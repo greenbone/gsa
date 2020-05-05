@@ -123,7 +123,7 @@ exports[`Audits table tests should render 1`] = `
   align-items: center;
 }
 
-.c37 {
+.c38 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -279,7 +279,7 @@ exports[`Audits table tests should render 1`] = `
   width: inherit;
 }
 
-.c38 {
+.c39 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -304,18 +304,18 @@ exports[`Audits table tests should render 1`] = `
   cursor: pointer;
 }
 
-.c39 {
+.c40 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c39 * {
+.c40 * {
   height: inherit;
   width: inherit;
 }
 
-.c35 {
+.c36 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -339,7 +339,7 @@ exports[`Audits table tests should render 1`] = `
   font-weight: normal;
 }
 
-.c34 {
+.c35 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -351,7 +351,16 @@ exports[`Audits table tests should render 1`] = `
   width: 180px;
 }
 
-.c36 {
+.c41 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c37 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -369,6 +378,13 @@ exports[`Audits table tests should render 1`] = `
   overflow: hidden;
   cursor: pointer;
   cursor: default;
+}
+
+.c34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .c11 a {
@@ -415,7 +431,7 @@ exports[`Audits table tests should render 1`] = `
   width: 10em;
 }
 
-.c40 {
+.c42 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1450,30 +1466,40 @@ exports[`Audits table tests should render 1`] = `
                       aria-labelledby="downshift-0-label"
                       class="c34"
                       role="combobox"
-                      width="180px"
                     >
                       <div
-                        aria-haspopup="true"
-                        aria-label="open menu"
                         class="c35"
-                        data-toggle="true"
-                        role="button"
-                        type="button"
+                        width="180px"
                       >
                         <div
+                          aria-haspopup="true"
+                          aria-label="open menu"
                           class="c36"
-                          data-testid="select-selected-value"
-                        />
-                        <div
-                          class="c37"
+                          data-toggle="true"
+                          role="button"
+                          type="button"
                         >
-                          <span
-                            class="c38 c39"
-                            data-testid="select-open-button"
+                          <div
+                            class="c37"
+                            data-testid="select-selected-value"
+                          />
+                          <div
+                            class="c38"
                           >
-                            ▼
-                          </span>
+                            <span
+                              class="c39 c40"
+                              data-testid="select-open-button"
+                            >
+                              ▼
+                            </span>
+                          </div>
                         </div>
+                      </div>
+                      <div
+                        class="c41"
+                        data-testid="error-marker"
+                      >
+                        ×
                       </div>
                     </div>
                     <div
@@ -1512,7 +1538,7 @@ exports[`Audits table tests should render 1`] = `
         class="c19"
       >
         <div
-          class="c40"
+          class="c42"
         >
           (Applied filter: rows=2)
         </div>

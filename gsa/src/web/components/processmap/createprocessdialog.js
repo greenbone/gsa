@@ -31,6 +31,11 @@ import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
 
+import useFormValidation, {
+  syncVariables,
+} from 'web/components/form/useFormValidation';
+import {createProcessRules} from './validationrules';
+
 const CreateProcessDialog = ({
   comment = '',
   id,
@@ -43,6 +48,19 @@ const CreateProcessDialog = ({
   const title = isEdit ? _('Edit Process') : _('Create Process');
   const buttonTitle = isEdit ? _('Save') : _('Create');
   const onSave = isEdit ? onEdit : onCreate;
+
+  const validationSchema = {
+    name,
+  };
+
+  const {
+    shouldWarn,
+    formValues,
+    handleValueChange,
+    validityStatus,
+    handleSubmit,
+  } = useFormValidation(validationSchema, createProcessRules, onSave);
+
   return (
     <SaveDialog
       buttonTitle={buttonTitle}
@@ -50,28 +68,34 @@ const CreateProcessDialog = ({
       defaultValues={{name, comment, id}}
       width="500px"
       onClose={onClose}
-      onSave={onSave}
+      onSave={vals => handleSubmit(vals)}
     >
-      {({values, onValueChange}) => (
-        <Layout flex="column">
-          <FormGroup title={_('Name')}>
-            <TextField
-              name="name"
-              value={name}
-              grow="1"
-              onChange={onValueChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Comment')}>
-            <TextField
-              name="comment"
-              value={comment}
-              grow="1"
-              onChange={onValueChange}
-            />
-          </FormGroup>
-        </Layout>
-      )}
+      {({values, onValueChange}) => {
+        syncVariables(values, formValues);
+        return (
+          <Layout flex="column">
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                hasError={shouldWarn && !validityStatus.name.isValid}
+                errorContent={validityStatus.name.error}
+                value={values.name}
+                data-testid="create-process-dialog-name"
+                grow="1"
+                onChange={handleValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={comment}
+                grow="1"
+                onChange={onValueChange}
+              />
+            </FormGroup>
+          </Layout>
+        );
+      }}
     </SaveDialog>
   );
 };

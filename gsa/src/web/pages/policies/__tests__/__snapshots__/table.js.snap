@@ -123,7 +123,7 @@ exports[`Policies table tests should render 1`] = `
   align-items: center;
 }
 
-.c26 {
+.c27 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -272,7 +272,7 @@ exports[`Policies table tests should render 1`] = `
   width: inherit;
 }
 
-.c27 {
+.c28 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -297,18 +297,18 @@ exports[`Policies table tests should render 1`] = `
   cursor: pointer;
 }
 
-.c28 {
+.c29 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c28 * {
+.c29 * {
   height: inherit;
   width: inherit;
 }
 
-.c24 {
+.c25 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -332,7 +332,7 @@ exports[`Policies table tests should render 1`] = `
   font-weight: normal;
 }
 
-.c23 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -344,7 +344,16 @@ exports[`Policies table tests should render 1`] = `
   width: 180px;
 }
 
-.c25 {
+.c30 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c26 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -362,6 +371,13 @@ exports[`Policies table tests should render 1`] = `
   overflow: hidden;
   cursor: pointer;
   cursor: default;
+}
+
+.c23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .c11 a {
@@ -392,7 +408,7 @@ exports[`Policies table tests should render 1`] = `
   width: 8%;
 }
 
-.c29 {
+.c31 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1017,30 +1033,40 @@ exports[`Policies table tests should render 1`] = `
                       aria-labelledby="downshift-0-label"
                       class="c23"
                       role="combobox"
-                      width="180px"
                     >
                       <div
-                        aria-haspopup="true"
-                        aria-label="open menu"
                         class="c24"
-                        data-toggle="true"
-                        role="button"
-                        type="button"
+                        width="180px"
                       >
                         <div
+                          aria-haspopup="true"
+                          aria-label="open menu"
                           class="c25"
-                          data-testid="select-selected-value"
-                        />
-                        <div
-                          class="c26"
+                          data-toggle="true"
+                          role="button"
+                          type="button"
                         >
-                          <span
-                            class="c27 c28"
-                            data-testid="select-open-button"
+                          <div
+                            class="c26"
+                            data-testid="select-selected-value"
+                          />
+                          <div
+                            class="c27"
                           >
-                            ▼
-                          </span>
+                            <span
+                              class="c28 c29"
+                              data-testid="select-open-button"
+                            >
+                              ▼
+                            </span>
+                          </div>
                         </div>
+                      </div>
+                      <div
+                        class="c30"
+                        data-testid="error-marker"
+                      >
+                        ×
                       </div>
                     </div>
                     <div
@@ -1079,7 +1105,7 @@ exports[`Policies table tests should render 1`] = `
         class="c17"
       >
         <div
-          class="c29"
+          class="c31"
         >
           (Applied filter: rows=2)
         </div>

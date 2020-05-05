@@ -132,4 +132,29 @@ describe('CreateTicketDialog component tests', () => {
       note: 'foobar',
     });
   });
+
+  test('should not save invalid form states', () => {
+    const handleClose = jest.fn();
+    const handleSave = jest.fn();
+    const handleUserIdChange = jest.fn();
+
+    const {getByTestId, baseElement} = render(
+      <CreateTicketDialog
+        resultId="r1"
+        userId="u1"
+        users={users}
+        onClose={handleClose}
+        onSave={handleSave}
+        onUserIdChange={handleUserIdChange}
+      />,
+    );
+
+    const saveButton = getByTestId('dialog-save-button');
+    const noteInput = baseElement.querySelector('textarea');
+    fireEvent.change(noteInput, {target: {value: ''}});
+
+    fireEvent.click(saveButton);
+
+    expect(handleSave).not.toHaveBeenCalled();
+  });
 });

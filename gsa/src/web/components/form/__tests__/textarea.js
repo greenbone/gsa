@@ -44,6 +44,12 @@ describe('TextArea tests', () => {
     expect(element).toMatchSnapshot();
   });
 
+  test('should render invalid state', () => {
+    const {element, baseElement} = render(<TextArea hasError={true} />);
+    expect(baseElement).toHaveTextContent('×');
+    expect(element).toHaveStyleRule('background-color: #f2dede');
+  });
+
   test('should call change handler with value', () => {
     const onChange = jest.fn();
 

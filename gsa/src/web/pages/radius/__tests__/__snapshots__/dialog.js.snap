@@ -104,7 +104,7 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c24 {
+.c25 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -113,7 +113,7 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c23 {
+.c24 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -180,7 +180,7 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c20 {
+.c21 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -200,12 +200,12 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c20:focus,
-.c20:hover {
+.c21:focus,
+.c21:hover {
   border: 1px solid #393637;
 }
 
-.c20:hover {
+.c21:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -213,26 +213,26 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c20[disabled] {
+.c21[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c20 img {
+.c21 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c20:link {
+.c21:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c21 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -250,18 +250,18 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c22 {
+.c23 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c22:hover {
+.c23:hover {
   color: #fff;
   background: #519032;
 }
 
-.c19 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -408,6 +408,15 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
+}
+
+.c19 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
 }
 
 .c17 {
@@ -592,6 +601,12 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
                         type="text"
                         value="foo"
                       />
+                      <div
+                        class="c19"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -622,17 +637,17 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c19"
+              class="c20"
             >
               <button
-                class="c20 c21 c22"
+                class="c21 c22 c23"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c20 c21 c22"
+                class="c21 c22 c23"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -641,10 +656,10 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c23"
+            class="c24"
           >
             <div
-              class="c24"
+              class="c25"
             />
           </div>
         </div>

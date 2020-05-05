@@ -52,7 +52,7 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c19 {
+.c20 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -61,7 +61,7 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c18 {
+.c19 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -128,7 +128,7 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c15 {
+.c16 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -148,12 +148,12 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c15:focus,
-.c15:hover {
+.c16:focus,
+.c16:hover {
   border: 1px solid #393637;
 }
 
-.c15:hover {
+.c16:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -161,26 +161,26 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c15[disabled] {
+.c16[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c15 img {
+.c16 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c15:link {
+.c16:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c16 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -198,18 +198,18 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c17 {
+.c18 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c17:hover {
+.c18:hover {
   color: #fff;
   background: #519032;
 }
 
-.c14 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -358,6 +358,15 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
   padding-right: 10px;
 }
 
+.c14 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c12 {
   font-family: inherit;
   font-size: inherit;
@@ -462,6 +471,12 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
                         type="text"
                         value="Unnamed"
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -485,23 +500,29 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
                         type="text"
                         value=""
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div
-              class="c14"
+              class="c15"
             >
               <button
-                class="c15 c16 c17"
+                class="c16 c17 c18"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c15 c16 c17"
+                class="c16 c17 c18"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -510,10 +531,10 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c18"
+            class="c19"
           >
             <div
-              class="c19"
+              class="c20"
             />
           </div>
         </div>

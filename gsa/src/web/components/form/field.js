@@ -46,7 +46,13 @@ const StyledInput = styled.input`
     box-shadow: 0 0 0 1000px white inset;
   }
   cursor: ${props => (props.disabled ? 'not-allowed' : undefined)};
-  background-color: ${props => (props.disabled ? Theme.dialogGray : undefined)};
+  background-color: ${props => {
+    if (props.hasError) {
+      return Theme.lightRed;
+    } else if (props.disabled) {
+      return Theme.dialogGray;
+    }
+  }};
   opacity: ${props => (props.disabled ? DISABLED_OPACTIY : undefined)};
 `;
 
