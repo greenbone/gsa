@@ -18,7 +18,7 @@
  */
 import gql from 'graphql-tag';
 
-import {useMutation, useQuery} from '@apollo/react-hooks';
+import {useMutation, useQuery, useLazyQuery} from '@apollo/react-hooks';
 
 import {toGraphQL, toFruitfulQuery} from 'web/utils/graphql';
 
@@ -304,4 +304,20 @@ export const START_TASK = gql`
 export const useStartTask = () => {
   const [startTask] = useMutation(START_TASK);
   return toGraphQL(startTask);
+};
+
+export const GET_SCANNERS = gql`
+  query Scanner($filterString: String) {
+    scanners(filterString: $filterString) {
+      nodes {
+        name
+        type
+        id
+      }
+    }
+  }
+`;
+
+export const useGetScanners = () => {
+  return toFruitfulQuery(useLazyQuery)(GET_SCANNERS);
 };

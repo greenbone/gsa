@@ -35,7 +35,7 @@ import date from 'gmp/models/date';
 
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
-import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
+import Scanner, {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 
 import {
   loadEntities as loadAlerts,
@@ -98,12 +98,25 @@ import TargetComponent from 'web/pages/targets/component';
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
 import {setTimezone} from 'web/store/usersettings/actions';
-import {useModifyTask, useCreateContainerTask, useCreateTask} from './graphql';
+import {
+  useModifyTask,
+  useCreateContainerTask,
+  useCreateTask,
+  useGetScanners,
+} from './graphql';
 
 const TaskComponent = props => {
   const modifyTask = useModifyTask();
   const createTask = useCreateTask();
   const createContainerTask = useCreateContainerTask();
+
+  const scannerQuery = useGetScanners();
+  const [
+    loadScanners,
+    {data: scannerData, loading: isLoadingScanners},
+  ] = scannerQuery({
+    filterString: ALL_FILTER.toFilterString(),
+  });
 
   const capabilities = useCapabilities();
 
@@ -168,6 +181,16 @@ const TaskComponent = props => {
     false,
   );
   const [tag_id] = useState();
+
+  const [scanners, setScanners] = useState();
+
+  useEffect(() => {
+    if (isDefined(scannerData)) {
+      setScanners(
+        scannerData.scanners.nodes.map(scanner => Scanner.fromObject(scanner)),
+      );
+    }
+  }, [scannerData]);
 
   const {gmp} = props;
 
@@ -381,7 +404,7 @@ const TaskComponent = props => {
   const openStandardTaskDialog = task => {
     props.loadAlerts();
     props.loadScanConfigs();
-    props.loadScanners();
+    loadScanners();
     props.loadSchedules();
     props.loadTargets();
     props.loadTags();
@@ -633,12 +656,10 @@ const TaskComponent = props => {
     credentials,
     isLoadingAlerts,
     isLoadingConfigs,
-    isLoadingScanners,
     isLoadingSchedules,
     isLoadingTargets,
     isLoadingTags,
     scanConfigs,
-    scanners,
     schedules,
     tags,
     targets,

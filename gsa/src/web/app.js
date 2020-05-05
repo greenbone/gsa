@@ -93,7 +93,7 @@ class App extends React.Component {
     this.handleGmpErrorResponse = this.handleGmpErrorResponse.bind(this);
 
     const logoutLink = onError(({networkError}) => {
-      if (networkError.statusCode === 401) {
+      if (networkError?.statusCode === 401) {
         this.logout();
       }
     });
