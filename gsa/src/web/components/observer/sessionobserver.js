@@ -17,7 +17,7 @@
  */
 import React, {useEffect, useRef, useCallback} from 'react';
 
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Logger from 'gmp/log';
 
@@ -25,11 +25,11 @@ import moment from 'gmp/models/date';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
+import {useLazyIsAuthenticated} from 'web/graphql/auth';
+
 import {getSessionTimeout} from 'web/store/usersettings/selectors';
 
-import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
-import {useLazyIsAuthenticated} from 'web/graphql/auth';
 
 const log = Logger.getLogger('web.observer.sessionobserver');
 
@@ -93,7 +93,9 @@ const SessionTimeout = ({sessionTimeout}) => {
   return null;
 };
 
-const SessionObserver = ({sessionTimeout}) => {
+const SessionObserver = () => {
+  const sessionTimeout = useSelector(getSessionTimeout);
+
   if (!isDefined(sessionTimeout)) {
     return null;
   }
@@ -101,12 +103,6 @@ const SessionObserver = ({sessionTimeout}) => {
   return <SessionTimeout sessionTimeout={sessionTimeout} />;
 };
 
-SessionObserver.propTypes = {
-  sessionTimeout: PropTypes.date,
-};
-
-export default connect(rootState => ({
-  sessionTimeout: getSessionTimeout(rootState),
-}))(SessionObserver);
+export default SessionObserver;
 
 // vim: set ts=2 sw=2 tw=80:
