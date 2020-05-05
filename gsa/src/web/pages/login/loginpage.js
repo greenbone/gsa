@@ -214,8 +214,8 @@ const LoginPage = () => {
           gmpLoginData = loginData;
           return loginMutation({username, password});
         })
-        .then(data => {
-          const {locale, timezone, sessionTimeout} = data;
+        .then(response => {
+          const {locale, timezone, sessionTimeout} = response.data.login;
           const {token} = gmpLoginData;
 
           // only store settings if both logins have been successfully
