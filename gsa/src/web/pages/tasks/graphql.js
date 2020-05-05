@@ -220,22 +220,44 @@ export const useDeleteTask = () => {
 
 export const MODIFY_TASK = gql`
   mutation modifyTask(
-    $taskId: String!
+    $alertIds: [UUID]
+    $alterable: Boolean
+    $applyOverrides: Int
+    $autoDelete: String
+    $autoDeleteData: Int
+    $comment: String
+    $configId: UUID
+    $hostsOrdering: String
+    $inAssets: Int
+    $maxChecks: Int
+    $maxHosts: Int
+    $minQod: Int
     $name: String
-    $targetId: UUID
     $scannerId: UUID
     $schedulePeriods: Int
-    $alterable: Boolean
-    $comment: String
+    $sourceIface: String
+    $targetId: UUID
+    $taskId: String!
   ) {
     modifyTask(
-      taskId: $taskId
+      alertIds: $alertIds
+      alterable: $alterable
+      applyOverrides: $applyOverrides
+      autoDelete: $autoDelete
+      autoDeleteData: $autoDeleteData
+      comment: $comment
+      configId: $configId
+      hostsOrdering: $hostsOrdering
+      inAssets: $inAssets
+      maxChecks: $maxChecks
+      maxHosts: $maxHosts
+      minQod: $minQod
       name: $name
-      targetId: $targetId
       scannerId: $scannerId
       schedulePeriods: $schedulePeriods
-      alterable: $alterable
-      comment: $comment
+      sourceIface: $sourceIface
+      targetId: $targetId
+      taskId: $taskId
     ) {
       id
     }
