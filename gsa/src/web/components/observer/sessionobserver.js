@@ -35,6 +35,16 @@ const log = Logger.getLogger('web.observer.sessionobserver');
 
 const DELAY = 15 * 1000; // 15 seconds in milliseconds
 
+// allow to set timeout functions for testing purposes
+let setTimeoutFunc = global.setTimeout;
+let clearTimeoutFunc = global.clearTimeout;
+
+export const setTimeoutFuncForTesting = timeoutFunc =>
+  (setTimeoutFunc = timeoutFunc);
+
+export const setClearTimeoutFuncForTesting = timeoutFunc =>
+  (clearTimeoutFunc = timeoutFunc);
+
 const SessionTimeout = ({sessionTimeout}) => {
   const timerRef = useRef();
   const gmp = useGmp();
@@ -57,7 +67,7 @@ const SessionTimeout = ({sessionTimeout}) => {
     const timeout = sessionTimeout.diff(moment()) + DELAY;
 
     if (timeout > 0) {
-      timerRef.current = global.setTimeout(handleTimer, timeout);
+      timerRef.current = setTimeoutFunc(handleTimer, timeout);
 
       log.debug(
         'started session timer',
@@ -77,7 +87,7 @@ const SessionTimeout = ({sessionTimeout}) => {
       if (hasValue(timerRef.current)) {
         log.debug('clearing session timer', timerRef.current);
 
-        global.clearTimeout(timerRef.current);
+        clearTimeoutFunc(timerRef.current);
       }
     };
   }, [sessionTimeout, startTimer]);
