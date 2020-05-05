@@ -19,7 +19,6 @@
 import React, {useState, useEffect} from 'react';
 
 import {useMutation} from '@apollo/react-hooks';
-import moment from 'gmp/models/date';
 
 import gql from 'graphql-tag';
 
@@ -34,6 +33,8 @@ import Rejection from 'gmp/http/rejection';
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
+
+import moment from 'gmp/models/date';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -55,11 +56,11 @@ import {
   setIsLoggedIn as setIsLoggedInAction,
 } from 'web/store/usersettings/actions';
 
+import {toGraphQL} from 'web/utils/graphql';
+
 import {isLoggedIn as isLoggedInSelector} from 'web/store/usersettings/selectors';
 
 import LoginForm from './loginform';
-
-import {toGraphQL} from 'web/utils/graphql.js';
 
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
