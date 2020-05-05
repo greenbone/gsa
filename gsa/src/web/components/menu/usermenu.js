@@ -139,7 +139,7 @@ export const LOGOUT = gql`
 `;
 
 const UserMenuContainer = () => {
-  const [sessionTimeout, setSessionTimeout] = useUserSessionTimeout();
+  const [sessionTimeout, renewSession] = useUserSessionTimeout();
   const [userTimezone] = useUserTimezone();
   const [userName] = useUserName();
   const gmp = useGmp();
@@ -166,7 +166,7 @@ const UserMenuContainer = () => {
   };
 
   const handleRenewSessionTimeout = () => {
-    gmp.user.renewSession().then(response => setSessionTimeout(response.data));
+    renewSession();
   };
 
   return (
