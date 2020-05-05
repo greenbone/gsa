@@ -18,12 +18,19 @@
 import {useSelector, useDispatch} from 'react-redux';
 
 import {getSessionTimeout} from 'web/store/usersettings/selectors';
-import {setSessionTimeout} from 'web/store/usersettings/actions';
+import {
+  setSessionTimeout,
+  renewSessionTimeout,
+} from 'web/store/usersettings/actions';
+
+import useGmp from './useGmp';
 
 const useUserSessionTimeout = () => {
   const dispatch = useDispatch();
+  const gmp = useGmp();
   return [
     useSelector(getSessionTimeout),
+    () => dispatch(renewSessionTimeout(gmp)()),
     timeout => dispatch(setSessionTimeout(timeout)),
   ];
 };
