@@ -19,7 +19,7 @@ import {useQuery, useLazyQuery} from '@apollo/react-hooks';
 
 import gql from 'graphql-tag';
 
-const GET_CURRENT_USER = gql`
+export const GET_CURRENT_USER_IS_AUTHENTICATED = gql`
   query {
     currentUser {
       isAuthenticated
@@ -28,7 +28,7 @@ const GET_CURRENT_USER = gql`
 `;
 
 export const useIsAuthenticated = () => {
-  const {data, ...other} = useQuery(GET_CURRENT_USER, {
+  const {data, ...other} = useQuery(GET_CURRENT_USER_IS_AUTHENTICATED, {
     fetchPolicy: 'no-cache', // never cache the query!
   });
   const isAuthenticated = data?.currentUser?.isAuthenticated;
@@ -36,9 +36,12 @@ export const useIsAuthenticated = () => {
 };
 
 export const useLazyIsAuthenticated = () => {
-  const [getCurrentUser, {data, ...other}] = useLazyQuery(GET_CURRENT_USER, {
-    fetchPolicy: 'no-cache',
-  });
+  const [getCurrentUser, {data, ...other}] = useLazyQuery(
+    GET_CURRENT_USER_IS_AUTHENTICATED,
+    {
+      fetchPolicy: 'no-cache',
+    },
+  );
   const isAuthenticated = data?.currentUser?.isAuthenticated;
   return [getCurrentUser, {isAuthenticated, ...other}];
 };
