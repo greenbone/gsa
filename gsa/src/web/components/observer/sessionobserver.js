@@ -98,12 +98,7 @@ const SessionObserver = ({sessionTimeout}) => {
     return null;
   }
 
-  return (
-    <SessionTimeout
-      key={sessionTimeout.unix()}
-      sessionTimeout={sessionTimeout}
-    />
-  );
+  return <SessionTimeout sessionTimeout={sessionTimeout} />;
 };
 
 SessionObserver.propTypes = {
