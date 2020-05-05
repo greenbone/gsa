@@ -175,7 +175,7 @@ const LoginPage = () => {
   const setLocale = locale => gmp.setLocale(locale);
   const setTimezone = timezone => dispatch(updateTimezoneAction(gmp)(timezone));
   const setSessionTimeout = timeout =>
-    dispatch(setSessionTimeoutAction(timeout));
+    dispatch(setSessionTimeoutAction(moment(timeout)));
   const setUsername = username => dispatch(setUsernameAction(username));
   const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
 
@@ -185,15 +185,13 @@ const LoginPage = () => {
         .then(resp => {
           const {locale, timezone, sessionTimeout} = resp.data.login;
 
-          const dateObj = new Date(sessionTimeout);
-
           gmp.settings.username = username;
           gmp.settings.timezone = timezone;
           gmp.settings.locale = locale;
 
           setTimezone(timezone);
           setLocale(locale);
-          setSessionTimeout(moment(dateObj)); // convert sessionTimeout to Moment instance
+          setSessionTimeout(sessionTimeout);
           setUsername(username);
 
           // must be set before changing the location
