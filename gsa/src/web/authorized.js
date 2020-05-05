@@ -21,33 +21,18 @@ import {useHistory, useLocation} from 'react-router-dom';
 
 import {useDispatch} from 'react-redux';
 
-import {useQuery} from '@apollo/react-hooks';
-
-import gql from 'graphql-tag';
-
 import {hasValue} from 'gmp/utils/identity';
 
 import Loading from 'web/components/loading/loading';
+
+import {useIsAuthenticated} from 'web/graphql/auth';
 
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
 
 import useGmp from 'web/utils/useGmp';
 
-const GET_CURRENT_USER = gql`
-  query {
-    currentUser {
-      isAuthenticated
-    }
-  }
-`;
-
-const useQueryCurrentUser = () =>
-  useQuery(GET_CURRENT_USER, {
-    fetchPolicy: 'no-cache', // never cache the query!
-  });
-
 const Authorized = ({children}) => {
-  const {data, loading} = useQueryCurrentUser();
+  const {isAuthenticated, loading} = useIsAuthenticated();
   const [isLoading, setIsLoading] = useState(loading);
 
   const gmp = useGmp();
@@ -72,9 +57,7 @@ const Authorized = ({children}) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (hasValue(data)) {
-      const {isAuthenticated} = data.currentUser;
-
+    if (hasValue(isAuthenticated)) {
       dispatch(setIsLoggedIn(isAuthenticated));
 
       if (!isAuthenticated) {
@@ -82,7 +65,7 @@ const Authorized = ({children}) => {
       }
     }
     setIsLoading(loading);
-  }, [loading, data]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loading, isAuthenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading) {
     return <Loading />;
