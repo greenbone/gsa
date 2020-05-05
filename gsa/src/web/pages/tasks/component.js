@@ -190,7 +190,7 @@ const TaskComponent = props => {
         scannerData.scanners.nodes.map(scanner => Scanner.fromObject(scanner)),
       );
     }
-  }, [scannerData]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [scannerData]);
 
   const {gmp} = props;
 
