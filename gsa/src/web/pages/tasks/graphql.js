@@ -337,3 +337,18 @@ export const GET_SCAN_CONFIGS = gql`
 export const useGetScanConfigs = () => {
   return toFruitfulQuery(useLazyQuery)(GET_SCAN_CONFIGS);
 };
+
+export const GET_TARGETS = gql`
+  query Targets($filterString: String) {
+    targets(filterString: $filterString) {
+      nodes {
+        name
+        id
+      }
+    }
+  }
+`;
+
+export const useGetTargets = () => {
+  return toFruitfulQuery(useLazyQuery)(GET_TARGETS);
+};
