@@ -32,10 +32,9 @@ import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId, hasId} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
-
-import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
-
+import ScanConfig, {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import Scanner, {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
+import Target from 'gmp/models/target';
 
 import {
   loadEntities as loadAlerts,
@@ -103,6 +102,8 @@ import {
   useCreateContainerTask,
   useCreateTask,
   useGetScanners,
+  useGetScanConfigs,
+  useGetTargets,
 } from './graphql';
 
 const TaskComponent = props => {
@@ -115,6 +116,22 @@ const TaskComponent = props => {
     loadScanners,
     {data: scannerData, loading: isLoadingScanners},
   ] = scannerQuery({
+    filterString: ALL_FILTER.toFilterString(),
+  });
+
+  const scanConfigQuery = useGetScanConfigs();
+  const [
+    loadScanConfigs,
+    {data: scanConfigData, loading: isLoadingConfigs},
+  ] = scanConfigQuery({
+    filterString: ALL_FILTER.toFilterString(),
+  });
+
+  const targetQuery = useGetTargets();
+  const [
+    loadTargets,
+    {data: targetData, loading: isLoadingTargets},
+  ] = targetQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
 
@@ -187,10 +204,32 @@ const TaskComponent = props => {
   useEffect(() => {
     if (isDefined(scannerData)) {
       setScanners(
-        scannerData.scanners.nodes.map(scanner => Scanner.fromObject(scanner)),
+        scannerData.scanners.nodes.map(scanner => Scanner.fromElement(scanner)),
       );
     }
   }, [scannerData]);
+
+  const [scanConfigs, setScanConfigs] = useState();
+
+  useEffect(() => {
+    if (isDefined(scanConfigData)) {
+      setScanConfigs(
+        scanConfigData.scanConfigs.nodes.map(scanConfig =>
+          ScanConfig.fromElement(scanConfig),
+        ),
+      );
+    }
+  }, [scanConfigData]);
+
+  const [targets, setTargets] = useState();
+
+  useEffect(() => {
+    if (isDefined(targetData)) {
+      setTargets(
+        targetData.targets.nodes.map(target => Target.fromObject(target)),
+      );
+    }
+  }, [targetData]);
 
   const {gmp} = props;
 
@@ -403,10 +442,10 @@ const TaskComponent = props => {
 
   const openStandardTaskDialog = task => {
     props.loadAlerts();
-    props.loadScanConfigs();
+    loadScanConfigs();
     loadScanners();
     props.loadSchedules();
-    props.loadTargets();
+    loadTargets();
     props.loadTags();
 
     if (isDefined(task)) {
@@ -655,14 +694,10 @@ const TaskComponent = props => {
     alerts,
     credentials,
     isLoadingAlerts,
-    isLoadingConfigs,
     isLoadingSchedules,
-    isLoadingTargets,
     isLoadingTags,
-    scanConfigs,
     schedules,
     tags,
-    targets,
     children,
     onCloned,
     onCloneError,
