@@ -22,16 +22,26 @@ import date from 'gmp/models/date';
 
 import {setSessionTimeout as setSessionTimeoutAction} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from '../testing';
+import {rendererWith, fireEvent, screen, wait} from '../testing';
 
 import useUserSessionTimeout from '../useUserSessionTimeout';
 
 const TestUserSessionTimeout = () => {
-  const [sessionTimeout, setSessionTimeout] = useUserSessionTimeout();
+  const [
+    sessionTimeout,
+    renewSession,
+    setSessionTimeout,
+  ] = useUserSessionTimeout();
   return (
-    <span onClick={() => setSessionTimeout(date('2020-03-10'))}>
-      {dateFormat(sessionTimeout, 'DD-MM-YY')}
-    </span>
+    <div>
+      <span
+        data-testid="set"
+        onClick={() => setSessionTimeout(date('2020-03-10'))}
+      >
+        {dateFormat(sessionTimeout, 'DD-MM-YY')}
+      </span>
+      <button data-testid="renew" onClick={() => renewSession()} />
+    </div>
   );
 };
 
@@ -43,8 +53,9 @@ describe('useUserSessionTimeout tests', () => {
 
     store.dispatch(setSessionTimeoutAction(timeout));
 
-    const {element} = render(<TestUserSessionTimeout />);
+    render(<TestUserSessionTimeout />);
 
+    const element = screen.getByTestId('set');
     expect(element).toHaveTextContent(/^10-10-19$/);
   });
 
@@ -55,12 +66,47 @@ describe('useUserSessionTimeout tests', () => {
 
     store.dispatch(setSessionTimeoutAction(timeout));
 
-    const {element} = render(<TestUserSessionTimeout />);
+    render(<TestUserSessionTimeout />);
+
+    const element = screen.getByTestId('set');
 
     expect(element).toHaveTextContent(/^10-10-19$/);
 
     fireEvent.click(element);
 
     expect(element).toHaveTextContent(/^10-03-20$/);
+  });
+
+  test('should allow to renew the users session timeout', async () => {
+    const renewDate = date('2020-03-20');
+    const renewSession = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({data: renewDate}));
+    const gmp = {
+      user: {
+        renewSession,
+      },
+    };
+    const {render, store} = rendererWith({store: true, gmp});
+
+    const timeout = date('2019-10-10');
+
+    store.dispatch(setSessionTimeoutAction(timeout));
+
+    render(<TestUserSessionTimeout />);
+
+    const element = screen.getByTestId('set');
+
+    expect(element).toHaveTextContent(/^10-10-19$/);
+
+    const button = screen.getByTestId('renew');
+
+    fireEvent.click(button);
+
+    expect(renewSession).toHaveBeenCalled();
+
+    await wait();
+
+    expect(element).toHaveTextContent(/^20-03-20$/);
   });
 });
