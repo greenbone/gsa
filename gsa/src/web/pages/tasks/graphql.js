@@ -260,6 +260,7 @@ export const MODIFY_TASK = gql`
       taskId: $taskId
     ) {
       status
+      id
     }
   }
 `;
