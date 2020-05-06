@@ -135,6 +135,7 @@ class App extends React.Component {
 
   handlePostLogout() {
     // cleanup store
+    this.client.clearStore();
     clearStore(store.dispatch);
   }
 
