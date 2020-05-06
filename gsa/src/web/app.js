@@ -134,8 +134,9 @@ class App extends React.Component {
   }
 
   handlePostLogout() {
-    // cleanup store
+    // clear Apollo cache
     this.client.clearStore();
+    // cleanup redux store
     clearStore(store.dispatch);
   }
 
