@@ -125,7 +125,6 @@ class App extends React.Component {
   handleGmpErrorResponse(xhr) {
     if (xhr.status === 401) {
       this.logout();
-      return Promise.resolve(xhr);
     }
     return Promise.reject(xhr);
   }
