@@ -19,7 +19,6 @@
 import React, {useState, useEffect} from 'react';
 
 import {useMutation} from '@apollo/react-hooks';
-import moment from 'gmp/models/date';
 
 import gql from 'graphql-tag';
 
@@ -34,6 +33,8 @@ import Rejection from 'gmp/http/rejection';
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
+
+import moment from 'gmp/models/date';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
@@ -55,11 +56,11 @@ import {
   setIsLoggedIn as setIsLoggedInAction,
 } from 'web/store/usersettings/actions';
 
+import {toGraphQL} from 'web/utils/graphql';
+
 import {isLoggedIn as isLoggedInSelector} from 'web/store/usersettings/selectors';
 
 import LoginForm from './loginform';
-
-import {toGraphQL} from 'web/utils/graphql.js';
 
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
@@ -175,7 +176,7 @@ const LoginPage = () => {
   const setLocale = locale => gmp.setLocale(locale);
   const setTimezone = timezone => dispatch(updateTimezoneAction(gmp)(timezone));
   const setSessionTimeout = timeout =>
-    dispatch(setSessionTimeoutAction(timeout));
+    dispatch(setSessionTimeoutAction(moment(timeout)));
   const setUsername = username => dispatch(setUsernameAction(username));
   const setIsLoggedIn = value => dispatch(setIsLoggedInAction(value));
 
@@ -185,15 +186,13 @@ const LoginPage = () => {
         .then(resp => {
           const {locale, timezone, sessionTimeout} = resp.data.login;
 
-          const dateObj = new Date(sessionTimeout);
-
           gmp.settings.username = username;
           gmp.settings.timezone = timezone;
           gmp.settings.locale = locale;
 
           setTimezone(timezone);
           setLocale(locale);
-          setSessionTimeout(moment(dateObj)); // convert sessionTimeout to Moment instance
+          setSessionTimeout(sessionTimeout);
           setUsername(username);
 
           // must be set before changing the location
@@ -215,8 +214,8 @@ const LoginPage = () => {
           gmpLoginData = loginData;
           return loginMutation({username, password});
         })
-        .then(data => {
-          const {locale, timezone, sessionTimeout} = data;
+        .then(response => {
+          const {locale, timezone, sessionTimeout} = response.data.login;
           const {token} = gmpLoginData;
 
           // only store settings if both logins have been successfully
