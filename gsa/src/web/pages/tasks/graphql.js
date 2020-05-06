@@ -222,13 +222,13 @@ export const MODIFY_TASK = gql`
   mutation modifyTask(
     $alertIds: [UUID]
     $alterable: Boolean
-    $applyOverrides: Int
+    $applyOverrides: Boolean
     $autoDelete: String
     $autoDeleteData: Int
     $comment: String
     $configId: UUID
     $hostsOrdering: String
-    $inAssets: Int
+    $inAssets: Boolean
     $maxChecks: Int
     $maxHosts: Int
     $minQod: Int
@@ -237,7 +237,7 @@ export const MODIFY_TASK = gql`
     $schedulePeriods: Int
     $sourceIface: String
     $targetId: UUID
-    $taskId: String!
+    $taskId: UUID!
   ) {
     modifyTask(
       alertIds: $alertIds
@@ -259,7 +259,7 @@ export const MODIFY_TASK = gql`
       targetId: $targetId
       taskId: $taskId
     ) {
-      id
+      status
     }
   }
 `;
