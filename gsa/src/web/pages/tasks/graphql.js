@@ -234,6 +234,7 @@ export const MODIFY_TASK = gql`
     $minQod: Int
     $name: String
     $scannerId: UUID
+    $scannerType: Int
     $schedulePeriods: Int
     $sourceIface: String
     $targetId: UUID
@@ -254,6 +255,7 @@ export const MODIFY_TASK = gql`
       minQod: $minQod
       name: $name
       scannerId: $scannerId
+      scannerType: $scannerType
       schedulePeriods: $schedulePeriods
       sourceIface: $sourceIface
       targetId: $targetId
