@@ -549,6 +549,11 @@ const load = gmp => {
   const loadPermissionsFunc = loadPermissions(gmp);
   const loadNotesFunc = loadNotes(gmp);
   const loadOverridesFunc = loadOverrides(gmp);
+
+  if (gmp.settings.enableHyperionOnly) {
+    return id => dispatch => Promise.resolve(); // promise is required by withEntityContainer
+  }
+
   return id => dispatch =>
     Promise.all([
       dispatch(loadTaskFunc(id)),
