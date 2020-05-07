@@ -120,7 +120,7 @@ const TestingCapabilitiesProvider = withProvider(
 )(CapabilitiesContext.Provider);
 
 export const rendererWith = (
-  {capabilities, gmp, store, router} = {
+  {capabilities, gmp, store, router, queryMocks} = {
     store: true,
     router: true,
   },
@@ -143,7 +143,7 @@ export const rendererWith = (
         <TestingGmpProvider gmp={gmp}>
           <TestingCapabilitiesProvider capabilities={capabilities}>
             <TestingStoreProvider store={store}>
-              <MockedProvider mocks={[]} addTypename={false}>
+              <MockedProvider mocks={queryMocks} addTypename={false}>
                 <TestingRouter history={history}>{ui}</TestingRouter>
               </MockedProvider>
             </TestingStoreProvider>
