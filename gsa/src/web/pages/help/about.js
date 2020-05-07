@@ -100,7 +100,7 @@ const About = ({gmp}) => (
                 ' version',
             )}
             &nbsp;
-            <ExternalLink to="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">
+            <ExternalLink to="https://www.gnu.org/licenses/agpl-3.0.en.html">
               {_('(full license text)')}
             </ExternalLink>
           </DivP>
