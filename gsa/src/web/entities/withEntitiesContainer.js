@@ -73,33 +73,38 @@ const withEntitiesContainer = (
     const [taskError, setTaskError] = useState();
 
     useEffect(() => {
-      loadTasks();
-      if (isDefined(data)) {
-        setTasks(data.tasks.edges.map(entity => Task.fromObject(entity.node)));
+      if (gmpname === 'task') {
+        loadTasks();
+        if (isDefined(data)) {
+          setTasks(
+            data.tasks.edges.map(entity => Task.fromObject(entity.node)),
+          );
 
-        const {total, filtered, offset, limit, length} = data.tasks.counts;
-        setCounts(
-          new CollectionCounts({
-            all: total,
-            filtered: filtered,
-            first: offset + 1,
-            length: length,
-            rows: limit,
-          }),
-        );
-      }
+          const {total, filtered, offset, limit, length} = data.tasks.counts;
+          setCounts(
+            new CollectionCounts({
+              all: total,
+              filtered: filtered,
+              first: offset + 1,
+              length: length,
+              rows: limit,
+            }),
+          );
+        }
 
-      if (isDefined(error)) {
-        setTaskError(error);
+        if (isDefined(error)) {
+          setTaskError(error);
+        }
       }
     }, [data, error, loadTasks]);
 
-    let {entities, entitiesCounts, entitiesError} = props;
+    let {entities, entitiesCounts, entitiesError, loadedFilter} = props;
 
     if (gmpname === 'task') {
       entities = tasks;
       entitiesCounts = counts;
       entitiesError = taskError;
+      loadedFilter = filter;
     }
 
     return (
@@ -118,7 +123,7 @@ const withEntitiesContainer = (
             entities={entities}
             entitiesCounts={entitiesCounts}
             entitiesError={entitiesError}
-            loadedFilter={filter}
+            loadedFilter={loadedFilter}
           >
             {pageProps => <Component {...pageProps} />}
           </EntitiesContainer>
@@ -133,6 +138,7 @@ const withEntitiesContainer = (
     entitiesError: PropTypes.error,
     filter: PropTypes.filter,
     loadEntities: PropTypes.func.isRequired,
+    loadedFilter: PropTypes.filter,
     notify: PropTypes.func.isRequired,
   };
 
