@@ -151,7 +151,7 @@ const UserMenuContainer = () => {
 
     if (gmp.settings.enableHyperionOnly) {
       logout()
-        .then(gmp.logout())
+        .then(() => gmp.logout())
         .then(() => {
           history.push('/login?type=logout');
         });
