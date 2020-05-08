@@ -201,6 +201,30 @@ export const useGetTasks = () => {
   return toFruitfulQuery(useQuery)(GET_TASKS);
 };
 
+export const LAZY_GET_TASKS = gql`
+  query Task($filterString: String) {
+    tasks(filterString: $filterString) {
+      edges {
+        node {
+          name
+          id
+        }
+      }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+    }
+  }
+`;
+
+export const useLazyGetTasks = () => {
+  return toFruitfulQuery(useLazyQuery)(LAZY_GET_TASKS);
+};
+
 export const CLONE_TASK = gql`
   mutation cloneTask($taskId: String!) {
     cloneTask(taskId: $taskId) {
