@@ -54,6 +54,7 @@ class ExternalLink extends React.Component {
   handleOpenLink() {
     const url = this.props.to;
     window.open(url, '_blank', 'noopener, scrollbars=1, resizable=1');
+    this.handleCloseDialog();
   }
 
   render() {
