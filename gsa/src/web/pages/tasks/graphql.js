@@ -121,68 +121,77 @@ export const useGetTask = () => {
 export const GET_TASKS = gql`
   query Task($filterString: String) {
     tasks(filterString: $filterString) {
-      nodes {
-        name
-        id
-        permissions {
+      edges {
+        node {
           name
-        }
-        reports {
-          lastReport {
+          id
+          permissions {
+            name
+          }
+          reports {
+            lastReport {
+              id
+              severity
+              timestamp
+            }
+            counts {
+              total
+              finished
+            }
+          }
+          status
+          target {
+            name
             id
-            severity
-            timestamp
           }
-          counts {
-            total
-            finished
-          }
-        }
-        status
-        target {
-          name
-          id
-        }
-        trend
-        alterable
-        comment
-        owner
-        preferences {
-          name
-          value
-          description
-        }
-        schedule {
-          name
-          id
-          icalendar
-          timezone
-          duration
-        }
-        alerts {
-          name
-          id
-        }
-        scanConfig {
-          id
-          name
-          trash
-        }
-        scanner {
-          id
-          name
-          type
-        }
-        hostsOrdering
-        observers {
-          users
-          roles {
+          trend
+          alterable
+          comment
+          owner
+          preferences {
             name
+            value
+            description
           }
-          groups {
+          schedule {
             name
+            id
+            icalendar
+            timezone
+            duration
+          }
+          alerts {
+            name
+            id
+          }
+          scanConfig {
+            id
+            name
+            trash
+          }
+          scanner {
+            id
+            name
+            type
+          }
+          hostsOrdering
+          observers {
+            users
+            roles {
+              name
+            }
+            groups {
+              name
+            }
           }
         }
+      }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
       }
     }
   }
