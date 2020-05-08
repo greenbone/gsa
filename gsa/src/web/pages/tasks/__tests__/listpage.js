@@ -58,7 +58,14 @@ const {listMockTask: task} = getMockTasks(); // mock task
 const mockTask = {
   data: {
     tasks: {
-      nodes: [listMockTask],
+      edges: [{node: listMockTask}],
+      counts: {
+        total: 1,
+        filtered: 1,
+        offset: 0,
+        limit: 10,
+        length: 1,
+      },
     },
   },
 };
@@ -74,14 +81,14 @@ const mocks = [
   {
     request: {
       query: GET_TASKS,
-      variables: {filterString: ''},
+      variables: {filterString: 'foo=bar rows=2'},
     },
     result: mockTask,
   },
   {
     request: {
       query: GET_TASKS,
-      variables: {filterString: ''},
+      variables: {filterString: 'foo=bar rows=2'},
     },
     result: mockTask,
   },
