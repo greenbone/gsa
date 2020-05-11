@@ -94,15 +94,14 @@ class TaskDetails extends React.Component {
       inAssets,
       reports,
       minQod,
-      preferences,
       scanner,
       target,
       maxChecks,
       maxHosts,
       schedule,
+      sourceIface = '',
     } = entity;
 
-    const {iface = {}} = preferences;
     const {lastReport} = reports;
 
     let dur;
@@ -195,7 +194,7 @@ class TaskDetails extends React.Component {
                   config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Network Source Interface')}</TableData>
-                      <TableData>{iface.value}</TableData>
+                      <TableData>{sourceIface}</TableData>
                     </TableRow>
                   )}
                 {hasValue(config) &&

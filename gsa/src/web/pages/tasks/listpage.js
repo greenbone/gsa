@@ -20,6 +20,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import _ from 'gmp/locale';
 
+import CollectionCounts from 'gmp/collection/collectioncounts';
+
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
@@ -131,9 +133,19 @@ const Page = ({
   const cloneTask = queryWithRefetch(useCloneTask())(refetch);
 
   let entities;
+  let entitiesCounts;
 
   if (isDefined(data)) {
-    entities = data.tasks.nodes.map(entity => Task.fromObject(entity));
+    entities = data.tasks.edges.map(entity => Task.fromObject(entity.node));
+
+    const {total, filtered, offset, limit, length} = data.tasks.counts;
+    entitiesCounts = new CollectionCounts({
+      all: total,
+      filtered: filtered,
+      first: offset + 1,
+      length: length,
+      rows: limit,
+    });
   }
 
   let entitiesError;
@@ -188,6 +200,7 @@ const Page = ({
           <EntitiesPage
             {...props}
             entities={entities}
+            entitiesCounts={entitiesCounts}
             entitiesError={entitiesError}
             dashboard={() => (
               <TaskDashboard
