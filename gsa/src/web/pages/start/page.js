@@ -41,7 +41,6 @@ import {
 import getDashboardSettings, {
   DashboardSetting,
 } from 'web/store/dashboard/settings/selectors';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import {
   addDisplayToSettings,
@@ -77,6 +76,7 @@ import ConfirmRemoveDialog from './confirmremovedialog';
 import NewDashboardDialog, {DEFAULT_DISPLAYS} from './newdashboarddialog';
 import EditDashboardDialog from './editdashboarddialog';
 import Divider from 'web/components/layout/divider';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
@@ -117,6 +117,8 @@ const ToolBarIcons = () => (
 );
 
 const StartPage = props => {
+  const [, renewSession] = useUserSessionTimeout();
+
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
   const [showConfirmRemoveDialog, setShowConfirmRemoveDialog] = useState(false);
   const [showNewDashboardDialog, setShowNewDashboardDialog] = useState(false);
@@ -416,7 +418,7 @@ const StartPage = props => {
                             notify={notify}
                             saveSettings={handleSaveDashboardSettings}
                             setDefaultSettings={handleSetDefaultSettings}
-                            onInteraction={props.renewSessionTimeout}
+                            onInteraction={renewSession}
                             onNewDisplay={handleAddNewDisplay}
                             onResetDashboard={handleResetDashboard}
                           />
@@ -465,7 +467,6 @@ StartPage.propTypes = {
   error: PropTypes.toString,
   isLoading: PropTypes.bool,
   loadSettings: PropTypes.func.isRequired,
-  renewSessionTimeout: PropTypes.func.isRequired,
   saveSettings: PropTypes.func.isRequired,
   settings: PropTypes.shape({
     byId: PropTypes.object.isRequired,
@@ -490,7 +491,6 @@ const mapStateToProps = rootState => {
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
   saveSettings: (id, settings) => dispatch(saveSettings(gmp)(id, settings)),
-  renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
   setDefaultSettings: (id, settings) =>
     dispatch(setDashboardSettingDefaults(id, settings)),
 });
