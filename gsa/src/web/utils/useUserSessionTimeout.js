@@ -17,20 +17,44 @@
  */
 import {useSelector, useDispatch} from 'react-redux';
 
+import gql from 'graphql-tag';
+
+import {useMutation} from '@apollo/react-hooks';
+
+import date from 'gmp/models/date';
+
 import {getSessionTimeout} from 'web/store/usersettings/selectors';
-import {
-  setSessionTimeout,
-  renewSessionTimeout,
-} from 'web/store/usersettings/actions';
+import {setSessionTimeout} from 'web/store/usersettings/actions';
 
 import useGmp from './useGmp';
+
+const RENEW_SESSION = gql`
+  mutation renewSession {
+    renewSession {
+      currentUser {
+        sessionTimeout
+      }
+    }
+  }
+`;
 
 const useUserSessionTimeout = () => {
   const dispatch = useDispatch();
   const gmp = useGmp();
+  const [renewSession] = useMutation(RENEW_SESSION);
   return [
     useSelector(getSessionTimeout),
-    () => dispatch(renewSessionTimeout(gmp)()),
+    () => {
+      if (!gmp.settings.isHyperionOnly) {
+        gmp.user.renewSession();
+      }
+
+      renewSession().then(({data}) =>
+        dispatch(
+          setSessionTimeout(date(data.renewSession.currentUser.sessionTimeout)),
+        ),
+      );
+    },
     timeout => dispatch(setSessionTimeout(timeout)),
   ];
 };
