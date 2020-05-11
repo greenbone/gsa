@@ -421,13 +421,25 @@ const TaskComponent = props => {
         .then(() => closeTaskDialog());
     }
     const mutationData = {
-      name,
-      configId: FULL_AND_FAST_SCAN_CONFIG_ID,
-      scannerId: scanner_id,
-      schedulePeriods: schedule_periods,
-      targetId: target_id,
+      alertIds: alert_ids,
       alterable,
+      applyOverrides: apply_overrides,
+      autoDelete: auto_delete,
+      autoDeleteData: auto_delete_data,
       comment,
+      configId: config_id,
+      hostsOrdering: hosts_ordering,
+      inAssets: in_assets,
+      maxChecks: max_checks,
+      maxHosts: max_hosts,
+      minQod: min_qod,
+      name,
+      scannerId: scanner_id,
+      scannerType: scanner_type,
+      scheduleId: schedule_id,
+      schedulePeriods: schedule_periods,
+      sourceIface: source_iface,
+      targetId: target_id,
     };
     const {onCreated, onCreateError} = props;
     return createTask(mutationData)
