@@ -15,11 +15,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {useLocation} from 'react-router-dom';
 
 import {connect} from 'react-redux';
+
+import {isDefined} from 'gmp/utils/identity';
+
+import CollectionCounts from 'gmp/collection/collectioncounts';
+
+import Task from 'gmp/models/task';
 
 import FilterProvider from 'web/entities/filterprovider';
 
@@ -34,6 +40,8 @@ import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
+
+import {useLazyGetTasks} from 'web/pages/tasks/graphql';
 
 import EntitiesContainer from './container';
 
@@ -54,29 +62,83 @@ const withEntitiesContainer = (
     loadEntities,
     notify,
     ...props
-  }) => (
-    <Reload
-      reloadInterval={() => reloadInterval(props)}
-      reload={(newFilter = filter) => loadEntities(newFilter)}
-      name={gmpname}
-    >
-      {({reload}) => (
-        <EntitiesContainer
-          {...props}
-          filter={filter}
-          notify={notify}
-          gmpname={gmpname}
-          reload={reload}
-        >
-          {pageProps => <Component {...pageProps} />}
-        </EntitiesContainer>
-      )}
-    </Reload>
-  );
+  }) => {
+    const query = useLazyGetTasks();
+    const [loadTasks, {data, error}] = query({
+      filterString: filter.toFilterString(),
+    });
+
+    const [tasks, setTasks] = useState();
+    const [counts, setCounts] = useState();
+    const [taskError, setTaskError] = useState();
+
+    useEffect(() => {
+      if (gmpname === 'task') {
+        loadTasks();
+        if (isDefined(data)) {
+          setTasks(
+            data.tasks.edges.map(entity => Task.fromObject(entity.node)),
+          );
+
+          const {total, filtered, offset, limit, length} = data.tasks.counts;
+          setCounts(
+            new CollectionCounts({
+              all: total,
+              filtered: filtered,
+              first: offset + 1,
+              length: length,
+              rows: limit,
+            }),
+          );
+        }
+
+        if (isDefined(error)) {
+          setTaskError(error);
+        }
+      }
+    }, [data, error, loadTasks]);
+
+    let {entities, entitiesCounts, entitiesError, loadedFilter} = props;
+
+    if (gmpname === 'task') {
+      entities = tasks;
+      entitiesCounts = counts;
+      entitiesError = taskError;
+      loadedFilter = filter;
+    }
+
+    return (
+      <Reload
+        reloadInterval={() => reloadInterval(props)}
+        reload={(newFilter = filter) => loadEntities(newFilter)}
+        name={gmpname}
+      >
+        {({reload}) => (
+          <EntitiesContainer
+            {...props}
+            filter={filter}
+            notify={notify}
+            gmpname={gmpname}
+            reload={reload}
+            entities={entities}
+            entitiesCounts={entitiesCounts}
+            entitiesError={entitiesError}
+            loadedFilter={loadedFilter}
+          >
+            {pageProps => <Component {...pageProps} />}
+          </EntitiesContainer>
+        )}
+      </Reload>
+    );
+  };
 
   EntitiesContainerWrapper.propTypes = {
+    entities: PropTypes.array,
+    entitiesCounts: PropTypes.counts,
+    entitiesError: PropTypes.error,
     filter: PropTypes.filter,
     loadEntities: PropTypes.func.isRequired,
+    loadedFilter: PropTypes.filter,
     notify: PropTypes.func.isRequired,
   };
 
@@ -103,10 +165,7 @@ const withEntitiesContainer = (
     withDialogNotification,
     withDownload,
     withGmp,
-    connect(
-      mapStateToProps,
-      mapDispatchToProps,
-    ),
+    connect(mapStateToProps, mapDispatchToProps),
   )(EntitiesContainerWrapper);
 
   return props => {
