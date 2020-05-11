@@ -15,80 +15,37 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {useEffect, useState} from 'react';
 
-import {connect} from 'react-redux';
-
-import {withRouter} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 import Logger from 'gmp/log';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
-
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const log = Logger.getLogger('web.observer.locationobserver');
 
 const locationChanged = (loc, prevLoc) =>
   loc.pathname !== prevLoc.pathname || loc.search !== prevLoc.search;
 
-class LocationObserver extends React.Component {
-  constructor(...args) {
-    super(...args);
+const LocationObserver = props => {
+  const location = useLocation();
+  const [, renewSession] = useUserSessionTimeout();
+  const [lastLocation, setLocation] = useState(location);
 
-    this.state = {
-      location: this.props.location,
-    };
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    if (locationChanged(props.location, state.location)) {
-      return {
-        location: props.location,
-        locationHasChanged: true,
-      };
-    }
-    return {
-      locationHasChanged: false,
-    };
-  }
-
-  componentDidMount() {
-    // init session timeout in store
-    // this is necessary for page reloads
-    this.props.renewSessionTimeout();
-  }
-
-  componentDidUpdate() {
-    if (this.state.locationHasChanged) {
+  useEffect(() => {
+    // renew session if location has changed
+    if (locationChanged(lastLocation, location)) {
       log.debug('Location has changed. Renewing session.');
 
-      this.props.renewSessionTimeout();
+      renewSession();
+      setLocation(location);
     }
-  }
+  }, [lastLocation, location, renewSession]);
 
-  render() {
-    return this.props.children;
-  }
-}
-
-LocationObserver.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  location: PropTypes.object.isRequired,
-  renewSessionTimeout: PropTypes.func.isRequired,
+  return props.children;
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-  connect(
-    undefined,
-    (dispatch, {gmp}) => ({
-      renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
-    }),
-  ),
-)(LocationObserver);
+export default LocationObserver;
 
 // vim: set ts=2 sw=2 tw=80:
