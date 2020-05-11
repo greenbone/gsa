@@ -318,9 +318,9 @@ const TaskComponent = props => {
     setName(task ? task.name : _('Unnamed'));
     setComment(task ? task.comment : '');
     setId(task ? task.id : undefined);
-    setInAssets(task ? task.in_assets : undefined);
-    setAutoDelete(task ? task.auto_delete : undefined);
-    setAutoDeleteData(task ? task.auto_delete_data : undefined);
+    setInAssets(task ? task.inAssets : undefined);
+    setAutoDelete(task ? task.autoDelete : undefined);
+    setAutoDeleteData(task ? task.autoDeleteData : undefined);
     setTitle(
       task ? _('Edit Container Task {{name}}', task) : _('New Container Task'),
     );
@@ -465,11 +465,11 @@ const TaskComponent = props => {
         capabilities.mayAccess('schedules') && isDefined(task.schedule);
       const schedule_id = canAccessSchedules ? task.schedule.id : UNSET_VALUE;
       const schedule_periods = canAccessSchedules
-        ? task.schedule_periods
+        ? task.schedulePeriods
         : undefined;
 
-      setMinQod(task.min_qod);
-      setSourceIFace(task.source_iface);
+      setMinQod(task.minQod);
+      setSourceIFace(task.sourceIface);
       setSchedulePeriods(schedule_periods);
       setScannerId(hasId(task.scanner) ? task.scanner.id : undefined);
       setName(task.name);
@@ -478,16 +478,16 @@ const TaskComponent = props => {
       toggleTaskDialogVisible(true);
       setAlertIds(map(task.alerts, alert => alert.id));
       setAlterable(task.alterable);
-      setApplyOverrides(task.apply_overrides);
-      setAutoDelete(task.auto_delete);
-      setAutoDeleteData(task.auto_delete_data);
+      setApplyOverrides(task.applyOverrides);
+      setAutoDelete(task.autoDelete);
+      setAutoDeleteData(task.autoDeleteData);
       setComment(task.comment);
       setConfigId(hasId(task.config) ? task.config.id : undefined);
-      setHostsOrdering(task.hosts_ordering);
+      setHostsOrdering(task.hostsOrdering);
       setId(task.id);
-      setInAssets(task.in_assets);
-      setMaxChecks(task.max_checks);
-      setMaxHosts(task.max_hosts);
+      setInAssets(task.inAssets);
+      setMaxChecks(task.maxChecks);
+      setMaxHosts(task.maxHosts);
       setTitle(_('Edit Task {{name}}', task));
       setTask(task);
     } else {
