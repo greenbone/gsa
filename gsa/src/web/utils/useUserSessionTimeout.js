@@ -28,7 +28,7 @@ import {setSessionTimeout} from 'web/store/usersettings/actions';
 
 import useGmp from './useGmp';
 
-const RENEW_SESSION = gql`
+export const RENEW_SESSION = gql`
   mutation renewSession {
     renewSession {
       currentUser {
