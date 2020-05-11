@@ -24,7 +24,7 @@ import {setSessionTimeout as setSessionTimeoutAction} from 'web/store/usersettin
 
 import {rendererWith, fireEvent, screen, wait} from '../testing';
 
-import useUserSessionTimeout from '../useUserSessionTimeout';
+import useUserSessionTimeout, {RENEW_SESSION} from '../useUserSessionTimeout';
 
 const TestUserSessionTimeout = () => {
   const [
@@ -79,6 +79,16 @@ describe('useUserSessionTimeout tests', () => {
 
   test('should allow to renew the users session timeout', async () => {
     const renewDate = date('2020-03-20');
+    const result = {
+      data: {
+        renewSession: {
+          currentUser: {
+            sessionTimeout: renewDate,
+          },
+        },
+      },
+    };
+    const resultFunc = jest.fn().mockReturnValue(result);
     const renewSession = jest
       .fn()
       .mockReturnValue(Promise.resolve({data: renewDate}));
@@ -86,8 +96,22 @@ describe('useUserSessionTimeout tests', () => {
       user: {
         renewSession,
       },
+      settings: {
+        isHyperionOnly: false,
+      },
     };
-    const {render, store} = rendererWith({store: true, gmp});
+    const mock = {
+      request: {
+        query: RENEW_SESSION,
+        variables: {},
+      },
+      result: resultFunc,
+    };
+    const {render, store} = rendererWith({
+      store: true,
+      gmp,
+      queryMocks: [mock],
+    });
 
     const timeout = date('2019-10-10');
 
@@ -106,6 +130,8 @@ describe('useUserSessionTimeout tests', () => {
     expect(renewSession).toHaveBeenCalled();
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     expect(element).toHaveTextContent(/^20-03-20$/);
   });
