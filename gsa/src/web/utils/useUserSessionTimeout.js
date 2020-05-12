@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {useCallback} from 'react';
+
 import {useSelector, useDispatch} from 'react-redux';
 
 import gql from 'graphql-tag';
@@ -42,10 +44,11 @@ const useUserSessionTimeout = () => {
   const dispatch = useDispatch();
   const gmp = useGmp();
   const [renewSession] = useMutation(RENEW_SESSION);
+  const {isHyperionOnly = false} = gmp.settings;
   return [
     useSelector(getSessionTimeout),
-    () => {
-      if (!gmp.settings.isHyperionOnly) {
+    useCallback(() => {
+      if (!isHyperionOnly) {
         gmp.user.renewSession();
       }
 
@@ -54,7 +57,7 @@ const useUserSessionTimeout = () => {
           setSessionTimeout(date(data.renewSession.currentUser.sessionTimeout)),
         ),
       );
-    },
+    }, [renewSession, dispatch, isHyperionOnly, gmp.user]),
     timeout => dispatch(setSessionTimeout(timeout)),
   ];
 };
