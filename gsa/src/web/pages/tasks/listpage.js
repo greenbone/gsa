@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 
 import _ from 'gmp/locale';
@@ -58,9 +58,18 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import Table from './table';
-import {useGetTasks, useDeleteTask, useCloneTask} from './graphql';
+import {
+  useGetTasks,
+  useDeleteTask,
+  useCloneTask,
+  useStartTask,
+  useStopTask,
+} from './graphql';
 import {queryWithRefetch} from 'web/utils/graphql';
 import useCapabilities from 'web/utils/useCapabilities';
+
+const DEFAULT_POLLING_INTERVAL = 10000;
+const DEFAULT_POLLING_INTERVAL_ACTIVE = 2000;
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -127,12 +136,21 @@ const Page = ({
 }) => {
   const query = useGetTasks();
 
-  const {data, refetch, error} = query({filterString: filter.toFilterString()});
+  const [interval, setInterval] = useState(USE_DEFAULT_RELOAD_INTERVAL);
 
+  const {data, refetch, error} = query({filterString: filter.toFilterString()})(
+    {
+      fetchPolicy: 'cache-and-network',
+      pollInterval: interval,
+    },
+  );
+  // query(vars)(options)
   const deleteTask = queryWithRefetch(useDeleteTask())(refetch);
   const cloneTask = queryWithRefetch(useCloneTask())(refetch);
+  const startTask = queryWithRefetch(useStartTask())(refetch);
+  const stopTask = queryWithRefetch(useStopTask())(refetch);
 
-  let entities;
+  let entities = [];
   let entitiesCounts;
 
   if (isDefined(data)) {
@@ -155,7 +173,11 @@ const Page = ({
   }
 
   useEffect(() => {
-    refetch();
+    setInterval(
+      entities.some(task => task.isActive())
+        ? DEFAULT_POLLING_INTERVAL_ACTIVE
+        : DEFAULT_POLLING_INTERVAL,
+    );
   }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -176,9 +198,9 @@ const Page = ({
       onResumed={onChanged}
       onResumeError={onError}
       onSaved={refetch}
-      onStarted={onChanged}
+      onStarted={refetch}
       onStartError={onError}
-      onStopped={onChanged}
+      onStopped={refetch}
       onStopError={onError}
       onTaskWizardSaved={onChanged}
     >
@@ -236,8 +258,8 @@ const Page = ({
             onTaskDownloadClick={download}
             onTaskEditClick={edit}
             onTaskResumeClick={resume}
-            onTaskStartClick={start}
-            onTaskStopClick={stop}
+            onTaskStartClick={startTask}
+            onTaskStopClick={stopTask}
             onTaskWizardClick={taskwizard}
           />
         </React.Fragment>
