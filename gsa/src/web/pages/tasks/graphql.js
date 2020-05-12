@@ -115,7 +115,7 @@ export const GET_TASK = gql`
 `;
 
 export const useGetTask = () => {
-  return toFruitfulQuery(useQuery)(GET_TASK);
+  return toFruitfulQuery(useQuery)(GET_TASK)();
 };
 
 export const GET_TASKS = gql`
@@ -128,6 +128,7 @@ export const GET_TASKS = gql`
           permissions {
             name
           }
+          progress
           reports {
             lastReport {
               id
@@ -197,8 +198,8 @@ export const GET_TASKS = gql`
   }
 `;
 
-export const useGetTasks = () => {
-  return toFruitfulQuery(useQuery)(GET_TASKS);
+export const useGetTasks = () => () => {
+  return toFruitfulQuery(useQuery)(GET_TASKS)();
 };
 
 export const LAZY_GET_TASKS = gql`
@@ -222,7 +223,7 @@ export const LAZY_GET_TASKS = gql`
 `;
 
 export const useLazyGetTasks = () => {
-  return toFruitfulQuery(useLazyQuery)(LAZY_GET_TASKS);
+  return toFruitfulQuery(useLazyQuery)(LAZY_GET_TASKS)();
 };
 
 export const CLONE_TASK = gql`
@@ -373,8 +374,6 @@ export const useCreateContainerTask = () => {
 export const START_TASK = gql`
   mutation startTask($taskId: String!) {
     startTask(taskId: $taskId) {
-      status
-      statusText
       reportId
     }
   }
@@ -383,6 +382,19 @@ export const START_TASK = gql`
 export const useStartTask = () => {
   const [startTask] = useMutation(START_TASK);
   return toGraphQL(startTask);
+};
+
+export const STOP_TASK = gql`
+  mutation stopTask($taskId: String!) {
+    stopTask(taskId: $taskId) {
+      ok
+    }
+  }
+`;
+
+export const useStopTask = () => {
+  const [stopTask] = useMutation(STOP_TASK);
+  return toGraphQL(stopTask);
 };
 
 export const GET_SCANNERS = gql`
@@ -398,7 +410,7 @@ export const GET_SCANNERS = gql`
 `;
 
 export const useGetScanners = () => {
-  return toFruitfulQuery(useLazyQuery)(GET_SCANNERS);
+  return toFruitfulQuery(useLazyQuery)(GET_SCANNERS)();
 };
 
 export const GET_SCAN_CONFIGS = gql`
@@ -414,7 +426,7 @@ export const GET_SCAN_CONFIGS = gql`
 `;
 
 export const useGetScanConfigs = () => {
-  return toFruitfulQuery(useLazyQuery)(GET_SCAN_CONFIGS);
+  return toFruitfulQuery(useLazyQuery)(GET_SCAN_CONFIGS)();
 };
 
 export const GET_TARGETS = gql`
@@ -429,5 +441,5 @@ export const GET_TARGETS = gql`
 `;
 
 export const useGetTargets = () => {
-  return toFruitfulQuery(useLazyQuery)(GET_TARGETS);
+  return toFruitfulQuery(useLazyQuery)(GET_TARGETS)();
 };

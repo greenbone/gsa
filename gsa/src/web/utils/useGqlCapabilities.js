@@ -29,5 +29,5 @@ export const GET_CAPS = gql`
 `;
 
 export const useGqlCapabilities = () => {
-  return toFruitfulQuery(useQuery)(GET_CAPS);
+  return toFruitfulQuery(useQuery)(GET_CAPS)();
 };

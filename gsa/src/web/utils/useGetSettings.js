@@ -34,7 +34,7 @@ export const GET_SETTING = gql`
 `;
 
 export const useGetSetting = () => {
-  return toFruitfulQuery(useQuery)(GET_SETTING);
+  return toFruitfulQuery(useQuery)(GET_SETTING)();
 };
 
 export const GET_SETTINGS = gql`
@@ -49,5 +49,5 @@ export const GET_SETTINGS = gql`
 `;
 
 export const useGetSettings = () => {
-  return toFruitfulQuery(useQuery)(GET_SETTINGS);
+  return toFruitfulQuery(useQuery)(GET_SETTINGS)();
 };
