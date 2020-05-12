@@ -21,14 +21,18 @@ import date from 'gmp/models/date';
 import {longDate} from 'gmp/locale/date';
 
 import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
+
 import {fireEvent, rendererWith, wait} from 'web/utils/testing';
-import {RENEW_SESSION} from 'web/utils/useUserSessionTimeout';
+import {createRenewSessionQueryResultMock} from 'web/utils/testing/querymocks';
 
 import UserMenu, {LOGOUT} from '../usermenu';
 
 describe('UserMenu component tests', () => {
   test('should render UserMenu', () => {
-    const {render} = rendererWith({gmp: {}, router: true, store: true});
+    const gmp = {
+      settings: {},
+    };
+    const {render} = rendererWith({gmp, router: true, store: true});
 
     const {element} = render(<UserMenu />);
 
@@ -36,7 +40,10 @@ describe('UserMenu component tests', () => {
   });
 
   test('should render username and sessionTimeout', () => {
-    const {render, store} = rendererWith({gmp: {}, router: true, store: true});
+    const gmp = {
+      settings: {},
+    };
+    const {render, store} = rendererWith({gmp, router: true, store: true});
     const timeout = date('2018-10-10');
 
     store.dispatch(setSessionTimeout(timeout));
@@ -49,8 +56,11 @@ describe('UserMenu component tests', () => {
   });
 
   test('should route to usersettings on click', () => {
+    const gmp = {
+      settings: {},
+    };
     const {render, history} = rendererWith({
-      gmp: {},
+      gmp,
       store: true,
       router: true,
     });
@@ -104,24 +114,10 @@ describe('UserMenu component tests', () => {
 
   test('should renew session timeout on click', () => {
     const renewDate = '2019-10-10T12:00:00Z';
-    const result = {
-      data: {
-        renewSession: {
-          currentUser: {
-            sessionTimeout: renewDate,
-          },
-        },
-      },
-    };
-    const resultFunc = jest.fn().mockReturnValue(result);
+    const [queryMock, resultFunc] = createRenewSessionQueryResultMock(
+      renewDate,
+    );
 
-    const mock = {
-      request: {
-        query: RENEW_SESSION,
-        variables: {},
-      },
-      newData: resultFunc,
-    };
     const renewSession = jest.fn().mockResolvedValue({data: renewDate});
     const gmp = {
       user: {
@@ -135,7 +131,7 @@ describe('UserMenu component tests', () => {
       gmp,
       store: true,
       router: true,
-      queryMocks: [mock],
+      queryMocks: [queryMock],
     });
 
     const {getAllByTestId} = render(<UserMenu />);
