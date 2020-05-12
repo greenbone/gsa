@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [8.0.2] - unreleased
+## [8.0.2] - 2020-05-13
 
 ### Added
 - Show passphrase field in credential dialog for cc type [#2006](https://github.com/greenbone/gsa/pull/2006)
@@ -114,7 +114,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
 - Update manpage [#1616](https://github.com/greenbone/gsa/pull/1616)
 
-[8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...gsa-8.0
+[8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...v8.0.2
 
 ## [8.0.1] - 2019-07-17
 
