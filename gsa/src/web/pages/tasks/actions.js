@@ -56,12 +56,18 @@ const Actions = ({
       {isDefined(entity.schedule) ? (
         <ScheduleIcon schedule={entity.schedule} links={links} />
       ) : (
-        <StartIcon task={entity} onClick={onTaskStartClick} />
+        <StartIcon
+          task={entity}
+          onClick={() => onTaskStartClick({taskId: entity.id})}
+        />
       )}
 
       <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
-      <StopIcon task={entity} onClick={onTaskStopClick} />
+      <StopIcon
+        task={entity}
+        onClick={() => onTaskStopClick({taskId: entity.id})}
+      />
 
       <ResumeIcon task={entity} onClick={onTaskResumeClick} />
 
