@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -32,7 +31,8 @@ import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, act} from 'web/utils/testing';
+import {createRenewSessionQueryResultMock} from 'web/utils/testing/querymocks';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -542,11 +542,14 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [renewSessionQueryMock] = createRenewSessionQueryResultMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -635,11 +638,14 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [renewSessionQueryMock] = createRenewSessionQueryResultMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -737,11 +743,14 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [renewSessionQueryMock] = createRenewSessionQueryResultMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -830,11 +839,14 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [renewSessionQueryMock] = createRenewSessionQueryResultMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
