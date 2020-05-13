@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [9.0.1] - unreleased
+## [9.0.1] - 2020-05-13
 
 ### Added
 - Added scanner selection to audit dialog
@@ -71,7 +71,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Removed auto delete field from container task dialog [#1784](https://github.com/greenbone/gsa/pull/1784)
 - Removed obsolete DefaultFilter component and withDefaultFilter HOC [#1709](https://github.com/greenbone/gsa/pull/1709)
 
-[9.0.1]: https://github.com/greenbone/gsa/compare/v9.0.0...gsa-9.0
+[9.0.1]: https://github.com/greenbone/gsa/compare/v9.0.0...v9.0.1
 
 ## [9.0.0] - 2019-10-14
 
