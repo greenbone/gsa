@@ -17,8 +17,6 @@
  */
 import React, {useState, useEffect} from 'react';
 
-import {connect} from 'react-redux';
-
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
@@ -41,10 +39,9 @@ import Layout from 'web/components/layout/layout';
 
 import Section from 'web/components/section/section';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import withGmp from 'web/utils/withGmp';
 
 const StyledTextField = styled(TextField)`
@@ -61,6 +58,8 @@ const ToolBarIcons = () => (
 );
 
 const CvssCalculator = ({gmp, onInteraction, ...props}) => {
+  const [, renewSession] = useUserSessionTimeout();
+
   const [state, setState] = useState({
     accessVector: 'LOCAL',
     accessComplexity: 'LOW',
@@ -132,9 +131,7 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
   };
 
   const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
+    renewSession();
   };
 
   const handleMetricsChange = (value, name) => {
@@ -361,19 +358,8 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
 
 CvssCalculator.propTypes = {
   gmp: PropTypes.gmp.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-});
-
-export default compose(
-  withGmp,
-  connect(
-    undefined,
-    mapDispatchToProps,
-  ),
-)(CvssCalculator);
+export default compose(withGmp)(CvssCalculator);
 
 // vim: set ts=2 sw=2 tw=80:
