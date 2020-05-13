@@ -130,10 +130,12 @@ const StartPage = props => {
     settings => new DashboardSetting(settings),
   );
 
+  const {loadSettings} = props;
+
   useEffect(() => {
     const DEFAULTS = getDefaults();
-    props.loadSettings(DASHBOARD_ID, DEFAULTS);
-  }, []);
+    loadSettings(DASHBOARD_ID, DEFAULTS);
+  }, [loadSettings]);
 
   const saveSettings = newSettings => {
     props.saveSettings(DASHBOARD_ID, {
@@ -269,6 +271,7 @@ const StartPage = props => {
   };
 
   const handleResetDashboards = () => {
+    // eslint-disable-line no-unused-vars
     // reset all dashboards
     // currently not assigned to a handler
     // const {byId, defaults} = this.props;
