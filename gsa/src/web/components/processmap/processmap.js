@@ -41,7 +41,6 @@ import ErrorBoundary from 'web/components/error/errorboundary';
 import {selector as hostSelector} from 'web/store/entities/hosts';
 
 import {saveBusinessProcessMap} from 'web/store/businessprocessmaps/actions';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -780,7 +779,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
     saveUpdatedMaps: updatedMaps =>
       dispatch(saveBusinessProcessMap(gmp)(updatedMaps)),
-    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   };
 };
 
