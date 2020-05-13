@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {connect} from 'react-redux';
 
@@ -69,58 +69,49 @@ ToolBarIcons.propTypes = {
   onOpenDialogClick: PropTypes.func,
 };
 
-class RadiusAuthentication extends React.Component {
-  constructor(...args) {
-    super(...args);
+const RadiusAuthentication = props => {
+  const [hasRadiusSupport, setHasRadiusSupport] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [enabled, setEnabled] = useState();
+  const [radiushost, setRadiusHost] = useState();
+  const [radiuskey, setRadiusKey] = useState();
 
-    this.state = {
-      hasRadiusSupport: true,
-      loading: true,
-      initial: true,
-      dialogVisible: false,
-    };
-
-    this.handleSaveSettings = this.handleSaveSettings.bind(this);
-    this.closeDialog = this.closeDialog.bind(this);
-    this.openDialog = this.openDialog.bind(this);
-  }
-
-  componentDidMount() {
-    this.loadRadiusAuthSettings();
-  }
-
-  loadRadiusAuthSettings() {
-    const {gmp} = this.props;
+  const loadRadiusAuthSettings = () => {
+    const {gmp} = props;
     const authData = gmp.user.currentAuthSettings().then(response => {
       const {data: settings} = response;
       // radius support is enabled in gvm-libs
-      const hasRadiusSupport = settings.has('method:radius_connect');
-      const {enabled, radiushost, radiuskey} = settings.get(
-        'method:radius_connect',
-      );
-      this.setState({
-        hasRadiusSupport,
-        enabled,
-        radiushost,
-        radiuskey,
-        loading: false,
-        initial: false,
-      });
+      const hasRadiusConnectMethod = settings.has('method:radius_connect');
+      const {
+        enabled: isEnabled,
+        radiushost: radHost,
+        radiuskey: radKey,
+      } = settings.get('method:radius_connect');
+      setHasRadiusSupport(hasRadiusConnectMethod);
+      setEnabled(isEnabled);
+      setRadiusHost(radHost);
+      setRadiusKey(radKey);
+      setLoading(false);
     });
     return authData;
-  }
+  };
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
+  useEffect(() => {
+    loadRadiusAuthSettings();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleInteraction = () => {
+    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  handleSaveSettings({enable, radiushost, radiuskey}) {
-    const {gmp} = this.props;
+  const handleSaveSettings = ({enable, radiushost, radiuskey}) => {
+    const {gmp} = props;
 
-    this.handleInteraction();
+    handleInteraction();
 
     return gmp.auth
       .saveRadius({
@@ -129,82 +120,69 @@ class RadiusAuthentication extends React.Component {
         radiuskey,
       })
       .then(() => {
-        this.loadRadiusAuthSettings();
-        this.setState({dialogVisible: false});
+        loadRadiusAuthSettings();
+        setDialogVisible(false);
       });
+  };
+
+  const openDialog = () => {
+    setDialogVisible(true);
+  };
+
+  const closeDialog = () => {
+    setDialogVisible(false);
+  };
+
+  if (loading) {
+    return <Loading />;
   }
 
-  openDialog() {
-    this.setState({dialogVisible: true});
-  }
-
-  closeDialog() {
-    this.setState({dialogVisible: false});
-  }
-
-  render() {
-    const {loading} = this.state;
-    if (loading) {
-      return <Loading />;
-    }
-
-    const {
-      hasRadiusSupport,
-      dialogVisible,
-      enabled,
-      radiushost,
-      radiuskey,
-    } = this.state;
-
-    return (
-      <React.Fragment>
-        <PageTitle title={_('RADIUS Authentication')} />
-        <Layout flex="column">
-          {hasRadiusSupport && (
-            <ToolBarIcons onOpenDialogClick={this.openDialog} />
-          )}
-          <Section
-            img={<RadiusIcon size="large" />}
-            title={_('RADIUS Authentication')}
-          />
-          {hasRadiusSupport ? (
-            <Table>
-              <colgroup>
-                <Col width="10%" />
-                <Col width="90%" />
-              </colgroup>
-              <TableBody>
-                <TableRow>
-                  <TableData>{_('Enabled')}</TableData>
-                  <TableData>{renderYesNo(enabled)}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('RADIUS Host')}</TableData>
-                  <TableData>{radiushost}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Secret Key')}</TableData>
-                  <TableData>********</TableData>
-                </TableRow>
-              </TableBody>
-            </Table>
-          ) : (
-            <p>{_('Support for RADIUS is not available.')}</p>
-          )}
-        </Layout>
-        {dialogVisible && (
-          <RadiusDialog
-            enable={enabled}
-            radiushost={radiushost}
-            radiuskey={radiuskey}
-            onClose={this.closeDialog}
-            onSave={this.handleSaveSettings}
-          />
+  return (
+    <React.Fragment>
+      <PageTitle title={_('RADIUS Authentication')} />
+      <Layout flex="column">
+        {hasRadiusSupport && <ToolBarIcons onOpenDialogClick={openDialog} />}
+        <Section
+          img={<RadiusIcon size="large" />}
+          title={_('RADIUS Authentication')}
+        />
+        {hasRadiusSupport ? (
+          <Table>
+            <colgroup>
+              <Col width="10%" />
+              <Col width="90%" />
+            </colgroup>
+            <TableBody>
+              <TableRow>
+                <TableData>{_('Enabled')}</TableData>
+                <TableData>{renderYesNo(enabled)}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('RADIUS Host')}</TableData>
+                <TableData>{radiushost}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Secret Key')}</TableData>
+                <TableData>********</TableData>
+              </TableRow>
+            </TableBody>
+          </Table>
+        ) : (
+          <p>{_('Support for RADIUS is not available.')}</p>
         )}
-      </React.Fragment>
-    );
-  }
-}
+      </Layout>
+      {dialogVisible && (
+        <RadiusDialog
+          enable={enabled}
+          radiushost={radiushost}
+          radiuskey={radiuskey}
+          onClose={closeDialog}
+          onSave={handleSaveSettings}
+        />
+      )}
+    </React.Fragment>
+  );
+};
 
 RadiusAuthentication.propTypes = {
   gmp: PropTypes.gmp.isRequired,
@@ -217,10 +195,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    undefined,
-    mapDispatchToProps,
-  ),
+  connect(undefined, mapDispatchToProps),
 )(RadiusAuthentication);
 
 // vim: set ts=2 sw=2 tw=80:
