@@ -57,7 +57,7 @@ const ToolBarIcons = () => (
   />
 );
 
-const CvssCalculator = ({gmp, onInteraction, ...props}) => {
+const CvssCalculator = ({gmp, ...props}) => {
   const [, renewSession] = useUserSessionTimeout();
 
   const [state, setState] = useState({
