@@ -15,13 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useState, useEffect} from 'react';
-
-import {connect} from 'react-redux';
+import React, {useState, useEffect, useCallback} from 'react';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import EditIcon from 'web/components/icon/editicon';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -43,12 +39,11 @@ import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-import compose from 'web/utils/compose';
 import {renderYesNo} from 'web/utils/render';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import RadiusDialog from './dialog';
+import useGmp from 'web/utils/useGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const ToolBarIcons = ({onOpenDialogClick}) => (
   <IconDivider>
@@ -69,7 +64,10 @@ ToolBarIcons.propTypes = {
   onOpenDialogClick: PropTypes.func,
 };
 
-const RadiusAuthentication = props => {
+const RadiusAuthentication = () => {
+  const gmp = useGmp();
+  const [, renewSession] = useUserSessionTimeout();
+
   const [hasRadiusSupport, setHasRadiusSupport] = useState(true);
   const [loading, setLoading] = useState(true);
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -77,8 +75,7 @@ const RadiusAuthentication = props => {
   const [radiushost, setRadiusHost] = useState();
   const [radiuskey, setRadiusKey] = useState();
 
-  const loadRadiusAuthSettings = () => {
-    const {gmp} = props;
+  const loadRadiusAuthSettings = useCallback(() => {
     const authData = gmp.user.currentAuthSettings().then(response => {
       const {data: settings} = response;
       // radius support is enabled in gvm-libs
@@ -95,22 +92,18 @@ const RadiusAuthentication = props => {
       setLoading(false);
     });
     return authData;
-  };
+  }, [gmp]);
 
   useEffect(() => {
     loadRadiusAuthSettings();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loadRadiusAuthSettings]);
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
+    renewSession();
   };
 
+  // eslint-disable-next-line no-shadow
   const handleSaveSettings = ({enable, radiushost, radiuskey}) => {
-    const {gmp} = props;
-
     handleInteraction();
 
     return gmp.auth
@@ -184,18 +177,6 @@ const RadiusAuthentication = props => {
   );
 };
 
-RadiusAuthentication.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-});
-
-export default compose(
-  withGmp,
-  connect(undefined, mapDispatchToProps),
-)(RadiusAuthentication);
+export default RadiusAuthentication;
 
 // vim: set ts=2 sw=2 tw=80:
