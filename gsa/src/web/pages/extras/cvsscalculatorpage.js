@@ -42,7 +42,7 @@ import Section from 'web/components/section/section';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 
 const StyledTextField = styled(TextField)`
   width: 180px;
@@ -57,7 +57,8 @@ const ToolBarIcons = () => (
   />
 );
 
-const CvssCalculator = ({gmp, ...props}) => {
+const CvssCalculator = props => {
+  const gmp = useGmp();
   const [, renewSession] = useUserSessionTimeout();
 
   const [state, setState] = useState({
@@ -356,10 +357,6 @@ const CvssCalculator = ({gmp, ...props}) => {
   );
 };
 
-CvssCalculator.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default compose(withGmp)(CvssCalculator);
+export default CvssCalculator;
 
 // vim: set ts=2 sw=2 tw=80:
