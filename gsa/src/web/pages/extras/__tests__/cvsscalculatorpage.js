@@ -22,6 +22,7 @@ import {act} from 'react-dom/test-utils';
 import {fireEvent, rendererWith, waitForElement} from 'web/utils/testing';
 
 import CvssCalculator from 'web/pages/extras/cvsscalculatorpage';
+import {createRenewSessionQueryResultMock} from 'web/utils/testing/querymocks';
 
 /* eslint-disable no-console */
 
@@ -49,6 +50,15 @@ const calculateScoreFromVector = jest.fn().mockReturnValue(
   }),
 );
 
+const location = {
+  query: {cvssVector: 'AV:N/AC:L/Au:N/C:P/I:P/A:P'},
+};
+
+const renewDate = '2019-10-10T12:00:00Z';
+
+const [queryMock] = createRenewSessionQueryResultMock(renewDate);
+
+const renewSession = jest.fn().mockResolvedValue({data: renewDate});
 const gmp = {
   cvsscalculator: {
     calculateScoreFromVector,
@@ -57,16 +67,8 @@ const gmp = {
     manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
   },
   user: {
-    renewSession: jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: 'foo',
-      }),
-    ),
+    renewSession,
   },
-};
-
-const location = {
-  query: {cvssVector: 'AV:N/AC:L/Au:N/C:P/I:P/A:P'},
 };
 
 describe('CvssCalculator page tests', () => {
@@ -74,6 +76,7 @@ describe('CvssCalculator page tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(<CvssCalculator />);
@@ -97,6 +100,7 @@ describe('CvssCalculator page tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(
@@ -122,6 +126,7 @@ describe('CvssCalculator page tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(
@@ -153,6 +158,7 @@ describe('CvssCalculator page tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(
