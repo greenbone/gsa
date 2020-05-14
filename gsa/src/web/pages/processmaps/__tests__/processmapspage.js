@@ -366,9 +366,6 @@ describe('ProcessMapsPage tests', () => {
     expect(progressBars[1]).toHaveAttribute('title', 'N/A');
     expect(progressBars[1]).toHaveTextContent('N/A');
     expect(icons[11]).toHaveAttribute('title', 'Remove host from process');
-
-    expect(gmp.user.renewSession).toHaveBeenCalled();
-    expect(resultFunc).toHaveBeenCalled();
   });
 
   test('should save map when drawing new edge', () => {
@@ -420,9 +417,6 @@ describe('ProcessMapsPage tests', () => {
     expect(edgeIcon).not.toHaveStyleRule('background-color', '#66c430');
 
     expect(saveBusinessProcessMaps).toHaveBeenCalled();
-
-    expect(gmp.user.renewSession).toHaveBeenCalled();
-    expect(resultFunc).toHaveBeenCalled();
   });
 
   test('should save map after a process was moved', () => {
@@ -471,8 +465,5 @@ describe('ProcessMapsPage tests', () => {
     fireEvent.mouseUp(circles[0]);
 
     expect(saveBusinessProcessMaps).toHaveBeenCalled();
-
-    expect(gmp.user.renewSession).toHaveBeenCalled();
-    expect(resultFunc).toHaveBeenCalled();
   });
 });
