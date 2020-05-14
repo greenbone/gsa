@@ -34,11 +34,12 @@ import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
 import {
-  loadSettings,
-  saveSettings,
+  loadSettings as loadDashboardSettings,
+  saveSettings as saveDashboardSettings,
   setDashboardSettingDefaults,
 } from 'web/store/dashboard/settings/actions';
-import getDashboardSettings, {
+import {
+  default as getDashboardSettingsFromStore,
   DashboardSetting,
 } from 'web/store/dashboard/settings/selectors';
 
@@ -479,7 +480,7 @@ StartPage.propTypes = {
 };
 
 const mapStateToProps = rootState => {
-  const settingsSelector = getDashboardSettings(rootState);
+  const settingsSelector = getDashboardSettingsFromStore(rootState);
   const settings = settingsSelector.getById(DASHBOARD_ID);
   const isLoading = settingsSelector.getIsLoading(DASHBOARD_ID);
   const error = settingsSelector.getError(DASHBOARD_ID);
@@ -492,8 +493,10 @@ const mapStateToProps = rootState => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
-  saveSettings: (id, settings) => dispatch(saveSettings(gmp)(id, settings)),
+  loadSettings: (id, defaults) =>
+    dispatch(loadDashboardSettings(gmp)(id, defaults)),
+  saveSettings: (id, settings) =>
+    dispatch(saveDashboardSettings(gmp)(id, settings)),
   setDefaultSettings: (id, settings) =>
     dispatch(setDashboardSettingDefaults(id, settings)),
 });
