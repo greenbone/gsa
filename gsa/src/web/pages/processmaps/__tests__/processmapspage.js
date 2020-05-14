@@ -33,6 +33,7 @@ import {hostsFilter} from 'web/components/processmap/processmaploader';
 import {getMockProcessMap} from 'web/components/processmap/__mocks__/mockprocessmap';
 
 import ProcessMapsPage from '../processmapspage';
+import {createRenewSessionQueryResultMock} from 'web/utils/testing/querymocks';
 
 setLocale('en');
 
@@ -72,7 +73,11 @@ const getTag = jest.fn().mockResolvedValue({
   data: '',
 });
 
-const renewSession = jest.fn().mockResolvedValue({data: {}});
+const renewDate = '2019-10-10T12:00:00Z';
+
+const [queryMock, resultFunc] = createRenewSessionQueryResultMock(renewDate);
+
+const renewSession = jest.fn().mockResolvedValue({data: renewDate});
 
 const getBusinessProcessMaps = jest.fn().mockResolvedValue({
   foo: 'bar',
@@ -94,6 +99,7 @@ describe('ProcessMapsPage tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getByTestId, getAllByTestId} = render(<ProcessMapsPage />);
@@ -172,6 +178,7 @@ describe('ProcessMapsPage tests', () => {
     const {render, store} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getByTestId, getAllByTestId} = render(<ProcessMapsPage />);
@@ -248,6 +255,9 @@ describe('ProcessMapsPage tests', () => {
     expect(element).not.toHaveTextContent(
       'No hosts associated with this process.',
     );
+
+    expect(gmp.user.renewSession).toHaveBeenCalled();
+    expect(resultFunc).toHaveBeenCalled();
   });
 
   test('should render ProcessMapsPage with hosts', () => {
@@ -271,6 +281,7 @@ describe('ProcessMapsPage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(<ProcessMapsPage />);
@@ -355,6 +366,9 @@ describe('ProcessMapsPage tests', () => {
     expect(progressBars[1]).toHaveAttribute('title', 'N/A');
     expect(progressBars[1]).toHaveTextContent('N/A');
     expect(icons[11]).toHaveAttribute('title', 'Remove host from process');
+
+    expect(gmp.user.renewSession).toHaveBeenCalled();
+    expect(resultFunc).toHaveBeenCalled();
   });
 
   test('should save map when drawing new edge', () => {
@@ -381,6 +395,7 @@ describe('ProcessMapsPage tests', () => {
     const {render, store} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {getByTestId, getAllByTestId} = render(<ProcessMapsPage />);
@@ -405,6 +420,9 @@ describe('ProcessMapsPage tests', () => {
     expect(edgeIcon).not.toHaveStyleRule('background-color', '#66c430');
 
     expect(saveBusinessProcessMaps).toHaveBeenCalled();
+
+    expect(gmp.user.renewSession).toHaveBeenCalled();
+    expect(resultFunc).toHaveBeenCalled();
   });
 
   test('should save map after a process was moved', () => {
@@ -433,6 +451,7 @@ describe('ProcessMapsPage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {getAllByTestId} = render(<ProcessMapsPage />);
@@ -452,5 +471,8 @@ describe('ProcessMapsPage tests', () => {
     fireEvent.mouseUp(circles[0]);
 
     expect(saveBusinessProcessMaps).toHaveBeenCalled();
+
+    expect(gmp.user.renewSession).toHaveBeenCalled();
+    expect(resultFunc).toHaveBeenCalled();
   });
 });
