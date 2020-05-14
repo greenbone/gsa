@@ -270,8 +270,8 @@ const StartPage = props => {
     setShowEditDashboardDialog(false);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleResetDashboards = () => {
-    // eslint-disable-line no-unused-vars
     // reset all dashboards
     // currently not assigned to a handler
     // const {byId, defaults} = this.props;
