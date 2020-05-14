@@ -39,8 +39,6 @@ import Layout from 'web/components/layout/layout';
 
 import Section from 'web/components/section/section';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import useGmp from 'web/utils/useGmp';
 
