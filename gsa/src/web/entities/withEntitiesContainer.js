@@ -107,10 +107,13 @@ const withEntitiesContainer = (
       loadedFilter = filter;
     }
 
+    const reloadFunc = isDefined(loadEntities)
+      ? (newFilter = filter) => loadEntities(newFilter)
+      : undefined;
     return (
       <Reload
         reloadInterval={() => reloadInterval(props)}
-        reload={(newFilter = filter) => loadEntities(newFilter)}
+        reload={reloadFunc}
         name={gmpname}
       >
         {({reload}) => (
@@ -137,7 +140,7 @@ const withEntitiesContainer = (
     entitiesCounts: PropTypes.counts,
     entitiesError: PropTypes.error,
     filter: PropTypes.filter,
-    loadEntities: PropTypes.func.isRequired,
+    loadEntities: PropTypes.func,
     loadedFilter: PropTypes.filter,
     notify: PropTypes.func.isRequired,
   };
@@ -155,11 +158,17 @@ const withEntitiesContainer = (
     };
   };
 
-  const mapDispatchToProps = (dispatch, {gmp}) => ({
-    loadEntities: filter => dispatch(loadEntitiesFunc(gmp)(filter)),
-    updateFilter: filter => dispatch(pageFilter(gmpname, filter)),
-    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-  });
+  const mapDispatchToProps = (dispatch, {gmp}) => {
+    const loadEntities = isDefined(loadEntitiesFunc)
+      ? filter => dispatch(loadEntitiesFunc(gmp)(filter))
+      : undefined;
+
+    return {
+      loadEntities,
+      updateFilter: filter => dispatch(pageFilter(gmpname, filter)),
+      onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+    };
+  };
 
   EntitiesContainerWrapper = compose(
     withDialogNotification,
