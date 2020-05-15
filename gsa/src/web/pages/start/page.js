@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+/* eslint-disable no-shadow */
+
 import React, {useState, useEffect, useCallback} from 'react';
 
 import {v4 as uuid} from 'uuid';
