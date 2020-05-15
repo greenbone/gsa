@@ -20,7 +20,7 @@ import gql from 'graphql-tag';
 
 import {useMutation, useQuery, useLazyQuery} from '@apollo/react-hooks';
 
-import {toGraphQL, toFruitfulQuery} from 'web/utils/graphql';
+import {toGraphQL, toFruitfulQuery, toInputObject} from 'web/utils/graphql';
 
 export const GET_TASK = gql`
   query Task($taskId: UUID!) {
@@ -252,48 +252,8 @@ export const useDeleteTask = () => {
 };
 
 export const MODIFY_TASK = gql`
-  mutation modifyTask(
-    $alertIds: [UUID]
-    $alterable: Boolean
-    $applyOverrides: Boolean
-    $autoDelete: String
-    $autoDeleteData: Int
-    $comment: String
-    $configId: UUID
-    $hostsOrdering: String
-    $inAssets: Boolean
-    $maxChecks: Int
-    $maxHosts: Int
-    $minQod: Int
-    $name: String
-    $scannerId: UUID
-    $scannerType: Int
-    $schedulePeriods: Int
-    $sourceIface: String
-    $targetId: UUID
-    $taskId: UUID!
-  ) {
-    modifyTask(
-      alertIds: $alertIds
-      alterable: $alterable
-      applyOverrides: $applyOverrides
-      autoDelete: $autoDelete
-      autoDeleteData: $autoDeleteData
-      comment: $comment
-      configId: $configId
-      hostsOrdering: $hostsOrdering
-      inAssets: $inAssets
-      maxChecks: $maxChecks
-      maxHosts: $maxHosts
-      minQod: $minQod
-      name: $name
-      scannerId: $scannerId
-      scannerType: $scannerType
-      schedulePeriods: $schedulePeriods
-      sourceIface: $sourceIface
-      targetId: $targetId
-      taskId: $taskId
-    ) {
+  mutation modifyTask($input: ModifyTaskInput!) {
+    modifyTask(input: $input) {
       status
       id
     }
@@ -302,50 +262,12 @@ export const MODIFY_TASK = gql`
 
 export const useModifyTask = () => {
   const [modifyTask] = useMutation(MODIFY_TASK);
-  return toGraphQL(modifyTask);
+  return toInputObject(modifyTask);
 };
 
 export const CREATE_TASK = gql`
-  mutation createTask(
-    $alertIds: [UUID]
-    $alterable: Boolean
-    $applyOverrides: Boolean
-    $autoDelete: String
-    $autoDeleteData: Int
-    $comment: String
-    $configId: UUID!
-    $hostsOrdering: String
-    $inAssets: Boolean
-    $maxChecks: Int
-    $maxHosts: Int
-    $minQod: Int
-    $name: String!
-    $scannerId: UUID!
-    $scannerType: Int
-    $schedulePeriods: Int
-    $sourceIface: String
-    $targetId: UUID!
-  ) {
-    createTask(
-      alertIds: $alertIds
-      alterable: $alterable
-      applyOverrides: $applyOverrides
-      autoDelete: $autoDelete
-      autoDeleteData: $autoDeleteData
-      comment: $comment
-      configId: $configId
-      hostsOrdering: $hostsOrdering
-      inAssets: $inAssets
-      maxChecks: $maxChecks
-      maxHosts: $maxHosts
-      minQod: $minQod
-      name: $name
-      scannerId: $scannerId
-      scannerType: $scannerType
-      schedulePeriods: $schedulePeriods
-      sourceIface: $sourceIface
-      targetId: $targetId
-    ) {
+  mutation createTask($input: CreateTaskInput!) {
+    createTask(input: $input) {
       id
       status
     }
@@ -354,7 +276,7 @@ export const CREATE_TASK = gql`
 
 export const useCreateTask = () => {
   const [createTask] = useMutation(CREATE_TASK);
-  return toGraphQL(createTask);
+  return toInputObject(createTask);
 };
 
 export const CREATE_CONTAINER_TASK = gql`

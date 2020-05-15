@@ -21,6 +21,10 @@ export const toGraphQL = query => data => {
   return query({variables: data});
 };
 
+export const toInputObject = query => data => {
+  return query({variables: {input: data}});
+};
+
 export const toFruitfulQuery = query => gql => vars => {
   return query(gql, {variables: vars});
 };
