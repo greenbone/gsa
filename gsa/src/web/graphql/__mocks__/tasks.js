@@ -30,27 +30,11 @@ const target = deepFreeze({
   name: 'target 1',
 });
 
-const target2 = deepFreeze({
-  id: '265',
-  name: 'target 2',
-});
-
-const target3 = deepFreeze({
-  id: '358',
-  name: 'target 3',
-});
-
 // Scanner
 const scanner = deepFreeze({
   id: '212223',
   name: 'scanner 1',
   type: 'OPENVAS_SCANNER_TYPE',
-});
-
-const gmpScanner = deepFreeze({
-  id: '242526',
-  name: 'scanner 2',
-  type: 'GMP_SCANNER_TYPE',
 });
 
 // ScanConfig
@@ -63,12 +47,6 @@ const scanConfig = deepFreeze({
   type: OPENVAS_SCAN_CONFIG_TYPE,
 });
 
-// Schedule
-const schedule = deepFreeze({id: '121314', name: 'schedule 1'});
-
-// Alert
-const alert = deepFreeze({id: '151617', name: 'alert 1'});
-
 // Reports
 const lastReport = deepFreeze({
   id: '1234',
@@ -77,15 +55,6 @@ const lastReport = deepFreeze({
   scanStart: '2019-07-30T13:23:34Z',
   scanEnd: '2019-07-30T13:25:43Z',
 });
-
-const currentReport = deepFreeze({
-  id: '5678',
-  timestamp: '2019-08-30T13:23:30Z',
-  scanStart: '2019-08-30T13:23:34Z',
-});
-
-// Permissions
-const limitedPermissions = deepFreeze([{name: 'get_tasks'}]);
 
 const allPermissions = deepFreeze([
   {
@@ -153,143 +122,6 @@ const preferences = deepFreeze([
   },
 ]);
 
-// Tasks
-const task = deepFreeze({
-  id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  owner: 'admin',
-  alterable: 1,
-  creationTime: '2019-07-30T13:00:00Z',
-  modificationTime: '2019-08-30T13:23:30Z',
-  status: TASK_STATUS.stopped,
-  reports: {
-    lastReport,
-    currentReport,
-    counts: {
-      total: 2,
-      finished: 1,
-    },
-  },
-  permissions: allPermissions,
-  target: target,
-  schedule: schedule,
-  alerts: [alert],
-  scanner: gmpScanner,
-  scanConfig: scanConfig,
-  preferences: preferences,
-  hostsOrdering: 'sequential',
-  observers: observers,
-});
-
-const newTask = deepFreeze({
-  id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  owner: 'admin',
-  alterable: 0,
-  status: TASK_STATUS.new,
-  reports: {
-    counts: {
-      total: 0,
-      finished: 0,
-    },
-  },
-  permissions: allPermissions,
-  target: target2,
-});
-
-const finishedTask = deepFreeze({
-  id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  owner: 'admin',
-  status: TASK_STATUS.done,
-  reports: {
-    lastReport,
-    counts: {
-      total: 1,
-      finished: 1,
-    },
-  },
-  permissions: allPermissions,
-  target,
-});
-
-const runningTask = deepFreeze({
-  id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  owner: 'admin',
-  alterable: 0,
-  inUse: true,
-  status: TASK_STATUS.running,
-  reports: {
-    lastReport,
-    currentReport,
-    counts: {
-      total: 2,
-      finished: 1,
-    },
-  },
-  permissions: allPermissions,
-  target: target3,
-});
-
-const stoppedTask = deepFreeze({
-  id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  owner: 'admin',
-  alterable: 0,
-  status: TASK_STATUS.stopped,
-  reports: {
-    lastReport,
-    currentReport,
-    counts: {
-      total: 2,
-      finished: 1,
-    },
-  },
-  permissions: allPermissions,
-  target: target,
-});
-
-const observedTask = deepFreeze({
-  id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  owner: 'admin',
-  alterable: 0,
-  status: TASK_STATUS.done,
-  reports: {
-    lastReport,
-    counts: {
-      total: 1,
-      finished: 1,
-    },
-  },
-  permissions: limitedPermissions,
-  target: target,
-});
-
-const containerTask = deepFreeze({
-  id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  owner: 'admin',
-  alterable: 0,
-  status: TASK_STATUS.done,
-  reports: {
-    lastReport,
-    counts: {
-      total: 1,
-      finished: 1,
-    },
-  },
-  permissions: allPermissions,
-});
-
 const listMockTask = deepFreeze({
   name: 'foo',
   id: '12345',
@@ -313,37 +145,6 @@ const listMockTask = deepFreeze({
   scanConfig,
   scanner,
   hostsOrdering: null,
-  observers,
-});
-
-const detailsMockTask = deepFreeze({
-  name: 'foo',
-  id: '12345',
-  creationTime: '2019-07-30T13:00:00Z',
-  modificationTime: '2019-08-30T13:23:30Z',
-  permissions: allPermissions,
-  reports: {
-    lastReport,
-    currentReport,
-    counts: {
-      total: 1,
-      finished: 1,
-    },
-  },
-  status: TASK_STATUS.stopped,
-  target,
-  alterable: 0,
-  trend: null,
-  comment: 'bar',
-  owner: 'admin',
-  preferences,
-  schedule: schedule,
-  alerts: [alert],
-  scanConfig,
-  scanner,
-  schedulePeriods: null,
-  hostsOrdering: 'sequential',
-  userTags: null,
   observers,
 });
 
