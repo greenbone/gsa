@@ -20,10 +20,11 @@ import React from 'react';
 import date from 'gmp/models/date';
 import {longDate} from 'gmp/locale/date';
 
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
 
 import {fireEvent, rendererWith, wait} from 'web/utils/testing';
-import {createRenewSessionQueryResultMock} from 'web/utils/testing/querymocks';
 
 import UserMenu, {LOGOUT} from '../usermenu';
 
@@ -114,9 +115,7 @@ describe('UserMenu component tests', () => {
 
   test('should renew session timeout on click', () => {
     const renewDate = '2019-10-10T12:00:00Z';
-    const [queryMock, resultFunc] = createRenewSessionQueryResultMock(
-      renewDate,
-    );
+    const [queryMock, resultFunc] = createRenewSessionQueryMock(renewDate);
 
     const renewSession = jest.fn().mockResolvedValue({data: renewDate});
     const gmp = {

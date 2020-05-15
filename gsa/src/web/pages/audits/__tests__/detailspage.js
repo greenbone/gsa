@@ -30,11 +30,12 @@ import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, act} from 'web/utils/testing';
-import {createRenewSessionQueryResultMock} from 'web/utils/testing/querymocks';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -483,7 +484,7 @@ describe('Audit Detailspage tests', () => {
         renewSession,
       },
     };
-    const [renewQueryMock] = createRenewSessionQueryResultMock();
+    const [renewQueryMock] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,

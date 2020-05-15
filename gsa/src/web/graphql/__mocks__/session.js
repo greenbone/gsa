@@ -20,9 +20,9 @@ import date from 'gmp/models/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {RENEW_SESSION} from '../useUserSessionTimeout';
+import {RENEW_SESSION} from 'web/utils/useUserSessionTimeout';
 
-export const createRenewSessionQueryResultMock = renewDate => {
+export const createRenewSessionQueryMock = renewDate => {
   if (!isDefined(renewDate)) {
     renewDate = date('2020-03-20');
   }

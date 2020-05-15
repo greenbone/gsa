@@ -20,11 +20,11 @@ import React from 'react';
 import {dateFormat} from 'gmp/locale/date';
 import date from 'gmp/models/date';
 
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {setSessionTimeout as setSessionTimeoutAction} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, screen, wait} from '../testing';
-
-import {createRenewSessionQueryResultMock} from '../testing/querymocks';
 
 import useUserSessionTimeout from '../useUserSessionTimeout';
 
@@ -91,9 +91,7 @@ describe('useUserSessionTimeout tests', () => {
 
   test('should allow to renew the users session timeout', async () => {
     const renewDate = date('2020-03-20');
-    const [queryMock, resultFunc] = createRenewSessionQueryResultMock(
-      renewDate,
-    );
+    const [queryMock, resultFunc] = createRenewSessionQueryMock(renewDate);
     const renewSession = jest
       .fn()
       .mockReturnValue(Promise.resolve({data: renewDate}));

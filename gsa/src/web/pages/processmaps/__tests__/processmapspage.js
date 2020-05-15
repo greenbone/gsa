@@ -23,17 +23,18 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
 
+import {hostsFilter} from 'web/components/processmap/processmaploader';
+
+import {getMockProcessMap} from 'web/components/processmap/__mocks__/mockprocessmap';
+
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {getBusinessProcessMapsAction} from 'web/store/businessprocessmaps/actions';
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
-import {hostsFilter} from 'web/components/processmap/processmaploader';
-
-import {getMockProcessMap} from 'web/components/processmap/__mocks__/mockprocessmap';
-
 import ProcessMapsPage from '../processmapspage';
-import {createRenewSessionQueryResultMock} from 'web/utils/testing/querymocks';
 
 setLocale('en');
 
@@ -75,7 +76,7 @@ const getTag = jest.fn().mockResolvedValue({
 
 const renewDate = '2019-10-10T12:00:00Z';
 
-const [queryMock, resultFunc] = createRenewSessionQueryResultMock(renewDate);
+const [queryMock, resultFunc] = createRenewSessionQueryMock(renewDate);
 
 const renewSession = jest.fn().mockResolvedValue({data: renewDate});
 

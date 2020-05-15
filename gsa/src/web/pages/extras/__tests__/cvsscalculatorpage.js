@@ -19,10 +19,11 @@
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {fireEvent, rendererWith, waitForElement} from 'web/utils/testing';
 
 import CvssCalculator from 'web/pages/extras/cvsscalculatorpage';
-import {createRenewSessionQueryResultMock} from 'web/utils/testing/querymocks';
 
 /* eslint-disable no-console */
 
@@ -56,7 +57,7 @@ const location = {
 
 const renewDate = '2019-10-10T12:00:00Z';
 
-const [queryMock] = createRenewSessionQueryResultMock(renewDate);
+const [queryMock] = createRenewSessionQueryMock(renewDate);
 
 const renewSession = jest.fn().mockResolvedValue({data: renewDate});
 const gmp = {

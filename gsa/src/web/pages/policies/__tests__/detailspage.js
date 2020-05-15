@@ -28,11 +28,12 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, act} from 'web/utils/testing';
-import {createRenewSessionQueryResultMock} from 'web/utils/testing/querymocks';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -542,7 +543,7 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
-    const [renewSessionQueryMock] = createRenewSessionQueryResultMock();
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -638,7 +639,7 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
-    const [renewSessionQueryMock] = createRenewSessionQueryResultMock();
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -743,7 +744,7 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
-    const [renewSessionQueryMock] = createRenewSessionQueryResultMock();
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -839,7 +840,7 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
-    const [renewSessionQueryMock] = createRenewSessionQueryResultMock();
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
