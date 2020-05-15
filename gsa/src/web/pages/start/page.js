@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
 import {v4 as uuid} from 'uuid';
 
@@ -23,19 +23,17 @@ import memoize from 'memoize-one';
 
 import styled from 'styled-components';
 
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 
 import {
-  loadSettings as loadDashboardSettings,
-  saveSettings as saveDashboardSettings,
+  loadSettings,
+  saveSettings as saveSettingsToStore,
   setDashboardSettingDefaults,
 } from 'web/store/dashboard/settings/actions';
 import {
@@ -117,7 +115,10 @@ const ToolBarIcons = () => (
   />
 );
 
-const StartPage = props => {
+const StartPage = () => {
+  const gmp = useGmp();
+  const dispatch = useDispatch();
+
   const [, renewSession] = useUserSessionTimeout();
 
   const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
@@ -126,21 +127,49 @@ const StartPage = props => {
   const [removeDashboardId, setRemoveDashboardId] = useState();
   const [editDashboardId, setEditDashboardId] = useState();
   const [showEditDashboardDialog, setShowEditDashboardDialog] = useState();
+  const [settings, setSettings] = useState({});
+
+  const loadDashboardSettings = useCallback(
+    (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
+    [gmp, dispatch],
+  );
+
+  const saveDashboardSettings = useCallback(
+    (id, settings) => dispatch(saveSettingsToStore(gmp)(id, settings)),
+    [gmp, dispatch],
+  );
+
+  // eslint-disable-next-line no-unused-vars
+  const setDefaultSettings = useCallback(
+    // doesn't seem to be used
+    (id, settings) => dispatch(setDashboardSettingDefaults(id, settings)),
+    [dispatch],
+  );
+
+  const settingsSelector = useSelector(getDashboardSettingsFromStore);
+
+  const loadedSettings = settingsSelector.getById(DASHBOARD_ID);
+  const isLoading = settingsSelector.getIsLoading(DASHBOARD_ID);
+
+  // eslint-disable-next-line no-unused-vars
+  const error = settingsSelector.getError(DASHBOARD_ID); // doesn't seem to be used
+
+  useEffect(() => {
+    const DEFAULTS = getDefaults();
+    loadDashboardSettings(DASHBOARD_ID, DEFAULTS);
+  }, [loadDashboardSettings]);
+
+  useEffect(() => {
+    setSettings(isDefined(loadedSettings) ? loadedSettings : {});
+  }, [loadedSettings]);
 
   const getDashboardSelector = memoize(
     settings => new DashboardSetting(settings),
   );
 
-  const {loadSettings} = props;
-
-  useEffect(() => {
-    const DEFAULTS = getDefaults();
-    loadSettings(DASHBOARD_ID, DEFAULTS);
-  }, [loadSettings]);
-
   const saveSettings = newSettings => {
-    props.saveSettings(DASHBOARD_ID, {
-      ...props.settings,
+    saveDashboardSettings(DASHBOARD_ID, {
+      ...settings,
       ...newSettings,
     });
   };
@@ -152,7 +181,6 @@ const StartPage = props => {
       return;
     }
 
-    const {settings = {}} = props;
     const {byId = {}, defaults = {}} = settings;
 
     const byIdCopy = {...byId};
@@ -239,7 +267,6 @@ const StartPage = props => {
     title,
     defaultDisplays = DEFAULT_DISPLAYS,
   }) => {
-    const {settings = {}} = props;
     const {byId = {}} = settings;
     const dashboards = getDashboards();
 
@@ -290,7 +317,7 @@ const StartPage = props => {
   };
 
   const updateDashboardSettings = (dashboardId, newSettings) => {
-    const {byId = {}} = props.settings;
+    const {byId = {}} = settings;
     const oldSettings = getDashboardSettings(dashboardId);
 
     saveSettings({
@@ -305,7 +332,7 @@ const StartPage = props => {
   };
 
   const updateDashboardDefaults = (dashboardId, newDefaults) => {
-    const {defaults = {}} = props.settings;
+    const {defaults = {}} = settings;
     saveSettings({
       defaults: {
         ...defaults,
@@ -315,19 +342,16 @@ const StartPage = props => {
   };
 
   const getDashboards = () => {
-    const {settings = {}} = props;
     const {dashboards = [], byId = {}} = settings;
     return dashboards.filter(id => isDefined(byId[id]));
   };
 
   const getDashboardSettings = dashboardId => {
-    const {settings = {}} = props;
     const selector = getDashboardSelector(settings);
     return selector.getById(dashboardId);
   };
 
   const getDashboardDefaults = dashboardId => {
-    const {settings = {}} = props;
     const selector = getDashboardSelector(settings);
     return selector.getDefaultsById(dashboardId);
   };
@@ -345,8 +369,6 @@ const StartPage = props => {
       return items.map(item => item.displayId);
     });
   };
-
-  const {isLoading} = props;
 
   const dashboards = getDashboards();
 
@@ -467,43 +489,6 @@ const StartPage = props => {
   );
 };
 
-StartPage.propTypes = {
-  error: PropTypes.toString,
-  isLoading: PropTypes.bool,
-  loadSettings: PropTypes.func.isRequired,
-  saveSettings: PropTypes.func.isRequired,
-  settings: PropTypes.shape({
-    byId: PropTypes.object.isRequired,
-    dashboards: PropTypes.arrayOf(PropTypes.string).isRequired,
-    defaults: PropTypes.object.isRequired,
-  }),
-};
-
-const mapStateToProps = rootState => {
-  const settingsSelector = getDashboardSettingsFromStore(rootState);
-  const settings = settingsSelector.getById(DASHBOARD_ID);
-  const isLoading = settingsSelector.getIsLoading(DASHBOARD_ID);
-  const error = settingsSelector.getError(DASHBOARD_ID);
-
-  return {
-    error,
-    isLoading,
-    settings,
-  };
-};
-
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: (id, defaults) =>
-    dispatch(loadDashboardSettings(gmp)(id, defaults)),
-  saveSettings: (id, settings) =>
-    dispatch(saveDashboardSettings(gmp)(id, settings)),
-  setDefaultSettings: (id, settings) =>
-    dispatch(setDashboardSettingDefaults(id, settings)),
-});
-
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(StartPage);
+export default StartPage;
 
 // vim: set ts=2 sw=2 tw=80:
