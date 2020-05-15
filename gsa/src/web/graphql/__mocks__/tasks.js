@@ -362,7 +362,7 @@ const mockTasks = {
   },
 };
 
-export const createGetTaskQueryMock = filterString => {
+export const createGetTaskQueryMock = ({filterString} = {}) => {
   const queryResult = {
     data: {
       tasks: mockTasks,
