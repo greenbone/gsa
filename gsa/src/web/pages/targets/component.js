@@ -294,23 +294,23 @@ const TargetComponent = props => {
     }
 
     const mutationData = {
-      aliveTests: alive_tests,
+      // aliveTest: alive_tests,
       comment,
       esxiCredentialId: esxi_credential_id,
       excludeHosts: exclude_hosts,
       hosts,
       id,
-      inUse: in_use,
+      // inUse: in_use,
       name,
-      port,
+      // port,
       portListId: port_list_id,
       reverseLookupOnly: reverse_lookup_only,
       reverseLookupUnify: reverse_lookup_unify,
       smbCredentialId: smb_credential_id,
       snmpCredentialId: snmp_credential_id,
       sshCredentialId: ssh_credential_id,
-      targetExcludeSource: target_exclude_source,
-      targetSource: target_source,
+      // targetExcludeSource: target_exclude_source,
+      // targetSource: target_source,
     };
 
     console.log(mutationData);
