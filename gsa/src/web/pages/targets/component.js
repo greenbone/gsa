@@ -36,6 +36,9 @@ import PortListDialog from '../portlists/dialog.js';
 
 import TargetDialog from './dialog.js';
 
+import {useCreateTarget} from './graphql';
+import {interpolate} from 'd3-interpolate';
+
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
 const id_or__ = value => {
@@ -44,6 +47,8 @@ const id_or__ = value => {
 
 const TargetComponent = props => {
   const gmp = useGmp();
+
+  const createTarget = useCreateTarget();
 
   const [credentialsDialogVisible, setCredentialsDialogVisible] = useState(
     false,
@@ -55,27 +60,27 @@ const TargetComponent = props => {
   const [credentialsTitle, setCredentialsTitle] = useState();
   const [id, setId] = useState();
 
-  const [aliveTests, setAliveTests] = useState();
+  const [alive_tests, setAliveTests] = useState();
   const [comment, setComment] = useState();
-  const [esxiCredentialId, setEsxiCredentialId] = useState();
-  const [excludeHosts, setExcludeHosts] = useState();
+  const [esxi_credential_id, setEsxiCredentialId] = useState();
+  const [exclude_hosts, setExcludeHosts] = useState();
   const [hosts, setHosts] = useState();
-  const [inUse, setInUse] = useState();
+  const [in_use, setInUse] = useState();
   const [name, setName] = useState();
   const [port, setPort] = useState();
-  const [reverseLookupOnly, setReverseLookupOnly] = useState();
-  const [reverseLookupUnify, setReverseLookupUnify] = useState();
-  const [targetSource, setTargetSource] = useState();
-  const [targetExcludeSource, setTargetExcludeSource] = useState();
+  const [reverse_lookup_only, setReverseLookupOnly] = useState();
+  const [reverse_lookup_unify, setReverseLookupUnify] = useState();
+  const [target_source, setTargetSource] = useState();
+  const [target_exclude_source, setTargetExcludeSource] = useState();
   const [targetTitle, setTargetTitle] = useState();
-  const [smbCredentialId, setSmbCredentialId] = useState();
-  const [sshCredentialId, setSshCredentialId] = useState();
-  const [portListId, setPortListId] = useState();
+  const [smb_credential_id, setSmbCredentialId] = useState();
+  const [ssh_credential_id, setSshCredentialId] = useState();
+  const [port_list_id, setPortListId] = useState();
   const [initial, setInitial] = useState({});
 
   const [credentials, setCredentials] = useState();
   const [portLists, setPortLists] = useState();
-  const [snmpCredentialId, setSnmpCredentialId] = useState();
+  const [snmp_credential_id, setSnmpCredentialId] = useState();
   const [portListsTitle, setPortListsTitle] = useState();
 
   const openCredentialsDialog = ({id_field, types, title}) => {
@@ -263,6 +268,60 @@ const TargetComponent = props => {
     }
   };
 
+  const handleSaveTarget = ({
+    alive_tests,
+    comment,
+    esxi_credential_id,
+    exclude_hosts,
+    hosts,
+    id,
+    in_use,
+    name,
+    port,
+    port_list_id,
+    reverse_lookup_only,
+    reverse_lookup_unify,
+    smb_credential_id,
+    snmp_credential_id,
+    ssh_credential_id,
+    target_exclude_source,
+    target_source,
+  }) => {
+    handleInteraction();
+
+    if (isDefined(id)) {
+      return;
+    }
+
+    const mutationData = {
+      aliveTests: alive_tests,
+      comment,
+      esxiCredentialId: esxi_credential_id,
+      excludeHosts: exclude_hosts,
+      hosts,
+      id,
+      inUse: in_use,
+      name,
+      port,
+      portListId: port_list_id,
+      reverseLookupOnly: reverse_lookup_only,
+      reverseLookupUnify: reverse_lookup_unify,
+      smbCredentialId: smb_credential_id,
+      snmpCredentialId: snmp_credential_id,
+      sshCredentialId: ssh_credential_id,
+      targetExcludeSource: target_exclude_source,
+      targetSource: target_source,
+    };
+
+    console.log(mutationData);
+
+    const {onCreated, onCreatedError} = props;
+
+    return createTarget(mutationData)
+      .then(result => onCreated(result), onCreatedError)
+      .then(() => closeTargetDialog());
+  };
+
   const {
     children,
     onCloned,
@@ -293,7 +352,7 @@ const TargetComponent = props => {
       onSaved={onSaved}
       onSaveError={onSaveError}
     >
-      {({save, ...other}) => (
+      {({other}) => (
         <React.Fragment>
           {children({
             ...other,
@@ -302,28 +361,28 @@ const TargetComponent = props => {
           })}
           {targetDialogVisible && (
             <TargetDialog
-              alive_tests={aliveTests}
+              alive_tests={alive_tests}
               comment={comment}
               // credential={credential} // this is undefined?
               credentials={credentials}
-              esxi_credential_id={esxiCredentialId}
-              exclude_hosts={excludeHosts}
+              esxi_credential_id={esxi_credential_id}
+              exclude_hosts={exclude_hosts}
               hosts={hosts}
               // hosts_count={hosts_count} // this is undefined?
               // hosts_filter={hosts_filter} // this is undefined?
               id={id}
-              in_use={inUse}
+              in_use={in_use}
               name={name}
               port={port}
               port_lists={portLists}
-              port_list_id={portListId}
-              reverse_lookup_only={reverseLookupOnly}
-              reverse_lookup_unify={reverseLookupUnify}
-              smb_credential_id={smbCredentialId}
-              snmp_credential_id={snmpCredentialId}
-              ssh_credential_id={sshCredentialId}
-              target_source={targetSource}
-              target_exclude_source={targetExcludeSource}
+              port_list_id={port_list_id}
+              reverse_lookup_only={reverse_lookup_only}
+              reverse_lookup_unify={reverse_lookup_unify}
+              smb_credential_id={smb_credential_id}
+              snmp_credential_id={snmp_credential_id}
+              ssh_credential_id={ssh_credential_id}
+              target_source={target_source}
+              target_exclude_source={target_exclude_source}
               title={targetTitle}
               onClose={handleCloseTargetDialog}
               onNewCredentialsClick={openCredentialsDialog}
@@ -333,10 +392,7 @@ const TargetComponent = props => {
               onSshCredentialChange={handleSshCredentialChange}
               onEsxiCredentialChange={handleEsxiCredentialChange}
               onSmbCredentialChange={handleSmbCredentialChange}
-              onSave={d => {
-                handleInteraction();
-                return save(d).then(() => closeTargetDialog());
-              }}
+              onSave={handleSaveTarget}
             />
           )}
           {credentialsDialogVisible && (
