@@ -44,11 +44,11 @@ const useUserSessionTimeout = () => {
   const dispatch = useDispatch();
   const gmp = useGmp();
   const [renewSession] = useMutation(RENEW_SESSION);
-  const {isHyperionOnly = false} = gmp.settings;
+  const {enableHyperionOnly = false} = gmp.settings;
   return [
     useSelector(getSessionTimeout),
     useCallback(() => {
-      if (!isHyperionOnly) {
+      if (!enableHyperionOnly) {
         gmp.user.renewSession();
       }
 
@@ -57,7 +57,7 @@ const useUserSessionTimeout = () => {
           setSessionTimeout(date(data.renewSession.currentUser.sessionTimeout)),
         ),
       );
-    }, [renewSession, dispatch, isHyperionOnly, gmp.user]),
+    }, [renewSession, dispatch, enableHyperionOnly, gmp.user]),
     timeout => dispatch(setSessionTimeout(timeout)),
   ];
 };

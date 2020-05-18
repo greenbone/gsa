@@ -123,7 +123,7 @@ describe('UserMenu component tests', () => {
         renewSession,
       },
       settings: {
-        isHyperionOnly: false,
+        enableHyperionOnly: false,
       },
     };
     const {render} = rendererWith({

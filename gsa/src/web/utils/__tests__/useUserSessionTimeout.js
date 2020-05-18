@@ -51,7 +51,7 @@ describe('useUserSessionTimeout tests', () => {
   test('should return the users session timeout', () => {
     const gmp = {
       settings: {
-        isHyperionOnly: false,
+        enableHyperionOnly: false,
       },
     };
     const {render, store} = rendererWith({store: true, gmp});
@@ -69,7 +69,7 @@ describe('useUserSessionTimeout tests', () => {
   test('should allow to set the users session timeout', () => {
     const gmp = {
       settings: {
-        isHyperionOnly: false,
+        enableHyperionOnly: false,
       },
     };
     const {render, store} = rendererWith({store: true, gmp});
@@ -100,7 +100,7 @@ describe('useUserSessionTimeout tests', () => {
         renewSession,
       },
       settings: {
-        isHyperionOnly: false,
+        enableHyperionOnly: false,
       },
     };
     const {render, store} = rendererWith({
