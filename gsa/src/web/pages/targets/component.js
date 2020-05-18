@@ -37,7 +37,6 @@ import PortListDialog from '../portlists/dialog.js';
 import TargetDialog from './dialog.js';
 
 import {useCreateTarget} from './graphql';
-import {interpolate} from 'd3-interpolate';
 
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
@@ -294,7 +293,7 @@ const TargetComponent = props => {
     }
 
     const mutationData = {
-      // aliveTest: alive_tests,
+      aliveTest: alive_tests.toLowerCase(),
       comment,
       esxiCredentialId: esxi_credential_id,
       excludeHosts: exclude_hosts,
