@@ -35,3 +35,17 @@ export const useCreateTarget = () => {
   const [createTarget] = useMutation(CREATE_TARGET);
   return toInputObject(createTarget);
 };
+
+export const MODIFY_TARGET = gql`
+  mutation modifyTarget($input: ModifyTargetInput!) {
+    modifyTarget(input: $input) {
+      id
+      status
+    }
+  }
+`;
+
+export const useModifyTarget = () => {
+  const [modifyTarget] = useMutation(MODIFY_TARGET);
+  return toInputObject(modifyTarget);
+};

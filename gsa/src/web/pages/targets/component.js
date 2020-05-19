@@ -36,7 +36,7 @@ import PortListDialog from '../portlists/dialog.js';
 
 import TargetDialog from './dialog.js';
 
-import {useCreateTarget} from './graphql';
+import {useCreateTarget, useModifyTarget} from './graphql';
 
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
@@ -48,6 +48,7 @@ const TargetComponent = props => {
   const gmp = useGmp();
 
   const createTarget = useCreateTarget();
+  const modifyTarget = useModifyTarget();
 
   const [credentialsDialogVisible, setCredentialsDialogVisible] = useState(
     false,
@@ -289,7 +290,29 @@ const TargetComponent = props => {
     handleInteraction();
 
     if (isDefined(id)) {
-      return;
+      const mutationData = {
+        targetId: id,
+        aliveTest: alive_tests.toLowerCase(),
+        comment,
+        esxiCredentialId: esxi_credential_id,
+        excludeHosts: exclude_hosts,
+        inUse: in_use,
+        hosts,
+        name,
+        sshCredentialPort: parseInt(port),
+        portListId: port_list_id,
+        reverseLookupOnly: reverse_lookup_only,
+        reverseLookupUnify: reverse_lookup_unify,
+        smbCredentialId: smb_credential_id,
+        snmpCredentialId: snmp_credential_id,
+        sshCredentialId: ssh_credential_id,
+      };
+
+      const {onSaved, onSaveError} = props;
+
+      return modifyTarget(mutationData)
+        .then(onSaved, onSaveError)
+        .then(() => closeTargetDialog());
     }
 
     const mutationData = {
@@ -298,10 +321,8 @@ const TargetComponent = props => {
       esxiCredentialId: esxi_credential_id,
       excludeHosts: exclude_hosts,
       hosts,
-      id,
-      // inUse: in_use,
       name,
-      // port,
+      sshCredentialPort: parseInt(port),
       portListId: port_list_id,
       reverseLookupOnly: reverse_lookup_only,
       reverseLookupUnify: reverse_lookup_unify,
@@ -311,8 +332,6 @@ const TargetComponent = props => {
       // targetExcludeSource: target_exclude_source,
       // targetSource: target_source,
     };
-
-    console.log(mutationData);
 
     const {onCreated, onCreatedError} = props;
 
