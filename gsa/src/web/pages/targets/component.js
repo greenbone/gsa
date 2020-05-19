@@ -411,7 +411,7 @@ const TargetComponent = props => {
       onSaved={onSaved}
       onSaveError={onSaveError}
     >
-      {({other}) => (
+      {({...other}) => (
         <React.Fragment>
           {children({
             ...other,
