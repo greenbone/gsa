@@ -130,7 +130,7 @@ const TaskComponent = props => {
   const targetQuery = useGetTargets();
   const [
     loadTargets,
-    {data: targetData, loading: isLoadingTargets},
+    {data: targetData, loading: isLoadingTargets, refetch: refetchTargets},
   ] = targetQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
@@ -305,11 +305,8 @@ const TaskComponent = props => {
     setScheduleId(data.id);
   };
 
-  const handleTargetCreated = resp => {
-    const {data} = resp;
-
-    props.loadTargets();
-    setTargetId(data.id);
+  const handleTargetCreated = () => {
+    refetchTargets();
   };
 
   const openContainerTaskDialog = task => {
