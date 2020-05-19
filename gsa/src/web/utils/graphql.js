@@ -32,3 +32,8 @@ export const toFruitfulQuery = query => gql => vars => {
 export const queryWithRefetch = query => refetch => vars => {
   return query(vars).then(refetch());
 };
+
+export const goto_entity_details = (entityName, op, props) => result => {
+  const {history} = props;
+  return history.push('/' + entityName + '/' + result.data[op].id);
+};

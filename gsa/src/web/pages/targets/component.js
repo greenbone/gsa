@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
 
 import React, {useState} from 'react';
 
@@ -55,6 +55,8 @@ const TargetComponent = props => {
   );
   const [portListDialogVisible, setPortListDialogVisible] = useState(false);
   const [targetDialogVisible, setTargetDialogVisible] = useState(false);
+
+  // eslint-disable-next-line no-unused-vars
   const [idField, setIdField] = useState();
   const [credentialTypes, setCredentialTypes] = useState();
   const [credentialsTitle, setCredentialsTitle] = useState();
@@ -76,6 +78,8 @@ const TargetComponent = props => {
   const [smb_credential_id, setSmbCredentialId] = useState();
   const [ssh_credential_id, setSshCredentialId] = useState();
   const [port_list_id, setPortListId] = useState();
+
+  // eslint-disable-next-line no-unused-vars
   const [initial, setInitial] = useState({});
 
   const [credentials, setCredentials] = useState();
@@ -333,10 +337,10 @@ const TargetComponent = props => {
       // targetSource: target_source,
     };
 
-    const {onCreated, onCreatedError} = props;
+    const {onCreated, onCreateError} = props;
 
     return createTarget(mutationData)
-      .then(result => onCreated(result), onCreatedError)
+      .then(result => onCreated(result), onCreateError)
       .then(() => closeTargetDialog());
   };
 
