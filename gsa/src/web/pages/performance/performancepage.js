@@ -61,7 +61,6 @@ import {
 } from 'web/store/entities/scanners';
 
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
 import {renderSelectItems} from 'web/utils/render';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import useUserTimezone from 'web/utils/useUserTimezone';
@@ -127,23 +126,22 @@ ToolBar.propTypes = {
   onDurationChangeClick: PropTypes.func.isRequired,
 };
 
-const ReportImage = withGmp(
-  ({gmp, name, duration, scannerId, endDate, startDate}) => {
-    const params = {
-      slave_id: scannerId,
-      token: gmp.settings.token,
-    };
+const ReportImage = ({name, duration, scannerId, endDate, startDate}) => {
+  const gmp = useGmp();
+  const params = {
+    slave_id: scannerId,
+    token: gmp.settings.token,
+  };
 
-    if (isDefined(duration)) {
-      params.duration = DURATIONS[duration];
-    } else {
-      params.start_time = startDate.toISOString();
-      params.end_time = endDate.toISOString();
-    }
-    const url = gmp.buildUrl('system_report/' + name + '/report.', params);
-    return <img alt="" src={url} />;
-  },
-);
+  if (isDefined(duration)) {
+    params.duration = DURATIONS[duration];
+  } else {
+    params.start_time = startDate.toISOString();
+    params.end_time = endDate.toISOString();
+  }
+  const url = gmp.buildUrl('system_report/' + name + '/report.', params);
+  return <img alt="" src={url} />;
+};
 
 ReportImage.propTypes = {
   duration: PropTypes.string,
