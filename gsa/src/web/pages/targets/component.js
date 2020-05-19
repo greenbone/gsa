@@ -272,11 +272,36 @@ const TargetComponent = props => {
     }
   };
 
+  const setFileText = (file, exclude_file) => {
+    let fileText;
+    let excludeFileText;
+
+    if (isDefined(file)) {
+      fileText = file.text().then(text => {
+        return text;
+      });
+    } else {
+      fileText = Promise.resolve();
+    }
+
+    if (isDefined(exclude_file)) {
+      excludeFileText = exclude_file.text().then(text => {
+        return text;
+      });
+    } else {
+      excludeFileText = Promise.resolve();
+    }
+
+    return Promise.all([fileText, excludeFileText]);
+  };
+
   const handleSaveTarget = ({
     alive_tests,
     comment,
     esxi_credential_id,
     exclude_hosts,
+    exclude_file,
+    file,
     hosts,
     id,
     in_use,
@@ -294,52 +319,64 @@ const TargetComponent = props => {
     handleInteraction();
 
     if (isDefined(id)) {
-      const mutationData = {
-        targetId: id,
-        aliveTest: alive_tests.toLowerCase(),
-        comment,
-        esxiCredentialId: esxi_credential_id,
-        excludeHosts: exclude_hosts,
-        inUse: in_use,
-        hosts,
-        name,
-        sshCredentialPort: parseInt(port),
-        portListId: port_list_id,
-        reverseLookupOnly: reverse_lookup_only,
-        reverseLookupUnify: reverse_lookup_unify,
-        smbCredentialId: smb_credential_id,
-        snmpCredentialId: snmp_credential_id,
-        sshCredentialId: ssh_credential_id,
-      };
-
       const {onSaved, onSaveError} = props;
 
-      return modifyTarget(mutationData)
+      return setFileText(file, exclude_file)
+        .then(text => {
+          const [fileText, excludeFileText] = text;
+
+          const mutationData = {
+            targetId: id,
+            aliveTest: alive_tests.toLowerCase(),
+            comment,
+            esxiCredentialId: esxi_credential_id,
+            hosts: target_source === 'file' ? fileText : hosts,
+            excludeHosts:
+              target_exclude_source === 'file'
+                ? excludeFileText
+                : exclude_hosts,
+            inUse: in_use,
+            name,
+            sshCredentialPort: parseInt(port),
+            portListId: port_list_id,
+            reverseLookupOnly: reverse_lookup_only,
+            reverseLookupUnify: reverse_lookup_unify,
+            smbCredentialId: smb_credential_id,
+            snmpCredentialId: snmp_credential_id,
+            sshCredentialId: ssh_credential_id,
+          };
+
+          return modifyTarget(mutationData);
+        })
         .then(onSaved, onSaveError)
         .then(() => closeTargetDialog());
     }
 
-    const mutationData = {
-      aliveTest: alive_tests.toLowerCase(),
-      comment,
-      esxiCredentialId: esxi_credential_id,
-      excludeHosts: exclude_hosts,
-      hosts,
-      name,
-      sshCredentialPort: parseInt(port),
-      portListId: port_list_id,
-      reverseLookupOnly: reverse_lookup_only,
-      reverseLookupUnify: reverse_lookup_unify,
-      smbCredentialId: smb_credential_id,
-      snmpCredentialId: snmp_credential_id,
-      sshCredentialId: ssh_credential_id,
-      // targetExcludeSource: target_exclude_source,
-      // targetSource: target_source,
-    };
-
     const {onCreated, onCreateError} = props;
 
-    return createTarget(mutationData)
+    return setFileText(file, exclude_file)
+      .then(text => {
+        const [fileText, excludeFileText] = text;
+
+        const mutationData = {
+          aliveTest: alive_tests.toLowerCase(),
+          comment,
+          esxiCredentialId: esxi_credential_id,
+          name,
+          hosts: target_source === 'file' ? fileText : hosts,
+          excludeHosts:
+            target_exclude_source === 'file' ? excludeFileText : exclude_hosts,
+          sshCredentialPort: parseInt(port),
+          portListId: port_list_id,
+          reverseLookupOnly: reverse_lookup_only,
+          reverseLookupUnify: reverse_lookup_unify,
+          smbCredentialId: smb_credential_id,
+          snmpCredentialId: snmp_credential_id,
+          sshCredentialId: ssh_credential_id,
+        };
+
+        return createTarget(mutationData);
+      })
       .then(result => onCreated(result), onCreateError)
       .then(() => closeTargetDialog());
   };
