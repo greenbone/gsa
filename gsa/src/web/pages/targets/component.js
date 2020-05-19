@@ -26,7 +26,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from '../../utils/proptypes.js';
 import useGmp from 'web/utils/useGmp';
-import {UNSET_VALUE} from '../../utils/render.js';
+import {NULL_VALUE} from '../../utils/render.js';
 
 import EntityComponent from '../../entity/component.js';
 
@@ -41,7 +41,7 @@ import {useCreateTarget, useModifyTarget} from './graphql';
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
 const id_or__ = value => {
-  return isDefined(value) ? value.id : UNSET_VALUE;
+  return isDefined(value) ? value.id : NULL_VALUE;
 };
 
 const TargetComponent = props => {
