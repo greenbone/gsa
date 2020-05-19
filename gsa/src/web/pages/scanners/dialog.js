@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useCallback} from 'react';
 import styled from 'styled-components';
 
 import {connect} from 'react-redux';
@@ -24,16 +24,26 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
+import {
+  OSP_SCANNER_TYPE,
+  GMP_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
+  scannerTypeName,
+} from 'gmp/models/scanner';
+
+import {
+  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+} from 'gmp/models/credential';
+
+import {parseInt} from 'gmp/parser';
+
 import {filter, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
-import {parseInt} from 'gmp/parser';
-
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
-
-import withGmp from 'web/utils/withGmp';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -58,19 +68,9 @@ import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 import TabLayout from 'web/components/tab/tablayout';
 
+import useGmp from 'web/utils/useGmp';
+
 import {getTimezone} from 'web/store/usersettings/selectors';
-
-import {
-  OSP_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
-  GREENBONE_SENSOR_SCANNER_TYPE,
-  scannerTypeName,
-} from 'gmp/models/scanner';
-
-import {
-  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from 'gmp/models/credential';
 
 const DialogTabLayout = styled(TabLayout)`
   margin-top: 5px;
@@ -138,6 +138,7 @@ const ScannerDialog = ({
   comment = '',
   scanner,
   credentials,
+  credential_id,
   host = 'localhost',
   id,
   name = _('Unnamed'),
@@ -150,21 +151,24 @@ const ScannerDialog = ({
   onNewCredentialClick,
   onSave,
   onScannerTypeChange,
-  ...props
 }) => {
-  // eslint-disable-next-line no-shadow
-  const handleTypeChange = (value, name) => {
-    if (onScannerTypeChange) {
-      value = parseInt(value);
-      const scan_credentials = filter_credentials(credentials, value);
+  const gmp = useGmp();
 
-      onScannerTypeChange(value, name);
-      onScannerTypeChange(
-        selectSaveId(scan_credentials, credential_id),
-        'credential_id',
-      );
-    }
-  };
+  const handleTypeChange = useCallback(
+    newScannerType => {
+      if (onScannerTypeChange) {
+        newScannerType = parseInt(newScannerType);
+        const scan_credentials = filter_credentials(
+          credentials,
+          newScannerType,
+        );
+        const credentialId = selectSaveId(scan_credentials, credential_id);
+
+        onScannerTypeChange(newScannerType, credentialId);
+      }
+    },
+    [onScannerTypeChange, credentials, credential_id],
+  );
 
   const data = {
     ca_pub,
@@ -178,8 +182,6 @@ const ScannerDialog = ({
 
   let SCANNER_TYPES;
 
-  const {gmp} = props;
-
   if (gmp.settings.enableGreenboneSensor) {
     SCANNER_TYPES = [
       GMP_SCANNER_TYPE,
@@ -189,8 +191,6 @@ const ScannerDialog = ({
   } else {
     SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
   }
-
-  let {credential_id} = props;
 
   const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
     label: scannerTypeName(scannerType),
@@ -376,12 +376,16 @@ ScannerDialog.propTypes = {
   credentials: PropTypes.array,
   gmp: PropTypes.gmp,
   host: PropTypes.string,
-  id: PropTypes.string,
+  id: PropTypes.id,
   name: PropTypes.string,
-  port: PropTypes.string,
+  port: PropTypes.number,
   scanner: PropTypes.model,
   title: PropTypes.string,
-  type: PropTypes.array,
+  type: PropTypes.oneOf([
+    OSP_SCANNER_TYPE,
+    GMP_SCANNER_TYPE,
+    GREENBONE_SENSOR_SCANNER_TYPE,
+  ]),
   which_cert: PropTypes.oneOf(['default', 'existing', 'new']),
   onClose: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,
@@ -391,6 +395,6 @@ ScannerDialog.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-export default withGmp(ScannerDialog);
+export default ScannerDialog;
 
 // vim: set ts=2 sw=2 tw=80:
