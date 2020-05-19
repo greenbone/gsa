@@ -59,19 +59,12 @@ const CredentialsComponent = ({
   const userName = useUserName();
   const gmp = useGmp();
   const [, renewSessionTimeout] = useUserSessionTimeout();
-  const [allowInsecure, setAllowInsecure] = useState();
-  const [allowedCredentialTypes, setAllowedCredentialTypes] = useState(
-    ALL_CREDENTIAL_TYPES,
-  );
-  const [authAlgorithm, setAuthAlgorithm] = useState();
-  const [comment, setComment] = useState();
-  const [credential, setCredential] = useState();
-  const [credentialLogin, setCredentialLogin] = useState();
-  const [credentialName, setCredentialName] = useState();
-  const [credentialType, setCredentialType] = useState();
-  const [dialogVisible, setDialogVisible] = useState(false);
-  const [privacyAlgorithm, setPrivacyAlgorithm] = useState();
-  const [title, setTitle] = useState(_('New Credential'));
+
+  const [credentialDialogState, setCredentialDialogState] = useState({
+    allowedCredentialTypes: ALL_CREDENTIAL_TYPES,
+    visible: false,
+    title: _('New Credential'),
+  });
 
   const loadSettings = useCallback(
     () => dispatch(loadUserSettingDefaults(gmp)()),
@@ -88,7 +81,7 @@ const CredentialsComponent = ({
   }, [loadSettings]);
 
   const handleCloseCredentialDialog = useCallback(() => {
-    setDialogVisible(false);
+    setCredentialDialogState(state => ({...state, visible: false}));
     renewSessionTimeout();
   }, [renewSessionTimeout]);
 
@@ -96,40 +89,42 @@ const CredentialsComponent = ({
     // eslint-disable-next-line no-shadow
     credential => {
       if (isDefined(credential)) {
-        setTitle(
-          _('Edit Credential {{name}}', {
+        setCredentialDialogState(state => ({
+          ...state,
+          title: _('Edit Credential {{name}}', {
             name: shorten(credential.name),
           }),
-        );
-
-        setAllowInsecure(credential.allow_insecure);
-        setAllowedCredentialTypes([credential.credential_type]);
-        setAuthAlgorithm(credential.auth_algorithm);
-        setComment(credential.comment);
-        setCredential(credential);
-        setCredentialLogin(credential.login);
-        setCredentialName(credential.name);
-        setCredentialType(credential.credential_type);
-        setPrivacyAlgorithm(
-          isDefined(credential.privacy)
+          allowInsecure: credential.allow_insecure,
+          allowedCredentialTypes: [credential.credential_type],
+          authAlgorithm: credential.auth_algorithm,
+          comment: credential.comment,
+          credential,
+          credentialLogin: credential.login,
+          credentialName: credential.name,
+          credentialType: credential.credential_type,
+          privacyAlgorithm: isDefined(credential.privacy)
             ? credential.privacy.algorithm
             : undefined,
-        );
+          visible: true,
+        }));
       } else {
         // reset all values in state to not show values from last edit
-        setAllowInsecure(undefined);
-        setAllowedCredentialTypes(ALL_CREDENTIAL_TYPES);
-        setAuthAlgorithm(undefined);
-        setComment(undefined);
-        setCredential(undefined);
-        setCredentialLogin(undefined);
-        setCredentialName(undefined);
-        setCredentialType(undefined);
-        setPrivacyAlgorithm(undefined);
-        setTitle(_('New Credential'));
+        setCredentialDialogState(state => ({
+          ...state,
+          title: _('New Credential'),
+          allowInsecure: undefined,
+          allowedCredentialTypes: ALL_CREDENTIAL_TYPES,
+          authAlgorithm: undefined,
+          comment: undefined,
+          credential: undefined,
+          credentialLogin: undefined,
+          credentialName: undefined,
+          credentialType: undefined,
+          privacyAlgorithm: undefined,
+          visible: true,
+        }));
       }
 
-      setDialogVisible(true);
       renewSessionTimeout();
     },
     [renewSessionTimeout],
@@ -197,18 +192,18 @@ const CredentialsComponent = ({
             downloadinstaller: handleDownloadInstaller,
           })}
 
-          {dialogVisible && (
+          {credentialDialogState.visible && (
             <CredentialsDialog
-              title={title}
-              allow_insecure={allowInsecure}
-              auth_algorithm={authAlgorithm}
-              comment={comment}
-              credential={credential}
-              credential_login={credentialLogin}
-              credential_type={credentialType}
-              name={credentialName}
-              privacy_algorithm={privacyAlgorithm}
-              types={allowedCredentialTypes}
+              title={credentialDialogState.title}
+              allow_insecure={credentialDialogState.allowInsecure}
+              auth_algorithm={credentialDialogState.authAlgorithm}
+              comment={credentialDialogState.comment}
+              credential={credentialDialogState.credential}
+              credential_login={credentialDialogState.credentialLogin}
+              credential_type={credentialDialogState.credentialType}
+              name={credentialDialogState.credentialName}
+              privacy_algorithm={credentialDialogState.privacyAlgorithm}
+              types={credentialDialogState.allowedCredentialTypes}
               onClose={handleCloseCredentialDialog}
               onSave={d => save(d).then(handleCloseCredentialDialog)}
             />
