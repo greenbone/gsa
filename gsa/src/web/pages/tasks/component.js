@@ -305,8 +305,10 @@ const TaskComponent = props => {
     setScheduleId(data.id);
   };
 
-  const handleTargetCreated = () => {
+  const handleTargetCreated = resp => {
+    const {data} = resp;
     refetchTargets();
+    setTargetId(data.createTarget.id);
   };
 
   const openContainerTaskDialog = task => {
