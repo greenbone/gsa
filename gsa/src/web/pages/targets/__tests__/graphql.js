@@ -36,7 +36,7 @@ const createTargetInput = {
 };
 
 const modifyTargetInput = {
-  targetId: '12345',
+  id: '12345',
   name: 'bar',
 };
 

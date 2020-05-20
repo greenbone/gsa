@@ -331,11 +331,11 @@ const TargetComponent = props => {
               name,
               comment,
               aliveTest: alive_tests,
-              targetId: id,
+              id,
             };
           } else {
             mutationData = {
-              targetId: id,
+              id,
               aliveTest: alive_tests.toLowerCase(),
               comment,
               esxiCredentialId: esxi_credential_id,
