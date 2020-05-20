@@ -26,7 +26,7 @@ import {
   useModifyTarget,
   CREATE_TARGET,
   MODIFY_TARGET,
-} from '../graphql';
+} from 'web/pages/targets/graphql';
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 

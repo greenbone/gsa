@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {goto_entity_details} from '../graphql';
+import {goto_entity_details} from 'web/utils/graphql';
 
 describe('goto_entity_details test', () => {
   test('should push to correct history', () => {

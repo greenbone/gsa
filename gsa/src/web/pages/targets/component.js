@@ -24,15 +24,15 @@ import _ from 'gmp/locale';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 import useGmp from 'web/utils/useGmp';
-import {NULL_VALUE} from '../../utils/render.js';
+import {NULL_VALUE} from 'web/utils/render.js';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component.js';
 
-import CredentialsDialog from '../credentials/dialog.js';
+import CredentialsDialog from 'web/pages/credentials/dialog.js';
 
-import PortListDialog from '../portlists/dialog.js';
+import PortListDialog from 'web/pages/portlists/dialog.js';
 
 import TargetDialog from './dialog.js';
 
