@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {useCallback} from 'react';
 
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery, useLazyQuery} from '@apollo/react-hooks';
 
 import gql from 'graphql-tag';
 
@@ -120,5 +121,31 @@ export const useGetTasks = (variables, options) => {
     length: length,
     rows: limit,
   });
-  return {...other, data, counts, tasks};
+  return {...other, counts, tasks};
+};
+
+export const useLazyGetTasks = (variables, options) => {
+  const [queryTasks, {data, ...other}] = useLazyQuery(GET_TASKS, {
+    ...options,
+    variables,
+  });
+  const tasks = isDefined(data?.tasks)
+    ? data.tasks.edges.map(entity => Task.fromObject(entity.node))
+    : [];
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.tasks?.counts || {};
+  const counts = new CollectionCounts({
+    all: total,
+    filtered: filtered,
+    first: offset + 1,
+    length: length,
+    rows: limit,
+  });
+  const getTasks = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => queryTasks({...options, variables}),
+    [queryTasks],
+  );
+  return [getTasks, {...other, counts, tasks}];
 };

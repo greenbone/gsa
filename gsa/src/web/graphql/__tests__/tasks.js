@@ -18,18 +18,44 @@
 
 import React from 'react';
 
-import {useGetTasks} from '../tasks';
-import {createGetTaskQueryMock} from '../__mocks__/tasks';
+import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
-import {rendererWith, screen, wait} from 'web/utils/testing';
+import {useGetTasks, useLazyGetTasks} from '../tasks';
+import {createGetTaskQueryMock} from '../__mocks__/tasks';
 
 const TestComponent = () => {
   const {counts, loading, tasks} = useGetTasks();
   if (loading) {
-    return <span>Loading</span>;
+    return <span data-testid="loading">Loading</span>;
   }
   return (
     <div>
+      <div data-testid="counts">
+        <span data-testid="total">{counts.all}</span>
+        <span data-testid="filtered">{counts.filtered}</span>
+        <span data-testid="offset">{counts.first}</span>
+        <span data-testid="limit">{counts.rows}</span>
+        <span data-testid="length">{counts.length}</span>
+      </div>
+      {tasks.map(task => {
+        return (
+          <div key={task.id} data-testid="task">
+            {task.name}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+const TestComponent2 = () => {
+  const [getTasks, {counts, loading, tasks}] = useLazyGetTasks();
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getTasks()} />
       <div data-testid="counts">
         <span data-testid="total">{counts.all}</span>
         <span data-testid="filtered">{counts.filtered}</span>
@@ -53,15 +79,53 @@ describe('useGetTask tests', () => {
     const [mock, resultFunc] = createGetTaskQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
-    const {element} = render(<TestComponent />);
+    render(<TestComponent />);
 
-    expect(element).toHaveTextContent('Loading');
+    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
 
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
 
     const taskElements = screen.getAllByTestId('task');
+    expect(taskElements).toHaveLength(1);
+
+    expect(taskElements[0]).toHaveTextContent('foo');
+
+    expect(screen.getByTestId('total')).toHaveTextContent(1);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(1);
+    expect(screen.getByTestId('offset')).toHaveTextContent(1);
+    expect(screen.getByTestId('limit')).toHaveTextContent(10);
+    expect(screen.getByTestId('length')).toHaveTextContent(1);
+  });
+});
+
+describe('useLazyGetTask tests', () => {
+  test('should query a task after user interaction', async () => {
+    const [mock, resultFunc] = createGetTaskQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<TestComponent2 />);
+
+    let taskElements = screen.queryAllByTestId('task');
+    expect(taskElements).toHaveLength(0);
+
+    expect(screen.getByTestId('total')).toHaveTextContent(0);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(0);
+    expect(screen.getByTestId('offset')).toHaveTextContent(0);
+    expect(screen.getByTestId('limit')).toHaveTextContent(0);
+    expect(screen.getByTestId('length')).toHaveTextContent(0);
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    taskElements = screen.getAllByTestId('task');
     expect(taskElements).toHaveLength(1);
 
     expect(taskElements[0]).toHaveTextContent('foo');
