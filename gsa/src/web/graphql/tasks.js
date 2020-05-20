@@ -17,7 +17,7 @@
  */
 import {useCallback} from 'react';
 
-import {useQuery, useLazyQuery} from '@apollo/react-hooks';
+import {useQuery, useLazyQuery, useMutation} from '@apollo/react-hooks';
 
 import gql from 'graphql-tag';
 
@@ -26,6 +26,38 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Task from 'gmp/models/task';
 
 import {isDefined} from 'gmp/utils/identity';
+
+export const CLONE_TASK = gql`
+  mutation cloneTask($taskId: String!) {
+    cloneTask(id: $taskId) {
+      id
+    }
+  }
+`;
+
+export const CREATE_CONTAINER_TASK = gql`
+  mutation createContainerTask($input: CreateContainerTaskInput!) {
+    createContainerTask(input: $input) {
+      id
+    }
+  }
+`;
+
+export const CREATE_TASK = gql`
+  mutation createTask($input: CreateTaskInput!) {
+    createTask(input: $input) {
+      id
+    }
+  }
+`;
+
+export const DELETE_TASK = gql`
+  mutation deleteTask($taskId: String!) {
+    deleteTask(id: $taskId) {
+      ok
+    }
+  }
+`;
 
 export const GET_TASKS = gql`
   query Task($filterString: String) {
@@ -106,6 +138,30 @@ export const GET_TASKS = gql`
   }
 `;
 
+export const MODIFY_TASK = gql`
+  mutation modifyTask($input: ModifyTaskInput!) {
+    modifyTask(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const START_TASK = gql`
+  mutation startTask($taskId: String!) {
+    startTask(id: $taskId) {
+      reportId
+    }
+  }
+`;
+
+export const STOP_TASK = gql`
+  mutation stopTask($taskId: String!) {
+    stopTask(id: $taskId) {
+      ok
+    }
+  }
+`;
+
 export const useGetTasks = (variables, options) => {
   const {data, ...other} = useQuery(GET_TASKS, {...options, variables});
   const tasks = isDefined(data?.tasks)
@@ -148,4 +204,84 @@ export const useLazyGetTasks = (variables, options) => {
     [queryTasks],
   );
   return [getTasks, {...other, counts, tasks}];
+};
+
+export const useCloneTask = options => {
+  const [queryCloneTask, {data, ...other}] = useMutation(CLONE_TASK, options);
+  const deleteTask = useCallback(
+    // eslint-disable-next-line no-shadow
+    (taskId, options) => queryCloneTask({...options, variables: {taskId}}),
+    [queryCloneTask],
+  );
+  const taskId = data?.cloneTask?.id;
+  return [deleteTask, {...other, id: taskId}];
+};
+
+export const useCreateContainerTask = options => {
+  const [queryCreateTask, {data, ...other}] = useMutation(
+    CREATE_CONTAINER_TASK,
+    options,
+  );
+  const createTask = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreateTask({...options, variables: {input: inputObject}}),
+    [queryCreateTask],
+  );
+  const taskId = data?.createContainerTask?.id;
+  return [createTask, {...other, id: taskId}];
+};
+
+export const useCreateTask = options => {
+  const [queryCreateTask, {data, ...other}] = useMutation(CREATE_TASK, options);
+  const createTask = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreateTask({...options, variables: {input: inputObject}}),
+    [queryCreateTask],
+  );
+  const taskId = data?.createTask?.id;
+  return [createTask, {...other, id: taskId}];
+};
+
+export const useDeleteTask = options => {
+  const [queryDeleteTask, data] = useMutation(DELETE_TASK, options);
+  const deleteTask = useCallback(
+    // eslint-disable-next-line no-shadow
+    (taskId, options) => queryDeleteTask({...options, variables: {taskId}}),
+    [queryDeleteTask],
+  );
+  return [deleteTask, data];
+};
+
+export const useModifyTask = options => {
+  const [queryModifyTask, data] = useMutation(MODIFY_TASK, options);
+  const modifyTask = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryModifyTask({...options, variables: {input: inputObject}}),
+    [queryModifyTask],
+  );
+  return [modifyTask, data];
+};
+
+export const useStartTask = options => {
+  const [queryStartTask, {data, ...other}] = useMutation(START_TASK, options);
+  const startTask = useCallback(
+    // eslint-disable-next-line no-shadow
+    (taskId, options) => queryStartTask({...options, variables: {taskId}}),
+    [queryStartTask],
+  );
+  const reportId = data?.startTask?.reportId;
+  return [startTask, {...other, reportId}];
+};
+
+export const useStopTask = options => {
+  const [queryStopTask, data] = useMutation(STOP_TASK, options);
+  const stopTask = useCallback(
+    // eslint-disable-next-line no-shadow
+    (taskId, options) => queryStopTask({...options, variables: {taskId}}),
+    [queryStopTask],
+  );
+  return [stopTask, data];
 };
