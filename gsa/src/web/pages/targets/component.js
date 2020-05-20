@@ -325,26 +325,35 @@ const TargetComponent = props => {
         .then(text => {
           const [fileText, excludeFileText] = text;
 
-          const mutationData = {
-            targetId: id,
-            aliveTest: alive_tests.toLowerCase(),
-            comment,
-            esxiCredentialId: esxi_credential_id,
-            hosts: target_source === 'file' ? fileText : hosts,
-            excludeHosts:
-              target_exclude_source === 'file'
-                ? excludeFileText
-                : exclude_hosts,
-            inUse: in_use,
-            name,
-            sshCredentialPort: parseInt(port),
-            portListId: port_list_id,
-            reverseLookupOnly: reverse_lookup_only,
-            reverseLookupUnify: reverse_lookup_unify,
-            smbCredentialId: smb_credential_id,
-            snmpCredentialId: snmp_credential_id,
-            sshCredentialId: ssh_credential_id,
-          };
+          let mutationData;
+          if (in_use) {
+            mutationData = {
+              name,
+              comment,
+              aliveTest: alive_tests,
+              targetId: id,
+            };
+          } else {
+            mutationData = {
+              targetId: id,
+              aliveTest: alive_tests.toLowerCase(),
+              comment,
+              esxiCredentialId: esxi_credential_id,
+              hosts: target_source === 'file' ? fileText : hosts,
+              excludeHosts:
+                target_exclude_source === 'file'
+                  ? excludeFileText
+                  : exclude_hosts,
+              name,
+              sshCredentialPort: parseInt(port),
+              portListId: port_list_id,
+              reverseLookupOnly: reverse_lookup_only,
+              reverseLookupUnify: reverse_lookup_unify,
+              smbCredentialId: smb_credential_id,
+              snmpCredentialId: snmp_credential_id,
+              sshCredentialId: ssh_credential_id,
+            };
+          }
 
           return modifyTarget(mutationData);
         })
