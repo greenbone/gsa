@@ -23,7 +23,7 @@ import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 import {useGetTasks, useLazyGetTasks} from '../tasks';
 import {createGetTaskQueryMock} from '../__mocks__/tasks';
 
-const TestComponent = () => {
+const GetTasksComponent = () => {
   const {counts, loading, tasks} = useGetTasks();
   if (loading) {
     return <span data-testid="loading">Loading</span>;
@@ -48,7 +48,7 @@ const TestComponent = () => {
   );
 };
 
-const TestComponent2 = () => {
+const GetLazyTasksComponent = () => {
   const [getTasks, {counts, loading, tasks}] = useLazyGetTasks();
   if (loading) {
     return <span data-testid="loading">Loading</span>;
@@ -79,7 +79,7 @@ describe('useGetTask tests', () => {
     const [mock, resultFunc] = createGetTaskQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
-    render(<TestComponent />);
+    render(<GetTasksComponent />);
 
     expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
 
@@ -105,7 +105,7 @@ describe('useLazyGetTask tests', () => {
     const [mock, resultFunc] = createGetTaskQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
-    render(<TestComponent2 />);
+    render(<GetLazyTasksComponent />);
 
     let taskElements = screen.queryAllByTestId('task');
     expect(taskElements).toHaveLength(0);
