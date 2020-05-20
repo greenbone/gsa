@@ -52,7 +52,7 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
+import {renderSelectItems, NULL_VALUE} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -160,7 +160,7 @@ const TaskDialog = ({
       scanner_type: OPENVAS_SCANNER_TYPE,
     },
   ],
-  schedule_id = UNSET_VALUE,
+  schedule_id = NULL_VALUE,
   schedule_periods = NO_VALUE,
   schedules = [],
   source_iface = '',
@@ -224,10 +224,10 @@ const TaskDialog = ({
         );
       } else if (scanner_type === OSP_SCANNER_TYPE) {
         onScanConfigChange(
-          selectSaveId(sorted_scan_configs[OSP_SCAN_CONFIG_TYPE], UNSET_VALUE),
+          selectSaveId(sorted_scan_configs[OSP_SCAN_CONFIG_TYPE], NULL_VALUE),
         );
       } else {
-        onScanConfigChange(UNSET_VALUE);
+        onScanConfigChange(NULL_VALUE);
       }
     }
     setPrevConfigType(configType);
@@ -237,7 +237,7 @@ const TaskDialog = ({
 
   const target_items = renderSelectItems(targets);
 
-  const schedule_items = renderSelectItems(schedules, UNSET_VALUE);
+  const schedule_items = renderSelectItems(schedules, NULL_VALUE);
 
   const sorted_scan_configs = sort_scan_configs(scan_configs);
 

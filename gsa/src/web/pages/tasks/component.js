@@ -79,7 +79,7 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-import {UNSET_VALUE} from 'web/utils/render';
+import {NULL_VALUE} from 'web/utils/render';
 import useCapabilities from 'web/utils/useCapabilities';
 
 import EntityComponent from 'web/entity/component';
@@ -472,7 +472,7 @@ const TaskComponent = props => {
     if (isDefined(task)) {
       const canAccessSchedules =
         capabilities.mayAccess('schedules') && isDefined(task.schedule);
-      const schedule_id = canAccessSchedules ? task.schedule.id : UNSET_VALUE;
+      const schedule_id = canAccessSchedules ? task.schedule.id : NULL_VALUE;
       const schedule_periods = canAccessSchedules
         ? task.schedulePeriods
         : undefined;
