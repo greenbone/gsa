@@ -330,7 +330,7 @@ const TargetComponent = props => {
             mutationData = {
               name,
               comment,
-              aliveTest: alive_tests,
+              aliveTest: alive_tests.toLowerCase(),
               id,
             };
           } else {
