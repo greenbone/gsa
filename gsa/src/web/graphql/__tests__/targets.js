@@ -21,14 +21,14 @@ import React, {useState} from 'react';
 
 import Button from 'web/components/form/button';
 
+import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
+
 import {
   useCreateTarget,
   useModifyTarget,
   CREATE_TARGET,
   MODIFY_TARGET,
-} from 'web/pages/targets/graphql';
-
-import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
+} from '../targets';
 
 const createTargetInput = {
   name: 'foo',
@@ -52,8 +52,7 @@ const createTargetResult = jest.fn().mockReturnValue({
 const modifyTargetResult = jest.fn().mockReturnValue({
   data: {
     modifyTarget: {
-      id: '12345',
-      status: 200,
+      ok: true,
     },
   },
 });
@@ -77,8 +76,8 @@ const modifyTargetMock = {
 const TestComponent = () => {
   const [notification, setNotification] = useState('');
 
-  const createTarget = useCreateTarget();
-  const modifyTarget = useModifyTarget();
+  const [createTarget] = useCreateTarget();
+  const [modifyTarget] = useModifyTarget();
 
   const handleCreateResult = resp => {
     const {data} = resp;
@@ -89,9 +88,7 @@ const TestComponent = () => {
 
   const handleModifyResult = resp => {
     const {data} = resp;
-    setNotification(
-      `Target modified with id ${data.modifyTarget.id} and status ${data.modifyTarget.status}.`,
-    );
+    setNotification(`Target modified with ok=${data.modifyTarget.ok}.`);
   };
 
   return (
@@ -114,6 +111,7 @@ describe('Target mutation tests', () => {
     const {render} = rendererWith({queryMocks: [createTargetMock]});
 
     const {element} = render(<TestComponent />);
+
     const buttons = element.querySelectorAll('button');
 
     fireEvent.click(buttons[0]);
@@ -130,6 +128,7 @@ describe('Target mutation tests', () => {
     const {render} = rendererWith({queryMocks: [modifyTargetMock]});
 
     const {element} = render(<TestComponent />);
+
     const buttons = element.querySelectorAll('button');
 
     fireEvent.click(buttons[1]);
@@ -138,7 +137,7 @@ describe('Target mutation tests', () => {
 
     expect(modifyTargetResult).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
-      'Target modified with id 12345 and status 200.',
+      'Target modified with ok=true.',
     );
   });
 });

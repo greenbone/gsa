@@ -36,7 +36,7 @@ import PortListDialog from 'web/pages/portlists/dialog.js';
 
 import TargetDialog from './dialog.js';
 
-import {useCreateTarget, useModifyTarget} from './graphql';
+import {useCreateTarget, useModifyTarget} from 'web/graphql/targets';
 
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
@@ -47,8 +47,8 @@ const id_or__ = value => {
 const TargetComponent = props => {
   const gmp = useGmp();
 
-  const createTarget = useCreateTarget();
-  const modifyTarget = useModifyTarget();
+  const [createTarget] = useCreateTarget();
+  const [modifyTarget] = useModifyTarget();
 
   const [credentialsDialogVisible, setCredentialsDialogVisible] = useState(
     false,
