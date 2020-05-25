@@ -589,6 +589,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/processmap/processmaploader.js
      ${GSA_SRC_DIR}/src/web/components/processmap/processnode.js
      ${GSA_SRC_DIR}/src/web/components/processmap/processpanel.js
+     ${GSA_SRC_DIR}/src/web/components/processmap/resultstable.js
      ${GSA_SRC_DIR}/src/web/components/processmap/tools.js
      ${GSA_SRC_DIR}/src/web/components/processmap/usecolorize.js
      ${GSA_SRC_DIR}/src/web/components/processmap/utils.js

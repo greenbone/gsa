@@ -26,9 +26,9 @@ import {isDefined} from 'gmp/utils/identity';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
-import DeleteIcon from 'web/components/icon/deleteicon';
-
 import Layout from 'web/components/layout/layout';
+
+import DetailsLink from 'web/components/link/detailslink';
 
 import Body from 'web/components/table/body';
 import Data from 'web/components/table/data';
@@ -41,46 +41,28 @@ import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Theme from 'web/utils/theme';
-
 const StyledDiv = styled.div`
   padding: 5px;
 `;
 
-const FakeLink = styled.div`
-  color: ${Theme.blue};
-  &:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-`;
-
-const HostRow = ({host, onDeleteHost, onSelectHost}) => {
-  const {id, name, severity} = host;
+const ResultRow = ({result}) => {
+  const {id, nvt, severity} = result;
   return (
     <Row>
       <Data>
-        <FakeLink id={id} onClick={() => onSelectHost(host)}>
-          {name}
-        </FakeLink>
+        <DetailsLink id={id} type="result">
+          {isDefined(nvt.name) ? nvt.name : nvt.oid}
+        </DetailsLink>
       </Data>
       <Data>
         <SeverityBar severity={severity} />
-      </Data>
-      <Data>
-        <DeleteIcon
-          title={_('Remove host from process')}
-          onClick={() => onDeleteHost(id)}
-        />
       </Data>
     </Row>
   );
 };
 
-HostRow.propTypes = {
-  host: PropTypes.object,
-  onDeleteHost: PropTypes.func.isRequired,
-  onSelectHost: PropTypes.func.isRequired,
+ResultRow.propTypes = {
+  result: PropTypes.object,
 };
 
 const StyledLayout = styled(Layout)`
@@ -88,9 +70,9 @@ const StyledLayout = styled(Layout)`
   overflow: auto;
 `;
 
-const HostTable = ({hosts, onDeleteHost, onSelectHost}) => {
+const ResultTable = ({results}) => {
   return (
-    <StyledLayout align="start" flex="column">
+    <StyledLayout align="start" grow flex="column">
       <StripedTable>
         <colgroup>
           <Col width="55%" />
@@ -99,37 +81,29 @@ const HostTable = ({hosts, onDeleteHost, onSelectHost}) => {
         </colgroup>
         <Header>
           <Row>
-            <Head>{_('Host')}</Head>
+            <Head>{_('Result')}</Head>
             <Head>{_('Severity')}</Head>
-            <Head>{_('Actions')}</Head>
           </Row>
         </Header>
-        {isDefined(hosts) && hosts.length > 0 && (
+        {isDefined(results) && results.length > 0 && (
           <Body>
-            {hosts.map((host, i) => (
-              <HostRow
-                key={i}
-                host={host}
-                onDeleteHost={onDeleteHost}
-                onSelectHost={onSelectHost}
-              />
+            {results.map((result, i) => (
+              <ResultRow key={i} result={result} />
             ))}
           </Body>
         )}
       </StripedTable>
-      {isDefined(hosts) && hosts.length === 0 && (
-        <StyledDiv>{_('No hosts associated with this process.')}</StyledDiv>
+      {isDefined(results) && results.length === 0 && (
+        <StyledDiv>{_('No host selected.')}</StyledDiv>
       )}
     </StyledLayout>
   );
 };
 
-HostTable.propTypes = {
-  hosts: PropTypes.array,
-  onDeleteHost: PropTypes.func.isRequired,
-  onSelectHost: PropTypes.func.isRequired,
+ResultTable.propTypes = {
+  results: PropTypes.array,
 };
 
-export default HostTable;
+export default ResultTable;
 
 // vim: set ts=2 sw=2 tw=80:
