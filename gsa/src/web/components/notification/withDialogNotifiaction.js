@@ -18,17 +18,20 @@
 
 import React from 'react';
 
-import DialogNotifaction from './dialognotification.js';
+import DialogNotification from './dialognotification';
+import useDialogNotification from './useDialogNotification';
 
 const withDialogNotification = Component => {
-  const DialogNoticiationWrapper = props => {
+  const DialogNotificationWrapper = props => {
+    const {dialogState, ...notificationProps} = useDialogNotification();
     return (
-      <DialogNotifaction>
-        {notificationProps => <Component {...props} {...notificationProps} />}
-      </DialogNotifaction>
+      <React.Fragment>
+        <Component {...props} {...notificationProps} />
+        <DialogNotification {...dialogState} />
+      </React.Fragment>
     );
   };
-  return DialogNoticiationWrapper;
+  return DialogNotificationWrapper;
 };
 
 export default withDialogNotification;
