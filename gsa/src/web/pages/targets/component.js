@@ -57,33 +57,13 @@ const TargetComponent = props => {
   const [targetDialogVisible, setTargetDialogVisible] = useState(false);
 
   const [targetDialogState, setTargetDialogState] = useState({
-    id: undefined,
-    alive_tests: undefined,
-    comment: undefined,
-    esxi_credential_id: undefined,
-    exclude_hosts: undefined,
-    hosts: undefined,
-    in_use: undefined,
-    name: undefined,
-    port: undefined,
-    reverse_lookup_only: undefined,
-    reverse_lookup_unify: undefined,
-    target_source: undefined,
-    target_exclude_source: undefined,
-    targetTitle: undefined,
-    port_list_id: undefined,
-    smb_credential_id: undefined,
-    ssh_credential_id: undefined,
     initial: {},
   });
 
   // eslint-disable-next-line no-unused-vars
   const [idField, setIdField] = useState();
 
-  const [credentialsDialogState, setCredentialsDialogState] = useState({
-    credentialTypes: undefined,
-    credentialsTitle: undefined,
-  });
+  const [credentialsDialogState, setCredentialsDialogState] = useState({});
 
   const [credentials, setCredentials] = useState();
   const [portLists, setPortLists] = useState();
