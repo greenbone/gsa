@@ -729,7 +729,12 @@ const load = ({
 };
 
 const ReportDetailsWrapper = ({reportFilter, ...props}) => (
-  <FilterProvider fallbackFilter={DEFAULT_FILTER} gmpname="result">
+  <FilterProvider
+    fallbackFilter={DEFAULT_FILTER}
+    gmpname="result"
+    // deactivate filter via url param for now. not sure why we are doing this
+    locationQueryFilterString={null}
+  >
     {({filter}) => (
       <Reload
         name={`report-${props.reportId}`}
