@@ -38,11 +38,10 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 
 import useGmp from 'web/utils/useGmp';
 
-const usePageFilter = ({
-  fallbackFilter,
-  entityType,
-  locationQueryFilterString,
-}) => {
+const usePageFilter = (
+  pageName,
+  {fallbackFilter, locationQueryFilterString} = {},
+) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
 
@@ -50,7 +49,7 @@ const usePageFilter = ({
 
   const [defaultSettingFilter, defaultSettingsFilterError] = useSelector(
     state => {
-      const defaultFilterSel = getUserSettingsDefaultFilter(state, entityType);
+      const defaultFilterSel = getUserSettingsDefaultFilter(state, pageName);
       return [defaultFilterSel.getFilter(), defaultFilterSel.getError()];
     },
   );
@@ -60,14 +59,14 @@ const usePageFilter = ({
       !isDefined(defaultSettingFilter) &&
       !isDefined(defaultSettingsFilterError)
     ) {
-      dispatch(loadUserSettingsDefaultFilter(gmp)(entityType));
+      dispatch(loadUserSettingsDefaultFilter(gmp)(pageName));
     }
   }, [
     defaultSettingFilter,
     defaultSettingsFilterError,
     dispatch,
     gmp,
-    entityType,
+    pageName,
   ]);
 
   let [rowsPerPage, rowsPerPageError] = useSelector(state => {
@@ -93,13 +92,13 @@ const usePageFilter = ({
   useEffect(() => {
     if (isDefined(locationQueryFilterString)) {
       dispatch(
-        setPageFilter(entityType, Filter.fromString(locationQueryFilterString)),
+        setPageFilter(pageName, Filter.fromString(locationQueryFilterString)),
       );
     }
     setLocationQueryFilter(undefined);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const pageFilter = useSelector(state => getPage(state).getFilter(entityType));
+  const pageFilter = useSelector(state => getPage(state).getFilter(pageName));
 
   if (isDefined(locationQueryFilter)) {
     returnedFilter = locationQueryFilter;

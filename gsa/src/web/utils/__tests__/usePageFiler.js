@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+/* eslint-disable react/prop-types */
+
 import React from 'react';
 
 import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
@@ -27,8 +30,8 @@ import {rendererWith, waitForElement, screen} from 'web/utils/testing';
 
 import usePageFilter from '../usePageFilter';
 
-const TestComponent = ({children, ...props}) => {
-  const [filter, isLoading] = usePageFilter(props);
+const TestComponent = ({children, entityType, ...props}) => {
+  const [filter, isLoading] = usePageFilter(entityType, props);
   return isLoading ? <div>Loading</div> : children({filter});
 };
 

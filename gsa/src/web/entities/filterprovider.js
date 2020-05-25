@@ -24,10 +24,9 @@ import PropTypes from 'web/utils/proptypes';
 import usePageFilter from 'web/utils/usePageFilter';
 
 const FilterProvider = ({children, fallbackFilter, gmpname, locationQuery}) => {
-  const [filter, isLoading] = usePageFilter({
+  const [filter, isLoading] = usePageFilter(gmpname, {
     fallbackFilter,
     locationQueryFilterString: locationQuery?.filter,
-    entityType: gmpname,
   });
   return (
     <React.Fragment>
