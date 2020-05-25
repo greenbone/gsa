@@ -389,7 +389,7 @@ const TargetComponent = props => {
           return modifyTarget(mutationData);
         })
         .then(onSaved, onSaveError)
-        .then(() => closeTargetDialog());
+        .then(closeTargetDialog);
     }
 
     const {onCreated, onCreateError} = props;
@@ -417,8 +417,8 @@ const TargetComponent = props => {
 
         return createTarget(mutationData);
       })
-      .then(result => onCreated(result), onCreateError)
-      .then(() => closeTargetDialog());
+      .then(onCreated, onCreateError)
+      .then(closeTargetDialog);
   };
 
   const {
