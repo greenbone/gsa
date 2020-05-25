@@ -16,20 +16,67 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* eslint-disable react/prop-types */
+
 import React from 'react';
 
-import {useGetTasks} from '../tasks';
-import {createGetTaskQueryMock} from '../__mocks__/tasks';
+import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
-import {rendererWith, screen, wait} from 'web/utils/testing';
+import {
+  useCloneTask,
+  useCreateContainerTask,
+  useCreateTask,
+  useDeleteTask,
+  useGetTasks,
+  useLazyGetTasks,
+  useModifyTask,
+  useStartTask,
+  useStopTask,
+} from '../tasks';
+import {
+  createCloneTaskQueryMock,
+  createCreateContainerTaskQueryMock,
+  createCreateTaskQueryMock,
+  createDeleteTaskQueryMock,
+  createGetTaskQueryMock,
+  createModifyTaskQueryMock,
+  createStartTaskQueryMock,
+  createStopTaskQueryMock,
+} from '../__mocks__/tasks';
 
-const TestComponent = () => {
+const GetTasksComponent = () => {
   const {counts, loading, tasks} = useGetTasks();
   if (loading) {
-    return <span>Loading</span>;
+    return <span data-testid="loading">Loading</span>;
   }
   return (
     <div>
+      <div data-testid="counts">
+        <span data-testid="total">{counts.all}</span>
+        <span data-testid="filtered">{counts.filtered}</span>
+        <span data-testid="offset">{counts.first}</span>
+        <span data-testid="limit">{counts.rows}</span>
+        <span data-testid="length">{counts.length}</span>
+      </div>
+      {tasks.map(task => {
+        return (
+          <div key={task.id} data-testid="task">
+            {task.name}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+const GetLazyTasksComponent = () => {
+  const [getTasks, {counts, loading, tasks}] = useLazyGetTasks();
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getTasks()} />
       <div data-testid="counts">
         <span data-testid="total">{counts.all}</span>
         <span data-testid="filtered">{counts.filtered}</span>
@@ -53,9 +100,9 @@ describe('useGetTask tests', () => {
     const [mock, resultFunc] = createGetTaskQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
-    const {element} = render(<TestComponent />);
+    render(<GetTasksComponent />);
 
-    expect(element).toHaveTextContent('Loading');
+    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
 
     await wait();
 
@@ -71,5 +118,249 @@ describe('useGetTask tests', () => {
     expect(screen.getByTestId('offset')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
     expect(screen.getByTestId('length')).toHaveTextContent(1);
+  });
+});
+
+describe('useLazyGetTask tests', () => {
+  test('should query a task after user interaction', async () => {
+    const [mock, resultFunc] = createGetTaskQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<GetLazyTasksComponent />);
+
+    let taskElements = screen.queryAllByTestId('task');
+    expect(taskElements).toHaveLength(0);
+
+    expect(screen.getByTestId('total')).toHaveTextContent(0);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(0);
+    expect(screen.getByTestId('offset')).toHaveTextContent(0);
+    expect(screen.getByTestId('limit')).toHaveTextContent(0);
+    expect(screen.getByTestId('length')).toHaveTextContent(0);
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    taskElements = screen.getAllByTestId('task');
+    expect(taskElements).toHaveLength(1);
+
+    expect(taskElements[0]).toHaveTextContent('foo');
+
+    expect(screen.getByTestId('total')).toHaveTextContent(1);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(1);
+    expect(screen.getByTestId('offset')).toHaveTextContent(1);
+    expect(screen.getByTestId('limit')).toHaveTextContent(10);
+    expect(screen.getByTestId('length')).toHaveTextContent(1);
+  });
+});
+
+const DeleteTaskComponent = () => {
+  const [deleteTask] = useDeleteTask();
+  return <button data-testid="delete" onClick={() => deleteTask('foo')} />;
+};
+
+describe('useDeleteTask tests', () => {
+  test('should delete a task after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteTaskQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteTaskComponent />);
+
+    const button = screen.getByTestId('delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const CloneTaskComponent = () => {
+  const [cloneTask, {id: taskId}] = useCloneTask();
+  return (
+    <div>
+      {taskId && <span data-testid="cloned-task">{taskId}</span>}
+      <button data-testid="clone" onClick={() => cloneTask('foo')} />
+    </div>
+  );
+};
+
+describe('useCloneTask tests', () => {
+  test('should clone a task after user interaction', async () => {
+    const [mock, resultFunc] = createCloneTaskQueryMock('foo', 'foo2');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CloneTaskComponent />);
+
+    const button = screen.getByTestId('clone');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('cloned-task')).toHaveTextContent('foo2');
+  });
+});
+
+const StartTaskComponent = ({taskId}) => {
+  const [startTask, {reportId}] = useStartTask();
+  return (
+    <div>
+      {reportId && <span data-testid="report">{reportId}</span>}
+      <button data-testid="start" onClick={() => startTask(taskId)} />
+    </div>
+  );
+};
+
+describe('useStartTask tests', () => {
+  test('should start a task after user interaction', async () => {
+    const [mock, resultFunc] = createStartTaskQueryMock('t1', 'r1');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<StartTaskComponent taskId="t1" />);
+
+    const button = screen.getByTestId('start');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('report')).toHaveTextContent('r1');
+  });
+});
+
+const CreateContainerTaskComponent = ({name, comment}) => {
+  const [createContainerTask, {id: taskId}] = useCreateContainerTask();
+  return (
+    <div>
+      {taskId && <span data-testid="task">{taskId}</span>}
+      <button
+        data-testid="create"
+        onClick={() => createContainerTask({name, comment})}
+      />
+    </div>
+  );
+};
+
+describe('useCreateContainerTask tests', () => {
+  test('should create a container task after user interaction', async () => {
+    const [mock, resultFunc] = createCreateContainerTaskQueryMock(
+      'c1',
+      'foo',
+      't1',
+    );
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CreateContainerTaskComponent name="c1" comment="foo" />);
+
+    const button = screen.getByTestId('create');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('task')).toHaveTextContent('t1');
+  });
+});
+
+const CreateTaskComponent = ({data}) => {
+  const [createTask, {id: taskId}] = useCreateTask();
+  return (
+    <div>
+      {taskId && <span data-testid="task">{taskId}</span>}
+      <button data-testid="create" onClick={() => createTask(data)} />
+    </div>
+  );
+};
+
+describe('useCreateTask tests', () => {
+  test('should create a task after user interaction', async () => {
+    const data = {
+      name: 't1',
+      comment: 'foo',
+      scanConfigId: 's1',
+      scannerId: 's1',
+      targetId: 't1',
+    };
+
+    const [mock, resultFunc] = createCreateTaskQueryMock(data, 't1');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CreateTaskComponent data={data} />);
+
+    const button = screen.getByTestId('create');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('task')).toHaveTextContent('t1');
+  });
+});
+
+const ModifyTaskComponent = ({data}) => {
+  const [modifyTask] = useModifyTask();
+  return (
+    <div>
+      <button data-testid="modify" onClick={() => modifyTask(data)} />
+    </div>
+  );
+};
+
+describe('useModifyTask tests', () => {
+  test('should modify a task after user interaction', async () => {
+    const data = {
+      name: 't1',
+      comment: 'foo',
+      scanConfigId: 's1',
+      scannerId: 's1',
+      targetId: 't1',
+    };
+
+    const [mock, resultFunc] = createModifyTaskQueryMock(data, 't1');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ModifyTaskComponent data={data} />);
+
+    const button = screen.getByTestId('modify');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const StopTaskComponent = ({taskId}) => {
+  const [stopTask] = useStopTask();
+  return (
+    <div>
+      <button data-testid="stop" onClick={() => stopTask(taskId)} />
+    </div>
+  );
+};
+
+describe('useStopTask tests', () => {
+  test('should stop a task after user interaction', async () => {
+    const [mock, resultFunc] = createStopTaskQueryMock('t1');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<StopTaskComponent taskId="t1" />);
+
+    const button = screen.getByTestId('stop');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 });

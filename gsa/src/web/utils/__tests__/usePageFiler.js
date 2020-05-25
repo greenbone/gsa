@@ -28,7 +28,7 @@ import {rendererWith, waitForElement, screen} from 'web/utils/testing';
 import usePageFilter from '../usePageFilter';
 
 const TestComponent = ({children, ...props}) => {
-  const {isLoading, filter} = usePageFilter(props);
+  const [filter, isLoading] = usePageFilter(props);
   return isLoading ? <div>Loading</div> : children({filter});
 };
 

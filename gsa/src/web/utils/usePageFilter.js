@@ -131,7 +131,7 @@ const usePageFilter = ({
       isDefined(defaultSettingsFilterError)) &&
     isDefined(rowsPerPage);
 
-  return {isLoading: !finishedLoading, filter: returnedFilter};
+  return [returnedFilter, !finishedLoading];
 };
 
 export default usePageFilter;

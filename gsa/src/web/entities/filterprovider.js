@@ -24,7 +24,7 @@ import PropTypes from 'web/utils/proptypes';
 import usePageFilter from 'web/utils/usePageFilter';
 
 const FilterProvider = ({children, fallbackFilter, gmpname, locationQuery}) => {
-  const {isLoading, filter} = usePageFilter({
+  const [filter, isLoading] = usePageFilter({
     fallbackFilter,
     locationQueryFilterString: locationQuery?.filter,
     entityType: gmpname,
