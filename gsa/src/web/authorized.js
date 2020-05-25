@@ -30,10 +30,12 @@ import {useIsAuthenticated} from 'web/graphql/auth';
 import {setIsLoggedIn} from 'web/store/usersettings/actions';
 
 import useGmp from 'web/utils/useGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const Authorized = ({children}) => {
   const {isAuthenticated, loading} = useIsAuthenticated();
   const [isLoading, setIsLoading] = useState(loading);
+  const [, renewSession] = useUserSessionTimeout();
 
   const gmp = useGmp();
   const location = useLocation();
@@ -60,12 +62,14 @@ const Authorized = ({children}) => {
     if (hasValue(isAuthenticated)) {
       dispatch(setIsLoggedIn(isAuthenticated));
 
-      if (!isAuthenticated) {
+      if (isAuthenticated) {
+        renewSession();
+      } else {
         toLoginPage();
       }
     }
     setIsLoading(loading);
-  }, [loading, isAuthenticated, toLoginPage, dispatch]);
+  }, [loading, isAuthenticated, toLoginPage, dispatch, renewSession]);
 
   if (isLoading) {
     return <Loading />;
