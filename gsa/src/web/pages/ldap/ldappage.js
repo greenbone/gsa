@@ -15,13 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {connect} from 'react-redux';
+import React, {useState, useCallback, useEffect} from 'react';
 
 import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import EditIcon from 'web/components/icon/editicon';
 import LdapIcon from 'web/components/icon/ldapicon';
@@ -41,12 +37,10 @@ import Loading from 'web/components/loading/loading';
 
 import {Col} from 'web/entity/page';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
-
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import LdapDialog from './dialog';
 
@@ -69,179 +63,142 @@ ToolBarIcons.propTypes = {
   onOpenDialogClick: PropTypes.func,
 };
 
-class LdapAuthentication extends React.Component {
-  constructor(...args) {
-    super(...args);
+const LdapAuthentication = () => {
+  const gmp = useGmp();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
 
-    this.state = {
-      hasLdapSupport: true,
-      loading: true,
-      initial: true,
-      dialogVisible: false,
-    };
+  const [authdn, setAuthdn] = useState();
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [isInitial, setIsInitial] = useState(true);
+  const [isLdapEnabled, setIsLdapEnabled] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasLdapSupport, setHasLdapSupport] = useState(false);
+  const [ldapHost, setLdapHost] = useState();
+  const [certificateInfo, setCertificateInfo] = useState({});
 
-    this.handleSaveSettings = this.handleSaveSettings.bind(this);
-    this.closeDialog = this.closeDialog.bind(this);
-    this.openDialog = this.openDialog.bind(this);
-  }
-
-  componentDidMount() {
-    this.loadLdapAuthSettings();
-  }
-
-  loadLdapAuthSettings() {
-    const {gmp} = this.props;
-
-    this.setState({loading: true});
+  const loadLdapAuthSettings = useCallback(() => {
+    setIsLoading(true);
 
     return gmp.user.currentAuthSettings().then(response => {
       const {data: settings} = response;
       // ldap support is enabled in gvm-libs
-      const hasLdapSupport = settings.has('method:ldap_connect');
+      // eslint-disable-next-line no-shadow
       const {authdn, certificateInfo, enabled, ldaphost} = settings.get(
         'method:ldap_connect',
       );
-      this.setState({
-        hasLdapSupport,
-        authdn,
-        certificateInfo,
-        enabled,
-        ldaphost,
-        loading: false,
-        initial: false,
-      });
+
+      setAuthdn(authdn);
+      setCertificateInfo(certificateInfo ?? {});
+      setHasLdapSupport(settings.has('method:ldap_connect'));
+      setIsInitial(false);
+      setIsLdapEnabled(enabled);
+      setIsLoading(false);
+      setLdapHost(ldaphost);
     });
+  }, [gmp.user]);
+
+  const openDialog = useCallback(() => {
+    setDialogVisible(true);
+    renewSessionTimeout();
+  }, [renewSessionTimeout]);
+
+  const closeDialog = useCallback(() => {
+    setDialogVisible(false);
+    renewSessionTimeout();
+  }, [renewSessionTimeout]);
+
+  const handleSaveSettings = useCallback(
+    // eslint-disable-next-line no-shadow
+    ({authdn, certificate, enable, ldaphost}) => {
+      renewSessionTimeout();
+
+      return gmp.auth
+        .saveLdap({
+          authdn,
+          certificate,
+          enable,
+          ldaphost,
+        })
+        .then(() => {
+          loadLdapAuthSettings();
+          setDialogVisible(false);
+        });
+    },
+    [gmp.auth, loadLdapAuthSettings, renewSessionTimeout],
+  );
+
+  useEffect(() => {
+    // load ldap auth settings on mount
+    loadLdapAuthSettings();
+  }, [loadLdapAuthSettings]);
+
+  if (isLoading && isInitial) {
+    return <Loading />;
   }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  }
-
-  handleSaveSettings({authdn, certificate, enable, ldaphost}) {
-    const {gmp} = this.props;
-
-    this.handleInteraction();
-
-    return gmp.auth
-      .saveLdap({
-        authdn,
-        certificate,
-        enable,
-        ldaphost,
-      })
-      .then(() => {
-        this.loadLdapAuthSettings();
-        this.setState({dialogVisible: false});
-      });
-  }
-
-  openDialog() {
-    this.setState({dialogVisible: true});
-  }
-
-  closeDialog() {
-    this.setState({dialogVisible: false});
-  }
-
-  render() {
-    const {loading, initial} = this.state;
-    if (loading && initial) {
-      return <Loading />;
-    }
-    const {
-      authdn,
-      certificateInfo = {},
-      dialogVisible,
-      enabled,
-      hasLdapSupport,
-      ldaphost,
-    } = this.state;
-
-    return (
-      <React.Fragment>
-        <PageTitle title={_('LDAP per-User Authentication')} />
-        <Layout flex="column">
-          {hasLdapSupport && (
-            <ToolBarIcons onOpenDialogClick={this.openDialog} />
-          )}
-          <Section
-            img={<LdapIcon size="large" />}
-            title={_('LDAP per-User Authentication')}
-          />
-          {hasLdapSupport ? (
-            <Table>
-              <colgroup>
-                <Col width="10%" />
-                <Col width="90%" />
-              </colgroup>
-              <TableBody>
-                <TableRow>
-                  <TableData>{_('Enabled')}</TableData>
-                  <TableData>{renderYesNo(enabled)}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('LDAP Host')}</TableData>
-                  <TableData>{ldaphost}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Auth. DN')}</TableData>
-                  <TableData>{authdn}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Activation')}</TableData>
-                  <TableData>{certificateInfo.activation_time}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Expiration')}</TableData>
-                  <TableData>{certificateInfo.expiration_time}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('MD5 Fingerprint')}</TableData>
-                  <TableData>{certificateInfo.md5_fingerprint}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Issued by')}</TableData>
-                  <TableData>{certificateInfo.issuer}</TableData>
-                </TableRow>
-              </TableBody>
-            </Table>
-          ) : (
-            <p>{_('Support for LDAP is not available.')}</p>
-          )}
-        </Layout>
-
-        {dialogVisible && (
-          <LdapDialog
-            authdn={authdn}
-            enable={enabled}
-            ldaphost={ldaphost}
-            onClose={this.closeDialog}
-            onSave={this.handleSaveSettings}
-          />
+  return (
+    <React.Fragment>
+      <PageTitle title={_('LDAP per-User Authentication')} />
+      <Layout flex="column">
+        {hasLdapSupport && <ToolBarIcons onOpenDialogClick={openDialog} />}
+        <Section
+          img={<LdapIcon size="large" />}
+          title={_('LDAP per-User Authentication')}
+        />
+        {hasLdapSupport ? (
+          <Table>
+            <colgroup>
+              <Col width="10%" />
+              <Col width="90%" />
+            </colgroup>
+            <TableBody>
+              <TableRow>
+                <TableData>{_('Enabled')}</TableData>
+                <TableData>{renderYesNo(isLdapEnabled)}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('LDAP Host')}</TableData>
+                <TableData>{ldapHost}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Auth. DN')}</TableData>
+                <TableData>{authdn}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Activation')}</TableData>
+                <TableData>{certificateInfo.activation_time}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Expiration')}</TableData>
+                <TableData>{certificateInfo.expiration_time}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('MD5 Fingerprint')}</TableData>
+                <TableData>{certificateInfo.md5_fingerprint}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Issued by')}</TableData>
+                <TableData>{certificateInfo.issuer}</TableData>
+              </TableRow>
+            </TableBody>
+          </Table>
+        ) : (
+          <p>{_('Support for LDAP is not available.')}</p>
         )}
-      </React.Fragment>
-    );
-  }
-}
+      </Layout>
 
-LdapAuthentication.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  onInteraction: PropTypes.func.isRequired,
+      {dialogVisible && (
+        <LdapDialog
+          authdn={authdn}
+          enable={isLdapEnabled}
+          ldaphost={ldapHost}
+          onClose={closeDialog}
+          onSave={handleSaveSettings}
+        />
+      )}
+    </React.Fragment>
+  );
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-});
-
-export default compose(
-  withGmp,
-  connect(
-    undefined,
-    mapDispatchToProps,
-  ),
-)(LdapAuthentication);
+export default LdapAuthentication;
 
 // vim: set ts=2 sw=2 tw=80:
