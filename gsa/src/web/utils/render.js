@@ -28,10 +28,8 @@ import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
 import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
-export const UNSET_VALUE = '0';
+export const UNSET_VALUE = null;
 export const UNSET_LABEL = '--';
-
-export const NULL_VALUE = null;
 
 /**
  * Render a entities list as items array
