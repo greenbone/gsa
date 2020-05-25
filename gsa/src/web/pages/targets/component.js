@@ -56,43 +56,47 @@ const TargetComponent = props => {
   const [portListDialogVisible, setPortListDialogVisible] = useState(false);
   const [targetDialogVisible, setTargetDialogVisible] = useState(false);
 
+  const [targetDialogState, setTargetDialogState] = useState({
+    id: undefined,
+    alive_tests: undefined,
+    comment: undefined,
+    esxi_credential_id: undefined,
+    exclude_hosts: undefined,
+    hosts: undefined,
+    in_use: undefined,
+    name: undefined,
+    port: undefined,
+    reverse_lookup_only: undefined,
+    reverse_lookup_unify: undefined,
+    target_source: undefined,
+    target_exclude_source: undefined,
+    targetTitle: undefined,
+    port_list_id: undefined,
+    smb_credential_id: undefined,
+    ssh_credential_id: undefined,
+    initial: {},
+  });
+
   // eslint-disable-next-line no-unused-vars
   const [idField, setIdField] = useState();
-  const [credentialTypes, setCredentialTypes] = useState();
-  const [credentialsTitle, setCredentialsTitle] = useState();
-  const [id, setId] = useState();
 
-  const [alive_tests, setAliveTests] = useState();
-  const [comment, setComment] = useState();
-  const [esxi_credential_id, setEsxiCredentialId] = useState();
-  const [exclude_hosts, setExcludeHosts] = useState();
-  const [hosts, setHosts] = useState();
-  const [in_use, setInUse] = useState();
-  const [name, setName] = useState();
-  const [port, setPort] = useState();
-  const [reverse_lookup_only, setReverseLookupOnly] = useState();
-  const [reverse_lookup_unify, setReverseLookupUnify] = useState();
-  const [target_source, setTargetSource] = useState();
-  const [target_exclude_source, setTargetExcludeSource] = useState();
-  const [targetTitle, setTargetTitle] = useState();
-  const [smb_credential_id, setSmbCredentialId] = useState();
-  const [ssh_credential_id, setSshCredentialId] = useState();
-  const [port_list_id, setPortListId] = useState();
-
-  // eslint-disable-next-line no-unused-vars
-  const [initial, setInitial] = useState({});
+  const [credentialsDialogState, setCredentialsDialogState] = useState({
+    credentialTypes: undefined,
+    credentialsTitle: undefined,
+  });
 
   const [credentials, setCredentials] = useState();
   const [portLists, setPortLists] = useState();
-  const [snmp_credential_id, setSnmpCredentialId] = useState();
   const [portListsTitle, setPortListsTitle] = useState();
 
   const openCredentialsDialog = ({id_field, types, title}) => {
     setIdField(id_field);
 
     setCredentialsDialogVisible(true);
-    setCredentialTypes(types);
-    setCredentialsTitle(title);
+    setCredentialsDialogState({
+      credentialTypes: types,
+      credentialsTitle: title,
+    });
 
     handleInteraction();
   };
@@ -109,55 +113,64 @@ const TargetComponent = props => {
   const openTargetDialog = (entity, initial = {}) => {
     if (isDefined(entity)) {
       setTargetDialogVisible(true);
-      setId(entity.id);
-      setAliveTests(entity.alive_tests);
-      setComment(entity.comment);
-      setEsxiCredentialId(id_or__(entity.esxi_credential));
-      setExcludeHosts(
-        isDefined(entity.exclude_hosts) ? entity.exclude_hosts.join(', ') : '',
-      );
-      setHosts(entity.hosts.join(', '));
-      setInUse(entity.isInUse());
-      setName(entity.name);
-      setPort(
-        isDefined(entity.ssh_credential) ? entity.ssh_credential.port : '22',
-      );
-      setReverseLookupOnly(entity.reverse_lookup_only);
-      setReverseLookupUnify(entity.reverse_lookup_unify);
-      setTargetSource('manual');
-      setTargetExcludeSource('manual');
-      setTargetTitle(_('Edit Target {{name}}', entity));
+      setTargetDialogState(prevState => ({
+        ...prevState,
+        id: entity.id,
+        alive_tests: entity.alive_tests,
+        comment: entity.comment,
+        esxi_credential_id: id_or__(entity.esxi_credential),
+        exclude_hosts: isDefined(entity.exclude_hosts)
+          ? entity.exclude_hosts.join(', ')
+          : '',
+        hosts: entity.hosts.join(', '),
+        in_use: entity.isInUse(),
+        name: entity.name,
+        port: isDefined(entity.ssh_credential)
+          ? entity.ssh_credential.port
+          : '22',
+        reverse_lookup_only: entity.reverse_lookup_only,
+        reverse_lookup_unify: entity.reverse_lookup_unify,
+        target_source: 'manual',
+        target_exclude_source: 'manual',
+        targetTitle: _('Edit Target {{name}}', entity),
+      }));
 
       // set credential and port list ids after credentials and port lists have been loaded
       loadAll().then(() => {
-        setPortListId(id_or__(entity.port_list));
-        setSmbCredentialId(id_or__(entity.smb_credential));
-        setSshCredentialId(id_or__(entity.ssh_credential));
+        setTargetDialogState(prevState => ({
+          ...prevState,
+          smb_credential_id: id_or__(entity.smb_credential),
+          ssh_credential_id: id_or__(entity.ssh_credential),
+          port_list_id: id_or__(entity.port_list),
+        }));
       });
     } else {
       loadAll().then(() => {
-        setPortListId(DEFAULT_PORT_LIST_ID);
+        setTargetDialogState(prevState => ({
+          ...prevState,
+          port_list_id: DEFAULT_PORT_LIST_ID,
+        }));
       });
       setTargetDialogVisible(true);
-      setTargetTitle(_('New Target'));
-      setInitial({...initial});
-      setAliveTests();
-      setComment();
-      setEsxiCredentialId();
-      setExcludeHosts();
-      setHosts();
-      setId();
-      setInUse();
-      setName();
-      setPort();
-      setReverseLookupOnly();
-      setReverseLookupUnify();
-      setSmbCredentialId();
-      setSnmpCredentialId();
-      setSshCredentialId();
-      setTargetSource();
-      setTargetExcludeSource();
-      setTargetTitle();
+
+      setTargetDialogState(prevState => ({
+        ...prevState,
+        id: undefined,
+        alive_tests: undefined,
+        comment: undefined,
+        esxi_credential_id: undefined,
+        exclude_hosts: undefined,
+        hosts: undefined,
+        in_use: undefined,
+        name: undefined,
+        port: undefined,
+        reverse_lookup_only: undefined,
+        reverse_lookup_unify: undefined,
+        target_source: undefined,
+        target_exclude_source: undefined,
+        targetTitle: _('New Target'),
+        initial: {...initial},
+      }));
     }
 
     handleInteraction();
@@ -241,28 +254,46 @@ const TargetComponent = props => {
       })
       .then(port_lists => {
         setPortLists(port_lists);
-        setPortListId(port_list_id);
+        setTargetDialogState(prevState => ({
+          ...prevState,
+          port_list_id,
+        }));
       });
   };
 
   const handlePortListChange = port_list_id => {
-    setPortListId(port_list_id);
+    setTargetDialogState(prevState => ({
+      ...prevState,
+      port_list_id,
+    }));
   };
 
   const handleEsxiCredentialChange = esxi_credential_id => {
-    setEsxiCredentialId(esxi_credential_id);
+    setTargetDialogState(prevState => ({
+      ...prevState,
+      esxi_credential_id,
+    }));
   };
 
   const handleSshCredentialChange = ssh_credential_id => {
-    setSshCredentialId(ssh_credential_id);
+    setTargetDialogState(prevState => ({
+      ...prevState,
+      ssh_credential_id,
+    }));
   };
 
   const handleSnmpCredentialChange = snmp_credential_id => {
-    setSnmpCredentialId(snmp_credential_id);
+    setTargetDialogState(prevState => ({
+      ...prevState,
+      snmp_credential_id,
+    }));
   };
 
   const handleSmbCredentialChange = smb_credential_id => {
-    setSmbCredentialId(smb_credential_id);
+    setTargetDialogState(prevState => ({
+      ...prevState,
+      smb_credential_id,
+    }));
   };
 
   const handleInteraction = () => {
@@ -336,7 +367,7 @@ const TargetComponent = props => {
           } else {
             mutationData = {
               id,
-              aliveTest: alive_tests.toLowerCase(),
+              aliveTest: alive_tests,
               comment,
               esxiCredentialId: esxi_credential_id,
               hosts: target_source === 'file' ? fileText : hosts,
@@ -368,7 +399,7 @@ const TargetComponent = props => {
         const [fileText, excludeFileText] = text;
 
         const mutationData = {
-          aliveTest: alive_tests.toLowerCase(),
+          aliveTest: alive_tests,
           comment,
           esxiCredentialId: esxi_credential_id,
           name,
@@ -404,6 +435,29 @@ const TargetComponent = props => {
     onSaved,
     onSaveError,
   } = props;
+
+  const {
+    alive_tests,
+    comment,
+    esxi_credential_id,
+    exclude_hosts,
+    hosts,
+    id,
+    in_use,
+    name,
+    port,
+    port_list_id,
+    reverse_lookup_only,
+    reverse_lookup_unify,
+    smb_credential_id,
+    ssh_credential_id,
+    snmp_credential_id,
+    target_source,
+    target_exclude_source,
+    targetTitle,
+  } = targetDialogState;
+
+  const {credentialsTitle, credentialTypes} = credentialsDialogState;
 
   return (
     <EntityComponent
