@@ -17,23 +17,24 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-export const toGraphQL = query => data => {
-  return query({variables: data});
-};
+import {goto_entity_details} from 'web/utils/graphql';
 
-export const toInputObject = query => data => {
-  return query({variables: {input: data}});
-};
+describe('goto_entity_details test', () => {
+  test('should push to correct history', () => {
+    const props = {
+      history: [],
+    };
 
-export const toFruitfulQuery = query => gql => vars => {
-  return query(gql, {variables: vars});
-};
+    const result = {
+      data: {
+        getFoo: {
+          id: 'bar',
+        },
+      },
+    };
 
-export const queryWithRefetch = query => refetch => vars => {
-  return query(vars).then(refetch());
-};
+    goto_entity_details('foo', 'getFoo', props)(result);
 
-export const goto_entity_details = (entityName, op, props) => result => {
-  const {history} = props;
-  return history.push('/' + entityName + '/' + result.data[op].id);
-};
+    expect(props.history).toEqual(['/foo/bar']);
+  });
+});
