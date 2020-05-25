@@ -27,8 +27,12 @@ import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/severitybar';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
+import DetailsIcon from 'web/components/icon/detailsicon';
 
 import Layout from 'web/components/layout/layout';
+import IconDivider from 'web/components/layout/icondivider';
+
+import DetailsLink from 'web/components/link/detailslink';
 
 import Body from 'web/components/table/body';
 import Data from 'web/components/table/data';
@@ -56,7 +60,7 @@ const FakeLink = styled.div`
 `;
 
 const HostRow = ({host, onDeleteHost, onSelectHost}) => {
-  const {id, name, severity} = host;
+  const {id, name, hostname, severity} = host;
   return (
     <Row>
       <Data>
@@ -65,13 +69,25 @@ const HostRow = ({host, onDeleteHost, onSelectHost}) => {
         </FakeLink>
       </Data>
       <Data>
+        {isDefined(hostname) && (
+          <FakeLink id={id} onClick={() => onSelectHost(host)}>
+            {hostname}
+          </FakeLink>
+        )}
+      </Data>
+      <Data>
         <SeverityBar severity={severity} />
       </Data>
       <Data>
-        <DeleteIcon
-          title={_('Remove host from process')}
-          onClick={() => onDeleteHost(id)}
-        />
+        <IconDivider>
+          <DeleteIcon
+            title={_('Remove host from process')}
+            onClick={() => onDeleteHost(id)}
+          />
+          <DetailsLink id={id} type="host">
+            <DetailsIcon title={_('Open all details')} />
+          </DetailsLink>
+        </IconDivider>
       </Data>
     </Row>
   );
@@ -93,13 +109,15 @@ const HostTable = ({hosts, onDeleteHost, onSelectHost}) => {
     <StyledLayout align="start" flex="column">
       <StripedTable>
         <colgroup>
-          <Col width="55%" />
           <Col width="30%" />
-          <Col width="15%" />
+          <Col width="40%" />
+          <Col width="25%" />
+          <Col width="5%" />
         </colgroup>
         <Header>
           <Row>
             <Head>{_('Host')}</Head>
+            <Head>{_('Name')}</Head>
             <Head>{_('Severity')}</Head>
             <Head>{_('Actions')}</Head>
           </Row>
