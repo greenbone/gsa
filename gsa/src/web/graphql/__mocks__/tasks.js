@@ -209,7 +209,7 @@ export const createDeleteTaskQueryMock = taskId => {
   const resultFunc = jest.fn().mockReturnValue(queryResult);
 
   const variables = {
-    taskId,
+    id: taskId,
   };
 
   const queryMock = {
@@ -237,7 +237,7 @@ export const createCloneTaskQueryMock = (
   const resultFunc = jest.fn().mockReturnValue(queryResult);
 
   const variables = {
-    taskId,
+    id: taskId,
   };
 
   const queryMock = {
@@ -262,7 +262,7 @@ export const createStartTaskQueryMock = (taskId, reportId) => {
   const resultFunc = jest.fn().mockReturnValue(queryResult);
 
   const variables = {
-    taskId,
+    id: taskId,
   };
 
   const queryMock = {
@@ -369,7 +369,7 @@ export const createStopTaskQueryMock = taskId => {
   const resultFunc = jest.fn().mockReturnValue(queryResult);
 
   const variables = {
-    taskId,
+    id: taskId,
   };
 
   const queryMock = {

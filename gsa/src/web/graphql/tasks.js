@@ -28,8 +28,8 @@ import Task from 'gmp/models/task';
 import {isDefined} from 'gmp/utils/identity';
 
 export const CLONE_TASK = gql`
-  mutation cloneTask($taskId: String!) {
-    cloneTask(id: $taskId) {
+  mutation cloneTask($id: UUID!) {
+    cloneTask(id: $id) {
       id
     }
   }
@@ -52,8 +52,8 @@ export const CREATE_TASK = gql`
 `;
 
 export const DELETE_TASK = gql`
-  mutation deleteTask($taskId: String!) {
-    deleteTask(id: $taskId) {
+  mutation deleteTask($id: UUID!) {
+    deleteTask(id: $id) {
       ok
     }
   }
@@ -147,16 +147,16 @@ export const MODIFY_TASK = gql`
 `;
 
 export const START_TASK = gql`
-  mutation startTask($taskId: String!) {
-    startTask(id: $taskId) {
+  mutation startTask($id: UUID!) {
+    startTask(id: $id) {
       reportId
     }
   }
 `;
 
 export const STOP_TASK = gql`
-  mutation stopTask($taskId: String!) {
-    stopTask(id: $taskId) {
+  mutation stopTask($id: UUID!) {
+    stopTask(id: $id) {
       ok
     }
   }
@@ -210,7 +210,7 @@ export const useCloneTask = options => {
   const [queryCloneTask, {data, ...other}] = useMutation(CLONE_TASK, options);
   const deleteTask = useCallback(
     // eslint-disable-next-line no-shadow
-    (taskId, options) => queryCloneTask({...options, variables: {taskId}}),
+    (id, options) => queryCloneTask({...options, variables: {id}}),
     [queryCloneTask],
   );
   const taskId = data?.cloneTask?.id;
@@ -248,7 +248,7 @@ export const useDeleteTask = options => {
   const [queryDeleteTask, data] = useMutation(DELETE_TASK, options);
   const deleteTask = useCallback(
     // eslint-disable-next-line no-shadow
-    (taskId, options) => queryDeleteTask({...options, variables: {taskId}}),
+    (id, options) => queryDeleteTask({...options, variables: {id}}),
     [queryDeleteTask],
   );
   return [deleteTask, data];
@@ -269,7 +269,7 @@ export const useStartTask = options => {
   const [queryStartTask, {data, ...other}] = useMutation(START_TASK, options);
   const startTask = useCallback(
     // eslint-disable-next-line no-shadow
-    (taskId, options) => queryStartTask({...options, variables: {taskId}}),
+    (id, options) => queryStartTask({...options, variables: {id}}),
     [queryStartTask],
   );
   const reportId = data?.startTask?.reportId;
@@ -280,7 +280,7 @@ export const useStopTask = options => {
   const [queryStopTask, data] = useMutation(STOP_TASK, options);
   const stopTask = useCallback(
     // eslint-disable-next-line no-shadow
-    (taskId, options) => queryStopTask({...options, variables: {taskId}}),
+    (id, options) => queryStopTask({...options, variables: {id}}),
     [queryStopTask],
   );
   return [stopTask, data];
