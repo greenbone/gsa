@@ -26,7 +26,7 @@ import usePageFilter from 'web/utils/usePageFilter';
 const FilterProvider = ({children, fallbackFilter, gmpname, locationQuery}) => {
   const [filter, isLoading] = usePageFilter(gmpname, {
     fallbackFilter,
-    locationQueryFilterString: locationQuery?.filter,
+    locationQueryFilterString: locationQuery?.filter ?? null,
   });
   return (
     <React.Fragment>
