@@ -352,7 +352,7 @@ class Task extends Model {
             break;
           case 'auto_delete_data':
             const value = parseInt(pref.value);
-            copy.auto_delete_data =
+            copy.autoDeleteData =
               value === 0
                 ? AUTO_DELETE_KEEP_DEFAULT_VALUE
                 : parseInt(pref.value);
