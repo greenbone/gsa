@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -15,21 +15,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
 
-import Download from './download';
-import useDownload from './useDownload';
+import {useRef, useCallback} from 'react';
 
-const withDownload = Component => props => {
-  const [ref, handleDownload] = useDownload();
-  return (
-    <React.Fragment>
-      <Component {...props} onDownload={handleDownload} />
-      <Download ref={ref} />
-    </React.Fragment>
-  );
+import logger from 'gmp/log';
+
+import {hasValue} from 'gmp/utils/identity';
+
+const log = logger.getLogger('web.components.form.useDownload');
+
+const useDownload = () => {
+  const downloadRef = useRef(null);
+
+  const download = useCallback(({filename, data, mimetype}) => {
+    if (!hasValue(downloadRef.current)) {
+      log.warn('Download ref not set.');
+      return;
+    }
+
+    downloadRef.current.setFilename(filename);
+    downloadRef.current.setData(data, mimetype);
+    downloadRef.current.download();
+  }, []);
+  return [downloadRef, download];
 };
 
-export default withDownload;
-
-// vim: set ts=2 sw=2 tw=80:
+export default useDownload;
