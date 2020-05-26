@@ -17,13 +17,16 @@
  */
 import {_l} from 'gmp/locale/lang';
 
-import {isDefined, isArray, hasValue} from '../utils/identity';
+import {isDefined, isArray, hasValue, isString} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
+import {normalizeType} from '../utils/entitytype';
 
 import {
   parseInt,
+  parseIntoArray,
   parseProgressElement,
+  parseText,
   parseYesNo,
   parseYes,
   parseDuration,
@@ -263,6 +266,148 @@ class Task extends Model {
     } else {
       copy.userTags = [];
     }
+
+    return copy;
+  }
+
+  static parseElement(element) {
+    const copy = super.parseElement(element);
+
+    const {report_count} = element;
+
+    if (isDefined(report_count)) {
+      copy.report_count = {...report_count};
+      copy.report_count.total = parseInt(report_count.__text);
+      copy.report_count.finished = parseInt(report_count.finished);
+    }
+
+    if (isDefined(element.observers)) {
+      copy.observers = {};
+      if (isString(element.observers) && element.observers.length > 0) {
+        copy.observers.users = element.observers.split(' ');
+      } else {
+        if (isDefined(element.observers.__text)) {
+          copy.observers.users = parseText(element.observers).split(' ');
+        }
+
+        if (isDefined(element.observers.role)) {
+          copy.observers.roles = parseIntoArray(element.observers.role);
+        }
+        if (isDefined(element.observers.group)) {
+          copy.observers.groups = parseIntoArray(element.observers.group);
+        }
+      }
+    }
+
+    copy.alterable = parseYesNo(element.alterable);
+    copy.result_count = parseInt(element.result_count);
+
+    copy.reports = {};
+
+    if (isDefined(element.last_report)) {
+      copy.reports['lastReport'] = Report.fromElement(
+        element.last_report.report,
+      );
+    }
+
+    if (isDefined(element.current_report)) {
+      copy.reports['currentReport'] = Report.fromElement(
+        element.current_report.report,
+      );
+    }
+
+    // slave isn't really an entity type but it has an id
+    const models = ['config', 'slave', 'target'];
+    models.forEach(item => {
+      const name = item;
+
+      const data = element[name];
+      if (isDefined(data) && !isEmpty(data._id)) {
+        copy[name] = parseModelFromElement(data, normalizeType(name));
+      } else {
+        delete copy[name];
+      }
+    });
+
+    if (isDefined(element.alert)) {
+      copy.alerts = map(element.alert, alert =>
+        parseModelFromElement(alert, 'alert'),
+      );
+      delete copy.alert;
+    }
+
+    if (isDefined(element.scanner) && !isEmpty(element.scanner._id)) {
+      copy.scanner = Scanner.fromElement(element.scanner);
+    } else {
+      delete copy.scanner;
+    }
+
+    if (isDefined(element.schedule) && !isEmpty(element.schedule._id)) {
+      copy.schedule = Schedule.fromElement(element.schedule);
+    } else {
+      delete copy.schedule;
+    }
+
+    copy.schedule_periods = parseInt(element.schedule_periods);
+
+    copy.progress = parseProgressElement(element.progress);
+
+    const prefs = {};
+
+    if (copy.preferences && isArray(element.preferences.preference)) {
+      for (const pref of element.preferences.preference) {
+        switch (pref.scanner_name) {
+          case 'in_assets':
+            copy.in_assets = parseYes(pref.value);
+            break;
+          case 'assets_apply_overrides':
+            copy.apply_overrides = parseYes(pref.value);
+            break;
+          case 'assets_min_qod':
+            copy.min_qod = parseInt(pref.value);
+            break;
+          case 'auto_delete':
+            copy.auto_delete =
+              pref.value === AUTO_DELETE_KEEP
+                ? AUTO_DELETE_KEEP
+                : AUTO_DELETE_NO;
+            break;
+          case 'auto_delete_data':
+            const value = parseInt(pref.value);
+            copy.auto_delete_data =
+              value === 0
+                ? AUTO_DELETE_KEEP_DEFAULT_VALUE
+                : parseInt(pref.value);
+            break;
+          case 'max_hosts':
+          case 'max_checks':
+            copy[pref.scanner_name] = parseInt(pref.value);
+            break;
+          case 'source_iface':
+            copy.source_iface = pref.value;
+            break;
+          default:
+            prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
+            break;
+        }
+      }
+    }
+
+    copy.preferences = prefs;
+
+    if (isDefined(element.average_duration)) {
+      copy.average_duration = parseDuration(element.average_duration);
+    }
+
+    if (
+      copy.hosts_ordering !== HOSTS_ORDERING_RANDOM &&
+      copy.hosts_ordering !== HOSTS_ORDERING_REVERSE &&
+      copy.hosts_ordering !== HOSTS_ORDERING_SEQUENTIAL
+    ) {
+      delete copy.hosts_ordering;
+    }
+
+    copy.usageType = element.usage_type;
 
     return copy;
   }

@@ -110,11 +110,11 @@ const Row = ({
     if (hasValue(observers.users)) {
       obs.user = _('Users {{user}}', {user: observers.users.join(', ')});
     }
-    if (observers.roles.length > 0) {
+    if (observers?.roles?.length > 0) {
       const role = observers.roles.map(r => r.name);
       obs.role = _('Roles {{role}}', {role: role.join(', ')});
     }
-    if (observers.groups.length > 0) {
+    if (observers?.groups?.length > 0) {
       const group = observers.groups.map(g => g.name);
       obs.group = _('Groups {{group}}', {group: group.join(', ')});
     }

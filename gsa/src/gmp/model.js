@@ -65,7 +65,6 @@ class Model {
 
   static parseElement(element = {}) {
     const copy = parseDefaultProperties(element);
-
     if (isDefined(element.end_time)) {
       if (element.end_time.length > 0) {
         copy.endTime = parseDate(element.end_time);
@@ -105,8 +104,15 @@ class Model {
       delete copy.in_use;
     }
 
-    if (isDefined(element.owner) && isEmpty(element.owner.name)) {
-      delete copy.owner;
+    if (isDefined(element.owner)) {
+      if (isEmpty(element.owner.name)) {
+        delete copy.owner;
+      }
+
+      if (this.entityType === 'task') {
+        // hyperion tasks don't have owner.name
+        copy.owner = element.owner.name;
+      }
     }
 
     copy.summary = parseText(element.summary);
@@ -120,7 +126,6 @@ class Model {
     if (isEmpty(element.comment)) {
       delete copy.comment;
     }
-
     return copy;
   }
 

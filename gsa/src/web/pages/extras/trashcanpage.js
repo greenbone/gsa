@@ -126,7 +126,6 @@ const Trashcan = () => {
     const data = gmp.trashcan.get().then(
       response => {
         const trash = response.data;
-        console.log(trash);
         setTrash(trash);
       },
       error => {
