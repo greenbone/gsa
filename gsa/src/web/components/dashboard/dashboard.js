@@ -35,7 +35,6 @@ import {
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-import Setting from 'gmp/models/setting';
 
 import {
   loadSettings,
@@ -58,14 +57,14 @@ import Loading from 'web/components/loading/loading';
 
 import Grid from 'web/components/sortable/grid';
 
+import {useGetSetting} from 'web/graphql/settings';
+
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 import compose from 'web/utils/compose';
 
 import {getDisplay} from './registry';
 import {getRows as getRowsUtil} from './utils';
-
-import {useGetSetting} from 'web/utils/useGetSettings';
 
 const log = Logger.getLogger('web.components.dashboard');
 
@@ -95,10 +94,9 @@ const RowPlaceHolder = styled.div`
 `;
 
 export const Dashboard = props => {
-  const getSetting = useGetSetting();
-  const {data, loading: isLoading} = getSetting({
-    userSettingId: '3d5db3c7-5208-4b47-8c28-48efc621b1e0',
-  });
+  const {setting, loading: isLoading} = useGetSetting(
+    '3d5db3c7-5208-4b47-8c28-48efc621b1e0',
+  );
   const {permittedDisplays = []} = props;
 
   const components = {};
@@ -134,8 +132,7 @@ export const Dashboard = props => {
 
   let dashboardSettings;
 
-  if (hasValue(data?.userSetting)) {
-    const setting = Setting.fromElement(data.userSetting);
+  if (hasValue(setting)) {
     const {value, name} = setting;
     const config = JSON.parse(value);
 
