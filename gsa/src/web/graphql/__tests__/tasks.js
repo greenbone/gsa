@@ -38,7 +38,7 @@ import {
   createCreateContainerTaskQueryMock,
   createCreateTaskQueryMock,
   createDeleteTaskQueryMock,
-  createGetTaskQueryMock,
+  createGetTasksQueryMock,
   createModifyTaskQueryMock,
   createStartTaskQueryMock,
   createStopTaskQueryMock,
@@ -101,9 +101,9 @@ const GetLazyTasksComponent = () => {
   );
 };
 
-describe('useGetTask tests', () => {
-  test('should query a task', async () => {
-    const [mock, resultFunc] = createGetTaskQueryMock();
+describe('useGetTasks tests', () => {
+  test('should query tasks', async () => {
+    const [mock, resultFunc] = createGetTasksQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
     render(<GetTasksComponent />);
@@ -127,9 +127,9 @@ describe('useGetTask tests', () => {
   });
 });
 
-describe('useLazyGetTask tests', () => {
-  test('should query a task after user interaction', async () => {
-    const [mock, resultFunc] = createGetTaskQueryMock();
+describe('useLazyGetTasks tests', () => {
+  test('should query tasks after user interaction', async () => {
+    const [mock, resultFunc] = createGetTasksQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
     render(<GetLazyTasksComponent />);
