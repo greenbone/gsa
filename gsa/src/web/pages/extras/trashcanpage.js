@@ -50,6 +50,7 @@ import TableHeader from 'web/components/table/header';
 
 import withCapabilities from 'web/utils/withCapabilities';
 import useGmp from 'web/utils/useGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import AlertsTable from '../alerts/table';
 import ScanConfigsTable from '../scanconfigs/table';
@@ -71,7 +72,6 @@ import TasksTable from '../tasks/table';
 import TicketsTable from '../tickets/table';
 
 import TrashActions from './trashactions';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const Col = styled.col`
   width: 50%;
