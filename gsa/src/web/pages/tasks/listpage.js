@@ -24,7 +24,7 @@ import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {hasValue} from 'gmp/utils/identity';
 
-import {DashboardControls} from 'web/components/dashboard/controls';
+import DashboardControls from 'web/components/dashboard/controls';
 
 import Download from 'web/components/form/download';
 import useDownload from 'web/components/form/useDownload';
