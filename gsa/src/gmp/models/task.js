@@ -17,16 +17,14 @@
  */
 import {_l} from 'gmp/locale/lang';
 
-import {isDefined, isArray, hasValue, isString} from '../utils/identity';
+import {isDefined, isArray, hasValue} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
 import {normalizeType} from '../utils/entitytype';
 
 import {
   parseInt,
-  parseIntoArray,
   parseProgressElement,
-  parseText,
   parseYesNo,
   parseYes,
   parseDuration,
@@ -271,25 +269,10 @@ class Task extends Model {
   }
 
   static parseElement(element) {
+    // Added back for trash rows
     const copy = super.parseElement(element);
 
-    if (isDefined(element.observers)) {
-      copy.observers = {};
-      if (isString(element.observers) && element.observers.length > 0) {
-        copy.observers.users = element.observers.split(' ');
-      } else {
-        if (isDefined(element.observers.__text)) {
-          copy.observers.users = parseText(element.observers).split(' ');
-        }
-
-        if (isDefined(element.observers.role)) {
-          copy.observers.roles = parseIntoArray(element.observers.role);
-        }
-        if (isDefined(element.observers.group)) {
-          copy.observers.groups = parseIntoArray(element.observers.group);
-        }
-      }
-    }
+    // Trash can page does not have observers field
 
     copy.reports = {};
 
@@ -392,10 +375,7 @@ class Task extends Model {
 
     copy.preferences = prefs;
 
-    if (isDefined(element.average_duration)) {
-      copy.averageDuration = parseDuration(element.average_duration);
-    }
-
+    // no average duration in trash
     if (
       copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
       copy.hostsOrdering !== HOSTS_ORDERING_REVERSE &&
