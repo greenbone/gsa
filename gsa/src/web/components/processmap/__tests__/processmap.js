@@ -150,8 +150,9 @@ describe('ProcessMap tests', () => {
     expect(buttons[0]).toHaveTextContent('Add Selected Hosts');
 
     expect(header[0]).toHaveTextContent('Host');
-    expect(header[1]).toHaveTextContent('Severity');
-    expect(header[2]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
 
     expect(element).not.toHaveTextContent(
       'No hosts associated with this process.',
@@ -216,8 +217,9 @@ describe('ProcessMap tests', () => {
     expect(buttons[0]).toHaveTextContent('Add Selected Hosts');
 
     expect(header[0]).toHaveTextContent('Host');
-    expect(header[1]).toHaveTextContent('Severity');
-    expect(header[2]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
 
     expect(element).not.toHaveTextContent(
       'No hosts associated with this process.',
@@ -289,8 +291,9 @@ describe('ProcessMap tests', () => {
 
     // headings
     expect(header[0]).toHaveTextContent('Host');
-    expect(header[1]).toHaveTextContent('Severity');
-    expect(header[2]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
 
     expect(element).toHaveTextContent('No hosts associated with this process.');
   });
@@ -355,22 +358,25 @@ describe('ProcessMap tests', () => {
 
     // Headings
     expect(header[0]).toHaveTextContent('Host');
-    expect(header[1]).toHaveTextContent('Severity');
-    expect(header[2]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
 
     // Row 1
     expect(detailsLinks[0]).toHaveAttribute('href', '/host/1234');
-    expect(detailsLinks[0]).toHaveTextContent('123.456.78.910');
+    expect(detailsLinks[0]).toHaveTextContent('details.svg');
     expect(progressBars[0]).toHaveAttribute('title', 'Medium');
     expect(progressBars[0]).toHaveTextContent('5.0 (Medium)');
     expect(icons[8]).toHaveAttribute('title', 'Remove host from process');
+    expect(icons[9]).toHaveAttribute('title', 'Open all details');
 
     // Row 2
     expect(detailsLinks[1]).toHaveAttribute('href', '/host/5678');
-    expect(detailsLinks[1]).toHaveTextContent('109.876.54.321');
+    expect(detailsLinks[1]).toHaveTextContent('details.svg');
     expect(progressBars[1]).toHaveAttribute('title', 'N/A');
     expect(progressBars[1]).toHaveTextContent('N/A');
-    expect(icons[9]).toHaveAttribute('title', 'Remove host from process');
+    expect(icons[10]).toHaveAttribute('title', 'Remove host from process');
+    expect(icons[11]).toHaveAttribute('title', 'Open all details');
   });
 
   test('should call click handler for colorization', () => {

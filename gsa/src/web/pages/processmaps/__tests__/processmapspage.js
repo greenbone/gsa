@@ -47,7 +47,7 @@ const hostFilter2 = hostsFilter('32');
 const hostFilter3 = hostsFilter('33');
 
 const hosts = [
-  {name: '123.456.78.910', id: '1234', severity: 5},
+  {name: '123.456.78.910', id: '1234', hostname: 'foo', severity: 5},
   {name: '109.876.54.321', id: '5678', severity: undefined},
   {name: '109.876.54.123', id: '9101', severity: 10},
 ];
@@ -62,6 +62,17 @@ const getAllHosts = jest.fn().mockResolvedValue({
 
 const getHosts = jest.fn().mockResolvedValue({
   data: hosts,
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const getResults = jest.fn().mockResolvedValue({
+  data: [
+    {id: '123', severity: 4, nvt: {name: 'bar', oid: '1337'}},
+    {id: '456', severity: 8, nvt: {name: 'lorem', oid: '7353'}},
+  ],
   meta: {
     filter: Filter.fromString(),
     counts: new CollectionCounts(),
@@ -83,6 +94,9 @@ describe('ProcessMapsPage tests', () => {
     const gmp = {
       hosts: {
         getAll: getAllHosts,
+      },
+      results: {
+        get: getResults,
       },
       user: {
         getBusinessProcessMaps,
@@ -145,8 +159,9 @@ describe('ProcessMapsPage tests', () => {
     expect(buttons[0]).toHaveTextContent('Add Selected Hosts');
 
     expect(header[0]).toHaveTextContent('Host');
-    expect(header[1]).toHaveTextContent('Severity');
-    expect(header[2]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
 
     expect(element).not.toHaveTextContent(
       'No hosts associated with this process.',
@@ -158,6 +173,9 @@ describe('ProcessMapsPage tests', () => {
       hosts: {
         get: getHosts,
         getAll: getAllHosts,
+      },
+      results: {
+        get: getResults,
       },
       tag: {
         get: getTag,
@@ -242,8 +260,9 @@ describe('ProcessMapsPage tests', () => {
     expect(buttons[0]).toHaveTextContent('Add Selected Hosts');
 
     expect(header[0]).toHaveTextContent('Host');
-    expect(header[1]).toHaveTextContent('Severity');
-    expect(header[2]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
 
     expect(element).not.toHaveTextContent(
       'No hosts associated with this process.',
@@ -255,6 +274,9 @@ describe('ProcessMapsPage tests', () => {
       hosts: {
         get: getHosts,
         getAll: getAllHosts,
+      },
+      results: {
+        get: getResults,
       },
       tag: {
         get: getTag,
@@ -339,22 +361,24 @@ describe('ProcessMapsPage tests', () => {
 
     // Headings
     expect(header[0]).toHaveTextContent('Host');
-    expect(header[1]).toHaveTextContent('Severity');
-    expect(header[2]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
 
     // Row 1
     expect(detailsLinks[0]).toHaveAttribute('href', '/host/1234');
-    expect(detailsLinks[0]).toHaveTextContent('123.456.78.910');
+    expect(detailsLinks[0]).toHaveTextContent('details.svg');
     expect(progressBars[0]).toHaveAttribute('title', 'Medium');
     expect(progressBars[0]).toHaveTextContent('5.0 (Medium)');
     expect(icons[10]).toHaveAttribute('title', 'Remove host from process');
 
     // Row 2
     expect(detailsLinks[1]).toHaveAttribute('href', '/host/5678');
-    expect(detailsLinks[1]).toHaveTextContent('109.876.54.321');
+    expect(detailsLinks[1]).toHaveTextContent('details.svg');
     expect(progressBars[1]).toHaveAttribute('title', 'N/A');
     expect(progressBars[1]).toHaveTextContent('N/A');
-    expect(icons[11]).toHaveAttribute('title', 'Remove host from process');
+    expect(icons[12]).toHaveAttribute('title', 'Remove host from process');
+    expect(icons[13]).toHaveAttribute('title', 'Open all details');
   });
 
   test('should save map when drawing new edge', () => {
@@ -366,6 +390,9 @@ describe('ProcessMapsPage tests', () => {
       hosts: {
         get: getHosts,
         getAll: getAllHosts,
+      },
+      results: {
+        get: getResults,
       },
       tag: {
         get: getTag,
@@ -416,6 +443,9 @@ describe('ProcessMapsPage tests', () => {
       hosts: {
         get: getHosts,
         getAll: getAllHosts,
+      },
+      results: {
+        get: getResults,
       },
       tag: {
         get: getTag,

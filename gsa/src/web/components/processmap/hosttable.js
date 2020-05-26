@@ -60,12 +60,12 @@ const FakeLink = styled.div`
 `;
 
 const HostRow = ({host, onDeleteHost, onSelectHost}) => {
-  const {id, name, hostname, severity} = host;
+  const {id, ip, hostname, severity} = host;
   return (
     <Row>
       <Data>
         <FakeLink id={id} onClick={() => onSelectHost(host)}>
-          {name}
+          {ip}
         </FakeLink>
       </Data>
       <Data>
