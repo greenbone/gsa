@@ -28,17 +28,14 @@ import _ from 'gmp/locale';
 
 import Logger from 'gmp/log';
 
-import {
-  DEFAULT_ROW_HEIGHT,
-  convertLoadedSettings,
-} from 'gmp/commands/dashboards';
+import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
 import {
-  loadSettings,
-  saveSettings,
+  loadSettings as loadSettingsAction,
+  saveSettings as saveSettingsAction,
   setDashboardSettingDefaults,
 } from 'web/store/dashboard/settings/actions';
 import DashboardSettings from 'web/store/dashboard/settings/selectors';
@@ -56,8 +53,6 @@ import ErrorBoundary from 'web/components/error/errorboundary';
 import Loading from 'web/components/loading/loading';
 
 import Grid from 'web/components/sortable/grid';
-
-import {useGetSetting} from 'web/graphql/settings';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -96,15 +91,18 @@ const RowPlaceHolder = styled.div`
 export const Dashboard = ({
   error,
   id,
+  isLoading,
+  settings,
   permittedDisplays = [],
   defaultDisplays,
   maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
   maxRows = DEFAULT_MAX_ROWS,
+  loadSettings,
+  saveSettings,
+  setDefaultSettings,
   onInteraction,
   ...props
 }) => {
-  const {setting, loading: isLoading} = useGetSetting(id);
-
   const components = {};
   permittedDisplays.forEach(displayId => {
     const display = getDisplay(displayId);
@@ -125,18 +123,9 @@ export const Dashboard = ({
       maxRows,
     };
 
-    props.setDefaultSettings(id, defaultDashboardSettings);
-    props.loadSettings(id, defaults);
+    setDefaultSettings(id, defaultDashboardSettings);
+    loadSettings(id, defaults);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  let dashboardSettings;
-
-  if (hasValue(setting)) {
-    const {value, name} = setting;
-    const config = JSON.parse(value);
-
-    dashboardSettings = convertLoadedSettings(config, name);
-  }
 
   const handleItemsChange = (gridItems = []) => {
     const rows = getRows();
@@ -189,7 +178,7 @@ export const Dashboard = ({
   };
 
   const getRows = defaultRows => {
-    return getRowsUtil(props.settings, defaultRows);
+    return getRowsUtil(settings, defaultRows);
   };
 
   const getDisplayState = displayId => {
@@ -238,20 +227,20 @@ export const Dashboard = ({
     save({rows});
   };
 
-  const save = settings => {
-    props.saveSettings(id, settings);
+  const save = dashboardSettings => {
+    saveSettings(id, dashboardSettings);
 
     handleInteraction();
   };
 
   let rows;
 
-  if (isDefined(dashboardSettings)) {
-    rows = dashboardSettings.rows;
+  if (isDefined(settings)) {
+    rows = settings.rows;
   } else {
     rows = getRows();
   }
-  if (isDefined(error) && !isLoading && !isDefined(dashboardSettings)) {
+  if (isDefined(error) && !isLoading && !isDefined(settings)) {
     return (
       <RowPlaceHolder>
         {_('Could not load dashboard settings. Reason: {{error}}', {
@@ -272,9 +261,10 @@ export const Dashboard = ({
   const getDisplayComponent = displayId => components[displayId];
   const getDisplaySettings = displayId => displaysById[displayId];
   const isAllowed = displayId => {
-    const settings = getDisplaySettings(displayId);
+    const displaySettings = getDisplaySettings(displayId);
     return (
-      isDefined(settings) && isDefined(getDisplayComponent(settings.displayId))
+      isDefined(displaySettings) &&
+      isDefined(getDisplayComponent(displaySettings.displayId))
     );
   };
 
@@ -360,8 +350,10 @@ const mapStateToProps = (rootState, {id}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
-  saveSettings: (id, settings) => dispatch(saveSettings(gmp)(id, settings)),
+  loadSettings: (id, defaults) =>
+    dispatch(loadSettingsAction(gmp)(id, defaults)),
+  saveSettings: (id, settings) =>
+    dispatch(saveSettingsAction(gmp)(id, settings)),
   setDefaultSettings: (id, settings) =>
     dispatch(setDashboardSettingDefaults(id, settings)),
 });
