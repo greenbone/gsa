@@ -294,13 +294,11 @@ class Task extends Model {
     copy.reports = {};
 
     if (isDefined(element.last_report)) {
-      copy.reports['lastReport'] = Report.fromElement(
-        element.last_report.report,
-      );
+      copy.reports.lastReport = Report.fromElement(element.last_report.report);
     }
 
     if (isDefined(element.current_report)) {
-      copy.reports['currentReport'] = Report.fromElement(
+      copy.reports.currentReport = Report.fromElement(
         element.current_report.report,
       );
     }
