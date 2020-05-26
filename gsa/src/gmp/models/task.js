@@ -273,14 +273,6 @@ class Task extends Model {
   static parseElement(element) {
     const copy = super.parseElement(element);
 
-    const {report_count} = element;
-
-    if (isDefined(report_count)) {
-      copy.report_count = {...report_count};
-      copy.report_count.total = parseInt(report_count.__text);
-      copy.report_count.finished = parseInt(report_count.finished);
-    }
-
     if (isDefined(element.observers)) {
       copy.observers = {};
       if (isString(element.observers) && element.observers.length > 0) {
@@ -299,9 +291,6 @@ class Task extends Model {
       }
     }
 
-    copy.alterable = parseYesNo(element.alterable);
-    copy.result_count = parseInt(element.result_count);
-
     copy.reports = {};
 
     if (isDefined(element.last_report)) {
@@ -314,6 +303,14 @@ class Task extends Model {
       copy.reports['currentReport'] = Report.fromElement(
         element.current_report.report,
       );
+    }
+
+    const {report_count} = element;
+
+    if (isDefined(report_count)) {
+      copy.reports.counts = {...report_count};
+      copy.reports.counts.total = parseInt(report_count.__text);
+      copy.reports.counts.finished = parseInt(report_count.finished);
     }
 
     // slave isn't really an entity type but it has an id
@@ -358,16 +355,16 @@ class Task extends Model {
       for (const pref of element.preferences.preference) {
         switch (pref.scanner_name) {
           case 'in_assets':
-            copy.in_assets = parseYes(pref.value);
+            copy.inAssets = parseYes(pref.value);
             break;
           case 'assets_apply_overrides':
-            copy.apply_overrides = parseYes(pref.value);
+            copy.applyOverrides = parseYes(pref.value);
             break;
           case 'assets_min_qod':
-            copy.min_qod = parseInt(pref.value);
+            copy.minQod = parseInt(pref.value);
             break;
           case 'auto_delete':
-            copy.auto_delete =
+            copy.autoDelete =
               pref.value === AUTO_DELETE_KEEP
                 ? AUTO_DELETE_KEEP
                 : AUTO_DELETE_NO;
@@ -380,11 +377,13 @@ class Task extends Model {
                 : parseInt(pref.value);
             break;
           case 'max_hosts':
+            copy.maxHosts = parseInt(pref.value);
+            break;
           case 'max_checks':
-            copy[pref.scanner_name] = parseInt(pref.value);
+            copy.maxChecks = parseInt(pref.value);
             break;
           case 'source_iface':
-            copy.source_iface = pref.value;
+            copy.sourceIface = pref.value;
             break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
@@ -396,13 +395,13 @@ class Task extends Model {
     copy.preferences = prefs;
 
     if (isDefined(element.average_duration)) {
-      copy.average_duration = parseDuration(element.average_duration);
+      copy.averageDuration = parseDuration(element.average_duration);
     }
 
     if (
-      copy.hosts_ordering !== HOSTS_ORDERING_RANDOM &&
-      copy.hosts_ordering !== HOSTS_ORDERING_REVERSE &&
-      copy.hosts_ordering !== HOSTS_ORDERING_SEQUENTIAL
+      copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
+      copy.hostsOrdering !== HOSTS_ORDERING_REVERSE &&
+      copy.hostsOrdering !== HOSTS_ORDERING_SEQUENTIAL
     ) {
       delete copy.hosts_ordering;
     }
