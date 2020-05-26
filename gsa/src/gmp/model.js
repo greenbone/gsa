@@ -105,13 +105,13 @@ class Model {
     }
 
     if (isDefined(element.owner)) {
-      if (isEmpty(element.owner.name)) {
-        delete copy.owner;
-      }
-
       if (this.entityType === 'task') {
         // hyperion tasks don't have owner.name
-        copy.owner = element.owner.name;
+        copy.owner = element.owner?.name;
+      }
+
+      if (isEmpty(element.owner.name)) {
+        delete copy.owner;
       }
     }
 
