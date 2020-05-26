@@ -21,28 +21,31 @@ import _ from 'gmp/locale';
 
 import {RESET_FILTER, TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/audits';
-
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
+import AuditIcon from 'web/components/icon/auditicon';
 import NewIcon from 'web/components/icon/newicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
+import {
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+  USE_DEFAULT_RELOAD_INTERVAL,
+} from 'web/components/loading/reload';
+
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/audits';
+import PropTypes from 'web/utils/proptypes';
+
+import withCapabilities from 'web/utils/withCapabilities';
+
 import AuditComponent from './component';
 import Table from './table';
-
-import AuditIcon from 'web/components/icon/auditicon';
-import {taskReloadInterval} from '../tasks/listpage';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAuditCreateClick}) => (
@@ -127,11 +130,16 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const reloadInterval = ({entities = []}) =>
+  entities.some(task => task.isActive())
+    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+    : USE_DEFAULT_RELOAD_INTERVAL;
+
 export default withEntitiesContainer('audit', {
   entitiesSelector,
   loadEntities,
   defaultFilter: RESET_FILTER,
-  reloadInterval: taskReloadInterval,
+  reloadInterval,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
