@@ -20,11 +20,15 @@ import gql from 'graphql-tag';
 
 import {useQuery} from '@apollo/react-hooks';
 
+import Setting from 'gmp/models/setting';
+
+import {hasValue} from 'gmp/utils/identity';
+
 import {toFruitfulQuery} from 'web/utils/graphql';
 
 export const GET_SETTING = gql`
-  query UserSetting($userSettingId: UUID!) {
-    userSetting(id: $userSettingId) {
+  query UserSetting($id: UUID!) {
+    userSetting(id: $id) {
       id
       name
       value
@@ -33,8 +37,12 @@ export const GET_SETTING = gql`
   }
 `;
 
-export const useGetSetting = () => {
-  return toFruitfulQuery(useQuery)(GET_SETTING);
+export const useGetSetting = (id, options) => {
+  const {data, ...other} = useQuery(GET_SETTING, {...options, variables: {id}});
+  const setting = hasValue(data?.userSetting)
+    ? Setting.fromObject(data.userSetting)
+    : undefined;
+  return {...other, setting};
 };
 
 export const GET_SETTINGS = gql`
