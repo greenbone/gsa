@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-/* eslint-disable no-shadow */
 import React, {useState, useEffect, useCallback} from 'react';
 
 import styled from 'styled-components';
@@ -123,22 +122,27 @@ const Trashcan = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
-  const getTrash = useCallback(() => {
+  console.log(trash, loading, error);
+
+  const loadTrashCanData = useCallback(() => {
+    setLoading(true);
     const data = gmp.trashcan.get().then(
       response => {
         const trash = response.data;
         setTrash(trash);
+        setLoading(false);
       },
       error => {
         setError(error);
+        setLoading(false);
       },
     );
     return data;
   }, [gmp.trashcan]);
 
   useEffect(() => {
-    getTrash();
-  }, [getTrash]);
+    loadTrashCanData();
+  }, [loadTrashCanData]);
 
   const handleInteraction = useCallback(() => {
     renewSessionTimeout();
@@ -150,22 +154,19 @@ const Trashcan = () => {
 
       return gmp.trashcan
         .restore(entity)
-        .then(getTrash)
+        .then(loadTrashCanData)
         .catch(setError);
     },
-    [getTrash, gmp.trashcan, handleInteraction],
+    [loadTrashCanData, gmp.trashcan, handleInteraction],
   );
 
   const handleDelete = useCallback(
     entity => {
       handleInteraction();
 
-      return gmp.trashcan
-        .delete(entity)
-        .then(getTrash)
-        .catch(setError);
+      return gmp.trashcan.delete(entity).then(loadTrashCanData).catch(setError);
     },
-    [getTrash, gmp.trashcan, handleInteraction],
+    [loadTrashCanData, gmp.trashcan, handleInteraction],
   );
 
   const handleEmpty = useCallback(() => {
@@ -176,14 +177,14 @@ const Trashcan = () => {
     gmp.trashcan
       .empty()
       .then(() => {
-        getTrash();
+        loadTrashCanData();
         setLoading(false);
       })
       .catch(error => {
         setError(error);
         setLoading(false);
       });
-  }, [getTrash, gmp.trashcan, handleInteraction]);
+  }, [loadTrashCanData, gmp.trashcan, handleInteraction]);
 
   const handleErrorClose = useCallback(() => {
     setError();
@@ -303,10 +304,8 @@ const Trashcan = () => {
     [createContentRow],
   );
 
-  if (!isDefined(trash) && !isDefined(error)) {
+  if (!isDefined(error) && loading) {
     return <Loading />;
-  } else if (!isDefined(trash) && isDefined(error)) {
-    setTrash({});
   }
 
   const {scan: tasks, compliance: audits} = separateByUsageType(
@@ -326,7 +325,6 @@ const Trashcan = () => {
     footnote: false,
     footer: false,
   };
-
   return (
     <React.Fragment>
       <PageTitle title={_('Trashcan')} />
