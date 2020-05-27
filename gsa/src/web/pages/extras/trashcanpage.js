@@ -170,17 +170,13 @@ const Trashcan = () => {
   const handleEmpty = useCallback(() => {
     handleInteraction();
 
-    setLoading(true);
-
     gmp.trashcan
       .empty()
       .then(() => {
         loadTrashCanData();
-        setLoading(false);
       })
       .catch(err => {
         setError(err);
-        setLoading(false);
       });
   }, [loadTrashCanData, gmp.trashcan, handleInteraction]);
 
