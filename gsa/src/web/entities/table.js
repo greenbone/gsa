@@ -135,14 +135,14 @@ class EntitiesTable extends React.Component {
 
   renderEmpty() {
     const {emptyTitle, filter, footnote = true} = this.props;
-    const filterstring = isDefined(filter) ? filter.toFilterString() : '';
+    const filterString = isDefined(filter) ? filter.toFilterString() : '';
     return (
       <React.Fragment>
         <EmptyTitle>{`${emptyTitle}`}</EmptyTitle>
         {footnote && (
           <Layout align="space-between">
             <FootNote>
-              {_('(Applied filter: {{- filter}})', {filter: filterstring})}
+              {_('(Applied filter: {{- filter}})', {filter: filterString})}
             </FootNote>
           </Layout>
         )}
@@ -177,7 +177,7 @@ class EntitiesTable extends React.Component {
 
     const other = excludeObjectProps(this.props, exclude_props);
 
-    const filterstring = isDefined(filter) ? filter.toFilterString() : '';
+    const filterString = isDefined(filter) ? filter.toFilterString() : '';
 
     if (entities.length === 0) {
       return this.renderEmpty();
@@ -280,7 +280,7 @@ class EntitiesTable extends React.Component {
         {footnote ? (
           <Layout align="space-between">
             <FootNote>
-              {_('(Applied filter: {{- filter}})', {filter: filterstring})}
+              {_('(Applied filter: {{- filter}})', {filter: filterString})}
             </FootNote>
             {pagination}
           </Layout>
