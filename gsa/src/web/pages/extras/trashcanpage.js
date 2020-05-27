@@ -151,9 +151,7 @@ const Trashcan = () => {
       return gmp.trashcan
         .restore(entity)
         .then(getTrash)
-        .catch(error => {
-          setError(error);
-        });
+        .catch(setError);
     },
     [getTrash, gmp.trashcan, handleInteraction],
   );
@@ -165,9 +163,7 @@ const Trashcan = () => {
       return gmp.trashcan
         .delete(entity)
         .then(getTrash)
-        .catch(error => {
-          setError(error);
-        });
+        .catch(setError);
     },
     [getTrash, gmp.trashcan, handleInteraction],
   );
