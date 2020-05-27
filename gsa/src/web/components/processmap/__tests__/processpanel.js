@@ -46,6 +46,20 @@ const getAllHosts = jest.fn().mockResolvedValue({
   },
 });
 
+const results = [
+  {id: '123', severity: 4, nvt: {name: 'bar', oid: '1337'}},
+  {id: '456', severity: 8, nvt: {name: 'lorem', oid: '7353'}},
+  {id: '789', severity: 1, nvt: {oid: '987'}},
+];
+
+const getResults = jest.fn().mockResolvedValue({
+  data: results,
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
 describe('ProcessPanel tests', () => {
   test('should render ProcessPanel', () => {
     const handleAddHosts = jest.fn();
@@ -94,6 +108,12 @@ describe('ProcessPanel tests', () => {
     expect(element).not.toHaveTextContent(
       'No hosts associated with this process.',
     );
+
+    // Result Table
+    expect(header[4]).toHaveTextContent('Result');
+    expect(header[5]).toHaveTextContent('Severity');
+
+    expect(element).toHaveTextContent('No host selected.');
   });
 
   test('should render ProcessPanel with selected element without hosts', () => {
@@ -208,7 +228,101 @@ describe('ProcessPanel tests', () => {
     expect(progressBars[1]).toHaveAttribute('title', 'N/A');
     expect(progressBars[1]).toHaveTextContent('N/A');
     expect(icons[3]).toHaveAttribute('title', 'Remove host from process');
-    // expect(icons[2]).toHaveAttribute('title', 'Remove host from process');
+  });
+
+  test('should render ProcessPanel with selected element with hosts and results', () => {
+    const handleAddHosts = jest.fn();
+    const handleDeleteHost = jest.fn();
+    const handleSelectHost = jest.fn();
+    const handleEditProcessClick = jest.fn();
+
+    const gmp = {
+      hosts: {
+        getAll: getAllHosts,
+      },
+      results: {
+        get: getResults,
+      },
+    };
+
+    const {render} = rendererWith({
+      capabilities: true,
+      gmp,
+      router: true,
+    });
+
+    const {element, getAllByTestId} = render(
+      <ProcessPanel
+        element={process1}
+        hostList={hosts}
+        resultList={results}
+        isLoadingHosts={false}
+        onAddHosts={handleAddHosts}
+        onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
+        onEditProcessClick={handleEditProcessClick}
+      />,
+    );
+
+    const header = element.querySelectorAll('th');
+    const buttons = element.querySelectorAll('button');
+    const detailsLinks = getAllByTestId('details-link');
+    const icons = getAllByTestId('svg-icon');
+    const progressBars = getAllByTestId('progressbar-box');
+
+    // Title
+    expect(element).toHaveTextContent('foo');
+    expect(icons[0]).toHaveAttribute('title', 'Edit process');
+
+    // Add Hosts
+    expect(buttons[0]).toHaveAttribute('title', 'Add Selected Hosts');
+    expect(buttons[0]).toHaveTextContent('Add Selected Hosts');
+
+    // Host Table
+
+    // Headings
+    expect(header[0]).toHaveTextContent('Host');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
+
+    // Row 1
+    expect(detailsLinks[0]).toHaveAttribute('href', '/host/1234');
+    expect(detailsLinks[0]).toHaveTextContent('details.svg');
+    expect(progressBars[0]).toHaveAttribute('title', 'Medium');
+    expect(progressBars[0]).toHaveTextContent('5.0 (Medium)');
+    expect(icons[1]).toHaveAttribute('title', 'Remove host from process');
+
+    // Row 2
+    expect(detailsLinks[1]).toHaveAttribute('href', '/host/5678');
+    expect(detailsLinks[1]).toHaveTextContent('details.svg');
+    expect(progressBars[1]).toHaveAttribute('title', 'N/A');
+    expect(progressBars[1]).toHaveTextContent('N/A');
+    expect(icons[3]).toHaveAttribute('title', 'Remove host from process');
+
+    // Results Table
+
+    // Headings
+    expect(header[4]).toHaveTextContent('Result');
+    expect(header[5]).toHaveTextContent('Severity');
+
+    // Row 1
+    expect(detailsLinks[2]).toHaveAttribute('href', '/result/456');
+    expect(detailsLinks[2]).toHaveTextContent('lorem');
+    expect(progressBars[2]).toHaveAttribute('title', 'High');
+    expect(progressBars[2]).toHaveTextContent('8.0 (High)');
+
+    // Row 2
+    expect(detailsLinks[3]).toHaveAttribute('href', '/result/123');
+    expect(detailsLinks[3]).toHaveTextContent('bar');
+    expect(progressBars[3]).toHaveAttribute('title', 'Medium');
+    expect(progressBars[3]).toHaveTextContent('4.0 (Medium)');
+
+    // Row 3
+    expect(detailsLinks[4]).toHaveAttribute('href', '/result/789');
+    expect(detailsLinks[4]).toHaveTextContent('987');
+    expect(progressBars[4]).toHaveAttribute('title', 'Low');
+    expect(progressBars[4]).toHaveTextContent('1.0 (Low)');
   });
 
   test('should call click handler', () => {

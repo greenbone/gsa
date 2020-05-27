@@ -64,7 +64,11 @@ const HostRow = ({host, onDeleteHost, onSelectHost}) => {
   return (
     <Row>
       <Data>
-        <FakeLink id={id} onClick={() => onSelectHost(host)}>
+        <FakeLink
+          id={id}
+          data-testid="hosttable-fakelink"
+          onClick={() => onSelectHost(host)}
+        >
           {ip}
         </FakeLink>
       </Data>

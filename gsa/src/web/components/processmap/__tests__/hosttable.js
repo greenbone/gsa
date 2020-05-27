@@ -26,8 +26,8 @@ import HostTable from '../hosttable';
 setLocale('en');
 
 const hosts = [
-  {name: '123.456.78.910', id: '1234', hostname: 'foo', severity: 5},
-  {name: '109.876.54.321', id: '5678', severity: undefined},
+  {ip: '123.456.78.910', id: '1234', hostname: 'foo', severity: 5},
+  {ip: '109.876.54.321', id: '5678', severity: undefined},
 ];
 
 describe('HostTable tests', () => {
@@ -117,6 +117,7 @@ describe('HostTable tests', () => {
 
   test('should call click handler', () => {
     const handleDeleteHost = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -124,13 +125,21 @@ describe('HostTable tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <HostTable hosts={hosts} onDeleteHost={handleDeleteHost} />,
+      <HostTable
+        hosts={hosts}
+        onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
-
+    const links = getAllByTestId('hosttable-fakelink');
     expect(icons[0]).toHaveAttribute('title', 'Remove host from process');
     fireEvent.click(icons[0]);
     expect(handleDeleteHost).toHaveBeenCalledWith(hosts[0].id);
+
+    expect(links[0]).toHaveTextContent('123.456.78.910');
+    fireEvent.click(links[0]);
+    expect(handleSelectHost).toHaveBeenCalledWith(hosts[0]);
   });
 });
