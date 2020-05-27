@@ -33,8 +33,6 @@ import ManualIcon from 'web/components/icon/manualicon';
 import TaskIcon from 'web/components/icon/taskicon';
 import WizardIcon from 'web/components/icon/wizardicon';
 
-import Loading from 'web/components/loading/loading';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
@@ -151,9 +149,6 @@ const TasksListPage = () => {
     }
   }, [isLoadingFilter, filter, getTasks]);
 
-  if (!hasValue(tasks) && (isLoadingFilter || isLoading)) {
-    return <Loading />;
-  }
   return (
     <TaskComponent
       onAdvancedTaskWizardSaved={refetch}
