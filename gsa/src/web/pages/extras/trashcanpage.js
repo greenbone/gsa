@@ -122,18 +122,16 @@ const Trashcan = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
-  console.log(trash, loading, error);
-
   const loadTrashCanData = useCallback(() => {
     setLoading(true);
     const data = gmp.trashcan.get().then(
       response => {
-        const trash = response.data;
-        setTrash(trash);
+        const trash_response = response.data;
+        setTrash(trash_response);
         setLoading(false);
       },
-      error => {
-        setError(error);
+      err => {
+        setError(err);
         setLoading(false);
       },
     );
@@ -180,8 +178,8 @@ const Trashcan = () => {
         loadTrashCanData();
         setLoading(false);
       })
-      .catch(error => {
-        setError(error);
+      .catch(err => {
+        setError(err);
         setLoading(false);
       });
   }, [loadTrashCanData, gmp.trashcan, handleInteraction]);
@@ -202,64 +200,82 @@ const Trashcan = () => {
   }, []);
 
   const createContentsTable = useCallback(
-    trash => {
-      const render_alerts = isDefined(trash.alert_list);
-      const render_credentials = isDefined(trash.credential_list);
-      const render_filters = isDefined(trash.filter_list);
-      const render_groups = isDefined(trash.group_list);
-      const render_notes = isDefined(trash.note_list);
-      const render_overrides = isDefined(trash.override_list);
-      const render_permissions = isDefined(trash.permission_list);
-      const render_port_lists = isDefined(trash.port_list_list);
-      const render_report_formats = isDefined(trash.report_format_list);
-      const render_roles = isDefined(trash.role_list);
-      const render_scanners = isDefined(trash.scanner_list);
-      const render_schedules = isDefined(trash.schedule_list);
-      const render_tags = isDefined(trash.tag_list);
-      const render_targets = isDefined(trash.target_list);
-      const render_tickets = isDefined(trash.ticket_list);
+    trash_response => {
+      const render_alerts = isDefined(trash_response.alert_list);
+      const render_credentials = isDefined(trash_response.credential_list);
+      const render_filters = isDefined(trash_response.filter_list);
+      const render_groups = isDefined(trash_response.group_list);
+      const render_notes = isDefined(trash_response.note_list);
+      const render_overrides = isDefined(trash_response.override_list);
+      const render_permissions = isDefined(trash_response.permission_list);
+      const render_port_lists = isDefined(trash_response.port_list_list);
+      const render_report_formats = isDefined(
+        trash_response.report_format_list,
+      );
+      const render_roles = isDefined(trash_response.role_list);
+      const render_scanners = isDefined(trash_response.scanner_list);
+      const render_schedules = isDefined(trash_response.schedule_list);
+      const render_tags = isDefined(trash_response.tag_list);
+      const render_targets = isDefined(trash_response.target_list);
+      const render_tickets = isDefined(trash_response.ticket_list);
 
       const {scan: tasks, compliance: audits} = separateByUsageType(
-        trash.task_list,
+        trash_response.task_list,
       );
-      const renderTasks = isDefined(trash.task_list);
-      const renderAudits = isDefined(trash.task_list);
+      const renderTasks = isDefined(trash_response.task_list);
+      const renderAudits = isDefined(trash_response.task_list);
 
       const {scan: configs, compliance: policies} = separateByUsageType(
-        trash.config_list,
+        trash_response.config_list,
       );
-      const renderConfigs = isDefined(trash.config_list);
-      const renderPolicies = isDefined(trash.config_list);
+      const renderConfigs = isDefined(trash_response.config_list);
+      const renderPolicies = isDefined(trash_response.config_list);
 
       return (
         <TableBody>
           {render_alerts &&
-            createContentRow('alert', _('Alerts'), trash.alert_list.length)}
+            createContentRow(
+              'alert',
+              _('Alerts'),
+              trash_response.alert_list.length,
+            )}
           {renderAudits &&
             createContentRow('audit', _('Audits'), audits.length)}
           {render_credentials &&
             createContentRow(
               'credential',
               _('Credentials'),
-              trash.credential_list.length,
+              trash_response.credential_list.length,
             )}
           {render_filters &&
-            createContentRow('filter', _('Filters'), trash.filter_list.length)}
+            createContentRow(
+              'filter',
+              _('Filters'),
+              trash_response.filter_list.length,
+            )}
           {render_groups &&
-            createContentRow('group', _('Groups'), trash.group_list.length)}
+            createContentRow(
+              'group',
+              _('Groups'),
+              trash_response.group_list.length,
+            )}
           {render_notes &&
-            createContentRow('note', _('Notes'), trash.note_list.length)}
+            createContentRow(
+              'note',
+              _('Notes'),
+              trash_response.note_list.length,
+            )}
           {render_overrides &&
             createContentRow(
               'override',
               _('Overrides'),
-              trash.override_list.length,
+              trash_response.override_list.length,
             )}
           {render_permissions &&
             createContentRow(
               'permission',
               _('Permissions'),
-              trash.permission_list.length,
+              trash_response.permission_list.length,
             )}
           {renderPolicies &&
             createContentRow('policy', _('Policies'), policies.length)}
@@ -267,37 +283,49 @@ const Trashcan = () => {
             createContentRow(
               'port_list',
               _('Port Lists'),
-              trash.port_list_list.length,
+              trash_response.port_list_list.length,
             )}
           {render_report_formats &&
             createContentRow(
               'report_format',
               _('Report Formats'),
-              trash.report_format_list.length,
+              trash_response.report_format_list.length,
             )}
           {render_roles &&
-            createContentRow('role', _('Roles'), trash.role_list.length)}
+            createContentRow(
+              'role',
+              _('Roles'),
+              trash_response.role_list.length,
+            )}
           {renderConfigs &&
             createContentRow('config', _('Scan Configs'), configs.length)}
           {render_scanners &&
             createContentRow(
               'scanner',
               _('Scanners'),
-              trash.scanner_list.length,
+              trash_response.scanner_list.length,
             )}
           {render_schedules &&
             createContentRow(
               'schedule',
               _('Schedules'),
-              trash.schedule_list.length,
+              trash_response.schedule_list.length,
             )}
           {render_tags &&
-            createContentRow('tag', _('Tags'), trash.tag_list.length)}
+            createContentRow('tag', _('Tags'), trash_response.tag_list.length)}
           {render_targets &&
-            createContentRow('target', _('Targets'), trash.target_list.length)}
+            createContentRow(
+              'target',
+              _('Targets'),
+              trash_response.target_list.length,
+            )}
           {renderTasks && createContentRow('task', _('Tasks'), tasks.length)}
           {render_tickets &&
-            createContentRow('ticket', _('Tickets'), trash.ticket_list.length)}
+            createContentRow(
+              'ticket',
+              _('Tickets'),
+              trash_response.ticket_list.length,
+            )}
         </TableBody>
       );
     },
