@@ -65,7 +65,6 @@ class Model {
 
   static parseElement(element = {}) {
     const copy = parseDefaultProperties(element);
-
     if (isDefined(element.end_time)) {
       if (element.end_time.length > 0) {
         copy.endTime = parseDate(element.end_time);
@@ -120,7 +119,6 @@ class Model {
     if (isEmpty(element.comment)) {
       delete copy.comment;
     }
-
     return copy;
   }
 

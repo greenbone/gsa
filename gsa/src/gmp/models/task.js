@@ -20,6 +20,7 @@ import {_l} from 'gmp/locale/lang';
 import {isDefined, isArray, hasValue} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {map} from '../utils/array';
+import {normalizeType} from '../utils/entitytype';
 
 import {
   parseInt,
@@ -263,6 +264,135 @@ class Task extends Model {
     } else {
       copy.userTags = [];
     }
+
+    return copy;
+  }
+
+  static parseElement(element) {
+    // Added back for trash rows
+    const copy = super.parseElement(element);
+
+    // Trash can page does not have observers field
+
+    if (isDefined(element.owner)) {
+      if (isEmpty(element.owner.name)) {
+        delete copy.owner;
+      } else {
+        copy.owner = element.owner?.name;
+      }
+    }
+
+    copy.reports = {};
+
+    if (isDefined(element.last_report)) {
+      copy.reports.lastReport = Report.fromElement(element.last_report.report);
+    }
+
+    if (isDefined(element.current_report)) {
+      copy.reports.currentReport = Report.fromElement(
+        element.current_report.report,
+      );
+    }
+
+    const {report_count} = element;
+
+    if (isDefined(report_count)) {
+      copy.reports.counts = {...report_count};
+      copy.reports.counts.total = parseInt(report_count.__text);
+      copy.reports.counts.finished = parseInt(report_count.finished);
+    }
+
+    // slave isn't really an entity type but it has an id
+    const models = ['config', 'slave', 'target'];
+    models.forEach(item => {
+      const name = item;
+
+      const data = element[name];
+      if (isDefined(data) && !isEmpty(data._id)) {
+        copy[name] = parseModelFromElement(data, normalizeType(name));
+      } else {
+        delete copy[name];
+      }
+    });
+
+    if (isDefined(element.alert)) {
+      copy.alerts = map(element.alert, alert =>
+        parseModelFromElement(alert, 'alert'),
+      );
+      delete copy.alert;
+    }
+
+    if (isDefined(element.scanner) && !isEmpty(element.scanner._id)) {
+      copy.scanner = Scanner.fromElement(element.scanner);
+    } else {
+      delete copy.scanner;
+    }
+
+    if (isDefined(element.schedule) && !isEmpty(element.schedule._id)) {
+      copy.schedule = Schedule.fromElement(element.schedule);
+    } else {
+      delete copy.schedule;
+    }
+
+    copy.schedule_periods = parseInt(element.schedule_periods);
+
+    copy.progress = parseProgressElement(element.progress);
+
+    const prefs = {};
+
+    if (copy.preferences && isArray(element.preferences.preference)) {
+      for (const pref of element.preferences.preference) {
+        switch (pref.scanner_name) {
+          case 'in_assets':
+            copy.inAssets = parseYes(pref.value);
+            break;
+          case 'assets_apply_overrides':
+            copy.applyOverrides = parseYes(pref.value);
+            break;
+          case 'assets_min_qod':
+            copy.minQod = parseInt(pref.value);
+            break;
+          case 'auto_delete':
+            copy.autoDelete =
+              pref.value === AUTO_DELETE_KEEP
+                ? AUTO_DELETE_KEEP
+                : AUTO_DELETE_NO;
+            break;
+          case 'auto_delete_data':
+            const value = parseInt(pref.value);
+            copy.autoDeleteData =
+              value === 0
+                ? AUTO_DELETE_KEEP_DEFAULT_VALUE
+                : parseInt(pref.value);
+            break;
+          case 'max_hosts':
+            copy.maxHosts = parseInt(pref.value);
+            break;
+          case 'max_checks':
+            copy.maxChecks = parseInt(pref.value);
+            break;
+          case 'source_iface':
+            copy.sourceIface = pref.value;
+            break;
+          default:
+            prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
+            break;
+        }
+      }
+    }
+
+    copy.preferences = prefs;
+
+    // no average duration in trash
+    if (
+      copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
+      copy.hostsOrdering !== HOSTS_ORDERING_REVERSE &&
+      copy.hostsOrdering !== HOSTS_ORDERING_SEQUENTIAL
+    ) {
+      delete copy.hosts_ordering;
+    }
+
+    copy.usageType = element.usage_type;
 
     return copy;
   }
