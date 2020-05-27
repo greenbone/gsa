@@ -274,6 +274,10 @@ class Task extends Model {
 
     // Trash can page does not have observers field
 
+    if (isDefined(element.owner)) {
+      copy.owner = element.owner?.name;
+    }
+
     copy.reports = {};
 
     if (isDefined(element.last_report)) {
