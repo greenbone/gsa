@@ -215,9 +215,7 @@ class EntitiesTable extends React.Component {
     }
 
     const pagination =
-      PaginationComponent === false ? (
-        undefined
-      ) : (
+      PaginationComponent === false ? undefined : (
         <PaginationComponent
           {...other}
           onFirstClick={this.handleFirst}
@@ -229,9 +227,7 @@ class EntitiesTable extends React.Component {
       );
 
     const header =
-      !isDefined(HeaderComponent) || HeaderComponent === false ? (
-        undefined
-      ) : (
+      !isDefined(HeaderComponent) || HeaderComponent === false ? undefined : (
         <HeaderComponent
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
@@ -240,9 +236,7 @@ class EntitiesTable extends React.Component {
       );
 
     const footer =
-      !isDefined(FooterComponent) || FooterComponent === false ? (
-        undefined
-      ) : (
+      !isDefined(FooterComponent) || FooterComponent === false ? undefined : (
         <FooterComponent {...other} />
       );
 
@@ -258,7 +252,12 @@ class EntitiesTable extends React.Component {
     );
 
     return (
-      <TableBox flex="column" grow="1" className="entities-table">
+      <TableBox
+        flex="column"
+        grow="1"
+        className="entities-table"
+        data-testid="entities-table"
+      >
         {toggleDetailsIcon ? (
           <Layout align="space-between" grow="1">
             {detailsIcon}
