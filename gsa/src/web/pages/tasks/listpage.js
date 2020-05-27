@@ -112,7 +112,7 @@ ToolBarIcons.propTypes = {
   onTaskWizardClick: PropTypes.func.isRequired,
 };
 
-const TaskListPage = () => {
+const TasksListPage = () => {
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('task');
   const [
@@ -250,4 +250,4 @@ const TaskListPage = () => {
   );
 };
 
-export default TaskListPage;
+export default TasksListPage;
