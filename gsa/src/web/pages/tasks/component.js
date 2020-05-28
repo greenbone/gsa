@@ -88,6 +88,8 @@ import {
   useModifyTask,
   useCreateContainerTask,
   useCreateTask,
+  useStartTask,
+  useStopTask,
 } from 'web/graphql/tasks';
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
@@ -112,6 +114,9 @@ const TaskComponent = props => {
   const [modifyTask] = useModifyTask();
   const [createTask] = useCreateTask();
   const [createContainerTask] = useCreateContainerTask();
+  const [startTask] = useStartTask();
+  const [stopTask] = useStopTask();
+
   const scannerQuery = useGetScanners();
   const [
     loadScanners,
@@ -251,7 +256,7 @@ const TaskComponent = props => {
 
     handleInteraction();
 
-    return cmd.start(task).then(onStarted, onStartError);
+    return startTask(task.id).then(onStarted, onStartError);
   };
 
   const handleTaskStop = task => {
@@ -259,7 +264,7 @@ const TaskComponent = props => {
 
     handleInteraction();
 
-    return cmd.stop(task).then(onStopped, onStopError);
+    return stopTask(task.id).then(onStopped, onStopError);
   };
 
   const handleTaskResume = task => {
