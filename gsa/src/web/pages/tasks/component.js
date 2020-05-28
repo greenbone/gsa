@@ -108,10 +108,10 @@ import {useGetScanners, useGetScanConfigs, useGetTargets} from './graphql';
 import {setTimezone} from 'web/store/usersettings/actions';
 
 const TaskComponent = props => {
+  // GraphQL Queries and Mutations
   const [modifyTask] = useModifyTask();
   const [createTask] = useCreateTask();
   const [createContainerTask] = useCreateContainerTask();
-
   const scannerQuery = useGetScanners();
   const [
     loadScanners,
@@ -119,7 +119,6 @@ const TaskComponent = props => {
   ] = scannerQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
-
   const scanConfigQuery = useGetScanConfigs();
   const [
     loadScanConfigs,
@@ -127,7 +126,6 @@ const TaskComponent = props => {
   ] = scanConfigQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
-
   const targetQuery = useGetTargets();
   const [
     loadTargets,
@@ -135,9 +133,9 @@ const TaskComponent = props => {
   ] = targetQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
-
   const capabilities = useCapabilities();
 
+  // default values
   const {
     defaultPortListId,
     defaultAlertId,
@@ -173,11 +171,12 @@ const TaskComponent = props => {
     config_id: defaultScanConfigId,
   });
 
+  // task wizard variables. Not sure what to do with those.
   const [hosts] = useState();
-
   const [start_timezone] = useState();
   const [tag_id] = useState();
 
+  // Query and set task dialog subobjects
   const [scanners, setScanners] = useState();
 
   console.log(dialogState);
