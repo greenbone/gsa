@@ -251,47 +251,6 @@ export const useDeleteTask = () => {
   return toGraphQL(deleteTask);
 };
 
-export const MODIFY_TASK = gql`
-  mutation modifyTask($input: ModifyTaskInput!) {
-    modifyTask(input: $input) {
-      status
-      id
-    }
-  }
-`;
-
-export const useModifyTask = () => {
-  const [modifyTask] = useMutation(MODIFY_TASK);
-  return toInputObject(modifyTask);
-};
-
-export const CREATE_TASK = gql`
-  mutation createTask($input: CreateTaskInput!) {
-    createTask(input: $input) {
-      id
-      status
-    }
-  }
-`;
-
-export const useCreateTask = () => {
-  const [createTask] = useMutation(CREATE_TASK);
-  return toInputObject(createTask);
-};
-
-export const CREATE_CONTAINER_TASK = gql`
-  mutation createContainerTask($name: String!, $comment: String) {
-    createContainerTask(name: $name, comment: $comment) {
-      taskId
-    }
-  }
-`;
-
-export const useCreateContainerTask = () => {
-  const [createContainerTask] = useMutation(CREATE_CONTAINER_TASK);
-  return toGraphQL(createContainerTask);
-};
-
 export const START_TASK = gql`
   mutation startTask($taskId: String!) {
     startTask(taskId: $taskId) {
