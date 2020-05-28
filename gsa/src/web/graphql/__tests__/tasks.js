@@ -38,11 +38,12 @@ import {
   createCreateContainerTaskQueryMock,
   createCreateTaskQueryMock,
   createDeleteTaskQueryMock,
-  createGetTaskQueryMock,
+  createGetTasksQueryMock,
   createModifyTaskQueryMock,
   createStartTaskQueryMock,
   createStopTaskQueryMock,
 } from '../__mocks__/tasks';
+import {isDefined} from 'gmp/utils/identity';
 
 const GetTasksComponent = () => {
   const {counts, loading, tasks} = useGetTasks();
@@ -71,6 +72,7 @@ const GetTasksComponent = () => {
 
 const GetLazyTasksComponent = () => {
   const [getTasks, {counts, loading, tasks}] = useLazyGetTasks();
+
   if (loading) {
     return <span data-testid="loading">Loading</span>;
   }
@@ -84,20 +86,24 @@ const GetLazyTasksComponent = () => {
         <span data-testid="limit">{counts.rows}</span>
         <span data-testid="length">{counts.length}</span>
       </div>
-      {tasks.map(task => {
-        return (
-          <div key={task.id} data-testid="task">
-            {task.name}
-          </div>
-        );
-      })}
+      {isDefined(tasks) ? (
+        tasks.map(task => {
+          return (
+            <div key={task.id} data-testid="task">
+              {task.name}
+            </div>
+          );
+        })
+      ) : (
+        <div data-testid="no-task" />
+      )}
     </div>
   );
 };
 
-describe('useGetTask tests', () => {
-  test('should query a task', async () => {
-    const [mock, resultFunc] = createGetTaskQueryMock();
+describe('useGetTasks tests', () => {
+  test('should query tasks', async () => {
+    const [mock, resultFunc] = createGetTasksQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
     render(<GetTasksComponent />);
@@ -121,15 +127,18 @@ describe('useGetTask tests', () => {
   });
 });
 
-describe('useLazyGetTask tests', () => {
-  test('should query a task after user interaction', async () => {
-    const [mock, resultFunc] = createGetTaskQueryMock();
+describe('useLazyGetTasks tests', () => {
+  test('should query tasks after user interaction', async () => {
+    const [mock, resultFunc] = createGetTasksQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
     render(<GetLazyTasksComponent />);
 
     let taskElements = screen.queryAllByTestId('task');
     expect(taskElements).toHaveLength(0);
+
+    let noTasks = screen.queryByTestId('no-task');
+    expect(noTasks).toBeInTheDocument();
 
     expect(screen.getByTestId('total')).toHaveTextContent(0);
     expect(screen.getByTestId('filtered')).toHaveTextContent(0);
@@ -150,6 +159,9 @@ describe('useLazyGetTask tests', () => {
     expect(taskElements).toHaveLength(1);
 
     expect(taskElements[0]).toHaveTextContent('foo');
+
+    noTasks = screen.queryByTestId('no-task');
+    expect(noTasks).not.toBeInTheDocument();
 
     expect(screen.getByTestId('total')).toHaveTextContent(1);
     expect(screen.getByTestId('filtered')).toHaveTextContent(1);

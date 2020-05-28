@@ -18,6 +18,8 @@
 
 import {useEffect, useState} from 'react';
 
+import {useLocation} from 'react-router-dom';
+
 import {useSelector, useDispatch} from 'react-redux';
 
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
@@ -27,7 +29,7 @@ import Filter, {
   DEFAULT_ROWS_PER_PAGE,
 } from 'gmp/models/filter';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import getPage from 'web/store/pages/selectors';
 import {pageFilter as setPageFilter} from 'web/store/pages/actions';
@@ -38,19 +40,25 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 
 import useGmp from 'web/utils/useGmp';
 
-const usePageFilter = ({
-  fallbackFilter,
-  entityType,
-  locationQueryFilterString,
-}) => {
+const usePageFilter = (
+  pageName,
+  {fallbackFilter, locationQueryFilterString} = {},
+) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  // only use location directly if locationQueryFilterString is undefined
+  // use null as value for not set at all
+  if (!isDefined(locationQueryFilterString)) {
+    locationQueryFilterString = location?.query?.filter;
+  }
 
   let returnedFilter;
 
   const [defaultSettingFilter, defaultSettingsFilterError] = useSelector(
     state => {
-      const defaultFilterSel = getUserSettingsDefaultFilter(state, entityType);
+      const defaultFilterSel = getUserSettingsDefaultFilter(state, pageName);
       return [defaultFilterSel.getFilter(), defaultFilterSel.getError()];
     },
   );
@@ -60,14 +68,14 @@ const usePageFilter = ({
       !isDefined(defaultSettingFilter) &&
       !isDefined(defaultSettingsFilterError)
     ) {
-      dispatch(loadUserSettingsDefaultFilter(gmp)(entityType));
+      dispatch(loadUserSettingsDefaultFilter(gmp)(pageName));
     }
   }, [
     defaultSettingFilter,
     defaultSettingsFilterError,
     dispatch,
     gmp,
-    entityType,
+    pageName,
   ]);
 
   let [rowsPerPage, rowsPerPageError] = useSelector(state => {
@@ -85,23 +93,23 @@ const usePageFilter = ({
   }, [returnedFilter, rowsPerPage, gmp, dispatch]);
 
   const [locationQueryFilter, setLocationQueryFilter] = useState(
-    isDefined(locationQueryFilterString)
+    hasValue(locationQueryFilterString)
       ? Filter.fromString(locationQueryFilterString)
       : undefined,
   );
 
   useEffect(() => {
-    if (isDefined(locationQueryFilterString)) {
+    if (hasValue(locationQueryFilterString)) {
       dispatch(
-        setPageFilter(entityType, Filter.fromString(locationQueryFilterString)),
+        setPageFilter(pageName, Filter.fromString(locationQueryFilterString)),
       );
     }
     setLocationQueryFilter(undefined);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const pageFilter = useSelector(state => getPage(state).getFilter(entityType));
+  const pageFilter = useSelector(state => getPage(state).getFilter(pageName));
 
-  if (isDefined(locationQueryFilter)) {
+  if (hasValue(locationQueryFilter)) {
     returnedFilter = locationQueryFilter;
   } else if (isDefined(pageFilter)) {
     returnedFilter = pageFilter;

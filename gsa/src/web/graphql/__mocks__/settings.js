@@ -15,31 +15,34 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isEmpty} from 'gmp/utils/string';
 
-class Setting {
-  constructor({id, comment, name, value} = {}) {
-    this.id = id;
-    this.comment = comment;
-    this.name = name;
-    this.value = value;
-  }
+import {GET_SETTING} from '../settings';
 
-  static fromElement(element) {
-    return Setting.fromObject({
-      id: element._id,
-      comment: element.comment === '(null)' ? undefined : element.comment,
-      name: element.name,
-      value:
-        !isEmpty(element.value) && element.value !== '0'
-          ? element.value
-          : undefined,
-    });
-  }
+export const createGetSettingQueryMock = (
+  id,
+  {comment = 'A comment', name = 'foo', value = 'bar'},
+) => {
+  const queryResult = {
+    data: {
+      userSetting: {
+        id,
+        comment,
+        name,
+        value,
+      },
+    },
+  };
 
-  static fromObject(object) {
-    return new Setting(object);
-  }
-}
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
 
-export default Setting;
+  const queryMock = {
+    request: {
+      query: GET_SETTING,
+      variables: {
+        id,
+      },
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};

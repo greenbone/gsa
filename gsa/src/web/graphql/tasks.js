@@ -187,7 +187,7 @@ export const useLazyGetTasks = (variables, options) => {
   });
   const tasks = isDefined(data?.tasks)
     ? data.tasks.edges.map(entity => Task.fromObject(entity.node))
-    : [];
+    : undefined;
 
   const {total, filtered, offset = -1, limit, length} =
     data?.tasks?.counts || {};

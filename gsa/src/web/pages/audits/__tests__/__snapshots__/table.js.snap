@@ -707,6 +707,7 @@ exports[`Audits table tests should render 1`] = `
   <div>
     <div
       class="c0 entities-table"
+      data-testid="entities-table"
     >
       <div
         class="c1"
@@ -1430,7 +1431,9 @@ exports[`Audits table tests should render 1`] = `
             </td>
           </tr>
         </tbody>
-        <tfoot>
+        <tfoot
+          data-testid="entities-footer"
+        >
           <tr>
             <td
               colspan="5"

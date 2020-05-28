@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -15,31 +15,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isEmpty} from 'gmp/utils/string';
 
-class Setting {
-  constructor({id, comment, name, value} = {}) {
-    this.id = id;
-    this.comment = comment;
-    this.name = name;
-    this.value = value;
-  }
+import {useRef, useCallback} from 'react';
 
-  static fromElement(element) {
-    return Setting.fromObject({
-      id: element._id,
-      comment: element.comment === '(null)' ? undefined : element.comment,
-      name: element.name,
-      value:
-        !isEmpty(element.value) && element.value !== '0'
-          ? element.value
-          : undefined,
-    });
-  }
+import logger from 'gmp/log';
 
-  static fromObject(object) {
-    return new Setting(object);
-  }
-}
+import {hasValue} from 'gmp/utils/identity';
 
-export default Setting;
+const log = logger.getLogger('web.components.form.useDownload');
+
+const useDownload = () => {
+  const downloadRef = useRef(null);
+
+  const download = useCallback(({filename, data, mimetype}) => {
+    if (!hasValue(downloadRef.current)) {
+      log.warn('Download ref not set.');
+      return;
+    }
+
+    downloadRef.current.setFilename(filename);
+    downloadRef.current.setData(data, mimetype);
+    downloadRef.current.download();
+  }, []);
+  return [downloadRef, download];
+};
+
+export default useDownload;

@@ -34,6 +34,22 @@ describe('Setting tests', () => {
     expect(setting.foo).toBeUndefined();
   });
 
+  test('should create setting from an object', () => {
+    const setting = Setting.fromObject({
+      id: 'foo',
+      comment: 'a comment',
+      name: 'bar',
+      value: 'foobar',
+      foo: 'bar',
+    });
+
+    expect(setting.id).toEqual('foo');
+    expect(setting.comment).toEqual('a comment');
+    expect(setting.name).toEqual('bar');
+    expect(setting.value).toEqual('foobar');
+    expect(setting.foo).toBeUndefined();
+  });
+
   test('should not set empty value', () => {
     const setting = Setting.fromElement({
       value: '',

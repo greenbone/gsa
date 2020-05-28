@@ -204,7 +204,7 @@ describe('Tasks table tests', () => {
     expect(icons[6]).toHaveAttribute('title', 'Task is not stopped');
 
     fireEvent.click(icons[7]);
-    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskDelete).toHaveBeenCalledWith(task);
     expect(icons[7]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[8]);
@@ -212,7 +212,7 @@ describe('Tasks table tests', () => {
     expect(icons[8]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[9]);
-    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskClone).toHaveBeenCalledWith(task);
     expect(icons[9]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[10]);

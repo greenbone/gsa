@@ -23,11 +23,15 @@ import Loading from 'web/components/loading/loading';
 import PropTypes from 'web/utils/proptypes';
 import usePageFilter from 'web/utils/usePageFilter';
 
-const FilterProvider = ({children, fallbackFilter, gmpname, locationQuery}) => {
-  const [filter, isLoading] = usePageFilter({
+const FilterProvider = ({
+  children,
+  fallbackFilter,
+  gmpname,
+  locationQueryFilterString,
+}) => {
+  const [filter, isLoading] = usePageFilter(gmpname, {
     fallbackFilter,
-    locationQueryFilterString: locationQuery?.filter,
-    entityType: gmpname,
+    locationQueryFilterString,
   });
   return (
     <React.Fragment>
@@ -39,9 +43,7 @@ const FilterProvider = ({children, fallbackFilter, gmpname, locationQuery}) => {
 FilterProvider.propTypes = {
   fallbackFilter: PropTypes.filter,
   gmpname: PropTypes.string,
-  locationQuery: PropTypes.shape({
-    filter: PropTypes.string,
-  }),
+  locationQueryFilterString: PropTypes.string,
 };
 
 export default FilterProvider;
