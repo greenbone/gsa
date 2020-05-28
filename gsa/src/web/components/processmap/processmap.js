@@ -39,6 +39,7 @@ import ErrorDialog from 'web/components/dialog/errordialog';
 import ErrorBoundary from 'web/components/error/errorboundary';
 
 import {selector as hostSelector} from 'web/store/entities/hosts';
+import {selector as resultSelector} from 'web/store/entities/results';
 
 import {saveBusinessProcessMap} from 'web/store/businessprocessmaps/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
@@ -120,6 +121,7 @@ class ProcessMap extends React.Component {
     this.handleCreateProcess = this.handleCreateProcess.bind(this);
     this.handleInteraction = this.handleInteraction.bind(this);
     this.handleSelectElement = this.handleSelectElement.bind(this);
+    this.handleSelectHost = this.handleSelectHost.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
     this.handleProcessChange = this.handleProcessChange.bind(this);
     this.handleDeleteElement = this.handleDeleteElement.bind(this);
@@ -320,6 +322,7 @@ class ProcessMap extends React.Component {
           });
         }
         this.selectedElement = undefined;
+        this.selectedHost = undefined;
         this.saveMaps({processes, edges});
       }
     }
@@ -338,6 +341,7 @@ class ProcessMap extends React.Component {
 
   handleOpenCreateProcessDialog() {
     this.selectedElement = undefined; // the dialog will otherwise become an edit dialog
+    this.selectedHost = undefined;
     this.setState({createProcessDialogVisible: true});
   }
 
@@ -449,6 +453,7 @@ class ProcessMap extends React.Component {
       tagId: this.selectedElement.tagId,
       gmp: this.props.gmp,
     }).then(() => {
+      this.selectedHost = undefined;
       this.props.forceUpdate();
     });
     this.handleInteraction();
@@ -497,7 +502,14 @@ class ProcessMap extends React.Component {
     }
     this.props.onSelectElement(element);
     this.selectedElement = element;
+    this.selectedHost = undefined;
     this.draggingElement = element;
+    this.handleInteraction();
+  }
+
+  handleSelectHost(host) {
+    this.props.onSelectHost(host);
+    this.selectedHost = host;
     this.handleInteraction();
   }
 
@@ -507,6 +519,7 @@ class ProcessMap extends React.Component {
       y: event.pageY,
     };
     this.selectedElement = undefined;
+    this.selectedHost = undefined;
     this.setState({
       isDraggingBackground: true,
       isDrawingEdge: false,
@@ -703,8 +716,12 @@ class ProcessMap extends React.Component {
           <ProcessPanel
             element={this.selectedElement}
             hostList={this.selectedElement ? this.props.hostList : undefined}
+            resultList={
+              isDefined(this.selectedHost) ? this.props.resultList : undefined
+            }
             onAddHosts={this.handleAddHosts}
             onDeleteHost={this.handleDeleteHosts}
+            onSelectHost={this.handleSelectHost}
             onEditProcessClick={this.openCreateProcessDialog}
             onInteraction={this.handleInteraction}
           />
@@ -769,10 +786,12 @@ class ProcessMap extends React.Component {
   }
 }
 
-const mapStateToProps = (rootState, {hostFilter}) => {
+const mapStateToProps = (rootState, {hostFilter, resultFilter}) => {
   const hostSel = hostSelector(rootState);
+  const resultSel = resultSelector(rootState);
   return {
     hostList: hostSel.getEntities(hostFilter),
+    resultList: resultSel.getEntities(resultFilter),
   };
 };
 
@@ -791,9 +810,11 @@ ProcessMap.propTypes = {
   hostList: PropTypes.array,
   mapId: PropTypes.id, // isRequired
   processMaps: PropTypes.object,
+  resultList: PropTypes.array,
   saveUpdatedMaps: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
   onSelectElement: PropTypes.func.isRequired,
+  onSelectHost: PropTypes.func.isRequired,
   onToggleConditionalColorization: PropTypes.func.isRequired,
 };
 

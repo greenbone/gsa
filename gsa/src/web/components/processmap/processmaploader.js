@@ -34,6 +34,8 @@ import {
   selector as hostSelector,
 } from 'web/store/entities/hosts';
 
+import {loadEntities as loadResults} from 'web/store/entities/results';
+
 import PropTypes from 'web/utils/proptypes';
 
 import useGmp from 'web/utils/useGmp';
@@ -43,10 +45,16 @@ import {loadBusinessProcessMaps} from 'web/store/businessprocessmaps/actions';
 import useColorize from './usecolorize';
 
 export const MAX_HOSTS_PER_PROCESS = 100;
+export const MAX_RESULTS_PER_HOST = 100;
 
 export const hostsFilter = id =>
   Filter.fromString(
     'tag_id=' + id + ' first=1 rows=' + (MAX_HOSTS_PER_PROCESS + 1),
+  );
+
+export const resultsFilter = hostIp =>
+  Filter.fromString(
+    'host=' + hostIp + ' first=1 rows=' + (MAX_RESULTS_PER_HOST + 1),
   );
 
 const createDialogContent = failedTags => {
@@ -97,6 +105,7 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
   const [failedTags, setFailedTags] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedElement, setSelectedElement] = useState({});
+  const [selectedHost, setSelectedHost] = useState({});
   const [update, setUpdate] = useState(false);
 
   // get map from store
@@ -122,10 +131,15 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
   const handleSelectElement = selEl => {
     return setSelectedElement(selEl);
   };
+  // keep track of currently selected host to show its results
+  const handleSelectHost = selHost => {
+    return setSelectedHost(selHost);
+  };
 
   // create a filter for each individual tagId used to load all hosts associated
   // to a specific process
   const hostFilter = hostsFilter(selectedElement.tagId);
+  const resultFilter = resultsFilter(selectedHost.ip);
 
   // loop through all processes and load their associated hosts via individual
   // host filters
@@ -157,6 +171,11 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
     setIsLoading(false);
   }, [isLoadingHosts]);
 
+  useEffect(() => {
+    const tempResultFilter = resultsFilter(selectedHost?.ip);
+    dispatch(loadResults(gmp)(tempResultFilter));
+  }, [selectedHost, dispatch, gmp]);
+
   const handleToggleConditionalColorization = () => {
     setApplyConditionalColorization(!applyConditionalColorization);
   };
@@ -181,11 +200,13 @@ const ProcessMapsLoader = ({children, mapId = '1'}) => {
         children({
           applyConditionalColorization,
           hostFilter,
+          resultFilter,
           isLoading,
           mapId,
           processMaps: coloredProcessMap,
           forceUpdate,
           onSelectElement: handleSelectElement,
+          onSelectHost: handleSelectHost,
           onToggleConditionalColorization: handleToggleConditionalColorization,
         })
       )}
