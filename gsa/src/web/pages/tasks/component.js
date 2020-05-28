@@ -146,6 +146,8 @@ const TaskComponent = props => {
     defaultSmbCredential,
     defaultEsxiCredential,
   } = props;
+
+  // Dialog and wizard visibility flags
   const [advancedTaskWizardVisible, toggleAdvancedTaskWizardVisible] = useState(
     false,
   );
@@ -156,35 +158,24 @@ const TaskComponent = props => {
   const [modifyTaskWizardVisible, toggleModifyTaskWizardVisible] = useState(
     false,
   );
-  const [dialogState, setDialogState] = useState({});
-
   const [taskDialogVisible, toggleTaskDialogVisible] = useState(false);
   const [taskWizardVisible, toggleTaskWizardVisible] = useState(false);
-  const [target_id, setTargetId] = useState(0);
-  const [alert_ids, setAlertIds] = useState([]);
-  const [schedule_id, setScheduleId] = useState('0');
-  const [scanner_id, setScannerId] = useState('0');
-  const [hosts_ordering, setHostsOrdering] = useState();
-  const [hosts] = useState();
-  const [port_list_id, setPortListId] = useState(defaultPortListId);
-  const [alert_id, setAlertId] = useState(defaultAlertId);
-  const [config_id, setConfigId] = useState(defaultScanConfigId);
-  const [ssh_credential, setSshCredential] = useState(defaultSshCredential);
-  const [smb_credential, setSmbCredential] = useState(defaultSmbCredential);
-  const [esxi_credential, setEsxiCredential] = useState(defaultEsxiCredential);
-  const [task_name, setTaskName] = useState(_('New Quick Task'));
-  const [target_hosts, setTargetHosts] = useState();
-
-  const [start_date, setStartDate] = useState();
-  const [start_minute, setStartMinute] = useState();
-  const [start_hour, setStartHour] = useState();
-  const [start_timezone] = useState();
-  const [tasks, setTasks] = useState();
-  const [reschedule, setReschedule] = useState(NO_VALUE);
-  const [task_id, setTaskId] = useState();
   const [reportImportDialogVisible, toggleReportImportDialogVisible] = useState(
     false,
   );
+
+  // Dialog and wizard dialog state
+  const [dialogState, setDialogState] = useState({
+    target_id: UNSET_VALUE,
+    alert_ids: [],
+    schedule_id: UNSET_VALUE,
+    scanner_id: UNSET_VALUE,
+    config_id: defaultScanConfigId,
+  });
+
+  const [hosts] = useState();
+
+  const [start_timezone] = useState();
   const [tag_id] = useState();
 
   const [scanners, setScanners] = useState();
@@ -236,15 +227,24 @@ const TaskComponent = props => {
   };
 
   const handleTargetChange = targetId => {
-    setTargetId(targetId);
+    setDialogState(state => ({
+      ...state,
+      target_id: targetId,
+    }));
   };
 
   const handleAlertsChange = alertIds => {
-    setAlertIds(alertIds);
+    setDialogState(state => ({
+      ...state,
+      alert_ids: alertIds,
+    }));
   };
 
   const handleScheduleChange = scheduleId => {
-    setScheduleId(scheduleId);
+    setDialogState(state => ({
+      ...state,
+      schedule_id: scheduleId,
+    }));
   };
 
   const handleTaskStart = task => {
@@ -284,7 +284,10 @@ const TaskComponent = props => {
     const {data} = resp;
 
     props.loadAlerts();
-    setAlertIds(({alert_ids}) => ({alert_ids: [data.id, ...alert_ids]}));
+    setDialogState(state => ({
+      ...state,
+      alert_ids: ({alert_ids}) => ({alert_ids: [data.id, ...alert_ids]}),
+    }));
   };
 
   const handleScheduleCreated = resp => {
@@ -292,13 +295,19 @@ const TaskComponent = props => {
 
     props.loadSchedules();
 
-    setScheduleId(data.id);
+    setDialogState(state => ({
+      ...state,
+      schedule_id: data.id,
+    }));
   };
 
   const handleTargetCreated = resp => {
     const {data} = resp;
     refetchTargets();
-    setTargetId(data?.createTarget?.id);
+    setDialogState(state => ({
+      ...state,
+      target_id: data?.createTarget?.id,
+    }));
   };
 
   const openContainerTaskDialog = inputTask => {
@@ -380,9 +389,13 @@ const TaskComponent = props => {
       // save edit part
       if (isDefined(task) && !task.isChangeable()) {
         // arguments need to be undefined if the task is not changeable
-        setTargetId(undefined);
-        setScannerId(undefined);
-        setConfigId(undefined);
+
+        setDialogState(state => ({
+          ...state,
+          target_id: undefined,
+          scanner_id: undefined,
+          config_id: undefined,
+        }));
       }
       const {onSaved, onSaveError} = props;
 
@@ -540,28 +553,23 @@ const TaskComponent = props => {
   };
 
   const openTaskWizard = () => {
-    const {
-      gmp,
-      defaultAlertId,
-      defaultEsxiCredential,
-      defaultPortListId,
-      defaultScanConfigId,
-      defaultScannerId,
-      defaultSshCredential,
-      defaultSmbCredential,
-    } = props;
+    const {gmp, defaultScanConfigId, defaultScannerId} = props;
 
     gmp.wizard.task().then(response => {
       const settings = response.data;
       toggleTaskWizardVisible(true);
-      setHostsOrdering(settings.client_address);
-      setPortListId(defaultPortListId);
-      setAlertId(defaultAlertId);
-      setConfigId(defaultScanConfigId);
-      setSshCredential(defaultSshCredential);
-      setSmbCredential(defaultSmbCredential);
-      setEsxiCredential(defaultEsxiCredential);
-      setScannerId(defaultScannerId);
+
+      setDialogState(state => ({
+        ...state,
+        hosts_ordering: settings.client_address,
+        port_list_id: defaultPortListId,
+        alert_id: defaultAlertId,
+        config_id: defaultScanConfigId,
+        ssh_credential: defaultSshCredential,
+        smb_credential: defaultSmbCredential,
+        esxi_credential: defaultEsxiCredential,
+        scanner_id: defaultScannerId,
+      }));
     });
     handleInteraction();
   };
@@ -586,13 +594,8 @@ const TaskComponent = props => {
     const {
       gmp,
       timezone,
-      defaultAlertId,
-      defaultEsxiCredential,
-      defaultPortListId,
       defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
       defaultScannerId,
-      defaultSshCredential,
-      defaultSmbCredential,
     } = props;
 
     props.loadCredentials();
@@ -604,18 +607,21 @@ const TaskComponent = props => {
       const now = date().tz(timezone);
 
       toggleAdvancedTaskWizardVisible(true);
-      setTaskName(_('New Quick Task'));
-      setTargetHosts(settings.client_address);
-      setPortListId(defaultPortListId);
-      setAlertId(defaultAlertId);
-      setConfigId(defaultScanConfigId);
-      setSshCredential(defaultSshCredential);
-      setSmbCredential(defaultSmbCredential);
-      setEsxiCredential(defaultEsxiCredential);
-      setScannerId(defaultScannerId);
-      setStartDate(now);
-      setStartMinute(now.minutes());
-      setStartHour(now.hours());
+      setDialogState(state => ({
+        ...state,
+        alert_id: defaultAlertId,
+        task_name: _('New Quick Task'),
+        target_hosts: settings.client_address,
+        port_list_id: defaultPortListId,
+        config_id: defaultScanConfigId,
+        ssh_credential: defaultSshCredential,
+        smb_credential: defaultSmbCredential,
+        esxi_credential: defaultEsxiCredential,
+        scanner_id: defaultScannerId,
+        start_date: now,
+        start_minute: now.minutes(),
+        start_hour: now.hours(),
+      }));
       setTimezone(timezone);
     });
     handleInteraction();
@@ -649,12 +655,16 @@ const TaskComponent = props => {
       const now = date().tz(timezone);
 
       toggleModifyTaskWizardVisible(true);
-      setTasks(settings.tasks);
-      setReschedule(NO_VALUE);
-      setTaskId(selectSaveId(settings.tasks));
-      setStartDate(now);
-      setStartMinute(now.minutes());
-      setStartHour(now.hours());
+
+      setDialogState(state => ({
+        ...state,
+        tasks: settings.tasks,
+        reschedule: NO_VALUE,
+        task_id: selectSaveId(settings.tasks),
+        start_date: now,
+        start_minute: now.minutes(),
+        start_hour: now.hours(),
+      }));
       setTimezone(timezone);
     });
     handleInteraction();
@@ -682,8 +692,11 @@ const TaskComponent = props => {
 
   const openReportImportDialog = task => {
     toggleReportImportDialogVisible(true);
-    setTaskId(task.id);
-    setTasks([task]);
+    setDialogState(state => ({
+      ...state,
+      tasks: [task],
+      task_id: task.id,
+    }));
 
     handleInteraction();
   };
@@ -708,12 +721,18 @@ const TaskComponent = props => {
       .then(() => closeReportImportDialog());
   };
 
-  const handleScanConfigChange = config_id => {
-    setConfigId(config_id);
+  const handleScanConfigChange = configId => {
+    setDialogState(state => ({
+      ...state,
+      config_id: configId,
+    }));
   };
 
-  const handleScannerChange = scanner_id => {
-    setScannerId(scanner_id);
+  const handleScannerChange = scannerId => {
+    setDialogState(state => ({
+      ...state,
+      scanner_id: scannerId,
+    }));
   };
 
   const {
@@ -752,6 +771,25 @@ const TaskComponent = props => {
     task,
     title,
     name,
+    hosts_ordering,
+    port_list_id,
+    alert_id,
+    ssh_credential,
+    smb_credential,
+    esxi_credential,
+    task_name,
+    target_hosts,
+    start_date,
+    start_minute,
+    start_hour,
+    reschedule,
+    alert_ids,
+    config_id,
+    scanner_id,
+    schedule_id,
+    target_id,
+    tasks,
+    task_id,
   } = dialogState;
 
   return (
