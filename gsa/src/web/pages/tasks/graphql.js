@@ -23,8 +23,8 @@ import {useMutation, useQuery, useLazyQuery} from '@apollo/react-hooks';
 import {toGraphQL, toFruitfulQuery} from 'web/utils/graphql';
 
 export const GET_TASK = gql`
-  query Task($taskId: UUID!) {
-    task(taskId: $taskId) {
+  query Task($id: UUID!) {
+    task(id: $id) {
       name
       id
       creationTime
@@ -226,9 +226,9 @@ export const useLazyGetTasks = () => {
 };
 
 export const CLONE_TASK = gql`
-  mutation cloneTask($taskId: String!) {
-    cloneTask(taskId: $taskId) {
-      taskId
+  mutation cloneTask($id: String!) {
+    cloneTask(id: $id) {
+      id
     }
   }
 `;
@@ -239,8 +239,8 @@ export const useCloneTask = () => {
 };
 
 export const DELETE_TASK = gql`
-  mutation deleteTask($taskId: String!) {
-    deleteTask(taskId: $taskId) {
+  mutation deleteTask($id: String!) {
+    deleteTask(id: $id) {
       ok
     }
   }
@@ -252,10 +252,8 @@ export const useDeleteTask = () => {
 };
 
 export const START_TASK = gql`
-  mutation startTask($taskId: String!) {
-    startTask(taskId: $taskId) {
-      status
-      statusText
+  mutation startTask($id: String!) {
+    startTask(id: $id) {
       reportId
     }
   }
