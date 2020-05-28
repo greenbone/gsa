@@ -20,11 +20,11 @@ import gql from 'graphql-tag';
 
 import {useMutation, useQuery, useLazyQuery} from '@apollo/react-hooks';
 
-import {toGraphQL, toFruitfulQuery, toInputObject} from 'web/utils/graphql';
+import {toGraphQL, toFruitfulQuery} from 'web/utils/graphql';
 
 export const GET_TASK = gql`
-  query Task($taskId: UUID!) {
-    task(taskId: $taskId) {
+  query Task($id: UUID!) {
+    task(id: $id) {
       name
       id
       creationTime
@@ -226,9 +226,9 @@ export const useLazyGetTasks = () => {
 };
 
 export const CLONE_TASK = gql`
-  mutation cloneTask($taskId: String!) {
-    cloneTask(taskId: $taskId) {
-      taskId
+  mutation cloneTask($id: UUID!) {
+    cloneTask(id: $id) {
+      id
     }
   }
 `;
@@ -239,8 +239,8 @@ export const useCloneTask = () => {
 };
 
 export const DELETE_TASK = gql`
-  mutation deleteTask($taskId: String!) {
-    deleteTask(taskId: $taskId) {
+  mutation deleteTask($id: UUID!) {
+    deleteTask(id: $id) {
       ok
     }
   }
@@ -251,52 +251,9 @@ export const useDeleteTask = () => {
   return toGraphQL(deleteTask);
 };
 
-export const MODIFY_TASK = gql`
-  mutation modifyTask($input: ModifyTaskInput!) {
-    modifyTask(input: $input) {
-      status
-      id
-    }
-  }
-`;
-
-export const useModifyTask = () => {
-  const [modifyTask] = useMutation(MODIFY_TASK);
-  return toInputObject(modifyTask);
-};
-
-export const CREATE_TASK = gql`
-  mutation createTask($input: CreateTaskInput!) {
-    createTask(input: $input) {
-      id
-      status
-    }
-  }
-`;
-
-export const useCreateTask = () => {
-  const [createTask] = useMutation(CREATE_TASK);
-  return toInputObject(createTask);
-};
-
-export const CREATE_CONTAINER_TASK = gql`
-  mutation createContainerTask($name: String!, $comment: String) {
-    createContainerTask(name: $name, comment: $comment) {
-      taskId
-    }
-  }
-`;
-
-export const useCreateContainerTask = () => {
-  const [createContainerTask] = useMutation(CREATE_CONTAINER_TASK);
-  return toGraphQL(createContainerTask);
-};
-
 export const START_TASK = gql`
-  mutation startTask($taskId: String!) {
-    startTask(taskId: $taskId) {
-      status
-      statusText
+  mutation startTask($id: UUID!) {
+    startTask(id: $id) {
       reportId
     }
   }
