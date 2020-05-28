@@ -18,9 +18,26 @@
 
 import {useCallback} from 'react';
 
-import {useMutation} from '@apollo/react-hooks';
+import {useLazyQuery, useMutation} from '@apollo/react-hooks';
+
+import {toFruitfulQuery} from 'web/utils/graphql';
 
 import gql from 'graphql-tag';
+
+export const GET_TARGETS = gql`
+  query Targets($filterString: String) {
+    targets(filterString: $filterString) {
+      nodes {
+        name
+        id
+      }
+    }
+  }
+`;
+
+export const useGetTargets = () => {
+  return toFruitfulQuery(useLazyQuery)(GET_TARGETS);
+};
 
 export const CREATE_TARGET = gql`
   mutation createTarget($input: CreateTargetInput!) {

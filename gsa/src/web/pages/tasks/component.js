@@ -69,6 +69,12 @@ import useCapabilities from 'web/utils/useCapabilities';
 
 import EntityComponent from 'web/entity/component';
 
+import {useGetScanners} from 'web/graphql/scanners';
+
+import {useGetScanConfigs} from 'web/graphql/scanconfigs';
+
+import {useGetTargets} from 'web/graphql/targets';
+
 import {
   useModifyTask,
   useCreateContainerTask,
@@ -89,8 +95,6 @@ import TargetComponent from 'web/pages/targets/component';
 
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
-
-import {useGetScanners, useGetScanConfigs, useGetTargets} from './graphql';
 
 const TaskComponent = props => {
   // GraphQL Queries and Mutations

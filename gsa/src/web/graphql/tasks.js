@@ -27,6 +27,8 @@ import Task from 'gmp/models/task';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import {toFruitfulQuery} from 'web/utils/graphql';
+
 export const CLONE_TASK = gql`
   mutation cloneTask($id: UUID!) {
     cloneTask(id: $id) {
@@ -55,6 +57,98 @@ export const DELETE_TASK = gql`
   mutation deleteTask($id: UUID!) {
     deleteTask(id: $id) {
       ok
+    }
+  }
+`;
+
+export const GET_TASK = gql`
+  query Task($id: UUID!) {
+    task(id: $id) {
+      name
+      id
+      creationTime
+      modificationTime
+      permissions {
+        name
+      }
+      reports {
+        lastReport {
+          id
+          severity
+          timestamp
+          scanStart
+          scanEnd
+        }
+        currentReport {
+          id
+          scanStart
+        }
+        counts {
+          total
+          finished
+        }
+      }
+      results {
+        counts {
+          current
+        }
+      }
+      status
+      target {
+        name
+        id
+      }
+      trend
+      alterable
+      comment
+      owner
+      preferences {
+        name
+        value
+        description
+      }
+      schedule {
+        name
+        id
+        icalendar
+        timezone
+        duration
+      }
+      alerts {
+        name
+        id
+      }
+      scanConfig {
+        id
+        name
+        trash
+        type
+      }
+      scanner {
+        id
+        name
+        type
+      }
+      schedulePeriods
+      hostsOrdering
+      userTags {
+        count
+        tags {
+          name
+          id
+          value
+          comment
+        }
+      }
+      observers {
+        users
+        roles {
+          name
+        }
+        groups {
+          name
+        }
+      }
     }
   }
 `;
@@ -161,6 +255,10 @@ export const STOP_TASK = gql`
     }
   }
 `;
+
+export const useGetTask = () => {
+  return toFruitfulQuery(useQuery)(GET_TASK);
+};
 
 export const useGetTasks = (variables, options) => {
   const {data, ...other} = useQuery(GET_TASKS, {...options, variables});

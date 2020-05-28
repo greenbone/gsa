@@ -83,6 +83,13 @@ import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
 import {
+  useCloneTask,
+  useDeleteTask,
+  useGetTask,
+  useStartTask,
+} from 'web/graphql/tasks';
+
+import {
   selector as notesSelector,
   loadEntities as loadNotes,
 } from 'web/store/entities/notes';
@@ -113,7 +120,6 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
-import {useGetTask, useCloneTask, useStartTask, useDeleteTask} from './graphql';
 
 const goto_task_details = (op, props) => result => {
   const {history} = props;
@@ -338,9 +344,9 @@ Details.propTypes = {
 };
 
 const Page = props => {
-  const {id: taskId} = useParams();
+  const {id} = useParams();
   const query = useGetTask();
-  const {data, refetch, loading} = query({taskId});
+  const {data, refetch, loading} = query({id});
 
   const clone = useCloneTask();
   const cloneTask = vars =>
