@@ -84,6 +84,12 @@ import useCapabilities from 'web/utils/useCapabilities';
 
 import EntityComponent from 'web/entity/component';
 
+import {
+  useModifyTask,
+  useCreateContainerTask,
+  useCreateTask,
+} from 'web/graphql/tasks';
+
 import ImportReportDialog from 'web/pages/reports/importdialog';
 
 import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
@@ -96,20 +102,15 @@ import TargetComponent from 'web/pages/targets/component';
 
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
+
+import {useGetScanners, useGetScanConfigs, useGetTargets} from './graphql';
+
 import {setTimezone} from 'web/store/usersettings/actions';
-import {
-  useModifyTask,
-  useCreateContainerTask,
-  useCreateTask,
-  useGetScanners,
-  useGetScanConfigs,
-  useGetTargets,
-} from './graphql';
 
 const TaskComponent = props => {
-  const modifyTask = useModifyTask();
-  const createTask = useCreateTask();
-  const createContainerTask = useCreateContainerTask();
+  const [modifyTask] = useModifyTask();
+  const [createTask] = useCreateTask();
+  const [createContainerTask] = useCreateContainerTask();
 
   const scannerQuery = useGetScanners();
   const [
@@ -412,7 +413,7 @@ const TaskComponent = props => {
         schedulePeriods: schedule_periods,
         sourceIface: source_iface,
         targetId: target_id,
-        taskId: id,
+        id,
       };
 
       return modifyTask(mutationData)
