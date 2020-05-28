@@ -133,7 +133,7 @@ describe('HostTable tests', () => {
     );
 
     const icons = getAllByTestId('svg-icon');
-    const links = getAllByTestId('hosttable-fakelink');
+    const links = getAllByTestId('hosttable-selectionlink');
     expect(icons[0]).toHaveAttribute('title', 'Remove host from process');
     fireEvent.click(icons[0]);
     expect(handleDeleteHost).toHaveBeenCalledWith(hosts[0].id);

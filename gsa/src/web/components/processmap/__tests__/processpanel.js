@@ -434,8 +434,8 @@ describe('ProcessPanel tests', () => {
       {id: '17', severity: 8.3},
       {id: '18', severity: 8.2},
       {id: '19', severity: 8.1},
-      {id: '20', severity: 8.0},
-      {id: '21', severity: 7.9},
+      {id: '20', severity: 7.9},
+      {id: '21', severity: 8.0},
     ];
 
     const getAllHosts2 = jest.fn().mockResolvedValue({
@@ -491,7 +491,7 @@ describe('ProcessPanel tests', () => {
     // 3. Page
     icons = getAllByTestId('svg-icon');
 
-    expect(detailsLinks[0]).toHaveAttribute('href', '/host/21');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/host/20');
     expect(element).toHaveTextContent('21 - 21 of 21');
 
     expect(icons[3]).toHaveAttribute('title', 'First');
@@ -509,7 +509,7 @@ describe('ProcessPanel tests', () => {
     // 3. Page
     icons = getAllByTestId('svg-icon');
 
-    expect(detailsLinks[0]).toHaveAttribute('href', '/host/21');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/host/20');
     expect(element).toHaveTextContent('21 - 21 of 21');
 
     expect(icons[4]).toHaveAttribute('title', 'Previous');

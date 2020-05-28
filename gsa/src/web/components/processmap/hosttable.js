@@ -51,7 +51,7 @@ const StyledDiv = styled.div`
   padding: 5px;
 `;
 
-const FakeLink = styled.div`
+const SelectionLink = styled.div`
   color: ${Theme.blue};
   &:hover {
     text-decoration: underline;
@@ -64,19 +64,19 @@ const HostRow = ({host, onDeleteHost, onSelectHost}) => {
   return (
     <Row>
       <Data>
-        <FakeLink
+        <SelectionLink
           id={id}
-          data-testid="hosttable-fakelink"
+          data-testid="hosttable-selectionlink"
           onClick={() => onSelectHost(host)}
         >
           {ip}
-        </FakeLink>
+        </SelectionLink>
       </Data>
       <Data>
         {isDefined(hostname) && (
-          <FakeLink id={id} onClick={() => onSelectHost(host)}>
+          <SelectionLink id={id} onClick={() => onSelectHost(host)}>
             {hostname}
-          </FakeLink>
+          </SelectionLink>
         )}
       </Data>
       <Data>
