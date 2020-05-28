@@ -343,7 +343,7 @@ const TaskComponent = props => {
     if (isDefined(data.id)) {
       const {onContainerSaved, onContainerSaveError} = props;
       return modifyTask({
-        taskId: data.id,
+        id: data.id,
         name: data.name,
         comment: data.comment,
       })

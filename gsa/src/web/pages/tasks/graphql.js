@@ -20,7 +20,7 @@ import gql from 'graphql-tag';
 
 import {useMutation, useQuery, useLazyQuery} from '@apollo/react-hooks';
 
-import {toGraphQL, toFruitfulQuery, toInputObject} from 'web/utils/graphql';
+import {toGraphQL, toFruitfulQuery} from 'web/utils/graphql';
 
 export const GET_TASK = gql`
   query Task($taskId: UUID!) {
