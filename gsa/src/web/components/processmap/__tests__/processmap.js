@@ -61,6 +61,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
     const gmp = {
       hosts: {
@@ -81,6 +82,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -162,6 +164,7 @@ describe('ProcessMap tests', () => {
   test('should render ProcessMap without map', () => {
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
     const gmp = {
       hosts: {
@@ -181,6 +184,7 @@ describe('ProcessMap tests', () => {
         mapId={'1'}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -231,6 +235,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
 
     const getEmptyHostsList = jest.fn().mockResolvedValue({
@@ -263,6 +268,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -303,6 +309,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
     const gmp = {
       hosts: {
@@ -326,6 +333,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -384,6 +392,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
 
     const gmp = {
@@ -405,6 +414,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -422,6 +432,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
 
     const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
@@ -450,6 +461,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -479,6 +491,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
 
     const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
@@ -507,6 +520,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -535,6 +549,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
 
     const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
@@ -563,6 +578,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -592,6 +608,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
 
     const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
@@ -620,6 +637,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -642,6 +660,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
 
     const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
@@ -670,6 +689,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -691,6 +711,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
 
     const saveBusinessProcessMaps = jest.fn().mockResolvedValue({
@@ -719,6 +740,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -743,6 +765,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
 
     const saveTag = jest.fn().mockResolvedValue({
@@ -778,6 +801,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );
@@ -807,6 +831,7 @@ describe('ProcessMap tests', () => {
 
     const handleForceUpdate = jest.fn();
     const handleSelectElement = jest.fn();
+    const handleSelectHost = jest.fn();
     const handleToggleConditionalColorization = jest.fn();
     const gmp = {
       hosts: {
@@ -827,6 +852,7 @@ describe('ProcessMap tests', () => {
         processMaps={mockProcessMap}
         forceUpdate={handleForceUpdate}
         onSelectElement={handleSelectElement}
+        onSelectHost={handleSelectHost}
         onToggleConditionalColorization={handleToggleConditionalColorization}
       />,
     );

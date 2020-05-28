@@ -65,6 +65,7 @@ describe('ProcessPanel tests', () => {
     const handleAddHosts = jest.fn();
     const handleDeleteHost = jest.fn();
     const handleEditProcessClick = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const gmp = {
       hosts: {
@@ -83,6 +84,7 @@ describe('ProcessPanel tests', () => {
         isLoadingHosts={false}
         onAddHosts={handleAddHosts}
         onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
         onEditProcessClick={handleEditProcessClick}
       />,
     );
@@ -120,6 +122,7 @@ describe('ProcessPanel tests', () => {
     const handleAddHosts = jest.fn();
     const handleDeleteHost = jest.fn();
     const handleEditProcessClick = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const gmp = {
       hosts: {
@@ -140,6 +143,7 @@ describe('ProcessPanel tests', () => {
         isLoadingHosts={false}
         onAddHosts={handleAddHosts}
         onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
         onEditProcessClick={handleEditProcessClick}
       />,
     );
@@ -169,6 +173,7 @@ describe('ProcessPanel tests', () => {
     const handleAddHosts = jest.fn();
     const handleDeleteHost = jest.fn();
     const handleEditProcessClick = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const gmp = {
       hosts: {
@@ -189,6 +194,7 @@ describe('ProcessPanel tests', () => {
         isLoadingHosts={false}
         onAddHosts={handleAddHosts}
         onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
         onEditProcessClick={handleEditProcessClick}
       />,
     );
@@ -329,6 +335,7 @@ describe('ProcessPanel tests', () => {
     const handleAddHosts = jest.fn();
     const handleDeleteHost = jest.fn();
     const handleEditProcessClick = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const gmp = {
       hosts: {
@@ -349,6 +356,7 @@ describe('ProcessPanel tests', () => {
         isLoadingHosts={false}
         onAddHosts={handleAddHosts}
         onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
         onEditProcessClick={handleEditProcessClick}
       />,
     );
@@ -373,6 +381,7 @@ describe('ProcessPanel tests', () => {
     const handleAddHosts = jest.fn();
     const handleDeleteHost = jest.fn();
     const handleEditProcessClick = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const gmp = {
       hosts: {
@@ -391,6 +400,7 @@ describe('ProcessPanel tests', () => {
         isLoadingHosts={false}
         onAddHosts={handleAddHosts}
         onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
         onEditProcessClick={handleEditProcessClick}
       />,
     );
@@ -413,6 +423,7 @@ describe('ProcessPanel tests', () => {
     const handleAddHosts = jest.fn();
     const handleDeleteHost = jest.fn();
     const handleEditProcessClick = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const hosts2 = [
       {id: '01', severity: 10},
@@ -465,6 +476,7 @@ describe('ProcessPanel tests', () => {
         isLoadingHosts={false}
         onAddHosts={handleAddHosts}
         onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
         onEditProcessClick={handleEditProcessClick}
       />,
     );

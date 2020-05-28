@@ -33,13 +33,19 @@ const hosts = [
 describe('HostTable tests', () => {
   test('should render HostTable', () => {
     const handleDeleteHost = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const {render} = rendererWith({
       capabilities: true,
       router: true,
     });
 
-    const {element} = render(<HostTable onDeleteHost={handleDeleteHost} />);
+    const {element} = render(
+      <HostTable
+        onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
+      />,
+    );
 
     const header = element.querySelectorAll('th');
 
@@ -55,6 +61,7 @@ describe('HostTable tests', () => {
 
   test('should render empty HostTable', () => {
     const handleDeleteHost = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -62,7 +69,11 @@ describe('HostTable tests', () => {
     });
 
     const {element} = render(
-      <HostTable hosts={[]} onDeleteHost={handleDeleteHost} />,
+      <HostTable
+        hosts={[]}
+        onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
+      />,
     );
 
     const header = element.querySelectorAll('th');
@@ -77,6 +88,7 @@ describe('HostTable tests', () => {
 
   test('should render HostTable with hosts', () => {
     const handleDeleteHost = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -84,7 +96,11 @@ describe('HostTable tests', () => {
     });
 
     const {element, getAllByTestId} = render(
-      <HostTable hosts={hosts} onDeleteHost={handleDeleteHost} />,
+      <HostTable
+        hosts={hosts}
+        onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
+      />,
     );
 
     const header = element.querySelectorAll('th');
