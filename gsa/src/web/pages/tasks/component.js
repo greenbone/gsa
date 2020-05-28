@@ -156,28 +156,15 @@ const TaskComponent = props => {
   const [modifyTaskWizardVisible, toggleModifyTaskWizardVisible] = useState(
     false,
   );
+  const [dialogState, setDialogState] = useState({});
+
   const [taskDialogVisible, toggleTaskDialogVisible] = useState(false);
   const [taskWizardVisible, toggleTaskWizardVisible] = useState(false);
   const [target_id, setTargetId] = useState(0);
   const [alert_ids, setAlertIds] = useState([]);
   const [schedule_id, setScheduleId] = useState('0');
-  const [name, setName] = useState(_('Unnamed'));
-  const [comment, setComment] = useState('');
-  const [id, setId] = useState();
-  const [in_assets, setInAssets] = useState();
-  const [auto_delete, setAutoDelete] = useState();
-  const [auto_delete_data, setAutoDeleteData] = useState();
-  const [title, setTitle] = useState('');
   const [scanner_id, setScannerId] = useState('0');
-  const [alterable, setAlterable] = useState();
-  const [apply_overrides, setApplyOverrides] = useState();
   const [hosts_ordering, setHostsOrdering] = useState();
-  const [max_checks, setMaxChecks] = useState();
-  const [max_hosts, setMaxHosts] = useState();
-  const [task, setTask] = useState();
-  const [schedule_periods, setSchedulePeriods] = useState(0);
-  const [min_qod, setMinQod] = useState(70);
-  const [source_iface, setSourceIFace] = useState('');
   const [hosts] = useState();
   const [port_list_id, setPortListId] = useState(defaultPortListId);
   const [alert_id, setAlertId] = useState(defaultAlertId);
@@ -201,6 +188,8 @@ const TaskComponent = props => {
   const [tag_id] = useState();
 
   const [scanners, setScanners] = useState();
+
+  console.log(dialogState);
 
   useEffect(() => {
     if (isDefined(scannerData)) {
@@ -312,18 +301,22 @@ const TaskComponent = props => {
     setTargetId(data?.createTarget?.id);
   };
 
-  const openContainerTaskDialog = task => {
+  const openContainerTaskDialog = inputTask => {
     toggleContainerTaskDialogVisible(true);
-    setTask(task);
-    setName(task ? task.name : _('Unnamed'));
-    setComment(task ? task.comment : '');
-    setId(task ? task.id : undefined);
-    setInAssets(task ? task.inAssets : undefined);
-    setAutoDelete(task ? task.autoDelete : undefined);
-    setAutoDeleteData(task ? task.autoDeleteData : undefined);
-    setTitle(
-      task ? _('Edit Container Task {{name}}', task) : _('New Container Task'),
-    );
+
+    setDialogState(state => ({
+      ...state,
+      task: inputTask,
+      name: inputTask ? inputTask.name : _('Unnamed'),
+      comment: inputTask ? inputTask.comment : '',
+      id: inputTask ? inputTask.id : undefined,
+      in_assets: inputTask ? inputTask.inAssets : undefined,
+      auto_delete: inputTask ? inputTask.autoDelete : undefined,
+      auto_delete_data: inputTask ? inputTask.autoDeleteData : undefined,
+      title: inputTask
+        ? _('Edit Container Task {{name}}', inputTask)
+        : _('New Container Task'),
+    }));
 
     handleInteraction();
   };
@@ -480,28 +473,32 @@ const TaskComponent = props => {
         ? task.schedulePeriods
         : undefined;
 
-      setMinQod(task.minQod);
-      setSourceIFace(task.sourceIface);
-      setSchedulePeriods(schedule_periods);
-      setScannerId(hasId(task.scanner) ? task.scanner.id : undefined);
-      setName(task.name);
-      setScheduleId(schedule_id);
-      setTargetId(hasId(task.target) ? task.target.id : undefined);
+      setDialogState(state => ({
+        ...state,
+        min_qod: task.minQod,
+        source_iface: task.sourceIface,
+        schedule_periods,
+        scanner_id: hasId(task.scanner) ? task.scanner.id : undefined,
+        name: task.name,
+        schedule_id,
+        target_id: hasId(task.target) ? task.target.id : undefined,
+        alert_ids: map(task.alerts, alert => alert.id),
+        alterable: task.alterable,
+        apply_overrides: task.applyOverrides,
+        auto_delete: task.autoDelete,
+        auto_delete_data: task.autoDeleteData,
+        comment: task.comment,
+        config_id: hasId(task.config) ? task.config.id : undefined,
+        hosts_ordering: task.hostsOrdering,
+        id: task.id,
+        in_assets: task.inAssets,
+        max_checks: task.maxChecks,
+        max_hosts: task.maxHosts,
+        title: _('Edit Task {{name}}', task),
+        task,
+      }));
+
       toggleTaskDialogVisible(true);
-      setAlertIds(map(task.alerts, alert => alert.id));
-      setAlterable(task.alterable);
-      setApplyOverrides(task.applyOverrides);
-      setAutoDelete(task.autoDelete);
-      setAutoDeleteData(task.autoDeleteData);
-      setComment(task.comment);
-      setConfigId(hasId(task.config) ? task.config.id : undefined);
-      setHostsOrdering(task.hostsOrdering);
-      setId(task.id);
-      setInAssets(task.inAssets);
-      setMaxChecks(task.maxChecks);
-      setMaxHosts(task.maxHosts);
-      setTitle(_('Edit Task {{name}}', task));
-      setTask(task);
     } else {
       const {
         defaultAlertId,
@@ -512,26 +509,31 @@ const TaskComponent = props => {
       } = props;
 
       const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
+
+      setDialogState(state => ({
+        ...state,
+        alert_ids,
+        config_id: defaultScanConfigId,
+        scanner_id: defaultScannerId,
+        schedule_id: defaultScheduleId,
+        target_id: defaultTargetId,
+        title: _('New Task'),
+        apply_overrides: undefined,
+        auto_delete: undefined,
+        auto_delete_data: undefined,
+        comment: undefined,
+        hosts_ordering: undefined,
+        id: undefined,
+        max_checks: undefined,
+        max_hosts: undefined,
+        min_qod: undefined,
+        name: undefined,
+        schedule_periods: undefined,
+        source_iface: undefined,
+        task: undefined,
+      }));
+
       toggleTaskDialogVisible(true);
-      setAlertIds(alert_ids);
-      setApplyOverrides(undefined);
-      setAutoDelete(undefined);
-      setAutoDeleteData(undefined);
-      setComment(undefined);
-      setConfigId(defaultScanConfigId);
-      setHostsOrdering(undefined);
-      setId(undefined);
-      setMaxChecks(undefined);
-      setMaxHosts(undefined);
-      setMinQod(undefined);
-      setName(undefined);
-      setScannerId(defaultScannerId);
-      setScheduleId(defaultScheduleId);
-      setSchedulePeriods(undefined);
-      setSourceIFace(undefined);
-      setTargetId(defaultTargetId);
-      setTask(undefined);
-      setTitle(_('New Task'));
 
       handleInteraction();
     }
@@ -733,6 +735,24 @@ const TaskComponent = props => {
     onDownloadError,
     onInteraction,
   } = props;
+
+  const {
+    alterable,
+    apply_overrides,
+    max_checks,
+    max_hosts,
+    min_qod,
+    schedule_periods,
+    source_iface,
+    auto_delete,
+    auto_delete_data,
+    comment,
+    id,
+    in_assets,
+    task,
+    title,
+    name,
+  } = dialogState;
 
   return (
     <React.Fragment>
