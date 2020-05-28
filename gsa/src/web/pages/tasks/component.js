@@ -46,10 +46,6 @@ import {
   selector as credentialsSelector,
 } from 'web/store/entities/credentials';
 
-import {selector as scanConfigsSelector} from 'web/store/entities/scanconfigs';
-
-import {selector as scannerSelector} from 'web/store/entities/scanners';
-
 import {
   loadEntities as loadSchedules,
   selector as scheduleSelector,
@@ -59,8 +55,6 @@ import {
   loadEntities as loadTags,
   selector as tagsSelector,
 } from 'web/store/entities/tags';
-
-import {selector as targetSelector} from 'web/store/entities/targets';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
@@ -588,7 +582,7 @@ const TaskComponent = props => {
     } = props;
 
     props.loadCredentials();
-    props.loadScanConfigs();
+    loadScanConfigs();
 
     gmp.wizard.advancedTask().then(response => {
       const settings = response.data;
@@ -1034,11 +1028,8 @@ const mapStateToProps = rootState => {
   const alertSel = alertSelector(rootState);
   const credentialsSel = credentialsSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
-  const scanConfigsSel = scanConfigsSelector(rootState);
-  const scannersSel = scannerSelector(rootState);
   const scheduleSel = scheduleSelector(rootState);
   const tagsSel = tagsSelector(rootState);
-  const targetSel = targetSelector(rootState);
   return {
     timezone: getTimezone(rootState),
     alerts: alertSel.getEntities(ALL_FILTER),
@@ -1055,16 +1046,10 @@ const mapStateToProps = rootState => {
     defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
     isLoadingAlerts: alertSel.isLoadingAllEntities(ALL_FILTER),
-    isLoadingConfigs: scanConfigsSel.isLoadingAllEntities(ALL_FILTER),
-    isLoadingScanners: scannersSel.isLoadingAllEntities(ALL_FILTER),
     isLoadingSchedules: scheduleSel.isLoadingAllEntities(ALL_FILTER),
     isLoadingTags: tagsSel.isLoadingAllEntities(ALL_FILTER),
-    isLoadingTargets: targetSel.isLoadingAllEntities(ALL_FILTER),
-    scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
-    scanners: scannersSel.getEntities(ALL_FILTER),
     schedules: scheduleSel.getEntities(ALL_FILTER),
     tags: tagsSel.getEntities(TAGS_FILTER),
-    targets: targetSel.getEntities(ALL_FILTER),
   };
 };
 
