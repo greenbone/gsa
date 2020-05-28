@@ -226,7 +226,7 @@ export const useLazyGetTasks = () => {
 };
 
 export const CLONE_TASK = gql`
-  mutation cloneTask($id: String!) {
+  mutation cloneTask($id: UUID!) {
     cloneTask(id: $id) {
       id
     }
@@ -239,7 +239,7 @@ export const useCloneTask = () => {
 };
 
 export const DELETE_TASK = gql`
-  mutation deleteTask($id: String!) {
+  mutation deleteTask($id: UUID!) {
     deleteTask(id: $id) {
       ok
     }
@@ -252,7 +252,7 @@ export const useDeleteTask = () => {
 };
 
 export const START_TASK = gql`
-  mutation startTask($id: String!) {
+  mutation startTask($id: UUID!) {
     startTask(id: $id) {
       reportId
     }
