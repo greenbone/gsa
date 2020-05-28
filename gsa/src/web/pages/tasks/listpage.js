@@ -33,8 +33,6 @@ import ManualIcon from 'web/components/icon/manualicon';
 import TaskIcon from 'web/components/icon/taskicon';
 import WizardIcon from 'web/components/icon/wizardicon';
 
-import Loading from 'web/components/loading/loading';
-
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
@@ -52,6 +50,7 @@ import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
 import usePageFilter from 'web/utils/usePageFilter';
+import useSelection from 'web/utils/useSelection';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import NewIconMenu from './icons/newiconmenu';
@@ -132,6 +131,13 @@ const TasksListPage = () => {
     showError,
   } = useDialogNotification();
   const [downloadRef, handleDownload] = useDownload();
+  const {
+    selectionType,
+    selected,
+    changeSelectionType,
+    select,
+    deselect,
+  } = useSelection();
 
   const handleCloneTask = useCallback(
     task => cloneTask(task.id).then(refetch, showError),
@@ -151,9 +157,6 @@ const TasksListPage = () => {
     }
   }, [isLoadingFilter, filter, getTasks]);
 
-  if (!hasValue(tasks) && (isLoadingFilter || isLoading)) {
-    return <Loading />;
-  }
   return (
     <TaskComponent
       onAdvancedTaskWizardSaved={refetch}
@@ -210,17 +213,21 @@ const TasksListPage = () => {
             entities={tasks}
             entitiesCounts={counts}
             entitiesError={error}
+            entitiesSelected={selected}
             filter={filter}
             filterEditDialog={TaskFilterDialog}
             filtersFilter={TASKS_FILTER_FILTER}
             isLoading={isLoading}
             refetch={refetch}
+            selectionType={selectionType}
             sectionIcon={<TaskIcon size="large" />}
             table={TaskListTable}
             title={_('Tasks')}
             toolBarIcons={ToolBarIcons}
             onAdvancedTaskWizardClick={advancedtaskwizard}
             onContainerTaskCreateClick={createcontainer}
+            onEntitySelected={select}
+            onEntityDeselected={deselect}
             onError={showError}
             onFilterChanged={handleFilterChanged}
             onFilterCreated={handleFilterChanged}
@@ -229,6 +236,7 @@ const TasksListPage = () => {
             onInteraction={renewSession}
             onModifyTaskWizardClick={modifytaskwizard}
             onReportImportClick={reportimport}
+            onSelectionTypeChange={changeSelectionType}
             onTaskCloneClick={handleCloneTask}
             onTaskCreateClick={create}
             onTaskDeleteClick={handleDeleteTask}

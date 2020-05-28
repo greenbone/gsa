@@ -280,21 +280,20 @@ describe('TasksListPage tests', () => {
 
     const icons = screen.getAllByTestId('svg-icon');
 
-    // with listpage transformation to graphql and hooks the selection is still
-    // missing and titles aren't shown. Also they aren't clickable
-
-    // expect(icons[33]).toHaveAttribute(
-    //   'title',
-    //   'Move page contents to trashcan',
-    // );
-    expect(icons[33]).not.toHaveAttribute('title');
+    expect(icons[33]).toHaveAttribute(
+      'title',
+      'Move page contents to trashcan',
+    );
 
     fireEvent.click(icons[33]);
+
+    // with listpage transformation to graphql and hooks the bulk actions are
+    // still missing. Thus they aren't clickable
+
     // expect(deleteByFilter).toHaveBeenCalled();
     expect(deleteByFilter).not.toHaveBeenCalled();
 
-    // expect(icons[34]).toHaveAttribute('title', 'Export page contents');
-    expect(icons[34]).not.toHaveAttribute('title');
+    expect(icons[34]).toHaveAttribute('title', 'Export page contents');
     fireEvent.click(icons[34]);
 
     // expect(exportByFilter).toHaveBeenCalled();
