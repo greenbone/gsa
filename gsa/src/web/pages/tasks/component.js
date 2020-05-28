@@ -184,8 +184,6 @@ const TaskComponent = props => {
   // Query and set task dialog subobjects
   const [scanners, setScanners] = useState();
 
-  console.log(dialogState);
-
   useEffect(() => {
     if (isDefined(scannerData)) {
       setScanners(
