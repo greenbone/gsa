@@ -46,15 +46,9 @@ import {
   selector as credentialsSelector,
 } from 'web/store/entities/credentials';
 
-import {
-  loadEntities as loadScanConfigs,
-  selector as scanConfigsSelector,
-} from 'web/store/entities/scanconfigs';
+import {selector as scanConfigsSelector} from 'web/store/entities/scanconfigs';
 
-import {
-  loadEntities as loadScanners,
-  selector as scannerSelector,
-} from 'web/store/entities/scanners';
+import {selector as scannerSelector} from 'web/store/entities/scanners';
 
 import {
   loadEntities as loadSchedules,
@@ -66,10 +60,7 @@ import {
   selector as tagsSelector,
 } from 'web/store/entities/tags';
 
-import {
-  loadEntities as loadTargets,
-  selector as targetSelector,
-} from 'web/store/entities/targets';
+import {selector as targetSelector} from 'web/store/entities/targets';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
@@ -997,11 +988,8 @@ TaskComponent.propTypes = {
   isLoadingTargets: PropTypes.bool,
   loadAlerts: PropTypes.func.isRequired,
   loadCredentials: PropTypes.func.isRequired,
-  loadScanConfigs: PropTypes.func.isRequired,
-  loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
   loadTags: PropTypes.func.isRequired,
-  loadTargets: PropTypes.func.isRequired,
   loadUserSettingsDefaults: PropTypes.func.isRequired,
   scanConfigs: PropTypes.arrayOf(PropTypes.model),
   scanners: PropTypes.arrayOf(PropTypes.model),
@@ -1083,11 +1071,8 @@ const mapStateToProps = rootState => {
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
   loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
-  loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
-  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
   loadTags: () => dispatch(loadTags(gmp)(TAGS_FILTER)),
-  loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
 });
 
