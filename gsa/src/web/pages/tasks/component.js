@@ -107,8 +107,6 @@ import ContainerTaskDialog from './containerdialog';
 
 import {useGetScanners, useGetScanConfigs, useGetTargets} from './graphql';
 
-import {setTimezone} from 'web/store/usersettings/actions';
-
 const TaskComponent = props => {
   // GraphQL Queries and Mutations
   const [modifyTask] = useModifyTask();
@@ -176,9 +174,7 @@ const TaskComponent = props => {
     config_id: defaultScanConfigId,
   });
 
-  // task wizard variables. Not sure what to do with those.
-  const [hosts] = useState();
-  const [start_timezone] = useState();
+  // Not sure where tag_id is set
   const [tag_id] = useState();
 
   // Query and set task dialog subobjects
@@ -563,7 +559,7 @@ const TaskComponent = props => {
 
       setDialogState(state => ({
         ...state,
-        hosts_ordering: settings.client_address,
+        hosts: settings.client_address,
         port_list_id: defaultPortListId,
         alert_id: defaultAlertId,
         config_id: defaultScanConfigId,
@@ -623,8 +619,8 @@ const TaskComponent = props => {
         start_date: now,
         start_minute: now.minutes(),
         start_hour: now.hours(),
+        start_timezone: timezone,
       }));
-      setTimezone(timezone);
     });
     handleInteraction();
   };
@@ -666,8 +662,8 @@ const TaskComponent = props => {
         start_date: now,
         start_minute: now.minutes(),
         start_hour: now.hours(),
+        start_timezone: timezone,
       }));
-      setTimezone(timezone);
     });
     handleInteraction();
   };
@@ -792,6 +788,8 @@ const TaskComponent = props => {
     target_id,
     tasks,
     task_id,
+    start_timezone,
+    hosts,
   } = dialogState;
 
   return (
