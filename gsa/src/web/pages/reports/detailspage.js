@@ -78,6 +78,7 @@ import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
+import usePrevious from 'web/utils/usePrevious';
 
 import TargetComponent from '../targets/component';
 import PageTitle from 'web/components/layout/pagetitle';
@@ -111,6 +112,8 @@ const getFilter = (entity = {}) => {
 };
 
 const ReportDetails = props => {
+  const prevReportId = usePrevious(props.reportId);
+
   const [isUpdating, setIsUpdating] = useState(false);
   const [pageState, setPageState] = useState({
     activeTab: 0,
@@ -259,8 +262,10 @@ const ReportDetails = props => {
       }
     }
 
-    load();
-  }, [pageState.reportFormatId]);
+    if (prevReportId !== props.reportId) {
+      load();
+    }
+  }, [pageState.reportFormatId, prevReportId, props, load]);
 
   const reload = () => {
     // reload data from backend
