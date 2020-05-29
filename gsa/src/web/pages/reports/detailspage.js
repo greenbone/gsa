@@ -244,38 +244,50 @@ const ReportDetails = props => {
       // report is not in the store and is currently loaded
       setIsUpdating(true);
     }
-  }, [props.entity]);
+  }, [props.entity, props.reportFilter]);
+
+  const {
+    loadSettings,
+    loadFilters,
+    loadReportFormats,
+    loadReportComposerDefaults,
+  } = props;
 
   useEffect(() => {
-    props.loadSettings();
-    props.loadFilters();
-    props.loadReportFormats();
-    props.loadReportComposerDefaults();
+    loadSettings();
+    loadFilters();
+    loadReportFormats();
+    loadReportComposerDefaults();
   }, [
-    props.loadSettings,
-    props.loadFilters,
-    props.loadReportFormats,
-    props.loadReportComposerDefaults,
+    loadSettings,
+    loadFilters,
+    loadReportFormats,
+    loadReportComposerDefaults,
   ]); // componentDidMount
 
-  const load = filter => {
-    log.debug('Loading report', {
-      filter,
-    });
-    const {reportFilter} = props;
+  const {reload: reloadFilter, reportFilter: filterFromProps} = props;
 
-    setIsUpdating(!isDefined(reportFilter) || !reportFilter.equals(filter));
-    // show update indicator if filter has changed
-
-    props
-      .reload(filter)
-      .then(() => {
-        setIsUpdating(false);
-      })
-      .catch(() => {
-        setIsUpdating(false);
+  const load = useCallback(
+    filter => {
+      log.debug('Loading report', {
+        filter,
       });
-  };
+
+      setIsUpdating(
+        !isDefined(filterFromProps) || !filterFromProps.equals(filter),
+      );
+      // show update indicator if filter has changed
+
+      reloadFilter(filter)
+        .then(() => {
+          setIsUpdating(false);
+        })
+        .catch(() => {
+          setIsUpdating(false);
+        });
+    },
+    [reloadFilter, filterFromProps],
+  );
 
   useEffect(() => {
     const {reportFormats} = props;
@@ -476,7 +488,7 @@ const ReportDetails = props => {
   const handleFilterCreated = filter => {
     renewSession();
     load(filter);
-    props.loadFilters();
+    loadFilters();
   };
 
   const handleFilterAddLogLevel = () => {
