@@ -60,7 +60,6 @@ import {reportSelector} from 'web/store/entities/report/selectors';
 
 import {
   loadReportComposerDefaults,
-  renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 
@@ -79,6 +78,7 @@ import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 import usePrevious from 'web/utils/usePrevious';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import TargetComponent from '../targets/component';
 import PageTitle from 'web/components/layout/pagetitle';
@@ -226,6 +226,7 @@ const reportReducer = (state, action) => {
 };
 
 const ReportDetails = props => {
+  const [, renewSession] = useUserSessionTimeout();
   const prevReportId = usePrevious(props.reportId);
 
   const [isUpdating, setIsUpdating] = useState(false);
@@ -314,7 +315,7 @@ const ReportDetails = props => {
   };
 
   const handleFilterChange = filter => {
-    handleInteraction();
+    renewSession();
 
     load(filter);
   };
@@ -332,7 +333,7 @@ const ReportDetails = props => {
   };
 
   const handleActivateTab = index => {
-    handleInteraction();
+    renewSession();
 
     dispatchState({type: 'setPageState', newState: {activeTab: index}});
   };
@@ -340,7 +341,7 @@ const ReportDetails = props => {
   const handleAddToAssets = () => {
     const {gmp, showSuccessMessage, entity, reportFilter: filter} = props;
 
-    handleInteraction();
+    renewSession();
 
     gmp.report.addAssets(entity, {filter}).then(() => {
       showSuccessMessage(
@@ -355,7 +356,7 @@ const ReportDetails = props => {
   const handleRemoveFromAssets = () => {
     const {gmp, showSuccessMessage, entity, reportFilter: filter} = props;
 
-    handleInteraction();
+    renewSession();
 
     gmp.report.removeAssets(entity, {filter}).then(() => {
       showSuccessMessage(_('Report content removed from Assets.'));
@@ -364,13 +365,13 @@ const ReportDetails = props => {
   };
 
   const handleFilterEditClick = () => {
-    handleInteraction();
+    renewSession();
 
     dispatchState({type: 'setPageState', newState: {showFilterDialog: true}});
   };
 
   const handleFilterDialogClose = () => {
-    handleInteraction();
+    renewSession();
 
     dispatchState({type: 'setPageState', newState: {showFilterDialog: false}});
   };
@@ -429,7 +430,7 @@ const ReportDetails = props => {
       ? report_format.extension
       : 'unknown'; // unknown should never happen but we should be save here
 
-    handleInteraction();
+    renewSession();
 
     return gmp.report
       .download(entity, {
@@ -463,7 +464,7 @@ const ReportDetails = props => {
 
     const {data, serial} = cert;
 
-    handleInteraction();
+    renewSession();
 
     onDownload({
       filename: 'tls-cert-' + serial + '.pem',
@@ -473,7 +474,7 @@ const ReportDetails = props => {
   };
 
   const handleFilterCreated = filter => {
-    handleInteraction();
+    renewSession();
     load(filter);
     props.loadFilters();
   };
@@ -482,7 +483,7 @@ const ReportDetails = props => {
     const {reportFilter} = props;
     let levels = reportFilter.get('levels', '');
 
-    handleInteraction();
+    renewSession();
 
     if (!levels.includes('g')) {
       levels += 'g';
@@ -495,7 +496,7 @@ const ReportDetails = props => {
   const handleFilterRemoveSeverity = () => {
     const {reportFilter} = props;
 
-    handleInteraction();
+    renewSession();
 
     if (reportFilter.has('severity')) {
       const lfilter = reportFilter.copy();
@@ -507,7 +508,7 @@ const ReportDetails = props => {
   const handleFilterDecreaseMinQoD = () => {
     const {reportFilter} = props;
 
-    handleInteraction();
+    renewSession();
 
     if (reportFilter.has('min_qod')) {
       const lfilter = reportFilter.copy();
@@ -517,16 +518,9 @@ const ReportDetails = props => {
   };
 
   const handleSortChange = (name, sortField) => {
-    handleInteraction();
+    renewSession();
 
     dispatchState({type: 'sortChange', name, sortField});
-  };
-
-  const handleInteraction = () => {
-    const {onInteraction} = props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
   };
 
   const loadTarget = () => {
@@ -545,7 +539,6 @@ const ReportDetails = props => {
     reportError,
     reportFormats,
     reportId,
-    onInteraction,
     reportComposerDefaults,
     showError,
     showErrorMessage,
@@ -579,7 +572,7 @@ const ReportDetails = props => {
   return (
     <React.Fragment>
       <PageTitle title={_('Report Details')} />
-      <TargetComponent onError={handleError} onInteraction={onInteraction}>
+      <TargetComponent onError={handleError} onInteraction={renewSession}>
         {({edit}) => (
           <Page
             activeTab={activeTab}
@@ -615,7 +608,7 @@ const ReportDetails = props => {
             onFilterRemoveSeverityClick={handleFilterRemoveSeverity}
             onFilterResetClick={handleFilterResetClick}
             onFilterRemoveClick={handleFilterRemoveClick}
-            onInteraction={onInteraction}
+            onInteraction={renewSession}
             onRemoveFromAssetsClick={handleRemoveFromAssets}
             onReportDownloadClick={handleOpenDownloadReportDialog}
             onSortChange={handleSortChange}
@@ -688,7 +681,6 @@ ReportDetails.propTypes = {
   target: PropTypes.model,
   username: PropTypes.string,
   onDownload: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const reloadInterval = report =>
@@ -760,7 +752,6 @@ ReportDetailsWrapper.propTypes = {
 const getReportPageName = id => `report-${id}`;
 
 const mapDispatchToProps = (dispatch, {gmp, match}) => ({
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
   loadTarget: targetId => gmp.target.get({id: targetId}),
