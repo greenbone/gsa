@@ -21,14 +21,15 @@ export const toGraphQL = query => data => {
   return query({variables: data});
 };
 
-export const toInputObject = query => data => {
-  return query({variables: {input: data}});
-};
-
 export const toFruitfulQuery = query => gql => vars => {
   return query(gql, {variables: vars});
 };
 
 export const queryWithRefetch = query => refetch => vars => {
   return query(vars).then(refetch());
+};
+
+export const goto_entity_details = (entityName, op, props) => result => {
+  const {history} = props;
+  return history.push('/' + entityName + '/' + result.data[op].id);
 };

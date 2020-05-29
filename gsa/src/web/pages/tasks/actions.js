@@ -65,17 +65,9 @@ const Actions = ({
 
       <ResumeIcon task={entity} onClick={onTaskResumeClick} />
 
-      <TrashIcon
-        entity={entity}
-        name="task"
-        onClick={() => onTaskDeleteClick({taskId: entity.id})}
-      />
+      <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
       <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-      <CloneIcon
-        entity={entity}
-        name="task"
-        onClick={() => onTaskCloneClick({taskId: entity.id})}
-      />
+      <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
       <ExportIcon
         value={entity}
         title={_('Export Task')}

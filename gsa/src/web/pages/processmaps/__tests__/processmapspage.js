@@ -23,14 +23,16 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
 
+import {hostsFilter} from 'web/components/processmap/processmaploader';
+
+import {getMockProcessMap} from 'web/components/processmap/__mocks__/mockprocessmap';
+
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {getBusinessProcessMapsAction} from 'web/store/businessprocessmaps/actions';
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
-
-import {hostsFilter} from 'web/components/processmap/processmaploader';
-
-import {getMockProcessMap} from 'web/components/processmap/__mocks__/mockprocessmap';
 
 import ProcessMapsPage from '../processmapspage';
 
@@ -72,7 +74,11 @@ const getTag = jest.fn().mockResolvedValue({
   data: '',
 });
 
-const renewSession = jest.fn().mockResolvedValue({data: {}});
+const renewDate = '2019-10-10T12:00:00Z';
+
+const [queryMock, resultFunc] = createRenewSessionQueryMock(renewDate);
+
+const renewSession = jest.fn().mockResolvedValue({data: renewDate});
 
 const getBusinessProcessMaps = jest.fn().mockResolvedValue({
   foo: 'bar',
@@ -94,6 +100,7 @@ describe('ProcessMapsPage tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getByTestId, getAllByTestId} = render(<ProcessMapsPage />);
@@ -172,6 +179,7 @@ describe('ProcessMapsPage tests', () => {
     const {render, store} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getByTestId, getAllByTestId} = render(<ProcessMapsPage />);
@@ -248,6 +256,9 @@ describe('ProcessMapsPage tests', () => {
     expect(element).not.toHaveTextContent(
       'No hosts associated with this process.',
     );
+
+    expect(gmp.user.renewSession).toHaveBeenCalled();
+    expect(resultFunc).toHaveBeenCalled();
   });
 
   test('should render ProcessMapsPage with hosts', () => {
@@ -271,6 +282,7 @@ describe('ProcessMapsPage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(<ProcessMapsPage />);
@@ -381,6 +393,7 @@ describe('ProcessMapsPage tests', () => {
     const {render, store} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {getByTestId, getAllByTestId} = render(<ProcessMapsPage />);
@@ -433,6 +446,7 @@ describe('ProcessMapsPage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {getAllByTestId} = render(<ProcessMapsPage />);

@@ -17,8 +17,6 @@
  */
 import React from 'react';
 
-import {useLocation} from 'react-router-dom';
-
 import {connect} from 'react-redux';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -131,28 +129,21 @@ const withEntitiesContainer = (
     connect(mapStateToProps, mapDispatchToProps),
   )(EntitiesContainerWrapper);
 
-  return props => {
-    const location = useLocation();
-    return (
-      <SubscriptionProvider>
-        {({notify}) => (
-          <FilterProvider
-            fallbackFilter={fallbackFilter}
-            gmpname={gmpname}
-            locationQuery={location.query}
-          >
-            {({filter}) => (
-              <EntitiesContainerWrapper
-                {...props}
-                filter={filter}
-                notify={notify}
-              />
-            )}
-          </FilterProvider>
-        )}
-      </SubscriptionProvider>
-    );
-  };
+  return props => (
+    <SubscriptionProvider>
+      {({notify}) => (
+        <FilterProvider fallbackFilter={fallbackFilter} gmpname={gmpname}>
+          {({filter}) => (
+            <EntitiesContainerWrapper
+              {...props}
+              filter={filter}
+              notify={notify}
+            />
+          )}
+        </FilterProvider>
+      )}
+    </SubscriptionProvider>
+  );
 };
 
 export default withEntitiesContainer;

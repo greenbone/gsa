@@ -20,7 +20,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {hasValue} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import withUserName from 'web/utils/withUserName';
@@ -110,11 +110,11 @@ const Row = ({
     if (hasValue(observers.users)) {
       obs.user = _('Users {{user}}', {user: observers.users.join(', ')});
     }
-    if (observers.roles.length > 0) {
+    if (isDefined(observers?.roles?.length) && observers.roles.length > 0) {
       const role = observers.roles.map(r => r.name);
       obs.role = _('Roles {{role}}', {role: role.join(', ')});
     }
-    if (observers.groups.length > 0) {
+    if (isDefined(observers?.roles?.length) && observers.roles.length > 0) {
       const group = observers.groups.map(g => g.name);
       obs.group = _('Groups {{group}}', {group: group.join(', ')});
     }

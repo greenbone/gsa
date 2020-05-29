@@ -17,8 +17,6 @@
  */
 import {parseInt} from 'gmp/parser';
 
-import {BROWSER_LANGUAGE} from 'gmp/locale/languages';
-
 import moment from 'gmp/models/date';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -28,7 +26,7 @@ class Login {
     const {data = {}, meta = {}} = elem;
     this.clientAddress = data.client_address;
     this.guest = data.guest;
-    this.locale = meta.i18n === BROWSER_LANGUAGE ? undefined : meta.i18n;
+    this.locale = meta.i18n;
     this.role = data.role;
     this.severity = data.severity;
     this.timezone = meta.timezone;

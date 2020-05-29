@@ -21,9 +21,18 @@ import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {deepFreeze} from 'web/utils/testing';
+import {
+  CLONE_TASK,
+  CREATE_CONTAINER_TASK,
+  CREATE_TASK,
+  DELETE_TASK,
+  GET_TASKS,
+  MODIFY_TASK,
+  START_TASK,
+  STOP_TASK,
+} from 'web/graphql/tasks';
 
-import {GET_TASKS} from '../tasks';
+import {deepFreeze} from 'web/utils/testing';
 
 const target = deepFreeze({
   id: '159',
@@ -163,7 +172,7 @@ const mockTasks = {
   },
 };
 
-export const createGetTaskQueryMock = ({filterString} = {}) => {
+export const createGetTasksQueryMock = ({filterString} = {}) => {
   const queryResult = {
     data: {
       tasks: mockTasks,
@@ -181,6 +190,191 @@ export const createGetTaskQueryMock = ({filterString} = {}) => {
   const queryMock = {
     request: {
       query: GET_TASKS,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createDeleteTaskQueryMock = taskId => {
+  const queryResult = {
+    data: {
+      deleteTask: {
+        ok: true,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    id: taskId,
+  };
+
+  const queryMock = {
+    request: {
+      query: DELETE_TASK,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createCloneTaskQueryMock = (
+  taskId,
+  newTaskId = `${taskId}-cloned`,
+) => {
+  const queryResult = {
+    data: {
+      cloneTask: {
+        id: newTaskId,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    id: taskId,
+  };
+
+  const queryMock = {
+    request: {
+      query: CLONE_TASK,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createStartTaskQueryMock = (taskId, reportId) => {
+  const queryResult = {
+    data: {
+      startTask: {
+        reportId,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    id: taskId,
+  };
+
+  const queryMock = {
+    request: {
+      query: START_TASK,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createCreateContainerTaskQueryMock = (name, comment, taskId) => {
+  const queryResult = {
+    data: {
+      createContainerTask: {
+        id: taskId,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    input: {
+      name,
+      comment,
+    },
+  };
+
+  const queryMock = {
+    request: {
+      query: CREATE_CONTAINER_TASK,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createCreateTaskQueryMock = (data, taskId) => {
+  const queryResult = {
+    data: {
+      createTask: {
+        id: taskId,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    input: {
+      ...data,
+    },
+  };
+
+  const queryMock = {
+    request: {
+      query: CREATE_TASK,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createModifyTaskQueryMock = (data, taskId) => {
+  const queryResult = {
+    data: {
+      modifyTask: {
+        ok: true,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    input: {
+      ...data,
+    },
+  };
+
+  const queryMock = {
+    request: {
+      query: MODIFY_TASK,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createStopTaskQueryMock = taskId => {
+  const queryResult = {
+    data: {
+      stopTask: {
+        ok: true,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    id: taskId,
+  };
+
+  const queryMock = {
+    request: {
+      query: STOP_TASK,
       variables,
     },
     newData: resultFunc,

@@ -47,16 +47,6 @@ import {
 } from 'web/store/entities/credentials';
 
 import {
-  loadEntities as loadScanConfigs,
-  selector as scanConfigsSelector,
-} from 'web/store/entities/scanconfigs';
-
-import {
-  loadEntities as loadScanners,
-  selector as scannerSelector,
-} from 'web/store/entities/scanners';
-
-import {
   loadEntities as loadSchedules,
   selector as scheduleSelector,
 } from 'web/store/entities/schedules';
@@ -65,11 +55,6 @@ import {
   loadEntities as loadTags,
   selector as tagsSelector,
 } from 'web/store/entities/tags';
-
-import {
-  loadEntities as loadTargets,
-  selector as targetSelector,
-} from 'web/store/entities/targets';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
@@ -84,6 +69,14 @@ import useCapabilities from 'web/utils/useCapabilities';
 
 import EntityComponent from 'web/entity/component';
 
+import {
+  useModifyTask,
+  useCreateContainerTask,
+  useCreateTask,
+  useStartTask,
+  useStopTask,
+} from 'web/graphql/tasks';
+
 import ImportReportDialog from 'web/pages/reports/importdialog';
 
 import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
@@ -96,20 +89,16 @@ import TargetComponent from 'web/pages/targets/component';
 
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
-import {setTimezone} from 'web/store/usersettings/actions';
-import {
-  useModifyTask,
-  useCreateContainerTask,
-  useCreateTask,
-  useGetScanners,
-  useGetScanConfigs,
-  useGetTargets,
-} from './graphql';
+
+import {useGetScanners, useGetScanConfigs, useGetTargets} from './graphql';
 
 const TaskComponent = props => {
-  const modifyTask = useModifyTask();
-  const createTask = useCreateTask();
-  const createContainerTask = useCreateContainerTask();
+  // GraphQL Queries and Mutations
+  const [modifyTask] = useModifyTask();
+  const [createTask] = useCreateTask();
+  const [createContainerTask] = useCreateContainerTask();
+  const [startTask] = useStartTask();
+  const [stopTask] = useStopTask();
 
   const scannerQuery = useGetScanners();
   const [
@@ -118,7 +107,6 @@ const TaskComponent = props => {
   ] = scannerQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
-
   const scanConfigQuery = useGetScanConfigs();
   const [
     loadScanConfigs,
@@ -126,17 +114,16 @@ const TaskComponent = props => {
   ] = scanConfigQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
-
   const targetQuery = useGetTargets();
   const [
     loadTargets,
-    {data: targetData, loading: isLoadingTargets},
+    {data: targetData, loading: isLoadingTargets, refetch: refetchTargets},
   ] = targetQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
-
   const capabilities = useCapabilities();
 
+  // default values
   const {
     defaultPortListId,
     defaultAlertId,
@@ -145,6 +132,8 @@ const TaskComponent = props => {
     defaultSmbCredential,
     defaultEsxiCredential,
   } = props;
+
+  // Dialog and wizard visibility flags
   const [advancedTaskWizardVisible, toggleAdvancedTaskWizardVisible] = useState(
     false,
   );
@@ -157,48 +146,23 @@ const TaskComponent = props => {
   );
   const [taskDialogVisible, toggleTaskDialogVisible] = useState(false);
   const [taskWizardVisible, toggleTaskWizardVisible] = useState(false);
-  const [target_id, setTargetId] = useState(0);
-  const [alert_ids, setAlertIds] = useState([]);
-  const [schedule_id, setScheduleId] = useState('0');
-  const [name, setName] = useState(_('Unnamed'));
-  const [comment, setComment] = useState('');
-  const [id, setId] = useState();
-  const [in_assets, setInAssets] = useState();
-  const [auto_delete, setAutoDelete] = useState();
-  const [auto_delete_data, setAutoDeleteData] = useState();
-  const [title, setTitle] = useState('');
-  const [scanner_id, setScannerId] = useState('0');
-  const [alterable, setAlterable] = useState();
-  const [apply_overrides, setApplyOverrides] = useState();
-  const [hosts_ordering, setHostsOrdering] = useState();
-  const [max_checks, setMaxChecks] = useState();
-  const [max_hosts, setMaxHosts] = useState();
-  const [task, setTask] = useState();
-  const [schedule_periods, setSchedulePeriods] = useState(0);
-  const [min_qod, setMinQod] = useState(70);
-  const [source_iface, setSourceIFace] = useState('');
-  const [hosts] = useState();
-  const [port_list_id, setPortListId] = useState(defaultPortListId);
-  const [alert_id, setAlertId] = useState(defaultAlertId);
-  const [config_id, setConfigId] = useState(defaultScanConfigId);
-  const [ssh_credential, setSshCredential] = useState(defaultSshCredential);
-  const [smb_credential, setSmbCredential] = useState(defaultSmbCredential);
-  const [esxi_credential, setEsxiCredential] = useState(defaultEsxiCredential);
-  const [task_name, setTaskName] = useState(_('New Quick Task'));
-  const [target_hosts, setTargetHosts] = useState();
-
-  const [start_date, setStartDate] = useState();
-  const [start_minute, setStartMinute] = useState();
-  const [start_hour, setStartHour] = useState();
-  const [start_timezone] = useState();
-  const [tasks, setTasks] = useState();
-  const [reschedule, setReschedule] = useState(NO_VALUE);
-  const [task_id, setTaskId] = useState();
   const [reportImportDialogVisible, toggleReportImportDialogVisible] = useState(
     false,
   );
+
+  // Dialog and wizard dialog state
+  const [dialogState, setDialogState] = useState({
+    target_id: UNSET_VALUE,
+    alert_ids: [],
+    schedule_id: UNSET_VALUE,
+    scanner_id: UNSET_VALUE,
+    config_id: defaultScanConfigId,
+  });
+
+  // Not sure where tag_id is set
   const [tag_id] = useState();
 
+  // Query and set task dialog subobjects
   const [scanners, setScanners] = useState();
 
   useEffect(() => {
@@ -246,15 +210,24 @@ const TaskComponent = props => {
   };
 
   const handleTargetChange = targetId => {
-    setTargetId(targetId);
+    setDialogState(state => ({
+      ...state,
+      target_id: targetId,
+    }));
   };
 
   const handleAlertsChange = alertIds => {
-    setAlertIds(alertIds);
+    setDialogState(state => ({
+      ...state,
+      alert_ids: alertIds,
+    }));
   };
 
   const handleScheduleChange = scheduleId => {
-    setScheduleId(scheduleId);
+    setDialogState(state => ({
+      ...state,
+      schedule_id: scheduleId,
+    }));
   };
 
   const handleTaskStart = task => {
@@ -262,7 +235,7 @@ const TaskComponent = props => {
 
     handleInteraction();
 
-    return cmd.start(task).then(onStarted, onStartError);
+    return startTask(task.id).then(onStarted, onStartError);
   };
 
   const handleTaskStop = task => {
@@ -270,7 +243,7 @@ const TaskComponent = props => {
 
     handleInteraction();
 
-    return cmd.stop(task).then(onStopped, onStopError);
+    return stopTask(task.id).then(onStopped, onStopError);
   };
 
   const handleTaskResume = task => {
@@ -294,7 +267,10 @@ const TaskComponent = props => {
     const {data} = resp;
 
     props.loadAlerts();
-    setAlertIds(({alert_ids}) => ({alert_ids: [data.id, ...alert_ids]}));
+    setDialogState(state => ({
+      ...state,
+      alert_ids: ({alert_ids}) => ({alert_ids: [data.id, ...alert_ids]}),
+    }));
   };
 
   const handleScheduleCreated = resp => {
@@ -302,28 +278,37 @@ const TaskComponent = props => {
 
     props.loadSchedules();
 
-    setScheduleId(data.id);
+    setDialogState(state => ({
+      ...state,
+      schedule_id: data.id,
+    }));
   };
 
   const handleTargetCreated = resp => {
     const {data} = resp;
-
-    props.loadTargets();
-    setTargetId(data.id);
+    refetchTargets();
+    setDialogState(state => ({
+      ...state,
+      target_id: data?.createTarget?.id,
+    }));
   };
 
-  const openContainerTaskDialog = task => {
+  const openContainerTaskDialog = inputTask => {
     toggleContainerTaskDialogVisible(true);
-    setTask(task);
-    setName(task ? task.name : _('Unnamed'));
-    setComment(task ? task.comment : '');
-    setId(task ? task.id : undefined);
-    setInAssets(task ? task.inAssets : undefined);
-    setAutoDelete(task ? task.autoDelete : undefined);
-    setAutoDeleteData(task ? task.autoDeleteData : undefined);
-    setTitle(
-      task ? _('Edit Container Task {{name}}', task) : _('New Container Task'),
-    );
+
+    setDialogState(state => ({
+      ...state,
+      task: inputTask,
+      name: inputTask ? inputTask.name : _('Unnamed'),
+      comment: inputTask ? inputTask.comment : '',
+      id: inputTask ? inputTask.id : undefined,
+      in_assets: inputTask ? inputTask.inAssets : undefined,
+      auto_delete: inputTask ? inputTask.autoDelete : undefined,
+      auto_delete_data: inputTask ? inputTask.autoDeleteData : undefined,
+      title: inputTask
+        ? _('Edit Container Task {{name}}', inputTask)
+        : _('New Container Task'),
+    }));
 
     handleInteraction();
   };
@@ -343,7 +328,7 @@ const TaskComponent = props => {
     if (isDefined(data.id)) {
       const {onContainerSaved, onContainerSaveError} = props;
       return modifyTask({
-        taskId: data.id,
+        id: data.id,
         name: data.name,
         comment: data.comment,
       })
@@ -387,9 +372,13 @@ const TaskComponent = props => {
       // save edit part
       if (isDefined(task) && !task.isChangeable()) {
         // arguments need to be undefined if the task is not changeable
-        setTargetId(undefined);
-        setScannerId(undefined);
-        setConfigId(undefined);
+
+        setDialogState(state => ({
+          ...state,
+          target_id: undefined,
+          scanner_id: undefined,
+          config_id: undefined,
+        }));
       }
       const {onSaved, onSaveError} = props;
 
@@ -413,7 +402,7 @@ const TaskComponent = props => {
         schedulePeriods: schedule_periods,
         sourceIface: source_iface,
         targetId: target_id,
-        taskId: id,
+        id,
       };
 
       return modifyTask(mutationData)
@@ -480,28 +469,32 @@ const TaskComponent = props => {
         ? task.schedulePeriods
         : undefined;
 
-      setMinQod(task.minQod);
-      setSourceIFace(task.sourceIface);
-      setSchedulePeriods(schedule_periods);
-      setScannerId(hasId(task.scanner) ? task.scanner.id : undefined);
-      setName(task.name);
-      setScheduleId(schedule_id);
-      setTargetId(hasId(task.target) ? task.target.id : undefined);
+      setDialogState(state => ({
+        ...state,
+        min_qod: task.minQod,
+        source_iface: task.sourceIface,
+        schedule_periods,
+        scanner_id: hasId(task.scanner) ? task.scanner.id : undefined,
+        name: task.name,
+        schedule_id,
+        target_id: hasId(task.target) ? task.target.id : undefined,
+        alert_ids: map(task.alerts, alert => alert.id),
+        alterable: task.alterable,
+        apply_overrides: task.applyOverrides,
+        auto_delete: task.autoDelete,
+        auto_delete_data: task.autoDeleteData,
+        comment: task.comment,
+        config_id: hasId(task.config) ? task.config.id : undefined,
+        hosts_ordering: task.hostsOrdering,
+        id: task.id,
+        in_assets: task.inAssets,
+        max_checks: task.maxChecks,
+        max_hosts: task.maxHosts,
+        title: _('Edit Task {{name}}', task),
+        task,
+      }));
+
       toggleTaskDialogVisible(true);
-      setAlertIds(map(task.alerts, alert => alert.id));
-      setAlterable(task.alterable);
-      setApplyOverrides(task.applyOverrides);
-      setAutoDelete(task.autoDelete);
-      setAutoDeleteData(task.autoDeleteData);
-      setComment(task.comment);
-      setConfigId(hasId(task.config) ? task.config.id : undefined);
-      setHostsOrdering(task.hostsOrdering);
-      setId(task.id);
-      setInAssets(task.inAssets);
-      setMaxChecks(task.maxChecks);
-      setMaxHosts(task.maxHosts);
-      setTitle(_('Edit Task {{name}}', task));
-      setTask(task);
     } else {
       const {
         defaultAlertId,
@@ -512,54 +505,54 @@ const TaskComponent = props => {
       } = props;
 
       const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
+
+      setDialogState(state => ({
+        ...state,
+        alert_ids,
+        config_id: defaultScanConfigId,
+        scanner_id: defaultScannerId,
+        schedule_id: defaultScheduleId,
+        target_id: defaultTargetId,
+        title: _('New Task'),
+        apply_overrides: undefined,
+        auto_delete: undefined,
+        auto_delete_data: undefined,
+        comment: undefined,
+        hosts_ordering: undefined,
+        id: undefined,
+        max_checks: undefined,
+        max_hosts: undefined,
+        min_qod: undefined,
+        name: undefined,
+        schedule_periods: undefined,
+        source_iface: undefined,
+        task: undefined,
+      }));
+
       toggleTaskDialogVisible(true);
-      setAlertIds(alert_ids);
-      setApplyOverrides(undefined);
-      setAutoDelete(undefined);
-      setAutoDeleteData(undefined);
-      setComment(undefined);
-      setConfigId(defaultScanConfigId);
-      setHostsOrdering(undefined);
-      setId(undefined);
-      setMaxChecks(undefined);
-      setMaxHosts(undefined);
-      setMinQod(undefined);
-      setName(undefined);
-      setScannerId(defaultScannerId);
-      setScheduleId(defaultScheduleId);
-      setSchedulePeriods(undefined);
-      setSourceIFace(undefined);
-      setTargetId(defaultTargetId);
-      setTask(undefined);
-      setTitle(_('New Task'));
 
       handleInteraction();
     }
   };
 
   const openTaskWizard = () => {
-    const {
-      gmp,
-      defaultAlertId,
-      defaultEsxiCredential,
-      defaultPortListId,
-      defaultScanConfigId,
-      defaultScannerId,
-      defaultSshCredential,
-      defaultSmbCredential,
-    } = props;
+    const {gmp, defaultScanConfigId, defaultScannerId} = props;
 
     gmp.wizard.task().then(response => {
       const settings = response.data;
       toggleTaskWizardVisible(true);
-      setHostsOrdering(settings.client_address);
-      setPortListId(defaultPortListId);
-      setAlertId(defaultAlertId);
-      setConfigId(defaultScanConfigId);
-      setSshCredential(defaultSshCredential);
-      setSmbCredential(defaultSmbCredential);
-      setEsxiCredential(defaultEsxiCredential);
-      setScannerId(defaultScannerId);
+
+      setDialogState(state => ({
+        ...state,
+        hosts: settings.client_address,
+        port_list_id: defaultPortListId,
+        alert_id: defaultAlertId,
+        config_id: defaultScanConfigId,
+        ssh_credential: defaultSshCredential,
+        smb_credential: defaultSmbCredential,
+        esxi_credential: defaultEsxiCredential,
+        scanner_id: defaultScannerId,
+      }));
     });
     handleInteraction();
   };
@@ -584,17 +577,12 @@ const TaskComponent = props => {
     const {
       gmp,
       timezone,
-      defaultAlertId,
-      defaultEsxiCredential,
-      defaultPortListId,
       defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
       defaultScannerId,
-      defaultSshCredential,
-      defaultSmbCredential,
     } = props;
 
     props.loadCredentials();
-    props.loadScanConfigs();
+    loadScanConfigs();
 
     gmp.wizard.advancedTask().then(response => {
       const settings = response.data;
@@ -602,19 +590,22 @@ const TaskComponent = props => {
       const now = date().tz(timezone);
 
       toggleAdvancedTaskWizardVisible(true);
-      setTaskName(_('New Quick Task'));
-      setTargetHosts(settings.client_address);
-      setPortListId(defaultPortListId);
-      setAlertId(defaultAlertId);
-      setConfigId(defaultScanConfigId);
-      setSshCredential(defaultSshCredential);
-      setSmbCredential(defaultSmbCredential);
-      setEsxiCredential(defaultEsxiCredential);
-      setScannerId(defaultScannerId);
-      setStartDate(now);
-      setStartMinute(now.minutes());
-      setStartHour(now.hours());
-      setTimezone(timezone);
+      setDialogState(state => ({
+        ...state,
+        alert_id: defaultAlertId,
+        task_name: _('New Quick Task'),
+        target_hosts: settings.client_address,
+        port_list_id: defaultPortListId,
+        config_id: defaultScanConfigId,
+        ssh_credential: defaultSshCredential,
+        smb_credential: defaultSmbCredential,
+        esxi_credential: defaultEsxiCredential,
+        scanner_id: defaultScannerId,
+        start_date: now,
+        start_minute: now.minutes(),
+        start_hour: now.hours(),
+        start_timezone: timezone,
+      }));
     });
     handleInteraction();
   };
@@ -647,13 +638,17 @@ const TaskComponent = props => {
       const now = date().tz(timezone);
 
       toggleModifyTaskWizardVisible(true);
-      setTasks(settings.tasks);
-      setReschedule(NO_VALUE);
-      setTaskId(selectSaveId(settings.tasks));
-      setStartDate(now);
-      setStartMinute(now.minutes());
-      setStartHour(now.hours());
-      setTimezone(timezone);
+
+      setDialogState(state => ({
+        ...state,
+        tasks: settings.tasks,
+        reschedule: NO_VALUE,
+        task_id: selectSaveId(settings.tasks),
+        start_date: now,
+        start_minute: now.minutes(),
+        start_hour: now.hours(),
+        start_timezone: timezone,
+      }));
     });
     handleInteraction();
   };
@@ -680,8 +675,11 @@ const TaskComponent = props => {
 
   const openReportImportDialog = task => {
     toggleReportImportDialogVisible(true);
-    setTaskId(task.id);
-    setTasks([task]);
+    setDialogState(state => ({
+      ...state,
+      tasks: [task],
+      task_id: task.id,
+    }));
 
     handleInteraction();
   };
@@ -706,12 +704,18 @@ const TaskComponent = props => {
       .then(() => closeReportImportDialog());
   };
 
-  const handleScanConfigChange = config_id => {
-    setConfigId(config_id);
+  const handleScanConfigChange = configId => {
+    setDialogState(state => ({
+      ...state,
+      config_id: configId,
+    }));
   };
 
-  const handleScannerChange = scanner_id => {
-    setScannerId(scanner_id);
+  const handleScannerChange = scannerId => {
+    setDialogState(state => ({
+      ...state,
+      scanner_id: scannerId,
+    }));
   };
 
   const {
@@ -733,6 +737,45 @@ const TaskComponent = props => {
     onDownloadError,
     onInteraction,
   } = props;
+
+  const {
+    alterable,
+    apply_overrides,
+    max_checks,
+    max_hosts,
+    min_qod,
+    schedule_periods,
+    source_iface,
+    auto_delete,
+    auto_delete_data,
+    comment,
+    id,
+    in_assets,
+    task,
+    title,
+    name,
+    hosts_ordering,
+    port_list_id,
+    alert_id,
+    ssh_credential,
+    smb_credential,
+    esxi_credential,
+    task_name,
+    target_hosts,
+    start_date,
+    start_minute,
+    start_hour,
+    reschedule,
+    alert_ids,
+    config_id,
+    scanner_id,
+    schedule_id,
+    target_id,
+    tasks,
+    task_id,
+    start_timezone,
+    hosts,
+  } = dialogState;
 
   return (
     <React.Fragment>
@@ -939,11 +982,8 @@ TaskComponent.propTypes = {
   isLoadingTargets: PropTypes.bool,
   loadAlerts: PropTypes.func.isRequired,
   loadCredentials: PropTypes.func.isRequired,
-  loadScanConfigs: PropTypes.func.isRequired,
-  loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
   loadTags: PropTypes.func.isRequired,
-  loadTargets: PropTypes.func.isRequired,
   loadUserSettingsDefaults: PropTypes.func.isRequired,
   scanConfigs: PropTypes.arrayOf(PropTypes.model),
   scanners: PropTypes.arrayOf(PropTypes.model),
@@ -988,11 +1028,8 @@ const mapStateToProps = rootState => {
   const alertSel = alertSelector(rootState);
   const credentialsSel = credentialsSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
-  const scanConfigsSel = scanConfigsSelector(rootState);
-  const scannersSel = scannerSelector(rootState);
   const scheduleSel = scheduleSelector(rootState);
   const tagsSel = tagsSelector(rootState);
-  const targetSel = targetSelector(rootState);
   return {
     timezone: getTimezone(rootState),
     alerts: alertSel.getEntities(ALL_FILTER),
@@ -1009,27 +1046,18 @@ const mapStateToProps = rootState => {
     defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
     defaultTargetId: userDefaults.getValueByName('defaulttarget'),
     isLoadingAlerts: alertSel.isLoadingAllEntities(ALL_FILTER),
-    isLoadingConfigs: scanConfigsSel.isLoadingAllEntities(ALL_FILTER),
-    isLoadingScanners: scannersSel.isLoadingAllEntities(ALL_FILTER),
     isLoadingSchedules: scheduleSel.isLoadingAllEntities(ALL_FILTER),
     isLoadingTags: tagsSel.isLoadingAllEntities(ALL_FILTER),
-    isLoadingTargets: targetSel.isLoadingAllEntities(ALL_FILTER),
-    scanConfigs: scanConfigsSel.getEntities(ALL_FILTER),
-    scanners: scannersSel.getEntities(ALL_FILTER),
     schedules: scheduleSel.getEntities(ALL_FILTER),
     tags: tagsSel.getEntities(TAGS_FILTER),
-    targets: targetSel.getEntities(ALL_FILTER),
   };
 };
 
 const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
   loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
-  loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
-  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
   loadTags: () => dispatch(loadTags(gmp)(TAGS_FILTER)),
-  loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
 });
 
