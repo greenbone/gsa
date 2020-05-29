@@ -18,7 +18,7 @@
 
 import 'core-js/features/string/includes';
 
-import React, {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState, useReducer} from 'react';
 
 import {connect} from 'react-redux';
 
@@ -111,57 +111,71 @@ const getFilter = (entity = {}) => {
   return report.filter;
 };
 
-const ReportDetails = props => {
-  const prevReportId = usePrevious(props.reportId);
-
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [pageState, setPageState] = useState({
-    activeTab: 0,
-    showFilterDialog: false,
-    showDownloadReportDialog: false,
-    sorting: {
-      results: {
-        sortField: 'severity',
-        sortReverse: true,
-      },
-      apps: {
-        sortField: 'severity',
-        sortReverse: true,
-      },
-      ports: {
-        sortField: 'severity',
-        sortReverse: true,
-      },
-      hosts: {
-        sortField: 'severity',
-        sortReverse: true,
-      },
-      os: {
-        sortField: 'severity',
-        sortReverse: true,
-      },
-      cves: {
-        sortField: 'severity',
-        sortReverse: true,
-      },
-      closedcves: {
-        sortField: 'severity',
-        sortReverse: true,
-      },
-      tlscerts: {
-        sortField: 'dn',
-        sortReverse: false,
-      },
-      errors: {
-        sortField: 'error',
-        sortReverse: false,
-      },
+const initialState = {
+  activeTab: 0,
+  showFilterDialog: false,
+  showDownloadReportDialog: false,
+  sorting: {
+    results: {
+      sortField: 'severity',
+      sortReverse: true,
     },
-  });
+    apps: {
+      sortField: 'severity',
+      sortReverse: true,
+    },
+    ports: {
+      sortField: 'severity',
+      sortReverse: true,
+    },
+    hosts: {
+      sortField: 'severity',
+      sortReverse: true,
+    },
+    os: {
+      sortField: 'severity',
+      sortReverse: true,
+    },
+    cves: {
+      sortField: 'severity',
+      sortReverse: true,
+    },
+    closedcves: {
+      sortField: 'severity',
+      sortReverse: true,
+    },
+    tlscerts: {
+      sortField: 'dn',
+      sortReverse: false,
+    },
+    errors: {
+      sortField: 'error',
+      sortReverse: false,
+    },
+  },
+};
 
-  useEffect(() => {
-    if (isDefined(props.entity)) {
-      const {report = {}} = props.entity;
+const reportReducer = (state, action) => {
+  switch (action.type) {
+    case 'sortChange':
+      const {name, sortField} = action;
+      const prev = state.sorting[name];
+
+      const sortReverse =
+        sortField === prev.sortField ? !prev.sortReverse : false;
+      return {
+        ...state,
+        sorting: {
+          ...state.sorting,
+          [name]: {
+            sortField,
+            sortReverse,
+          },
+        },
+      };
+    case 'updateReport':
+      const {report = {}} = action.entity;
+
       const {
         results = {},
         hosts = {},
@@ -174,36 +188,56 @@ const ReportDetails = props => {
         errors = {},
       } = report;
 
-      setPageState(state => ({
+      return {
         ...state,
-        entity: props.entity,
+        entity: action.entity,
         resultsCounts: isDefined(results.counts)
           ? results.counts
-          : pageState.resultsCounts,
-        hostsCounts: isDefined(hosts.counts)
-          ? hosts.counts
-          : pageState.hostsCounts,
-        portsCounts: isDefined(ports.counts)
-          ? ports.counts
-          : pageState.portsCounts,
+          : state.resultsCounts,
+        hostsCounts: isDefined(hosts.counts) ? hosts.counts : state.hostsCounts,
+        portsCounts: isDefined(ports.counts) ? ports.counts : state.portsCounts,
         applicationsCounts: isDefined(applications.counts)
           ? applications.counts
-          : pageState.applicationsCounts,
+          : state.applicationsCounts,
         operatingSystemsCounts: isDefined(operatingsystems.counts)
           ? operatingsystems.counts
-          : pageState.operatingSystemsCounts,
-        cvesCounts: isDefined(cves.counts) ? cves.counts : pageState.cvesCounts,
+          : state.operatingSystemsCounts,
+        cvesCounts: isDefined(cves.counts) ? cves.counts : state.cvesCounts,
         closedCvesCounts: isDefined(closedCves.counts)
           ? closedCves.counts
-          : pageState.closedCvesCounts,
+          : state.closedCvesCounts,
         tlsCertificatesCounts: isDefined(tlsCertificates.counts)
           ? tlsCertificates.counts
-          : pageState.tlsCertificatesCounts,
+          : state.tlsCertificatesCounts,
         errorsCounts: isDefined(errors.counts)
           ? errors.counts
-          : pageState.errorsCounts,
-        reportFilter: props.reportFilter,
-      }));
+          : state.errorsCounts,
+      };
+    case 'setPageState':
+      const {newState} = action;
+
+      return {
+        ...state,
+        ...newState,
+      };
+    default:
+      throw new Error('Unexpected action');
+  }
+};
+
+const ReportDetails = props => {
+  const prevReportId = usePrevious(props.reportId);
+
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [state, dispatchState] = useReducer(reportReducer, initialState);
+
+  useEffect(() => {
+    if (isDefined(props.entity)) {
+      dispatchState({type: 'updateReport', entity: props.entity});
+      dispatchState({
+        type: 'setPageState',
+        newState: {reportFilter: props.reportFilter},
+      });
       setIsUpdating(false);
     } else {
       // report is not in the store and is currently loaded
@@ -245,7 +279,7 @@ const ReportDetails = props => {
   useEffect(() => {
     const {reportFormats} = props;
     if (
-      !isDefined(pageState.reportFormatId) &&
+      !isDefined(state.reportFormatId) &&
       isDefined(reportFormats) &&
       reportFormats.length > 0
     ) {
@@ -255,17 +289,14 @@ const ReportDetails = props => {
         // ensure the report format id is only set if we really have one
         // if no report format id is available we would create an infinite
         // render loop here
-        setPageState(state => ({
-          ...state,
-          reportFormatId,
-        }));
+        dispatchState({type: 'setPageState', newState: {reportFormatId}});
       }
     }
 
     if (prevReportId !== props.reportId) {
       load();
     }
-  }, [pageState.reportFormatId, prevReportId, props, load]);
+  }, [state.reportFormatId, prevReportId, props, load]);
 
   const reload = () => {
     // reload data from backend
@@ -303,10 +334,7 @@ const ReportDetails = props => {
   const handleActivateTab = index => {
     handleInteraction();
 
-    setPageState(state => ({
-      ...state,
-      activeTab: index,
-    }));
+    dispatchState({type: 'setPageState', newState: {activeTab: index}});
   };
 
   const handleAddToAssets = () => {
@@ -338,33 +366,27 @@ const ReportDetails = props => {
   const handleFilterEditClick = () => {
     handleInteraction();
 
-    setPageState(state => ({
-      ...state,
-      showFilterDialog: true,
-    }));
+    dispatchState({type: 'setPageState', newState: {showFilterDialog: true}});
   };
 
   const handleFilterDialogClose = () => {
     handleInteraction();
 
-    setPageState(state => ({
-      ...state,
-      showFilterDialog: false,
-    }));
+    dispatchState({type: 'setPageState', newState: {showFilterDialog: false}});
   };
 
   const handleOpenDownloadReportDialog = () => {
-    setPageState(state => ({
-      ...state,
-      showDownloadReportDialog: true,
-    }));
+    dispatchState({
+      type: 'setPageState',
+      newState: {showDownloadReportDialog: true},
+    });
   };
 
   const handleCloseDownloadReportDialog = () => {
-    setPageState(state => ({
-      ...state,
-      showDownloadReportDialog: false,
-    }));
+    dispatchState({
+      type: 'setPageState',
+      newState: {showDownloadReportDialog: false},
+    });
   };
 
   const handleReportDownload = state => {
@@ -415,7 +437,10 @@ const ReportDetails = props => {
         filter: newFilter,
       })
       .then(response => {
-        setPageState(state => ({...state, showDownloadReportDialog: false}));
+        dispatchState({
+          type: 'setPageState',
+          newState: {showDownloadReportDialog: false},
+        });
         const {data} = response;
         const filename = generateFilename({
           creationTime: entity.creationTime,
@@ -494,21 +519,7 @@ const ReportDetails = props => {
   const handleSortChange = (name, sortField) => {
     handleInteraction();
 
-    const prev = pageState.sorting[name];
-
-    const sortReverse =
-      sortField === prev.sortField ? !prev.sortReverse : false;
-
-    setPageState(otherState => ({
-      ...otherState,
-      sorting: {
-        ...pageState.sorting,
-        [name]: {
-          sortField,
-          sortReverse,
-        },
-      },
-    }));
+    dispatchState({type: 'sortChange', name, sortField});
   };
 
   const handleInteraction = () => {
@@ -557,7 +568,7 @@ const ReportDetails = props => {
     sorting,
     storeAsDefault,
     tlsCertificatesCounts,
-  } = pageState;
+  } = state;
 
   const report = isDefined(entity) ? entity.report : undefined;
 
