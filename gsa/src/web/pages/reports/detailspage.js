@@ -155,7 +155,7 @@ const initialState = {
   },
 };
 
-const reportReducer = (state, action) => {
+const reducer = (state, action) => {
   switch (action.type) {
     case 'sortChange':
       const {name, sortField} = action;
@@ -230,7 +230,7 @@ const ReportDetails = props => {
   const prevReportId = usePrevious(props.reportId);
 
   const [isUpdating, setIsUpdating] = useState(false);
-  const [state, dispatchState] = useReducer(reportReducer, initialState);
+  const [state, dispatchState] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (isDefined(props.entity)) {
