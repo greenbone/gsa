@@ -21,10 +21,9 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {isDefined, isArray} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {forEach} from 'gmp/utils/array';
 import {excludeObjectProps} from 'gmp/utils/object';
-import {getEntityType} from 'gmp/utils/entitytype';
 
 import FootNote from 'web/components/footnote/footnote';
 
@@ -269,11 +268,7 @@ class EntitiesTable extends React.Component {
         <UpdatingStripedTable
           header={header}
           footer={footer}
-          isUpdating={
-            isArray(entities) && getEntityType(entities[0]) === 'task'
-              ? false
-              : isUpdating
-          }
+          isUpdating={isUpdating}
         >
           {body}
         </UpdatingStripedTable>

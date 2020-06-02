@@ -49,8 +49,10 @@ import {useLazyGetTasks, useDeleteTask, useCloneTask} from 'web/graphql/tasks';
 import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
+import useFilterSortBy from 'web/utils/useFilterSortby';
 import usePageFilter from 'web/utils/usePageFilter';
 import useSelection from 'web/utils/useSelection';
+import usePrevious from 'web/utils/usePrevious';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import NewIconMenu from './icons/newiconmenu';
@@ -114,16 +116,17 @@ ToolBarIcons.propTypes = {
 const TasksListPage = () => {
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('task');
+  const prevFilter = usePrevious(filter);
   const [
     getTasks,
-    {counts, tasks, error, loading: isLoading, refetch},
+    {counts, tasks, error, loading: isLoading, refetch, called},
   ] = useLazyGetTasks();
   const [deleteTask] = useDeleteTask();
   const [cloneTask] = useCloneTask();
   const {
-    change: handleFilterChanged,
-    remove: handleFilterRemoved,
-    reset: handleFilterReset,
+    change: changeFilter,
+    remove: removeFilter,
+    reset: resetFilter,
   } = useChangeFilter('task');
   const {
     dialogState: notificationDialogState,
@@ -138,6 +141,10 @@ const TasksListPage = () => {
     select,
     deselect,
   } = useSelection();
+  const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
+    filter,
+    changeFilter,
+  );
 
   const handleCloneTask = useCallback(
     task => cloneTask(task.id).then(refetch, showError),
@@ -149,13 +156,20 @@ const TasksListPage = () => {
   );
 
   useEffect(() => {
-    // load tasks after the filter is resolved
-    if (!isLoadingFilter && hasValue(filter)) {
+    // load tasks initially after the filter is resolved
+    if (!isLoadingFilter && hasValue(filter) && !called) {
       getTasks({
         filterString: filter.toFilterString(),
       });
     }
-  }, [isLoadingFilter, filter, getTasks]);
+  }, [isLoadingFilter, filter, getTasks, called]);
+
+  useEffect(() => {
+    // reload if filter has changed
+    if (hasValue(refetch) && !filter.equals(prevFilter)) {
+      refetch({filterString: filter.toFilterString()});
+    }
+  }, [filter, prevFilter, refetch]);
 
   return (
     <TaskComponent
@@ -200,7 +214,7 @@ const TasksListPage = () => {
             dashboard={() => (
               <TaskDashboard
                 filter={filter}
-                onFilterChanged={handleFilterChanged}
+                onFilterChanged={changeFilter}
                 onInteraction={renewSession}
               />
             )}
@@ -218,9 +232,11 @@ const TasksListPage = () => {
             filterEditDialog={TaskFilterDialog}
             filtersFilter={TASKS_FILTER_FILTER}
             isLoading={isLoading}
-            refetch={refetch}
+            isUpdating={isLoading}
             selectionType={selectionType}
             sectionIcon={<TaskIcon size="large" />}
+            sortBy={sortBy}
+            sortDir={sortDir}
             table={TaskListTable}
             title={_('Tasks')}
             toolBarIcons={ToolBarIcons}
@@ -229,14 +245,15 @@ const TasksListPage = () => {
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}
-            onFilterChanged={handleFilterChanged}
-            onFilterCreated={handleFilterChanged}
-            onFilterReset={handleFilterReset}
-            onFilterRemoved={handleFilterRemoved}
+            onFilterChanged={changeFilter}
+            onFilterCreated={changeFilter}
+            onFilterReset={resetFilter}
+            onFilterRemoved={removeFilter}
             onInteraction={renewSession}
             onModifyTaskWizardClick={modifytaskwizard}
             onReportImportClick={reportimport}
             onSelectionTypeChange={changeSelectionType}
+            onSortChange={handleSortChange}
             onTaskCloneClick={handleCloneTask}
             onTaskCreateClick={create}
             onTaskDeleteClick={handleDeleteTask}
