@@ -20,7 +20,7 @@ import 'core-js/features/string/includes';
 
 import React, {useEffect, useCallback, useState, useReducer} from 'react';
 
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useRouteMatch} from 'react-router-dom';
 
@@ -78,7 +78,6 @@ import {create_pem_certificate} from 'web/utils/cert';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
 import useGmp from 'web/utils/useGmp';
 import usePrevious from 'web/utils/usePrevious';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
@@ -750,7 +749,7 @@ const ReportDetailsWrapper = props => {
   const dispatch = useDispatch();
   const match = useRouteMatch();
 
-  const {id} = match.params;
+  const {id: reportId} = match.params;
 
   const loadReportWithThreshold = useCallback(
     (id, options) => dispatch(loadReportWithThresholdAction(gmp)(id, options)),
@@ -759,8 +758,8 @@ const ReportDetailsWrapper = props => {
   );
 
   const updateFilter = useCallback(
-    f => dispatch(setPageFilter(getReportPageName(id), f)),
-    [dispatch, id],
+    f => dispatch(setPageFilter(getReportPageName(reportId), f)),
+    [dispatch, reportId],
   );
 
   const loadFuncs = {
@@ -769,13 +768,13 @@ const ReportDetailsWrapper = props => {
   };
 
   const pSelector = useSelector(rootState => getPage(rootState));
-  const pageFilter = pSelector.getFilter(getReportPageName(id));
+  const pageFilter = pSelector.getFilter(getReportPageName(reportId));
 
   const reportSel = useSelector(reportSelector);
-  const reportError = reportSel.getEntityError(id, pageFilter);
-  const isLoading = reportSel.isLoadingEntity(id, pageFilter);
+  const reportError = reportSel.getEntityError(reportId, pageFilter);
+  const isLoading = reportSel.isLoadingEntity(reportId, pageFilter);
 
-  const entity = reportSel.getEntity(id, pageFilter);
+  const entity = reportSel.getEntity(reportId, pageFilter);
 
   const filterSel = useSelector(filterSelector);
   const filters = filterSel.getAllEntities(RESULTS_FILTER_FILTER);
@@ -784,7 +783,6 @@ const ReportDetailsWrapper = props => {
     RESULTS_FILTER_FILTER,
   );
 
-  const reportId = id;
   const reportFilter = getFilter(entity);
 
   const reportFormatsSel = useSelector(reportFormatsSelector);
@@ -804,6 +802,7 @@ const ReportDetailsWrapper = props => {
   const resultDefaultFilter = userDefaultFilterSel.getFilter();
 
   const args = {
+    entity,
     filters,
     isLoadingFilters,
     reportId,
@@ -823,7 +822,7 @@ const ReportDetailsWrapper = props => {
     >
       {({filter}) => (
         <Reload
-          name={`report-${props.reportId}`}
+          name={`report-${args.reportId}`}
           load={load({
             ...props,
             ...args,
@@ -837,14 +836,13 @@ const ReportDetailsWrapper = props => {
             defaultFilter: filter,
             reportFilter,
           })}
-          reloadInterval={() => reloadInterval(props.entity)}
+          reloadInterval={() => reloadInterval(args.entity)}
         >
           {({reload}) => (
             <ReportDetails
               {...props}
               {...args}
               gmp={gmp}
-              entity={entity}
               isLoading={isLoading}
               reportError={reportError}
               dispatch={dispatch}
@@ -860,7 +858,6 @@ const ReportDetailsWrapper = props => {
 };
 
 export default compose(
-  withGmp,
   withDialogNotification,
   withDownload,
 )(ReportDetailsWrapper);
