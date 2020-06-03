@@ -22,6 +22,8 @@ import React, {useEffect, useCallback, useState, useReducer} from 'react';
 
 import {connect, useDispatch} from 'react-redux';
 
+import {useRouteMatch} from 'react-router-dom';
+
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
@@ -55,12 +57,12 @@ import {
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
-import {loadReportWithThreshold} from 'web/store/entities/report/actions';
+import {loadReportWithThreshold as loadReportWithThresholdAction} from 'web/store/entities/report/actions';
 import {reportSelector} from 'web/store/entities/report/selectors';
 
 import {
   loadReportComposerDefaults as loadReportComposerDefaultsAction,
-  saveReportComposerDefaults,
+  saveReportComposerDefaults as saveReportComposerDefaultsAction,
 } from 'web/store/usersettings/actions';
 
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
@@ -227,8 +229,7 @@ const reducer = (state, action) => {
 };
 
 const ReportDetails = props => {
-  const gmp = useGmp();
-  const dispatch = useDispatch();
+  const {gmp, dispatch} = props;
   const [, renewSession] = useUserSessionTimeout();
   const prevReportId = usePrevious(props.reportId);
 
@@ -250,6 +251,15 @@ const ReportDetails = props => {
   const loadReportComposerDefaults = useCallback(
     () => dispatch(loadReportComposerDefaultsAction(gmp)()),
     [dispatch, gmp],
+  );
+  const loadTargetAction = useCallback(
+    targetId => gmp.target.get({id: targetId}),
+    [gmp],
+  );
+  const saveReportComposerDefaults = useCallback(
+    reportComposerDefaults =>
+      dispatch(saveReportComposerDefaultsAction(gmp)(reportComposerDefaults)),
+    [gmp, dispatch],
   );
 
   useEffect(() => {
@@ -443,7 +453,7 @@ const ReportDetails = props => {
         includeNotes,
         includeOverrides,
       };
-      props.saveReportComposerDefaults(defaults);
+      saveReportComposerDefaults(defaults);
     }
 
     const report_format = reportFormats.find(
@@ -551,7 +561,7 @@ const ReportDetails = props => {
     const {entity} = props;
     const target = getTarget(entity);
 
-    return props.loadTarget(target.id);
+    return loadTargetAction(target.id);
   };
 
   const {
@@ -675,17 +685,13 @@ const ReportDetails = props => {
 };
 
 ReportDetails.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   entity: PropTypes.model,
   filter: PropTypes.filter,
   filters: PropTypes.array,
   gmp: PropTypes.gmp.isRequired,
   isLoading: PropTypes.bool,
   isLoadingFilters: PropTypes.bool,
-  loadFilters: PropTypes.func.isRequired,
-  loadReportComposerDefaults: PropTypes.func.isRequired,
-  loadReportFormats: PropTypes.func.isRequired,
-  loadSettings: PropTypes.func.isRequired,
-  loadTarget: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   pageFilter: PropTypes.filter,
@@ -697,7 +703,6 @@ ReportDetails.propTypes = {
   reportFormats: PropTypes.array,
   reportId: PropTypes.id,
   resultDefaultFilter: PropTypes.filter,
-  saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
@@ -738,51 +743,76 @@ const load = ({
   return loadReportWithThreshold(reportId, {filter});
 };
 
-const ReportDetailsWrapper = ({reportFilter, ...props}) => (
-  <FilterProvider
-    fallbackFilter={DEFAULT_FILTER}
-    gmpname="result"
-    // deactivate filter via url param for now. not sure why we are doing this
-    locationQueryFilterString={null}
-  >
-    {({filter}) => (
-      <Reload
-        name={`report-${props.reportId}`}
-        load={load({...props, defaultFilter: filter})}
-        reload={load({...props, defaultFilter: filter, reportFilter})}
-        reloadInterval={() => reloadInterval(props.entity)}
-      >
-        {({reload}) => (
-          <ReportDetails
-            {...props}
-            defaultFilter={filter}
-            reportFilter={reportFilter}
-            reload={reload}
-          />
-        )}
-      </Reload>
-    )}
-  </FilterProvider>
-);
+const ReportDetailsWrapper = ({reportFilter, ...props}) => {
+  const gmp = useGmp();
+  const dispatch = useDispatch();
+  const match = useRouteMatch();
+
+  const {id} = match.params;
+
+  const loadReportWithThreshold = useCallback(
+    (id, options) => dispatch(loadReportWithThresholdAction(gmp)(id, options)),
+
+    [gmp, dispatch],
+  );
+
+  const updateFilter = useCallback(
+    f => dispatch(setPageFilter(getReportPageName(id), f)),
+    [dispatch, id],
+  );
+
+  const loadFuncs = {
+    loadReportWithThreshold,
+    updateFilter,
+  };
+  return (
+    <FilterProvider
+      fallbackFilter={DEFAULT_FILTER}
+      gmpname="result"
+      // deactivate filter via url param for now. not sure why we are doing this
+      locationQueryFilterString={null}
+    >
+      {({filter}) => (
+        <Reload
+          name={`report-${props.reportId}`}
+          load={load({
+            ...props,
+            ...loadFuncs,
+            reportId: id,
+            defaultFilter: filter,
+          })}
+          reload={load({
+            ...props,
+            ...loadFuncs,
+            reportId: id,
+            defaultFilter: filter,
+            reportFilter,
+          })}
+          reloadInterval={() => reloadInterval(props.entity)}
+        >
+          {({reload}) => (
+            <ReportDetails
+              {...props}
+              gmp={gmp}
+              dispatch={dispatch}
+              defaultFilter={filter}
+              reportFilter={reportFilter}
+              reload={reload}
+            />
+          )}
+        </Reload>
+      )}
+    </FilterProvider>
+  );
+};
 
 ReportDetailsWrapper.propTypes = {
   entity: PropTypes.model,
-  gmp: PropTypes.gmp.isRequired,
   reportFilter: PropTypes.filter,
   reportId: PropTypes.id.isRequired,
 };
 
 const getReportPageName = id => `report-${id}`;
-
-const mapDispatchToProps = (dispatch, {gmp, match}) => ({
-  loadTarget: targetId => gmp.target.get({id: targetId}),
-  loadReportWithThreshold: (id, options) =>
-    dispatch(loadReportWithThreshold(gmp)(id, options)),
-  saveReportComposerDefaults: reportComposerDefaults =>
-    dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
-  updateFilter: f =>
-    dispatch(setPageFilter(getReportPageName(match.params.id), f)),
-});
 
 const mapStateToProps = (rootState, {match}) => {
   const {id} = match.params;
@@ -831,7 +861,7 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps, undefined),
 )(ReportDetailsWrapper);
 
 // vim: set ts=2 sw=2 tw=80:
