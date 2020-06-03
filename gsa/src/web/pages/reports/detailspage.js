@@ -232,9 +232,11 @@ const ReportDetails = props => {
   const [, renewSession] = useUserSessionTimeout();
   const prevReportId = usePrevious(props.reportId);
 
+  // Page state using react hooks
   const [isUpdating, setIsUpdating] = useState(false);
   const [state, dispatchState] = useReducer(reducer, initialState);
 
+  // Dispatches to memoize for componentDidMount
   const loadSettings = useCallback(
     () => dispatch(loadUserSettingDefaults(gmp)()),
     [gmp, dispatch],
@@ -261,6 +263,7 @@ const ReportDetails = props => {
     [gmp, dispatch],
   );
 
+  // getDerivedStatesFromProps
   useEffect(() => {
     if (isDefined(props.entity)) {
       dispatchState({type: 'updateReport', entity: props.entity});
@@ -275,6 +278,7 @@ const ReportDetails = props => {
     }
   }, [props.entity, props.reportFilter]);
 
+  // componentDidMount
   useEffect(() => {
     loadSettings();
     loadFilters();
@@ -285,7 +289,7 @@ const ReportDetails = props => {
     loadFilters,
     loadReportFormats,
     loadReportComposerDefaults,
-  ]); // componentDidMount
+  ]);
 
   const {reload: reloadFilter, reportFilter: filterFromProps} = props;
 
@@ -311,6 +315,7 @@ const ReportDetails = props => {
     [reloadFilter, filterFromProps],
   );
 
+  // componentDidUpdate
   useEffect(() => {
     const {reportFormats} = props;
     if (
@@ -576,6 +581,7 @@ const ReportDetails = props => {
     showErrorMessage,
     showSuccessMessage,
   } = props;
+
   const {
     activeTab,
     applicationsCounts,
@@ -751,57 +757,51 @@ const ReportDetailsWrapper = props => {
 
   const {id: reportId} = match.params;
 
+  // Dispatches
   const loadReportWithThreshold = useCallback(
     (id, options) => dispatch(loadReportWithThresholdAction(gmp)(id, options)),
 
     [gmp, dispatch],
   );
-
   const updateFilter = useCallback(
     f => dispatch(setPageFilter(getReportPageName(reportId), f)),
     [dispatch, reportId],
   );
-
   const loadFuncs = {
     loadReportWithThreshold,
     updateFilter,
   };
 
+  // Selectors
   const pSelector = useSelector(rootState => getPage(rootState));
-  const pageFilter = pSelector.getFilter(getReportPageName(reportId));
-
   const reportSel = useSelector(reportSelector);
-  const reportError = reportSel.getEntityError(reportId, pageFilter);
-  const isLoading = reportSel.isLoadingEntity(reportId, pageFilter);
-
-  const entity = reportSel.getEntity(reportId, pageFilter);
-
   const filterSel = useSelector(filterSelector);
-  const filters = filterSel.getAllEntities(RESULTS_FILTER_FILTER);
-
-  const isLoadingFilters = filterSel.isLoadingAllEntities(
-    RESULTS_FILTER_FILTER,
-  );
-
-  const reportFilter = getFilter(entity);
-
   const reportFormatsSel = useSelector(reportFormatsSelector);
   const userDefaultsSelector = useSelector(getUserSettingsDefaults);
   const userDefaultFilterSel = useSelector(rootState =>
     getUserSettingsDefaultFilter(rootState, 'result'),
   );
   const username = useSelector(getUsername);
+  const reportComposerDefaults = useSelector(getReportComposerDefaults);
 
+  // States
+  const pageFilter = pSelector.getFilter(getReportPageName(reportId));
+  const reportError = reportSel.getEntityError(reportId, pageFilter);
+  const isLoading = reportSel.isLoadingEntity(reportId, pageFilter);
+  const entity = reportSel.getEntity(reportId, pageFilter);
+  const filters = filterSel.getAllEntities(RESULTS_FILTER_FILTER);
+  const isLoadingFilters = filterSel.isLoadingAllEntities(
+    RESULTS_FILTER_FILTER,
+  );
+  const resultDefaultFilter = userDefaultFilterSel.getFilter();
+  const reportFormats = reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER);
   const reportExportFileName = userDefaultsSelector.getValueByName(
     'reportexportfilename',
   );
-
-  const reportFormats = reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER);
-
-  const reportComposerDefaults = useSelector(getReportComposerDefaults);
-  const resultDefaultFilter = userDefaultFilterSel.getFilter();
+  const reportFilter = getFilter(entity);
 
   const args = {
+    // args to pass to ReportDetails
     entity,
     filters,
     isLoadingFilters,
