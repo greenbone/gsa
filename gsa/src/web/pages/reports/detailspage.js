@@ -20,7 +20,7 @@ import 'core-js/features/string/includes';
 
 import React, {useEffect, useCallback, useState, useReducer} from 'react';
 
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -46,12 +46,12 @@ import FilterProvider from 'web/entities/filterprovider';
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
 
 import {
-  loadAllEntities as loadFilters,
+  loadAllEntities as loadFiltersAction,
   selector as filterSelector,
 } from 'web/store/entities/filters';
 
 import {
-  loadAllEntities as loadReportFormats,
+  loadAllEntities as loadReportFormatsAction,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
@@ -59,7 +59,7 @@ import {loadReportWithThreshold} from 'web/store/entities/report/actions';
 import {reportSelector} from 'web/store/entities/report/selectors';
 
 import {
-  loadReportComposerDefaults,
+  loadReportComposerDefaults as loadReportComposerDefaultsAction,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 
@@ -77,6 +77,7 @@ import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 import usePrevious from 'web/utils/usePrevious';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
@@ -226,11 +227,30 @@ const reducer = (state, action) => {
 };
 
 const ReportDetails = props => {
+  const gmp = useGmp();
+  const dispatch = useDispatch();
   const [, renewSession] = useUserSessionTimeout();
   const prevReportId = usePrevious(props.reportId);
 
   const [isUpdating, setIsUpdating] = useState(false);
   const [state, dispatchState] = useReducer(reducer, initialState);
+
+  const loadSettings = useCallback(
+    () => dispatch(loadUserSettingDefaults(gmp)()),
+    [gmp, dispatch],
+  );
+  const loadFilters = useCallback(
+    () => dispatch(loadFiltersAction(gmp)(RESULTS_FILTER_FILTER)),
+    [gmp, dispatch],
+  );
+  const loadReportFormats = useCallback(
+    () => dispatch(loadReportFormatsAction(gmp)(REPORT_FORMATS_FILTER)),
+    [dispatch, gmp],
+  );
+  const loadReportComposerDefaults = useCallback(
+    () => dispatch(loadReportComposerDefaultsAction(gmp)()),
+    [dispatch, gmp],
+  );
 
   useEffect(() => {
     if (isDefined(props.entity)) {
@@ -245,13 +265,6 @@ const ReportDetails = props => {
       setIsUpdating(true);
     }
   }, [props.entity, props.reportFilter]);
-
-  const {
-    loadSettings,
-    loadFilters,
-    loadReportFormats,
-    loadReportComposerDefaults,
-  } = props;
 
   useEffect(() => {
     loadSettings();
@@ -351,7 +364,7 @@ const ReportDetails = props => {
   };
 
   const handleAddToAssets = () => {
-    const {gmp, showSuccessMessage, entity, reportFilter: filter} = props;
+    const {showSuccessMessage, entity, reportFilter: filter} = props;
 
     renewSession();
 
@@ -366,7 +379,7 @@ const ReportDetails = props => {
   };
 
   const handleRemoveFromAssets = () => {
-    const {gmp, showSuccessMessage, entity, reportFilter: filter} = props;
+    const {showSuccessMessage, entity, reportFilter: filter} = props;
 
     renewSession();
 
@@ -402,10 +415,9 @@ const ReportDetails = props => {
     });
   };
 
-  const handleReportDownload = state => {
+  const handleReportDownload = reportState => {
     const {
       entity,
-      gmp,
       reportComposerDefaults,
       reportExportFileName,
       reportFilter,
@@ -418,7 +430,7 @@ const ReportDetails = props => {
       includeOverrides,
       reportFormatId,
       storeAsDefault,
-    } = state;
+    } = reportState;
 
     const newFilter = reportFilter.copy();
     newFilter.set('notes', includeNotes);
@@ -544,7 +556,6 @@ const ReportDetails = props => {
 
   const {
     filters = [],
-    gmp,
     isLoading,
     isLoadingFilters,
     pageFilter,
@@ -764,14 +775,9 @@ ReportDetailsWrapper.propTypes = {
 const getReportPageName = id => `report-${id}`;
 
 const mapDispatchToProps = (dispatch, {gmp, match}) => ({
-  loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
-  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
   loadTarget: targetId => gmp.target.get({id: targetId}),
-  loadReportFormats: () =>
-    dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
   loadReportWithThreshold: (id, options) =>
     dispatch(loadReportWithThreshold(gmp)(id, options)),
-  loadReportComposerDefaults: () => dispatch(loadReportComposerDefaults(gmp)()),
   saveReportComposerDefaults: reportComposerDefaults =>
     dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
   updateFilter: f =>
