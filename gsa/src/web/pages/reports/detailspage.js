@@ -20,7 +20,7 @@ import 'core-js/features/string/includes';
 
 import React, {useEffect, useCallback, useState, useReducer} from 'react';
 
-import {connect, useDispatch} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 
 import {useRouteMatch} from 'react-router-dom';
 
@@ -743,7 +743,9 @@ const load = ({
   return loadReportWithThreshold(reportId, {filter});
 };
 
-const ReportDetailsWrapper = ({reportFilter, ...props}) => {
+const getReportPageName = id => `report-${id}`;
+
+const ReportDetailsWrapper = props => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const match = useRouteMatch();
@@ -765,6 +767,53 @@ const ReportDetailsWrapper = ({reportFilter, ...props}) => {
     loadReportWithThreshold,
     updateFilter,
   };
+
+  const pSelector = useSelector(rootState => getPage(rootState));
+  const pageFilter = pSelector.getFilter(getReportPageName(id));
+
+  const reportSel = useSelector(reportSelector);
+  const reportError = reportSel.getEntityError(id, pageFilter);
+  const isLoading = reportSel.isLoadingEntity(id, pageFilter);
+
+  const entity = reportSel.getEntity(id, pageFilter);
+
+  const filterSel = useSelector(filterSelector);
+  const filters = filterSel.getAllEntities(RESULTS_FILTER_FILTER);
+
+  const isLoadingFilters = filterSel.isLoadingAllEntities(
+    RESULTS_FILTER_FILTER,
+  );
+
+  const reportId = id;
+  const reportFilter = getFilter(entity);
+
+  const reportFormatsSel = useSelector(reportFormatsSelector);
+  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
+  const userDefaultFilterSel = useSelector(rootState =>
+    getUserSettingsDefaultFilter(rootState, 'result'),
+  );
+  const username = useSelector(getUsername);
+
+  const reportExportFileName = userDefaultsSelector.getValueByName(
+    'reportexportfilename',
+  );
+
+  const reportFormats = reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER);
+
+  const reportComposerDefaults = useSelector(getReportComposerDefaults);
+  const resultDefaultFilter = userDefaultFilterSel.getFilter();
+
+  const args = {
+    filters,
+    isLoadingFilters,
+    reportId,
+    username,
+    reportExportFileName,
+    reportFormats,
+    reportComposerDefaults,
+    resultDefaultFilter,
+  };
+
   return (
     <FilterProvider
       fallbackFilter={DEFAULT_FILTER}
@@ -777,14 +826,14 @@ const ReportDetailsWrapper = ({reportFilter, ...props}) => {
           name={`report-${props.reportId}`}
           load={load({
             ...props,
+            ...args,
             ...loadFuncs,
-            reportId: id,
             defaultFilter: filter,
           })}
           reload={load({
             ...props,
+            ...args,
             ...loadFuncs,
-            reportId: id,
             defaultFilter: filter,
             reportFilter,
           })}
@@ -793,7 +842,11 @@ const ReportDetailsWrapper = ({reportFilter, ...props}) => {
           {({reload}) => (
             <ReportDetails
               {...props}
+              {...args}
               gmp={gmp}
+              entity={entity}
+              isLoading={isLoading}
+              reportError={reportError}
               dispatch={dispatch}
               defaultFilter={filter}
               reportFilter={reportFilter}
@@ -806,62 +859,10 @@ const ReportDetailsWrapper = ({reportFilter, ...props}) => {
   );
 };
 
-ReportDetailsWrapper.propTypes = {
-  entity: PropTypes.model,
-  reportFilter: PropTypes.filter,
-  reportId: PropTypes.id.isRequired,
-};
-
-const getReportPageName = id => `report-${id}`;
-
-const mapStateToProps = (rootState, {match}) => {
-  const {id} = match.params;
-  const filterSel = filterSelector(rootState);
-  const reportSel = reportSelector(rootState);
-  const reportFormatsSel = reportFormatsSelector(rootState);
-  const userDefaultsSelector = getUserSettingsDefaults(rootState);
-  const userDefaultFilterSel = getUserSettingsDefaultFilter(
-    rootState,
-    'result',
-  );
-  const username = getUsername(rootState);
-
-  const pSelector = getPage(rootState);
-  const pageFilter = pSelector.getFilter(getReportPageName(id));
-
-  const entity = reportSel.getEntity(id, pageFilter);
-  const isLoading = reportSel.isLoadingEntity(id, pageFilter);
-  const reportError = reportSel.getEntityError(id, pageFilter);
-
-  const filters = filterSel.getAllEntities(RESULTS_FILTER_FILTER);
-  const isLoadingFilters = filterSel.isLoadingAllEntities(
-    RESULTS_FILTER_FILTER,
-  );
-
-  return {
-    entity,
-    filters,
-    reportError,
-    pageFilter,
-    isLoading,
-    isLoadingFilters,
-    reportExportFileName: userDefaultsSelector.getValueByName(
-      'reportexportfilename',
-    ),
-    reportFilter: getFilter(entity),
-    reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
-    reportId: id,
-    reportComposerDefaults: getReportComposerDefaults(rootState),
-    resultDefaultFilter: userDefaultFilterSel.getFilter(),
-    username,
-  };
-};
-
 export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  connect(mapStateToProps, undefined),
 )(ReportDetailsWrapper);
 
 // vim: set ts=2 sw=2 tw=80:
