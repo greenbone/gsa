@@ -662,8 +662,6 @@ ReportDetails.propTypes = {
   loadSettings: PropTypes.func.isRequired,
   loadTargetAction: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
-  onDownload: PropTypes.func.isRequired,
   pageFilter: PropTypes.filter,
   reload: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
@@ -679,6 +677,7 @@ ReportDetails.propTypes = {
   showSuccessMessage: PropTypes.func.isRequired,
   target: PropTypes.model,
   username: PropTypes.string,
+  onDownload: PropTypes.func.isRequired,
 };
 
 const reloadInterval = report =>
