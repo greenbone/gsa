@@ -57,40 +57,40 @@ import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
 import {
-  loadEntities as loadAlerts,
+  loadEntities as loadAlertsAction,
   loadEntity as loadAlert,
   selector as alertsSelector,
 } from 'web/store/entities/alerts';
 import {
-  loadEntities as loadCredentials,
+  loadEntities as loadCredentialsAction,
   selector as credentialsSelector,
 } from 'web/store/entities/credentials';
 import {
-  loadEntities as loadFilters,
+  loadEntities as loadFiltersAction,
   selector as filtersSelector,
 } from 'web/store/entities/filters';
 import {
-  loadEntities as loadPortLists,
+  loadEntities as loadPortListsAction,
   selector as portListsSelector,
 } from 'web/store/entities/portlists';
 import {
-  loadEntities as loadReportFormats,
+  loadEntities as loadReportFormatsAction,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 import {
-  loadEntities as loadScanConfigs,
+  loadEntities as loadScanConfigsAction,
   selector as scanConfigsSelector,
 } from 'web/store/entities/scanconfigs';
 import {
-  loadEntities as loadScanners,
+  loadEntities as loadScannersAction,
   selector as scannersSelector,
 } from 'web/store/entities/scanners';
 import {
-  loadEntities as loadSchedules,
+  loadEntities as loadSchedulesAction,
   selector as schedulesSelector,
 } from 'web/store/entities/schedules';
 import {
-  loadEntities as loadTargets,
+  loadEntities as loadTargetsAction,
   selector as targetsSelector,
 } from 'web/store/entities/targets';
 
@@ -293,6 +293,8 @@ const UserSettings = props => {
       loadSettings();
     });
   };
+
+  // handleValueChange doesn't seem to be used by the settings dialog so it was removed
 
   let {
     capabilities,
@@ -1145,9 +1147,9 @@ const mapStateToProps = rootState => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
-  loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
-  loadFilters: () => dispatch(loadFilters(gmp)(ALL_FILTER)),
+  loadAlerts: () => dispatch(loadAlertsAction(gmp)(ALL_FILTER)),
+  loadCredentials: () => dispatch(loadCredentialsAction(gmp)(ALL_FILTER)),
+  loadFilters: () => dispatch(loadFiltersAction(gmp)(ALL_FILTER)),
   loadFilterDefaults: () =>
     Promise.all([
       dispatch(loadUserSettingsDefaultFilter(gmp)('alert')),
@@ -1181,13 +1183,13 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
       dispatch(loadUserSettingsDefaultFilter(gmp)('nvt')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('ovaldef')),
     ]),
-  loadPortLists: () => dispatch(loadPortLists(gmp)(ALL_FILTER)),
-  loadReportFormats: () => dispatch(loadReportFormats(gmp)(ALL_FILTER)),
-  loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
-  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
-  loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
+  loadPortLists: () => dispatch(loadPortListsAction(gmp)(ALL_FILTER)),
+  loadReportFormats: () => dispatch(loadReportFormatsAction(gmp)(ALL_FILTER)),
+  loadScanConfigs: () => dispatch(loadScanConfigsAction(gmp)(ALL_FILTER)),
+  loadScanners: () => dispatch(loadScannersAction(gmp)(ALL_FILTER)),
+  loadSchedules: () => dispatch(loadSchedulesAction(gmp)(ALL_FILTER)),
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-  loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
+  loadTargets: () => dispatch(loadTargetsAction(gmp)(ALL_FILTER)),
   loadAlert: id => dispatch(loadAlert(gmp)(id)),
   setLocale: locale => gmp.setLocale(locale),
   setTimezone: timezone => dispatch(updateTimezone(gmp)(timezone)),
