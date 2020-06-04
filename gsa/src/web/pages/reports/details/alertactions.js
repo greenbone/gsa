@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
-import {connect} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -26,9 +26,7 @@ import logger from 'gmp/log';
 
 import {ALL_FILTER} from 'gmp/models/filter';
 
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
 import useGmp from 'web/utils/useGmp';
 
 import StartIcon from 'web/components/icon/starticon';
@@ -40,13 +38,13 @@ import TriggerAlertDialog from 'web/pages/reports/triggeralertdialog';
 import AlertComponent from 'web/pages/alerts/component';
 
 import {
-  loadEntities as loadAlerts,
-  selector as alertsSelector,
+  loadEntities as loadAlertsAction,
+  selector,
 } from 'web/store/entities/alerts';
 
 import {
-  loadReportComposerDefaults,
-  saveReportComposerDefaults,
+  loadReportComposerDefaults as loadReportComposerDefaultsAction,
+  saveReportComposerDefaults as saveReportComposerDefaultsAction,
 } from 'web/store/usersettings/actions';
 
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
@@ -55,8 +53,9 @@ import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const log = logger.getLogger('web.report.alertactions');
 
-const AlertActions = ({loadReportComposerDefaults, ...props}) => {
+const AlertActions = props => {
   const gmp = useGmp();
+  const dispatch = useDispatch();
   const [, renewSession] = useUserSessionTimeout();
 
   const [showTriggerAlertDialog, setShowTriggerAlertDialog] = useState(false);
@@ -64,6 +63,26 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
   const [alertId, setAlertId] = useState();
 
   const capabilities = useCapabilities();
+
+  // States
+  const alertsSelector = useSelector(selector);
+  const alerts = alertsSelector.getEntities(ALL_FILTER);
+  const reportComposerDefaults = useSelector(getReportComposerDefaults);
+
+  // Dispatches
+  const loadAlerts = useCallback(
+    () => dispatch(loadAlertsAction(gmp)(ALL_FILTER)),
+    [gmp, dispatch],
+  );
+  const loadReportComposerDefaults = useCallback(
+    () => dispatch(loadReportComposerDefaultsAction(gmp)()),
+    [gmp, dispatch],
+  );
+  const saveReportComposerDefaults = useCallback(
+    reportComposerDefaults =>
+      dispatch(saveReportComposerDefaultsAction(gmp)(reportComposerDefaults)),
+    [gmp, dispatch],
+  );
 
   useEffect(() => {
     loadReportComposerDefaults();
@@ -91,7 +110,7 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
     renewSession();
 
     if (storeAsDefault) {
-      props.saveReportComposerDefaults({
+      saveReportComposerDefaults({
         ...reportComposerDefaults,
         defaultAlertId: alertId,
         includeNotes,
@@ -120,7 +139,7 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
   };
 
   const handleOpenTriggerAlertDialog = () => {
-    props.loadAlerts();
+    loadAlerts();
     setShowTriggerAlertDialog(true);
   };
 
@@ -129,26 +148,18 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
   };
 
   const onAlertCreated = response => {
-    props.loadAlerts();
+    loadAlerts();
     setAlertId(response.data.id);
   };
 
-  const {
-    alerts,
-    reportComposerDefaults,
-    filter,
-    showError,
-    showThresholdMessage,
-    threshold,
-    onInteraction,
-  } = props;
+  const {filter, showError, showThresholdMessage, threshold} = props;
 
   const mayAccessAlerts = capabilities.mayOp('get_alerts');
   return (
     <AlertComponent
       onCreated={onAlertCreated}
       onError={showError}
-      onInteraction={onInteraction}
+      onInteraction={renewSession}
     >
       {({create}) => (
         <React.Fragment>
@@ -184,13 +195,8 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
 };
 
 AlertActions.propTypes = {
-  alerts: PropTypes.array,
   filter: PropTypes.filter,
-  loadAlerts: PropTypes.func.isRequired,
-  loadReportComposerDefaults: PropTypes.func.isRequired,
-  reportComposerDefaults: PropTypes.object,
   reportId: PropTypes.id.isRequired,
-  saveReportComposerDefaults: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   showErrorMessage: PropTypes.func.isRequired,
   showSuccessMessage: PropTypes.func.isRequired,
@@ -198,26 +204,6 @@ AlertActions.propTypes = {
   threshold: PropTypes.number,
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => {
-  return {
-    loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
-    loadReportComposerDefaults: () =>
-      dispatch(loadReportComposerDefaults(gmp)()),
-    saveReportComposerDefaults: reportComposerDefaults =>
-      dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
-  };
-};
-
-const mapStateToProps = rootState => {
-  return {
-    alerts: alertsSelector(rootState).getEntities(ALL_FILTER),
-    reportComposerDefaults: getReportComposerDefaults(rootState),
-  };
-};
-
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(AlertActions);
+export default AlertActions;
 
 // vim: set ts=2 sw=2 tw=80:
