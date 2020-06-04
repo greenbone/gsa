@@ -46,7 +46,8 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
     status === TASK_STATUS.deleterequested ||
     status === TASK_STATUS.ultimatedeleterequested ||
     status === TASK_STATUS.resumerequested ||
-    status === TASK_STATUS.requested
+    status === TASK_STATUS.requested ||
+    status === TASK_STATUS.queued
   ) {
     progress = '100';
   }
@@ -79,6 +80,8 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
     background = 'new';
   } else if (status === TASK_STATUS.running) {
     background = 'run';
+  } else if (status === TASK_STATUS.queued) {
+    background = 'queued';
   }
   return (
     <ProgressBar

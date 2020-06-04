@@ -133,6 +133,31 @@ describe('Task StartIcon component tests', () => {
     });
   });
 
+  test('should render in inactive state if task is queued', () => {
+    const caps = new Capabilities(['everything']);
+    const task = Task.fromElement({
+      status: TASK_STATUS.queued,
+      target: {_id: '123'},
+      permissions: {permission: [{name: 'everything'}]},
+    });
+    const clickHandler = jest.fn();
+
+    const {render} = rendererWith({capabilities: caps});
+
+    const {element} = render(<StartIcon task={task} />);
+
+    expect(caps.mayOp('start_task')).toEqual(true);
+    expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
+
+    fireEvent.click(element);
+
+    expect(clickHandler).not.toHaveBeenCalled();
+    expect(element).toHaveAttribute('title', 'Task is already active');
+    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
+      modifier: `svg path`,
+    });
+  });
+
   test('should not be rendered if task is running', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({

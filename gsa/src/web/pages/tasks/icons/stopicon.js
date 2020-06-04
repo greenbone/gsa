@@ -31,7 +31,7 @@ const TaskStopIcon = ({
   usageType = _('task'),
   onClick,
 }) => {
-  if (task.isRunning() && !task.isContainer()) {
+  if ((task.isRunning() || task.isQueued()) && !task.isContainer()) {
     if (
       !capabilities.mayOp('stop_task') ||
       !task.userCapabilities.mayOp('stop_task')

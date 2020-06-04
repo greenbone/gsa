@@ -52,6 +52,7 @@ export const DEFAULT_MAX_HOSTS = 20;
 export const DEFAULT_MIN_QOD = 70;
 
 export const TASK_STATUS = {
+  queued: 'Queued',
   running: 'Running',
   stoprequested: 'Stop Requested',
   deleterequested: 'Delete Requested',
@@ -80,6 +81,7 @@ const TASK_STATUS_TRANSLATIONS = {
   Container: _l('Container'),
   Uploading: _l('Uploading'),
   Done: _l('Done'),
+  Queued: _l('Queued'),
 };
 /* eslint-disable quote-props */
 
@@ -92,7 +94,8 @@ export const isActive = status =>
   status === TASK_STATUS.deleterequested ||
   status === TASK_STATUS.ultimatedeleterequested ||
   status === TASK_STATUS.resumerequested ||
-  status === TASK_STATUS.requested;
+  status === TASK_STATUS.requested ||
+  status === TASK_STATUS.queued;
 
 class Task extends Model {
   static entityType = 'task';
@@ -111,6 +114,10 @@ class Task extends Model {
 
   isInterrupted() {
     return this.status === TASK_STATUS.interrupted;
+  }
+
+  isQueued() {
+    return this.status === TASK_STATUS.queued;
   }
 
   isNew() {
