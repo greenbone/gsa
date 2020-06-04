@@ -17,7 +17,7 @@
  */
 import React from 'react';
 
-import {connect, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -73,7 +73,6 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 
 import {loadEntity, selector} from 'web/store/entities/results';
 
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
 
@@ -281,17 +280,16 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  detailsExportFileName,
-  entity,
-  onChanged,
-  onDownloaded,
-  onError,
-  username,
-  ...props
-}) => {
+const Page = ({entity, onChanged, onDownloaded, onError, ...props}) => {
   const gmp = useGmp();
   const [, renewSession] = useUserSessionTimeout();
+
+  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
+  const username = useSelector(getUsername);
+
+  const detailsExportFileName = userDefaultsSelector.getValueByName(
+    'detailsexportfilename',
+  );
 
   const handleDownload = result => {
     return gmp.result
@@ -399,36 +397,17 @@ const Page = ({
 };
 
 Page.propTypes = {
-  detailsExportFileName: PropTypes.object,
   entity: PropTypes.model,
-  username: PropTypes.string,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
 };
-
-const mapStateToProps = rootState => {
-  const userDefaultsSelector = getUserSettingsDefaults(rootState);
-  const username = getUsername(rootState);
-  const detailsExportFileName = userDefaultsSelector.getValueByName(
-    'detailsexportfilename',
-  );
-  return {
-    detailsExportFileName,
-    username,
-  };
-};
-
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-});
 
 export default compose(
   withEntityContainer('result', {
     entitySelector: selector,
     load: loadEntity,
   }),
-  connect(mapStateToProps, mapDispatchToProps),
 )(Page);
 
 // vim: set ts=2 sw=2 tw=80:
