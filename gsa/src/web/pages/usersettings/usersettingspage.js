@@ -190,25 +190,27 @@ ToolBarIcons.propTypes = {
   onEditSettingsClick: PropTypes.func.isRequired,
 };
 
-const UserSettings = props => {
+const UserSettings = ({
+  gmp,
+  loadAlerts,
+  loadCredentials,
+  loadFilters,
+  loadPortLists,
+  loadReportFormats,
+  loadScanConfigs,
+  loadScanners,
+  loadSchedules,
+  loadTargets,
+  loadFilterDefaults,
+  loadSettings: loadSettingsAction,
+  setLocale,
+  setTimezone,
+  ...props
+}) => {
   const [, renewSession] = useUserSessionTimeout();
   const [activeTab, setActiveTab] = useState(0);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [disableEditIcon, setDisableEditIcon] = useState(true);
-
-  const {
-    loadAlerts,
-    loadCredentials,
-    loadFilters,
-    loadPortLists,
-    loadReportFormats,
-    loadScanConfigs,
-    loadScanners,
-    loadSchedules,
-    loadTargets,
-    loadFilterDefaults,
-    loadSettings: loadSettingsAction,
-  } = props;
 
   const loadEntities = useCallback(() => {
     loadAlerts();
@@ -276,19 +278,18 @@ const UserSettings = props => {
   };
 
   const handleSaveSettings = data => {
-    const {gmp} = props;
     const {userInterfaceLanguage = BROWSER_LANGUAGE, timezone} = data;
 
     renewSession();
 
     return gmp.user.saveSettings(data).then(() => {
       closeDialog();
-      props.setLocale(
+      setLocale(
         userInterfaceLanguage === BROWSER_LANGUAGE
           ? undefined
           : userInterfaceLanguage,
       );
-      props.setTimezone(timezone);
+      setTimezone(timezone);
 
       loadSettings();
     });
