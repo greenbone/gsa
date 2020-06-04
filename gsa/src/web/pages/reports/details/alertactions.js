@@ -52,7 +52,7 @@ import {
 } from 'web/store/usersettings/actions';
 
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
-import withCapabilities from 'web/utils/withCapabilities';
+import useCapabilities from 'web/utils/useCapabilities';
 
 const log = logger.getLogger('web.report.alertactions');
 
@@ -60,6 +60,8 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
   const [showTriggerAlertDialog, setShowTriggerAlertDialog] = useState(false);
   const [storeAsDefault, setStoreAsDefault] = useState();
   const [alertId, setAlertId] = useState();
+
+  const capabilities = useCapabilities();
 
   useEffect(() => {
     loadReportComposerDefaults();
@@ -139,7 +141,6 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
 
   const {
     alerts,
-    capabilities,
     reportComposerDefaults,
     filter,
     showError,
@@ -190,7 +191,6 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
 
 AlertActions.propTypes = {
   alerts: PropTypes.array,
-  capabilities: PropTypes.capabilities.isRequired,
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
@@ -226,7 +226,6 @@ const mapStateToProps = rootState => {
 
 export default compose(
   withGmp,
-  withCapabilities,
   connect(mapStateToProps, mapDispatchToProps),
 )(AlertActions);
 
