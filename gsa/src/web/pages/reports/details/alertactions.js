@@ -53,7 +53,15 @@ import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const log = logger.getLogger('web.report.alertactions');
 
-const AlertActions = props => {
+const AlertActions = ({
+  filter,
+  reportId,
+  showError,
+  showErrorMessage,
+  showSuccessMessage,
+  showThresholdMessage,
+  threshold,
+}) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const [, renewSession] = useUserSessionTimeout();
@@ -95,13 +103,6 @@ const AlertActions = props => {
   const handleTriggerAlert = state => {
     const {alertId, includeNotes, includeOverrides, storeAsDefault} = state;
     setStoreAsDefault(storeAsDefault); // not sure where this was set in the original
-    const {
-      filter,
-      reportId,
-      reportComposerDefaults,
-      showErrorMessage,
-      showSuccessMessage,
-    } = props;
 
     const newFilter = filter.copy();
     newFilter.set('notes', includeNotes);
@@ -151,8 +152,6 @@ const AlertActions = props => {
     loadAlerts();
     setAlertId(response.data.id);
   };
-
-  const {filter, showError, showThresholdMessage, threshold} = props;
 
   const mayAccessAlerts = capabilities.mayOp('get_alerts');
   return (
