@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useCallback} from 'react';
 
-import {connect} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -82,6 +82,8 @@ import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
+import useGmp from 'web/utils/useGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import NoteComponent from '../notes/component';
 
@@ -280,19 +282,21 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-class Page extends React.Component {
-  constructor(...args) {
-    super(...args);
+const Page = ({
+  detailsExportFileName,
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  username,
+  ...props
+}) => {
+  const gmp = useGmp();
+  const dispatch = useDispatch();
+  const [, renewSession] = useUserSessionTimeout();
 
-    this.handleDownload = this.handleDownload.bind(this);
-
-    this.openDialog = this.openDialog.bind(this);
-  }
-
-  handleDownload(result) {
-    const {gmp} = this.props;
-
-    const {detailsExportFileName, username, onError, onDownloaded} = this.props;
+  const handleDownload = result => {
     return gmp.result
       .export(result)
       .then(response => {
@@ -309,9 +313,9 @@ class Page extends React.Component {
         return {filename, data: response.data};
       })
       .then(onDownloaded, onError);
-  }
+  };
 
-  openDialog(result = {}, createfunc) {
+  const openDialog = (result = {}, createfunc) => {
     const {nvt = {}, task = {}, host = {}} = result;
     createfunc({
       fixed: true,
@@ -329,81 +333,73 @@ class Page extends React.Component {
       port: MANUAL,
       port_manual: result.port,
     });
-  }
+  };
 
-  render() {
-    const {entity, onChanged, onError, onInteraction} = this.props;
-    return (
-      <NoteComponent onCreated={onChanged} onInteraction={onInteraction}>
-        {({create: createnote}) => (
-          <OverrideComponent
-            onCreated={onChanged}
-            onInteraction={onInteraction}
-          >
-            {({create: createoverride}) => (
-              <TicketComponent
-                onCreated={goto_details('ticket', this.props)}
-                onInteraction={onInteraction}
-              >
-                {({createFromResult: createticket}) => (
-                  <EntityPage
-                    {...this.props}
-                    entity={entity}
-                    sectionIcon={<ResultIcon size="large" />}
-                    title={_('Result')}
-                    toolBarIcons={ToolBarIcons}
-                    onInteraction={onInteraction}
-                    onNoteCreateClick={result =>
-                      this.openDialog(result, createnote)
-                    }
-                    onOverrideCreateClick={result =>
-                      this.openDialog(result, createoverride)
-                    }
-                    onResultDownloadClick={this.handleDownload}
-                    onTicketCreateClick={createticket}
-                  >
-                    {({activeTab = 0, onActivateTab}) => (
-                      <Layout grow="1" flex="column">
-                        <TabLayout grow="1" align={['start', 'end']}>
-                          <TabList
-                            active={activeTab}
-                            align={['start', 'stretch']}
-                            onActivateTab={onActivateTab}
-                          >
-                            <Tab>{_('Information')}</Tab>
-                            <EntitiesTab entities={entity.userTags}>
-                              {_('User Tags')}
-                            </EntitiesTab>
-                          </TabList>
-                        </TabLayout>
+  return (
+    <NoteComponent onCreated={onChanged} onInteraction={onInteraction}>
+      {({create: createnote}) => (
+        <OverrideComponent onCreated={onChanged} onInteraction={onInteraction}>
+          {({create: createoverride}) => (
+            <TicketComponent
+              onCreated={goto_details('ticket', props)}
+              onInteraction={onInteraction}
+            >
+              {({createFromResult: createticket}) => (
+                <EntityPage
+                  {...props}
+                  entity={entity}
+                  sectionIcon={<ResultIcon size="large" />}
+                  title={_('Result')}
+                  toolBarIcons={ToolBarIcons}
+                  onInteraction={onInteraction}
+                  onNoteCreateClick={result => openDialog(result, createnote)}
+                  onOverrideCreateClick={result =>
+                    openDialog(result, createoverride)
+                  }
+                  onResultDownloadClick={handleDownload}
+                  onTicketCreateClick={createticket}
+                >
+                  {({activeTab = 0, onActivateTab}) => (
+                    <Layout grow="1" flex="column">
+                      <TabLayout grow="1" align={['start', 'end']}>
+                        <TabList
+                          active={activeTab}
+                          align={['start', 'stretch']}
+                          onActivateTab={onActivateTab}
+                        >
+                          <Tab>{_('Information')}</Tab>
+                          <EntitiesTab entities={entity.userTags}>
+                            {_('User Tags')}
+                          </EntitiesTab>
+                        </TabList>
+                      </TabLayout>
 
-                        <Tabs active={activeTab}>
-                          <TabPanels>
-                            <TabPanel>
-                              <Details entity={entity} />
-                            </TabPanel>
-                            <TabPanel>
-                              <EntityTags
-                                entity={entity}
-                                onChanged={onChanged}
-                                onError={onError}
-                                onInteraction={onInteraction}
-                              />
-                            </TabPanel>
-                          </TabPanels>
-                        </Tabs>
-                      </Layout>
-                    )}
-                  </EntityPage>
-                )}
-              </TicketComponent>
-            )}
-          </OverrideComponent>
-        )}
-      </NoteComponent>
-    );
-  }
-}
+                      <Tabs active={activeTab}>
+                        <TabPanels>
+                          <TabPanel>
+                            <Details entity={entity} />
+                          </TabPanel>
+                          <TabPanel>
+                            <EntityTags
+                              entity={entity}
+                              onChanged={onChanged}
+                              onError={onError}
+                              onInteraction={onInteraction}
+                            />
+                          </TabPanel>
+                        </TabPanels>
+                      </Tabs>
+                    </Layout>
+                  )}
+                </EntityPage>
+              )}
+            </TicketComponent>
+          )}
+        </OverrideComponent>
+      )}
+    </NoteComponent>
+  );
+};
 
 Page.propTypes = {
   detailsExportFileName: PropTypes.object,
@@ -438,10 +434,7 @@ export default compose(
     entitySelector: selector,
     load: loadEntity,
   }),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(Page);
 
 // vim: set ts=2 sw=2 tw=80:
