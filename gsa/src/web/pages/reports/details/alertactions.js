@@ -87,22 +87,27 @@ const AlertActions = ({
     [gmp, dispatch],
   );
   const saveReportComposerDefaults = useCallback(
-    reportComposerDefaults =>
-      dispatch(saveReportComposerDefaultsAction(gmp)(reportComposerDefaults)),
+    defaults => dispatch(saveReportComposerDefaultsAction(gmp)(defaults)),
     [gmp, dispatch],
   );
 
   useEffect(() => {
     loadReportComposerDefaults();
-  }, [loadReportComposerDefaults]); //componentDidMount
+  }, [loadReportComposerDefaults]); // componentDidMount
 
   const handleAlertChange = alert_id => {
     setAlertId(alert_id);
   };
 
   const handleTriggerAlert = state => {
-    const {alertId, includeNotes, includeOverrides, storeAsDefault} = state;
-    setStoreAsDefault(storeAsDefault); // not sure where this was set in the original
+    const {
+      alertId: stateAlertId,
+      includeNotes,
+      includeOverrides,
+      storeAsDefault: stateDefault,
+    } = state;
+    setStoreAsDefault(stateDefault); // not sure where this was set in the original
+    setAlertId(stateAlertId); // Should this be set here?
 
     const newFilter = filter.copy();
     newFilter.set('notes', includeNotes);
@@ -110,10 +115,10 @@ const AlertActions = ({
 
     renewSession();
 
-    if (storeAsDefault) {
+    if (stateDefault) {
       saveReportComposerDefaults({
         ...reportComposerDefaults,
-        defaultAlertId: alertId,
+        defaultAlertId: stateAlertId,
         includeNotes,
         includeOverrides,
       });
@@ -122,7 +127,7 @@ const AlertActions = ({
     return gmp.report
       .alert({
         report_id: reportId,
-        alert_id: alertId,
+        alert_id: stateAlertId,
         filter: newFilter.simple(),
       })
       .then(
