@@ -118,6 +118,7 @@ import {
 } from 'web/utils/severity';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import SettingsDialog from './dialog';
@@ -191,7 +192,6 @@ ToolBarIcons.propTypes = {
 };
 
 const UserSettings = ({
-  gmp,
   loadAlerts,
   loadCredentials,
   loadFilters,
@@ -207,6 +207,7 @@ const UserSettings = ({
   setTimezone,
   ...props
 }) => {
+  const gmp = useGmp();
   const [, renewSession] = useUserSessionTimeout();
   const [activeTab, setActiveTab] = useState(0);
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -892,7 +893,6 @@ UserSettings.propTypes = {
   dynamicSeverity: PropTypes.object,
   filters: PropTypes.array,
   filtersFilter: PropTypes.object,
-  gmp: PropTypes.gmp.isRequired,
   groupsFilter: PropTypes.object,
   hostsFilter: PropTypes.object,
   isLoading: PropTypes.bool,
