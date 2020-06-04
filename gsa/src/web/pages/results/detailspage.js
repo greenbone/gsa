@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useCallback} from 'react';
+import React from 'react';
 
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -73,7 +73,6 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 
 import {loadEntity, selector} from 'web/store/entities/results';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
@@ -288,12 +287,10 @@ const Page = ({
   onChanged,
   onDownloaded,
   onError,
-  onInteraction,
   username,
   ...props
 }) => {
   const gmp = useGmp();
-  const dispatch = useDispatch();
   const [, renewSession] = useUserSessionTimeout();
 
   const handleDownload = result => {
@@ -336,13 +333,13 @@ const Page = ({
   };
 
   return (
-    <NoteComponent onCreated={onChanged} onInteraction={onInteraction}>
+    <NoteComponent onCreated={onChanged} onInteraction={renewSession}>
       {({create: createnote}) => (
-        <OverrideComponent onCreated={onChanged} onInteraction={onInteraction}>
+        <OverrideComponent onCreated={onChanged} onInteraction={renewSession}>
           {({create: createoverride}) => (
             <TicketComponent
               onCreated={goto_details('ticket', props)}
-              onInteraction={onInteraction}
+              onInteraction={renewSession}
             >
               {({createFromResult: createticket}) => (
                 <EntityPage
@@ -351,7 +348,7 @@ const Page = ({
                   sectionIcon={<ResultIcon size="large" />}
                   title={_('Result')}
                   toolBarIcons={ToolBarIcons}
-                  onInteraction={onInteraction}
+                  onInteraction={renewSession}
                   onNoteCreateClick={result => openDialog(result, createnote)}
                   onOverrideCreateClick={result =>
                     openDialog(result, createoverride)
@@ -384,7 +381,7 @@ const Page = ({
                               entity={entity}
                               onChanged={onChanged}
                               onError={onError}
-                              onInteraction={onInteraction}
+                              onInteraction={renewSession}
                             />
                           </TabPanel>
                         </TabPanels>
@@ -409,7 +406,6 @@ Page.propTypes = {
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func,
 };
 
 const mapStateToProps = rootState => {
@@ -426,7 +422,6 @@ const mapStateToProps = rootState => {
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
 });
 
 export default compose(
