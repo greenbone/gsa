@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {connect} from 'react-redux';
 
@@ -56,42 +56,29 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 const log = logger.getLogger('web.report.alertactions');
 
-class AlertActions extends React.Component {
-  constructor(...args) {
-    super(...args);
+const AlertActions = ({loadReportComposerDefaults, ...props}) => {
+  const [showTriggerAlertDialog, setShowTriggerAlertDialog] = useState(false);
+  const [storeAsDefault, setStoreAsDefault] = useState();
+  const [alertId, setAlertId] = useState();
 
-    this.state = {
-      showTriggerAlertDialog: false,
-    };
+  useEffect(() => {
+    loadReportComposerDefaults();
+  }, [loadReportComposerDefaults]); //componentDidMount
 
-    this.handleAlertChange = this.handleAlertChange.bind(this);
-    this.handleTriggerAlert = this.handleTriggerAlert.bind(this);
-    this.onAlertCreated = this.onAlertCreated.bind(this);
-    this.handleOpenTriggerAlertDialog = this.handleOpenTriggerAlertDialog.bind(
-      this,
-    ); /* eslint-disable-line max-len */
-    this.handleCloseTriggerAlertDialog = this.handleCloseTriggerAlertDialog.bind(
-      this,
-    ); /* eslint-disable-line max-len */
-  }
+  const handleAlertChange = alert_id => {
+    setAlertId(alert_id);
+  };
 
-  componentDidMount() {
-    this.props.loadReportComposerDefaults();
-  }
-
-  handleAlertChange(alertId) {
-    this.setState({alertId});
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
+  const handleInteraction = () => {
+    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  handleTriggerAlert(state) {
+  const handleTriggerAlert = state => {
     const {alertId, includeNotes, includeOverrides, storeAsDefault} = state;
+    setStoreAsDefault(storeAsDefault); // not sure where this was set in the original
     const {
       filter,
       gmp,
@@ -99,16 +86,16 @@ class AlertActions extends React.Component {
       reportComposerDefaults,
       showErrorMessage,
       showSuccessMessage,
-    } = this.props;
+    } = props;
 
     const newFilter = filter.copy();
     newFilter.set('notes', includeNotes);
     newFilter.set('overrides', includeOverrides);
 
-    this.handleInteraction();
+    handleInteraction();
 
     if (storeAsDefault) {
-      this.props.saveReportComposerDefaults({
+      props.saveReportComposerDefaults({
         ...reportComposerDefaults,
         defaultAlertId: alertId,
         includeNotes,
@@ -125,91 +112,81 @@ class AlertActions extends React.Component {
       .then(
         response => {
           showSuccessMessage(_('Running the alert was successful'));
-          this.setState({
-            alertId: undefined,
-            showTriggerAlertDialog: false,
-          });
+          setAlertId();
+          setShowTriggerAlertDialog(false);
         },
         error => {
           log.error('Failed running alert', error);
           showErrorMessage(_('Failed to run alert.'));
-          this.setState({showTriggerAlertDialog: false});
+          setShowTriggerAlertDialog(false);
         },
       );
-  }
+  };
 
-  handleOpenTriggerAlertDialog() {
-    this.props.loadAlerts();
-    this.setState({
-      showTriggerAlertDialog: true,
-    });
-  }
+  const handleOpenTriggerAlertDialog = () => {
+    props.loadAlerts();
+    setShowTriggerAlertDialog(true);
+  };
 
-  handleCloseTriggerAlertDialog() {
-    this.setState({
-      showTriggerAlertDialog: false,
-    });
-  }
+  const handleCloseTriggerAlertDialog = () => {
+    setShowTriggerAlertDialog(false);
+  };
 
-  onAlertCreated(response) {
-    this.props.loadAlerts();
-    this.setState({
-      alertId: response.data.id,
-    });
-  }
+  const onAlertCreated = response => {
+    props.loadAlerts();
+    setAlertId(response.data.id);
+  };
 
-  render() {
-    const {
-      alerts,
-      capabilities,
-      reportComposerDefaults,
-      filter,
-      showError,
-      showThresholdMessage,
-      threshold,
-      onInteraction,
-    } = this.props;
-    const {alertId, showTriggerAlertDialog, storeAsDefault} = this.state;
-    const mayAccessAlerts = capabilities.mayOp('get_alerts');
-    return (
-      <AlertComponent
-        onCreated={this.onAlertCreated}
-        onError={showError}
-        onInteraction={onInteraction}
-      >
-        {({create}) => (
-          <React.Fragment>
-            {mayAccessAlerts && (
-              <IconDivider>
-                <StartIcon
-                  title={_('Trigger Alert')}
-                  onClick={this.handleOpenTriggerAlertDialog}
-                />
-              </IconDivider>
-            )}
-            {showTriggerAlertDialog && (
-              <TriggerAlertDialog
-                alertId={alertId}
-                alerts={alerts}
-                defaultAlertId={reportComposerDefaults.defaultAlertId}
-                filter={filter}
-                includeNotes={reportComposerDefaults.includeNotes}
-                includeOverrides={reportComposerDefaults.includeOverrides}
-                showThresholdMessage={showThresholdMessage}
-                storeAsDefault={storeAsDefault}
-                threshold={threshold}
-                onAlertChange={this.handleAlertChange}
-                onClose={this.handleCloseTriggerAlertDialog}
-                onNewAlertClick={create}
-                onSave={this.handleTriggerAlert}
+  const {
+    alerts,
+    capabilities,
+    reportComposerDefaults,
+    filter,
+    showError,
+    showThresholdMessage,
+    threshold,
+    onInteraction,
+  } = props;
+
+  const mayAccessAlerts = capabilities.mayOp('get_alerts');
+  return (
+    <AlertComponent
+      onCreated={onAlertCreated}
+      onError={showError}
+      onInteraction={onInteraction}
+    >
+      {({create}) => (
+        <React.Fragment>
+          {mayAccessAlerts && (
+            <IconDivider>
+              <StartIcon
+                title={_('Trigger Alert')}
+                onClick={handleOpenTriggerAlertDialog}
               />
-            )}
-          </React.Fragment>
-        )}
-      </AlertComponent>
-    );
-  }
-}
+            </IconDivider>
+          )}
+          {showTriggerAlertDialog && (
+            <TriggerAlertDialog
+              alertId={alertId}
+              alerts={alerts}
+              defaultAlertId={reportComposerDefaults.defaultAlertId}
+              filter={filter}
+              includeNotes={reportComposerDefaults.includeNotes}
+              includeOverrides={reportComposerDefaults.includeOverrides}
+              showThresholdMessage={showThresholdMessage}
+              storeAsDefault={storeAsDefault}
+              threshold={threshold}
+              onAlertChange={handleAlertChange}
+              onClose={handleCloseTriggerAlertDialog}
+              onNewAlertClick={create}
+              onSave={handleTriggerAlert}
+            />
+          )}
+        </React.Fragment>
+      )}
+    </AlertComponent>
+  );
+};
 
 AlertActions.propTypes = {
   alerts: PropTypes.array,
@@ -250,10 +227,7 @@ const mapStateToProps = rootState => {
 export default compose(
   withGmp,
   withCapabilities,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(AlertActions);
 
 // vim: set ts=2 sw=2 tw=80:
