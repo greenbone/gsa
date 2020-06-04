@@ -401,7 +401,6 @@ const Page = ({
 Page.propTypes = {
   detailsExportFileName: PropTypes.object,
   entity: PropTypes.model,
-  gmp: PropTypes.gmp.isRequired,
   username: PropTypes.string,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
