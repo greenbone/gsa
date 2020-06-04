@@ -101,11 +101,7 @@ import {loadUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilte
 import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilters/selectors';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
-import {
-  updateTimezone,
-  renewSessionTimeout,
-  setSessionTimeout,
-} from 'web/store/usersettings/actions';
+import {updateTimezone} from 'web/store/usersettings/actions';
 
 import Table from 'web/components/table/table';
 import TableBody from 'web/components/table/body';
@@ -122,6 +118,7 @@ import {
 } from 'web/utils/severity';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import SettingsDialog from './dialog';
 
@@ -194,6 +191,7 @@ ToolBarIcons.propTypes = {
 };
 
 const UserSettings = props => {
+  const [, renewSession] = useUserSessionTimeout();
   const [activeTab, setActiveTab] = useState(0);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [disableEditIcon, setDisableEditIcon] = useState(true);
@@ -251,14 +249,14 @@ const UserSettings = props => {
   }, [loadSettings, loadEntities]);
 
   const handleActivateTab = index => {
-    handleInteraction();
+    renewSession();
 
     setActiveTab(index);
   };
 
   const openDialog = () => {
     setDialogVisible(true);
-    handleInteraction();
+    renewSession();
   };
 
   const closeDialog = () => {
@@ -267,14 +265,7 @@ const UserSettings = props => {
 
   const handleCloseDialog = () => {
     closeDialog();
-    handleInteraction();
-  };
-
-  const handleInteraction = () => {
-    const {onInteraction} = props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
+    renewSession();
   };
 
   const getSeverityClassNameById = id => {
@@ -288,7 +279,7 @@ const UserSettings = props => {
     const {gmp} = props;
     const {userInterfaceLanguage = BROWSER_LANGUAGE, timezone} = data;
 
-    handleInteraction();
+    renewSession();
 
     return gmp.user.saveSettings(data).then(() => {
       closeDialog();
@@ -948,7 +939,6 @@ UserSettings.propTypes = {
   userInterfaceLanguage: PropTypes.object,
   usersFilter: PropTypes.object,
   vulnerabilitiesFilter: PropTypes.object,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = rootState => {
@@ -1199,7 +1189,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
   loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
   loadAlert: id => dispatch(loadAlert(gmp)(id)),
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   setLocale: locale => gmp.setLocale(locale),
   setTimezone: timezone => dispatch(updateTimezone(gmp)(timezone)),
 });
