@@ -47,16 +47,18 @@ import {
 
 import {
   loadReportComposerDefaults,
-  renewSessionTimeout,
   saveReportComposerDefaults,
 } from 'web/store/usersettings/actions';
 
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 import useCapabilities from 'web/utils/useCapabilities';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const log = logger.getLogger('web.report.alertactions');
 
 const AlertActions = ({loadReportComposerDefaults, ...props}) => {
+  const [, renewSession] = useUserSessionTimeout();
+
   const [showTriggerAlertDialog, setShowTriggerAlertDialog] = useState(false);
   const [storeAsDefault, setStoreAsDefault] = useState();
   const [alertId, setAlertId] = useState();
@@ -69,13 +71,6 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
 
   const handleAlertChange = alert_id => {
     setAlertId(alert_id);
-  };
-
-  const handleInteraction = () => {
-    const {onInteraction} = props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
   };
 
   const handleTriggerAlert = state => {
@@ -94,7 +89,7 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
     newFilter.set('notes', includeNotes);
     newFilter.set('overrides', includeOverrides);
 
-    handleInteraction();
+    renewSession();
 
     if (storeAsDefault) {
       props.saveReportComposerDefaults({
@@ -203,12 +198,10 @@ AlertActions.propTypes = {
   showSuccessMessage: PropTypes.func.isRequired,
   showThresholdMessage: PropTypes.bool,
   threshold: PropTypes.number,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
-    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
     loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
     loadReportComposerDefaults: () =>
       dispatch(loadReportComposerDefaults(gmp)()),
