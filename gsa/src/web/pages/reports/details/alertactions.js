@@ -26,11 +26,10 @@ import logger from 'gmp/log';
 
 import {ALL_FILTER} from 'gmp/models/filter';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 
 import StartIcon from 'web/components/icon/starticon';
 
@@ -57,6 +56,7 @@ import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 const log = logger.getLogger('web.report.alertactions');
 
 const AlertActions = ({loadReportComposerDefaults, ...props}) => {
+  const gmp = useGmp();
   const [, renewSession] = useUserSessionTimeout();
 
   const [showTriggerAlertDialog, setShowTriggerAlertDialog] = useState(false);
@@ -78,7 +78,6 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
     setStoreAsDefault(storeAsDefault); // not sure where this was set in the original
     const {
       filter,
-      gmp,
       reportId,
       reportComposerDefaults,
       showErrorMessage,
@@ -187,7 +186,6 @@ const AlertActions = ({loadReportComposerDefaults, ...props}) => {
 AlertActions.propTypes = {
   alerts: PropTypes.array,
   filter: PropTypes.filter,
-  gmp: PropTypes.gmp.isRequired,
   loadAlerts: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
