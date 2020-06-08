@@ -154,8 +154,20 @@ export const GET_TASK = gql`
 `;
 
 export const GET_TASKS = gql`
-  query Task($filterString: String) {
-    tasks(filterString: $filterString) {
+  query Tasks(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    tasks(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
       edges {
         node {
           name
@@ -228,6 +240,13 @@ export const GET_TASKS = gql`
         limit
         length
       }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
+      }
     }
   }
 `;
@@ -275,7 +294,8 @@ export const useGetTasks = (variables, options) => {
     length: length,
     rows: limit,
   });
-  return {...other, counts, tasks};
+  const pageInfo = data?.tasks?.pageInfo;
+  return {...other, counts, tasks, pageInfo};
 };
 
 export const useLazyGetTasks = (variables, options) => {
@@ -289,19 +309,22 @@ export const useLazyGetTasks = (variables, options) => {
 
   const {total, filtered, offset = -1, limit, length} =
     data?.tasks?.counts || {};
-  const counts = new CollectionCounts({
-    all: total,
-    filtered: filtered,
-    first: offset + 1,
-    length: length,
-    rows: limit,
-  });
+  const counts = isDefined(data?.tasks?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
   const getTasks = useCallback(
     // eslint-disable-next-line no-shadow
     (variables, options) => queryTasks({...options, variables}),
     [queryTasks],
   );
-  return [getTasks, {...other, counts, tasks}];
+  const pageInfo = data?.tasks?.pageInfo;
+  return [getTasks, {...other, counts, tasks, pageInfo}];
 };
 
 export const useCloneTask = options => {
