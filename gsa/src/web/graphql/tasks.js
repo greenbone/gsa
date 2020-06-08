@@ -287,13 +287,15 @@ export const useGetTasks = (variables, options) => {
 
   const {total, filtered, offset = -1, limit, length} =
     data?.tasks?.counts || {};
-  const counts = new CollectionCounts({
-    all: total,
-    filtered: filtered,
-    first: offset + 1,
-    length: length,
-    rows: limit,
-  });
+  const counts = isDefined(data?.tasks?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
   const pageInfo = data?.tasks?.pageInfo;
   return {...other, counts, tasks, pageInfo};
 };
