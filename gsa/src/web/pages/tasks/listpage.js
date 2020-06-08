@@ -117,9 +117,10 @@ const TasksListPage = () => {
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('task');
   const prevFilter = usePrevious(filter);
+  const simpleFilter = filter.withoutView();
   const [
     getTasks,
-    {counts, tasks, error, loading: isLoading, refetch, called},
+    {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
   const [deleteTask] = useDeleteTask();
   const [cloneTask] = useCloneTask();
@@ -160,6 +161,7 @@ const TasksListPage = () => {
     if (!isLoadingFilter && hasValue(filter) && !called) {
       getTasks({
         filterString: filter.toFilterString(),
+        first: filter.get('rows'),
       });
     }
   }, [isLoadingFilter, filter, getTasks, called]);
@@ -167,9 +169,53 @@ const TasksListPage = () => {
   useEffect(() => {
     // reload if filter has changed
     if (hasValue(refetch) && !filter.equals(prevFilter)) {
-      refetch({filterString: filter.toFilterString()});
+      refetch({
+        filterString: filter.toFilterString(),
+        first: undefined,
+        last: undefined,
+      });
     }
-  }, [filter, prevFilter, refetch]);
+  }, [filter, prevFilter, simpleFilter, refetch]);
+
+  const getNextTasks = () => {
+    refetch({
+      filterString: simpleFilter.toFilterString(),
+      after: pageInfo.endCursor,
+      before: undefined,
+      first: filter.get('rows'),
+      last: undefined,
+    });
+  };
+
+  const getPreviousTasks = () => {
+    refetch({
+      filterString: simpleFilter.toFilterString(),
+      after: undefined,
+      before: pageInfo.startCursor,
+      first: undefined,
+      last: filter.get('rows'),
+    });
+  };
+
+  const getFirstTasks = () => {
+    refetch({
+      filterString: simpleFilter.toFilterString(),
+      after: undefined,
+      before: undefined,
+      first: filter.get('rows'),
+      last: undefined,
+    });
+  };
+
+  const getLastTasks = () => {
+    refetch({
+      filterString: simpleFilter.toFilterString(),
+      after: pageInfo.lastPageCursor,
+      before: undefined,
+      first: filter.get('rows'),
+      last: undefined,
+    });
+  };
 
   return (
     <TaskComponent
@@ -251,6 +297,10 @@ const TasksListPage = () => {
             onFilterRemoved={removeFilter}
             onInteraction={renewSession}
             onModifyTaskWizardClick={modifytaskwizard}
+            onFirstClick={getFirstTasks}
+            onLastClick={getLastTasks}
+            onNextClick={getNextTasks}
+            onPreviousClick={getPreviousTasks}
             onReportImportClick={reportimport}
             onSelectionTypeChange={changeSelectionType}
             onSortChange={handleSortChange}
