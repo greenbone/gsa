@@ -56,17 +56,6 @@ const exclude_props = [
   'toolBarIcons',
 ];
 
-const renderSectionTitle = (counts, title) => {
-  if (!isDefined(counts)) {
-    return title;
-  }
-
-  return _('{{title}} {{filtered}} of {{all}}', {
-    title,
-    ...counts,
-  });
-};
-
 class EntitiesPage extends React.Component {
   constructor(...args) {
     super(...args);
@@ -87,9 +76,16 @@ class EntitiesPage extends React.Component {
   }
 
   getSectionTitle() {
-    const {entitiesCounts, title} = this.props;
+    const {entities, entitiesCounts, title, isLoading} = this.props;
 
-    return renderSectionTitle(entitiesCounts, title);
+    if (!isDefined(entitiesCounts) || (isLoading && !isDefined(entities))) {
+      return title;
+    }
+
+    return _('{{title}} {{filtered}} of {{all}}', {
+      title,
+      ...entitiesCounts,
+    });
   }
 
   handleFilterEditClick() {
