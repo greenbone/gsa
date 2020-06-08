@@ -79,13 +79,17 @@ const GetLazyTasksComponent = () => {
   return (
     <div>
       <button data-testid="load" onClick={() => getTasks()} />
-      <div data-testid="counts">
-        <span data-testid="total">{counts.all}</span>
-        <span data-testid="filtered">{counts.filtered}</span>
-        <span data-testid="offset">{counts.first}</span>
-        <span data-testid="limit">{counts.rows}</span>
-        <span data-testid="length">{counts.length}</span>
-      </div>
+      {isDefined(counts) ? (
+        <div data-testid="counts">
+          <span data-testid="total">{counts.all}</span>
+          <span data-testid="filtered">{counts.filtered}</span>
+          <span data-testid="offset">{counts.first}</span>
+          <span data-testid="limit">{counts.rows}</span>
+          <span data-testid="length">{counts.length}</span>
+        </div>
+      ) : (
+        <div data-testid="no-counts" />
+      )}
       {isDefined(tasks) ? (
         tasks.map(task => {
           return (
@@ -139,12 +143,8 @@ describe('useLazyGetTasks tests', () => {
 
     let noTasks = screen.queryByTestId('no-task');
     expect(noTasks).toBeInTheDocument();
-
-    expect(screen.getByTestId('total')).toHaveTextContent(0);
-    expect(screen.getByTestId('filtered')).toHaveTextContent(0);
-    expect(screen.getByTestId('offset')).toHaveTextContent(0);
-    expect(screen.getByTestId('limit')).toHaveTextContent(0);
-    expect(screen.getByTestId('length')).toHaveTextContent(0);
+    const noCounts = screen.queryByTestId('no-counts');
+    expect(noCounts).toBeInTheDocument();
 
     const button = screen.getByTestId('load');
     fireEvent.click(button);

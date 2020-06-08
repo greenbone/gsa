@@ -19,8 +19,6 @@
 import {TASK_STATUS} from 'gmp/models/task';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {
   CLONE_TASK,
   CREATE_CONTAINER_TASK,
@@ -170,9 +168,22 @@ const mockTasks = {
     limit: 10,
     length: 1,
   },
+  pageInfo: {
+    hasNextPage: false,
+    hasPreviousPage: false,
+    startCursor: 'task:0',
+    endCursor: 'task:1',
+    lastPageCursor: 'task:3',
+  },
 };
 
-export const createGetTasksQueryMock = ({filterString} = {}) => {
+export const createGetTasksQueryMock = ({
+  filterString,
+  after,
+  previous,
+  first,
+  last,
+} = {}) => {
   const queryResult = {
     data: {
       tasks: mockTasks,
@@ -181,11 +192,13 @@ export const createGetTasksQueryMock = ({filterString} = {}) => {
 
   const resultFunc = jest.fn().mockReturnValue(queryResult);
 
-  const variables = {};
-
-  if (isDefined(filterString)) {
-    variables.filterString = filterString;
-  }
+  const variables = {
+    filterString,
+    after,
+    previous,
+    first,
+    last,
+  };
 
   const queryMock = {
     request: {

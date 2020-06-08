@@ -126,8 +126,11 @@ describe('TasksListPage tests', () => {
       user: {currentSettings, getSetting: getUserSetting},
     };
     const filterString = 'foo=bar rows=2';
-    const defaultSettingFilter = Filter.fromString('foo=bar');
-    const [mock, resultFunc] = createGetTasksQueryMock({filterString});
+    const defaultSettingFilter = Filter.fromString('foo=bar rows=2');
+    const [mock, resultFunc] = createGetTasksQueryMock({
+      filterString,
+      first: 2,
+    });
 
     const {render, store} = rendererWith({
       gmp,
@@ -251,7 +254,10 @@ describe('TasksListPage tests', () => {
     };
 
     const filterString = 'foo=bar rows=2';
-    const [mock, resultFunc] = createGetTasksQueryMock({filterString});
+    const [mock, resultFunc] = createGetTasksQueryMock({
+      filterString,
+      first: 2,
+    });
 
     const {render, store} = rendererWith({
       gmp,
