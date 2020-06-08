@@ -36,7 +36,7 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import {MockedProvider} from '@apollo/react-testing';
 
-import {GET_TASK} from 'web/pages/tasks/graphql';
+import {GET_TASK} from 'web/graphql/tasks';
 import {
   getMockTasks,
   getMockTaskData,
