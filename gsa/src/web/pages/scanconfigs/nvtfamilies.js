@@ -49,6 +49,12 @@ import PropTypes from 'web/utils/proptypes';
 
 import Trend from './trend';
 
+const WHOLE_SELECTION_FAMILIES = [
+  'CentOS Local Security Checks',
+  'Fedora Local Security Checks',
+  'Huawei EulerOS Local Security Checks',
+];
+
 const NvtFamily = ({
   familyMaxNvtCount = 0,
   familyName,
@@ -59,56 +65,62 @@ const NvtFamily = ({
   onEditConfigFamilyClick,
   onSelectChange,
   onTrendChange,
-}) => (
-  <TableRow key={familyName}>
-    <TableData>{familyName}</TableData>
-    <TableData align="start">
-      {_('{{count}} of {{max}}', {
-        count: familyNvtCount,
-        max: familyMaxNvtCount,
-      })}
-    </TableData>
-    <TableData align={['center', 'start']}>
-      <Divider>
-        <Radio
+}) => {
+  const isToSelectWhole = WHOLE_SELECTION_FAMILIES.includes(familyName);
+  return (
+    <TableRow key={familyName}>
+      <TableData>{familyName}</TableData>
+      <TableData align="start">
+        {_('{{count}} of {{max}}', {
+          count: familyNvtCount,
+          max: familyMaxNvtCount,
+        })}
+      </TableData>
+      <TableData align={['center', 'start']}>
+        <Divider>
+          <Radio
+            flex
+            name={familyName}
+            checked={isToSelectWhole || trend === SCANCONFIG_TREND_DYNAMIC}
+            convert={parseTrend}
+            value={SCANCONFIG_TREND_DYNAMIC}
+            onChange={onTrendChange}
+          />
+          <Trend trend={SCANCONFIG_TREND_DYNAMIC} />
+          <Radio
+            flex
+            name={familyName}
+            checked={!isToSelectWhole && trend === SCANCONFIG_TREND_STATIC}
+            disabled={isToSelectWhole}
+            convert={parseTrend}
+            value={SCANCONFIG_TREND_STATIC}
+            onChange={onTrendChange}
+          />
+          <Trend active={!isToSelectWhole} trend={SCANCONFIG_TREND_STATIC} />
+        </Divider>
+      </TableData>
+      <TableData align={['start', 'center']}>
+        <Checkbox
           flex
           name={familyName}
-          checked={trend === SCANCONFIG_TREND_DYNAMIC}
-          convert={parseTrend}
-          value={SCANCONFIG_TREND_DYNAMIC}
-          onChange={onTrendChange}
+          checked={select === YES_VALUE}
+          checkedValue={YES_VALUE}
+          unCheckedValue={NO_VALUE}
+          onChange={onSelectChange}
         />
-        <Trend trend={SCANCONFIG_TREND_DYNAMIC} />
-        <Radio
-          flex
-          name={familyName}
-          checked={trend === SCANCONFIG_TREND_STATIC}
-          convert={parseTrend}
-          value={SCANCONFIG_TREND_STATIC}
-          onChange={onTrendChange}
-        />
-        <Trend trend={SCANCONFIG_TREND_STATIC} />
-      </Divider>
-    </TableData>
-    <TableData align={['start', 'center']}>
-      <Checkbox
-        flex
-        name={familyName}
-        checked={select === YES_VALUE}
-        checkedValue={YES_VALUE}
-        unCheckedValue={NO_VALUE}
-        onChange={onSelectChange}
-      />
-    </TableData>
-    <TableData align={['center', 'center']}>
-      <EditIcon
-        title={title}
-        value={familyName}
-        onClick={onEditConfigFamilyClick}
-      />
-    </TableData>
-  </TableRow>
-);
+      </TableData>
+      <TableData align={['center', 'center']}>
+        {!isToSelectWhole && (
+          <EditIcon
+            title={title}
+            value={familyName}
+            onClick={onEditConfigFamilyClick}
+          />
+        )}
+      </TableData>
+    </TableRow>
+  );
+};
 
 NvtFamily.propTypes = {
   familyMaxNvtCount: PropTypes.number,
