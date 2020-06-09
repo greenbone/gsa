@@ -164,7 +164,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 
 [9.0.0]: https://github.com/greenbone/gsa/compare/v8.0.1...v9.0.0
 
-## [8.0.2] - unreleased
+## [8.0.2] - 2020-05-13
 
 ### Added
 - Show passphrase field in credential dialog for cc type [#2006](https://github.com/greenbone/gsa/pull/2006)
@@ -227,6 +227,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
+- Fixed missing CVEs on CPE detailspage [#2220](https://github.com/greenbone/gsa/pull/2220)
 - Fixed nvt family links not changing the filter [#1997](https://github.com/greenbone/gsa/pull/1997)
 - Use correct capabilities for task icons [#1973](https://github.com/greenbone/gsa/pull/1973)
 - Fixed ProvideViewIcon for tasks is only shown for users but not for groups and roles [#1968](https://github.com/greenbone/gsa/pull/1968)
@@ -274,7 +275,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Fixed using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
 - Update manpage [#1616](https://github.com/greenbone/gsa/pull/1616)
 
-[8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...gsa-8.0
+[8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...v8.0.2
 
 ## [8.0.1] - 2019-07-17
 
