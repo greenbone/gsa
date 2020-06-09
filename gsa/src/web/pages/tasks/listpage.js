@@ -44,7 +44,12 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 
 import EntitiesPage from 'web/entities/page';
 
-import {useLazyGetTasks, useDeleteTask, useCloneTask} from 'web/graphql/tasks';
+import {
+  useLazyGetTasks,
+  useDeleteTask,
+  useGetAllFiltered,
+  useCloneTask,
+} from 'web/graphql/tasks';
 
 import PropTypes from 'web/utils/proptypes';
 import SelectionType from 'web/utils/selectiontype';
@@ -123,6 +128,9 @@ const TasksListPage = () => {
     getTasks,
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
+
+  const [getAllFiltered, filteredTasks = []] = useGetAllFiltered();
+
   const [deleteTask] = useDeleteTask();
   const [cloneTask] = useCloneTask();
   const {
@@ -157,7 +165,7 @@ const TasksListPage = () => {
     [deleteTask, refetch, showError],
   );
 
-  const handleDeleteTaskBulk = () => {
+  const handleDeleteTaskBulk = async () => {
     let idsToDelete = [];
 
     if (selectionType === SelectionType.SELECTION_USER) {
@@ -168,13 +176,18 @@ const TasksListPage = () => {
         idsToDelete.push(promise);
       });
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      console.log('page content type');
+
       tasks.forEach(task => {
         const promise = deleteTask(task.id);
 
         idsToDelete.push(promise);
       });
     } else {
-      console.log('all filtered');
+      filteredTasks.forEach(task => {
+        const promise = deleteTask(task.id);
+        idsToDelete.push(promise);
+      });
     }
 
     return Promise.all([...idsToDelete]).then(refetch, showError);
@@ -187,8 +200,11 @@ const TasksListPage = () => {
         filterString: filter.toFilterString(),
         first: filter.get('rows'),
       });
+
+      const allFilter = filter.all().toFilterString();
+      getAllFiltered(allFilter);
     }
-  }, [isLoadingFilter, filter, getTasks, called]);
+  }, [isLoadingFilter, filter, getTasks, called, getAllFiltered]);
 
   useEffect(() => {
     // reload if filter has changed
@@ -198,8 +214,10 @@ const TasksListPage = () => {
         first: undefined,
         last: undefined,
       });
+      const allFilter = filter.all().toFilterString();
+      getAllFiltered(allFilter);
     }
-  }, [filter, prevFilter, simpleFilter, refetch]);
+  }, [filter, prevFilter, simpleFilter, refetch, getAllFiltered]);
 
   const getNextTasks = () => {
     refetch({
@@ -240,8 +258,6 @@ const TasksListPage = () => {
       last: undefined,
     });
   };
-
-  console.log(tasks);
 
   return (
     <TaskComponent
@@ -314,7 +330,7 @@ const TasksListPage = () => {
             toolBarIcons={ToolBarIcons}
             onAdvancedTaskWizardClick={advancedtaskwizard}
             onContainerTaskCreateClick={createcontainer}
-            onDeleteBulk={selected => handleDeleteTaskBulk(selected)}
+            onDeleteBulk={handleDeleteTaskBulk}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}
