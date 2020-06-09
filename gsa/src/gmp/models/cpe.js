@@ -35,9 +35,9 @@ class Cpe extends Info {
     delete ret.max_cvss;
 
     if (isDefined(ret.cves) && isDefined(ret.cves.cve)) {
-      ret.cves = map(ret.cves.cve.entry, cve => ({
-        id: cve._id,
-        severity: parseSeverity(cve.cvss.base_metrics.score.__text),
+      ret.cves = map(ret.cves.cve, cve => ({
+        id: cve.entry._id,
+        severity: parseSeverity(cve.entry.cvss.base_metrics.score),
       }));
     } else {
       ret.cves = [];
