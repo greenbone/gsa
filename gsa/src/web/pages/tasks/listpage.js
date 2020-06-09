@@ -137,7 +137,7 @@ const TasksListPage = () => {
   const [downloadRef, handleDownload] = useDownload();
   const {
     selectionType,
-    selected,
+    selected = [],
     changeSelectionType,
     select,
     deselect,
@@ -155,6 +155,17 @@ const TasksListPage = () => {
     task => deleteTask(task.id).then(refetch, showError),
     [deleteTask, refetch, showError],
   );
+
+  const handleDeleteTaskBulk = () => {
+    let idsToDelete = [];
+    selected.forEach(item => {
+      const promise = deleteTask(item.id);
+
+      idsToDelete.push(promise);
+    });
+
+    return Promise.all([...idsToDelete]).then(refetch, showError);
+  };
 
   useEffect(() => {
     // load tasks initially after the filter is resolved
@@ -288,6 +299,7 @@ const TasksListPage = () => {
             toolBarIcons={ToolBarIcons}
             onAdvancedTaskWizardClick={advancedtaskwizard}
             onContainerTaskCreateClick={createcontainer}
+            onDeleteBulk={selected => handleDeleteTaskBulk(selected)}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}
