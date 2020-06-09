@@ -42,30 +42,28 @@ describe('CPE model tests', () => {
   test('should parse id and severity of cves', () => {
     const elem = {
       cves: {
-        cve: {
-          entry: [
-            {
+        cve: [
+          {
+            entry: {
               _id: '1337',
               cvss: {
                 base_metrics: {
-                  score: {
-                    __text: '9.0',
-                  },
+                  score: '9.0',
                 },
               },
             },
-            {
+          },
+          {
+            entry: {
               _id: '42',
               cvss: {
                 base_metrics: {
-                  score: {
-                    __text: '9.5',
-                  },
+                  score: '9.5',
                 },
               },
             },
-          ],
-        },
+          },
+        ],
       },
     };
     const cpe = Cpe.fromElement(elem);

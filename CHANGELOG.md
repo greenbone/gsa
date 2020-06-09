@@ -67,6 +67,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
+- Fixed missing CVEs on CPE detailspage [#2220](https://github.com/greenbone/gsa/pull/2220)
 - Fixed nvt family links not changing the filter [#1997](https://github.com/greenbone/gsa/pull/1997)
 - Use correct capabilities for task icons [#1973](https://github.com/greenbone/gsa/pull/1973)
 - Fixed ProvideViewIcon for tasks is only shown for users but not for groups and roles [#1968](https://github.com/greenbone/gsa/pull/1968)
