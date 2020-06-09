@@ -47,6 +47,7 @@ import EntitiesPage from 'web/entities/page';
 import {useLazyGetTasks, useDeleteTask, useCloneTask} from 'web/graphql/tasks';
 
 import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
 import useFilterSortBy from 'web/utils/useFilterSortby';
@@ -158,11 +159,23 @@ const TasksListPage = () => {
 
   const handleDeleteTaskBulk = () => {
     let idsToDelete = [];
-    selected.forEach(item => {
-      const promise = deleteTask(item.id);
 
-      idsToDelete.push(promise);
-    });
+    if (selectionType === SelectionType.SELECTION_USER) {
+      console.log('user selection type');
+      selected.forEach(item => {
+        const promise = deleteTask(item.id);
+
+        idsToDelete.push(promise);
+      });
+    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      tasks.forEach(task => {
+        const promise = deleteTask(task.id);
+
+        idsToDelete.push(promise);
+      });
+    } else {
+      console.log('all filtered');
+    }
 
     return Promise.all([...idsToDelete]).then(refetch, showError);
   };
@@ -227,6 +240,8 @@ const TasksListPage = () => {
       last: undefined,
     });
   };
+
+  console.log(tasks);
 
   return (
     <TaskComponent
