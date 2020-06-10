@@ -19,7 +19,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   align-items: stretch;
 }
 
-.c15 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -70,7 +70,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c25 {
+.c27 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -79,7 +79,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c24 {
+.c26 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -146,7 +146,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c21 {
+.c23 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -166,12 +166,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c21:focus,
-.c21:hover {
+.c23:focus,
+.c23:hover {
   border: 1px solid #393637;
 }
 
-.c21:hover {
+.c23:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -179,26 +179,26 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c21[disabled] {
+.c23[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c21 img {
+.c23 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c21:link {
+.c23:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c22 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -216,18 +216,18 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c23 {
+.c25 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c23:hover {
+.c25:hover {
   color: #fff;
   background: #519032;
 }
 
-.c20 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -376,7 +376,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   padding-right: 10px;
 }
 
-.c16 {
+.c17 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -401,18 +401,18 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c17 {
+.c18 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c17 * {
+.c18 * {
   height: inherit;
   width: inherit;
 }
 
-.c13 {
+.c14 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -436,7 +436,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   font-weight: normal;
 }
 
-.c12 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -448,7 +448,16 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   width: 180px;
 }
 
-.c14 {
+.c19 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -468,7 +477,14 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   cursor: default;
 }
 
-.c18 {
+.c12 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c20 {
   display: block;
   height: auto;
   color: #393637;
@@ -479,7 +495,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   padding: 4px 8px;
 }
 
-.c19 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -564,33 +580,43 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                         aria-labelledby="downshift-0-label"
                         class="c12"
                         role="combobox"
-                        width="180px"
                       >
                         <div
-                          aria-haspopup="true"
-                          aria-label="open menu"
                           class="c13"
-                          data-toggle="true"
-                          role="button"
-                          type="button"
+                          width="180px"
                         >
                           <div
+                            aria-haspopup="true"
+                            aria-label="open menu"
                             class="c14"
-                            data-testid="select-selected-value"
-                            title="Open"
+                            data-toggle="true"
+                            role="button"
+                            type="button"
                           >
-                            Open
-                          </div>
-                          <div
-                            class="c15"
-                          >
-                            <span
-                              class="c16 c17"
-                              data-testid="select-open-button"
+                            <div
+                              class="c15"
+                              data-testid="select-selected-value"
+                              title="Open"
                             >
-                              ▼
-                            </span>
+                              Open
+                            </div>
+                            <div
+                              class="c16"
+                            >
+                              <span
+                                class="c17 c18"
+                                data-testid="select-open-button"
+                              >
+                                ▼
+                              </span>
+                            </div>
                           </div>
+                        </div>
+                        <div
+                          class="c19"
+                          data-testid="error-marker"
+                        >
+                          ×
                         </div>
                       </div>
                     </div>
@@ -615,33 +641,43 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                         aria-labelledby="downshift-1-label"
                         class="c12"
                         role="combobox"
-                        width="180px"
                       >
                         <div
-                          aria-haspopup="true"
-                          aria-label="open menu"
                           class="c13"
-                          data-toggle="true"
-                          role="button"
-                          type="button"
+                          width="180px"
                         >
                           <div
+                            aria-haspopup="true"
+                            aria-label="open menu"
                             class="c14"
-                            data-testid="select-selected-value"
-                            title="foo"
+                            data-toggle="true"
+                            role="button"
+                            type="button"
                           >
-                            foo
-                          </div>
-                          <div
-                            class="c15"
-                          >
-                            <span
-                              class="c16 c17"
-                              data-testid="select-open-button"
+                            <div
+                              class="c15"
+                              data-testid="select-selected-value"
+                              title="foo"
                             >
-                              ▼
-                            </span>
+                              foo
+                            </div>
+                            <div
+                              class="c16"
+                            >
+                              <span
+                                class="c17 c18"
+                                data-testid="select-open-button"
+                              >
+                                ▼
+                              </span>
+                            </div>
                           </div>
+                        </div>
+                        <div
+                          class="c19"
+                          data-testid="error-marker"
+                        >
+                          ×
                         </div>
                       </div>
                     </div>
@@ -661,10 +697,16 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                       size="10"
                     >
                       <textarea
-                        class="c18 c19"
+                        class="c20 c21"
                         name="openNote"
                         rows="5"
                       />
+                      <div
+                        class="c19"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -682,10 +724,16 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                       size="10"
                     >
                       <textarea
-                        class="c18 c19"
+                        class="c20 c21"
                         name="fixedNote"
                         rows="5"
                       />
+                      <div
+                        class="c19"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -703,27 +751,33 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                       size="10"
                     >
                       <textarea
-                        class="c18 c19"
+                        class="c20 c21"
                         name="closedNote"
                         rows="5"
                       />
+                      <div
+                        class="c19"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div
-              class="c20"
+              class="c22"
             >
               <button
-                class="c21 c22 c23"
+                class="c23 c24 c25"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c21 c22 c23"
+                class="c23 c24 c25"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -732,10 +786,10 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c24"
+            class="c26"
           >
             <div
-              class="c25"
+              class="c27"
             />
           </div>
         </div>

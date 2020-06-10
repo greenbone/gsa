@@ -40,7 +40,13 @@ export const Box = styled.div`
   color: ${Theme.black};
   font-weight: normal;
   border-radius: ${props => (props.isOpen ? '2px 2px 0 0' : null)};
-  background-color: ${props => (props.disabled ? Theme.dialogGray : null)};
+  background-color: ${props => {
+    if (props.hasError) {
+      return Theme.lightRed;
+    } else if (props.disabled) {
+      return Theme.dialogGray;
+    }
+  }};
 `;
 
 export const Input = styled.input`

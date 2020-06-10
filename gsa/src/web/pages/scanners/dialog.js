@@ -72,6 +72,12 @@ import useGmp from 'web/utils/useGmp';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
+const AVAILABLE_SCANNER_TYPES = [
+  OSP_SCANNER_TYPE,
+  GMP_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
+];
+
 const DialogTabLayout = styled(TabLayout)`
   margin-top: 5px;
 `;
@@ -381,11 +387,7 @@ ScannerDialog.propTypes = {
   port: PropTypes.number,
   scanner: PropTypes.model,
   title: PropTypes.string,
-  type: PropTypes.oneOf([
-    OSP_SCANNER_TYPE,
-    GMP_SCANNER_TYPE,
-    GREENBONE_SENSOR_SCANNER_TYPE,
-  ]),
+  type: PropTypes.oneOf(AVAILABLE_SCANNER_TYPES),
   which_cert: PropTypes.oneOf(['default', 'existing', 'new']),
   onClose: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,

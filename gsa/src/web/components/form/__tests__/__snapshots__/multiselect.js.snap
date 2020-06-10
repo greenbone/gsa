@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MultiSelect component tests should render 1`] = `
-.c2 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -26,7 +26,7 @@ exports[`MultiSelect component tests should render 1`] = `
   align-items: center;
 }
 
-.c3 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -44,7 +44,7 @@ exports[`MultiSelect component tests should render 1`] = `
   align-items: center;
 }
 
-.c4 {
+.c5 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -69,18 +69,18 @@ exports[`MultiSelect component tests should render 1`] = `
   cursor: not-allowed;
 }
 
-.c5 {
+.c6 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
 
-.c1 {
+.c2 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -105,7 +105,7 @@ exports[`MultiSelect component tests should render 1`] = `
   background-color: #eeeeee;
 }
 
-.c0 {
+.c1 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -117,36 +117,62 @@ exports[`MultiSelect component tests should render 1`] = `
   width: 250px;
 }
 
+.c7 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 <div
   aria-expanded="false"
   aria-haspopup="listbox"
   aria-labelledby="downshift-0-label"
   class="c0"
   role="combobox"
-  width="250px"
 >
   <div
     class="c1"
-    disabled=""
+    width="250px"
   >
     <div
       class="c2"
-    />
-    <div
-      class="c3"
+      disabled=""
     >
-      <span
-        aria-haspopup="true"
-        aria-label="open menu"
-        class="c4 c5"
-        data-toggle="true"
-        disabled=""
-        role="button"
-        type="button"
+      <div
+        class="c3"
+      />
+      <div
+        class="c4"
       >
-        ▼
-      </span>
+        <span
+          aria-haspopup="true"
+          aria-label="open menu"
+          class="c5 c6"
+          data-toggle="true"
+          disabled=""
+          role="button"
+          type="button"
+        >
+          ▼
+        </span>
+      </div>
     </div>
+  </div>
+  <div
+    class="c7"
+    data-testid="error-marker"
+  >
+    ×
   </div>
 </div>
 `;

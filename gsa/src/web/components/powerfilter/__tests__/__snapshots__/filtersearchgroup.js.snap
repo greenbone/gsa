@@ -35,6 +35,15 @@ exports[`FilterSearchGroup tests should render 1`] = `
   align-items: center;
 }
 
+.c4 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c2 {
   font-family: inherit;
   font-size: inherit;
@@ -84,6 +93,12 @@ exports[`FilterSearchGroup tests should render 1`] = `
       type="text"
       value="tcp"
     />
+    <div
+      class="c4"
+      data-testid="error-marker"
+    >
+      ×
+    </div>
   </div>
 </div>
 `;

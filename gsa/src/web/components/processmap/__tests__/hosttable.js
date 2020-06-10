@@ -26,26 +26,33 @@ import HostTable from '../hosttable';
 setLocale('en');
 
 const hosts = [
-  {name: '123.456.78.910', id: '1234', severity: 5},
-  {name: '109.876.54.321', id: '5678', severity: undefined},
+  {ip: '123.456.78.910', id: '1234', hostname: 'foo', severity: 5},
+  {ip: '109.876.54.321', id: '5678', severity: undefined},
 ];
 
 describe('HostTable tests', () => {
   test('should render HostTable', () => {
     const handleDeleteHost = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const {render} = rendererWith({
       capabilities: true,
       router: true,
     });
 
-    const {element} = render(<HostTable onDeleteHost={handleDeleteHost} />);
+    const {element} = render(
+      <HostTable
+        onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
+      />,
+    );
 
     const header = element.querySelectorAll('th');
 
     expect(header[0]).toHaveTextContent('Host');
-    expect(header[1]).toHaveTextContent('Severity');
-    expect(header[2]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
 
     expect(element).not.toHaveTextContent(
       'No hosts associated with this process.',
@@ -54,6 +61,7 @@ describe('HostTable tests', () => {
 
   test('should render empty HostTable', () => {
     const handleDeleteHost = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -61,20 +69,26 @@ describe('HostTable tests', () => {
     });
 
     const {element} = render(
-      <HostTable hosts={[]} onDeleteHost={handleDeleteHost} />,
+      <HostTable
+        hosts={[]}
+        onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
+      />,
     );
 
     const header = element.querySelectorAll('th');
 
     expect(header[0]).toHaveTextContent('Host');
-    expect(header[1]).toHaveTextContent('Severity');
-    expect(header[2]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
 
     expect(element).toHaveTextContent('No hosts associated with this process.');
   });
 
   test('should render HostTable with hosts', () => {
     const handleDeleteHost = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -82,7 +96,11 @@ describe('HostTable tests', () => {
     });
 
     const {element, getAllByTestId} = render(
-      <HostTable hosts={hosts} onDeleteHost={handleDeleteHost} />,
+      <HostTable
+        hosts={hosts}
+        onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
+      />,
     );
 
     const header = element.querySelectorAll('th');
@@ -92,26 +110,30 @@ describe('HostTable tests', () => {
 
     // Headings
     expect(header[0]).toHaveTextContent('Host');
-    expect(header[1]).toHaveTextContent('Severity');
-    expect(header[2]).toHaveTextContent('Actions');
+    expect(header[1]).toHaveTextContent('Name');
+    expect(header[2]).toHaveTextContent('Severity');
+    expect(header[3]).toHaveTextContent('Actions');
 
     // Row 1
     expect(detailsLinks[0]).toHaveAttribute('href', '/host/1234');
-    expect(detailsLinks[0]).toHaveTextContent('123.456.78.910');
+    expect(detailsLinks[0]).toHaveTextContent('details.svg');
     expect(progressBars[0]).toHaveAttribute('title', 'Medium');
     expect(progressBars[0]).toHaveTextContent('5.0 (Medium)');
     expect(icons[0]).toHaveAttribute('title', 'Remove host from process');
+    expect(icons[1]).toHaveAttribute('title', 'Open all details');
 
     // Row 2
     expect(detailsLinks[1]).toHaveAttribute('href', '/host/5678');
-    expect(detailsLinks[1]).toHaveTextContent('109.876.54.321');
+    expect(detailsLinks[1]).toHaveTextContent('details.svg');
     expect(progressBars[1]).toHaveAttribute('title', 'N/A');
     expect(progressBars[1]).toHaveTextContent('N/A');
-    expect(icons[1]).toHaveAttribute('title', 'Remove host from process');
+    expect(icons[2]).toHaveAttribute('title', 'Remove host from process');
+    expect(icons[3]).toHaveAttribute('title', 'Open all details');
   });
 
   test('should call click handler', () => {
     const handleDeleteHost = jest.fn();
+    const handleSelectHost = jest.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -119,13 +141,21 @@ describe('HostTable tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <HostTable hosts={hosts} onDeleteHost={handleDeleteHost} />,
+      <HostTable
+        hosts={hosts}
+        onDeleteHost={handleDeleteHost}
+        onSelectHost={handleSelectHost}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
-
+    const links = getAllByTestId('hosttable-selectionlink');
     expect(icons[0]).toHaveAttribute('title', 'Remove host from process');
     fireEvent.click(icons[0]);
     expect(handleDeleteHost).toHaveBeenCalledWith(hosts[0].id);
+
+    expect(links[0]).toHaveTextContent('123.456.78.910');
+    fireEvent.click(links[0]);
+    expect(handleSelectHost).toHaveBeenCalledWith(hosts[0]);
   });
 });

@@ -145,7 +145,7 @@ const ToolBarIcons = ({
               showSuccessMessage={showSuccessMessage}
               showErrorMessage={showErrorMessage}
               showThresholdMessage={showThresholdMessage}
-              theshold={threshold}
+              threshold={threshold}
               onInteraction={onInteraction}
             />
           )}

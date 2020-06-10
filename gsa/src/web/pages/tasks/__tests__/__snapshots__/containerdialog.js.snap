@@ -52,7 +52,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   height: 100%;
 }
 
-.c19 {
+.c20 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -61,7 +61,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c18 {
+.c19 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -128,7 +128,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   width: inherit;
 }
 
-.c15 {
+.c16 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -148,12 +148,12 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   z-index: 1;
 }
 
-.c15:focus,
-.c15:hover {
+.c16:focus,
+.c16:hover {
   border: 1px solid #393637;
 }
 
-.c15:hover {
+.c16:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -161,26 +161,26 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   color: #fff;
 }
 
-.c15[disabled] {
+.c16[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c15 img {
+.c16 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c15:link {
+.c16:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c16 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -198,18 +198,18 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   align-items: center;
 }
 
-.c17 {
+.c18 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c17:hover {
+.c18:hover {
   color: #fff;
   background: #519032;
 }
 
-.c14 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -356,6 +356,15 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
+}
+
+.c14 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
 }
 
 .c12 {
@@ -462,6 +471,12 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
                         type="text"
                         value=""
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -485,23 +500,29 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
                         type="text"
                         value=""
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div
-              class="c14"
+              class="c15"
             >
               <button
-                class="c15 c16 c17"
+                class="c16 c17 c18"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c15 c16 c17"
+                class="c16 c17 c18"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -510,10 +531,10 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
             </div>
           </div>
           <div
-            class="c18"
+            class="c19"
           >
             <div
-              class="c19"
+              class="c20"
             />
           </div>
         </div>
@@ -547,7 +568,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: stretch;
 }
 
-.c14 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -565,7 +586,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: center;
 }
 
-.c16 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -584,18 +605,18 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   margin-left: -5px;
 }
 
-.c16 > * {
+.c17 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c16 > * {
+.c17 > * {
   margin-left: 5px;
 }
 
-.c15 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -650,7 +671,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   height: 100%;
 }
 
-.c26 {
+.c27 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -659,7 +680,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c25 {
+.c26 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -726,7 +747,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   width: inherit;
 }
 
-.c22 {
+.c23 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -746,12 +767,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   z-index: 1;
 }
 
-.c22:focus,
-.c22:hover {
+.c23:focus,
+.c23:hover {
   border: 1px solid #393637;
 }
 
-.c22:hover {
+.c23:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -759,26 +780,26 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   color: #fff;
 }
 
-.c22[disabled] {
+.c23[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c22 img {
+.c23 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c22:link {
+.c23:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c23 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -796,18 +817,18 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: center;
 }
 
-.c24 {
+.c25 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c24:hover {
+.c25:hover {
   color: #fff;
   background: #519032;
 }
 
-.c21 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -956,6 +977,15 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   padding-right: 10px;
 }
 
+.c14 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c12 {
   font-family: inherit;
   font-size: inherit;
@@ -996,7 +1026,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: center;
 }
 
-.c17 {
+.c18 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -1012,7 +1042,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   cursor: pointer;
 }
 
-.c18 {
+.c19 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -1023,11 +1053,11 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   height: auto;
 }
 
-.c20 {
+.c21 {
   opacity: 1;
 }
 
-.c19 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1105,6 +1135,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                         type="text"
                         value=""
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -1128,6 +1164,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                         type="text"
                         value=""
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -1145,35 +1187,35 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                       size="10"
                     >
                       <div
-                        class="c14"
+                        class="c15"
                       >
                         <div
-                          class="c15"
+                          class="c16"
                         >
                           <div
-                            class="c16"
+                            class="c17"
                             margin="5px"
                           >
                             <label
-                              class="c17"
+                              class="c18"
                             >
                               <div
-                                class="c15"
+                                class="c16"
                               >
                                 <div
-                                  class="c16"
+                                  class="c17"
                                   margin="5px"
                                 >
                                   <input
                                     checked=""
-                                    class="c18 c19"
+                                    class="c19 c20"
                                     data-testid="radio-input"
                                     name="in_assets"
                                     type="radio"
                                     value="1"
                                   />
                                   <span
-                                    class="c20"
+                                    class="c21"
                                     data-testid="radio-title"
                                   >
                                     Yes
@@ -1182,24 +1224,24 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                               </div>
                             </label>
                             <label
-                              class="c17"
+                              class="c18"
                             >
                               <div
-                                class="c15"
+                                class="c16"
                               >
                                 <div
-                                  class="c16"
+                                  class="c17"
                                   margin="5px"
                                 >
                                   <input
-                                    class="c18 c19"
+                                    class="c19 c20"
                                     data-testid="radio-input"
                                     name="in_assets"
                                     type="radio"
                                     value="0"
                                   />
                                   <span
-                                    class="c20"
+                                    class="c21"
                                     data-testid="radio-title"
                                   >
                                     No
@@ -1216,17 +1258,17 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
               </div>
             </div>
             <div
-              class="c21"
+              class="c22"
             >
               <button
-                class="c22 c23 c24"
+                class="c23 c24 c25"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c22 c23 c24"
+                class="c23 c24 c25"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1235,10 +1277,10 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
             </div>
           </div>
           <div
-            class="c25"
+            class="c26"
           >
             <div
-              class="c26"
+              class="c27"
             />
           </div>
         </div>

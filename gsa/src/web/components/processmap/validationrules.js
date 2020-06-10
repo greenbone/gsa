@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2020 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,33 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import {
+  shouldBeValidName,
+  VALID_NAME_ERROR_MESSAGE,
+} from 'web/components/form/useFormValidation';
 
-import PropTypes from 'web/utils/proptypes';
-
-import Field from './field';
-import {Marker} from './useFormValidation';
-
-const TextField = ({hasError = false, errorContent, title, ...props}) => {
-  return (
-    <React.Fragment>
-      <Field
-        {...props}
-        hasError={hasError}
-        title={hasError ? errorContent : title}
-        type="text"
-      />
-      <Marker isVisible={hasError}>×</Marker>
-    </React.Fragment>
-  );
+export const createProcessRules = {
+  name: value => {
+    const isValid = shouldBeValidName(value);
+    const error = isValid ? '' : VALID_NAME_ERROR_MESSAGE;
+    return {isValid, error};
+  },
 };
-
-TextField.propTypes = {
-  errorContent: PropTypes.string,
-  hasError: PropTypes.bool,
-  title: PropTypes.string,
-};
-
-export default TextField;
 
 // vim: set ts=2 sw=2 tw=80:
