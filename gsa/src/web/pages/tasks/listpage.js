@@ -165,19 +165,16 @@ const TasksListPage = () => {
     [deleteTask, refetch, showError],
   );
 
-  const handleDeleteTaskBulk = async () => {
+  const handleDeleteTaskBulk = () => {
     let idsToDelete = [];
 
     if (selectionType === SelectionType.SELECTION_USER) {
-      console.log('user selection type');
       selected.forEach(item => {
         const promise = deleteTask(item.id);
 
         idsToDelete.push(promise);
       });
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      console.log('page content type');
-
       tasks.forEach(task => {
         const promise = deleteTask(task.id);
 
