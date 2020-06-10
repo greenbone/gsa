@@ -1316,6 +1316,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
         >
           <div
             class="c29 entities-table"
+            data-testid="entities-table"
           >
             <div
               class="c30"

@@ -137,7 +137,7 @@ exports[`Tasks table tests should render 1`] = `
   align-items: center;
 }
 
-.c42 {
+.c41 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -293,7 +293,7 @@ exports[`Tasks table tests should render 1`] = `
   width: inherit;
 }
 
-.c43 {
+.c42 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -318,18 +318,18 @@ exports[`Tasks table tests should render 1`] = `
   cursor: pointer;
 }
 
-.c44 {
+.c43 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c44 * {
+.c43 * {
   height: inherit;
   width: inherit;
 }
 
-.c40 {
+.c39 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -353,7 +353,7 @@ exports[`Tasks table tests should render 1`] = `
   font-weight: normal;
 }
 
-.c39 {
+.c38 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -365,7 +365,7 @@ exports[`Tasks table tests should render 1`] = `
   width: 180px;
 }
 
-.c45 {
+.c44 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -374,7 +374,7 @@ exports[`Tasks table tests should render 1`] = `
   display: none;
 }
 
-.c41 {
+.c40 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -394,7 +394,7 @@ exports[`Tasks table tests should render 1`] = `
   cursor: default;
 }
 
-.c38 {
+.c37 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -461,7 +461,7 @@ exports[`Tasks table tests should render 1`] = `
   width: 10em;
 }
 
-.c46 {
+.c45 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1586,26 +1586,26 @@ exports[`Tasks table tests should render 1`] = `
                       role="combobox"
                     >
                       <div
-                        class="c39"
+                        class="c38"
                         width="180px"
                       >
                         <div
                           aria-haspopup="true"
                           aria-label="open menu"
-                          class="c40"
+                          class="c39"
                           data-toggle="true"
                           role="button"
                           type="button"
                         >
                           <div
-                            class="c41"
+                            class="c40"
                             data-testid="select-selected-value"
                           />
                           <div
-                            class="c42"
+                            class="c41"
                           >
                             <span
-                              class="c43 c44"
+                              class="c42 c43"
                               data-testid="select-open-button"
                             >
                               ▼
@@ -1614,7 +1614,7 @@ exports[`Tasks table tests should render 1`] = `
                         </div>
                       </div>
                       <div
-                        class="c45"
+                        class="c44"
                         data-testid="error-marker"
                       >
                         ×
@@ -1664,7 +1664,7 @@ exports[`Tasks table tests should render 1`] = `
         class="c21"
       >
         <div
-          class="c46"
+          class="c45"
         >
           (Applied filter: rows=2)
         </div>
