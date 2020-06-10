@@ -331,7 +331,7 @@ export const useLazyGetTasks = (variables, options) => {
 
 export const useGetAllFiltered = variables => {
   const [queryTasks, {data}] = useLazyQuery(GET_TASKS, {variables});
-  const filteredTasks = isDefined(data?.tasks)
+  const allFilteredTasks = isDefined(data?.tasks)
     ? data.tasks.edges.map(entity => Task.fromObject(entity.node))
     : undefined;
 
@@ -339,7 +339,7 @@ export const useGetAllFiltered = variables => {
     filterString => queryTasks({variables: {filterString}}),
     [queryTasks],
   );
-  return [getAllFiltered, filteredTasks];
+  return [getAllFiltered, allFilteredTasks];
 };
 
 export const useCloneTask = options => {
