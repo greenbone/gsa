@@ -18,7 +18,7 @@
 
 import SelectionType from 'web/utils/selectiontype';
 
-const createBulkDelete = (
+const createBulkDelete = ({
   entities,
   filteredEntities,
   selected,
@@ -26,9 +26,9 @@ const createBulkDelete = (
   deleteFunc,
   refetch,
   onError,
-) => {
+}) => {
   const handleBulkDelete = () => {
-    let toDelete = [];
+    const toDelete = [];
 
     if (selectionType === SelectionType.SELECTION_USER) {
       selected.forEach(item => {

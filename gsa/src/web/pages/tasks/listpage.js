@@ -165,7 +165,7 @@ const TasksListPage = () => {
     [deleteTask, refetch, showError],
   );
 
-  const handleBulkDelete = createBulkDelete(
+  const handleBulkDelete = createBulkDelete({
     tasks,
     allFilteredTasks,
     selected,
@@ -173,7 +173,7 @@ const TasksListPage = () => {
     deleteTask,
     refetch,
     showError,
-  );
+  });
 
   const handleBulkDeleteTask = () => {
     handleBulkDelete();
