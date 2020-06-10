@@ -43,7 +43,7 @@ import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import EntitiesPage from 'web/entities/page';
-import createBulkDelete from 'web/entities/createBulkDelete';
+import {entitiesBulkDelete} from 'web/entities/entitiesBulkActions';
 
 import {
   useLazyGetTasks,
@@ -53,6 +53,7 @@ import {
 } from 'web/graphql/tasks';
 
 import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
 import useFilterSortBy from 'web/utils/useFilterSortby';
@@ -165,18 +166,19 @@ const TasksListPage = () => {
     [deleteTask, refetch, showError],
   );
 
-  const handleBulkDelete = createBulkDelete({
-    tasks,
-    allFilteredTasks,
-    selected,
-    selectionType,
-    deleteTask,
-    refetch,
-    showError,
-  });
-
   const handleBulkDeleteTask = () => {
-    handleBulkDelete();
+    let tasksToDelete;
+    if (selectionType === SelectionType.SELECTION_USER) {
+      tasksToDelete = selected;
+    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      tasksToDelete = tasks;
+    } else {
+      tasksToDelete = allFilteredTasks;
+    }
+    return entitiesBulkDelete(tasksToDelete, deleteTask).then(
+      refetch,
+      showError,
+    );
   };
 
   useEffect(() => {
