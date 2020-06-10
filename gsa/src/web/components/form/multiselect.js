@@ -46,7 +46,13 @@ import {
   SelectedValue,
 } from './selectelements';
 
+import {Marker} from './useFormValidation';
+
 const DEFAULT_WIDTH = '250px';
+
+const Div = styled.div`
+  display: flex;
+`;
 
 export const MultiSelectedValue = styled(SelectedValue)`
   display: inline;
@@ -163,11 +169,14 @@ class MultiSelect extends React.Component {
     let {disabled = false} = this.props;
     const {
       className,
+      hasError = false,
+      errorContent,
       items,
       menuPosition = 'adjust',
       width = DEFAULT_WIDTH,
       grow,
       isLoading = false,
+      title,
       value = [],
     } = this.props;
 
@@ -198,77 +207,81 @@ class MultiSelect extends React.Component {
           selectItem,
         }) => {
           return (
-            <SelectContainer
-              {...getRootProps({})}
-              className={className}
-              width={width}
-              grow={grow}
-            >
-              <Box isOpen={isOpen} disabled={disabled} ref={this.box}>
-                <Layout grow="1" wrap>
-                  {isLoading
-                    ? _('Loading...')
-                    : value.map(item => this.renderItem(item, items))}
-                </Layout>
-                <Layout align={['center', 'center']}>
-                  <ArrowIcon
-                    {...getToggleButtonProps({
-                      disabled,
-                      down: !isOpen,
-                      onClick: isOpen
-                        ? undefined
-                        : event => {
-                            event.preventDownshiftDefault = true; // don't call default handler from downshift
-                            openMenu(() => {
-                              const {current: input} = this.input;
-                              input !== null && input.focus();
-                            });
-                          },
-                    })}
-                    size="small"
-                    isLoading={isLoading}
-                  />
-                </Layout>
-              </Box>
-              {isOpen && !disabled && (
-                <Menu
-                  {...getMenuProps({})}
-                  position={menuPosition}
-                  target={this.box}
+            <Div {...getRootProps({})}>
+              <SelectContainer className={className} width={width} grow={grow}>
+                <Box
+                  isOpen={isOpen}
+                  hasError={hasError}
+                  disabled={disabled}
+                  title={hasError ? errorContent : title}
+                  ref={this.box}
                 >
-                  <Input
-                    {...getInputProps({
-                      disabled,
-                      value: search,
-                      onChange: this.handleSearch,
-                    })}
-                    ref={this.input}
-                    data-testid="multiselect-input"
-                  />
-                  <ItemContainer>
-                    {displayedItems.map(
-                      ({label: itemLabel, value: itemValue}, i) => (
-                        <Item
-                          {...getItemProps({
-                            item: itemValue,
-                            isSelected: value.includes(itemValue),
-                            isActive: i === highlightedIndex,
-                            onClick: event => {
-                              event.preventDownshiftDefault = true;
-                              selectItem(itemValue);
+                  <Layout grow="1" wrap>
+                    {isLoading
+                      ? _('Loading...')
+                      : value.map(item => this.renderItem(item, items))}
+                  </Layout>
+                  <Layout align={['center', 'center']}>
+                    <ArrowIcon
+                      {...getToggleButtonProps({
+                        disabled,
+                        down: !isOpen,
+                        onClick: isOpen
+                          ? undefined
+                          : event => {
+                              event.preventDownshiftDefault = true; // don't call default handler from downshift
+                              openMenu(() => {
+                                const {current: input} = this.input;
+                                input !== null && input.focus();
+                              });
                             },
-                          })}
-                          data-testid="multiselect-item-label"
-                          key={itemValue}
-                        >
-                          {itemLabel}
-                        </Item>
-                      ),
-                    )}
-                  </ItemContainer>
-                </Menu>
-              )}
-            </SelectContainer>
+                      })}
+                      size="small"
+                      isLoading={isLoading}
+                    />
+                  </Layout>
+                </Box>
+                {isOpen && !disabled && (
+                  <Menu
+                    {...getMenuProps({})}
+                    position={menuPosition}
+                    target={this.box}
+                  >
+                    <Input
+                      {...getInputProps({
+                        disabled,
+                        value: search,
+                        onChange: this.handleSearch,
+                      })}
+                      ref={this.input}
+                      data-testid="multiselect-input"
+                    />
+                    <ItemContainer>
+                      {displayedItems.map(
+                        ({label: itemLabel, value: itemValue}, i) => (
+                          <Item
+                            {...getItemProps({
+                              item: itemValue,
+                              isSelected: value.includes(itemValue),
+                              isActive: i === highlightedIndex,
+                              onClick: event => {
+                                event.preventDownshiftDefault = true;
+                                selectItem(itemValue);
+                              },
+                            })}
+                            data-testid="multiselect-item-label"
+                            key={itemValue}
+                          >
+                            {itemLabel}
+                          </Item>
+                        ),
+                      )}
+                    </ItemContainer>
+                  </Menu>
+                )}
+              </SelectContainer>
+              <Marker isVisible={hasError}>×</Marker>
+            </Div>
           );
         }}
       </Downshift>
@@ -278,11 +291,14 @@ class MultiSelect extends React.Component {
 
 MultiSelect.propTypes = {
   disabled: PropTypes.bool,
+  errorContent: PropTypes.string,
   grow: PropTypes.number,
+  hasError: PropTypes.bool,
   isLoading: PropTypes.bool,
   items: PropTypes.arrayOf(PropTypes.object),
   menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
   name: PropTypes.string,
+  title: PropTypes.string,
   value: PropTypes.array,
   width: PropTypes.string,
   onChange: PropTypes.func,

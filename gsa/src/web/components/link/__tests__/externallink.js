@@ -62,6 +62,37 @@ describe('ExternalLink tests', () => {
     expect(dialog).toBeTruthy();
   });
 
+  test('should close confirmation dialog on resume click', () => {
+    const oldOpen = window.open;
+
+    window.open = jest.fn();
+
+    const {render} = rendererWith({capabilities: true, router: true});
+    const {element, baseElement, getByTestId} = render(
+      <ExternalLink title="Foo" to="http://foo.bar">
+        Bar
+      </ExternalLink>,
+    );
+
+    expect(queryByRole(baseElement, 'dialog')).toBeNull();
+
+    fireEvent.click(element);
+
+    const dialog = queryByRole(baseElement, 'dialog');
+
+    expect(dialog).toBeTruthy();
+
+    const resumeButton = getByTestId('dialog-save-button');
+
+    fireEvent.click(resumeButton);
+
+    const closedDialog = queryByRole(baseElement, 'dialog');
+
+    expect(closedDialog).toBeFalsy();
+
+    window.open = oldOpen;
+  });
+
   test('should open url in new window', () => {
     const oldOpen = window.open;
 

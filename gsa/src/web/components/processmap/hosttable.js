@@ -27,8 +27,10 @@ import {isDefined} from 'gmp/utils/identity';
 import SeverityBar from 'web/components/bar/severitybar';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
+import DetailsIcon from 'web/components/icon/detailsicon';
 
 import Layout from 'web/components/layout/layout';
+import IconDivider from 'web/components/layout/icondivider';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -43,27 +45,53 @@ import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
 
+import Theme from 'web/utils/theme';
+
 const StyledDiv = styled.div`
   padding: 5px;
 `;
 
-const HostRow = ({host, onDeleteHost}) => {
-  const {id, name, severity} = host;
+const SelectionLink = styled.div`
+  color: ${Theme.blue};
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+
+const HostRow = ({host, onDeleteHost, onSelectHost}) => {
+  const {id, ip, hostname, severity} = host;
   return (
     <Row>
       <Data>
-        <DetailsLink id={id} type="host">
-          {name}
-        </DetailsLink>
+        <SelectionLink
+          id={id}
+          data-testid="hosttable-selectionlink"
+          onClick={() => onSelectHost(host)}
+        >
+          {ip}
+        </SelectionLink>
+      </Data>
+      <Data>
+        {isDefined(hostname) && (
+          <SelectionLink id={id} onClick={() => onSelectHost(host)}>
+            {hostname}
+          </SelectionLink>
+        )}
       </Data>
       <Data>
         <SeverityBar severity={severity} />
       </Data>
       <Data>
-        <DeleteIcon
-          title={_('Remove host from process')}
-          onClick={() => onDeleteHost(id)}
-        />
+        <IconDivider>
+          <DeleteIcon
+            title={_('Remove host from process')}
+            onClick={() => onDeleteHost(id)}
+          />
+          <DetailsLink id={id} type="host">
+            <DetailsIcon title={_('Open all details')} />
+          </DetailsLink>
+        </IconDivider>
       </Data>
     </Row>
   );
@@ -72,6 +100,7 @@ const HostRow = ({host, onDeleteHost}) => {
 HostRow.propTypes = {
   host: PropTypes.object,
   onDeleteHost: PropTypes.func.isRequired,
+  onSelectHost: PropTypes.func.isRequired,
 };
 
 const StyledLayout = styled(Layout)`
@@ -79,18 +108,20 @@ const StyledLayout = styled(Layout)`
   overflow: auto;
 `;
 
-const HostTable = ({hosts, onDeleteHost}) => {
+const HostTable = ({hosts, onDeleteHost, onSelectHost}) => {
   return (
-    <StyledLayout align="start" grow flex="column">
+    <StyledLayout align="start" flex="column">
       <StripedTable>
         <colgroup>
-          <Col width="55%" />
           <Col width="30%" />
-          <Col width="15%" />
+          <Col width="40%" />
+          <Col width="25%" />
+          <Col width="5%" />
         </colgroup>
         <Header>
           <Row>
             <Head>{_('Host')}</Head>
+            <Head>{_('Name')}</Head>
             <Head>{_('Severity')}</Head>
             <Head>{_('Actions')}</Head>
           </Row>
@@ -98,7 +129,12 @@ const HostTable = ({hosts, onDeleteHost}) => {
         {isDefined(hosts) && hosts.length > 0 && (
           <Body>
             {hosts.map((host, i) => (
-              <HostRow key={i} host={host} onDeleteHost={onDeleteHost} />
+              <HostRow
+                key={i}
+                host={host}
+                onDeleteHost={onDeleteHost}
+                onSelectHost={onSelectHost}
+              />
             ))}
           </Body>
         )}
@@ -113,6 +149,7 @@ const HostTable = ({hosts, onDeleteHost}) => {
 HostTable.propTypes = {
   hosts: PropTypes.array,
   onDeleteHost: PropTypes.func.isRequired,
+  onSelectHost: PropTypes.func.isRequired,
 };
 
 export default HostTable;

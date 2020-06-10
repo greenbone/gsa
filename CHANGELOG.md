@@ -7,13 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.08] - unreleased
 
 ### Added
+- Added new form validation feature, implemented on create and edit ticket dialog [#1782](https://github.com/greenbone/gsa/pull/1782)
 - Added German translation for About page [#1998](https://github.com/greenbone/gsa/pull/1998)
 - Added a renew session timeout icon to usermenu [#1966](https://github.com/greenbone/gsa/pull/1966)
-- Added new BPM feature [#1931](https://github.com/greenbone/gsa/pull/1931) [#2018](https://github.com/greenbone/gsa/pull/2018) [#2025](https://github.com/greenbone/gsa/pull/2025) [#2099](https://github.com/greenbone/gsa/pull/2099)
+- Added new BPM feature [#1931](https://github.com/greenbone/gsa/pull/1931) [#2018](https://github.com/greenbone/gsa/pull/2018) [#2025](https://github.com/greenbone/gsa/pull/2025) [#2099](https://github.com/greenbone/gsa/pull/2099)  [#2129](https://github.com/greenbone/gsa/pull/2129) [#2196](https://github.com/greenbone/gsa/pull/2196)
 - Added clean-up-translations script [#1948](https://github.com/greenbone/gsa/pull/1948)
 - Added handling possible undefined trash in case of an error on the trashcanpage [#1908](https://github.com/greenbone/gsa/pull/1908)
 - Added translation using babel-plugin-i18next-extract [#1808](https://github.com/greenbone/gsa/pull/1808)
 - Multistep dialog feature, implemented on scanner dialog [#1725](https://github.com/greenbone/gsa/pull/1725)
+- Added handling of queued task status [#2208](https://github.com/greenbone/gsa/pull/2208)
 
 ### Changed
 - Changed future release version from 20.04 to 20.08 [#2118](https://github.com/greenbone/gsa/pull/2118)
@@ -29,7 +31,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
-- Fixed license information on AboutPage [#2118](https://github.com/greenbone/gsa/pull/2118)
+- Fixed sort order for recurring days for custom monthly schedule [#2188](https://github.com/greenbone/gsa/pull/2188)
+- Fix missing loading indicator for test alert button [#2156](https://github.com/greenbone/gsa/pull/2156)
+- Close dialog for ExternalLink when following link [#2148](https://github.com/greenbone/gsa/pull/2148)
+- Fixed license information on AboutPage [#2118](https://github.com/greenbone/gsa/pull/2118) [#2148](https://github.com/greenbone/gsa/pull/2148)
 - Fixed state updates on unmounted SvgIcons [#2063](https://github.com/greenbone/gsa/pull/2063)
 - Fixed parsing xml rejection messages [#1970](https://github.com/greenbone/gsa/pull/1970)
 - Fixed returning bulk_delete response [#1969](https://github.com/greenbone/gsa/pull/1969)
@@ -44,10 +49,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [20.08]: https://github.com/greenbone/gsa/compare/gsa-9.0...master
 
-### [9.0.1] - unreleased
+## [9.0.1] - 2020-05-13
 
 ### Added
-- Added scanner selection to audit dialog [#2031](https://github.com/greenbone/gsa/pull/2031)
+- Added scanner selection to audit dialog
+  [#2031](https://github.com/greenbone/gsa/pull/2031)
+  [#2105](https://github.com/greenbone/gsa/pull/2105)
 - Added base config to create scanconfig dialog, make it new default base for scanconfigs and new base for policies [#1789](https://github.com/greenbone/gsa/pull/1789)
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
@@ -73,6 +80,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Lowered memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Fixed passing threshold prop in AlertActions for ThresholdMessage [#2114](https://github.com/greenbone/gsa/pull/2114)
 - Fixed audit listpage observer tooltip [#2048](https://github.com/greenbone/gsa/pull/2048)
 - Fixed showing errors in CredentialDialog when opened from AlertDialog [#2041](https://github.com/greenbone/gsa/pull/2041)
 - Fixed usage of report format %F in generateFilename() [#2021](https://github.com/greenbone/gsa/pull/2021)
@@ -108,7 +116,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Removed auto delete field from container task dialog [#1784](https://github.com/greenbone/gsa/pull/1784)
 - Removed obsolete DefaultFilter component and withDefaultFilter HOC [#1709](https://github.com/greenbone/gsa/pull/1709)
 
-[9.0.1]: https://github.com/greenbone/gsa/compare/v9.0.0...gsa-9.0
+[9.0.1]: https://github.com/greenbone/gsa/compare/v9.0.0...v9.0.1
 
 ## [9.0.0] - 2019-10-14
 
@@ -201,7 +209,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 
 [9.0.0]: https://github.com/greenbone/gsa/compare/v8.0.1...v9.0.0
 
-## [8.0.2] - unreleased
+## [8.0.2] - 2020-05-13
 
 ### Added
 - Show passphrase field in credential dialog for cc type [#2006](https://github.com/greenbone/gsa/pull/2006)
@@ -264,6 +272,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Lower memory usage when getting a report [#1858](https://github.com/greenbone/gvmd/pull/1858)
 
 ### Fixed
+- Fixed missing CVEs on CPE detailspage [#2220](https://github.com/greenbone/gsa/pull/2220)
 - Fixed nvt family links not changing the filter [#1997](https://github.com/greenbone/gsa/pull/1997)
 - Use correct capabilities for task icons [#1973](https://github.com/greenbone/gsa/pull/1973)
 - Fixed ProvideViewIcon for tasks is only shown for users but not for groups and roles [#1968](https://github.com/greenbone/gsa/pull/1968)
@@ -311,7 +320,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Fixed using filename templates from usersettings [#1512](https://github.com/greenbone/gsa/pull/1512)
 - Update manpage [#1616](https://github.com/greenbone/gsa/pull/1616)
 
-[8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...gsa-8.0
+[8.0.2]: https://github.com/greenbone/gsa/compare/v8.0.1...v8.0.2
 
 ## [8.0.1] - 2019-07-17
 

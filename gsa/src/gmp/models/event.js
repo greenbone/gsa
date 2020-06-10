@@ -104,7 +104,7 @@ const getMonthDaysFromRRule = rrule => {
   }
 
   const bymonthday = rrule.getComponent('bymonthday');
-  return bymonthday.length > 0 ? bymonthday.sort() : undefined;
+  return bymonthday.length > 0 ? bymonthday.sort((a, b) => a - b) : undefined;
 };
 
 export class WeekDays {

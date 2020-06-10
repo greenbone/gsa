@@ -32,6 +32,10 @@ const TaskResumeIcon = ({
   usageType = _('task'),
   onClick,
 }) => {
+  if (task.isQueued()) {
+    return null;
+  }
+
   if (task.isContainer()) {
     return (
       <ResumeIcon

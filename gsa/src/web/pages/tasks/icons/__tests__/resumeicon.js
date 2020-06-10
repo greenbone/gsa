@@ -184,4 +184,21 @@ describe('Task ResumeIcon component tests', () => {
       modifier: `svg path`,
     });
   });
+
+  test('should not be rendered if task is queued', () => {
+    const caps = new Capabilities(['everything']);
+    const task = Task.fromElement({
+      status: TASK_STATUS.queued,
+      permissions: {permission: [{name: 'everything'}]},
+    });
+
+    const {render} = rendererWith({capabilities: caps});
+
+    const {element} = render(<ResumeIcon task={task} />);
+
+    expect(caps.mayOp('stop_task')).toEqual(true);
+    expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
+
+    expect(element).toEqual(null);
+  });
 });

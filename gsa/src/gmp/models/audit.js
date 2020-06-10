@@ -78,6 +78,10 @@ class Audit extends Model {
     return this.status === AUDIT_STATUS.running;
   }
 
+  isQueued() {
+    return this.status === AUDIT_STATUS.queued;
+  }
+
   isStopped() {
     return this.status === AUDIT_STATUS.stopped;
   }
