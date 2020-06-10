@@ -43,6 +43,7 @@ import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import EntitiesPage from 'web/entities/page';
+import createBulkDelete from 'web/entities/createBulkDelete';
 
 import {
   useLazyGetTasks,
@@ -52,7 +53,6 @@ import {
 } from 'web/graphql/tasks';
 
 import PropTypes from 'web/utils/proptypes';
-import SelectionType from 'web/utils/selectiontype';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
 import useFilterSortBy from 'web/utils/useFilterSortby';
@@ -129,7 +129,7 @@ const TasksListPage = () => {
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
 
-  const [getAllFiltered, filteredTasks = []] = useGetAllFiltered();
+  const [getAllFiltered, allFilteredTasks = []] = useGetAllFiltered();
 
   const [deleteTask] = useDeleteTask();
   const [cloneTask] = useCloneTask();
@@ -165,29 +165,18 @@ const TasksListPage = () => {
     [deleteTask, refetch, showError],
   );
 
-  const handleDeleteTaskBulk = () => {
-    let idsToDelete = [];
+  const handleBulkDelete = createBulkDelete(
+    tasks,
+    allFilteredTasks,
+    selected,
+    selectionType,
+    deleteTask,
+    refetch,
+    showError,
+  );
 
-    if (selectionType === SelectionType.SELECTION_USER) {
-      selected.forEach(item => {
-        const promise = deleteTask(item.id);
-
-        idsToDelete.push(promise);
-      });
-    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      tasks.forEach(task => {
-        const promise = deleteTask(task.id);
-
-        idsToDelete.push(promise);
-      });
-    } else {
-      filteredTasks.forEach(task => {
-        const promise = deleteTask(task.id);
-        idsToDelete.push(promise);
-      });
-    }
-
-    return Promise.all([...idsToDelete]).then(refetch, showError);
+  const handleBulkDeleteTask = () => {
+    handleBulkDelete();
   };
 
   useEffect(() => {
@@ -198,8 +187,7 @@ const TasksListPage = () => {
         first: filter.get('rows'),
       });
 
-      const allFilter = filter.all().toFilterString();
-      getAllFiltered(allFilter);
+      getAllFiltered(filter.all().toFilterString());
     }
   }, [isLoadingFilter, filter, getTasks, called, getAllFiltered]);
 
@@ -211,8 +199,7 @@ const TasksListPage = () => {
         first: undefined,
         last: undefined,
       });
-      const allFilter = filter.all().toFilterString();
-      getAllFiltered(allFilter);
+      getAllFiltered(filter.all().toFilterString());
     }
   }, [filter, prevFilter, simpleFilter, refetch, getAllFiltered]);
 
@@ -327,7 +314,7 @@ const TasksListPage = () => {
             toolBarIcons={ToolBarIcons}
             onAdvancedTaskWizardClick={advancedtaskwizard}
             onContainerTaskCreateClick={createcontainer}
-            onDeleteBulk={handleDeleteTaskBulk}
+            onDeleteBulk={handleBulkDeleteTask}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}
