@@ -425,6 +425,7 @@ describe('ProcessMapsPage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(<ProcessMapsPage />);
