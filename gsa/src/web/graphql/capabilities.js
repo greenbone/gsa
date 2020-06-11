@@ -1,6 +1,6 @@
 /* Copyright (C) 2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,18 +16,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 import gql from 'graphql-tag';
 
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery} from 'react-apollo';
 
-import {toFruitfulQuery} from 'web/utils/graphql';
+import Capabilities from 'gmp/capabilities/capabilities';
 
-export const GET_CAPS = gql`
+import {isDefined} from 'gmp/utils/identity';
+import {useMemo} from 'react';
+
+export const GET_CAPABILITIES = gql`
   query Capabilities {
     capabilities
   }
 `;
 
-export const useGqlCapabilities = () => {
-  return toFruitfulQuery(useQuery)(GET_CAPS);
+export const useGetCapabilities = options => {
+  const {data, ...other} = useQuery(GET_CAPABILITIES, options);
+  const capabilities = useMemo(
+    () =>
+      isDefined(data?.capabilities)
+        ? new Capabilities(data.capabilities)
+        : undefined,
+    [data],
+  );
+  return {capabilities, ...other};
 };
