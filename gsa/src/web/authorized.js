@@ -33,7 +33,7 @@ import useGmp from 'web/utils/useGmp';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const Authorized = ({children}) => {
-  const {isAuthenticated, loading: isLoading} = useIsAuthenticated();
+  const {isAuthenticated, loading: isLoading, error} = useIsAuthenticated();
   const [, renewSession] = useUserSessionTimeout();
 
   const gmp = useGmp();
@@ -68,6 +68,16 @@ const Authorized = ({children}) => {
       }
     }
   }, [isAuthenticated, toLoginPage, dispatch, renewSession]);
+
+  useEffect(() => {
+    // redirect to login page if an error has occurred when requesting the
+    // authentication status. this should be a general issue with the setup and
+    // therefore we should avoid rendering anything then the login page.
+
+    if (hasValue(error)) {
+      toLoginPage();
+    }
+  }, [toLoginPage, error]);
 
   if (isLoading) {
     return <Loading />;

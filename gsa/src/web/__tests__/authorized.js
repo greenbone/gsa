@@ -125,4 +125,52 @@ describe('Authorized tests', () => {
 
     expect(history.location.pathname).toMatch('/login');
   });
+
+  test('should redirect to login page if an error occurred', async () => {
+    const [mock] = createIsAuthenticatedQueryErrorMock();
+    const subscribeToLogout = jest.fn();
+    const renewDate = date('2020-03-20');
+    const [
+      renewSessionMock,
+      renewSessionResultFunc,
+    ] = createRenewSessionQueryMock(renewDate);
+    const renewSession = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({data: renewDate}));
+    const gmp = {
+      settings: {
+        enableHyperionOnly: false,
+      },
+      subscribeToLogout,
+      user: {
+        renewSession,
+      },
+    };
+    const {render, history} = rendererWith({
+      queryMocks: [mock, renewSessionMock],
+      store: true,
+      gmp,
+      router: true,
+    });
+
+    render(
+      <Authorized>
+        <div data-testid="child" />
+      </Authorized>,
+    );
+
+    expect(subscribeToLogout).toHaveBeenCalled();
+
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(renewSessionResultFunc).not.toHaveBeenCalled();
+
+    expect(screen.queryByTestId('child')).not.toBeInTheDocument();
+
+    expect(renewSession).not.toHaveBeenCalled();
+
+    expect(history.location.pathname).toMatch('/login');
+  });
 });
