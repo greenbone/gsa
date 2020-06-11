@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 
 import {useLocation} from 'react-router-dom';
 
@@ -24,17 +24,12 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import Capabilities from 'gmp/capabilities/capabilities';
-
-import useGmp from 'web/utils/useGmp';
 
 import MenuBar from 'web/components/bar/menubar';
 
 import ErrorBoundary from 'web/components/error/errorboundary';
+import ErrorPanel from 'web/components/error/errorpanel';
 
 import Layout from 'web/components/layout/layout';
 
@@ -46,45 +41,23 @@ import Main from 'web/components/structure/main';
 
 import {useGetCapabilities} from 'web/graphql/capabilities';
 
-const log = logger.getLogger('web.page');
-
 const StyledLayout = styled(Layout)`
   height: 100%;
 `;
 
 const Page = ({children}) => {
-  const gmp = useGmp();
   const location = useLocation();
 
-  const [capabilities, setCapabilities] = useState();
-  const {capabilities: graphqlCapabilities, error} = useGetCapabilities();
+  const {capabilities, error} = useGetCapabilities();
 
-  useEffect(() => {
-    if (isDefined(graphqlCapabilities)) {
-      setCapabilities(graphqlCapabilities);
-    } else if (isDefined(error)) {
-      log.error(
-        'An error during fetching capabilities from hyperion. Trying gmp...',
-        error,
-      );
-
-      gmp.user
-        .currentCapabilities()
-        .then(response => {
-          const caps = response.data;
-          log.debug('User capabilities', caps);
-          setCapabilities(caps);
-        })
-        .catch(rejection => {
-          log.error(
-            'An error occurred during fetching capabilities',
-            rejection,
-          );
-          // use empty capabilities
-          setCapabilities(new Capabilities());
-        });
-    }
-  }, [graphqlCapabilities, error, gmp]);
+  if (isDefined(error)) {
+    return (
+      <ErrorPanel
+        error={error}
+        message={_('An error occurred while loading the users capabilities.')}
+      />
+    );
+  }
 
   if (!isDefined(capabilities)) {
     // only show content after caps have been loaded
