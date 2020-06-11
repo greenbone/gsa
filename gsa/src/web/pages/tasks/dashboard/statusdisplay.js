@@ -38,6 +38,8 @@ import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay
 
 import {TaskStatusLoader} from './loaders';
 
+import Theme from 'web/utils/theme.js';
+
 const red = interpolateHcl('#d62728', '#ff9896');
 const green = interpolateHcl('#2ca02c', '#98df8a');
 const blue = interpolateHcl('#aec7e8', '#1f77b4');
@@ -63,7 +65,7 @@ const taskStatusColorScale = scaleOrdinal()
     red(0.0),
     green(1.0),
     green(0.5),
-    green(0.0),
+    Theme.severityWarnYellow,
     green(0.0),
     orange(1.0),
     orange(0.0),
