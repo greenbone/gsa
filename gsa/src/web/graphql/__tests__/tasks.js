@@ -27,6 +27,7 @@ import {
   useCreateContainerTask,
   useCreateTask,
   useDeleteTask,
+  useDeleteTasks,
   useGetTasks,
   useLazyGetTasks,
   useModifyTask,
@@ -42,6 +43,7 @@ import {
   createModifyTaskQueryMock,
   createStartTaskQueryMock,
   createStopTaskQueryMock,
+  createDeleteTasksQueryMock,
 } from '../__mocks__/tasks';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -184,6 +186,31 @@ describe('useDeleteTask tests', () => {
     render(<DeleteTaskComponent />);
 
     const button = screen.getByTestId('delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteTasksComponent = () => {
+  const [deleteTasks] = useDeleteTasks();
+  return (
+    <button
+      data-testid="bulk-delete"
+      onClick={() => deleteTasks(['foo', 'bar'])}
+    />
+  );
+};
+
+describe('useDeleteTasks tests', () => {
+  test('should delete a list of tasks after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteTasksQueryMock(['foo', 'bar']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteTasksComponent />);
+    const button = screen.getByTestId('bulk-delete');
     fireEvent.click(button);
 
     await wait();

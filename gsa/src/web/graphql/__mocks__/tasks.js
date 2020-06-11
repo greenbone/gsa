@@ -24,6 +24,7 @@ import {
   CREATE_CONTAINER_TASK,
   CREATE_TASK,
   DELETE_TASK,
+  DELETE_TASKS,
   GET_TASKS,
   MODIFY_TASK,
   START_TASK,
@@ -222,12 +223,37 @@ export const createDeleteTaskQueryMock = taskId => {
   const resultFunc = jest.fn().mockReturnValue(queryResult);
 
   const variables = {
-    ids: [taskId],
+    id: taskId,
   };
 
   const queryMock = {
     request: {
       query: DELETE_TASK,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createDeleteTasksQueryMock = taskIds => {
+  const queryResult = {
+    data: {
+      deleteTasks: {
+        ok: true,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    ids: taskIds,
+  };
+
+  const queryMock = {
+    request: {
+      query: DELETE_TASKS,
       variables,
     },
     newData: resultFunc,
