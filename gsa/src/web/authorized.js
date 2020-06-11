@@ -73,7 +73,9 @@ const Authorized = ({children}) => {
     return <Loading />;
   }
 
-  return children;
+  // don't render children if user is not authenticated. this can happen for one
+  // render cycle after the data has loaded and the effect has not fired yet.
+  return isAuthenticated ? children : null;
 };
 
 export default Authorized;
