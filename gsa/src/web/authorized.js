@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useCallback} from 'react';
 
 import {useHistory, useLocation} from 'react-router-dom';
 
@@ -33,8 +33,7 @@ import useGmp from 'web/utils/useGmp';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const Authorized = ({children}) => {
-  const {isAuthenticated, loading} = useIsAuthenticated();
-  const [isLoading, setIsLoading] = useState(loading);
+  const {isAuthenticated, loading: isLoading} = useIsAuthenticated();
   const [, renewSession] = useUserSessionTimeout();
 
   const gmp = useGmp();
@@ -68,8 +67,7 @@ const Authorized = ({children}) => {
         toLoginPage();
       }
     }
-    setIsLoading(loading);
-  }, [loading, isAuthenticated, toLoginPage, dispatch, renewSession]);
+  }, [isAuthenticated, toLoginPage, dispatch, renewSession]);
 
   if (isLoading) {
     return <Loading />;
