@@ -293,6 +293,8 @@ describe('TasksListPage tests', () => {
 
     fireEvent.click(icons[33]);
 
+    await wait();
+
     // with listpage transformation to graphql and hooks the bulk actions are
     // still missing. Thus they aren't clickable
 
