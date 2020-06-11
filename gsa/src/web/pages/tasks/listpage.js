@@ -52,7 +52,7 @@ import {
 } from 'web/graphql/tasks';
 
 import PropTypes from 'web/utils/proptypes';
-import SelectionType from 'web/utils/selectiontype';
+import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
 import useFilterSortBy from 'web/utils/useFilterSortby';
@@ -169,11 +169,11 @@ const TasksListPage = () => {
   const handleBulkDeleteTask = () => {
     let tasksToDelete;
     if (selectionType === SelectionType.SELECTION_USER) {
-      tasksToDelete = selected.map(task => task.id);
+      tasksToDelete = getEntityIds(selected);
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      tasksToDelete = tasks.map(task => task.id);
+      tasksToDelete = getEntityIds(tasks);
     } else {
-      tasksToDelete = allFilteredTasks.map(task => task.id);
+      tasksToDelete = getEntityIds(allFilteredTasks);
     }
     return deleteTasks(tasksToDelete).then(refetch, showError);
   };
