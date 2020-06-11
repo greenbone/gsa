@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 
 import {useLocation} from 'react-router-dom';
 
@@ -24,18 +24,12 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import Capabilities from 'gmp/capabilities/capabilities';
-
-import useGmp from 'web/utils/useGmp';
-import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
 
 import MenuBar from 'web/components/bar/menubar';
 
 import ErrorBoundary from 'web/components/error/errorboundary';
+import ErrorPanel from 'web/components/error/errorpanel';
 
 import Layout from 'web/components/layout/layout';
 
@@ -45,47 +39,25 @@ import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 import Main from 'web/components/structure/main';
 
-const log = logger.getLogger('web.page');
+import {useGetCapabilities} from 'web/graphql/capabilities';
 
 const StyledLayout = styled(Layout)`
   height: 100%;
 `;
 
 const Page = ({children}) => {
-  const gmp = useGmp();
   const location = useLocation();
 
-  const [capabilities, setCapabilities] = useState();
-  const query = useGqlCapabilities();
-  const {data, error} = query();
+  const {capabilities, error} = useGetCapabilities();
 
-  useEffect(() => {
-    if (isDefined(data) && isDefined(data.capabilities)) {
-      setCapabilities(new Capabilities(data.capabilities));
-    } else {
-      log.error(
-        'An error during fetching capabilities from hyperion. Trying gmp...',
-        error,
-      );
-
-      gmp.user
-        .currentCapabilities()
-        .then(response => {
-          const caps = response.data;
-          log.debug('User capabilities', caps);
-          setCapabilities(caps);
-        })
-        .catch(rejection => {
-          log.error(
-            'An error occurred during fetching capabilities',
-            rejection,
-          );
-          // use empty capabilities
-          setCapabilities(new Capabilities());
-        });
-    }
-  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
-  // if we don't wait for data to become defined, undefined caps will be saved.
+  if (isDefined(error)) {
+    return (
+      <ErrorPanel
+        error={error}
+        message={_('An error occurred while loading the users capabilities.')}
+      />
+    );
+  }
 
   if (!isDefined(capabilities)) {
     // only show content after caps have been loaded

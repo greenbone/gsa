@@ -19,7 +19,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: stretch;
 }
 
-.c18 {
+.c19 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -37,7 +37,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c23 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -59,7 +59,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c27 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -77,7 +77,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c29 {
+.c30 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -91,7 +91,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   justify-content: center;
 }
 
-.c30 {
+.c31 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -105,7 +105,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   justify-content: flex-start;
 }
 
-.c31 {
+.c32 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -123,7 +123,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: flex-start;
 }
 
-.c37 {
+.c38 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -141,7 +141,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c39 {
+.c40 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -159,7 +159,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c33 {
+.c34 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -178,18 +178,18 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   margin-left: -5px;
 }
 
-.c33 > * {
+.c34 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c33 > * {
+.c34 > * {
   margin-left: 5px;
 }
 
-.c32 {
+.c33 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -211,28 +211,28 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   display: inline-flex;
 }
 
-.c20 {
+.c21 {
   cursor: pointer;
 }
 
-.c21 {
+.c22 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c21 * {
+.c22 * {
   height: inherit;
   width: inherit;
 }
 
-.c22 {
+.c23 {
   overflow: hidden;
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
-.c40 {
+.c41 {
   overflow: hidden;
   -webkit-transition: 0.4s;
   transition: 0.4s;
@@ -240,7 +240,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   height: 0;
 }
 
-.c14 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -262,11 +262,11 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   position: relative;
 }
 
-.c15 {
+.c16 {
   margin: 0 0 1px 0;
 }
 
-.c16 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -284,7 +284,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: stretch;
 }
 
-.c17 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -304,7 +304,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   min-width: 100px;
 }
 
-.c19 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -357,7 +357,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c51 {
+.c52 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -366,7 +366,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c50 {
+.c51 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -433,7 +433,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c47 {
+.c48 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -453,12 +453,12 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c47:focus,
-.c47:hover {
+.c48:focus,
+.c48:hover {
   border: 1px solid #393637;
 }
 
-.c47:hover {
+.c48:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -466,26 +466,26 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c47[disabled] {
+.c48[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c47 img {
+.c48 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c47:link {
+.c48:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c48 {
+.c49 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -503,18 +503,18 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c49 {
+.c50 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c49:hover {
+.c50:hover {
   color: #fff;
   background: #519032;
 }
 
-.c46 {
+.c47 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -663,7 +663,16 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   padding-right: 10px;
 }
 
-.c24 {
+.c14 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c25 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -672,21 +681,21 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   width: 100%;
 }
 
-.c24 th,
-.c24 td {
+.c25 th,
+.c25 td {
   padding: 4px 10px;
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c24 tfoot tr {
+.c25 tfoot tr {
   background: #fff;
 }
 
-.c24 tfoot tr td {
+.c25 tfoot tr td {
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c42 {
+.c43 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -695,40 +704,40 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   width: 100%;
 }
 
-.c42 th,
-.c42 td {
+.c43 th,
+.c43 td {
   padding: 4px 10px;
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c42 tfoot tr {
+.c43 tfoot tr {
   background: #fff;
 }
 
-.c42 tfoot tr td {
+.c43 tfoot tr td {
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c25 a {
+.c26 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c25 a:hover {
+.c26 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c26 {
+.c27 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
   font-weight: bold;
 }
 
-.c28 {
+.c29 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -736,7 +745,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   width: 9em;
 }
 
-.c43 {
+.c44 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -744,7 +753,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   width: 30%;
 }
 
-.c44 {
+.c45 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -792,7 +801,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c41 {
+.c42 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -810,7 +819,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c34 {
+.c35 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -826,7 +835,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c35 {
+.c36 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -837,7 +846,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   height: auto;
 }
 
-.c36 {
+.c37 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -855,7 +864,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c38 {
+.c39 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -873,59 +882,59 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c45 {
+.c46 {
   overflow-wrap: break-word;
 }
 
 @media print {
-  .c20 {
+  .c21 {
     display: none;
   }
 }
 
 @media print {
-  .c24 {
-    border-collapse: collapse;
-  }
-}
-
-@media screen {
-  .c24 > tbody:nth-of-type(even),
-  .c24 > tbody:only-of-type > tr:nth-of-type(even) {
-    background: #eeeeee;
-  }
-
-  .c24 > tbody:not(:only-of-type):hover,
-  .c24 > tbody:only-of-type > tr:hover {
-    background: #c8d3d9;
-  }
-}
-
-@media print {
-  .c42 {
-    border-collapse: collapse;
-  }
-}
-
-@media screen {
-  .c42 > tbody:nth-of-type(even),
-  .c42 > tbody:only-of-type > tr:nth-of-type(even) {
-    background: #eeeeee;
-  }
-
-  .c42 > tbody:not(:only-of-type):hover,
-  .c42 > tbody:only-of-type > tr:hover {
-    background: #c8d3d9;
-  }
-}
-
-@media print {
   .c25 {
+    border-collapse: collapse;
+  }
+}
+
+@media screen {
+  .c25 > tbody:nth-of-type(even),
+  .c25 > tbody:only-of-type > tr:nth-of-type(even) {
+    background: #eeeeee;
+  }
+
+  .c25 > tbody:not(:only-of-type):hover,
+  .c25 > tbody:only-of-type > tr:hover {
+    background: #c8d3d9;
+  }
+}
+
+@media print {
+  .c43 {
+    border-collapse: collapse;
+  }
+}
+
+@media screen {
+  .c43 > tbody:nth-of-type(even),
+  .c43 > tbody:only-of-type > tr:nth-of-type(even) {
+    background: #eeeeee;
+  }
+
+  .c43 > tbody:not(:only-of-type):hover,
+  .c43 > tbody:only-of-type > tr:hover {
+    background: #c8d3d9;
+  }
+}
+
+@media print {
+  .c26 {
     border-bottom: 1px solid black;
   }
 
-  .c25 a,
-  .c25 a:hover {
+  .c26 a,
+  .c26 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
@@ -933,7 +942,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 }
 
 @media print {
-  .c26 {
+  .c27 {
     color: #000;
     font-size: 1.2em;
     background-color: none;
@@ -942,16 +951,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 }
 
 @media print {
-  .c28 {
-    color: #000;
-    font-size: 1.2em;
-    background-color: none;
-    font-weight: bold;
-  }
-}
-
-@media print {
-  .c43 {
+  .c29 {
     color: #000;
     font-size: 1.2em;
     background-color: none;
@@ -961,6 +961,15 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 
 @media print {
   .c44 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c45 {
     color: #000;
     font-size: 1.2em;
     background-color: none;
@@ -1032,6 +1041,12 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                         type="text"
                         value="Config"
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -1055,29 +1070,35 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                         type="text"
                         value="bar"
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <section>
                     <div
-                      class="c14 section-header"
+                      class="c15 section-header"
                     >
                       <h2
-                        class="c15 c16"
+                        class="c16 c17"
                       >
                         <div
-                          class="c17"
+                          class="c18"
                         >
                           Edit Network Vulnerability Test Families (4)
                         </div>
                       </h2>
                       <div
-                        class="c18"
+                        class="c19"
                       >
                         <div
-                          class="c19"
+                          class="c20"
                         >
                           <span
-                            class="c20 c21 section-fold-icon"
+                            class="c21 c22 section-fold-icon"
                             data-testid="svg-icon"
                             title="Fold"
                           >
@@ -1091,59 +1112,59 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                       </div>
                     </div>
                     <div
-                      class="c22"
+                      class="c23"
                     >
                       <div
-                        class="c23"
+                        class="c24"
                       >
                         <table
-                          class="c24"
+                          class="c25"
                         >
                           <thead
-                            class="c25"
+                            class="c26"
                           >
                             <tr>
                               <th
-                                class="c26"
+                                class="c27"
                               >
                                 <div
-                                  class="c27"
+                                  class="c28"
                                 >
                                   Family
                                 </div>
                               </th>
                               <th
-                                class="c26"
+                                class="c27"
                               >
                                 <div
-                                  class="c27"
+                                  class="c28"
                                 >
                                   NVTs selected
                                 </div>
                               </th>
                               <th
-                                class="c26"
+                                class="c27"
                               >
                                 <div
-                                  class="c27"
+                                  class="c28"
                                 >
                                   Trend
                                 </div>
                               </th>
                               <th
-                                class="c28"
+                                class="c29"
                               >
                                 <div
-                                  class="c27"
+                                  class="c28"
                                 >
                                   Select all NVTs
                                 </div>
                               </th>
                               <th
-                                class="c26"
+                                class="c27"
                               >
                                 <div
-                                  class="c29"
+                                  class="c30"
                                 >
                                   Actions
                                 </div>
@@ -1163,35 +1184,35 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c30"
+                                  class="c31"
                                 >
                                   1 of 1
                                 </div>
                               </td>
                               <td>
                                 <div
-                                  class="c31"
+                                  class="c32"
                                 >
                                   <div
-                                    class="c32"
+                                    class="c33"
                                   >
                                     <div
-                                      class="c33"
+                                      class="c34"
                                       margin="5px"
                                     >
                                       <label
-                                        class="c34"
+                                        class="c35"
                                       >
                                         <div
-                                          class="c32"
+                                          class="c33"
                                         >
                                           <div
-                                            class="c33"
+                                            class="c34"
                                             margin="5px"
                                           >
                                             <input
                                               checked=""
-                                              class="c35 c36"
+                                              class="c36 c37"
                                               data-testid="radio-input"
                                               name="family1"
                                               type="radio"
@@ -1202,7 +1223,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Dynamic"
-                                        class="c21"
+                                        class="c22"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1210,17 +1231,17 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         </svg>
                                       </span>
                                       <label
-                                        class="c34"
+                                        class="c35"
                                       >
                                         <div
-                                          class="c32"
+                                          class="c33"
                                         >
                                           <div
-                                            class="c33"
+                                            class="c34"
                                             margin="5px"
                                           >
                                             <input
-                                              class="c35 c36"
+                                              class="c36 c37"
                                               data-testid="radio-input"
                                               name="family1"
                                               type="radio"
@@ -1231,7 +1252,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Static"
-                                        class="c21"
+                                        class="c22"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1244,21 +1265,21 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c37"
+                                  class="c38"
                                 >
                                   <label
-                                    class="c34"
+                                    class="c35"
                                   >
                                     <div
-                                      class="c32"
+                                      class="c33"
                                     >
                                       <div
-                                        class="c33"
+                                        class="c34"
                                         margin="5px"
                                       >
                                         <input
                                           checked=""
-                                          class="c35 c38"
+                                          class="c36 c39"
                                           name="family1"
                                           type="checkbox"
                                         />
@@ -1269,10 +1290,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c39"
+                                  class="c40"
                                 >
                                   <span
-                                    class="c20 c21"
+                                    class="c21 c22"
                                     data-testid="svg-icon"
                                     title="Edit Scan Config Family"
                                   >
@@ -1295,34 +1316,34 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c30"
+                                  class="c31"
                                 >
                                   2 of 4
                                 </div>
                               </td>
                               <td>
                                 <div
-                                  class="c31"
+                                  class="c32"
                                 >
                                   <div
-                                    class="c32"
+                                    class="c33"
                                   >
                                     <div
-                                      class="c33"
+                                      class="c34"
                                       margin="5px"
                                     >
                                       <label
-                                        class="c34"
+                                        class="c35"
                                       >
                                         <div
-                                          class="c32"
+                                          class="c33"
                                         >
                                           <div
-                                            class="c33"
+                                            class="c34"
                                             margin="5px"
                                           >
                                             <input
-                                              class="c35 c36"
+                                              class="c36 c37"
                                               data-testid="radio-input"
                                               name="family2"
                                               type="radio"
@@ -1333,7 +1354,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Dynamic"
-                                        class="c21"
+                                        class="c22"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1341,18 +1362,18 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         </svg>
                                       </span>
                                       <label
-                                        class="c34"
+                                        class="c35"
                                       >
                                         <div
-                                          class="c32"
+                                          class="c33"
                                         >
                                           <div
-                                            class="c33"
+                                            class="c34"
                                             margin="5px"
                                           >
                                             <input
                                               checked=""
-                                              class="c35 c36"
+                                              class="c36 c37"
                                               data-testid="radio-input"
                                               name="family2"
                                               type="radio"
@@ -1363,7 +1384,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Static"
-                                        class="c21"
+                                        class="c22"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1376,20 +1397,20 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c37"
+                                  class="c38"
                                 >
                                   <label
-                                    class="c34"
+                                    class="c35"
                                   >
                                     <div
-                                      class="c32"
+                                      class="c33"
                                     >
                                       <div
-                                        class="c33"
+                                        class="c34"
                                         margin="5px"
                                       >
                                         <input
-                                          class="c35 c38"
+                                          class="c36 c39"
                                           name="family2"
                                           type="checkbox"
                                         />
@@ -1400,10 +1421,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c39"
+                                  class="c40"
                                 >
                                   <span
-                                    class="c20 c21"
+                                    class="c21 c22"
                                     data-testid="svg-icon"
                                     title="Edit Scan Config Family"
                                   >
@@ -1426,34 +1447,34 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c30"
+                                  class="c31"
                                 >
                                   0 of 2
                                 </div>
                               </td>
                               <td>
                                 <div
-                                  class="c31"
+                                  class="c32"
                                 >
                                   <div
-                                    class="c32"
+                                    class="c33"
                                   >
                                     <div
-                                      class="c33"
+                                      class="c34"
                                       margin="5px"
                                     >
                                       <label
-                                        class="c34"
+                                        class="c35"
                                       >
                                         <div
-                                          class="c32"
+                                          class="c33"
                                         >
                                           <div
-                                            class="c33"
+                                            class="c34"
                                             margin="5px"
                                           >
                                             <input
-                                              class="c35 c36"
+                                              class="c36 c37"
                                               data-testid="radio-input"
                                               name="family3"
                                               type="radio"
@@ -1464,7 +1485,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Dynamic"
-                                        class="c21"
+                                        class="c22"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1472,18 +1493,18 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         </svg>
                                       </span>
                                       <label
-                                        class="c34"
+                                        class="c35"
                                       >
                                         <div
-                                          class="c32"
+                                          class="c33"
                                         >
                                           <div
-                                            class="c33"
+                                            class="c34"
                                             margin="5px"
                                           >
                                             <input
                                               checked=""
-                                              class="c35 c36"
+                                              class="c36 c37"
                                               data-testid="radio-input"
                                               name="family3"
                                               type="radio"
@@ -1494,7 +1515,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Static"
-                                        class="c21"
+                                        class="c22"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1507,20 +1528,20 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c37"
+                                  class="c38"
                                 >
                                   <label
-                                    class="c34"
+                                    class="c35"
                                   >
                                     <div
-                                      class="c32"
+                                      class="c33"
                                     >
                                       <div
-                                        class="c33"
+                                        class="c34"
                                         margin="5px"
                                       >
                                         <input
-                                          class="c35 c38"
+                                          class="c36 c39"
                                           name="family3"
                                           type="checkbox"
                                         />
@@ -1531,10 +1552,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c39"
+                                  class="c40"
                                 >
                                   <span
-                                    class="c20 c21"
+                                    class="c21 c22"
                                     data-testid="svg-icon"
                                     title="Edit Scan Config Family"
                                   >
@@ -1557,34 +1578,34 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c30"
+                                  class="c31"
                                 >
                                   0 of 6
                                 </div>
                               </td>
                               <td>
                                 <div
-                                  class="c31"
+                                  class="c32"
                                 >
                                   <div
-                                    class="c32"
+                                    class="c33"
                                   >
                                     <div
-                                      class="c33"
+                                      class="c34"
                                       margin="5px"
                                     >
                                       <label
-                                        class="c34"
+                                        class="c35"
                                       >
                                         <div
-                                          class="c32"
+                                          class="c33"
                                         >
                                           <div
-                                            class="c33"
+                                            class="c34"
                                             margin="5px"
                                           >
                                             <input
-                                              class="c35 c36"
+                                              class="c36 c37"
                                               data-testid="radio-input"
                                               name="family4"
                                               type="radio"
@@ -1595,7 +1616,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Dynamic"
-                                        class="c21"
+                                        class="c22"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1603,18 +1624,18 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         </svg>
                                       </span>
                                       <label
-                                        class="c34"
+                                        class="c35"
                                       >
                                         <div
-                                          class="c32"
+                                          class="c33"
                                         >
                                           <div
-                                            class="c33"
+                                            class="c34"
                                             margin="5px"
                                           >
                                             <input
                                               checked=""
-                                              class="c35 c36"
+                                              class="c36 c37"
                                               data-testid="radio-input"
                                               name="family4"
                                               type="radio"
@@ -1625,7 +1646,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                       </label>
                                       <span
                                         alt="Static"
-                                        class="c21"
+                                        class="c22"
                                         data-testid="svg-icon"
                                       >
                                         <svg>
@@ -1638,20 +1659,20 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c37"
+                                  class="c38"
                                 >
                                   <label
-                                    class="c34"
+                                    class="c35"
                                   >
                                     <div
-                                      class="c32"
+                                      class="c33"
                                     >
                                       <div
-                                        class="c33"
+                                        class="c34"
                                         margin="5px"
                                       >
                                         <input
-                                          class="c35 c38"
+                                          class="c36 c39"
                                           name="family4"
                                           type="checkbox"
                                         />
@@ -1662,10 +1683,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c39"
+                                  class="c40"
                                 >
                                   <span
-                                    class="c20 c21"
+                                    class="c21 c22"
                                     data-testid="svg-icon"
                                     title="Edit Scan Config Family"
                                   >
@@ -1685,25 +1706,25 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                   </section>
                   <section>
                     <div
-                      class="c14 section-header"
+                      class="c15 section-header"
                     >
                       <h2
-                        class="c15 c16"
+                        class="c16 c17"
                       >
                         <div
-                          class="c17"
+                          class="c18"
                         >
                           Edit Scanner Preferences (1)
                         </div>
                       </h2>
                       <div
-                        class="c18"
+                        class="c19"
                       >
                         <div
-                          class="c19"
+                          class="c20"
                         >
                           <span
-                            class="c20 c21 section-fold-icon"
+                            class="c21 c22 section-fold-icon"
                             data-testid="svg-icon"
                             title="Unfold"
                           >
@@ -1717,41 +1738,41 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                       </div>
                     </div>
                     <div
-                      class="c40"
+                      class="c41"
                     >
                       <div
-                        class="c23"
+                        class="c24"
                       >
                         <table
-                          class="c24"
+                          class="c25"
                         >
                           <thead
-                            class="c25"
+                            class="c26"
                           >
                             <tr>
                               <th
-                                class="c26"
+                                class="c27"
                               >
                                 <div
-                                  class="c27"
+                                  class="c28"
                                 >
                                   Name
                                 </div>
                               </th>
                               <th
-                                class="c26"
+                                class="c27"
                               >
                                 <div
-                                  class="c27"
+                                  class="c28"
                                 >
                                   New Value
                                 </div>
                               </th>
                               <th
-                                class="c26"
+                                class="c27"
                               >
                                 <div
-                                  class="c27"
+                                  class="c28"
                                 >
                                   Default Value
                                 </div>
@@ -1774,11 +1795,17 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                   class="c8"
                                 >
                                   <input
-                                    class="c12 c41"
+                                    class="c12 c42"
                                     name="scannerpref0"
                                     type="text"
                                     value="0"
                                   />
+                                  <div
+                                    class="c14"
+                                    data-testid="error-marker"
+                                  >
+                                    ×
+                                  </div>
                                 </div>
                               </td>
                               <td>
@@ -1794,25 +1821,25 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                   </section>
                   <section>
                     <div
-                      class="c14 section-header"
+                      class="c15 section-header"
                     >
                       <h2
-                        class="c15 c16"
+                        class="c16 c17"
                       >
                         <div
-                          class="c17"
+                          class="c18"
                         >
                           Network Vulnerability Test Preferences (3)
                         </div>
                       </h2>
                       <div
-                        class="c18"
+                        class="c19"
                       >
                         <div
-                          class="c19"
+                          class="c20"
                         >
                           <span
-                            class="c20 c21 section-fold-icon"
+                            class="c21 c22 section-fold-icon"
                             data-testid="svg-icon"
                             title="Unfold"
                           >
@@ -1826,50 +1853,50 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                       </div>
                     </div>
                     <div
-                      class="c40"
+                      class="c41"
                     >
                       <div
-                        class="c23"
+                        class="c24"
                       >
                         <table
-                          class="c42"
+                          class="c43"
                         >
                           <thead
-                            class="c25"
+                            class="c26"
                           >
                             <tr>
                               <th
-                                class="c43"
+                                class="c44"
                               >
                                 <div
-                                  class="c27"
+                                  class="c28"
                                 >
                                   NVT
-                                </div>
-                              </th>
-                              <th
-                                class="c43"
-                              >
-                                <div
-                                  class="c27"
-                                >
-                                  Name
-                                </div>
-                              </th>
-                              <th
-                                class="c43"
-                              >
-                                <div
-                                  class="c27"
-                                >
-                                  Value
                                 </div>
                               </th>
                               <th
                                 class="c44"
                               >
                                 <div
-                                  class="c29"
+                                  class="c28"
+                                >
+                                  Name
+                                </div>
+                              </th>
+                              <th
+                                class="c44"
+                              >
+                                <div
+                                  class="c28"
+                                >
+                                  Value
+                                </div>
+                              </th>
+                              <th
+                                class="c45"
+                              >
+                                <div
+                                  class="c30"
                                 >
                                   Actions
                                 </div>
@@ -1881,7 +1908,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                           >
                             <tr>
                               <td
-                                class="c45"
+                                class="c46"
                               >
                                 <div
                                   class="c8"
@@ -1890,7 +1917,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                 </div>
                               </td>
                               <td
-                                class="c45"
+                                class="c46"
                               >
                                 <div
                                   class="c8"
@@ -1899,7 +1926,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                 </div>
                               </td>
                               <td
-                                class="c45"
+                                class="c46"
                               >
                                 <div
                                   class="c8"
@@ -1909,10 +1936,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c39"
+                                  class="c40"
                                 >
                                   <span
-                                    class="c20 c21"
+                                    class="c21 c22"
                                     data-testid="svg-icon"
                                     title="Edit Scan Config NVT Details"
                                   >
@@ -1927,7 +1954,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                             </tr>
                             <tr>
                               <td
-                                class="c45"
+                                class="c46"
                               >
                                 <div
                                   class="c8"
@@ -1936,7 +1963,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                 </div>
                               </td>
                               <td
-                                class="c45"
+                                class="c46"
                               >
                                 <div
                                   class="c8"
@@ -1945,7 +1972,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                 </div>
                               </td>
                               <td
-                                class="c45"
+                                class="c46"
                               >
                                 <div
                                   class="c8"
@@ -1955,10 +1982,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c39"
+                                  class="c40"
                                 >
                                   <span
-                                    class="c20 c21"
+                                    class="c21 c22"
                                     data-testid="svg-icon"
                                     title="Edit Scan Config NVT Details"
                                   >
@@ -1973,7 +2000,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                             </tr>
                             <tr>
                               <td
-                                class="c45"
+                                class="c46"
                               >
                                 <div
                                   class="c8"
@@ -1982,7 +2009,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                 </div>
                               </td>
                               <td
-                                class="c45"
+                                class="c46"
                               >
                                 <div
                                   class="c8"
@@ -1991,7 +2018,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                 </div>
                               </td>
                               <td
-                                class="c45"
+                                class="c46"
                               >
                                 <div
                                   class="c8"
@@ -2001,10 +2028,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                               </td>
                               <td>
                                 <div
-                                  class="c39"
+                                  class="c40"
                                 >
                                   <span
-                                    class="c20 c21"
+                                    class="c21 c22"
                                     data-testid="svg-icon"
                                     title="Edit Scan Config NVT Details"
                                   >
@@ -2026,17 +2053,17 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c46"
+              class="c47"
             >
               <button
-                class="c47 c48 c49"
+                class="c48 c49 c50"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c47 c48 c49"
+                class="c48 c49 c50"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -2045,10 +2072,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c50"
+            class="c51"
           >
             <div
-              class="c51"
+              class="c52"
             />
           </div>
         </div>
@@ -2115,7 +2142,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   height: 100%;
 }
 
-.c19 {
+.c20 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -2124,7 +2151,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   border-top: 20px solid #fff;
 }
 
-.c18 {
+.c19 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -2191,7 +2218,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   width: inherit;
 }
 
-.c15 {
+.c16 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -2211,12 +2238,12 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   z-index: 1;
 }
 
-.c15:focus,
-.c15:hover {
+.c16:focus,
+.c16:hover {
   border: 1px solid #393637;
 }
 
-.c15:hover {
+.c16:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -2224,26 +2251,26 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   color: #fff;
 }
 
-.c15[disabled] {
+.c16[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c15 img {
+.c16 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c15:link {
+.c16:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c16 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2261,18 +2288,18 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   align-items: center;
 }
 
-.c17 {
+.c18 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c17:hover {
+.c18:hover {
   color: #fff;
   background: #519032;
 }
 
-.c14 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2419,6 +2446,15 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
+}
+
+.c14 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
 }
 
 .c12 {
@@ -2521,6 +2557,12 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
                         type="text"
                         value="Config"
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -2544,23 +2586,29 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
                         type="text"
                         value="bar"
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div
-              class="c14"
+              class="c15"
             >
               <button
-                class="c15 c16 c17"
+                class="c16 c17 c18"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c15 c16 c17"
+                class="c16 c17 c18"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -2569,10 +2617,10 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
             </div>
           </div>
           <div
-            class="c18"
+            class="c19"
           >
             <div
-              class="c19"
+              class="c20"
             />
           </div>
         </div>
@@ -2606,7 +2654,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   align-items: stretch;
 }
 
-.c24 {
+.c26 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2624,7 +2672,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   align-items: center;
 }
 
-.c29 {
+.c31 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2646,7 +2694,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   align-items: center;
 }
 
-.c33 {
+.c35 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2664,7 +2712,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   align-items: center;
 }
 
-.c17 {
+.c19 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2682,22 +2730,22 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   align-items: center;
 }
 
-.c26 {
+.c28 {
   cursor: pointer;
 }
 
-.c27 {
+.c29 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c27 * {
+.c29 * {
   height: inherit;
   width: inherit;
 }
 
-.c28 {
+.c30 {
   overflow: hidden;
   -webkit-transition: 0.4s;
   transition: 0.4s;
@@ -2705,7 +2753,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   height: 0;
 }
 
-.c20 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2727,11 +2775,11 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   position: relative;
 }
 
-.c21 {
+.c23 {
   margin: 0 0 1px 0;
 }
 
-.c22 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2749,7 +2797,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   align-items: stretch;
 }
 
-.c23 {
+.c25 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2769,7 +2817,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   min-width: 100px;
 }
 
-.c25 {
+.c27 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2822,7 +2870,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   height: 100%;
 }
 
-.c40 {
+.c42 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -2831,7 +2879,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   border-top: 20px solid #fff;
 }
 
-.c39 {
+.c41 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -2898,7 +2946,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   width: inherit;
 }
 
-.c36 {
+.c38 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -2918,12 +2966,12 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   z-index: 1;
 }
 
-.c36:focus,
-.c36:hover {
+.c38:focus,
+.c38:hover {
   border: 1px solid #393637;
 }
 
-.c36:hover {
+.c38:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -2931,26 +2979,26 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   color: #fff;
 }
 
-.c36[disabled] {
+.c38[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c36 img {
+.c38 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c36:link {
+.c38:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c37 {
+.c39 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2968,18 +3016,18 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   align-items: center;
 }
 
-.c38 {
+.c40 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c38:hover {
+.c40:hover {
   color: #fff;
   background: #519032;
 }
 
-.c35 {
+.c37 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3128,7 +3176,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   padding-right: 10px;
 }
 
-.c18 {
+.c20 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -3153,18 +3201,18 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   cursor: pointer;
 }
 
-.c19 {
+.c21 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c19 * {
+.c21 * {
   height: inherit;
   width: inherit;
 }
 
-.c15 {
+.c17 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -3188,7 +3236,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   font-weight: normal;
 }
 
-.c14 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3200,7 +3248,16 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   width: 180px;
 }
 
-.c16 {
+.c14 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3220,7 +3277,14 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   cursor: default;
 }
 
-.c30 {
+.c15 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c32 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -3229,33 +3293,33 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   width: 100%;
 }
 
-.c30 th,
-.c30 td {
+.c32 th,
+.c32 td {
   padding: 4px 10px;
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c30 tfoot tr {
+.c32 tfoot tr {
   background: #fff;
 }
 
-.c30 tfoot tr td {
+.c32 tfoot tr td {
   border-bottom: 1px solid #c8d3d9;
 }
 
-.c31 a {
+.c33 a {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #000;
 }
 
-.c31 a:hover {
+.c33 a:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #000;
 }
 
-.c32 {
+.c34 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
@@ -3302,7 +3366,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
   align-items: center;
 }
 
-.c34 {
+.c36 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3321,36 +3385,36 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
 }
 
 @media print {
-  .c26 {
+  .c28 {
     display: none;
   }
 }
 
 @media print {
-  .c30 {
+  .c32 {
     border-collapse: collapse;
   }
 }
 
 @media screen {
-  .c30 > tbody:nth-of-type(even),
-  .c30 > tbody:only-of-type > tr:nth-of-type(even) {
+  .c32 > tbody:nth-of-type(even),
+  .c32 > tbody:only-of-type > tr:nth-of-type(even) {
     background: #eeeeee;
   }
 
-  .c30 > tbody:not(:only-of-type):hover,
-  .c30 > tbody:only-of-type > tr:hover {
+  .c32 > tbody:not(:only-of-type):hover,
+  .c32 > tbody:only-of-type > tr:hover {
     background: #c8d3d9;
   }
 }
 
 @media print {
-  .c31 {
+  .c33 {
     border-bottom: 1px solid black;
   }
 
-  .c31 a,
-  .c31 a:hover {
+  .c33 a,
+  .c33 a:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
@@ -3358,7 +3422,7 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
 }
 
 @media print {
-  .c32 {
+  .c34 {
     color: #000;
     font-size: 1.2em;
     background-color: none;
@@ -3426,6 +3490,12 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                         type="text"
                         value="Config"
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -3449,6 +3519,12 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                         type="text"
                         value="bar"
                       />
+                      <div
+                        class="c14"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -3469,60 +3545,70 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="downshift-0-label"
-                        class="c14"
+                        class="c15"
                         role="combobox"
-                        width="180px"
                       >
                         <div
-                          aria-haspopup="true"
-                          aria-label="open menu"
-                          class="c15"
-                          data-toggle="true"
-                          role="button"
-                          type="button"
+                          class="c16"
+                          width="180px"
                         >
                           <div
-                            class="c16"
-                            data-testid="select-selected-value"
-                            title="scanner1"
-                          >
-                            scanner1
-                          </div>
-                          <div
+                            aria-haspopup="true"
+                            aria-label="open menu"
                             class="c17"
+                            data-toggle="true"
+                            role="button"
+                            type="button"
                           >
-                            <span
-                              class="c18 c19"
-                              data-testid="select-open-button"
+                            <div
+                              class="c18"
+                              data-testid="select-selected-value"
+                              title="scanner1"
                             >
-                              ▼
-                            </span>
+                              scanner1
+                            </div>
+                            <div
+                              class="c19"
+                            >
+                              <span
+                                class="c20 c21"
+                                data-testid="select-open-button"
+                              >
+                                ▼
+                              </span>
+                            </div>
                           </div>
+                        </div>
+                        <div
+                          class="c14"
+                          data-testid="error-marker"
+                        >
+                          ×
                         </div>
                       </div>
                     </div>
                   </div>
                   <section>
                     <div
-                      class="c20 section-header"
+                      class="c22 section-header"
                     >
                       <h2
-                        class="c21 c22"
+                        class="c23 c24"
                       >
                         <div
-                          class="c23"
+                          class="c25"
                         >
                           Edit Scanner Preferences (1)
                         </div>
                       </h2>
                       <div
-                        class="c24"
+                        class="c26"
                       >
                         <div
-                          class="c25"
+                          class="c27"
                         >
                           <span
-                            class="c26 c27 section-fold-icon"
+                            class="c28 c29 section-fold-icon"
                             data-testid="svg-icon"
                             title="Unfold"
                           >
@@ -3536,41 +3622,41 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                       </div>
                     </div>
                     <div
-                      class="c28"
+                      class="c30"
                     >
                       <div
-                        class="c29"
+                        class="c31"
                       >
                         <table
-                          class="c30"
+                          class="c32"
                         >
                           <thead
-                            class="c31"
+                            class="c33"
                           >
                             <tr>
                               <th
-                                class="c32"
+                                class="c34"
                               >
                                 <div
-                                  class="c33"
+                                  class="c35"
                                 >
                                   Name
                                 </div>
                               </th>
                               <th
-                                class="c32"
+                                class="c34"
                               >
                                 <div
-                                  class="c33"
+                                  class="c35"
                                 >
                                   New Value
                                 </div>
                               </th>
                               <th
-                                class="c32"
+                                class="c34"
                               >
                                 <div
-                                  class="c33"
+                                  class="c35"
                                 >
                                   Default Value
                                 </div>
@@ -3593,11 +3679,17 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
                                   class="c8"
                                 >
                                   <input
-                                    class="c12 c34"
+                                    class="c12 c36"
                                     name="scannerpref0"
                                     type="text"
                                     value="0"
                                   />
+                                  <div
+                                    class="c14"
+                                    data-testid="error-marker"
+                                  >
+                                    ×
+                                  </div>
                                 </div>
                               </td>
                               <td>
@@ -3615,17 +3707,17 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
               </div>
             </div>
             <div
-              class="c35"
+              class="c37"
             >
               <button
-                class="c36 c37 c38"
+                class="c38 c39 c40"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c36 c37 c38"
+                class="c38 c39 c40"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -3634,10 +3726,10 @@ exports[`EditScanConfigDialog component tests should render dialog for osp confi
             </div>
           </div>
           <div
-            class="c39"
+            class="c41"
           >
             <div
-              class="c40"
+              class="c42"
             />
           </div>
         </div>

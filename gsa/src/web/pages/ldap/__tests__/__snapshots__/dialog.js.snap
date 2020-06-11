@@ -104,7 +104,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c25 {
+.c26 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -113,7 +113,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c24 {
+.c25 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -180,7 +180,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c21 {
+.c22 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -200,12 +200,12 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c21:focus,
-.c21:hover {
+.c22:focus,
+.c22:hover {
   border: 1px solid #393637;
 }
 
-.c21:hover {
+.c22:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -213,26 +213,26 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c21[disabled] {
+.c22[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c21 img {
+.c22 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c21:link {
+.c22:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c22 {
+.c23 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -250,18 +250,18 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c23 {
+.c24 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c23:hover {
+.c24:hover {
   color: #fff;
   background: #519032;
 }
 
-.c20 {
+.c21 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -410,6 +410,15 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   padding-right: 10px;
 }
 
+.c19 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c17 {
   font-family: inherit;
   font-size: inherit;
@@ -491,7 +500,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c19 {
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -610,6 +619,12 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
                         type="text"
                         value="bar"
                       />
+                      <div
+                        class="c19"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -634,6 +649,12 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
                         type="text"
                         value="foo"
                       />
+                      <div
+                        class="c19"
+                        data-testid="error-marker"
+                      >
+                        ×
+                      </div>
                     </div>
                   </div>
                   <div
@@ -654,7 +675,7 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
                         class="c8"
                       >
                         <input
-                          class="c19"
+                          class="c20"
                           name="certificate"
                           type="file"
                         />
@@ -665,17 +686,17 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c20"
+              class="c21"
             >
               <button
-                class="c21 c22 c23"
+                class="c22 c23 c24"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c21 c22 c23"
+                class="c22 c23 c24"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -684,10 +705,10 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c24"
+            class="c25"
           >
             <div
-              class="c25"
+              class="c26"
             />
           </div>
         </div>

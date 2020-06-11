@@ -801,7 +801,7 @@ class AlertComponent extends React.Component {
 
     this.handleInteraction();
 
-    gmp.alert
+    return gmp.alert
       .test(alert)
       .then(response => {
         if (isDefined(onTestSuccess)) {
@@ -1243,10 +1243,7 @@ const mapStateToProps = rootState => {
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(AlertComponent);
 
 // vim: set ts=2 sw=2 tw=80:

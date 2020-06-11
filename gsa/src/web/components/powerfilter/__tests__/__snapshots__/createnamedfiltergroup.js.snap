@@ -53,6 +53,15 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   display: inline-flex;
 }
 
+.c9 {
+  color: #a94442;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c7 {
   font-family: inherit;
   font-size: inherit;
@@ -206,6 +215,12 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
         type="text"
         value=""
       />
+      <div
+        class="c9"
+        data-testid="error-marker"
+      >
+        ×
+      </div>
     </div>
   </div>
 </div>
