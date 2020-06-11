@@ -222,7 +222,7 @@ export const createDeleteTaskQueryMock = taskId => {
   const resultFunc = jest.fn().mockReturnValue(queryResult);
 
   const variables = {
-    id: taskId,
+    ids: [taskId],
   };
 
   const queryMock = {
