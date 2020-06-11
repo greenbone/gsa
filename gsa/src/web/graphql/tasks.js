@@ -329,19 +329,6 @@ export const useLazyGetTasks = (variables, options) => {
   return [getTasks, {...other, counts, tasks, pageInfo}];
 };
 
-export const useGetAllFiltered = variables => {
-  const [queryTasks, {data}] = useLazyQuery(GET_TASKS, {variables});
-  const allFilteredTasks = isDefined(data?.tasks)
-    ? data.tasks.edges.map(entity => Task.fromObject(entity.node))
-    : undefined;
-
-  const getAllFiltered = useCallback(
-    filterString => queryTasks({variables: {filterString}}),
-    [queryTasks],
-  );
-  return [getAllFiltered, allFilteredTasks];
-};
-
 export const useCloneTask = options => {
   const [queryCloneTask, {data, ...other}] = useMutation(CLONE_TASK, options);
   const deleteTask = useCallback(

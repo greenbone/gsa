@@ -48,7 +48,6 @@ import {
   useLazyGetTasks,
   useDeleteTask,
   useDeleteTasks,
-  useGetAllFiltered,
   useCloneTask,
 } from 'web/graphql/tasks';
 
