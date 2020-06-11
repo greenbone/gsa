@@ -31,7 +31,6 @@ import {isDefined} from 'gmp/utils/identity';
 import Capabilities from 'gmp/capabilities/capabilities';
 
 import useGmp from 'web/utils/useGmp';
-import {useGqlCapabilities} from 'web/utils/useGqlCapabilities';
 
 import MenuBar from 'web/components/bar/menubar';
 
@@ -45,6 +44,8 @@ import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 import Main from 'web/components/structure/main';
 
+import {useGetCapabilities} from 'web/graphql/capabilities';
+
 const log = logger.getLogger('web.page');
 
 const StyledLayout = styled(Layout)`
@@ -56,13 +57,12 @@ const Page = ({children}) => {
   const location = useLocation();
 
   const [capabilities, setCapabilities] = useState();
-  const query = useGqlCapabilities();
-  const {data, error} = query();
+  const {capabilities: graphqlCapabilities, error} = useGetCapabilities();
 
   useEffect(() => {
-    if (isDefined(data) && isDefined(data.capabilities)) {
-      setCapabilities(new Capabilities(data.capabilities));
-    } else {
+    if (isDefined(graphqlCapabilities)) {
+      setCapabilities(graphqlCapabilities);
+    } else if (isDefined(error)) {
       log.error(
         'An error during fetching capabilities from hyperion. Trying gmp...',
         error,
@@ -84,8 +84,7 @@ const Page = ({children}) => {
           setCapabilities(new Capabilities());
         });
     }
-  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
-  // if we don't wait for data to become defined, undefined caps will be saved.
+  }, [graphqlCapabilities, error, gmp]);
 
   if (!isDefined(capabilities)) {
     // only show content after caps have been loaded
