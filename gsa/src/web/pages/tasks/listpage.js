@@ -130,7 +130,7 @@ const TasksListPage = () => {
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
 
-  const [getAllFiltered, allFilteredTasks = []] = useGetAllFiltered();
+  const [getAllFiltered, {tasks: allFilteredTasks = []}] = useLazyGetTasks();
 
   const [deleteTask] = useDeleteTask();
   const [deleteTasks] = useDeleteTasks();
@@ -187,7 +187,7 @@ const TasksListPage = () => {
         first: filter.get('rows'),
       });
 
-      getAllFiltered(filter.all().toFilterString());
+      getAllFiltered({filterString: filter.all().toFilterString()});
     }
   }, [isLoadingFilter, filter, getTasks, called, getAllFiltered]);
 
@@ -199,7 +199,7 @@ const TasksListPage = () => {
         first: undefined,
         last: undefined,
       });
-      getAllFiltered(filter.all().toFilterString());
+      getAllFiltered({filterString: filter.all().toFilterString()});
     }
   }, [filter, prevFilter, simpleFilter, refetch, getAllFiltered]);
 
