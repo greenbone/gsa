@@ -85,7 +85,7 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
 
   const title =
     status === TASK_STATUS.queued
-      ? 'Task is queued for scanning'
+      ? _('Task is queued for scanning')
       : getTranslatableTaskStatus(status);
 
   return (
