@@ -34,8 +34,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
-import {MockedProvider} from '@apollo/react-testing';
-
 import {GET_TASK} from 'web/graphql/tasks';
 import {
   getMockTasks,
@@ -161,6 +159,7 @@ describe.skip('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: mocks,
     });
 
     store.dispatch(setTimezone('CET'));
@@ -169,9 +168,7 @@ describe.skip('Task Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', task));
 
     const {baseElement, element, getAllByTestId} = render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <Detailspage id="12345" />
-      </MockedProvider>,
+      <Detailspage id="12345" />,
     );
 
     expect(element).toMatchSnapshot();
@@ -276,6 +273,7 @@ describe.skip('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: mocks,
     });
 
     store.dispatch(setTimezone('CET'));
@@ -283,11 +281,7 @@ describe.skip('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
-    const {baseElement, element} = render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <Detailspage id="12345" />
-      </MockedProvider>,
-    );
+    const {baseElement, element} = render(<Detailspage id="12345" />);
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[22]);
 
@@ -334,6 +328,7 @@ describe.skip('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: mocks,
     });
 
     store.dispatch(setTimezone('CET'));
@@ -341,11 +336,7 @@ describe.skip('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
-    const {baseElement, element} = render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <Detailspage id="12345" />
-      </MockedProvider>,
-    );
+    const {baseElement, element} = render(<Detailspage id="12345" />);
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[24]);
 
@@ -417,6 +408,7 @@ describe.skip('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: mocks,
     });
 
     store.dispatch(setTimezone('CET'));
@@ -424,11 +416,7 @@ describe.skip('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
-    const {getAllByTestId} = render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <Detailspage id="12345" />
-      </MockedProvider>,
-    );
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
 
     const icons = getAllByTestId('svg-icon');
 
@@ -536,24 +524,23 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
+      queryMocks: mocks,
     });
 
     const {baseElement, getAllByTestId} = render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <ToolBarIcons
-          entity={newTask}
-          onReportImportClick={handleReportImport}
-          onTaskCreateClick={handleTaskCreate}
-          onContainerTaskCreateClick={handleContainerTaskCreate}
-          onTaskCloneClick={handleTaskClone}
-          onTaskDeleteClick={handleTaskDelete}
-          onTaskDownloadClick={handleTaskDownload}
-          onTaskEditClick={handleTaskEdit}
-          onTaskResumeClick={handleTaskResume}
-          onTaskStartClick={handleTaskStart}
-          onTaskStopClick={handleTaskStop}
-        />
-      </MockedProvider>,
+      <ToolBarIcons
+        entity={newTask}
+        onReportImportClick={handleReportImport}
+        onTaskCreateClick={handleTaskCreate}
+        onContainerTaskCreateClick={handleContainerTaskCreate}
+        onTaskCloneClick={handleTaskClone}
+        onTaskDeleteClick={handleTaskDelete}
+        onTaskDownloadClick={handleTaskDownload}
+        onTaskEditClick={handleTaskEdit}
+        onTaskResumeClick={handleTaskResume}
+        onTaskStartClick={handleTaskStart}
+        onTaskStopClick={handleTaskStop}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
