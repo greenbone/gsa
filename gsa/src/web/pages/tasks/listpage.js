@@ -166,6 +166,13 @@ const TasksListPage = () => {
     [deleteTask, refetch, showError],
   );
 
+  useEffect(() => {
+    // load all filtered tasks if selection is all filtered
+    if (selectionType === SelectionType.SELECTION_FILTER) {
+      getAllFiltered({filterString: filter.all().toFilterString()});
+    }
+  }, [selectionType, filter, getAllFiltered]);
+
   const handleBulkDeleteTask = () => {
     let tasksToDelete;
     if (selectionType === SelectionType.SELECTION_USER) {
@@ -185,10 +192,8 @@ const TasksListPage = () => {
         filterString: filter.toFilterString(),
         first: filter.get('rows'),
       });
-
-      getAllFiltered({filterString: filter.all().toFilterString()});
     }
-  }, [isLoadingFilter, filter, getTasks, called, getAllFiltered]);
+  }, [isLoadingFilter, filter, getTasks, called]);
 
   useEffect(() => {
     // reload if filter has changed
@@ -198,9 +203,8 @@ const TasksListPage = () => {
         first: undefined,
         last: undefined,
       });
-      getAllFiltered({filterString: filter.all().toFilterString()});
     }
-  }, [filter, prevFilter, simpleFilter, refetch, getAllFiltered]);
+  }, [filter, prevFilter, simpleFilter, refetch]);
 
   const getNextTasks = () => {
     refetch({
