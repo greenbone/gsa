@@ -16,7 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {GET_CURRENT_USER_IS_AUTHENTICATED} from '../auth';
+import date from 'gmp/models/date';
+
+import {GET_CURRENT_USER_IS_AUTHENTICATED, LOGIN} from '../auth';
 
 export const createIsAuthenticatedQueryMock = (isAuthenticated = true) => {
   const queryResult = {
@@ -44,6 +46,56 @@ export const createIsAuthenticatedQueryErrorMock = (
   const queryMock = {
     request: {
       query: GET_CURRENT_USER_IS_AUTHENTICATED,
+    },
+    error,
+  };
+  return [queryMock];
+};
+
+export const createLoginQueryMock = ({
+  username = 'foo',
+  password = 'bar',
+  locale = 'en',
+  ok = true,
+  sessionTimeout = date('2020-03-20'),
+  timezone = 'UTC',
+} = {}) => {
+  const queryResult = {
+    data: {
+      login: {
+        ok,
+        locale,
+        timezone,
+        sessionTimeout,
+      },
+    },
+  };
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+  const queryMock = {
+    request: {
+      query: LOGIN,
+      variables: {
+        username,
+        password,
+      },
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createLoginQueryErrorMock = ({
+  username = 'foo',
+  password = 'bar',
+  error = new Error('An error has occurred.'),
+} = {}) => {
+  const queryMock = {
+    request: {
+      query: LOGIN,
+      variables: {
+        username,
+        password,
+      },
     },
     error,
   };

@@ -15,7 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {useQuery, useLazyQuery} from '@apollo/react-hooks';
+import {useCallback} from 'react';
+
+import {useQuery, useLazyQuery, useMutation} from '@apollo/react-hooks';
 
 import gql from 'graphql-tag';
 
@@ -44,4 +46,26 @@ export const useLazyIsAuthenticated = () => {
   );
   const isAuthenticated = data?.currentUser?.isAuthenticated;
   return [getCurrentUser, {isAuthenticated, ...other}];
+};
+
+export const LOGIN = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      ok
+      locale
+      sessionTimeout
+      timezone
+    }
+  }
+`;
+
+export const useLogin = () => {
+  const [loginMutation] = useMutation(LOGIN);
+  const login = useCallback(
+    ({username, password}) => {
+      return loginMutation({variables: {username, password}});
+    },
+    [loginMutation],
+  );
+  return login;
 };

@@ -16,11 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useState, useEffect, useCallback} from 'react';
-
-import {useMutation} from '@apollo/react-hooks';
-
-import gql from 'graphql-tag';
+import React, {useState, useEffect} from 'react';
 
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -46,6 +42,8 @@ import Logo from 'web/components/img/greenbone';
 
 import Layout from 'web/components/layout/layout';
 
+import {useLogin} from 'web/graphql/auth';
+
 import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 
@@ -59,28 +57,6 @@ import {
 import {isLoggedIn as isLoggedInSelector} from 'web/store/usersettings/selectors';
 
 import LoginForm from './loginform';
-
-export const LOGIN = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      ok
-      locale
-      sessionTimeout
-      timezone
-    }
-  }
-`;
-
-const useLogin = () => {
-  const [loginMutation] = useMutation(LOGIN);
-  const login = useCallback(
-    ({username, password}) => {
-      return loginMutation({variables: {username, password}});
-    },
-    [loginMutation],
-  );
-  return login;
-};
 
 const log = logger.getLogger('web.login');
 
