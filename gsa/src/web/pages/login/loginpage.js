@@ -139,7 +139,7 @@ const LoginPage = () => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
-  const loginMutation = useLogin();
+  const [loginMutation] = useLogin();
   const location = useLocation();
   const history = useHistory();
   const isLoggedIn = useSelector(isLoggedInSelector);

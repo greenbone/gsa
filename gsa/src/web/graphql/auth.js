@@ -60,12 +60,13 @@ export const LOGIN = gql`
 `;
 
 export const useLogin = () => {
-  const [loginMutation] = useMutation(LOGIN);
+  const [loginMutation, {data, ...other}] = useMutation(LOGIN);
   const login = useCallback(
     ({username, password}) => {
       return loginMutation({variables: {username, password}});
     },
     [loginMutation],
   );
-  return login;
+  const loginData = data?.login;
+  return [login, {...other, ...loginData}];
 };
