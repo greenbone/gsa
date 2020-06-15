@@ -48,7 +48,6 @@ import {
   createDeleteFilteredTasksQueryMock,
 } from '../__mocks__/tasks';
 import {isDefined} from 'gmp/utils/identity';
-import {render} from 'react-dom';
 
 const GetTasksComponent = () => {
   const {counts, loading, tasks} = useGetTasks();
