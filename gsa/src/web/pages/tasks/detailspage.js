@@ -17,7 +17,7 @@
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
@@ -28,8 +28,6 @@ import Filter from 'gmp/models/filter';
 import {hasValue} from 'gmp/utils/identity';
 
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
-
-import Task from 'gmp/models/task';
 
 import Badge from 'web/components/badge/badge';
 
@@ -121,9 +119,8 @@ import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
 
-const goto_task_details = (op, props) => result => {
-  const {history} = props;
-  return history.push('/task/' + result.data[op].taskId);
+const goto_task_details = history => id => {
+  return history.push(`/task/${id}`);
 };
 
 export const ToolBarIcons = ({
@@ -170,17 +167,9 @@ export const ToolBarIcons = ({
           onNewClick={onTaskCreateClick}
           onNewContainerClick={onContainerTaskCreateClick}
         />
-        <CloneIcon
-          entity={entity}
-          name="task"
-          onClick={() => onTaskCloneClick({taskId: entity.id})}
-        />
+        <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
         <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-        <TrashIcon
-          entity={entity}
-          name="task"
-          onClick={() => onTaskDeleteClick({taskId: entity.id})}
-        />
+        <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
         <ExportIcon
           value={entity}
           title={_('Export Task as XML')}
@@ -196,10 +185,7 @@ export const ToolBarIcons = ({
             links={links}
           />
         )}
-        <StartIcon
-          task={entity}
-          onClick={() => onTaskStartClick({taskId: entity.id})}
-        />
+        <StartIcon task={entity} onClick={onTaskStartClick} />
 
         <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
@@ -343,52 +329,43 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = props => {
+const Page = ({
+  history,
+  permissions = [],
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   const {id} = useParams();
-  const query = useGetTask();
-  const {data, refetch, loading} = query({id});
+  const {task, refetch, loading} = useGetTask(id);
 
-  const clone = useCloneTask();
-  const cloneTask = vars =>
-    clone(vars).then(goto_task_details('cloneTask', props));
+  const [clone] = useCloneTask();
+  const cloneTask = cTask =>
+    clone(cTask.id).then(goto_task_details(history)).catch(onError);
 
-  const start = useStartTask();
-  const startTask = vars => start(vars).then(refetch);
+  const [start] = useStartTask();
+  const startTask = sTask => start(sTask.id).then(refetch).catch(onError);
 
-  const del = useDeleteTask();
-  const deleteTask = vars => del(vars).then(goto_list('tasks', props));
-
-  const [entity, setEntity] = useState();
-  useEffect(() => {
-    if (hasValue(data)) {
-      setEntity(Task.fromObject(data.task));
-    } else {
-      setEntity();
-    }
-  }, [data]);
+  const [del] = useDeleteTask();
+  const deleteTask = dTask =>
+    del(dTask.id).then(goto_list('tasks', {history})).catch(onError);
 
   useEffect(() => {
-    const {history} = props;
-    if (hasValue(entity) && entity.usageType === 'audit') {
-      return history.replace('/audit/' + entity.id);
+    if (hasValue(task) && task.usageType === 'audit') {
+      return history.replace(`/audit/${task.id}`);
     }
-  }, [props]);
+  }, [history]);
 
-  const {
-    permissions = [],
-    onChanged,
-    onDownloaded,
-    onError,
-    onInteraction,
-  } = props;
   return (
     <TaskComponent
       onCloned={onChanged}
       onCloneError={onError}
-      onCreated={goto_task_details('createTask', props)}
-      onContainerCreated={goto_task_details('createContainerTask', props)}
+      onCreated={goto_task_details(history)}
+      onContainerCreated={goto_task_details(history)}
       onContainerSaved={refetch}
-      onDeleted={goto_list('tasks', props)}
+      onDeleted={goto_list('tasks', {history})}
       onDeleteError={onError}
       onDownloaded={onDownloaded}
       onDownloadError={onError}
@@ -414,7 +391,7 @@ const Page = props => {
         return (
           <EntityPage
             {...props}
-            entity={entity}
+            entity={task}
             isLoading={loading}
             sectionIcon={<TaskIcon size="large" />}
             title={_('Task')}
@@ -436,7 +413,7 @@ const Page = props => {
             {({activeTab = 0, onActivateTab}) => {
               return (
                 <React.Fragment>
-                  <PageTitle title={_('Task: {{name}}', {name: entity.name})} />
+                  <PageTitle title={_('Task: {{name}}', {name: task.name})} />
                   <Layout grow="1" flex="column">
                     <TabLayout grow="1" align={['start', 'end']}>
                       <TabList
@@ -445,7 +422,7 @@ const Page = props => {
                         onActivateTab={onActivateTab}
                       >
                         <Tab>{_('Information')}</Tab>
-                        <EntitiesTab entities={entity.userTags}>
+                        <EntitiesTab entities={task.userTags}>
                           {_('User Tags')}
                         </EntitiesTab>
                         <EntitiesTab entities={permissions}>
@@ -457,11 +434,11 @@ const Page = props => {
                     <Tabs active={activeTab}>
                       <TabPanels>
                         <TabPanel>
-                          <Details entity={entity} />
+                          <Details entity={task} />
                         </TabPanel>
                         <TabPanel>
                           <EntityTags
-                            entity={entity}
+                            entity={task}
                             onChanged={onChanged}
                             onError={onError}
                             onInteraction={onInteraction}
@@ -469,7 +446,7 @@ const Page = props => {
                         </TabPanel>
                         <TabPanel>
                           <TaskPermissions
-                            entity={entity}
+                            entity={task}
                             permissions={permissions}
                             onChanged={onChanged}
                             onDownloaded={onDownloaded}

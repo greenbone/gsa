@@ -18,10 +18,6 @@
 
 import React, {useState, useEffect} from 'react';
 
-import {useMutation} from '@apollo/react-hooks';
-
-import gql from 'graphql-tag';
-
 import {useSelector, useDispatch} from 'react-redux';
 
 import {useHistory, useLocation} from 'react-router-dom';
@@ -46,6 +42,8 @@ import Logo from 'web/components/img/greenbone';
 
 import Layout from 'web/components/layout/layout';
 
+import {useLogin} from 'web/graphql/auth';
+
 import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 
@@ -56,27 +54,9 @@ import {
   setIsLoggedIn as setIsLoggedInAction,
 } from 'web/store/usersettings/actions';
 
-import {toGraphQL} from 'web/utils/graphql';
-
 import {isLoggedIn as isLoggedInSelector} from 'web/store/usersettings/selectors';
 
 import LoginForm from './loginform';
-
-export const LOGIN = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      ok
-      locale
-      sessionTimeout
-      timezone
-    }
-  }
-`;
-
-const useLogin = () => {
-  const [login] = useMutation(LOGIN);
-  return toGraphQL(login);
-};
 
 const log = logger.getLogger('web.login');
 
@@ -159,7 +139,7 @@ const LoginPage = () => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
-  const loginMutation = useLogin();
+  const [loginMutation] = useLogin();
   const location = useLocation();
   const history = useHistory();
   const isLoggedIn = useSelector(isLoggedInSelector);
