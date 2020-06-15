@@ -69,6 +69,14 @@ export const DELETE_TASKS = gql`
   }
 `;
 
+export const DELETE_FILTERED_TASKS = gql`
+  mutation deleteFilteredTasks($filterString: String!) {
+    deleteFilteredTasks(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
 export const GET_TASK = gql`
   query Task($id: UUID!) {
     task(id: $id) {
@@ -339,13 +347,13 @@ export const useLazyGetTasks = (variables, options) => {
 
 export const useCloneTask = options => {
   const [queryCloneTask, {data, ...other}] = useMutation(CLONE_TASK, options);
-  const deleteTask = useCallback(
+  const cloneTask = useCallback(
     // eslint-disable-next-line no-shadow
     (id, options) => queryCloneTask({...options, variables: {id}}),
     [queryCloneTask],
   );
   const taskId = data?.cloneTask?.id;
-  return [deleteTask, {...other, id: taskId}];
+  return [cloneTask, {...other, id: taskId}];
 };
 
 export const useCreateContainerTask = options => {
@@ -386,13 +394,30 @@ export const useDeleteTask = options => {
 };
 
 export const useDeleteTasks = options => {
-  const [queryDeleteTask, data] = useMutation(DELETE_TASKS, options);
+  const [queryDeleteTasks, data] = useMutation(DELETE_TASKS, options);
   const deleteTasks = useCallback(
     // eslint-disable-next-line no-shadow
-    (ids, options) => queryDeleteTask({...options, variables: {ids}}),
-    [queryDeleteTask],
+    (ids, options) => queryDeleteTasks({...options, variables: {ids}}),
+    [queryDeleteTasks],
   );
   return [deleteTasks, data];
+};
+
+export const useDeleteFilteredTasks = options => {
+  const [queryDeleteFilteredTasks, data] = useMutation(
+    DELETE_FILTERED_TASKS,
+    options,
+  );
+  const deleteFilteredTasks = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filter, options) =>
+      queryDeleteFilteredTasks({
+        ...options,
+        variables: {filterString: filter.all().toFilterString()},
+      }),
+    [queryDeleteFilteredTasks],
+  );
+  return [deleteFilteredTasks, data];
 };
 
 export const useModifyTask = options => {
