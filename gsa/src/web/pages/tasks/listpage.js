@@ -16,13 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useEffect, useCallback} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 
 import _ from 'gmp/locale';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
-import {hasValue} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
@@ -68,6 +68,9 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import TaskListTable from './table';
+
+const DEFAULT_POLLING_INTERVAL = 10000;
+const DEFAULT_POLLING_INTERVAL_ACTIVE = 2000;
 
 export const ToolBarIcons = ({
   onAdvancedTaskWizardClick,
@@ -125,10 +128,26 @@ const TasksListPage = () => {
   const [filter, isLoadingFilter] = usePageFilter('task');
   const prevFilter = usePrevious(filter);
   const simpleFilter = filter.withoutView();
+  const [interval, setInterval] = useState(DEFAULT_POLLING_INTERVAL);
   const [
     getTasks,
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
-  ] = useLazyGetTasks();
+  ] = useLazyGetTasks(
+    {},
+    {
+      fetchPolicy: 'cache-and-network',
+      pollInterval: interval,
+    },
+  );
+  /* Apollo's cache-and-network fetch policy is used here to have quick listings
+    and then update data.
+    - When a query is send, Apollo checks for the data in the cache
+    - If data is in cache, return cached data
+    - Pass another query to get up-to-date data (irrespective if data was
+      already cached or not)
+    - Update cache with new data
+    - Return updated query data
+  */
 
   const [deleteTask] = useDeleteTask();
   const [deleteTasks] = useDeleteTasks();
@@ -198,6 +217,16 @@ const TasksListPage = () => {
       });
     }
   }, [filter, prevFilter, simpleFilter, refetch]);
+
+  useEffect(() => {
+    if (isDefined(tasks)) {
+      setInterval(
+        tasks.some(task => task.isActive())
+          ? DEFAULT_POLLING_INTERVAL_ACTIVE
+          : DEFAULT_POLLING_INTERVAL,
+      );
+    }
+  }, [tasks]);
 
   const getNextTasks = () => {
     refetch({
