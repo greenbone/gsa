@@ -328,7 +328,7 @@ const TagComponent = ({
       onSaved={onSaved}
       onSaveError={onSaveError}
     >
-      {({other}) => (
+      {({...other}) => (
         <React.Fragment>
           {children({
             ...other,
