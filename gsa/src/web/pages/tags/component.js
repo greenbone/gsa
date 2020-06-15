@@ -294,8 +294,8 @@ const TagComponent = ({
         : null,
       resourceIds: resource_ids,
     })
-      .then(closeTagDialog)
-      .then(onSaved, onSaveError);
+      .then(onSaved, onSaveError)
+      .then(closeTagDialog);
   };
 
   const {
