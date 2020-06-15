@@ -524,7 +524,6 @@ describe('Task ToolBarIcons tests', () => {
       gmp,
       capabilities: caps,
       router: true,
-      queryMocks: mocks,
     });
 
     const {baseElement, getAllByTestId} = render(
