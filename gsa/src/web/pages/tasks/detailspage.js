@@ -170,17 +170,9 @@ export const ToolBarIcons = ({
           onNewClick={onTaskCreateClick}
           onNewContainerClick={onContainerTaskCreateClick}
         />
-        <CloneIcon
-          entity={entity}
-          name="task"
-          onClick={() => onTaskCloneClick({taskId: entity.id})}
-        />
+        <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
         <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-        <TrashIcon
-          entity={entity}
-          name="task"
-          onClick={() => onTaskDeleteClick({taskId: entity.id})}
-        />
+        <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
         <ExportIcon
           value={entity}
           title={_('Export Task as XML')}
@@ -196,10 +188,7 @@ export const ToolBarIcons = ({
             links={links}
           />
         )}
-        <StartIcon
-          task={entity}
-          onClick={() => onTaskStartClick({taskId: entity.id})}
-        />
+        <StartIcon task={entity} onClick={onTaskStartClick} />
 
         <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
