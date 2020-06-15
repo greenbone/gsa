@@ -29,6 +29,7 @@ import {
   MODIFY_TASK,
   START_TASK,
   STOP_TASK,
+  DELETE_FILTERED_TASKS,
 } from 'web/graphql/tasks';
 
 import {deepFreeze} from 'web/utils/testing';
@@ -254,6 +255,31 @@ export const createDeleteTasksQueryMock = taskIds => {
   const queryMock = {
     request: {
       query: DELETE_TASKS,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createDeleteFilteredTasksQueryMock = filterString => {
+  const queryResult = {
+    data: {
+      deleteFilteredTasks: {
+        ok: true,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    filterString,
+  };
+
+  const queryMock = {
+    request: {
+      query: DELETE_FILTERED_TASKS,
       variables,
     },
     newData: resultFunc,

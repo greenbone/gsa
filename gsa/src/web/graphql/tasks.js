@@ -410,10 +410,10 @@ export const useDeleteFilteredTasks = options => {
   );
   const deleteFilteredTasks = useCallback(
     // eslint-disable-next-line no-shadow
-    (filter, options) =>
+    (filterString, options) =>
       queryDeleteFilteredTasks({
         ...options,
-        variables: {filterString: filter.all().toFilterString()},
+        variables: {filterString},
       }),
     [queryDeleteFilteredTasks],
   );

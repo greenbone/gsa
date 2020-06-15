@@ -33,6 +33,7 @@ import {
   useModifyTask,
   useStartTask,
   useStopTask,
+  useDeleteFilteredTasks,
 } from '../tasks';
 import {
   createCloneTaskQueryMock,
@@ -44,8 +45,10 @@ import {
   createStartTaskQueryMock,
   createStopTaskQueryMock,
   createDeleteTasksQueryMock,
+  createDeleteFilteredTasksQueryMock,
 } from '../__mocks__/tasks';
 import {isDefined} from 'gmp/utils/identity';
+import {render} from 'react-dom';
 
 const GetTasksComponent = () => {
   const {counts, loading, tasks} = useGetTasks();
@@ -211,6 +214,31 @@ describe('useDeleteTasks tests', () => {
 
     render(<DeleteTasksComponent />);
     const button = screen.getByTestId('bulk-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteFilteredTasksComponent = () => {
+  const [deleteFilteredTasks] = useDeleteFilteredTasks();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deleteFilteredTasks('foo')}
+    />
+  );
+};
+
+describe('useDeleteFilteredTasks tests', () => {
+  test('should delete a list of tasks by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteFilteredTasksQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteFilteredTasksComponent />);
+    const button = screen.getByTestId('filter-delete');
     fireEvent.click(button);
 
     await wait();

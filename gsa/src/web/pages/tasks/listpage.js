@@ -173,7 +173,8 @@ const TasksListPage = () => {
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       tasksToDelete = getEntityIds(tasks);
     } else {
-      return deleteFilteredTasks(filter).then(refetch, showError);
+      const filterAll = filter.all().toFilterString();
+      return deleteFilteredTasks(filterAll).then(refetch, showError);
     }
     return deleteTasks(tasksToDelete).then(refetch, showError);
   };
