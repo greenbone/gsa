@@ -23,11 +23,15 @@ import useDialogNotification from './useDialogNotification';
 
 const withDialogNotification = Component => {
   const DialogNotificationWrapper = props => {
-    const {dialogState, ...notificationProps} = useDialogNotification();
+    const {
+      dialogState,
+      closeDialog,
+      ...notificationProps
+    } = useDialogNotification();
     return (
       <React.Fragment>
         <Component {...props} {...notificationProps} />
-        <DialogNotification {...dialogState} />
+        <DialogNotification {...dialogState} onCloseClick={closeDialog} />
       </React.Fragment>
     );
   };
