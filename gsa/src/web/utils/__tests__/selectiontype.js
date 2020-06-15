@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2020 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,15 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-const SelectionType = {
-  SELECTION_PAGE_CONTENTS: '0',
-  SELECTION_USER: '1',
-  SELECTION_FILTER: '2',
-};
+import {getEntityIds} from '../selectiontype';
 
-export const getEntityIds = (entityArray = []) =>
-  entityArray.map(entity => entity.id);
+import Task from 'gmp/models/task';
 
-export default SelectionType;
+describe('getEntityIds tests', () => {
+  test('Should parse defined and undefined entity array', () => {
+    const task1 = Task.fromObject({id: 'foo'});
+    const task2 = Task.fromObject({id: 'bar'});
+    const entityArray = [task1, task2];
 
-// vim: set ts=2 sw=2 tw=80:
+    expect(getEntityIds(entityArray)).toEqual(['foo', 'bar']);
+    expect(getEntityIds()).toEqual([]);
+  });
+});
