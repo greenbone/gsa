@@ -16,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {useMemo} from 'react';
+
 import gql from 'graphql-tag';
 
 import {useQuery} from '@apollo/react-hooks';
@@ -23,8 +25,6 @@ import {useQuery} from '@apollo/react-hooks';
 import Setting from 'gmp/models/setting';
 
 import {hasValue} from 'gmp/utils/identity';
-
-import {toFruitfulQuery} from 'web/utils/graphql';
 
 export const GET_SETTING = gql`
   query UserSetting($id: UUID!) {
@@ -56,6 +56,14 @@ export const GET_SETTINGS = gql`
   }
 `;
 
-export const useGetSettings = () => {
-  return toFruitfulQuery(useQuery)(GET_SETTINGS);
+export const useGetSettings = options => {
+  const {data, ...other} = useQuery(GET_SETTINGS, options);
+  const settings = useMemo(
+    () =>
+      hasValue(data?.userSettings)
+        ? data.userSettings.map(setting => Setting.fromObject(setting))
+        : undefined,
+    [data],
+  );
+  return {settings, ...other};
 };
