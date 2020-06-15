@@ -331,13 +331,16 @@ export const useLazyGetTasks = (variables, options) => {
 
 export const useCloneTask = options => {
   const [queryCloneTask, {data, ...other}] = useMutation(CLONE_TASK, options);
-  const deleteTask = useCallback(
+  const cloneTask = useCallback(
     // eslint-disable-next-line no-shadow
-    (id, options) => queryCloneTask({...options, variables: {id}}),
+    (id, options) =>
+      queryCloneTask({...options, variables: {id}}).then(
+        result => result.data.cloneTask.id,
+      ),
     [queryCloneTask],
   );
   const taskId = data?.cloneTask?.id;
-  return [deleteTask, {...other, id: taskId}];
+  return [cloneTask, {...other, id: taskId}];
 };
 
 export const useCreateContainerTask = options => {
@@ -348,7 +351,9 @@ export const useCreateContainerTask = options => {
   const createTask = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreateTask({...options, variables: {input: inputObject}}),
+      queryCreateTask({...options, variables: {input: inputObject}}).then(
+        result => result.data.createContainerTask.id,
+      ),
     [queryCreateTask],
   );
   const taskId = data?.createContainerTask?.id;
@@ -392,7 +397,10 @@ export const useStartTask = options => {
   const [queryStartTask, {data, ...other}] = useMutation(START_TASK, options);
   const startTask = useCallback(
     // eslint-disable-next-line no-shadow
-    (id, options) => queryStartTask({...options, variables: {id}}),
+    (id, options) =>
+      queryStartTask({...options, variables: {id}}).then(
+        result => result.data.startTask.reportId,
+      ),
     [queryStartTask],
   );
   const reportId = data?.startTask?.reportId;
