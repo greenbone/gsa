@@ -128,7 +128,21 @@ const TasksListPage = () => {
   const [
     getTasks,
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
-  ] = useLazyGetTasks();
+  ] = useLazyGetTasks(
+    {},
+    {
+      fetchPolicy: 'cache-and-network',
+    },
+  );
+  /* Apollo's cache-and-network fetch policy is used here to have quick listings
+    and then update data.
+    - When a query is send, Apollo checks for the data in the cache
+    - If data is in cache, return cached data
+    - Pass another query to get up-to-date data (irrespective if data was
+      already cached or not)
+    - Update cache with new data
+    - Return updated query data
+  */
 
   const [deleteTask] = useDeleteTask();
   const [deleteTasks] = useDeleteTasks();
