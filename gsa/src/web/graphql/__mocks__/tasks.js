@@ -24,6 +24,7 @@ import {
   CREATE_CONTAINER_TASK,
   CREATE_TASK,
   DELETE_TASK,
+  GET_TASK,
   GET_TASKS,
   MODIFY_TASK,
   START_TASK,
@@ -31,6 +32,8 @@ import {
 } from 'web/graphql/tasks';
 
 import {deepFreeze} from 'web/utils/testing';
+
+const alert = deepFreeze({id: '151617', name: 'alert 1'});
 
 const target = deepFreeze({
   id: '159',
@@ -61,6 +64,36 @@ const lastReport = deepFreeze({
   timestamp: '2019-07-30T13:23:30Z',
   scanStart: '2019-07-30T13:23:34Z',
   scanEnd: '2019-07-30T13:25:43Z',
+});
+
+const currentReport = deepFreeze({
+  id: '5678',
+  timestamp: '2019-08-30T13:23:30Z',
+  scanStart: '2019-08-30T13:23:34Z',
+});
+
+const weekly = `
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager
+ 20.8+alpha~git-b4610ada-master//EN
+BEGIN:VEVENT
+DTSTART:20200615T080000Z
+DURATION:PT0S
+RRULE:FREQ=WEEKLY
+UID:c5694e2e-daea-419b-b524-bb363b4ca37b
+DTSTAMP:20200615T072702Z
+END:VEVENT
+END:VCALENDAR
+`;
+
+// Schedule
+const schedule = deepFreeze({
+  id: '121314',
+  name: 'schedule 1',
+  timezone: 'UTC',
+  duration: 0,
+  icalendar: weekly,
 });
 
 const allPermissions = deepFreeze([
@@ -177,6 +210,42 @@ const mockTasks = {
   },
 };
 
+const detailsMockTask = deepFreeze({
+  name: 'foo',
+  id: '12345',
+  creationTime: '2019-07-30T13:00:00Z',
+  modificationTime: '2019-08-30T13:23:30Z',
+  permissions: allPermissions,
+  reports: {
+    lastReport,
+    currentReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
+  },
+  status: TASK_STATUS.stopped,
+  target,
+  alterable: 0,
+  trend: null,
+  comment: 'bar',
+  owner: 'admin',
+  preferences,
+  schedule,
+  alerts: [alert],
+  scanConfig,
+  scanner,
+  schedulePeriods: null,
+  hostsOrdering: 'sequential',
+  userTags: null,
+  observers,
+  results: {
+    counts: {
+      current: 20,
+    },
+  },
+});
+
 export const createGetTasksQueryMock = ({
   filterString,
   after,
@@ -204,6 +273,27 @@ export const createGetTasksQueryMock = ({
     request: {
       query: GET_TASKS,
       variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createGetTaskQueryMock = (id, task = detailsMockTask) => {
+  const queryResult = {
+    data: {
+      task,
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const queryMock = {
+    request: {
+      query: GET_TASK,
+      variables: {
+        id,
+      },
     },
     newData: resultFunc,
   };

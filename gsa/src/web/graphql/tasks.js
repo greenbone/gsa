@@ -27,8 +27,6 @@ import Task from 'gmp/models/task';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {toFruitfulQuery} from 'web/utils/graphql';
-
 export const CLONE_TASK = gql`
   mutation cloneTask($id: UUID!) {
     cloneTask(id: $id) {
@@ -275,8 +273,10 @@ export const STOP_TASK = gql`
   }
 `;
 
-export const useGetTask = () => {
-  return toFruitfulQuery(useQuery)(GET_TASK);
+export const useGetTask = (id, options) => {
+  const {data, ...other} = useQuery(GET_TASK, {...options, variables: {id}});
+  const task = isDefined(data?.task) ? Task.fromObject(data.task) : undefined;
+  return {task, ...other};
 };
 
 export const useGetTasks = (variables, options) => {
