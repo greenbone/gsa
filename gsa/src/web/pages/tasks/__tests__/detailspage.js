@@ -556,7 +556,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(divs[10]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
-    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskClone).toHaveBeenCalledWith(newTask);
     expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[4]);
@@ -564,7 +564,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(icons[4]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[5]);
-    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskDelete).toHaveBeenCalledWith(newTask);
     expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[6]);
@@ -572,7 +572,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
     fireEvent.click(icons[7]);
-    expect(handleTaskStart).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskStart).toHaveBeenCalledWith(newTask);
     expect(icons[7]).toHaveAttribute('title', 'Start');
 
     fireEvent.click(icons[8]);
@@ -654,7 +654,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(divs[10]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
-    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskClone).toHaveBeenCalledWith(runningTask);
     expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[4]);
@@ -759,7 +759,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(divs[10]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
-    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskClone).toHaveBeenCalledWith(stoppedTask);
     expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[4]);
@@ -767,7 +767,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(icons[4]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[5]);
-    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskDelete).toHaveBeenCalledWith(stoppedTask);
     expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[6]);
@@ -775,7 +775,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
     fireEvent.click(icons[7]);
-    expect(handleTaskStart).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskStart).toHaveBeenCalledWith(stoppedTask);
     expect(icons[7]).toHaveAttribute('title', 'Start');
 
     fireEvent.click(icons[8]);
@@ -865,7 +865,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(divs[10]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
-    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskClone).toHaveBeenCalledWith(finishedTask);
     expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[4]);
@@ -873,7 +873,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(icons[4]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[5]);
-    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskDelete).toHaveBeenCalledWith(finishedTask);
     expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[6]);
@@ -881,7 +881,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
     fireEvent.click(icons[7]);
-    expect(handleTaskStart).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskStart).toHaveBeenCalledWith(finishedTask);
     expect(icons[7]).toHaveAttribute('title', 'Start');
 
     fireEvent.click(icons[8]);
@@ -969,7 +969,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(divs[10]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
-    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskClone).toHaveBeenCalledWith(observedTask);
     expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[4]);
@@ -1076,7 +1076,7 @@ describe('Task ToolBarIcons tests', () => {
     );
 
     fireEvent.click(icons[9]);
-    expect(handleTaskStart).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskStart).toHaveBeenCalledWith(scheduledTask);
     expect(icons[9]).toHaveAttribute('title', 'Start');
 
     fireEvent.click(icons[10]);
@@ -1138,7 +1138,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(divs[10]).toHaveTextContent('New Container Task');
 
     fireEvent.click(icons[3]);
-    expect(handleTaskClone).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskClone).toHaveBeenCalledWith(containerTask);
     expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
     fireEvent.click(icons[4]);
@@ -1146,7 +1146,7 @@ describe('Task ToolBarIcons tests', () => {
     expect(icons[4]).toHaveAttribute('title', 'Edit Task');
 
     fireEvent.click(icons[5]);
-    expect(handleTaskDelete).toHaveBeenCalledWith({taskId: '12345'});
+    expect(handleTaskDelete).toHaveBeenCalledWith(containerTask);
     expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
     fireEvent.click(icons[6]);
