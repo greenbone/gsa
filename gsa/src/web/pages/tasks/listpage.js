@@ -170,13 +170,12 @@ const TasksListPage = () => {
     if (selectionType === SelectionType.SELECTION_FILTER) {
       const filterAll = filter.all().toFilterString();
       return deleteFilteredTasks(filterAll).then(refetch, showError);
-    } else {
-      const tasksToDelete =
-        selectionType === SelectionType.SELECTION_USER
-          ? getEntityIds(selected)
-          : getEntityIds(tasks);
-      return deleteTasks(tasksToDelete).then(refetch, showError);
     }
+    const tasksToDelete =
+      selectionType === SelectionType.SELECTION_USER
+        ? getEntityIds(selected)
+        : getEntityIds(tasks);
+    return deleteTasks(tasksToDelete).then(refetch, showError);
   };
 
   useEffect(() => {
