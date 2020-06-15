@@ -28,6 +28,7 @@ import {
   useCreateTask,
   useDeleteTask,
   useGetTasks,
+  useGetTask,
   useLazyGetTasks,
   useModifyTask,
   useStartTask,
@@ -39,9 +40,11 @@ import {
   createCreateTaskQueryMock,
   createDeleteTaskQueryMock,
   createGetTasksQueryMock,
+  createGetTaskQueryMock,
   createModifyTaskQueryMock,
   createStartTaskQueryMock,
   createStopTaskQueryMock,
+  createGetTaskQueryErrorMock,
 } from '../__mocks__/tasks';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -374,5 +377,68 @@ describe('useStopTask tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const GetTaskComponent = ({id}) => {
+  const {loading, task, error} = useGetTask(id, {cache: 'no-cache'});
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      {error && <div data-testid="error">{error.message}</div>}
+      {task && (
+        <div data-testid="task">
+          <span data-testid="id">{task.id}</span>
+          <span data-testid="name">{task.name}</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+describe('useGetTask tests', () => {
+  test('should load task', async () => {
+    const id = '12345';
+    const [queryMock, resultFunc] = createGetTaskQueryMock(id);
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<GetTaskComponent id={id} />);
+
+    expect(screen.queryByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('task')).toBeInTheDocument();
+
+    expect(screen.getByTestId('id')).toHaveTextContent('123');
+    expect(screen.getByTestId('name')).toHaveTextContent('foo');
+  });
+
+  test('should handle error', async () => {
+    const id = '12345';
+    const [queryMock] = createGetTaskQueryErrorMock(id);
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<GetTaskComponent id={id} />);
+
+    expect(screen.queryByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('error')).toHaveTextContent(
+      'Network error: An error occurred.',
+    );
   });
 });

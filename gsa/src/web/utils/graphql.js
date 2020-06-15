@@ -17,16 +17,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-export const toGraphQL = query => data => {
-  return query({variables: data});
-};
-
 export const toFruitfulQuery = query => gql => vars => {
   return query(gql, {variables: vars});
-};
-
-export const queryWithRefetch = query => refetch => vars => {
-  return query(vars).then(refetch());
 };
 
 export const goto_entity_details = (entityName, op, props) => result => {

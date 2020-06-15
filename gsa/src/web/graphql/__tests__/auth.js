@@ -22,10 +22,12 @@ import React from 'react';
 
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
-import {useIsAuthenticated, useLazyIsAuthenticated} from '../auth';
+import {useIsAuthenticated, useLazyIsAuthenticated, useLogin} from '../auth';
 import {
   createIsAuthenticatedQueryMock,
   createIsAuthenticatedQueryErrorMock,
+  createLoginQueryMock,
+  createLoginQueryErrorMock,
 } from '../__mocks__/auth';
 
 const TestUseIsAuthenticated = () => {
@@ -163,5 +165,67 @@ describe('useLazyIsAuthenticated tests', () => {
 
     expect(screen.getByTestId('error')).toBeInTheDocument();
     expect(screen.getByTestId('is-authenticated')).toHaveTextContent('no');
+  });
+});
+
+const TestLogin = () => {
+  const [login, {locale, called, error}] = useLogin();
+  return (
+    <div>
+      {!called && <div data-testid="not-called" />}
+      {locale && <div data-testid="locale">{locale}</div>}
+      {error && <div data-testid="error">{error.message}</div>}
+      <button
+        data-testid="login"
+        onClick={() => login({username: 'foo', password: 'bar'}).catch(e => {})}
+      />
+    </div>
+  );
+};
+
+describe('useLogin tests', () => {
+  test('should allow to login a user', async () => {
+    const [queryMock, resultFunc] = createLoginQueryMock({
+      username: 'foo',
+      password: 'bar',
+      locale: 'en',
+    });
+    const {render} = rendererWith({store: true, queryMocks: [queryMock]});
+
+    render(<TestLogin />);
+
+    expect(screen.getByTestId('not-called')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('login'));
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.queryByTestId('not-called')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('locale')).toHaveTextContent('en');
+  });
+
+  test('should show error if login was not successful', async () => {
+    const [queryMock] = createLoginQueryErrorMock({
+      username: 'foo',
+      password: 'bar',
+    });
+    const {render} = rendererWith({store: true, queryMocks: [queryMock]});
+
+    render(<TestLogin />);
+
+    expect(screen.getByTestId('not-called')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('login'));
+
+    await wait();
+
+    expect(screen.queryByTestId('not-called')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('locale')).not.toBeInTheDocument();
+
+    expect(screen.queryByTestId('error')).toHaveTextContent(
+      'Network error: An error has occurred.',
+    );
   });
 });
