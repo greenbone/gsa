@@ -167,16 +167,16 @@ const TasksListPage = () => {
   );
 
   const handleBulkDeleteTask = () => {
-    let tasksToDelete;
-    if (selectionType === SelectionType.SELECTION_USER) {
-      tasksToDelete = getEntityIds(selected);
-    } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-      tasksToDelete = getEntityIds(tasks);
-    } else {
+    if (selectionType === SelectionType.SELECTION_FILTER) {
       const filterAll = filter.all().toFilterString();
       return deleteFilteredTasks(filterAll).then(refetch, showError);
+    } else {
+      const tasksToDelete =
+        selectionType === SelectionType.SELECTION_USER
+          ? getEntityIds(selected)
+          : getEntityIds(tasks);
+      return deleteTasks(tasksToDelete).then(refetch, showError);
     }
-    return deleteTasks(tasksToDelete).then(refetch, showError);
   };
 
   useEffect(() => {
