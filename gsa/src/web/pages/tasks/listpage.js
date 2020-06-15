@@ -48,6 +48,7 @@ import {
   useLazyGetTasks,
   useDeleteTask,
   useDeleteTasks,
+  useDeleteFilteredTasks,
   useCloneTask,
 } from 'web/graphql/tasks';
 
@@ -129,10 +130,9 @@ const TasksListPage = () => {
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
 
-  const [getAllFiltered, {tasks: allFilteredTasks = []}] = useLazyGetTasks();
-
   const [deleteTask] = useDeleteTask();
   const [deleteTasks] = useDeleteTasks();
+  const [deleteFilteredTasks] = useDeleteFilteredTasks();
   const [cloneTask] = useCloneTask();
   const {
     change: changeFilter,
@@ -166,13 +166,6 @@ const TasksListPage = () => {
     [deleteTask, refetch, showError],
   );
 
-  useEffect(() => {
-    // load all filtered tasks if selection is all filtered
-    if (selectionType === SelectionType.SELECTION_FILTER) {
-      getAllFiltered({filterString: filter.all().toFilterString()});
-    }
-  }, [selectionType, filter, getAllFiltered]);
-
   const handleBulkDeleteTask = () => {
     let tasksToDelete;
     if (selectionType === SelectionType.SELECTION_USER) {
@@ -180,7 +173,7 @@ const TasksListPage = () => {
     } else if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
       tasksToDelete = getEntityIds(tasks);
     } else {
-      tasksToDelete = getEntityIds(allFilteredTasks);
+      return deleteFilteredTasks(filter).then(refetch, showError);
     }
     return deleteTasks(tasksToDelete).then(refetch, showError);
   };
