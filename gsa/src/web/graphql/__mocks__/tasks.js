@@ -300,6 +300,22 @@ export const createGetTaskQueryMock = (id, task = detailsMockTask) => {
   return [queryMock, resultFunc];
 };
 
+export const createGetTaskQueryErrorMock = (
+  id,
+  error = new Error('An error occurred.'),
+) => {
+  const queryMock = {
+    request: {
+      query: GET_TASK,
+      variables: {
+        id,
+      },
+    },
+    error,
+  };
+  return [queryMock];
+};
+
 export const createDeleteTaskQueryMock = taskId => {
   const queryResult = {
     data: {
