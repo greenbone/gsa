@@ -44,9 +44,16 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 
 import EntitiesPage from 'web/entities/page';
 
-import {useLazyGetTasks, useDeleteTask, useCloneTask} from 'web/graphql/tasks';
+import {
+  useLazyGetTasks,
+  useDeleteTask,
+  useDeleteTasks,
+  useDeleteFilteredTasks,
+  useCloneTask,
+} from 'web/graphql/tasks';
 
 import PropTypes from 'web/utils/proptypes';
+import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
 import useFilterSortBy from 'web/utils/useFilterSortby';
@@ -122,7 +129,10 @@ const TasksListPage = () => {
     getTasks,
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
+
   const [deleteTask] = useDeleteTask();
+  const [deleteTasks] = useDeleteTasks();
+  const [deleteFilteredTasks] = useDeleteFilteredTasks();
   const [cloneTask] = useCloneTask();
   const {
     change: changeFilter,
@@ -137,7 +147,7 @@ const TasksListPage = () => {
   const [downloadRef, handleDownload] = useDownload();
   const {
     selectionType,
-    selected,
+    selected = [],
     changeSelectionType,
     select,
     deselect,
@@ -155,6 +165,18 @@ const TasksListPage = () => {
     task => deleteTask(task.id).then(refetch, showError),
     [deleteTask, refetch, showError],
   );
+
+  const handleBulkDeleteTask = () => {
+    if (selectionType === SelectionType.SELECTION_FILTER) {
+      const filterAll = filter.all().toFilterString();
+      return deleteFilteredTasks(filterAll).then(refetch, showError);
+    }
+    const tasksToDelete =
+      selectionType === SelectionType.SELECTION_USER
+        ? getEntityIds(selected)
+        : getEntityIds(tasks);
+    return deleteTasks(tasksToDelete).then(refetch, showError);
+  };
 
   useEffect(() => {
     // load tasks initially after the filter is resolved
@@ -288,6 +310,7 @@ const TasksListPage = () => {
             toolBarIcons={ToolBarIcons}
             onAdvancedTaskWizardClick={advancedtaskwizard}
             onContainerTaskCreateClick={createcontainer}
+            onDeleteBulk={handleBulkDeleteTask}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}
