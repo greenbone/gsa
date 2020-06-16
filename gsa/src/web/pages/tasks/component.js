@@ -23,6 +23,8 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
+import logger from 'gmp/log';
+
 import {ALL_FILTER} from 'gmp/models/filter';
 
 import {NO_VALUE} from 'gmp/parser';
@@ -96,6 +98,8 @@ import TargetComponent from 'web/pages/targets/component';
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';
 
+const log = logger.getLogger('web.pages.tasks.component');
+
 const TaskComponent = props => {
   // GraphQL Queries and Mutations
   const [modifyTask] = useModifyTask();
@@ -107,21 +111,26 @@ const TaskComponent = props => {
   const scannerQuery = useGetScanners();
   const [
     loadScanners,
-    {data: scannerData, loading: isLoadingScanners},
+    {data: scannerData, loading: isLoadingScanners, error: scannerError},
   ] = scannerQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
   const scanConfigQuery = useGetScanConfigs();
   const [
     loadScanConfigs,
-    {data: scanConfigData, loading: isLoadingConfigs},
+    {data: scanConfigData, loading: isLoadingConfigs, error: scanConfigError},
   ] = scanConfigQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
   const targetQuery = useGetTargets();
   const [
     loadTargets,
-    {data: targetData, loading: isLoadingTargets, refetch: refetchTargets},
+    {
+      data: targetData,
+      loading: isLoadingTargets,
+      refetch: refetchTargets,
+      error: targetError,
+    },
   ] = targetQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
@@ -722,6 +731,41 @@ const TaskComponent = props => {
     }));
   };
 
+  const handleTaskDialogErrorClose = () => {
+    setDialogState(state => ({...state, error: undefined}));
+  };
+
+  useEffect(() => {
+    // display first loading error in the dialog
+    if (scanConfigError) {
+      setDialogState(state => ({
+        ...state,
+        error: _('Error while loading scan configs.'),
+      }));
+    } else if (scannerError) {
+      setDialogState(state => ({
+        ...state,
+        error: _('Error while loading scanners.'),
+      }));
+    } else if (targetError) {
+      setDialogState(state => ({
+        ...state,
+        error: _('Error while loading targets.'),
+      }));
+    }
+
+    // log error all objects to be able to inspect them the console
+    if (scanConfigError) {
+      log.error({scanConfigError});
+    }
+    if (scannerError) {
+      log.error({scannerError});
+    }
+    if (targetError) {
+      log.error({targetError});
+    }
+  }, [scanConfigError, scannerError, targetError]);
+
   const {
     alerts,
     credentials,
@@ -745,6 +789,7 @@ const TaskComponent = props => {
   const {
     alterable,
     apply_overrides,
+    error,
     max_checks,
     max_hosts,
     min_qod,
@@ -836,6 +881,7 @@ const TaskComponent = props => {
                             auto_delete_data={auto_delete_data}
                             comment={comment}
                             config_id={config_id}
+                            error={error}
                             hosts_ordering={hosts_ordering}
                             id={id}
                             in_assets={in_assets}
@@ -863,6 +909,7 @@ const TaskComponent = props => {
                             task={task}
                             title={title}
                             onAlertsChange={handleAlertsChange}
+                            onErrorClose={handleTaskDialogErrorClose}
                             onNewAlertClick={createalert}
                             onNewTargetClick={createtarget}
                             onNewScheduleClick={createschedule}
