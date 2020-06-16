@@ -439,7 +439,7 @@ const Page = ({
                         <TabPanel>
                           <EntityTags
                             entity={task}
-                            onChanged={onChanged}
+                            onChanged={refetch}
                             onError={onError}
                             onInteraction={onInteraction}
                           />
