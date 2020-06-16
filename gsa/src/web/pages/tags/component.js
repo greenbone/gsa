@@ -100,20 +100,20 @@ const TagComponent = ({
   const capabilities = useCapabilities();
   const [createTag] = useCreateTag();
   const [modifyTag] = useModifyTag();
-  const [enableTag, disableTag] = useToggleTag();
+  const [toggleTag] = useToggleTag();
   const [removeTag] = useRemoveTag();
 
   const [state, setState] = useState({dialogVisible: false});
 
   const handleEnableTag = tag => {
     handleInteraction();
-    enableTag(tag).then(onEnabled, onEnableError);
+    toggleTag(tag, true).then(onEnabled, onEnableError);
   };
 
   const handleDisableTag = tag => {
     handleInteraction();
 
-    disableTag(tag).then(onDisabled, onDisableError);
+    toggleTag(tag, false).then(onDisabled, onDisableError);
   };
 
   const getResourceTypes = () => {

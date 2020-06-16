@@ -73,7 +73,9 @@ export const useCreateTag = options => {
   const createTag = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreateTag({...options, variables: {input: inputObject}}).then(result => result.data.createTag.id),
+      queryCreateTag({...options, variables: {input: inputObject}}).then(
+        result => result.data.createTag.id,
+      ),
     [queryCreateTag],
   );
   const tagId = data?.createTag?.id;
@@ -99,37 +101,47 @@ export const useModifyTag = options => {
   return [modifyTag, data];
 };
 
+export const TOGGLE_TAG = gql`
+  mutation toggleTag($input: ToggleTagInput!) {
+    toggleTag(input: $input) {
+      ok
+    }
+  }
+`;
+
 export const useToggleTag = () => {
-  const [queryModifyTag, data] = useMutation(MODIFY_TAG);
-  const enableTag = useCallback(
+  const [queryToggleTag, data] = useMutation(TOGGLE_TAG);
+  const toggleTag = useCallback(
     // eslint-disable-next-line no-shadow
-    tag => queryModifyTag({variables: {input: {id: tag.id, active: true}}}),
-    [queryModifyTag],
+    (tag, active) => queryToggleTag({variables: {input: {id: tag.id, active}}}),
+    [queryToggleTag],
   );
-  const disableTag = useCallback(
-    // eslint-disable-next-line no-shadow
-    tag => queryModifyTag({variables: {input: {id: tag.id, active: false}}}),
-    [queryModifyTag],
-  );
-  return [enableTag, disableTag, data];
+  return [toggleTag, data];
 };
 
+export const REMOVE_TAG = gql`
+  mutation removeTag($input: RemoveTagInput!) {
+    removeTag(input: $input) {
+      ok
+    }
+  }
+`;
+
 export const useRemoveTag = () => {
-  const [queryModifyTag, data] = useMutation(MODIFY_TAG);
+  const [queryRemoveTag, data] = useMutation(REMOVE_TAG);
   const removeTag = useCallback(
     // eslint-disable-next-line no-shadow
     (tag_id, entity) =>
-      queryModifyTag({
+      queryRemoveTag({
         variables: {
           input: {
             id: tag_id,
             resourceIds: [entity.id],
             resourceType: ENTITY_TYPES[getEntityType(entity)],
-            resourceAction: 'REMOVE',
           },
         },
       }),
-    [queryModifyTag],
+    [queryRemoveTag],
   );
   return [removeTag, data];
 };
