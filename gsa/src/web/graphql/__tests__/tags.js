@@ -18,20 +18,28 @@
  */
 
 import React, {useState} from 'react';
-import {
-  createTagInput,
-  modifyTagInput,
-  createCreateTagMock,
-  createModifyTagMock,
-} from '../__mocks__/tags';
+
+import Tag from 'gmp/models/tag';
+import Task from 'gmp/models/task';
 
 import Button from 'web/components/form/button';
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
-import {useCreateTag, useModifyTag} from '../tags';
+import {
+  createTagInput,
+  modifyTagInput,
+  createCreateTagMock,
+  createModifyTagMock,
+  createEnableTagMock,
+  createDisableTagMock,
+} from '../__mocks__/tags';
 
-const TestComponent = () => {
+import {useCreateTag, useModifyTag, useToggleTag} from '../tags';
+
+const tag = Tag.fromElement({_id: '12345'});
+
+const CreateModifyTagComponent = () => {
   const [notification, setNotification] = useState('');
 
   const [createTag] = useCreateTag();
@@ -66,7 +74,7 @@ describe('Tag mutation tests', () => {
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
-    const {element} = render(<TestComponent />);
+    const {element} = render(<CreateModifyTagComponent />);
 
     const buttons = element.querySelectorAll('button');
     fireEvent.click(buttons[0]);
@@ -84,7 +92,7 @@ describe('Tag mutation tests', () => {
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
-    const {element} = render(<TestComponent />);
+    const {element} = render(<CreateModifyTagComponent />);
 
     const buttons = element.querySelectorAll('button');
 
@@ -95,6 +103,73 @@ describe('Tag mutation tests', () => {
     expect(resultFunc).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Tag modified.',
+    );
+  });
+});
+
+const ToggleTagComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [toggleTag] = useToggleTag();
+
+  const handleEnableResult = () => {
+    setNotification('Tag enabled.');
+  };
+
+  const handleDisableResult = () => {
+    setNotification(`Tag disabled.`);
+  };
+
+  return (
+    <div>
+      <Button
+        title={'Enable tag'}
+        onClick={() => toggleTag(tag, true).then(handleEnableResult)}
+      />
+      <Button
+        title={'Disable tag'}
+        onClick={() => toggleTag(tag, false).then(handleDisableResult)}
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Tag toggle tests', () => {
+  test('should enable a tag', async () => {
+    const [queryMock, resultFunc] = createEnableTagMock(tag);
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    const {element} = render(<ToggleTagComponent />);
+
+    const buttons = element.querySelectorAll('button');
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Tag enabled.',
+    );
+  });
+
+  test('should disable a tag', async () => {
+    const [queryMock, resultFunc] = createDisableTagMock(tag);
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    const {element} = render(<ToggleTagComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[1]);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Tag disabled.',
     );
   });
 });

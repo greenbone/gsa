@@ -17,7 +17,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {CREATE_TAG, MODIFY_TAG} from '../tags';
+import Task from 'gmp/models/task';
+
+import {CREATE_TAG, MODIFY_TAG, TOGGLE_TAG, REMOVE_TAG} from '../tags';
 
 export const createTagInput = {
   name: 'foo',
@@ -67,4 +69,42 @@ export const createModifyTagMock = () => {
   };
 
   return [queryMock, modifyTagResult];
+};
+
+export const createEnableTagMock = tag => {
+  const enableTagResult = jest.fn().mockReturnValue({
+    data: {
+      toggleTag: {
+        ok: true,
+      },
+    },
+  });
+
+  const queryMock = {
+    request: {
+      query: TOGGLE_TAG,
+      variables: {input: {id: tag.id, active: true}},
+    },
+    newData: enableTagResult,
+  };
+  return [queryMock, enableTagResult];
+};
+
+export const createDisableTagMock = tag => {
+  const disableTagResult = jest.fn().mockReturnValue({
+    data: {
+      toggleTag: {
+        ok: true,
+      },
+    },
+  });
+
+  const queryMock = {
+    request: {
+      query: TOGGLE_TAG,
+      variables: {input: {id: tag.id, active: false}},
+    },
+    newData: disableTagResult,
+  };
+  return [queryMock, disableTagResult];
 };
