@@ -138,14 +138,19 @@ const TagComponent = ({
 
   const handleEnableTag = tag => {
     handleInteraction();
-
-    gmp.tag.enable(tag).then(onEnabled, onEnableError);
+    modifyTag({
+      id: tag.id,
+      active: 1,
+    }).then(onEnabled, onEnableError);
   };
 
   const handleDisableTag = tag => {
     handleInteraction();
 
-    gmp.tag.disable(tag).then(onDisabled, onDisableError);
+    modifyTag({
+      id: tag.id,
+      active: 0,
+    }).then(onEnabled, onEnableError);
   };
 
   const handleAddTag = ({name, value, entity}) => {
