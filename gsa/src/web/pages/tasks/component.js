@@ -484,6 +484,7 @@ const TaskComponent = props => {
 
       setDialogState(state => ({
         ...state,
+        error: undefined, // remove old errors
         min_qod: task.minQod,
         source_iface: task.sourceIface,
         schedule_periods,
