@@ -46,7 +46,7 @@ export const useGetSetting = (id, options) => {
 };
 
 export const GET_SETTINGS = gql`
-  query UserSettings($filterString: String) {
+  query UserSettings($filterString: FilterString) {
     userSettings(filterString: $filterString) {
       id
       name

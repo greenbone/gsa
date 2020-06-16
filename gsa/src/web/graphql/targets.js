@@ -25,7 +25,7 @@ import {toFruitfulQuery} from 'web/utils/graphql';
 import gql from 'graphql-tag';
 
 export const GET_TARGETS = gql`
-  query Targets($filterString: String) {
+  query Targets($filterString: FilterString) {
     targets(filterString: $filterString) {
       nodes {
         name
