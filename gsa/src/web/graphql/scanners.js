@@ -23,7 +23,7 @@ import {useLazyQuery} from '@apollo/react-hooks';
 import {toFruitfulQuery} from 'web/utils/graphql';
 
 export const GET_SCANNERS = gql`
-  query Scanner($filterString: String) {
+  query Scanner($filterString: FilterString) {
     scanners(filterString: $filterString) {
       nodes {
         name

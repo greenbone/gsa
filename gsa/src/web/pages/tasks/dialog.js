@@ -139,6 +139,7 @@ const TaskDialog = ({
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   comment = '',
   config_id,
+  error,
   hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
   in_assets = YES_VALUE,
   isLoadingAlerts = false,
@@ -170,6 +171,7 @@ const TaskDialog = ({
   title = _('New Task'),
   onAlertsChange,
   onClose,
+  onErrorClose,
   onNewAlertClick,
   onNewScheduleClick,
   onNewTargetClick,
@@ -296,8 +298,10 @@ const TaskDialog = ({
 
   return (
     <SaveDialog
+      error={error}
       title={title}
       onClose={onClose}
+      onErrorClose={onErrorClose}
       onSave={onSave}
       defaultValues={uncontrolledData}
       values={controlledData}
@@ -624,6 +628,7 @@ TaskDialog.propTypes = {
   auto_delete_data: PropTypes.number,
   comment: PropTypes.string,
   config_id: PropTypes.idOrZero,
+  error: PropTypes.string,
   hosts_ordering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
   in_assets: PropTypes.yesno,
   isLoadingAlerts: PropTypes.bool,
@@ -651,6 +656,7 @@ TaskDialog.propTypes = {
   title: PropTypes.string,
   onAlertsChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  onErrorClose: PropTypes.func,
   onNewAlertClick: PropTypes.func.isRequired,
   onNewScheduleClick: PropTypes.func.isRequired,
   onNewTargetClick: PropTypes.func.isRequired,
