@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {GET_SETTING} from '../settings';
+import {GET_SETTING, GET_SETTINGS} from '../settings';
 
 export const createGetSettingQueryMock = (
   id,
@@ -45,4 +45,41 @@ export const createGetSettingQueryMock = (
     newData: resultFunc,
   };
   return [queryMock, resultFunc];
+};
+
+export const createGetSettingsQueryMock = (
+  settings = [
+    {id: '1', comment: 'A first comment', name: 'foo1', value: 'bar1'},
+    {id: '2', comment: 'A second comment', name: 'foo2', value: 'bar2'},
+  ],
+) => {
+  const queryResult = {
+    data: {
+      userSettings: settings,
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const queryMock = {
+    request: {
+      query: GET_SETTINGS,
+      variables: {},
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createGetSettingsQueryErrorMock = (
+  error = new Error('An error occurred.'),
+) => {
+  const queryMock = {
+    request: {
+      query: GET_SETTINGS,
+      variables: {},
+    },
+    error,
+  };
+  return [queryMock];
 };
