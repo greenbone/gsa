@@ -147,7 +147,7 @@ const TagComponent = ({
             id,
             name,
             resourceCount,
-            resource_ids: resources.map(res => res.id),
+            resourceIds: resources.map(res => res.id),
             resource_type: isDefined(resourceType)
               ? resourceType
               : first(resource_types, [])[0],
@@ -168,7 +168,7 @@ const TagComponent = ({
         id: undefined,
         name: undefined,
         resourceCount: 0,
-        resource_ids: [],
+        resourceIds: [],
         resource_type: undefined,
         resource_types,
         dialogVisible: true,
@@ -252,7 +252,7 @@ const TagComponent = ({
     comment,
     id,
     name,
-    resource_ids,
+    resourceIds,
     resource_type,
     resource_types = [],
     resourceCount,
@@ -294,7 +294,7 @@ const TagComponent = ({
               comment={comment}
               id={id}
               name={name}
-              resource_ids={resource_ids}
+              resource_ids={resourceIds}
               resource_type={resource_type}
               resource_types={resource_types}
               resourceCount={resourceCount}

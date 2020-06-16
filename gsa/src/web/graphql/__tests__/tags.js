@@ -18,54 +18,18 @@
  */
 
 import React, {useState} from 'react';
+import {
+  createTagInput,
+  modifyTagInput,
+  createCreateTagMock,
+  createModifyTagMock,
+} from '../__mocks__/tags';
 
 import Button from 'web/components/form/button';
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
-import {CREATE_TAG, MODIFY_TAG, useCreateTag, useModifyTag} from '../tags';
-
-const createTagInput = {
-  name: 'foo',
-  resourceType: 'OPERATING_SYSTEM',
-};
-
-const modifyTagInput = {
-  id: '12345',
-};
-
-const createTagResult = jest.fn().mockReturnValue({
-  data: {
-    createTag: {
-      id: '12345',
-      status: 200,
-    },
-  },
-});
-
-const modifyTagResult = jest.fn().mockReturnValue({
-  data: {
-    modifyTag: {
-      ok: true,
-    },
-  },
-});
-
-const createTagMock = {
-  request: {
-    query: CREATE_TAG,
-    variables: {input: createTagInput},
-  },
-  newData: createTagResult,
-};
-
-const modifyTagMock = {
-  request: {
-    query: MODIFY_TAG,
-    variables: {input: modifyTagInput},
-  },
-  newData: modifyTagResult,
-};
+import {useCreateTag, useModifyTag} from '../tags';
 
 const TestComponent = () => {
   const [notification, setNotification] = useState('');
@@ -73,16 +37,12 @@ const TestComponent = () => {
   const [createTag] = useCreateTag();
   const [modifyTag] = useModifyTag();
 
-  const handleCreateResult = resp => {
-    const {data} = resp;
-    setNotification(
-      `Tag created with id ${data.createTag.id} and status ${data.createTag.status}.`,
-    );
+  const handleCreateResult = id => {
+    setNotification(`Tag created with id ${id}.`);
   };
 
-  const handleModifyResult = resp => {
-    const {data} = resp;
-    setNotification(`Tag modified with ok=${data.modifyTag.ok}.`);
+  const handleModifyResult = () => {
+    setNotification(`Tag modified.`);
   };
 
   return (
@@ -102,24 +62,27 @@ const TestComponent = () => {
 
 describe('Tag mutation tests', () => {
   test('should create a tag', async () => {
-    const {render} = rendererWith({queryMocks: [createTagMock]});
+    const [queryMock, resultFunc] = createCreateTagMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
 
     const {element} = render(<TestComponent />);
 
     const buttons = element.querySelectorAll('button');
-
     fireEvent.click(buttons[0]);
 
     await wait();
 
-    expect(createTagResult).toHaveBeenCalled();
+    expect(resultFunc).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
-      'Tag created with id 12345 and status 200.',
+      'Tag created with id 12345.',
     );
   });
 
   test('should modify a tag', async () => {
-    const {render} = rendererWith({queryMocks: [modifyTagMock]});
+    const [queryMock, resultFunc] = createModifyTagMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
 
     const {element} = render(<TestComponent />);
 
@@ -129,9 +92,9 @@ describe('Tag mutation tests', () => {
 
     await wait();
 
-    expect(modifyTagResult).toHaveBeenCalled();
+    expect(resultFunc).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
-      'Tag modified with ok=true.',
+      'Tag modified.',
     );
   });
 });
