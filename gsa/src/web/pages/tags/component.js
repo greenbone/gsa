@@ -25,8 +25,6 @@ import {shorten} from 'gmp/utils/string';
 import {first} from 'gmp/utils/array';
 import {getEntityType, pluralizeType, typeName} from 'gmp/utils/entitytype';
 
-import {YES_VALUE} from 'gmp/parser';
-
 import {useCreateTag, useModifyTag} from 'web/graphql/tags';
 
 import PropTypes from 'web/utils/proptypes';
@@ -109,8 +107,6 @@ const RESOURCES_ACTION = {
 
 const TagComponent = ({
   children,
-  onAdded,
-  onAddError,
   onCloned,
   onCloneError,
   onCreated,
@@ -150,21 +146,7 @@ const TagComponent = ({
     modifyTag({
       id: tag.id,
       active: 0,
-    }).then(onEnabled, onEnableError);
-  };
-
-  const handleAddTag = ({name, value, entity}) => {
-    handleInteraction();
-
-    return gmp.tag
-      .create({
-        name,
-        value,
-        active: YES_VALUE,
-        resource_ids: [entity.id],
-        resource_type: getEntityType(entity),
-      })
-      .then(onAdded, onAddError);
+    }).then(onDisabled, onDisableError);
   };
 
   const getResourceTypes = () => {
@@ -337,7 +319,6 @@ const TagComponent = ({
         <React.Fragment>
           {children({
             ...other,
-            add: handleAddTag,
             create: openCreateTagDialog,
             edit: openTagDialog,
             enable: handleEnableTag,
