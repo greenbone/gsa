@@ -101,6 +101,20 @@ class App extends React.Component {
     this.client = new ApolloClient({
       link: logoutLink.concat(httpLink),
       cache: new InMemoryCache(),
+      defaultOptions: {
+        query: {
+          /* Apollo's cache-and-network fetch policy is used to have quick
+            listings and then update data.
+            - When a query is send, Apollo checks for the data in the cache
+            - If data is in cache, return cached data
+            - Pass another query to get up-to-date data (irrespective if data
+              was already cached or not)
+            - Update cache with new data
+            - Return updated query data
+          */
+          fetchPolicy: 'cache-and-network',
+        },
+      },
     });
   }
 
