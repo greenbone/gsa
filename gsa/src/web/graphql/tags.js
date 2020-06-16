@@ -73,7 +73,7 @@ export const useCreateTag = options => {
   const createTag = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreateTag({...options, variables: {input: inputObject}}),
+      queryCreateTag({...options, variables: {input: inputObject}}).then(result => result.data.createTag.id),
     [queryCreateTag],
   );
   const tagId = data?.createTag?.id;
@@ -103,12 +103,12 @@ export const useToggleTag = () => {
   const [queryModifyTag, data] = useMutation(MODIFY_TAG);
   const enableTag = useCallback(
     // eslint-disable-next-line no-shadow
-    tag => queryModifyTag({variables: {input: {id: tag.id, active: 1}}}),
+    tag => queryModifyTag({variables: {input: {id: tag.id, active: true}}}),
     [queryModifyTag],
   );
   const disableTag = useCallback(
     // eslint-disable-next-line no-shadow
-    tag => queryModifyTag({variables: {input: {id: tag.id, active: 0}}}),
+    tag => queryModifyTag({variables: {input: {id: tag.id, active: false}}}),
     [queryModifyTag],
   );
   return [enableTag, disableTag, data];
