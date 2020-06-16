@@ -23,8 +23,12 @@ import React from 'react';
 
 import {rendererWith, wait, screen} from 'web/utils/testing';
 
-import {useGetSetting} from '../settings';
-import {createGetSettingQueryMock} from '../__mocks__/settings';
+import {useGetSetting, useGetSettings} from '../settings';
+import {
+  createGetSettingQueryMock,
+  createGetSettingsQueryMock,
+  createGetSettingsQueryErrorMock,
+} from '../__mocks__/settings';
 
 const TestUseSetting = ({settingId}) => {
   const {setting, loading: isLoading} = useGetSetting(settingId);
@@ -79,5 +83,66 @@ describe('useGetSetting tests', () => {
     expect(settingComment).toHaveTextContent(comment);
     expect(settingName).toHaveTextContent(name);
     expect(settingValue).toHaveTextContent(value);
+  });
+});
+
+const TestGetSettings = () => {
+  const {settings, loading, error} = useGetSettings();
+  if (loading) {
+    return <div data-testid="loading">Loading</div>;
+  }
+  return (
+    <div>
+      {error && <div data-testid="error">{error.message}</div>}
+      {settings && (
+        <div data-testid="settings">
+          {settings.map((setting, i) => (
+            <div data-testid="setting" key={i}>
+              <div data-testid="name">{setting.name}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+describe('useGetSettings tests', () => {
+  test('should load settings', async () => {
+    const [queryMock, resultFunc] = createGetSettingsQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<TestGetSettings />);
+
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+    expect(screen.getByTestId('settings')).toBeInTheDocument();
+
+    const settings = screen.getAllByTestId('setting');
+    expect(settings.length).toEqual(2);
+  });
+
+  test('should return error if loading failed', async () => {
+    const [queryMock] = createGetSettingsQueryErrorMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<TestGetSettings />);
+
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(screen.queryByTestId('settings')).not.toBeInTheDocument();
+
+    expect(screen.queryByTestId('error')).toHaveTextContent(
+      'Network error: An error occurred.',
+    );
   });
 });
