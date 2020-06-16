@@ -38,8 +38,8 @@ import {
 
 import {useCreateTag, useModifyTag, useToggleTag, useRemoveTag} from '../tags';
 
-const tag = Tag.fromElement({_id: '12345'});
-const task = Task.fromObject({id: '23456', entityType: 'task'});
+const tag = Tag.fromObject({id: '12345'});
+const task = Task.fromObject({id: '23456'});
 
 const CreateModifyTagComponent = () => {
   const [notification, setNotification] = useState('');
