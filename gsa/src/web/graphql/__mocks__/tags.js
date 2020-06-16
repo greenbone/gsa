@@ -17,9 +17,15 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import Task from 'gmp/models/task';
+import {getEntityType} from 'gmp/utils/entitytype';
 
-import {CREATE_TAG, MODIFY_TAG, TOGGLE_TAG, REMOVE_TAG} from '../tags';
+import {
+  CREATE_TAG,
+  MODIFY_TAG,
+  TOGGLE_TAG,
+  REMOVE_TAG,
+  ENTITY_TYPES,
+} from '../tags';
 
 export const createTagInput = {
   name: 'foo',
@@ -107,4 +113,29 @@ export const createDisableTagMock = tag => {
     newData: disableTagResult,
   };
   return [queryMock, disableTagResult];
+};
+
+export const createRemoveTagMock = (tag, entity) => {
+  const removeTagResult = jest.fn().mockReturnValue({
+    data: {
+      removeTag: {
+        ok: true,
+      },
+    },
+  });
+
+  const queryMock = {
+    request: {
+      query: REMOVE_TAG,
+      variables: {
+        input: {
+          id: tag.id,
+          resourceIds: [entity.id],
+          resourceType: ENTITY_TYPES[getEntityType(entity)],
+        },
+      },
+    },
+    newData: removeTagResult,
+  };
+  return [queryMock, removeTagResult];
 };

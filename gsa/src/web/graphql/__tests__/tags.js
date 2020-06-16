@@ -33,11 +33,13 @@ import {
   createModifyTagMock,
   createEnableTagMock,
   createDisableTagMock,
+  createRemoveTagMock,
 } from '../__mocks__/tags';
 
-import {useCreateTag, useModifyTag, useToggleTag} from '../tags';
+import {useCreateTag, useModifyTag, useToggleTag, useRemoveTag} from '../tags';
 
 const tag = Tag.fromElement({_id: '12345'});
+const task = Task.fromObject({id: '23456', entityType: 'task'});
 
 const CreateModifyTagComponent = () => {
   const [notification, setNotification] = useState('');
@@ -170,6 +172,46 @@ describe('Tag toggle tests', () => {
     expect(resultFunc).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Tag disabled.',
+    );
+  });
+});
+
+const RemoveTagComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [removeTag] = useRemoveTag();
+
+  const handleRemoveResult = () => {
+    setNotification('Tag removed.');
+  };
+
+  return (
+    <div>
+      <Button
+        title={'Remove tag'}
+        onClick={() => removeTag(tag.id, task).then(handleRemoveResult)}
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Tag remove tests', () => {
+  test('should enable a tag', async () => {
+    const [queryMock, resultFunc] = createRemoveTagMock(tag, task);
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    const {element} = render(<RemoveTagComponent />);
+
+    const buttons = element.querySelectorAll('button');
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Tag removed.',
     );
   });
 });
