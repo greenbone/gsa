@@ -22,6 +22,44 @@ import {useMutation} from '@apollo/react-hooks';
 
 import gql from 'graphql-tag';
 
+import {getEntityType} from 'gmp/utils/entitytype';
+
+export const ENTITY_TYPES = {
+  alert: 'ALERT',
+  host: 'HOST',
+  operatingsystem: 'OPERATING_SYSTEM',
+  cpe: 'CPE',
+  credential: 'CREDENTIAL',
+  cve: 'CVE',
+  certbund: 'CERT_BUND_ADV',
+  dfncert: 'DFN_CERT_ADV',
+  filter: 'FILTER',
+  group: 'GROUP',
+  note: 'NOTE',
+  nvt: 'NVT',
+  ovaldef: 'OVALDEF',
+  override: 'OVERRIDE',
+  permission: 'PERMISSION',
+  portlist: 'PORT_LIST',
+  report: 'REPORT',
+  reportformat: 'REPORT_FORMAT',
+  result: 'RESULT',
+  role: 'ROLE',
+  scanconfig: 'SCAN_CONFIG',
+  scanner: 'SCANNER',
+  schedule: 'SCHEDULE',
+  target: 'TARGET',
+  task: 'TASK',
+  tlscertificate: 'TLS_CERTIFICATE',
+  user: 'USER',
+};
+
+export const RESOURCES_ACTION = {
+  add: 'ADD',
+  set: 'SET',
+  remove: 'REMOVE',
+};
+
 export const CREATE_TAG = gql`
   mutation createTag($input: CreateTagInput!) {
     createTag(input: $input) {
@@ -59,4 +97,39 @@ export const useModifyTag = options => {
     [queryModifyTag],
   );
   return [modifyTag, data];
+};
+
+export const useToggleTag = () => {
+  const [queryModifyTag, data] = useMutation(MODIFY_TAG);
+  const enableTag = useCallback(
+    // eslint-disable-next-line no-shadow
+    tag => queryModifyTag({variables: {input: {id: tag.id, active: 1}}}),
+    [queryModifyTag],
+  );
+  const disableTag = useCallback(
+    // eslint-disable-next-line no-shadow
+    tag => queryModifyTag({variables: {input: {id: tag.id, active: 0}}}),
+    [queryModifyTag],
+  );
+  return [enableTag, disableTag, data];
+};
+
+export const useRemoveTag = () => {
+  const [queryModifyTag, data] = useMutation(MODIFY_TAG);
+  const removeTag = useCallback(
+    // eslint-disable-next-line no-shadow
+    (tag_id, entity) =>
+      queryModifyTag({
+        variables: {
+          input: {
+            id: tag_id,
+            resourceIds: [entity.id],
+            resourceType: ENTITY_TYPES[getEntityType(entity)],
+            resourceAction: 'REMOVE',
+          },
+        },
+      }),
+    [queryModifyTag],
+  );
+  return [removeTag, data];
 };

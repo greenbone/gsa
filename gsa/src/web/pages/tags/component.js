@@ -23,9 +23,16 @@ import _ from 'gmp/locale';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {first} from 'gmp/utils/array';
-import {getEntityType, pluralizeType, typeName} from 'gmp/utils/entitytype';
+import {pluralizeType, typeName} from 'gmp/utils/entitytype';
 
-import {useCreateTag, useModifyTag} from 'web/graphql/tags';
+import {
+  useCreateTag,
+  useModifyTag,
+  useToggleTag,
+  useRemoveTag,
+  ENTITY_TYPES,
+  RESOURCES_ACTION,
+} from 'web/graphql/tags';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -69,42 +76,6 @@ const TYPES = [
   'user',
 ];
 
-const ENTITY_TYPES = {
-  alert: 'ALERT',
-  host: 'HOST',
-  operatingsystem: 'OPERATING_SYSTEM',
-  cpe: 'CPE',
-  credential: 'CREDENTIAL',
-  cve: 'CVE',
-  certbund: 'CERT_BUND_ADV',
-  dfncert: 'DFN_CERT_ADV',
-  filter: 'FILTER',
-  group: 'GROUP',
-  note: 'NOTE',
-  nvt: 'NVT',
-  ovaldef: 'OVALDEF',
-  override: 'OVERRIDE',
-  permission: 'PERMISSION',
-  portlist: 'PORT_LIST',
-  report: 'REPORT',
-  reportformat: 'REPORT_FORMAT',
-  result: 'RESULT',
-  role: 'ROLE',
-  scanconfig: 'SCAN_CONFIG',
-  scanner: 'SCANNER',
-  schedule: 'SCHEDULE',
-  target: 'TARGET',
-  task: 'TASK',
-  tlscertificate: 'TLS_CERTIFICATE',
-  user: 'USER',
-};
-
-const RESOURCES_ACTION = {
-  add: 'ADD',
-  set: 'SET',
-  remove: 'REMOVE',
-};
-
 const TagComponent = ({
   children,
   onCloned,
@@ -129,24 +100,20 @@ const TagComponent = ({
   const capabilities = useCapabilities();
   const [createTag] = useCreateTag();
   const [modifyTag] = useModifyTag();
+  const [enableTag, disableTag] = useToggleTag();
+  const [removeTag] = useRemoveTag();
 
   const [state, setState] = useState({dialogVisible: false});
 
   const handleEnableTag = tag => {
     handleInteraction();
-    modifyTag({
-      id: tag.id,
-      active: 1,
-    }).then(onEnabled, onEnableError);
+    enableTag(tag).then(onEnabled, onEnableError);
   };
 
   const handleDisableTag = tag => {
     handleInteraction();
 
-    modifyTag({
-      id: tag.id,
-      active: 0,
-    }).then(onDisabled, onDisableError);
+    disableTag(tag).then(onDisabled, onDisableError);
   };
 
   const getResourceTypes = () => {
@@ -230,12 +197,7 @@ const TagComponent = ({
   const handleRemove = (tag_id, entity) => {
     handleInteraction();
 
-    return modifyTag({
-      id: tag_id,
-      resourceIds: [entity.id],
-      resourceType: ENTITY_TYPES[getEntityType(entity)],
-      resourceAction: 'REMOVE',
-    }).then(onRemoved, onRemoveError);
+    removeTag(tag_id, entity).then(onRemoved, onRemoveError);
   };
 
   const handleInteraction = () => {
