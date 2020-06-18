@@ -39,12 +39,6 @@ const initialState = {
 };
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'createTag':
-      const {tag} = action;
-      return {
-        ...state,
-        tags: [...state.tags, tag],
-      };
     case 'setState':
       const {newState} = action;
       return {
