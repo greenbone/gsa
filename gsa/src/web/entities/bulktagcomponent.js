@@ -166,9 +166,11 @@ const BulkTagComponent = ({
 
     const resourceType = ENTITY_TYPES[entitiesType];
 
-    return bulkTag(id, resourceType, tagEntitiesIds, loadedFilter).then(
-      onClose,
-    );
+    return bulkTag(id, {
+      resourceType,
+      resourceIds: tagEntitiesIds,
+      resourceFilter: loadedFilter,
+    }).then(onClose);
   };
 
   const resourceTypes = [[entitiesType, typeName(entitiesType)]];

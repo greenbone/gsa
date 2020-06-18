@@ -158,7 +158,7 @@ export const useBulkTag = () => {
   const [queryBulkTag, data] = useMutation(BULK_TAG);
   const bulkTag = useCallback(
     // eslint-disable-next-line no-shadow
-    (tag_id, resourceType, resourceIds, resourceFilter) =>
+    (tag_id, {resourceType, resourceIds, resourceFilter}) =>
       queryBulkTag({
         variables: {
           input: {
