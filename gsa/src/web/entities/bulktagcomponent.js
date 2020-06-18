@@ -64,24 +64,21 @@ const BulkTagComponent = ({
   const [state, dispatch] = useReducer(reducer, initialState);
   const [bulkTag] = useBulkTag();
 
-  const getTagsByType = useCallback(
-    entitiesArray => {
-      if (entitiesArray.length > 0) {
-        const tagFilter =
-          'resource_type=' + apiType(getEntityType(entitiesArray[0]));
+  const entitiesType = getEntityType(entities[0]);
+  // if there are no entities, BulkTagComponent is not rendered.
 
-        return gmp.tags.getAll({filter: tagFilter}).then(resp => {
-          const {data: tags} = resp;
-          dispatch({type: 'setState', newState: {tags}});
-        });
-      }
-    },
-    [gmp.tags],
-  );
+  const getTagsByType = useCallback(() => {
+    const tagFilter = 'resource_type=' + apiType(entitiesType);
+
+    return gmp.tags.getAll({filter: tagFilter}).then(resp => {
+      const {data: tags} = resp;
+      dispatch({type: 'setState', newState: {tags}});
+    });
+  }, [gmp.tags]);
 
   useEffect(() => {
-    getTagsByType(entities);
-  }, [getTagsByType, entities]); // replaces openTagsDialog
+    getTagsByType();
+  }, [getTagsByType]); // replaces openTagsDialog
 
   const getMultiTagEntitiesCount = (
     pageEntities,
@@ -164,14 +161,13 @@ const BulkTagComponent = ({
       tagEntitiesIds = null;
     }
 
-    const entitiesType = ENTITY_TYPES[getEntityType(entities[0])];
+    const resourceType = ENTITY_TYPES[entitiesType];
 
-    return bulkTag(id, entitiesType, tagEntitiesIds, loadedFilter).then(
+    return bulkTag(id, resourceType, tagEntitiesIds, loadedFilter).then(
       onClose,
     );
   };
 
-  const entitiesType = getEntityType(entities[0]);
   const resourceTypes = [[entitiesType, typeName(entitiesType)]];
 
   let title;
