@@ -16,9 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useReducer, useEffect} from 'react';
+import React, {useReducer, useEffect, useCallback} from 'react';
 
-import {getEntityType, apiType} from 'gmp/utils/entitytype';
+import _ from 'gmp/locale';
+
+import {getEntityType, apiType, typeName} from 'gmp/utils/entitytype';
 
 import TagsDialog from 'web/entities/tagsdialog';
 
@@ -67,20 +69,23 @@ const BulkTagComponent = ({
   const [state, dispatch] = useReducer(reducer, initialState);
   const [bulkTag] = useBulkTag();
 
-  const getTagsByType = entities => {
-    if (entities.length > 0) {
-      const filter = 'resource_type=' + apiType(getEntityType(entities[0]));
+  const getTagsByType = useCallback(
+    entities => {
+      if (entities.length > 0) {
+        const filter = 'resource_type=' + apiType(getEntityType(entities[0]));
 
-      return gmp.tags.getAll({filter}).then(resp => {
-        const {data: tags} = resp;
-        dispatch({type: 'setState', newState: {tags}});
-      });
-    }
-  };
+        return gmp.tags.getAll({filter}).then(resp => {
+          const {data: tags} = resp;
+          dispatch({type: 'setState', newState: {tags}});
+        });
+      }
+    },
+    [gmp.tags],
+  );
 
   useEffect(() => {
     getTagsByType(entities);
-  }, []); // replaces openTagsDialog
+  }, [getTagsByType, entities]); // replaces openTagsDialog
 
   const getMultiTagEntitiesCount = (
     pageEntities,
@@ -148,7 +153,7 @@ const BulkTagComponent = ({
     renewSession();
   };
 
-  const handleAddMultiTag = id => {
+  const handleAddMultiTag = ({id}) => {
     let tagEntitiesIds;
     let loadedFilter;
 
@@ -166,10 +171,8 @@ const BulkTagComponent = ({
     return bulkTag(id, 'TASK', tagEntitiesIds, loadedFilter).then(onClose);
   };
 
-  if (isDefined(entities) && entities.length > 0) {
-    entitiesType = getEntityType(entities[0]);
-    resourceTypes = [[entitiesType, typeName(entitiesType)]];
-  }
+  const entitiesType = getEntityType(entities[0]);
+  const resourceTypes = [[entitiesType, typeName(entitiesType)]];
 
   let title;
   if (selectionType === SelectionType.SELECTION_USER) {
