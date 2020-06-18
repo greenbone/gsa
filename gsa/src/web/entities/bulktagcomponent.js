@@ -24,7 +24,7 @@ import {getEntityType, apiType, typeName} from 'gmp/utils/entitytype';
 
 import TagsDialog from 'web/entities/tagsdialog';
 
-import {useBulkTag} from 'web/graphql/tags';
+import {useBulkTag, ENTITY_TYPES} from 'web/graphql/tags';
 
 import TagDialog from 'web/pages/tags/dialog';
 
@@ -162,7 +162,11 @@ const BulkTagComponent = ({
       tagEntitiesIds = null;
     }
 
-    return bulkTag(id, 'TASK', tagEntitiesIds, loadedFilter).then(onClose);
+    const entitiesType = ENTITY_TYPES[getEntityType(entities[0])];
+
+    return bulkTag(id, entitiesType, tagEntitiesIds, loadedFilter).then(
+      onClose,
+    );
   };
 
   const entitiesType = getEntityType(entities[0]);
