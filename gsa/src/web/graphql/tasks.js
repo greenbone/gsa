@@ -108,6 +108,7 @@ export const GET_TASK = gql`
         }
       }
       status
+      progress
       target {
         name
         id
@@ -201,6 +202,7 @@ export const GET_TASKS = gql`
             }
           }
           status
+          progress
           target {
             name
             id
