@@ -28,6 +28,7 @@ import {useBulkTag, ENTITY_TYPES} from 'web/graphql/tags';
 
 import TagDialog from 'web/pages/tags/dialog';
 
+import PropTypes from 'web/utils/proptypes';
 import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useGmp from 'web/utils/useGmp';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
@@ -211,6 +212,15 @@ const BulkTagComponent = ({
       )}
     </React.Fragment>
   );
+};
+
+BulkTagComponent.propTypes = {
+  entities: PropTypes.arrayOf(PropTypes.model).isRequired,
+  entitiesCounts: PropTypes.counts.isRequired,
+  filter: PropTypes.filter.isRequired,
+  selected: PropTypes.arrayOf(PropTypes.model).isRequired,
+  selectionType: PropTypes.oneOf(SelectionType).isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default BulkTagComponent;
