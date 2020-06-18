@@ -61,7 +61,10 @@ const BulkTagComponent = ({
 }) => {
   const gmp = useGmp();
   const [, renewSession] = useUserSessionTimeout();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{tag, tags, tagDialogVisible}, dispatch] = useReducer(
+    reducer,
+    initialState,
+  );
   const [bulkTag] = useBulkTag();
 
   const entitiesType = getEntityType(entities[0]);
@@ -71,10 +74,10 @@ const BulkTagComponent = ({
     const tagFilter = 'resource_type=' + apiType(entitiesType);
 
     return gmp.tags.getAll({filter: tagFilter}).then(resp => {
-      const {data: tags} = resp;
-      dispatch({type: 'setState', newState: {tags}});
+      const {data} = resp;
+      dispatch({type: 'setState', newState: {tags: data}});
     });
-  }, [gmp.tags]);
+  }, [gmp.tags, entitiesType]);
 
   useEffect(() => {
     getTagsByType();
@@ -118,7 +121,7 @@ const BulkTagComponent = ({
       .create(data)
       .then(response => gmp.tag.get(response.data))
       .then(response => {
-        const newTags = [...state.tags, response.data];
+        const newTags = [...tags, response.data];
         dispatch({
           type: 'setState',
           newState: {
@@ -178,8 +181,6 @@ const BulkTagComponent = ({
   } else {
     title = _('Add Tag to All Filtered');
   }
-
-  const {tag, tags, tagDialogVisible} = state;
 
   return (
     <React.Fragment>
