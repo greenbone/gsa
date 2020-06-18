@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -32,13 +31,14 @@ import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
-import {GET_TASK} from 'web/graphql/tasks';
 import {
-  getMockTasks,
-  getMockTaskData,
-} from 'web/pages/tasks/__mocks__/mocktasks';
+  createGetTaskQueryMock,
+  createCloneTaskQueryMock,
+  createDeleteTaskQueryMock,
+} from 'web/graphql/__mocks__/tasks';
+import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -46,6 +46,13 @@ if (!isDefined(window.URL)) {
   window.URL = {};
 }
 window.URL.createObjectURL = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: '12345',
+  }),
+}));
 
 setLocale('en');
 
@@ -55,24 +62,7 @@ const reloadInterval = 1;
 const manualUrl = 'test/';
 
 // create mock task
-const {detailsMockTask: mockData} = getMockTaskData(); // data needed to create the mock requests
 const {detailsMockTask: task} = getMockTasks(); // mock task
-
-const mockTask = {
-  data: {
-    task: {mockData},
-  },
-};
-
-const mocks = [
-  {
-    request: {
-      query: GET_TASK,
-      variables: {taskId: '12345'},
-    },
-    result: mockTask,
-  },
-];
 
 // mock gmp commands
 const config = ScanConfig.fromElement({
@@ -119,7 +109,7 @@ const renewSession = jest.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-describe.skip('Task Detailspage tests', () => {
+describe('Task Detailspage tests', () => {
   test('should render full Detailspage', async () => {
     const getTask = jest.fn().mockResolvedValue({
       data: task,
@@ -154,12 +144,15 @@ describe.skip('Task Detailspage tests', () => {
       },
     };
 
+    const id = '12345';
+    const [mock, resultFunc] = createGetTaskQueryMock(id);
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: mocks,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -167,13 +160,15 @@ describe.skip('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
-    const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
-    );
+    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
 
-    expect(element).toMatchSnapshot();
+    await wait();
 
-    expect(element).toHaveTextContent('Task: foo');
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(baseElement).toMatchSnapshot();
+
+    expect(baseElement).toHaveTextContent('Task: foo');
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
@@ -187,42 +182,64 @@ describe.skip('Task Detailspage tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Task List');
     expect(links[1]).toHaveAttribute('href', '/tasks');
 
-    expect(element).toHaveTextContent('12345');
-    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
-    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:44 AM CEST');
-    expect(element).toHaveTextContent('admin');
+    expect(baseElement).toHaveTextContent('12345');
+    expect(baseElement).toHaveTextContent('Tue, Jul 30, 2019 3:00 PM CEST');
+    expect(baseElement).toHaveTextContent('Fri, Aug 30, 2019 3:23 PM CEST');
+    expect(baseElement).toHaveTextContent('admin');
 
-    expect(element).toHaveTextContent('foo');
-    expect(element).toHaveTextContent('bar');
+    expect(baseElement).toHaveTextContent('User Tags');
+    expect(baseElement).toHaveTextContent('Permissions');
 
-    const progressBars = getAllByTestId('progressbar-box');
-    expect(progressBars[0]).toHaveAttribute('title', 'Done');
-    expect(progressBars[0]).toHaveTextContent('Done');
-
-    const headings = element.querySelectorAll('h2');
+    const headings = baseElement.querySelectorAll('h2');
     const detailslinks = getAllByTestId('details-link');
 
+    expect(baseElement).toHaveTextContent('foo');
+    expect(baseElement).toHaveTextContent('bar');
+
+    const progressBars = getAllByTestId('progressbar-box');
+    expect(progressBars[0]).toHaveAttribute('title', 'Stopped');
+    expect(progressBars[0]).toHaveTextContent('Stopped');
+    expect(detailslinks[2]).toHaveAttribute('href', '/report/5678');
+
     expect(headings[1]).toHaveTextContent('Target');
-    expect(detailslinks[2]).toHaveAttribute('href', '/target/5678');
-    expect(element).toHaveTextContent('target1');
+    expect(detailslinks[3]).toHaveAttribute('href', '/target/159');
+    expect(baseElement).toHaveTextContent('target 1');
 
     expect(headings[2]).toHaveTextContent('Alerts');
-    expect(detailslinks[3]).toHaveAttribute('href', '/alert/91011');
-    expect(element).toHaveTextContent('alert1');
+    expect(detailslinks[4]).toHaveAttribute('href', '/alert/151617');
+    expect(baseElement).toHaveTextContent('alert 1');
 
     expect(headings[3]).toHaveTextContent('Scanner');
-    expect(detailslinks[4]).toHaveAttribute('href', '/scanner/1516');
-    expect(element).toHaveTextContent('scanner1');
-    expect(element).toHaveTextContent('OpenVAS Scanner');
+    expect(detailslinks[5]).toHaveAttribute('href', '/scanner/212223');
+    expect(baseElement).toHaveTextContent('scanner 1');
+    expect(baseElement).toHaveTextContent('OpenVAS Scanner');
+    expect(detailslinks[6]).toHaveAttribute('href', '/scanconfig/314');
+    expect(baseElement).toHaveTextContent('Order for target hostssequential');
+    expect(baseElement).toHaveTextContent('Network Source Interface');
+    expect(baseElement).toHaveTextContent(
+      'Maximum concurrently executed NVTs per host4',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Maximum concurrently scanned hosts20',
+    );
 
     expect(headings[4]).toHaveTextContent('Assets');
+    expect(baseElement).toHaveTextContent('Add to AssetsYes');
+    expect(baseElement).toHaveTextContent('Apply OverridesYes');
+    expect(baseElement).toHaveTextContent('Min QoD70 %');
 
-    expect(headings[5]).toHaveTextContent('Scan');
-    expect(element).toHaveTextContent('2 minutes');
-    expect(element).toHaveTextContent('Do not automatically delete reports');
+    expect(headings[5]).toHaveTextContent('Schedule');
+    expect(detailslinks[7]).toHaveAttribute('href', '/schedule/121314');
+    expect(baseElement).toHaveTextContent('schedule 1');
+
+    expect(headings[6]).toHaveTextContent('Scan');
+    expect(baseElement).toHaveTextContent('2 minutes');
+    expect(baseElement).toHaveTextContent(
+      'Do not automatically delete reports',
+    );
   });
 
-  test('should render user tags tab', () => {
+  test('should render user tags tab', async () => {
     const getTask = jest.fn().mockResolvedValue({
       data: task,
     });
@@ -268,12 +285,15 @@ describe.skip('Task Detailspage tests', () => {
       },
     };
 
+    const id = '12345';
+    const [mock, resultFunc] = createGetTaskQueryMock(id);
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: mocks,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -281,14 +301,21 @@ describe.skip('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
     const spans = baseElement.querySelectorAll('span');
+
+    expect(spans[22]).toHaveTextContent('User Tags');
     fireEvent.click(spans[22]);
 
-    expect(element).toHaveTextContent('No user tags available');
+    expect(baseElement).toHaveTextContent('No user tags available');
   });
 
-  test('should render permissions tab', () => {
+  test('should render permissions tab', async () => {
     const getTask = jest.fn().mockResolvedValue({
       data: task,
     });
@@ -323,12 +350,15 @@ describe.skip('Task Detailspage tests', () => {
       },
     };
 
+    const id = '12345';
+    const [mock, resultFunc] = createGetTaskQueryMock(id);
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: mocks,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -336,46 +366,26 @@ describe.skip('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[24]);
 
-    expect(element).toHaveTextContent('No permissions available');
+    expect(baseElement).toHaveTextContent('No permissions available');
   });
 
-  test('should call commands', async () => {
+  test('should call mutations', async () => {
     const getTask = jest.fn().mockResolvedValue({
       data: task,
-    });
-
-    const clone = jest.fn().mockResolvedValue({
-      data: {id: 'foo'},
-    });
-
-    const deleteFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const start = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const resume = jest.fn().mockResolvedValue({
-      foo: 'bar',
     });
 
     const gmp = {
       task: {
         get: getTask,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-        start,
-        resume,
       },
       scanconfig: {
         get: getConfig,
@@ -403,12 +413,18 @@ describe.skip('Task Detailspage tests', () => {
       },
     };
 
+    const id = '12345';
+    const [getTaskMock, getTaskResultFunc] = createGetTaskQueryMock(id);
+    const [cloneTaskMock, cloneTaskResultFunc] = createCloneTaskQueryMock(id);
+    const [deleteTaskMock, deleteTaskResultFunc] = createDeleteTaskQueryMock(
+      id,
+    );
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: mocks,
+      queryMocks: [getTaskMock, cloneTaskMock, deleteTaskMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -416,31 +432,21 @@ describe.skip('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    render(<Detailspage id="12345" />);
 
-    const icons = getAllByTestId('svg-icon');
+    await wait();
 
-    await act(async () => {
-      fireEvent.click(icons[3]);
-      expect(clone).toHaveBeenCalledWith({taskId: '12345'});
-      expect(icons[3]).toHaveAttribute('title', 'Clone Task');
+    expect(getTaskResultFunc).toHaveBeenCalled();
 
-      fireEvent.click(icons[5]);
-      expect(deleteFunc).toHaveBeenCalledWith(task);
-      expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
+    const icons = screen.getAllByTestId('svg-icon');
 
-      fireEvent.click(icons[6]);
-      expect(exportFunc).toHaveBeenCalledWith(task);
-      expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
+    expect(icons[3]).toHaveAttribute('title', 'Clone Task');
+    fireEvent.click(icons[3]);
+    expect(cloneTaskResultFunc).toHaveBeenCalled();
 
-      fireEvent.click(icons[7]);
-      expect(start).toHaveBeenCalledWith({taskId: '12345'});
-      expect(icons[7]).toHaveAttribute('title', 'Start');
-
-      fireEvent.click(icons[8]);
-      expect(resume).toHaveBeenCalledWith(task);
-      expect(icons[8]).toHaveAttribute('title', 'Resume');
-    });
+    expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
+    fireEvent.click(icons[5]);
+    expect(deleteTaskResultFunc).toHaveBeenCalled();
   });
 });
 
