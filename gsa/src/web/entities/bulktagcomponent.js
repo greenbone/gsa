@@ -65,11 +65,12 @@ const BulkTagComponent = ({
   const [bulkTag] = useBulkTag();
 
   const getTagsByType = useCallback(
-    entities => {
-      if (entities.length > 0) {
-        const filter = 'resource_type=' + apiType(getEntityType(entities[0]));
+    entitiesArray => {
+      if (entitiesArray.length > 0) {
+        const tagFilter =
+          'resource_type=' + apiType(getEntityType(entitiesArray[0]));
 
-        return gmp.tags.getAll({filter}).then(resp => {
+        return gmp.tags.getAll({filter: tagFilter}).then(resp => {
           const {data: tags} = resp;
           dispatch({type: 'setState', newState: {tags}});
         });
