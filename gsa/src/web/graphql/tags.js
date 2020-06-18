@@ -145,3 +145,31 @@ export const useRemoveTag = () => {
   );
   return [removeTag, data];
 };
+
+export const BULK_TAG = gql`
+  mutation bulkTag($input: BulkTagInput!) {
+    bulkTag(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const useBulkTag = () => {
+  const [queryBulkTag, data] = useMutation(BULK_TAG);
+  const bulkTag = useCallback(
+    // eslint-disable-next-line no-shadow
+    (tag_id, resourceType, resourceIds, resourceFilter) =>
+      queryBulkTag({
+        variables: {
+          input: {
+            id: tag_id,
+            resourceType,
+            resourceIds,
+            resourceFilter,
+          },
+        },
+      }),
+    [queryBulkTag],
+  );
+  return [bulkTag, data];
+};
