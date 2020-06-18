@@ -217,7 +217,7 @@ BulkTagComponent.propTypes = {
   entitiesCounts: PropTypes.counts.isRequired,
   filter: PropTypes.filter.isRequired,
   selected: PropTypes.arrayOf(PropTypes.model).isRequired,
-  selectionType: PropTypes.oneOf(SelectionType).isRequired,
+  selectionType: PropTypes.oneOf(['0', '1', '2']).isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
