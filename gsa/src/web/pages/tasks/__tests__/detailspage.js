@@ -166,8 +166,6 @@ describe('Task Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    expect(baseElement).toMatchSnapshot();
-
     expect(baseElement).toHaveTextContent('Task: foo');
 
     const links = baseElement.querySelectorAll('a');
