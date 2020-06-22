@@ -36,6 +36,8 @@ import WizardIcon from 'web/components/icon/wizardicon';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
+import useReload from 'web/components/loading/useReload';
+
 import IconMenu from 'web/components/menu/iconmenu';
 import MenuEntry from 'web/components/menu/menuentry';
 
@@ -56,6 +58,7 @@ import PropTypes from 'web/utils/proptypes';
 import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
+import useGmpSettings from 'web/utils/useGmpSettings';
 import useFilterSortBy from 'web/utils/useFilterSortby';
 import usePageFilter from 'web/utils/usePageFilter';
 import useSelection from 'web/utils/useSelection';
@@ -121,6 +124,7 @@ ToolBarIcons.propTypes = {
 };
 
 const TasksListPage = () => {
+  const gmpSettings = useGmpSettings();
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('task');
   const prevFilter = usePrevious(filter);
@@ -155,6 +159,25 @@ const TasksListPage = () => {
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
     filter,
     changeFilter,
+  );
+
+  const timeoutFunc = useCallback(
+    ({isVisible}) => {
+      if (!isVisible) {
+        return gmpSettings.reloadIntervalInactive;
+      }
+      if (hasValue(tasks) && tasks.some(task => task.isActive())) {
+        return gmpSettings.reloadIntervalActive;
+      }
+      return gmpSettings.reloadInterval;
+    },
+    [tasks, gmpSettings],
+  );
+
+  const reloadFunc = useCallback(() => refetch(), [refetch]);
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    reloadFunc,
+    timeoutFunc,
   );
 
   const handleCloneTask = useCallback(
@@ -198,6 +221,16 @@ const TasksListPage = () => {
       });
     }
   }, [filter, prevFilter, simpleFilter, refetch]);
+
+  useEffect(() => {
+    // start reloading if tasks are available and no timer is running yet
+    if (hasValue(tasks) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [tasks, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
 
   const getNextTasks = () => {
     refetch({
