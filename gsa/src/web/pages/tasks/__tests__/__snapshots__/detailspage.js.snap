@@ -1,47 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Task Detailspage tests should render full Detailspage 1`] = `
-.c1 {
-  width: 80px;
-  height: 80px;
-  margin: 40px auto;
-  background-image: url(greenbone.svg);
-  background-size: 90%;
-  background-position: center;
-  background-repeat: no-repeat;
-  -webkit-animation: fSFzYT 2s infinite ease-in-out;
-  animation: fSFzYT 2s infinite ease-in-out;
-}
-
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  width: 100%;
-}
-
-<div
-  class="c0"
-  data-testid="loading"
->
-  <div
-    class="c1"
-  />
-</div>
-`;
-
 exports[`Task ToolBarIcons tests should render 1`] = `
 .c11 {
   display: -webkit-box;
@@ -201,15 +159,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
 .c3 * {
   height: inherit;
   width: inherit;
-}
-
-.c16 {
-  position: relative;
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  margin-right: px;
 }
 
 .c14 {
@@ -575,7 +524,7 @@ exports[`Task ToolBarIcons tests should render 1`] = `
           title="Results for Task foo"
         >
           <div
-            class="c16"
+            class="c14"
           >
             <span
               class="c3"
@@ -584,6 +533,12 @@ exports[`Task ToolBarIcons tests should render 1`] = `
               <svg>
                 result.svg
               </svg>
+            </span>
+            <span
+              class="c15"
+              data-testid="badge-icon"
+            >
+              0
             </span>
           </div>
         </a>
