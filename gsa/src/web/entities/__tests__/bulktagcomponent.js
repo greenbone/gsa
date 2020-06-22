@@ -74,7 +74,7 @@ describe('BulkTagComponent tests', () => {
   test('should render', async () => {
     const {render} = rendererWith({gmp, store: true});
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <BulkTagComponent
         entities={entities}
         selected={selected}
@@ -85,14 +85,13 @@ describe('BulkTagComponent tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
-
     await wait();
 
     const title = getByTestId('dialog-title-bar');
 
     expect(title).toHaveTextContent('Add Tag to Page Contents');
   });
+
   test('should render different title based on selection', async () => {
     const {render} = rendererWith({gmp, store: true});
 
@@ -113,6 +112,7 @@ describe('BulkTagComponent tests', () => {
 
     expect(title).toHaveTextContent('Add Tag to All Filtered');
   });
+
   test('Should render tags in select', async () => {
     const {render} = rendererWith({gmp, store: true});
 
@@ -140,6 +140,7 @@ describe('BulkTagComponent tests', () => {
     expect(selectElements[0]).toHaveTextContent('cat');
     expect(selectElements[1]).toHaveTextContent('dog');
   });
+
   test('should create new tag', async () => {
     const renewDate = date('2020-03-20');
 

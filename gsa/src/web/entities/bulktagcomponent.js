@@ -38,6 +38,7 @@ const initialState = {
   tags: [],
   tagDialogVisible: false,
 };
+
 const reducer = (state, action) => {
   switch (action.type) {
     case 'setState':
@@ -220,7 +221,11 @@ BulkTagComponent.propTypes = {
   entitiesCounts: PropTypes.counts.isRequired,
   filter: PropTypes.filter.isRequired,
   selected: PropTypes.arrayOf(PropTypes.model).isRequired,
-  selectionType: PropTypes.oneOf(['0', '1', '2']).isRequired,
+  selectionType: PropTypes.oneOf([
+    SelectionType.SELECTION_PAGE_CONTENTS,
+    SelectionType.SELECTION_USER,
+    SelectionType.SELECTION_FILTER,
+  ]).isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

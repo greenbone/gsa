@@ -131,11 +131,11 @@ export const useRemoveTag = () => {
   const [queryRemoveTag, data] = useMutation(REMOVE_TAG);
   const removeTag = useCallback(
     // eslint-disable-next-line no-shadow
-    (tag_id, entity) =>
+    (tagId, entity) =>
       queryRemoveTag({
         variables: {
           input: {
-            id: tag_id,
+            id: tagId,
             resourceIds: [entity.id],
             resourceType: ENTITY_TYPES[getEntityType(entity)],
           },
@@ -158,11 +158,11 @@ export const useBulkTag = () => {
   const [queryBulkTag, data] = useMutation(BULK_TAG);
   const bulkTag = useCallback(
     // eslint-disable-next-line no-shadow
-    (tag_id, {resourceType, resourceIds, resourceFilter}) =>
+    (tagId, {resourceType, resourceIds, resourceFilter}) =>
       queryBulkTag({
         variables: {
           input: {
-            id: tag_id,
+            id: tagId,
             resourceType,
             resourceIds,
             resourceFilter,
