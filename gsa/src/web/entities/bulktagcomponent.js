@@ -111,6 +111,7 @@ const BulkTagComponent = ({
   };
 
   const openTagDialog = () => {
+    renewSession();
     dispatch({type: 'setState', newState: {tagDialogVisible: true}});
   };
 
@@ -139,6 +140,7 @@ const BulkTagComponent = ({
   };
 
   const handleTagChange = id => {
+    renewSession();
     return gmp.tag.get({id}).then(resp => {
       dispatch({type: 'setState', newState: {tag: resp.data}});
     });
@@ -146,7 +148,6 @@ const BulkTagComponent = ({
 
   const handleCloseTagsDialog = () => {
     onClose();
-    renewSession();
   };
 
   const handleAddMultiTag = ({id}) => {

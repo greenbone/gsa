@@ -209,6 +209,7 @@ const TasksListPage = () => {
   };
 
   const closeTagsDialog = () => {
+    renewSession();
     setTagsDialogVisible(false);
   };
 
