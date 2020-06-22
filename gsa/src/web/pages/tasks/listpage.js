@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -45,6 +45,7 @@ import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import EntitiesPage from 'web/entities/page';
+import BulkTagComponent from 'web/entities/bulktagcomponent';
 
 import {
   useLazyGetTasks,
@@ -126,6 +127,7 @@ ToolBarIcons.propTypes = {
 const TasksListPage = () => {
   const gmpSettings = useGmpSettings();
   const [, renewSession] = useUserSessionTimeout();
+  const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
   const [filter, isLoadingFilter] = usePageFilter('task');
   const prevFilter = usePrevious(filter);
   const simpleFilter = filter.withoutView();
@@ -199,6 +201,16 @@ const TasksListPage = () => {
         ? getEntityIds(selected)
         : getEntityIds(tasks);
     return deleteTasks(tasksToDelete).then(refetch, showError);
+  };
+
+  const openTagsDialog = () => {
+    renewSession();
+    setTagsDialogVisible(true);
+  };
+
+  const closeTagsDialog = () => {
+    renewSession();
+    setTagsDialogVisible(false);
   };
 
   useEffect(() => {
@@ -360,6 +372,7 @@ const TasksListPage = () => {
             onReportImportClick={reportimport}
             onSelectionTypeChange={changeSelectionType}
             onSortChange={handleSortChange}
+            onTagsBulk={openTagsDialog}
             onTaskCloneClick={handleCloneTask}
             onTaskCreateClick={create}
             onTaskDeleteClick={handleDeleteTask}
@@ -375,6 +388,16 @@ const TasksListPage = () => {
             onCloseClick={closeNotificationDialog}
           />
           <Download ref={downloadRef} />
+          {tagsDialogVisible && (
+            <BulkTagComponent
+              entities={tasks}
+              selected={selected}
+              filter={filter}
+              selectionType={selectionType}
+              entitiesCounts={counts}
+              onClose={closeTagsDialog}
+            />
+          )}
         </React.Fragment>
       )}
     </TaskComponent>

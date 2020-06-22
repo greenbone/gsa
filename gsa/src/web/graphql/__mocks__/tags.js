@@ -25,6 +25,7 @@ import {
   TOGGLE_TAG,
   REMOVE_TAG,
   ENTITY_TYPES,
+  BULK_TAG,
 } from '../tags';
 
 export const createTagInput = {
@@ -138,4 +139,35 @@ export const createRemoveTagMock = (tag, entity) => {
     newData: removeTagResult,
   };
   return [queryMock, removeTagResult];
+};
+
+export const createBulkTagMock = (
+  id,
+  {resourceType, resourceIds, resourceFilter},
+) => {
+  const bulkTagResult = {
+    data: {
+      bulkTag: {
+        ok: true,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(bulkTagResult);
+
+  const queryMock = {
+    request: {
+      query: BULK_TAG,
+      variables: {
+        input: {
+          id,
+          resourceIds,
+          resourceType,
+          resourceFilter,
+        },
+      },
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
 };
