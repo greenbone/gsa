@@ -34,9 +34,16 @@ import {
   createEnableTagMock,
   createDisableTagMock,
   createRemoveTagMock,
+  createBulkTagMock,
 } from '../__mocks__/tags';
 
-import {useCreateTag, useModifyTag, useToggleTag, useRemoveTag} from '../tags';
+import {
+  useCreateTag,
+  useModifyTag,
+  useToggleTag,
+  useRemoveTag,
+  useBulkTag,
+} from '../tags';
 
 const tag = Tag.fromObject({id: '12345'});
 const task = Task.fromObject({id: '23456'});
@@ -213,5 +220,51 @@ describe('Tag remove tests', () => {
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Tag removed.',
     );
+  });
+});
+
+const BulkTagTestComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [bulkTag] = useBulkTag();
+
+  const handleBulkTag = () => {
+    setNotification('Tag added.');
+  };
+  return (
+    <div>
+      <Button
+        title={'Bulk tag'}
+        onClick={() =>
+          bulkTag(tag.id, {
+            resourceType: 'TASK',
+            resourceIds: ['foo', 'bar'],
+            resourceFilter: 'lorem',
+          }).then(handleBulkTag)
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Bulk tag tests', () => {
+  test('should bulk tag', async () => {
+    const [queryMock, resultFunc] = createBulkTagMock('12345', {
+      resourceType: 'TASK',
+      resourceIds: ['foo', 'bar'],
+      resourceFilter: 'lorem',
+    });
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    const {element} = render(<BulkTagTestComponent />);
+
+    const buttons = element.querySelectorAll('button');
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent('Tag added.');
   });
 });
