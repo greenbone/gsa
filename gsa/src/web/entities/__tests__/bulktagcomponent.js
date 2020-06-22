@@ -93,6 +93,26 @@ describe('BulkTagComponent tests', () => {
 
     expect(title).toHaveTextContent('Add Tag to Page Contents');
   });
+  test('should render different title based on selection', async () => {
+    const {render} = rendererWith({gmp, store: true});
+
+    const {getByTestId} = render(
+      <BulkTagComponent
+        entities={entities}
+        selected={selected}
+        filter={filter}
+        selectionType="2"
+        entitiesCounts={counts}
+        onClose={handleClose}
+      />,
+    );
+
+    await wait();
+
+    const title = getByTestId('dialog-title-bar');
+
+    expect(title).toHaveTextContent('Add Tag to All Filtered');
+  });
   test('Should render tags in select', async () => {
     const {render} = rendererWith({gmp, store: true});
 
