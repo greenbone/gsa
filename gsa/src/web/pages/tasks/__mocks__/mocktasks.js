@@ -195,6 +195,11 @@ const newTask = deepFreeze({
       finished: 0,
     },
   },
+  results: {
+    counts: {
+      current: 0,
+    },
+  },
   permissions: allPermissions,
   target: target2,
 });
@@ -210,6 +215,11 @@ const finishedTask = deepFreeze({
     counts: {
       total: 1,
       finished: 1,
+    },
+  },
+  results: {
+    counts: {
+      current: 0,
     },
   },
   permissions: allPermissions,
@@ -232,6 +242,11 @@ const runningTask = deepFreeze({
       finished: 1,
     },
   },
+  results: {
+    counts: {
+      current: 0,
+    },
+  },
   permissions: allPermissions,
   target: target3,
 });
@@ -249,6 +264,11 @@ const stoppedTask = deepFreeze({
     counts: {
       total: 2,
       finished: 1,
+    },
+  },
+  results: {
+    counts: {
+      current: 10,
     },
   },
   permissions: allPermissions,
@@ -269,6 +289,11 @@ const observedTask = deepFreeze({
       finished: 1,
     },
   },
+  results: {
+    counts: {
+      current: 1,
+    },
+  },
   permissions: limitedPermissions,
   target: target,
 });
@@ -285,6 +310,11 @@ const containerTask = deepFreeze({
     counts: {
       total: 1,
       finished: 1,
+    },
+  },
+  results: {
+    counts: {
+      current: 1,
     },
   },
   permissions: allPermissions,

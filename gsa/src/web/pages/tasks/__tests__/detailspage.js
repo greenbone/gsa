@@ -591,19 +591,18 @@ describe('Task ToolBarIcons tests', () => {
 
     expect(links[3]).toHaveAttribute('href', '/results?filter=task_id%3D12345');
     expect(links[3]).toHaveAttribute('title', 'Results for Task foo');
-    // TODO implement resultCount to make this work again
-    // expect(badgeIcons[1]).toHaveTextContent('0');
+    expect(badgeIcons[1]).toHaveTextContent('0');
 
     expect(links[4]).toHaveAttribute('href', '/notes?filter=task_id%3D12345');
     expect(links[4]).toHaveAttribute('title', 'Notes for Task foo');
-    // expect(badgeIcons[2]).toHaveTextContent('0');
+    expect(badgeIcons[2]).toHaveTextContent('0');
 
     expect(links[5]).toHaveAttribute(
       'href',
       '/overrides?filter=task_id%3D12345',
     );
     expect(links[5]).toHaveAttribute('title', 'Overrides for Task foo');
-    // expect(badgeIcons[3]).toHaveTextContent('0');
+    expect(badgeIcons[3]).toHaveTextContent('0');
   });
 
   test('should call click handlers for running task', () => {
@@ -696,19 +695,18 @@ describe('Task ToolBarIcons tests', () => {
 
     expect(links[4]).toHaveAttribute('href', '/results?filter=task_id%3D12345');
     expect(links[4]).toHaveAttribute('title', 'Results for Task foo');
-    // TODO implement resultCount to make this work again
-    // expect(badgeIcons[1]).toHaveTextContent('0');
+    expect(badgeIcons[1]).toHaveTextContent('0');
 
     expect(links[5]).toHaveAttribute('href', '/notes?filter=task_id%3D12345');
     expect(links[5]).toHaveAttribute('title', 'Notes for Task foo');
-    // expect(badgeIcons[2]).toHaveTextContent('0');
+    expect(badgeIcons[2]).toHaveTextContent('0');
 
     expect(links[6]).toHaveAttribute(
       'href',
       '/overrides?filter=task_id%3D12345',
     );
     expect(links[6]).toHaveAttribute('title', 'Overrides for Task foo');
-    // expect(badgeIcons[3]).toHaveTextContent('0');
+    expect(badgeIcons[3]).toHaveTextContent('0');
   });
 
   test('should call click handlers for stopped task', () => {
@@ -800,19 +798,18 @@ describe('Task ToolBarIcons tests', () => {
 
     expect(links[4]).toHaveAttribute('href', '/results?filter=task_id%3D12345');
     expect(links[4]).toHaveAttribute('title', 'Results for Task foo');
-    // TODO implement resultCount to make this work again
-    // expect(badgeIcons[1]).toHaveTextContent('10');
+    expect(badgeIcons[1]).toHaveTextContent('10');
 
     expect(links[5]).toHaveAttribute('href', '/notes?filter=task_id%3D12345');
     expect(links[5]).toHaveAttribute('title', 'Notes for Task foo');
-    // expect(badgeIcons[2]).toHaveTextContent('0');
+    expect(badgeIcons[2]).toHaveTextContent('0');
 
     expect(links[6]).toHaveAttribute(
       'href',
       '/overrides?filter=task_id%3D12345',
     );
     expect(links[6]).toHaveAttribute('title', 'Overrides for Task foo');
-    // expect(badgeIcons[3]).toHaveTextContent('0');
+    expect(badgeIcons[3]).toHaveTextContent('0');
   });
 
   test('should call click handlers for finished task', () => {
@@ -906,19 +903,18 @@ describe('Task ToolBarIcons tests', () => {
 
     expect(links[4]).toHaveAttribute('href', '/results?filter=task_id%3D12345');
     expect(links[4]).toHaveAttribute('title', 'Results for Task foo');
-    // TODO implement resultCount to make this work again
-    // expect(badgeIcons[1]).toHaveTextContent('10');
+    expect(badgeIcons[1]).toHaveTextContent('0');
 
     expect(links[5]).toHaveAttribute('href', '/notes?filter=task_id%3D12345');
     expect(links[5]).toHaveAttribute('title', 'Notes for Task foo');
-    // expect(badgeIcons[2]).toHaveTextContent('2');
+    expect(badgeIcons[2]).toHaveTextContent('2');
 
     expect(links[6]).toHaveAttribute(
       'href',
       '/overrides?filter=task_id%3D12345',
     );
     expect(links[6]).toHaveAttribute('title', 'Overrides for Task foo');
-    // expect(badgeIcons[3]).toHaveTextContent('3');
+    expect(badgeIcons[3]).toHaveTextContent('3');
   });
 
   test('should not call click handlers without permission', () => {
@@ -1016,19 +1012,18 @@ describe('Task ToolBarIcons tests', () => {
 
     expect(links[4]).toHaveAttribute('href', '/results?filter=task_id%3D12345');
     expect(links[4]).toHaveAttribute('title', 'Results for Task foo');
-    // TODO implement resultCount to make this work again
-    // expect(badgeIcons[1]).toHaveTextContent('1');
+    expect(badgeIcons[1]).toHaveTextContent('1');
 
     expect(links[5]).toHaveAttribute('href', '/notes?filter=task_id%3D12345');
     expect(links[5]).toHaveAttribute('title', 'Notes for Task foo');
-    // expect(badgeIcons[2]).toHaveTextContent('0');
+    expect(badgeIcons[2]).toHaveTextContent('0');
 
     expect(links[6]).toHaveAttribute(
       'href',
       '/overrides?filter=task_id%3D12345',
     );
     expect(links[6]).toHaveAttribute('title', 'Overrides for Task foo');
-    // expect(badgeIcons[3]).toHaveTextContent('0');
+    expect(badgeIcons[3]).toHaveTextContent('0');
   });
 
   test('should render schedule icon if task is scheduled', () => {
@@ -1175,18 +1170,17 @@ describe('Task ToolBarIcons tests', () => {
 
     expect(links[4]).toHaveAttribute('href', '/results?filter=task_id%3D12345');
     expect(links[4]).toHaveAttribute('title', 'Results for Task foo');
-    // TODO implement resultCount to make this work again
-    // expect(badgeIcons[1]).toHaveTextContent('1');
+    expect(badgeIcons[1]).toHaveTextContent('1');
 
     expect(links[5]).toHaveAttribute('href', '/notes?filter=task_id%3D12345');
     expect(links[5]).toHaveAttribute('title', 'Notes for Task foo');
-    // expect(badgeIcons[2]).toHaveTextContent('0');
+    expect(badgeIcons[2]).toHaveTextContent('0');
 
     expect(links[6]).toHaveAttribute(
       'href',
       '/overrides?filter=task_id%3D12345',
     );
     expect(links[6]).toHaveAttribute('title', 'Overrides for Task foo');
-    // expect(badgeIcons[3]).toHaveTextContent('0');
+    expect(badgeIcons[3]).toHaveTextContent('0');
   });
 });
