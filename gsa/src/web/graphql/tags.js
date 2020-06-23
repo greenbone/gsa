@@ -18,11 +18,15 @@
 
 import {useCallback} from 'react';
 
-import {useMutation, useQuery} from '@apollo/react-hooks';
+import {useMutation, useLazyQuery} from '@apollo/react-hooks';
 
 import gql from 'graphql-tag';
+import Tag from 'gmp/models/tag';
 
 import {getEntityType} from 'gmp/utils/entitytype';
+import {isDefined} from 'gmp/utils/identity';
+
+import {useImperativeQuery} from 'web/utils/graphql';
 
 export const ENTITY_TYPES = {
   alert: 'ALERT',
@@ -185,9 +189,25 @@ export const GET_TAG = gql`
   }
 `;
 
-export const useGetTag = () => {
-  const {refetch} = useQuery(GET_TAG, {skip: true});
+export const useLazyGetTag = options => {
+  const [queryGetTag, {data, ...other}] = useLazyQuery(GET_TAG, options);
+  const tag = isDefined(data) ? Tag.fromObject(data.tag) : undefined;
 
-  const getTagPromise = useCallback(id => refetch({id}), [refetch]);
-  return [getTagPromise];
+  const getTag = useCallback(
+    // eslint-disable-next-line no-shadow
+    id => queryGetTag({id}),
+    [queryGetTag],
+  );
+  return [getTag, tag, ...other];
+};
+
+// to be deprecated once useLazyQuery supports promises
+export const useImperativeGetTag = () => {
+  const imperativeGetTag = useImperativeQuery(GET_TAG);
+
+  const getTag = useCallback(
+    id => imperativeGetTag({id}).then(resp => Tag.fromObject(resp.data.tag)),
+    [imperativeGetTag],
+  );
+  return [getTag];
 };

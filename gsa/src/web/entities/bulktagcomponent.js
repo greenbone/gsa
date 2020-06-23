@@ -19,7 +19,6 @@
 import React, {useReducer, useEffect, useCallback} from 'react';
 
 import _ from 'gmp/locale';
-import Tag from 'gmp/models/tag';
 
 import {getEntityType, apiType, typeName} from 'gmp/utils/entitytype';
 
@@ -27,7 +26,7 @@ import TagsDialog from 'web/entities/tagsdialog';
 
 import {
   useBulkTag,
-  useGetTag,
+  useImperativeGetTag,
   useCreateTag,
   ENTITY_TYPES,
 } from 'web/graphql/tags';
@@ -73,7 +72,7 @@ const BulkTagComponent = ({
     initialState,
   );
   const [bulkTag] = useBulkTag();
-  const [getTag = {}] = useGetTag();
+  const [getTag] = useImperativeGetTag();
   const [createTag] = useCreateTag();
 
   const entitiesType = getEntityType(entities[0]);
@@ -143,15 +142,13 @@ const BulkTagComponent = ({
       value,
     })
       .then(id => getTag(id))
-      .then(response => {
-        const nTag = Tag.fromObject(response.data.tag);
-
-        const newTags = [...tags, nTag];
+      .then(newTag => {
+        const newTags = [...tags, newTag];
 
         dispatch({
           type: 'setState',
           newState: {
-            tag: nTag,
+            tag: newTag,
             tags: newTags,
           },
         });

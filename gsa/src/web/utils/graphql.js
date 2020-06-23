@@ -16,9 +16,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {useQuery} from '@apollo/react-hooks';
 
 export const toFruitfulQuery = query => gql => vars => {
   return query(gql, {variables: vars});
+};
+
+export const useImperativeQuery = query => {
+  const {refetch} = useQuery(query, {skip: true});
+
+  const imperativelyCallQuery = variables => {
+    return refetch(variables);
+  };
+
+  return imperativelyCallQuery;
 };
 
 export const goto_entity_details = (entityName, op, props) => result => {
