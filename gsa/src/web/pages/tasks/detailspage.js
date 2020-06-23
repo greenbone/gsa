@@ -80,12 +80,7 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {
-  useCloneTask,
-  useDeleteTask,
-  useGetTask,
-  useStartTask,
-} from 'web/graphql/tasks';
+import {useCloneTask, useDeleteTask, useGetTask} from 'web/graphql/tasks';
 
 import {
   selector as notesSelector,
@@ -345,9 +340,6 @@ const Page = ({
   const cloneTask = cTask =>
     clone(cTask.id).then(goto_task_details(history)).catch(onError);
 
-  const [start] = useStartTask();
-  const startTask = sTask => start(sTask.id).then(refetch).catch(onError);
-
   const [del] = useDeleteTask();
   const deleteTask = dTask =>
     del(dTask.id).then(goto_list('tasks', {history})).catch(onError);
@@ -374,9 +366,9 @@ const Page = ({
       onResumed={onChanged}
       onResumeError={onError}
       onSaved={refetch}
-      onStarted={onChanged}
+      onStarted={refetch}
       onStartError={onError}
-      onStopped={onChanged}
+      onStopped={refetch}
       onStopError={onError}
     >
       {({
@@ -384,6 +376,7 @@ const Page = ({
         createcontainer,
         download,
         edit,
+        start,
         stop,
         resume,
         reportimport,
@@ -407,7 +400,7 @@ const Page = ({
             onTaskDownloadClick={download}
             onTaskEditClick={edit}
             onTaskResumeClick={resume}
-            onTaskStartClick={startTask}
+            onTaskStartClick={start}
             onTaskStopClick={stop}
           >
             {({activeTab = 0, onActivateTab}) => {
