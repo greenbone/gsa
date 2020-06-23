@@ -25,7 +25,12 @@ import {getEntityType, apiType, typeName} from 'gmp/utils/entitytype';
 
 import TagsDialog from 'web/entities/tagsdialog';
 
-import {useBulkTag, useGetTag, ENTITY_TYPES} from 'web/graphql/tags';
+import {
+  useBulkTag,
+  useGetTag,
+  useCreateTag,
+  ENTITY_TYPES,
+} from 'web/graphql/tags';
 
 import TagDialog from 'web/pages/tags/dialog';
 
@@ -68,7 +73,8 @@ const BulkTagComponent = ({
     initialState,
   );
   const [bulkTag] = useBulkTag();
-  const [getTag] = useGetTag();
+  const [getTag = {}] = useGetTag();
+  const [createTag] = useCreateTag();
 
   const entitiesType = getEntityType(entities[0]);
   // if there are no entities, BulkTagComponent is not rendered.
@@ -118,16 +124,28 @@ const BulkTagComponent = ({
     dispatch({type: 'setState', newState: {tagDialogVisible: true}});
   };
 
-  const handleCreateTag = data => {
+  const handleCreateTag = ({
+    name,
+    comment,
+    active,
+    resource_type,
+    resource_ids,
+    value,
+  }) => {
     renewSession();
 
-    return gmp.tag
-      .create(data)
-      .then(async response => await getTag(response.data.id))
+    return createTag({
+      name,
+      comment,
+      active,
+      resourceType: ENTITY_TYPES[resource_type],
+      resourceIds: resource_ids,
+      value,
+    })
+      .then(id => getTag(id))
       .then(response => {
         const nTag = Tag.fromObject(response.data.tag);
 
-        console.log(nTag);
         const newTags = [...tags, nTag];
 
         dispatch({

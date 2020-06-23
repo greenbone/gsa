@@ -188,10 +188,6 @@ export const GET_TAG = gql`
 export const useGetTag = () => {
   const {refetch} = useQuery(GET_TAG, {skip: true});
 
-  const getTagPromise = useCallback(
-    // eslint-disable-next-line no-shadow
-    id => refetch({id}),
-    [refetch],
-  );
+  const getTagPromise = useCallback(id => refetch({id}), [refetch]);
   return [getTagPromise];
 };
