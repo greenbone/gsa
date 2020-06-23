@@ -18,7 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {useMutation} from '@apollo/react-hooks';
+import {useMutation, useQuery} from '@apollo/react-hooks';
 
 import gql from 'graphql-tag';
 
@@ -172,4 +172,26 @@ export const useBulkTag = () => {
     [queryBulkTag],
   );
   return [bulkTag, data];
+};
+
+export const GET_TAG = gql`
+  query Tag($id: UUID!) {
+    tag(id: $id) {
+      name
+      id
+      value
+      comment
+    }
+  }
+`;
+
+export const useGetTag = () => {
+  const {refetch} = useQuery(GET_TAG, {skip: true});
+
+  const getTagPromise = useCallback(
+    // eslint-disable-next-line no-shadow
+    id => refetch({id}),
+    [refetch],
+  );
+  return [getTagPromise];
 };
