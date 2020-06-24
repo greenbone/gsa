@@ -19,9 +19,6 @@ updates:
     - "> 1.8.0"
   - dependency-name: "@testing-library/react"
     versions:
-    - ">= 10.2.a, < 10.3"
-  - dependency-name: "@testing-library/react"
-    versions:
     - ">= 10.a, < 11"
   - dependency-name: "@vx/axis"
     versions:
