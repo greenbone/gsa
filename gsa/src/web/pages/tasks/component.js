@@ -36,7 +36,6 @@ import {selectSaveId, hasId} from 'gmp/utils/id';
 import date from 'gmp/models/date';
 import ScanConfig, {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import Scanner, {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
-import Target from 'gmp/models/target';
 
 import {
   loadEntities as loadAlerts,
@@ -75,7 +74,7 @@ import {useGetScanners} from 'web/graphql/scanners';
 
 import {useGetScanConfigs} from 'web/graphql/scanconfigs';
 
-import {useGetTargets} from 'web/graphql/targets';
+import {useLazyGetTargets} from 'web/graphql/targets';
 
 import {
   useModifyTask,
@@ -122,16 +121,15 @@ const TaskComponent = props => {
   ] = scanConfigQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
-  const targetQuery = useGetTargets();
   const [
     loadTargets,
     {
-      data: targetData,
+      targets,
       loading: isLoadingTargets,
       refetch: refetchTargets,
       error: targetError,
     },
-  ] = targetQuery({
+  ] = useLazyGetTargets({
     filterString: ALL_FILTER.toFilterString(),
   });
   const capabilities = useCapabilities();
@@ -197,16 +195,6 @@ const TaskComponent = props => {
       );
     }
   }, [scanConfigData]);
-
-  const [targets, setTargets] = useState();
-
-  useEffect(() => {
-    if (isDefined(targetData)) {
-      setTargets(
-        targetData.targets.nodes.map(target => Target.fromObject(target)),
-      );
-    }
-  }, [targetData]);
 
   const {gmp} = props;
 
