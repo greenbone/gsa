@@ -19,16 +19,21 @@
 
 import React, {useState} from 'react';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import Button from 'web/components/form/button';
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import {
   useCreateTarget,
+  useLazyGetTargets,
   useModifyTarget,
   CREATE_TARGET,
   MODIFY_TARGET,
 } from '../targets';
+
+import {createGetTargetsQueryMock} from '../__mocks__/targets';
 
 const createTargetInput = {
   name: 'foo',
@@ -139,5 +144,78 @@ describe('Target mutation tests', () => {
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Target modified with ok=true.',
     );
+  });
+});
+
+const GetLazyTargetsComponent = () => {
+  const [getTargets, {counts, loading, targets}] = useLazyGetTargets();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getTargets()} />
+      {isDefined(counts) ? (
+        <div data-testid="counts">
+          <span data-testid="total">{counts.all}</span>
+          <span data-testid="filtered">{counts.filtered}</span>
+          <span data-testid="first">{counts.first}</span>
+          <span data-testid="limit">{counts.rows}</span>
+          <span data-testid="length">{counts.length}</span>
+        </div>
+      ) : (
+        <div data-testid="no-counts" />
+      )}
+      {isDefined(targets) ? (
+        targets.map(target => {
+          return (
+            <div key={target.id} data-testid="target">
+              {target.name}
+            </div>
+          );
+        })
+      ) : (
+        <div data-testid="no-targets" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetTargets tests', () => {
+  test('should query targets after user interaction', async () => {
+    const [mock, resultFunc] = createGetTargetsQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<GetLazyTargetsComponent />);
+
+    let targetElements = screen.queryAllByTestId('target');
+    expect(targetElements).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-targets')).toBeInTheDocument();
+    expect(screen.queryByTestId('no-counts')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    targetElements = screen.getAllByTestId('target');
+    expect(targetElements).toHaveLength(2);
+
+    expect(targetElements[0]).toHaveTextContent('target 1');
+    expect(targetElements[1]).toHaveTextContent('target 2');
+
+    expect(screen.queryByTestId('no-target')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('total')).toHaveTextContent(2);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(2);
+    expect(screen.getByTestId('first')).toHaveTextContent(1);
+    expect(screen.getByTestId('limit')).toHaveTextContent(10);
+    expect(screen.getByTestId('length')).toHaveTextContent(2);
   });
 });

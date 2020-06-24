@@ -20,23 +20,80 @@ import {useCallback} from 'react';
 
 import {useLazyQuery, useMutation} from '@apollo/react-hooks';
 
-import {toFruitfulQuery} from 'web/utils/graphql';
-
 import gql from 'graphql-tag';
 
+import CollectionCounts from 'gmp/collection/collectioncounts';
+
+import Target from 'gmp/models/target';
+
+import {isDefined} from 'gmp/utils/identity';
+
 export const GET_TARGETS = gql`
-  query Targets($filterString: FilterString) {
-    targets(filterString: $filterString) {
-      nodes {
-        name
-        id
+  query Targets(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    targets(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
+      edges {
+        node {
+          name
+          id
+        }
+      }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
       }
     }
   }
 `;
 
-export const useGetTargets = () => {
-  return toFruitfulQuery(useLazyQuery)(GET_TARGETS);
+export const useLazyGetTargets = (variables, options) => {
+  const [queryTargets, {data, ...other}] = useLazyQuery(GET_TARGETS, {
+    ...options,
+    variables,
+  });
+  const targets = isDefined(data?.targets)
+    ? data.targets.edges.map(entity => Target.fromObject(entity.node))
+    : undefined;
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.targets?.counts || {};
+  const counts = isDefined(data?.targets?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const getTargets = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => queryTargets({...options, variables}),
+    [queryTargets],
+  );
+  const pageInfo = data?.targets?.pageInfo;
+  return [getTargets, {...other, counts, targets, pageInfo}];
 };
 
 export const CREATE_TARGET = gql`
