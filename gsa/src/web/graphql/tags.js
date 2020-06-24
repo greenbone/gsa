@@ -211,3 +211,46 @@ export const useImperativeGetTag = () => {
   );
   return [getTag];
 };
+
+export const GET_TAGS = gql`
+  query Tags(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    tags(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
+      edges {
+        node {
+          name
+          id
+          comment
+          value
+        }
+      }
+    }
+  }
+`;
+
+// to be deprecated once useLazyQuery supports promises
+export const useImperativeGetTags = () => {
+  const imperativeGetTags = useImperativeQuery(GET_TAGS);
+
+  const getTags = useCallback(
+    filterString =>
+      imperativeGetTags({filterString}).then(resp => {
+        const tags = resp?.data?.tags?.edges;
+
+        return tags.map(entity => Tag.fromObject(entity.node));
+      }),
+    [imperativeGetTags],
+  );
+  return [getTags];
+};

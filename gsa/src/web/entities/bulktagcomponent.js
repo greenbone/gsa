@@ -29,6 +29,7 @@ import {
   useImperativeGetTag,
   useCreateTag,
   ENTITY_TYPES,
+  useImperativeGetTags,
 } from 'web/graphql/tags';
 
 import TagDialog from 'web/pages/tags/dialog';
@@ -73,6 +74,7 @@ const BulkTagComponent = ({
   );
   const [bulkTag] = useBulkTag();
   const [getTag] = useImperativeGetTag();
+  const [getTags] = useImperativeGetTags();
   const [createTag] = useCreateTag();
 
   const entitiesType = getEntityType(entities[0]);
@@ -81,8 +83,7 @@ const BulkTagComponent = ({
   const getTagsByType = useCallback(() => {
     const tagFilter = 'resource_type=' + apiType(entitiesType);
 
-    return gmp.tags.getAll({filter: tagFilter}).then(resp => {
-      const {data} = resp;
+    return getTags(tagFilter).then(data => {
       dispatch({type: 'setState', newState: {tags: data}});
     });
   }, [gmp.tags, entitiesType]);
@@ -163,8 +164,8 @@ const BulkTagComponent = ({
 
   const handleTagChange = id => {
     renewSession();
-    return gmp.tag.get({id}).then(resp => {
-      dispatch({type: 'setState', newState: {tag: resp.data}});
+    return getTag(id).then(resp => {
+      dispatch({type: 'setState', newState: {tag: resp}});
     });
   };
 
