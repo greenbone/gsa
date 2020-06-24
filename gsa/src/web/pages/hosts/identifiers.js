@@ -68,7 +68,7 @@ const Source = ({source}) => {
     return (
       <div>
         <span>{_('Report')}</span>{' '}
-        <DetailsLink textOnly={deleted !== '0'} type="report" id={id}>
+        <DetailsLink textOnly={deleted} type="report" id={id}>
           {id}
         </DetailsLink>{' '}
         <span>
@@ -86,7 +86,7 @@ const Source = ({source}) => {
     return (
       <div>
         <span>{_('Report')}</span>{' '}
-        <DetailsLink textOnly={deleted !== '0'} type="report" id={id}>
+        <DetailsLink textOnly={deleted} type="report" id={id}>
           {id}
         </DetailsLink>{' '}
         <span>{_('(Target Host)')}</span>
@@ -98,7 +98,7 @@ const Source = ({source}) => {
     return (
       <div>
         <span>{_('User')}</span>{' '}
-        <DetailsLink textOnly={deleted !== '0'} type="user" id={id}>
+        <DetailsLink textOnly={deleted} type="user" id={id}>
           {name}
         </DetailsLink>
       </div>

@@ -23,6 +23,7 @@ import {isEmpty} from 'gmp/utils/string';
 import {forEach, map} from 'gmp/utils/array';
 
 import {
+  parseBoolean,
   parseInt,
   parseProperties,
   parseSeverity,
@@ -46,6 +47,7 @@ class Identifier {
       props.source = newProperties({
         ...props.source,
         source_type: props.source.type,
+        deleted: parseBoolean(props.source.deleted),
       });
     }
 
