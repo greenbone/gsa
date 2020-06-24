@@ -65,7 +65,8 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
     status === TASK_STATUS.deleterequested ||
     status === TASK_STATUS.ultimatedeleterequested ||
     status === TASK_STATUS.resumerequested ||
-    status === TASK_STATUS.requested
+    status === TASK_STATUS.requested ||
+    status === TASK_STATUS.queued
   ) {
     background = 'warn';
   } else if (status === TASK_STATUS.interrupted) {
@@ -80,15 +81,15 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
     background = 'new';
   } else if (status === TASK_STATUS.running) {
     background = 'run';
-  } else if (status === TASK_STATUS.queued) {
-    background = 'queued';
   }
+
+  const title =
+    status === TASK_STATUS.queued
+      ? _('Task is queued for scanning')
+      : getTranslatableTaskStatus(status);
+
   return (
-    <ProgressBar
-      title={getTranslatableTaskStatus(status)}
-      progress={progress}
-      background={background}
-    >
+    <ProgressBar title={title} progress={progress} background={background}>
       <Span>{text}</Span>
     </ProgressBar>
   );
