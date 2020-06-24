@@ -16,6 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+import {useCallback} from 'react';
+
 import {useQuery} from '@apollo/react-hooks';
 
 export const toFruitfulQuery = query => gql => vars => {
@@ -25,9 +28,9 @@ export const toFruitfulQuery = query => gql => vars => {
 export const useImperativeQuery = query => {
   const {refetch} = useQuery(query, {skip: true});
 
-  const imperativelyCallQuery = variables => {
-    return refetch(variables);
-  };
+  const imperativelyCallQuery = useCallback(variables => refetch(variables), [
+    refetch,
+  ]); // if it's a normal function, getTagsByType (in BulkTagComponent) will constantly be updated with useEffect
 
   return imperativelyCallQuery;
 };

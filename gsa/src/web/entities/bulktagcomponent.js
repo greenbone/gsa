@@ -175,7 +175,8 @@ const BulkTagComponent = ({
   const handleTagChange = id => {
     renewSession();
     return getTag(id).then(resp => {
-      dispatch({type: 'setState', newState: {tag: resp}});
+      const newTag = Tag.fromObject(resp.data.tag);
+      dispatch({type: 'setState', newState: {tag: newTag}});
     });
   };
 
