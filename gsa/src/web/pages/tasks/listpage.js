@@ -53,6 +53,7 @@ import {
   useDeleteTasksByIds,
   useDeleteTasksByFilter,
   useCloneTask,
+  useExportTasksByFilter,
 } from 'web/graphql/tasks';
 
 import PropTypes from 'web/utils/proptypes';
@@ -135,6 +136,7 @@ const TasksListPage = () => {
     getTasks,
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
+  const [exportTasksByFilter, exported] = useExportTasksByFilter();
 
   const [deleteTask] = useDeleteTask();
   const [deleteTasksByIds] = useDeleteTasksByIds();
@@ -283,6 +285,8 @@ const TasksListPage = () => {
     });
   };
 
+  console.log(exported);
+
   return (
     <TaskComponent
       onAdvancedTaskWizardSaved={refetch}
@@ -355,6 +359,7 @@ const TasksListPage = () => {
             onAdvancedTaskWizardClick={advancedtaskwizard}
             onContainerTaskCreateClick={createcontainer}
             onDeleteBulk={handleBulkDeleteTask}
+            onDownloadBulk={() => exportTasksByFilter(filter.toFilterString())}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}

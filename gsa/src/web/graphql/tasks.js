@@ -485,4 +485,34 @@ export const useResumeTask = options => {
     [queryResumeTask],
   );
   return [resumeTask, data];
+}
+
+export const EXPORT_FILTERED_TASKS = gql`
+  mutation exportByFilter($entityType: EntityType!, $filterString: String) {
+    exportByFilter(entityType: $entityType, filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportTasksByFilter = options => {
+  const [queryExportTasksByFilter, {data}] = useMutation(
+    EXPORT_FILTERED_TASKS,
+    options,
+  );
+  const exportTasksByFilter = useCallback(
+    filterString =>
+      queryExportTasksByFilter({
+        ...options,
+        variables: {
+          entityType: 'TASK',
+          filterString,
+        },
+      }),
+    [queryExportTasksByFilter],
+  );
+
+  const exportedTasks = data?.exportByFilter?.exportedEntities;
+
+  return [exportTasksByFilter, exportedTasks];
 };

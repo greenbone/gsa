@@ -222,6 +222,7 @@ class EntitiesContainer extends React.Component {
         username,
       });
       const {data} = response;
+      console.log(data);
       onDownload({filename, data});
     }, this.handleError);
   }
