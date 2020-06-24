@@ -205,10 +205,7 @@ export const useLazyGetTag = options => {
 export const useImperativeGetTag = () => {
   const imperativeGetTag = useImperativeQuery(GET_TAG);
 
-  const getTag = useCallback(
-    id => imperativeGetTag({id}).then(resp => Tag.fromObject(resp.data.tag)),
-    [imperativeGetTag],
-  );
+  const getTag = useCallback(id => imperativeGetTag({id}), [imperativeGetTag]);
   return [getTag];
 };
 
@@ -244,12 +241,7 @@ export const useImperativeGetTags = () => {
   const imperativeGetTags = useImperativeQuery(GET_TAGS);
 
   const getTags = useCallback(
-    filterString =>
-      imperativeGetTags({filterString}).then(resp => {
-        const tags = resp?.data?.tags?.edges;
-
-        return tags.map(entity => Tag.fromObject(entity.node));
-      }),
+    filterString => imperativeGetTags({filterString}),
     [imperativeGetTags],
   );
   return [getTags];

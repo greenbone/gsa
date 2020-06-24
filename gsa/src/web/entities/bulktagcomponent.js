@@ -19,6 +19,7 @@
 import React, {useReducer, useEffect, useCallback} from 'react';
 
 import _ from 'gmp/locale';
+import Tag from 'gmp/models/tag';
 
 import {getEntityType, apiType, typeName} from 'gmp/utils/entitytype';
 
@@ -36,7 +37,6 @@ import TagDialog from 'web/pages/tags/dialog';
 
 import PropTypes from 'web/utils/proptypes';
 import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
-import useGmp from 'web/utils/useGmp';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const initialState = {
@@ -66,7 +66,6 @@ const BulkTagComponent = ({
   entitiesCounts,
   onClose,
 }) => {
-  const gmp = useGmp();
   const [, renewSession] = useUserSessionTimeout();
   const [{tag, tags, tagDialogVisible}, dispatch] = useReducer(
     reducer,
@@ -83,10 +82,20 @@ const BulkTagComponent = ({
   const getTagsByType = useCallback(() => {
     const tagFilter = 'resource_type=' + apiType(entitiesType);
 
-    return getTags(tagFilter).then(data => {
-      dispatch({type: 'setState', newState: {tags: data}});
+    return getTags(tagFilter).then(resp => {
+      // Parse tags here. I started out parsing them in the custom hook.
+      // But I anticipate once useLazyQuery returns a promise,
+      // We will still need to parse them here.
+      // Since waiting for the returned data/tags variable to update
+      // Might happen one render too late and make the new value
+      // unusable for this promise chain.
+      // This way, we can simply replace useImperativeGetTags
+      // with useLazyGetTags without any additional changes
+      const returned = resp?.data?.tags?.edges;
+      const fetchedTags = returned.map(entity => Tag.fromObject(entity.node));
+      dispatch({type: 'setState', newState: {tags: fetchedTags}});
     });
-  }, [gmp.tags, entitiesType]);
+  }, [getTags, entitiesType]);
 
   useEffect(() => {
     getTagsByType();
@@ -143,7 +152,8 @@ const BulkTagComponent = ({
       value,
     })
       .then(id => getTag(id))
-      .then(newTag => {
+      .then(resp => {
+        const newTag = Tag.fromObject(resp.data.tag);
         const newTags = [...tags, newTag];
 
         dispatch({
