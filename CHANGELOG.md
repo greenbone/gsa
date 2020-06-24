@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.08] - unreleased
 
 ### Added
+- Added loading indicator for CVEs on CPE detailspage [#2248](https://github.com/greenbone/gsa/pull/2248)
 - Added new form validation feature, implemented on create and edit ticket dialog [#1782](https://github.com/greenbone/gsa/pull/1782)
 - Added German translation for About page [#1998](https://github.com/greenbone/gsa/pull/1998)
 - Added a renew session timeout icon to usermenu [#1966](https://github.com/greenbone/gsa/pull/1966)
@@ -18,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added handling of queued task status [#2208](https://github.com/greenbone/gsa/pull/2208)
 
 ### Changed
+- Changed queued status color [#2227](https://github.com/greenbone/gsa/pull/2227)
 - Changed future release version from 20.04 to 20.08 [#2118](https://github.com/greenbone/gsa/pull/2118)
 - Adjusted task icons to use them for both tasks and audits and removed audit icons [#2070](https://github.com/greenbone/gsa/pull/2070)
 - Don't use DetailsLink in ClosedCvesTable if host does not have an ID [#2055](ttps://github.com/greenbone/gsa/pull/2055)
@@ -31,8 +33,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed displaying asset host identifiers references [#2260](https://github.com/greenbone/gsa/pull/2260)
 - Fixed sort order for recurring days for custom monthly schedule [#2188](https://github.com/greenbone/gsa/pull/2188)
-- Fix missing loading indicator for test alert button [#2156](https://github.com/greenbone/gsa/pull/2156)
+- Fixed missing loading indicator for test alert button [#2156](https://github.com/greenbone/gsa/pull/2156)
 - Close dialog for ExternalLink when following link [#2148](https://github.com/greenbone/gsa/pull/2148)
 - Fixed license information on AboutPage [#2118](https://github.com/greenbone/gsa/pull/2118) [#2148](https://github.com/greenbone/gsa/pull/2148)
 - Fixed state updates on unmounted SvgIcons [#2063](https://github.com/greenbone/gsa/pull/2063)

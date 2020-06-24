@@ -69,7 +69,23 @@ describe('Host model tests', () => {
               _id: '42xy',
               type: 'teip',
               data: 'ipsum',
-              deleted: '0',
+              deleted: 0,
+            },
+            os: {
+              title: 'teitl',
+            },
+          },
+          {
+            _id: '321abc',
+            name: 'bar',
+            value: 'foo:/3',
+            creation_time: '2018-10-10T13:31:00+01:00',
+            modification_time: '2018-10-10T13:32:00+01:00',
+            source: {
+              _id: '42yz',
+              type: 'teip',
+              data: 'ipsum',
+              deleted: 1,
             },
             os: {
               title: 'teitl',
@@ -91,9 +107,23 @@ describe('Host model tests', () => {
           id: '42xy',
           source_type: 'teip',
           data: 'ipsum',
-          deleted: '0',
+          deleted: false,
         },
         value: 'bar:/3',
+      },
+      {
+        creationTime: parseDate('2018-10-10T13:31:00+01:00'),
+        id: '321abc',
+        modificationTime: parseDate('2018-10-10T13:32:00+01:00'),
+        name: 'bar',
+        os: {title: 'teitl'},
+        source: {
+          id: '42yz',
+          source_type: 'teip',
+          data: 'ipsum',
+          deleted: true,
+        },
+        value: 'foo:/3',
       },
     ];
     expect(host.identifiers).toEqual(res);

@@ -41,6 +41,8 @@ import Tabs from 'web/components/tab/tabs';
 
 import DetailsLink from 'web/components/link/detailslink';
 
+import Loading from 'web/components/loading/loading';
+
 import Table from 'web/components/table/stripedtable';
 import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
@@ -106,7 +108,7 @@ EntityInfo.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
-  const {cves} = entity;
+  const {cves, cve_refs} = entity;
   return (
     <Layout flex="column">
       <CpeDetails entity={entity} />
@@ -136,8 +138,10 @@ const Details = ({entity, links = true}) => {
               ))}
             </TableBody>
           </Table>
-        ) : (
+        ) : cve_refs === 0 ? (
           _('None')
+        ) : (
+          <Loading />
         )}
       </DetailsBlock>
     </Layout>
