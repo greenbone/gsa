@@ -136,6 +136,14 @@ class Nvt extends Info {
       getFilteredRefs(refs, 'cert-bund'),
     );
 
+    if (isDefined(element.solution)) {
+      ret.solution = {
+        type: element.solution._type,
+        description: element.solution.__text,
+        method: element.solution._method,
+      };
+    }
+
     ret.xrefs = getFilteredUrlRefs(refs, 'url').concat(getOtherRefs(refs));
 
     delete ret.refs;
