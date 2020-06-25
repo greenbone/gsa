@@ -63,7 +63,6 @@ const Row = ({
   if (!isDefined(shownName)) {
     shownName = entity.id;
   }
-  const hasTags = isDefined(entity.nvt) && isDefined(entity.nvt.tags);
   const hasActiveNotes =
     entity.notes.filter(note => note.isActive()).length > 0;
   const hasActiveOverrides =
@@ -95,7 +94,9 @@ const Row = ({
         </Layout>
       </TableData>
       <TableData>
-        {hasTags && <SolutionTypeIcon type={entity.nvt.tags.solution_type} />}
+        {isDefined(entity?.nvt?.solution) && (
+          <SolutionTypeIcon type={entity.nvt.solution.type} />
+        )}
       </TableData>
       <TableData>
         <SeverityBar severity={entity.severity} />
