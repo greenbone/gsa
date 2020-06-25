@@ -169,6 +169,7 @@ const listMockTask = deepFreeze({
   id: '12345',
   permissions: allPermissions,
   reports: {
+    currentReport,
     lastReport,
     counts: {
       total: 1,

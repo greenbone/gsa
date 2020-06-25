@@ -191,6 +191,10 @@ export const GET_TASKS = gql`
             name
           }
           reports {
+            currentReport {
+              id
+              scanStart
+            }
             lastReport {
               id
               severity
