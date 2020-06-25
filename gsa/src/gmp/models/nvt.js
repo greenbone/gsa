@@ -89,15 +89,17 @@ const getFilteredRefs = (refs, type) =>
 
 const getOtherRefs = refs => {
   const filteredRefs = refs.filter(ref => {
-    const rtype = isString(ref._type) ? ref._type.toLowerCase() : undefined;
+    const referenceType = isString(ref._type)
+      ? ref._type.toLowerCase()
+      : undefined;
     return (
-      rtype !== 'url' &&
-      rtype !== 'cve' &&
-      rtype !== 'cve_id' &&
-      rtype !== 'bid' &&
-      rtype !== 'bugtraq_id' &&
-      rtype !== 'dfn-cert' &&
-      rtype !== 'cert-bund'
+      referenceType !== 'url' &&
+      referenceType !== 'cve' &&
+      referenceType !== 'cve_id' &&
+      referenceType !== 'bid' &&
+      referenceType !== 'bugtraq_id' &&
+      referenceType !== 'dfn-cert' &&
+      referenceType !== 'cert-bund'
     );
   });
   const returnRefs = filteredRefs.map(ref => {
