@@ -46,6 +46,10 @@ const entity = NVT.fromElement({
   cvss_base: 5,
   qod: {value: 80},
   tags: 'This is a description|solution_type=VendorFix',
+  solution: {
+    _type: 'VendorFix',
+    __text: 'This is a description',
+  },
   refs: {
     ref: [
       {_type: 'cve', _id: 'CVE-2020-1234'},
