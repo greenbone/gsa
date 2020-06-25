@@ -27,18 +27,18 @@ import Info from './info';
 
 export const TAG_NA = 'N/A';
 
-const parse_tags = tags => {
-  const newtags = {};
+const parseTags = tags => {
+  const newTags = {};
 
   if (tags) {
-    const splited = tags.split('|');
-    for (const t of splited) {
+    const splitted = tags.split('|');
+    for (const t of splitted) {
       const [key, value] = split(t, '=', 1);
-      newtags[key] = value;
+      newTags[key] = value;
     }
   }
 
-  return newtags;
+  return newTags;
 };
 
 export const getRefs = element => {
@@ -89,15 +89,17 @@ const getFilteredRefs = (refs, type) =>
 
 const getOtherRefs = refs => {
   const filteredRefs = refs.filter(ref => {
-    const rtype = isString(ref._type) ? ref._type.toLowerCase() : undefined;
+    const referenceType = isString(ref._type)
+      ? ref._type.toLowerCase()
+      : undefined;
     return (
-      rtype !== 'url' &&
-      rtype !== 'cve' &&
-      rtype !== 'cve_id' &&
-      rtype !== 'bid' &&
-      rtype !== 'bugtraq_id' &&
-      rtype !== 'dfn-cert' &&
-      rtype !== 'cert-bund'
+      referenceType !== 'url' &&
+      referenceType !== 'cve' &&
+      referenceType !== 'cve_id' &&
+      referenceType !== 'bid' &&
+      referenceType !== 'bugtraq_id' &&
+      referenceType !== 'dfn-cert' &&
+      referenceType !== 'cert-bund'
     );
   });
   const returnRefs = filteredRefs.map(ref => {
@@ -119,7 +121,7 @@ class Nvt extends Info {
 
     ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
     ret.id = ret.oid;
-    ret.tags = parse_tags(ret.tags);
+    ret.tags = parseTags(ret.tags);
 
     const refs = getRefs(ret);
 
@@ -133,6 +135,14 @@ class Nvt extends Info {
     ret.certs = getFilteredRefs(refs, 'dfn-cert').concat(
       getFilteredRefs(refs, 'cert-bund'),
     );
+
+    if (isDefined(element.solution)) {
+      ret.solution = {
+        type: element.solution._type,
+        description: element.solution.__text,
+        method: element.solution._method,
+      };
+    }
 
     ret.xrefs = getFilteredUrlRefs(refs, 'url').concat(getOtherRefs(refs));
 
