@@ -27,7 +27,7 @@ import Info from './info';
 
 export const TAG_NA = 'N/A';
 
-const parse_tags = tags => {
+const parseTags = tags => {
   const newtags = {};
 
   if (tags) {
@@ -119,7 +119,7 @@ class Nvt extends Info {
 
     ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
     ret.id = ret.oid;
-    ret.tags = parse_tags(ret.tags);
+    ret.tags = parseTags(ret.tags);
 
     const refs = getRefs(ret);
 
