@@ -28,17 +28,17 @@ import Info from './info';
 export const TAG_NA = 'N/A';
 
 const parseTags = tags => {
-  const newtags = {};
+  const newTags = {};
 
   if (tags) {
     const splitted = tags.split('|');
     for (const t of splitted) {
       const [key, value] = split(t, '=', 1);
-      newtags[key] = value;
+      newTags[key] = value;
     }
   }
 
-  return newtags;
+  return newTags;
 };
 
 export const getRefs = element => {
