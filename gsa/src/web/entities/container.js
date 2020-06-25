@@ -36,6 +36,7 @@ import {
   apiType,
   typeName,
   pluralizeType,
+  normalizeType,
 } from 'gmp/utils/entitytype';
 import {debounce} from 'gmp/utils/event';
 
@@ -83,7 +84,7 @@ class EntitiesContainer extends React.Component {
 
     const {gmpname, gmp, notify} = this.props;
 
-    const entitiesCommandName = pluralizeType(gmpname);
+    const entitiesCommandName = pluralizeType(normalizeType(gmpname));
 
     this.entitiesCommand = gmp[entitiesCommandName];
 
