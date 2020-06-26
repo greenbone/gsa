@@ -31,8 +31,7 @@ import {
   modifyTagInput,
   createTagQueryMock,
   modifyTagQueryMock,
-  createEnableTagMock,
-  createDisableTagMock,
+  createToggleTagQueryMock,
   createRemoveTagMock,
   createBulkTagMock,
 } from '../__mocks__/tags';
@@ -146,7 +145,7 @@ const ToggleTagComponent = () => {
 
 describe('Tag toggle tests', () => {
   test('should enable a tag', async () => {
-    const [queryMock, resultFunc] = createEnableTagMock(tag);
+    const [queryMock, resultFunc] = createToggleTagQueryMock(tag, true);
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
@@ -164,7 +163,7 @@ describe('Tag toggle tests', () => {
   });
 
   test('should disable a tag', async () => {
-    const [queryMock, resultFunc] = createDisableTagMock(tag);
+    const [queryMock, resultFunc] = createToggleTagQueryMock(tag, false);
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 

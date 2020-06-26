@@ -64,42 +64,16 @@ export const modifyTagQueryMock = createGenericQueryMock(
   {input: modifyTagInput},
 );
 
-export const createEnableTagMock = tag => {
-  const enableTagResult = jest.fn().mockReturnValue({
-    data: {
-      toggleTag: {
-        ok: true,
-      },
-    },
-  });
-
-  const queryMock = {
-    request: {
-      query: TOGGLE_TAG,
-      variables: {input: {id: tag.id, active: true}},
-    },
-    newData: enableTagResult,
-  };
-  return [queryMock, enableTagResult];
+const toggleTagResult = {
+  toggleTag: {
+    ok: true,
+  },
 };
 
-export const createDisableTagMock = tag => {
-  const disableTagResult = jest.fn().mockReturnValue({
-    data: {
-      toggleTag: {
-        ok: true,
-      },
-    },
+export const createToggleTagQueryMock = (tag, active) => {
+  return createGenericQueryMock(TOGGLE_TAG, toggleTagResult, {
+    input: {id: tag.id, active},
   });
-
-  const queryMock = {
-    request: {
-      query: TOGGLE_TAG,
-      variables: {input: {id: tag.id, active: false}},
-    },
-    newData: disableTagResult,
-  };
-  return [queryMock, disableTagResult];
 };
 
 export const createRemoveTagMock = (tag, entity) => {
