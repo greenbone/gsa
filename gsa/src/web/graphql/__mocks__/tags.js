@@ -28,7 +28,7 @@ import {
   BULK_TAG,
 } from '../tags';
 
-import {createGenericQueryMock} from './createGenericQueryMock';
+import {createGenericQueryMock} from 'web/utils/testing';
 
 export const createTagInput = {
   name: 'foo',
@@ -48,50 +48,21 @@ export const createTagQueryMock = createGenericQueryMock(
   {input: createTagInput},
 );
 
-export const createCreateTagMock = () => {
-  const createTagResult = jest.fn().mockReturnValue({
-    data: {
-      createTag: {
-        id: '12345',
-        status: 200,
-      },
-    },
-  });
-
-  const queryMock = {
-    request: {
-      query: CREATE_TAG,
-      variables: {input: createTagInput},
-    },
-    newData: createTagResult,
-  };
-
-  return [queryMock, createTagResult];
-};
-
 export const modifyTagInput = {
   id: '12345',
 };
 
-export const createModifyTagMock = () => {
-  const modifyTagResult = jest.fn().mockReturnValue({
-    data: {
-      modifyTag: {
-        ok: true,
-      },
-    },
-  });
-
-  const queryMock = {
-    request: {
-      query: MODIFY_TAG,
-      variables: {input: modifyTagInput},
-    },
-    newData: modifyTagResult,
-  };
-
-  return [queryMock, modifyTagResult];
+const modifyTagResult = {
+  modifyTag: {
+    ok: true,
+  },
 };
+
+export const modifyTagQueryMock = createGenericQueryMock(
+  MODIFY_TAG,
+  modifyTagResult,
+  {input: modifyTagInput},
+);
 
 export const createEnableTagMock = tag => {
   const enableTagResult = jest.fn().mockReturnValue({

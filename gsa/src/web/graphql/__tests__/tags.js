@@ -30,7 +30,7 @@ import {
   createTagInput,
   modifyTagInput,
   createTagQueryMock,
-  createModifyTagMock,
+  modifyTagQueryMock,
   createEnableTagMock,
   createDisableTagMock,
   createRemoveTagMock,
@@ -97,7 +97,7 @@ describe('Tag mutation tests', () => {
   });
 
   test('should modify a tag', async () => {
-    const [queryMock, resultFunc] = createModifyTagMock();
+    const [queryMock, resultFunc] = modifyTagQueryMock;
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
