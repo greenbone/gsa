@@ -29,7 +29,7 @@ import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 import {
   createTagInput,
   modifyTagInput,
-  createCreateTagMock,
+  createTagQueryMock,
   createModifyTagMock,
   createEnableTagMock,
   createDisableTagMock,
@@ -79,7 +79,7 @@ const CreateModifyTagComponent = () => {
 
 describe('Tag mutation tests', () => {
   test('should create a tag', async () => {
-    const [queryMock, resultFunc] = createCreateTagMock();
+    const [queryMock, resultFunc] = createTagQueryMock;
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
