@@ -28,35 +28,41 @@ import {
   BULK_TAG,
 } from '../tags';
 
+import {createGenericQueryMock} from './entities';
+
 export const createTagInput = {
   name: 'foo',
   resourceType: 'OPERATING_SYSTEM',
+};
+
+const createTagResult = {
+  createTag: {
+    id: '12345',
+    status: 200,
+  },
+};
+
+export const createTagQueryMock = createGenericQueryMock(
+  CREATE_TAG,
+  createTagResult,
+  {input: createTagInput},
+);
+
+const modifyTagResult = {
+  modifyTag: {
+    ok: true,
+  },
 };
 
 export const modifyTagInput = {
   id: '12345',
 };
 
-export const createCreateTagMock = () => {
-  const createTagResult = jest.fn().mockReturnValue({
-    data: {
-      createTag: {
-        id: '12345',
-        status: 200,
-      },
-    },
-  });
-
-  const queryMock = {
-    request: {
-      query: CREATE_TAG,
-      variables: {input: createTagInput},
-    },
-    newData: createTagResult,
-  };
-
-  return [queryMock, createTagResult];
-};
+export const modifyTagQueryMock = createGenericQueryMock(
+  MODIFY_TAG,
+  modifyTagResult,
+  {input: modifyTagInput},
+);
 
 export const createModifyTagMock = () => {
   const modifyTagResult = jest.fn().mockReturnValue({
