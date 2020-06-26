@@ -42,7 +42,7 @@ const resultsSortFunctions = {
   location: makeCompareString('port'),
   qod: makeCompareNumber(entity => entity.qod.value),
   severity: makeCompareSeverity(),
-  solution_type: makeCompareString(entity => entity.nvt.tags.solution_type),
+  solution_type: makeCompareString(entity => entity.nvt.solution?.type),
   vulnerability: makeCompareString('vulnerability'),
 };
 

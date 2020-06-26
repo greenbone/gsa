@@ -20,6 +20,8 @@ import React from 'react';
 
 import Filter from 'gmp/models/filter.js';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import SeverityBar from 'web/components/bar/severitybar';
 
 import DateTime from 'web/components/date/datetime';
@@ -89,8 +91,8 @@ const Row = ({
         </Divider>
       </TableData>
       <TableData align="center">
-        {entity && entity.tags && (
-          <SolutionTypeIcon type={entity.tags.solution_type} />
+        {isDefined(entity?.solution) && (
+          <SolutionTypeIcon type={entity.solution.type} />
         )}
       </TableData>
       <TableData>

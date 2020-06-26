@@ -101,6 +101,9 @@ const result3 = {
     name: 'nvt1',
     tags: 'solution_type=Mitigation',
     refs: {ref: [{_type: 'cve', _id: 'CVE-2019-1234'}]},
+    solution: {
+      _type: 'Mitigation',
+    },
   },
   threat: 'Medium',
   severity: 5.0,

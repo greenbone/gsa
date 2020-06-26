@@ -104,7 +104,7 @@ const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
   const {nvt} = result;
-  const {oid, tags} = nvt;
+  const {oid, tags, solution} = nvt;
 
   const is_oval = isDefined(oid) && oid.startsWith('oval:');
   const has_detection =
@@ -335,7 +335,10 @@ const ResultDetails = ({className, links = true, entity}) => {
         </DetailsBlock>
       )}
 
-      <Solution solution={tags.solution} solutionType={tags.solution_type} />
+      <Solution
+        solutionDescription={solution?.description}
+        solutionType={solution?.type}
+      />
 
       <References links={links} nvt={nvt} />
     </Layout>

@@ -257,6 +257,22 @@ describe('nvt Model tests', () => {
     expect(nvt3.timeout).toEqual(123);
     expect(nvt4.timeout).toEqual(123);
   });
+
+  test('should parse unified solution type', () => {
+    const nvt = Nvt.fromElement({
+      solution: {
+        _type: 'foo',
+        _method: 'bar',
+        __text: 'Some description',
+        lorem: 'ipsum',
+      },
+    });
+
+    expect(nvt.solution.type).toEqual('foo');
+    expect(nvt.solution.method).toEqual('bar');
+    expect(nvt.solution.description).toEqual('Some description');
+    expect(nvt.solution.lorem).toBeUndefined();
+  });
 });
 
 describe('getRefs tests', () => {

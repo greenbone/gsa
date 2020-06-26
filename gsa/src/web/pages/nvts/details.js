@@ -43,7 +43,7 @@ import Solution from './solution';
 import Pre from './preformatted';
 
 const NvtDetails = ({entity, links = true}) => {
-  const {tags = {}, severity, qod, family} = entity;
+  const {tags = {}, severity, qod, family, solution} = entity;
   return (
     <Layout flex="column" grow="1">
       {isDefined(tags.summary) && (
@@ -115,7 +115,10 @@ const NvtDetails = ({entity, links = true}) => {
         </DetailsBlock>
       )}
 
-      <Solution solution={tags.solution} solutionType={tags.solution_type} />
+      <Solution
+        solutionDescription={solution?.description}
+        solutionType={solution?.type}
+      />
 
       {isDefined(family) && (
         <DetailsBlock title={_('Family')}>
