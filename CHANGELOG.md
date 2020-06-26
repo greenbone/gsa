@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added handling of queued task status [#2208](https://github.com/greenbone/gsa/pull/2208)
 
 ### Changed
+- Use unified solution type instead of solution type nvt tag [#2268](https://github.com/greenbone/gsa/pull/2268)
 - Changed queued status color [#2227](https://github.com/greenbone/gsa/pull/2227)
 - Changed future release version from 20.04 to 20.08 [#2118](https://github.com/greenbone/gsa/pull/2118)
 - Adjusted task icons to use them for both tasks and audits and removed audit icons [#2070](https://github.com/greenbone/gsa/pull/2070)
@@ -33,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed installing the json translation files [#2272](https://github.com/greenbone/gsa/pull/2272)
 - Fixed displaying asset host identifiers references [#2260](https://github.com/greenbone/gsa/pull/2260)
 - Fixed sort order for recurring days for custom monthly schedule [#2188](https://github.com/greenbone/gsa/pull/2188)
 - Fixed missing loading indicator for test alert button [#2156](https://github.com/greenbone/gsa/pull/2156)

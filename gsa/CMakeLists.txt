@@ -1215,4 +1215,5 @@ install (CODE "file(REMOVE_RECURSE ${GSA_DEST_DIR}/static)")
 install (DIRECTORY
          ${GSA_BUILD_DIR}/static
          ${GSA_BUILD_DIR}/img
+         ${GSA_BUILD_DIR}/locales
          DESTINATION ${GSA_DEST_DIR})

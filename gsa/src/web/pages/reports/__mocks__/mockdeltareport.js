@@ -46,6 +46,9 @@ const result1 = {
     name: 'nvt1',
     cve: 'CVE-2019-1234',
     tags: 'solution_type=Mitigation',
+    solution: {
+      _type: 'Mitigation',
+    },
   },
   threat: 'High',
   severity: 10.0,
@@ -67,6 +70,9 @@ const result2 = {
     name: 'nvt2',
     cve: 'CVE-2019-5678',
     tags: 'solution_type=VendorFix',
+    solution: {
+      _type: 'VendorFix',
+    },
   },
   threat: 'Medium',
   severity: 5.0,

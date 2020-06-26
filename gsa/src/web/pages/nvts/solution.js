@@ -21,21 +21,19 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {TAG_NA} from 'gmp/models/nvt';
+import PropTypes from 'web/utils/proptypes';
+import DetailsBlock from 'web/entity/block';
 
-import PropTypes from '../../utils/proptypes.js';
-import DetailsBlock from '../../entity/block.js';
+import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 
-import SolutionTypeIcon from '../../components/icon/solutiontypeicon.js';
-
-import IconDivider from '../../components/layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
 import Pre from './preformatted';
 
-const Solution = ({solution, solutionType}) => {
-  const has_solution = isDefined(solution) && solution !== TAG_NA;
+const Solution = ({solutionDescription, solutionType}) => {
+  const hasSolution = isDefined(solutionDescription) || isDefined(solutionType);
 
-  if (!has_solution) {
+  if (!hasSolution) {
     return null;
   }
 
@@ -45,13 +43,13 @@ const Solution = ({solution, solutionType}) => {
         <b>{_('Solution Type: ')}</b>
         <SolutionTypeIcon displayTitleText type={solutionType} />
       </IconDivider>
-      <Pre>{solution}</Pre>
+      <Pre>{solutionDescription}</Pre>
     </DetailsBlock>
   );
 };
 
 Solution.propTypes = {
-  solution: PropTypes.string,
+  solutionDescription: PropTypes.string,
   solutionType: PropTypes.string,
 };
 
