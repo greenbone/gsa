@@ -78,7 +78,7 @@ const CreateModifyTagComponent = () => {
 
 describe('Tag mutation tests', () => {
   test('should create a tag', async () => {
-    const [queryMock, resultFunc] = createTagQueryMock;
+    const [queryMock, resultFunc] = createTagQueryMock();
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
@@ -96,7 +96,7 @@ describe('Tag mutation tests', () => {
   });
 
   test('should modify a tag', async () => {
-    const [queryMock, resultFunc] = modifyTagQueryMock;
+    const [queryMock, resultFunc] = modifyTagQueryMock();
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 

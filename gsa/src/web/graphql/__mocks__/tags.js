@@ -42,11 +42,8 @@ const createTagResult = {
   },
 };
 
-export const createTagQueryMock = createGenericQueryMock(
-  CREATE_TAG,
-  createTagResult,
-  {input: createTagInput},
-);
+export const createTagQueryMock = () =>
+  createGenericQueryMock(CREATE_TAG, createTagResult, {input: createTagInput});
 
 export const modifyTagInput = {
   id: '12345',
@@ -58,11 +55,8 @@ const modifyTagResult = {
   },
 };
 
-export const modifyTagQueryMock = createGenericQueryMock(
-  MODIFY_TAG,
-  modifyTagResult,
-  {input: modifyTagInput},
-);
+export const modifyTagQueryMock = () =>
+  createGenericQueryMock(MODIFY_TAG, modifyTagResult, {input: modifyTagInput});
 
 const toggleTagResult = {
   toggleTag: {
