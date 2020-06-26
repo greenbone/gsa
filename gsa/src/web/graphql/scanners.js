@@ -15,25 +15,81 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {useCallback} from 'react';
 
 import gql from 'graphql-tag';
 
 import {useLazyQuery} from '@apollo/react-hooks';
 
-import {toFruitfulQuery} from 'web/utils/graphql';
+import CollectionCounts from 'gmp/collection/collectioncounts';
+
+import Scanner from 'gmp/models/scanner';
+
+import {isDefined} from 'gmp/utils/identity';
 
 export const GET_SCANNERS = gql`
-  query Scanner($filterString: FilterString) {
-    scanners(filterString: $filterString) {
+  query Scanner(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    scanners(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
       nodes {
         name
         type
         id
       }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
+      }
     }
   }
 `;
 
-export const useGetScanners = () => {
-  return toFruitfulQuery(useLazyQuery)(GET_SCANNERS);
+export const useLazyGetScanners = (variables, options) => {
+  const [queryScanners, {data, ...other}] = useLazyQuery(GET_SCANNERS, {
+    ...options,
+    variables,
+  });
+  const scanners = isDefined(data?.scanners)
+    ? data.scanners.nodes.map(entity => Scanner.fromObject(entity))
+    : undefined;
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.scanners?.counts || {};
+  const counts = isDefined(data?.scanners?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const getScanners = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => queryScanners({...options, variables}),
+    [queryScanners],
+  );
+  const pageInfo = data?.scanners?.pageInfo;
+  return [getScanners, {...other, counts, scanners, pageInfo}];
 };

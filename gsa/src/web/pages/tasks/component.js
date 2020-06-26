@@ -35,7 +35,7 @@ import {selectSaveId, hasId} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
 import ScanConfig, {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
-import Scanner, {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
+import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 
 import {
   loadEntities as loadAlerts,
@@ -70,7 +70,7 @@ import useCapabilities from 'web/utils/useCapabilities';
 
 import EntityComponent from 'web/entity/component';
 
-import {useGetScanners} from 'web/graphql/scanners';
+import {useLazyGetScanners} from 'web/graphql/scanners';
 
 import {useGetScanConfigs} from 'web/graphql/scanconfigs';
 
@@ -107,11 +107,10 @@ const TaskComponent = props => {
   const [startTask] = useStartTask();
   const [stopTask] = useStopTask();
 
-  const scannerQuery = useGetScanners();
   const [
     loadScanners,
-    {data: scannerData, loading: isLoadingScanners, error: scannerError},
-  ] = scannerQuery({
+    {scanners, loading: isLoadingScanners, error: scannerError},
+  ] = useLazyGetScanners({
     filterString: ALL_FILTER.toFilterString(),
   });
   const scanConfigQuery = useGetScanConfigs();
@@ -172,17 +171,6 @@ const TaskComponent = props => {
 
   // Not sure where tag_id is set
   const [tag_id] = useState();
-
-  // Query and set task dialog subobjects
-  const [scanners, setScanners] = useState();
-
-  useEffect(() => {
-    if (isDefined(scannerData)) {
-      setScanners(
-        scannerData.scanners.nodes.map(scanner => Scanner.fromElement(scanner)),
-      );
-    }
-  }, [scannerData]);
 
   const [scanConfigs, setScanConfigs] = useState();
 
