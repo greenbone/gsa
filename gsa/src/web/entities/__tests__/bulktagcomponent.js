@@ -34,6 +34,7 @@ import {
 
 import BulkTagComponent from '../bulktagcomponent';
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {createImperativeGetTagsQueryMock} from 'web/graphql/__mocks__/tags';
 
 const task1 = Task.fromObject({id: 'foo'});
 const task2 = Task.fromObject({id: 'bar'});
@@ -72,7 +73,11 @@ const gmp = {
 
 describe('BulkTagComponent tests', () => {
   test('should render', async () => {
-    const {render} = rendererWith({gmp, store: true});
+    const [queryMock, resultFunc] = createImperativeGetTagsQueryMock(
+      'resource_type=task',
+    );
+
+    const {render} = rendererWith({gmp, store: true, queryMocks: [queryMock]});
 
     const {getByTestId} = render(
       <BulkTagComponent
@@ -87,13 +92,16 @@ describe('BulkTagComponent tests', () => {
 
     await wait();
 
+    expect(resultFunc).toHaveBeenCalled();
+
     const title = getByTestId('dialog-title-bar');
 
     expect(title).toHaveTextContent('Add Tag to Page Contents');
   });
 
   test('should render different title based on selection', async () => {
-    const {render} = rendererWith({gmp, store: true});
+    const [queryMock] = createImperativeGetTagsQueryMock('resource_type=task');
+    const {render} = rendererWith({gmp, store: true, queryMocks: [queryMock]});
 
     const {getByTestId} = render(
       <BulkTagComponent
@@ -114,7 +122,10 @@ describe('BulkTagComponent tests', () => {
   });
 
   test('Should render tags in select', async () => {
-    const {render} = rendererWith({gmp, store: true});
+    const [queryMock, resultFunc] = createImperativeGetTagsQueryMock(
+      'resource_type=task',
+    );
+    const {render} = rendererWith({gmp, store: true, queryMocks: [queryMock]});
 
     const {baseElement, getByTestId} = render(
       <BulkTagComponent
@@ -128,21 +139,22 @@ describe('BulkTagComponent tests', () => {
     );
 
     await wait();
+    expect(resultFunc).toHaveBeenCalled();
 
     fireEvent.click(getByTestId('select-open-button'));
 
     await wait();
 
-    expect(gmp.tags.getAll).toHaveBeenCalled();
-
     const selectElements = queryAllByTestId(baseElement, 'select-item');
-    expect(selectElements.length).toEqual(2);
-    expect(selectElements[0]).toHaveTextContent('cat');
-    expect(selectElements[1]).toHaveTextContent('dog');
+    expect(selectElements.length).toEqual(1);
+    expect(selectElements[0]).toHaveTextContent('foo');
   });
 
   test('should create new tag', async () => {
     const renewDate = date('2020-03-20');
+    const [getTagsMock, getTagsResultFunc] = createImperativeGetTagsQueryMock(
+      'resource_type=task',
+    );
 
     const [
       renewSessionMock,
@@ -151,7 +163,7 @@ describe('BulkTagComponent tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
-      queryMocks: [renewSessionMock],
+      queryMocks: [renewSessionMock, getTagsMock],
     });
 
     const {baseElement, getByTestId, getAllByTestId} = render(
@@ -166,12 +178,11 @@ describe('BulkTagComponent tests', () => {
     );
 
     await wait();
+    expect(getTagsResultFunc).toHaveBeenCalled();
 
     fireEvent.click(getByTestId('select-open-button'));
 
     await wait();
-
-    expect(gmp.tags.getAll).toHaveBeenCalled();
 
     const tag = getByTestId('select-selected-value');
     expect(tag).not.toHaveAttribute('title');
