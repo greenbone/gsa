@@ -362,9 +362,8 @@ const Page = ({
     [task, gmpSettings],
   );
 
-  const reloadFunc = useCallback(() => refetch(), [refetch]);
   const [startReload, stopReload, hasRunningTimer] = useReload(
-    reloadFunc,
+    refetch,
     timeoutFunc,
   );
 
