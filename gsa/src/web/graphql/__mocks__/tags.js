@@ -76,58 +76,41 @@ export const createToggleTagQueryMock = (tag, active) => {
   });
 };
 
-export const createRemoveTagMock = (tag, entity) => {
-  const removeTagResult = jest.fn().mockReturnValue({
-    data: {
-      removeTag: {
-        ok: true,
-      },
-    },
-  });
+const removeTagResult = {
+  removeTag: {
+    ok: true,
+  },
+};
 
-  const queryMock = {
-    request: {
-      query: REMOVE_TAG,
-      variables: {
-        input: {
-          id: tag.id,
-          resourceIds: [entity.id],
-          resourceType: ENTITY_TYPES[getEntityType(entity)],
-        },
-      },
+export const createRemoveTagMock = (tag, entity) => {
+  const variables = {
+    input: {
+      id: tag.id,
+      resourceIds: [entity.id],
+      resourceType: ENTITY_TYPES[getEntityType(entity)],
     },
-    newData: removeTagResult,
   };
-  return [queryMock, removeTagResult];
+  return createGenericQueryMock(REMOVE_TAG, removeTagResult, variables);
+};
+
+const bulkTagResult = {
+  bulkTag: {
+    ok: true,
+  },
 };
 
 export const createBulkTagMock = (
   id,
   {resourceType, resourceIds, resourceFilter},
 ) => {
-  const bulkTagResult = {
-    data: {
-      bulkTag: {
-        ok: true,
-      },
+  const variables = {
+    input: {
+      id,
+      resourceIds,
+      resourceType,
+      resourceFilter,
     },
   };
 
-  const resultFunc = jest.fn().mockReturnValue(bulkTagResult);
-
-  const queryMock = {
-    request: {
-      query: BULK_TAG,
-      variables: {
-        input: {
-          id,
-          resourceIds,
-          resourceType,
-          resourceFilter,
-        },
-      },
-    },
-    newData: resultFunc,
-  };
-  return [queryMock, resultFunc];
+  return createGenericQueryMock(BULK_TAG, bulkTagResult, variables);
 };
