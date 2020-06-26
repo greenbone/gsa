@@ -32,7 +32,7 @@ import {
 
 import {createGenericQueryMock} from './entities';
 
-const listMockTag = {
+const mockTag = {
   name: 'foo',
   id: '123',
   comment: 'bar',
@@ -42,7 +42,7 @@ const getTagsResult = {
   tags: {
     edges: [
       {
-        node: listMockTag,
+        node: mockTag,
       },
     ],
     counts: {
@@ -64,6 +64,17 @@ const getTagsResult = {
 
 export const createImperativeGetTagsQueryMock = (filterString = null) => {
   return createGenericQueryMock(GET_TAGS, getTagsResult, {filterString});
+};
+
+const getTagResult = {
+  tag: mockTag,
+};
+
+export const createImperativeGetTagQueryMock = (
+  result = getTagResult,
+  id = '123',
+) => {
+  return createGenericQueryMock(GET_TAG, result, {id});
 };
 
 export const createTagInput = {

@@ -35,8 +35,8 @@ import {
   createDisableTagMock,
   createRemoveTagMock,
   createBulkTagMock,
-  createGetTagsQueryMock,
   createImperativeGetTagsQueryMock,
+  createImperativeGetTagQueryMock,
 } from '../__mocks__/tags';
 
 import {
@@ -46,6 +46,7 @@ import {
   useRemoveTag,
   useBulkTag,
   useImperativeGetTags,
+  useImperativeGetTag,
 } from '../tags';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -320,5 +321,59 @@ describe('useImperativeGetTags tests', () => {
     const tags = screen.getAllByTestId('tag');
 
     expect(tags).toHaveLength(1);
+    expect(tags[0]).toHaveTextContent('foo');
+    expect(noTags).not.toBeInTheDocument();
+  });
+});
+
+const ImperativeGetTagComponent = () => {
+  const [getTag] = useImperativeGetTag();
+  const [tag, setTag] = useState();
+
+  const handleGetTag = () => {
+    return getTag('123').then(resp => {
+      const newTag = Tag.fromObject(resp.data.tag);
+      setTag(newTag);
+    });
+  };
+  return (
+    <div>
+      <button data-testid="load" onClick={handleGetTag} />
+      {isDefined(tag) ? (
+        <div data-testid="tag">
+          <span data-testid="id">{tag.id}</span>
+          <span data-testid="name">{tag.name}</span>
+          <span data-testid="comment">{tag.comment}</span>
+          <span data-testid="value">{tag.value}</span>
+        </div>
+      ) : (
+        <div data-testid="no-tag" />
+      )}
+    </div>
+  );
+};
+
+describe('useImperativeGetTag tests', () => {
+  test('should query tag', async () => {
+    const [mock, resultFunc] = createImperativeGetTagQueryMock();
+
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<ImperativeGetTagComponent />);
+
+    let noTag = screen.queryByTestId('no-tag');
+    expect(noTag).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    await wait();
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('tag')).toBeInTheDocument();
+
+    expect(screen.getByTestId('id')).toHaveTextContent('123');
+    expect(screen.getByTestId('name')).toHaveTextContent('foo');
+    expect(screen.getByTestId('comment')).toHaveTextContent('bar');
+    expect(screen.getByTestId('value')).toHaveTextContent('baz');
   });
 });
