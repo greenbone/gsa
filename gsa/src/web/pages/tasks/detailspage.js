@@ -17,7 +17,7 @@
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
@@ -35,6 +35,8 @@ import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
+
+import useReload from 'web/components/loading/useReload';
 
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
@@ -102,6 +104,7 @@ import {
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
+import useGmpSettings from 'web/utils/useGmpSettings';
 
 import ImportReportIcon from './icons/importreporticon';
 import NewIconMenu from './icons/newiconmenu';
@@ -343,6 +346,36 @@ const Page = ({
   const [del] = useDeleteTask();
   const deleteTask = dTask =>
     del(dTask.id).then(goto_list('tasks', {history})).catch(onError);
+
+  const gmpSettings = useGmpSettings();
+
+  const timeoutFunc = useCallback(
+    ({isVisible}) => {
+      if (!isVisible) {
+        return gmpSettings.reloadIntervalInactive;
+      }
+      if (task.isActive()) {
+        return gmpSettings.reloadIntervalActive;
+      }
+      return gmpSettings.reloadInterval;
+    },
+    [task, gmpSettings],
+  );
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetch,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if task is available and no timer is running yet
+    if (hasValue(task) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [task, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
 
   useEffect(() => {
     if (hasValue(task) && task.usageType === 'audit') {
