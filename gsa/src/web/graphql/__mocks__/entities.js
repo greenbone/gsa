@@ -17,14 +17,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-export const createGenericQueryMock = (gql_query, result, variables) => {
+export const createGenericQueryMock = (query, result, variables) => {
   const resultFunc = jest.fn().mockReturnValue({
     data: result,
   });
 
   const queryMock = {
     request: {
-      query: gql_query,
+      query,
       variables,
     },
     newData: resultFunc,
