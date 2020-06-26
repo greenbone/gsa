@@ -26,9 +26,45 @@ import {
   REMOVE_TAG,
   ENTITY_TYPES,
   BULK_TAG,
+  GET_TAG,
+  GET_TAGS,
 } from '../tags';
 
 import {createGenericQueryMock} from './entities';
+
+const listMockTag = {
+  name: 'foo',
+  id: '123',
+  comment: 'bar',
+  value: 'baz',
+};
+const getTagsResult = {
+  tags: {
+    edges: [
+      {
+        node: listMockTag,
+      },
+    ],
+    counts: {
+      total: 1,
+      filtered: 1,
+      offset: 0,
+      limit: 10,
+      length: 1,
+    },
+    pageInfo: {
+      hasNextPage: false,
+      hasPreviousPage: false,
+      startCursor: 'tag:0',
+      endCursor: 'tag:1',
+      lastPageCursor: 'tag:3',
+    },
+  },
+};
+
+export const createImperativeGetTagsQueryMock = (filterString = null) => {
+  return createGenericQueryMock(GET_TAGS, getTagsResult, {filterString});
+};
 
 export const createTagInput = {
   name: 'foo',

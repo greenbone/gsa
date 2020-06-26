@@ -35,6 +35,8 @@ import {
   createDisableTagMock,
   createRemoveTagMock,
   createBulkTagMock,
+  createGetTagsQueryMock,
+  createImperativeGetTagsQueryMock,
 } from '../__mocks__/tags';
 
 import {
@@ -43,7 +45,9 @@ import {
   useToggleTag,
   useRemoveTag,
   useBulkTag,
+  useImperativeGetTags,
 } from '../tags';
+import {isDefined} from 'gmp/utils/identity';
 
 const tag = Tag.fromObject({id: '12345'});
 const task = Task.fromObject({id: '23456'});
@@ -266,5 +270,55 @@ describe('Bulk tag tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent('Tag added.');
+  });
+});
+
+const ImperativeGetTagsComponent = () => {
+  const [getTags] = useImperativeGetTags();
+  const [tags, setTags] = useState();
+
+  const handleGetTags = () => {
+    return getTags('foo=bar').then(resp => {
+      const returned = resp?.data?.tags?.edges;
+      const fetchedTags = returned.map(entity => Tag.fromObject(entity.node));
+      setTags(fetchedTags);
+    });
+  };
+  return (
+    <div>
+      <button data-testid="load" onClick={handleGetTags} />
+      {isDefined(tags) ? (
+        tags.map(tag => {
+          return (
+            <div key={tag.id} data-testid="tag">
+              {tag.name}
+            </div>
+          );
+        })
+      ) : (
+        <div data-testid="no-tag" />
+      )}
+    </div>
+  );
+};
+
+describe('useImperativeGetTags tests', () => {
+  test('should query tags', async () => {
+    const [mock, resultFunc] = createImperativeGetTagsQueryMock('foo=bar');
+
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<ImperativeGetTagsComponent />);
+
+    let noTags = screen.queryByTestId('no-tag');
+    expect(noTags).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    await wait();
+    expect(resultFunc).toHaveBeenCalled();
+    const tags = screen.getAllByTestId('tag');
+
+    expect(tags).toHaveLength(1);
   });
 });
