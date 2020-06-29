@@ -135,6 +135,31 @@ ToolBarIcons.propTypes = {
   onTaskWizardClick: PropTypes.func.isRequired,
 };
 
+const bulkExportByFilter = ({
+  entities,
+  selected,
+  filter,
+  selectionType,
+  export: exportFunc,
+}) => {
+  let exportFilter;
+
+  if (selectionType === SelectionType.SELECTION_FILTER) {
+    exportFilter = filter.all().toFilterString();
+  } else {
+    const toDownload =
+      selectionType === SelectionType.SELECTION_USER
+        ? getEntityIds(selected)
+        : getEntityIds(entities);
+
+    exportFilter = '';
+
+    toDownload.forEach(entityId => (exportFilter += `uuid=${entityId} `));
+  }
+
+  return exportFunc(exportFilter);
+};
+
 const TasksListPage = () => {
   const gmpSettings = useGmpSettings();
   const username = useUserName();
@@ -152,7 +177,7 @@ const TasksListPage = () => {
     getTasks,
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
-  const [exportTasksByFilter, exported] = useExportTasksByFilter();
+  const [exportTasksByFilter] = useExportTasksByFilter();
 
   const [deleteTask] = useDeleteTask();
   const [deleteTasksByIds] = useDeleteTasksByIds();
@@ -230,18 +255,21 @@ const TasksListPage = () => {
   };
 
   const handleBulkDownloadTask = () => {
-    if (selectionType === SelectionType.SELECTION_FILTER) {
-      const filterAll = filter.all().toFilterString();
-      return exportTasksByFilter(filterAll).then(response => {
-        const filename = generateFilename({
-          fileNameFormat: listExportFileName,
-          resourceType: 'tasks',
-          username,
-        });
-        const xml = response?.data?.exportFilteredTasks?.exportedEntities;
-        handleDownload({filename, data: xml});
-      }, showError);
-    }
+    bulkExportByFilter({
+      entities: tasks,
+      selected,
+      filter,
+      selectionType,
+      export: exportTasksByFilter,
+    }).then(response => {
+      const filename = generateFilename({
+        fileNameFormat: listExportFileName,
+        resourceType: 'tasks',
+        username,
+      });
+      const xml = response?.data?.exportFilteredTasks?.exportedEntities;
+      handleDownload({filename, data: xml});
+    }, showError);
   };
 
   useEffect(() => {
