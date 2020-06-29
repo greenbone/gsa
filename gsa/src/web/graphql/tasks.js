@@ -295,6 +295,14 @@ export const STOP_TASK = gql`
   }
 `;
 
+export const RESUME_TASK = gql`
+  mutation resumeTask($id: UUID!) {
+    resumeTask(id: $id) {
+      ok
+    }
+  }
+`;
+
 export const useGetTask = (id, options) => {
   const {data, ...other} = useQuery(GET_TASK, {...options, variables: {id}});
   const task = isDefined(data?.task) ? Task.fromObject(data.task) : undefined;
@@ -464,4 +472,14 @@ export const useStopTask = options => {
     [queryStopTask],
   );
   return [stopTask, data];
+};
+
+export const useResumeTask = options => {
+  const [queryResumeTask, data] = useMutation(RESUME_TASK, options);
+  const resumeTask = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryResumeTask({...options, variables: {id}}),
+    [queryResumeTask],
+  );
+  return [resumeTask, data];
 };
