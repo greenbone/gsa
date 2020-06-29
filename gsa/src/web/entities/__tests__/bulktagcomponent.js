@@ -32,7 +32,7 @@ import {
   wait,
 } from 'web/utils/testing';
 
-import BulkTagComponent from '../bulktagcomponent';
+import {BulkTagComponent} from '../bulkactions';
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
 const task1 = Task.fromObject({id: 'foo'});

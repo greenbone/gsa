@@ -24,12 +24,6 @@ import _ from 'gmp/locale';
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {hasValue} from 'gmp/utils/identity';
-import {
-  getEntityType,
-  apiType,
-  typeName,
-  pluralizeType,
-} from 'gmp/utils/entitytype';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
@@ -52,7 +46,7 @@ import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import EntitiesPage from 'web/entities/page';
-import BulkTagComponent from 'web/entities/bulktagcomponent';
+import {BulkTagComponent, bulkExportByFilter} from 'web/entities/bulkactions';
 
 import {
   useLazyGetTasks,
@@ -133,31 +127,6 @@ ToolBarIcons.propTypes = {
   onModifyTaskWizardClick: PropTypes.func.isRequired,
   onTaskCreateClick: PropTypes.func.isRequired,
   onTaskWizardClick: PropTypes.func.isRequired,
-};
-
-const bulkExportByFilter = ({
-  entities,
-  selected,
-  filter,
-  selectionType,
-  export: exportFunc,
-}) => {
-  let exportFilter;
-
-  if (selectionType === SelectionType.SELECTION_FILTER) {
-    exportFilter = filter.all().toFilterString();
-  } else {
-    const toDownload =
-      selectionType === SelectionType.SELECTION_USER
-        ? getEntityIds(selected)
-        : getEntityIds(entities);
-
-    exportFilter = '';
-
-    toDownload.forEach(entityId => (exportFilter += `uuid=${entityId} `));
-  }
-
-  return exportFunc(exportFilter);
 };
 
 const TasksListPage = () => {

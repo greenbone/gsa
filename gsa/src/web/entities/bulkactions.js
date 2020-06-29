@@ -52,7 +52,7 @@ const reducer = (state, action) => {
   }
 };
 
-const BulkTagComponent = ({
+export const BulkTagComponent = ({
   entities,
   selected,
   filter,
@@ -229,4 +229,27 @@ BulkTagComponent.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default BulkTagComponent;
+export const bulkExportByFilter = ({
+  entities,
+  selected,
+  filter,
+  selectionType,
+  export: exportFunc,
+}) => {
+  let exportFilter;
+
+  if (selectionType === SelectionType.SELECTION_FILTER) {
+    exportFilter = filter.all().toFilterString();
+  } else {
+    const toDownload =
+      selectionType === SelectionType.SELECTION_USER
+        ? getEntityIds(selected)
+        : getEntityIds(entities);
+
+    exportFilter = '';
+
+    toDownload.forEach(entityId => (exportFilter += `uuid=${entityId} `));
+  }
+
+  return exportFunc(exportFilter);
+};
