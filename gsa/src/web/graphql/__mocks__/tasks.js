@@ -30,6 +30,7 @@ import {
   MODIFY_TASK,
   START_TASK,
   STOP_TASK,
+  RESUME_TASK,
   DELETE_FILTERED_TASKS,
 } from 'web/graphql/tasks';
 
@@ -549,6 +550,31 @@ export const createStopTaskQueryMock = taskId => {
   const queryMock = {
     request: {
       query: STOP_TASK,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createResumeTaskQueryMock = taskId => {
+  const queryResult = {
+    data: {
+      resumeTask: {
+        ok: true,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    id: taskId,
+  };
+
+  const queryMock = {
+    request: {
+      query: RESUME_TASK,
       variables,
     },
     newData: resultFunc,
