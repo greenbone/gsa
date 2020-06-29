@@ -54,8 +54,13 @@ import Trend from './trend';
 
 const WHOLE_SELECTION_FAMILIES = [
   'CentOS Local Security Checks',
+  'Debian Local Security Checks',
   'Fedora Local Security Checks',
   'Huawei EulerOS Local Security Checks',
+  'Oracle Linux Local Security Checks',
+  'Red Hat Local Security Checks',
+  'SuSE Local Security Checks',
+  'Ubuntu Local Security Checks',
 ];
 
 const NvtFamily = ({
