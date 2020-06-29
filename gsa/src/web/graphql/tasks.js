@@ -488,8 +488,8 @@ export const useResumeTask = options => {
 }
 
 export const EXPORT_FILTERED_TASKS = gql`
-  mutation exportByFilter($entityType: EntityType!, $filterString: String) {
-    exportByFilter(entityType: $entityType, filterString: $filterString) {
+  mutation exportFilteredTasks($filterString: String) {
+    exportFilteredTasks(filterString: $filterString) {
       exportedEntities
     }
   }
@@ -505,14 +505,15 @@ export const useExportTasksByFilter = options => {
       queryExportTasksByFilter({
         ...options,
         variables: {
-          entityType: 'TASK',
           filterString,
         },
       }),
     [queryExportTasksByFilter],
   );
 
-  const exportedTasks = data?.exportByFilter?.exportedEntities;
+  const exportedTasks = data?.exportFilteredTasks?.exportedEntities.substring(
+    2,
+  );
 
   return [exportTasksByFilter, exportedTasks];
 };

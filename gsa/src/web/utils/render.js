@@ -505,6 +505,7 @@ export const generateFilename = ({
   username,
 }) => {
   let fileName = isDefined(fileNameFormat) ? fileNameFormat : '';
+  console.log(fileNameFormat);
   const currentTime = new Date();
   const cTime = isDefined(creationTime) ? creationTime : currentTime;
 

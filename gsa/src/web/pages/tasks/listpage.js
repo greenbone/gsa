@@ -17,12 +17,19 @@
  */
 
 import React, {useState, useEffect, useCallback} from 'react';
+import {useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {hasValue} from 'gmp/utils/identity';
+import {
+  getEntityType,
+  apiType,
+  typeName,
+  pluralizeType,
+} from 'gmp/utils/entitytype';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
@@ -56,6 +63,7 @@ import {
   useExportTasksByFilter,
 } from 'web/graphql/tasks';
 
+import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useCapabilities from 'web/utils/useCapabilities';
@@ -73,6 +81,8 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import TaskListTable from './table';
+import useUserName from 'web/utils/useUserName';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 export const ToolBarIcons = ({
   onAdvancedTaskWizardClick,
@@ -127,6 +137,12 @@ ToolBarIcons.propTypes = {
 
 const TasksListPage = () => {
   const gmpSettings = useGmpSettings();
+  const username = useUserName();
+  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
+  const listExportFileName = userDefaultsSelector.getValueByName(
+    'listexportfilename',
+  );
+  const [downloadRef, handleDownload] = useDownload();
   const [, renewSession] = useUserSessionTimeout();
   const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
   const [filter, isLoadingFilter] = usePageFilter('task');
@@ -152,7 +168,6 @@ const TasksListPage = () => {
     closeDialog: closeNotificationDialog,
     showError,
   } = useDialogNotification();
-  const [downloadRef, handleDownload] = useDownload();
   const {
     selectionType,
     selected = [],
@@ -212,6 +227,21 @@ const TasksListPage = () => {
   const closeTagsDialog = () => {
     renewSession();
     setTagsDialogVisible(false);
+  };
+
+  const handleBulkDownloadTask = () => {
+    if (selectionType === SelectionType.SELECTION_FILTER) {
+      const filterAll = filter.all().toFilterString();
+      return exportTasksByFilter(filterAll).then(response => {
+        const filename = generateFilename({
+          fileNameFormat: listExportFileName,
+          resourceType: 'tasks',
+          username,
+        });
+        const xml = response?.data?.exportFilteredTasks?.exportedEntities;
+        handleDownload({filename, data: xml});
+      }, showError);
+    }
   };
 
   useEffect(() => {
@@ -285,8 +315,6 @@ const TasksListPage = () => {
     });
   };
 
-  console.log(exported);
-
   return (
     <TaskComponent
       onAdvancedTaskWizardSaved={refetch}
@@ -359,7 +387,7 @@ const TasksListPage = () => {
             onAdvancedTaskWizardClick={advancedtaskwizard}
             onContainerTaskCreateClick={createcontainer}
             onDeleteBulk={handleBulkDeleteTask}
-            onDownloadBulk={() => exportTasksByFilter(filter.toFilterString())}
+            onDownloadBulk={handleBulkDownloadTask}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}
