@@ -22,6 +22,7 @@ import {useSelector} from 'react-redux';
 import _ from 'gmp/locale';
 
 import {getEntityType, apiType, typeName} from 'gmp/utils/entitytype';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 import TagsDialog from 'web/entities/tagsdialog';
 
@@ -36,7 +37,6 @@ import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import {generateFilename} from 'web/utils/render';
 import useUserName from 'web/utils/useUserName';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 const initialState = {
   tag: {},
