@@ -46,7 +46,10 @@ import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import EntitiesPage from 'web/entities/page';
-import {BulkTagComponent, bulkExportByFilter} from 'web/entities/bulkactions';
+import {
+  BulkTagComponent,
+  exportFilteredEntities,
+} from 'web/entities/bulkactions';
 
 import {
   useLazyGetTasks,
@@ -54,7 +57,7 @@ import {
   useDeleteTasksByIds,
   useDeleteTasksByFilter,
   useCloneTask,
-  useExportTasksByFilter,
+  useExportFilteredTasks,
 } from 'web/graphql/tasks';
 
 import {generateFilename} from 'web/utils/render';
@@ -146,7 +149,7 @@ const TasksListPage = () => {
     getTasks,
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
-  const [exportTasksByFilter] = useExportTasksByFilter();
+  const [exportFilteredTasks] = useExportFilteredTasks();
 
   const [deleteTask] = useDeleteTask();
   const [deleteTasksByIds] = useDeleteTasksByIds();
@@ -224,12 +227,12 @@ const TasksListPage = () => {
   };
 
   const handleBulkDownloadTask = () => {
-    bulkExportByFilter({
+    exportFilteredEntities({
       entities: tasks,
       selected,
       filter,
       selectionType,
-      export: exportTasksByFilter,
+      export: exportFilteredTasks,
     }).then(response => {
       const filename = generateFilename({
         fileNameFormat: listExportFileName,

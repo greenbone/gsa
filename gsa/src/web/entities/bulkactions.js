@@ -229,7 +229,7 @@ BulkTagComponent.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export const bulkExportByFilter = ({
+export const exportFilteredEntities = ({
   entities,
   selected,
   filter,
