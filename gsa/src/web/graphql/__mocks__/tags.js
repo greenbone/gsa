@@ -28,146 +28,83 @@ import {
   BULK_TAG,
 } from '../tags';
 
+import {createGenericQueryMock} from 'web/utils/testing';
+
 export const createTagInput = {
   name: 'foo',
   resourceType: 'OPERATING_SYSTEM',
 };
 
+const createTagResult = {
+  createTag: {
+    id: '12345',
+    status: 200,
+  },
+};
+
+export const createTagQueryMock = () =>
+  createGenericQueryMock(CREATE_TAG, createTagResult, {input: createTagInput});
+
 export const modifyTagInput = {
   id: '12345',
 };
 
-export const createCreateTagMock = () => {
-  const createTagResult = jest.fn().mockReturnValue({
-    data: {
-      createTag: {
-        id: '12345',
-        status: 200,
-      },
-    },
-  });
-
-  const queryMock = {
-    request: {
-      query: CREATE_TAG,
-      variables: {input: createTagInput},
-    },
-    newData: createTagResult,
-  };
-
-  return [queryMock, createTagResult];
+const modifyTagResult = {
+  modifyTag: {
+    ok: true,
+  },
 };
 
-export const createModifyTagMock = () => {
-  const modifyTagResult = jest.fn().mockReturnValue({
-    data: {
-      modifyTag: {
-        ok: true,
-      },
-    },
-  });
+export const modifyTagQueryMock = () =>
+  createGenericQueryMock(MODIFY_TAG, modifyTagResult, {input: modifyTagInput});
 
-  const queryMock = {
-    request: {
-      query: MODIFY_TAG,
-      variables: {input: modifyTagInput},
-    },
-    newData: modifyTagResult,
-  };
-
-  return [queryMock, modifyTagResult];
+const toggleTagResult = {
+  toggleTag: {
+    ok: true,
+  },
 };
 
-export const createEnableTagMock = tag => {
-  const enableTagResult = jest.fn().mockReturnValue({
-    data: {
-      toggleTag: {
-        ok: true,
-      },
-    },
+export const createToggleTagQueryMock = (tag, active) => {
+  return createGenericQueryMock(TOGGLE_TAG, toggleTagResult, {
+    input: {id: tag.id, active},
   });
-
-  const queryMock = {
-    request: {
-      query: TOGGLE_TAG,
-      variables: {input: {id: tag.id, active: true}},
-    },
-    newData: enableTagResult,
-  };
-  return [queryMock, enableTagResult];
 };
 
-export const createDisableTagMock = tag => {
-  const disableTagResult = jest.fn().mockReturnValue({
-    data: {
-      toggleTag: {
-        ok: true,
-      },
-    },
-  });
-
-  const queryMock = {
-    request: {
-      query: TOGGLE_TAG,
-      variables: {input: {id: tag.id, active: false}},
-    },
-    newData: disableTagResult,
-  };
-  return [queryMock, disableTagResult];
+const removeTagResult = {
+  removeTag: {
+    ok: true,
+  },
 };
 
 export const createRemoveTagMock = (tag, entity) => {
-  const removeTagResult = jest.fn().mockReturnValue({
-    data: {
-      removeTag: {
-        ok: true,
-      },
+  const variables = {
+    input: {
+      id: tag.id,
+      resourceIds: [entity.id],
+      resourceType: ENTITY_TYPES[getEntityType(entity)],
     },
-  });
-
-  const queryMock = {
-    request: {
-      query: REMOVE_TAG,
-      variables: {
-        input: {
-          id: tag.id,
-          resourceIds: [entity.id],
-          resourceType: ENTITY_TYPES[getEntityType(entity)],
-        },
-      },
-    },
-    newData: removeTagResult,
   };
-  return [queryMock, removeTagResult];
+  return createGenericQueryMock(REMOVE_TAG, removeTagResult, variables);
+};
+
+const bulkTagResult = {
+  bulkTag: {
+    ok: true,
+  },
 };
 
 export const createBulkTagMock = (
   id,
   {resourceType, resourceIds, resourceFilter},
 ) => {
-  const bulkTagResult = {
-    data: {
-      bulkTag: {
-        ok: true,
-      },
+  const variables = {
+    input: {
+      id,
+      resourceIds,
+      resourceType,
+      resourceFilter,
     },
   };
 
-  const resultFunc = jest.fn().mockReturnValue(bulkTagResult);
-
-  const queryMock = {
-    request: {
-      query: BULK_TAG,
-      variables: {
-        input: {
-          id,
-          resourceIds,
-          resourceType,
-          resourceFilter,
-        },
-      },
-    },
-    newData: resultFunc,
-  };
-  return [queryMock, resultFunc];
+  return createGenericQueryMock(BULK_TAG, bulkTagResult, variables);
 };

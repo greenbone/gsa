@@ -29,10 +29,9 @@ import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 import {
   createTagInput,
   modifyTagInput,
-  createCreateTagMock,
-  createModifyTagMock,
-  createEnableTagMock,
-  createDisableTagMock,
+  createTagQueryMock,
+  modifyTagQueryMock,
+  createToggleTagQueryMock,
   createRemoveTagMock,
   createBulkTagMock,
 } from '../__mocks__/tags';
@@ -79,7 +78,7 @@ const CreateModifyTagComponent = () => {
 
 describe('Tag mutation tests', () => {
   test('should create a tag', async () => {
-    const [queryMock, resultFunc] = createCreateTagMock();
+    const [queryMock, resultFunc] = createTagQueryMock();
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
@@ -97,7 +96,7 @@ describe('Tag mutation tests', () => {
   });
 
   test('should modify a tag', async () => {
-    const [queryMock, resultFunc] = createModifyTagMock();
+    const [queryMock, resultFunc] = modifyTagQueryMock();
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
@@ -146,7 +145,7 @@ const ToggleTagComponent = () => {
 
 describe('Tag toggle tests', () => {
   test('should enable a tag', async () => {
-    const [queryMock, resultFunc] = createEnableTagMock(tag);
+    const [queryMock, resultFunc] = createToggleTagQueryMock(tag, true);
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
@@ -164,7 +163,7 @@ describe('Tag toggle tests', () => {
   });
 
   test('should disable a tag', async () => {
-    const [queryMock, resultFunc] = createDisableTagMock(tag);
+    const [queryMock, resultFunc] = createToggleTagQueryMock(tag, false);
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
