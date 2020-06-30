@@ -28,7 +28,6 @@ const useDownload = () => {
   const downloadRef = useRef(null);
 
   const download = useCallback(({filename, data, mimetype}) => {
-    console.log(filename, data);
     if (!hasValue(downloadRef.current)) {
       log.warn('Download ref not set.');
       return;
