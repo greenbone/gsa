@@ -36,6 +36,7 @@ import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import {generateFilename} from 'web/utils/render';
 import useUserName from 'web/utils/useUserName';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 const initialState = {
   tag: {},
@@ -272,8 +273,13 @@ export const useExportFilteredEntities = () => {
           resourceType,
           username,
         });
-        const xml = response?.data?.exportFilteredTasks?.exportedEntities;
-        onDownload({filename, data: xml});
+
+        const commandName =
+          'exportFiltered' + capitalizeFirstLetter(resourceType);
+
+        const xml = response?.data;
+        const exportedEntities = xml[commandName]?.exportedEntities;
+        onDownload({filename, data: exportedEntities});
       }, onError);
     },
     [listExportFileName, username],
