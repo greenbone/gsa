@@ -467,7 +467,7 @@ class ProcessPanel extends React.Component {
         {hostList.length > MAX_HOSTS_PER_PROCESS && (
           <MaxHostsWarning>
             {_(
-              'The maximum of {{num}} hosts was exceded. If there are more ' +
+              'The maximum of {{num}} hosts was exceeded. If there are more ' +
                 'hosts associated with this process, they will not be taken ' +
                 'into account.',
               {num: MAX_HOSTS_PER_PROCESS},
