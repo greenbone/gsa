@@ -287,3 +287,31 @@ export const useExportFilteredEntities = () => {
 
   return exportFilteredEntities;
 };
+
+export const useBulkDeleteEntities = () => {
+  const bulkDelete = useCallback(
+    ({
+      selectionType,
+      filter,
+      selected,
+      entities,
+      deleteByIdsFunc,
+      deleteByFilterFunc,
+      onDeleted,
+      onError,
+    }) => {
+      if (selectionType === SelectionType.SELECTION_FILTER) {
+        const filterAll = filter.all().toFilterString();
+        return deleteByFilterFunc(filterAll).then(onDeleted, onError);
+      }
+      const toDelete =
+        selectionType === SelectionType.SELECTION_USER
+          ? getEntityIds(selected)
+          : getEntityIds(entities);
+      return deleteByIdsFunc(toDelete).then(onDeleted, onError);
+    },
+    [],
+  );
+
+  return bulkDelete;
+};

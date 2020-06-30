@@ -48,6 +48,7 @@ import EntitiesPage from 'web/entities/page';
 import {
   BulkTagComponent,
   useExportFilteredEntities,
+  useBulkDeleteEntities,
 } from 'web/entities/bulkactions';
 
 import {
@@ -144,8 +145,9 @@ const TasksListPage = () => {
   const exportFilteredEntities = useExportFilteredEntities();
 
   const [deleteTask] = useDeleteTask();
-  const [deleteTasksByIds] = useDeleteTasksByIds();
-  const [deleteTasksByFilter] = useDeleteTasksByFilter();
+const [deleteTasksByIds] = useDeleteTasksByIds();
+const [deleteTasksByFilter] = useDeleteTasksByFilter();
+  const bulkDeleteTasks = useBulkDeleteEntities();
   const [cloneTask] = useCloneTask();
   const {
     change: changeFilter,
@@ -197,15 +199,16 @@ const TasksListPage = () => {
   );
 
   const handleBulkDeleteTasks = () => {
-    if (selectionType === SelectionType.SELECTION_FILTER) {
-      const filterAll = filter.all().toFilterString();
-      return deleteTasksByFilter(filterAll).then(refetch, showError);
-    }
-    const tasksToDelete =
-      selectionType === SelectionType.SELECTION_USER
-        ? getEntityIds(selected)
-        : getEntityIds(tasks);
-    return deleteTasksByIds(tasksToDelete).then(refetch, showError);
+    return bulkDeleteTasks({
+      selectionType,
+      filter,
+      selected,
+      entities: tasks,
+      deleteByIdsFunc: deleteTasksByIds,
+      deleteByFilterFunc: deleteTasksByFilter,
+      onDeleted: refetch,
+      onError: showError,
+    });
   };
 
   const openTagsDialog = () => {
