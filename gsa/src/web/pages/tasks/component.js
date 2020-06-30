@@ -82,6 +82,7 @@ import {
   useCreateTask,
   useStartTask,
   useStopTask,
+  useResumeTask,
 } from 'web/graphql/tasks';
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
@@ -106,6 +107,7 @@ const TaskComponent = props => {
   const [createContainerTask] = useCreateContainerTask();
   const [startTask] = useStartTask();
   const [stopTask] = useStopTask();
+  const [resumeTask] = useResumeTask();
 
   const [
     loadScanners,
@@ -184,10 +186,6 @@ const TaskComponent = props => {
     }
   }, [scanConfigData]);
 
-  const {gmp} = props;
-
-  const cmd = gmp.task;
-
   useEffect(() => {
     props.loadUserSettingsDefaults();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -240,7 +238,7 @@ const TaskComponent = props => {
 
     handleInteraction();
 
-    return cmd.resume(task).then(onResumed, onResumeError);
+    return resumeTask(task.id).then(onResumed, onResumeError);
   };
 
   const closeTaskWizard = () => {

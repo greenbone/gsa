@@ -34,6 +34,7 @@ import {
   useModifyTask,
   useStartTask,
   useStopTask,
+  useResumeTask,
   useDeleteFilteredTasks,
 } from '../tasks';
 import {
@@ -46,6 +47,7 @@ import {
   createModifyTaskQueryMock,
   createStartTaskQueryMock,
   createStopTaskQueryMock,
+  createResumeTaskQueryMock,
   createDeleteTasksQueryMock,
   createDeleteFilteredTasksQueryMock,
   createGetTaskQueryErrorMock,
@@ -426,6 +428,31 @@ describe('useStopTask tests', () => {
     render(<StopTaskComponent taskId="t1" />);
 
     const button = screen.getByTestId('stop');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ResumeTaskComponent = ({taskId}) => {
+  const [resumeTask] = useResumeTask();
+  return (
+    <div>
+      <button data-testid="resume" onClick={() => resumeTask(taskId)} />
+    </div>
+  );
+};
+
+describe('useResumeTask tests', () => {
+  test('should resume a task after user interaction', async () => {
+    const [mock, resultFunc] = createResumeTaskQueryMock('t1');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ResumeTaskComponent taskId="t1" />);
+
+    const button = screen.getByTestId('resume');
     fireEvent.click(button);
 
     await wait();
