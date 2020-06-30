@@ -102,7 +102,7 @@ class OverrideComponent extends React.Component {
         active,
         custom_severity,
         hosts: hosts.length > 0 ? MANUAL : ANY,
-        hosts_manual: hosts.join(' '),
+        hosts_manual: hosts.join(', '),
         newSeverity,
         new_severity_from_list,
         nvt_name: isDefined(nvt) ? nvt.name : undefined,
