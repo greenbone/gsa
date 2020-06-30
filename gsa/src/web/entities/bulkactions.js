@@ -234,14 +234,14 @@ BulkTagComponent.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export const useExportFilteredEntities = () => {
+export const useExportEntitiesByFilter = () => {
   const username = useUserName();
   const userDefaultsSelector = useSelector(getUserSettingsDefaults);
   const listExportFileName = userDefaultsSelector.getValueByName(
     'listexportfilename',
   );
 
-  const exportFilteredEntities = useCallback(
+  const exportEntitiesByFilter = useCallback(
     ({
       entities,
       selected,
@@ -275,7 +275,7 @@ export const useExportFilteredEntities = () => {
         });
 
         const commandName =
-          'exportFiltered' + capitalizeFirstLetter(entitiesType);
+          'export' + capitalizeFirstLetter(entitiesType) + 'ByFilter';
 
         const xml = response?.data;
         const exportedEntities = xml[commandName]?.exportedEntities;
@@ -285,7 +285,7 @@ export const useExportFilteredEntities = () => {
     [listExportFileName, username],
   );
 
-  return exportFilteredEntities;
+  return exportEntitiesByFilter;
 };
 
 export const useBulkDeleteEntities = () => {

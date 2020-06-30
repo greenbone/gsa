@@ -47,7 +47,7 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 import EntitiesPage from 'web/entities/page';
 import {
   BulkTagComponent,
-  useExportFilteredEntities,
+  useExportEntitiesByFilter,
   useBulkDeleteEntities,
 } from 'web/entities/bulkactions';
 
@@ -57,7 +57,7 @@ import {
   useDeleteTasksByIds,
   useDeleteTasksByFilter,
   useCloneTask,
-  useExportFilteredTasks,
+  useExportTasksByFilter,
 } from 'web/graphql/tasks';
 
 import PropTypes from 'web/utils/proptypes';
@@ -164,8 +164,9 @@ const TasksListPage = () => {
     getTasks,
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
-  const [exportFilteredTasks] = useExportFilteredTasks();
-  const exportFilteredEntities = useExportFilteredEntities();
+
+  const exportTasksByFilter = useExportTasksByFilter();
+  const exportEntitiesByFilter = useExportEntitiesByFilter();
 
   const [deleteTask] = useDeleteTask();
 const [deleteTasksByIds] = useDeleteTasksByIds();
@@ -267,13 +268,13 @@ const [deleteTasksByFilter] = useDeleteTasksByFilter();
   };
 
   const handleBulkExportTasks = () => {
-    return exportFilteredEntities({
+    return exportEntitiesByFilter({
       entities: tasks,
       selected,
       filter,
       entitiesType: 'tasks',
       selectionType,
-      export: exportFilteredTasks,
+      export: exportTasksByFilter,
       onDownload: handleDownload,
       onError: showError,
     });

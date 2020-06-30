@@ -487,30 +487,30 @@ export const useResumeTask = options => {
   return [resumeTask, data];
 };
 
-export const EXPORT_FILTERED_TASKS = gql`
-  mutation exportFilteredTasks($filterString: String) {
-    exportFilteredTasks(filterString: $filterString) {
+export const EXPORT_TASKS_BY_FILTER = gql`
+  mutation exportTasksByFilter($filterString: String) {
+    exportTasksByFilter(filterString: $filterString) {
       exportedEntities
     }
   }
 `;
 
-export const useExportFilteredTasks = options => {
-  const [queryExportFilteredTasks] = useMutation(
-    EXPORT_FILTERED_TASKS,
+export const useExportTasksByFilter = options => {
+  const [queryExportTasksByFilter] = useMutation(
+    EXPORT_TASKS_BY_FILTER,
     options,
   );
-  const exportFilteredTasks = useCallback(
+  const exportTasksByFilter = useCallback(
     // eslint-disable-next-line no-shadow
     filterString =>
-      queryExportFilteredTasks({
+      queryExportTasksByFilter({
         ...options,
         variables: {
           filterString,
         },
       }),
-    [queryExportFilteredTasks, options],
+    [queryExportTasksByFilter, options],
   );
 
-  return [exportFilteredTasks];
+  return exportTasksByFilter;
 };
