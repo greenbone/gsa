@@ -223,7 +223,7 @@ const TasksListPage = () => {
       entities: tasks,
       selected,
       filter,
-      resourceType: 'tasks',
+      entitiesType: 'tasks',
       selectionType,
       export: exportFilteredTasks,
       onDownload: handleDownload,

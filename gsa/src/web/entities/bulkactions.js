@@ -246,7 +246,7 @@ export const useExportFilteredEntities = () => {
       entities,
       selected,
       filter,
-      resourceType,
+      entitiesType,
       selectionType,
       export: exportFunc,
       onDownload,
@@ -270,12 +270,12 @@ export const useExportFilteredEntities = () => {
       return exportFunc(exportFilter).then(response => {
         const filename = generateFilename({
           fileNameFormat: listExportFileName,
-          resourceType,
+          entitiesType,
           username,
         });
 
         const commandName =
-          'exportFiltered' + capitalizeFirstLetter(resourceType);
+          'exportFiltered' + capitalizeFirstLetter(entitiesType);
 
         const xml = response?.data;
         const exportedEntities = xml[commandName]?.exportedEntities;
