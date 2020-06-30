@@ -17,7 +17,6 @@
  */
 
 import React, {useState, useEffect, useCallback} from 'react';
-import {useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -48,7 +47,7 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 import EntitiesPage from 'web/entities/page';
 import {
   BulkTagComponent,
-  exportFilteredEntities,
+  useExportFilteredEntities,
 } from 'web/entities/bulkactions';
 
 import {
@@ -60,7 +59,6 @@ import {
   useExportFilteredTasks,
 } from 'web/graphql/tasks';
 
-import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useCapabilities from 'web/utils/useCapabilities';
@@ -78,8 +76,6 @@ import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
 import TaskListTable from './table';
-import useUserName from 'web/utils/useUserName';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 export const ToolBarIcons = ({
   onAdvancedTaskWizardClick,
@@ -134,11 +130,6 @@ ToolBarIcons.propTypes = {
 
 const TasksListPage = () => {
   const gmpSettings = useGmpSettings();
-  const username = useUserName();
-  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
-  const listExportFileName = userDefaultsSelector.getValueByName(
-    'listexportfilename',
-  );
   const [downloadRef, handleDownload] = useDownload();
   const [, renewSession] = useUserSessionTimeout();
   const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
@@ -150,6 +141,7 @@ const TasksListPage = () => {
     {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTasks();
   const [exportFilteredTasks] = useExportFilteredTasks();
+  const exportFilteredEntities = useExportFilteredEntities();
 
   const [deleteTask] = useDeleteTask();
   const [deleteTasksByIds] = useDeleteTasksByIds();
@@ -204,7 +196,7 @@ const TasksListPage = () => {
     [deleteTask, refetch, showError],
   );
 
-  const handleBulkDeleteTask = () => {
+  const handleBulkDeleteTasks = () => {
     if (selectionType === SelectionType.SELECTION_FILTER) {
       const filterAll = filter.all().toFilterString();
       return deleteTasksByFilter(filterAll).then(refetch, showError);
@@ -226,22 +218,17 @@ const TasksListPage = () => {
     setTagsDialogVisible(false);
   };
 
-  const handleBulkDownloadTask = () => {
-    exportFilteredEntities({
+  const handleBulkExportTasks = () => {
+    return exportFilteredEntities({
       entities: tasks,
       selected,
       filter,
+      resourceType: 'tasks',
       selectionType,
       export: exportFilteredTasks,
-    }).then(response => {
-      const filename = generateFilename({
-        fileNameFormat: listExportFileName,
-        resourceType: 'tasks',
-        username,
-      });
-      const xml = response?.data?.exportFilteredTasks?.exportedEntities;
-      handleDownload({filename, data: xml});
-    }, showError);
+      onDownload: handleDownload,
+      onError: showError,
+    });
   };
 
   useEffect(() => {
@@ -386,8 +373,8 @@ const TasksListPage = () => {
             toolBarIcons={ToolBarIcons}
             onAdvancedTaskWizardClick={advancedtaskwizard}
             onContainerTaskCreateClick={createcontainer}
-            onDeleteBulk={handleBulkDeleteTask}
-            onDownloadBulk={handleBulkDownloadTask}
+            onDeleteBulk={handleBulkDeleteTasks}
+            onDownloadBulk={handleBulkExportTasks}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}

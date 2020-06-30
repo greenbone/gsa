@@ -17,6 +17,7 @@
  */
 
 import React, {useReducer, useEffect, useCallback} from 'react';
+import {useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -32,6 +33,9 @@ import PropTypes from 'web/utils/proptypes';
 import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useGmp from 'web/utils/useGmp';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import {generateFilename} from 'web/utils/render';
+import useUserName from 'web/utils/useUserName';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 const initialState = {
   tag: {},
@@ -229,27 +233,51 @@ BulkTagComponent.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export const exportFilteredEntities = ({
-  entities,
-  selected,
-  filter,
-  selectionType,
-  export: exportFunc,
-}) => {
-  let exportFilter;
+export const useExportFilteredEntities = () => {
+  const username = useUserName();
+  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
+  const listExportFileName = userDefaultsSelector.getValueByName(
+    'listexportfilename',
+  );
 
-  if (selectionType === SelectionType.SELECTION_FILTER) {
-    exportFilter = filter.all().toFilterString();
-  } else {
-    const toDownload =
-      selectionType === SelectionType.SELECTION_USER
-        ? getEntityIds(selected)
-        : getEntityIds(entities);
+  const exportFilteredEntities = useCallback(
+    ({
+      entities,
+      selected,
+      filter,
+      resourceType,
+      selectionType,
+      export: exportFunc,
+      onDownload,
+      onError,
+    }) => {
+      let exportFilter;
 
-    exportFilter = '';
+      if (selectionType === SelectionType.SELECTION_FILTER) {
+        exportFilter = filter.all().toFilterString();
+      } else {
+        const toDownload =
+          selectionType === SelectionType.SELECTION_USER
+            ? getEntityIds(selected)
+            : getEntityIds(entities);
 
-    toDownload.forEach(entityId => (exportFilter += `uuid=${entityId} `));
-  }
+        exportFilter = '';
 
-  return exportFunc(exportFilter);
+        toDownload.forEach(entityId => (exportFilter += `uuid=${entityId} `));
+      }
+
+      return exportFunc(exportFilter).then(response => {
+        const filename = generateFilename({
+          fileNameFormat: listExportFileName,
+          resourceType,
+          username,
+        });
+        const xml = response?.data?.exportFilteredTasks?.exportedEntities;
+        onDownload({filename, data: xml});
+      }, onError);
+    },
+    [listExportFileName, username],
+  );
+
+  return exportFilteredEntities;
 };
