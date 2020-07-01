@@ -234,48 +234,57 @@ BulkTagComponent.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export const useExportEntitiesByFilter = () => {
+export const useBulkExportEntities = () => {
   const username = useUserName();
   const userDefaultsSelector = useSelector(getUserSettingsDefaults);
   const listExportFileName = userDefaultsSelector.getValueByName(
     'listexportfilename',
   );
 
-  const exportEntitiesByFilter = useCallback(
+  const bulkExportEntities = useCallback(
     ({
       entities,
       selected,
       filter,
       entitiesType,
       selectionType,
-      export: exportFunc,
+      exportByFilterFunc,
+      exportByIdsFunc,
       onDownload,
       onError,
     }) => {
-      let exportFilter;
-
       if (selectionType === SelectionType.SELECTION_FILTER) {
-        exportFilter = filter.all().toFilterString();
-      } else {
-        const toDownload =
-          selectionType === SelectionType.SELECTION_USER
-            ? getEntityIds(selected)
-            : getEntityIds(entities);
+        const exportFilter = filter.all().toFilterString();
 
-        exportFilter = '';
+        return exportByFilterFunc(exportFilter).then(response => {
+          const filename = generateFilename({
+            fileNameFormat: listExportFileName,
+            resourceType: entitiesType,
+            username,
+          });
 
-        toDownload.forEach(entityId => (exportFilter += `uuid=${entityId} `));
+          const commandName =
+            'export' + capitalizeFirstLetter(entitiesType) + 'ByFilter';
+
+          const xml = response?.data;
+          const exportedEntities = xml[commandName]?.exportedEntities;
+          onDownload({filename, data: exportedEntities});
+        }, onError);
       }
+      const toExport =
+        selectionType === SelectionType.SELECTION_USER
+          ? getEntityIds(selected)
+          : getEntityIds(entities);
 
-      return exportFunc(exportFilter).then(response => {
+      return exportByIdsFunc(toExport).then(response => {
         const filename = generateFilename({
           fileNameFormat: listExportFileName,
-          entitiesType,
+          resourceType: entitiesType,
           username,
         });
 
         const commandName =
-          'export' + capitalizeFirstLetter(entitiesType) + 'ByFilter';
+          'export' + capitalizeFirstLetter(entitiesType) + 'ByIds';
 
         const xml = response?.data;
         const exportedEntities = xml[commandName]?.exportedEntities;
@@ -285,11 +294,11 @@ export const useExportEntitiesByFilter = () => {
     [listExportFileName, username],
   );
 
-  return exportEntitiesByFilter;
+  return bulkExportEntities;
 };
 
 export const useBulkDeleteEntities = () => {
-  const bulkDelete = useCallback(
+  const bulkDeleteEntities = useCallback(
     ({
       selectionType,
       filter,
@@ -313,5 +322,5 @@ export const useBulkDeleteEntities = () => {
     [],
   );
 
-  return bulkDelete;
+  return bulkDeleteEntities;
 };

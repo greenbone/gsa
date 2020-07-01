@@ -514,3 +514,29 @@ export const useExportTasksByFilter = options => {
 
   return exportTasksByFilter;
 };
+
+export const EXPORT_TASKS_BY_IDS = gql`
+  mutation exportTasksByIds($ids: [UUID]!) {
+    exportTasksByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportTasksByIds = options => {
+  const [queryExportTasksByIds] = useMutation(EXPORT_TASKS_BY_IDS, options);
+
+  const exportTasksByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    taskIds =>
+      queryExportTasksByIds({
+        ...options,
+        variables: {
+          ids: taskIds,
+        },
+      }),
+    [queryExportTasksByIds, options],
+  );
+
+  return exportTasksByIds;
+};
