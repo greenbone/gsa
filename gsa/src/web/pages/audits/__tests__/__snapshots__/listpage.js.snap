@@ -1281,6 +1281,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
       </div>
       <section
         class="entities-section"
+        data-testid="entities-section"
       >
         <div
           class="c23 section-header"
@@ -1315,6 +1316,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
         >
           <div
             class="c29 entities-table"
+            data-testid="entities-table"
           >
             <div
               class="c30"
@@ -1570,7 +1572,9 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td
+                    data-testid="entities-table"
+                  >
                     <div
                       class="c0"
                     >
@@ -1665,7 +1669,9 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </td>
                 </tr>
               </tbody>
-              <tfoot>
+              <tfoot
+                data-testid="entities-footer"
+              >
                 <tr>
                   <td
                     colspan="5"

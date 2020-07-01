@@ -91,7 +91,6 @@ describe('Task StopIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
-
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(false);
     fireEvent.click(element);
@@ -141,7 +140,6 @@ describe('Task StopIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
-
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
 
@@ -159,7 +157,6 @@ describe('Task StopIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
-
     expect(caps.mayOp('stop_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
 

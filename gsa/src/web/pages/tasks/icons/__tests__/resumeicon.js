@@ -41,7 +41,6 @@ describe('Task ResumeIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(<ResumeIcon task={task} onClick={clickHandler} />);
-
     expect(caps.mayOp('resume_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
 
@@ -66,7 +65,6 @@ describe('Task ResumeIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(<ResumeIcon task={task} />);
-
     expect(caps.mayOp('resume_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(false);
 
@@ -94,7 +92,6 @@ describe('Task ResumeIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(<ResumeIcon task={task} />);
-
     expect(caps.mayOp('resume_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
 
@@ -150,7 +147,6 @@ describe('Task ResumeIcon component tests', () => {
     const clickHandler = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
-
     const {element} = render(<ResumeIcon task={task} />);
 
     expect(caps.mayOp('resume_task')).toEqual(true);
@@ -177,7 +173,6 @@ describe('Task ResumeIcon component tests', () => {
     const {render} = rendererWith({capabilities: caps});
 
     const {element} = render(<ResumeIcon task={task} />);
-
     expect(caps.mayOp('resume_task')).toEqual(true);
     expect(task.userCapabilities.mayOp('resume_task')).toEqual(true);
 

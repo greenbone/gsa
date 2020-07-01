@@ -41,6 +41,7 @@ const FoldLayout = styled(Layout)`
 const Section = ({
   children,
   className,
+  'data-testid': dataTestId,
   extra,
   foldable,
   foldState,
@@ -69,7 +70,7 @@ const Section = ({
     );
   }
   return (
-    <section className={className}>
+    <section data-testid={dataTestId} className={className}>
       {header}
       {foldable ? (
         <FoldableLayout
@@ -88,6 +89,7 @@ const Section = ({
 
 Section.propTypes = {
   className: PropTypes.string,
+  'data-testid': PropTypes.string,
   extra: PropTypes.element,
   foldState: PropTypes.string,
   foldable: PropTypes.bool,

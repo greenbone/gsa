@@ -22,6 +22,9 @@ const SelectionType = {
   SELECTION_FILTER: '2',
 };
 
+export const getEntityIds = (entityArray = []) =>
+  entityArray.map(entity => entity.id);
+
 export default SelectionType;
 
 // vim: set ts=2 sw=2 tw=80:

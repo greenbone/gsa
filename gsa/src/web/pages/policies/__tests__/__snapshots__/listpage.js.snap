@@ -1195,6 +1195,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
       </div>
       <section
         class="entities-section"
+        data-testid="entities-section"
       >
         <div
           class="c23 section-header"
@@ -1229,6 +1230,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
         >
           <div
             class="c29 entities-table"
+            data-testid="entities-table"
           >
             <div
               class="c30"
@@ -1380,7 +1382,9 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td
+                    data-testid="entities-table"
+                  >
                     <div
                       class="c0"
                     >
@@ -1452,7 +1456,9 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                   </td>
                 </tr>
               </tbody>
-              <tfoot>
+              <tfoot
+                data-testid="entities-footer"
+              >
                 <tr>
                   <td
                     colspan="2"

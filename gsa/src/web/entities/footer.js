@@ -68,7 +68,7 @@ export const EntitiesFooter = ({
     },
   ];
   return (
-    <TableFooter>
+    <TableFooter data-testid="entities-footer">
       <TableRow>
         <td colSpan={span}>
           {actions ? (

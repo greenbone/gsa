@@ -32,7 +32,15 @@ import Layout from 'web/components/layout/layout';
 import Theme from 'web/utils/theme';
 
 const OwnerInfo = ({owner}) =>
-  isDefined(owner) ? <span>{owner.name}</span> : <i>{_('(Global Object)')}</i>;
+  isDefined(owner) ? (
+    isDefined(owner.name) ? (
+      <span>{owner.name}</span>
+    ) : (
+      <span>{owner}</span>
+    )
+  ) : (
+    <i>{_('(Global Object)')}</i>
+  );
 OwnerInfo.propTypes = {
   owner: PropTypes.object,
 };

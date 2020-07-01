@@ -128,7 +128,7 @@ describe('Row tests', () => {
     const handlePolicyEdit = jest.fn();
     const handleCreateAudit = jest.fn();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
@@ -191,7 +191,7 @@ describe('Row tests', () => {
 
     const wrongCaps = new Capabilities(['authenticate']);
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       gmp,
       capabilities: wrongCaps,
       store: true,

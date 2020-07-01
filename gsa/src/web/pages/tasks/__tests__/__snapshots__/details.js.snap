@@ -149,9 +149,9 @@ exports[`Task Details tests should render full task details 1`] = `
       <a
         class="c2"
         data-testid="details-link"
-        href="/target/5678"
+        href="/target/159"
       >
-        target1
+        target 1
       </a>
     </div>
   </div>
@@ -173,9 +173,9 @@ exports[`Task Details tests should render full task details 1`] = `
             <a
               class="c2"
               data-testid="details-link"
-              href="/alert/91011"
+              href="/alert/151617"
             >
-              alert1
+              alert 1
             </a>
           </span>
         </div>
@@ -221,9 +221,9 @@ exports[`Task Details tests should render full task details 1`] = `
                   <a
                     class="c2"
                     data-testid="details-link"
-                    href="/scanner/1516"
+                    href="/scanner/212223"
                   >
-                    scanner1
+                    scanner 1
                   </a>
                 </span>
               </div>
@@ -242,6 +242,92 @@ exports[`Task Details tests should render full task details 1`] = `
                 class="c1"
               >
                 OpenVAS Scanner
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Scan Config
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              >
+                <span>
+                  <a
+                    class="c2"
+                    data-testid="details-link"
+                    href="/scanconfig/314"
+                  >
+                    foo
+                  </a>
+                </span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Order for target hosts
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              >
+                sequential
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Network Source Interface
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Maximum concurrently executed NVTs per host
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              >
+                4
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Maximum concurrently scanned hosts
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              >
+                20
               </div>
             </td>
           </tr>
@@ -317,6 +403,57 @@ exports[`Task Details tests should render full task details 1`] = `
                 class="c1"
               >
                 70 %
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div
+    class="c1"
+  >
+    <h2>
+      Schedule
+    </h2>
+    <div>
+      <table
+        class="c6 c7"
+      >
+        <colgroup>
+          <col
+            class="c8"
+            width="10%"
+          />
+          <col
+            class="c9"
+            width="90%"
+          />
+        </colgroup>
+        <tbody
+          class=""
+        >
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Name
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              >
+                <span>
+                  <a
+                    class="c2"
+                    data-testid="details-link"
+                    href="/schedule/121314"
+                  >
+                    schedule 1
+                  </a>
+                </span>
               </div>
             </td>
           </tr>

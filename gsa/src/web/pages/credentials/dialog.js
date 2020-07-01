@@ -85,6 +85,7 @@ class CredentialsDialog extends React.Component {
         error: error,
       };
     }
+    return null;
   }
 
   componentDidMount() {

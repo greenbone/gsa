@@ -19,7 +19,7 @@ import React from 'react';
 
 import ReactDOM from 'react-dom';
 
-import App from './web/app.js';
+import App from './web/app';
 
 ReactDOM.render(<App />, document.getElementById('app'));
 

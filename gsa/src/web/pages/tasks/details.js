@@ -22,7 +22,7 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser';
 
@@ -73,42 +73,42 @@ class TaskDetails extends React.Component {
   componentDidMount() {
     const {entity} = this.props;
 
-    if (isDefined(entity.config)) {
+    if (hasValue(entity.config)) {
       this.props.loadScanConfig(entity.config.id);
     }
-    if (isDefined(entity.schedule)) {
+    if (hasValue(entity.schedule)) {
       this.props.loadSchedule(entity.schedule.id);
     }
   }
 
   render() {
-    const {links = true, entity, scanConfig, schedule} = this.props;
+    const {links = true, entity} = this.props;
     const {
       alerts,
-      apply_overrides,
-      auto_delete,
-      auto_delete_data,
-      average_duration,
+      applyOverrides,
+      autoDelete,
+      autoDeleteData,
+      averageDuration,
       config,
-      hosts_ordering,
-      in_assets,
-      last_report,
-      min_qod,
-      preferences,
+      hostsOrdering,
+      inAssets,
+      reports,
+      minQod,
       scanner,
-      schedule_periods,
       target,
-      max_checks,
-      max_hosts,
+      maxChecks,
+      maxHosts,
+      schedule,
+      sourceIface = '',
     } = entity;
-    const {iface = {}} = preferences;
+
+    const {lastReport} = reports;
 
     let dur;
-    const has_duration =
-      isDefined(last_report) && isDefined(last_report.scan_start);
-    if (has_duration) {
-      if (isDefined(last_report.scan_end)) {
-        const diff = last_report.scan_end.diff(last_report.scan_start);
+    const hasDuration = hasValue(lastReport) && hasValue(lastReport.scanStart);
+    if (hasDuration) {
+      if (hasValue(lastReport.scanEnd)) {
+        const diff = lastReport.scanEnd.diff(lastReport.scanStart); // Seems like scanEnd is not a valid date object or something. I get an error sometimes.
         dur = duration(diff).humanize();
       } else {
         dur = _('Not finished yet');
@@ -117,12 +117,12 @@ class TaskDetails extends React.Component {
       dur = _('No scans yet');
     }
 
-    const has_av_duration = isDefined(average_duration) && average_duration > 0;
-    const av_duration = has_av_duration ? average_duration.humanize() : '';
+    const hasAvDuration = hasValue(averageDuration) && averageDuration > 0;
+    const avDuration = hasAvDuration ? averageDuration.humanize() : '';
 
     return (
       <Layout grow="1" flex="column">
-        {isDefined(target) && (
+        {hasValue(target) && (
           <DetailsBlock title={_('Target')}>
             <DetailsLink textOnly={!links} type="target" id={target.id}>
               {target.name}
@@ -130,7 +130,7 @@ class TaskDetails extends React.Component {
           </DetailsBlock>
         )}
 
-        {isDefined(alerts) && (
+        {hasValue(alerts) && alerts.length > 0 && (
           <DetailsBlock title={_('Alerts')}>
             <HorizontalSep>
               {alerts.sort(compareAlerts).map(alert => (
@@ -144,7 +144,7 @@ class TaskDetails extends React.Component {
           </DetailsBlock>
         )}
 
-        {isDefined(scanner) && (
+        {hasValue(scanner) && (
           <DetailsBlock title={_('Scanner')}>
             <DetailsTable>
               <TableBody>
@@ -166,7 +166,7 @@ class TaskDetails extends React.Component {
                   <TableData>{_('Type')}</TableData>
                   <TableData>{scannerTypeName(scanner.scannerType)}</TableData>
                 </TableRow>
-                {isDefined(config) && (
+                {hasValue(config) && (
                   <TableRow>
                     <TableData>{_('Scan Config')}</TableData>
                     <TableData>
@@ -182,38 +182,39 @@ class TaskDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {hasValue(config) &&
+                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
+                  hasValue(hostsOrdering) && (
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
-                      <TableData>{hosts_ordering}</TableData>
+                      <TableData>{hostsOrdering}</TableData>
                     </TableRow>
                   )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {hasValue(config) &&
+                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Network Source Interface')}</TableData>
-                      <TableData>{iface.value}</TableData>
+                      <TableData>{sourceIface}</TableData>
                     </TableRow>
                   )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_checks) && (
+                {hasValue(config) &&
+                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
+                  hasValue(maxChecks) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently executed NVTs per host')}
                       </TableData>
-                      <TableData>{max_checks}</TableData>
+                      <TableData>{maxChecks}</TableData>
                     </TableRow>
                   )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_hosts) && (
+                {hasValue(config) &&
+                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
+                  hasValue(maxHosts) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently scanned hosts')}
                       </TableData>
-                      <TableData>{max_hosts}</TableData>
+                      <TableData>{maxHosts}</TableData>
                     </TableRow>
                   )}
               </TableBody>
@@ -226,27 +227,27 @@ class TaskDetails extends React.Component {
             <TableBody>
               <TableRow>
                 <TableData>{_('Add to Assets')}</TableData>
-                <TableData>{renderYesNo(in_assets)}</TableData>
+                <TableData>{renderYesNo(inAssets)}</TableData>
               </TableRow>
 
-              {in_assets === YES_VALUE && (
+              {inAssets === YES_VALUE && (
                 <TableRow>
                   <TableData>{_('Apply Overrides')}</TableData>
-                  <TableData>{renderYesNo(apply_overrides)}</TableData>
+                  <TableData>{renderYesNo(applyOverrides)}</TableData>
                 </TableRow>
               )}
 
-              {in_assets === YES_VALUE && (
+              {inAssets === YES_VALUE && (
                 <TableRow>
                   <TableData>{_('Min QoD')}</TableData>
-                  <TableData>{min_qod + ' %'}</TableData>
+                  <TableData>{minQod + ' %'}</TableData>
                 </TableRow>
               )}
             </TableBody>
           </DetailsTable>
         </DetailsBlock>
 
-        {isDefined(schedule) && (
+        {hasValue(schedule) && (
           <DetailsBlock title={_('Schedule')}>
             <DetailsTable>
               <TableBody>
@@ -264,7 +265,7 @@ class TaskDetails extends React.Component {
                     </span>
                   </TableData>
                 </TableRow>
-                {isDefined(schedule.event) && (
+                {hasValue(schedule.event) && (
                   <TableRow>
                     <TableData>{_('Next')}</TableData>
                     <TableData>
@@ -284,30 +285,20 @@ class TaskDetails extends React.Component {
                 <TableData>{_('Duration of last Scan')}</TableData>
                 <TableData>{dur}</TableData>
               </TableRow>
-              {has_av_duration && (
+              {hasAvDuration && (
                 <TableRow>
                   <TableData>{_('Average Scan duration')}</TableData>
-                  <TableData>{av_duration}</TableData>
-                </TableRow>
-              )}
-              {schedule_periods > 0 && (
-                <TableRow>
-                  <TableData>{_('Period')}</TableData>
-                  <TableData>
-                    {schedule_periods > 1
-                      ? _('{{nr}} more times', {nr: schedule_periods})
-                      : _('Once')}
-                  </TableData>
+                  <TableData>{avDuration}</TableData>
                 </TableRow>
               )}
               <TableRow>
                 <TableData>{_('Auto delete Reports')}</TableData>
                 <TableData>
-                  {auto_delete === 'keep'
+                  {autoDelete === 'keep'
                     ? _(
                         'Automatically delete oldest reports but always keep ' +
                           'newest {{nr}} reports',
-                        {nr: auto_delete_data},
+                        {nr: autoDeleteData},
                       )
                     : _('Do not automatically delete reports')}
                 </TableData>
@@ -326,18 +317,18 @@ TaskDetails.propTypes = {
   links: PropTypes.bool,
   loadScanConfig: PropTypes.func.isRequired,
   loadSchedule: PropTypes.func.isRequired,
-  scanConfig: PropTypes.model,
-  schedule: PropTypes.model,
+  scanConfig: PropTypes.object,
+  schedule: PropTypes.object,
 };
 
 const mapStateToProps = (rootState, {entity = {}}) => {
   const scheduleSel = scheduleSelector(rootState);
   const scanConfigSel = scanConfigSelector(rootState);
   return {
-    scanConfig: isDefined(entity.config)
+    scanConfig: hasValue(entity.config)
       ? scanConfigSel.getEntity(entity.config.id)
       : undefined,
-    schedule: isDefined(entity.schedule)
+    schedule: hasValue(entity.schedule)
       ? scheduleSel.getEntity(entity.schedule.id)
       : undefined,
   };
@@ -350,10 +341,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(TaskDetails);
 
 // vim: set ts=2 sw=2 tw=80:

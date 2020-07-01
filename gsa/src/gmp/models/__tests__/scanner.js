@@ -38,10 +38,19 @@ import {YES_VALUE} from 'gmp/parser';
 testModel(Scanner, 'scanner');
 
 describe('Scanner model tests', () => {
+  test('should parse id', () => {
+    const scanner = Scanner.fromElement({uuid: 'foo'});
+
+    expect(scanner.id).toEqual('foo');
+  });
   test('should parse type', () => {
     const scanner = Scanner.fromElement({type: '42'});
+    const scanner2 = Scanner.fromElement({type: 'OSP_SCANNER_TYPE'});
+    const scanner3 = Scanner.fromElement({type: 9});
 
     expect(scanner.scannerType).toEqual(42);
+    expect(scanner2.scannerType).toEqual(1);
+    expect(scanner3.scannerType).toEqual(9);
   });
 
   test('should parse credential', () => {
