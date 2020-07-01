@@ -27,7 +27,7 @@ import {
   useCreateContainerTask,
   useCreateTask,
   useDeleteTask,
-  useDeleteTasks,
+  useDeleteTasksByIds,
   useGetTasks,
   useGetTask,
   useLazyGetTasks,
@@ -48,7 +48,7 @@ import {
   createStartTaskQueryMock,
   createStopTaskQueryMock,
   createResumeTaskQueryMock,
-  createDeleteTasksQueryMock,
+  createDeleteTasksByIdsQueryMock,
   createDeleteFilteredTasksQueryMock,
   createGetTaskQueryErrorMock,
 } from '../__mocks__/tasks';
@@ -202,18 +202,18 @@ describe('useDeleteTask tests', () => {
 });
 
 const DeleteTasksComponent = () => {
-  const [deleteTasks] = useDeleteTasks();
+  const [deleteTasksByIds] = useDeleteTasksByIds();
   return (
     <button
       data-testid="bulk-delete"
-      onClick={() => deleteTasks(['foo', 'bar'])}
+      onClick={() => deleteTasksByIds(['foo', 'bar'])}
     />
   );
 };
 
-describe('useDeleteTasks tests', () => {
+describe('useDeleteTasksByIds tests', () => {
   test('should delete a list of tasks after user interaction', async () => {
-    const [mock, resultFunc] = createDeleteTasksQueryMock(['foo', 'bar']);
+    const [mock, resultFunc] = createDeleteTasksByIdsQueryMock(['foo', 'bar']);
     const {render} = rendererWith({queryMocks: [mock]});
 
     render(<DeleteTasksComponent />);

@@ -24,7 +24,7 @@ import {
   CREATE_CONTAINER_TASK,
   CREATE_TASK,
   DELETE_TASK,
-  DELETE_TASKS,
+  DELETE_TASKS_BY_IDS,
   GET_TASK,
   GET_TASKS,
   MODIFY_TASK,
@@ -347,10 +347,10 @@ export const createDeleteTaskQueryMock = taskId => {
   return [queryMock, resultFunc];
 };
 
-export const createDeleteTasksQueryMock = taskIds => {
+export const createDeleteTasksByIdsQueryMock = taskIds => {
   const queryResult = {
     data: {
-      deleteTasks: {
+      deleteTasksByIds: {
         ok: true,
       },
     },
@@ -364,7 +364,7 @@ export const createDeleteTasksQueryMock = taskIds => {
 
   const queryMock = {
     request: {
-      query: DELETE_TASKS,
+      query: DELETE_TASKS_BY_IDS,
       variables,
     },
     newData: resultFunc,

@@ -59,9 +59,9 @@ export const DELETE_TASK = gql`
   }
 `;
 
-export const DELETE_TASKS = gql`
-  mutation deleteTasks($ids: [UUID]!) {
-    deleteTasks(ids: $ids) {
+export const DELETE_TASKS_BY_IDS = gql`
+  mutation deleteTasksByIds($ids: [UUID]!) {
+    deleteTasksByIds(ids: $ids) {
       ok
     }
   }
@@ -412,14 +412,17 @@ export const useDeleteTask = options => {
   return [deleteTask, data];
 };
 
-export const useDeleteTasks = options => {
-  const [queryDeleteTasks, data] = useMutation(DELETE_TASKS, options);
-  const deleteTasks = useCallback(
-    // eslint-disable-next-line no-shadow
-    (ids, options) => queryDeleteTasks({...options, variables: {ids}}),
-    [queryDeleteTasks],
+export const useDeleteTasksByIds = options => {
+  const [queryDeleteTasksByIds, data] = useMutation(
+    DELETE_TASKS_BY_IDS,
+    options,
   );
-  return [deleteTasks, data];
+  const deleteTasksByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteTasksByIds({...options, variables: {ids}}),
+    [queryDeleteTasksByIds],
+  );
+  return [deleteTasksByIds, data];
 };
 
 export const useDeleteFilteredTasks = options => {
