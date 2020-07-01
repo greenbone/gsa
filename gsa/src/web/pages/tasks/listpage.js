@@ -51,7 +51,7 @@ import {
   useLazyGetTasks,
   useDeleteTask,
   useDeleteTasksByIds,
-  useDeleteFilteredTasks,
+  useDeleteTasksByFilter,
   useCloneTask,
 } from 'web/graphql/tasks';
 
@@ -138,7 +138,7 @@ const TasksListPage = () => {
 
   const [deleteTask] = useDeleteTask();
   const [deleteTasksByIds] = useDeleteTasksByIds();
-  const [deleteFilteredTasks] = useDeleteFilteredTasks();
+  const [deleteTasksByFilter] = useDeleteTasksByFilter();
   const [cloneTask] = useCloneTask();
   const {
     change: changeFilter,
@@ -193,7 +193,7 @@ const TasksListPage = () => {
   const handleBulkDeleteTask = () => {
     if (selectionType === SelectionType.SELECTION_FILTER) {
       const filterAll = filter.all().toFilterString();
-      return deleteFilteredTasks(filterAll).then(refetch, showError);
+      return deleteTasksByFilter(filterAll).then(refetch, showError);
     }
     const tasksToDelete =
       selectionType === SelectionType.SELECTION_USER

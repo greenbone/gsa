@@ -31,7 +31,7 @@ import {
   START_TASK,
   STOP_TASK,
   RESUME_TASK,
-  DELETE_FILTERED_TASKS,
+  DELETE_TASKS_BY_FILTER,
 } from 'web/graphql/tasks';
 
 import {deepFreeze} from 'web/utils/testing';
@@ -372,10 +372,10 @@ export const createDeleteTasksByIdsQueryMock = taskIds => {
   return [queryMock, resultFunc];
 };
 
-export const createDeleteFilteredTasksQueryMock = filterString => {
+export const createDeleteTasksByFilterQueryMock = filterString => {
   const queryResult = {
     data: {
-      deleteFilteredTasks: {
+      deleteTasksByFilter: {
         ok: true,
       },
     },
@@ -389,7 +389,7 @@ export const createDeleteFilteredTasksQueryMock = filterString => {
 
   const queryMock = {
     request: {
-      query: DELETE_FILTERED_TASKS,
+      query: DELETE_TASKS_BY_FILTER,
       variables,
     },
     newData: resultFunc,

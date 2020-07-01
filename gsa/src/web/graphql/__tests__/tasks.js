@@ -35,7 +35,7 @@ import {
   useStartTask,
   useStopTask,
   useResumeTask,
-  useDeleteFilteredTasks,
+  useDeleteTasksByFilter,
 } from '../tasks';
 import {
   createCloneTaskQueryMock,
@@ -49,7 +49,7 @@ import {
   createStopTaskQueryMock,
   createResumeTaskQueryMock,
   createDeleteTasksByIdsQueryMock,
-  createDeleteFilteredTasksQueryMock,
+  createDeleteTasksByFilterQueryMock,
   createGetTaskQueryErrorMock,
 } from '../__mocks__/tasks';
 import {isDefined} from 'gmp/utils/identity';
@@ -201,7 +201,7 @@ describe('useDeleteTask tests', () => {
   });
 });
 
-const DeleteTasksComponent = () => {
+const DeleteTasksByIdsComponent = () => {
   const [deleteTasksByIds] = useDeleteTasksByIds();
   return (
     <button
@@ -216,7 +216,7 @@ describe('useDeleteTasksByIds tests', () => {
     const [mock, resultFunc] = createDeleteTasksByIdsQueryMock(['foo', 'bar']);
     const {render} = rendererWith({queryMocks: [mock]});
 
-    render(<DeleteTasksComponent />);
+    render(<DeleteTasksByIdsComponent />);
     const button = screen.getByTestId('bulk-delete');
     fireEvent.click(button);
 
@@ -226,22 +226,22 @@ describe('useDeleteTasksByIds tests', () => {
   });
 });
 
-const DeleteFilteredTasksComponent = () => {
-  const [deleteFilteredTasks] = useDeleteFilteredTasks();
+const DeleteTasksByFilterComponent = () => {
+  const [deleteTasksByFilter] = useDeleteTasksByFilter();
   return (
     <button
       data-testid="filter-delete"
-      onClick={() => deleteFilteredTasks('foo')}
+      onClick={() => deleteTasksByFilter('foo')}
     />
   );
 };
 
-describe('useDeleteFilteredTasks tests', () => {
+describe('useDeleteTasksByFilter tests', () => {
   test('should delete a list of tasks by filter string after user interaction', async () => {
-    const [mock, resultFunc] = createDeleteFilteredTasksQueryMock('foo');
+    const [mock, resultFunc] = createDeleteTasksByFilterQueryMock('foo');
     const {render} = rendererWith({queryMocks: [mock]});
 
-    render(<DeleteFilteredTasksComponent />);
+    render(<DeleteTasksByFilterComponent />);
     const button = screen.getByTestId('filter-delete');
     fireEvent.click(button);
 
