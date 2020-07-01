@@ -50,8 +50,8 @@ import BulkTagComponent from 'web/entities/bulktagcomponent';
 import {
   useLazyGetTasks,
   useDeleteTask,
-  useDeleteTasks,
-  useDeleteFilteredTasks,
+  useDeleteTasksByIds,
+  useDeleteTasksByFilter,
   useCloneTask,
 } from 'web/graphql/tasks';
 
@@ -137,8 +137,8 @@ const TasksListPage = () => {
   ] = useLazyGetTasks();
 
   const [deleteTask] = useDeleteTask();
-  const [deleteTasks] = useDeleteTasks();
-  const [deleteFilteredTasks] = useDeleteFilteredTasks();
+  const [deleteTasksByIds] = useDeleteTasksByIds();
+  const [deleteTasksByFilter] = useDeleteTasksByFilter();
   const [cloneTask] = useCloneTask();
   const {
     change: changeFilter,
@@ -193,13 +193,13 @@ const TasksListPage = () => {
   const handleBulkDeleteTask = () => {
     if (selectionType === SelectionType.SELECTION_FILTER) {
       const filterAll = filter.all().toFilterString();
-      return deleteFilteredTasks(filterAll).then(refetch, showError);
+      return deleteTasksByFilter(filterAll).then(refetch, showError);
     }
     const tasksToDelete =
       selectionType === SelectionType.SELECTION_USER
         ? getEntityIds(selected)
         : getEntityIds(tasks);
-    return deleteTasks(tasksToDelete).then(refetch, showError);
+    return deleteTasksByIds(tasksToDelete).then(refetch, showError);
   };
 
   const openTagsDialog = () => {

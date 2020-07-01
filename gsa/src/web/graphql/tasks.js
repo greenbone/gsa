@@ -59,17 +59,17 @@ export const DELETE_TASK = gql`
   }
 `;
 
-export const DELETE_TASKS = gql`
-  mutation deleteTasks($ids: [UUID]!) {
-    deleteTasks(ids: $ids) {
+export const DELETE_TASKS_BY_IDS = gql`
+  mutation deleteTasksByIds($ids: [UUID]!) {
+    deleteTasksByIds(ids: $ids) {
       ok
     }
   }
 `;
 
-export const DELETE_FILTERED_TASKS = gql`
-  mutation deleteFilteredTasks($filterString: String!) {
-    deleteFilteredTasks(filterString: $filterString) {
+export const DELETE_TASKS_BY_FILTER = gql`
+  mutation deleteTasksByFilter($filterString: String!) {
+    deleteTasksByFilter(filterString: $filterString) {
       ok
     }
   }
@@ -412,31 +412,34 @@ export const useDeleteTask = options => {
   return [deleteTask, data];
 };
 
-export const useDeleteTasks = options => {
-  const [queryDeleteTasks, data] = useMutation(DELETE_TASKS, options);
-  const deleteTasks = useCallback(
-    // eslint-disable-next-line no-shadow
-    (ids, options) => queryDeleteTasks({...options, variables: {ids}}),
-    [queryDeleteTasks],
-  );
-  return [deleteTasks, data];
-};
-
-export const useDeleteFilteredTasks = options => {
-  const [queryDeleteFilteredTasks, data] = useMutation(
-    DELETE_FILTERED_TASKS,
+export const useDeleteTasksByIds = options => {
+  const [queryDeleteTasksByIds, data] = useMutation(
+    DELETE_TASKS_BY_IDS,
     options,
   );
-  const deleteFilteredTasks = useCallback(
+  const deleteTasksByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteTasksByIds({...options, variables: {ids}}),
+    [queryDeleteTasksByIds],
+  );
+  return [deleteTasksByIds, data];
+};
+
+export const useDeleteTasksByFilter = options => {
+  const [queryDeleteTasksByFilter, data] = useMutation(
+    DELETE_TASKS_BY_FILTER,
+    options,
+  );
+  const deleteTasksByFilter = useCallback(
     // eslint-disable-next-line no-shadow
     (filterString, options) =>
-      queryDeleteFilteredTasks({
+      queryDeleteTasksByFilter({
         ...options,
         variables: {filterString},
       }),
-    [queryDeleteFilteredTasks],
+    [queryDeleteTasksByFilter],
   );
-  return [deleteFilteredTasks, data];
+  return [deleteTasksByFilter, data];
 };
 
 export const useModifyTask = options => {

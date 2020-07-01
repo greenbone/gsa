@@ -24,14 +24,14 @@ import {
   CREATE_CONTAINER_TASK,
   CREATE_TASK,
   DELETE_TASK,
-  DELETE_TASKS,
+  DELETE_TASKS_BY_IDS,
   GET_TASK,
   GET_TASKS,
   MODIFY_TASK,
   START_TASK,
   STOP_TASK,
   RESUME_TASK,
-  DELETE_FILTERED_TASKS,
+  DELETE_TASKS_BY_FILTER,
 } from 'web/graphql/tasks';
 
 import {deepFreeze} from 'web/utils/testing';
@@ -347,10 +347,10 @@ export const createDeleteTaskQueryMock = taskId => {
   return [queryMock, resultFunc];
 };
 
-export const createDeleteTasksQueryMock = taskIds => {
+export const createDeleteTasksByIdsQueryMock = taskIds => {
   const queryResult = {
     data: {
-      deleteTasks: {
+      deleteTasksByIds: {
         ok: true,
       },
     },
@@ -364,7 +364,7 @@ export const createDeleteTasksQueryMock = taskIds => {
 
   const queryMock = {
     request: {
-      query: DELETE_TASKS,
+      query: DELETE_TASKS_BY_IDS,
       variables,
     },
     newData: resultFunc,
@@ -372,10 +372,10 @@ export const createDeleteTasksQueryMock = taskIds => {
   return [queryMock, resultFunc];
 };
 
-export const createDeleteFilteredTasksQueryMock = filterString => {
+export const createDeleteTasksByFilterQueryMock = filterString => {
   const queryResult = {
     data: {
-      deleteFilteredTasks: {
+      deleteTasksByFilter: {
         ok: true,
       },
     },
@@ -389,7 +389,7 @@ export const createDeleteFilteredTasksQueryMock = filterString => {
 
   const queryMock = {
     request: {
-      query: DELETE_FILTERED_TASKS,
+      query: DELETE_TASKS_BY_FILTER,
       variables,
     },
     newData: resultFunc,
