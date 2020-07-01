@@ -38,7 +38,7 @@ export const SCANCONFIG_TREND_DYNAMIC = 1;
 export const SCANCONFIG_TREND_STATIC = 0;
 
 export const getTranslatedType = config => {
-  return config.scan_config_type === OSP_SCAN_CONFIG_TYPE
+  return config.scanConfigType === OSP_SCAN_CONFIG_TYPE
     ? _('OSP')
     : _('OpenVAS');
 };
@@ -51,9 +51,9 @@ export const filterEmptyScanConfig = config =>
   config.id !== EMPTY_SCAN_CONFIG_ID;
 
 export const openVasScanConfigsFilter = config =>
-  config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE;
+  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE;
 export const ospScanConfigsFilter = config =>
-  config.scan_config_type === OSP_SCAN_CONFIG_TYPE;
+  config.scanConfigType === OSP_SCAN_CONFIG_TYPE;
 
 export const parseTrend = parseInt;
 
@@ -149,7 +149,7 @@ class ScanConfig extends Model {
       nvt: nvt_preferences,
     };
 
-    ret.scan_config_type = parseInt(element.type);
+    ret.scanConfigType = parseInt(element.type);
 
     if (isDefined(element.scanner)) {
       const scanner = {

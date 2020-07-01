@@ -67,6 +67,7 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 
+import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
@@ -152,7 +153,7 @@ const Page = ({
     <TargetComponent
       onCloned={goto_details('target', props)}
       onCloneError={onError}
-      onCreated={goto_details('target', props)}
+      onCreated={goto_entity_details('target', 'createTarget', props)}
       onDeleted={goto_list('targets', props)}
       onDeleteError={onError}
       onDownloaded={onDownloaded}

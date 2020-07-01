@@ -15,24 +15,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+
+import React, {useState, useEffect, useCallback} from 'react';
 
 import _ from 'gmp/locale';
 
 import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/tasks';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import {hasValue} from 'gmp/utils/identity';
 
 import DashboardControls from 'web/components/dashboard/controls';
+
+import Download from 'web/components/form/download';
+import useDownload from 'web/components/form/useDownload';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import TaskIcon from 'web/components/icon/taskicon';
@@ -41,30 +36,52 @@ import WizardIcon from 'web/components/icon/wizardicon';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
-import {
-  USE_DEFAULT_RELOAD_INTERVAL,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/reload';
+import useReload from 'web/components/loading/useReload';
 
 import IconMenu from 'web/components/menu/iconmenu';
 import MenuEntry from 'web/components/menu/menuentry';
+
+import DialogNotification from 'web/components/notification/dialognotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+
+import EntitiesPage from 'web/entities/page';
+import BulkTagComponent from 'web/entities/bulktagcomponent';
+
+import {
+  useLazyGetTasks,
+  useDeleteTask,
+  useDeleteTasksByIds,
+  useDeleteTasksByFilter,
+  useCloneTask,
+} from 'web/graphql/tasks';
+
+import PropTypes from 'web/utils/proptypes';
+import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
+import useCapabilities from 'web/utils/useCapabilities';
+import useChangeFilter from 'web/utils/useChangeFilter';
+import useGmpSettings from 'web/utils/useGmpSettings';
+import useFilterSortBy from 'web/utils/useFilterSortby';
+import usePageFilter from 'web/utils/usePageFilter';
+import useSelection from 'web/utils/useSelection';
+import usePrevious from 'web/utils/usePrevious';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import NewIconMenu from './icons/newiconmenu';
 
 import TaskComponent from './component';
 import TaskDashboard, {TASK_DASHBOARD_ID} from './dashboard';
 import TaskFilterDialog from './filterdialog';
-import Table from './table';
+import TaskListTable from './table';
 
-export const ToolBarIcons = withCapabilities(
-  ({
-    capabilities,
-    onAdvancedTaskWizardClick,
-    onModifyTaskWizardClick,
-    onContainerTaskCreateClick,
-    onTaskCreateClick,
-    onTaskWizardClick,
-  }) => (
+export const ToolBarIcons = ({
+  onAdvancedTaskWizardClick,
+  onModifyTaskWizardClick,
+  onContainerTaskCreateClick,
+  onTaskCreateClick,
+  onTaskWizardClick,
+}) => {
+  const capabilities = useCapabilities();
+  return (
     <IconDivider>
       <ManualIcon
         page="scanning"
@@ -96,8 +113,8 @@ export const ToolBarIcons = withCapabilities(
         onNewContainerClick={onContainerTaskCreateClick}
       />
     </IconDivider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
   onAdvancedTaskWizardClick: PropTypes.func.isRequired,
@@ -107,117 +124,283 @@ ToolBarIcons.propTypes = {
   onTaskWizardClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
-  filter,
-  onFilterChanged,
-  onInteraction,
-  onChanged,
-  onDownloaded,
-  onError,
-  ...props
-}) => (
-  <TaskComponent
-    onAdvancedTaskWizardSaved={onChanged}
-    onCloned={onChanged}
-    onCloneError={onError}
-    onContainerSaved={onChanged}
-    onCreated={onChanged}
-    onContainerCreated={onChanged}
-    onDeleted={onChanged}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onModifyTaskWizardSaved={onChanged}
-    onReportImported={onChanged}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onSaved={onChanged}
-    onStarted={onChanged}
-    onStartError={onError}
-    onStopped={onChanged}
-    onStopError={onError}
-    onTaskWizardSaved={onChanged}
-  >
-    {({
-      clone,
-      create,
-      createcontainer,
-      delete: delete_func,
-      download,
-      edit,
-      start,
-      stop,
-      resume,
-      reportimport,
-      advancedtaskwizard,
-      modifytaskwizard,
-      taskwizard,
-    }) => (
-      <React.Fragment>
-        <PageTitle title={_('Tasks')} />
-        <EntitiesPage
-          {...props}
-          dashboard={() => (
-            <TaskDashboard
-              filter={filter}
-              onFilterChanged={onFilterChanged}
-              onInteraction={onInteraction}
-            />
-          )}
-          dashboardControls={() => (
-            <DashboardControls
-              dashboardId={TASK_DASHBOARD_ID}
-              onInteraction={onInteraction}
-            />
-          )}
-          filter={filter}
-          filterEditDialog={TaskFilterDialog}
-          filtersFilter={TASKS_FILTER_FILTER}
-          sectionIcon={<TaskIcon size="large" />}
-          table={Table}
-          title={_('Tasks')}
-          toolBarIcons={ToolBarIcons}
-          onAdvancedTaskWizardClick={advancedtaskwizard}
-          onContainerTaskCreateClick={createcontainer}
-          onError={onError}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-          onModifyTaskWizardClick={modifytaskwizard}
-          onReportImportClick={reportimport}
-          onTaskCloneClick={clone}
-          onTaskCreateClick={create}
-          onTaskDeleteClick={delete_func}
-          onTaskDownloadClick={download}
-          onTaskEditClick={edit}
-          onTaskResumeClick={resume}
-          onTaskStartClick={start}
-          onTaskStopClick={stop}
-          onTaskWizardClick={taskwizard}
-        />
-      </React.Fragment>
-    )}
-  </TaskComponent>
-);
+const TasksListPage = () => {
+  const gmpSettings = useGmpSettings();
+  const [, renewSession] = useUserSessionTimeout();
+  const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
+  const [filter, isLoadingFilter] = usePageFilter('task');
+  const prevFilter = usePrevious(filter);
+  const simpleFilter = filter.withoutView();
+  const [
+    getTasks,
+    {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
+  ] = useLazyGetTasks();
 
-Page.propTypes = {
-  filter: PropTypes.filter,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
+  const [deleteTask] = useDeleteTask();
+  const [deleteTasksByIds] = useDeleteTasksByIds();
+  const [deleteTasksByFilter] = useDeleteTasksByFilter();
+  const [cloneTask] = useCloneTask();
+  const {
+    change: changeFilter,
+    remove: removeFilter,
+    reset: resetFilter,
+  } = useChangeFilter('task');
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+  const [downloadRef, handleDownload] = useDownload();
+  const {
+    selectionType,
+    selected = [],
+    changeSelectionType,
+    select,
+    deselect,
+  } = useSelection();
+  const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
+    filter,
+    changeFilter,
+  );
+
+  const timeoutFunc = useCallback(
+    ({isVisible}) => {
+      if (!isVisible) {
+        return gmpSettings.reloadIntervalInactive;
+      }
+      if (hasValue(tasks) && tasks.some(task => task.isActive())) {
+        return gmpSettings.reloadIntervalActive;
+      }
+      return gmpSettings.reloadInterval;
+    },
+    [tasks, gmpSettings],
+  );
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetch,
+    timeoutFunc,
+  );
+
+  const handleCloneTask = useCallback(
+    task => cloneTask(task.id).then(refetch, showError),
+    [cloneTask, refetch, showError],
+  );
+  const handleDeleteTask = useCallback(
+    task => deleteTask(task.id).then(refetch, showError),
+    [deleteTask, refetch, showError],
+  );
+
+  const handleBulkDeleteTask = () => {
+    if (selectionType === SelectionType.SELECTION_FILTER) {
+      const filterAll = filter.all().toFilterString();
+      return deleteTasksByFilter(filterAll).then(refetch, showError);
+    }
+    const tasksToDelete =
+      selectionType === SelectionType.SELECTION_USER
+        ? getEntityIds(selected)
+        : getEntityIds(tasks);
+    return deleteTasksByIds(tasksToDelete).then(refetch, showError);
+  };
+
+  const openTagsDialog = () => {
+    renewSession();
+    setTagsDialogVisible(true);
+  };
+
+  const closeTagsDialog = () => {
+    renewSession();
+    setTagsDialogVisible(false);
+  };
+
+  useEffect(() => {
+    // load tasks initially after the filter is resolved
+    if (!isLoadingFilter && hasValue(filter) && !called) {
+      getTasks({
+        filterString: filter.toFilterString(),
+        first: filter.get('rows'),
+      });
+    }
+  }, [isLoadingFilter, filter, getTasks, called]);
+
+  useEffect(() => {
+    // reload if filter has changed
+    if (hasValue(refetch) && !filter.equals(prevFilter)) {
+      refetch({
+        filterString: filter.toFilterString(),
+        first: undefined,
+        last: undefined,
+      });
+    }
+  }, [filter, prevFilter, simpleFilter, refetch]);
+
+  useEffect(() => {
+    // start reloading if tasks are available and no timer is running yet
+    if (hasValue(tasks) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [tasks, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
+
+  const getNextTasks = () => {
+    refetch({
+      filterString: simpleFilter.toFilterString(),
+      after: pageInfo.endCursor,
+      before: undefined,
+      first: filter.get('rows'),
+      last: undefined,
+    });
+  };
+
+  const getPreviousTasks = () => {
+    refetch({
+      filterString: simpleFilter.toFilterString(),
+      after: undefined,
+      before: pageInfo.startCursor,
+      first: undefined,
+      last: filter.get('rows'),
+    });
+  };
+
+  const getFirstTasks = () => {
+    refetch({
+      filterString: simpleFilter.toFilterString(),
+      after: undefined,
+      before: undefined,
+      first: filter.get('rows'),
+      last: undefined,
+    });
+  };
+
+  const getLastTasks = () => {
+    refetch({
+      filterString: simpleFilter.toFilterString(),
+      after: pageInfo.lastPageCursor,
+      before: undefined,
+      first: filter.get('rows'),
+      last: undefined,
+    });
+  };
+
+  return (
+    <TaskComponent
+      onAdvancedTaskWizardSaved={refetch}
+      onCloned={refetch}
+      onCloneError={showError}
+      onContainerSaved={refetch}
+      onCreated={refetch}
+      onContainerCreated={refetch}
+      onDeleted={refetch}
+      onDeleteError={showError}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onInteraction={renewSession}
+      onModifyTaskWizardSaved={refetch}
+      onReportImported={refetch}
+      onResumed={refetch}
+      onResumeError={showError}
+      onSaved={refetch}
+      onStarted={refetch}
+      onStartError={showError}
+      onStopped={refetch}
+      onStopError={showError}
+      onTaskWizardSaved={refetch}
+    >
+      {({
+        create,
+        createcontainer,
+        download,
+        edit,
+        start,
+        stop,
+        resume,
+        reportimport,
+        advancedtaskwizard,
+        modifytaskwizard,
+        taskwizard,
+      }) => (
+        <React.Fragment>
+          <PageTitle title={_('Tasks')} />
+          <EntitiesPage
+            dashboard={() => (
+              <TaskDashboard
+                filter={filter}
+                onFilterChanged={changeFilter}
+                onInteraction={renewSession}
+              />
+            )}
+            dashboardControls={() => (
+              <DashboardControls
+                dashboardId={TASK_DASHBOARD_ID}
+                onInteraction={renewSession}
+              />
+            )}
+            entities={tasks}
+            entitiesCounts={counts}
+            entitiesError={error}
+            entitiesSelected={selected}
+            filter={filter}
+            filterEditDialog={TaskFilterDialog}
+            filtersFilter={TASKS_FILTER_FILTER}
+            isLoading={isLoading}
+            isUpdating={isLoading}
+            selectionType={selectionType}
+            sectionIcon={<TaskIcon size="large" />}
+            sortBy={sortBy}
+            sortDir={sortDir}
+            table={TaskListTable}
+            title={_('Tasks')}
+            toolBarIcons={ToolBarIcons}
+            onAdvancedTaskWizardClick={advancedtaskwizard}
+            onContainerTaskCreateClick={createcontainer}
+            onDeleteBulk={handleBulkDeleteTask}
+            onEntitySelected={select}
+            onEntityDeselected={deselect}
+            onError={showError}
+            onFilterChanged={changeFilter}
+            onFilterCreated={changeFilter}
+            onFilterReset={resetFilter}
+            onFilterRemoved={removeFilter}
+            onInteraction={renewSession}
+            onModifyTaskWizardClick={modifytaskwizard}
+            onFirstClick={getFirstTasks}
+            onLastClick={getLastTasks}
+            onNextClick={getNextTasks}
+            onPreviousClick={getPreviousTasks}
+            onReportImportClick={reportimport}
+            onSelectionTypeChange={changeSelectionType}
+            onSortChange={handleSortChange}
+            onTagsBulk={openTagsDialog}
+            onTaskCloneClick={handleCloneTask}
+            onTaskCreateClick={create}
+            onTaskDeleteClick={handleDeleteTask}
+            onTaskDownloadClick={download}
+            onTaskEditClick={edit}
+            onTaskResumeClick={resume}
+            onTaskStartClick={start}
+            onTaskStopClick={stop}
+            onTaskWizardClick={taskwizard}
+          />
+          <DialogNotification
+            {...notificationDialogState}
+            onCloseClick={closeNotificationDialog}
+          />
+          <Download ref={downloadRef} />
+          {tagsDialogVisible && (
+            <BulkTagComponent
+              entities={tasks}
+              selected={selected}
+              filter={filter}
+              selectionType={selectionType}
+              entitiesCounts={counts}
+              onClose={closeTagsDialog}
+            />
+          )}
+        </React.Fragment>
+      )}
+    </TaskComponent>
+  );
 };
 
-export const taskReloadInterval = ({entities = []}) =>
-  entities.some(task => task.isActive())
-    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : USE_DEFAULT_RELOAD_INTERVAL;
-
-export default withEntitiesContainer('task', {
-  entitiesSelector,
-  loadEntities,
-  reloadInterval: taskReloadInterval,
-})(Page);
-
-// vim: set ts=2 sw=2 tw=80:
+export default TasksListPage;

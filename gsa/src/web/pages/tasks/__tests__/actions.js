@@ -23,8 +23,9 @@ import {setLocale} from 'gmp/locale/lang';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
+import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+
 import Actions from '../actions';
-import Task, {TASK_STATUS} from 'gmp/models/task';
 
 setLocale('en');
 
@@ -38,12 +39,7 @@ describe('Task Actions tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const task = Task.fromElement({
-      status: TASK_STATUS.new,
-      alterable: '0',
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-    });
+    const {newTask: task} = getMockTasks();
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -74,13 +70,7 @@ describe('Task Actions tests', () => {
   });
 
   test('should call click handlers', () => {
-    const task = Task.fromElement({
-      status: TASK_STATUS.done,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-    });
+    const {finishedTask: task} = getMockTasks();
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -92,6 +82,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -135,13 +126,7 @@ describe('Task Actions tests', () => {
   });
 
   test('should not call click handlers without permissions', () => {
-    const task = Task.fromElement({
-      status: TASK_STATUS.done,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'get_tasks'}]},
-      target: {_id: 'id', name: 'target'},
-    });
+    const {observedTask: task} = getMockTasks();
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -153,6 +138,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -205,13 +191,7 @@ describe('Task Actions tests', () => {
   });
 
   test('should not call click handlers for stopped task without permissions', () => {
-    const task = Task.fromElement({
-      status: TASK_STATUS.stopped,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'get_tasks'}]},
-      target: {_id: 'id', name: 'target'},
-    });
+    const {stoppedTask: task} = getMockTasks();
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -278,13 +258,7 @@ describe('Task Actions tests', () => {
   });
 
   test('should not call click handlers for running task without permissions', () => {
-    const task = Task.fromElement({
-      status: TASK_STATUS.running,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'get_tasks'}]},
-      target: {_id: 'id', name: 'target'},
-    });
+    const {runningTask: task} = getMockTasks();
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -323,10 +297,7 @@ describe('Task Actions tests', () => {
 
     fireEvent.click(icons[2]);
     expect(handleTaskDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute(
-      'title',
-      'Permission to move Task to trashcan denied',
-    );
+    expect(icons[2]).toHaveAttribute('title', 'Task is still in use');
 
     fireEvent.click(icons[3]);
     expect(handleTaskEdit).not.toHaveBeenCalled();
@@ -345,13 +316,7 @@ describe('Task Actions tests', () => {
   });
 
   test('should call click handlers for running task', () => {
-    const task = Task.fromElement({
-      status: TASK_STATUS.running,
-      alterable: '0',
-      in_use: true,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-    });
+    const {runningTask: task} = getMockTasks();
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -363,6 +328,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -406,13 +372,7 @@ describe('Task Actions tests', () => {
   });
 
   test('should call click handlers for stopped task', () => {
-    const task = Task.fromElement({
-      status: TASK_STATUS.stopped,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-    });
+    const {stoppedTask: task} = getMockTasks();
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -424,6 +384,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -467,18 +428,7 @@ describe('Task Actions tests', () => {
   });
 
   test('should render schedule icon if task is scheduled', () => {
-    const task = Task.fromElement({
-      status: TASK_STATUS.stopped,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      schedule: {
-        _id: 'schedule1',
-        name: 'schedule1',
-        permissions: {permission: [{name: 'everything'}]},
-      },
-    });
+    const {task} = getMockTasks();
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -494,6 +444,7 @@ describe('Task Actions tests', () => {
       store: true,
       router: true,
     });
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}
@@ -515,7 +466,7 @@ describe('Task Actions tests', () => {
     fireEvent.click(detailslinks[0]);
     expect(detailslinks[0]).toHaveAttribute(
       'title',
-      'View Details of Schedule schedule1 (Next due: over)',
+      'View Details of Schedule schedule 1 (Next due: over)',
     );
 
     fireEvent.click(icons[1]);
@@ -524,9 +475,7 @@ describe('Task Actions tests', () => {
   });
 
   test('should call click handlers for container task', () => {
-    const task = Task.fromElement({
-      permissions: {permission: [{name: 'everything'}]},
-    });
+    const {containerTask: task} = getMockTasks();
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -538,6 +487,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = jest.fn();
 
     const {render} = rendererWith({capabilities: caps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={task}

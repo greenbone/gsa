@@ -38,6 +38,10 @@ class Target extends Model {
   static parseElement(element) {
     const ret = super.parseElement(element);
 
+    if (!isDefined(ret.id) && isDefined(ret.uuid)) {
+      ret.id = ret.uuid;
+    }
+
     if (isDefined(element.port_list) && !isEmpty(element.port_list._id)) {
       ret.port_list = PortList.fromElement(ret.port_list);
     } else {

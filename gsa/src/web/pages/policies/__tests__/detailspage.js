@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -29,10 +28,12 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, act} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -480,7 +481,6 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
-
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
 
@@ -543,11 +543,14 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -555,7 +558,6 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -637,11 +639,14 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -649,7 +654,6 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy2));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -740,11 +744,14 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -752,7 +759,6 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy3));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
@@ -834,11 +840,14 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -846,7 +855,6 @@ describe('Policy Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', policy4));
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
-
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');

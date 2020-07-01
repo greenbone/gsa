@@ -23,6 +23,7 @@ import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 
 import {
+  act,
   render as reactTestingRender,
   cleanup,
   queryAllByAttribute,
@@ -44,10 +45,20 @@ import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
+import {MockedProvider} from '@apollo/react-testing';
 
 export * from '@testing-library/react';
 
 afterEach(cleanup);
+
+export async function wait(ms = 0) {
+  await act(
+    () =>
+      new Promise(resolve => {
+        setTimeout(resolve, ms);
+      }),
+  );
+}
 
 export const queryAllByName = (container, name) =>
   queryAllByAttribute('name', container, name);
@@ -100,15 +111,16 @@ const withProvider = (name, key = name) => Component => ({
     children
   );
 
-const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
+const TestingGmpProvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
-const TestingCapabilitiesProvider = withProvider('capabilities', 'value')(
-  CapabilitiesContext.Provider,
-);
+const TestingCapabilitiesProvider = withProvider(
+  'capabilities',
+  'value',
+)(CapabilitiesContext.Provider);
 
 export const rendererWith = (
-  {capabilities, gmp, store, router} = {
+  {capabilities, gmp, store, router, queryMocks} = {
     store: true,
     router: true,
   },
@@ -128,18 +140,51 @@ export const rendererWith = (
   return {
     render: ui =>
       render(
-        <TestingGmpPropvider gmp={gmp}>
+        <TestingGmpProvider gmp={gmp}>
           <TestingCapabilitiesProvider capabilities={capabilities}>
             <TestingStoreProvider store={store}>
-              <TestingRouter history={history}>{ui}</TestingRouter>
+              <MockedProvider mocks={queryMocks} addTypename={false}>
+                <TestingRouter history={history}>{ui}</TestingRouter>
+              </MockedProvider>
             </TestingStoreProvider>
           </TestingCapabilitiesProvider>
-        </TestingGmpPropvider>,
+        </TestingGmpProvider>,
       ),
     gmp,
     store,
     history,
   };
+};
+
+export const deepFreeze = object => {
+  // Retrieve the property names defined on object
+  const propNames = Object.getOwnPropertyNames(object);
+
+  // Freeze properties before freezing self
+  for (const name of propNames) {
+    const value = object[name];
+
+    if (value && typeof value === 'object') {
+      deepFreeze(value);
+    }
+  }
+
+  return Object.freeze(object);
+};
+
+export const createGenericQueryMock = (query, result, variables) => {
+  const resultFunc = jest.fn().mockReturnValue({
+    data: result,
+  });
+
+  const queryMock = {
+    request: {
+      query,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
 };
 
 // vim: set ts=2 sw=2 tw=80:

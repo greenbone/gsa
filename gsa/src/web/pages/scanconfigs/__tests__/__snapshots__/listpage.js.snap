@@ -1240,6 +1240,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
       </div>
       <section
         class="entities-section"
+        data-testid="entities-section"
       >
         <div
           class="c23 section-header"
@@ -1274,6 +1275,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
         >
           <div
             class="c29 entities-table"
+            data-testid="entities-table"
           >
             <div
               class="c30"
@@ -1572,7 +1574,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                       </span>
                     </div>
                   </td>
-                  <td>
+                  <td
+                    data-testid="entities-table"
+                  >
                     <div
                       class="c0"
                     >
@@ -1633,7 +1637,9 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                   </td>
                 </tr>
               </tbody>
-              <tfoot>
+              <tfoot
+                data-testid="entities-footer"
+              >
                 <tr>
                   <td
                     colspan="7"

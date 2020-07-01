@@ -18,24 +18,42 @@
 import React from 'react';
 
 import Task from 'gmp/models/task';
+import Audit from 'gmp/models/audit';
+import Target from 'gmp/models/target';
 
 import {render} from 'web/utils/testing';
 
 import ObserverIcon from '../observericon';
 
 describe('Entity ObserverIcon component tests', () => {
-  test('should render if the owner is not the current user', () => {
-    const entity = Task.fromElement({owner: {name: 'foo'}});
+  test('should render task if the owner is not the current user', () => {
+    const task = Task.fromObject({owner: 'foo'});
 
-    const {element} = render(<ObserverIcon entity={entity} userName={'bar'} />);
+    const {element} = render(<ObserverIcon entity={task} userName={'bar'} />);
 
     expect(element).toBeInTheDocument();
   });
 
-  test('should not render if the owner is the current user', () => {
-    const entity = Task.fromElement({owner: {name: 'foo'}});
+  test('should render non-task if the owner is not the current user', () => {
+    const audit = Audit.fromElement({owner: {name: 'foo'}});
 
-    const {element} = render(<ObserverIcon entity={entity} userName={'foo'} />);
+    const {element} = render(<ObserverIcon entity={audit} userName={'bar'} />);
+
+    expect(element).toBeInTheDocument();
+  });
+
+  test('should not render task if the owner is the current user', () => {
+    const task = Task.fromObject({owner: 'foo'});
+
+    const {element} = render(<ObserverIcon entity={task} userName={'foo'} />);
+
+    expect(element).toEqual(null);
+  });
+
+  test('should not render non-task if the owner is the current user', () => {
+    const target = Target.fromElement({owner: {name: 'foo'}});
+
+    const {element} = render(<ObserverIcon entity={target} userName={'foo'} />);
 
     expect(element).toEqual(null);
   });

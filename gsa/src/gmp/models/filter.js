@@ -632,6 +632,20 @@ class Filter extends Model {
   }
 
   /**
+   * Returns a new filter without first and rows terms
+   *
+   * @return {Filter} Copy of this filter but without first and rows terms.
+   */
+  withoutView() {
+    const filter = this.copy();
+
+    filter.delete('first');
+    filter.delete('rows');
+
+    return filter;
+  }
+
+  /**
    * Merge other filter with an and operation
    *
    * @param {Filter} filter  Filter to be merged with and operation
