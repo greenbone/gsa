@@ -84,7 +84,7 @@ class EntitiesContainer extends React.Component {
 
     const {gmpname, gmp, notify} = this.props;
 
-    const entitiesCommandName = pluralizeType(normalizeType(gmpname));
+    const entitiesCommandName = pluralizeType(gmpname);
 
     this.entitiesCommand = gmp[entitiesCommandName];
 
