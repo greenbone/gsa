@@ -18,7 +18,7 @@
  */
 import {v4 as uuid} from 'uuid';
 
-import {isDefined} from '../utils/identity';
+import {isArray, isDefined} from '../utils/identity';
 
 import logger from '../log';
 
@@ -80,18 +80,22 @@ class DashboardCommand extends GmpCommand {
       setting_id: id,
     }).then(response => {
       const {data} = response;
-      const {setting} = data.get_settings.get_settings_response;
+      let {setting} = data.get_settings.get_settings_response;
 
       if (!isDefined(setting)) {
         return response.setData({});
       }
 
+      if (isArray(setting)) {
+        setting = setting[0]; // use first setting to avoid crash if the same
+        // setting is returned twice in an array
+      }
       const {value, name} = setting;
       let config;
       try {
         config = JSON.parse(value);
       } catch (e) {
-        log.warn('Could not parse dashboard setting', value);
+        log.warn('Could not parse dashboard setting', id, value);
         return;
       }
       return response.setData(convertLoadedSettings(config, name));
