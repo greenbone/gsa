@@ -35,7 +35,6 @@ import {
   apiType,
   typeName,
   pluralizeType,
-  normalizeType,
 } from 'gmp/utils/entitytype';
 import {debounce} from 'gmp/utils/event';
 
