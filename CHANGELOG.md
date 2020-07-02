@@ -35,6 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed spacing between radio buttons and input field in override dialog [#2286](https://github.com/greenbone/gsa/pull/2286)
 - Fixed separating hosts in override dialog via comma [#2280](https://github.com/greenbone/gsa/pull/2280)
 - Fixed installing the json translation files [#2272](https://github.com/greenbone/gsa/pull/2272)
 - Fixed displaying asset host identifiers references [#2260](https://github.com/greenbone/gsa/pull/2260)

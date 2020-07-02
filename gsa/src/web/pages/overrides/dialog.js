@@ -271,7 +271,7 @@ const OverrideDialog = ({
                 value={ANY}
                 onChange={onValueChange}
               />
-              <Layout>
+              <Divider>
                 <Radio
                   name="hosts"
                   checked={state.hosts === MANUAL}
@@ -284,7 +284,7 @@ const OverrideDialog = ({
                   disabled={state.hosts !== MANUAL}
                   onChange={onValueChange}
                 />
-              </Layout>
+              </Divider>
             </FormGroup>
 
             <FormGroup title={_('Location')}>
@@ -295,7 +295,7 @@ const OverrideDialog = ({
                 value={ANY}
                 onChange={onValueChange}
               />
-              <Layout>
+              <Divider>
                 <Radio
                   name="port"
                   checked={state.port === MANUAL}
@@ -308,7 +308,7 @@ const OverrideDialog = ({
                   value={state.port_manual}
                   onChange={onValueChange}
                 />
-              </Layout>
+              </Divider>
             </FormGroup>
 
             <FormGroup title={_('Severity')}>
@@ -407,7 +407,7 @@ const OverrideDialog = ({
                 value={TASK_ANY}
                 onChange={onValueChange}
               />
-              <Layout>
+              <Divider>
                 <Radio
                   name="task_id"
                   checked={state.task_id === TASK_SELECTED}
@@ -422,7 +422,7 @@ const OverrideDialog = ({
                   value={state.task_uuid}
                   onChange={onValueChange}
                 />
-              </Layout>
+              </Divider>
             </FormGroup>
 
             <FormGroup title={_('Result')}>
