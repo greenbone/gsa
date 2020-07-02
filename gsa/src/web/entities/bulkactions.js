@@ -246,7 +246,7 @@ export const useBulkExportEntities = () => {
       entities,
       selected,
       filter,
-      entitiesType,
+      resourceType,
       selectionType,
       exportByFilterFunc,
       exportByIdsFunc,
@@ -259,12 +259,12 @@ export const useBulkExportEntities = () => {
         return exportByFilterFunc(exportFilter).then(response => {
           const filename = generateFilename({
             fileNameFormat: listExportFileName,
-            resourceType: entitiesType,
+            resourceType,
             username,
           });
 
           const commandName =
-            'export' + capitalizeFirstLetter(entitiesType) + 'ByFilter';
+            'export' + capitalizeFirstLetter(resourceType) + 'ByFilter';
 
           const xml = response?.data;
           const exportedEntities = xml[commandName]?.exportedEntities;
@@ -279,12 +279,12 @@ export const useBulkExportEntities = () => {
       return exportByIdsFunc(toExport).then(response => {
         const filename = generateFilename({
           fileNameFormat: listExportFileName,
-          resourceType: entitiesType,
+          resourceType,
           username,
         });
 
         const commandName =
-          'export' + capitalizeFirstLetter(entitiesType) + 'ByIds';
+          'export' + capitalizeFirstLetter(resourceType) + 'ByIds';
 
         const xml = response?.data;
         const exportedEntities = xml[commandName]?.exportedEntities;

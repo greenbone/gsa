@@ -274,7 +274,7 @@ const [deleteTasksByFilter] = useDeleteTasksByFilter();
       entities: tasks,
       selected,
       filter,
-      entitiesType: 'tasks',
+      resourceType: 'tasks',
       selectionType,
       exportByFilterFunc: exportTasksByFilter,
       exportByIdsFunc: exportTasksByIds,
