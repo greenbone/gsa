@@ -87,8 +87,10 @@ class DashboardCommand extends GmpCommand {
       }
 
       if (isArray(setting)) {
-        setting = setting[0]; // use first setting to avoid crash if the same
-        // setting is returned twice in an array
+        // before https://github.com/greenbone/gvmd/pull/1106 it was possible that
+        // a setting with the same UUID is added twice to the db
+        // therefore use first setting to avoid crash
+        setting = setting[0];
       }
       const {value, name} = setting;
       let config;
