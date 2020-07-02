@@ -88,6 +88,7 @@ describe('normalizeType function tests', () => {
     expect(normalizeType('report_format')).toEqual('reportformat');
     expect(normalizeType('config')).toEqual('scanconfig');
     expect(normalizeType('vuln')).toEqual('vulnerability');
+    expect(normalizeType('allinfo')).toEqual('secinfo');
   });
 
   test('should pass through already normalize types', () => {
