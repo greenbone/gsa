@@ -55,7 +55,6 @@ const TYPES = {
   report_format: 'reportformat',
   tls_certificate: 'tlscertificate',
   vuln: 'vulnerability',
-  allinfo: 'secinfo',
 };
 
 /**
