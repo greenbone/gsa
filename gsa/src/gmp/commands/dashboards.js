@@ -18,7 +18,7 @@
  */
 import {v4 as uuid} from 'uuid';
 
-import {isDefined} from '../utils/identity';
+import {isArray, isDefined} from '../utils/identity';
 
 import logger from '../log';
 
@@ -80,18 +80,24 @@ class DashboardCommand extends GmpCommand {
       setting_id: id,
     }).then(response => {
       const {data} = response;
-      const {setting} = data.get_settings.get_settings_response;
+      let {setting} = data.get_settings.get_settings_response;
 
       if (!isDefined(setting)) {
         return response.setData({});
       }
 
+      if (isArray(setting)) {
+        // before https://github.com/greenbone/gvmd/pull/1106 it was possible that
+        // a setting with the same UUID is added twice to the db
+        // therefore use first setting to avoid crash
+        setting = setting[0];
+      }
       const {value, name} = setting;
       let config;
       try {
         config = JSON.parse(value);
       } catch (e) {
-        log.warn('Could not parse dashboard setting', value);
+        log.warn('Could not parse dashboard setting', id, value);
         return;
       }
       return response.setData(convertLoadedSettings(config, name));
