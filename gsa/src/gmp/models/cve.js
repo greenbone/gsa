@@ -124,17 +124,13 @@ class Cve extends Info {
     if (isDefined(ret.raw_data) && isDefined(ret.raw_data.entry)) {
       const {entry} = ret.raw_data;
 
-      if (isDefined(ret.cwe)) {
-        ret.cweId = entry.cwe._id;
-      }
-
-      ret.publishedTime = parseDate(entry['published-datetime'].__text);
-      ret.lastModifiedTime = parseDate(entry['last-modified-datetime'].__text);
+      ret.publishedTime = parseDate(entry['published-datetime']);
+      ret.lastModifiedTime = parseDate(entry['last-modified-datetime']);
 
       ret.references = map(entry.references, ref => ({
         name: ref.reference.__text,
         href: ref.reference._href,
-        source: ref.source.__text,
+        source: ref.source,
         reference_type: ref._reference_type,
       }));
 
@@ -143,19 +139,19 @@ class Cve extends Info {
         isDefined(entry.cvss.base_metrics) &&
         isDefined(entry.cvss.base_metrics.source)
       ) {
-        ret.source = entry.cvss.base_metrics.source.__text;
+        ret.source = entry.cvss.base_metrics.source;
       }
 
-      if (isDefined(entry.summary) && !isEmpty(entry.summary.__text)) {
+      if (isDefined(entry.summary)) {
         // really don't know why entry.summary and ret.description can differ
         // but xslt did use the summary and and e.g. the description of
         // CVE-2017-2988 was empty but summary not
-        ret.description = entry.summary.__text;
+        ret.description = entry.summary;
       }
 
       const products = entry['vulnerable-software-list'];
       if (isDefined(products)) {
-        ret.products = map(products.product, product => product.__text);
+        ret.products = products.product;
       }
 
       delete ret.raw_data;
