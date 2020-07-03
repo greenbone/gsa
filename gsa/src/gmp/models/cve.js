@@ -18,7 +18,7 @@
  */
 import 'core-js/features/object/entries';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
@@ -151,7 +151,9 @@ class Cve extends Info {
 
       const products = entry['vulnerable-software-list'];
       if (isDefined(products)) {
-        ret.products = products.product;
+        ret.products = isArray(products.product)
+          ? products.product
+          : [products.product];
       }
 
       delete ret.raw_data;
