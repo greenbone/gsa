@@ -67,6 +67,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
+- Adjusted parsing of cve model and removed cwe id as it seems not to be needed anymore [#2294](https://github.com/greenbone/gsa/pull/2294)
 - Adjusted parsing of filter strings to deal with strings with double quotes [#2051](https://github.com/greenbone/gsa/pull/2051)
 - Changed report TlsCertificate table headers to match TlsCertificate assets
 table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
