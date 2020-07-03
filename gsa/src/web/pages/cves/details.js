@@ -50,27 +50,10 @@ const CVSS_PROPS = {
 };
 
 const CveDetails = ({entity}) => {
-  const {
-    cvssBaseVector,
-    cweId,
-    description,
-    references = [],
-    severity,
-  } = entity;
+  const {cvssBaseVector, description, references = [], severity} = entity;
 
   return (
     <Layout flex="column" grow="1">
-      {isDefined(cweId) && (
-        <InfoTable>
-          <TableBody>
-            <TableRow>
-              <TableData>{_('CWE ID')}</TableData>
-              <TableData>{entity.cweId}</TableData>
-            </TableRow>
-          </TableBody>
-        </InfoTable>
-      )}
-
       {isDefined(description) && (
         <DetailsBlock title={_('Description')}>
           <p>{description}</p>
