@@ -43,9 +43,26 @@ export const GET_SCANNERS = gql`
       last: $last
     ) {
       nodes {
-        name
-        type
         id
+        name
+        writable
+        inUse
+        owner
+        comment
+        host
+        port
+        caPub {
+          certificate
+        }
+        creationTime
+        modificationTime
+        permissions {
+          name
+        }
+        credential {
+          id
+        }
+        type
       }
       counts {
         total
