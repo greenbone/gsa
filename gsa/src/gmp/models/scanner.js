@@ -92,6 +92,50 @@ const parse_scanner_info = (info = {}) => {
 class Scanner extends Model {
   static entityType = 'scanner';
 
+  static parseObject(object) {
+    const copy = super.parseObject(object);
+
+    copy.scannerType = scannerTypeInt(object.type);
+
+    copy.credential =
+      hasValue(copy.credential) && hasValue(copy.credential._id)
+        ? Credential.fromElement(copy.credential)
+        : undefined;
+
+    if (hasValue(copy.caPub) && hasValue(copy.caPub.certificate)) {
+      if (hasValue(copy.caPub.info)) {
+        copy.caPub.info.activationTime = parseDate(
+          copy.caPub.info.activation_time,
+        );
+        copy.caPub.info.expirationTime = parseDate(
+          copy.caPub.info.expiration_time,
+        );
+      }
+    } else {
+      delete copy.caPub;
+    }
+
+    if (hasValue(copy.tasks)) {
+      copy.tasks = map(copy.tasks.task, task =>
+        parseModelFromElement(task, 'task'),
+      );
+    } else {
+      copy.tasks = [];
+    }
+
+    if (hasValue(copy.configs)) {
+      copy.configs = map(copy.configs.config, config =>
+        parseModelFromElement(config, 'scanconfig'),
+      );
+    } else {
+      copy.configs = [];
+    }
+
+    // ToDo: parse copy.info
+
+    return copy;
+  }
+
   static parseElement(element) {
     const ret = super.parseElement(element);
 
