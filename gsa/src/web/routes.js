@@ -17,7 +17,7 @@
  */
 import React from 'react';
 
-import {Router, Route, Switch} from 'react-router-dom';
+import {HashRouter, Route, Switch} from 'react-router-dom';
 
 import {createBrowserHistory} from 'history';
 import {stringify, parse} from 'qs';
@@ -117,7 +117,7 @@ export const createQueryHistory = (history = createBrowserHistory()) =>
 const HISTORY = createQueryHistory();
 
 const Routes = () => (
-  <Router history={HISTORY}>
+  <HashRouter history={HISTORY}>
     <Switch>
       <Route path="/login" component={LoginPage} />
       <Route path="/omp" component={LegacyOmpPage} />
@@ -231,7 +231,7 @@ const Routes = () => (
         </LocationObserver>
       </Authorized>
     </Switch>
-  </Router>
+  </HashRouter>
 );
 
 export default Routes;
