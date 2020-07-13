@@ -48,7 +48,14 @@ class LoginCommand extends HttpCommand {
               rej.setMessage(_('GMP error during authentication'));
               break;
             case 503:
-              rej.setMessage(_('GMP Service is down'));
+              rej.setMessage(
+                _(
+                  'The Greenbone Vulnerability Manager service is not ' +
+                    'responding. This could be due to system maintenance. ' +
+                    'Please try again later, check the system status, or ' +
+                    'contact your system administrator.',
+                ),
+              );
               break;
             default:
               break;
