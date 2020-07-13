@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added handling of queued task status [#2208](https://github.com/greenbone/gsa/pull/2208)
 
 ### Changed
+- Improve error 503 message at login [#2310](https://github.com/greenbone/gsa/pull/2310)
 - Use unified solution type instead of solution type nvt tag [#2268](https://github.com/greenbone/gsa/pull/2268)
 - Changed queued status color [#2227](https://github.com/greenbone/gsa/pull/2227)
 - Make several NVT families selectable as a whole only in scan configs [#2222](https://github.com/greenbone/gsa/pull/2222)
@@ -48,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed spacing between radio buttons and input field in override dialog [#2286](https://github.com/greenbone/gsa/pull/2286)
 - Fixed separating hosts in override dialog via comma [#2280](https://github.com/greenbone/gsa/pull/2280)
 - Fixed installing the json translation files [#2272](https://github.com/greenbone/gsa/pull/2272)
 - Fixed displaying asset host identifiers references [#2260](https://github.com/greenbone/gsa/pull/2260)
@@ -79,6 +81,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Display timezone for session timeout in user menu [#1764](https://github.com/greenbone/gsa/pull/1764)
 
 ### Changed
+- Adjusted parsing of cve model and removed cwe id as it seems not to be needed anymore [#2294](https://github.com/greenbone/gsa/pull/2294)
 - Adjusted parsing of filter strings to deal with strings with double quotes [#2051](https://github.com/greenbone/gsa/pull/2051)
 - Changed report TlsCertificate table headers to match TlsCertificate assets
 table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
@@ -100,6 +103,8 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Lowered memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Don't crash if dashboard getSetting returns duplicate setting [#2290](https://github.com/greenbone/gsa/pull/2290)
+- Fixed broken bulk export for AllSecInfo [#2269](https://github.com/greenbone/gsa/pull/2269)
 - Fixed passing threshold prop in AlertActions for ThresholdMessage [#2114](https://github.com/greenbone/gsa/pull/2114)
 - Fixed audit listpage observer tooltip [#2048](https://github.com/greenbone/gsa/pull/2048)
 - Fixed showing errors in CredentialDialog when opened from AlertDialog [#2041](https://github.com/greenbone/gsa/pull/2041)
@@ -250,6 +255,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Use IP Address instead of Name in host dialog form field title [#2311](https://github.com/greenbone/gsa/pull/2311)
 - Use = instead of ~ in filter of link in OS row [#2086](https://github.com/greenbone/gsa/pull/2086)
 - Update copyright header dates to 2020 [#2019](https://github.com/greenbone/gsa/pull/2019)
 - Improve text for empty results report and threshold panel [#1900](https://github.com/greenbone/gsa/pull/1900)
