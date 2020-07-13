@@ -242,6 +242,7 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
   [#1507](https://github.com/greenbone/gsa/pull/1507)
 
 ### Changed
+- Use IP Address instead of Name in host dialog form field title [#2311](https://github.com/greenbone/gsa/pull/2311)
 - Use = instead of ~ in filter of link in OS row [#2086](https://github.com/greenbone/gsa/pull/2086)
 - Update copyright header dates to 2020 [#2019](https://github.com/greenbone/gsa/pull/2019)
 - Improve text for empty results report and threshold panel [#1900](https://github.com/greenbone/gsa/pull/1900)
