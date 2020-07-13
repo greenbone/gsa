@@ -2763,6 +2763,7 @@ msgstr ""
 #: gsa/src/web/pages/hosts/table.js:100
 #: gsa/src/web/pages/ovaldefs/filterdialog.js:46
 #: gsa/src/web/pages/ovaldefs/table.js:94
+#: gsa/src/web/entity/box.js:81
 msgid "Modified"
 msgstr ""
 
@@ -3705,7 +3706,7 @@ msgid "NVD ID"
 msgstr ""
 
 #: gsa/src/web/pages/cpes/details.js:73
-msgid "Deprectated By"
+msgid "Deprecated By"
 msgstr ""
 
 #: gsa/src/web/pages/cpes/details.js:79
@@ -5495,11 +5496,11 @@ msgid "Delete Report"
 msgstr ""
 
 #: gsa/src/web/pages/reports/row.js:61
-msgid "Report is selected for delta comparision"
+msgid "Report is selected for delta comparison"
 msgstr ""
 
 #: gsa/src/web/pages/reports/row.js:65 gsa/src/web/pages/reports/row.js:72
-msgid "Select Report for delta comparision"
+msgid "Select Report for delta comparison"
 msgstr ""
 
 #: gsa/src/web/pages/reports/detailscontent.js:155
@@ -7189,10 +7190,6 @@ msgstr ""
 msgid "Vulnerabilities by CVSS (Total: {{count}})"
 msgstr ""
 
-#: gsa/src/web/pages/vulns/dashboard/cvssdisplay.js:44
-msgid "# of Vulnerabilties"
-msgstr ""
-
 #: gsa/src/web/pages/vulns/dashboard/cvssdisplay.js:53
 msgid "Chart: Vulnerabilities by CVSS"
 msgstr ""
@@ -8067,10 +8064,6 @@ msgstr ""
 
 #: gsa/src/web/entity/box.js:76
 msgid "Active until"
-msgstr ""
-
-#: gsa/src/web/entity/box.js:81
-msgid "Modifed"
 msgstr ""
 
 #: gsa/src/web/entity/override.js:45
