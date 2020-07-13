@@ -44,7 +44,7 @@ const HostsDialog = ({host, title = _('New Host'), onClose, onSave}) => {
       {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-            <FormGroup title={_('Name')}>
+            <FormGroup title={_('IP Address')}>
               <TextField
                 name="name"
                 grow="1"
