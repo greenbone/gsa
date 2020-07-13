@@ -80,7 +80,6 @@ class Override extends Model {
     }
 
     ret.active = parseYesNo(element.active);
-    ret.textExcerpt = parseYesNo(element.text_excerpt);
 
     ret.hosts = parseCsv(ret.hosts);
 
@@ -89,10 +88,6 @@ class Override extends Model {
     }
 
     return ret;
-  }
-
-  isExcerpt() {
-    return this.textExcerpt === YES_VALUE;
   }
 }
 
