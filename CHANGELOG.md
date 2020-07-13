@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Remove extra parsing of comment and summary in Model [#2309](https://github.com/greenbone/gsa/pull/2309)
 
 ### Fixed
 

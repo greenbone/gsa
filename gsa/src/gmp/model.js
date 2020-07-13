@@ -178,15 +178,6 @@ class Model {
 
     copy.summary = parseText(object.summary);
 
-    if (hasValue(object.summary)) {
-      delete copy.summary;
-    }
-    copy.comment = object.comment;
-
-    if (!hasValue(object.comment)) {
-      delete copy.comment;
-    }
-
     return copy;
   }
 
