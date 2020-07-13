@@ -157,7 +157,7 @@ const TaskDialog = ({
   scanners = [
     {
       id: OPENVAS_DEFAULT_SCANNER_ID,
-      scanner_type: OPENVAS_SCANNER_TYPE,
+      scannerType: OPENVAS_SCANNER_TYPE,
     },
   ],
   schedule_id = UNSET_VALUE,

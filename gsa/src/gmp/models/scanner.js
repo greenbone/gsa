@@ -26,6 +26,7 @@ import {parseInt, parseYesNo, parseDate} from '../parser';
 import Model, {parseModelFromElement} from '../model';
 
 import Credential from './credential';
+import Task from './task';
 
 export const OSP_SCANNER_TYPE = 1;
 export const OPENVAS_SCANNER_TYPE = 2;
@@ -91,6 +92,48 @@ const parse_scanner_info = (info = {}) => {
 
 class Scanner extends Model {
   static entityType = 'scanner';
+
+  static parseObject(object) {
+    const copy = super.parseObject(object);
+
+    copy.scannerType = scannerTypeInt(object.type);
+
+    copy.credential =
+      hasValue(copy.credential) && hasValue(copy.credential._id)
+        ? Credential.fromElement(copy.credential)
+        : undefined;
+
+    if (hasValue(copy.caPub) && hasValue(copy.caPub.certificate)) {
+      if (hasValue(copy.caPub.info)) {
+        copy.caPub.info.activationTime = parseDate(
+          copy.caPub.info.activationTime,
+        );
+        copy.caPub.info.expirationTime = parseDate(
+          copy.caPub.info.expirationTime,
+        );
+      }
+    } else {
+      delete copy.caPub;
+    }
+
+    if (hasValue(copy.tasks)) {
+      copy.tasks = map(copy.tasks.task, task => Task.fromObject(task));
+    } else {
+      copy.tasks = [];
+    }
+
+    if (hasValue(copy.configs)) {
+      copy.configs = map(copy.configs.config, config =>
+        parseModelFromElement(config, 'scanconfig'),
+      );
+    } else {
+      copy.configs = [];
+    }
+
+    // ToDo: parse copy.info
+
+    return copy;
+  }
 
   static parseElement(element) {
     const ret = super.parseElement(element);
