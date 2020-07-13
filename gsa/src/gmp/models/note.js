@@ -43,7 +43,7 @@ class Note extends Model {
       ret.name = ret.nvt.name;
     }
 
-    ret = {...ret, ...parseTextElement(ret.text)};
+    ret = {...ret, text: parseTextElement(ret.text)};
 
     ret.severity = parseSeverity(ret.severity);
 

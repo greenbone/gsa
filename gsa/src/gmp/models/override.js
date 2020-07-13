@@ -65,7 +65,7 @@ class Override extends Model {
 
     delete ret.new_severity;
 
-    ret = {...ret, ...parseTextElement(ret.text)};
+    ret = {...ret, text: parseTextElement(ret.text)};
 
     if (isModelElement(ret.task)) {
       ret.task = parseModelFromElement(ret.task, 'task');

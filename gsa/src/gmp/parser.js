@@ -48,16 +48,9 @@ export const parseText = text => {
 
 export const parseTextElement = (text = {}) => {
   if (isDefined(text.__text)) {
-    return {
-      text: text.__text,
-      textExcerpt: text.__excerpt,
-    };
+    return text.__text;
   }
-
-  return {
-    text,
-    textExcerpt: '0',
-  };
+  return text;
 };
 
 export const parseInt = value => {
