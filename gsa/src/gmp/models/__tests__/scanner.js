@@ -54,13 +54,13 @@ describe('Scanner model tests', () => {
     const scanner3 = Scanner.fromElement({type: 9});
 
     expect(scanner.scannerType).toEqual(42);
-    expect(scanner2.scannerType).toEqual(1);
+    expect(scanner2.scannerType).toEqual(OSP_SCANNER_TYPE);
     expect(scanner3.scannerType).toEqual(9);
 
     // Hyperion
     const scanner4 = Scanner.fromObject({type: 'OSP_SCANNER_TYPE'});
 
-    expect(scanner4.scannerType).toEqual(1);
+    expect(scanner4.scannerType).toEqual(OSP_SCANNER_TYPE);
   });
 
   test('should parse credential', () => {
@@ -113,8 +113,8 @@ describe('Scanner model tests', () => {
       caPub: {
         certificate: 'cert',
         info: {
-          activation_time: '2018-10-10T23:00:00.000+0000',
-          expiration_time: '2018-10-10T23:59:00.000+0000',
+          activationTime: '2018-10-10T23:00:00.000+0000',
+          expirationTime: '2018-10-10T23:59:00.000+0000',
         },
       },
     };

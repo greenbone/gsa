@@ -26,6 +26,7 @@ import {parseInt, parseYesNo, parseDate} from '../parser';
 import Model, {parseModelFromElement} from '../model';
 
 import Credential from './credential';
+import Task from './task';
 
 export const OSP_SCANNER_TYPE = 1;
 export const OPENVAS_SCANNER_TYPE = 2;
@@ -105,10 +106,10 @@ class Scanner extends Model {
     if (hasValue(copy.caPub) && hasValue(copy.caPub.certificate)) {
       if (hasValue(copy.caPub.info)) {
         copy.caPub.info.activationTime = parseDate(
-          copy.caPub.info.activation_time,
+          copy.caPub.info.activationTime,
         );
         copy.caPub.info.expirationTime = parseDate(
-          copy.caPub.info.expiration_time,
+          copy.caPub.info.expirationTime,
         );
       }
     } else {
@@ -116,9 +117,7 @@ class Scanner extends Model {
     }
 
     if (hasValue(copy.tasks)) {
-      copy.tasks = map(copy.tasks.task, task =>
-        parseModelFromElement(task, 'task'),
-      );
+      copy.tasks = map(copy.tasks.task, task => Task.fromObject(task));
     } else {
       copy.tasks = [];
     }
