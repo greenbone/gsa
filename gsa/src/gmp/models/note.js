@@ -19,13 +19,7 @@ import {isModelElement} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
 import Model, {parseModelFromElement} from '../model';
-import {
-  parseCsv,
-  parseSeverity,
-  parseTextElement,
-  parseYesNo,
-  YES_VALUE,
-} from '../parser';
+import {parseCsv, parseSeverity, parseTextElement, parseYesNo} from '../parser';
 
 import Nvt from './nvt';
 
@@ -43,7 +37,7 @@ class Note extends Model {
       ret.name = ret.nvt.name;
     }
 
-    ret = {...ret, ...parseTextElement(ret.text)};
+    ret = {...ret, text: parseTextElement(ret.text)};
 
     ret.severity = parseSeverity(ret.severity);
 
@@ -60,7 +54,6 @@ class Note extends Model {
     }
 
     ret.active = parseYesNo(element.active);
-    ret.textExcerpt = parseYesNo(element.text_excerpt);
 
     ret.hosts = parseCsv(element.hosts);
 
@@ -69,10 +62,6 @@ class Note extends Model {
     }
 
     return ret;
-  }
-
-  isExcerpt() {
-    return this.textExcerpt === YES_VALUE;
   }
 }
 
