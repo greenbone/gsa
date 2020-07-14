@@ -19,13 +19,7 @@ import {isModelElement} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
 import Model, {parseModelFromElement} from '../model';
-import {
-  parseCsv,
-  parseSeverity,
-  parseTextElement,
-  parseYesNo,
-  YES_VALUE,
-} from '../parser';
+import {parseCsv, parseSeverity, parseTextElement, parseYesNo} from '../parser';
 
 import Nvt from './nvt';
 
