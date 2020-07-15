@@ -200,11 +200,11 @@ const Routes = () => (
               <Route path="/override/:id" component={OverrideDetailsPage} />
               <Route path="/permission/:id" component={PermissionDetailsPage} />
               <Route path="/policy/:id" component={PoliciesDetailsPage} />
-              <Route path="/report/:id" component={ReportDetailsPage} />
               <Route
                 path="/report/delta/:id/:deltaid"
                 component={DeltaReportDetailsPage}
               />
+              <Route path="/report/:id" component={ReportDetailsPage} />
               <Route
                 path="/reportformat/:id"
                 component={ReportFormatDetailsPage}
