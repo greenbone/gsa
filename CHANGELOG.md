@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed report formats undeletable and unrestorable [#2321](https://github.com/greenbone/gsa/pull/2321)
 - Fixed loading delta report detailspage [#2320](https://github.com/greenbone/gsa/pull/2320)
 - Fixed spacing between radio buttons and input field in override dialog [#2286](https://github.com/greenbone/gsa/pull/2286)
 - Fixed separating hosts in override dialog via comma [#2280](https://github.com/greenbone/gsa/pull/2280)
