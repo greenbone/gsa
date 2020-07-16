@@ -154,6 +154,7 @@ describe(`Audit Model methods tests`, () => {
       [AUDIT_STATUS.container]: false,
       [AUDIT_STATUS.uploading]: false,
       [AUDIT_STATUS.done]: false,
+      [AUDIT_STATUS.queued]: true,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -176,6 +177,7 @@ describe(`Audit Model methods tests`, () => {
       [AUDIT_STATUS.container]: false,
       [AUDIT_STATUS.uploading]: false,
       [AUDIT_STATUS.done]: false,
+      [AUDIT_STATUS.queued]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -198,6 +200,7 @@ describe(`Audit Model methods tests`, () => {
       [AUDIT_STATUS.container]: false,
       [AUDIT_STATUS.uploading]: false,
       [AUDIT_STATUS.done]: false,
+      [AUDIT_STATUS.queued]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -220,6 +223,7 @@ describe(`Audit Model methods tests`, () => {
       [AUDIT_STATUS.container]: false,
       [AUDIT_STATUS.uploading]: false,
       [AUDIT_STATUS.done]: false,
+      [AUDIT_STATUS.queued]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -242,11 +246,58 @@ describe(`Audit Model methods tests`, () => {
       [AUDIT_STATUS.container]: false,
       [AUDIT_STATUS.uploading]: false,
       [AUDIT_STATUS.done]: false,
+      [AUDIT_STATUS.queued]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
       const audit = Audit.fromElement({status});
       expect(audit.isNew()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isQueued', () => {
+    const statusList = {
+      [AUDIT_STATUS.running]: false,
+      [AUDIT_STATUS.stoprequested]: false,
+      [AUDIT_STATUS.deleterequested]: false,
+      [AUDIT_STATUS.ultimatedeleterequested]: false,
+      [AUDIT_STATUS.resumerequested]: false,
+      [AUDIT_STATUS.requested]: false,
+      [AUDIT_STATUS.stopped]: false,
+      [AUDIT_STATUS.new]: false,
+      [AUDIT_STATUS.interrupted]: false,
+      [AUDIT_STATUS.container]: false,
+      [AUDIT_STATUS.uploading]: false,
+      [AUDIT_STATUS.done]: false,
+      [AUDIT_STATUS.queued]: true,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const audit = Audit.fromElement({status});
+      expect(audit.isQueued()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isStoppable', () => {
+    const statusList = {
+      [AUDIT_STATUS.running]: true,
+      [AUDIT_STATUS.stoprequested]: true,
+      [AUDIT_STATUS.deleterequested]: false,
+      [AUDIT_STATUS.ultimatedeleterequested]: false,
+      [AUDIT_STATUS.resumerequested]: false,
+      [AUDIT_STATUS.requested]: true,
+      [AUDIT_STATUS.stopped]: false,
+      [AUDIT_STATUS.new]: false,
+      [AUDIT_STATUS.interrupted]: false,
+      [AUDIT_STATUS.container]: false,
+      [AUDIT_STATUS.uploading]: false,
+      [AUDIT_STATUS.done]: false,
+      [AUDIT_STATUS.queued]: true,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const audit = Audit.fromElement({status});
+      expect(audit.isStoppable()).toEqual(exp);
     }
   });
 
