@@ -79,6 +79,56 @@ describe('Task StopIcon component tests', () => {
     });
   });
 
+  test('should render in active state with correct permissions if task is requested', () => {
+    const caps = new Capabilities(['everything']);
+    const task = Task.fromElement({
+      status: TASK_STATUS.requested,
+      target: {_id: '123'},
+      permissions: {permission: [{name: 'everything'}]},
+    });
+    const clickHandler = jest.fn();
+
+    const {render} = rendererWith({capabilities: caps});
+
+    const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
+
+    expect(caps.mayOp('stop_task')).toEqual(true);
+    expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
+
+    fireEvent.click(element);
+
+    expect(clickHandler).toHaveBeenCalled();
+    expect(element).toHaveAttribute('title', 'Stop');
+    expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
+      modifier: `svg path`,
+    });
+  });
+
+  test('should render in active state with correct permissions if task is stoprequested', () => {
+    const caps = new Capabilities(['everything']);
+    const task = Task.fromElement({
+      status: TASK_STATUS.stoprequested,
+      target: {_id: '123'},
+      permissions: {permission: [{name: 'everything'}]},
+    });
+    const clickHandler = jest.fn();
+
+    const {render} = rendererWith({capabilities: caps});
+
+    const {element} = render(<StopIcon task={task} onClick={clickHandler} />);
+
+    expect(caps.mayOp('stop_task')).toEqual(true);
+    expect(task.userCapabilities.mayOp('stop_task')).toEqual(true);
+
+    fireEvent.click(element);
+
+    expect(clickHandler).toHaveBeenCalled();
+    expect(element).toHaveAttribute('title', 'Stop');
+    expect(element).not.toHaveStyleRule('fill', Theme.inputBorderGray, {
+      modifier: `svg path`,
+    });
+  });
+
   test('should render in inactive state if wrong command level permissions are given', () => {
     const caps = new Capabilities(['everything']);
     const task = Task.fromElement({
