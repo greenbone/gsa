@@ -86,6 +86,15 @@ class Audit extends Model {
     return this.status === AUDIT_STATUS.stopped;
   }
 
+  isStoppable() {
+    return (
+      this.status === AUDIT_STATUS.running ||
+      this.status === AUDIT_STATUS.stoprequested ||
+      this.status === AUDIT_STATUS.requested ||
+      this.status === AUDIT_STATUS.queued
+    );
+  }
+
   isInterrupted() {
     return this.status === AUDIT_STATUS.interrupted;
   }
