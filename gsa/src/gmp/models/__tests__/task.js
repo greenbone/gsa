@@ -388,6 +388,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.queued]: true,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -410,6 +411,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.queued]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -432,6 +434,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.queued]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -453,6 +456,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.queued]: true,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -475,6 +479,7 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.queued]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
@@ -497,11 +502,35 @@ describe(`Task Model methods tests`, () => {
       [TASK_STATUS.container]: false,
       [TASK_STATUS.uploading]: false,
       [TASK_STATUS.done]: false,
+      [TASK_STATUS.queued]: false,
     };
 
     for (const [status, exp] of Object.entries(statusList)) {
       const task = Task.fromElement({status});
       expect(task.isNew()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isQueued', () => {
+    const statusList = {
+      [TASK_STATUS.running]: false,
+      [TASK_STATUS.stoprequested]: false,
+      [TASK_STATUS.deleterequested]: false,
+      [TASK_STATUS.ultimatedeleterequested]: false,
+      [TASK_STATUS.resumerequested]: false,
+      [TASK_STATUS.requested]: false,
+      [TASK_STATUS.stopped]: false,
+      [TASK_STATUS.new]: false,
+      [TASK_STATUS.interrupted]: false,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+      [TASK_STATUS.queued]: true,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isQueued()).toEqual(exp);
     }
   });
 
