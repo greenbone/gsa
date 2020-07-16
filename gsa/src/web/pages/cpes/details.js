@@ -69,7 +69,7 @@ const CpeDetails = ({entity}) => {
           )}
           {isDefined(deprecated_by) && (
             <TableRow>
-              <TableData>{_('Deprectated By')}</TableData>
+              <TableData>{_('Deprecated By')}</TableData>
               <TableData>{deprecated_by}</TableData>
             </TableRow>
           )}
