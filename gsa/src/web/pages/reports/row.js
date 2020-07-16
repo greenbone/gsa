@@ -57,18 +57,18 @@ const Actions = withEntitiesActions(
           entity.id === selectedDeltaReport.id ? (
             <DeltaIcon
               active={false}
-              title={_('Report is selected for delta comparision')}
+              title={_('Report is selected for delta comparison')}
             />
           ) : (
             <DeltaSecondIcon
-              title={_('Select Report for delta comparision')}
+              title={_('Select Report for delta comparison')}
               value={entity}
               onClick={onReportDeltaSelect}
             />
           )
         ) : (
           <DeltaIcon
-            title={_('Select Report for delta comparision')}
+            title={_('Select Report for delta comparison')}
             value={entity}
             onClick={onReportDeltaSelect}
           />

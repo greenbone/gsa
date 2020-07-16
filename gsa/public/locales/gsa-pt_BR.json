@@ -2,7 +2,6 @@
   "# of OVAL Definitions": "OVAL defini\u00e7\u00e3o",
   "# of Operating Systems": "Sistema Operacional",
   "# of Vulnerabilities": "Vulnerabilidade remota",
-  "# of Vulnerabilties": "Vulnerabilidade remota",
   "# of created OVAL Definitions": "OVAL defini\u00e7\u00e3o",
   "(Applied filter: {{- filter}})": "Filtro aplicado: {{filter}}",
   "Abort": "Cancelar",
