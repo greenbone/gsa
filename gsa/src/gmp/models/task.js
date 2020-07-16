@@ -112,6 +112,15 @@ class Task extends Model {
     return this.status === TASK_STATUS.stopped;
   }
 
+  isStoppable() {
+    return (
+      this.status === TASK_STATUS.running ||
+      this.status === TASK_STATUS.stoprequested ||
+      this.status === TASK_STATUS.requested ||
+      this.status === TASK_STATUS.queued
+    );
+  }
+
   isInterrupted() {
     return this.status === TASK_STATUS.interrupted;
   }
