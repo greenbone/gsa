@@ -31,7 +31,7 @@ const TaskStartIcon = ({
   usageType = _('task'),
   onClick,
 }) => {
-  if (task.isRunning() || task.isContainer()) {
+  if (task.isStoppable() || task.isContainer()) {
     return null;
   }
 
