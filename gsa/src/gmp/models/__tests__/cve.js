@@ -171,22 +171,17 @@ describe('CVE model tests', () => {
     expect(cve.products).toEqual([]);
   });
 
-  test('should parse cwe, published, and modified date from raw data', () => {
+  test('should parse published and modified date from raw data', () => {
     const elem = {
-      cwe: 'foo',
       raw_data: {
         entry: {
-          cwe: {
-            _id: '123abc',
-          },
-          'published-datetime': {__text: '2018-10-10T11:41:23.022Z'},
-          'last-modified-datetime': {__text: '2018-10-10T11:41:23.022Z'},
+          'published-datetime': '2018-10-10T11:41:23.022Z',
+          'last-modified-datetime': '2018-10-10T11:41:23.022Z',
         },
       },
     };
     const cve = Cve.fromElement(elem);
 
-    expect(cve.cweId).toEqual('123abc');
     expect(isDate(cve.publishedTime)).toBe(true);
     expect(isDate(cve.lastModifiedTime)).toBe(true);
   });
@@ -195,12 +190,10 @@ describe('CVE model tests', () => {
     const elem = {
       raw_data: {
         entry: {
-          'published-datetime': {__text: '2018-10-10T11:41:23.022Z'},
-          'last-modified-datetime': {__text: '2018-10-10T11:41:23.022Z'},
+          'published-datetime': '2018-10-10T11:41:23.022Z',
+          'last-modified-datetime': '2018-10-10T11:41:23.022Z',
           references: {
-            source: {
-              __text: 'foo',
-            },
+            source: 'foo',
             _reference_type: 'bar',
             reference: {
               __text: 'lorem',
@@ -226,13 +219,11 @@ describe('CVE model tests', () => {
     const elem = {
       raw_data: {
         entry: {
-          'published-datetime': {__text: '2018-10-10T11:41:23.022Z'},
-          'last-modified-datetime': {__text: '2018-10-10T11:41:23.022Z'},
+          'published-datetime': '2018-10-10T11:41:23.022Z',
+          'last-modified-datetime': '2018-10-10T11:41:23.022Z',
           cvss: {
             base_metrics: {
-              source: {
-                __text: 'prot://url',
-              },
+              source: 'prot://url',
             },
           },
         },
@@ -247,11 +238,9 @@ describe('CVE model tests', () => {
     const elem = {
       raw_data: {
         entry: {
-          'published-datetime': {__text: '2018-10-10T11:41:23.022Z'},
-          'last-modified-datetime': {__text: '2018-10-10T11:41:23.022Z'},
-          summary: {
-            __text: 'lorem ipsum',
-          },
+          'published-datetime': '2018-10-10T11:41:23.022Z',
+          'last-modified-datetime': '2018-10-10T11:41:23.022Z',
+          summary: 'lorem ipsum',
         },
       },
     };
@@ -264,10 +253,10 @@ describe('CVE model tests', () => {
     const elem = {
       raw_data: {
         entry: {
-          'published-datetime': {__text: '2018-10-10T11:41:23.022Z'},
-          'last-modified-datetime': {__text: '2018-10-10T11:41:23.022Z'},
+          'published-datetime': '2018-10-10T11:41:23.022Z',
+          'last-modified-datetime': '2018-10-10T11:41:23.022Z',
           'vulnerable-software-list': {
-            product: [{__text: 'lorem'}, {__text: 'ipsum'}],
+            product: ['lorem', 'ipsum'],
           },
         },
       },

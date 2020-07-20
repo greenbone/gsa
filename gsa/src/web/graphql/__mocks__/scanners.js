@@ -26,12 +26,46 @@ const scanner1 = deepFreeze({
   id: '1',
   name: 'scanner 1',
   type: OPENVAS_SCANNER_TYPE,
+  writable: true,
+  inUse: true,
+  owner: {name: 'admin'},
+  comment: 'Hello World',
+  host: '127.0.0.1',
+  port: '1234',
+  caPub: {
+    certificate: null,
+  },
+  creationTime: '2019-06-19T13:13:16+00:00',
+  modificationTime: '2020-05-05T13:11:51+00:00',
+  permissions: {
+    name: 'get_scanner',
+  },
+  credential: {
+    id: null,
+  },
 });
 
 const scanner2 = deepFreeze({
   id: '2',
   name: 'scanner 2',
   type: OSP_SCANNER_TYPE,
+  writable: true,
+  inUse: true,
+  owner: {name: 'admin'},
+  comment: 'Hello World',
+  host: '127.0.0.1',
+  port: '1234',
+  caPub: {
+    certificate: 'cert',
+  },
+  creationTime: '2019-06-19T13:13:16+00:00',
+  modificationTime: '2020-05-05T13:11:51+00:00',
+  permissions: {
+    name: 'get_scanner',
+  },
+  credential: {
+    id: '1234',
+  },
 });
 
 const mockScanners = {

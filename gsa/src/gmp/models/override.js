@@ -19,13 +19,7 @@ import {isModelElement} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
 import Model, {parseModelFromElement} from '../model';
-import {
-  parseCsv,
-  parseSeverity,
-  parseTextElement,
-  parseYesNo,
-  YES_VALUE,
-} from '../parser';
+import {parseCsv, parseSeverity, parseTextElement, parseYesNo} from '../parser';
 
 import Nvt from './nvt';
 
@@ -65,7 +59,7 @@ class Override extends Model {
 
     delete ret.new_severity;
 
-    ret = {...ret, ...parseTextElement(ret.text)};
+    ret = {...ret, text: parseTextElement(ret.text)};
 
     if (isModelElement(ret.task)) {
       ret.task = parseModelFromElement(ret.task, 'task');
@@ -80,7 +74,6 @@ class Override extends Model {
     }
 
     ret.active = parseYesNo(element.active);
-    ret.textExcerpt = parseYesNo(element.text_excerpt);
 
     ret.hosts = parseCsv(ret.hosts);
 
@@ -89,10 +82,6 @@ class Override extends Model {
     }
 
     return ret;
-  }
-
-  isExcerpt() {
-    return this.textExcerpt === YES_VALUE;
   }
 }
 

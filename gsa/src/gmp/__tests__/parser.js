@@ -151,19 +151,13 @@ describe('parseTextElement tests', () => {
     expect(
       parseTextElement({
         __text: 'foo',
-        __excerpt: '1',
+        __excerpt: '1', // this can be provided by gvmd. Make sure it is not parsed
       }),
-    ).toEqual({
-      text: 'foo',
-      textExcerpt: '1',
-    });
+    ).toEqual('foo');
   });
 
   test('should convert plain text elements', () => {
-    expect(parseTextElement('foo')).toEqual({
-      text: 'foo',
-      textExcerpt: '0',
-    });
+    expect(parseTextElement('foo')).toEqual('foo');
   });
 });
 
