@@ -396,8 +396,6 @@ class TaskComponent extends React.Component {
   }
 
   openStandardTaskDialog(task) {
-    const {capabilities} = this.props;
-
     this.props.loadAlerts();
     this.props.loadScanConfigs();
     this.props.loadScanners();
@@ -406,13 +404,6 @@ class TaskComponent extends React.Component {
     this.props.loadTags();
 
     if (isDefined(task)) {
-      const canAccessSchedules =
-        capabilities.mayAccess('schedules') && isDefined(task.schedule);
-      const schedule_id = canAccessSchedules ? task.schedule.id : UNSET_VALUE;
-      const schedule_periods = canAccessSchedules
-        ? task.schedule_periods
-        : undefined;
-
       this.setState({
         taskDialogVisible: true,
         alert_ids: map(task.alerts, alert => alert.id),
@@ -430,8 +421,8 @@ class TaskComponent extends React.Component {
         min_qod: task.min_qod,
         name: task.name,
         scanner_id: hasId(task.scanner) ? task.scanner.id : undefined,
-        schedule_id,
-        schedule_periods,
+        schedule_id: isDefined(task.schedule) ? task.schedule.id : UNSET_VALUE,
+        schedule_periods: task.schedule_periods,
         source_iface: task.source_iface,
         target_id: hasId(task.target) ? task.target.id : undefined,
         task,
@@ -1044,8 +1035,5 @@ const mapDispatchToProp = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withCapabilities,
-  connect(
-    mapStateToProps,
-    mapDispatchToProp,
-  ),
+  connect(mapStateToProps, mapDispatchToProp),
 )(TaskComponent);
