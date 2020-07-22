@@ -43,7 +43,6 @@ const FilterString = styled.span`
 `;
 
 const EmptyResultsReport = ({
-  all, // 'all' is not used right now because it refers to the no. of rows in the results table. Should be re-implemented in future versions.
   filter,
   onFilterAddLogLevelClick,
   onFilterEditClick,
@@ -126,7 +125,6 @@ const EmptyResultsReport = ({
 };
 
 EmptyResultsReport.propTypes = {
-  all: PropTypes.number.isRequired,
   filter: PropTypes.filter.isRequired,
   onFilterAddLogLevelClick: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,

@@ -79,7 +79,6 @@ const ResultsTab = ({
     } else if (counts.all > 0) {
       return (
         <EmptyResultsReport
-          all={counts.all}
           filter={filter}
           onFilterAddLogLevelClick={onFilterAddLogLevelClick}
           onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}

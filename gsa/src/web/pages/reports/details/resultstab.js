@@ -223,7 +223,6 @@ class ResultsTab extends React.Component {
       } else if (resultsCounts.all > 0) {
         return (
           <EmptyResultsReport
-            all={resultsCounts.all}
             filter={displayedFilter}
             onFilterAddLogLevelClick={onFilterAddLogLevelClick}
             onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -379,10 +378,7 @@ const mapDispatchToProps = (dispatch, {reportId, gmp}) => {
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(ResultsTabWrapper);
 
 // vim: set ts=2 sw=2 tw=80:

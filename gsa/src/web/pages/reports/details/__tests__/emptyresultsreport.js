@@ -41,7 +41,6 @@ describe('Empty Results Report tests', () => {
 
     const {baseElement} = render(
       <EmptyResultsReport
-        all={100} // this arg is currently not used. Will be re-implemented.
         filter={filter}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -100,7 +99,6 @@ describe('Empty Results Report tests', () => {
 
     const {baseElement} = render(
       <EmptyResultsReport
-        all={100}
         filter={filter}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -164,7 +162,6 @@ describe('Empty Results Report tests', () => {
 
     const {baseElement} = render(
       <EmptyResultsReport
-        all={100}
         filter={filter}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -228,7 +225,6 @@ describe('Empty Results Report tests', () => {
 
     const {baseElement} = render(
       <EmptyResultsReport
-        all={100}
         filter={filter}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -291,7 +287,6 @@ describe('Empty Results Report tests', () => {
 
     const {baseElement} = render(
       <EmptyResultsReport
-        all={100}
         filter={filter}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
