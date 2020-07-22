@@ -37,6 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed schedule_periods not forwarded if there is no schedule [#2331](https://github.com/greenbone/gsa/pull/2331)
 - Fixed broken radio buttons in alert dialog [#2326](https://github.com/greenbone/gsa/pull/2326)
 - Fixed report formats undeletable and unrestorable [#2321](https://github.com/greenbone/gsa/pull/2321)
 - Fixed loading delta report detailspage [#2320](https://github.com/greenbone/gsa/pull/2320)
