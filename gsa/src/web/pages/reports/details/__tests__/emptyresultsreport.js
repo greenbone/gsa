@@ -41,7 +41,7 @@ describe('Empty Results Report tests', () => {
 
     const {baseElement} = render(
       <EmptyResultsReport
-        all={100}
+        all={100} // this arg is currently not used. Will be re-implemented.
         filter={filter}
         onFilterAddLogLevelClick={onFilterAddLogLevelClick}
         onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -55,7 +55,7 @@ describe('Empty Results Report tests', () => {
 
     // Should include
     expect(baseElement).toHaveTextContent(
-      'The report is empty. The filter does not match any of the 100 results.',
+      'The report is empty. The filter does not match any results.',
     );
     expect(baseElement).toHaveTextContent(
       'The following filter is currently applied: apply_overrides=0 levels=hmlg rows=2 first=1 sort-reverse=severity',
@@ -114,7 +114,7 @@ describe('Empty Results Report tests', () => {
 
     // Should include
     expect(baseElement).toHaveTextContent(
-      'The report is empty. The filter does not match any of the 100 results.',
+      'The report is empty. The filter does not match any results.',
     );
     expect(baseElement).toHaveTextContent(
       'The following filter is currently applied: apply_overrides=0 levels=hml rows=2 first=1 sort-reverse=severity',
@@ -178,7 +178,7 @@ describe('Empty Results Report tests', () => {
 
     // Should include
     expect(baseElement).toHaveTextContent(
-      'The report is empty. The filter does not match any of the 100 results.',
+      'The report is empty. The filter does not match any results.',
     );
     expect(baseElement).toHaveTextContent(
       'The following filter is currently applied: apply_overrides=0 levels=hmlg severity>50 rows=2 first=1 sort-reverse=severity',
@@ -242,7 +242,7 @@ describe('Empty Results Report tests', () => {
 
     // Should include
     expect(baseElement).toHaveTextContent(
-      'The report is empty. The filter does not match any of the 100 results.',
+      'The report is empty. The filter does not match any results.',
     );
     expect(baseElement).toHaveTextContent(
       'The following filter is currently applied: apply_overrides=0 levels=hmlg min_qod>70 rows=2 first=1 sort-reverse=severity',

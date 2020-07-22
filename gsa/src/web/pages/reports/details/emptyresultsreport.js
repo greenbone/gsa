@@ -43,7 +43,7 @@ const FilterString = styled.span`
 `;
 
 const EmptyResultsReport = ({
-  all,
+  all, // 'all' is not used right now because it refers to the no. of rows in the results table. Should be re-implemented in future versions.
   filter,
   onFilterAddLogLevelClick,
   onFilterEditClick,
@@ -59,9 +59,7 @@ const EmptyResultsReport = ({
     <Layout flex="column" align={['start', 'stretch']} grow>
       <InfoPanel
         heading={_(
-          'The report is empty. The filter does not match any of the ' +
-            '{{all}} results.',
-          {all},
+          'The report is empty. The filter does not match any results.',
         )}
       >
         {_('The following filter is currently applied: ')}
