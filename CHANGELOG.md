@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added handling of queued task status [#2208](https://github.com/greenbone/gsa/pull/2208)
 
 ### Changed
+- Do not use resultsCounts in filter message [#2333](https://github.com/greenbone/gsa/pull/2333)
 - Improve error 503 message at login [#2310](https://github.com/greenbone/gsa/pull/2310)
 - Use unified solution type instead of solution type nvt tag [#2268](https://github.com/greenbone/gsa/pull/2268)
 - Changed queued status color [#2227](https://github.com/greenbone/gsa/pull/2227)
