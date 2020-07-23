@@ -17,7 +17,6 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
 
 import {connect} from 'react-redux';
 
@@ -51,13 +50,6 @@ import NewIcon from 'web/components/icon/newicon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import Tab from 'web/components/tab/tab';
-import TabList from 'web/components/tab/tablist';
-import TabPanel from 'web/components/tab/tabpanel';
-import TabPanels from 'web/components/tab/tabpanels';
-import Tabs from 'web/components/tab/tabs';
-import TabLayout from 'web/components/tab/tablayout';
-
 import {getTimezone} from 'web/store/usersettings/selectors';
 
 import {
@@ -77,10 +69,6 @@ const AVAILABLE_SCANNER_TYPES = [
   GMP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 ];
-
-const DialogTabLayout = styled(TabLayout)`
-  margin-top: 5px;
-`;
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -222,7 +210,6 @@ const ScannerDialog = ({
     <SaveDialog // the dialog current changes sizes based on content. For the future we should somehow fix the size to prevent jumping around.
       defaultValues={data}
       initialHeight={SCANNER_DIALOG_INITIAL_HEIGHT}
-      multiStep={1} // the option to switch to the MultiStepFooter. Leaving it out defaults to false
       title={title}
       values={{
         credential_id,
@@ -231,143 +218,123 @@ const ScannerDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({values: state, currentStep, onStepChange, onValueChange}) => {
+      {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-            <DialogTabLayout grow="1" align={['start', 'end']}>
-              <TabList
-                active={currentStep}
-                align={['start', 'stretch']}
-                onActivateTab={onStepChange}
-              >
-                <Tab>{_('General')}</Tab>
-                <Tab>{_('Configuration')}</Tab>
-              </TabList>
-            </DialogTabLayout>
-            <Tabs active={currentStep}>
-              <TabPanels>
-                <TabPanel>
-                  <FormGroup title={_('Name')}>
-                    <TextField
-                      name="name"
-                      grow="1"
-                      value={state.name}
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
+            <FormGroup title={_('Name')}>
+              <TextField
+                name="name"
+                grow="1"
+                value={state.name}
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-                  <FormGroup title={_('Comment')}>
-                    <TextField
-                      name="comment"
-                      value={state.comment}
-                      grow="1"
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
-                  <FormGroup title={_('Type')}>
-                    <Select
-                      name="type"
-                      value={state.type}
-                      items={scannerTypesOptions}
-                      disabled={isInUse}
-                      onChange={handleTypeChange}
-                    />
-                  </FormGroup>
-                </TabPanel>
-                <TabPanel>
-                  <FormGroup title={_('Host')}>
-                    <TextField
-                      name="host"
-                      value={state.host}
-                      disabled={isInUse}
-                      grow="1"
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
+            <FormGroup title={_('Comment')}>
+              <TextField
+                name="comment"
+                value={state.comment}
+                grow="1"
+                onChange={onValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Type')}>
+              <Select
+                name="type"
+                value={state.type}
+                items={scannerTypesOptions}
+                disabled={isInUse}
+                onChange={handleTypeChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Host')}>
+              <TextField
+                name="host"
+                value={state.host}
+                disabled={isInUse}
+                grow="1"
+                onChange={onValueChange}
+              />
+            </FormGroup>
 
-                  {isOspScannerType && (
-                    <React.Fragment>
-                      <FormGroup title={_('Port')}>
-                        <TextField
-                          name="port"
-                          value={state.port}
-                          disabled={isInUse}
-                          grow="1"
-                          onChange={onValueChange}
-                        />
-                      </FormGroup>
+            {isOspScannerType && (
+              <React.Fragment>
+                <FormGroup title={_('Port')}>
+                  <TextField
+                    name="port"
+                    value={state.port}
+                    disabled={isInUse}
+                    grow="1"
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
 
-                      <FormGroup title={_('CA Certificate')} flex="column">
+                <FormGroup title={_('CA Certificate')} flex="column">
+                  <Layout>
+                    <Divider>
+                      {is_edit && (
                         <Layout>
-                          <Divider>
-                            {is_edit && (
-                              <Layout>
-                                {isDefined(state.ca_pub) && (
-                                  <Radio
-                                    title={_('Existing')}
-                                    name="which_cert"
-                                    value="existing"
-                                    checked={state.which_cert === 'existing'}
-                                    onChange={onValueChange}
-                                  />
-                                )}
-                                <Radio
-                                  title={_('Default')}
-                                  name="which_cert"
-                                  value="default"
-                                  checked={state.which_cert === 'default'}
-                                  onChange={onValueChange}
-                                />
-                                <Radio
-                                  title={_('New:')}
-                                  name="which_cert"
-                                  value="new"
-                                  checked={state.which_cert === 'new'}
-                                  onChange={onValueChange}
-                                />
-                              </Layout>
-                            )}
-                            <FileField
-                              disabled={is_edit && state.which_cert !== 'new'}
-                              name="ca_pub"
+                          {isDefined(state.ca_pub) && (
+                            <Radio
+                              title={_('Existing')}
+                              name="which_cert"
+                              value="existing"
+                              checked={state.which_cert === 'existing'}
                               onChange={onValueChange}
                             />
-                          </Divider>
-                        </Layout>
-                        {is_edit && isDefined(state.ca_pub) && (
-                          <CertStatus info={state.ca_pub_info} />
-                        )}
-                      </FormGroup>
-                    </React.Fragment>
-                  )}
-
-                  {!isGreenboneSensorType && (
-                    <FormGroup title={_('Credential')} flex="column">
-                      <Divider>
-                        <Select
-                          name="credential_id"
-                          items={renderSelectItems(scanner_credentials)}
-                          value={credential_id}
-                          onChange={onCredentialChange}
-                        />
-                        <Layout>
-                          <NewIcon
-                            value={type}
-                            title={_('Create a new Credential')}
-                            onClick={onNewCredentialClick}
+                          )}
+                          <Radio
+                            title={_('Default')}
+                            name="which_cert"
+                            value="default"
+                            checked={state.which_cert === 'default'}
+                            onChange={onValueChange}
+                          />
+                          <Radio
+                            title={_('New:')}
+                            name="which_cert"
+                            value="new"
+                            checked={state.which_cert === 'new'}
+                            onChange={onValueChange}
                           />
                         </Layout>
-                      </Divider>
-                      {show_cred_info && (
-                        <CertStatus
-                          info={scanner.credential.certificate_info}
-                        />
                       )}
-                    </FormGroup>
+                      <FileField
+                        disabled={is_edit && state.which_cert !== 'new'}
+                        name="ca_pub"
+                        onChange={onValueChange}
+                      />
+                    </Divider>
+                  </Layout>
+                  {is_edit && isDefined(state.ca_pub) && (
+                    <CertStatus info={state.ca_pub_info} />
                   )}
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
+                </FormGroup>
+              </React.Fragment>
+            )}
+
+            {!isGreenboneSensorType && (
+              <FormGroup title={_('Credential')} flex="column">
+                <Divider>
+                  <Select
+                    name="credential_id"
+                    items={renderSelectItems(scanner_credentials)}
+                    value={credential_id}
+                    onChange={onCredentialChange}
+                  />
+                  <Layout>
+                    <NewIcon
+                      value={type}
+                      title={_('Create a new Credential')}
+                      onClick={onNewCredentialClick}
+                    />
+                  </Layout>
+                </Divider>
+                {show_cred_info && (
+                  <CertStatus info={scanner.credential.certificate_info} />
+                )}
+              </FormGroup>
+            )}
           </Layout>
         );
       }}
