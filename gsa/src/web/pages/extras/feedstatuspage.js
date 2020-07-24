@@ -88,6 +88,22 @@ const renderFeedStatus = feed => {
   return _('Current');
 };
 
+const REPORT_FORMATS = [
+  '5057e5cc-b825-11e4-9d0e-28d24461215b', // Anonymous XML
+  'c1645568-627a-11e3-a660-406186ea4fc5', // CSV Results
+  '77bd6c4a-1f62-11e1-abf0-406186ea4fc5', // ITG
+  'c402cc3e-b531-11e1-9163-406186ea4fc5', // PDF
+  'a3810a62-1f62-11e1-9219-406186ea4fc5', // TXT
+  'a994b278-1f62-11e1-96ac-406186ea4fc5', // XML
+];
+
+const composeFeedUrl = objectIds => {
+  let url = '';
+
+  objectIds.forEach(id => (url += 'uuid=' + id + ' '));
+  return url;
+};
+
 const FeedStatus = () => {
   const gmp = useGmp();
   const [feeds, setFeeds] = useState([]);
@@ -185,7 +201,10 @@ const FeedStatus = () => {
                           <span>Port Lists</span>
                         </IconDivider>
                       </Link>
-                      <Link to="reportformats">
+                      <Link
+                        to="reportformats"
+                        filter={composeFeedUrl(REPORT_FORMATS)}
+                      >
                         <IconDivider align={['start', 'center']}>
                           <ReportFormatIcon size="medium" />
                           <span>Report Formats</span>

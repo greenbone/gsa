@@ -31,6 +31,7 @@ const convertVersion = version =>
 export const NVT_FEED = 'NVT';
 export const CERT_FEED = 'CERT';
 export const SCAP_FEED = 'SCAP';
+export const GVMD_DATA = 'GVMD_DATA';
 
 class Feed {
   constructor({type, name, description, status, version}) {
