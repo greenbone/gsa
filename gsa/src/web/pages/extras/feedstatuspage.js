@@ -21,7 +21,12 @@ import _ from 'gmp/locale';
 
 import {parseInt} from 'gmp/parser';
 
-import {NVT_FEED, SCAP_FEED, CERT_FEED} from 'gmp/commands/feedstatus';
+import {
+  NVT_FEED,
+  SCAP_FEED,
+  CERT_FEED,
+  GVMD_DATA,
+} from 'gmp/commands/feedstatus';
 
 import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
 import CveIcon from 'web/components/icon/cveicon';
@@ -48,6 +53,10 @@ import TableHead from 'web/components/table/head';
 import TableData from 'web/components/table/data';
 
 import useGmp from 'web/utils/useGmp';
+import PolicyIcon from 'web/components/icon/policyicon';
+import PortListIcon from 'web/components/icon/portlisticon';
+import ReportFormatIcon from 'web/components/icon/reportformaticon';
+import ScanConfigIcon from 'web/components/icon/scanconfigicon';
 
 const ToolBarIcons = () => (
   <ManualIcon
@@ -158,6 +167,34 @@ const FeedStatus = () => {
                         <IconDivider align={['start', 'center']}>
                           <DfnCertAdvIcon size="medium" />
                           <span>DFN-CERT Advisories</span>
+                        </IconDivider>
+                      </Link>
+                    </IconDivider>
+                  )}
+                  {feed.feed_type === GVMD_DATA && (
+                    <IconDivider>
+                      <Link to="policies">
+                        <IconDivider align={['start', 'center']}>
+                          <PolicyIcon size="medium" />
+                          <span>Compliance Policies</span>
+                        </IconDivider>
+                      </Link>
+                      <Link to="portlists">
+                        <IconDivider align={['start', 'center']}>
+                          <PortListIcon size="medium" />
+                          <span>Port Lists</span>
+                        </IconDivider>
+                      </Link>
+                      <Link to="reportformats">
+                        <IconDivider align={['start', 'center']}>
+                          <ReportFormatIcon size="medium" />
+                          <span>Report Formats</span>
+                        </IconDivider>
+                      </Link>
+                      <Link to="scanconfigs">
+                        <IconDivider align={['start', 'center']}>
+                          <ScanConfigIcon size="medium" />
+                          <span>Scan Configs</span>
                         </IconDivider>
                       </Link>
                     </IconDivider>
