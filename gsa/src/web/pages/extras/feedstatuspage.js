@@ -97,6 +97,10 @@ const REPORT_FORMATS = [
   'a994b278-1f62-11e1-96ac-406186ea4fc5', // XML
 ];
 
+const COMPLIANCE_POLICIES = [
+  'c4b7c0cb-6502-4809-b034-8e635311b3e6', // IT-Grundschutz
+];
+
 const composeFeedUrl = objectIds => {
   let url = '';
 
@@ -189,7 +193,10 @@ const FeedStatus = () => {
                   )}
                   {feed.feed_type === GVMD_DATA && (
                     <IconDivider>
-                      <Link to="policies">
+                      <Link
+                        to="policies"
+                        filter={composeFeedUrl(COMPLIANCE_POLICIES)}
+                      >
                         <IconDivider align={['start', 'center']}>
                           <PolicyIcon size="medium" />
                           <span>Compliance Policies</span>
