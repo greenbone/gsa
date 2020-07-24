@@ -36,6 +36,10 @@ import ManualIcon from 'web/components/icon/manualicon';
 import NvtIcon from 'web/components/icon/nvticon';
 import OvalDefIcon from 'web/components/icon/ovaldeficon';
 import CpeLogoIcon from 'web/components/icon/cpelogoicon';
+import PolicyIcon from 'web/components/icon/policyicon';
+import PortListIcon from 'web/components/icon/portlisticon';
+import ReportFormatIcon from 'web/components/icon/reportformaticon';
+import ScanConfigIcon from 'web/components/icon/scanconfigicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -53,10 +57,6 @@ import TableHead from 'web/components/table/head';
 import TableData from 'web/components/table/data';
 
 import useGmp from 'web/utils/useGmp';
-import PolicyIcon from 'web/components/icon/policyicon';
-import PortListIcon from 'web/components/icon/portlisticon';
-import ReportFormatIcon from 'web/components/icon/reportformaticon';
-import ScanConfigIcon from 'web/components/icon/scanconfigicon';
 
 const ToolBarIcons = () => (
   <ManualIcon
