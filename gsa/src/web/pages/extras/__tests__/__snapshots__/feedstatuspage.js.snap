@@ -1,0 +1,902 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Feed status page tests should render 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c11 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c18 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c17 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c17 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c17 > * {
+  margin-left: 5px;
+}
+
+.c19 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c19 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c19 > * {
+  margin-left: 5px;
+}
+
+.c21 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: -5px;
+}
+
+.c21 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c21 > * {
+  margin-left: 5px;
+}
+
+.c16 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c1 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c1 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c6 {
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+}
+
+.c6 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c20 {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.c20 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+  margin: 10px 0px;
+  padding-bottom: 1px;
+  border-bottom: 2px solid #c8d3d9;
+  position: relative;
+}
+
+.c3 {
+  margin: 0 0 1px 0;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+  margin-right: 5px;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+  word-break: break-all;
+  min-width: 100px;
+}
+
+.c9 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+  width: 100%;
+}
+
+.c9 th,
+.c9 td {
+  padding: 4px 10px;
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c9 tfoot tr {
+  background: #fff;
+}
+
+.c9 tfoot tr td {
+  border-bottom: 1px solid #c8d3d9;
+}
+
+.c10 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 3rem;
+}
+
+.c12 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 21rem;
+}
+
+.c13 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 9rem;
+}
+
+.c14 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+  width: 7rem;
+}
+
+.c15 {
+  background-color: #fff;
+  color: #000;
+  border-top: 1px solid #c8d3d9;
+  font-weight: bold;
+}
+
+@media print {
+  .c9 {
+    border-collapse: collapse;
+  }
+}
+
+@media screen {
+  .c9 > tbody:nth-of-type(even),
+  .c9 > tbody:only-of-type > tr:nth-of-type(even) {
+    background: #eeeeee;
+  }
+
+  .c9 > tbody:not(:only-of-type):hover,
+  .c9 > tbody:only-of-type > tr:hover {
+    background: #c8d3d9;
+  }
+}
+
+@media print {
+  .c10 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c12 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c13 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c14 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+@media print {
+  .c15 {
+    color: #000;
+    font-size: 1.2em;
+    background-color: none;
+    font-weight: bold;
+  }
+}
+
+<body>
+  <div
+    id="portals"
+  />
+  <div>
+    <div
+      class="c0"
+    >
+      <a
+        href="http://foo.bar/en/web-interface.html#displaying-the-feed-status"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <span
+          class="c1"
+          data-testid="svg-icon"
+          title="Help: Feed Status"
+        >
+          <svg
+            title="Help: Feed Status"
+          >
+            help.svg
+          </svg>
+        </span>
+      </a>
+      <section>
+        <div
+          class="c2 section-header"
+        >
+          <h2
+            class="c3 c4"
+          >
+            <div
+              class="c5"
+            >
+              <span
+                class="c6"
+                data-testid="svg-icon"
+              >
+                <svg>
+                  feed.svg
+                </svg>
+              </span>
+            </div>
+            <div
+              class="c7"
+            >
+              Feed Status
+            </div>
+          </h2>
+          <div
+            class="c8"
+          />
+        </div>
+      </section>
+      <table
+        class="c9"
+      >
+        <tbody
+          class=""
+        >
+          <tr>
+            <th
+              class="c10"
+            >
+              <div
+                class="c11"
+              >
+                Type
+              </div>
+            </th>
+            <th
+              class="c12"
+            >
+              <div
+                class="c11"
+              >
+                Content
+              </div>
+            </th>
+            <th
+              class="c13"
+            >
+              <div
+                class="c11"
+              >
+                Origin
+              </div>
+            </th>
+            <th
+              class="c14"
+            >
+              <div
+                class="c11"
+              >
+                Version
+              </div>
+            </th>
+            <th
+              class="c15"
+            >
+              <div
+                class="c11"
+              >
+                Status
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c0"
+              >
+                NVT
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                <div
+                  class="c16"
+                >
+                  <div
+                    class="c17"
+                    margin="5px"
+                  >
+                    <a
+                      class="c18"
+                      href="/nvts"
+                    >
+                      <div
+                        class="c16"
+                      >
+                        <div
+                          class="c19"
+                          margin="5px"
+                        >
+                          <span
+                            class="c20"
+                            data-testid="svg-icon"
+                          >
+                            <svg>
+                              nvt.svg
+                            </svg>
+                          </span>
+                          <span>
+                            NVTs
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                Greenbone Community Feed
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                20200723T0955
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                <div
+                  class="c16"
+                >
+                  <div
+                    class="c21"
+                    margin="5px"
+                  >
+                    <strong>
+                      Current
+                    </strong>
+                    <span />
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c0"
+              >
+                SCAP
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                <div
+                  class="c16"
+                >
+                  <div
+                    class="c17"
+                    margin="5px"
+                  >
+                    <a
+                      class="c18"
+                      href="/cves"
+                    >
+                      <div
+                        class="c16"
+                      >
+                        <div
+                          class="c19"
+                          margin="5px"
+                        >
+                          <span
+                            class="c20"
+                            data-testid="svg-icon"
+                          >
+                            <svg>
+                              cve.svg
+                            </svg>
+                          </span>
+                          <span>
+                            CVEs
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                    <a
+                      class="c18"
+                      href="/cpes"
+                    >
+                      <div
+                        class="c16"
+                      >
+                        <div
+                          class="c19"
+                          margin="5px"
+                        >
+                          <span
+                            class="c20"
+                            data-testid="svg-icon"
+                          >
+                            <svg>
+                              cpe.svg
+                            </svg>
+                          </span>
+                          <span>
+                            CPEs
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                    <a
+                      class="c18"
+                      href="/ovaldefs"
+                    >
+                      <div
+                        class="c16"
+                      >
+                        <div
+                          class="c19"
+                          margin="5px"
+                        >
+                          <span
+                            class="c20"
+                            data-testid="svg-icon"
+                          >
+                            <svg>
+                              ovaldef.svg
+                            </svg>
+                          </span>
+                          <span>
+                            OVAL Definitions
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                Greenbone Community SCAP Feed
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                20200723T0130
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                <div
+                  class="c16"
+                >
+                  <div
+                    class="c21"
+                    margin="5px"
+                  >
+                    <strong>
+                      Current
+                    </strong>
+                    <span />
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c0"
+              >
+                CERT
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                <div
+                  class="c16"
+                >
+                  <div
+                    class="c17"
+                    margin="5px"
+                  >
+                    <a
+                      class="c18"
+                      href="/certbunds"
+                    >
+                      <div
+                        class="c16"
+                      >
+                        <div
+                          class="c19"
+                          margin="5px"
+                        >
+                          <span
+                            class="c20"
+                            data-testid="svg-icon"
+                          >
+                            <svg>
+                              cert_bund_adv.svg
+                            </svg>
+                          </span>
+                          <span>
+                            CERT-Bund Advisories
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                    <a
+                      class="c18"
+                      href="/dfncerts"
+                    >
+                      <div
+                        class="c16"
+                      >
+                        <div
+                          class="c19"
+                          margin="5px"
+                        >
+                          <span
+                            class="c20"
+                            data-testid="svg-icon"
+                          >
+                            <svg>
+                              dfn_cert_adv.svg
+                            </svg>
+                          </span>
+                          <span>
+                            DFN-CERT Advisories
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                Greenbone Community CERT Feed
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                20200723T1003
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                <div
+                  class="c16"
+                >
+                  <div
+                    class="c21"
+                    margin="5px"
+                  >
+                    <strong>
+                      Current
+                    </strong>
+                    <span />
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c0"
+              >
+                "GVMD_DATA"
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              />
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                Greenbone Community GVMd Data Feed
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                20200722T1009
+              </div>
+            </td>
+            <td>
+              <div
+                class="c0"
+              >
+                <div
+                  class="c16"
+                >
+                  <div
+                    class="c21"
+                    margin="5px"
+                  >
+                    <strong>
+                      2 days old
+                    </strong>
+                    <span />
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+`;
