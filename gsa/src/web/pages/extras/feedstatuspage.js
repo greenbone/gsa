@@ -88,17 +88,23 @@ const renderFeedStatus = feed => {
   return _('Current');
 };
 
-const REPORT_FORMATS = [
+const compliancePolicies = [
+  'c4b7c0cb-6502-4809-b034-8e635311b3e6', // IT-Grundschutz
+];
+
+const portLists = [
+  '33d0cd82-57c6-11e1-8ed1-406186ea4fc5', // All IANA assigned TCP
+  '4a4717fe-57d2-11e1-9a26-406186ea4fc5', // All IANA assigned TCP and UDP
+  '730ef368-57e2-11e1-a90f-406186ea4fc5', // All TCP and Nmap top 100 UDP
+];
+
+const reportFormats = [
   '5057e5cc-b825-11e4-9d0e-28d24461215b', // Anonymous XML
   'c1645568-627a-11e3-a660-406186ea4fc5', // CSV Results
   '77bd6c4a-1f62-11e1-abf0-406186ea4fc5', // ITG
   'c402cc3e-b531-11e1-9163-406186ea4fc5', // PDF
   'a3810a62-1f62-11e1-9219-406186ea4fc5', // TXT
   'a994b278-1f62-11e1-96ac-406186ea4fc5', // XML
-];
-
-const COMPLIANCE_POLICIES = [
-  'c4b7c0cb-6502-4809-b034-8e635311b3e6', // IT-Grundschutz
 ];
 
 const composeFeedUrl = objectIds => {
@@ -195,14 +201,14 @@ const FeedStatus = () => {
                     <IconDivider>
                       <Link
                         to="policies"
-                        filter={composeFeedUrl(COMPLIANCE_POLICIES)}
+                        filter={composeFeedUrl(compliancePolicies)}
                       >
                         <IconDivider align={['start', 'center']}>
                           <PolicyIcon size="medium" />
                           <span>Compliance Policies</span>
                         </IconDivider>
                       </Link>
-                      <Link to="portlists">
+                      <Link to="portlists" filter={composeFeedUrl(portLists)}>
                         <IconDivider align={['start', 'center']}>
                           <PortListIcon size="medium" />
                           <span>Port Lists</span>
@@ -210,7 +216,7 @@ const FeedStatus = () => {
                       </Link>
                       <Link
                         to="reportformats"
-                        filter={composeFeedUrl(REPORT_FORMATS)}
+                        filter={composeFeedUrl(reportFormats)}
                       >
                         <IconDivider align={['start', 'center']}>
                           <ReportFormatIcon size="medium" />
