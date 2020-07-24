@@ -107,6 +107,15 @@ const reportFormats = [
   'a994b278-1f62-11e1-96ac-406186ea4fc5', // XML
 ];
 
+const scanConfigs = [
+  'd21f6c81-2b88-4ac1-b7b4-a2a9f2ad4663', // Base
+  '8715c877-47a0-438d-98a3-27c7a6ab2196', // Discovery
+  '085569ce-73ed-11df-83c3-002264764cea', // empty
+  'daba56c8-73ec-11df-a475-002264764cea', // Full and fast
+  '2d3f051c-55ba-11e3-bf43-406186ea4fc5', // Host Discovery
+  'bbca7412-a950-11e3-9109-406186ea4fc5', // System Discovery
+];
+
 const composeFeedUrl = objectIds => {
   let url = '';
 
@@ -223,7 +232,10 @@ const FeedStatus = () => {
                           <span>Report Formats</span>
                         </IconDivider>
                       </Link>
-                      <Link to="scanconfigs">
+                      <Link
+                        to="scanconfigs"
+                        filter={composeFeedUrl(scanConfigs)}
+                      >
                         <IconDivider align={['start', 'center']}>
                           <ScanConfigIcon size="medium" />
                           <span>Scan Configs</span>
