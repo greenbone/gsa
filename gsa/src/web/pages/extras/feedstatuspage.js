@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -39,8 +39,6 @@ import PageTitle from 'web/components/layout/pagetitle';
 
 import Link from 'web/components/link/link';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Section from 'web/components/section/section';
 
 import Table from 'web/components/table/stripedtable';
@@ -49,7 +47,7 @@ import TableRow from 'web/components/table/row';
 import TableHead from 'web/components/table/head';
 import TableData from 'web/components/table/data';
 
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 
 const ToolBarIcons = () => (
   <ManualIcon
@@ -81,118 +79,105 @@ const renderFeedStatus = feed => {
   return _('Current');
 };
 
-class FeedStatus extends React.Component {
-  constructor(...args) {
-    super(...args);
+const FeedStatus = () => {
+  const gmp = useGmp();
+  const [feeds, setFeeds] = useState([]);
 
-    this.state = {
-      feeds: [],
-    };
-  }
-
-  componentDidMount() {
-    this.loadFeeds();
-  }
-
-  loadFeeds() {
-    const {gmp} = this.props;
+  const loadFeeds = useCallback(() => {
     gmp.feedstatus.readFeedInformation().then(response => {
       const {data: feeds} = response;
-      this.setState({feeds});
+      setFeeds(feeds);
     });
-  }
+  }, [gmp.feedstatus]);
 
-  render() {
-    const {feeds} = this.state;
-    return (
-      <React.Fragment>
-        <PageTitle title={_('Feed Status')} />
-        <Layout flex="column">
-          <ToolBarIcons />
-          <Section img={<FeedIcon size="large" />} title={_('Feed Status')} />
-          <Table>
-            <TableBody>
-              <TableRow>
-                <TableHead width="3rem">{_('Type')}</TableHead>
-                <TableHead width="21rem">{_('Content')}</TableHead>
-                <TableHead width="9rem">{_('Origin')}</TableHead>
-                <TableHead width="7rem">{_('Version')}</TableHead>
-                <TableHead>{_('Status')}</TableHead>
+  useEffect(() => {
+    loadFeeds();
+  }, [loadFeeds]);
+
+  return (
+    <React.Fragment>
+      <PageTitle title={_('Feed Status')} />
+      <Layout flex="column">
+        <ToolBarIcons />
+        <Section img={<FeedIcon size="large" />} title={_('Feed Status')} />
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableHead width="3rem">{_('Type')}</TableHead>
+              <TableHead width="21rem">{_('Content')}</TableHead>
+              <TableHead width="9rem">{_('Origin')}</TableHead>
+              <TableHead width="7rem">{_('Version')}</TableHead>
+              <TableHead>{_('Status')}</TableHead>
+            </TableRow>
+
+            {feeds.map(feed => (
+              <TableRow key={feed.feed_type}>
+                <TableData>{feed.feed_type}</TableData>
+                <TableData>
+                  {feed.feed_type === NVT_FEED && (
+                    <IconDivider>
+                      <Link to="nvts">
+                        <IconDivider align={['start', 'center']}>
+                          <NvtIcon size="medium" />
+                          <span>NVTs</span>
+                        </IconDivider>
+                      </Link>
+                    </IconDivider>
+                  )}
+                  {feed.feed_type === SCAP_FEED && (
+                    <IconDivider>
+                      <Link to="cves">
+                        <IconDivider align={['start', 'center']}>
+                          <CveIcon size="medium" />
+                          <span>CVEs</span>
+                        </IconDivider>
+                      </Link>
+                      <Link to="cpes">
+                        <IconDivider align={['start', 'center']}>
+                          <CpeLogoIcon size="medium" />
+                          <span>CPEs</span>
+                        </IconDivider>
+                      </Link>
+                      <Link to="ovaldefs">
+                        <IconDivider align={['start', 'center']}>
+                          <OvalDefIcon size="medium" />
+                          <span>OVAL Definitions</span>
+                        </IconDivider>
+                      </Link>
+                    </IconDivider>
+                  )}
+                  {feed.feed_type === CERT_FEED && (
+                    <IconDivider>
+                      <Link to="certbunds">
+                        <IconDivider align={['start', 'center']}>
+                          <CertBundAdvIcon size="medium" />
+                          <span>CERT-Bund Advisories</span>
+                        </IconDivider>
+                      </Link>
+                      <Link to="dfncerts">
+                        <IconDivider align={['start', 'center']}>
+                          <DfnCertAdvIcon size="medium" />
+                          <span>DFN-CERT Advisories</span>
+                        </IconDivider>
+                      </Link>
+                    </IconDivider>
+                  )}
+                </TableData>
+                <TableData>{feed.name}</TableData>
+                <TableData>{feed.version}</TableData>
+                <TableData>
+                  <Divider wrap>
+                    <strong>{renderFeedStatus(feed)}</strong>
+                    <span>{renderCheck(feed)}</span>
+                  </Divider>
+                </TableData>
               </TableRow>
-
-              {feeds.map(feed => (
-                <TableRow key={feed.feed_type}>
-                  <TableData>{feed.feed_type}</TableData>
-                  <TableData>
-                    {feed.feed_type === NVT_FEED && (
-                      <IconDivider>
-                        <Link to="nvts">
-                          <IconDivider align={['start', 'center']}>
-                            <NvtIcon size="medium" />
-                            <span>NVTs</span>
-                          </IconDivider>
-                        </Link>
-                      </IconDivider>
-                    )}
-                    {feed.feed_type === SCAP_FEED && (
-                      <IconDivider>
-                        <Link to="cves">
-                          <IconDivider align={['start', 'center']}>
-                            <CveIcon size="medium" />
-                            <span>CVEs</span>
-                          </IconDivider>
-                        </Link>
-                        <Link to="cpes">
-                          <IconDivider align={['start', 'center']}>
-                            <CpeLogoIcon size="medium" />
-                            <span>CPEs</span>
-                          </IconDivider>
-                        </Link>
-                        <Link to="ovaldefs">
-                          <IconDivider align={['start', 'center']}>
-                            <OvalDefIcon size="medium" />
-                            <span>OVAL Definitions</span>
-                          </IconDivider>
-                        </Link>
-                      </IconDivider>
-                    )}
-                    {feed.feed_type === CERT_FEED && (
-                      <IconDivider>
-                        <Link to="certbunds">
-                          <IconDivider align={['start', 'center']}>
-                            <CertBundAdvIcon size="medium" />
-                            <span>CERT-Bund Advisories</span>
-                          </IconDivider>
-                        </Link>
-                        <Link to="dfncerts">
-                          <IconDivider align={['start', 'center']}>
-                            <DfnCertAdvIcon size="medium" />
-                            <span>DFN-CERT Advisories</span>
-                          </IconDivider>
-                        </Link>
-                      </IconDivider>
-                    )}
-                  </TableData>
-                  <TableData>{feed.name}</TableData>
-                  <TableData>{feed.version}</TableData>
-                  <TableData>
-                    <Divider wrap>
-                      <strong>{renderFeedStatus(feed)}</strong>
-                      <span>{renderCheck(feed)}</span>
-                    </Divider>
-                  </TableData>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Layout>
-      </React.Fragment>
-    );
-  }
-}
-
-FeedStatus.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
+            ))}
+          </TableBody>
+        </Table>
+      </Layout>
+    </React.Fragment>
+  );
 };
 
-export default withGmp(FeedStatus);
+export default FeedStatus;
