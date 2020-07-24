@@ -25,7 +25,7 @@ import {
   NVT_FEED,
   SCAP_FEED,
   CERT_FEED,
-  GVMD_DATA,
+  GVMD_DATA_FEED,
 } from 'gmp/commands/feedstatus';
 
 import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
@@ -116,11 +116,11 @@ const SCAN_CONFIGS = [
   'bbca7412-a950-11e3-9109-406186ea4fc5', // System Discovery
 ];
 
-const composeFeedUrl = objectIds => {
-  let url = '';
+const composeObjFilter = objectIds => {
+  let filterString = '';
 
-  objectIds.forEach(id => (url += 'uuid=' + id + ' '));
-  return url;
+  objectIds.forEach(id => (filterString += 'uuid=' + id + ' '));
+  return filterString;
 };
 
 const FeedStatus = () => {
@@ -206,18 +206,21 @@ const FeedStatus = () => {
                       </Link>
                     </IconDivider>
                   )}
-                  {feed.feed_type === GVMD_DATA && (
+                  {feed.feed_type === GVMD_DATA_FEED && (
                     <IconDivider>
                       <Link
                         to="policies"
-                        filter={composeFeedUrl(COMPLIANCE_POLICIES)}
+                        filter={composeObjFilter(COMPLIANCE_POLICIES)}
                       >
                         <IconDivider align={['start', 'center']}>
                           <PolicyIcon size="medium" />
                           <span>Compliance Policies</span>
                         </IconDivider>
                       </Link>
-                      <Link to="portlists" filter={composeFeedUrl(PORT_LISTS)}>
+                      <Link
+                        to="portlists"
+                        filter={composeObjFilter(PORT_LISTS)}
+                      >
                         <IconDivider align={['start', 'center']}>
                           <PortListIcon size="medium" />
                           <span>Port Lists</span>
@@ -225,7 +228,7 @@ const FeedStatus = () => {
                       </Link>
                       <Link
                         to="reportformats"
-                        filter={composeFeedUrl(REPORT_FORMATS)}
+                        filter={composeObjFilter(REPORT_FORMATS)}
                       >
                         <IconDivider align={['start', 'center']}>
                           <ReportFormatIcon size="medium" />
@@ -234,7 +237,7 @@ const FeedStatus = () => {
                       </Link>
                       <Link
                         to="scanconfigs"
-                        filter={composeFeedUrl(SCAN_CONFIGS)}
+                        filter={composeObjFilter(SCAN_CONFIGS)}
                       >
                         <IconDivider align={['start', 'center']}>
                           <ScanConfigIcon size="medium" />
