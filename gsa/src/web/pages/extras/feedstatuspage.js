@@ -129,8 +129,8 @@ const FeedStatus = () => {
 
   const loadFeeds = useCallback(() => {
     gmp.feedstatus.readFeedInformation().then(response => {
-      const {data: feeds} = response;
-      setFeeds(feeds);
+      const {data} = response;
+      setFeeds(data);
     });
   }, [gmp.feedstatus]);
 
