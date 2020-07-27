@@ -91,7 +91,7 @@
     "babel-plugin-i18next-extract": "^0.7.2",
     "eslint-config-prettier": "^6.11.0",
     "husky": "^2.7.0",
-    "jest-junit": "^11.0.1",
+    "jest-junit": "^11.1.0",
     "jest-styled-components": "^6.3.4",
     "lint-staged": "^8.2.1",
     "prettier": "^2.0.5"
