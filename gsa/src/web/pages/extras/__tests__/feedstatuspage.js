@@ -144,10 +144,33 @@ describe('Feed status page tests', () => {
     expect(header[3]).toHaveTextContent('Version');
     expect(header[4]).toHaveTextContent('Status');
 
-    // Column texts
+    // Type names
     expect(element).toHaveTextContent('NVT');
     expect(element).toHaveTextContent('SCAP');
     expect(element).toHaveTextContent('CERT');
     expect(element).toHaveTextContent('GVMD_DATA');
+
+    // Feed Origin
+    expect(element).toHaveTextContent('Greenbone Community Feed');
+    expect(element).toHaveTextContent('Greenbone Community SCAP Feed');
+    expect(element).toHaveTextContent('Greenbone Community CERT Feed');
+    expect(element).toHaveTextContent('Greenbone Community CERT Feed');
+    expect(element).toHaveTextContent('Greenbone Community GVMd Data Feed');
+
+    // Feed versions
+    expect(element).toHaveTextContent('20200724T1005');
+    expect(element).toHaveTextContent('20200723T0130');
+    expect(element).toHaveTextContent('20200723T1003');
+    expect(element).toHaveTextContent('20200722T1009');
+
+    // Feed Status
+
+    const ageText = element.querySelectorAll('strong');
+
+    expect(ageText.length).toBe(4);
+    expect(ageText[0]).toHaveTextContent('2 days old');
+    expect(ageText[1]).toHaveTextContent('4 days old');
+    expect(ageText[2]).toHaveTextContent('3 days old');
+    expect(ageText[3]).toHaveTextContent('4 days old');
   });
 });
