@@ -26,6 +26,9 @@ import Response from 'gmp/http/response';
 
 const mockDate = new Date(1595660400000); // Saturday July 25 090000
 
+// store global.Date.now to restore later
+const _now = global.Date.now;
+
 // set mockDate so the feed ages don't keep changing
 global.Date.now = jest.fn(() => mockDate);
 
@@ -188,3 +191,6 @@ describe('Test uuid filter composer', () => {
     expect(filterString).toEqual('uuid=foo uuid=bar uuid=baz ');
   });
 });
+
+// restore overwritten method
+global.Date.now = _now;
