@@ -132,5 +132,22 @@ describe('Feed status page tests', () => {
       'href',
       '/scanconfigs?filter=uuid%3Dd21f6c81-2b88-4ac1-b7b4-a2a9f2ad4663%20uuid%3D8715c877-47a0-438d-98a3-27c7a6ab2196%20uuid%3D085569ce-73ed-11df-83c3-002264764cea%20uuid%3Ddaba56c8-73ec-11df-a475-002264764cea%20uuid%3D2d3f051c-55ba-11e3-bf43-406186ea4fc5%20uuid%3Dbbca7412-a950-11e3-9109-406186ea4fc5%20',
     );
+
+    // Test headers
+    const header = element.querySelectorAll('th');
+
+    expect(header.length).toBe(5);
+
+    expect(header[0]).toHaveTextContent('Type');
+    expect(header[1]).toHaveTextContent('Content');
+    expect(header[2]).toHaveTextContent('Origin');
+    expect(header[3]).toHaveTextContent('Version');
+    expect(header[4]).toHaveTextContent('Status');
+
+    // Column texts
+    expect(element).toHaveTextContent('NVT');
+    expect(element).toHaveTextContent('SCAP');
+    expect(element).toHaveTextContent('CERT');
+    expect(element).toHaveTextContent('GVMD_DATA');
   });
 });
