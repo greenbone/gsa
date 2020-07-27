@@ -152,7 +152,6 @@ describe('Feed status page tests', () => {
     expect(element).toHaveTextContent('Greenbone Community Feed');
     expect(element).toHaveTextContent('Greenbone Community SCAP Feed');
     expect(element).toHaveTextContent('Greenbone Community CERT Feed');
-    expect(element).toHaveTextContent('Greenbone Community CERT Feed');
     expect(element).toHaveTextContent('Greenbone Community GVMd Data Feed');
 
     // Feed versions
