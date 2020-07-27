@@ -149,8 +149,8 @@ const FeedStatus = () => {
           <TableBody>
             <TableRow>
               <TableHead width="3rem">{_('Type')}</TableHead>
-              <TableHead width="21rem">{_('Content')}</TableHead>
-              <TableHead width="9rem">{_('Origin')}</TableHead>
+              <TableHead width="22rem">{_('Content')}</TableHead>
+              <TableHead width="11rem">{_('Origin')}</TableHead>
               <TableHead width="7rem">{_('Version')}</TableHead>
               <TableHead>{_('Status')}</TableHead>
             </TableRow>
