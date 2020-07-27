@@ -24,7 +24,7 @@ import {Feed} from 'gmp/commands/feedstatus';
 
 import Response from 'gmp/http/response';
 
-const mockDate = new Date(1595833720475);
+const mockDate = new Date(1595660400000); // Saturday July 25 090000
 
 // set mockDate so the feed ages don't keep changing
 global.Date.now = jest.fn(() => mockDate);
@@ -166,10 +166,10 @@ describe('Feed status page tests', () => {
     const ageText = element.querySelectorAll('strong');
 
     expect(ageText.length).toEqual(4);
-    expect(ageText[0]).toHaveTextContent('2 days old');
-    expect(ageText[1]).toHaveTextContent('4 days old');
-    expect(ageText[2]).toHaveTextContent('3 days old');
-    expect(ageText[3]).toHaveTextContent('4 days old');
+    expect(ageText[0]).toHaveTextContent('Current');
+    expect(ageText[1]).toHaveTextContent('2 days old');
+    expect(ageText[2]).toHaveTextContent('Current');
+    expect(ageText[3]).toHaveTextContent('2 days old');
   });
 });
 
