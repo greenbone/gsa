@@ -116,10 +116,11 @@ const SCAN_CONFIGS = [
   'bbca7412-a950-11e3-9109-406186ea4fc5', // System Discovery
 ];
 
-const composeObjFilter = objectIds => {
+export const composeObjFilter = (objectIds = []) => {
   let filterString = '';
 
   objectIds.forEach(id => (filterString += 'uuid=' + id + ' '));
+
   return filterString;
 };
 

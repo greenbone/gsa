@@ -19,7 +19,7 @@ import React from 'react';
 
 import {rendererWith, wait} from 'web/utils/testing';
 
-import FeedStatus from '../feedstatuspage';
+import FeedStatus, {composeObjFilter} from '../feedstatuspage';
 import {Feed} from 'gmp/commands/feedstatus';
 
 import Response from 'gmp/http/response';
@@ -82,7 +82,7 @@ describe('Feed status page tests', () => {
     // Should render all icons
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons.length).toBe(12);
+    expect(icons.length).toEqual(12);
 
     expect(icons[0]).toHaveTextContent('help.svg');
     expect(icons[0]).toHaveAttribute('title', 'Help: Feed Status');
@@ -102,7 +102,7 @@ describe('Feed status page tests', () => {
     // Should render all links
     const links = element.querySelectorAll('a');
 
-    expect(links.length).toBe(11);
+    expect(links.length).toEqual(11);
 
     expect(links[0]).toHaveAttribute(
       'href',
@@ -134,7 +134,7 @@ describe('Feed status page tests', () => {
     // Test headers
     const header = element.querySelectorAll('th');
 
-    expect(header.length).toBe(5);
+    expect(header.length).toEqual(5);
 
     expect(header[0]).toHaveTextContent('Type');
     expect(header[1]).toHaveTextContent('Content');
@@ -165,10 +165,27 @@ describe('Feed status page tests', () => {
 
     const ageText = element.querySelectorAll('strong');
 
-    expect(ageText.length).toBe(4);
+    expect(ageText.length).toEqual(4);
     expect(ageText[0]).toHaveTextContent('2 days old');
     expect(ageText[1]).toHaveTextContent('4 days old');
     expect(ageText[2]).toHaveTextContent('3 days old');
     expect(ageText[3]).toHaveTextContent('4 days old');
+  });
+});
+
+describe('Test uuid filter composer', () => {
+  test('Should return empty string for empty array', () => {
+    const emptyFilter = composeObjFilter([]);
+    expect(emptyFilter).toEqual('');
+  });
+
+  test('Should not crash on undefined input', () => {
+    const noFilter = composeObjFilter();
+    expect(noFilter).toEqual('');
+  });
+
+  test('Should return correct filter string', () => {
+    const filterString = composeObjFilter(['foo', 'bar', 'baz']);
+    expect(filterString).toEqual('uuid=foo uuid=bar uuid=baz ');
   });
 });
