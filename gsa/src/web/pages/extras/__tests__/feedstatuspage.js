@@ -17,17 +17,22 @@
  */
 import React from 'react';
 
-import {rendererWith, wait} from 'web/utils/testing';
+import {rendererWith, wait, waitForElement} from 'web/utils/testing';
 
 import FeedStatus from '../feedstatuspage';
 import {Feed} from 'gmp/commands/feedstatus';
 
 import Response from 'gmp/http/response';
 
+const mockDate = new Date(1595833720475);
+
+// set mockDate so the feed ages don't keep changing
+global.Date.now = jest.fn(() => mockDate);
+
 const nvtFeed = new Feed({
   name: 'Greenbone Community Feed',
   type: 'NVT',
-  version: 202007230955,
+  version: 202007241005,
 });
 
 const scapFeed = new Feed({
@@ -44,7 +49,7 @@ const certFeed = new Feed({
 
 const gvmdDataFeed = new Feed({
   name: 'Greenbone Community GVMd Data Feed',
-  type: '"GVMD_DATA"',
+  type: 'GVMD_DATA',
   version: 202007221009,
 });
 
@@ -70,10 +75,29 @@ const gmp = {
 describe('Feed status page tests', () => {
   test('should render', async () => {
     const {render} = rendererWith({gmp, router: true});
-    const {baseElement} = render(<FeedStatus />);
+    const {element, getAllByTestId} = render(<FeedStatus />);
 
     await wait();
 
-    expect(baseElement).toMatchSnapshot();
+    expect(element).toMatchSnapshot();
+
+    // Should render all icons
+    const icons = getAllByTestId('svg-icon');
+
+    expect(icons.length).toBe(12);
+    expect(icons[0]).toHaveTextContent('help.svg');
+    expect(icons[0]).toHaveAttribute('title', 'Help: Feed Status');
+
+    expect(icons[1]).toHaveTextContent('feed.svg');
+    expect(icons[2]).toHaveTextContent('nvt.svg');
+    expect(icons[3]).toHaveTextContent('cve.svg');
+    expect(icons[4]).toHaveTextContent('cpe.svg');
+    expect(icons[5]).toHaveTextContent('ovaldef.svg');
+    expect(icons[6]).toHaveTextContent('cert_bund_adv.svg');
+    expect(icons[7]).toHaveTextContent('dfn_cert_adv.svg');
+    expect(icons[8]).toHaveTextContent('policy.svg');
+    expect(icons[9]).toHaveTextContent('port_list.svg');
+    expect(icons[10]).toHaveTextContent('report_format.svg');
+    expect(icons[11]).toHaveTextContent('config.svg');
   });
 });
