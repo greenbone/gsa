@@ -60,7 +60,7 @@ const ScheduleDetails = ({entity, links = true}) => {
           <TableRow>
             <TableData>{_('First Run')}</TableData>
             <TableData>
-              {isDefined(nextDate) ? (
+              {isDefined(startDate) ? (
                 <DateTime date={startDate} timezone={timezone} />
               ) : (
                 '-'
