@@ -97,6 +97,8 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Lowered memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Fixed broken radio buttons and wrong date for schedule in Modify Task Wizard [#2340](https://github.com/greenbone/gsa/pull/2340)
+- Fixed missing nextDate for schedules with recurrence "once" [#2336](https://github.com/greenbone/gsa/pull/2336)
 - Don't crash if dashboard getSetting returns duplicate setting [#2290](https://github.com/greenbone/gsa/pull/2290)
 - Fixed broken bulk export for AllSecInfo [#2269](https://github.com/greenbone/gsa/pull/2269)
 - Fixed passing threshold prop in AlertActions for ThresholdMessage [#2114](https://github.com/greenbone/gsa/pull/2114)
