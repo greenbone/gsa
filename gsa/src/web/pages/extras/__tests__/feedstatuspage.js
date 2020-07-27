@@ -79,8 +79,6 @@ describe('Feed status page tests', () => {
 
     await wait();
 
-    expect(element).toMatchSnapshot();
-
     // Should render all icons
     const icons = getAllByTestId('svg-icon');
 
