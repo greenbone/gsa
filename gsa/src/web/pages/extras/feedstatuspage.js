@@ -164,7 +164,7 @@ const FeedStatus = () => {
                       <Link to="nvts">
                         <IconDivider align={['start', 'center']}>
                           <NvtIcon size="medium" />
-                          <span>NVTs</span>
+                          <span>{_('NVTs')}</span>
                         </IconDivider>
                       </Link>
                     </IconDivider>
@@ -174,19 +174,19 @@ const FeedStatus = () => {
                       <Link to="cves">
                         <IconDivider align={['start', 'center']}>
                           <CveIcon size="medium" />
-                          <span>CVEs</span>
+                          <span>{_('CVEs')}</span>
                         </IconDivider>
                       </Link>
                       <Link to="cpes">
                         <IconDivider align={['start', 'center']}>
                           <CpeLogoIcon size="medium" />
-                          <span>CPEs</span>
+                          <span>{_('CPEs')}</span>
                         </IconDivider>
                       </Link>
                       <Link to="ovaldefs">
                         <IconDivider align={['start', 'center']}>
                           <OvalDefIcon size="medium" />
-                          <span>OVAL Definitions</span>
+                          <span>{_('OVAL Definitions')}</span>
                         </IconDivider>
                       </Link>
                     </IconDivider>
@@ -196,13 +196,13 @@ const FeedStatus = () => {
                       <Link to="certbunds">
                         <IconDivider align={['start', 'center']}>
                           <CertBundAdvIcon size="medium" />
-                          <span>CERT-Bund Advisories</span>
+                          <span>{_('CERT-Bund Advisories')}</span>
                         </IconDivider>
                       </Link>
                       <Link to="dfncerts">
                         <IconDivider align={['start', 'center']}>
                           <DfnCertAdvIcon size="medium" />
-                          <span>DFN-CERT Advisories</span>
+                          <span>{_('DFN-CERT Advisories')}</span>
                         </IconDivider>
                       </Link>
                     </IconDivider>
@@ -215,7 +215,7 @@ const FeedStatus = () => {
                       >
                         <IconDivider align={['start', 'center']}>
                           <PolicyIcon size="medium" />
-                          <span>Compliance Policies</span>
+                          <span>{_('Compliance Policies')}</span>
                         </IconDivider>
                       </Link>
                       <Link
@@ -224,7 +224,7 @@ const FeedStatus = () => {
                       >
                         <IconDivider align={['start', 'center']}>
                           <PortListIcon size="medium" />
-                          <span>Port Lists</span>
+                          <span>{_('Port Lists')}</span>
                         </IconDivider>
                       </Link>
                       <Link
@@ -233,7 +233,7 @@ const FeedStatus = () => {
                       >
                         <IconDivider align={['start', 'center']}>
                           <ReportFormatIcon size="medium" />
-                          <span>Report Formats</span>
+                          <span>{_('Report Formats')}</span>
                         </IconDivider>
                       </Link>
                       <Link
@@ -242,7 +242,7 @@ const FeedStatus = () => {
                       >
                         <IconDivider align={['start', 'center']}>
                           <ScanConfigIcon size="medium" />
-                          <span>Scan Configs</span>
+                          <span>{_('Scan Configs')}</span>
                         </IconDivider>
                       </Link>
                     </IconDivider>
