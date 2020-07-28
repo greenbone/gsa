@@ -3062,7 +3062,7 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   int ret;
   gchar *html, *response;
-  const char *name, *comment, *login, *type, *password, *passphrase;
+  const char *name, *comment, *credential_login, *type, *password, *passphrase;
   const char *private_key, *public_key, *certificate, *community;
   const char *privacy_password, *auth_algorithm, *privacy_algorithm;
   const char *autogenerate, *allow_insecure;
@@ -3070,7 +3070,7 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  login = params_value (params, "credential_login");
+  credential_login = params_value (params, "credential_login");
   type = params_value (params, "credential_type");
   password = params_value (params, "lsc_password");
   passphrase = params_value (params, "passphrase");
@@ -3108,7 +3108,7 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
       else
         {
           // Auto-generate types with username
-          CHECK_VARIABLE_INVALID (login, "Create Credential");
+          CHECK_VARIABLE_INVALID (credential_login, "Create Credential");
 
           ret =
             gmpf (connection, credentials, &response, &entity, response_data,
@@ -3119,14 +3119,15 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   "<login>%s</login>"
                   "<allow_insecure>%s</allow_insecure>"
                   "</create_credential>",
-                  name, comment ? comment : "", type, login, allow_insecure);
+                  name, comment ? comment : "", type, credential_login,
+                  allow_insecure);
         }
     }
   else
     {
       if (str_equal (type, "up"))
         {
-          CHECK_VARIABLE_INVALID (login, "Create Credential");
+          CHECK_VARIABLE_INVALID (credential_login, "Create Credential");
           CHECK_VARIABLE_INVALID (password, "Create Credential");
 
           ret =
@@ -3139,12 +3140,13 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   "<password>%s</password>"
                   "<allow_insecure>%s</allow_insecure>"
                   "</create_credential>",
-                  name, comment ? comment : "", type, login ? login : "",
+                  name, comment ? comment : "", type,
+                  credential_login ? credential_login : "",
                   password ? password : "", allow_insecure);
         }
       else if (str_equal (type, "usk"))
         {
-          CHECK_VARIABLE_INVALID (login, "Create Credential");
+          CHECK_VARIABLE_INVALID (credential_login, "Create Credential");
           CHECK_VARIABLE_INVALID (passphrase, "Create Credential");
           CHECK_VARIABLE_INVALID (private_key, "Create Credential");
 
@@ -3161,7 +3163,8 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
                   "</key>"
                   "<allow_insecure>%s</allow_insecure>"
                   "</create_credential>",
-                  name, comment ? comment : "", type, login ? login : "",
+                  name, comment ? comment : "", type,
+                  credential_login ? credential_login : "",
                   private_key ? private_key : "", passphrase ? passphrase : "",
                   allow_insecure);
         }
@@ -3191,7 +3194,7 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
       else if (str_equal (type, "snmp"))
         {
           CHECK_VARIABLE_INVALID (community, "Create Credential");
-          CHECK_VARIABLE_INVALID (login, "Create Credential");
+          CHECK_VARIABLE_INVALID (credential_login, "Create Credential");
           CHECK_VARIABLE_INVALID (password, "Create Credential");
           CHECK_VARIABLE_INVALID (privacy_password, "Create Credential");
           CHECK_VARIABLE_INVALID (auth_algorithm, "Create Credential");
@@ -3215,7 +3218,8 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
               "<allow_insecure>%s</allow_insecure>"
               "</create_credential>",
               name, comment ? comment : "", type, community ? community : "",
-              login ? login : "", password ? password : "",
+              credential_login ? credential_login : "",
+              password ? password : "",
               privacy_password ? privacy_password : "",
               privacy_algorithm ? privacy_algorithm : "",
               auth_algorithm ? auth_algorithm : "", allow_insecure);
@@ -3233,7 +3237,8 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
               "<allow_insecure>%s</allow_insecure>"
               "</create_credential>",
               name, comment ? comment : "", type, community ? community : "",
-              login ? login : "", password ? password : "",
+              credential_login ? credential_login : "",
+              password ? password : "",
               auth_algorithm ? auth_algorithm : "", allow_insecure);
         }
       else if (str_equal (type, "pgp"))
@@ -3662,7 +3667,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
   int change_community, change_privacy_password;
   gchar *html, *response;
   const char *credential_id, *public_key;
-  const char *name, *comment, *login, *password, *passphrase, *type;
+  const char *name, *comment, *credential_login, *password, *passphrase, *type;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
   GString *command;
@@ -3672,7 +3677,7 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
   type = params_value (params, "credential_type");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  login = params_value (params, "credential_login");
+  credential_login = params_value (params, "credential_login");
   password = params_value (params, "password");
   passphrase = params_value (params, "passphrase");
   private_key = params_value (params, "private_key");
@@ -3731,8 +3736,8 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
         CHECK_VARIABLE_INVALID (public_key, "Save Credential");
     }
 
-  if (params_given (params, "login"))
-    CHECK_VARIABLE_INVALID (login, "Save Credential");
+  if (params_given (params, "credential_login"))
+    CHECK_VARIABLE_INVALID (credential_login, "Save Credential");
 
   change_password = params_value_bool (params, "change_password");
 
@@ -3835,8 +3840,8 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
         }
     }
 
-  if (login && strcmp (login, ""))
-    xml_string_append (command, "<login>%s</login>", login);
+  if (credential_login && strcmp (credential_login, ""))
+    xml_string_append (command, "<login>%s</login>", credential_login);
 
   xml_string_append (command, "</modify_credential>");
 
