@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -55,6 +55,10 @@ import TableBody from 'web/components/table/body';
 import TableRow from 'web/components/table/row';
 import TableHead from 'web/components/table/head';
 import TableData from 'web/components/table/data';
+
+import Reload, {
+  USE_DEFAULT_RELOAD_INTERVAL,
+} from 'web/components/loading/reload';
 
 import useGmp from 'web/utils/useGmp';
 
@@ -124,145 +128,148 @@ export const composeObjFilter = (objectIds = []) => {
   return filterString;
 };
 
-const FeedStatus = () => {
+const FeedStatus = ({feeds}) => (
+  <React.Fragment>
+    <PageTitle title={_('Feed Status')} />
+    <Layout flex="column">
+      <ToolBarIcons />
+      <Section img={<FeedIcon size="large" />} title={_('Feed Status')} />
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableHead width="3rem">{_('Type')}</TableHead>
+            <TableHead width="22rem">{_('Content')}</TableHead>
+            <TableHead width="11rem">{_('Origin')}</TableHead>
+            <TableHead width="7rem">{_('Version')}</TableHead>
+            <TableHead>{_('Status')}</TableHead>
+          </TableRow>
+
+          {feeds.map(feed => (
+            <TableRow key={feed.feed_type}>
+              <TableData>{feed.feed_type}</TableData>
+              <TableData>
+                {feed.feed_type === NVT_FEED && (
+                  <IconDivider>
+                    <Link to="nvts">
+                      <IconDivider align={['start', 'center']}>
+                        <NvtIcon size="medium" />
+                        <span>{_('NVTs')}</span>
+                      </IconDivider>
+                    </Link>
+                  </IconDivider>
+                )}
+                {feed.feed_type === SCAP_FEED && (
+                  <IconDivider>
+                    <Link to="cves">
+                      <IconDivider align={['start', 'center']}>
+                        <CveIcon size="medium" />
+                        <span>{_('CVEs')}</span>
+                      </IconDivider>
+                    </Link>
+                    <Link to="cpes">
+                      <IconDivider align={['start', 'center']}>
+                        <CpeLogoIcon size="medium" />
+                        <span>{_('CPEs')}</span>
+                      </IconDivider>
+                    </Link>
+                    <Link to="ovaldefs">
+                      <IconDivider align={['start', 'center']}>
+                        <OvalDefIcon size="medium" />
+                        <span>{_('OVAL Definitions')}</span>
+                      </IconDivider>
+                    </Link>
+                  </IconDivider>
+                )}
+                {feed.feed_type === CERT_FEED && (
+                  <IconDivider>
+                    <Link to="certbunds">
+                      <IconDivider align={['start', 'center']}>
+                        <CertBundAdvIcon size="medium" />
+                        <span>{_('CERT-Bund Advisories')}</span>
+                      </IconDivider>
+                    </Link>
+                    <Link to="dfncerts">
+                      <IconDivider align={['start', 'center']}>
+                        <DfnCertAdvIcon size="medium" />
+                        <span>{_('DFN-CERT Advisories')}</span>
+                      </IconDivider>
+                    </Link>
+                  </IconDivider>
+                )}
+                {feed.feed_type === GVMD_DATA_FEED && (
+                  <IconDivider>
+                    <Link
+                      to="policies"
+                      filter={composeObjFilter(COMPLIANCE_POLICIES)}
+                    >
+                      <IconDivider align={['start', 'center']}>
+                        <PolicyIcon size="medium" />
+                        <span>{_('Compliance Policies')}</span>
+                      </IconDivider>
+                    </Link>
+                    <Link to="portlists" filter={composeObjFilter(PORT_LISTS)}>
+                      <IconDivider align={['start', 'center']}>
+                        <PortListIcon size="medium" />
+                        <span>{_('Port Lists')}</span>
+                      </IconDivider>
+                    </Link>
+                    <Link
+                      to="reportformats"
+                      filter={composeObjFilter(REPORT_FORMATS)}
+                    >
+                      <IconDivider align={['start', 'center']}>
+                        <ReportFormatIcon size="medium" />
+                        <span>{_('Report Formats')}</span>
+                      </IconDivider>
+                    </Link>
+                    <Link
+                      to="scanconfigs"
+                      filter={composeObjFilter(SCAN_CONFIGS)}
+                    >
+                      <IconDivider align={['start', 'center']}>
+                        <ScanConfigIcon size="medium" />
+                        <span>{_('Scan Configs')}</span>
+                      </IconDivider>
+                    </Link>
+                  </IconDivider>
+                )}
+              </TableData>
+              <TableData>{feed.name}</TableData>
+              <TableData>{feed.version}</TableData>
+              <TableData>
+                <Divider wrap>
+                  <strong>{renderFeedStatus(feed)}</strong>
+                  <span>{renderCheck(feed)}</span>
+                </Divider>
+              </TableData>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Layout>
+  </React.Fragment>
+);
+
+const FeedStatusWrapper = () => {
   const gmp = useGmp();
   const [feeds, setFeeds] = useState([]);
 
-  const loadFeeds = useCallback(() => {
+  const loadFeeds = () =>
+    // cannot store gmp.feedstatus.readFeedInformation in separate variable
+    // causes undefined "this" in FeedStatus class
     gmp.feedstatus.readFeedInformation().then(response => {
       const {data} = response;
       setFeeds(data);
     });
-  }, [gmp.feedstatus]);
-
-  useEffect(() => {
-    loadFeeds();
-  }, [loadFeeds]);
 
   return (
-    <React.Fragment>
-      <PageTitle title={_('Feed Status')} />
-      <Layout flex="column">
-        <ToolBarIcons />
-        <Section img={<FeedIcon size="large" />} title={_('Feed Status')} />
-        <Table>
-          <TableBody>
-            <TableRow>
-              <TableHead width="3rem">{_('Type')}</TableHead>
-              <TableHead width="22rem">{_('Content')}</TableHead>
-              <TableHead width="11rem">{_('Origin')}</TableHead>
-              <TableHead width="7rem">{_('Version')}</TableHead>
-              <TableHead>{_('Status')}</TableHead>
-            </TableRow>
-
-            {feeds.map(feed => (
-              <TableRow key={feed.feed_type}>
-                <TableData>{feed.feed_type}</TableData>
-                <TableData>
-                  {feed.feed_type === NVT_FEED && (
-                    <IconDivider>
-                      <Link to="nvts">
-                        <IconDivider align={['start', 'center']}>
-                          <NvtIcon size="medium" />
-                          <span>{_('NVTs')}</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                  {feed.feed_type === SCAP_FEED && (
-                    <IconDivider>
-                      <Link to="cves">
-                        <IconDivider align={['start', 'center']}>
-                          <CveIcon size="medium" />
-                          <span>{_('CVEs')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="cpes">
-                        <IconDivider align={['start', 'center']}>
-                          <CpeLogoIcon size="medium" />
-                          <span>{_('CPEs')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="ovaldefs">
-                        <IconDivider align={['start', 'center']}>
-                          <OvalDefIcon size="medium" />
-                          <span>{_('OVAL Definitions')}</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                  {feed.feed_type === CERT_FEED && (
-                    <IconDivider>
-                      <Link to="certbunds">
-                        <IconDivider align={['start', 'center']}>
-                          <CertBundAdvIcon size="medium" />
-                          <span>{_('CERT-Bund Advisories')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="dfncerts">
-                        <IconDivider align={['start', 'center']}>
-                          <DfnCertAdvIcon size="medium" />
-                          <span>{_('DFN-CERT Advisories')}</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                  {feed.feed_type === GVMD_DATA_FEED && (
-                    <IconDivider>
-                      <Link
-                        to="policies"
-                        filter={composeObjFilter(COMPLIANCE_POLICIES_FROM_FEED)}
-                      >
-                        <IconDivider align={['start', 'center']}>
-                          <PolicyIcon size="medium" />
-                          <span>{_('Compliance Policies')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link
-                        to="portlists"
-                        filter={composeObjFilter(PORT_LISTS_FROM_FEED)}
-                      >
-                        <IconDivider align={['start', 'center']}>
-                          <PortListIcon size="medium" />
-                          <span>{_('Port Lists')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link
-                        to="reportformats"
-                        filter={composeObjFilter(REPORT_FORMATS_FROM_FEED)}
-                      >
-                        <IconDivider align={['start', 'center']}>
-                          <ReportFormatIcon size="medium" />
-                          <span>{_('Report Formats')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link
-                        to="scanconfigs"
-                        filter={composeObjFilter(SCAN_CONFIGS_FROM_FEED)}
-                      >
-                        <IconDivider align={['start', 'center']}>
-                          <ScanConfigIcon size="medium" />
-                          <span>{_('Scan Configs')}</span>
-                        </IconDivider>
-                      </Link>
-                    </IconDivider>
-                  )}
-                </TableData>
-                <TableData>{feed.name}</TableData>
-                <TableData>{feed.version}</TableData>
-                <TableData>
-                  <Divider wrap>
-                    <strong>{renderFeedStatus(feed)}</strong>
-                    <span>{renderCheck(feed)}</span>
-                  </Divider>
-                </TableData>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Layout>
-    </React.Fragment>
+    <Reload
+      reload={loadFeeds}
+      reloadInterval={() => USE_DEFAULT_RELOAD_INTERVAL}
+    >
+      {() => <FeedStatus feeds={feeds} />}
+    </Reload>
   );
 };
 
-export default FeedStatus;
+export default FeedStatusWrapper;
