@@ -334,10 +334,13 @@ class Trashcan extends React.Component {
   }
 
   render() {
-    const {error, trash, loading} = this.state;
+    const {error, loading} = this.state;
+    let {trash} = this.state;
 
     if (!isDefined(trash) && !isDefined(error)) {
       return <Loading />;
+    } else if (!isDefined(trash) && isDefined(error)) {
+      trash = {};
     }
 
     const {scan: tasks, compliance: audits} = separateByUsageType(
@@ -557,7 +560,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(undefined, mapDispatchToProps),
+  connect(
+    undefined,
+    mapDispatchToProps,
+  ),
 )(Trashcan);
 
 // vim: set ts=2 sw=2 tw=80:
