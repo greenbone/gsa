@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import 'core-js/features/array/includes';
+
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -47,6 +49,8 @@ import withEntityContainer, {
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+
+import {COMPLIANCE_POLICIES_FROM_FEED} from 'web/pages/extras/feedstatuspage';
 
 import {selector, loadEntity} from 'web/store/entities/policies';
 
@@ -92,6 +96,7 @@ export const ToolBarIcons = withCapabilities(
           onClick={onPolicyCloneClick}
         />
         <EditIcon
+          disabled={COMPLIANCE_POLICIES_FROM_FEED.includes(entity.id)}
           entity={entity}
           displayName={_('Policy')}
           onClick={onPolicyEditClick}
