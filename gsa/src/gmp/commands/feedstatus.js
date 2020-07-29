@@ -18,7 +18,6 @@
 import registerCommand from 'gmp/command';
 
 import {parseDate} from 'gmp/parser';
-import {hasValue} from 'gmp/utils/identity';
 
 import {map} from 'gmp/utils/array';
 
@@ -40,9 +39,7 @@ export class Feed {
     this.name = name;
     this.description = description;
     this.status = status;
-    this.currently_syncing = hasValue(currently_syncing)
-      ? currently_syncing
-      : null;
+    this.currently_syncing = currently_syncing;
 
     const versionDate = convertVersion(version);
     this.version = versionDate;
