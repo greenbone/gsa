@@ -272,20 +272,18 @@ const FeedStatusWrapper = () => {
   const [feeds, setFeeds] = useState([]);
 
   const loadFeeds = () =>
-    // cannot store gmp.feedstatus.readFeedInformation in separate variable
-    // causes undefined "this" in FeedStatus class
     gmp.feedstatus.readFeedInformation().then(response => {
       const {data} = response;
       setFeeds(data);
     });
 
   const calculateSyncInterval = (feedsArray = []) => {
-    const hasFeed = hasValue(feedsArray[0]);
+    const isSyncing = feedsArray.some(feed => hasValue(feed.currently_syncing));
 
-    return hasFeed && hasValue(feedsArray[0].currently_syncing)
+    return isSyncing
       ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
       : USE_DEFAULT_RELOAD_INTERVAL;
-  }; // currently, if one feed is syncing then all feeds have the currently_syncing attribute if that changes, this will have to be redone
+  };
 
   return (
     <Reload
