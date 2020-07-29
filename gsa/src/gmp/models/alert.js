@@ -138,6 +138,10 @@ class Alert extends Model {
       ret.method.data.report_formats = [];
     }
 
+    if (isDefined(ret.method.data.notice?.value)) {
+      ret.method.data.notice.value = ret.method.data.notice.value.toString();
+    }
+
     ret.active = parseYesNo(element.active);
 
     return ret;

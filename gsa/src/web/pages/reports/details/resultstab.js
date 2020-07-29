@@ -364,7 +364,6 @@ const mapStateToProps = (state, {reportId}) => {
     resultsFilter,
     resultsError: selector.getEntitiesError(resultsFilter),
     results: selector.getEntities(resultsFilter),
-    resultsCounts: selector.getEntitiesCounts(resultsFilter),
     isLoading: selector.isLoadingEntities(resultsFilter),
   };
 };
@@ -379,10 +378,7 @@ const mapDispatchToProps = (dispatch, {reportId, gmp}) => {
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(ResultsTabWrapper);
 
 // vim: set ts=2 sw=2 tw=80:

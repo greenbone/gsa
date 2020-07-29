@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.08] - unreleased
 
 ### Added
+- Add filtered links to GVMD_DATA row in feed status page [#2339](https://github.com/greenbone/gsa/pull/2339)
 - Added loading indicator for CVEs on CPE detailspage [#2248](https://github.com/greenbone/gsa/pull/2248)
 - Added new form validation feature, implemented on create and edit ticket dialog [#1782](https://github.com/greenbone/gsa/pull/1782)
 - Added German translation for About page [#1998](https://github.com/greenbone/gsa/pull/1998)
@@ -19,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added handling of queued task status [#2208](https://github.com/greenbone/gsa/pull/2208)
 
 ### Changed
+- Disable EditIcons for data objects from feed [#2346](https://github.com/greenbone/gsa/pull/2346)
+- EmptyResultsReport uses the same counts as the results tab title in normal reports, when filtering for nonexistent results [#2335](https://github.com/greenbone/gsa/pull/2335)
 - Improve error 503 message at login [#2310](https://github.com/greenbone/gsa/pull/2310)
 - Use unified solution type instead of solution type nvt tag [#2268](https://github.com/greenbone/gsa/pull/2268)
 - Changed queued status color [#2227](https://github.com/greenbone/gsa/pull/2227)
@@ -36,6 +39,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed schedule_periods not forwarded if there is no schedule [#2331](https://github.com/greenbone/gsa/pull/2331)
+- Fixed broken radio buttons in alert dialog [#2326](https://github.com/greenbone/gsa/pull/2326)
 - Fixed report formats undeletable and unrestorable [#2321](https://github.com/greenbone/gsa/pull/2321)
 - Fixed loading delta report detailspage [#2320](https://github.com/greenbone/gsa/pull/2320)
 - Fixed spacing between radio buttons and input field in override dialog [#2286](https://github.com/greenbone/gsa/pull/2286)
@@ -52,6 +57,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed parsing DFN-Cert CVE entries [#1965](https://github.com/greenbone/gsa/pull/1965)
 
 ### Removed
+- Remove multistep feature from scanner dialog [#2337](https://github.com/greenbone/gsa/pull/2337)
 - Removed predefined status for report formats [#2111](https://github.com/greenbone/gsa/pull/2111)
 - Removed old translation mechanism [#1952](https://github.com/greenbone/gsa/pull/1952)
 - Removed Agents from GSA and gsad [#1903](https://github.com/greenbone/gsa/pull/1903) [#1905](https://github.com/greenbone/gsa/pull/1905)
@@ -92,6 +98,8 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Lowered memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Fixed broken radio buttons and wrong date for schedule in Modify Task Wizard [#2340](https://github.com/greenbone/gsa/pull/2340)
+- Fixed missing nextDate for schedules with recurrence "once" [#2336](https://github.com/greenbone/gsa/pull/2336)
 - Don't crash if dashboard getSetting returns duplicate setting [#2290](https://github.com/greenbone/gsa/pull/2290)
 - Fixed broken bulk export for AllSecInfo [#2269](https://github.com/greenbone/gsa/pull/2269)
 - Fixed passing threshold prop in AlertActions for ThresholdMessage [#2114](https://github.com/greenbone/gsa/pull/2114)
