@@ -200,14 +200,17 @@ const FeedStatus = ({feeds}) => (
                   <IconDivider>
                     <Link
                       to="policies"
-                      filter={composeObjFilter(COMPLIANCE_POLICIES)}
+                      filter={composeObjFilter(COMPLIANCE_POLICIES_FROM_FEED)}
                     >
                       <IconDivider align={['start', 'center']}>
                         <PolicyIcon size="medium" />
                         <span>{_('Compliance Policies')}</span>
                       </IconDivider>
                     </Link>
-                    <Link to="portlists" filter={composeObjFilter(PORT_LISTS)}>
+                    <Link
+                      to="portlists"
+                      filter={composeObjFilter(PORT_LISTS_FROM_FEED)}
+                    >
                       <IconDivider align={['start', 'center']}>
                         <PortListIcon size="medium" />
                         <span>{_('Port Lists')}</span>
@@ -215,7 +218,7 @@ const FeedStatus = ({feeds}) => (
                     </Link>
                     <Link
                       to="reportformats"
-                      filter={composeObjFilter(REPORT_FORMATS)}
+                      filter={composeObjFilter(REPORT_FORMATS_FROM_FEED)}
                     >
                       <IconDivider align={['start', 'center']}>
                         <ReportFormatIcon size="medium" />
@@ -224,7 +227,7 @@ const FeedStatus = ({feeds}) => (
                     </Link>
                     <Link
                       to="scanconfigs"
-                      filter={composeObjFilter(SCAN_CONFIGS)}
+                      filter={composeObjFilter(SCAN_CONFIGS_FROM_FEED)}
                     >
                       <IconDivider align={['start', 'center']}>
                         <ScanConfigIcon size="medium" />
