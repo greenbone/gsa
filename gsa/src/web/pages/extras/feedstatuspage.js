@@ -88,17 +88,17 @@ const renderFeedStatus = feed => {
   return _('Current');
 };
 
-const COMPLIANCE_POLICIES = [
+export const COMPLIANCE_POLICIES_FROM_FEED = [
   'c4b7c0cb-6502-4809-b034-8e635311b3e6', // IT-Grundschutz
 ];
 
-const PORT_LISTS = [
+export const PORT_LISTS_FROM_FEED = [
   '33d0cd82-57c6-11e1-8ed1-406186ea4fc5', // All IANA assigned TCP
   '4a4717fe-57d2-11e1-9a26-406186ea4fc5', // All IANA assigned TCP and UDP
   '730ef368-57e2-11e1-a90f-406186ea4fc5', // All TCP and Nmap top 100 UDP
 ];
 
-const REPORT_FORMATS = [
+export const REPORT_FORMATS_FROM_FEED = [
   '5057e5cc-b825-11e4-9d0e-28d24461215b', // Anonymous XML
   'c1645568-627a-11e3-a660-406186ea4fc5', // CSV Results
   '77bd6c4a-1f62-11e1-abf0-406186ea4fc5', // ITG
@@ -107,7 +107,7 @@ const REPORT_FORMATS = [
   'a994b278-1f62-11e1-96ac-406186ea4fc5', // XML
 ];
 
-const SCAN_CONFIGS = [
+export const SCAN_CONFIGS_FROM_FEED = [
   'd21f6c81-2b88-4ac1-b7b4-a2a9f2ad4663', // Base
   '8715c877-47a0-438d-98a3-27c7a6ab2196', // Discovery
   '085569ce-73ed-11df-83c3-002264764cea', // empty
@@ -211,7 +211,7 @@ const FeedStatus = () => {
                     <IconDivider>
                       <Link
                         to="policies"
-                        filter={composeObjFilter(COMPLIANCE_POLICIES)}
+                        filter={composeObjFilter(COMPLIANCE_POLICIES_FROM_FEED)}
                       >
                         <IconDivider align={['start', 'center']}>
                           <PolicyIcon size="medium" />
@@ -220,7 +220,7 @@ const FeedStatus = () => {
                       </Link>
                       <Link
                         to="portlists"
-                        filter={composeObjFilter(PORT_LISTS)}
+                        filter={composeObjFilter(PORT_LISTS_FROM_FEED)}
                       >
                         <IconDivider align={['start', 'center']}>
                           <PortListIcon size="medium" />
@@ -229,7 +229,7 @@ const FeedStatus = () => {
                       </Link>
                       <Link
                         to="reportformats"
-                        filter={composeObjFilter(REPORT_FORMATS)}
+                        filter={composeObjFilter(REPORT_FORMATS_FROM_FEED)}
                       >
                         <IconDivider align={['start', 'center']}>
                           <ReportFormatIcon size="medium" />
@@ -238,7 +238,7 @@ const FeedStatus = () => {
                       </Link>
                       <Link
                         to="scanconfigs"
-                        filter={composeObjFilter(SCAN_CONFIGS)}
+                        filter={composeObjFilter(SCAN_CONFIGS_FROM_FEED)}
                       >
                         <IconDivider align={['start', 'center']}>
                           <ScanConfigIcon size="medium" />

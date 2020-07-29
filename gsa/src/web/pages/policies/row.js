@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+import 'core-js/features/array/includes';
+
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -32,6 +35,8 @@ import withEntitiesActions from 'web/entities/withEntitiesActions';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+
+import {COMPLIANCE_POLICIES_FROM_FEED} from 'web/pages/extras/feedstatuspage';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -59,6 +64,7 @@ const PoliciesActions = compose(
       />
       <EditIcon
         displayName={_('Policy')}
+        disabled={COMPLIANCE_POLICIES_FROM_FEED.includes(entity.id)}
         name="config"
         entity={entity}
         onClick={onPolicyEditClick}

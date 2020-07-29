@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'core-js/features/array/includes';
+
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -40,6 +42,8 @@ import {renderYesNo} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 
+import {REPORT_FORMATS_FROM_FEED} from 'web/pages/extras/feedstatuspage';
+
 const Actions = compose(
   withCapabilities,
   withEntitiesActions,
@@ -60,6 +64,7 @@ const Actions = compose(
       />
       <EditIcon
         displayName={_('Report Format')}
+        disabled={REPORT_FORMATS_FROM_FEED.includes(entity.id)}
         name="report_format"
         entity={entity}
         onClick={onReportFormatEditClick}
