@@ -54,6 +54,7 @@ const gvmdDataFeed = new Feed({
   name: 'Greenbone Community GVMd Data Feed',
   type: 'GVMD_DATA',
   version: 202007221009,
+  currently_syncing: {timestamp: 'foo'},
 });
 
 const data = [nvtFeed, scapFeed, certFeed, gvmdDataFeed];
@@ -171,7 +172,7 @@ describe('Feed status page tests', () => {
     expect(ageText[0]).toHaveTextContent('Current');
     expect(ageText[1]).toHaveTextContent('2 days old');
     expect(ageText[2]).toHaveTextContent('Current');
-    expect(ageText[3]).toHaveTextContent('2 days old');
+    expect(ageText[3]).toHaveTextContent('Update in progress');
   });
 });
 

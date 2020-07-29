@@ -285,7 +285,7 @@ const FeedStatusWrapper = () => {
     return hasFeed && hasValue(feedsArray[0].currently_syncing)
       ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
       : USE_DEFAULT_RELOAD_INTERVAL;
-  };
+  }; // currently, if one feed is syncing then all feeds have the currently_syncing attribute if that changes, this will have to be redone
 
   return (
     <Reload
