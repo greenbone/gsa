@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [9.0.1] - 2020-05-13
 
 ### Added
+- Added handling possible undefined trash in case of an error on the trashcanpage [#2348](https://github.com/greenbone/gsa/pull/2348)
 - Added scanner selection to audit dialog
   [#2031](https://github.com/greenbone/gsa/pull/2031)
   [#2105](https://github.com/greenbone/gsa/pull/2105)
