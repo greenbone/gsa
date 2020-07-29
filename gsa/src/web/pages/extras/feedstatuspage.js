@@ -267,6 +267,7 @@ const FeedStatusWrapper = () => {
 
   return (
     <Reload
+      name={'feedstatus'}
       reload={loadFeeds}
       reloadInterval={() => USE_DEFAULT_RELOAD_INTERVAL}
     >
