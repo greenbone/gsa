@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import 'core-js/features/array/includes';
+
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -64,6 +66,8 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
+import {SCAN_CONFIGS_FROM_FEED} from 'web/pages/extras/feedstatuspage';
+
 import {selector, loadEntity} from 'web/store/entities/scanconfigs';
 
 import {
@@ -101,7 +105,11 @@ export const ToolBarIcons = withCapabilities(
       <IconDivider>
         <CreateIcon entity={entity} onClick={onScanConfigCreateClick} />
         <CloneIcon entity={entity} onClick={onScanConfigCloneClick} />
-        <EditIcon entity={entity} onClick={onScanConfigEditClick} />
+        <EditIcon
+          entity={entity}
+          disabled={SCAN_CONFIGS_FROM_FEED.includes(entity.id)}
+          onClick={onScanConfigEditClick}
+        />
         <TrashIcon entity={entity} onClick={onScanConfigDeleteClick} />
         <ExportIcon
           value={entity}
