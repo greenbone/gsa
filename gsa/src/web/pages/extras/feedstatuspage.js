@@ -28,6 +28,8 @@ import {
   GVMD_DATA_FEED,
 } from 'gmp/commands/feedstatus';
 
+import {hasValue} from 'gmp/utils/identity';
+
 import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
 import CveIcon from 'web/components/icon/cveicon';
 import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
@@ -62,7 +64,7 @@ import Reload, {
 } from 'web/components/loading/reload';
 
 import useGmp from 'web/utils/useGmp';
-import {hasValue} from 'gmp/utils/identity';
+import PropTypes from 'web/utils/proptypes';
 
 const ToolBarIcons = () => (
   <ManualIcon
@@ -259,6 +261,10 @@ const FeedStatus = ({feeds}) => {
       </Layout>
     </React.Fragment>
   );
+};
+
+FeedStatus.propTypes = {
+  feeds: PropTypes.array,
 };
 
 const FeedStatusWrapper = () => {
