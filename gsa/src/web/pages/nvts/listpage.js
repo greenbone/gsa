@@ -88,7 +88,7 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const fallbackFilter = Filter.fromString('sort-reverse=modified');
+const fallbackFilter = Filter.fromString('sort-reverse=created');
 
 export default withEntitiesContainer('nvt', {
   entitiesSelector,
