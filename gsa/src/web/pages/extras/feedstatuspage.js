@@ -85,7 +85,16 @@ const renderCheck = feed => {
 
 const renderFeedStatus = feed => {
   if (hasValue(feed.currently_syncing)) {
-    return _('Update in progress');
+    return (
+      <span style={{paddingLeft: '10px'}}>
+        <img
+          data-testid="loading-indicator"
+          src="/img/loading.gif"
+          title={_('Update in progress')}
+          alt={_('Loading Indicator')}
+        ></img>
+      </span>
+    );
   }
 
   const age = parseInt(feed.age.asDays());
