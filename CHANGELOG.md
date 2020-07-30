@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added handling of queued task status [#2208](https://github.com/greenbone/gsa/pull/2208)
 
 ### Changed
+- Default to sorting nvts by "Created", newest first [#2352](https://github.com/greenbone/gsa/pull/2352)
 - Disable EditIcons for data objects from feed [#2346](https://github.com/greenbone/gsa/pull/2346)
 - EmptyResultsReport uses the same counts as the results tab title in normal reports, when filtering for nonexistent results [#2335](https://github.com/greenbone/gsa/pull/2335)
 - Improve error 503 message at login [#2310](https://github.com/greenbone/gsa/pull/2310)
