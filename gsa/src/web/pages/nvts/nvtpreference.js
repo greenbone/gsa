@@ -55,7 +55,7 @@ class NvtPreference extends React.Component {
 
   onPreferenceChange(value) {
     const {onChange, preference} = this.props;
-    onChange({type: 'setState', newState: {name: preference.name, value}});
+    onChange({type: 'setValue', newState: {name: preference.name, value}});
   }
 
   onCheckedChange(value) {

@@ -84,7 +84,7 @@ const createScannerPreferenceValues = (preferences = []) => {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setState':
+    case 'setValue':
       const {newState} = action;
       return {
         ...state,

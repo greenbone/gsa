@@ -132,7 +132,7 @@ const ScannerPreferences = ({
               name={pref.name}
               value={values[pref.name]}
               onPreferenceChange={(value, name) =>
-                onValuesChange({type: 'setState', newState: {[name]: value}})
+                onValuesChange({type: 'setValue', newState: {[name]: value}})
               }
             />
           ))}
