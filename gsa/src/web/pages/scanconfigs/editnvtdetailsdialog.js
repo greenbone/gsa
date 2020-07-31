@@ -80,13 +80,13 @@ const reducer = (state, action) => {
       const {newState} = action;
       const {name, value} = newState;
 
-      const oldState = state[name];
+      const prefAttributes = state[name];
 
       // preference has other attributes like id, type, etc. those must be kept so its not as simple as [name]: value
       const updatedState = {
         ...state,
         [name]: {
-          ...oldState,
+          ...prefAttributes,
           value,
         },
       };
