@@ -37,6 +37,7 @@ import Layout from 'web/components/layout/layout';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+import Preferences from './preferences';
 
 const noop_convert = value => value;
 
@@ -54,7 +55,7 @@ class NvtPreference extends React.Component {
 
   onPreferenceChange(value) {
     const {onChange, preference} = this.props;
-    onChange({value, type: preference.type}, preference.name);
+    onChange({type: 'setState', newState: {name: preference.name, value}});
   }
 
   onCheckedChange(value) {

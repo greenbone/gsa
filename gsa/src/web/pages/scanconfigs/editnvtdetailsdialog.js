@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -74,6 +74,31 @@ const createPrefValues = (preferences = []) => {
 const convertTimeout = value =>
   !isDefined(value) || value.trim().length === 0 ? undefined : value;
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'setState':
+      const {newState} = action;
+      const {name, value} = newState;
+
+      const oldState = state[name];
+
+      const updatedState = {
+        ...state,
+        [name]: {
+          ...oldState,
+          value,
+        },
+      };
+
+      return updatedState;
+    case 'setAll':
+      const {stateObject} = action;
+      return stateObject;
+    default:
+      return state;
+  }
+};
+
 const EditNvtDetailsDialog = ({
   configId,
   configName,
@@ -96,7 +121,8 @@ const EditNvtDetailsDialog = ({
 }) => {
   timeout = convertTimeout(timeout);
 
-  const [preferenceValues, setPreferenceValues] = useState(
+  const [preferenceValues, dispatch] = useReducer(
+    reducer,
     createPrefValues(preferences),
   );
 
@@ -106,7 +132,10 @@ const EditNvtDetailsDialog = ({
   );
 
   useEffect(() => {
-    setPreferenceValues(createPrefValues(preferences));
+    dispatch({
+      type: 'setAll',
+      stateObject: createPrefValues(preferences),
+    });
   }, [preferences]);
 
   useEffect(() => {
@@ -268,9 +297,7 @@ const EditNvtDetailsDialog = ({
                       key={pref.name}
                       preference={pref}
                       value={prefValue}
-                      onChange={value => {
-                        preferenceValues[pref.name].value = value.value;
-                      }}
+                      onChange={dispatch}
                     />
                   );
                 })}
