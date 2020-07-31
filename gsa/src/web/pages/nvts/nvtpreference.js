@@ -37,7 +37,6 @@ import Layout from 'web/components/layout/layout';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-import Preferences from './preferences';
 
 const noop_convert = value => value;
 
