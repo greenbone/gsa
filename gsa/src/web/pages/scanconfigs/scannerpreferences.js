@@ -76,7 +76,7 @@ const ScannerPreference = ({
       <TableData>
         {is_radio ? (
           <Layout>
-            <YesNoRadio
+            <YesNoRadio // booleans are now 1 and 0 and not yes/no.
               yesValue={1}
               noValue={0}
               name={name}
