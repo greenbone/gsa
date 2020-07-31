@@ -91,8 +91,8 @@ const reducer = (state, action) => {
         ...newState,
       };
     case 'setAll':
-      const {stateObject} = action;
-      return stateObject;
+      const {formValues} = action;
+      return formValues;
     default:
       return state;
   }
@@ -131,7 +131,7 @@ const EditScanConfigDialog = ({
   useEffect(() => {
     dispatch({
       type: 'setAll',
-      stateObject: createScannerPreferenceValues(scannerPreferences),
+      formValues: createScannerPreferenceValues(scannerPreferences),
     });
   }, [scannerPreferences]);
 

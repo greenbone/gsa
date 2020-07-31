@@ -92,8 +92,8 @@ const reducer = (state, action) => {
 
       return updatedState;
     case 'setAll':
-      const {stateObject} = action;
-      return stateObject;
+      const {formValues} = action;
+      return formValues;
     default:
       return state;
   }
@@ -134,7 +134,7 @@ const EditNvtDetailsDialog = ({
   useEffect(() => {
     dispatch({
       type: 'setAll',
-      stateObject: createPrefValues(preferences),
+      formValues: createPrefValues(preferences),
     });
   }, [preferences]);
 
