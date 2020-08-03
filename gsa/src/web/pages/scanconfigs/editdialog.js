@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useReducer, useState, useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -82,6 +82,22 @@ const createScannerPreferenceValues = (preferences = []) => {
   return values;
 };
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'setValue':
+      const {newState} = action;
+      return {
+        ...state,
+        ...newState,
+      };
+    case 'setAll':
+      const {formValues} = action;
+      return formValues;
+    default:
+      return state;
+  }
+};
+
 const EditScanConfigDialog = ({
   comment = '',
   configId,
@@ -105,16 +121,18 @@ const EditScanConfigDialog = ({
   onEditNvtDetailsClick,
   onSave,
 }) => {
-  const [scannerPreferenceValues, setScannerPreferenceValues] = useState(
+  const [scannerPreferenceValues, dispatch] = useReducer(
+    reducer,
     createScannerPreferenceValues(scannerPreferences),
   );
-  const [trendValues, setTrendValues] = useState(undefined);
-  const [selectValues, setSelectValues] = useState(undefined);
+  const [trendValues, setTrendValues] = useState();
+  const [selectValues, setSelectValues] = useState();
 
   useEffect(() => {
-    setScannerPreferenceValues(
-      createScannerPreferenceValues(scannerPreferences),
-    );
+    dispatch({
+      type: 'setAll',
+      formValues: createScannerPreferenceValues(scannerPreferences),
+    });
   }, [scannerPreferences]);
 
   // trend and select are created only once and only after the whole config is loaded
@@ -206,7 +224,7 @@ const EditScanConfigDialog = ({
                 <ScannerPreferences
                   values={scannerPreferenceValues}
                   preferences={scannerPreferences}
-                  onValuesChange={values => setScannerPreferenceValues(values)}
+                  onValuesChange={dispatch}
                 />
               )}
 

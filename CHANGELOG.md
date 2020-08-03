@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added handling of queued task status [#2208](https://github.com/greenbone/gsa/pull/2208)
 
 ### Changed
+- Improve performance of form fields in edit scan config dialog [#2354](https://github.com/greenbone/gsa/pull/2354)
 - Default to sorting nvts by "Created", newest first [#2352](https://github.com/greenbone/gsa/pull/2352)
 - Disable EditIcons for data objects from feed [#2346](https://github.com/greenbone/gsa/pull/2346)
 - EmptyResultsReport uses the same counts as the results tab title in normal reports, when filtering for nonexistent results [#2335](https://github.com/greenbone/gsa/pull/2335)
