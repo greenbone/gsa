@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import styled from 'styled-components';
 
@@ -102,9 +102,11 @@ const Summary = ({
 
   const [hostsCount, setHostsCount] = useState(0);
 
-  if (hosts?.counts?.all > hostsCount) {
-    setHostsCount(hosts.counts.all);
-  }
+  useEffect(() => {
+    if (isDefined(hosts?.counts?.all)) {
+      setHostsCount(hosts.counts.all);
+    }
+  }, [hosts]);
 
   const filterString = isDefined(filter)
     ? filter.simple().toFilterString()
