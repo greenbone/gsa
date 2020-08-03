@@ -39,7 +39,7 @@ export class Feed {
     this.name = name;
     this.description = description;
     this.status = status;
-    this.currently_syncing = currently_syncing;
+    this.currentlySyncing = currently_syncing;
 
     const versionDate = convertVersion(version);
     this.version = versionDate;
