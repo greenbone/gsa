@@ -42,6 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed "Hosts scanned" in report details disappearing during page refresh [#2357](https://github.com/greenbone/gsa/pull/2357)
 - Fixed schedule_periods not forwarded if there is no schedule [#2331](https://github.com/greenbone/gsa/pull/2331)
 - Fixed broken radio buttons in alert dialog [#2326](https://github.com/greenbone/gsa/pull/2326)
 - Fixed report formats undeletable and unrestorable [#2321](https://github.com/greenbone/gsa/pull/2321)
@@ -58,6 +59,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed parsing xml rejection messages [#1970](https://github.com/greenbone/gsa/pull/1970)
 - Fixed returning bulk_delete response [#1969](https://github.com/greenbone/gsa/pull/1969)
 - Fixed parsing DFN-Cert CVE entries [#1965](https://github.com/greenbone/gsa/pull/1965)
+- Fixed credential_login in gsad request handlers [#2347](https://github.com/greenbone/gsa/pull/2347)
 
 ### Removed
 - Remove multistep feature from scanner dialog [#2337](https://github.com/greenbone/gsa/pull/2337)
