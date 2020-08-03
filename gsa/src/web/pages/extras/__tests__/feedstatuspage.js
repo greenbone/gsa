@@ -54,6 +54,7 @@ const gvmdDataFeed = new Feed({
   name: 'Greenbone Community GVMd Data Feed',
   type: 'GVMD_DATA',
   version: 202007221009,
+  currently_syncing: {timestamp: 'foo'},
 });
 
 const data = [nvtFeed, scapFeed, certFeed, gvmdDataFeed];
@@ -78,7 +79,7 @@ const gmp = {
 describe('Feed status page tests', () => {
   test('should render', async () => {
     const {render} = rendererWith({gmp, router: true});
-    const {element, getAllByTestId} = render(<FeedStatus />);
+    const {element, getAllByTestId, getByTestId} = render(<FeedStatus />);
 
     await wait();
 
@@ -171,7 +172,12 @@ describe('Feed status page tests', () => {
     expect(ageText[0]).toHaveTextContent('Current');
     expect(ageText[1]).toHaveTextContent('2 days old');
     expect(ageText[2]).toHaveTextContent('Current');
-    expect(ageText[3]).toHaveTextContent('2 days old');
+
+    const loadingIndicator = getByTestId('loading-indicator');
+
+    expect(loadingIndicator).toHaveAttribute('title', 'Update in progress');
+    expect(loadingIndicator).toHaveAttribute('src', '/img/loading.gif');
+    expect(loadingIndicator).toHaveAttribute('alt', 'Loading Indicator');
   });
 });
 

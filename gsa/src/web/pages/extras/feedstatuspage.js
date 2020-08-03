@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -27,6 +27,8 @@ import {
   CERT_FEED,
   GVMD_DATA_FEED,
 } from 'gmp/commands/feedstatus';
+
+import {hasValue} from 'gmp/utils/identity';
 
 import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
 import CveIcon from 'web/components/icon/cveicon';
@@ -56,7 +58,13 @@ import TableRow from 'web/components/table/row';
 import TableHead from 'web/components/table/head';
 import TableData from 'web/components/table/data';
 
+import Reload, {
+  USE_DEFAULT_RELOAD_INTERVAL,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/reload';
+
 import useGmp from 'web/utils/useGmp';
+import PropTypes from 'web/utils/proptypes';
 
 const ToolBarIcons = () => (
   <ManualIcon
@@ -76,6 +84,19 @@ const renderCheck = feed => {
 };
 
 const renderFeedStatus = feed => {
+  if (hasValue(feed.currentlySyncing)) {
+    return (
+      <span style={{paddingLeft: '10px'}}>
+        <img
+          data-testid="loading-indicator"
+          src="/img/loading.gif"
+          title={_('Update in progress')}
+          alt={_('Loading Indicator')}
+        ></img>
+      </span>
+    );
+  }
+
   const age = parseInt(feed.age.asDays());
 
   if (age >= 10) {
@@ -124,21 +145,7 @@ export const composeObjFilter = (objectIds = []) => {
   return filterString;
 };
 
-const FeedStatus = () => {
-  const gmp = useGmp();
-  const [feeds, setFeeds] = useState([]);
-
-  const loadFeeds = useCallback(() => {
-    gmp.feedstatus.readFeedInformation().then(response => {
-      const {data} = response;
-      setFeeds(data);
-    });
-  }, [gmp.feedstatus]);
-
-  useEffect(() => {
-    loadFeeds();
-  }, [loadFeeds]);
-
+const FeedStatus = ({feeds}) => {
   return (
     <React.Fragment>
       <PageTitle title={_('Feed Status')} />
@@ -265,4 +272,37 @@ const FeedStatus = () => {
   );
 };
 
-export default FeedStatus;
+FeedStatus.propTypes = {
+  feeds: PropTypes.array,
+};
+
+const FeedStatusWrapper = () => {
+  const gmp = useGmp();
+  const [feeds, setFeeds] = useState([]);
+
+  const loadFeeds = () =>
+    gmp.feedstatus.readFeedInformation().then(response => {
+      const {data} = response;
+      setFeeds(data);
+    });
+
+  const calculateSyncInterval = (feedsArray = []) => {
+    const isSyncing = feedsArray.some(feed => hasValue(feed.currentlySyncing));
+
+    return isSyncing
+      ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+      : USE_DEFAULT_RELOAD_INTERVAL;
+  };
+
+  return (
+    <Reload
+      name={'feedstatus'}
+      reload={loadFeeds}
+      reloadInterval={(feedsArray = feeds) => calculateSyncInterval(feedsArray)}
+    >
+      {() => <FeedStatus feeds={feeds} />}
+    </Reload>
+  );
+};
+
+export default FeedStatusWrapper;
