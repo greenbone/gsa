@@ -84,7 +84,7 @@ const renderCheck = feed => {
 };
 
 const renderFeedStatus = feed => {
-  if (hasValue(feed.currently_syncing)) {
+  if (hasValue(feed.currentlySyncing)) {
     return (
       <span style={{paddingLeft: '10px'}}>
         <img
@@ -287,7 +287,7 @@ const FeedStatusWrapper = () => {
     });
 
   const calculateSyncInterval = (feedsArray = []) => {
-    const isSyncing = feedsArray.some(feed => hasValue(feed.currently_syncing));
+    const isSyncing = feedsArray.some(feed => hasValue(feed.currentlySyncing));
 
     return isSyncing
       ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
