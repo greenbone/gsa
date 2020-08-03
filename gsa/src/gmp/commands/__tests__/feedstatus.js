@@ -30,6 +30,7 @@ describe('FeedStatusCommand tests', () => {
             name: 'foo',
             version: 201906251319,
             description: 'bar',
+            currently_syncing: {timestamp: 'baz'},
           },
         },
       },
@@ -51,6 +52,7 @@ describe('FeedStatusCommand tests', () => {
       expect(data[0].feed_type).toEqual('NVT');
       expect(data[0].name).toEqual('foo');
       expect(data[0].description).toEqual('bar');
+      expect(data[0].currentlySyncing).toEqual({timestamp: 'baz'});
       expect(data[0].status).toEqual(undefined);
       expect(data[0].version).toEqual('20190625T1319');
     });
