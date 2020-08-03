@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import styled from 'styled-components';
 
@@ -100,8 +100,11 @@ const Summary = ({
 
   const {id, name, comment, progress} = task;
 
-  const hosts_count =
-    isDefined(hosts) && isDefined(hosts.counts) ? hosts.counts.all : 0;
+  const [hostsCount, setHostsCount] = useState(0);
+
+  if (hosts?.counts?.all > hostsCount) {
+    setHostsCount(hosts.counts.all);
+  }
 
   const filterString = isDefined(filter)
     ? filter.simple().toFilterString()
@@ -244,10 +247,10 @@ const Summary = ({
               <TableData>{slave.name}</TableData>
             </TableRow>
           )}
-          {hosts_count > 0 && (
+          {hostsCount > 0 && (
             <TableRow>
               <TableData>{_('Hosts scanned')}</TableData>
-              <TableData>{hosts_count}</TableData>
+              <TableData>{hostsCount}</TableData>
             </TableRow>
           )}
           <TableRow>
