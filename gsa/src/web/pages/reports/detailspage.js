@@ -715,11 +715,6 @@ const load = ({
   }
 
   if (!hasValue(filter)) {
-    // use filter from user setting
-    filter = defaultFilter;
-  }
-
-  if (!hasValue(filter)) {
     // use fallback filter
     filter = DEFAULT_FILTER;
   }
@@ -822,10 +817,7 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(ReportDetailsWrapper);
 
 // vim: set ts=2 sw=2 tw=80:
