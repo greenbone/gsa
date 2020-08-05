@@ -44,6 +44,11 @@ import ReportTLSCertificate from './tlscertificate';
 import Result from '../result';
 import {getRefs, hasRefType} from '../nvt';
 
+// reports with details=1 always have a results element
+// (that can be empty) whereas reports with details=0
+// never have a results element
+const isReportWithDetails = results => isDefined(results);
+
 const emptyCollectionList = filter => {
   return {
     filter,
@@ -62,9 +67,9 @@ const getTlsCertificate = (certs, fingerprint) => {
 };
 
 export const parseTlsCertificates = (report, filter) => {
-  const {host: hosts, ssl_certs} = report;
+  const {host: hosts, ssl_certs, results} = report;
 
-  if (!isDefined(ssl_certs)) {
+  if (!isDefined(ssl_certs) || !isReportWithDetails(results)) {
     return emptyCollectionList(filter);
   }
 
@@ -218,7 +223,7 @@ export const parseApps = (report, filter) => {
   const apps_temp = {};
   const cpe_host_details = {};
 
-  if (!isDefined(apps)) {
+  if (!isDefined(apps) || !isReportWithDetails(results)) {
     return emptyCollectionList(filter);
   }
 
@@ -337,7 +342,7 @@ export const parseHostSeverities = (results = {}) => {
 export const parseOperatingSystems = (report, filter) => {
   const {host: hosts, results, os: os_count} = report;
 
-  if (!isDefined(os_count)) {
+  if (!isDefined(os_count) || !isReportWithDetails(results)) {
     return emptyCollectionList(filter);
   }
 
@@ -401,7 +406,10 @@ export const parseOperatingSystems = (report, filter) => {
 export const parseHosts = (report, filter) => {
   const {host: hosts, results, hosts: hosts_count} = report;
 
-  if (!isDefined(hosts)) {
+  if (
+    (!isDefined(hosts) && !isDefined(hosts_count)) ||
+    !isReportWithDetails(results)
+  ) {
     return emptyCollectionList(filter);
   }
 
@@ -468,9 +476,9 @@ export const parseResults = (report, filter) => {
 };
 
 export const parse_errors = (report, filter) => {
-  const {host: hosts, errors} = report;
+  const {host: hosts, errors, results} = report;
 
-  if (!isDefined(errors)) {
+  if (!isDefined(errors) || !isReportWithDetails(results)) {
     return emptyCollectionList(filter);
   }
 
@@ -536,9 +544,9 @@ export const parse_errors = (report, filter) => {
 };
 
 export const parseClosedCves = (report, filter) => {
-  const {host: hosts, closed_cves} = report;
+  const {host: hosts, closed_cves, results} = report;
 
-  if (!isDefined(closed_cves)) {
+  if (!isDefined(closed_cves) || !isReportWithDetails(results)) {
     return emptyCollectionList(filter);
   }
 
