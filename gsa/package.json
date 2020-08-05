@@ -67,7 +67,7 @@
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.4.1",
     "uuid": "^8.3.0",
-    "whatwg-fetch": "^3.2.0"
+    "whatwg-fetch": "^3.3.1"
   },
   "scripts": {
     "test": "react-scripts test",
