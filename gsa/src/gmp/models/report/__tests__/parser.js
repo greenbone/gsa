@@ -438,6 +438,22 @@ describe('report parser tests', () => {
   test('should parse tls certificates', () => {
     const filterString = 'foo=bar rows=5';
     const report = {
+      results: {
+        result: [
+          {
+            host: {
+              __text: '1.1.1.1',
+            },
+            severity: '5.5',
+          },
+          {
+            host: {
+              __text: '2.2.2.2',
+            },
+            severity: '9.5',
+          },
+        ],
+      },
       host: [
         {
           ip: '1.1.1.1',
