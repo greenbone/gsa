@@ -17,7 +17,6 @@
  */
 
 import React, {useCallback} from 'react';
-import styled from 'styled-components';
 
 import {connect} from 'react-redux';
 
@@ -60,13 +59,6 @@ import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
-import Tab from 'web/components/tab/tab';
-import TabList from 'web/components/tab/tablist';
-import TabPanel from 'web/components/tab/tabpanel';
-import TabPanels from 'web/components/tab/tabpanels';
-import Tabs from 'web/components/tab/tabs';
-import TabLayout from 'web/components/tab/tablayout';
 
 import useGmp from 'web/utils/useGmp';
 

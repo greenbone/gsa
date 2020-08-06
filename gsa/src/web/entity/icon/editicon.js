@@ -27,7 +27,6 @@ import useCapabilities from 'web/utils/useCapabilities';
 import EditIcon from 'web/components/icon/editicon';
 
 const EntityEditIcon = ({
-  capabilities,
   disabled,
   displayName,
   entity,
@@ -75,7 +74,6 @@ const EntityEditIcon = ({
 };
 
 EntityEditIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   disabled: PropTypes.bool,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
