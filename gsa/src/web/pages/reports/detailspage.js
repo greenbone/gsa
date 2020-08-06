@@ -263,6 +263,17 @@ class ReportDetails extends React.Component {
         // if no report format id is available we would create an infinite
         // render loop here
         this.setState({reportFormatId});
+      } else {
+        // if there is no report format at all, throw a proper error message
+        // instead of just showing x is undefined JS stacktrace
+        const noReportFormatError = _(
+          'The report cannot be displayed because' +
+            ' no Greenbone Vulnerability Manager report format is available.' +
+            ' This could be due to a missing feed. Please update the feed, ' +
+            'check the "feed import owner" setting, or contact your system ' +
+            'administrator.',
+        );
+        throw new Error(noReportFormatError);
       }
     }
 
