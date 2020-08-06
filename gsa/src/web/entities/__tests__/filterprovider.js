@@ -33,7 +33,7 @@ describe('FilterProvider component tests', () => {
 
     const locationQuery = {filter: 'location=query'};
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
 
     const getSetting = jest.fn().mockResolvedValue({});
     const gmp = {
@@ -50,7 +50,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('task', defaultSettingfilter),
+      defaultFilterLoadingActions.success('task', defaultSettingFilter),
     );
 
     const renderFunc = jest
@@ -76,7 +76,7 @@ describe('FilterProvider component tests', () => {
 
     const emptyFilter = Filter.fromString('rows=42');
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
 
     const getSetting = jest.fn().mockResolvedValue({});
     const gmp = {
@@ -93,7 +93,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('task', defaultSettingfilter),
+      defaultFilterLoadingActions.success('task', defaultSettingFilter),
     );
     store.dispatch(pageFilter('task', pFilter));
 
@@ -114,7 +114,7 @@ describe('FilterProvider component tests', () => {
   test('should use defaultSettingFilter', async () => {
     const resultingFilter = Filter.fromString('foo=bar rows=42');
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
 
     const emptyFilter = Filter.fromString('rows=42');
 
@@ -133,7 +133,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('task', defaultSettingfilter),
+      defaultFilterLoadingActions.success('task', defaultSettingFilter),
     );
 
     const renderFunc = jest
@@ -150,7 +150,7 @@ describe('FilterProvider component tests', () => {
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
   });
 
-  test('should use fallbackfilter if defaultSettingFilter could not be loaded', async () => {
+  test('should use fallbackFilter if defaultSettingFilter could not be loaded', async () => {
     const resultingFilter = Filter.fromString('fall=back rows=42');
 
     const fallbackFilter = Filter.fromString('fall=back');
