@@ -43,6 +43,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Show proper error message on report detailspage when no report format is available [#2367](https://github.com/greenbone/gsa/pull/2367)
 - Don't use stored result list page filter at report results tab [#2366](https://github.com/greenbone/gsa/pull/2366)
 - Fixed flickering reports [#2359](https://github.com/greenbone/gsa/pull/2359)
 - Fixed "Hosts scanned" in report details disappearing during page refresh [#2357](https://github.com/greenbone/gsa/pull/2357)
