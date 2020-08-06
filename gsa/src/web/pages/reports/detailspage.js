@@ -717,12 +717,23 @@ const load = ({
   reportId,
   // eslint-disable-next-line no-shadow
   loadReportWithThreshold,
+  pageFilter,
   reportFilter,
   updateFilter,
 }) => filter => {
   if (!hasValue(filter)) {
     // use loaded filter after initial loading
     filter = reportFilter;
+  }
+
+  if (!hasValue(filter)) {
+    // use filter from store
+    filter = pageFilter;
+  }
+
+  if (!hasValue(filter)) {
+    // use filter from user setting
+    filter = defaultFilter;
   }
 
   if (!hasValue(filter)) {
@@ -735,7 +746,11 @@ const load = ({
 };
 
 const ReportDetailsWrapper = ({reportFilter, ...props}) => (
-  <FilterProvider fallbackFilter={DEFAULT_FILTER} gmpname="result">
+  <FilterProvider
+    fallbackFilter={DEFAULT_FILTER}
+    gmpname="result"
+    pageName={`report-${props.reportId}`}
+  >
     {({filter}) => (
       <Reload
         name={`report-${props.reportId}`}
