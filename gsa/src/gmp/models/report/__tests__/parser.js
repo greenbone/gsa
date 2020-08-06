@@ -23,6 +23,8 @@ import {
   parseOperatingSystems,
   parseTlsCertificates,
   parseCves,
+  parse_errors,
+  parseClosedCves,
 } from '../parser';
 
 describe('report parser tests', () => {
@@ -438,6 +440,22 @@ describe('report parser tests', () => {
   test('should parse tls certificates', () => {
     const filterString = 'foo=bar rows=5';
     const report = {
+      results: {
+        result: [
+          {
+            host: {
+              __text: '1.1.1.1',
+            },
+            severity: '5.5',
+          },
+          {
+            host: {
+              __text: '2.2.2.2',
+            },
+            severity: '9.5',
+          },
+        ],
+      },
       host: [
         {
           ip: '1.1.1.1',
@@ -692,6 +710,231 @@ describe('report parser tests', () => {
     expect(cve3.severity).toEqual(6.5);
     expect(cve3.hosts.count).toEqual(1);
     expect(cve3.occurrences).toEqual(1);
+  });
+
+  test('should parse empty errors', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {};
+    const errors = parse_errors(report, filterString);
+
+    expect(errors.entities.length).toEqual(0);
+    expect(errors.counts).toBeUndefined();
+    expect(errors.filter).toEqual('foo=bar rows=5');
+  });
+
+  test('should parse errors', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {
+      results: {
+        result: [
+          {
+            host: {
+              __text: '1.1.1.1',
+            },
+            severity: '5.5',
+          },
+          {
+            host: {
+              __text: '2.2.2.2',
+            },
+            severity: '9.5',
+          },
+        ],
+      },
+      host: [
+        {
+          ip: '1.1.1.1',
+          detail: [
+            {
+              name: 'hostname',
+              value: 'foo.bar',
+            },
+          ],
+        },
+
+        {
+          ip: '2.2.2.2',
+          detail: [
+            {
+              name: 'hostname',
+              value: 'lorem.ipsum',
+            },
+          ],
+        },
+      ],
+      errors: {
+        count: '2',
+        error: [
+          {
+            host: {
+              __text: '1.1.1.1',
+              asset: {_asset_id: '123'},
+            },
+            port: '123/tcp',
+            description: 'This is an error.',
+            nvt: {
+              _oid: '314',
+              name: 'NVT1',
+            },
+          },
+          {
+            host: {
+              __text: '2.2.2.2',
+            },
+            port: '456/tcp',
+            description: 'This is another error.',
+            nvt: {
+              _oid: '159',
+              name: 'NVT2',
+            },
+          },
+        ],
+      },
+    };
+
+    const counts = {
+      first: 1,
+      all: 2,
+      filtered: 2,
+      length: 2,
+      rows: 2,
+      last: 2,
+    };
+
+    const errors = parse_errors(report, filterString);
+
+    expect(errors.entities.length).toEqual(2);
+    expect(errors.counts).toEqual(counts);
+    expect(errors.filter).toEqual('foo=bar rows=5');
+
+    const [error1, error2] = errors.entities;
+
+    expect(error1.id).toEqual('1.1.1.1314');
+    expect(error1.description).toEqual('This is an error.');
+    expect(error1.host.ip).toEqual('1.1.1.1');
+    expect(error1.host.name).toEqual('foo.bar');
+    expect(error1.host.id).toEqual('123');
+    expect(error1.nvt.id).toEqual('314');
+    expect(error1.nvt.name).toEqual('NVT1');
+    expect(error1.port).toEqual('123/tcp');
+
+    expect(error2.id).toEqual('2.2.2.2159');
+    expect(error2.description).toEqual('This is another error.');
+    expect(error2.host.ip).toEqual('2.2.2.2');
+    expect(error2.host.name).toEqual('lorem.ipsum');
+    expect(error2.host.id).toEqual(undefined);
+    expect(error2.nvt.id).toEqual('159');
+    expect(error2.nvt.name).toEqual('NVT2');
+    expect(error2.port).toEqual('456/tcp');
+  });
+
+  test('should parse empty closed CVEs', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {};
+    const closedCves = parse_errors(report, filterString);
+
+    expect(closedCves.entities.length).toEqual(0);
+    expect(closedCves.counts).toBeUndefined();
+    expect(closedCves.filter).toEqual('foo=bar rows=5');
+  });
+
+  test('should parse closed CVEs', () => {
+    const filterString = 'foo=bar rows=5';
+    const report = {
+      results: {
+        result: [
+          {
+            host: {
+              __text: '1.1.1.1',
+            },
+            severity: '5.5',
+          },
+          {
+            host: {
+              __text: '2.2.2.2',
+            },
+            severity: '9.5',
+          },
+        ],
+      },
+      host: [
+        {
+          ip: '1.1.1.1',
+          detail: [
+            {
+              name: 'hostname',
+              value: 'foo.bar',
+            },
+            {
+              name: 'Closed CVE',
+              value: 'CVE-2000-1234',
+              source: {
+                type: 'openvas',
+                name: '201',
+                description: 'This is a description',
+              },
+              extra: '10.0',
+            },
+          ],
+        },
+
+        {
+          ip: '2.2.2.2',
+          detail: [
+            {
+              name: 'hostname',
+              value: 'lorem.ipsum',
+            },
+            {
+              name: 'Closed CVE',
+              value: 'CVE-2000-5678',
+              source: {
+                type: 'openvas',
+                name: '202',
+                description: 'This is another description',
+              },
+              extra: '5.0',
+            },
+          ],
+        },
+      ],
+      closed_cves: {
+        count: '2',
+      },
+    };
+
+    const counts = {
+      first: 1,
+      all: 2,
+      filtered: 2,
+      length: 2,
+      rows: 2,
+      last: 2,
+    };
+
+    const closedCves = parseClosedCves(report, filterString);
+
+    expect(closedCves.entities.length).toEqual(2);
+    expect(closedCves.counts).toEqual(counts);
+    expect(closedCves.filter).toEqual('foo=bar rows=5');
+
+    const [closedCve1, closedCve2] = closedCves.entities;
+
+    expect(closedCve1.id).toEqual('CVE-2000-1234-1.1.1.1-201');
+    expect(closedCve1.cveId).toEqual('CVE-2000-1234');
+    expect(closedCve1.host.ip).toEqual('1.1.1.1');
+    expect(closedCve1.host.name).toEqual('foo.bar');
+    expect(closedCve1.host.id).toEqual(undefined);
+    expect(closedCve1.source.name).toEqual('201');
+    expect(closedCve1.severity).toEqual(10);
+
+    expect(closedCve2.id).toEqual('CVE-2000-5678-2.2.2.2-202');
+    expect(closedCve2.cveId).toEqual('CVE-2000-5678');
+    expect(closedCve2.host.ip).toEqual('2.2.2.2');
+    expect(closedCve2.host.name).toEqual('lorem.ipsum');
+    expect(closedCve2.host.id).toEqual(undefined);
+    expect(closedCve2.source.name).toEqual('202');
+    expect(closedCve2.severity).toEqual(5);
   });
 });
 

@@ -15,9 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+import 'core-js/features/array/includes';
+
 import React from 'react';
 
 import _ from 'gmp/locale';
+
+import {getTranslatedType} from 'gmp/models/scanconfig';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -33,11 +38,12 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
+import {SCAN_CONFIGS_FROM_FEED} from 'web/pages/extras/feedstatuspage';
+
 import PropTypes from 'web/utils/proptypes';
 import {na} from 'web/utils/render';
 
 import Trend from './trend';
-import {getTranslatedType} from 'gmp/models/scanconfig';
 
 const ScanConfigActions = withEntitiesActions(
   ({
@@ -56,6 +62,7 @@ const ScanConfigActions = withEntitiesActions(
       />
       <EditIcon
         displayName={_('Scan Config')}
+        disabled={SCAN_CONFIGS_FROM_FEED.includes(entity.id)}
         name="config"
         entity={entity}
         onClick={onScanConfigEditClick}

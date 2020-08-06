@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+import 'core-js/features/array/includes';
+
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -53,6 +56,8 @@ import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+
+import {REPORT_FORMATS_FROM_FEED} from 'web/pages/extras/feedstatuspage';
 
 import {selector, loadEntity} from 'web/store/entities/reportformats';
 
@@ -93,6 +98,7 @@ const ToolBarIcons = withCapabilities(
         />
         <EditIcon
           displayName={_('Report Format')}
+          disabled={REPORT_FORMATS_FROM_FEED.includes(entity.id)}
           entity={entity}
           onClick={onReportFormatEditClick}
         />

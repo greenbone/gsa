@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import {parseDate} from '../parser';
+import {parseDate} from 'gmp/parser';
 
-import {map} from '../utils/array';
+import {map} from 'gmp/utils/array';
 
-import date, {duration} from '../models/date';
+import date, {duration} from 'gmp/models/date';
 
 import HttpCommand from './http';
 
@@ -31,13 +31,15 @@ const convertVersion = version =>
 export const NVT_FEED = 'NVT';
 export const CERT_FEED = 'CERT';
 export const SCAP_FEED = 'SCAP';
+export const GVMD_DATA_FEED = 'GVMD_DATA';
 
-class Feed {
-  constructor({type, name, description, status, version}) {
+export class Feed {
+  constructor({type, name, description, status, version, currently_syncing}) {
     this.feed_type = type;
     this.name = name;
     this.description = description;
     this.status = status;
+    this.currentlySyncing = currently_syncing;
 
     const versionDate = convertVersion(version);
     this.version = versionDate;
