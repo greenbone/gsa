@@ -364,6 +364,7 @@ const mapStateToProps = (state, {reportId}) => {
     resultsFilter,
     resultsError: selector.getEntitiesError(resultsFilter),
     results: selector.getEntities(resultsFilter),
+    resultsCounts: selector.getEntitiesCounts(resultsFilter),
     isLoading: selector.isLoadingEntities(resultsFilter),
   };
 };
