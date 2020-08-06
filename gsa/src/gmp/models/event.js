@@ -378,6 +378,14 @@ class Event {
           }
         }
       }
+    } else if (isDefined(this.event) && isDefined(this.event.startDate)) {
+      // the event is not recurring
+      // it should only occur once on its start date
+      const now = date();
+
+      if (this.event.startDate.toUnixTime() >= now.unix()) {
+        return convertIcalDate(this.event.startDate, this.timezone);
+      }
     }
     return undefined;
   }

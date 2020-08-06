@@ -1,6 +1,8 @@
 [Unit]
 Description=Greenbone Security Assistant
-After=network.target
+After=network.target networking.service gvmd.service
+Documentation=man:gsad(8)
+ConditionKernelCommandLine=!recovery
 
 [Service]
 Type=forking

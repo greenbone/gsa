@@ -27,6 +27,7 @@ import useCapabilities from 'web/utils/useCapabilities';
 import EditIcon from 'web/components/icon/editicon';
 
 const EntityEditIcon = ({
+  disabled,
   displayName,
   entity,
   name,
@@ -47,7 +48,7 @@ const EntityEditIcon = ({
   const mayEdit =
     capabilities.mayEdit(name) && entity.userCapabilities.mayEdit(name);
 
-  const active = mayEdit && entity.isWritable();
+  const active = mayEdit && entity.isWritable() && !disabled;
 
   if (!isDefined(title)) {
     if (active) {
@@ -73,6 +74,7 @@ const EntityEditIcon = ({
 };
 
 EntityEditIcon.propTypes = {
+  disabled: PropTypes.bool,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: PropTypes.string,

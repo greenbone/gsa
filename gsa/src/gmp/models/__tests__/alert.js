@@ -155,6 +155,20 @@ describe('Alert Model tests', () => {
     expect(alert.method.data.report_formats).toEqual([]);
   });
 
+  test('should parse notice as String', () => {
+    const elem = {
+      method: {
+        data: {
+          __text: 1,
+          name: 'notice',
+        },
+      },
+    };
+    const alert = Alert.fromElement(elem);
+
+    expect(alert.method.data.notice.value).toEqual('1');
+  });
+
   test('isActive() should return correct true/false', () => {
     const alert1 = Alert.fromElement({active: '0'});
     const alert2 = Alert.fromElement({active: '1'});

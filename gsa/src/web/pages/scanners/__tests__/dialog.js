@@ -114,7 +114,7 @@ describe('ScannerDialog component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {baseElement} = render(
+    const {getAllByTestId, baseElement} = render(
       <ScannerDialog // using OSP Scanner to render the most amount of fields
         credentials={credentials}
         scanner={scanner}
@@ -129,20 +129,22 @@ describe('ScannerDialog component tests', () => {
 
     const inputs = baseElement.querySelectorAll('input');
 
+    expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveAttribute('value', 'Unnamed'); // name field
+
+    expect(inputs[1]).toHaveAttribute('name', 'comment');
     expect(inputs[1]).toHaveAttribute('value', ''); // comment field
 
-    const nextButton = baseElement.querySelector('button[title="🠮"]');
+    expect(inputs[2]).toHaveAttribute('name', 'host');
+    expect(inputs[2]).toHaveAttribute('value', 'localhost');
 
-    fireEvent.click(nextButton);
+    expect(inputs[3]).toHaveAttribute('name', 'port');
+    expect(inputs[3]).toHaveAttribute('value', '9391');
 
-    const pageTwoInputs = baseElement.querySelectorAll('input');
+    const selectedValues = getAllByTestId('select-selected-value');
 
-    expect(pageTwoInputs[0]).toHaveAttribute('name', 'host');
-    expect(pageTwoInputs[0]).toHaveAttribute('value', 'localhost');
-
-    expect(pageTwoInputs[1]).toHaveAttribute('name', 'port');
-    expect(pageTwoInputs[1]).toHaveAttribute('value', '9391');
+    expect(selectedValues[0]).toHaveAttribute('title', 'OSP Scanner');
+    expect(selectedValues[1]).toHaveAttribute('title', 'foo');
   });
 
   test('should display value from props', () => {
@@ -155,7 +157,7 @@ describe('ScannerDialog component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {baseElement} = render(
+    const {getAllByTestId, baseElement} = render(
       <ScannerDialog // using OSP Scanner to render the most amount of fields
         comment={scanner.comment}
         credentials={credentials}
@@ -174,20 +176,22 @@ describe('ScannerDialog component tests', () => {
 
     const inputs = baseElement.querySelectorAll('input');
 
+    expect(inputs[0]).toHaveAttribute('name', 'name');
     expect(inputs[0]).toHaveAttribute('value', 'john');
+
+    expect(inputs[1]).toHaveAttribute('name', 'comment');
     expect(inputs[1]).toHaveAttribute('value', 'lorem ipsum');
 
-    const nextButton = baseElement.querySelector('button[title="🠮"]');
+    expect(inputs[2]).toHaveAttribute('name', 'host');
+    expect(inputs[2]).toHaveAttribute('value', 'mypc');
 
-    fireEvent.click(nextButton);
+    expect(inputs[3]).toHaveAttribute('name', 'port');
+    expect(inputs[3]).toHaveAttribute('value', '1357');
 
-    const pageTwoInputs = baseElement.querySelectorAll('input');
+    const selectedValues = getAllByTestId('select-selected-value');
 
-    expect(pageTwoInputs[0]).toHaveAttribute('name', 'host');
-    expect(pageTwoInputs[0]).toHaveAttribute('value', 'mypc');
-
-    expect(pageTwoInputs[1]).toHaveAttribute('name', 'port');
-    expect(pageTwoInputs[1]).toHaveAttribute('value', '1357');
+    expect(selectedValues[0]).toHaveAttribute('title', 'OSP Scanner');
+    expect(selectedValues[1]).toHaveAttribute('title', 'foo');
   });
 
   test('should save valid form state', () => {

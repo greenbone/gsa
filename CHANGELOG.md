@@ -22,6 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.08] - unreleased
 
 ### Added
+- Add reload timer to feedstatuspage and displaying when updating is in progress [#2350](https://github.com/greenbone/gsa/pull/2350)
+- Add filtered links to GVMD_DATA row in feed status page [#2339](https://github.com/greenbone/gsa/pull/2339)
 - Added loading indicator for CVEs on CPE detailspage [#2248](https://github.com/greenbone/gsa/pull/2248)
 - Added new form validation feature, implemented on create and edit ticket dialog [#1782](https://github.com/greenbone/gsa/pull/1782)
 - Added German translation for About page [#1998](https://github.com/greenbone/gsa/pull/1998)
@@ -34,6 +36,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added handling of queued task status [#2208](https://github.com/greenbone/gsa/pull/2208)
 
 ### Changed
+- Do not use result filter from store on report detailspage by default [#2358](https://github.com/greenbone/gsa/pull/2358)
+- Improve performance of form fields in edit scan config dialog [#2354](https://github.com/greenbone/gsa/pull/2354)
+- Default to sorting nvts by "Created", newest first [#2352](https://github.com/greenbone/gsa/pull/2352)
+- Disable EditIcons for data objects from feed [#2346](https://github.com/greenbone/gsa/pull/2346)
+- EmptyResultsReport uses the same counts as the results tab title in normal reports, when filtering for nonexistent results [#2335](https://github.com/greenbone/gsa/pull/2335)
 - Improve error 503 message at login [#2310](https://github.com/greenbone/gsa/pull/2310)
 - Use unified solution type instead of solution type nvt tag [#2268](https://github.com/greenbone/gsa/pull/2268)
 - Changed queued status color [#2227](https://github.com/greenbone/gsa/pull/2227)
@@ -51,6 +58,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed flickering reports [#2359](https://github.com/greenbone/gsa/pull/2359)
+- Fixed "Hosts scanned" in report details disappearing during page refresh [#2357](https://github.com/greenbone/gsa/pull/2357)
+- Fixed schedule_periods not forwarded if there is no schedule [#2331](https://github.com/greenbone/gsa/pull/2331)
+- Fixed broken radio buttons in alert dialog [#2326](https://github.com/greenbone/gsa/pull/2326)
+- Fixed report formats undeletable and unrestorable [#2321](https://github.com/greenbone/gsa/pull/2321)
+- Fixed loading delta report detailspage [#2320](https://github.com/greenbone/gsa/pull/2320)
 - Fixed spacing between radio buttons and input field in override dialog [#2286](https://github.com/greenbone/gsa/pull/2286)
 - Fixed separating hosts in override dialog via comma [#2280](https://github.com/greenbone/gsa/pull/2280)
 - Fixed installing the json translation files [#2272](https://github.com/greenbone/gsa/pull/2272)
@@ -63,8 +76,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed parsing xml rejection messages [#1970](https://github.com/greenbone/gsa/pull/1970)
 - Fixed returning bulk_delete response [#1969](https://github.com/greenbone/gsa/pull/1969)
 - Fixed parsing DFN-Cert CVE entries [#1965](https://github.com/greenbone/gsa/pull/1965)
+- Fixed credential_login in gsad request handlers [#2347](https://github.com/greenbone/gsa/pull/2347)
 
 ### Removed
+- Remove multistep feature from scanner dialog [#2337](https://github.com/greenbone/gsa/pull/2337)
 - Removed predefined status for report formats [#2111](https://github.com/greenbone/gsa/pull/2111)
 - Removed old translation mechanism [#1952](https://github.com/greenbone/gsa/pull/1952)
 - Removed Agents from GSA and gsad [#1903](https://github.com/greenbone/gsa/pull/1903) [#1905](https://github.com/greenbone/gsa/pull/1905)
@@ -105,6 +120,8 @@ table headers [#2044](https://github.com/greenbone/gsa/pull/2044)
 - Lowered memory usage when getting a report [#1857](https://github.com/greenbone/gvmd/pull/1857)
 
 ### Fixed
+- Fixed broken radio buttons and wrong date for schedule in Modify Task Wizard [#2340](https://github.com/greenbone/gsa/pull/2340)
+- Fixed missing nextDate for schedules with recurrence "once" [#2336](https://github.com/greenbone/gsa/pull/2336)
 - Don't crash if dashboard getSetting returns duplicate setting [#2290](https://github.com/greenbone/gsa/pull/2290)
 - Fixed broken bulk export for AllSecInfo [#2269](https://github.com/greenbone/gsa/pull/2269)
 - Fixed passing threshold prop in AlertActions for ThresholdMessage [#2114](https://github.com/greenbone/gsa/pull/2114)

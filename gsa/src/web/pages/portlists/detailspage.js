@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+import 'core-js/features/array/includes';
+
 import React from 'react';
 
 import _ from 'gmp/locale';
@@ -50,6 +53,8 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
+import {PORT_LISTS_FROM_FEED} from 'web/pages/extras/feedstatuspage';
+
 import {selector, loadEntity} from 'web/store/entities/portlists';
 
 import {
@@ -83,7 +88,11 @@ const ToolBarIcons = ({
     <IconDivider>
       <CreateIcon entity={entity} onClick={onPortListCreateClick} />
       <CloneIcon entity={entity} onClick={onPortListCloneClick} />
-      <EditIcon entity={entity} onClick={onPortListEditClick} />
+      <EditIcon
+        entity={entity}
+        disabled={PORT_LISTS_FROM_FEED.includes(entity.id)}
+        onClick={onPortListEditClick}
+      />
       <TrashIcon entity={entity} onClick={onPortListDeleteClick} />
       <ExportIcon
         value={entity}

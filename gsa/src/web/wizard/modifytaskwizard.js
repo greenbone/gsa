@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -126,6 +126,7 @@ const ModifyTaskWizard = ({
                   title={_('Do not change')}
                   value={NO_VALUE}
                   checked={state.reschedule === NO_VALUE}
+                  convert={parseYesNo}
                   name="reschedule"
                   onChange={onValueChange}
                 />
@@ -135,6 +136,7 @@ const ModifyTaskWizard = ({
                   title={_('Create Schedule')}
                   value={YES_VALUE}
                   checked={state.reschedule === YES_VALUE}
+                  convert={parseYesNo}
                   name="reschedule"
                   onChange={onValueChange}
                 />

@@ -309,6 +309,7 @@ const PageContent = ({
                       reportFilter={reportFilter}
                       reportId={reportId}
                       results={results.entities}
+                      resultsCounts={resultsCounts}
                       sortField={sorting.results.sortField}
                       sortReverse={sorting.results.sortReverse}
                       onFilterAddLogLevelClick={onFilterAddLogLevelClick}

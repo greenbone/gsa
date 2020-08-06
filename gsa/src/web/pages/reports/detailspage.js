@@ -699,11 +699,6 @@ const load = ({
   }
 
   if (!hasValue(filter)) {
-    // use filter from user setting
-    filter = defaultFilter;
-  }
-
-  if (!hasValue(filter)) {
     // use fallback filter
     filter = DEFAULT_FILTER;
   }

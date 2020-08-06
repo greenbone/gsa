@@ -95,6 +95,29 @@ describe('Entity EditIcon component tests', () => {
       modifier: `svg path`,
     });
   });
+
+  test('should deactivate if set to disabled', () => {
+    const caps = new Capabilities(['everything']);
+    const entity = Task.fromElement({
+      permissions: {permission: [{name: 'modify_schedule'}]},
+    });
+    const clickHandler = jest.fn();
+
+    const {render} = rendererWith({capabilities: caps});
+
+    const {element} = render(
+      <EditIcon entity={entity} disabled={true} onClick={clickHandler} />,
+    );
+
+    expect(entity.userCapabilities.mayEdit('schedule')).toEqual(true);
+
+    fireEvent.click(element);
+
+    expect(clickHandler).not.toHaveBeenCalled();
+    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
+      modifier: `svg path`,
+    });
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
