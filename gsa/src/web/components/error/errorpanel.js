@@ -45,9 +45,7 @@ const ErrorDetails = styled.div`
   background-color: ${Theme.white};
   padding: 5px;
   max-height: 200px;
-  overflow: auto;
   overflow-x: auto;
-  white-space: pre;
 `;
 
 const ErrorPanel = ({error, message, info}) => {
