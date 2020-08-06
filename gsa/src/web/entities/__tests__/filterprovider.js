@@ -111,6 +111,52 @@ describe('FilterProvider component tests', () => {
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
   });
 
+  test('should allow to set a pageName for loading the pageFilter', async () => {
+    const gmpName = 'task';
+    const pageName = 'foo-bar-baz';
+    const resultingFilter = Filter.fromString('page=filter rows=42');
+
+    const pFilter = Filter.fromString('page=filter');
+
+    const emptyFilter = Filter.fromString('rows=42');
+
+    const defaultSettingFilter = Filter.fromString('foo=bar');
+
+    const getSetting = jest.fn().mockResolvedValue({});
+    const gmp = {
+      user: {
+        getSetting,
+      },
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success(gmpName, defaultSettingFilter),
+    );
+    store.dispatch(pageFilter(pageName, pFilter));
+
+    const renderFunc = jest
+      .fn()
+      .mockReturnValue(<span data-testid="awaiting-span" />);
+
+    const {getByTestId} = render(
+      <FilterProvider gmpname={gmpName} pageName={pageName}>
+        {renderFunc}
+      </FilterProvider>,
+    );
+
+    await waitForElement(() => getByTestId('awaiting-span'));
+
+    expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
+    expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
+  });
+
   test('should use defaultSettingFilter', async () => {
     const resultingFilter = Filter.fromString('foo=bar rows=42');
 
