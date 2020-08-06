@@ -735,7 +735,11 @@ const load = ({
 };
 
 const ReportDetailsWrapper = ({reportFilter, ...props}) => (
-  <FilterProvider fallbackFilter={DEFAULT_FILTER} gmpname="result">
+  <FilterProvider
+    fallbackFilter={DEFAULT_FILTER}
+    gmpname="result"
+    pageName={`report-${props.reportId}`}
+  >
     {({filter}) => (
       <Reload
         name={`report-${props.reportId}`}
