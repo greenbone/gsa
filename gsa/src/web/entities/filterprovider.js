@@ -45,6 +45,7 @@ const FilterProvider = ({
   children,
   fallbackFilter,
   gmpname,
+  pageName = gmpname,
   locationQuery = {},
 }) => {
   const gmp = useGmp();
@@ -96,12 +97,14 @@ const FilterProvider = ({
 
   useEffect(() => {
     if (isDefined(locationQuery.filter)) {
-      dispatch(setPageFilter(gmpname, Filter.fromString(locationQuery.filter)));
+      dispatch(
+        setPageFilter(pageName, Filter.fromString(locationQuery.filter)),
+      );
     }
     setLocationQueryFilter(undefined);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const pageFilter = useSelector(state => getPage(state).getFilter(gmpname));
+  const pageFilter = useSelector(state => getPage(state).getFilter(pageName));
 
   if (isDefined(locationQueryFilter)) {
     returnedFilter = locationQueryFilter;
@@ -146,6 +149,7 @@ FilterProvider.propTypes = {
   locationQuery: PropTypes.shape({
     filter: PropTypes.string,
   }),
+  pageName: PropTypes.string,
 };
 
 export default FilterProvider;
