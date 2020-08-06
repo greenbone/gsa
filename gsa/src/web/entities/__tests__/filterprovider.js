@@ -231,7 +231,7 @@ describe('FilterProvider component tests', () => {
   });
 
   test('should use default fallbackFilter as last resort', async () => {
-    const resultingFilter = DEFAULT_FALLBACK_FILTER.set('rows', 42);
+    const resultingFilter = DEFAULT_FALLBACK_FILTER.copy().set('rows', 42);
 
     const getSetting = jest.fn().mockResolvedValue({});
     const subscribe = jest.fn();
