@@ -51,7 +51,7 @@ const certFeed = new Feed({
 });
 
 const gvmdDataFeed = new Feed({
-  name: 'Greenbone Community GVMd Data Feed',
+  name: 'Greenbone Community gvmd Data Feed',
   type: 'GVMD_DATA',
   version: 202007221009,
   currently_syncing: {timestamp: 'foo'},
@@ -156,7 +156,7 @@ describe('Feed status page tests', () => {
     expect(element).toHaveTextContent('Greenbone Community Feed');
     expect(element).toHaveTextContent('Greenbone Community SCAP Feed');
     expect(element).toHaveTextContent('Greenbone Community CERT Feed');
-    expect(element).toHaveTextContent('Greenbone Community GVMd Data Feed');
+    expect(element).toHaveTextContent('Greenbone Community gvmd Data Feed');
 
     // Feed versions
     expect(element).toHaveTextContent('20200724T1005');
