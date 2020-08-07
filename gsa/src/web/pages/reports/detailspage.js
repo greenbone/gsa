@@ -269,9 +269,9 @@ class ReportDetails extends React.Component {
         const noReportFormatError = _(
           'The report cannot be displayed because' +
             ' no Greenbone Vulnerability Manager report format is available.' +
-            ' This could be due to a missing feed. Please update the feed, ' +
-            'check the "feed import owner" setting, or contact your system ' +
-            'administrator.',
+            ' This could be due to a missing gvmd data feed. Please update' +
+            ' the gvmd data feed, check the "feed import owner" setting, or' +
+            ' contact your system administrator.',
         );
         throw new Error(noReportFormatError);
       }
