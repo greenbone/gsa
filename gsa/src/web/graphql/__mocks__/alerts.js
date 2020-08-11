@@ -18,6 +18,8 @@
 
 import {deepFreeze} from 'web/utils/testing';
 
+import {createGenericQueryMock} from 'web/utils/testing';
+
 import {GET_ALERTS} from '../alerts';
 
 const alert1 = deepFreeze({
@@ -53,7 +55,7 @@ const alert1 = deepFreeze({
     type: 'Always',
     data: [],
   },
-  permission: [{name: 'Everything'}],
+  permissions: [{name: 'Everything'}],
   tasks: [
     {id: '8589296f-5051-4ed9-9d86-c022936e2893', name: 'task_with_alerts'},
     {id: '173a38fe-1038-48a6-9c48-a623ffc04ba8', name: 'scan_local'},
@@ -89,12 +91,19 @@ const alert2 = deepFreeze({
     type: 'Filter count at least',
     data: [{name: 'count', value: '3'}],
   },
-  permission: [{name: 'Everything'}],
+  permissions: [{name: 'Everything'}],
   tasks: null,
 });
 
 const mockAlerts = {
-  nodes: [alert1, alert2],
+  edges: [
+    {
+      node: alert1,
+    },
+    {
+      node: alert2,
+    },
+  ],
   counts: {
     total: 2,
     filtered: 2,
@@ -110,3 +119,6 @@ const mockAlerts = {
     lastPageCursor: 'YWxlcnQ6MA==',
   },
 };
+
+export const createGetAlertsQueryMock = () =>
+  createGenericQueryMock(GET_ALERTS, {alerts: mockAlerts});
