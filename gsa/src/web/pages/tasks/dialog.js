@@ -296,8 +296,6 @@ const TaskDialog = ({
     target_id,
   };
 
-  console.log(alerts);
-
   return (
     <SaveDialog
       error={error}

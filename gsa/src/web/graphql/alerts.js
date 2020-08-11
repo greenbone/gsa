@@ -107,10 +107,7 @@ export const useLazyGetAlerts = (variables, options) => {
     variables,
   });
   const alerts = isDefined(data?.alerts)
-    ? data.alerts.edges.map(entity => {
-        console.log(entity.node);
-        return Alert.fromObject(entity.node);
-      })
+    ? data.alerts.edges.map(entity => Alert.fromObject(entity.node))
     : undefined;
 
   const {total, filtered, offset = -1, limit, length} =
