@@ -75,7 +75,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed "All SecInfo" section [#1685](https://github.com/greenbone/gsa/pull/1685) [#1695](https://github.com/greenbone/gsa/pull/1695)
 - Removed agents [#1903](https://github.com/greenbone/gsa/pull/1903)
 
-[20.08]: https://github.com/greenbone/gsa/compare/gsa-9.0...gsa-20.08
+[20.08]: https://github.com/greenbone/gsa/compare/gsa-9.0...v20.8.0
 
 ## [9.0.1] - 2020-05-13
 
