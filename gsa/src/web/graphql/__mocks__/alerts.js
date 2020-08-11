@@ -16,9 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {deepFreeze} from 'web/utils/testing';
-
-import {createGenericQueryMock} from 'web/utils/testing';
+import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
 import {GET_ALERTS} from '../alerts';
 
