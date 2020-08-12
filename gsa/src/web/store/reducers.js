@@ -20,14 +20,12 @@ import {combineReducers} from 'redux';
 import dashboardData from './dashboard/data/reducers';
 import dashboardSettings from './dashboard/settings/reducers';
 import userSettings from './usersettings/reducers';
-import {businessProcessMaps} from './businessprocessmaps/reducers';
 import pages from './pages/reducers';
 
 import entities from './entities/reducers';
 import {CLEAR_STORE} from 'web/store/actions';
 
 const rootReducer = combineReducers({
-  businessProcessMaps,
   dashboardData,
   dashboardSettings,
   entities,
