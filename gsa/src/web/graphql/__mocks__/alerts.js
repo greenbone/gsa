@@ -40,7 +40,7 @@ const alert1 = deepFreeze({
       {name: 'vfire_call_partition_name', value: 'lorem'},
       {name: 'delta_report_id', value: null},
       {name: 'vfire_call_template_name', value: 'bar'},
-      {name: 'vfire_call_urgency_name', value: 'dfasdfasdf'},
+      {name: 'vfire_call_urgency_name', value: 'hello'},
       {name: 'vfire_call_impact_name', value: 'baz'},
       {name: 'details_url', value: 'https://secinfo.greenbone.net/etc'},
     ],
