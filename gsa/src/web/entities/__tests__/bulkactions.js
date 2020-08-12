@@ -15,8 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+/* eslint-disable react/prop-types */
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import date from 'gmp/models/date';
 
@@ -25,15 +26,19 @@ import Task from 'gmp/models/task';
 import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {useExportTasksByFilter, useExportTasksByIds} from 'web/graphql/tasks';
+import {createExportTasksByIdsQueryMock} from 'web/graphql/__mocks__/tasks';
+
 import {
   rendererWith,
   queryAllByTestId,
   fireEvent,
   wait,
+  screen,
 } from 'web/utils/testing';
 
-import {BulkTagComponent} from '../bulkactions';
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {BulkTagComponent, useBulkExportEntities} from '../bulkactions';
 
 const task1 = Task.fromObject({id: 'foo'});
 const task2 = Task.fromObject({id: 'bar'});
@@ -206,5 +211,67 @@ describe('BulkTagComponent tests', () => {
 
     const selectedTag = getByTestId('select-selected-value');
     expect(selectedTag).toHaveAttribute('title', 'goat');
+  });
+});
+
+const tasks = [task1, task2, task3];
+const onDownload = jest.fn();
+
+const BulkExportTasksComponent = ({selectionType}) => {
+  const [message, setMessage] = useState('Not called');
+
+  const bulkExportTasks = useBulkExportEntities();
+  const exportTasksByFilter = useExportTasksByFilter();
+  const exportTasksByIds = useExportTasksByIds();
+
+  const handleExportEntities = () => {
+    return bulkExportTasks({
+      entities: tasks,
+      selected,
+      filter: Filter.fromString('foo'),
+      resourceType: 'tasks',
+      selectionType,
+      exportByFilterFunc: exportTasksByFilter,
+      exportByIdsFunc: exportTasksByIds,
+      onDownload,
+      onError: jest.fn(),
+    });
+  };
+
+  return (
+    <div>
+      <button
+        data-testid="load"
+        onClick={() =>
+          handleExportEntities().then(setMessage('Bulk export called!'))
+        }
+      />
+      <span data-testid="message">{message}</span>
+    </div>
+  );
+};
+
+describe('useBulkExportEntities tests', () => {
+  test('should call export by ids query for correct entity', async () => {
+    const [mock, resultFunc] = createExportTasksByIdsQueryMock();
+
+    const {render} = rendererWith({queryMocks: [mock], store: true});
+
+    const {getByTestId} = render(
+      <BulkExportTasksComponent selectionType="0" />,
+    );
+
+    const message = getByTestId('message');
+
+    expect(message).toHaveTextContent('Not called');
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(onDownload).toHaveBeenCalled();
+    expect(message).toHaveTextContent('Bulk export called!');
   });
 });

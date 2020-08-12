@@ -590,11 +590,9 @@ const exportTasksByIdsResult = {
   },
 };
 
-export const createExportTasksByIdsQueryMock = () => {
-  return createGenericQueryMock(EXPORT_TASKS_BY_IDS, exportTasksByIdsResult, {
-    ids: ['foo'],
-  });
-};
+export const createExportTasksByIdsQueryMock = (
+  ids = ['foo', 'bar', 'lorem'],
+) => createGenericQueryMock(EXPORT_TASKS_BY_IDS, exportTasksByIdsResult, {ids});
 
 const exportTasksByFilterResult = {
   exportTasksByFilter: {

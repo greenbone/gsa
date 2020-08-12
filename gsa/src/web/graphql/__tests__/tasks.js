@@ -267,7 +267,7 @@ const ExportTasksByIdsComponent = () => {
 
 describe('useExportTasksByIds tests', () => {
   test('should export a list of tasks after user interaction', async () => {
-    const [mock, resultFunc] = createExportTasksByIdsQueryMock();
+    const [mock, resultFunc] = createExportTasksByIdsQueryMock(['foo']);
     const {render} = rendererWith({queryMocks: [mock]});
 
     render(<ExportTasksByIdsComponent />);
