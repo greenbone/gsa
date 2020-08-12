@@ -42,8 +42,6 @@ import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.users');
 
-const BUSINESS_PROCESS_MAPS_SETTING_ID = '3ce2d136-bb52-448a-93f0-20069566f877';
-
 const REPORT_COMPOSER_DEFAULTS_SETTING_ID =
   'b6b449ee-5d90-4ff0-af20-7e838c389d39';
 
@@ -376,39 +374,6 @@ export class UserCommand extends EntityCommand {
       cmd: 'save_setting',
       setting_id: REPORT_COMPOSER_DEFAULTS_SETTING_ID,
       setting_value: JSON.stringify(defaults),
-    });
-  }
-
-  getBusinessProcessMaps() {
-    return this.httpGet({
-      cmd: 'get_setting',
-      setting_id: BUSINESS_PROCESS_MAPS_SETTING_ID,
-    }).then(response => {
-      const {data} = response;
-      const {setting = {}} = data.get_settings.get_settings_response;
-      const {value} = setting;
-      let processMaps;
-
-      try {
-        processMaps = JSON.parse(value);
-      } catch (e) {
-        log.warn(
-          'Could not parse saved business process map. Returning empty object.',
-        );
-        processMaps = {};
-      }
-
-      return response.setData(processMaps);
-    });
-  }
-
-  saveBusinessProcessMaps(processMaps = {}) {
-    log.debug('Saving business process maps', processMaps);
-
-    return this.action({
-      cmd: 'save_setting',
-      setting_id: BUSINESS_PROCESS_MAPS_SETTING_ID,
-      setting_value: JSON.stringify(processMaps),
     });
   }
 
