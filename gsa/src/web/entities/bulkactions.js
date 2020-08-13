@@ -317,7 +317,7 @@ export const useBulkDeleteEntities = () => {
         selectionType === SelectionType.SELECTION_USER
           ? getEntityIds(selected)
           : getEntityIds(entities);
-      return deleteByIdsFunc(toDelete).then(onDeleted, onError);
+      return deleteByIdsFunc(toDelete).then(() => onDeleted(), onError);
     },
     [],
   );

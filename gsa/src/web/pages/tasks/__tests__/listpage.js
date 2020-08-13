@@ -30,7 +30,13 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
-import {createGetTasksQueryMock} from 'web/graphql/__mocks__/tasks';
+import {
+  createGetTasksQueryMock,
+  createExportTasksByFilterQueryMock,
+  createDeleteTasksByFilterQueryMock,
+  createDeleteTasksByIdsQueryMock,
+  createExportTasksByIdsQueryMock,
+} from 'web/graphql/__mocks__/tasks';
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import TasksListPage, {ToolBarIcons} from '../listpage';
@@ -221,23 +227,13 @@ describe('TasksListPage tests', () => {
     expect(icons[31]).toHaveAttribute('title', 'Export Task');
   });
 
-  test('should allow to export all displayed tasks ', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
+  test('should allow to bulk action on page contents', async () => {
     const gmp = {
       tasks: {
         get: getTasks,
         getSeverityAggregates: getAggregates,
         getHighResultsAggregates: getAggregates,
         getStatusAggregates: getAggregates,
-        deleteByFilter,
-        exportByFilter,
       },
       filters: {
         get: getFilters,
@@ -259,12 +255,19 @@ describe('TasksListPage tests', () => {
       first: 2,
     });
 
+    const [exportMock, exportResult] = createExportTasksByIdsQueryMock([
+      '12345',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteTasksByIdsQueryMock([
+      '12345',
+    ]);
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -295,17 +298,13 @@ describe('TasksListPage tests', () => {
 
     await wait();
 
-    // with listpage transformation to graphql and hooks the bulk actions are
-    // still missing. Thus they aren't clickable
-
-    // expect(deleteByFilter).toHaveBeenCalled();
-    expect(deleteByFilter).not.toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
 
     expect(icons[34]).toHaveAttribute('title', 'Export page contents');
     fireEvent.click(icons[34]);
 
-    // expect(exportByFilter).toHaveBeenCalled();
-    expect(exportByFilter).not.toHaveBeenCalled();
+    await wait();
+    expect(exportResult).toHaveBeenCalled();
   });
 });
 
