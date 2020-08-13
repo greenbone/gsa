@@ -1017,7 +1017,7 @@ TaskComponent.propTypes = {
   isLoadingSchedules: PropTypes.bool,
   isLoadingTags: PropTypes.bool,
   isLoadingTargets: PropTypes.bool,
-  loadAlerts: PropTypes.func.isRequired,
+  loadAlerts: PropTypes.func,
   loadCredentials: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
   loadTags: PropTypes.func.isRequired,
