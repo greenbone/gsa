@@ -69,25 +69,28 @@ jobs:
           paths:
             - ./gsa/node_modules
   build_gsad:
-    working_directory: ~/gsa
+    working_directory: /home/circleci/gsa
     docker:
       - image: greenbone/build-env-gsa-master-debian-stretch-gcc-gsad
     steps:
       - run:
-          working_directory: ~/gvm-libs
+          working_directory: /home/circleci/gvm-libs
           name: Checkout gvm-libs
           command: git clone --depth 1 https://github.com/greenbone/gvm-libs.git -b gvm-libs-10.0
       - run:
-          working_directory: ~/gvm-libs
+          working_directory: /home/circleci/gvm-libs
           name: Configure and compile gvm-libs
           command: pushd gvm-libs && mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release .. && make install && popd
       - checkout
       - run:
-          working_directory: ~/gsa/gsad
+          name: Fix permissions
+          command: chmod -R o+rw .
+      - run:
+          working_directory: /home/circleci/gsa/gsad
           name: Configure and compile
           command: mkdir build && rm -rf .git && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
   build_gsa:
-    working_directory: ~/gsa
+    working_directory: /home/circleci/gsa
     docker:
       - image: greenbone/build-env-gsa-debian-buster-node10-ng
     steps:
@@ -95,6 +98,9 @@ jobs:
       - restore_cache:
           keys:
             - v1-deps-{{ checksum "./gsa/yarn.lock"  }}
+      - run:
+          name: Fix permissions
+          command: chmod -R o+rw .
       - run:
           name: Configure and compile
           command: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release ../gsa && make install
