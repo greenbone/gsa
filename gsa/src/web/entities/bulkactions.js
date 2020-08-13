@@ -255,7 +255,6 @@ export const useBulkExportEntities = () => {
     }) => {
       if (selectionType === SelectionType.SELECTION_FILTER) {
         const exportFilter = filter.all().toFilterString();
-
         return exportByFilterFunc(exportFilter).then(response => {
           const filename = generateFilename({
             fileNameFormat: listExportFileName,
@@ -311,7 +310,7 @@ export const useBulkDeleteEntities = () => {
     }) => {
       if (selectionType === SelectionType.SELECTION_FILTER) {
         const filterAll = filter.all().toFilterString();
-        return deleteByFilterFunc(filterAll).then(onDeleted, onError);
+        return deleteByFilterFunc(filterAll).then(() => onDeleted(), onError);
       }
       const toDelete =
         selectionType === SelectionType.SELECTION_USER
