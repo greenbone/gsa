@@ -218,7 +218,9 @@ const onDownload = jest.fn();
 const queryResponse = {
   data: {
     response: {
-      ipsum: '<get_entities_response />',
+      ipsum: {
+        exportedEntities: '<get_entities_response />',
+      },
     },
   },
 };
@@ -258,7 +260,7 @@ const BulkExportEntitiesComponent = ({selectionType}) => {
 };
 
 describe('useBulkExportEntities tests', () => {
-  test('should call export by ids query', async () => {
+  test('should call export by ids query for export by page content', async () => {
     const {render} = rendererWith({store: true});
 
     const {getByTestId} = render(
@@ -275,6 +277,48 @@ describe('useBulkExportEntities tests', () => {
     await wait();
 
     expect(exportByIdsFunc).toHaveBeenCalled();
+    expect(onDownload).toHaveBeenCalled();
+    expect(message).toHaveTextContent('Bulk export called!');
+  });
+
+  test('should call export by ids query for export by selection', async () => {
+    const {render} = rendererWith({store: true});
+
+    const {getByTestId} = render(
+      <BulkExportEntitiesComponent selectionType="1" />,
+    );
+
+    const message = getByTestId('message');
+
+    expect(message).toHaveTextContent('Not called');
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(exportByIdsFunc).toHaveBeenCalled();
+    expect(onDownload).toHaveBeenCalled();
+    expect(message).toHaveTextContent('Bulk export called!');
+  });
+
+  test('should call export by filter query for export by filter', async () => {
+    const {render} = rendererWith({store: true});
+
+    const {getByTestId} = render(
+      <BulkExportEntitiesComponent selectionType="2" />,
+    );
+
+    const message = getByTestId('message');
+
+    expect(message).toHaveTextContent('Not called');
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(exportByFilterFunc).toHaveBeenCalled();
     expect(onDownload).toHaveBeenCalled();
     expect(message).toHaveTextContent('Bulk export called!');
   });
