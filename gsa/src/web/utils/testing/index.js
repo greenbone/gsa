@@ -177,11 +177,21 @@ export const createGenericQueryMock = (query, result, variables) => {
     data: result,
   });
 
-  const queryMock = {
-    request: {
+  let queryRequest;
+
+  if (hasValue(variables)) {
+    queryRequest = {
       query,
       variables,
-    },
+    };
+  } else {
+    queryRequest = {
+      query,
+    };
+  }
+
+  const queryMock = {
+    request: queryRequest,
     newData: resultFunc,
   };
   return [queryMock, resultFunc];
