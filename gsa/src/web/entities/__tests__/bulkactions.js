@@ -36,7 +36,11 @@ import {
   screen,
 } from 'web/utils/testing';
 
-import {BulkTagComponent, useBulkExportEntities} from '../bulkactions';
+import {
+  BulkTagComponent,
+  useBulkExportEntities,
+  useBulkDeleteEntities,
+} from '../bulkactions';
 
 const task1 = Task.fromObject({id: 'foo'});
 const task2 = Task.fromObject({id: 'bar'});
@@ -321,5 +325,112 @@ describe('useBulkExportEntities tests', () => {
     expect(exportByFilterFunc).toHaveBeenCalled();
     expect(onDownload).toHaveBeenCalled();
     expect(message).toHaveTextContent('Bulk export called!');
+  });
+});
+
+const deleteResponse = {
+  data: {
+    ok: true,
+  },
+};
+
+const deleteByIdsFunc = jest.fn().mockResolvedValue(deleteResponse);
+const deleteByFilterFunc = jest.fn().mockResolvedValue(deleteResponse);
+const onDeleted = jest.fn();
+
+const BulkDeleteEntitiesComponent = ({selectionType}) => {
+  const [message, setMessage] = useState('Not called');
+
+  const bulkDeleteEntities = useBulkDeleteEntities();
+
+  const handleBulkDeleteEntities = () => {
+    return bulkDeleteEntities({
+      entities: dummyEntities,
+      selected: selectedEntities,
+      filter: Filter.fromString('cat'),
+      resourceType: 'ipsum',
+      selectionType,
+      deleteByFilterFunc,
+      deleteByIdsFunc,
+      onDeleted,
+      onError: jest.fn(),
+    });
+  };
+
+  return (
+    <div>
+      <button
+        data-testid="load"
+        onClick={() =>
+          handleBulkDeleteEntities().then(setMessage('Bulk delete called!'))
+        }
+      />
+      <span data-testid="message">{message}</span>
+    </div>
+  );
+};
+
+describe('useBulkDeleteEntities tests', () => {
+  test('should call delete by ids query for delete by page content', async () => {
+    const {render} = rendererWith({store: true});
+
+    const {getByTestId} = render(
+      <BulkDeleteEntitiesComponent selectionType="0" />,
+    );
+
+    const message = getByTestId('message');
+
+    expect(message).toHaveTextContent('Not called');
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(deleteByIdsFunc).toHaveBeenCalled();
+    expect(onDeleted).toHaveBeenCalled();
+    expect(message).toHaveTextContent('Bulk delete called!');
+  });
+
+  test('should call delete by ids query for delete by selection', async () => {
+    const {render} = rendererWith({store: true});
+
+    const {getByTestId} = render(
+      <BulkDeleteEntitiesComponent selectionType="1" />,
+    );
+
+    const message = getByTestId('message');
+
+    expect(message).toHaveTextContent('Not called');
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(deleteByIdsFunc).toHaveBeenCalled();
+    expect(onDeleted).toHaveBeenCalled();
+    expect(message).toHaveTextContent('Bulk delete called!');
+  });
+
+  test('should call delete by filter query for delete by filter', async () => {
+    const {render} = rendererWith({store: true});
+
+    const {getByTestId} = render(
+      <BulkDeleteEntitiesComponent selectionType="2" />,
+    );
+
+    const message = getByTestId('message');
+
+    expect(message).toHaveTextContent('Not called');
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(deleteByFilterFunc).toHaveBeenCalled();
+    expect(onDeleted).toHaveBeenCalled();
+    expect(message).toHaveTextContent('Bulk delete called!');
   });
 });
