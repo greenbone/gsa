@@ -73,6 +73,7 @@ const CheckboxComponent = ({
       <Divider title={toolTipTitle}>
         <StyledInput
           {...other}
+          data-testid="checkbox"
           disabled={disabled}
           type="checkbox"
           onChange={handleChange}
