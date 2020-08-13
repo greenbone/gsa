@@ -219,17 +219,20 @@ describe('BulkTagComponent tests', () => {
 const dummyEntities = [{id: 'foo'}, {id: 'bar'}];
 const selectedEntities = [{id: 'foo'}, {id: 'bar'}, {id: 'lorem'}];
 const onDownload = jest.fn();
-const queryResponse = {
+const exportByFilterFunc = jest.fn().mockResolvedValue({
   data: {
-    response: {
-      ipsum: {
-        exportedEntities: '<get_entities_response />',
-      },
+    exportIpsumByFilter: {
+      exportedEntities: '<get_entities_response />',
     },
   },
-};
-const exportByFilterFunc = jest.fn().mockResolvedValue(queryResponse);
-const exportByIdsFunc = jest.fn().mockResolvedValue(queryResponse);
+});
+const exportByIdsFunc = jest.fn().mockResolvedValue({
+  data: {
+    exportIpsumByIds: {
+      exportedEntities: '<get_entities_response />',
+    },
+  },
+});
 
 const BulkExportEntitiesComponent = ({selectionType}) => {
   const [message, setMessage] = useState('Not called');

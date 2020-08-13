@@ -266,8 +266,8 @@ export const useBulkExportEntities = () => {
           const commandName =
             'export' + capitalizeFirstLetter(resourceType) + 'ByFilter';
 
-          const xml = response?.data;
-          const exportedEntities = xml[commandName]?.exportedEntities;
+          const xml = response.data;
+          const {exportedEntities} = xml[commandName];
           onDownload({filename, data: exportedEntities});
         }, onError);
       }
@@ -286,8 +286,8 @@ export const useBulkExportEntities = () => {
         const commandName =
           'export' + capitalizeFirstLetter(resourceType) + 'ByIds';
 
-        const xml = response?.data;
-        const exportedEntities = xml[commandName]?.exportedEntities;
+        const xml = response.data;
+        const {exportedEntities} = xml[commandName];
         onDownload({filename, data: exportedEntities});
       }, onError);
     },
