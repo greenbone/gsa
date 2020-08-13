@@ -171,8 +171,8 @@ const TasksListPage = () => {
   const bulkExportTasks = useBulkExportEntities();
 
   const [deleteTask] = useDeleteTask();
-const [deleteTasksByIds] = useDeleteTasksByIds();
-const [deleteTasksByFilter] = useDeleteTasksByFilter();
+    const [deleteTasksByIds] = useDeleteTasksByIds();
+    const [deleteTasksByFilter] = useDeleteTasksByFilter();
   const bulkDeleteTasks = useBulkDeleteEntities();
   const [cloneTask] = useCloneTask();
 
