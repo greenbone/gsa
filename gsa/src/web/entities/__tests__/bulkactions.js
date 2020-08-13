@@ -27,8 +27,6 @@ import Filter from 'gmp/models/filter';
 import Tag from 'gmp/models/tag';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
-import {useExportTasksByFilter, useExportTasksByIds} from 'web/graphql/tasks';
-import {createExportTasksByIdsQueryMock} from 'web/graphql/__mocks__/tasks';
 
 import {
   rendererWith,
@@ -214,25 +212,33 @@ describe('BulkTagComponent tests', () => {
   });
 });
 
-const tasks = [task1, task2, task3];
+const dummyEntities = [{id: 'foo'}, {id: 'bar'}];
+const selectedEntities = [{id: 'foo'}, {id: 'bar'}, {id: 'lorem'}];
 const onDownload = jest.fn();
+const queryResponse = {
+  data: {
+    response: {
+      ipsum: '<get_entities_response />',
+    },
+  },
+};
+const exportByFilterFunc = jest.fn().mockResolvedValue(queryResponse);
+const exportByIdsFunc = jest.fn().mockResolvedValue(queryResponse);
 
-const BulkExportTasksComponent = ({selectionType}) => {
+const BulkExportEntitiesComponent = ({selectionType}) => {
   const [message, setMessage] = useState('Not called');
 
-  const bulkExportTasks = useBulkExportEntities();
-  const exportTasksByFilter = useExportTasksByFilter();
-  const exportTasksByIds = useExportTasksByIds();
+  const bulkExportEntities = useBulkExportEntities();
 
   const handleExportEntities = () => {
-    return bulkExportTasks({
-      entities: tasks,
-      selected,
-      filter: Filter.fromString('foo'),
-      resourceType: 'tasks',
+    return bulkExportEntities({
+      entities: dummyEntities,
+      selected: selectedEntities,
+      filter: Filter.fromString('cat'),
+      resourceType: 'ipsum',
       selectionType,
-      exportByFilterFunc: exportTasksByFilter,
-      exportByIdsFunc: exportTasksByIds,
+      exportByFilterFunc,
+      exportByIdsFunc,
       onDownload,
       onError: jest.fn(),
     });
@@ -252,13 +258,11 @@ const BulkExportTasksComponent = ({selectionType}) => {
 };
 
 describe('useBulkExportEntities tests', () => {
-  test('should call export by ids query for correct entity', async () => {
-    const [mock, resultFunc] = createExportTasksByIdsQueryMock();
-
-    const {render} = rendererWith({queryMocks: [mock], store: true});
+  test('should call export by ids query', async () => {
+    const {render} = rendererWith({store: true});
 
     const {getByTestId} = render(
-      <BulkExportTasksComponent selectionType="0" />,
+      <BulkExportEntitiesComponent selectionType="0" />,
     );
 
     const message = getByTestId('message');
@@ -270,7 +274,7 @@ describe('useBulkExportEntities tests', () => {
 
     await wait();
 
-    expect(resultFunc).toHaveBeenCalled();
+    expect(exportByIdsFunc).toHaveBeenCalled();
     expect(onDownload).toHaveBeenCalled();
     expect(message).toHaveTextContent('Bulk export called!');
   });
