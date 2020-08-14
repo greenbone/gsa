@@ -361,7 +361,7 @@ describe('TasksListPage tests', () => {
       defaultFilterLoadingActions.success('task', defaultSettingFilter),
     );
 
-    render(<TasksListPage />);
+    const {element} = render(<TasksListPage />);
 
     await wait();
 
@@ -378,10 +378,11 @@ describe('TasksListPage tests', () => {
 
     expect(selected[1]).toHaveTextContent('Apply to selection');
 
-    await wait();
-    const checkbox = screen.getByTestId('checkbox');
+    const inputs = element.querySelectorAll('input');
 
-    fireEvent.click(checkbox);
+    //check task to be exported
+    fireEvent.click(inputs[1]);
+    await wait();
 
     const icons = screen.getAllByTestId('svg-icon');
 
