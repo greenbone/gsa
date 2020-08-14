@@ -310,6 +310,9 @@ export const useBulkDeleteEntities = () => {
     }) => {
       if (selectionType === SelectionType.SELECTION_FILTER) {
         const filterAll = filter.all().toFilterString();
+        // onDeleted is refetch. If we do .then(onDeleted, onError) then
+        // refetch will be done with the response. Refetch should use original
+        // parameters.
         return deleteByFilterFunc(filterAll).then(() => onDeleted(), onError);
       }
       const toDelete =

@@ -380,7 +380,7 @@ describe('TasksListPage tests', () => {
 
     const inputs = element.querySelectorAll('input');
 
-    //check task to be exported
+    // check task to be exported
     fireEvent.click(inputs[1]);
     await wait();
 
