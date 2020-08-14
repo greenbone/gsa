@@ -401,7 +401,7 @@ describe('TasksListPage tests', () => {
     expect(deleteResult).toHaveBeenCalled();
   });
 
-  test.only('should allow to bulk action on filtered tasks', async () => {
+  test('should allow to bulk action on filtered tasks', async () => {
     const gmp = {
       tasks: {
         get: getTasks,

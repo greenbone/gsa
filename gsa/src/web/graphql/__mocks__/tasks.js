@@ -374,7 +374,7 @@ export const createDeleteTasksByIdsQueryMock = taskIds => {
   return [queryMock, resultFunc];
 };
 
-export const createDeleteTasksByFilterQueryMock = filterString => {
+export const createDeleteTasksByFilterQueryMock = (filterString = 'foo') => {
   const queryResult = {
     data: {
       deleteTasksByFilter: {
@@ -600,10 +600,10 @@ const exportTasksByFilterResult = {
   },
 };
 
-export const createExportTasksByFilterQueryMock = () => {
+export const createExportTasksByFilterQueryMock = (filterString = 'foo') => {
   return createGenericQueryMock(
     EXPORT_TASKS_BY_FILTER,
     exportTasksByFilterResult,
-    {filterString: 'foo'},
+    {filterString},
   );
 };
