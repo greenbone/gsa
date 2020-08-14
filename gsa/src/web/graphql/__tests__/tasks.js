@@ -36,6 +36,8 @@ import {
   useStopTask,
   useResumeTask,
   useDeleteTasksByFilter,
+  useExportTasksByIds,
+  useExportTasksByFilter,
 } from '../tasks';
 import {
   createCloneTaskQueryMock,
@@ -51,6 +53,8 @@ import {
   createDeleteTasksByIdsQueryMock,
   createDeleteTasksByFilterQueryMock,
   createGetTaskQueryErrorMock,
+  createExportTasksByFilterQueryMock,
+  createExportTasksByIdsQueryMock,
 } from '../__mocks__/tasks';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -243,6 +247,56 @@ describe('useDeleteTasksByFilter tests', () => {
 
     render(<DeleteTasksByFilterComponent />);
     const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportTasksByIdsComponent = () => {
+  const exportTasksByIds = useExportTasksByIds();
+  return (
+    <button
+      data-testid="bulk-export"
+      onClick={() => exportTasksByIds(['foo'])}
+    />
+  );
+};
+
+describe('useExportTasksByIds tests', () => {
+  test('should export a list of tasks after user interaction', async () => {
+    const [mock, resultFunc] = createExportTasksByIdsQueryMock(['foo']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportTasksByIdsComponent />);
+    const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportTasksByFilterComponent = () => {
+  const exportTasksByFilter = useExportTasksByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportTasksByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportTasksByFilter tests', () => {
+  test('should export a list of tasks by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportTasksByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportTasksByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
     fireEvent.click(button);
 
     await wait();

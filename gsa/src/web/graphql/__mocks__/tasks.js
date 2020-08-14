@@ -32,9 +32,11 @@ import {
   STOP_TASK,
   RESUME_TASK,
   DELETE_TASKS_BY_FILTER,
+  EXPORT_TASKS_BY_FILTER,
+  EXPORT_TASKS_BY_IDS,
 } from 'web/graphql/tasks';
 
-import {deepFreeze} from 'web/utils/testing';
+import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
 const alert = deepFreeze({id: '151617', name: 'alert 1'});
 
@@ -372,7 +374,7 @@ export const createDeleteTasksByIdsQueryMock = taskIds => {
   return [queryMock, resultFunc];
 };
 
-export const createDeleteTasksByFilterQueryMock = filterString => {
+export const createDeleteTasksByFilterQueryMock = (filterString = 'foo') => {
   const queryResult = {
     data: {
       deleteTasksByFilter: {
@@ -580,4 +582,28 @@ export const createResumeTaskQueryMock = taskId => {
     newData: resultFunc,
   };
   return [queryMock, resultFunc];
+};
+
+const exportTasksByIdsResult = {
+  exportTasksByIds: {
+    exportedEntities: '<get_tasks_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportTasksByIdsQueryMock = (
+  ids = ['foo', 'bar', 'lorem'],
+) => createGenericQueryMock(EXPORT_TASKS_BY_IDS, exportTasksByIdsResult, {ids});
+
+const exportTasksByFilterResult = {
+  exportTasksByFilter: {
+    exportedEntities: '<get_tasks_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportTasksByFilterQueryMock = (filterString = 'foo') => {
+  return createGenericQueryMock(
+    EXPORT_TASKS_BY_FILTER,
+    exportTasksByFilterResult,
+    {filterString},
+  );
 };

@@ -17,10 +17,12 @@
  */
 
 import React, {useReducer, useEffect, useCallback} from 'react';
+import {useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
 import {getEntityType, apiType, typeName} from 'gmp/utils/entitytype';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 
 import TagsDialog from 'web/entities/tagsdialog';
 
@@ -32,6 +34,9 @@ import PropTypes from 'web/utils/proptypes';
 import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useGmp from 'web/utils/useGmp';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import {generateFilename} from 'web/utils/render';
+import useUserName from 'web/utils/useUserName';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 const initialState = {
   tag: {},
@@ -52,7 +57,7 @@ const reducer = (state, action) => {
   }
 };
 
-const BulkTagComponent = ({
+export const BulkTagComponent = ({
   entities,
   selected,
   filter,
@@ -229,4 +234,95 @@ BulkTagComponent.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default BulkTagComponent;
+export const useBulkExportEntities = () => {
+  const username = useUserName();
+  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
+  const listExportFileName = userDefaultsSelector.getValueByName(
+    'listexportfilename',
+  );
+
+  const bulkExportEntities = useCallback(
+    ({
+      entities,
+      selected,
+      filter,
+      resourceType,
+      selectionType,
+      exportByFilterFunc,
+      exportByIdsFunc,
+      onDownload,
+      onError,
+    }) => {
+      if (selectionType === SelectionType.SELECTION_FILTER) {
+        const exportFilter = filter.all().toFilterString();
+        return exportByFilterFunc(exportFilter).then(response => {
+          const filename = generateFilename({
+            fileNameFormat: listExportFileName,
+            resourceType,
+            username,
+          });
+
+          const commandName =
+            'export' + capitalizeFirstLetter(resourceType) + 'ByFilter';
+
+          const xml = response.data;
+          const {exportedEntities} = xml[commandName];
+          onDownload({filename, data: exportedEntities});
+        }, onError);
+      }
+      const toExport =
+        selectionType === SelectionType.SELECTION_USER
+          ? getEntityIds(selected)
+          : getEntityIds(entities);
+
+      return exportByIdsFunc(toExport).then(response => {
+        const filename = generateFilename({
+          fileNameFormat: listExportFileName,
+          resourceType,
+          username,
+        });
+
+        const commandName =
+          'export' + capitalizeFirstLetter(resourceType) + 'ByIds';
+
+        const xml = response.data;
+        const {exportedEntities} = xml[commandName];
+        onDownload({filename, data: exportedEntities});
+      }, onError);
+    },
+    [listExportFileName, username],
+  );
+
+  return bulkExportEntities;
+};
+
+export const useBulkDeleteEntities = () => {
+  const bulkDeleteEntities = useCallback(
+    ({
+      selectionType,
+      filter,
+      selected,
+      entities,
+      deleteByIdsFunc,
+      deleteByFilterFunc,
+      onDeleted,
+      onError,
+    }) => {
+      if (selectionType === SelectionType.SELECTION_FILTER) {
+        const filterAll = filter.all().toFilterString();
+        // onDeleted is refetch. If we do .then(onDeleted, onError) then
+        // refetch will be done with the response. Refetch should use original
+        // parameters.
+        return deleteByFilterFunc(filterAll).then(() => onDeleted(), onError);
+      }
+      const toDelete =
+        selectionType === SelectionType.SELECTION_USER
+          ? getEntityIds(selected)
+          : getEntityIds(entities);
+      return deleteByIdsFunc(toDelete).then(() => onDeleted(), onError);
+    },
+    [],
+  );
+
+  return bulkDeleteEntities;
+};

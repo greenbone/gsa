@@ -30,7 +30,13 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
-import {createGetTasksQueryMock} from 'web/graphql/__mocks__/tasks';
+import {
+  createGetTasksQueryMock,
+  createExportTasksByFilterQueryMock,
+  createDeleteTasksByFilterQueryMock,
+  createDeleteTasksByIdsQueryMock,
+  createExportTasksByIdsQueryMock,
+} from 'web/graphql/__mocks__/tasks';
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import TasksListPage, {ToolBarIcons} from '../listpage';
@@ -221,23 +227,13 @@ describe('TasksListPage tests', () => {
     expect(icons[31]).toHaveAttribute('title', 'Export Task');
   });
 
-  test('should allow to export all displayed tasks ', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
+  test('should allow to bulk action on page contents', async () => {
     const gmp = {
       tasks: {
         get: getTasks,
         getSeverityAggregates: getAggregates,
         getHighResultsAggregates: getAggregates,
         getStatusAggregates: getAggregates,
-        deleteByFilter,
-        exportByFilter,
       },
       filters: {
         get: getFilters,
@@ -259,12 +255,19 @@ describe('TasksListPage tests', () => {
       first: 2,
     });
 
+    const [exportMock, exportResult] = createExportTasksByIdsQueryMock([
+      '12345',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteTasksByIdsQueryMock([
+      '12345',
+    ]);
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -286,6 +289,12 @@ describe('TasksListPage tests', () => {
 
     const icons = screen.getAllByTestId('svg-icon');
 
+    expect(icons[34]).toHaveAttribute('title', 'Export page contents');
+    fireEvent.click(icons[34]);
+
+    await wait();
+    expect(exportResult).toHaveBeenCalled();
+
     expect(icons[33]).toHaveAttribute(
       'title',
       'Move page contents to trashcan',
@@ -295,17 +304,193 @@ describe('TasksListPage tests', () => {
 
     await wait();
 
-    // with listpage transformation to graphql and hooks the bulk actions are
-    // still missing. Thus they aren't clickable
+    expect(deleteResult).toHaveBeenCalled();
+  });
 
-    // expect(deleteByFilter).toHaveBeenCalled();
-    expect(deleteByFilter).not.toHaveBeenCalled();
+  test('should allow to bulk action on selected tasks', async () => {
+    const gmp = {
+      tasks: {
+        get: getTasks,
+        getSeverityAggregates: getAggregates,
+        getHighResultsAggregates: getAggregates,
+        getStatusAggregates: getAggregates,
+      },
+      filters: {
+        get: getFilters,
+      },
+      reportformats: {
+        get: getReportFormats,
+      },
+      dashboard: {
+        getSetting: getDashboardSetting,
+      },
+      reloadInterval,
+      settings: {manualUrl},
+      user: {renewSession, currentSettings, getSetting: getUserSetting},
+    };
 
-    expect(icons[34]).toHaveAttribute('title', 'Export page contents');
+    const filterString = 'foo=bar rows=2';
+    const [mock, resultFunc] = createGetTasksQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportTasksByIdsQueryMock([
+      '12345',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteTasksByIdsQueryMock([
+      '12345',
+    ]);
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+      queryMocks: [mock, exportMock, deleteMock],
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingFilter = Filter.fromString('foo=bar');
+    store.dispatch(
+      loadUserSettingsActions.success({rowsperpage: {value: '2'}}),
+    );
+    store.dispatch(
+      defaultFilterLoadingActions.success('task', defaultSettingFilter),
+    );
+
+    const {element} = render(<TasksListPage />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    const selectFields = screen.getAllByTestId('select-open-button');
+
+    fireEvent.click(selectFields[1]);
+    const selectItems = screen.getAllByTestId('select-item');
+
+    fireEvent.click(selectItems[1]);
+
+    const selected = screen.getAllByTestId('select-selected-value');
+
+    expect(selected[1]).toHaveTextContent('Apply to selection');
+
+    const inputs = element.querySelectorAll('input');
+
+    // check task to be exported
+    fireEvent.click(inputs[1]);
+    await wait();
+
+    const icons = screen.getAllByTestId('svg-icon');
+
+    expect(icons[28]).toHaveAttribute('title', 'Export selection');
+    fireEvent.click(icons[28]);
+
+    await wait();
+
+    expect(exportResult).toHaveBeenCalled();
+
+    expect(icons[27]).toHaveAttribute('title', 'Move selection to trashcan');
+
+    fireEvent.click(icons[27]);
+
+    await wait();
+
+    expect(deleteResult).toHaveBeenCalled();
+  });
+
+  test('should allow to bulk action on filtered tasks', async () => {
+    const gmp = {
+      tasks: {
+        get: getTasks,
+        getSeverityAggregates: getAggregates,
+        getHighResultsAggregates: getAggregates,
+        getStatusAggregates: getAggregates,
+      },
+      filters: {
+        get: getFilters,
+      },
+      reportformats: {
+        get: getReportFormats,
+      },
+      dashboard: {
+        getSetting: getDashboardSetting,
+      },
+      reloadInterval,
+      settings: {manualUrl},
+      user: {renewSession, currentSettings, getSetting: getUserSetting},
+    };
+
+    const filterString = 'foo=bar rows=2';
+    const [mock, resultFunc] = createGetTasksQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportTasksByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+    const [deleteMock, deleteResult] = createDeleteTasksByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+      queryMocks: [mock, exportMock, deleteMock],
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingFilter = Filter.fromString('foo=bar');
+    store.dispatch(
+      loadUserSettingsActions.success({rowsperpage: {value: '2'}}),
+    );
+    store.dispatch(
+      defaultFilterLoadingActions.success('task', defaultSettingFilter),
+    );
+
+    render(<TasksListPage />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    const selectFields = screen.getAllByTestId('select-open-button');
+
+    fireEvent.click(selectFields[1]);
+    const selectItems = screen.getAllByTestId('select-item');
+
+    fireEvent.click(selectItems[2]);
+
+    await wait();
+
+    const selected = screen.getAllByTestId('select-selected-value');
+
+    expect(selected[1]).toHaveTextContent('Apply to all filtered');
+
+    const icons = screen.getAllByTestId('svg-icon');
+
+    expect(icons[34]).toHaveAttribute('title', 'Export all filtered');
     fireEvent.click(icons[34]);
 
-    // expect(exportByFilter).toHaveBeenCalled();
-    expect(exportByFilter).not.toHaveBeenCalled();
+    await wait();
+
+    expect(exportResult).toHaveBeenCalled();
+
+    expect(icons[33]).toHaveAttribute('title', 'Move all filtered to trashcan');
+
+    fireEvent.click(icons[33]);
+
+    await wait();
+
+    expect(deleteResult).toHaveBeenCalled();
   });
 });
 

@@ -45,7 +45,11 @@ import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import EntitiesPage from 'web/entities/page';
-import BulkTagComponent from 'web/entities/bulktagcomponent';
+import {
+  BulkTagComponent,
+  useBulkExportEntities,
+  useBulkDeleteEntities,
+} from 'web/entities/bulkactions';
 
 import {
   useLazyGetTasks,
@@ -53,10 +57,11 @@ import {
   useDeleteTasksByIds,
   useDeleteTasksByFilter,
   useCloneTask,
+  useExportTasksByFilter,
+  useExportTasksByIds,
 } from 'web/graphql/tasks';
 
 import PropTypes from 'web/utils/proptypes';
-import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
 import useGmpSettings from 'web/utils/useGmpSettings';
@@ -125,21 +130,13 @@ ToolBarIcons.propTypes = {
 };
 
 const TasksListPage = () => {
+  // Page methods and hooks
   const gmpSettings = useGmpSettings();
+  const [downloadRef, handleDownload] = useDownload();
   const [, renewSession] = useUserSessionTimeout();
-  const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
   const [filter, isLoadingFilter] = usePageFilter('task');
   const prevFilter = usePrevious(filter);
   const simpleFilter = filter.withoutView();
-  const [
-    getTasks,
-    {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
-  ] = useLazyGetTasks();
-
-  const [deleteTask] = useDeleteTask();
-  const [deleteTasksByIds] = useDeleteTasksByIds();
-  const [deleteTasksByFilter] = useDeleteTasksByFilter();
-  const [cloneTask] = useCloneTask();
   const {
     change: changeFilter,
     remove: removeFilter,
@@ -150,7 +147,6 @@ const TasksListPage = () => {
     closeDialog: closeNotificationDialog,
     showError,
   } = useDialogNotification();
-  const [downloadRef, handleDownload] = useDownload();
   const {
     selectionType,
     selected = [],
@@ -162,6 +158,23 @@ const TasksListPage = () => {
     filter,
     changeFilter,
   );
+  const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
+
+  // Task list state variables and methods
+  const [
+    getTasks,
+    {counts, tasks, error, loading: isLoading, refetch, called, pageInfo},
+  ] = useLazyGetTasks();
+
+  const exportTasksByFilter = useExportTasksByFilter();
+  const exportTasksByIds = useExportTasksByIds();
+  const bulkExportTasks = useBulkExportEntities();
+
+  const [deleteTask] = useDeleteTask();
+    const [deleteTasksByIds] = useDeleteTasksByIds();
+    const [deleteTasksByFilter] = useDeleteTasksByFilter();
+  const bulkDeleteTasks = useBulkDeleteEntities();
+  const [cloneTask] = useCloneTask();
 
   const timeoutFunc = useCallback(
     ({isVisible}) => {
@@ -181,68 +194,7 @@ const TasksListPage = () => {
     timeoutFunc,
   );
 
-  const handleCloneTask = useCallback(
-    task => cloneTask(task.id).then(refetch, showError),
-    [cloneTask, refetch, showError],
-  );
-  const handleDeleteTask = useCallback(
-    task => deleteTask(task.id).then(refetch, showError),
-    [deleteTask, refetch, showError],
-  );
-
-  const handleBulkDeleteTask = () => {
-    if (selectionType === SelectionType.SELECTION_FILTER) {
-      const filterAll = filter.all().toFilterString();
-      return deleteTasksByFilter(filterAll).then(refetch, showError);
-    }
-    const tasksToDelete =
-      selectionType === SelectionType.SELECTION_USER
-        ? getEntityIds(selected)
-        : getEntityIds(tasks);
-    return deleteTasksByIds(tasksToDelete).then(refetch, showError);
-  };
-
-  const openTagsDialog = () => {
-    renewSession();
-    setTagsDialogVisible(true);
-  };
-
-  const closeTagsDialog = () => {
-    renewSession();
-    setTagsDialogVisible(false);
-  };
-
-  useEffect(() => {
-    // load tasks initially after the filter is resolved
-    if (!isLoadingFilter && hasValue(filter) && !called) {
-      getTasks({
-        filterString: filter.toFilterString(),
-        first: filter.get('rows'),
-      });
-    }
-  }, [isLoadingFilter, filter, getTasks, called]);
-
-  useEffect(() => {
-    // reload if filter has changed
-    if (hasValue(refetch) && !filter.equals(prevFilter)) {
-      refetch({
-        filterString: filter.toFilterString(),
-        first: undefined,
-        last: undefined,
-      });
-    }
-  }, [filter, prevFilter, simpleFilter, refetch]);
-
-  useEffect(() => {
-    // start reloading if tasks are available and no timer is running yet
-    if (hasValue(tasks) && !hasRunningTimer) {
-      startReload();
-    }
-  }, [tasks, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // stop reload on unmount
-  useEffect(() => stopReload, [stopReload]);
-
+  // Pagination methods
   const getNextTasks = () => {
     refetch({
       filterString: simpleFilter.toFilterString(),
@@ -282,6 +234,86 @@ const TasksListPage = () => {
       last: undefined,
     });
   };
+
+  // Task methods
+  const handleCloneTask = useCallback(
+    task => cloneTask(task.id).then(refetch, showError),
+    [cloneTask, refetch, showError],
+  );
+  const handleDeleteTask = useCallback(
+    task => deleteTask(task.id).then(refetch, showError),
+    [deleteTask, refetch, showError],
+  );
+
+  // Bulk action methods
+  const openTagsDialog = () => {
+    renewSession();
+    setTagsDialogVisible(true);
+  };
+
+  const closeTagsDialog = () => {
+    renewSession();
+    setTagsDialogVisible(false);
+  };
+
+  const handleBulkDeleteTasks = () => {
+    return bulkDeleteTasks({
+      selectionType,
+      filter,
+      selected,
+      entities: tasks,
+      deleteByIdsFunc: deleteTasksByIds,
+      deleteByFilterFunc: deleteTasksByFilter,
+      onDeleted: refetch,
+      onError: showError,
+    });
+  };
+
+  const handleBulkExportTasks = () => {
+    return bulkExportTasks({
+      entities: tasks,
+      selected,
+      filter,
+      resourceType: 'tasks',
+      selectionType,
+      exportByFilterFunc: exportTasksByFilter,
+      exportByIdsFunc: exportTasksByIds,
+      onDownload: handleDownload,
+      onError: showError,
+    });
+  };
+
+  // Side effects
+  useEffect(() => {
+    // load tasks initially after the filter is resolved
+    if (!isLoadingFilter && hasValue(filter) && !called) {
+      getTasks({
+        filterString: filter.toFilterString(),
+        first: filter.get('rows'),
+      });
+    }
+  }, [isLoadingFilter, filter, getTasks, called]);
+
+  useEffect(() => {
+    // reload if filter has changed
+    if (hasValue(refetch) && !filter.equals(prevFilter)) {
+      refetch({
+        filterString: filter.toFilterString(),
+        first: undefined,
+        last: undefined,
+      });
+    }
+  }, [filter, prevFilter, simpleFilter, refetch]);
+
+  useEffect(() => {
+    // start reloading if tasks are available and no timer is running yet
+    if (hasValue(tasks) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [tasks, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
 
   return (
     <TaskComponent
@@ -354,7 +386,8 @@ const TasksListPage = () => {
             toolBarIcons={ToolBarIcons}
             onAdvancedTaskWizardClick={advancedtaskwizard}
             onContainerTaskCreateClick={createcontainer}
-            onDeleteBulk={handleBulkDeleteTask}
+            onDeleteBulk={handleBulkDeleteTasks}
+            onDownloadBulk={handleBulkExportTasks}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}

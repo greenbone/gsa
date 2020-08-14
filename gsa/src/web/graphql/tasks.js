@@ -486,3 +486,57 @@ export const useResumeTask = options => {
   );
   return [resumeTask, data];
 };
+
+export const EXPORT_TASKS_BY_FILTER = gql`
+  mutation exportTasksByFilter($filterString: String) {
+    exportTasksByFilter(filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportTasksByFilter = options => {
+  const [queryExportTasksByFilter] = useMutation(
+    EXPORT_TASKS_BY_FILTER,
+    options,
+  );
+  const exportTasksByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportTasksByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportTasksByFilter, options],
+  );
+
+  return exportTasksByFilter;
+};
+
+export const EXPORT_TASKS_BY_IDS = gql`
+  mutation exportTasksByIds($ids: [UUID]!) {
+    exportTasksByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportTasksByIds = options => {
+  const [queryExportTasksByIds] = useMutation(EXPORT_TASKS_BY_IDS, options);
+
+  const exportTasksByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    taskIds =>
+      queryExportTasksByIds({
+        ...options,
+        variables: {
+          ids: taskIds,
+        },
+      }),
+    [queryExportTasksByIds, options],
+  );
+
+  return exportTasksByIds;
+};
