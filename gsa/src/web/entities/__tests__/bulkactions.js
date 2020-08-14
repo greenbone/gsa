@@ -42,6 +42,11 @@ import {
   useBulkDeleteEntities,
 } from '../bulkactions';
 
+afterEach(() => {
+  // if not, then the call count of each function will persist between tests
+  jest.clearAllMocks();
+});
+
 const task1 = Task.fromObject({id: 'foo'});
 const task2 = Task.fromObject({id: 'bar'});
 const task3 = Task.fromObject({id: 'lorem'});
@@ -284,6 +289,7 @@ describe('useBulkExportEntities tests', () => {
     await wait();
 
     expect(exportByIdsFunc).toHaveBeenCalled();
+    expect(exportByFilterFunc).not.toHaveBeenCalled();
     expect(onDownload).toHaveBeenCalled();
     expect(message).toHaveTextContent('Bulk export called!');
   });
@@ -305,6 +311,7 @@ describe('useBulkExportEntities tests', () => {
     await wait();
 
     expect(exportByIdsFunc).toHaveBeenCalled();
+    expect(exportByFilterFunc).not.toHaveBeenCalled();
     expect(onDownload).toHaveBeenCalled();
     expect(message).toHaveTextContent('Bulk export called!');
   });
@@ -326,6 +333,7 @@ describe('useBulkExportEntities tests', () => {
     await wait();
 
     expect(exportByFilterFunc).toHaveBeenCalled();
+    expect(exportByIdsFunc).not.toHaveBeenCalled();
     expect(onDownload).toHaveBeenCalled();
     expect(message).toHaveTextContent('Bulk export called!');
   });
@@ -391,6 +399,7 @@ describe('useBulkDeleteEntities tests', () => {
     await wait();
 
     expect(deleteByIdsFunc).toHaveBeenCalled();
+    expect(deleteByFilterFunc).not.toHaveBeenCalled();
     expect(onDeleted).toHaveBeenCalled();
     expect(message).toHaveTextContent('Bulk delete called!');
   });
@@ -412,6 +421,7 @@ describe('useBulkDeleteEntities tests', () => {
     await wait();
 
     expect(deleteByIdsFunc).toHaveBeenCalled();
+    expect(deleteByFilterFunc).not.toHaveBeenCalled();
     expect(onDeleted).toHaveBeenCalled();
     expect(message).toHaveTextContent('Bulk delete called!');
   });
@@ -433,6 +443,7 @@ describe('useBulkDeleteEntities tests', () => {
     await wait();
 
     expect(deleteByFilterFunc).toHaveBeenCalled();
+    expect(deleteByIdsFunc).not.toHaveBeenCalled();
     expect(onDeleted).toHaveBeenCalled();
     expect(message).toHaveTextContent('Bulk delete called!');
   });
