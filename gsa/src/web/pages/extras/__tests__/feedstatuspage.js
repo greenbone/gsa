@@ -47,13 +47,13 @@ const scapFeed = new Feed({
 const certFeed = new Feed({
   name: 'Greenbone Community CERT Feed',
   type: 'CERT',
-  version: 202007231003,
+  version: 202005231003,
 });
 
 const gvmdDataFeed = new Feed({
   name: 'Greenbone Community gvmd Data Feed',
   type: 'GVMD_DATA',
-  version: 202007221009,
+  version: 202006221009,
   currently_syncing: {timestamp: 'foo'},
 });
 
@@ -161,18 +161,33 @@ describe('Feed status page tests', () => {
     // Feed versions
     expect(element).toHaveTextContent('20200724T1005');
     expect(element).toHaveTextContent('20200723T0130');
-    expect(element).toHaveTextContent('20200723T1003');
-    expect(element).toHaveTextContent('20200722T1009');
+    expect(element).toHaveTextContent('20200523T1003');
+    expect(element).toHaveTextContent('20200622T1009');
 
     // Feed Status
 
     const ageText = element.querySelectorAll('strong');
+    const updateMsgs = getAllByTestId('update-msg');
 
     expect(ageText.length).toEqual(4);
+    expect(updateMsgs.length).toEqual(4);
+
+    // Not too old and not currently syncing
     expect(ageText[0]).toHaveTextContent('Current');
+    expect(updateMsgs[0]).toHaveTextContent('');
+
     expect(ageText[1]).toHaveTextContent('2 days old');
-    expect(ageText[2]).toHaveTextContent('Current');
+    expect(updateMsgs[1]).toHaveTextContent('');
+
+    // CERT feed is too old but is not currently syncing
+    expect(ageText[2]).toHaveTextContent('Too old (62 days)');
+    expect(updateMsgs[2]).toHaveTextContent(
+      'Please check the automatic synchronization of your system.',
+    );
+
+    // GVMD_DATA feed is too old but IS currently syncing
     expect(ageText[3]).toHaveTextContent('Update in progress...');
+    expect(updateMsgs[3]).toHaveTextContent('');
   });
 });
 
