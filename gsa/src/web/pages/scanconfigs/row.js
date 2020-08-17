@@ -38,8 +38,6 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {SCAN_CONFIGS_FROM_FEED} from 'web/pages/extras/feedstatuspage';
-
 import PropTypes from 'web/utils/proptypes';
 import {na} from 'web/utils/render';
 
@@ -62,7 +60,7 @@ const ScanConfigActions = withEntitiesActions(
       />
       <EditIcon
         displayName={_('Scan Config')}
-        disabled={SCAN_CONFIGS_FROM_FEED.includes(entity.id)}
+        disabled={entity.predefined}
         name="config"
         entity={entity}
         onClick={onScanConfigEditClick}

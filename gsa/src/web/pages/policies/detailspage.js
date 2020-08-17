@@ -50,8 +50,6 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {COMPLIANCE_POLICIES_FROM_FEED} from 'web/pages/extras/feedstatuspage';
-
 import {selector, loadEntity} from 'web/store/entities/policies';
 
 import {
@@ -96,7 +94,7 @@ export const ToolBarIcons = withCapabilities(
           onClick={onPolicyCloneClick}
         />
         <EditIcon
-          disabled={COMPLIANCE_POLICIES_FROM_FEED.includes(entity.id)}
+          disabled={entity.predefined}
           entity={entity}
           displayName={_('Policy')}
           onClick={onPolicyEditClick}

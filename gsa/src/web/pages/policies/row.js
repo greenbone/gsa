@@ -36,8 +36,6 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {COMPLIANCE_POLICIES_FROM_FEED} from 'web/pages/extras/feedstatuspage';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import compose from 'web/utils/compose';
@@ -64,7 +62,7 @@ const PoliciesActions = compose(
       />
       <EditIcon
         displayName={_('Policy')}
-        disabled={COMPLIANCE_POLICIES_FROM_FEED.includes(entity.id)}
+        disabled={entity.predefined}
         name="config"
         entity={entity}
         onClick={onPolicyEditClick}
