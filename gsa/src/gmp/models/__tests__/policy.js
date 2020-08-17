@@ -246,6 +246,14 @@ describe('Policy model tests', () => {
 
     expect(policy.audits).toEqual([]);
   });
+
+  test('should parse predefined as yes/no correctly', () => {
+    const policy = Policy.fromElement({predefined: '0'});
+    const policy2 = Policy.fromElement({predefined: '1'});
+
+    expect(policy.predefined).toEqual(false);
+    expect(policy2.predefined).toEqual(true);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
