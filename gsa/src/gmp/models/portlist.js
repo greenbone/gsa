@@ -20,7 +20,7 @@ import {map} from '../utils/array';
 
 import Model, {parseModelFromElement} from '../model';
 
-import {parseInt} from '../parser';
+import {parseInt, parseBoolean} from '../parser';
 
 class PortRange extends Model {
   static entityType = 'portrange';
@@ -71,6 +71,9 @@ class PortList extends Model {
     } else {
       ret.targets = [];
     }
+
+    ret.predefined = parseBoolean(element.predefined);
+
     return ret;
   }
 }
