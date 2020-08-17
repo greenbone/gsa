@@ -251,7 +251,7 @@ const FeedStatus = ({feeds}) => {
                 <TableData>
                   <Divider wrap>
                     <strong>{renderFeedStatus(feed)}</strong>
-                    <span>{renderCheck(feed)}</span>
+                    <span data-testid="update-msg">{renderCheck(feed)}</span>
                   </Divider>
                 </TableData>
               </TableRow>
