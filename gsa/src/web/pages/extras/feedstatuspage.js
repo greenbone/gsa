@@ -78,7 +78,7 @@ const ToolBarIcons = () => (
 const renderCheck = feed => {
   const age = feed.age.asDays();
 
-  return age >= 10
+  return age >= 30 && !hasValue(feed.currentlySyncing)
     ? _('Please check the automatic synchronization of your system.')
     : '';
 };
@@ -90,7 +90,7 @@ const renderFeedStatus = feed => {
 
   const age = parseInt(feed.age.asDays());
 
-  if (age >= 10) {
+  if (age >= 30) {
     return _('Too old ({{age}} days)', {age});
   }
 
