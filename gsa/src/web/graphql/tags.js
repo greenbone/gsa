@@ -18,9 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {useMutation} from '@apollo/react-hooks';
-
-import gql from 'graphql-tag';
+import {gql, useMutation} from '@apollo/client';
 
 import {getEntityType} from 'gmp/utils/entitytype';
 

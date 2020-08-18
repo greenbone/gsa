@@ -20,8 +20,7 @@ import React from 'react';
 import {useHistory} from 'react-router-dom';
 
 import styled, {keyframes} from 'styled-components';
-import gql from 'graphql-tag';
-import {useMutation} from '@apollo/react-hooks';
+import {gql, useMutation} from '@apollo/client';
 
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';

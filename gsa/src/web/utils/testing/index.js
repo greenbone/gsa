@@ -45,7 +45,7 @@ import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
-import {MockedProvider} from '@apollo/react-testing';
+import {MockedProvider} from '@apollo/client/testing';
 
 export * from '@testing-library/react';
 
