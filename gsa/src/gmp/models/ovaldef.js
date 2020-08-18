@@ -75,10 +75,10 @@ class Ovaldef extends Info {
   static parseElement(element) {
     const ret = super.parseElement(element, 'ovaldef');
 
-    ret.severity = parseSeverity(element.max_cvss);
+    ret.severity = parseSeverity(ret.max_cvss);
     delete ret.max_cvss;
 
-    const {raw_data} = element;
+    const {raw_data} = ret;
 
     if (isDefined(raw_data) && isDefined(raw_data.definition)) {
       const {definition} = raw_data;
