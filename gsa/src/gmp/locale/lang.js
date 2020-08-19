@@ -15,8 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import 'core-js/features/string/includes';
-import 'core-js/features/array/includes';
 
 import i18next from 'i18next';
 import XHRBackend from 'i18next-xhr-backend';
