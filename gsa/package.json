@@ -28,7 +28,6 @@
     "@vx/gradient": "^0.0.183",
     "@vx/shape": "^0.0.179",
     "babel-loader": "8.1.0",
-    "core-js": "^3.8.3",
     "d3-cloud": "^1.2.5",
     "d3-color": "^2.0.0",
     "d3-force": "^2.0.0",
