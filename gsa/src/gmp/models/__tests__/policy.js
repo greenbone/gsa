@@ -247,7 +247,7 @@ describe('Policy model tests', () => {
     expect(policy.audits).toEqual([]);
   });
 
-  test('should parse predefined as yes/no correctly', () => {
+  test('should parse predefined as boolean correctly', () => {
     const policy = Policy.fromElement({predefined: '0'});
     const policy2 = Policy.fromElement({predefined: '1'});
 
