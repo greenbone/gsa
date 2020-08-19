@@ -250,6 +250,14 @@ describe('ScanConfig model tests', () => {
 
     expect(scanConfig.tasks).toEqual([]);
   });
+
+  test('should parse predefined as boolean correctly', () => {
+    const scanConfig = ScanConfig.fromElement({predefined: '0'});
+    const scanConfig2 = ScanConfig.fromElement({predefined: '1'});
+
+    expect(scanConfig.predefined).toEqual(false);
+    expect(scanConfig2.predefined).toEqual(true);
+  });
 });
 
 describe('ScanConfigs model function test', () => {

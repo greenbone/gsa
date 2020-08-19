@@ -42,8 +42,6 @@ import {renderYesNo} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
 
-import {REPORT_FORMATS_FROM_FEED} from 'web/pages/extras/feedstatuspage';
-
 const Actions = compose(
   withCapabilities,
   withEntitiesActions,
@@ -64,7 +62,7 @@ const Actions = compose(
       />
       <EditIcon
         displayName={_('Report Format')}
-        disabled={REPORT_FORMATS_FROM_FEED.includes(entity.id)}
+        disabled={entity.predefined}
         name="report_format"
         entity={entity}
         onClick={onReportFormatEditClick}
