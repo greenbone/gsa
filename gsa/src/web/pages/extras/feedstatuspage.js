@@ -128,14 +128,6 @@ export const SCAN_CONFIGS_FROM_FEED = [
   'bbca7412-a950-11e3-9109-406186ea4fc5', // System Discovery
 ];
 
-export const composeObjFilter = (objectIds = []) => {
-  let filterString = '';
-
-  objectIds.forEach(id => (filterString += 'uuid=' + id + ' '));
-
-  return filterString;
-};
-
 const FeedStatus = ({feeds}) => {
   return (
     <React.Fragment>
@@ -207,37 +199,25 @@ const FeedStatus = ({feeds}) => {
                   )}
                   {feed.feed_type === GVMD_DATA_FEED && (
                     <IconDivider>
-                      <Link
-                        to="policies"
-                        filter={composeObjFilter(COMPLIANCE_POLICIES_FROM_FEED)}
-                      >
+                      <Link to="policies" filter="predefined=1">
                         <IconDivider align={['start', 'center']}>
                           <PolicyIcon size="medium" />
                           <span>{_('Compliance Policies')}</span>
                         </IconDivider>
                       </Link>
-                      <Link
-                        to="portlists"
-                        filter={composeObjFilter(PORT_LISTS_FROM_FEED)}
-                      >
+                      <Link to="portlists" filter="predefined=1">
                         <IconDivider align={['start', 'center']}>
                           <PortListIcon size="medium" />
                           <span>{_('Port Lists')}</span>
                         </IconDivider>
                       </Link>
-                      <Link
-                        to="reportformats"
-                        filter={composeObjFilter(REPORT_FORMATS_FROM_FEED)}
-                      >
+                      <Link to="reportformats" filter="predefined=1">
                         <IconDivider align={['start', 'center']}>
                           <ReportFormatIcon size="medium" />
                           <span>{_('Report Formats')}</span>
                         </IconDivider>
                       </Link>
-                      <Link
-                        to="scanconfigs"
-                        filter={composeObjFilter(SCAN_CONFIGS_FROM_FEED)}
-                      >
+                      <Link to="scanconfigs" filter="predefined=1">
                         <IconDivider align={['start', 'center']}>
                           <ScanConfigIcon size="medium" />
                           <span>{_('Scan Configs')}</span>
