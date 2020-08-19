@@ -16,8 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'core-js/features/array/find';
-
 import memoize from 'memoize-one';
 
 import React from 'react';

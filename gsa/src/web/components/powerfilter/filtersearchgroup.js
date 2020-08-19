@@ -19,8 +19,6 @@
 /* this is experimental. trying to consolidate all filter terms whose
  * method should be ~'value' into one. */
 
-import 'core-js/features/string/starts-with';
-
 import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
