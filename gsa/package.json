@@ -103,11 +103,12 @@
     "resetMocks": false
   },
   "browserslist": [
-    ">0.2%",
+    ">0.5%",
+    "last 3 version",
     "not dead",
     "not ie <= 11",
     "not op_mini all",
-    "Firefox ESR"
+    "ff ESR"
   ],
   "husky": {
     "hooks": {
