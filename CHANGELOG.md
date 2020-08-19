@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 ### Removed
-- Removed Internet Explorer 11 support
+- Removed Internet Explorer 11 support [#2399](https://github.com/greenbone/gsa/pull/2399)
 - Removed parsing and testing of textExcerpt [#2316](https://github.com/greenbone/gsa/pull/2316)
 - Removed extra parsing of comment and summary in Model [#2309](https://github.com/greenbone/gsa/pull/2309)
 
