@@ -16,8 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'core-js/features/string/includes';
-
 import React, {useEffect, useCallback, useState, useReducer} from 'react';
 
 import {useDispatch, useSelector} from 'react-redux';

@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import 'core-js/features/array/includes';
 
 import React from 'react';
 
@@ -270,10 +269,7 @@ export default compose(
     entitiesSelector,
     loadEntities,
   }),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(UsersPage);
 
 // vim: set ts=2 sw=2 tw=80:

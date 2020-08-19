@@ -16,8 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'core-js/features/string/includes';
-
 import React from 'react';
 
 import {connect} from 'react-redux';
@@ -717,10 +715,7 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(DeltaReportDetailsWrapper);
 
 // vim: set ts=2 sw=2 tw=80:

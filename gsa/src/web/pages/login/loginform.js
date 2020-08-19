@@ -145,7 +145,7 @@ class LoginForm extends React.Component {
               <Error>{_('Warning: You are using IE11')}</Error>
               <p>
                 {_(
-                  'You are using Internet Explorer 11. You might encounter appearance and performance issues.',
+                  'You are using Internet Explorer 11. This browser is not supported anymore. Please use an up-to-date alternative or contact your system administrator.',
                 )}
               </p>
             </Panel>
@@ -156,7 +156,7 @@ class LoginForm extends React.Component {
           <StyledDivColumn>
             <StyledDivRow>
               <ProductImage />
-              {showLogin && (
+              {showLogin && !isIE11 && (
                 <Layout flex="column">
                   <FormGroup title={_('Username')} titleSize="4">
                     <TextField

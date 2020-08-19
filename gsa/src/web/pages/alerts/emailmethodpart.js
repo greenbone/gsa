@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import 'core-js/features/string/starts-with';
 
 import React from 'react';
 
@@ -247,9 +246,6 @@ EmailMethodPart.propTypes = {
   onNewCredentialClick: PropTypes.func,
 };
 
-export default compose(
-  withCapabilities,
-  withPrefix,
-)(EmailMethodPart);
+export default compose(withCapabilities, withPrefix)(EmailMethodPart);
 
 // vim: set ts=2 sw=2 tw=80:

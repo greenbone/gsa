@@ -16,8 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'core-js/features/array/find';
-
 import memoize from 'memoize-one';
 
 import React from 'react';
@@ -109,12 +107,8 @@ const getXScale = memoize((data = [], timeline = false, width) => {
     xDomain =
       data.length === 1
         ? [
-            date(data[0].x)
-              .subtract(1, 'day')
-              .toDate(),
-            date(data[0].x)
-              .add(1, 'day')
-              .toDate(),
+            date(data[0].x).subtract(1, 'day').toDate(),
+            date(data[0].x).add(1, 'day').toDate(),
           ]
         : [date(xMin).toDate(), date(xMax).toDate()];
   } else {

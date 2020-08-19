@@ -15,8 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import 'core-js/features/array/find-index';
-import 'core-js/features/array/includes';
 
 import {isDefined, isString, isArray, hasValue} from '../utils/identity';
 import {forEach, map} from '../utils/array';
