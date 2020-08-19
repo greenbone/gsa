@@ -19,7 +19,7 @@ import React from 'react';
 
 import {rendererWith, wait} from 'web/utils/testing';
 
-import FeedStatus, {composeObjFilter} from '../feedstatuspage';
+import FeedStatus from '../feedstatuspage';
 import {Feed} from 'gmp/commands/feedstatus';
 
 import Response from 'gmp/http/response';
@@ -118,21 +118,18 @@ describe('Feed status page tests', () => {
     expect(links[4]).toHaveAttribute('href', '/ovaldefs');
     expect(links[5]).toHaveAttribute('href', '/certbunds');
     expect(links[6]).toHaveAttribute('href', '/dfncerts');
-    expect(links[7]).toHaveAttribute(
-      'href',
-      '/policies?filter=uuid%3Dc4b7c0cb-6502-4809-b034-8e635311b3e6%20',
-    );
+    expect(links[7]).toHaveAttribute('href', '/policies?filter=predefined%3D1');
     expect(links[8]).toHaveAttribute(
       'href',
-      '/portlists?filter=uuid%3D33d0cd82-57c6-11e1-8ed1-406186ea4fc5%20uuid%3D4a4717fe-57d2-11e1-9a26-406186ea4fc5%20uuid%3D730ef368-57e2-11e1-a90f-406186ea4fc5%20',
+      '/portlists?filter=predefined%3D1',
     );
     expect(links[9]).toHaveAttribute(
       'href',
-      '/reportformats?filter=uuid%3D5057e5cc-b825-11e4-9d0e-28d24461215b%20uuid%3Dc1645568-627a-11e3-a660-406186ea4fc5%20uuid%3D77bd6c4a-1f62-11e1-abf0-406186ea4fc5%20uuid%3Dc402cc3e-b531-11e1-9163-406186ea4fc5%20uuid%3Da3810a62-1f62-11e1-9219-406186ea4fc5%20uuid%3Da994b278-1f62-11e1-96ac-406186ea4fc5%20',
+      '/reportformats?filter=predefined%3D1',
     );
     expect(links[10]).toHaveAttribute(
       'href',
-      '/scanconfigs?filter=uuid%3Dd21f6c81-2b88-4ac1-b7b4-a2a9f2ad4663%20uuid%3D8715c877-47a0-438d-98a3-27c7a6ab2196%20uuid%3D085569ce-73ed-11df-83c3-002264764cea%20uuid%3Ddaba56c8-73ec-11df-a475-002264764cea%20uuid%3D2d3f051c-55ba-11e3-bf43-406186ea4fc5%20uuid%3Dbbca7412-a950-11e3-9109-406186ea4fc5%20',
+      '/scanconfigs?filter=predefined%3D1',
     );
 
     // Test headers
@@ -188,23 +185,6 @@ describe('Feed status page tests', () => {
     // GVMD_DATA feed is too old but IS currently syncing
     expect(ageText[3]).toHaveTextContent('Update in progress...');
     expect(updateMsgs[3]).toHaveTextContent('');
-  });
-});
-
-describe('Test uuid filter composer', () => {
-  test('Should return empty string for empty array', () => {
-    const emptyFilter = composeObjFilter([]);
-    expect(emptyFilter).toEqual('');
-  });
-
-  test('Should not crash on undefined input', () => {
-    const noFilter = composeObjFilter();
-    expect(noFilter).toEqual('');
-  });
-
-  test('Should return correct filter string', () => {
-    const filterString = composeObjFilter(['foo', 'bar', 'baz']);
-    expect(filterString).toEqual('uuid=foo uuid=bar uuid=baz ');
   });
 });
 
