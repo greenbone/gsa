@@ -16,8 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'core-js/features/object/entries';
-
 import React from 'react';
 import {connect} from 'react-redux';
 
