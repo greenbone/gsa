@@ -30,7 +30,12 @@ import {
   CONDITION_TYPE_FILTER_COUNT_AT_LEAST,
   CONDITION_TYPE_FILTER_COUNT_CHANGED,
   CONDITION_TYPE_SEVERITY_AT_LEAST,
+  EVENT_TYPE_UPDATED_SECINFO,
+  EVENT_TYPE_NEW_SECINFO,
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+  EVENT_TYPE_TICKET_RECEIVED,
+  EVENT_TYPE_ASSIGNED_TICKET_CHANGED,
+  EVENT_TYPE_OWNED_TICKET_CHANGED,
   METHOD_TYPE_ALEMBA_VFIRE,
   METHOD_TYPE_SCP,
   METHOD_TYPE_SEND,
@@ -43,9 +48,6 @@ import {
   METHOD_TYPE_SOURCEFIRE,
   METHOD_TYPE_VERINICE,
   METHOD_TYPE_TIPPING_POINT,
-  DELTA_TYPE_NONE,
-  DELTA_TYPE_PREVIOUS,
-  DELTA_TYPE_REPORT,
 } from 'gmp/models/alert';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
@@ -124,6 +126,20 @@ const convertConditionEnum = condition => {
       return 'FILTER_COUNT_CHANGED';
     case CONDITION_TYPE_SEVERITY_AT_LEAST:
       return 'SEVERITY_AT_LEAST';
+    default:
+      return null;
+  }
+};
+
+const convertEventEnum = event => {
+  // Currently does not support all event types. Need updating.
+  switch (event) {
+    case EVENT_TYPE_TASK_RUN_STATUS_CHANGED:
+      return 'TASK_RUN_STATUS_CHANGED';
+    case EVENT_TYPE_UPDATED_SECINFO:
+      return 'UPDATED_SECINFO_ARRIVED';
+    case EVENT_TYPE_NEW_SECINFO:
+      return 'NEW_SECINFO_ARRIVED';
     default:
       return null;
   }
@@ -388,6 +404,7 @@ const AlertComponent = ({
           other,
           condition_data_fields,
         ),
+        event: convertEventEnum(event),
         eventData: convertDict('event_data', other, event_data_fields),
       })
         .then(onCreated, onCreateError)
