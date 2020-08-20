@@ -145,6 +145,38 @@ const convertEventEnum = event => {
   }
 };
 
+const convertMethodEnum = method => {
+  // Currently does not support all method types. Need updating.
+  switch (method) {
+    case METHOD_TYPE_ALEMBA_VFIRE:
+      return null;
+    case METHOD_TYPE_SCP:
+      return 'SCP';
+    case METHOD_TYPE_SEND:
+      return 'SEND';
+    case METHOD_TYPE_SMB:
+      return 'SMB';
+    case METHOD_TYPE_SNMP:
+      return 'SNMP';
+    case METHOD_TYPE_SYSLOG:
+      return 'SYSLOG';
+    case METHOD_TYPE_EMAIL:
+      return 'EMAIL';
+    case METHOD_TYPE_START_TASK:
+      return 'START_TASK';
+    case METHOD_TYPE_HTTP_GET:
+      return 'HTTP_GET';
+    case METHOD_TYPE_SOURCEFIRE:
+      return 'SOURCEFIRE_CONNECTOR';
+    case METHOD_TYPE_VERINICE:
+      return 'VERINICE_CONNECTOR';
+    case METHOD_TYPE_TIPPING_POINT:
+      return null;
+    default:
+      return null;
+  }
+};
+
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {
     for (const format of report_formats) {
@@ -397,7 +429,7 @@ const AlertComponent = ({
         comment,
         condition: convertConditionEnum(condition),
         filterId: filter_id,
-        method,
+        method: convertMethodEnum(method),
         methodData: convertDict('method_data', other, method_data_fields),
         conditionData: convertDict(
           'condition_data',
