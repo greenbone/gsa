@@ -25,6 +25,28 @@ import {
   condition_data_fields,
   method_data_fields,
 } from 'gmp/commands/alerts';
+import {
+  CONDITION_TYPE_ALWAYS,
+  CONDITION_TYPE_FILTER_COUNT_AT_LEAST,
+  CONDITION_TYPE_FILTER_COUNT_CHANGED,
+  CONDITION_TYPE_SEVERITY_AT_LEAST,
+  EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+  METHOD_TYPE_ALEMBA_VFIRE,
+  METHOD_TYPE_SCP,
+  METHOD_TYPE_SEND,
+  METHOD_TYPE_SMB,
+  METHOD_TYPE_SNMP,
+  METHOD_TYPE_SYSLOG,
+  METHOD_TYPE_EMAIL,
+  METHOD_TYPE_START_TASK,
+  METHOD_TYPE_HTTP_GET,
+  METHOD_TYPE_SOURCEFIRE,
+  METHOD_TYPE_VERINICE,
+  METHOD_TYPE_TIPPING_POINT,
+  DELTA_TYPE_NONE,
+  DELTA_TYPE_PREVIOUS,
+  DELTA_TYPE_REPORT,
+} from 'gmp/models/alert';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
@@ -90,6 +112,21 @@ const convertDict = (prefix, data, fields) => {
     }
   }
   return fieldDict;
+};
+
+const convertConditionEnum = condition => {
+  switch (condition) {
+    case CONDITION_TYPE_ALWAYS:
+      return 'ALWAYS';
+    case CONDITION_TYPE_FILTER_COUNT_AT_LEAST:
+      return 'FILTER_COUNT_AT_LEAST';
+    case CONDITION_TYPE_FILTER_COUNT_CHANGED:
+      return 'FILTER_COUNT_CHANGED';
+    case CONDITION_TYPE_SEVERITY_AT_LEAST:
+      return 'SEVERITY_AT_LEAST';
+    default:
+      return null;
+  }
 };
 
 const select_verinice_report_id = (report_formats, report_id) => {
@@ -342,7 +379,7 @@ const AlertComponent = ({
       return createAlert({
         name,
         comment,
-        condition,
+        condition: convertConditionEnum(condition),
         filterId: filter_id,
         method,
         methodData: convertDict('method_data', other, method_data_fields),
