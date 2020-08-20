@@ -16,8 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React, {useReducer} from 'react';
-
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -42,16 +41,14 @@ import FootNote from 'web/components/footnote/footnote';
 import Layout from 'web/components/layout/layout';
 
 import {
-  loadReportComposerDefaults,
-  saveReportComposerDefaults,
+  loadReportComposerDefaults as loadDefaults,
+  saveReportComposerDefaults as saveDefaults,
 } from 'web/store/usersettings/actions';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 
 import reducer from 'web/utils/baseReducer';
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
-import withGmp from 'web/utils/withGmp';
 
 import CredentialsDialog from '../credentials/dialog';
 
@@ -112,6 +109,13 @@ const initialState = {
 const AlertComponent = props => {
   const gmp = useGmp();
   const [state, dispatchState] = useReducer(reducer, initialState);
+  const dispatch = useDispatch();
+
+  const reportComposerDefaults = useSelector(getReportComposerDefaults);
+
+  const loadReportComposerDefaults = () => dispatch(loadDefaults(gmp)());
+  const saveReportComposerDefaults = reportComposerDefaults =>
+    dispatch(saveDefaults(gmp)(reportComposerDefaults));
 
   const handleInteraction = () => {
     const {onInteraction} = props;
@@ -264,14 +268,13 @@ const AlertComponent = props => {
     storeAsDefault,
   }) => {
     if (storeAsDefault) {
-      const {reportComposerDefaults} = props;
       const defaults = {
         ...reportComposerDefaults,
         reportResultFilterId: filterId === UNSET_VALUE ? undefined : filterId,
         includeNotes,
         includeOverrides,
       };
-      props.saveReportComposerDefaults(defaults);
+      saveReportComposerDefaults(defaults);
     }
     dispatchState({
       type: 'setState',
@@ -319,7 +322,7 @@ const AlertComponent = props => {
 
     const credentialPromise = gmp.credentials.getAll().then(r => r.data);
 
-    props.loadReportComposerDefaults();
+    loadReportComposerDefaults();
 
     if (isDefined(alert)) {
       const alertPromise = gmp.alert.editAlertSettings(alert).then(r => r.data);
@@ -678,7 +681,6 @@ const AlertComponent = props => {
       Promise.all([credentialPromise, alertPromise]).then(
         ([credentials, settings]) => {
           const {filters = [], report_formats = [], tasks = []} = settings;
-          const {reportComposerDefaults} = props;
 
           const result_filters = filters.filter(filter_results_filter);
           const secinfo_filters = filters.filter(filter_secinfo_filter);
@@ -1266,10 +1268,6 @@ const AlertComponent = props => {
 
 AlertComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
-  loadReportComposerDefaults: PropTypes.func.isRequired,
-  reportComposerDefaults: PropTypes.object,
-  saveReportComposerDefaults: PropTypes.func.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -1286,24 +1284,6 @@ AlertComponent.propTypes = {
   onTestSuccess: PropTypes.func,
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => {
-  return {
-    loadReportComposerDefaults: () =>
-      dispatch(loadReportComposerDefaults(gmp)()),
-    saveReportComposerDefaults: reportComposerDefaults =>
-      dispatch(saveReportComposerDefaults(gmp)(reportComposerDefaults)),
-  };
-};
-
-const mapStateToProps = rootState => {
-  return {
-    reportComposerDefaults: getReportComposerDefaults(rootState),
-  };
-};
-
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(AlertComponent);
+export default AlertComponent;
 
 // vim: set ts=2 sw=2 tw=80:
