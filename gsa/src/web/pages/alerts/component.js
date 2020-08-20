@@ -20,6 +20,11 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
+import {
+  event_data_fields,
+  condition_data_fields,
+  method_data_fields,
+} from 'gmp/commands/alerts';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
@@ -75,6 +80,17 @@ import AlertDialog, {
 } from './dialog';
 
 import ContentComposerDialog from './contentcomposerdialog';
+
+const convertDict = (prefix, data, fields) => {
+  const fieldDict = {};
+  for (const field of fields) {
+    const name = prefix + '_' + field;
+    if (data.hasOwnProperty(name)) {
+      fieldDict[field] = data[name];
+    }
+  }
+  return fieldDict;
+};
 
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {
@@ -309,16 +325,49 @@ const AlertComponent = ({
     handleInteraction();
   };
 
-  const handleSaveAlert = data => {
+  const handleSaveAlert = ({
+    active,
+    name,
+    comment = '',
+    event,
+    condition,
+    filter_id,
+    method,
+    report_format_ids,
+    ...other
+  }) => {
     handleInteraction();
 
     if (!isDefined(id)) {
-      return createTag({
+      return createAlert({
+        active,
         name,
+        comment,
+        condition,
+        filterId: filter_id,
+        method,
+        reportFormatIds: report_format_ids,
+        ...convertDict('method_data', other, method_data_fields),
+        ...convertDict('condition_data', other, condition_data_fields),
+        ...convertDict('event_data', other, event_data_fields),
       })
         .then(onCreated, onCreateError)
         .then(closeAlertDialog);
     }
+
+    return alertCommand
+      .save({
+        active,
+        name,
+        comment,
+        event,
+        condition,
+        filter_id,
+        method,
+        report_format_ids,
+        ...other,
+      })
+      .then(onSaved, onSaveError);
   };
 
   const openScpCredentialDialog = types => {
@@ -1096,7 +1145,7 @@ const AlertComponent = ({
       onSaved={onSaved}
       onSaveError={onSaveError}
     >
-      {({save, ...other}) => (
+      {({...other}) => (
         <Layout>
           {children({
             ...other,
@@ -1229,7 +1278,7 @@ const AlertComponent = ({
               }
               onSave={d => {
                 handleInteraction();
-                return save(d).then(() => closeAlertDialog());
+                return handleSaveAlert(d).then(() => closeAlertDialog());
               }}
               onReportFormatsChange={handleReportFormatsChange}
               onEmailCredentialChange={handleEmailCredentialChange}
