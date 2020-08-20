@@ -47,6 +47,7 @@ import {
 } from 'web/store/usersettings/actions';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 
+import reducer from 'web/utils/baseReducer';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
@@ -108,18 +109,6 @@ const initialState = {
   credentialType: '',
 };
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'setValue':
-      const {newState} = action;
-      return {
-        ...state,
-        ...newState,
-      };
-    default:
-      return state;
-  }
-};
 const AlertComponent = props => {
   const gmp = useGmp();
   const [state, dispatchState] = useReducer(reducer, initialState);
@@ -146,7 +135,7 @@ const AlertComponent = props => {
         const {data: credentials} = response;
         if (state.credentialType === 'scp') {
           dispatchState({
-            type: 'setValue',
+            type: 'setState',
             newState: {
               method_data_scp_credential: credential_id,
               credentials,
@@ -154,7 +143,7 @@ const AlertComponent = props => {
           });
         } else if (state.credentialType === 'smb') {
           dispatchState({
-            type: 'setValue',
+            type: 'setState',
             newState: {
               method_data_smb_credential: credential_id,
               credentials,
@@ -162,7 +151,7 @@ const AlertComponent = props => {
           });
         } else if (state.credentialType === 'verinice') {
           dispatchState({
-            type: 'setValue',
+            type: 'setState',
             newState: {
               method_data_verinice_server_credential: credential_id,
               credentials,
@@ -170,7 +159,7 @@ const AlertComponent = props => {
           });
         } else if (state.credentialType === 'vfire') {
           dispatchState({
-            type: 'setValue',
+            type: 'setState',
             newState: {
               method_data_vfire_credential: credential_id,
               credentials,
@@ -178,7 +167,7 @@ const AlertComponent = props => {
           });
         } else if (state.credentialType === 'tippingpoint') {
           dispatchState({
-            type: 'setValue',
+            type: 'setState',
             newState: {
               method_data_tp_sms_credential: credential_id,
               credentials,
@@ -186,7 +175,7 @@ const AlertComponent = props => {
           });
         } else if (state.credentialType === 'email') {
           dispatchState({
-            type: 'setValue',
+            type: 'setState',
             newState: {
               method_data_recipient_credential: credential_id,
               credentials,
@@ -194,7 +183,7 @@ const AlertComponent = props => {
           });
         } else if (state.credentialType === 'pw') {
           dispatchState({
-            type: 'setValue',
+            type: 'setState',
             newState: {
               method_data_pkcs12_credential: credential_id,
               credentials,
@@ -204,7 +193,7 @@ const AlertComponent = props => {
       })
       .catch(error => {
         dispatchState({
-          type: 'setValue',
+          type: 'setState',
           newState: {credentialError: error.message},
         });
       });
@@ -213,7 +202,7 @@ const AlertComponent = props => {
   const openCredentialDialog = ({type, types}) => {
     state.credentialType = type;
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         credentialDialogVisible: true,
         credentialDialogTitle: _('New Credential'),
@@ -227,7 +216,7 @@ const AlertComponent = props => {
 
   const closeCredentialDialog = () => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {credentialDialogVisible: false},
     });
   };
@@ -239,7 +228,7 @@ const AlertComponent = props => {
 
   const openContentComposerDialog = () => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {contentComposerDialogVisible: true},
     });
   };
@@ -257,7 +246,7 @@ const AlertComponent = props => {
       filter_id,
     } = state;
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         composerIncludeNotes: method_data_composer_include_notes,
         composerIncludeOverrides: method_data_composer_include_overrides,
@@ -285,7 +274,7 @@ const AlertComponent = props => {
       props.saveReportComposerDefaults(defaults);
     }
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         filter_id: filterId,
         method_data_composer_include_notes: includeNotes,
@@ -443,7 +432,7 @@ const AlertComponent = props => {
             : undefined;
 
           dispatchState({
-            type: 'setValue',
+            type: 'setState',
             newState: {
               alertDialogVisible: true,
               id: alert.id,
@@ -705,7 +694,7 @@ const AlertComponent = props => {
             : undefined;
 
           dispatchState({
-            type: 'setValue',
+            type: 'setState',
             newState: {
               active: undefined,
               alert: undefined,
@@ -806,7 +795,7 @@ const AlertComponent = props => {
 
   const closeAlertDialog = () => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         alertDialogVisible: false,
       },
@@ -815,7 +804,7 @@ const AlertComponent = props => {
 
   const handleCloseAlertDialog = () => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         composerIncludeNotes: undefined,
         composerIncludeOverrides: undefined,
@@ -879,7 +868,7 @@ const AlertComponent = props => {
 
   const handlePasswordOnlyCredentialChange = credential => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         method_data_pkcs12_credential: credential,
       },
@@ -888,7 +877,7 @@ const AlertComponent = props => {
 
   const handleScpCredentialChange = credential => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         method_data_scp_credential: credential,
       },
@@ -897,7 +886,7 @@ const AlertComponent = props => {
 
   const handleSmbCredentialChange = credential => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         method_data_smb_credential: credential,
       },
@@ -906,7 +895,7 @@ const AlertComponent = props => {
 
   const handleTippingPointCredentialChange = credential => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         method_data_tp_sms_credential: credential,
       },
@@ -915,7 +904,7 @@ const AlertComponent = props => {
 
   const handleVeriniceCredentialChange = credential => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         method_data_verinice_server_credential: credential,
       },
@@ -924,7 +913,7 @@ const AlertComponent = props => {
 
   const handleEmailCredentialChange = credential => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         method_data_recipient_credential: credential,
       },
@@ -933,7 +922,7 @@ const AlertComponent = props => {
 
   const handleVfireCredentialChange = credential => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         method_data_vfire_credential: credential,
       },
@@ -942,7 +931,7 @@ const AlertComponent = props => {
 
   const handleReportFormatsChange = report_format_ids => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         report_format_ids,
       },
@@ -953,7 +942,7 @@ const AlertComponent = props => {
     handleInteraction();
     name = capitalizeFirstLetter(name);
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         [`composer${name}`]: value,
       },
@@ -962,7 +951,7 @@ const AlertComponent = props => {
 
   const handleFilterIdChange = value => {
     dispatchState({
-      type: 'setValue',
+      type: 'setState',
       newState: {
         composerFilterId: value === UNSET_VALUE ? undefined : value,
       },
@@ -1248,7 +1237,7 @@ const AlertComponent = props => {
               onClose={handleCloseCredentialDialog}
               onErrorClose={() =>
                 dispatchState({
-                  type: 'setValue',
+                  type: 'setState',
                   newState: {credentialError: undefined},
                 })
               }
