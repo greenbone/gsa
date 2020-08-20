@@ -106,7 +106,23 @@ const initialState = {
   credentialType: '',
 };
 
-const AlertComponent = props => {
+const AlertComponent = ({
+  children,
+  onCloneError,
+  onCloned,
+  onCreateError,
+  onCreated,
+  onDeleteError,
+  onDeleted,
+  onDownloadError,
+  onDownloaded,
+  onError,
+  onInteraction,
+  onSaveError,
+  onSaved,
+  onTestError,
+  onTestSuccess,
+}) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
 
@@ -115,11 +131,10 @@ const AlertComponent = props => {
   const reportComposerDefaults = useSelector(getReportComposerDefaults);
 
   const loadReportComposerDefaults = () => dispatch(loadDefaults(gmp)());
-  const saveReportComposerDefaults = reportComposerDefaults =>
-    dispatch(saveDefaults(gmp)(reportComposerDefaults));
+  const saveReportComposerDefaults = defaults =>
+    dispatch(saveDefaults(gmp)(defaults));
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
@@ -822,8 +837,6 @@ const AlertComponent = props => {
   };
 
   const handleTestAlert = alert => {
-    const {onTestSuccess, onTestError} = props;
-
     handleInteraction();
 
     return gmp.alert
@@ -962,22 +975,6 @@ const AlertComponent = props => {
 
     handleInteraction();
   };
-
-  const {
-    children,
-    onError,
-    onCloned,
-    onCloneError = onError,
-    onCreated,
-    onCreateError = onError,
-    onDeleted,
-    onDeleteError = onError,
-    onDownloaded,
-    onDownloadError = onError,
-    onInteraction,
-    onSaved,
-    onSaveError = onError,
-  } = props;
 
   const {
     alertDialogVisible,
