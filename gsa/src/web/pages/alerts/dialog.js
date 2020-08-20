@@ -65,7 +65,7 @@ import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import {UNSET_VALUE} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import AlembaVfireMethodPart from './alembavfiremethodpart';
 import HttpMethodPart from './httpmethodpart';
@@ -239,6 +239,8 @@ const StyledDivider = styled(Divider)`
 `;
 
 const AlertDialog = props => {
+  const capabilities = useCapabilities();
+
   const [state, dispatchState] = useReducer(reducer, DEFAULTS);
 
   useEffect(() => {
@@ -295,7 +297,6 @@ const AlertDialog = props => {
   };
 
   const {
-    capabilities,
     credentials,
     filter_id,
     title = _('New Alert'),
@@ -855,7 +856,6 @@ const AlertDialog = props => {
 
 AlertDialog.propTypes = {
   active: PropTypes.yesno,
-  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   condition: PropTypes.string,
   condition_data_at_least_count: PropTypes.number,
@@ -949,6 +949,6 @@ AlertDialog.propTypes = {
   onVfireCredentialChange: PropTypes.func.isRequired,
 };
 
-export default withCapabilities(AlertDialog);
+export default AlertDialog;
 
 // vim: set ts=2 sw=2 tw=80:
