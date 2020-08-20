@@ -6098,10 +6098,10 @@ d3-dispatch@1, d3-dispatch@^1.0.3:
   resolved "https://registry.yarnpkg.com/d3-dispatch/-/d3-dispatch-1.0.6.tgz#00d37bcee4dd8cd97729dd893a0ac29caaba5d58"
   integrity sha512-fVjoElzjhCEy+Hbn8KygnmMS7Or0a9sI2UzGwoB7cCtvI1XpVN9GpoYlnb3xt2YV66oXYb1fLJ8GMvP4hdU1RA==
 
-d3-force@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/d3-force/-/d3-force-2.0.1.tgz#31750eee8c43535301d571195bf9683beda534e2"
-  integrity sha512-zh73/N6+MElRojiUG7vmn+3vltaKon7iD5vB/7r9nUaBeftXMzRo5IWEG63DLBCto4/8vr9i3m9lwr1OTJNiCg==
+d3-force@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/d3-force/-/d3-force-2.1.0.tgz#7bfbee5124199294447524ab90d84b19a00951c9"
+  integrity sha512-gW7FBPZwKLHyouN3GHhMKePt+3fCpEh7PX3erozciw4oYX7PAjCxlYOq6y59pDJ1m9e7FLVvY5fJNTualxaPrA==
   dependencies:
     d3-dispatch "1"
     d3-quadtree "1"
