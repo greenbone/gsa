@@ -140,6 +140,12 @@ const convertEventEnum = event => {
       return 'UPDATED_SECINFO_ARRIVED';
     case EVENT_TYPE_NEW_SECINFO:
       return 'NEW_SECINFO_ARRIVED';
+    case EVENT_TYPE_TICKET_RECEIVED:
+      return null;
+    case EVENT_TYPE_ASSIGNED_TICKET_CHANGED:
+      return null;
+    case EVENT_TYPE_OWNED_TICKET_CHANGED:
+      return null;
     default:
       return null;
   }
