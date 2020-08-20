@@ -26,7 +26,7 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {pageFilter} from 'web/store/pages/actions';
 
-import {rendererWith, waitForElement, screen} from 'web/utils/testing';
+import {rendererWith, screen} from 'web/utils/testing';
 
 import usePageFilter from '../usePageFilter';
 
@@ -74,7 +74,7 @@ describe('usePageFilter tests', () => {
       </TestComponent>,
     );
 
-    await waitForElement(() => screen.getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });
@@ -113,7 +113,7 @@ describe('usePageFilter tests', () => {
 
     render(<TestComponent entityType="task">{renderFunc}</TestComponent>);
 
-    await waitForElement(() => screen.getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
@@ -150,7 +150,7 @@ describe('usePageFilter tests', () => {
 
     render(<TestComponent entityType="task">{renderFunc}</TestComponent>);
 
-    await waitForElement(() => screen.getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
@@ -191,7 +191,7 @@ describe('usePageFilter tests', () => {
       </TestComponent>,
     );
 
-    await waitForElement(() => screen.getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
@@ -231,7 +231,7 @@ describe('usePageFilter tests', () => {
       </TestComponent>,
     );
 
-    await waitForElement(() => screen.getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });
@@ -263,7 +263,7 @@ describe('usePageFilter tests', () => {
 
     render(<TestComponent entityType="task">{renderFunc}</TestComponent>);
 
-    await waitForElement(() => screen.getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });
@@ -303,7 +303,7 @@ describe('usePageFilter tests', () => {
       </TestComponent>,
     );
 
-    await waitForElement(() => screen.getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });
@@ -337,7 +337,7 @@ describe('usePageFilter tests', () => {
       </TestComponent>,
     );
 
-    await waitForElement(() => screen.getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });

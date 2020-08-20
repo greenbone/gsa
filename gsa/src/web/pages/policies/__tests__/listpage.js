@@ -33,7 +33,7 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
 
 import PoliciesPage, {ToolBarIcons} from '../listpage';
 
@@ -55,7 +55,10 @@ const policy = Policy.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+    task: [
+      {id: '1234', name: 'audit1'},
+      {id: '5678', name: 'audit2'},
+    ],
   },
 });
 
@@ -131,7 +134,7 @@ describe('PoliciesPage tests', () => {
 
     const {baseElement} = render(<PoliciesPage />);
 
-    await waitForElement(() => baseElement.querySelectorAll('table'));
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     expect(baseElement).toMatchSnapshot();
   });
@@ -191,7 +194,7 @@ describe('PoliciesPage tests', () => {
 
     const {baseElement, getAllByTestId} = render(<PoliciesPage />);
 
-    await waitForElement(() => baseElement.querySelectorAll('table'));
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     const icons = getAllByTestId('svg-icon');
 
