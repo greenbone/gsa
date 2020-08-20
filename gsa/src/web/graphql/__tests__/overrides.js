@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React, {useState} from 'react';
+import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
