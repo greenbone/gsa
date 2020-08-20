@@ -55,6 +55,7 @@ const EntityComponent = ({
   onSaved,
   onSaveError,
 }) => {
+  console.log(name);
   const gmp = useGmp();
   const username = useUserName();
   const dispatch = useDispatch();

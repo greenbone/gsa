@@ -40,6 +40,7 @@ import FootNote from 'web/components/footnote/footnote';
 
 import Layout from 'web/components/layout/layout';
 
+import {useCreateAlert} from 'web/graphql/alerts';
 import {
   loadReportComposerDefaults as loadDefaults,
   saveReportComposerDefaults as saveDefaults,
@@ -124,6 +125,7 @@ const AlertComponent = ({
   onTestSuccess,
 }) => {
   const gmp = useGmp();
+  const alertCommand = gmp['alert'];
   const dispatch = useDispatch();
 
   const [state, dispatchState] = useReducer(reducer, initialState);
@@ -133,6 +135,8 @@ const AlertComponent = ({
   const loadReportComposerDefaults = () => dispatch(loadDefaults(gmp)());
   const saveReportComposerDefaults = defaults =>
     dispatch(saveDefaults(gmp)(defaults));
+
+  const [createAlert] = useCreateAlert();
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -303,6 +307,18 @@ const AlertComponent = ({
       },
     });
     handleInteraction();
+  };
+
+  const handleSaveAlert = data => {
+    handleInteraction();
+
+    if (!isDefined(id)) {
+      return createTag({
+        name,
+      })
+        .then(onCreated, onCreateError)
+        .then(closeAlertDialog);
+    }
   };
 
   const openScpCredentialDialog = types => {
