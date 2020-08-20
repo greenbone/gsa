@@ -49,6 +49,7 @@ import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 import reducer from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
+import useGmp from 'web/utils/useGmp';
 
 import CredentialsDialog from '../credentials/dialog';
 
@@ -73,7 +74,6 @@ import AlertDialog, {
 } from './dialog';
 
 import ContentComposerDialog from './contentcomposerdialog';
-import useGmp from 'web/utils/useGmp';
 
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {
@@ -108,8 +108,9 @@ const initialState = {
 
 const AlertComponent = props => {
   const gmp = useGmp();
-  const [state, dispatchState] = useReducer(reducer, initialState);
   const dispatch = useDispatch();
+
+  const [state, dispatchState] = useReducer(reducer, initialState);
 
   const reportComposerDefaults = useSelector(getReportComposerDefaults);
 
