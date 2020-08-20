@@ -340,16 +340,18 @@ const AlertComponent = ({
 
     if (!isDefined(id)) {
       return createAlert({
-        active,
         name,
         comment,
         condition,
         filterId: filter_id,
         method,
-        reportFormatIds: report_format_ids,
-        ...convertDict('method_data', other, method_data_fields),
-        ...convertDict('condition_data', other, condition_data_fields),
-        ...convertDict('event_data', other, event_data_fields),
+        methodData: convertDict('method_data', other, method_data_fields),
+        conditionData: convertDict(
+          'condition_data',
+          other,
+          condition_data_fields,
+        ),
+        eventData: convertDict('event_data', other, event_data_fields),
       })
         .then(onCreated, onCreateError)
         .then(closeAlertDialog);
