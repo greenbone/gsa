@@ -82,16 +82,14 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
+import {useLazyGetOverrides} from 'web/graphql/overrides';
+
 import {useCloneTask, useDeleteTask, useGetTask} from 'web/graphql/tasks';
 
 import {
   selector as notesSelector,
   loadEntities as loadNotes,
 } from 'web/store/entities/notes';
-import {
-  selector as overridesSelector,
-  loadEntities as loadOverrides,
-} from 'web/store/entities/overrides';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -383,6 +381,14 @@ const Page = ({
     }
   }, [history]);
 
+  const [loadOverrides, {overrides}] = useLazyGetOverrides({
+    filterString: 'task_id:' + id,
+  });
+
+  useEffect(() => {
+    loadOverrides();
+  }, [task]);
+
   return (
     <TaskComponent
       onCloned={onChanged}
@@ -419,6 +425,7 @@ const Page = ({
             {...props}
             entity={task}
             isLoading={loading}
+            overrides={overrides}
             sectionIcon={<TaskIcon size="large" />}
             title={_('Task')}
             toolBarIcons={ToolBarIcons}
@@ -545,10 +552,8 @@ const taskIdFilter = id => Filter.fromString('task_id=' + id).all();
 const mapStateToProps = (rootState, {id}) => {
   const permSel = permissionsSelector(rootState);
   const notesSel = notesSelector(rootState);
-  const overridesSel = overridesSelector(rootState);
   return {
     notes: notesSel.getEntities(taskIdFilter(id)),
-    overrides: overridesSel.getEntities(taskIdFilter(id)),
     permissions: permSel.getEntities(permissionsResourceFilter(id)),
   };
 };
@@ -557,7 +562,6 @@ const load = gmp => {
   const loadTaskFunc = loadTask(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
   const loadNotesFunc = loadNotes(gmp);
-  const loadOverridesFunc = loadOverrides(gmp);
 
   if (gmp.settings.enableHyperionOnly) {
     return id => dispatch => Promise.resolve(); // promise is required by withEntityContainer
@@ -568,7 +572,6 @@ const load = gmp => {
       dispatch(loadTaskFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
       dispatch(loadNotesFunc(taskIdFilter(id))),
-      dispatch(loadOverridesFunc(taskIdFilter(id))),
     ]);
 };
 
