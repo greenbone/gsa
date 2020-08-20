@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-const reducer = (state, action) => {
+const stateReducer = (state, action) => {
   switch (action.type) {
     case 'setState':
       const {newState} = action;
@@ -30,4 +30,4 @@ const reducer = (state, action) => {
   }
 };
 
-export default reducer;
+export default stateReducer;

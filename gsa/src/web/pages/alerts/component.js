@@ -46,7 +46,7 @@ import {
 } from 'web/store/usersettings/actions';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 
-import reducer from 'web/utils/baseReducer';
+import reducer from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
 

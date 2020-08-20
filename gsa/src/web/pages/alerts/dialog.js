@@ -49,7 +49,7 @@ import {
   isSecinfoEvent,
 } from 'gmp/models/alert';
 
-import reducer from 'web/utils/baseReducer';
+import reducer from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 import SaveDialog from 'web/components/dialog/savedialog';
 
