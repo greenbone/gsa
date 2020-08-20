@@ -19,7 +19,7 @@ import React from 'react';
 
 import {setLocale} from 'gmp/locale/lang';
 
-import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
 
 import AboutPage from '../about';
 
@@ -70,7 +70,8 @@ describe('AboutPage tests', () => {
     const links = baseElement.querySelectorAll('a');
 
     fireEvent.click(links[1]);
-    await waitForElement(() => baseElement.querySelectorAll('dialog'));
+
+    await waitFor(() => baseElement.querySelectorAll('dialog'));
 
     const dialogTitleBar = getByTestId('dialog-title-bar');
     const dialogButtons = baseElement.querySelectorAll('button');
