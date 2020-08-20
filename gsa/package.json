@@ -108,6 +108,7 @@
     "last 3 version",
     "not dead",
     "not ie <= 11",
+    "not edge <=18",
     "not op_mini all",
     "ff ESR"
   ],
