@@ -32,7 +32,7 @@
     "d3-cloud": "^1.2.5",
     "d3-color": "^2.0.0",
     "d3-force": "^2.1.0",
-    "d3-format": "^1.4.4",
+    "d3-format": "^2.0.0",
     "d3-hierarchy": "^1.1.9",
     "d3-interpolate": "^1.4.0",
     "d3-scale": "^3.2.1",
