@@ -105,12 +105,30 @@ import AlertDialog, {
 
 import ContentComposerDialog from './contentcomposerdialog';
 
-const convertDict = (prefix, data, fields) => {
+export const fileToBase64 = file => {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    // Read file content on file loaded event
+    reader.onload = function (event) {
+      resolve(event.target.result);
+    };
+
+    // Convert data to base64
+    reader.readAsDataURL(file);
+  });
+};
+
+const convertDict = async (prefix, data, fields) => {
   const fieldDict = {};
   for (const field of fields) {
     const name = prefix + '_' + field;
     if (data.hasOwnProperty(name)) {
-      fieldDict[field] = data[name];
+      if (field === 'pkcs12') {
+        const base64File = await fileToBase64(data[name]);
+        fieldDict[field] = base64File;
+      } else {
+        fieldDict[field] = data[name];
+      }
     }
   }
   return fieldDict;
@@ -416,7 +434,7 @@ const AlertComponent = ({
     handleInteraction();
   };
 
-  const handleSaveAlert = ({
+  const handleSaveAlert = async ({
     active,
     name,
     comment = '',
@@ -434,16 +452,16 @@ const AlertComponent = ({
         name,
         comment,
         condition: convertConditionEnum(condition),
-        filterId: filter_id,
-        method: convertMethodEnum(method),
-        methodData: convertDict('method_data', other, method_data_fields),
-        conditionData: convertDict(
+        conditionData: await convertDict(
           'condition_data',
           other,
           condition_data_fields,
         ),
+        filterId: filter_id,
+        method: convertMethodEnum(method),
+        methodData: await convertDict('method_data', other, method_data_fields),
         event: convertEventEnum(event),
-        eventData: convertDict('event_data', other, event_data_fields),
+        eventData: await convertDict('event_data', other, event_data_fields),
       })
         .then(onCreated, onCreateError)
         .then(closeAlertDialog);
