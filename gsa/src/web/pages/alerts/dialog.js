@@ -438,6 +438,10 @@ class AlertDialog extends React.Component {
           label: _('SNMP'),
         },
         {
+          value: METHOD_TYPE_START_TASK,
+          label: _('Start Task'),
+        },
+        {
           value: METHOD_TYPE_SYSLOG,
           label: _('System Logger'),
         },
