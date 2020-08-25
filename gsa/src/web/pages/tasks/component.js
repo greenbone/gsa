@@ -108,7 +108,12 @@ const TaskComponent = props => {
 
   const [
     loadAlerts,
-    {alerts, loading: isLoadingAlerts, error: alertError},
+    {
+      alerts,
+      loading: isLoadingAlerts,
+      refetch: refetchAlerts,
+      error: alertError,
+    },
   ] = useLazyGetAlerts({
     filterString: ALL_FILTER.toFilterString(),
   });
@@ -254,14 +259,8 @@ const TaskComponent = props => {
     closeTaskWizard();
   };
 
-  const handleAlertCreated = resp => {
-    const {data} = resp;
-
-    props.loadAlerts();
-    setDialogState(state => ({
-      ...state,
-      alert_ids: ({alert_ids}) => ({alert_ids: [data.id, ...alert_ids]}),
-    }));
+  const handleAlertCreated = () => {
+    refetchAlerts();
   };
 
   const handleScheduleCreated = resp => {
