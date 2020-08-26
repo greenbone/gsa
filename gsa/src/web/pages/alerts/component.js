@@ -212,6 +212,9 @@ const convertDict = async (prefix, data, fields) => {
         fieldDict[field] = convertDeltaTypeEnum(data[name]);
       } else if (field === 'delta_report_id') {
         fieldDict[field] = data[name] === '' ? null : data[name];
+      } else if (field === 'send_port' || field === 'defense_center_port') {
+        fieldDict[field] =
+          typeof data[name] === 'int' ? data[name] : parseInt(data[name]);
       } else {
         fieldDict[field] = data[name];
       }
