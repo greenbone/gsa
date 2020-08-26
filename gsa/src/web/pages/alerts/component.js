@@ -149,6 +149,17 @@ const convertDirectionEnum = directionType => {
   }
 };
 
+const convertFeedEventEnum = feedEvent => {
+  switch (feedEvent) {
+    case 'new':
+      return 'NEW';
+    case 'updated':
+      return 'UPDATED';
+    default:
+      return null;
+  }
+};
+
 const convertDict = async (prefix, data, fields) => {
   const fieldDict = {};
   for (const field of fields) {
@@ -161,6 +172,8 @@ const convertDict = async (prefix, data, fields) => {
         fieldDict[field] = convertSecInfoEnum(data[name]);
       } else if (field === 'direction') {
         fieldDict[field] = convertDirectionEnum(data[name]);
+      } else if (field === 'feed_event') {
+        fieldDict[field] = convertFeedEventEnum(data[name]);
       } else {
         fieldDict[field] = data[name];
       }
