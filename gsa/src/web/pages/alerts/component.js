@@ -117,6 +117,38 @@ export const fileToBase64 = file => {
   });
 };
 
+const convertSecInfoEnum = infoType => {
+  switch (infoType) {
+    case 'nvt':
+      return 'NVT';
+    case 'cve':
+      return 'CVE';
+    case 'cpe':
+      return 'CPE';
+    case 'cert_bund_adv':
+      return 'CERT_BUND_ADV';
+    case 'dfn_cert_adv':
+      return 'DFN_CERT_ADV';
+    case 'ovaldef':
+      return 'OVALDEF';
+    default:
+      return null;
+  }
+};
+
+const convertDirectionEnum = directionType => {
+  switch (directionType) {
+    case 'increased':
+      return 'INCREASED';
+    case 'decreased':
+      return 'DECREASED';
+    case 'changed':
+      return 'CHANGED';
+    default:
+      return null;
+  }
+};
+
 const convertDict = async (prefix, data, fields) => {
   const fieldDict = {};
   for (const field of fields) {
@@ -125,11 +157,17 @@ const convertDict = async (prefix, data, fields) => {
       if (field === 'pkcs12') {
         const base64File = await fileToBase64(data[name]);
         fieldDict[field] = base64File;
+      } else if (field === 'secinfo_type') {
+        fieldDict[field] = convertSecInfoEnum(data[name]);
+      } else if (field === 'direction') {
+        fieldDict[field] = convertDirectionEnum(data[name]);
       } else {
         fieldDict[field] = data[name];
       }
     }
   }
+  console.log(fieldDict);
+
   return fieldDict;
 };
 
