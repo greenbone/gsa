@@ -160,6 +160,25 @@ const convertFeedEventEnum = feedEvent => {
   }
 };
 
+const convertTaskStatusEnum = status => {
+  switch (status) {
+    case 'New':
+      return 'NEW';
+    case 'Done':
+      return 'DONE';
+    case 'Requested':
+      return 'REQUESTED';
+    case 'Running':
+      return 'RUNNING';
+    case 'Stop Requested':
+      return 'STOP_REQUESTED';
+    case 'Stopped':
+      return 'STOPPED';
+    default:
+      return null;
+  }
+};
+
 const convertDict = async (prefix, data, fields) => {
   const fieldDict = {};
   for (const field of fields) {
@@ -174,6 +193,8 @@ const convertDict = async (prefix, data, fields) => {
         fieldDict[field] = convertDirectionEnum(data[name]);
       } else if (field === 'feed_event') {
         fieldDict[field] = convertFeedEventEnum(data[name]);
+      } else if (field === 'status') {
+        fieldDict[field] = convertTaskStatusEnum(data[name]);
       } else {
         fieldDict[field] = data[name];
       }
