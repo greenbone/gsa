@@ -179,6 +179,19 @@ const convertTaskStatusEnum = status => {
   }
 };
 
+const convertDeltaTypeEnum = deltaType => {
+  switch (deltaType) {
+    case 'None':
+      return 'NONE';
+    case 'Report':
+      return 'REPORT';
+    case 'Previous':
+      return 'PREVIOUS';
+    default:
+      return null;
+  }
+};
+
 const convertDict = async (prefix, data, fields) => {
   const fieldDict = {};
   for (const field of fields) {
@@ -195,6 +208,8 @@ const convertDict = async (prefix, data, fields) => {
         fieldDict[field] = convertFeedEventEnum(data[name]);
       } else if (field === 'status') {
         fieldDict[field] = convertTaskStatusEnum(data[name]);
+      } else if (field === 'delta_type') {
+        fieldDict[field] = convertDeltaTypeEnum(data[name]);
       } else {
         fieldDict[field] = data[name];
       }
