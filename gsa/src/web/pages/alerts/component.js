@@ -340,7 +340,7 @@ const AlertComponent = ({
   onTestSuccess,
 }) => {
   const gmp = useGmp();
-  const alertCommand = gmp['alert'];
+
   const dispatch = useDispatch();
 
   const [state, dispatchState] = useReducer(reducer, initialState);
@@ -557,7 +557,7 @@ const AlertComponent = ({
         .then(closeAlertDialog);
     }
 
-    return alertCommand
+    return gmp.alert
       .save({
         active,
         name,
