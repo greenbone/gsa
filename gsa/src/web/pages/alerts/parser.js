@@ -223,7 +223,7 @@ export const convertMethodEnum = method => {
     case METHOD_TYPE_VERINICE:
       return 'VERINICE_CONNECTOR';
     case METHOD_TYPE_TIPPING_POINT:
-      return 'TippingPoint SMS';
+      return null;
     default:
       return null;
   }
