@@ -26,7 +26,6 @@ import CreateIcon from 'web/entity/icon/createicon';
 import DeleteIcon from 'web/entity/icon/deleteicon';
 import Divider from 'web/components/layout/divider';
 import EditIcon from 'web/entity/icon/editicon';
-import ExportIcon from 'web/components/icon/exporticon';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
