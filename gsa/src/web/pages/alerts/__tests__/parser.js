@@ -42,6 +42,7 @@ import {
 } from 'gmp/models/alert';
 
 import {
+  fileToBase64,
   convertConditionEnum,
   convertDict,
   convertMethodEnum,
@@ -52,6 +53,7 @@ import {
   convertTaskStatusEnum,
   convertDeltaTypeEnum,
 } from '../parser';
+import {method_data_fields} from 'gmp/commands/alerts';
 
 describe('Enum conversion tests', () => {
   test('convertSecInfoEnum', () => {
@@ -149,5 +151,99 @@ describe('Enum conversion tests', () => {
 
     expect(convertMethodEnum('foobar')).toEqual(null);
     expect(convertMethodEnum()).toEqual(null);
+  });
+});
+
+const pkcs12Blob = new Blob(['Hello world!'], {type: 'application/x-pkcs12'});
+
+const methodData = {
+  method_data_URL: 'foo.bar',
+  method_data_defense_center_ip: '123.456.789.0',
+  method_data_defense_center_port: '8307',
+  method_data_delta_report_id: '12345',
+  method_data_delta_type: 'Previous',
+  method_data_details_url: 'https://secinfo.greenbone.net/etc',
+  method_data_from_address: 'foo@bar.com',
+  method_data_message: 'A quick brown fox jumped over the lazy dog.',
+  method_data_message_attach: 'roses are red',
+  method_data_notice: '{notice}',
+  method_data_notice_attach_format: '12345',
+  method_data_notice_report_format: '12345',
+  method_data_pkcs12: pkcs12Blob,
+  method_data_pkcs12_credential: '12345',
+  method_data_recipient_credential: '12345',
+  method_data_scp_host: 'localhost',
+  method_data_scp_known_hosts: '192.168.10.130',
+  method_data_scp_path: 'report.xml',
+  method_data_scp_report_format: '12345',
+  method_data_scp_credential: '12345',
+  method_data_send_host: 'localhost',
+  method_data_send_port: '8080',
+  method_data_send_report_format: '12345',
+  method_data_smb_credential: '12345',
+  method_data_smb_file_path: 'report.xml',
+  method_data_smb_share_path: 'gvm-reports',
+  method_data_snmp_agent: 'localhost',
+  method_data_snmp_community: 'public',
+  method_data_snmp_message: '$e',
+  method_data_start_task_task: '12345',
+  method_data_subject: "[GVM] Task '$n': $e",
+  method_data_submethod: 'syslog',
+  method_data_to_address: 'foo@bar.com',
+  method_data_tp_sms_hostname: 'fluffy',
+  method_data_tp_sms_tls_workaround: 0,
+  method_data_verinice_server_credential: '12345',
+  method_data_verinice_server_report_format: '12345',
+  method_data_verinice_server_url: 'localhost',
+};
+
+describe('Alert data dictionary parsing tests', () => {
+  test('Should convert method data correctly', async () => {
+    const convertedBlob = await fileToBase64(pkcs12Blob);
+    const convertedDict = await convertDict(
+      'method_data',
+      methodData,
+      method_data_fields,
+    );
+    expect(convertedDict).toEqual({
+      URL: 'foo.bar',
+      defense_center_ip: '123.456.789.0',
+      defense_center_port: 8307,
+      delta_report_id: '12345',
+      delta_type: 'PREVIOUS',
+      details_url: 'https://secinfo.greenbone.net/etc',
+      from_address: 'foo@bar.com',
+      message: 'A quick brown fox jumped over the lazy dog.',
+      message_attach: 'roses are red',
+      notice: '{notice}',
+      notice_attach_format: '12345',
+      notice_report_format: '12345',
+      pkcs12: convertedBlob,
+      pkcs12_credential: '12345',
+      recipient_credential: '12345',
+      scp_host: 'localhost',
+      scp_known_hosts: '192.168.10.130',
+      scp_path: 'report.xml',
+      scp_report_format: '12345',
+      scp_credential: '12345',
+      send_host: 'localhost',
+      send_port: 8080,
+      send_report_format: '12345',
+      smb_credential: '12345',
+      smb_file_path: 'report.xml',
+      smb_share_path: 'gvm-reports',
+      snmp_agent: 'localhost',
+      snmp_community: 'public',
+      snmp_message: '$e',
+      start_task_task: '12345',
+      subject: "[GVM] Task '$n': $e",
+      submethod: 'syslog',
+      to_address: 'foo@bar.com',
+      tp_sms_hostname: 'fluffy',
+      tp_sms_tls_workaround: 0,
+      verinice_server_credential: '12345',
+      verinice_server_report_format: '12345',
+      verinice_server_url: 'localhost',
+    });
   });
 });
