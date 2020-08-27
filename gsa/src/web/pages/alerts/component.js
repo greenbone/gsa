@@ -49,7 +49,7 @@ import {
   METHOD_TYPE_VERINICE,
   METHOD_TYPE_TIPPING_POINT,
 } from 'gmp/models/alert';
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isString} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
 import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
@@ -105,7 +105,7 @@ import AlertDialog, {
 
 import ContentComposerDialog from './contentcomposerdialog';
 
-export const fileToBase64 = file => {
+const fileToBase64 = file => {
   return new Promise(resolve => {
     const reader = new FileReader();
     reader.onload = function (event) {
@@ -213,8 +213,9 @@ const convertDict = async (prefix, data, fields) => {
       } else if (field === 'delta_report_id') {
         fieldDict[field] = data[name] === '' ? null : data[name];
       } else if (field === 'send_port' || field === 'defense_center_port') {
-        fieldDict[field] =
-          typeof data[name] === 'int' ? data[name] : parseInt(data[name]);
+        fieldDict[field] = isString(data[name])
+          ? parseInt(data[name])
+          : data[name];
       } else {
         fieldDict[field] = data[name];
       }
