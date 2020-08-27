@@ -53,7 +53,11 @@ import {
   convertTaskStatusEnum,
   convertDeltaTypeEnum,
 } from '../parser';
-import {method_data_fields} from 'gmp/commands/alerts';
+import {
+  method_data_fields,
+  event_data_fields,
+  condition_data_fields,
+} from 'gmp/commands/alerts';
 
 describe('Enum conversion tests', () => {
   test('convertSecInfoEnum', () => {
@@ -67,6 +71,7 @@ describe('Enum conversion tests', () => {
     expect(convertSecInfoEnum('foobar')).toEqual(null);
     expect(convertSecInfoEnum()).toEqual(null);
   });
+
   test('convertDirectionEnum', () => {
     expect(convertDirectionEnum('increased')).toEqual('INCREASED');
     expect(convertDirectionEnum('decreased')).toEqual('DECREASED');
@@ -75,6 +80,7 @@ describe('Enum conversion tests', () => {
     expect(convertDirectionEnum('foobar')).toEqual(null);
     expect(convertDirectionEnum()).toEqual(null);
   });
+
   test('convertFeedEventEnum', () => {
     expect(convertFeedEventEnum('new')).toEqual('NEW');
     expect(convertFeedEventEnum('updated')).toEqual('UPDATED');
@@ -82,6 +88,7 @@ describe('Enum conversion tests', () => {
     expect(convertFeedEventEnum('foobar')).toEqual(null);
     expect(convertFeedEventEnum()).toEqual(null);
   });
+
   test('convertTaskStatusEnum', () => {
     expect(convertTaskStatusEnum('New')).toEqual('NEW');
     expect(convertTaskStatusEnum('Done')).toEqual('DONE');
@@ -93,6 +100,7 @@ describe('Enum conversion tests', () => {
     expect(convertTaskStatusEnum('foobar')).toEqual(null);
     expect(convertTaskStatusEnum()).toEqual(null);
   });
+
   test('convertDeltaTypeEnum', () => {
     expect(convertDeltaTypeEnum('None')).toEqual('NONE');
     expect(convertDeltaTypeEnum('Report')).toEqual('REPORT');
@@ -101,6 +109,7 @@ describe('Enum conversion tests', () => {
     expect(convertDeltaTypeEnum('foobar')).toEqual(null);
     expect(convertDeltaTypeEnum()).toEqual(null);
   });
+
   test('convertConditionEnum tests', () => {
     expect(convertConditionEnum(CONDITION_TYPE_ALWAYS)).toEqual('ALWAYS');
     expect(convertConditionEnum(CONDITION_TYPE_FILTER_COUNT_AT_LEAST)).toEqual(
@@ -115,6 +124,7 @@ describe('Enum conversion tests', () => {
     expect(convertConditionEnum('foobar')).toEqual(null);
     expect(convertConditionEnum()).toEqual(null);
   });
+
   test('convertEventEnum tests', () => {
     expect(convertEventEnum(EVENT_TYPE_TASK_RUN_STATUS_CHANGED)).toEqual(
       'TASK_RUN_STATUS_CHANGED',
@@ -131,6 +141,7 @@ describe('Enum conversion tests', () => {
     expect(convertEventEnum('foobar')).toEqual(null);
     expect(convertEventEnum()).toEqual(null);
   });
+
   test('convertMethodEnum tests', () => {
     expect(convertMethodEnum(METHOD_TYPE_SCP)).toEqual('SCP');
     expect(convertMethodEnum(METHOD_TYPE_SEND)).toEqual('SEND');
@@ -197,6 +208,20 @@ const methodData = {
   method_data_verinice_server_url: 'localhost',
 };
 
+const eventData = {
+  event_data_feed_event: 'new',
+  event_data_secinfo_type: 'dfn_cert_adv',
+  event_data_status: 'Done',
+};
+
+const conditionData = {
+  condition_data_at_least_count: 1,
+  condition_data_count: 0,
+  condition_data_direction: 'decreased',
+  condition_data_severity: 0.1,
+  condition_data_at_least_filter_id: '23456',
+};
+
 describe('Alert data dictionary parsing tests', () => {
   test('Should convert method data correctly', async () => {
     const convertedBlob = await fileToBase64(pkcs12Blob);
@@ -244,6 +269,34 @@ describe('Alert data dictionary parsing tests', () => {
       verinice_server_credential: '12345',
       verinice_server_report_format: '12345',
       verinice_server_url: 'localhost',
+    });
+  });
+
+  test('Should convert event data correctly', async () => {
+    const convertedDict = await convertDict(
+      'event_data',
+      eventData,
+      event_data_fields,
+    );
+    expect(convertedDict).toEqual({
+      feed_event: 'NEW',
+      secinfo_type: 'DFN_CERT_ADV',
+      status: 'DONE',
+    });
+  });
+
+  test('Should convert condition data correctly', async () => {
+    const convertedDict = await convertDict(
+      'condition_data',
+      conditionData,
+      condition_data_fields,
+    );
+    expect(convertedDict).toEqual({
+      at_least_count: 1,
+      at_least_filter_id: '23456',
+      count: 0,
+      direction: 'DECREASED',
+      severity: 0.1,
     });
   });
 });
