@@ -26,7 +26,6 @@ import CreateIcon from 'web/entity/icon/createicon';
 import DeleteIcon from 'web/entity/icon/deleteicon';
 import Divider from 'web/components/layout/divider';
 import EditIcon from 'web/entity/icon/editicon';
-import ExportIcon from 'web/components/icon/exporticon';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
@@ -76,7 +75,6 @@ const ToolBarIcons = withCapabilities(
     entity,
     onReportFormatImportClick,
     onReportFormatDeleteClick,
-    onReportFormatDownloadClick,
     onReportFormatEditClick,
   }) => (
     <Divider margin="10px">
@@ -105,11 +103,6 @@ const ToolBarIcons = withCapabilities(
           entity={entity}
           onClick={onReportFormatDeleteClick}
         />
-        <ExportIcon
-          value={entity}
-          title={_('Export Report Format as XML')}
-          onClick={onReportFormatDownloadClick}
-        />
       </IconDivider>
     </Divider>
   ),
@@ -118,7 +111,6 @@ const ToolBarIcons = withCapabilities(
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
   onReportFormatDeleteClick: PropTypes.func.isRequired,
-  onReportFormatDownloadClick: PropTypes.func.isRequired,
   onReportFormatEditClick: PropTypes.func.isRequired,
   onReportFormatImportClick: PropTypes.func.isRequired,
 };
@@ -173,7 +165,6 @@ const Page = ({
   links = true,
   permissions = [],
   onChanged,
-  onDownloaded,
   onError,
   onInteraction,
   ...props
@@ -181,13 +172,11 @@ const Page = ({
   <ReportFormatComponent
     onDeleted={goto_list('reportformats', props)}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
     onImported={goto_details('reportformat', props)}
     onInteraction={onInteraction}
     onSaved={onChanged}
   >
-    {({delete: delete_func, download, edit, import: import_func, save}) => (
+    {({delete: delete_func, edit, import: import_func, save}) => (
       <EntityPage
         {...props}
         entity={entity}
@@ -197,7 +186,6 @@ const Page = ({
         onInteraction={onInteraction}
         onReportFormatImportClick={import_func}
         onReportFormatDeleteClick={delete_func}
-        onReportFormatDownloadClick={download}
         onReportFormatEditClick={edit}
         onReportFormatSaveClick={save}
       >
@@ -248,7 +236,6 @@ const Page = ({
                         entity={entity}
                         permissions={permissions}
                         onChanged={onChanged}
-                        onDownloaded={onDownloaded}
                         onError={onError}
                         onInteraction={onInteraction}
                       />
@@ -269,7 +256,6 @@ Page.propTypes = {
   links: PropTypes.bool,
   permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
