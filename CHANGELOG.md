@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+- Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425) 
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Changed
