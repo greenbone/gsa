@@ -118,7 +118,7 @@ const CreateAlertComponent = () => {
   return (
     <div>
       <Button
-        title={'Create tag'}
+        title={'Create alert'}
         onClick={() => createAlert(createAlertInput).then(handleCreateResult)}
       />
       <h3 data-testid="notification">{notification}</h3>
