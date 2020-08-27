@@ -128,7 +128,7 @@ const createAlertResult = {
   },
 };
 
-const createAlertInput = {
+export const createAlertInput = {
   name: 'foo',
   event: 'NEW_SECINFO_ARRIVED',
   condition: 'ALWAYS',

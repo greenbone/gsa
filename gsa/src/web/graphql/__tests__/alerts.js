@@ -16,14 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
+import Button from 'web/components/form/button';
 
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
-import {useLazyGetAlerts} from '../alerts';
-import {createGetAlertsQueryMock} from '../__mocks__/alerts';
+import {useLazyGetAlerts, useCreateAlert} from '../alerts';
+import {
+  createGetAlertsQueryMock,
+  createCreateAlertQueryMock,
+  createAlertInput,
+} from '../__mocks__/alerts';
 
 const GetLazyAlertsComponent = () => {
   const [getAlerts, {counts, loading, alerts}] = useLazyGetAlerts();
@@ -98,5 +103,45 @@ describe('useLazyGetAlert tests', () => {
     expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
     expect(screen.getByTestId('length')).toHaveTextContent(2);
+  });
+});
+
+const CreateAlertComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [createAlert] = useCreateAlert();
+
+  const handleCreateResult = id => {
+    setNotification(`Alert created with id ${id}.`);
+  };
+
+  return (
+    <div>
+      <Button
+        title={'Create tag'}
+        onClick={() => createAlert(createAlertInput).then(handleCreateResult)}
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('useCreateAlert test', () => {
+  test('should create an alert', async () => {
+    const [queryMock, resultFunc] = createCreateAlertQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    const {element} = render(<CreateAlertComponent />);
+
+    const buttons = element.querySelectorAll('button');
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Alert created with id 12345.',
+    );
   });
 });
