@@ -23,7 +23,7 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {pageFilter} from 'web/store/pages/actions';
 
-import {rendererWith, screen} from 'web/utils/testing';
+import {rendererWith, screen, waitFor} from 'web/utils/testing';
 
 import FilterProvider from '../filterprovider';
 
@@ -151,7 +151,7 @@ describe('FilterProvider component tests', () => {
       </FilterProvider>,
     );
 
-    await waitForElement(() => getByTestId('awaiting-span'));
+    await waitFor(() => getByTestId('awaiting-span'));
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
