@@ -54,6 +54,51 @@ import {
 } from '../parser';
 
 describe('Enum conversion tests', () => {
+  test('convertSecInfoEnum', () => {
+    expect(convertSecInfoEnum('nvt')).toEqual('NVT');
+    expect(convertSecInfoEnum('cve')).toEqual('CVE');
+    expect(convertSecInfoEnum('cpe')).toEqual('CPE');
+    expect(convertSecInfoEnum('cert_bund_adv')).toEqual('CERT_BUND_ADV');
+    expect(convertSecInfoEnum('dfn_cert_adv')).toEqual('DFN_CERT_ADV');
+    expect(convertSecInfoEnum('ovaldef')).toEqual('OVALDEF');
+
+    expect(convertSecInfoEnum('foobar')).toEqual(null);
+    expect(convertSecInfoEnum()).toEqual(null);
+  });
+  test('convertDirectionEnum', () => {
+    expect(convertDirectionEnum('increased')).toEqual('INCREASED');
+    expect(convertDirectionEnum('decreased')).toEqual('DECREASED');
+    expect(convertDirectionEnum('changed')).toEqual('CHANGED');
+
+    expect(convertDirectionEnum('foobar')).toEqual(null);
+    expect(convertDirectionEnum()).toEqual(null);
+  });
+  test('convertFeedEventEnum', () => {
+    expect(convertFeedEventEnum('new')).toEqual('NEW');
+    expect(convertFeedEventEnum('updated')).toEqual('UPDATED');
+
+    expect(convertFeedEventEnum('foobar')).toEqual(null);
+    expect(convertFeedEventEnum()).toEqual(null);
+  });
+  test('convertTaskStatusEnum', () => {
+    expect(convertTaskStatusEnum('New')).toEqual('NEW');
+    expect(convertTaskStatusEnum('Done')).toEqual('DONE');
+    expect(convertTaskStatusEnum('Requested')).toEqual('REQUESTED');
+    expect(convertTaskStatusEnum('Running')).toEqual('RUNNING');
+    expect(convertTaskStatusEnum('Stop Requested')).toEqual('STOP_REQUESTED');
+    expect(convertTaskStatusEnum('Stopped')).toEqual('STOPPED');
+
+    expect(convertTaskStatusEnum('foobar')).toEqual(null);
+    expect(convertTaskStatusEnum()).toEqual(null);
+  });
+  test('convertDeltaTypeEnum', () => {
+    expect(convertDeltaTypeEnum('None')).toEqual('NONE');
+    expect(convertDeltaTypeEnum('Report')).toEqual('REPORT');
+    expect(convertDeltaTypeEnum('Previous')).toEqual('PREVIOUS');
+
+    expect(convertDeltaTypeEnum('foobar')).toEqual(null);
+    expect(convertDeltaTypeEnum()).toEqual(null);
+  });
   test('convertConditionEnum tests', () => {
     expect(convertConditionEnum(CONDITION_TYPE_ALWAYS)).toEqual('ALWAYS');
     expect(convertConditionEnum(CONDITION_TYPE_FILTER_COUNT_AT_LEAST)).toEqual(
