@@ -64,6 +64,14 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat2.active).toEqual(YES_VALUE);
   });
 
+  test('should parse predefined as boolean correctly', () => {
+    const reportFormat = ReportFormat.fromElement({predefined: '0'});
+    const reportFormat2 = ReportFormat.fromElement({predefined: '1'});
+
+    expect(reportFormat.predefined).toEqual(false);
+    expect(reportFormat2.predefined).toEqual(true);
+  });
+
   test('should parse alerts', () => {
     const elem = {
       alerts: {

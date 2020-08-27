@@ -1,16 +1,18 @@
 [Unit]
-Description=Greenbone Security Assistant
+Description=Greenbone Security Assistant daemon (gsad)
 After=network.target networking.service gvmd.service
 Documentation=man:gsad(8)
 ConditionKernelCommandLine=!recovery
 
 [Service]
 Type=forking
-EnvironmentFile=-${DEFAULT_CONFIG_DIR}/gsad
-ExecStart=${SBINDIR}/gsad --listen $GSA_ADDRESS --port $GSA_PORT $OPTIONS
+User=$GSAD_USER
+Group=$GSAD_GROUP
+PIDFile=${GVM_RUN_DIR}/gsad.pid
+EnvironmentFile=${DEFAULT_CONFIG_DIR}/gsad
+ExecStart=${SBINDIR}/gsad --listen $GSAD_ADDRESS --port $GSAD_PORT $GSAD_OPTIONS
 Restart=always
 TimeoutStopSec=10
 
 [Install]
 WantedBy=multi-user.target
-Alias=greenbone-security-assistant.service

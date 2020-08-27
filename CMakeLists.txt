@@ -22,7 +22,7 @@ message ("-- Configuring Greenbone Security Assistant")
 # VERSION: Set patch version for stable releases, e.g. "9.0.1",
 #          unset patch version for prereleases, e.g. "9.0"
 project (greenbone-security-assistant
-         VERSION 20.08)
+         VERSION 20.8.0)
 
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -32,7 +32,7 @@ endif (NOT CMAKE_BUILD_TYPE)
 
 # set if this is in prerelease status, starting at 0 before first beta release,
 # unset if this is a stable release series.
-set (PROJECT_BETA_RELEASE 0)
+# set (PROJECT_BETA_RELEASE 0)
 
 ## Retrieve git revision (at configure time)
 include (ProjectVersion)

@@ -51,8 +51,6 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {PORT_LISTS_FROM_FEED} from 'web/pages/extras/feedstatuspage';
-
 import {selector, loadEntity} from 'web/store/entities/portlists';
 
 import {
@@ -88,7 +86,7 @@ const ToolBarIcons = ({
       <CloneIcon entity={entity} onClick={onPortListCloneClick} />
       <EditIcon
         entity={entity}
-        disabled={PORT_LISTS_FROM_FEED.includes(entity.id)}
+        disabled={entity.predefined}
         onClick={onPortListEditClick}
       />
       <TrashIcon entity={entity} onClick={onPortListDeleteClick} />
