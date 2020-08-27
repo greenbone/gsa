@@ -220,8 +220,6 @@ const convertDict = async (prefix, data, fields) => {
       }
     }
   }
-  console.log(fieldDict);
-
   return fieldDict;
 };
 
