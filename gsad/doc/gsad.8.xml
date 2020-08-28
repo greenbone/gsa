@@ -126,19 +126,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <section name="SEE ALSO">
     <p>
+      <manref name="openvas" section="8"/>
       <manref name="gvmd" section="8"/>
+      <manref name="ospd-openvas" section="8"/>
     </p>
   </section>
 
   <section name="MORE INFORMATION">
     <p>
-      The places where you will find more information are:
+      The canonical places where you will find more information
+      about the Greenbone Vulnerability Manager are:
 
-      <url href="http://www.openvas.org/"/>
-      (Official site)
+      <url href="https://community.greenbone.net"/>
+      (Community Portal)
 
-      <url href="https://github.com/greenbone/"/>
+      <url href="https://github.com/greenbone"/>
       (Development Platform)
+
+      <url href="https://www.greenbone.net"/>
+      (Greenbone Website)
     </p>
   </section>
 

@@ -19,7 +19,7 @@ import {isDefined, isObject} from '../utils/identity';
 import {map} from '../utils/array';
 import {isEmpty} from '../utils/string';
 
-import {parseDate, parseYesNo, YES_VALUE} from '../parser';
+import {parseDate, parseYesNo, YES_VALUE, parseBoolean} from '../parser';
 
 import Model, {parseModelFromElement} from '../model';
 
@@ -84,6 +84,7 @@ class ReportFormat extends Model {
     }
 
     ret.active = parseYesNo(element.active);
+    ret.predefined = parseBoolean(element.predefined);
 
     return ret;
   }

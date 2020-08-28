@@ -20,7 +20,7 @@ import {isDefined} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 import {isEmpty} from '../utils/string';
 
-import {parseInt} from '../parser';
+import {parseInt, parseBoolean} from '../parser';
 
 import Model, {parseModelFromElement} from '../model';
 
@@ -129,6 +129,8 @@ class Policy extends Model {
     } else {
       ret.audits = [];
     }
+
+    ret.predefined = parseBoolean(element.predefined);
 
     return ret;
   }

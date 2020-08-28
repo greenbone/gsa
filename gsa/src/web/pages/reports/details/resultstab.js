@@ -165,6 +165,7 @@ class ResultsTab extends React.Component {
       progress,
       reportFilter,
       reportId,
+      reportResultsCounts,
       resultsError,
       resultsFilter,
       status,
@@ -210,8 +211,8 @@ class ResultsTab extends React.Component {
       ? resultsFilter.copy().delete('_and_report_id')
       : reportFilter;
 
-    if (isDefined(resultsCounts) && resultsCounts.filtered === 0) {
-      if (resultsCounts.all === 0) {
+    if (reportResultsCounts?.filtered === 0) {
+      if (reportResultsCounts.all === 0) {
         return (
           <EmptyReport
             hasTarget={hasTarget}
@@ -220,10 +221,10 @@ class ResultsTab extends React.Component {
             onTargetEditClick={onTargetEditClick}
           />
         );
-      } else if (resultsCounts.all > 0) {
+      } else if (reportResultsCounts.all > 0) {
         return (
           <EmptyResultsReport
-            all={resultsCounts.all}
+            all={reportResultsCounts.all}
             filter={displayedFilter}
             onFilterAddLogLevelClick={onFilterAddLogLevelClick}
             onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
@@ -263,6 +264,7 @@ ResultsTab.propTypes = {
   reload: PropTypes.func.isRequired,
   reportFilter: PropTypes.filter.isRequired,
   reportId: PropTypes.id.isRequired,
+  reportResultsCounts: PropTypes.counts,
   resultsCounts: PropTypes.counts,
   resultsError: PropTypes.error,
   resultsFilter: PropTypes.filter,
@@ -364,6 +366,7 @@ const mapStateToProps = (state, {reportId}) => {
     resultsFilter,
     resultsError: selector.getEntitiesError(resultsFilter),
     results: selector.getEntities(resultsFilter),
+    resultsCounts: selector.getEntitiesCounts(resultsFilter),
     isLoading: selector.isLoadingEntities(resultsFilter),
   };
 };
