@@ -20,7 +20,7 @@ import {useCallback} from 'react';
 
 import gql from 'graphql-tag';
 
-import {useLazyQuery} from '@apollo/react-hooks';
+import {useLazyQuery, useMutation} from '@apollo/react-hooks';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -128,4 +128,29 @@ export const useLazyGetAlerts = (variables, options) => {
   );
   const pageInfo = data?.alerts?.pageInfo;
   return [getAlerts, {...other, counts, alerts, pageInfo}];
+};
+
+export const CREATE_ALERT = gql`
+  mutation createAlert($input: CreateAlertInput!) {
+    createAlert(input: $input) {
+      id
+    }
+  }
+`;
+
+export const useCreateAlert = options => {
+  const [queryCreateAlert, {data, ...other}] = useMutation(
+    CREATE_ALERT,
+    options,
+  );
+  const createAlert = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreateAlert({...options, variables: {input: inputObject}}).then(
+        result => result.data.createAlert.id,
+      ),
+    [queryCreateAlert],
+  );
+  const alertId = data?.createAlert?.id;
+  return [createAlert, {...other, id: alertId}];
 };

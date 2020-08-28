@@ -20,6 +20,12 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
+import {
+  event_data_fields,
+  condition_data_fields,
+  method_data_fields,
+} from 'gmp/commands/alerts';
+
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
@@ -40,6 +46,7 @@ import FootNote from 'web/components/footnote/footnote';
 
 import Layout from 'web/components/layout/layout';
 
+import {useCreateAlert} from 'web/graphql/alerts';
 import {
   loadReportComposerDefaults as loadDefaults,
   saveReportComposerDefaults as saveDefaults,
@@ -74,6 +81,13 @@ import AlertDialog, {
 } from './dialog';
 
 import ContentComposerDialog from './contentcomposerdialog';
+
+import {
+  convertConditionEnum,
+  convertDict,
+  convertMethodEnum,
+  convertEventEnum,
+} from './parser';
 
 const select_verinice_report_id = (report_formats, report_id) => {
   if (isDefined(report_id)) {
@@ -124,6 +138,7 @@ const AlertComponent = ({
   onTestSuccess,
 }) => {
   const gmp = useGmp();
+
   const dispatch = useDispatch();
 
   const [state, dispatchState] = useReducer(reducer, initialState);
@@ -133,6 +148,8 @@ const AlertComponent = ({
   const loadReportComposerDefaults = () => dispatch(loadDefaults(gmp)());
   const saveReportComposerDefaults = defaults =>
     dispatch(saveDefaults(gmp)(defaults));
+
+  const [createAlert] = useCreateAlert();
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -303,6 +320,54 @@ const AlertComponent = ({
       },
     });
     handleInteraction();
+  };
+
+  const handleSaveAlert = async ({
+    active,
+    name,
+    comment = '',
+    event,
+    condition,
+    filter_id,
+    method,
+    report_format_ids,
+    ...other
+  }) => {
+    handleInteraction();
+
+    if (!isDefined(id)) {
+      return createAlert({
+        name,
+        comment,
+        condition: convertConditionEnum(condition),
+        conditionData: await convertDict(
+          'condition_data',
+          other,
+          condition_data_fields,
+        ),
+        filterId: filter_id,
+        method: convertMethodEnum(method),
+        methodData: await convertDict('method_data', other, method_data_fields),
+        event: convertEventEnum(event),
+        eventData: await convertDict('event_data', other, event_data_fields),
+      })
+        .then(onCreated, onCreateError)
+        .then(closeAlertDialog);
+    }
+
+    return gmp.alert
+      .save({
+        active,
+        name,
+        comment,
+        event,
+        condition,
+        filter_id,
+        method,
+        report_format_ids,
+        ...other,
+      })
+      .then(onSaved, onSaveError);
   };
 
   const openScpCredentialDialog = types => {
@@ -1080,7 +1145,7 @@ const AlertComponent = ({
       onSaved={onSaved}
       onSaveError={onSaveError}
     >
-      {({save, ...other}) => (
+      {({...other}) => (
         <Layout>
           {children({
             ...other,
@@ -1213,7 +1278,7 @@ const AlertComponent = ({
               }
               onSave={d => {
                 handleInteraction();
-                return save(d).then(() => closeAlertDialog());
+                return handleSaveAlert(d).then(() => closeAlertDialog());
               }}
               onReportFormatsChange={handleReportFormatsChange}
               onEmailCredentialChange={handleEmailCredentialChange}
