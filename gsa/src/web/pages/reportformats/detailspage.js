@@ -55,8 +55,6 @@ import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
 
-import {REPORT_FORMATS_FROM_FEED} from 'web/pages/extras/feedstatuspage';
-
 import {selector, loadEntity} from 'web/store/entities/reportformats';
 
 import {
@@ -96,7 +94,7 @@ const ToolBarIcons = withCapabilities(
         />
         <EditIcon
           displayName={_('Report Format')}
-          disabled={REPORT_FORMATS_FROM_FEED.includes(entity.id)}
+          disabled={entity.predefined}
           entity={entity}
           onClick={onReportFormatEditClick}
         />

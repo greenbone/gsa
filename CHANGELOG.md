@@ -21,11 +21,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...master
 
-## [20.08] - unreleased
+## [20.8.1] - unreleased
 
 ### Added
-- Add reload timer to feedstatuspage and displaying when updating is in progress [#2350](https://github.com/greenbone/gsa/pull/2350)
-- Add filtered links to GVMD_DATA row in feed status page [#2339](https://github.com/greenbone/gsa/pull/2339)
+- Added option for "Start Task" event upon "New SecInfo arrived" condition in alerts dialog [#2418](https://github.com/greenbone/gsa/pull/2418)
+
+### Changed
+- Use <predefined> to disable feed object editing and filter creation on feed status page [#2398](https://github.com/greenbone/gsa/pull/2398)
+
+### Fixed
+
+### Removed
+
+[20.8.1]: https://github.com/greenbone/gsa/compare/v20.8.0...gsa-20.08
+
+## [20.8.0] - 2020-08-11
+
+### Added
+- Added reload timer to feedstatuspage and displaying when updating is in progress [#2350](https://github.com/greenbone/gsa/pull/2350)
+- Added filtered links to GVMD_DATA row in feed status page [#2339](https://github.com/greenbone/gsa/pull/2339)
 - Added loading indicator for CVEs on CPE detailspage [#2248](https://github.com/greenbone/gsa/pull/2248)
 - Added new form validation feature, implemented on create and edit ticket dialog [#1782](https://github.com/greenbone/gsa/pull/1782)
 - Added German translation for About page [#1998](https://github.com/greenbone/gsa/pull/1998)
@@ -38,11 +52,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added handling of queued task status [#2208](https://github.com/greenbone/gsa/pull/2208)
 
 ### Changed
+- Increase age for feed being too old [#2394](https://github.com/greenbone/gsa/pull/2394)
 - Do not use result filter from store on report detailspage by default [#2358](https://github.com/greenbone/gsa/pull/2358)
 - Improve performance of form fields in edit scan config dialog [#2354](https://github.com/greenbone/gsa/pull/2354)
 - Default to sorting nvts by "Created", newest first [#2352](https://github.com/greenbone/gsa/pull/2352)
 - Disable EditIcons for data objects from feed [#2346](https://github.com/greenbone/gsa/pull/2346)
-- EmptyResultsReport uses the same counts as the results tab title in normal reports, when filtering for nonexistent results [#2335](https://github.com/greenbone/gsa/pull/2335)
 - Improve error 503 message at login [#2310](https://github.com/greenbone/gsa/pull/2310)
 - Use unified solution type instead of solution type nvt tag [#2268](https://github.com/greenbone/gsa/pull/2268)
 - Changed queued status color [#2227](https://github.com/greenbone/gsa/pull/2227)
@@ -60,6 +74,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Deleting a single entity now removes its ID from store [#1839](https://github.com/greenbone/gsa/pull/1839)
 
 ### Fixed
+- Fixed empty subsections on oval def details page [#2396](https://github.com/greenbone/gsa/pull/2396)
+- Fixed missing NVT solution [#2388](https://github.com/greenbone/gsa/pull/2388)
+- EmptyResultsReport uses the same counts as the results tab title in normal reports, when filtering for nonexistent results
+  [#2335](https://github.com/greenbone/gsa/pull/2335), [#2365](https://github.com/greenbone/gsa/pull/2365)
+- Show proper error message on report detailspage when no report format is available [#2367](https://github.com/greenbone/gsa/pull/2367)
+- Don't use stored result list page filter at report results tab [#2366](https://github.com/greenbone/gsa/pull/2366)
+- Fixed pagination of report results [#2365](https://github.com/greenbone/gsa/pull/2365)
 - Fixed flickering reports [#2359](https://github.com/greenbone/gsa/pull/2359)
 - Fixed "Hosts scanned" in report details disappearing during page refresh [#2357](https://github.com/greenbone/gsa/pull/2357)
 - Fixed schedule_periods not forwarded if there is no schedule [#2331](https://github.com/greenbone/gsa/pull/2331)
@@ -88,7 +109,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed "All SecInfo" section [#1685](https://github.com/greenbone/gsa/pull/1685) [#1695](https://github.com/greenbone/gsa/pull/1695)
 - Removed agents [#1903](https://github.com/greenbone/gsa/pull/1903)
 
-[20.08]: https://github.com/greenbone/gsa/compare/gsa-9.0...gsa-20.08
+[20.8.0]: https://github.com/greenbone/gsa/compare/gsa-9.0...v20.8.0
 
 ## [9.0.1] - 2020-05-13
 

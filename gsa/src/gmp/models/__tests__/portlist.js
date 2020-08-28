@@ -108,6 +108,14 @@ describe('PortList model tests', () => {
 
     expect(portList.targets).toEqual([]);
   });
+
+  test('should parse predefined as boolean correctly', () => {
+    const portList = PortList.fromElement({predefined: '0'});
+    const portList2 = PortList.fromElement({predefined: '1'});
+
+    expect(portList.predefined).toEqual(false);
+    expect(portList2.predefined).toEqual(true);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

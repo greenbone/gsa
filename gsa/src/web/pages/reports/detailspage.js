@@ -688,12 +688,23 @@ const load = ({
   reportId,
   // eslint-disable-next-line no-shadow
   loadReportWithThreshold,
+  pageFilter,
   reportFilter,
   updateFilter,
 }) => filter => {
   if (!hasValue(filter)) {
     // use loaded filter after initial loading
     filter = reportFilter;
+  }
+
+  if (!hasValue(filter)) {
+    // use filter from store
+    filter = pageFilter;
+  }
+
+  if (!hasValue(filter)) {
+    // use filter from user setting
+    filter = defaultFilter;
   }
 
   if (!hasValue(filter)) {

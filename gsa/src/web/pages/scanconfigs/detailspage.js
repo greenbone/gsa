@@ -65,8 +65,6 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {SCAN_CONFIGS_FROM_FEED} from 'web/pages/extras/feedstatuspage';
-
 import {selector, loadEntity} from 'web/store/entities/scanconfigs';
 
 import {
@@ -106,7 +104,7 @@ export const ToolBarIcons = withCapabilities(
         <CloneIcon entity={entity} onClick={onScanConfigCloneClick} />
         <EditIcon
           entity={entity}
-          disabled={SCAN_CONFIGS_FROM_FEED.includes(entity.id)}
+          disabled={entity.predefined}
           onClick={onScanConfigEditClick}
         />
         <TrashIcon entity={entity} onClick={onScanConfigDeleteClick} />

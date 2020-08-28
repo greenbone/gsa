@@ -19,7 +19,7 @@ import React from 'react';
 
 import {rendererWith, wait} from 'web/utils/testing';
 
-import FeedStatus, {composeObjFilter} from '../feedstatuspage';
+import FeedStatus from '../feedstatuspage';
 import {Feed} from 'gmp/commands/feedstatus';
 
 import Response from 'gmp/http/response';
@@ -47,13 +47,13 @@ const scapFeed = new Feed({
 const certFeed = new Feed({
   name: 'Greenbone Community CERT Feed',
   type: 'CERT',
-  version: 202007231003,
+  version: 202005231003,
 });
 
 const gvmdDataFeed = new Feed({
-  name: 'Greenbone Community GVMd Data Feed',
+  name: 'Greenbone Community gvmd Data Feed',
   type: 'GVMD_DATA',
-  version: 202007221009,
+  version: 202006221009,
   currently_syncing: {timestamp: 'foo'},
 });
 
@@ -79,7 +79,7 @@ const gmp = {
 describe('Feed status page tests', () => {
   test('should render', async () => {
     const {render} = rendererWith({gmp, router: true});
-    const {element, getAllByTestId, getByTestId} = render(<FeedStatus />);
+    const {element, getAllByTestId} = render(<FeedStatus />);
 
     await wait();
 
@@ -118,21 +118,18 @@ describe('Feed status page tests', () => {
     expect(links[4]).toHaveAttribute('href', '/ovaldefs');
     expect(links[5]).toHaveAttribute('href', '/certbunds');
     expect(links[6]).toHaveAttribute('href', '/dfncerts');
-    expect(links[7]).toHaveAttribute(
-      'href',
-      '/policies?filter=uuid%3Dc4b7c0cb-6502-4809-b034-8e635311b3e6%20',
-    );
+    expect(links[7]).toHaveAttribute('href', '/policies?filter=predefined%3D1');
     expect(links[8]).toHaveAttribute(
       'href',
-      '/portlists?filter=uuid%3D33d0cd82-57c6-11e1-8ed1-406186ea4fc5%20uuid%3D4a4717fe-57d2-11e1-9a26-406186ea4fc5%20uuid%3D730ef368-57e2-11e1-a90f-406186ea4fc5%20',
+      '/portlists?filter=predefined%3D1',
     );
     expect(links[9]).toHaveAttribute(
       'href',
-      '/reportformats?filter=uuid%3D5057e5cc-b825-11e4-9d0e-28d24461215b%20uuid%3Dc1645568-627a-11e3-a660-406186ea4fc5%20uuid%3D77bd6c4a-1f62-11e1-abf0-406186ea4fc5%20uuid%3Dc402cc3e-b531-11e1-9163-406186ea4fc5%20uuid%3Da3810a62-1f62-11e1-9219-406186ea4fc5%20uuid%3Da994b278-1f62-11e1-96ac-406186ea4fc5%20',
+      '/reportformats?filter=predefined%3D1',
     );
     expect(links[10]).toHaveAttribute(
       'href',
-      '/scanconfigs?filter=uuid%3Dd21f6c81-2b88-4ac1-b7b4-a2a9f2ad4663%20uuid%3D8715c877-47a0-438d-98a3-27c7a6ab2196%20uuid%3D085569ce-73ed-11df-83c3-002264764cea%20uuid%3Ddaba56c8-73ec-11df-a475-002264764cea%20uuid%3D2d3f051c-55ba-11e3-bf43-406186ea4fc5%20uuid%3Dbbca7412-a950-11e3-9109-406186ea4fc5%20',
+      '/scanconfigs?filter=predefined%3D1',
     );
 
     // Test headers
@@ -156,45 +153,38 @@ describe('Feed status page tests', () => {
     expect(element).toHaveTextContent('Greenbone Community Feed');
     expect(element).toHaveTextContent('Greenbone Community SCAP Feed');
     expect(element).toHaveTextContent('Greenbone Community CERT Feed');
-    expect(element).toHaveTextContent('Greenbone Community GVMd Data Feed');
+    expect(element).toHaveTextContent('Greenbone Community gvmd Data Feed');
 
     // Feed versions
     expect(element).toHaveTextContent('20200724T1005');
     expect(element).toHaveTextContent('20200723T0130');
-    expect(element).toHaveTextContent('20200723T1003');
-    expect(element).toHaveTextContent('20200722T1009');
+    expect(element).toHaveTextContent('20200523T1003');
+    expect(element).toHaveTextContent('20200622T1009');
 
     // Feed Status
 
     const ageText = element.querySelectorAll('strong');
+    const updateMsgs = getAllByTestId('update-msg');
 
     expect(ageText.length).toEqual(4);
+    expect(updateMsgs.length).toEqual(4);
+
+    // Not too old and not currently syncing
     expect(ageText[0]).toHaveTextContent('Current');
+    expect(updateMsgs[0]).toHaveTextContent('');
+
     expect(ageText[1]).toHaveTextContent('2 days old');
-    expect(ageText[2]).toHaveTextContent('Current');
+    expect(updateMsgs[1]).toHaveTextContent('');
 
-    const loadingIndicator = getByTestId('loading-indicator');
+    // CERT feed is too old but is not currently syncing
+    expect(ageText[2]).toHaveTextContent('Too old (62 days)');
+    expect(updateMsgs[2]).toHaveTextContent(
+      'Please check the automatic synchronization of your system.',
+    );
 
-    expect(loadingIndicator).toHaveAttribute('title', 'Update in progress');
-    expect(loadingIndicator).toHaveAttribute('src', '/img/loading.gif');
-    expect(loadingIndicator).toHaveAttribute('alt', 'Loading Indicator');
-  });
-});
-
-describe('Test uuid filter composer', () => {
-  test('Should return empty string for empty array', () => {
-    const emptyFilter = composeObjFilter([]);
-    expect(emptyFilter).toEqual('');
-  });
-
-  test('Should not crash on undefined input', () => {
-    const noFilter = composeObjFilter();
-    expect(noFilter).toEqual('');
-  });
-
-  test('Should return correct filter string', () => {
-    const filterString = composeObjFilter(['foo', 'bar', 'baz']);
-    expect(filterString).toEqual('uuid=foo uuid=bar uuid=baz ');
+    // GVMD_DATA feed is too old but IS currently syncing
+    expect(ageText[3]).toHaveTextContent('Update in progress...');
+    expect(updateMsgs[3]).toHaveTextContent('');
   });
 });
 

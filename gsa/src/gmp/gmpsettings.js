@@ -21,9 +21,10 @@ export const DEFAULT_GRAPHQL_API_LOCATION = 'selene/graphql/';
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
 export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
 export const DEFAULT_RELOAD_INTERVAL_INACTIVE = 60 * 1000; // one minute
-export const DEFAULT_MANUAL_URL = 'http://docs.greenbone.net/GSM-Manual/gos-6/';
+export const DEFAULT_MANUAL_URL =
+  'http://docs.greenbone.net/GSM-Manual/gos-20.08/';
 export const DEFAULT_PROTOCOLDOC_URL =
-  'https://docs.greenbone.net/API/GMP/gmp-9.0.html';
+  'https://docs.greenbone.net/API/GMP/gmp-20.08.html';
 export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
 export const DEFAULT_LOG_LEVEL = 'warn';
 export const DEFAULT_TIMEOUT = 300000; // 5 minutes

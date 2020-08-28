@@ -135,11 +135,11 @@ class Nvt extends Info {
       getFilteredRefs(refs, 'cert-bund'),
     );
 
-    if (isDefined(element.solution)) {
+    if (isDefined(ret.solution)) {
       ret.solution = {
-        type: element.solution._type,
-        description: element.solution.__text,
-        method: element.solution._method,
+        type: ret.solution._type,
+        description: ret.solution.__text,
+        method: ret.solution._method,
       };
     }
 

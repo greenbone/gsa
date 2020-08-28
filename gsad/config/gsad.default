@@ -1,14 +1,24 @@
 #
-# Additional options
-#
-OPTIONS=""
-
-#
 # The address the Greenbone Security Assistant daemon will listen on.
 #
-GSA_ADDRESS=127.0.0.1
+GSAD_ADDRESS=127.0.0.1
 
 #
 # The port the Greenbone Security Assistant daemon will listen on.
 #
-GSA_PORT=9392
+GSAD_PORT=9392
+
+#
+# The user for running the Greenbone Security Assistant daemon in the gsad.service systemd file
+#
+GSAD_USER="gvm"
+
+#
+# The group for running the Greenbone Security Assistant daemon in the gsad.service systemd file
+#
+GSAD_GROUP="gvm"
+
+#
+# Additional options
+#
+GSAD_OPTIONS=""
