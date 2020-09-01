@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed Internet Explorer 11 support [#2399](https://github.com/greenbone/gsa/pull/2399)
 - Removed parsing and testing of textExcerpt [#2316](https://github.com/greenbone/gsa/pull/2316)
 - Removed extra parsing of comment and summary in Model [#2309](https://github.com/greenbone/gsa/pull/2309)
+- Removed severity class 'bsi' [#2434](https://github.com/greenbone/gsa/pull/2434)
 
 [21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...master
 
