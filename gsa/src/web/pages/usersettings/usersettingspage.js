@@ -109,11 +109,7 @@ import TableRow from 'web/components/table/row';
 import compose from 'web/utils/compose';
 import Languages, {BROWSER_LANGUAGE} from 'web/utils/languages';
 import PropTypes from 'web/utils/proptypes';
-import {
-  SEVERITY_CLASS_NIST,
-  SEVERITY_CLASS_BSI,
-  SEVERITY_CLASS_PCI_DSS,
-} from 'web/utils/severity';
+import {SEVERITY_CLASS_NIST, SEVERITY_CLASS_PCI_DSS} from 'web/utils/severity';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import useGmp from 'web/utils/useGmp';
@@ -124,7 +120,6 @@ import SettingsDialog from './dialog';
 const FIRST_COL_WIDTH = '250px';
 export const SEVERITY_CLASSES = [
   {id: SEVERITY_CLASS_NIST, name: 'NVD Vulnerability Severity Ratings'},
-  {id: SEVERITY_CLASS_BSI, name: 'BSI Schwachstellenampel (Germany)'},
   {id: SEVERITY_CLASS_PCI_DSS, name: 'PCI-DSS'},
 ];
 
