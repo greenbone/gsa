@@ -86,13 +86,7 @@ const mockScanners = {
   },
 };
 
-export const createGetScannersQueryMock = ({
-  filterString,
-  after,
-  previous,
-  first,
-  last,
-} = {}) => {
+export const createGetScannersQueryMock = (variables = {}) => {
   const queryResult = {
     data: {
       scanners: mockScanners,
@@ -100,14 +94,6 @@ export const createGetScannersQueryMock = ({
   };
 
   const resultFunc = jest.fn().mockReturnValue(queryResult);
-
-  const variables = {
-    filterString,
-    after,
-    previous,
-    first,
-    last,
-  };
 
   const queryMock = {
     request: {
