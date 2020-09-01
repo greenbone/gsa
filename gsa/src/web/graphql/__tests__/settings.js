@@ -142,7 +142,7 @@ describe('useGetSettings tests', () => {
     expect(screen.queryByTestId('settings')).not.toBeInTheDocument();
 
     expect(screen.queryByTestId('error')).toHaveTextContent(
-      'Network error: An error occurred.',
+      'An error occurred.',
     );
   });
 });

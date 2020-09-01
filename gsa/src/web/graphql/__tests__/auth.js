@@ -225,7 +225,7 @@ describe('useLogin tests', () => {
     expect(screen.queryByTestId('locale')).not.toBeInTheDocument();
 
     expect(screen.queryByTestId('error')).toHaveTextContent(
-      'Network error: An error has occurred.',
+      'An error has occurred.',
     );
   });
 });

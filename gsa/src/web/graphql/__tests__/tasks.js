@@ -573,7 +573,7 @@ describe('useGetTask tests', () => {
     expect(screen.queryByTestId('error')).toBeInTheDocument();
 
     expect(screen.queryByTestId('error')).toHaveTextContent(
-      'Network error: An error occurred.',
+      'An error occurred.',
     );
   });
 });
