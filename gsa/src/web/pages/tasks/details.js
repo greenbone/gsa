@@ -62,7 +62,7 @@ export const compareAlerts = (alertA, alertB) => {
   return 0;
 };
 
-const TaskDetails = ({entity, links = true, ...props}) => {
+const TaskDetails = ({entity, links = true}) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
 
