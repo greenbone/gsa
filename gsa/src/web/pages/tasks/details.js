@@ -69,7 +69,7 @@ export const compareAlerts = (alertA, alertB) => {
   return 0;
 };
 
-const TaskDetails = props => {
+const TaskDetails = ({entity, links = true, ...props}) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
 
@@ -84,17 +84,14 @@ const TaskDetails = props => {
   ]);
 
   useEffect(() => {
-    const {entity} = props;
-
     if (hasValue(entity.config)) {
       loadScanConfig(entity.config.id);
     }
     if (hasValue(entity.schedule)) {
       loadSchedule(entity.schedule.id);
     }
-  }, []);
+  }, [loadScanConfig, loadSchedule]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const {links = true, entity} = props;
   const {
     alerts,
     applyOverrides,
@@ -324,10 +321,7 @@ const TaskDetails = props => {
 
 TaskDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   links: PropTypes.bool,
-  loadScanConfig: PropTypes.func.isRequired,
-  loadSchedule: PropTypes.func.isRequired,
   scanConfig: PropTypes.object,
   schedule: PropTypes.object,
 };
