@@ -42,7 +42,7 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 import {renderYesNo} from 'web/utils/render';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
@@ -70,17 +70,18 @@ export const compareAlerts = (alertA, alertB) => {
 };
 
 const TaskDetails = props => {
+  const gmp = useGmp();
   const dispatch = useDispatch();
 
   // Loaders
   const loadScanConfig = useCallback(
-    id => dispatch(scanConfigLoader(props.gmp)(id)),
-    [props.gmp, dispatch],
+    id => dispatch(scanConfigLoader(gmp)(id)),
+    [gmp, dispatch],
   );
-  const loadSchedule = useCallback(
-    id => dispatch(scheduleLoader(props.gmp)(id)),
-    [props.gmp, dispatch],
-  );
+  const loadSchedule = useCallback(id => dispatch(scheduleLoader(gmp)(id)), [
+    gmp,
+    dispatch,
+  ]);
 
   useEffect(() => {
     const {entity} = props;
@@ -344,9 +345,6 @@ const mapStateToProps = (rootState, {entity = {}}) => {
   };
 };
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, undefined),
-)(TaskDetails);
+export default compose(connect(mapStateToProps, undefined))(TaskDetails);
 
 // vim: set ts=2 sw=2 tw=80:
