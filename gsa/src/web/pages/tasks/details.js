@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {connect} from 'react-redux';
 
@@ -69,247 +69,245 @@ export const compareAlerts = (alertA, alertB) => {
   return 0;
 };
 
-class TaskDetails extends React.Component {
-  componentDidMount() {
-    const {entity} = this.props;
+const TaskDetails = props => {
+  useEffect(() => {
+    const {entity} = props;
 
     if (hasValue(entity.config)) {
-      this.props.loadScanConfig(entity.config.id);
+      props.loadScanConfig(entity.config.id);
     }
     if (hasValue(entity.schedule)) {
-      this.props.loadSchedule(entity.schedule.id);
+      props.loadSchedule(entity.schedule.id);
     }
+  }, []);
+
+  const {links = true, entity} = props;
+  const {
+    alerts,
+    applyOverrides,
+    autoDelete,
+    autoDeleteData,
+    averageDuration,
+    config,
+    hostsOrdering,
+    inAssets,
+    reports,
+    minQod,
+    scanner,
+    target,
+    maxChecks,
+    maxHosts,
+    schedule,
+    sourceIface = '',
+  } = entity;
+
+  const {lastReport} = reports;
+
+  let dur;
+  const hasDuration = hasValue(lastReport) && hasValue(lastReport.scanStart);
+  if (hasDuration) {
+    if (hasValue(lastReport.scanEnd)) {
+      const diff = lastReport.scanEnd.diff(lastReport.scanStart); // Seems like scanEnd is not a valid date object or something. I get an error sometimes.
+      dur = duration(diff).humanize();
+    } else {
+      dur = _('Not finished yet');
+    }
+  } else {
+    dur = _('No scans yet');
   }
 
-  render() {
-    const {links = true, entity} = this.props;
-    const {
-      alerts,
-      applyOverrides,
-      autoDelete,
-      autoDeleteData,
-      averageDuration,
-      config,
-      hostsOrdering,
-      inAssets,
-      reports,
-      minQod,
-      scanner,
-      target,
-      maxChecks,
-      maxHosts,
-      schedule,
-      sourceIface = '',
-    } = entity;
+  const hasAvDuration = hasValue(averageDuration) && averageDuration > 0;
+  const avDuration = hasAvDuration ? averageDuration.humanize() : '';
 
-    const {lastReport} = reports;
-
-    let dur;
-    const hasDuration = hasValue(lastReport) && hasValue(lastReport.scanStart);
-    if (hasDuration) {
-      if (hasValue(lastReport.scanEnd)) {
-        const diff = lastReport.scanEnd.diff(lastReport.scanStart); // Seems like scanEnd is not a valid date object or something. I get an error sometimes.
-        dur = duration(diff).humanize();
-      } else {
-        dur = _('Not finished yet');
-      }
-    } else {
-      dur = _('No scans yet');
-    }
-
-    const hasAvDuration = hasValue(averageDuration) && averageDuration > 0;
-    const avDuration = hasAvDuration ? averageDuration.humanize() : '';
-
-    return (
-      <Layout grow="1" flex="column">
-        {hasValue(target) && (
-          <DetailsBlock title={_('Target')}>
-            <DetailsLink textOnly={!links} type="target" id={target.id}>
-              {target.name}
-            </DetailsLink>
-          </DetailsBlock>
-        )}
-
-        {hasValue(alerts) && alerts.length > 0 && (
-          <DetailsBlock title={_('Alerts')}>
-            <HorizontalSep>
-              {alerts.sort(compareAlerts).map(alert => (
-                <span key={alert.id}>
-                  <DetailsLink textOnly={!links} type="alert" id={alert.id}>
-                    {alert.name}
-                  </DetailsLink>
-                </span>
-              ))}
-            </HorizontalSep>
-          </DetailsBlock>
-        )}
-
-        {hasValue(scanner) && (
-          <DetailsBlock title={_('Scanner')}>
-            <DetailsTable>
-              <TableBody>
-                <TableRow>
-                  <TableData>{_('Name')}</TableData>
-                  <TableData>
-                    <span>
-                      <DetailsLink
-                        textOnly={!links}
-                        type="scanner"
-                        id={scanner.id}
-                      >
-                        {scanner.name}
-                      </DetailsLink>
-                    </span>
-                  </TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Type')}</TableData>
-                  <TableData>{scannerTypeName(scanner.scannerType)}</TableData>
-                </TableRow>
-                {hasValue(config) && (
-                  <TableRow>
-                    <TableData>{_('Scan Config')}</TableData>
-                    <TableData>
-                      <span>
-                        <DetailsLink
-                          textOnly={!links}
-                          type="scanconfig"
-                          id={config.id}
-                        >
-                          {config.name}
-                        </DetailsLink>
-                      </span>
-                    </TableData>
-                  </TableRow>
-                )}
-                {hasValue(config) &&
-                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
-                  hasValue(hostsOrdering) && (
-                    <TableRow>
-                      <TableData>{_('Order for target hosts')}</TableData>
-                      <TableData>{hostsOrdering}</TableData>
-                    </TableRow>
-                  )}
-                {hasValue(config) &&
-                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
-                    <TableRow>
-                      <TableData>{_('Network Source Interface')}</TableData>
-                      <TableData>{sourceIface}</TableData>
-                    </TableRow>
-                  )}
-                {hasValue(config) &&
-                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
-                  hasValue(maxChecks) && (
-                    <TableRow>
-                      <TableData>
-                        {_('Maximum concurrently executed NVTs per host')}
-                      </TableData>
-                      <TableData>{maxChecks}</TableData>
-                    </TableRow>
-                  )}
-                {hasValue(config) &&
-                  config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
-                  hasValue(maxHosts) && (
-                    <TableRow>
-                      <TableData>
-                        {_('Maximum concurrently scanned hosts')}
-                      </TableData>
-                      <TableData>{maxHosts}</TableData>
-                    </TableRow>
-                  )}
-              </TableBody>
-            </DetailsTable>
-          </DetailsBlock>
-        )}
-
-        <DetailsBlock title={_('Assets')}>
-          <DetailsTable>
-            <TableBody>
-              <TableRow>
-                <TableData>{_('Add to Assets')}</TableData>
-                <TableData>{renderYesNo(inAssets)}</TableData>
-              </TableRow>
-
-              {inAssets === YES_VALUE && (
-                <TableRow>
-                  <TableData>{_('Apply Overrides')}</TableData>
-                  <TableData>{renderYesNo(applyOverrides)}</TableData>
-                </TableRow>
-              )}
-
-              {inAssets === YES_VALUE && (
-                <TableRow>
-                  <TableData>{_('Min QoD')}</TableData>
-                  <TableData>{minQod + ' %'}</TableData>
-                </TableRow>
-              )}
-            </TableBody>
-          </DetailsTable>
+  return (
+    <Layout grow="1" flex="column">
+      {hasValue(target) && (
+        <DetailsBlock title={_('Target')}>
+          <DetailsLink textOnly={!links} type="target" id={target.id}>
+            {target.name}
+          </DetailsLink>
         </DetailsBlock>
+      )}
 
-        {hasValue(schedule) && (
-          <DetailsBlock title={_('Schedule')}>
-            <DetailsTable>
-              <TableBody>
-                <TableRow>
-                  <TableData>{_('Name')}</TableData>
-                  <TableData>
-                    <span>
-                      <DetailsLink
-                        textOnly={!links}
-                        type="schedule"
-                        id={schedule.id}
-                      >
-                        {schedule.name}
-                      </DetailsLink>
-                    </span>
-                  </TableData>
-                </TableRow>
-                {hasValue(schedule.event) && (
-                  <TableRow>
-                    <TableData>{_('Next')}</TableData>
-                    <TableData>
-                      {dateTimeWithTimeZone(schedule.event.nextDate)}
-                    </TableData>
-                  </TableRow>
-                )}
-              </TableBody>
-            </DetailsTable>
-          </DetailsBlock>
-        )}
+      {hasValue(alerts) && alerts.length > 0 && (
+        <DetailsBlock title={_('Alerts')}>
+          <HorizontalSep>
+            {alerts.sort(compareAlerts).map(alert => (
+              <span key={alert.id}>
+                <DetailsLink textOnly={!links} type="alert" id={alert.id}>
+                  {alert.name}
+                </DetailsLink>
+              </span>
+            ))}
+          </HorizontalSep>
+        </DetailsBlock>
+      )}
 
-        <DetailsBlock title={_('Scan')}>
+      {hasValue(scanner) && (
+        <DetailsBlock title={_('Scanner')}>
           <DetailsTable>
             <TableBody>
               <TableRow>
-                <TableData>{_('Duration of last Scan')}</TableData>
-                <TableData>{dur}</TableData>
-              </TableRow>
-              {hasAvDuration && (
-                <TableRow>
-                  <TableData>{_('Average Scan duration')}</TableData>
-                  <TableData>{avDuration}</TableData>
-                </TableRow>
-              )}
-              <TableRow>
-                <TableData>{_('Auto delete Reports')}</TableData>
+                <TableData>{_('Name')}</TableData>
                 <TableData>
-                  {autoDelete === 'keep'
-                    ? _(
-                        'Automatically delete oldest reports but always keep ' +
-                          'newest {{nr}} reports',
-                        {nr: autoDeleteData},
-                      )
-                    : _('Do not automatically delete reports')}
+                  <span>
+                    <DetailsLink
+                      textOnly={!links}
+                      type="scanner"
+                      id={scanner.id}
+                    >
+                      {scanner.name}
+                    </DetailsLink>
+                  </span>
                 </TableData>
               </TableRow>
+              <TableRow>
+                <TableData>{_('Type')}</TableData>
+                <TableData>{scannerTypeName(scanner.scannerType)}</TableData>
+              </TableRow>
+              {hasValue(config) && (
+                <TableRow>
+                  <TableData>{_('Scan Config')}</TableData>
+                  <TableData>
+                    <span>
+                      <DetailsLink
+                        textOnly={!links}
+                        type="scanconfig"
+                        id={config.id}
+                      >
+                        {config.name}
+                      </DetailsLink>
+                    </span>
+                  </TableData>
+                </TableRow>
+              )}
+              {hasValue(config) &&
+                config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
+                hasValue(hostsOrdering) && (
+                  <TableRow>
+                    <TableData>{_('Order for target hosts')}</TableData>
+                    <TableData>{hostsOrdering}</TableData>
+                  </TableRow>
+                )}
+              {hasValue(config) &&
+                config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
+                  <TableRow>
+                    <TableData>{_('Network Source Interface')}</TableData>
+                    <TableData>{sourceIface}</TableData>
+                  </TableRow>
+                )}
+              {hasValue(config) &&
+                config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
+                hasValue(maxChecks) && (
+                  <TableRow>
+                    <TableData>
+                      {_('Maximum concurrently executed NVTs per host')}
+                    </TableData>
+                    <TableData>{maxChecks}</TableData>
+                  </TableRow>
+                )}
+              {hasValue(config) &&
+                config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
+                hasValue(maxHosts) && (
+                  <TableRow>
+                    <TableData>
+                      {_('Maximum concurrently scanned hosts')}
+                    </TableData>
+                    <TableData>{maxHosts}</TableData>
+                  </TableRow>
+                )}
             </TableBody>
           </DetailsTable>
         </DetailsBlock>
-      </Layout>
-    );
-  }
-}
+      )}
+
+      <DetailsBlock title={_('Assets')}>
+        <DetailsTable>
+          <TableBody>
+            <TableRow>
+              <TableData>{_('Add to Assets')}</TableData>
+              <TableData>{renderYesNo(inAssets)}</TableData>
+            </TableRow>
+
+            {inAssets === YES_VALUE && (
+              <TableRow>
+                <TableData>{_('Apply Overrides')}</TableData>
+                <TableData>{renderYesNo(applyOverrides)}</TableData>
+              </TableRow>
+            )}
+
+            {inAssets === YES_VALUE && (
+              <TableRow>
+                <TableData>{_('Min QoD')}</TableData>
+                <TableData>{minQod + ' %'}</TableData>
+              </TableRow>
+            )}
+          </TableBody>
+        </DetailsTable>
+      </DetailsBlock>
+
+      {hasValue(schedule) && (
+        <DetailsBlock title={_('Schedule')}>
+          <DetailsTable>
+            <TableBody>
+              <TableRow>
+                <TableData>{_('Name')}</TableData>
+                <TableData>
+                  <span>
+                    <DetailsLink
+                      textOnly={!links}
+                      type="schedule"
+                      id={schedule.id}
+                    >
+                      {schedule.name}
+                    </DetailsLink>
+                  </span>
+                </TableData>
+              </TableRow>
+              {hasValue(schedule.event) && (
+                <TableRow>
+                  <TableData>{_('Next')}</TableData>
+                  <TableData>
+                    {dateTimeWithTimeZone(schedule.event.nextDate)}
+                  </TableData>
+                </TableRow>
+              )}
+            </TableBody>
+          </DetailsTable>
+        </DetailsBlock>
+      )}
+
+      <DetailsBlock title={_('Scan')}>
+        <DetailsTable>
+          <TableBody>
+            <TableRow>
+              <TableData>{_('Duration of last Scan')}</TableData>
+              <TableData>{dur}</TableData>
+            </TableRow>
+            {hasAvDuration && (
+              <TableRow>
+                <TableData>{_('Average Scan duration')}</TableData>
+                <TableData>{avDuration}</TableData>
+              </TableRow>
+            )}
+            <TableRow>
+              <TableData>{_('Auto delete Reports')}</TableData>
+              <TableData>
+                {autoDelete === 'keep'
+                  ? _(
+                      'Automatically delete oldest reports but always keep ' +
+                        'newest {{nr}} reports',
+                      {nr: autoDeleteData},
+                    )
+                  : _('Do not automatically delete reports')}
+              </TableData>
+            </TableRow>
+          </TableBody>
+        </DetailsTable>
+      </DetailsBlock>
+    </Layout>
+  );
+};
 
 TaskDetails.propTypes = {
   entity: PropTypes.model.isRequired,
