@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
@@ -31,12 +31,12 @@ import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
 import {
-  loadEntity as loadSchedule,
+  loadEntity as scheduleLoader,
   selector as scheduleSelector,
 } from 'web/store/entities/schedules';
 
 import {
-  loadEntity as loadScanConfig,
+  loadEntity as scanConfigLoader,
   selector as scanConfigSelector,
 } from 'web/store/entities/scanconfigs';
 
@@ -70,14 +70,26 @@ export const compareAlerts = (alertA, alertB) => {
 };
 
 const TaskDetails = props => {
+  const dispatch = useDispatch();
+
+  // Loaders
+  const loadScanConfig = useCallback(
+    id => dispatch(scanConfigLoader(props.gmp)(id)),
+    [props.gmp, dispatch],
+  );
+  const loadSchedule = useCallback(
+    id => dispatch(scheduleLoader(props.gmp)(id)),
+    [props.gmp, dispatch],
+  );
+
   useEffect(() => {
     const {entity} = props;
 
     if (hasValue(entity.config)) {
-      props.loadScanConfig(entity.config.id);
+      loadScanConfig(entity.config.id);
     }
     if (hasValue(entity.schedule)) {
-      props.loadSchedule(entity.schedule.id);
+      loadSchedule(entity.schedule.id);
     }
   }, []);
 
@@ -332,14 +344,9 @@ const mapStateToProps = (rootState, {entity = {}}) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadScanConfig: id => dispatch(loadScanConfig(gmp)(id)),
-  loadSchedule: id => dispatch(loadSchedule(gmp)(id)),
-});
-
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps, undefined),
 )(TaskDetails);
 
 // vim: set ts=2 sw=2 tw=80:
