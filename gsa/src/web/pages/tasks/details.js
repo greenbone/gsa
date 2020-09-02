@@ -17,7 +17,7 @@
  */
 import React, {useEffect, useCallback} from 'react';
 
-import {connect, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
@@ -30,18 +30,11 @@ import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
-import {
-  loadEntity as scheduleLoader,
-  selector as scheduleSelector,
-} from 'web/store/entities/schedules';
+import {loadEntity as scheduleLoader} from 'web/store/entities/schedules';
 
-import {
-  loadEntity as scanConfigLoader,
-  selector as scanConfigSelector,
-} from 'web/store/entities/scanconfigs';
+import {loadEntity as scanConfigLoader} from 'web/store/entities/scanconfigs';
 
 import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
 import useGmp from 'web/utils/useGmp';
 import {renderYesNo} from 'web/utils/render';
 
@@ -326,19 +319,6 @@ TaskDetails.propTypes = {
   schedule: PropTypes.object,
 };
 
-const mapStateToProps = (rootState, {entity = {}}) => {
-  const scheduleSel = scheduleSelector(rootState);
-  const scanConfigSel = scanConfigSelector(rootState);
-  return {
-    scanConfig: hasValue(entity.config)
-      ? scanConfigSel.getEntity(entity.config.id)
-      : undefined,
-    schedule: hasValue(entity.schedule)
-      ? scheduleSel.getEntity(entity.schedule.id)
-      : undefined,
-  };
-};
-
-export default compose(connect(mapStateToProps, undefined))(TaskDetails);
+export default TaskDetails;
 
 // vim: set ts=2 sw=2 tw=80:
