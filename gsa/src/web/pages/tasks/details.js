@@ -82,7 +82,7 @@ const TaskDetails = ({entity, links = true, ...props}) => {
     }
     if (hasValue(entity.schedule)) {
       loadSchedule(entity.schedule.id);
-    }
+    } // entity being in deps array will result in excessive rerenders
   }, [loadScanConfig, loadSchedule]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
@@ -315,8 +315,6 @@ const TaskDetails = ({entity, links = true, ...props}) => {
 TaskDetails.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
-  scanConfig: PropTypes.object,
-  schedule: PropTypes.object,
 };
 
 export default TaskDetails;
