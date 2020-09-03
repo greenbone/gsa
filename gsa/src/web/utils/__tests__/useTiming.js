@@ -24,8 +24,6 @@ import {rendererWith, screen, act, fireEvent, wait} from '../testing';
 
 import useTiming from '../useTiming';
 
-jest.useFakeTimers();
-
 const TestComponent = ({onMount = false, timeout = 100, promise = false}) => {
   const [value, setValue] = useState(0);
 
@@ -54,6 +52,14 @@ const TestComponent = ({onMount = false, timeout = 100, promise = false}) => {
     </div>
   );
 };
+
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+
+afterAll(() => {
+  jest.useRealTimers();
+});
 
 describe('useTiming tests', () => {
   test('should start a timer during mount', async () => {
