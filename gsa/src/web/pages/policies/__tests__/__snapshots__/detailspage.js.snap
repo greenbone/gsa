@@ -728,7 +728,9 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
             <div
               class="c22"
             >
-              <span>
+              <span
+                data-testid="entities-tab-title"
+              >
                 Scanner Preferences
               </span>
               <span
@@ -748,7 +750,9 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
             <div
               class="c22"
             >
-              <span>
+              <span
+                data-testid="entities-tab-title"
+              >
                 NVT Families
               </span>
               <span
@@ -768,7 +772,9 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
             <div
               class="c22"
             >
-              <span>
+              <span
+                data-testid="entities-tab-title"
+              >
                 NVT Preferences
               </span>
               <span
@@ -788,7 +794,9 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
             <div
               class="c22"
             >
-              <span>
+              <span
+                data-testid="entities-tab-title"
+              >
                 Permissions
               </span>
               <span
