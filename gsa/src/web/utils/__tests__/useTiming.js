@@ -34,7 +34,7 @@ const TestComponent = ({onMount = false, timeout = 100, promise = false}) => {
     [],
   );
 
-  const [startTimer, clearTimer] = useTiming(
+  const [startTimer, clearTimer, isRunning] = useTiming(
     promise ? stateUpdatePromise : stateUpdate,
     timeout,
   );
@@ -49,6 +49,7 @@ const TestComponent = ({onMount = false, timeout = 100, promise = false}) => {
       <button data-testid="start" onClick={startTimer} />
       <button data-testid="stop" onClick={clearTimer} />
       <div data-testid="value">{value}</div>
+      <div data-testid="isRunning">{isRunning ? 'yes' : 'no'}</div>
     </div>
   );
 };
@@ -153,14 +154,17 @@ describe('useTiming tests', () => {
 
     render(<TestComponent promise={true} onMount={true} />);
 
+    expect(screen.getByTestId('isRunning')).toHaveTextContent('no');
     expect(screen.getByTestId('value')).toHaveTextContent(0);
 
     await wait(100);
 
+    expect(screen.getByTestId('isRunning')).toHaveTextContent('yes');
     expect(screen.getByTestId('value')).toHaveTextContent(1);
 
     await wait(100);
 
+    expect(screen.getByTestId('isRunning')).toHaveTextContent('yes');
     expect(screen.getByTestId('value')).toHaveTextContent(2);
   });
 });
