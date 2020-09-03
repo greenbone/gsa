@@ -85,7 +85,7 @@
     "@babel/cli": "^7.11.5",
     "@storybook/react": "^6.0.20",
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^10.4.8",
+    "@testing-library/react": "^11.0.0",
     "@types/jest": "^26.0.12",
     "babel-plugin-i18next-extract": "^0.7.2",
     "eslint-config-prettier": "^6.11.0",
