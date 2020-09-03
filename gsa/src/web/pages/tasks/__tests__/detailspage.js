@@ -58,7 +58,7 @@ setLocale('en');
 
 const caps = new Capabilities(['everything']);
 
-const reloadInterval = 1;
+const reloadInterval = null; // do not reload by default
 const manualUrl = 'test/';
 
 // create mock task
