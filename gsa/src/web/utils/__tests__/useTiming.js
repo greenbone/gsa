@@ -167,4 +167,17 @@ describe('useTiming tests', () => {
     expect(screen.getByTestId('isRunning')).toHaveTextContent('yes');
     expect(screen.getByTestId('value')).toHaveTextContent(2);
   });
+
+  test('should not start timer if timeout value is null', async () => {
+    const {render} = rendererWith();
+
+    render(<TestComponent onMount={true} timeout={null} />);
+
+    expect(screen.getByTestId('value')).toHaveTextContent(0);
+
+    await wait();
+
+    expect(screen.getByTestId('value')).toHaveTextContent(0);
+    expect(screen.getByTestId('isRunning')).toHaveTextContent('no');
+  });
 });
