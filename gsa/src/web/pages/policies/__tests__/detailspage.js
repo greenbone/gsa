@@ -219,7 +219,7 @@ const scanners = [{name: 'scanner1'}, {name: 'scanner2'}];
 const caps = new Capabilities(['everything']);
 
 const entityType = 'policy';
-const reloadInterval = 1;
+const reloadInterval = -1;
 const manualUrl = 'test/';
 
 const currentSettings = jest.fn().mockResolvedValue({
@@ -251,8 +251,7 @@ describe('Policy Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
       },
@@ -317,8 +316,7 @@ describe('Policy Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -403,8 +401,7 @@ describe('Policy Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -460,8 +457,7 @@ describe('Policy Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -535,8 +531,7 @@ describe('Policy Detailspage tests', () => {
       scanners: {
         getAll: getAllScanners,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -631,8 +626,7 @@ describe('Policy Detailspage tests', () => {
       scanners: {
         getAll: getAllScanners,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -736,8 +730,7 @@ describe('Policy Detailspage tests', () => {
       scanners: {
         getAll: getAllScanners,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -832,8 +825,7 @@ describe('Policy Detailspage tests', () => {
       scanners: {
         getAll: getAllScanners,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,

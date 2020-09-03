@@ -63,7 +63,7 @@ const audit = Audit.fromElement({
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
-const reloadInterval = 1;
+const reloadInterval = -1;
 const manualUrl = 'test/';
 
 const currentSettings = jest.fn().mockResolvedValue({
@@ -116,8 +116,7 @@ describe('AuditPage tests', () => {
       reportformats: {
         get: getReportFormats,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {currentSettings, getSetting},
     };
 
@@ -178,8 +177,7 @@ describe('AuditPage tests', () => {
       reportformats: {
         get: getReportFormats,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 

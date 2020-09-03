@@ -219,7 +219,7 @@ const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
 const entityType = 'scanconfig';
-const reloadInterval = 1;
+const reloadInterval = -1;
 const manualUrl = 'test/';
 
 const currentSettings = jest.fn().mockResolvedValue({
@@ -251,8 +251,7 @@ describe('Scan Config Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
       },
@@ -318,8 +317,7 @@ describe('Scan Config Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -402,8 +400,7 @@ describe('Scan Config Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -470,8 +467,7 @@ describe('Scan Config Detailspage tests', () => {
       tags: {
         get: getTags,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -510,8 +506,7 @@ describe('Scan Config Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -585,8 +580,7 @@ describe('Scan Config Detailspage tests', () => {
       scanners: {
         getAll: getAllScanners,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -684,8 +678,7 @@ describe('Scan Config Detailspage tests', () => {
       scanners: {
         getAll: getAllScanners,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -794,8 +787,7 @@ describe('Scan Config Detailspage tests', () => {
       scanners: {
         getAll: getAllScanners,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,
@@ -895,8 +887,7 @@ describe('Scan Config Detailspage tests', () => {
       scanners: {
         getAll: getAllScanners,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
         renewSession,

@@ -72,7 +72,7 @@ const config = ScanConfig.fromElement({
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
-const reloadInterval = 1;
+const reloadInterval = -1;
 const manualUrl = 'test/';
 
 const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
@@ -106,8 +106,7 @@ describe('ScanConfigsPage tests', () => {
       filters: {
         get: getFilters,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {currentSettings, getSetting: getSetting},
     };
 
@@ -166,8 +165,7 @@ describe('ScanConfigsPage tests', () => {
       filters: {
         get: getFilters,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {currentSettings, getSetting, renewSession},
     };
 
