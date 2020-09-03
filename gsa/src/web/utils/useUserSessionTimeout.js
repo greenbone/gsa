@@ -19,9 +19,7 @@ import {useCallback} from 'react';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-import gql from 'graphql-tag';
-
-import {useMutation} from '@apollo/react-hooks';
+import {gql, useMutation} from '@apollo/client';
 
 import date from 'gmp/models/date';
 

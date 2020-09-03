@@ -179,7 +179,7 @@ describe('LoginPageTests', () => {
     await wait();
 
     expect(screen.getByTestId('error')).toHaveTextContent(
-      'Network error: An error has occurred.',
+      'An error has occurred.',
     );
   });
 
@@ -228,8 +228,7 @@ describe('LoginPageTests', () => {
     await wait();
 
     expect(screen.getByTestId('error')).toHaveTextContent(
-      'Network error: Response not successful: Received status code 500:' +
-        ' Foo. Bar.',
+      'Response not successful: Received status code 500: Foo. Bar.',
     );
   });
 

@@ -17,9 +17,7 @@
  */
 import {useCallback} from 'react';
 
-import {useQuery, useLazyQuery, useMutation} from '@apollo/react-hooks';
-
-import gql from 'graphql-tag';
+import {gql, useQuery, useLazyQuery, useMutation} from '@apollo/client';
 
 export const GET_CURRENT_USER_IS_AUTHENTICATED = gql`
   query {

@@ -254,13 +254,7 @@ const detailsMockTask = deepFreeze({
   },
 });
 
-export const createGetTasksQueryMock = ({
-  filterString,
-  after,
-  previous,
-  first,
-  last,
-} = {}) => {
+export const createGetTasksQueryMock = (variables = {}) => {
   const queryResult = {
     data: {
       tasks: mockTasks,
@@ -268,14 +262,6 @@ export const createGetTasksQueryMock = ({
   };
 
   const resultFunc = jest.fn().mockReturnValue(queryResult);
-
-  const variables = {
-    filterString,
-    after,
-    previous,
-    first,
-    last,
-  };
 
   const queryMock = {
     request: {

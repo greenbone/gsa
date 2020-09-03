@@ -17,9 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import gql from 'graphql-tag';
-
-import {useQuery} from 'react-apollo';
+import {gql, useQuery} from '@apollo/client';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 

@@ -54,13 +54,7 @@ const mockTargets = {
   },
 };
 
-export const createGetTargetsQueryMock = ({
-  filterString,
-  after,
-  previous,
-  first,
-  last,
-} = {}) => {
+export const createGetTargetsQueryMock = (variables = {}) => {
   const queryResult = {
     data: {
       targets: mockTargets,
@@ -68,14 +62,6 @@ export const createGetTargetsQueryMock = ({
   };
 
   const resultFunc = jest.fn().mockReturnValue(queryResult);
-
-  const variables = {
-    filterString,
-    after,
-    previous,
-    first,
-    last,
-  };
 
   const queryMock = {
     request: {

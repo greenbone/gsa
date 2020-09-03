@@ -162,7 +162,7 @@ describe('Task Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
-    const {baseElement, getAllByTestId} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
 
     await wait();
 
@@ -170,8 +170,8 @@ describe('Task Detailspage tests', () => {
 
     expect(baseElement).toHaveTextContent('Task: foo');
 
-    const links = baseElement.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
+    const icons = screen.getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: Tasks');
     expect(links[0]).toHaveAttribute(
@@ -187,16 +187,17 @@ describe('Task Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('Fri, Aug 30, 2019 3:23 PM CEST');
     expect(baseElement).toHaveTextContent('admin');
 
-    expect(baseElement).toHaveTextContent('User Tags');
-    expect(baseElement).toHaveTextContent('Permissions');
+    const tabs = screen.getAllByTestId('entities-tab-title');
+    expect(tabs[0]).toHaveTextContent('User Tags');
+    expect(tabs[1]).toHaveTextContent('Permissions');
 
     const headings = baseElement.querySelectorAll('h2');
-    const detailslinks = getAllByTestId('details-link');
+    const detailslinks = screen.getAllByTestId('details-link');
 
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('bar');
 
-    const progressBars = getAllByTestId('progressbar-box');
+    const progressBars = screen.getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Stopped');
     expect(progressBars[0]).toHaveTextContent('Stopped');
     expect(detailslinks[2]).toHaveAttribute('href', '/report/5678');
@@ -309,10 +310,10 @@ describe('Task Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    const spans = baseElement.querySelectorAll('span');
+    const tabs = screen.getAllByTestId('entities-tab-title');
 
-    expect(spans[22]).toHaveTextContent('User Tags');
-    fireEvent.click(spans[22]);
+    expect(tabs[0]).toHaveTextContent('User Tags');
+    fireEvent.click(tabs[0]);
 
     expect(baseElement).toHaveTextContent('No user tags available');
   });
@@ -376,8 +377,10 @@ describe('Task Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[24]);
+    const tabs = screen.getAllByTestId('entities-tab-title');
+
+    expect(tabs[1]).toHaveTextContent('Permissions');
+    fireEvent.click(tabs[1]);
 
     expect(baseElement).toHaveTextContent('No permissions available');
   });

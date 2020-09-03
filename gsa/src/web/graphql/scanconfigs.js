@@ -16,9 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import gql from 'graphql-tag';
-
-import {useLazyQuery} from '@apollo/react-hooks';
+import {gql, useLazyQuery} from '@apollo/client';
 
 import {toFruitfulQuery} from 'web/utils/graphql';
 

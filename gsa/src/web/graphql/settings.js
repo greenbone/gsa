@@ -18,9 +18,7 @@
  */
 import {useMemo} from 'react';
 
-import gql from 'graphql-tag';
-
-import {useQuery} from '@apollo/react-hooks';
+import {gql, useQuery} from '@apollo/client';
 
 import Setting from 'gmp/models/setting';
 

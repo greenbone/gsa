@@ -48,7 +48,7 @@ window.URL.createObjectURL = jest.fn();
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
-const reloadInterval = 1;
+const reloadInterval = null;
 const manualUrl = 'test/';
 
 // create mock tasks
@@ -127,8 +127,7 @@ describe('TasksListPage tests', () => {
       dashboard: {
         getSetting: getDashboardSetting,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {currentSettings, getSetting: getUserSetting},
     };
     const filterString = 'foo=bar rows=2';
@@ -244,8 +243,7 @@ describe('TasksListPage tests', () => {
       dashboard: {
         getSetting: getDashboardSetting,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getUserSetting},
     };
 
@@ -324,8 +322,7 @@ describe('TasksListPage tests', () => {
       dashboard: {
         getSetting: getDashboardSetting,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getUserSetting},
     };
 
@@ -419,8 +416,7 @@ describe('TasksListPage tests', () => {
       dashboard: {
         getSetting: getDashboardSetting,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getUserSetting},
     };
 

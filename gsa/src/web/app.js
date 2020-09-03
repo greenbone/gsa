@@ -19,11 +19,9 @@ import React from 'react';
 
 import {Provider as StoreProvider} from 'react-redux';
 
-import {ApolloProvider} from 'react-apollo';
-import {ApolloClient} from 'apollo-client';
-import {onError} from 'apollo-link-error';
-import {createHttpLink} from 'apollo-link-http';
-import {InMemoryCache} from 'apollo-cache-inmemory';
+import {ApolloProvider, ApolloClient, createHttpLink} from '@apollo/client';
+import {onError} from '@apollo/client/link/error';
+import {InMemoryCache} from '@apollo/client/cache';
 
 import Gmp from 'gmp';
 import GmpSettings from 'gmp/gmpsettings';

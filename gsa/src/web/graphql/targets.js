@@ -18,9 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {useLazyQuery, useMutation} from '@apollo/react-hooks';
-
-import gql from 'graphql-tag';
+import {gql, useLazyQuery, useMutation} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 

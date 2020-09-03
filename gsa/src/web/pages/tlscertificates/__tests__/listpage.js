@@ -55,7 +55,7 @@ const tlsCertificate = TlsCertificate.fromElement({
   permissions: {permission: [{name: 'everything'}]},
 });
 
-const reloadInterval = 1;
+const reloadInterval = -1;
 const manualUrl = 'test/';
 
 const currentSettings = jest.fn().mockResolvedValue({
@@ -115,8 +115,7 @@ describe('TlsCertificatePage tests', () => {
       dashboard: {
         getSetting: getDashboardSetting,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {currentSettings, getSetting: getUserSetting},
     };
 

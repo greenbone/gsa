@@ -973,7 +973,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             <div
               class="c26"
             >
-              <span>
+              <span
+                data-testid="entities-tab-title"
+              >
                 Permissions
               </span>
               <span

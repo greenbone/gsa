@@ -119,7 +119,8 @@ describe('useLazyIsAuthenticated tests', () => {
     const button = screen.getByTestId('query');
     fireEvent.click(button);
 
-    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
 
     await wait();
 
@@ -139,7 +140,8 @@ describe('useLazyIsAuthenticated tests', () => {
     const button = screen.getByTestId('query');
     fireEvent.click(button);
 
-    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
 
     await wait();
 
@@ -159,7 +161,8 @@ describe('useLazyIsAuthenticated tests', () => {
     const button = screen.getByTestId('query');
     fireEvent.click(button);
 
-    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
 
     await wait();
 
@@ -225,7 +228,7 @@ describe('useLogin tests', () => {
     expect(screen.queryByTestId('locale')).not.toBeInTheDocument();
 
     expect(screen.queryByTestId('error')).toHaveTextContent(
-      'Network error: An error has occurred.',
+      'An error has occurred.',
     );
   });
 });
