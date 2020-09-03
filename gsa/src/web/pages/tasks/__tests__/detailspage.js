@@ -137,8 +137,10 @@ describe('Task Detailspage tests', () => {
       overrides: {
         get: getEntities,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {
+        manualUrl,
+        reloadInterval,
+      },
       user: {
         currentSettings,
       },
@@ -275,8 +277,10 @@ describe('Task Detailspage tests', () => {
       overrides: {
         get: getEntities,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {
+        manualUrl,
+        reloadInterval,
+      },
       user: {
         currentSettings,
         renewSession,
@@ -340,8 +344,10 @@ describe('Task Detailspage tests', () => {
       overrides: {
         get: getEntities,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {
+        manualUrl,
+        reloadInterval,
+      },
       user: {
         currentSettings,
         renewSession,
@@ -403,8 +409,10 @@ describe('Task Detailspage tests', () => {
       overrides: {
         get: getEntities,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {
+        manualUrl,
+        reloadInterval,
+      },
       user: {
         currentSettings,
         renewSession,
