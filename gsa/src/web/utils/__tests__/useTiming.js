@@ -24,8 +24,6 @@ import {rendererWith, screen, act, fireEvent, wait} from '../testing';
 
 import useTiming from '../useTiming';
 
-jest.useFakeTimers();
-
 const TestComponent = ({onMount = false, timeout = 100, promise = false}) => {
   const [value, setValue] = useState(0);
 
@@ -36,7 +34,7 @@ const TestComponent = ({onMount = false, timeout = 100, promise = false}) => {
     [],
   );
 
-  const [startTimer, clearTimer] = useTiming(
+  const [startTimer, clearTimer, isRunning] = useTiming(
     promise ? stateUpdatePromise : stateUpdate,
     timeout,
   );
@@ -51,9 +49,18 @@ const TestComponent = ({onMount = false, timeout = 100, promise = false}) => {
       <button data-testid="start" onClick={startTimer} />
       <button data-testid="stop" onClick={clearTimer} />
       <div data-testid="value">{value}</div>
+      <div data-testid="isRunning">{isRunning ? 'yes' : 'no'}</div>
     </div>
   );
 };
+
+beforeAll(() => {
+  jest.useFakeTimers();
+});
+
+afterAll(() => {
+  jest.useRealTimers();
+});
 
 describe('useTiming tests', () => {
   test('should start a timer during mount', async () => {
@@ -147,14 +154,30 @@ describe('useTiming tests', () => {
 
     render(<TestComponent promise={true} onMount={true} />);
 
+    expect(screen.getByTestId('isRunning')).toHaveTextContent('no');
     expect(screen.getByTestId('value')).toHaveTextContent(0);
 
     await wait(100);
 
+    expect(screen.getByTestId('isRunning')).toHaveTextContent('yes');
     expect(screen.getByTestId('value')).toHaveTextContent(1);
 
     await wait(100);
 
+    expect(screen.getByTestId('isRunning')).toHaveTextContent('yes');
     expect(screen.getByTestId('value')).toHaveTextContent(2);
+  });
+
+  test('should not start timer if timeout value is null', async () => {
+    const {render} = rendererWith();
+
+    render(<TestComponent onMount={true} timeout={null} />);
+
+    expect(screen.getByTestId('value')).toHaveTextContent(0);
+
+    await wait();
+
+    expect(screen.getByTestId('value')).toHaveTextContent(0);
+    expect(screen.getByTestId('isRunning')).toHaveTextContent('no');
   });
 });

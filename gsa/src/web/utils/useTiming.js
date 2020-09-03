@@ -39,6 +39,11 @@ const useTiming = (doFunc, timeout) => {
 
     const timeoutValue = isFunction(timeout) ? timeout() : timeout;
 
+    if (!hasValue(timeoutValue) || timeoutValue < 0) {
+      log.debug('Not starting timer because timeout value was', timeoutValue);
+      return;
+    }
+
     timer.timerId = setTimeout(() => {
       log.debug('Timer with id', timer.timerId, 'fired.');
 
