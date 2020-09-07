@@ -113,7 +113,6 @@ export const translatedResultSeverityRiskFactor = value =>
 
 export const SEVERITY_CLASS_PCI_DSS = 'pci-dss';
 export const SEVERITY_CLASS_NIST = 'nist';
-export const SEVERITY_CLASS_BSI = 'bsi';
 
 /*
  * The severity levels define the lower limit
