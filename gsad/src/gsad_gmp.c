@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2019 Greenbone Networks GmbH
+/* Copyright (C) 2009-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16561,7 +16561,6 @@ gvm_connection_open (gvm_connection_t *connection, const gchar *address,
  * @param[in]  password      Password.
  * @param[out] role          Role.
  * @param[out] timezone      Timezone.
- * @param[out] severity      Severity class.
  * @param[out] capabilities  Capabilities of manager.
  * @param[out] language      User Interface Language, or NULL.
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
@@ -16570,7 +16569,7 @@ gvm_connection_open (gvm_connection_t *connection, const gchar *address,
  */
 int
 authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
-                  gchar **timezone, gchar **severity, gchar **capabilities,
+                  gchar **timezone, gchar **capabilities,
                   gchar **language, gchar **pw_warning)
 {
   gvm_connection_t connection;
@@ -16587,7 +16586,6 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
   auth_opts.username = username;
   auth_opts.password = password;
   auth_opts.role = role;
-  auth_opts.severity = severity;
   auth_opts.timezone = timezone;
   auth_opts.pw_warning = pw_warning;
 
@@ -16700,7 +16698,6 @@ login (http_connection_t *con, params_t *params,
   gchar *timezone;
   gchar *role;
   gchar *capabilities;
-  gchar *severity;
   gchar *language;
   gchar *pw_warning;
 
@@ -16713,7 +16710,7 @@ login (http_connection_t *con, params_t *params,
 
   if (login && password)
     {
-      ret = authenticate_gmp (login, password, &role, &timezone, &severity,
+      ret = authenticate_gmp (login, password, &role, &timezone,
                               &capabilities, &language, &pw_warning);
       if (ret)
         {
@@ -16761,7 +16758,6 @@ login (http_connection_t *con, params_t *params,
           credentials_free (credentials);
 
           g_free (timezone);
-          g_free (severity);
           g_free (capabilities);
           g_free (language);
           g_free (role);
