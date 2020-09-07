@@ -16742,7 +16742,7 @@ login (http_connection_t *con, params_t *params,
       else
         {
           user_t *user;
-          user = user_add (login, password, timezone, severity, role,
+          user = user_add (login, password, timezone, role,
                            capabilities, language, pw_warning, client_address);
 
           g_message ("Authentication success for '%s' from %s", login ?: "",
