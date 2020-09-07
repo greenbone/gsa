@@ -342,14 +342,13 @@ envelope_gmp (gvm_connection_t *connection, credentials_t *credentials,
     "<login>%s</login>"
     "<session>%ld</session>"
     "<role>%s</role>"
-    "<severity>%s</severity>"
     "<i18n>%s</i18n>"
     "<client_address>%s</client_address>"
     "<backend_operation>%.2f</backend_operation>",
     GSAD_VERSION, vendor_version_get (), user_get_token (user), ctime_now,
     timezone ? timezone : "", user_get_username (user),
     user_get_session_timeout (user), user_get_role (user),
-    user_get_severity (user), credentials_get_language (credentials),
+    credentials_get_language (credentials),
     user_get_client_address (user), credentials_get_cmd_duration (credentials));
 
   g_string_append (string, res);
