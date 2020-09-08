@@ -111,9 +111,6 @@ export const translateRiskFactor = factor =>
 export const translatedResultSeverityRiskFactor = value =>
   translateRiskFactor(resultSeverityRiskFactor(value));
 
-export const SEVERITY_CLASS_PCI_DSS = 'pci-dss';
-export const SEVERITY_CLASS_NIST = 'nist';
-
 /*
  * The severity levels define the lower limit
  *
@@ -132,21 +129,6 @@ export const SEVERITY_CLASS_NIST = 'nist';
  *  - high range from 6.5 to 10 [6.5, 10]
  */
 
-/*
- The original version form xslt used
-  {
-    high: 4.0,
-    medium: 3.9,
-    low: 3.9,
-  }
-  for PCI-DSS
-*/
-const SEVERITY_LEVELS_PCI_DSS = {
-  high: 7.0,
-  medium: 4.0,
-  low: 0.1,
-};
-
 const SEVERITY_LEVELS_DEFAULT = {
   high: 7.0,
   medium: 4.0,
@@ -155,26 +137,12 @@ const SEVERITY_LEVELS_DEFAULT = {
 
 export const getSeverityLevels = type => {
   switch (type) {
-    case SEVERITY_CLASS_PCI_DSS:
-      return SEVERITY_LEVELS_PCI_DSS;
     default:
       return SEVERITY_LEVELS_DEFAULT;
   }
 };
 
 export const getSeverityLevelsOld = type => {
-  if (type === SEVERITY_CLASS_PCI_DSS) {
-    return {
-      max_high: 10.0,
-      min_high: 4.0,
-      max_medium: 3.9,
-      min_medium: 3.9,
-      max_low: 3.9,
-      min_low: 3.9,
-      max_log: 3.9,
-    };
-  }
-
   return {
     max_high: 10.0,
     min_high: 7.0,
