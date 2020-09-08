@@ -97,7 +97,7 @@ const transformCvssData = (data = {}, {severityClass}) => {
 
       const value = parseFloat(key);
 
-      const riskFactor = resultSeverityRiskFactor(value, severityClass);
+      const riskFactor = resultSeverityRiskFactor(value);
       const label = translateRiskFactor(riskFactor);
 
       let toolTip;

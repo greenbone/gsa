@@ -86,7 +86,7 @@ export const extraRiskFactor = (value = NA_VALUE) => {
   }
 };
 
-export const resultSeverityRiskFactor = (value, type) => {
+export const resultSeverityRiskFactor = value => {
   if (value > LOG_VALUE) {
     return severityRiskFactor(value);
   }

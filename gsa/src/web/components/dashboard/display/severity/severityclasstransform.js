@@ -57,7 +57,7 @@ const transformSeverityData = (
       value = NA_VALUE;
     }
 
-    const riskFactor = resultSeverityRiskFactor(value, severityClassType);
+    const riskFactor = resultSeverityRiskFactor(value);
     const severityClass = allSeverityClasses[riskFactor] || {};
 
     let {count = 0} = severityClass;

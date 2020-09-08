@@ -61,7 +61,7 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
       const {name} = text;
       const high_per_host = parseFloat(text.high_per_host);
       const severity = parseSeverity(text.severity);
-      const riskFactor = resultSeverityRiskFactor(severity, severityClass);
+      const riskFactor = resultSeverityRiskFactor(severity);
       const displaySeverity = isDefined(severity)
         ? severityFormat(severity)
         : `${_NA}`;
