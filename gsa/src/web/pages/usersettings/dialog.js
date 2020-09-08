@@ -65,7 +65,6 @@ let UserSettingsDialog = ({
   listExportFileName,
   reportExportFileName,
   autoCacheRebuild,
-  severityClass,
   dynamicSeverity,
   defaultSeverity,
   defaultAlert,
@@ -127,7 +126,6 @@ let UserSettingsDialog = ({
     listExportFileName,
     reportExportFileName,
     autoCacheRebuild,
-    severityClass,
     dynamicSeverity: parseYesNo(dynamicSeverity),
     defaultSeverity: parseFloat(defaultSeverity),
     defaultAlert,
@@ -206,7 +204,6 @@ let UserSettingsDialog = ({
             <Section title={_('Severity Settings')} foldable>
               <FormGroupSizer>
                 <SeverityPart
-                  severityClass={values.severityClass}
                   dynamicSeverity={values.dynamicSeverity}
                   defaultSeverity={values.defaultSeverity}
                   onChange={onValueChange}
@@ -348,7 +345,6 @@ UserSettingsDialog.propTypes = {
   schedules: PropTypes.array,
   schedulesFilter: PropTypes.string,
   secInfoFilter: PropTypes.string,
-  severityClass: PropTypes.string,
   tagsFilter: PropTypes.string,
   targets: PropTypes.array,
   targetsFilter: PropTypes.string,
@@ -370,9 +366,6 @@ UserSettingsDialog = connect(rootState => {
   };
 })(UserSettingsDialog);
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(UserSettingsDialog);
+export default compose(withGmp, withCapabilities)(UserSettingsDialog);
 
 // vim: set ts=2 sw=2 tw=80:
