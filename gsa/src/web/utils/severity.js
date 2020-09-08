@@ -48,8 +48,8 @@ export const FALSE_POSITIVE_VALUE = -1;
 export const DEBUG_VALUE = -2;
 export const ERROR_VALUE = -3;
 
-export const severityRiskFactor = (value, type) => {
-  const {low, medium, high} = getSeverityLevels(type);
+export const severityRiskFactor = value => {
+  const {low, medium, high} = getSeverityLevels();
 
   if (value >= LOG_VALUE && isDefined(low) && value < low) {
     return LOG;
@@ -88,7 +88,7 @@ export const extraRiskFactor = (value = NA_VALUE) => {
 
 export const resultSeverityRiskFactor = (value, type) => {
   if (value > LOG_VALUE) {
-    return severityRiskFactor(value, type);
+    return severityRiskFactor(value);
   }
 
   return extraRiskFactor(value);
