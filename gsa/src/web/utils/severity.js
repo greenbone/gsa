@@ -129,20 +129,15 @@ export const translatedResultSeverityRiskFactor = value =>
  *  - high range from 6.5 to 10 [6.5, 10]
  */
 
-const SEVERITY_LEVELS_DEFAULT = {
-  high: 7.0,
-  medium: 4.0,
-  low: 0.1,
+export const getSeverityLevels = () => {
+  return {
+    high: 7.0,
+    medium: 4.0,
+    low: 0.1,
+  };
 };
 
-export const getSeverityLevels = type => {
-  switch (type) {
-    default:
-      return SEVERITY_LEVELS_DEFAULT;
-  }
-};
-
-export const getSeverityLevelsOld = type => {
+export const getSeverityLevelsOld = () => {
   return {
     max_high: 10.0,
     min_high: 7.0,

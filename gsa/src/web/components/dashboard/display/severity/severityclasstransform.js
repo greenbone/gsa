@@ -71,7 +71,7 @@ const transformSeverityData = (
     return allSeverityClasses;
   }, {});
 
-  const {high, medium, low} = getSeverityLevels(severityClassType);
+  const {high, medium, low} = getSeverityLevels();
 
   const tdata = Object.values(severityClasses).map(severityClass => {
     const {count, riskFactor} = severityClass;
