@@ -114,17 +114,12 @@ import TableRow from 'web/components/table/row';
 import compose from 'web/utils/compose';
 import Languages, {BROWSER_LANGUAGE} from 'web/utils/languages';
 import PropTypes from 'web/utils/proptypes';
-import {SEVERITY_CLASS_NIST, SEVERITY_CLASS_PCI_DSS} from 'web/utils/severity';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
 import SettingsDialog from './dialog';
 
 const FIRST_COL_WIDTH = '250px';
-export const SEVERITY_CLASSES = [
-  {id: SEVERITY_CLASS_NIST, name: 'NVD Vulnerability Severity Ratings'},
-  {id: SEVERITY_CLASS_PCI_DSS, name: 'PCI-DSS'},
-];
 
 const getLangNameByCode = code => {
   const language = Languages[code];
@@ -260,13 +255,6 @@ class UserSettings extends React.Component {
     }
   }
 
-  getSeverityClassNameById(id) {
-    const specifiedClass = SEVERITY_CLASSES.find(clas => {
-      return clas.id === id;
-    });
-    return isDefined(specifiedClass) ? specifiedClass.name : undefined;
-  }
-
   handleSaveSettings(data) {
     const {gmp} = this.props;
     const {userInterfaceLanguage = BROWSER_LANGUAGE, timezone} = data;
@@ -311,7 +299,6 @@ class UserSettings extends React.Component {
       detailsExportFileName = {},
       listExportFileName = {},
       reportExportFileName = {},
-      severityClass = {},
       dynamicSeverity = {},
       defaultSeverity = {},
       defaultAlert = {},
@@ -495,12 +482,6 @@ class UserSettings extends React.Component {
                     <Table>
                       <colgroup width={FIRST_COL_WIDTH} />
                       <TableBody>
-                        <TableRow title={severityClass.comment}>
-                          <TableData>{_('Severity Class')}</TableData>
-                          <TableData>
-                            {this.getSeverityClassNameById(severityClass.value)}
-                          </TableData>
-                        </TableRow>
                         <TableRow title={dynamicSeverity.comment}>
                           <TableData>{_('Dynamic Severity')}</TableData>
                           <TableData>
@@ -802,9 +783,6 @@ class UserSettings extends React.Component {
               listExportFileName={listExportFileName.value}
               reportExportFileName={reportExportFileName.value}
               autoCacheRebuild={autoCacheRebuild.value}
-              severityClass={
-                severityClass.value === '' ? undefined : severityClass.value
-              }
               dynamicSeverity={dynamicSeverity.value}
               defaultSeverity={defaultSeverity.value}
               defaultAlert={defaultAlert.id}
@@ -930,7 +908,6 @@ UserSettings.propTypes = {
   schedulesFilter: PropTypes.object,
   setLocale: PropTypes.func.isRequired,
   setTimezone: PropTypes.func.isRequired,
-  severityClass: PropTypes.object,
   tagsFilter: PropTypes.object,
   targets: PropTypes.array,
   targetsFilter: PropTypes.object,
@@ -964,7 +941,6 @@ const mapStateToProps = rootState => {
   const maxRowsPerPage = userDefaultsSelector.getByName('maxrowsperpage');
   const autoCacheRebuild = userDefaultsSelector.getByName('autocacherebuild');
 
-  const severityClass = userDefaultsSelector.getByName('severityclass');
   const defaultSeverity = userDefaultsSelector.getByName('defaultseverity');
   const dynamicSeverity = userDefaultsSelector.getByName('dynamicseverity');
 
@@ -1096,7 +1072,6 @@ const mapStateToProps = rootState => {
     listExportFileName,
     reportExportFileName,
     maxRowsPerPage,
-    severityClass,
     defaultSeverity,
     dynamicSeverity,
     isLoading: userDefaultsSelector.isLoading(),
@@ -1200,10 +1175,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 export default compose(
   withGmp,
   withCapabilities,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(UserSettings);
 
 // vim: set ts=2 sw=2 tw=80:
