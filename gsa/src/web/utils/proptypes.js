@@ -32,7 +32,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Filter from 'gmp/models/filter';
 import Settings from 'gmp/models/settings';
 
-import {SEVERITY_CLASS_NIST, SEVERITY_CLASS_PCI_DSS} from './severity';
 import warning from './warning';
 
 export const mayRequire = validator => {
@@ -210,11 +209,6 @@ const toStringValidator = (props, prop_name, component_name) => {
 
 const toString = mayRequire(toStringValidator);
 
-const severityClass = ReactPropTypes.objectOf([
-  SEVERITY_CLASS_NIST,
-  SEVERITY_CLASS_PCI_DSS,
-]);
-
 const ref = ReactPropTypes.oneOfType([
   ReactPropTypes.func,
   // React.createRef() returns an object with a current property
@@ -264,7 +258,6 @@ export default {
   ref,
   set,
   settings,
-  severityClass,
   stringOrFalse,
   timeunit,
   toString,

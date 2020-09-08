@@ -27,12 +27,7 @@ import Spinner from 'web/components/form/spinner';
 
 import PropTypes from 'web/utils/proptypes';
 
-const SeverityPart = ({
-  defaultSeverity,
-  dynamicSeverity,
-  severityClass,
-  onChange,
-}) => (
+const SeverityPart = ({defaultSeverity, dynamicSeverity, onChange}) => (
   <React.Fragment>
     <FormGroup title={_('Dynamic Severity')} titleSize="3">
       <Checkbox
@@ -60,7 +55,6 @@ const SeverityPart = ({
 SeverityPart.propTypes = {
   defaultSeverity: PropTypes.number,
   dynamicSeverity: PropTypes.yesno,
-  severityClass: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
 
