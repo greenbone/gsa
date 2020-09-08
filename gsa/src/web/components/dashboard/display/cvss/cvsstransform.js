@@ -53,7 +53,7 @@ const getSeverityClassLabel = value => {
   }
 };
 
-const transformCvssData = (data = {}, {severityClass}) => {
+const transformCvssData = (data = {}) => {
   const {groups = []} = data;
 
   const sum = totalCount(groups);
