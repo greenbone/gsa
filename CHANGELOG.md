@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 ### Removed
+- Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
 - Removed severity class 'bsi' [#2434](https://github.com/greenbone/gsa/pull/2434)
 - Removed Edge <= 18 support [#2408](https://github.com/greenbone/gsa/pull/2408)
 - Removed Internet Explorer 11 support [#2399](https://github.com/greenbone/gsa/pull/2399)
