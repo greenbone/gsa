@@ -44,7 +44,7 @@ import {TasksHighResultsLoader} from './loaders';
 
 const format = d3format('0.2f');
 
-const transformHighResultsData = (data = {}, {severityClass}) => {
+const transformHighResultsData = (data = {}) => {
   const {groups = []} = data;
 
   return groups
