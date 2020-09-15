@@ -43,7 +43,6 @@ export const severityClassDataRow = row => [row.label, row.value];
 
 const transformSeverityData = (
   data = {},
-  {severityClass: severityClassType},
 ) => {
   const {groups = []} = data;
 
