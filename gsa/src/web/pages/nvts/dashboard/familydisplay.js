@@ -43,7 +43,7 @@ import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {NvtsFamilyLoader} from './loaders';
 
-const transformFamilyData = (data = {}, {severityClass}) => {
+const transformFamilyData = (data = {}) => {
   const {groups = []} = data;
   const totalNvts = groups.reduce(
     (prev, current) => prev + parseFloat(current.count),
