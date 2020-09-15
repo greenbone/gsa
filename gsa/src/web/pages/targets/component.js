@@ -21,6 +21,8 @@ import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
+import {ALL_FILTER} from 'gmp/models/filter';
+
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -36,6 +38,8 @@ import PortListDialog from 'web/pages/portlists/dialog.js';
 
 import TargetDialog from './dialog.js';
 
+import {useLazyGetCredentials} from 'web/graphql/credentials';
+
 import {useCreateTarget, useModifyTarget} from 'web/graphql/targets';
 
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
@@ -49,6 +53,13 @@ const TargetComponent = props => {
 
   const [createTarget] = useCreateTarget();
   const [modifyTarget] = useModifyTarget();
+
+  const [
+    loadCredentials,
+    {credentials, refetch: refetchCredentials},
+  ] = useLazyGetCredentials({
+    filterString: ALL_FILTER.toFilterString(),
+  });
 
   const [credentialsDialogVisible, setCredentialsDialogVisible] = useState(
     false,
@@ -65,7 +76,6 @@ const TargetComponent = props => {
 
   const [credentialsDialogState, setCredentialsDialogState] = useState({});
 
-  const [credentials, setCredentials] = useState();
   const [portLists, setPortLists] = useState();
   const [portListsTitle, setPortListsTitle] = useState();
 
@@ -171,13 +181,9 @@ const TargetComponent = props => {
 
   const loadAll = () => {
     return Promise.all([
-      loadCredentials().then(credentials => setCredentials(credentials)),
+      loadCredentials(),
       loadPortLists().then(port_lists => setPortLists(port_lists)),
     ]);
-  };
-
-  const loadCredentials = () => {
-    return gmp.credentials.getAll().then(response => response.data);
   };
 
   const loadPortLists = () => {
@@ -215,7 +221,7 @@ const TargetComponent = props => {
       })
       .then(credentials => {
         setIdField(credential_id);
-        setCredentials(credentials);
+        refetchCredentials();
       });
   };
 

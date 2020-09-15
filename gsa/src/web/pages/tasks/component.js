@@ -38,11 +38,6 @@ import ScanConfig, {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 
 import {
-  loadEntities as loadCredentials,
-  selector as credentialsSelector,
-} from 'web/store/entities/credentials';
-
-import {
   loadEntities as loadSchedules,
   selector as scheduleSelector,
 } from 'web/store/entities/schedules';
@@ -66,6 +61,8 @@ import useCapabilities from 'web/utils/useCapabilities';
 import EntityComponent from 'web/entity/component';
 
 import {useLazyGetAlerts} from 'web/graphql/alerts';
+
+import {useLazyGetCredentials} from 'web/graphql/credentials';
 
 import {useLazyGetScanners} from 'web/graphql/scanners';
 
@@ -119,11 +116,19 @@ const TaskComponent = props => {
   });
 
   const [
+    loadCredentials,
+    {credentials, error: credentialError},
+  ] = useLazyGetCredentials({
+    filterString: ALL_FILTER.toFilterString(),
+  });
+
+  const [
     loadScanners,
     {scanners, loading: isLoadingScanners, error: scannerError},
   ] = useLazyGetScanners({
     filterString: ALL_FILTER.toFilterString(),
   });
+
   const scanConfigQuery = useGetScanConfigs();
   const [
     loadScanConfigs,
@@ -131,6 +136,7 @@ const TaskComponent = props => {
   ] = scanConfigQuery({
     filterString: ALL_FILTER.toFilterString(),
   });
+
   const [
     loadTargets,
     {
@@ -142,6 +148,7 @@ const TaskComponent = props => {
   ] = useLazyGetTargets({
     filterString: ALL_FILTER.toFilterString(),
   });
+
   const capabilities = useCapabilities();
 
   // default values
@@ -572,7 +579,7 @@ const TaskComponent = props => {
       defaultScannerId,
     } = props;
 
-    props.loadCredentials();
+    loadCredentials();
     loadScanConfigs();
 
     gmp.wizard.advancedTask().then(response => {
@@ -735,6 +742,11 @@ const TaskComponent = props => {
         ...state,
         error: _('Error while loading alerts.'),
       }));
+    } else if (credentialError) {
+      setDialogState(state => ({
+        ...state,
+        error: _('Error while loading credentials.'),
+      }));
     }
 
     // log error all objects to be able to inspect them the console
@@ -747,14 +759,15 @@ const TaskComponent = props => {
     if (targetError) {
       log.error({targetError});
     }
-
     if (alertError) {
       log.error({alertError});
     }
-  }, [scanConfigError, scannerError, targetError, alertError]);
+    if (credentialError) {
+      log.error({credentialError});
+    }
+  }, [scanConfigError, scannerError, targetError, alertError, credentialError]);
 
   const {
-    credentials,
     isLoadingSchedules,
     isLoadingTags,
     schedules,
@@ -1061,13 +1074,11 @@ TaskComponent.propTypes = {
 const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 
 const mapStateToProps = rootState => {
-  const credentialsSel = credentialsSelector(rootState);
   const userDefaults = getUserSettingsDefaults(rootState);
   const scheduleSel = scheduleSelector(rootState);
   const tagsSel = tagsSelector(rootState);
   return {
     timezone: getTimezone(rootState),
-    credentials: credentialsSel.getEntities(ALL_FILTER),
     defaultAlertId: userDefaults.getValueByName('defaultalert'),
     defaultEsxiCredential: userDefaults.getValueByName('defaultesxicredential'),
     defaultPortListId: userDefaults.getValueByName('defaultportlist'),
@@ -1087,7 +1098,6 @@ const mapStateToProps = rootState => {
 };
 
 const mapDispatchToProp = (dispatch, {gmp}) => ({
-  loadCredentials: () => dispatch(loadCredentials(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
   loadTags: () => dispatch(loadTags(gmp)(TAGS_FILTER)),
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
