@@ -120,4 +120,27 @@ describe('ProgressBar tests', () => {
 
     expect(progress).toHaveStyleRule('background', 'gray');
   });
+
+  test('should render box background', () => {
+    const {getByTestId} = render(
+      <ProgressBar
+        boxBackground={Theme.errorRed}
+        background="run"
+        progress="10"
+        title="Progress"
+      />,
+    );
+    const progressbarBox = getByTestId('progressbar-box');
+
+    expect(progressbarBox).toHaveStyleRule('background', Theme.errorRed);
+  });
+
+  test('should render gray box background by default', () => {
+    const {getByTestId} = render(
+      <ProgressBar background="run" progress="10" title="Progress" />,
+    );
+    const progressbarBox = getByTestId('progressbar-box');
+
+    expect(progressbarBox).toHaveStyleRule('background', Theme.darkGray);
+  });
 });
