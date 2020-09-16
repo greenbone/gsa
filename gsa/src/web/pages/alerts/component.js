@@ -334,6 +334,7 @@ const AlertComponent = ({
     ...other
   }) => {
     handleInteraction();
+    console.log(other);
 
     if (!isDefined(id)) {
       return createAlert({
@@ -350,6 +351,7 @@ const AlertComponent = ({
         methodData: await convertDict('method_data', other, method_data_fields),
         event: convertEventEnum(event),
         eventData: await convertDict('event_data', other, event_data_fields),
+        reportFormats: report_format_ids,
       })
         .then(onCreated, onCreateError)
         .then(closeAlertDialog);
@@ -1130,6 +1132,7 @@ const AlertComponent = ({
     composerStoreAsDefault,
     tasks,
   } = state;
+  console.log(report_format_ids, report_formats);
   return (
     <EntityComponent
       name="alert"
