@@ -198,7 +198,6 @@ export const convertEventEnum = event => {
 };
 
 export const convertMethodEnum = method => {
-  // Currently does not support all method types. Need updating.
   switch (method) {
     case METHOD_TYPE_ALEMBA_VFIRE:
       return 'ALEMBA_VFIRE';
