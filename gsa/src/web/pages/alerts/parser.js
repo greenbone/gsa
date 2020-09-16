@@ -201,7 +201,7 @@ export const convertMethodEnum = method => {
   // Currently does not support all method types. Need updating.
   switch (method) {
     case METHOD_TYPE_ALEMBA_VFIRE:
-      return null;
+      return 'ALEMBA_VFIRE';
     case METHOD_TYPE_SCP:
       return 'SCP';
     case METHOD_TYPE_SEND:
@@ -223,7 +223,7 @@ export const convertMethodEnum = method => {
     case METHOD_TYPE_VERINICE:
       return 'VERINICE_CONNECTOR';
     case METHOD_TYPE_TIPPING_POINT:
-      return null;
+      return 'TIPPINGPOINT';
     default:
       return null;
   }
