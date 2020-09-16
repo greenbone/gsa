@@ -187,11 +187,11 @@ export const convertEventEnum = event => {
     case EVENT_TYPE_NEW_SECINFO:
       return 'NEW_SECINFO_ARRIVED';
     case EVENT_TYPE_TICKET_RECEIVED:
-      return null;
+      return 'TICKET_RECEIVED';
     case EVENT_TYPE_ASSIGNED_TICKET_CHANGED:
-      return null;
+      return 'ASSIGNED_TICKET_CHANGED';
     case EVENT_TYPE_OWNED_TICKET_CHANGED:
-      return null;
+      return 'OWNED_TICKET_CHANGED';
     default:
       return null;
   }
