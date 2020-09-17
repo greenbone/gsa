@@ -53,7 +53,7 @@ const getSeverityClassLabel = value => {
   }
 };
 
-const transformCvssData = (data = {}, {severityClass}) => {
+const transformCvssData = (data = {}) => {
   const {groups = []} = data;
 
   const sum = totalCount(groups);
@@ -97,7 +97,7 @@ const transformCvssData = (data = {}, {severityClass}) => {
 
       const value = parseFloat(key);
 
-      const riskFactor = resultSeverityRiskFactor(value, severityClass);
+      const riskFactor = resultSeverityRiskFactor(value);
       const label = translateRiskFactor(riskFactor);
 
       let toolTip;

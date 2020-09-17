@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2018 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -53,7 +53,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
 
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
-          const gchar *severity, const gchar *role, const gchar *capabilities,
+          const gchar *role, const gchar *capabilities,
           const gchar *language, const gchar *pw_warning, const char *address);
 
 void
@@ -64,9 +64,6 @@ user_set_username (user_t *user, const gchar *username);
 
 void
 user_set_password (user_t *user, const gchar *password);
-
-void
-user_set_severity (user_t *user, const gchar *severity);
 
 void
 user_set_language (user_t *user, const gchar *language);
@@ -94,9 +91,6 @@ user_get_client_address (user_t *user);
 
 const gchar *
 user_get_role (user_t *user);
-
-const gchar *
-user_get_severity (user_t *user);
 
 const gchar *
 user_get_password_warning (user_t *user);

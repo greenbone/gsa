@@ -23,29 +23,12 @@ import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
-import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
 
 import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
 
-import {SEVERITY_CLASSES} from './usersettingspage';
-
-const SeverityPart = ({
-  defaultSeverity,
-  dynamicSeverity,
-  severityClass,
-  onChange,
-}) => (
+const SeverityPart = ({defaultSeverity, dynamicSeverity, onChange}) => (
   <React.Fragment>
-    <FormGroup title={_('Severity Class')} titleSize="3">
-      <Select
-        name="severityClass"
-        value={severityClass}
-        items={renderSelectItems(SEVERITY_CLASSES)}
-        onChange={onChange}
-      />
-    </FormGroup>
     <FormGroup title={_('Dynamic Severity')} titleSize="3">
       <Checkbox
         name="dynamicSeverity"
@@ -72,7 +55,6 @@ const SeverityPart = ({
 SeverityPart.propTypes = {
   defaultSeverity: PropTypes.number,
   dynamicSeverity: PropTypes.yesno,
-  severityClass: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
 

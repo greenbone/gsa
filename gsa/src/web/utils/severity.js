@@ -48,8 +48,8 @@ export const FALSE_POSITIVE_VALUE = -1;
 export const DEBUG_VALUE = -2;
 export const ERROR_VALUE = -3;
 
-export const severityRiskFactor = (value, type) => {
-  const {low, medium, high} = getSeverityLevels(type);
+export const severityRiskFactor = value => {
+  const {low, medium, high} = getSeverityLevels();
 
   if (value >= LOG_VALUE && isDefined(low) && value < low) {
     return LOG;
@@ -86,9 +86,9 @@ export const extraRiskFactor = (value = NA_VALUE) => {
   }
 };
 
-export const resultSeverityRiskFactor = (value, type) => {
+export const resultSeverityRiskFactor = value => {
   if (value > LOG_VALUE) {
-    return severityRiskFactor(value, type);
+    return severityRiskFactor(value);
   }
 
   return extraRiskFactor(value);
@@ -111,9 +111,6 @@ export const translateRiskFactor = factor =>
 export const translatedResultSeverityRiskFactor = value =>
   translateRiskFactor(resultSeverityRiskFactor(value));
 
-export const SEVERITY_CLASS_PCI_DSS = 'pci-dss';
-export const SEVERITY_CLASS_NIST = 'nist';
-
 /*
  * The severity levels define the lower limit
  *
@@ -132,49 +129,15 @@ export const SEVERITY_CLASS_NIST = 'nist';
  *  - high range from 6.5 to 10 [6.5, 10]
  */
 
-/*
- The original version form xslt used
-  {
-    high: 4.0,
-    medium: 3.9,
-    low: 3.9,
-  }
-  for PCI-DSS
-*/
-const SEVERITY_LEVELS_PCI_DSS = {
-  high: 7.0,
-  medium: 4.0,
-  low: 0.1,
+export const getSeverityLevels = () => {
+  return {
+    high: 7.0,
+    medium: 4.0,
+    low: 0.1,
+  };
 };
 
-const SEVERITY_LEVELS_DEFAULT = {
-  high: 7.0,
-  medium: 4.0,
-  low: 0.1,
-};
-
-export const getSeverityLevels = type => {
-  switch (type) {
-    case SEVERITY_CLASS_PCI_DSS:
-      return SEVERITY_LEVELS_PCI_DSS;
-    default:
-      return SEVERITY_LEVELS_DEFAULT;
-  }
-};
-
-export const getSeverityLevelsOld = type => {
-  if (type === SEVERITY_CLASS_PCI_DSS) {
-    return {
-      max_high: 10.0,
-      min_high: 4.0,
-      max_medium: 3.9,
-      min_medium: 3.9,
-      max_low: 3.9,
-      min_low: 3.9,
-      max_log: 3.9,
-    };
-  }
-
+export const getSeverityLevelsOld = () => {
   return {
     max_high: 10.0,
     min_high: 7.0,

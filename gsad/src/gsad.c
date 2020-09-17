@@ -709,7 +709,6 @@ init_validator ()
   gvm_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   gvm_validator_add (validator, "severity",
                      "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
-  gvm_validator_add (validator, "severity_class", "^(nist|pci\\-dss)$");
   gvm_validator_add (validator, "severity_optional",
                      "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
   gvm_validator_add (validator, "source_iface", "^(.*){1,16}$");
