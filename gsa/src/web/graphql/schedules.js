@@ -18,7 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {useQuery, useLazyQuery} from '@apollo/client';
+import {useLazyQuery} from '@apollo/client';
 
 import gql from 'graphql-tag';
 
@@ -38,15 +38,17 @@ export const GET_SCHEDULE = gql`
   }
 `;
 
-export const useGetSchedule = (id, options) => {
-  const {data, ...other} = useQuery(GET_SCHEDULE, {
-    ...options,
-    variables: {id},
+export const useLazyGetSchedule = variables => {
+  const [querySchedule, {data, ...other}] = useLazyQuery(GET_SCHEDULE, {
+    variables,
   });
+
   const schedule = isDefined(data?.schedule)
     ? Schedule.fromObject(data.schedule)
     : undefined;
-  return {schedule, ...other};
+
+  const getSchedule = useCallback(id => querySchedule({id}), [querySchedule]);
+  return [getSchedule, {...other, schedule}];
 };
 
 export const GET_SCHEDULES = gql`
