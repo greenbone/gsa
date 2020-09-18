@@ -21,6 +21,7 @@ import {
   CONDITION_TYPE_FILTER_COUNT_AT_LEAST,
   CONDITION_TYPE_FILTER_COUNT_CHANGED,
   CONDITION_TYPE_SEVERITY_AT_LEAST,
+  CONDITION_TYPE_SEVERITY_CHANGED,
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
@@ -120,6 +121,9 @@ describe('Enum conversion tests', () => {
     );
     expect(convertConditionEnum(CONDITION_TYPE_SEVERITY_AT_LEAST)).toEqual(
       'SEVERITY_AT_LEAST',
+    );
+    expect(convertConditionEnum(CONDITION_TYPE_SEVERITY_CHANGED)).toEqual(
+      'SEVERITY_CHANGED',
     );
     expect(convertConditionEnum('foobar')).toEqual(null);
     expect(convertConditionEnum()).toEqual(null);
