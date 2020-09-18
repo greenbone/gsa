@@ -28,7 +28,7 @@ const ProgressBarBox = styled.div`
   box-sizing: content-box; /* height includes border */
   display: inline-block;
   width: 100px;
-  background: ${Theme.darkGray};
+  background: ${props => props.boxBackground};
   vertical-align: middle;
   text-align: center;
 
@@ -95,9 +95,19 @@ const Progress = styled.div`
   }};
 `;
 
-const ProgressBar = ({background, children, progress, title}) => {
+const ProgressBar = ({
+  background,
+  boxBackground = Theme.darkGray,
+  children,
+  progress,
+  title,
+}) => {
   return (
-    <ProgressBarBox data-testid="progressbar-box" title={title}>
+    <ProgressBarBox
+      data-testid="progressbar-box"
+      title={title}
+      boxBackground={boxBackground}
+    >
       <Progress
         data-testid="progress"
         progress={progress}
@@ -110,6 +120,7 @@ const ProgressBar = ({background, children, progress, title}) => {
 
 ProgressBar.propTypes = {
   background: PropTypes.string,
+  boxBackground: PropTypes.string,
   progress: PropTypes.numberOrNumberString,
   title: PropTypes.string,
 };
