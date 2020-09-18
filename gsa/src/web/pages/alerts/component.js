@@ -334,7 +334,6 @@ const AlertComponent = ({
     ...other
   }) => {
     handleInteraction();
-    console.log(other);
 
     if (!isDefined(id)) {
       return createAlert({
@@ -1132,7 +1131,6 @@ const AlertComponent = ({
     composerStoreAsDefault,
     tasks,
   } = state;
-  console.log(report_format_ids, report_formats);
   return (
     <EntityComponent
       name="alert"
