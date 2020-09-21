@@ -23,7 +23,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
-import {useLazyGetSchedules, useGetSchedule} from '../schedules';
+import {useLazyGetSchedules, useLazyGetSchedule} from '../schedules';
 
 import {
   createGetSchedulesQueryMock,
@@ -67,52 +67,25 @@ const GetLazySchedulesComponent = () => {
   );
 };
 
-const GetScheduleComponent = ({id}) => {
-  const {loading, schedule, error} = useGetSchedule(id);
+const GetLazyScheduleComponent = () => {
+  const [getSchedule, {schedule, loading}] = useLazyGetSchedule();
+
   if (loading) {
     return <span data-testid="loading">Loading</span>;
   }
   return (
     <div>
-      {error && <div data-testid="error">{error.message}</div>}
-      {schedule && (
-        <div data-testid="schedule">
-          <span data-testid="id">{schedule.id}</span>
-          <span data-testid="name">{schedule.name}</span>
-          <span data-testid="icalendar">{schedule.icalendar}</span>
+      <button data-testid="load" onClick={() => getSchedule()} />
+      {isDefined(schedule) ? (
+        <div key={schedule.id} data-testid="schedule">
+          {schedule.id}
         </div>
+      ) : (
+        <div data-testid="no-schedule" />
       )}
     </div>
   );
 };
-
-describe('useGetSchedule tests', () => {
-  test('should load schedule', async () => {
-    const id = '42';
-    const [queryMock, resultFunc] = createGetScheduleQueryMock(id);
-
-    const {render} = rendererWith({queryMocks: [queryMock]});
-
-    render(<GetScheduleComponent id={id} />);
-
-    expect(screen.queryByTestId('loading')).toBeInTheDocument();
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-
-    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
-
-    expect(screen.getByTestId('schedule')).toBeInTheDocument();
-
-    expect(screen.getByTestId('id')).toHaveTextContent('42');
-    expect(screen.getByTestId('name')).toHaveTextContent('schedule 1');
-    expect(screen.getByTestId('icalendar')).toHaveTextContent(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
-    );
-  });
-});
 
 describe('useLazyGetSchedules tests', () => {
   test('should query schedules after user interaction', async () => {
@@ -129,24 +102,60 @@ describe('useLazyGetSchedules tests', () => {
     const button = screen.getByTestId('load');
     fireEvent.click(button);
 
-    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
 
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
 
     scheduleElements = screen.getAllByTestId('schedule');
-    expect(scheduleElements).toHaveLength(2);
+    expect(scheduleElements).toHaveLength(4);
 
-    expect(scheduleElements[0]).toHaveTextContent('42');
-    expect(scheduleElements[1]).toHaveTextContent('1337');
+    expect(scheduleElements[0]).toHaveTextContent(
+      'c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
+    expect(scheduleElements[1]).toHaveTextContent(
+      'c35f82f1-7798-4b84-b2c4-761a33068957',
+    );
 
     expect(screen.queryByTestId('no-schedules')).not.toBeInTheDocument();
 
-    expect(screen.getByTestId('total')).toHaveTextContent(2);
-    expect(screen.getByTestId('filtered')).toHaveTextContent(2);
+    expect(screen.getByTestId('total')).toHaveTextContent(4);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(4);
     expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
-    expect(screen.getByTestId('length')).toHaveTextContent(2);
+    expect(screen.getByTestId('length')).toHaveTextContent(4);
+  });
+});
+
+describe('useLazyGetSchedule tests', () => {
+  test('should query schedule after user interaction', async () => {
+    const [mock, resultFunc] = createGetScheduleQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazyScheduleComponent />);
+
+    let scheduleElement = screen.queryAllByTestId('schedule');
+    expect(scheduleElement).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-schedule')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    scheduleElement = screen.getByTestId('schedule');
+
+    expect(scheduleElement).toHaveTextContent(
+      'c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 });

@@ -21,7 +21,7 @@ import {deepFreeze} from 'web/utils/testing';
 import {GET_SCHEDULES, GET_SCHEDULE} from '../schedules';
 
 const schedule1 = deepFreeze({
-  id: '42',
+  id: 'c35f82f1-7798-4b84-b2c4-761a33068956',
   name: 'schedule 1',
   icalendar: `BEGIN:VCALENDAR
 VERSION:2.0
@@ -36,7 +36,7 @@ END:VCALENDAR
 });
 
 const schedule2 = deepFreeze({
-  id: '1337',
+  id: 'c35f82f1-7798-4b84-b2c4-761a33068957',
   name: 'schedule 2',
   icalendar: `BEGIN:VCALENDAR
 VERSION:2.0
@@ -51,7 +51,7 @@ END:VCALENDAR
 });
 
 const schedule3 = deepFreeze({
-  id: '3',
+  id: '12345',
   name: 'schedule 3',
   icalendar: `BEGIN:VCALENDAR
 VERSION:2.0
@@ -66,7 +66,7 @@ END:VCALENDAR
 });
 
 const schedule4 = deepFreeze({
-  id: '4',
+  id: '121314',
   name: 'schedule 4',
   icalendar: `BEGIN:VCALENDAR
 VERSION:2.0
@@ -111,13 +111,7 @@ const mockSchedules = {
   },
 };
 
-export const createGetSchedulesQueryMock = ({
-  filterString,
-  after,
-  previous,
-  first,
-  last,
-} = {}) => {
+export const createGetSchedulesQueryMock = (variables = {}) => {
   const queryResult = {
     data: {
       schedules: mockSchedules,
@@ -125,14 +119,6 @@ export const createGetSchedulesQueryMock = ({
   };
 
   const resultFunc = jest.fn().mockReturnValue(queryResult);
-
-  const variables = {
-    filterString,
-    after,
-    previous,
-    first,
-    last,
-  };
 
   const queryMock = {
     request: {
