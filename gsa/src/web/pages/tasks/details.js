@@ -48,7 +48,7 @@ import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
 
-import {useLazyGetSchedules} from 'web/graphql/schedules';
+import {useLazyGetSchedule} from 'web/graphql/schedules';
 
 export const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();
@@ -72,18 +72,17 @@ const TaskDetails = ({entity, links = true}) => {
     [gmp, dispatch],
   );
 
-  const [loadSchedules, {schedules = []}] = useLazyGetSchedules();
+  const [loadSchedule, {schedule}] = useLazyGetSchedule(entity?.schedule?.id);
 
   useEffect(() => {
     if (hasValue(entity.config)) {
       loadScanConfig(entity.config.id);
     } // entity being in deps array will result in excessive rerenders
     if (hasValue(entity.schedule)) {
-      loadSchedules({id: entity.schedule.id});
+      loadSchedule(entity.schedule.id);
     }
-  }, [loadScanConfig, loadSchedules]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loadScanConfig, loadSchedule]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [schedule] = schedules;
   const {
     alerts,
     applyOverrides,
