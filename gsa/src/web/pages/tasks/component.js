@@ -38,11 +38,6 @@ import ScanConfig, {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 
 import {
-  loadEntities as loadSchedules,
-  selector as scheduleSelector,
-} from 'web/store/entities/schedules';
-
-import {
   loadEntities as loadTags,
   selector as tagsSelector,
 } from 'web/store/entities/tags';
@@ -782,7 +777,14 @@ const TaskComponent = props => {
     if (credentialError) {
       log.error({credentialError});
     }
-  }, [scanConfigError, scannerError, scheduleError, targetError, alertError, credentialError]);
+  }, [
+    scanConfigError,
+    scannerError,
+    scheduleError,
+    targetError,
+    alertError,
+    credentialError,
+  ]);
 
   const {
     isLoadingTags,
