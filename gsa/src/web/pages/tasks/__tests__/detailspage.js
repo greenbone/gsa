@@ -25,7 +25,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
-import Schedule from 'gmp/models/schedule';
 import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {entityLoadingActions} from 'web/store/entities/tasks';
@@ -38,6 +37,9 @@ import {
   createCloneTaskQueryMock,
   createDeleteTaskQueryMock,
 } from 'web/graphql/__mocks__/tasks';
+
+import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
+
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
@@ -79,18 +81,8 @@ const config = ScanConfig.fromElement({
   },
 });
 
-const schedule = Schedule.fromElement({
-  _id: '121314',
-  name: 'schedule1',
-  permissions: {permission: [{name: 'everything'}]},
-});
-
 const getConfig = jest.fn().mockResolvedValue({
   data: config,
-});
-
-const getSchedule = jest.fn().mockResolvedValue({
-  data: schedule,
 });
 
 const getEntities = jest.fn().mockResolvedValue({
@@ -122,9 +114,6 @@ describe('Task Detailspage tests', () => {
       scanconfig: {
         get: getConfig,
       },
-      schedule: {
-        get: getSchedule,
-      },
       permissions: {
         get: getEntities,
       },
@@ -148,13 +137,16 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
+    const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
+      'c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock],
+      queryMocks: [mock, scheduleMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -167,6 +159,7 @@ describe('Task Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(scheduleResultFunc).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('Task: foo');
 
@@ -230,7 +223,10 @@ describe('Task Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('Min QoD70 %');
 
     expect(headings[5]).toHaveTextContent('Schedule');
-    expect(detailslinks[7]).toHaveAttribute('href', '/schedule/121314');
+    expect(detailslinks[7]).toHaveAttribute(
+      'href',
+      '/schedule/c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
     expect(baseElement).toHaveTextContent('schedule 1');
 
     expect(headings[6]).toHaveTextContent('Scan');
@@ -260,9 +256,6 @@ describe('Task Detailspage tests', () => {
       scanconfig: {
         get: getConfig,
       },
-      schedule: {
-        get: getSchedule,
-      },
       permissions: {
         get: getEntities,
       },
@@ -290,13 +283,16 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
+    const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
+      'c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock],
+      queryMocks: [mock, scheduleMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -309,6 +305,7 @@ describe('Task Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(scheduleResultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -329,9 +326,6 @@ describe('Task Detailspage tests', () => {
       },
       scanconfig: {
         get: getConfig,
-      },
-      schedule: {
-        get: getSchedule,
       },
       permissions: {
         get: getEntities,
@@ -357,13 +351,16 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
+    const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
+      'c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock],
+      queryMocks: [mock, scheduleMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -376,6 +373,7 @@ describe('Task Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(scheduleResultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -396,9 +394,6 @@ describe('Task Detailspage tests', () => {
       },
       scanconfig: {
         get: getConfig,
-      },
-      schedule: {
-        get: getSchedule,
       },
       permissions: {
         get: getEntities,
@@ -428,12 +423,16 @@ describe('Task Detailspage tests', () => {
     const [deleteTaskMock, deleteTaskResultFunc] = createDeleteTaskQueryMock(
       id,
     );
+    const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
+      'c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [getTaskMock, cloneTaskMock, deleteTaskMock],
+      queryMocks: [getTaskMock, cloneTaskMock, deleteTaskMock, scheduleMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -446,6 +445,7 @@ describe('Task Detailspage tests', () => {
     await wait();
 
     expect(getTaskResultFunc).toHaveBeenCalled();
+    expect(scheduleResultFunc).toHaveBeenCalled();
 
     const icons = screen.getAllByTestId('svg-icon');
 
@@ -1079,7 +1079,10 @@ describe('Task ToolBarIcons tests', () => {
     const icons = getAllByTestId('svg-icon');
     const detailsLinks = getAllByTestId('details-link');
 
-    expect(detailsLinks[0]).toHaveAttribute('href', '/schedule/121314');
+    expect(detailsLinks[0]).toHaveAttribute(
+      'href',
+      '/schedule/c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
     expect(detailsLinks[0]).toHaveAttribute(
       'title',
       'View Details of Schedule schedule 1 (Next due: over)',

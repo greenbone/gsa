@@ -449,12 +449,26 @@ exports[`Task Details tests should render full task details 1`] = `
                   <a
                     class="c2"
                     data-testid="details-link"
-                    href="/schedule/121314"
+                    href="/schedule/c35f82f1-7798-4b84-b2c4-761a33068956"
                   >
                     schedule 1
                   </a>
                 </span>
               </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Next
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              />
             </td>
           </tr>
         </tbody>
