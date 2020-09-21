@@ -38,16 +38,20 @@ export const GET_SCHEDULE = gql`
   }
 `;
 
-export const useLazyGetSchedule = variables => {
+export const useLazyGetSchedule = id => {
   const [querySchedule, {data, ...other}] = useLazyQuery(GET_SCHEDULE, {
-    variables,
+    variables: {
+      id,
+    },
   });
 
   const schedule = isDefined(data?.schedule)
     ? Schedule.fromObject(data.schedule)
     : undefined;
 
-  const getSchedule = useCallback(id => querySchedule({id}), [querySchedule]);
+  const getSchedule = useCallback(uuid => querySchedule({id: uuid}), [
+    querySchedule,
+  ]);
   return [getSchedule, {...other, schedule}];
 };
 
