@@ -387,7 +387,7 @@ const Page = ({
 
   useEffect(() => {
     loadOverrides();
-  }, [task]);
+  }, [id]);
 
   return (
     <TaskComponent
