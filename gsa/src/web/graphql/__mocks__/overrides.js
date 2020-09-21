@@ -21,12 +21,10 @@ import {GET_OVERRIDES} from '../overrides';
 
 const override1 = deepFreeze({
   id: '0815',
-  name: 'override 1',
 });
 
 const override2 = deepFreeze({
   id: '174',
-  name: 'override 2',
 });
 
 const mockOverrides = {
@@ -54,13 +52,7 @@ const mockOverrides = {
   },
 };
 
-export const createGetOverridesQueryMock = ({
-  filterString,
-  after,
-  previous,
-  first,
-  last,
-} = {}) => {
+export const createGetOverridesQueryMock = (variables = {}) => {
   const queryResult = {
     data: {
       overrides: mockOverrides,
@@ -68,14 +60,6 @@ export const createGetOverridesQueryMock = ({
   };
 
   const resultFunc = jest.fn().mockReturnValue(queryResult);
-
-  const variables = {
-    filterString,
-    after,
-    previous,
-    first,
-    last,
-  };
 
   const queryMock = {
     request: {
