@@ -39,6 +39,7 @@ import {
 } from 'web/graphql/__mocks__/tasks';
 
 import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
+import {createGetOverridesQueryMock} from 'web/graphql/__mocks__/overrides';
 
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
@@ -123,9 +124,6 @@ describe('Task Detailspage tests', () => {
       notes: {
         get: getEntities,
       },
-      overrides: {
-        get: getEntities,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -137,6 +135,9 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
+    const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
+      filterString: 'task_id:12345',
+    });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
@@ -146,7 +147,7 @@ describe('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, scheduleMock],
+      queryMocks: [mock, overridesMock, scheduleMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -160,6 +161,7 @@ describe('Task Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
     expect(scheduleResultFunc).toHaveBeenCalled();
+    expect(overridesResultFunc).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('Task: foo');
 
@@ -268,9 +270,6 @@ describe('Task Detailspage tests', () => {
       notes: {
         get: getEntities,
       },
-      overrides: {
-        get: getEntities,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -283,6 +282,9 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
+    const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
+      filterString: 'task_id:12345',
+    });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
@@ -292,7 +294,7 @@ describe('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, scheduleMock],
+      queryMocks: [mock, overridesMock, scheduleMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -306,6 +308,7 @@ describe('Task Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
     expect(scheduleResultFunc).toHaveBeenCalled();
+    expect(overridesResultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -336,9 +339,6 @@ describe('Task Detailspage tests', () => {
       notes: {
         get: getEntities,
       },
-      overrides: {
-        get: getEntities,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -351,6 +351,9 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
+    const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
+      filterString: 'task_id:12345',
+    });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
@@ -360,7 +363,7 @@ describe('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, scheduleMock],
+      queryMocks: [mock, overridesMock, scheduleMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -374,6 +377,7 @@ describe('Task Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
     expect(scheduleResultFunc).toHaveBeenCalled();
+    expect(overridesResultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -404,9 +408,6 @@ describe('Task Detailspage tests', () => {
       notes: {
         get: getEntities,
       },
-      overrides: {
-        get: getEntities,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -423,6 +424,9 @@ describe('Task Detailspage tests', () => {
     const [deleteTaskMock, deleteTaskResultFunc] = createDeleteTaskQueryMock(
       id,
     );
+    const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
+      filterString: 'task_id:12345',
+    });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
@@ -432,7 +436,13 @@ describe('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
-      queryMocks: [getTaskMock, cloneTaskMock, deleteTaskMock, scheduleMock],
+      queryMocks: [
+        getTaskMock,
+        cloneTaskMock,
+        deleteTaskMock,
+        overridesMock,
+        scheduleMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -446,6 +456,7 @@ describe('Task Detailspage tests', () => {
 
     expect(getTaskResultFunc).toHaveBeenCalled();
     expect(scheduleResultFunc).toHaveBeenCalled();
+    expect(overridesResultFunc).toHaveBeenCalled();
 
     const icons = screen.getAllByTestId('svg-icon');
 
