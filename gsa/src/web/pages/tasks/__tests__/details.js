@@ -21,14 +21,13 @@ import {setLocale} from 'gmp/locale/lang';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import Schedule from 'gmp/models/schedule';
 import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
-import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
 
-import {rendererWith} from 'web/utils/testing';
+import {rendererWith, screen, wait} from 'web/utils/testing';
 
+import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import Details from '../details';
@@ -44,18 +43,9 @@ const scanConfig = {
 };
 const parsedConfig = ScanConfig.fromObject(scanConfig);
 
-const schedule = {uuid: '121314', name: 'schedule1'};
-const parsedSchedule = Schedule.fromObject(schedule);
-
 const getConfig = jest.fn().mockReturnValue(
   Promise.resolve({
     data: parsedConfig,
-  }),
-);
-
-const getSchedule = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: parsedSchedule,
   }),
 );
 
@@ -63,32 +53,33 @@ const gmp = {
   scanconfig: {
     get: getConfig,
   },
-  schedule: {
-    get: getSchedule,
-  },
 };
 
 describe('Task Details tests', () => {
-  test('should render full task details', () => {
+  test('should render full task details', async () => {
     const {detailsMockTask: task} = getMockTasks();
 
     const caps = new Capabilities(['everything']);
+    const [scheduleMock] = createGetScheduleQueryMock(
+      'c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
 
     const {render, store} = rendererWith({
       capabilities: caps,
       router: true,
       store: true,
       gmp,
+      queryMocks: [scheduleMock],
     });
 
     store.dispatch(scanconfigActions.success('314', scanConfig));
-    store.dispatch(scheduleActions.success('121314', parsedSchedule));
 
     const {element, getAllByTestId} = render(<Details entity={task} />);
 
+    await wait();
     expect(element).toMatchSnapshot();
 
-    const headings = element.querySelectorAll('h2');
+    const headings = screen.getAllByRole('heading');
     const detailslinks = getAllByTestId('details-link');
 
     expect(headings[0]).toHaveTextContent('Target');
@@ -118,7 +109,10 @@ describe('Task Details tests', () => {
     expect(element).toHaveTextContent('Min QoD70 %');
 
     expect(headings[4]).toHaveTextContent('Schedule');
-    expect(detailslinks[4]).toHaveAttribute('href', '/schedule/121314');
+    expect(detailslinks[4]).toHaveAttribute(
+      'href',
+      '/schedule/c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
     expect(element).toHaveTextContent('schedule 1');
 
     expect(headings[5]).toHaveTextContent('Scan');

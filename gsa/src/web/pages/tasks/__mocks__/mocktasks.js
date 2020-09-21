@@ -64,7 +64,10 @@ const scanConfig = deepFreeze({
 });
 
 // Schedule
-const schedule = deepFreeze({id: '121314', name: 'schedule 1'});
+const schedule = deepFreeze({
+  id: 'c35f82f1-7798-4b84-b2c4-761a33068956',
+  name: 'schedule 1',
+});
 
 // Alert
 const alert = deepFreeze({id: '151617', name: 'alert 1'});
@@ -367,7 +370,7 @@ const detailsMockTask = deepFreeze({
   comment: 'bar',
   owner: 'admin',
   preferences,
-  schedule: schedule,
+  schedule,
   alerts: [alert],
   scanConfig,
   scanner,
