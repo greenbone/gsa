@@ -137,7 +137,7 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
-    const [scheduleMock] = createGetScheduleQueryMock(
+    const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
 
@@ -159,6 +159,7 @@ describe('Task Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(scheduleResultFunc).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('Task: foo');
 
@@ -282,7 +283,7 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
-    const [scheduleMock] = createGetScheduleQueryMock(
+    const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
 
@@ -304,6 +305,7 @@ describe('Task Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(scheduleResultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -349,7 +351,7 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
-    const [scheduleMock] = createGetScheduleQueryMock(
+    const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
 
@@ -371,6 +373,7 @@ describe('Task Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(scheduleResultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -420,7 +423,7 @@ describe('Task Detailspage tests', () => {
     const [deleteTaskMock, deleteTaskResultFunc] = createDeleteTaskQueryMock(
       id,
     );
-    const [scheduleMock] = createGetScheduleQueryMock(
+    const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
 
@@ -442,6 +445,7 @@ describe('Task Detailspage tests', () => {
     await wait();
 
     expect(getTaskResultFunc).toHaveBeenCalled();
+    expect(scheduleResultFunc).toHaveBeenCalled();
 
     const icons = screen.getAllByTestId('svg-icon');
 
