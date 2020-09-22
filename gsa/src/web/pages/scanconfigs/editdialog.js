@@ -188,7 +188,7 @@ const EditScanConfigDialog = ({
           {configIsInUse ? (
             <h4>
               {_(
-                'The config is now in use by a task, so only name and comment can be modified.',
+                'The config is now in use by a task or audit, therefore only name and comment can be modified.',
               )}
             </h4>
           ) : (
