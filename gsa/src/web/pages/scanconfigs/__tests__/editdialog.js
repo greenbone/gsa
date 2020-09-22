@@ -239,7 +239,7 @@ describe('EditScanConfigDialog component tests', () => {
 
     const inUseNotification = baseElement.querySelectorAll('h4');
     expect(inUseNotification[0]).toHaveTextContent(
-      'The config is now in use by a task or audit, therefore only name and comment can be modified.',
+      'The config or policy is now in use by a task or audit, therefore only name and comment can be modified.',
     );
   });
 
