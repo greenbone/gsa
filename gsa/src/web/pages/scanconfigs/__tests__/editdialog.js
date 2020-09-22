@@ -220,8 +220,6 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
-
     const titleBar = getByTestId('dialog-title-bar');
     expect(titleBar).toHaveTextContent('Edit Scan Config');
 
