@@ -2594,6 +2594,9 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
                       </div>
                     </div>
                   </div>
+                  <h4>
+                    The config is now in use by a task or audit, therefore only name and comment can be modified.
+                  </h4>
                 </div>
               </div>
             </div>
