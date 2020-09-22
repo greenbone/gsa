@@ -766,7 +766,15 @@ class PolicyComponent extends React.Component {
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
                   onSave={d => {
                     this.handleInteraction();
-                    return save(d).then(() => this.closeEditPolicyDialog());
+                    const {name, comment, id} = d;
+                    let saveData = d;
+                    if (policy.isInUse()) {
+                      saveData = {name, comment, id};
+                    }
+
+                    return save(saveData).then(() =>
+                      this.closeEditConfigDialog(),
+                    );
                   }}
                 />
               )}
