@@ -123,7 +123,6 @@ export class ScanConfigCommand extends EntityCommand {
       scanner_id: scannerId, // seems to be used for osp scan configs only
     };
     log.debug('Saving scanconfig', data);
-    console.log(data);
     return this.action(data);
   }
 
