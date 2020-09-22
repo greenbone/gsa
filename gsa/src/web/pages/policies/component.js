@@ -773,7 +773,7 @@ class PolicyComponent extends React.Component {
                     }
 
                     return save(saveData).then(() =>
-                      this.closeEditConfigDialog(),
+                      this.closeEditPolicyDialog(),
                     );
                   }}
                 />
