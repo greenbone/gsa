@@ -766,6 +766,7 @@ class PolicyComponent extends React.Component {
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
                   onSave={d => {
                     this.handleInteraction();
+                    // eslint-disable-next-line no-shadow
                     const {name, comment, id} = d;
                     let saveData = d;
                     if (policy.isInUse()) {
