@@ -104,14 +104,18 @@ export class ScanConfigCommand extends EntityCommand {
     scannerId,
     scannerPreferenceValues,
   }) {
-    const data = {
-      ...convert(trend, 'trend:'),
-      ...convert(
-        scannerPreferenceValues,
-        'preference:scanner:scanner:scanner:',
-      ),
-      ...convertSelect(select, 'select:'),
+    const trendData = isDefined(trend) ? convert(trend, 'trend:') : {};
+    const scannerPreferenceData = isDefined(scannerPreferenceValues)
+      ? convert(scannerPreferenceValues, 'preference:scanner:scanner:scanner:')
+      : {};
 
+    const selectData = isDefined(select)
+      ? convertSelect(select, 'select:')
+      : {};
+    const data = {
+      ...trendData,
+      ...scannerPreferenceData,
+      ...selectData,
       cmd: 'save_config',
       id,
       comment,
@@ -119,6 +123,7 @@ export class ScanConfigCommand extends EntityCommand {
       scanner_id: scannerId, // seems to be used for osp scan configs only
     };
     log.debug('Saving scanconfig', data);
+    console.log(data);
     return this.action(data);
   }
 
