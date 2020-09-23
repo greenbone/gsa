@@ -187,7 +187,7 @@ const EditScanConfigDialog = ({
             />
           </FormGroup>
           {configIsInUse ? (
-            <DialogInlineNotification>
+            <DialogInlineNotification data-testid="inline-notification">
               {_(
                 'The config or policy is now in use by a task or audit, therefore only name and comment can be modified.',
               )}

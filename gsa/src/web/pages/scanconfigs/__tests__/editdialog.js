@@ -182,10 +182,6 @@ describe('EditScanConfigDialog component tests', () => {
 
     const scannerSelection = content.querySelector('[role=combobox]');
     expect(scannerSelection).toBeNull();
-
-    // Do not render configIsInUse notification.
-    const inUseNotification = baseElement.querySelectorAll('h4');
-    expect(inUseNotification.length).toEqual(0);
   });
 
   test('should render dialog for config in use', () => {
@@ -220,6 +216,8 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
+    expect(baseElement).toMatchSnapshot();
+
     const titleBar = getByTestId('dialog-title-bar');
     expect(titleBar).toHaveTextContent('Edit Scan Config');
 
@@ -235,8 +233,8 @@ describe('EditScanConfigDialog component tests', () => {
     const scannerSelection = content.querySelector('[role=combobox]');
     expect(scannerSelection).toBeNull();
 
-    const inUseNotification = baseElement.querySelectorAll('h4');
-    expect(inUseNotification[0]).toHaveTextContent(
+    const inUseNotification = getByTestId('inline-notification');
+    expect(inUseNotification).toHaveTextContent(
       'The config or policy is now in use by a task or audit, therefore only name and comment can be modified.',
     );
   });
