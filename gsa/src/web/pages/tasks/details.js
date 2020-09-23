@@ -30,8 +30,6 @@ import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
-import {loadEntity as scheduleLoader} from 'web/store/entities/schedules';
-
 import {loadEntity as scanConfigLoader} from 'web/store/entities/scanconfigs';
 
 import PropTypes from 'web/utils/proptypes';
@@ -49,6 +47,8 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
+
+import {useLazyGetSchedule} from 'web/graphql/schedules';
 
 export const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();
@@ -71,18 +71,16 @@ const TaskDetails = ({entity, links = true}) => {
     id => dispatch(scanConfigLoader(gmp)(id)),
     [gmp, dispatch],
   );
-  const loadSchedule = useCallback(id => dispatch(scheduleLoader(gmp)(id)), [
-    gmp,
-    dispatch,
-  ]);
+
+  const [loadSchedule, {schedule}] = useLazyGetSchedule(entity?.schedule?.id);
 
   useEffect(() => {
     if (hasValue(entity.config)) {
       loadScanConfig(entity.config.id);
-    }
+    } // entity being in deps array will result in excessive rerenders
     if (hasValue(entity.schedule)) {
       loadSchedule(entity.schedule.id);
-    } // entity being in deps array will result in excessive rerenders
+    }
   }, [loadScanConfig, loadSchedule]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
@@ -100,7 +98,6 @@ const TaskDetails = ({entity, links = true}) => {
     target,
     maxChecks,
     maxHosts,
-    schedule,
     sourceIface = '',
   } = entity;
 

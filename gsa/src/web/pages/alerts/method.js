@@ -654,7 +654,7 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                       {_('Use workaround for default certificate')}
                     </TableData>
                     <TableData>
-                      {data.tp_sms_tls_workaround.value === '1' ? 'Yes' : 'No'}
+                      {data.tp_sms_tls_workaround.value === 1 ? 'Yes' : 'No'}
                     </TableData>
                   </TableRow>
                 )}

@@ -21,6 +21,7 @@ import {
   CONDITION_TYPE_FILTER_COUNT_AT_LEAST,
   CONDITION_TYPE_FILTER_COUNT_CHANGED,
   CONDITION_TYPE_SEVERITY_AT_LEAST,
+  CONDITION_TYPE_SEVERITY_CHANGED,
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
@@ -121,6 +122,9 @@ describe('Enum conversion tests', () => {
     expect(convertConditionEnum(CONDITION_TYPE_SEVERITY_AT_LEAST)).toEqual(
       'SEVERITY_AT_LEAST',
     );
+    expect(convertConditionEnum(CONDITION_TYPE_SEVERITY_CHANGED)).toEqual(
+      'SEVERITY_CHANGED',
+    );
     expect(convertConditionEnum('foobar')).toEqual(null);
     expect(convertConditionEnum()).toEqual(null);
   });
@@ -135,9 +139,15 @@ describe('Enum conversion tests', () => {
     expect(convertEventEnum(EVENT_TYPE_NEW_SECINFO)).toEqual(
       'NEW_SECINFO_ARRIVED',
     );
-    expect(convertEventEnum(EVENT_TYPE_TICKET_RECEIVED)).toEqual(null);
-    expect(convertEventEnum(EVENT_TYPE_ASSIGNED_TICKET_CHANGED)).toEqual(null);
-    expect(convertEventEnum(EVENT_TYPE_OWNED_TICKET_CHANGED)).toEqual(null);
+    expect(convertEventEnum(EVENT_TYPE_TICKET_RECEIVED)).toEqual(
+      'TICKET_RECEIVED',
+    );
+    expect(convertEventEnum(EVENT_TYPE_ASSIGNED_TICKET_CHANGED)).toEqual(
+      'ASSIGNED_TICKET_CHANGED',
+    );
+    expect(convertEventEnum(EVENT_TYPE_OWNED_TICKET_CHANGED)).toEqual(
+      'OWNED_TICKET_CHANGED',
+    );
     expect(convertEventEnum('foobar')).toEqual(null);
     expect(convertEventEnum()).toEqual(null);
   });
@@ -157,8 +167,10 @@ describe('Enum conversion tests', () => {
     expect(convertMethodEnum(METHOD_TYPE_VERINICE)).toEqual(
       'VERINICE_CONNECTOR',
     );
-    expect(convertMethodEnum(METHOD_TYPE_TIPPING_POINT)).toEqual(null);
-    expect(convertMethodEnum(METHOD_TYPE_ALEMBA_VFIRE)).toEqual(null);
+    expect(convertMethodEnum(METHOD_TYPE_TIPPING_POINT)).toEqual(
+      'TIPPINGPOINT',
+    );
+    expect(convertMethodEnum(METHOD_TYPE_ALEMBA_VFIRE)).toEqual('ALEMBA_VFIRE');
 
     expect(convertMethodEnum('foobar')).toEqual(null);
     expect(convertMethodEnum()).toEqual(null);

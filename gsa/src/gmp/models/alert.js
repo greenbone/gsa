@@ -35,6 +35,7 @@ export const CONDITION_TYPE_FILTER_COUNT_AT_LEAST = 'Filter count at least';
 export const CONDITION_TYPE_FILTER_COUNT_CHANGED = 'Filter count changed';
 export const CONDITION_TYPE_SEVERITY_AT_LEAST = 'Severity at least';
 export const CONDITION_TYPE_ALWAYS = 'Always';
+export const CONDITION_TYPE_SEVERITY_CHANGED = 'Severity changed';
 
 export const CONDITION_DIRECTION_DECREASED = 'decreased';
 export const CONDITION_DIRECTION_INCREASED = 'increased';

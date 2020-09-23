@@ -23,6 +23,7 @@ import {
   CONDITION_TYPE_FILTER_COUNT_AT_LEAST,
   CONDITION_TYPE_FILTER_COUNT_CHANGED,
   CONDITION_TYPE_SEVERITY_AT_LEAST,
+  CONDITION_TYPE_SEVERITY_CHANGED,
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
@@ -172,6 +173,8 @@ export const convertConditionEnum = condition => {
       return 'FILTER_COUNT_CHANGED';
     case CONDITION_TYPE_SEVERITY_AT_LEAST:
       return 'SEVERITY_AT_LEAST';
+    case CONDITION_TYPE_SEVERITY_CHANGED:
+      return 'SEVERITY_CHANGED';
     default:
       return null;
   }
@@ -187,21 +190,20 @@ export const convertEventEnum = event => {
     case EVENT_TYPE_NEW_SECINFO:
       return 'NEW_SECINFO_ARRIVED';
     case EVENT_TYPE_TICKET_RECEIVED:
-      return null;
+      return 'TICKET_RECEIVED';
     case EVENT_TYPE_ASSIGNED_TICKET_CHANGED:
-      return null;
+      return 'ASSIGNED_TICKET_CHANGED';
     case EVENT_TYPE_OWNED_TICKET_CHANGED:
-      return null;
+      return 'OWNED_TICKET_CHANGED';
     default:
       return null;
   }
 };
 
 export const convertMethodEnum = method => {
-  // Currently does not support all method types. Need updating.
   switch (method) {
     case METHOD_TYPE_ALEMBA_VFIRE:
-      return null;
+      return 'ALEMBA_VFIRE';
     case METHOD_TYPE_SCP:
       return 'SCP';
     case METHOD_TYPE_SEND:
@@ -223,7 +225,7 @@ export const convertMethodEnum = method => {
     case METHOD_TYPE_VERINICE:
       return 'VERINICE_CONNECTOR';
     case METHOD_TYPE_TIPPING_POINT:
-      return null;
+      return 'TIPPINGPOINT';
     default:
       return null;
   }
