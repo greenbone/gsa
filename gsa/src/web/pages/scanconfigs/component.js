@@ -93,6 +93,7 @@ class ScanConfigComponent extends React.Component {
     );
     this.openImportDialog = this.openImportDialog.bind(this);
     this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
+    this.handleSaveScanConfig = this.handleSaveScanConfig.bind(this);
   }
 
   openEditConfigDialog(config) {
@@ -120,6 +121,22 @@ class ScanConfigComponent extends React.Component {
   handleCloseEditConfigDialog() {
     this.closeEditConfigDialog();
     this.handleInteraction();
+  }
+
+  handleSaveScanConfig(d) {
+    const {gmp} = this.props;
+    const {config} = this.state;
+
+    this.handleInteraction();
+    const {name, comment, id} = d;
+    let saveData = d;
+    if (config.isInUse()) {
+      saveData = {name, comment, id};
+    }
+
+    return gmp.scanconfig
+      .save(saveData)
+      .then(() => this.closeEditConfigDialog());
   }
 
   openCreateConfigDialog() {
@@ -512,18 +529,7 @@ class ScanConfigComponent extends React.Component {
                   onClose={this.handleCloseEditConfigDialog}
                   onEditConfigFamilyClick={this.openEditConfigFamilyDialog}
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
-                  onSave={d => {
-                    this.handleInteraction();
-                    const {name, comment, id} = d;
-                    let saveData = d;
-                    if (config.isInUse()) {
-                      saveData = {name, comment, id};
-                    }
-
-                    return save(saveData).then(() =>
-                      this.closeEditConfigDialog(),
-                    );
-                  }}
+                  onSave={this.handleSaveScanConfig}
                 />
               )}
             </React.Fragment>
