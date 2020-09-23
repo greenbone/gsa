@@ -23,11 +23,13 @@ import Button from 'web/components/form/button';
 
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
-import {useLazyGetAlerts, useCreateAlert} from '../alerts';
+import {useLazyGetAlerts, useCreateAlert, useModifyAlert} from '../alerts';
 import {
   createGetAlertsQueryMock,
+  createModifyAlertQueryMock,
   createCreateAlertQueryMock,
   createAlertInput,
+  modifyAlertInput,
 } from '../__mocks__/alerts';
 
 const GetLazyAlertsComponent = () => {
@@ -113,7 +115,7 @@ const CreateAlertComponent = () => {
   const [createAlert] = useCreateAlert();
 
   const handleCreateResult = id => {
-    setNotification(`Alert created with id ${id}.`);
+    setNotification(`Alert with id ${id} created.`);
   };
 
   return (
@@ -121,6 +123,26 @@ const CreateAlertComponent = () => {
       <Button
         title={'Create alert'}
         onClick={() => createAlert(createAlertInput).then(handleCreateResult)}
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+const ModifyAlertComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [modifyAlert] = useModifyAlert();
+
+  const handleModifyResult = id => {
+    setNotification(`Alert modified.`);
+  };
+
+  return (
+    <div>
+      <Button
+        title={'Modify alert'}
+        onClick={() => modifyAlert(modifyAlertInput).then(handleModifyResult)}
       />
       <h3 data-testid="notification">{notification}</h3>
     </div>
@@ -142,7 +164,27 @@ describe('useCreateAlert test', () => {
 
     expect(resultFunc).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
-      'Alert created with id 12345.',
+      'Alert with id 12345 created.',
+    );
+  });
+});
+
+describe('useModifyAlert test', () => {
+  test('should modify an alert', async () => {
+    const [queryMock, resultFunc] = createModifyAlertQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    const {element} = render(<ModifyAlertComponent />);
+
+    const buttons = element.querySelectorAll('button');
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Alert modified.',
     );
   });
 });

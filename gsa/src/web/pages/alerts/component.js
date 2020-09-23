@@ -150,6 +150,7 @@ const AlertComponent = ({
     dispatch(saveDefaults(gmp)(defaults));
 
   const [createAlert] = useCreateAlert();
+  const [modifyAlert] = useModifyAlert();
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -354,20 +355,24 @@ const AlertComponent = ({
         .then(onCreated, onCreateError)
         .then(closeAlertDialog);
     }
-
-    return gmp.alert
-      .save({
-        active,
-        name,
-        comment,
-        event,
-        condition,
-        filter_id,
-        method,
-        report_format_ids,
-        ...other,
-      })
-      .then(onSaved, onSaveError);
+    return modifyAlert({
+      id,
+      name,
+      comment,
+      condition: hasValue(condition) ? convertConditionEnum(condition) : null,
+      conditionData: await convertDict(
+        'condition_data',
+        other,
+        condition_data_fields,
+      ),
+      filterId: filter_id,
+      method: hasValue(method) ? convertMethodEnum(method) : null,
+      methodData: await convertDict('method_data', other, method_data_fields),
+      event: hasValue(event) ? convertEventEnum(event) : null,
+      eventData: await convertDict('event_data', other, event_data_fields),
+    })
+      .then(onSaved, onSaveError)
+      .then(closeAlertDialog);
   };
 
   const openScpCredentialDialog = types => {
