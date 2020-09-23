@@ -776,6 +776,7 @@ class PolicyComponent extends React.Component {
                   scannerPreferences={policy.preferences.scanner}
                   scanners={scanners}
                   title={title}
+                  usageType={'policy'}
                   onClose={this.handleCloseEditPolicyDialog}
                   onEditConfigFamilyClick={this.openEditPolicyFamilyDialog}
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}

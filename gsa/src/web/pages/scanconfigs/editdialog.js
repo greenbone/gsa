@@ -117,6 +117,7 @@ const EditScanConfigDialog = ({
   scannerId,
   scanners,
   title,
+  usageType = 'scan',
   onClose,
   onEditConfigFamilyClick,
   onEditNvtDetailsClick,
@@ -156,6 +157,11 @@ const EditScanConfigDialog = ({
     trend: trendValues,
   };
 
+  const notification =
+    usageType === 'policy'
+      ? [_('policy'), _('audits')]
+      : [_('scan config'), _('tasks')];
+
   return (
     <SaveDialog
       loading={isLoadingConfig}
@@ -189,7 +195,8 @@ const EditScanConfigDialog = ({
           {configIsInUse ? (
             <DialogInlineNotification data-testid="inline-notification">
               {_(
-                'The config or policy is now in use by a task or audit, therefore only name and comment can be modified.',
+                'The {{config}} is currently in use by one or more {{tasks}}, therefore only name and comment can be modified.',
+                {config: notification[0], tasks: notification[1]},
               )}
             </DialogInlineNotification>
           ) : (
