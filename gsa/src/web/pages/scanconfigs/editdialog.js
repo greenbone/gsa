@@ -159,8 +159,12 @@ const EditScanConfigDialog = ({
 
   const notification =
     usageType === 'policy'
-      ? [_('policy'), _('audits')]
-      : [_('scan config'), _('tasks')];
+      ? _(
+          'The policy is currently in use by one or more audits, therefore only name and comment can be modified.',
+        )
+      : _(
+          'The scan config is currently in use by one or more tasks, therefore only name and comment can be modified.',
+        );
 
   return (
     <SaveDialog
@@ -194,10 +198,7 @@ const EditScanConfigDialog = ({
           </FormGroup>
           {configIsInUse ? (
             <DialogInlineNotification data-testid="inline-notification">
-              {_(
-                'The {{config}} is currently in use by one or more {{tasks}}, therefore only name and comment can be modified.',
-                {config: notification[0], tasks: notification[1]},
-              )}
+              {notification}
             </DialogInlineNotification>
           ) : (
             <React.Fragment>
