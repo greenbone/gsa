@@ -34,6 +34,7 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
+import DialogInlineNotification from 'web/components/dialog/dialoginlinenotification';
 
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
@@ -186,11 +187,11 @@ const EditScanConfigDialog = ({
             />
           </FormGroup>
           {configIsInUse ? (
-            <h4>
+            <DialogInlineNotification>
               {_(
                 'The config or policy is now in use by a task or audit, therefore only name and comment can be modified.',
               )}
-            </h4>
+            </DialogInlineNotification>
           ) : (
             <React.Fragment>
               {configType === OSP_SCAN_CONFIG_TYPE &&
