@@ -16651,7 +16651,6 @@ authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
   auth_opts.username = username;
   auth_opts.password = password;
   auth_opts.role = role;
-  auth_opts.severity = severity;
   auth_opts.timezone = timezone;
   auth_opts.pw_warning = pw_warning;
 
