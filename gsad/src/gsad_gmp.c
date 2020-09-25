@@ -342,14 +342,13 @@ envelope_gmp (gvm_connection_t *connection, credentials_t *credentials,
     "<login>%s</login>"
     "<session>%ld</session>"
     "<role>%s</role>"
-    "<severity>%s</severity>"
     "<i18n>%s</i18n>"
     "<client_address>%s</client_address>"
     "<backend_operation>%.2f</backend_operation>",
     GSAD_VERSION, vendor_version_get (), user_get_token (user), ctime_now,
     timezone ? timezone : "", user_get_username (user),
     user_get_session_timeout (user), user_get_role (user),
-    user_get_severity (user), credentials_get_language (credentials),
+    credentials_get_language (credentials),
     user_get_client_address (user), credentials_get_cmd_duration (credentials));
 
   g_string_append (string, res);
@@ -11529,16 +11528,7 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
             response_data);
         }
       xml_string_append (xml, "</save_setting>");
-
-      if (gmp_success (entity) == 1)
-        {
-          if ((text != NULL) && (strlen (text) > 0))
-            {
-              user_set_severity (user, text);
-              user_changed = 1;
-            }
-        }
-      else
+      if (gmp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
           modify_failed = 1;
@@ -16634,7 +16624,7 @@ gvm_connection_open (gvm_connection_t *connection, const gchar *address,
  */
 int
 authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
-                  gchar **timezone, gchar **severity, gchar **capabilities,
+                  gchar **timezone, gchar **capabilities,
                   gchar **language, gchar **pw_warning)
 {
   gvm_connection_t connection;
@@ -16763,7 +16753,6 @@ login (http_connection_t *con, params_t *params,
   gchar *timezone;
   gchar *role;
   gchar *capabilities;
-  gchar *severity;
   gchar *language;
   gchar *pw_warning;
 
@@ -16773,10 +16762,10 @@ login (http_connection_t *con, params_t *params,
   if ((password == NULL)
       && (params_original_value (params, "password") == NULL))
     password = "";
-
   if (login && password)
     {
-      ret = authenticate_gmp (login, password, &role, &timezone, &severity,
+
+      ret = authenticate_gmp (login, password, &role, &timezone, 
                               &capabilities, &language, &pw_warning);
       if (ret)
         {
@@ -16805,7 +16794,7 @@ login (http_connection_t *con, params_t *params,
       else
         {
           user_t *user;
-          user = user_add (login, password, timezone, severity, role,
+          user = user_add (login, password, timezone, role,
                            capabilities, language, pw_warning, client_address);
 
           g_message ("Authentication success for '%s' from %s", login ?: "",
@@ -16824,7 +16813,6 @@ login (http_connection_t *con, params_t *params,
           credentials_free (credentials);
 
           g_free (timezone);
-          g_free (severity);
           g_free (capabilities);
           g_free (language);
           g_free (role);

@@ -46,7 +46,6 @@ struct user
   gchar *password;     ///< Password.
   gchar *role;         ///< Role.
   gchar *timezone;     ///< Timezone.
-  gchar *severity;     ///< Severity class.
   gchar *capabilities; ///< Capabilities.
   gchar *language;     ///< User Interface Language.
   gchar *pw_warning;   ///< Password policy warning.
@@ -69,7 +68,7 @@ user_new ()
 
 user_t *
 user_new_with_data (const gchar *username, const gchar *password,
-                    const gchar *timezone, const gchar *severity,
+                    const gchar *timezone, 
                     const gchar *role, const gchar *capabilities,
                     const gchar *language, const gchar *pw_warning,
                     const gchar *address)
@@ -82,7 +81,6 @@ user_new_with_data (const gchar *username, const gchar *password,
   user->username = g_strdup (username);
   user->password = g_strdup (password);
   user->timezone = g_strdup (timezone);
-  user->severity = g_strdup (severity);
   user->role = g_strdup (role);
   user->capabilities = g_strdup (capabilities);
   user->language = g_strdup (language);
@@ -109,7 +107,6 @@ user_free (user_t *user)
   g_free (user->password);
   g_free (user->role);
   g_free (user->timezone);
-  g_free (user->severity);
   g_free (user->capabilities);
   g_free (user->language);
   g_free (user->pw_warning);
@@ -133,7 +130,6 @@ user_copy (user_t *user)
   copy->password = g_strdup (user->password);
   copy->role = g_strdup (user->role);
   copy->timezone = g_strdup (user->timezone);
-  copy->severity = g_strdup (user->severity);
   copy->capabilities = g_strdup (user->capabilities);
   copy->language = g_strdup (user->language);
   copy->pw_warning = g_strdup (user->pw_warning);
@@ -198,12 +194,6 @@ user_get_client_address (user_t *user)
 }
 
 const gchar *
-user_get_severity (user_t *user)
-{
-  return user->severity;
-}
-
-const gchar *
 user_get_role (user_t *user)
 {
   return user->role;
@@ -251,21 +241,6 @@ user_set_password (user_t *user, const gchar *password)
 
   user->password = g_strdup (password);
   user->pw_warning = NULL;
-}
-
-/**
- * @brief Set severity class of user.
- *
- * @param[in]   user      User.
- * @param[in]   severity  Severity class.
- *
- */
-void
-user_set_severity (user_t *user, const gchar *severity)
-{
-  g_free (user->severity);
-
-  user->severity = g_strdup (severity);
 }
 
 /**
@@ -336,7 +311,6 @@ user_logout (user_t *user)
  * @param[in]  username      Name of user.
  * @param[in]  password      Password for user.
  * @param[in]  timezone      Timezone of user.
- * @param[in]  severity      Severity class setting of user.
  * @param[in]  role          Role of user.
  * @param[in]  capabilities  Capabilities of manager.
  * @param[in]  language      User Interface Language (language name or code)
@@ -347,7 +321,7 @@ user_logout (user_t *user)
  */
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
-          const gchar *severity, const gchar *role, const gchar *capabilities,
+          const gchar *role, const gchar *capabilities,
           const gchar *language, const gchar *pw_warning, const char *address)
 {
   user_t *user = session_get_user_by_username (username);
@@ -358,7 +332,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user_free (user);
     }
 
-  user = user_new_with_data (username, password, timezone, severity, role,
+  user = user_new_with_data (username, password, timezone, role,
                              capabilities, language, pw_warning, address);
 
   session_add_user (user->token, user);
