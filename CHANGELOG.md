@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added option for "Start Task" event upon "New SecInfo arrived" condition in alerts dialog [#2418](https://github.com/greenbone/gsa/pull/2418)
 
 ### Changed
+- Change tooltip of override icon in result details [#2467](https://github.com/greenbone/gsa/pull/2467)
 - For edit config/policy dialog, only send name and comment if config or policy is in use, and add in use notification [#2463](https://github.com/greenbone/gsa/pull/2463)
 - Changed visual appearance of compliance status bar [#2457](https://github.com/greenbone/gsa/pull/2457)
 - Changed delete icons on report format detailspage and schedule detailspage to trashcan icons [#2459](https://github.com/greenbone/gsa/pull/2459)
