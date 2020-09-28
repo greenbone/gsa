@@ -127,7 +127,7 @@ const ScheduleComponent = ({
     }
 
     return createSchedule(other)
-      .then(result => onCreated(result), onCreateError)
+      .then(onCreated, onCreateError)
       .then(() => closeScheduleDialog());
   };
 
