@@ -19,7 +19,7 @@
 import {_l} from 'gmp/locale/lang';
 
 const VALID_ROWSPERPAGE_ERROR_MESSAGE = _l(
-  'Rows per page requires a value of 1 or greater.',
+  '"Rows per page" requires a value of 1 or greater.',
 );
 
 export const userSettingsRules = {
