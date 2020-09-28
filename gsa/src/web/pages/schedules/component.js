@@ -115,6 +115,22 @@ const ScheduleComponent = ({
     }
   };
 
+  const handleSaveSchedule = data => {
+    handleInteraction();
+
+    const {id, ...other} = data;
+
+    if (isDefined(id)) {
+      return modifySchedule(data)
+        .then(onSaved, onSaveError)
+        .then(() => closeScheduleDialog());
+    }
+
+    return createSchedule(other)
+      .then(result => onCreated(result), onCreateError)
+      .then(() => closeScheduleDialog());
+  };
+
   const {dialogVisible, ...dialogProps} = state;
 
   return (
@@ -143,10 +159,7 @@ const ScheduleComponent = ({
             <ScheduleDialog
               {...dialogProps}
               onClose={handleCloseScheduleDialog}
-              onSave={d => {
-                handleInteraction();
-                return save(d).then(() => closeScheduleDialog());
-              }}
+              onSave={handleSaveSchedule}
             />
           )}
         </React.Fragment>
