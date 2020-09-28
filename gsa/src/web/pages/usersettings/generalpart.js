@@ -200,15 +200,15 @@ const GeneralPart = ({
 };
 
 GeneralPart.propTypes = {
-  autoCacheRebuild: PropTypes.string,
+  autoCacheRebuild: PropTypes.number,
   confPassword: PropTypes.string,
   detailsExportFileName: PropTypes.string,
   listExportFileName: PropTypes.string,
-  maxRowsPerPage: PropTypes.string,
+  maxRowsPerPage: PropTypes.number,
   newPassword: PropTypes.string,
   oldPassword: PropTypes.string,
   reportExportFileName: PropTypes.string,
-  rowsPerPage: PropTypes.string,
+  rowsPerPage: PropTypes.number,
   shouldWarn: PropTypes.bool.isRequired,
   timezone: PropTypes.string,
   userInterfaceLanguage: PropTypes.string,
