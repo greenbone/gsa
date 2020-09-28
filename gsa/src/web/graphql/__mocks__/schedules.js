@@ -18,7 +18,14 @@
 
 import {deepFreeze} from 'web/utils/testing';
 
-import {GET_SCHEDULES, GET_SCHEDULE} from '../schedules';
+import {
+  GET_SCHEDULES,
+  GET_SCHEDULE,
+  CREATE_SCHEDULE,
+  MODIFY_SCHEDULE,
+} from '../schedules';
+
+import {createGenericQueryMock} from 'web/utils/testing';
 
 const schedule1 = deepFreeze({
   id: 'c35f82f1-7798-4b84-b2c4-761a33068956',
@@ -150,3 +157,48 @@ export const createGetScheduleQueryMock = (id, schedule = schedule1) => {
   };
   return [queryMock, resultFunc];
 };
+
+export const createScheduleInput = {
+  id: '12345',
+  name: 'schedule 1',
+  icalendar: `BEGIN:VCALENDAR
+  VERSION:2.0
+  PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
+  BEGIN:VEVENT
+  UID:c35f82f1-7798-4b84-b2c4-761a33068956
+  DTSTAMP:20190715T124352Z
+  DTSTART:20190716T040000
+  END:VEVENT
+  END:VCALENDAR
+  `,
+  comment: 'foobar',
+};
+
+const createScheduleResult = {
+  createSchedule: {
+    id: '12345',
+    status: 200,
+  },
+};
+
+export const createCreateScheduleQueryMock = () =>
+  createGenericQueryMock(CREATE_SCHEDULE, createScheduleResult, {
+    input: createScheduleInput,
+  });
+
+export const modifyScheduleInput = {
+  id: '12345',
+  name: 'loremipsum',
+  comment: 'silence',
+};
+
+const modifyScheduleResult = {
+  modifySchedule: {
+    ok: true,
+  },
+};
+
+export const createModifyScheduleQueryMock = () =>
+  createGenericQueryMock(MODIFY_SCHEDULE, modifyScheduleResult, {
+    input: modifyScheduleInput,
+  });
