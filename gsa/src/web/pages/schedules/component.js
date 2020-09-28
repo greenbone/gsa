@@ -25,6 +25,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import EntityComponent from 'web/entity/component';
 
+import {useCreateSchedule, useModifySchedule} from 'web/graphql/schedules';
+
 import {getTimezone} from 'web/store/usersettings/selectors';
 
 import reducer from 'web/utils/stateReducer';
@@ -48,6 +50,8 @@ const ScheduleComponent = ({
 }) => {
   const [state, dispatch] = useReducer(reducer, {dialogVisible: false});
   const timezone = useSelector(getTimezone);
+  const [createSchedule] = useCreateSchedule();
+  const [modifySchedule] = useModifySchedule();
 
   const openScheduleDialog = schedule => {
     if (isDefined(schedule)) {
