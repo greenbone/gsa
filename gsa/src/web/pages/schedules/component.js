@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect, useReducer} from 'react';
 
 import {connect} from 'react-redux';
 
@@ -27,22 +27,16 @@ import EntityComponent from 'web/entity/component';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
+import reducer from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 
 import ScheduleDialog from './dialog';
 
-class ScheduleComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const ScheduleComponent = props => {
+  const [state, dispatch] = useReducer(reducer, {dialogVisible: false});
 
-    this.state = {dialogVisible: false};
-
-    this.handleCloseScheduleDialog = this.handleCloseScheduleDialog.bind(this);
-    this.openScheduleDialog = this.openScheduleDialog.bind(this);
-  }
-
-  openScheduleDialog(schedule) {
-    const {timezone} = this.props;
+  const openScheduleDialog = schedule => {
+    const {timezone} = props;
 
     if (isDefined(schedule)) {
       const {event} = schedule;
@@ -50,112 +44,116 @@ class ScheduleComponent extends React.Component {
 
       const {interval, freq, monthdays, weekdays} = recurrence;
 
-      this.setState({
-        comment: schedule.comment,
-        startDate,
-        dialogVisible: true,
-        duration: durationInSeconds > 0 ? duration : undefined,
-        freq,
-        id: schedule.id,
-        interval,
-        monthdays,
-        name: schedule.name,
-        title: _('Edit Schedule {{name}}', {name: schedule.name}),
-        timezone: schedule.timezone,
-        weekdays,
+      dispatch({
+        type: 'setState',
+        newState: {
+          comment: schedule.comment,
+          startDate,
+          dialogVisible: true,
+          duration: durationInSeconds > 0 ? duration : undefined,
+          freq,
+          id: schedule.id,
+          interval,
+          monthdays,
+          name: schedule.name,
+          title: _('Edit Schedule {{name}}', {name: schedule.name}),
+          timezone: schedule.timezone,
+          weekdays,
+        },
       });
     } else {
-      this.setState({
-        comment: undefined,
-        dialogVisible: true,
-        duration: undefined,
-        freq: undefined,
-        id: undefined,
-        interval: undefined,
-        monthdays: undefined,
-        name: undefined,
-        startDate: undefined,
-        timezone,
-        title: undefined,
-        weekdays: undefined,
+      dispatch({
+        type: 'setState',
+        newState: {
+          comment: undefined,
+          dialogVisible: true,
+          duration: undefined,
+          freq: undefined,
+          id: undefined,
+          interval: undefined,
+          monthdays: undefined,
+          name: undefined,
+          startDate: undefined,
+          timezone,
+          title: undefined,
+          weekdays: undefined,
+        },
       });
     }
 
-    this.handleInteraction();
-  }
+    handleInteraction();
+  };
 
-  closeScheduleDialog() {
-    this.setState({dialogVisible: false});
-  }
+  const closeScheduleDialog = () => {
+    dispatch({type: 'setState', newState: {dialogVisible: false}});
+  };
 
-  handleCloseScheduleDialog() {
-    this.closeScheduleDialog();
-    this.handleInteraction();
-  }
+  const handleCloseScheduleDialog = () => {
+    closeScheduleDialog();
+    handleInteraction();
+  };
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
+  const handleInteraction = () => {
+    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  render() {
-    const {
-      children,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
+  const {
+    children,
+    onCloned,
+    onCloneError,
+    onCreated,
+    onCreateError,
+    onDeleted,
+    onDeleteError,
+    onDownloaded,
+    onDownloadError,
+    onInteraction,
+    onSaved,
+    onSaveError,
+  } = props;
 
-    const {dialogVisible, ...dialogProps} = this.state;
+  const {dialogVisible, ...dialogProps} = state;
 
-    return (
-      <EntityComponent
-        name="schedule"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
-        onCloneError={onCloneError}
-        onDeleted={onDeleted}
-        onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
-        onDownloadError={onDownloadError}
-        onInteraction={onInteraction}
-        onSaved={onSaved}
-        onSaveError={onSaveError}
-      >
-        {({save, ...other}) => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: this.openScheduleDialog,
-              edit: this.openScheduleDialog,
-            })}
-            {dialogVisible && (
-              <ScheduleDialog
-                {...dialogProps}
-                onClose={this.handleCloseScheduleDialog}
-                onSave={d => {
-                  this.handleInteraction();
-                  return save(d).then(() => this.closeScheduleDialog());
-                }}
-              />
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
-    );
-  }
-}
+  return (
+    <EntityComponent
+      name="schedule"
+      onCreated={onCreated}
+      onCreateError={onCreateError}
+      onCloned={onCloned}
+      onCloneError={onCloneError}
+      onDeleted={onDeleted}
+      onDeleteError={onDeleteError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onDownloadError}
+      onInteraction={onInteraction}
+      onSaved={onSaved}
+      onSaveError={onSaveError}
+    >
+      {({save, ...other}) => (
+        <React.Fragment>
+          {children({
+            ...other,
+            create: openScheduleDialog,
+            edit: openScheduleDialog,
+          })}
+          {dialogVisible && (
+            <ScheduleDialog
+              {...dialogProps}
+              onClose={handleCloseScheduleDialog}
+              onSave={d => {
+                handleInteraction();
+                return save(d).then(() => closeScheduleDialog());
+              }}
+            />
+          )}
+        </React.Fragment>
+      )}
+    </EntityComponent>
+  );
+};
 
 ScheduleComponent.propTypes = {
   children: PropTypes.func.isRequired,
