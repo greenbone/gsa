@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useReducer} from 'react';
+import React, {useReducer} from 'react';
 
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -34,10 +34,9 @@ import ScheduleDialog from './dialog';
 
 const ScheduleComponent = props => {
   const [state, dispatch] = useReducer(reducer, {dialogVisible: false});
+  const timezone = useSelector(getTimezone);
 
   const openScheduleDialog = schedule => {
-    const {timezone} = props;
-
     if (isDefined(schedule)) {
       const {event} = schedule;
       const {startDate, recurrence = {}, duration, durationInSeconds} = event;
@@ -157,7 +156,6 @@ const ScheduleComponent = props => {
 
 ScheduleComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  timezone: PropTypes.string.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -171,8 +169,6 @@ ScheduleComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default connect(rootState => ({
-  timezone: getTimezone(rootState),
-}))(ScheduleComponent);
+export default ScheduleComponent;
 
 // vim: set ts=2 sw=2 tw=80:
