@@ -63,7 +63,7 @@ import {useLazyGetScanners} from 'web/graphql/scanners';
 
 import {useGetScanConfigs} from 'web/graphql/scanconfigs';
 
-import {useLazyGetSchedules, useCreateSchedule} from 'web/graphql/schedules';
+import {useLazyGetSchedules} from 'web/graphql/schedules';
 
 import {useLazyGetTargets} from 'web/graphql/targets';
 

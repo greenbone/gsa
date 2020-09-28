@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {deepFreeze} from 'web/utils/testing';
+import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
 import {
   GET_SCHEDULES,
@@ -24,8 +24,6 @@ import {
   CREATE_SCHEDULE,
   MODIFY_SCHEDULE,
 } from '../schedules';
-
-import {createGenericQueryMock} from 'web/utils/testing';
 
 const schedule1 = deepFreeze({
   id: 'c35f82f1-7798-4b84-b2c4-761a33068956',
