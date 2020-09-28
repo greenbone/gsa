@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use <predefined> to disable feed object editing and filter creation on feed status page [#2398](https://github.com/greenbone/gsa/pull/2398)
 
 ### Fixed
+- Only show schedule options in advanced and modify task wizard if user has correct permissions [#2472](https://github.com/greenbone/gsa/pull/2472)
 
 ### Removed
 - Removed export/download for report formats [#2427](https://github.com/greenbone/gsa/pull/2427)
