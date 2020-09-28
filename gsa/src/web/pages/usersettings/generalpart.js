@@ -92,6 +92,8 @@ const GeneralPart = ({
   listExportFileName,
   reportExportFileName,
   autoCacheRebuild,
+  shouldWarn,
+  validityStatus,
   onChange,
 }) => {
   return (
@@ -153,6 +155,8 @@ const GeneralPart = ({
       <FormGroup title={_('Rows Per Page')} titleSize="3">
         <TextField
           name="rowsPerPage"
+          hasError={shouldWarn && !validityStatus.rowsPerPage.isValid}
+          errorContent={validityStatus.rowsPerPage.error}
           value={rowsPerPage}
           size="19"
           onChange={onChange}
@@ -205,8 +209,10 @@ GeneralPart.propTypes = {
   oldPassword: PropTypes.string,
   reportExportFileName: PropTypes.string,
   rowsPerPage: PropTypes.string,
+  shouldWarn: PropTypes.bool.isRequired,
   timezone: PropTypes.string,
   userInterfaceLanguage: PropTypes.string,
+  validityStatus: PropTypes.object.isRequired,
   onChange: PropTypes.func,
 };
 

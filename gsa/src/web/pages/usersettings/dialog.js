@@ -30,6 +30,11 @@ import SaveDialog from 'web/components/dialog/savedialog';
 
 import Section from 'web/components/section/section';
 
+import useFormValidation, {
+  syncVariables,
+} from 'web/components/form/useFormValidation';
+import {userSettingsRules} from './validationrules';
+
 import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -175,14 +180,27 @@ let UserSettingsDialog = ({
     secInfoFilter,
   };
 
+  const validationSchema = {
+    rowsPerPage,
+  };
+
+  const {
+    shouldWarn,
+    formValues,
+    handleValueChange,
+    validityStatus,
+    handleSubmit,
+  } = useFormValidation(validationSchema, userSettingsRules, onSave);
+
   return (
     <SaveDialog
       title={_('Edit User Settings')}
       onClose={onClose}
-      onSave={onSave}
+      onSave={values => handleSubmit(values)}
       defaultValues={settings}
     >
       {({values, onValueChange}) => {
+        syncVariables(values, formValues);
         return (
           <React.Fragment>
             <Section title={_('General Settings')} foldable>
@@ -199,7 +217,9 @@ let UserSettingsDialog = ({
                   listExportFileName={values.listExportFileName}
                   reportExportFileName={values.reportExportFileName}
                   autoCacheRebuild={values.autoCacheRebuild}
-                  onChange={onValueChange}
+                  validityStatus={validityStatus}
+                  shouldWarn={shouldWarn}
+                  onChange={handleValueChange}
                 />
               </FormGroupSizer>
             </Section>
@@ -370,9 +390,6 @@ UserSettingsDialog = connect(rootState => {
   };
 })(UserSettingsDialog);
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(UserSettingsDialog);
+export default compose(withGmp, withCapabilities)(UserSettingsDialog);
 
 // vim: set ts=2 sw=2 tw=80:
