@@ -57,6 +57,7 @@ import {
   loadEntities as loadPermissions,
 } from 'web/store/entities/permissions';
 
+import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
 
 import ScheduleComponent from './component';
@@ -114,7 +115,7 @@ const Page = ({
   <ScheduleComponent
     onCloned={goto_details('schedule', props)}
     onCloneError={onError}
-    onCreated={goto_details('schedule', props)}
+    onCreated={goto_entity_details('schedule', 'createSchedule', props)}
     onDeleted={goto_list('schedules', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}
