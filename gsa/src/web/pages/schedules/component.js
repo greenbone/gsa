@@ -17,7 +17,7 @@
  */
 import React, {useReducer} from 'react';
 
-import {connect, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -32,7 +32,20 @@ import PropTypes from 'web/utils/proptypes';
 
 import ScheduleDialog from './dialog';
 
-const ScheduleComponent = props => {
+const ScheduleComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+}) => {
   const [state, dispatch] = useReducer(reducer, {dialogVisible: false});
   const timezone = useSelector(getTimezone);
 
@@ -93,26 +106,10 @@ const ScheduleComponent = props => {
   };
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
   };
-
-  const {
-    children,
-    onCloned,
-    onCloneError,
-    onCreated,
-    onCreateError,
-    onDeleted,
-    onDeleteError,
-    onDownloaded,
-    onDownloadError,
-    onInteraction,
-    onSaved,
-    onSaveError,
-  } = props;
 
   const {dialogVisible, ...dialogProps} = state;
 
