@@ -23,9 +23,10 @@ import {gql, useLazyQuery} from '@apollo/client';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import {isDefined} from 'gmp/utils/identity';
+import PortList from 'gmp/models/portlist';
 
 export const GET_PORT_LISTS = gql`
-  query PortList(
+  query PortLists(
     $filterString: FilterString
     $after: String
     $before: String
@@ -42,26 +43,6 @@ export const GET_PORT_LISTS = gql`
       nodes {
         name
         id
-        owner
-        creationTime
-        modificationTime
-        writable
-        inUse
-        portCount {
-          all
-          tcp
-          udp
-        }
-        portRanges {
-          id
-          start
-          end
-          protocolType
-        }
-        targets {
-          id
-          name
-        }
       }
       counts {
         total
@@ -81,14 +62,14 @@ export const GET_PORT_LISTS = gql`
   }
 `;
 
-export const useLazyGetPortLists = options => {
-  const [queryPortLists, {data, ...other}] = useLazyQuery(
-    GET_PORT_LISTS,
-    options,
-  );
+export const useLazyGetPortLists = (variables, options) => {
+  const [queryPortLists, {data, ...other}] = useLazyQuery(GET_PORT_LISTS, {
+    ...options,
+    variables,
+  });
 
   const portLists = isDefined(data?.portLists)
-    ? data.portLists.nodes.map(entity => Credential.fromObject(entity))
+    ? data.portLists.nodes.map(entity => PortList.fromObject(entity))
     : undefined;
 
   const {total, filtered, offset = -1, limit, length} =
