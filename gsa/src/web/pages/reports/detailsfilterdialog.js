@@ -28,7 +28,6 @@ import Layout from 'web/components/layout/layout';
 /* eslint-disable max-len */
 
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
-import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
@@ -84,8 +83,6 @@ const FilterDialog = ({
         filter={filter}
         onChange={onFilterValueChange}
       />
-
-      <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
       <FormGroup title={_('Only show hosts that have results')}>
         <Checkbox
@@ -157,9 +154,6 @@ const FilterDialog = ({
 
 FilterDialog.propTypes = FilterDialogPropTypes;
 
-export default compose(
-  withCapabilities,
-  withFilterDialog(),
-)(FilterDialog);
+export default compose(withCapabilities, withFilterDialog())(FilterDialog);
 
 // vim: set ts=2 sw=2 tw=80:
