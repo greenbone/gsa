@@ -60,7 +60,7 @@ export const GET_PORT_LISTS = gql`
       }
     }
   }
-`;
+`; // only need name and id for target dialog. Some subobjects are not supported in the current query. Will add later.
 
 export const useLazyGetPortLists = (variables, options) => {
   const [queryPortLists, {data, ...other}] = useLazyQuery(GET_PORT_LISTS, {
