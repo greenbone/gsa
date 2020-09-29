@@ -68,26 +68,25 @@ describe('ComplianceStatusBar tests', () => {
     expect(element).toHaveTextContent('N/A');
   });
 
-  test('should render background for high compliance', () => {
+  test('should render colors', () => {
     const {getByTestId} = render(
       <ComplianceStatusBar complianceStatus={100} />,
     );
     const progress = getByTestId('progress');
+    const progressbarBox = getByTestId('progressbar-box');
 
-    expect(progress).toHaveStyleRule('background', Theme.paleGreen);
+    expect(progress).toHaveStyleRule('background', Theme.statusRunGreen);
+    expect(progressbarBox).toHaveStyleRule('background', Theme.errorRed);
   });
 
-  test('should render background for medium compliance', () => {
-    const {getByTestId} = render(<ComplianceStatusBar complianceStatus={75} />);
+  test('should render gray background for N/A', () => {
+    const {getByTestId} = render(<ComplianceStatusBar complianceStatus={-1} />);
     const progress = getByTestId('progress');
+    const progressbarBox = getByTestId('progressbar-box');
 
-    expect(progress).toHaveStyleRule('background', Theme.goldYellow);
-  });
+    expect(progress).toHaveStyleRule('background', Theme.statusRunGreen);
+    expect(progress).toHaveStyleRule('width', '0%');
 
-  test('should render background for low compliance', () => {
-    const {getByTestId} = render(<ComplianceStatusBar complianceStatus={25} />);
-    const progress = getByTestId('progress');
-
-    expect(progress).toHaveStyleRule('background', Theme.errorRed);
+    expect(progressbarBox).toHaveStyleRule('background', Theme.darkGray);
   });
 });

@@ -184,6 +184,35 @@ describe('ScanConfigCommand tests', () => {
       });
   });
 
+  test('should save an in use config with undefined input objects', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new ScanConfigCommand(fakeHttp);
+    return cmd
+      .save({
+        id: 'c1',
+        name: 'foo',
+        comment: 'somecomment',
+        trend: undefined,
+        select: undefined,
+        scannerPreferenceValues: undefined,
+        scannerId: undefined,
+      })
+      .then(() => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'save_config',
+            comment: 'somecomment',
+            config_id: 'c1',
+            name: 'foo',
+          },
+        });
+      });
+  });
+
   test('should save a config family', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);

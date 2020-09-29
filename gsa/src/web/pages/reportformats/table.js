@@ -59,7 +59,6 @@ const ReportFormatsTable = createEntitiesTable({
   row: Row,
   rowDetails: withRowDetails('reportformat', 10)(ReportFormatDetails),
   footer: createEntitiesFooter({
-    download: 'reportformats.xml',
     span: 6,
     trash: true,
   }),

@@ -142,10 +142,13 @@ const AdvancedTaskWizard = ({
               </p>
               <p>
                 {_(
-                  'You can choose, whether you want to run the scan ' +
-                    'immediately, schedule the task for a later date and ' +
-                    'time, or just create the task so you can run it manually' +
-                    ' later.',
+                  'You can choose, whether you want to run the scan immediately',
+                )}
+                {capabilities.mayAccess('schedules') &&
+                  capabilities.mayCreate('schedule') &&
+                  _(', schedule the task for a later date and time,')}
+                {_(
+                  ' or just create the task so you can run it manually later.',
                 )}
               </p>
               <p>
@@ -219,54 +222,60 @@ const AdvancedTaskWizard = ({
                   onChange={onValueChange}
                 />
               </FormGroup>
-              <FormGroup>
-                <Radio
-                  title={_('Create Schedule:')}
-                  value={SCHEDULE_START_VALUE}
-                  checked={state.auto_start === SCHEDULE_START_VALUE}
-                  name="auto_start"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-              <FormGroup offset="1">
-                <Datepicker
-                  name="start_date"
-                  value={state.start_date}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-              <FormGroup offset="1">
-                <Divider>
-                  <span>{_('at')}</span>
-                  <Spinner
-                    type="int"
-                    min="0"
-                    max="23"
-                    size="2"
-                    name="start_hour"
-                    value={state.start_hour}
-                    onChange={onValueChange}
-                  />
-                  <span>{_('h')}</span>
-                  <Spinner
-                    type="int"
-                    min="0"
-                    max="59"
-                    size="2"
-                    name="start_minute"
-                    value={state.start_minute}
-                    onChange={onValueChange}
-                  />
-                  <span>{_('m')}</span>
-                </Divider>
-              </FormGroup>
-              <FormGroup offset="1">
-                <TimeZoneSelect
-                  name="start_timezone"
-                  value={state.start_timezone}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
+
+              {capabilities.mayCreate('schedule') &&
+                capabilities.mayAccess('schedules') && (
+                  <span>
+                    <FormGroup>
+                      <Radio
+                        title={_('Create Schedule:')}
+                        value={SCHEDULE_START_VALUE}
+                        checked={state.auto_start === SCHEDULE_START_VALUE}
+                        name="auto_start"
+                        onChange={onValueChange}
+                      />
+                    </FormGroup>
+                    <FormGroup offset="1">
+                      <Datepicker
+                        name="start_date"
+                        value={state.start_date}
+                        onChange={onValueChange}
+                      />
+                    </FormGroup>
+                    <FormGroup offset="1">
+                      <Divider>
+                        <span>{_('at')}</span>
+                        <Spinner
+                          type="int"
+                          min="0"
+                          max="23"
+                          size="2"
+                          name="start_hour"
+                          value={state.start_hour}
+                          onChange={onValueChange}
+                        />
+                        <span>{_('h')}</span>
+                        <Spinner
+                          type="int"
+                          min="0"
+                          max="59"
+                          size="2"
+                          name="start_minute"
+                          value={state.start_minute}
+                          onChange={onValueChange}
+                        />
+                        <span>{_('m')}</span>
+                      </Divider>
+                    </FormGroup>
+                    <FormGroup offset="1">
+                      <TimeZoneSelect
+                        name="start_timezone"
+                        value={state.start_timezone}
+                        onChange={onValueChange}
+                      />
+                    </FormGroup>
+                  </span>
+                )}
 
               <Radio
                 title={_('Do not start automatically')}

@@ -72,7 +72,6 @@ const ReportFormatsFilterDialog = createFilterDialog({
 
 const ReportFormatsPage = ({
   onChanged,
-  onDownloaded,
   onError,
   onInteraction,
   showSuccess,
@@ -82,12 +81,10 @@ const ReportFormatsPage = ({
     onSaved={onChanged}
     onDeleted={onChanged}
     onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
     onImported={onChanged}
     onInteraction={onInteraction}
   >
-    {({delete: delete_func, download, edit, import: import_func, save}) => (
+    {({delete: delete_func, edit, import: import_func, save}) => (
       <React.Fragment>
         <PageTitle title={_('Report Formats')} />
         <EntitiesPage
@@ -99,12 +96,10 @@ const ReportFormatsPage = ({
           title={_('Report Formats')}
           toolBarIcons={ToolBarIcons}
           onChanged={onChanged}
-          onDownloaded={onDownloaded}
           onError={onError}
           onInteraction={onInteraction}
           onReportFormatImportClick={import_func}
           onReportFormatDeleteClick={delete_func}
-          onReportFormatDownloadClick={download}
           onReportFormatEditClick={edit}
         />
       </React.Fragment>
@@ -115,7 +110,6 @@ const ReportFormatsPage = ({
 ReportFormatsPage.propTypes = {
   showSuccess: PropTypes.func.isRequired,
   onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };

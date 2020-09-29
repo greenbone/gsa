@@ -126,14 +126,7 @@ class ReportFormatComponent extends React.Component {
   }
 
   render() {
-    const {
-      children,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-    } = this.props;
+    const {children, onDeleted, onDeleteError, onInteraction} = this.props;
 
     const {dialogVisible, reportformat, title} = this.state;
 
@@ -142,8 +135,6 @@ class ReportFormatComponent extends React.Component {
         name="reportformat"
         onDeleted={onDeleted}
         onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
-        onDownloadError={onDownloadError}
         onInteraction={onInteraction}
       >
         {other => (
@@ -173,8 +164,6 @@ ReportFormatComponent.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   onDeleteError: PropTypes.func,
   onDeleted: PropTypes.func,
-  onDownloadError: PropTypes.func,
-  onDownloaded: PropTypes.func,
   onImportError: PropTypes.func,
   onImported: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
