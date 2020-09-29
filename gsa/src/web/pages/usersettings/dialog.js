@@ -196,7 +196,7 @@ let UserSettingsDialog = ({
     <SaveDialog
       title={_('Edit User Settings')}
       onClose={onClose}
-      onSave={values => handleSubmit(values)}
+      onSave={handleSubmit}
       defaultValues={settings}
     >
       {({values, onValueChange}) => {
