@@ -22,6 +22,8 @@ import {gql, useLazyQuery} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
+import {isDefined} from 'gmp/utils/identity';
+
 export const GET_PORT_LISTS = gql`
   query PortList(
     $filterString: FilterString
