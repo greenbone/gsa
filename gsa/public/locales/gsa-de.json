@@ -4,6 +4,7 @@
   " on Port {{port}}": " auf Port {{port}}",
   " on port ": " auf Port ",
   " or just create the task so you can run it manually later.": " oder nur die Aufgabe für ein späteres manuelles Starten erstellt werden soll.",
+  "\"Rows per page\" requires a value of 1 or greater.": "\"Zeilen pro Seite\" benötigt einen Wert von 1 oder höher.",
   "# of CERT-Bund Advisories": "Anz. CERT-Bund-Adv",
   "# of CERT-Bund Advs": "Anz. CERT-Bund-Advs",
   "# of CPEs": "Anz. CPEs",

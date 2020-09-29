@@ -30,6 +30,11 @@ import SaveDialog from 'web/components/dialog/savedialog';
 
 import Section from 'web/components/section/section';
 
+import useFormValidation, {
+  syncVariables,
+} from 'web/components/form/useFormValidation';
+import {userSettingsRules} from './validationrules';
+
 import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -175,14 +180,27 @@ let UserSettingsDialog = ({
     secInfoFilter,
   };
 
+  const validationSchema = {
+    rowsPerPage,
+  };
+
+  const {
+    shouldWarn,
+    formValues,
+    handleValueChange,
+    validityStatus,
+    handleSubmit,
+  } = useFormValidation(validationSchema, userSettingsRules, onSave);
+
   return (
     <SaveDialog
       title={_('Edit User Settings')}
       onClose={onClose}
-      onSave={onSave}
+      onSave={handleSubmit}
       defaultValues={settings}
     >
       {({values, onValueChange}) => {
+        syncVariables(values, formValues);
         return (
           <React.Fragment>
             <Section title={_('General Settings')} foldable>
@@ -199,7 +217,9 @@ let UserSettingsDialog = ({
                   listExportFileName={values.listExportFileName}
                   reportExportFileName={values.reportExportFileName}
                   autoCacheRebuild={values.autoCacheRebuild}
-                  onChange={onValueChange}
+                  validityStatus={validityStatus}
+                  shouldWarn={shouldWarn}
+                  onChange={handleValueChange}
                 />
               </FormGroupSizer>
             </Section>
@@ -294,7 +314,7 @@ let UserSettingsDialog = ({
 UserSettingsDialog.propTypes = {
   alerts: PropTypes.array,
   alertsFilter: PropTypes.string,
-  autoCacheRebuild: PropTypes.string,
+  autoCacheRebuild: PropTypes.number,
   capabilities: PropTypes.capabilities.isRequired,
   certBundFilter: PropTypes.string,
   configsFilter: PropTypes.string,
@@ -311,20 +331,20 @@ UserSettingsDialog.propTypes = {
   defaultPortList: PropTypes.string,
   defaultReportFormat: PropTypes.string,
   defaultSchedule: PropTypes.string,
-  defaultSeverity: PropTypes.string,
+  defaultSeverity: PropTypes.number,
   defaultSmbCredential: PropTypes.string,
   defaultSnmpCredential: PropTypes.string,
   defaultSshCredential: PropTypes.string,
   defaultTarget: PropTypes.string,
   detailsExportFileName: PropTypes.string,
   dfnCertFilter: PropTypes.string,
-  dynamicSeverity: PropTypes.string,
+  dynamicSeverity: PropTypes.number,
   filters: PropTypes.array,
   filtersFilter: PropTypes.string,
   groupsFilter: PropTypes.string,
   hostsFilter: PropTypes.string,
   listExportFileName: PropTypes.string,
-  maxRowsPerPage: PropTypes.string,
+  maxRowsPerPage: PropTypes.number,
   notesFilter: PropTypes.string,
   nvtFilter: PropTypes.string,
   openVasScanConfigs: PropTypes.array,
@@ -343,7 +363,7 @@ UserSettingsDialog.propTypes = {
   reportsFilter: PropTypes.string,
   resultsFilter: PropTypes.string,
   rolesFilter: PropTypes.string,
-  rowsPerPage: PropTypes.string,
+  rowsPerPage: PropTypes.number,
   scannersFilter: PropTypes.string,
   schedules: PropTypes.array,
   schedulesFilter: PropTypes.string,
@@ -370,9 +390,6 @@ UserSettingsDialog = connect(rootState => {
   };
 })(UserSettingsDialog);
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(UserSettingsDialog);
+export default compose(withGmp, withCapabilities)(UserSettingsDialog);
 
 // vim: set ts=2 sw=2 tw=80:
