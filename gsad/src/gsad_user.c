@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2018 Greenbone Networks GmbH
+/* Copyright (C) 2016-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -68,7 +68,7 @@ user_new ()
 
 user_t *
 user_new_with_data (const gchar *username, const gchar *password,
-                    const gchar *timezone, 
+                    const gchar *timezone,
                     const gchar *role, const gchar *capabilities,
                     const gchar *language, const gchar *pw_warning,
                     const gchar *address)

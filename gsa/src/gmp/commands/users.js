@@ -279,7 +279,6 @@ export class UserCommand extends EntityCommand {
       details_fname: data.detailsExportFileName,
       list_fname: data.listExportFileName,
       report_fname: data.reportExportFileName,
-      severity_class: data.severityClass,
       dynamic_severity: data.dynamicSeverity,
       default_severity: severityValue(data.defaultSeverity),
       'settings_default:f9f5a546-8018-48d0-bef5-5ad4926ea899':

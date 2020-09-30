@@ -1,4 +1,4 @@
-/* Copyright (C) 2009-2019 Greenbone Networks GmbH
+/* Copyright (C) 2009-2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -472,19 +472,6 @@ check_modify_config (gvm_connection_t *connection, credentials_t *credentials,
         "It is unclear whether the entire config has been saved. "
         "Diagnostics: Failure to parse status_text from response.",
         response_data);
-    }
-
-  if (str_equal (status_text, "Config is in use"))
-    {
-      const char *message = "The config is now in use by a task,"
-                            " so only name and comment can be modified.";
-
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      response = action_result (connection, credentials, params, response_data,
-                                "Save Config", message, NULL, NULL);
-
-      free_entity (entity);
-      return response;
     }
   else if (str_equal (status_text, "MODIFY_CONFIG name must be unique"))
     {
@@ -11481,60 +11468,6 @@ save_my_settings_gmp (gvm_connection_t *connection, credentials_t *credentials,
         response_data);
     }
 
-  /* Send Severity Class. */
-
-  changed_value = params_value (changed, "severity_class");
-  if (changed_value == NULL
-      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
-    {
-      text = params_value (params, "severity_class");
-      text_64 = (text ? g_base64_encode ((guchar *) text, strlen (text))
-                      : g_strdup (""));
-
-      if (gvm_connection_sendf (connection,
-                                "<modify_setting"
-                                " setting_id"
-                                "=\"f16bb236-a32d-4cd5-a880-e0fcf2599f59\">"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                text_64 ? text_64 : "")
-          == -1)
-        {
-          g_free (text_64);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __func__, __LINE__,
-            "An internal error occurred while saving settings. "
-            "It is unclear whether all the settings were saved. "
-            "Diagnostics: Failure to send command to manager daemon.",
-            response_data);
-        }
-      g_free (text_64);
-
-      entity = NULL;
-      xml_string_append (xml, "<save_setting id=\"%s\">",
-                         "f16bb236-a32d-4cd5-a880-e0fcf2599f59");
-      if (read_entity_and_string_c (connection, &entity, &xml))
-        {
-          g_string_free (xml, TRUE);
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
-          return gsad_message (
-            credentials, "Internal error", __func__, __LINE__,
-            "An internal error occurred while saving settings. "
-            "It is unclear whether all the settings were saved. "
-            "Diagnostics: Failure to receive response from manager daemon.",
-            response_data);
-        }
-      xml_string_append (xml, "</save_setting>");
-      if (gmp_success (entity) != 1)
-        {
-          set_http_status_from_entity (entity, response_data);
-          modify_failed = 1;
-        }
-    }
-
   /* Send Dynamic Severity setting. */
 
   changed_value = params_value (changed, "dynamic_severity");
@@ -16615,7 +16548,6 @@ gvm_connection_open (gvm_connection_t *connection, const gchar *address,
  * @param[in]  password      Password.
  * @param[out] role          Role.
  * @param[out] timezone      Timezone.
- * @param[out] severity      Severity class.
  * @param[out] capabilities  Capabilities of manager.
  * @param[out] language      User Interface Language, or NULL.
  * @param[out] pw_warning    Password warning message, NULL if password is OK.
@@ -16764,8 +16696,7 @@ login (http_connection_t *con, params_t *params,
     password = "";
   if (login && password)
     {
-
-      ret = authenticate_gmp (login, password, &role, &timezone, 
+      ret = authenticate_gmp (login, password, &role, &timezone,
                               &capabilities, &language, &pw_warning);
       if (ret)
         {
