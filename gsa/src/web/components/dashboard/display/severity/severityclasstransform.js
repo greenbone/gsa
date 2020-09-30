@@ -41,10 +41,7 @@ import {severityValue} from 'gmp/utils/number';
 
 export const severityClassDataRow = row => [row.label, row.value];
 
-const transformSeverityData = (
-  data = {},
-  {severityClass: severityClassType},
-) => {
+const transformSeverityData = (data = {}) => {
   const {groups = []} = data;
 
   const sum = totalCount(groups);
@@ -57,7 +54,7 @@ const transformSeverityData = (
       value = NA_VALUE;
     }
 
-    const riskFactor = resultSeverityRiskFactor(value, severityClassType);
+    const riskFactor = resultSeverityRiskFactor(value);
     const severityClass = allSeverityClasses[riskFactor] || {};
 
     let {count = 0} = severityClass;
@@ -71,7 +68,7 @@ const transformSeverityData = (
     return allSeverityClasses;
   }, {});
 
-  const {high, medium, low} = getSeverityLevels(severityClassType);
+  const {high, medium, low} = getSeverityLevels();
 
   const tdata = Object.values(severityClasses).map(severityClass => {
     const {count, riskFactor} = severityClass;
