@@ -6,7 +6,7 @@ exports[`ComplianceStatusBar tests should render 1`] = `
   box-sizing: content-box;
   display: inline-block;
   width: 100px;
-  background: #393637;
+  background: #c83814;
   vertical-align: middle;
   text-align: center;
 }
@@ -25,7 +25,7 @@ exports[`ComplianceStatusBar tests should render 1`] = `
 .c1 {
   height: 13px;
   width: 75%;
-  background: #fdc300;
+  background: #70c000;
 }
 
 @media print {

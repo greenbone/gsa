@@ -27,12 +27,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.8.1] - unreleased
 
 ### Added
+- Added form validation for user setting "rows per page" [#2478](https://github.com/greenbone/gsa/pull/2478)
 - Added option for "Start Task" event upon "New SecInfo arrived" condition in alerts dialog [#2418](https://github.com/greenbone/gsa/pull/2418)
 
 ### Changed
+- Change tooltip of override icon in result details [#2467](https://github.com/greenbone/gsa/pull/2467)
+- For edit config/policy dialog, only send name and comment if config or policy is in use, and add in use notification [#2463](https://github.com/greenbone/gsa/pull/2463)
+- Changed visual appearance of compliance status bar [#2457](https://github.com/greenbone/gsa/pull/2457)
+- Changed delete icons on report format detailspage and schedule detailspage to trashcan icons [#2459](https://github.com/greenbone/gsa/pull/2459)
 - Use <predefined> to disable feed object editing and filter creation on feed status page [#2398](https://github.com/greenbone/gsa/pull/2398)
 
 ### Fixed
+- Fixed form validation error tooltips [#2478](https://github.com/greenbone/gsa/pull/2478)
+- Only show schedule options in advanced and modify task wizard if user has correct permissions [#2472](https://github.com/greenbone/gsa/pull/2472)
 
 ### Removed
 - Removed export/download for report formats [#2427](https://github.com/greenbone/gsa/pull/2427)
