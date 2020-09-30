@@ -202,7 +202,9 @@ const Details = ({entity, ...props}) => {
                       <SeverityBar severity={entity.severity} />
                       {active_overrides.length > 0 && (
                         <InnerLink to="overrides">
-                          <OverrideIcon title={_('Overrides are applied')} />
+                          <OverrideIcon
+                            title={_('There are overrides for this result')}
+                          />
                         </InnerLink>
                       )}
                     </Divider>

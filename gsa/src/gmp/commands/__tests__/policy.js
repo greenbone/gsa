@@ -110,6 +110,35 @@ describe('PolicyCommand tests', () => {
       });
   });
 
+  test('should save an in use policy with undefined input objects', () => {
+    const response = createActionResultResponse();
+    const fakeHttp = createHttp(response);
+
+    expect.hasAssertions();
+
+    const cmd = new PolicyCommand(fakeHttp);
+    return cmd
+      .save({
+        id: 'c1',
+        name: 'foo',
+        comment: 'somecomment',
+        trend: undefined,
+        select: undefined,
+        scannerPreferenceValues: undefined,
+        scannerId: undefined,
+      })
+      .then(() => {
+        expect(fakeHttp.request).toHaveBeenCalledWith('post', {
+          data: {
+            cmd: 'save_config',
+            comment: 'somecomment',
+            config_id: 'c1',
+            name: 'foo',
+          },
+        });
+      });
+  });
+
   test('should return single policy', () => {
     const response = createEntityResponse('config', {_id: 'foo'});
     const fakeHttp = createHttp(response);

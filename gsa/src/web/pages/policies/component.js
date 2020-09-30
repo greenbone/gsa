@@ -134,6 +134,7 @@ class PolicyComponent extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleScannerChange = this.handleScannerChange.bind(this);
+    this.handleSavePolicy = this.handleSavePolicy.bind(this);
   }
 
   handleChange(value, name) {
@@ -189,6 +190,20 @@ class PolicyComponent extends React.Component {
   handleCloseEditPolicyDialog() {
     this.closeEditPolicyDialog();
     this.handleInteraction();
+  }
+
+  handleSavePolicy(d) {
+    const {gmp} = this.props;
+    const {policy} = this.state;
+
+    this.handleInteraction();
+    const {name, comment, id} = d;
+    let saveData = d;
+    if (policy.isInUse()) {
+      saveData = {name, comment, id};
+    }
+
+    return gmp.policy.save(saveData).then(() => this.closeEditPolicyDialog());
   }
 
   openCreatePolicyDialog() {
@@ -760,13 +775,11 @@ class PolicyComponent extends React.Component {
                   scannerPreferences={policy.preferences.scanner}
                   scanners={scanners}
                   title={title}
+                  usageType={'policy'}
                   onClose={this.handleCloseEditPolicyDialog}
                   onEditConfigFamilyClick={this.openEditPolicyFamilyDialog}
                   onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
-                  onSave={d => {
-                    this.handleInteraction();
-                    return save(d).then(() => this.closeEditPolicyDialog());
-                  }}
+                  onSave={this.handleSavePolicy}
                 />
               )}
             </React.Fragment>

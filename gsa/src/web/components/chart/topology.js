@@ -68,7 +68,7 @@ const Circle = styled.circle`
 `;
 
 const severityColorsGradientScale = type => {
-  const severity_levels = getSeverityLevels(type);
+  const severity_levels = getSeverityLevels();
   return scaleLinear()
     .domain([
       FALSE_POSITIVE_VALUE,

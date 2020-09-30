@@ -42,7 +42,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 import {WizardContent, WizardIcon} from './taskwizard';
 
 const ModifyTaskWizard = ({
-  alert_email,
+  alert_email = '',
   capabilities,
   reschedule,
   start_date,
@@ -94,18 +94,24 @@ const ModifyTaskWizard = ({
               <div>
                 {_('Please be aware that:')}
                 <ul>
-                  <li>
-                    {_(
-                      'Setting a start time overwrites a possibly already ' +
-                        'existing one.',
+                  {capabilities.mayCreate('schedule') &&
+                    capabilities.mayAccess('schedules') && (
+                      <li>
+                        {_(
+                          'Setting a start time overwrites a possibly already ' +
+                            'existing one.',
+                        )}
+                      </li>
                     )}
-                  </li>
-                  <li>
-                    {_(
-                      'Setting an email Address means adding an additional' +
-                        ' Alert, not replacing an existing one.',
+                  {capabilities.mayCreate('alert') &&
+                    capabilities.mayAccess('alerts') && (
+                      <li>
+                        {_(
+                          'Setting an email Address means adding an additional' +
+                            ' Alert, not replacing an existing one.',
+                        )}
+                      </li>
                     )}
-                  </li>
                 </ul>
               </div>
             </WizardContent>
@@ -120,68 +126,71 @@ const ModifyTaskWizard = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Start Time')} titleSize="3" flex="column">
-              <FormGroup>
-                <Radio
-                  title={_('Do not change')}
-                  value={NO_VALUE}
-                  checked={state.reschedule === NO_VALUE}
-                  convert={parseYesNo}
-                  name="reschedule"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Radio
-                  title={_('Create Schedule')}
-                  value={YES_VALUE}
-                  checked={state.reschedule === YES_VALUE}
-                  convert={parseYesNo}
-                  name="reschedule"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-              <FormGroup offset="1">
-                <Datepicker
-                  name="start_date"
-                  value={state.start_date}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-              <FormGroup offset="1">
-                <Divider>
-                  <span>{_('at')}</span>
-                  <Spinner
-                    type="int"
-                    min="0"
-                    max="23"
-                    size="2"
-                    name="start_hour"
-                    value={state.start_hour}
-                    onChange={onValueChange}
-                  />
-                  <span>{_('h')}</span>
-                  <Spinner
-                    type="int"
-                    min="0"
-                    max="59"
-                    size="2"
-                    name="start_minute"
-                    value={state.start_minute}
-                    onChange={onValueChange}
-                    i
-                  />
-                  <span>{_('m')}</span>
-                </Divider>
-              </FormGroup>
-              <FormGroup offset="1">
-                <TimeZoneSelect
-                  name="start_timezone"
-                  value={state.start_timezone}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-            </FormGroup>
+            {capabilities.mayCreate('schedule') &&
+              capabilities.mayAccess('schedules') && (
+                <FormGroup title={_('Start Time')} titleSize="3" flex="column">
+                  <FormGroup>
+                    <Radio
+                      title={_('Do not change')}
+                      value={NO_VALUE}
+                      checked={state.reschedule === NO_VALUE}
+                      convert={parseYesNo}
+                      name="reschedule"
+                      onChange={onValueChange}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Radio
+                      title={_('Create Schedule')}
+                      value={YES_VALUE}
+                      checked={state.reschedule === YES_VALUE}
+                      convert={parseYesNo}
+                      name="reschedule"
+                      onChange={onValueChange}
+                    />
+                  </FormGroup>
+                  <FormGroup offset="1">
+                    <Datepicker
+                      name="start_date"
+                      value={state.start_date}
+                      onChange={onValueChange}
+                    />
+                  </FormGroup>
+                  <FormGroup offset="1">
+                    <Divider>
+                      <span>{_('at')}</span>
+                      <Spinner
+                        type="int"
+                        min="0"
+                        max="23"
+                        size="2"
+                        name="start_hour"
+                        value={state.start_hour}
+                        onChange={onValueChange}
+                      />
+                      <span>{_('h')}</span>
+                      <Spinner
+                        type="int"
+                        min="0"
+                        max="59"
+                        size="2"
+                        name="start_minute"
+                        value={state.start_minute}
+                        onChange={onValueChange}
+                        i
+                      />
+                      <span>{_('m')}</span>
+                    </Divider>
+                  </FormGroup>
+                  <FormGroup offset="1">
+                    <TimeZoneSelect
+                      name="start_timezone"
+                      value={state.start_timezone}
+                      onChange={onValueChange}
+                    />
+                  </FormGroup>
+                </FormGroup>
+              )}
 
             {capabilities.mayCreate('alert') &&
               capabilities.mayAccess('alerts') && (

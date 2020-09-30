@@ -47,7 +47,7 @@ import {TasksHighResultsLoader} from './loaders';
 
 const format = d3format('0.2f');
 
-const transformHighResultsData = (data = {}, {severityClass}) => {
+const transformHighResultsData = (data = {}) => {
   const {groups = []} = data;
 
   return groups
@@ -61,7 +61,7 @@ const transformHighResultsData = (data = {}, {severityClass}) => {
       const {name} = text;
       const high_per_host = parseFloat(text.high_per_host);
       const severity = parseSeverity(text.severity);
-      const riskFactor = resultSeverityRiskFactor(severity, severityClass);
+      const riskFactor = resultSeverityRiskFactor(severity);
       const displaySeverity = isDefined(severity)
         ? severityFormat(severity)
         : `${_NA}`;
