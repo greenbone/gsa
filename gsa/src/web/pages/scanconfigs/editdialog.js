@@ -34,6 +34,7 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
+import DialogInlineNotification from 'web/components/dialog/dialoginlinenotification';
 
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
@@ -116,6 +117,7 @@ const EditScanConfigDialog = ({
   scannerId,
   scanners,
   title,
+  usageType = 'scan',
   onClose,
   onEditConfigFamilyClick,
   onEditNvtDetailsClick,
@@ -155,6 +157,15 @@ const EditScanConfigDialog = ({
     trend: trendValues,
   };
 
+  const notification =
+    usageType === 'policy'
+      ? _(
+          'The policy is currently in use by one or more audits, therefore only name and comment can be modified.',
+        )
+      : _(
+          'The scan config is currently in use by one or more tasks, therefore only name and comment can be modified.',
+        );
+
   return (
     <SaveDialog
       loading={isLoadingConfig}
@@ -185,8 +196,11 @@ const EditScanConfigDialog = ({
               onChange={onValueChange}
             />
           </FormGroup>
-
-          {!configIsInUse && (
+          {configIsInUse ? (
+            <DialogInlineNotification data-testid="inline-notification">
+              {notification}
+            </DialogInlineNotification>
+          ) : (
             <React.Fragment>
               {configType === OSP_SCAN_CONFIG_TYPE &&
                 (isLoadingScanners ? (
@@ -271,6 +285,7 @@ EditScanConfigDialog.propTypes = {
   scanners: PropTypes.array,
   select: PropTypes.object,
   title: PropTypes.string.isRequired,
+  usageType: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onEditConfigFamilyClick: PropTypes.func,
   onEditNvtDetailsClick: PropTypes.func,
