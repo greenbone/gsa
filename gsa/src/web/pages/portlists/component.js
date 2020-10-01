@@ -34,7 +34,22 @@ import ImportPortListDialog from './importdialog';
 import PortListsDialog from './dialog';
 import PortRangeDialog from './portrangedialog';
 
-const PortListComponent = props => {
+const PortListComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onImported,
+  onImportError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+}) => {
   const gmp = useGmp();
 
   const [state, dispatch] = useReducer(reducer, {
@@ -159,8 +174,6 @@ const PortListComponent = props => {
   };
 
   const handleImportPortList = data => {
-    const {onImported, onImportError} = props;
-
     handleInteraction();
 
     return gmp.portlist
@@ -289,26 +302,10 @@ const PortListComponent = props => {
   };
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
   };
-
-  const {
-    children,
-    onCloned,
-    onCloneError,
-    onCreated,
-    onCreateError,
-    onDeleted,
-    onDeleteError,
-    onDownloaded,
-    onDownloadError,
-    onInteraction,
-    onSaved,
-    onSaveError,
-  } = props;
 
   const {
     comment,
