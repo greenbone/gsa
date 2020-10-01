@@ -185,6 +185,7 @@ const PortListComponent = props => {
         range.isTmp = false;
         range.id = id;
         setCreatedPortRanges(
+          // .filter returns a new array => can be set.
           createdPortRanges.filter(prange => prange !== range),
         );
       });
@@ -256,7 +257,7 @@ const PortListComponent = props => {
       start: values.port_range_start,
       isTmp: true,
     };
-
+    // was this.created_port_ranges.push() therefore cannot be set directly
     setCreatedPortRanges(oldRanges => [...oldRanges, newRange]);
     dispatch({
       type: 'setState',
