@@ -22,8 +22,11 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
-import {useLazyGetCredentials} from '../credentials';
-import {createGetCredentialsQueryMock} from '../__mocks__/credentials';
+import {useLazyGetCredentials, useCreateCredential} from '../credentials';
+import {
+  createGetCredentialsQueryMock,
+  createCreateCredentialQueryMock,
+} from '../__mocks__/credentials';
 
 const GetLazyCredentialsComponent = () => {
   const [
@@ -103,5 +106,41 @@ describe('useLazyGetCredentials tests', () => {
     expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
     expect(screen.getByTestId('length')).toHaveTextContent(2);
+  });
+});
+
+const CreateCredentialComponent = ({data}) => {
+  const [createCredential, {id: credentialId}] = useCreateCredential();
+  return (
+    <div>
+      {credentialId && <span data-testid="credential">{credentialId}</span>}
+      <button data-testid="create" onClick={() => createCredential(data)} />
+    </div>
+  );
+};
+
+describe('useCreateCredential tests', () => {
+  test('should create a credential after user interaction', async () => {
+    const data = {
+      name: 'credential 1',
+      comment: 'foo',
+    };
+
+    const [mock, resultFunc] = createCreateCredentialQueryMock(
+      data,
+      'credential 1',
+    );
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CreateCredentialComponent data={data} />);
+
+    const button = screen.getByTestId('create');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('credential')).toHaveTextContent('credential 1');
   });
 });
