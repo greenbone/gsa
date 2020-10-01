@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 ### Removed
+- Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
 - Removed severity class 'bsi' [#2434](https://github.com/greenbone/gsa/pull/2434)
 - Removed Edge <= 18 support [#2408](https://github.com/greenbone/gsa/pull/2408)

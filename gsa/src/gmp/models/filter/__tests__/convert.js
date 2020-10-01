@@ -36,24 +36,6 @@ describe('convert tests', () => {
     });
   });
 
-  test('should convert autofp keyword', () => {
-    expect(convert('autofp', '1', '=')).toEqual({
-      keyword: 'autofp',
-      relation: '=',
-      value: 1,
-    });
-    expect(convert('autofp', '0', '=')).toEqual({
-      keyword: 'autofp',
-      relation: '=',
-      value: 0,
-    });
-    expect(convert('autofp', '99', '=')).toEqual({
-      keyword: 'autofp',
-      relation: '=',
-      value: 99,
-    });
-  });
-
   test('should convert first keyword', () => {
     expect(convert('first', '1', '=')).toEqual({
       keyword: 'first',
