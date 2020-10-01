@@ -18,7 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {gql, useLazyQuery} from '@apollo/client';
+import {gql, useLazyQuery, useMutation} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -90,4 +90,29 @@ export const useLazyGetPortLists = (variables, options) => {
   );
   const pageInfo = data?.portLists?.pageInfo;
   return [getPortLists, {...other, counts, portLists, pageInfo}];
+};
+
+const CREATE_PORT_LIST = gql`
+  mutation createPortList($input: CreatePortListInput!) {
+    createPortList(input: $input) {
+      id
+    }
+  }
+`;
+
+export const useCreatePortList = options => {
+  const [queryCreatePortList, {data, ...other}] = useMutation(
+    CREATE_PORT_LIST,
+    options,
+  );
+  const createPortList = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreatePortList({...options, variables: {input: inputObject}}).then(
+        result => result.data.createPortList.id,
+      ),
+    [queryCreatePortList],
+  );
+  const portListId = data?.createPortList?.id;
+  return [createPortList, {...other, id: portListId}];
 };
