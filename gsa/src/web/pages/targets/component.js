@@ -40,9 +40,11 @@ import TargetDialog from './dialog.js';
 
 import {useLazyGetCredentials} from 'web/graphql/credentials';
 
-import {useLazyGetPortLists} from 'web/graphql/portlists';
+import {useLazyGetPortLists, useCreatePortList} from 'web/graphql/portlists';
 
 import {useCreateTarget, useModifyTarget} from 'web/graphql/targets';
+
+import readFileToText from 'web/utils/readFileToText.js';
 
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
@@ -55,6 +57,7 @@ const TargetComponent = props => {
 
   const [createTarget] = useCreateTarget();
   const [modifyTarget] = useModifyTarget();
+  const [createPortList] = useCreatePortList();
 
   const [
     loadCredentials,
@@ -226,16 +229,28 @@ const TargetComponent = props => {
       });
   };
 
-  const handleCreatePortList = data => {
+  const handleCreatePortList = ({
+    name,
+    comment,
+    from_file,
+    file,
+    port_range,
+  }) => {
     let port_list_id;
 
     handleInteraction();
 
-    return gmp.portlist
-      .create(data)
+    return readFileToText(file)
+      .then(text => {
+        return createPortList({
+          name,
+          comment,
+          portRange: from_file ? text : port_range,
+        });
+      })
       .then(response => {
-        const {data: portlist} = response;
-        port_list_id = portlist.id;
+        const {data} = response;
+        port_list_id = data.createPortList.id;
         closePortListDialog();
         return refetchPortLists();
       })
@@ -289,7 +304,7 @@ const TargetComponent = props => {
     }
   };
 
-  const setFileText = (file, exclude_file) => {
+  const setHostFileText = (file, exclude_file) => {
     let fileText;
     let excludeFileText;
 
@@ -338,7 +353,7 @@ const TargetComponent = props => {
     if (isDefined(id)) {
       const {onSaved, onSaveError} = props;
 
-      return setFileText(file, exclude_file)
+      return setHostFileText(file, exclude_file)
         .then(text => {
           const [fileText, excludeFileText] = text;
 
@@ -380,7 +395,7 @@ const TargetComponent = props => {
 
     const {onCreated, onCreateError} = props;
 
-    return setFileText(file, exclude_file)
+    return setHostFileText(file, exclude_file)
       .then(text => {
         const [fileText, excludeFileText] = text;
 

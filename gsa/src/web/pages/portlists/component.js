@@ -282,7 +282,6 @@ const PortListComponent = ({
   };
 
   const handleTmpDeletePortRange = portRange => {
-    console.log(portRange);
     const {portRanges} = state;
     let newPortRanges = portRanges;
 
