@@ -64,39 +64,44 @@ export const ToolBarIcons = withCapabilities(
     onContainerTaskCreateClick,
     onTaskCreateClick,
     onTaskWizardClick,
-  }) => (
-    <IconDivider>
-      <ManualIcon
-        page="scanning"
-        anchor="managing-tasks"
-        title={_('Help: Tasks')}
-      />
-      {capabilities.mayOp('run_wizard') && (
-        <IconMenu icon={<WizardIcon />} onClick={onTaskWizardClick}>
-          {capabilities.mayCreate('task') && (
-            <MenuEntry title={_('Task Wizard')} onClick={onTaskWizardClick} />
-          )}
-          {capabilities.mayCreate('task') && (
-            <MenuEntry
-              title={_('Advanced Task Wizard')}
-              onClick={onAdvancedTaskWizardClick}
-            />
-          )}
-          {capabilities.mayEdit('task') && (
-            <MenuEntry
-              title={_('Modify Task Wizard')}
-              onClick={onModifyTaskWizardClick}
-            />
-          )}
-        </IconMenu>
-      )}
+  }) => {
+    const mayUseModifyTaskWizard =
+      capabilities.mayEdit('task') &&
+      (capabilities.mayCreate('alert') || capabilities.mayCreate('schedule'));
+    return (
+      <IconDivider>
+        <ManualIcon
+          page="scanning"
+          anchor="managing-tasks"
+          title={_('Help: Tasks')}
+        />
+        {capabilities.mayOp('run_wizard') && (
+          <IconMenu icon={<WizardIcon />} onClick={onTaskWizardClick}>
+            {capabilities.mayCreate('task') && (
+              <MenuEntry title={_('Task Wizard')} onClick={onTaskWizardClick} />
+            )}
+            {capabilities.mayCreate('task') && (
+              <MenuEntry
+                title={_('Advanced Task Wizard')}
+                onClick={onAdvancedTaskWizardClick}
+              />
+            )}
+            {mayUseModifyTaskWizard && (
+              <MenuEntry
+                title={_('Modify Task Wizard')}
+                onClick={onModifyTaskWizardClick}
+              />
+            )}
+          </IconMenu>
+        )}
 
-      <NewIconMenu
-        onNewClick={onTaskCreateClick}
-        onNewContainerClick={onContainerTaskCreateClick}
-      />
-    </IconDivider>
-  ),
+        <NewIconMenu
+          onNewClick={onTaskCreateClick}
+          onNewContainerClick={onContainerTaskCreateClick}
+        />
+      </IconDivider>
+    );
+  },
 );
 
 ToolBarIcons.propTypes = {

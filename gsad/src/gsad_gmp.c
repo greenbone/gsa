@@ -473,19 +473,6 @@ check_modify_config (gvm_connection_t *connection, credentials_t *credentials,
         "Diagnostics: Failure to parse status_text from response.",
         response_data);
     }
-
-  if (str_equal (status_text, "Config is in use"))
-    {
-      const char *message = "The config is now in use by a task,"
-                            " so only name and comment can be modified.";
-
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      response = action_result (connection, credentials, params, response_data,
-                                "Save Config", message, NULL, NULL);
-
-      free_entity (entity);
-      return response;
-    }
   else if (str_equal (status_text, "MODIFY_CONFIG name must be unique"))
     {
       const char *message = "A config with the given name exists already.";

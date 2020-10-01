@@ -26,24 +26,22 @@ import ProgressBar from 'web/components/bar/progressbar';
 
 const ComplianceStatusBar = ({complianceStatus}) => {
   let text;
+  let boxBackground;
   if (complianceStatus < 0 || complianceStatus > 100) {
     text = _('N/A');
+    boxBackground = Theme.darkGrey;
   } else {
     text = complianceStatus + '%';
+    boxBackground = Theme.errorRed;
   }
 
-  let type;
-  if (complianceStatus < 0 || complianceStatus > 100) {
-    type = 'log';
-  } else if (complianceStatus === 100) {
-    type = Theme.paleGreen;
-  } else if (complianceStatus <= 50) {
-    type = Theme.errorRed;
-  } else {
-    type = Theme.goldYellow;
-  }
   return (
-    <ProgressBar title={text} progress={complianceStatus} background={type}>
+    <ProgressBar
+      title={text}
+      progress={complianceStatus}
+      background={Theme.statusRunGreen}
+      boxBackground={boxBackground}
+    >
       {text}
     </ProgressBar>
   );

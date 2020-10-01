@@ -232,6 +232,64 @@ describe('EditScanConfigDialog component tests', () => {
 
     const scannerSelection = content.querySelector('[role=combobox]');
     expect(scannerSelection).toBeNull();
+
+    const inUseNotification = getByTestId('inline-notification');
+    expect(inUseNotification).toHaveTextContent(
+      'The scan config is currently in use by one or more tasks, therefore only name and comment can be modified.',
+    );
+  });
+
+  test('should render dialog inline notification for policy in use', () => {
+    const handleClose = jest.fn();
+    const handleSave = jest.fn();
+    const handleOpenEditConfigFamilyDialog = jest.fn();
+    const handleOpenEditNvtDetailsDialog = jest.fn();
+
+    const {render} = rendererWith({capabilities: true});
+    const {baseElement, getByTestId} = render(
+      <EditScanConfigDialog
+        comment="bar"
+        configFamilies={configFamilies}
+        configId="c1"
+        configIsInUse={true}
+        configType={OPENVAS_SCAN_CONFIG_TYPE}
+        editNvtDetailsTitle="Edit Policy NVT Details"
+        editNvtFamiliesTitle="Edit Policy Family'"
+        families={families}
+        isLoadingConfig={false}
+        isLoadingFamilies={false}
+        isLoadingScanners={false}
+        name="Policy"
+        nvtPreferences={nvtPreferences}
+        scannerPreferences={scannerPreferences}
+        scanners={scanners}
+        title="Edit Policy"
+        usageType="policy"
+        onClose={handleClose}
+        onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
+        onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
+        onSave={handleSave}
+      />,
+    );
+
+    expect(baseElement).toMatchSnapshot();
+
+    const titleBar = getByTestId('dialog-title-bar');
+    expect(titleBar).toHaveTextContent('Edit Policy');
+
+    const content = getByTestId('save-dialog-content');
+    expect(content).not.toHaveTextContent(
+      'Edit Network Vulnerability Test Families',
+    );
+    expect(content).not.toHaveTextContent('Edit Scanner Preferences');
+    expect(content).not.toHaveTextContent(
+      'Network Vulnerability Test Preferences',
+    );
+
+    const inUseNotification = getByTestId('inline-notification');
+    expect(inUseNotification).toHaveTextContent(
+      'The policy is currently in use by one or more audits, therefore only name and comment can be modified.',
+    );
   });
 
   test('should render dialog for osp config', () => {

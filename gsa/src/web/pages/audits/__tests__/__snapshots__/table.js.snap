@@ -83,7 +83,7 @@ exports[`Audits table tests should render 1`] = `
   justify-content: space-between;
 }
 
-.c28 {
+.c29 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -105,7 +105,7 @@ exports[`Audits table tests should render 1`] = `
   align-items: stretch;
 }
 
-.c33 {
+.c34 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -123,7 +123,7 @@ exports[`Audits table tests should render 1`] = `
   align-items: center;
 }
 
-.c38 {
+.c39 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -178,7 +178,7 @@ exports[`Audits table tests should render 1`] = `
   margin-left: 5px;
 }
 
-.c30 {
+.c31 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -201,14 +201,14 @@ exports[`Audits table tests should render 1`] = `
   margin-left: -5px;
 }
 
-.c30 > * {
+.c31 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c30 > * {
+.c31 > * {
   margin-left: 5px;
 }
 
@@ -234,7 +234,7 @@ exports[`Audits table tests should render 1`] = `
   display: inline-flex;
 }
 
-.c29 {
+.c30 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -279,7 +279,7 @@ exports[`Audits table tests should render 1`] = `
   width: inherit;
 }
 
-.c39 {
+.c40 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -304,18 +304,18 @@ exports[`Audits table tests should render 1`] = `
   cursor: pointer;
 }
 
-.c40 {
+.c41 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c40 * {
+.c41 * {
   height: inherit;
   width: inherit;
 }
 
-.c36 {
+.c37 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -339,7 +339,7 @@ exports[`Audits table tests should render 1`] = `
   font-weight: normal;
 }
 
-.c35 {
+.c36 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -351,7 +351,7 @@ exports[`Audits table tests should render 1`] = `
   width: 180px;
 }
 
-.c41 {
+.c42 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -360,7 +360,7 @@ exports[`Audits table tests should render 1`] = `
   display: none;
 }
 
-.c37 {
+.c38 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -380,7 +380,7 @@ exports[`Audits table tests should render 1`] = `
   cursor: default;
 }
 
-.c34 {
+.c35 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -431,7 +431,7 @@ exports[`Audits table tests should render 1`] = `
   width: 10em;
 }
 
-.c42 {
+.c43 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -550,6 +550,16 @@ exports[`Audits table tests should render 1`] = `
   text-align: center;
 }
 
+.c27 {
+  height: 13px;
+  box-sizing: content-box;
+  display: inline-block;
+  width: 100px;
+  background: #c83814;
+  vertical-align: middle;
+  text-align: center;
+}
+
 .c25 {
   z-index: 1;
   font-weight: bold;
@@ -567,19 +577,19 @@ exports[`Audits table tests should render 1`] = `
   background: #4f91c7;
 }
 
-.c27 {
+.c28 {
   height: 13px;
   width: 50%;
-  background: #c83814;
+  background: #70c000;
 }
 
-.c31 {
+.c32 {
   height: 13px;
   width: 100%;
   background: #99be48;
 }
 
-.c32 {
+.c33 {
   height: 13px;
   width: 0%;
   background: #70c000;
@@ -687,6 +697,13 @@ exports[`Audits table tests should render 1`] = `
 }
 
 @media print {
+  .c27 {
+    background: none;
+    border: 0;
+  }
+}
+
+@media print {
   .c25 {
     color: black;
   }
@@ -699,19 +716,19 @@ exports[`Audits table tests should render 1`] = `
 }
 
 @media print {
-  .c27 {
-    background: none;
-  }
-}
-
-@media print {
-  .c31 {
+  .c28 {
     background: none;
   }
 }
 
 @media print {
   .c32 {
+    background: none;
+  }
+}
+
+@media print {
+  .c33 {
     background: none;
   }
 }
@@ -950,12 +967,12 @@ exports[`Audits table tests should render 1`] = `
                 class="c18"
               >
                 <div
-                  class="c23"
+                  class="c27"
                   data-testid="progressbar-box"
                   title="50%"
                 >
                   <div
-                    class="c27"
+                    class="c28"
                     data-testid="progress"
                   />
                   <div
@@ -968,13 +985,13 @@ exports[`Audits table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c28"
+                class="c29"
               >
                 <div
-                  class="c29"
+                  class="c30"
                 >
                   <div
-                    class="c30"
+                    class="c31"
                     margin="5px"
                   >
                     <span
@@ -1118,7 +1135,7 @@ exports[`Audits table tests should render 1`] = `
                     title="New"
                   >
                     <div
-                      class="c31"
+                      class="c32"
                       data-testid="progress"
                     />
                     <div
@@ -1146,13 +1163,13 @@ exports[`Audits table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c28"
+                class="c29"
               >
                 <div
-                  class="c29"
+                  class="c30"
                 >
                   <div
-                    class="c30"
+                    class="c31"
                     margin="5px"
                   >
                     <span
@@ -1298,7 +1315,7 @@ exports[`Audits table tests should render 1`] = `
                     title="Running"
                   >
                     <div
-                      class="c32"
+                      class="c33"
                       data-testid="progress"
                     />
                     <div
@@ -1334,12 +1351,12 @@ exports[`Audits table tests should render 1`] = `
                 class="c18"
               >
                 <div
-                  class="c23"
+                  class="c27"
                   data-testid="progressbar-box"
                   title="50%"
                 >
                   <div
-                    class="c27"
+                    class="c28"
                     data-testid="progress"
                   />
                   <div
@@ -1352,13 +1369,13 @@ exports[`Audits table tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c28"
+                class="c29"
               >
                 <div
-                  class="c29"
+                  class="c30"
                 >
                   <div
-                    class="c30"
+                    class="c31"
                     margin="5px"
                   >
                     <span
@@ -1451,7 +1468,7 @@ exports[`Audits table tests should render 1`] = `
               colspan="5"
             >
               <div
-                class="c33"
+                class="c34"
               >
                 <div
                   class="c6"
@@ -1464,30 +1481,30 @@ exports[`Audits table tests should render 1`] = `
                       aria-expanded="false"
                       aria-haspopup="listbox"
                       aria-labelledby="downshift-0-label"
-                      class="c34"
+                      class="c35"
                       role="combobox"
                     >
                       <div
-                        class="c35"
+                        class="c36"
                         width="180px"
                       >
                         <div
                           aria-haspopup="true"
                           aria-label="open menu"
-                          class="c36"
+                          class="c37"
                           data-toggle="true"
                           role="button"
                           type="button"
                         >
                           <div
-                            class="c37"
+                            class="c38"
                             data-testid="select-selected-value"
                           />
                           <div
-                            class="c38"
+                            class="c39"
                           >
                             <span
-                              class="c39 c40"
+                              class="c40 c41"
                               data-testid="select-open-button"
                             >
                               ▼
@@ -1496,7 +1513,7 @@ exports[`Audits table tests should render 1`] = `
                         </div>
                       </div>
                       <div
-                        class="c41"
+                        class="c42"
                         data-testid="error-marker"
                       >
                         ×
@@ -1538,7 +1555,7 @@ exports[`Audits table tests should render 1`] = `
         class="c19"
       >
         <div
-          class="c42"
+          class="c43"
         >
           (Applied filter: rows=2)
         </div>

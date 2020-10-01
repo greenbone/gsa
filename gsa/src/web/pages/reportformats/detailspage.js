@@ -23,7 +23,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import CreateIcon from 'web/entity/icon/createicon';
-import DeleteIcon from 'web/entity/icon/deleteicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 import Divider from 'web/components/layout/divider';
 import EditIcon from 'web/entity/icon/editicon';
 import IconDivider from 'web/components/layout/icondivider';
@@ -98,7 +98,7 @@ const ToolBarIcons = withCapabilities(
           entity={entity}
           onClick={onReportFormatEditClick}
         />
-        <DeleteIcon
+        <TrashIcon
           displayName={_('Report Format')}
           entity={entity}
           onClick={onReportFormatDeleteClick}
