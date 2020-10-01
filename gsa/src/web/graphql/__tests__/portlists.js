@@ -16,13 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
-import {useLazyGetPortLists} from '../portlists';
-import {createGetPortListsQueryMock} from '../__mocks__/portlists';
+import {useLazyGetPortLists, useCreatePortList} from '../portlists';
+import {
+  createGetPortListsQueryMock,
+  createCreatePortListQueryMock,
+  createPortListInput,
+} from '../__mocks__/portlists';
 
 const GetLazyPortListsComponent = () => {
   const [loadPortLists, {counts, loading, portLists}] = useLazyGetPortLists({
@@ -101,4 +105,50 @@ describe('useLazyGetPortLists tests', () => {
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
     expect(screen.getByTestId('length')).toHaveTextContent(2);
   });
+});
+
+const CreatePortListComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [createPortList] = useCreatePortList();
+
+  const handleCreateResult = id => {
+    setNotification(`Portlist created with id ${id}.`);
+  };
+
+  // Add modify handler here later.
+
+  return (
+    <div>
+      <button
+        data-testid="create"
+        title={'Create portlist'}
+        onClick={() =>
+          createPortList(createPortListInput).then(handleCreateResult)
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Portlist mutation tests', () => {
+  test('should create a portlist', async () => {
+    const [queryMock, resultFunc] = createCreatePortListQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<CreatePortListComponent />);
+
+    const button = screen.getByTestId('create');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Portlist created with id 58989.',
+    );
+  });
+  // add modify test here
 });

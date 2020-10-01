@@ -92,7 +92,7 @@ export const useLazyGetPortLists = (variables, options) => {
   return [getPortLists, {...other, counts, portLists, pageInfo}];
 };
 
-const CREATE_PORT_LIST = gql`
+export const CREATE_PORT_LIST = gql`
   mutation createPortList($input: CreatePortListInput!) {
     createPortList(input: $input) {
       id
