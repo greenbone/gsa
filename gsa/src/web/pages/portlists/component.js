@@ -49,21 +49,21 @@ const PortListComponent = props => {
   const openPortListDialog = entity => {
     if (entity) {
       gmp.portlist.get(entity).then(response => {
-        const port_list = response.data;
+        const portList = response.data;
         setCreatedPortRanges([]);
         setDeletedPortRanges([]);
 
         dispatch({
           type: 'setState',
           newState: {
-            comment: port_list.comment,
-            id: port_list.id,
-            port_list,
-            name: port_list.name,
+            comment: portList.comment,
+            id: portList.id,
+            portList,
+            name: portList.name,
             portListDialogVisible: true,
-            port_ranges: port_list.port_ranges,
+            portRanges: portList.port_ranges,
             title: _('Edit Port List {{name}}', {
-              name: shorten(port_list.name),
+              name: shorten(portList.name),
             }),
           },
         });
@@ -77,7 +77,7 @@ const PortListComponent = props => {
           comment: undefined,
           id: undefined,
           name: undefined,
-          port_list: undefined,
+          portList: undefined,
           portListDialogVisible: true,
           title: _('New Port List'),
         },
@@ -119,12 +119,12 @@ const PortListComponent = props => {
     handleInteraction();
   };
 
-  const openNewPortRangeDialog = port_list => {
+  const openNewPortRangeDialog = portList => {
     dispatch({
       type: 'setState',
       newState: {
         portRangeDialogVisible: true,
-        id: port_list.id,
+        id: portList.id,
       },
     });
     handleInteraction();
@@ -147,7 +147,7 @@ const PortListComponent = props => {
       const {data} = response;
       dispatch({
         type: 'setState',
-        newState: {port_list: data},
+        newState: {portList: data},
       });
     });
   };
@@ -206,7 +206,7 @@ const PortListComponent = props => {
   };
 
   const handleTmpAddPortRange = values => {
-    const {port_ranges} = state;
+    const {portRanges} = state;
     const {port_range_end, port_range_start, port_type} = values;
 
     handleInteraction();
@@ -229,7 +229,7 @@ const PortListComponent = props => {
 
     // check if new port range overlaps with existing and temporarily existing
     // ones, only relevant if protocol_type is the same
-    for (const range of port_ranges) {
+    for (const range of portRanges) {
       const start = parseInt(range.start);
       const end = parseInt(range.end);
       if (
@@ -261,27 +261,28 @@ const PortListComponent = props => {
     dispatch({
       type: 'setState',
       newState: {
-        port_ranges: [...port_ranges, newRange],
+        portRanges: [...portRanges, newRange],
       },
     });
     closeNewPortRangeDialog();
   };
 
-  const handleTmpDeletePortRange = port_range => {
-    const {port_ranges} = state;
-    let new_port_ranges = port_ranges;
+  const handleTmpDeletePortRange = portRange => {
+    console.log(portRange);
+    const {portRanges} = state;
+    let newPortRanges = portRanges;
 
-    if (port_range.isTmp) {
+    if (portRange.isTmp) {
       setCreatedPortRanges(
-        createdPortRanges.filter(range => range !== port_range),
+        createdPortRanges.filter(range => range !== portRange),
       );
     } else {
-      setDeletedPortRanges(oldRanges => [...oldRanges, port_range]);
+      setDeletedPortRanges(oldRanges => [...oldRanges, portRange]);
     }
 
-    new_port_ranges = port_ranges.filter(range => range !== port_range);
+    newPortRanges = portRanges.filter(range => range !== portRange);
 
-    dispatch({type: 'setState', newState: {port_ranges: new_port_ranges}});
+    dispatch({type: 'setState', newState: {portRanges: newPortRanges}});
 
     handleInteraction();
   };
@@ -313,11 +314,11 @@ const PortListComponent = props => {
     id,
     importDialogVisible,
     name,
-    port_list,
+    portList,
     portListDialogVisible,
     portRangeDialogVisible,
     title,
-    port_ranges,
+    portRanges,
   } = state;
 
   return (
@@ -348,9 +349,9 @@ const PortListComponent = props => {
               comment={comment}
               id={id}
               name={name}
-              port_list={port_list}
+              port_list={portList}
               title={title}
-              port_ranges={port_ranges}
+              port_ranges={portRanges}
               onClose={handleClosePortListDialog}
               onNewPortRangeClick={openNewPortRangeDialog}
               onSave={(...args) => handleSavePortList(save, ...args)}
