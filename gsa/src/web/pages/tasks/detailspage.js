@@ -23,8 +23,6 @@ import {useParams} from 'react-router-dom';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import Filter from 'gmp/models/filter';
-
 import {hasValue} from 'gmp/utils/identity';
 
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
