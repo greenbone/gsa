@@ -249,8 +249,7 @@ const TargetComponent = props => {
         });
       })
       .then(response => {
-        const {data} = response;
-        port_list_id = data.createPortList.id;
+        port_list_id = response;
         closePortListDialog();
         return refetchPortLists();
       })
