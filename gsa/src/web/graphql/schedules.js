@@ -18,7 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {useLazyQuery} from '@apollo/client';
+import {useLazyQuery, useMutation} from '@apollo/client';
 
 import gql from 'graphql-tag';
 
@@ -122,6 +122,49 @@ export const useLazyGetSchedules = (variables, options) => {
   );
   const pageInfo = data?.schedules?.pageInfo;
   return [getSchedules, {...other, counts, schedules, pageInfo}];
+};
+
+export const CREATE_SCHEDULE = gql`
+  mutation createSchedule($input: CreateScheduleInput!) {
+    createSchedule(input: $input) {
+      id
+    }
+  }
+`;
+
+export const useCreateSchedule = options => {
+  const [queryCreateSchedule, {data, ...other}] = useMutation(
+    CREATE_SCHEDULE,
+    options,
+  );
+
+  const createSchedule = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreateSchedule({...options, variables: {input: inputObject}}),
+    [queryCreateSchedule],
+  );
+  const scheduleId = data?.createSchedule?.id;
+  return [createSchedule, {...other, id: scheduleId}];
+};
+
+export const MODIFY_SCHEDULE = gql`
+  mutation modifySchedule($input: ModifyScheduleInput!) {
+    modifySchedule(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const useModifySchedule = options => {
+  const [queryModifySchedule, data] = useMutation(MODIFY_SCHEDULE, options);
+  const modifySchedule = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryModifySchedule({...options, variables: {input: inputObject}}),
+    [queryModifySchedule],
+  );
+  return [modifySchedule, data];
 };
 
 // vim: set ts=2 sw=2 tw=80:

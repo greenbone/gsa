@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Added getNotes query [#2485](https://github.com/greenbone/gsa/pull/2485)
+- Create and modify schedule from graphql [#2477](https://github.com/greenbone/gsa/pull/2477)
 - Support more enum types for create alert [#2462](https://github.com/greenbone/gsa/pull/2462)
 - Added getSchedule and getSchedules via graphQL [#2450](https://github.com/greenbone/gsa/pull/2450)
 - Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425)

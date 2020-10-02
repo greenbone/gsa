@@ -17,17 +17,28 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import Button from 'web/components/form/button';
+
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
-import {useLazyGetSchedules, useLazyGetSchedule} from '../schedules';
+import {
+  useLazyGetSchedules,
+  useLazyGetSchedule,
+  useCreateSchedule,
+  useModifySchedule,
+} from '../schedules';
 
 import {
+  createScheduleInput,
+  modifyScheduleInput,
   createGetSchedulesQueryMock,
   createGetScheduleQueryMock,
+  createCreateScheduleQueryMock,
+  createModifyScheduleQueryMock,
 } from '../__mocks__/schedules';
 
 /* eslint-disable react/prop-types */
@@ -157,5 +168,87 @@ describe('useLazyGetSchedule tests', () => {
     );
 
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+  });
+});
+
+const CreateModifyScheduleComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [createSchedule] = useCreateSchedule();
+  const [modifySchedule] = useModifySchedule();
+
+  const handleCreateResult = resp => {
+    const {data} = resp;
+    setNotification(
+      `Schedule created with id ${data.createSchedule.id} and status ${data.createSchedule.status}.`,
+    );
+  };
+
+  const handleModifyResult = resp => {
+    const {data} = resp;
+    setNotification(`Schedule modified with ok=${data.modifySchedule.ok}.`);
+  };
+
+  return (
+    <div>
+      <Button
+        title={'Create schedule'}
+        onClick={() =>
+          createSchedule(createScheduleInput).then(handleCreateResult)
+        }
+      />
+      <Button
+        title={'Modify schedule'}
+        onClick={() =>
+          modifySchedule(modifyScheduleInput).then(handleModifyResult)
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Schedule mutation tests', () => {
+  test('should create a schedule', async () => {
+    const [
+      createScheduleMock,
+      createScheduleResult,
+    ] = createCreateScheduleQueryMock();
+    const {render} = rendererWith({queryMocks: [createScheduleMock]});
+
+    const {element} = render(<CreateModifyScheduleComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(createScheduleResult).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Schedule created with id 12345 and status 200.',
+    );
+  });
+
+  test('should modify a schedule', async () => {
+    const [
+      modifyScheduleMock,
+      modifyScheduleResult,
+    ] = createModifyScheduleQueryMock();
+
+    const {render} = rendererWith({queryMocks: [modifyScheduleMock]});
+
+    const {element} = render(<CreateModifyScheduleComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[1]);
+
+    await wait();
+
+    expect(modifyScheduleResult).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Schedule modified with ok=true.',
+    );
   });
 });

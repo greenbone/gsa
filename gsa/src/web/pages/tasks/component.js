@@ -136,7 +136,12 @@ const TaskComponent = props => {
 
   const [
     loadSchedules,
-    {schedules, loading: isLoadingSchedules, error: scheduleError},
+    {
+      schedules,
+      loading: isLoadingSchedules,
+      error: scheduleError,
+      refetch: refetchSchedules,
+    },
   ] = useLazyGetSchedules({
     filterString: ALL_FILTER.toFilterString(),
   });
@@ -277,11 +282,11 @@ const TaskComponent = props => {
   const handleScheduleCreated = resp => {
     const {data} = resp;
 
-    loadSchedules();
+    refetchSchedules();
 
     setDialogState(state => ({
       ...state,
-      schedule_id: data.id,
+      schedule_id: data.createSchedule?.id,
     }));
   };
 
