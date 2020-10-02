@@ -477,8 +477,6 @@ init_validator ()
   gvm_validator_add (validator, "authdn", "^.{0,200}%s.{0,200}$");
   gvm_validator_add (validator, "auto_delete", "^(no|keep)$");
   gvm_validator_add (validator, "auto_delete_data", "^.*$");
-  gvm_validator_add (validator, "autofp", "^(0|1|2)$");
-  gvm_validator_add (validator, "autofp_value", "^(1|2)$");
   gvm_validator_add (validator, "boolean", "^(0|1)$");
   gvm_validator_add (validator, "bulk_selected:name", "^.*$");
   gvm_validator_add (validator, "bulk_selected:value", "(?s)^.*$");
