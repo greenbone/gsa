@@ -27,12 +27,14 @@ import {shorten} from 'gmp/utils/string';
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 import reducer from 'web/utils/stateReducer';
+import readFileToText from 'web/utils/readFileToText.js';
 
 import EntityComponent from 'web/entity/component';
 
 import ImportPortListDialog from './importdialog';
 import PortListsDialog from './dialog';
 import PortRangeDialog from './portrangedialog';
+import {useCreatePortList, useModifyPortList} from 'web/graphql/portlists';
 
 const PortListComponent = ({
   children,
@@ -57,6 +59,9 @@ const PortListComponent = ({
     portListDialogVisible: false,
     portRangeDialogVisible: false,
   });
+
+  const [createPortList] = useCreatePortList();
+  const [modifyPortList] = useModifyPortList();
 
   const [createdPortRanges, setCreatedPortRanges] = useState([]);
   const [deletedPortRanges, setDeletedPortRanges] = useState([]);
@@ -182,7 +187,7 @@ const PortListComponent = ({
       .then(() => closeImportDialog());
   };
 
-  const handleSavePortList = (save, data) => {
+  const handleSavePortList = data => {
     const createdPortRangesCopy = [...createdPortRanges];
 
     handleInteraction();
@@ -214,8 +219,29 @@ const PortListComponent = ({
         ),
       ),
     ];
+
+    const {id, from_file, file, name, comment, port_range} = data;
     return Promise.all(promises)
-      .then(() => save(data))
+      .then(() => {
+        if (from_file) {
+          return readFileToText(file);
+        }
+        return Promise.resolve();
+      })
+      .then(text => {
+        if (isDefined(id)) {
+          return modifyPortList({
+            id,
+            name,
+            comment,
+          });
+        }
+        return createPortList({
+          name,
+          comment,
+          portRange: from_file ? text : port_range,
+        });
+      })
       .then(() => closePortListDialog());
   };
 
@@ -333,7 +359,7 @@ const PortListComponent = ({
       onSaved={onSaved}
       onSaveError={onSaveError}
     >
-      {({save, ...other}) => (
+      {({...other}) => (
         <React.Fragment>
           {children({
             ...other,
@@ -351,7 +377,7 @@ const PortListComponent = ({
               port_ranges={portRanges}
               onClose={handleClosePortListDialog}
               onNewPortRangeClick={openNewPortRangeDialog}
-              onSave={(...args) => handleSavePortList(save, ...args)}
+              onSave={handleSavePortList}
               onTmpDeletePortRange={handleTmpDeletePortRange}
             />
           )}
