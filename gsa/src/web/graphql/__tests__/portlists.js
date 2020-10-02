@@ -21,11 +21,17 @@ import React, {useState} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
-import {useLazyGetPortLists, useCreatePortList} from '../portlists';
+import {
+  useLazyGetPortLists,
+  useCreatePortList,
+  useModifyPortList,
+} from '../portlists';
 import {
   createGetPortListsQueryMock,
   createCreatePortListQueryMock,
   createPortListInput,
+  modifyPortListInput,
+  createModifyPortListQueryMock,
 } from '../__mocks__/portlists';
 
 const GetLazyPortListsComponent = () => {
@@ -107,16 +113,19 @@ describe('useLazyGetPortLists tests', () => {
   });
 });
 
-const CreatePortListComponent = () => {
+const CreateModifyPortListComponent = () => {
   const [notification, setNotification] = useState('');
 
   const [createPortList] = useCreatePortList();
+  const [modifyPortList] = useModifyPortList();
 
   const handleCreateResult = id => {
     setNotification(`Portlist created with id ${id}.`);
   };
 
-  // Add modify handler here later.
+  const handleModifyResult = () => {
+    setNotification('Portlist modified.');
+  };
 
   return (
     <div>
@@ -125,6 +134,13 @@ const CreatePortListComponent = () => {
         title={'Create portlist'}
         onClick={() =>
           createPortList(createPortListInput).then(handleCreateResult)
+        }
+      />
+      <button
+        data-testid="modify"
+        title={'Modify portlist'}
+        onClick={() =>
+          modifyPortList(modifyPortListInput).then(handleModifyResult)
         }
       />
       <h3 data-testid="notification">{notification}</h3>
@@ -138,7 +154,7 @@ describe('Portlist mutation tests', () => {
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
-    render(<CreatePortListComponent />);
+    render(<CreateModifyPortListComponent />);
 
     const button = screen.getByTestId('create');
     fireEvent.click(button);
@@ -150,5 +166,21 @@ describe('Portlist mutation tests', () => {
       'Portlist created with id 58989.',
     );
   });
-  // add modify test here
+  test('should modify a portlist', async () => {
+    const [queryMock, resultFunc] = createModifyPortListQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<CreateModifyPortListComponent />);
+
+    const button = screen.getByTestId('modify');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Portlist modified.',
+    );
+  });
 });

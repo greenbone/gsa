@@ -116,3 +116,22 @@ export const useCreatePortList = options => {
   const portListId = data?.createPortList?.id;
   return [createPortList, {...other, id: portListId}];
 };
+
+export const MODIFY_PORT_LIST = gql`
+  mutation modifyPortList($input: ModifyPortListInput!) {
+    modifyPortList(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const useModifyPortList = options => {
+  const [queryModifyPortList, data] = useMutation(MODIFY_PORT_LIST, options);
+  const modifyPortList = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryModifyPortList({...options, variables: {input: inputObject}}),
+    [queryModifyPortList],
+  );
+  return [modifyPortList, data];
+};
