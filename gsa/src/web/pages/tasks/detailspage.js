@@ -23,8 +23,6 @@ import {useParams} from 'react-router-dom';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import Filter from 'gmp/models/filter';
-
 import {hasValue} from 'gmp/utils/identity';
 
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
@@ -82,14 +80,11 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
+import {useLazyGetNotes} from 'web/graphql/notes';
 import {useLazyGetOverrides} from 'web/graphql/overrides';
 
 import {useCloneTask, useDeleteTask, useGetTask} from 'web/graphql/tasks';
 
-import {
-  selector as notesSelector,
-  loadEntities as loadNotes,
-} from 'web/store/entities/notes';
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -381,11 +376,16 @@ const Page = ({
     }
   }, [history]);
 
+  const [loadNotes, {notes}] = useLazyGetNotes({
+    filterString: 'task_id:' + id,
+  });
+
   const [loadOverrides, {overrides}] = useLazyGetOverrides({
     filterString: 'task_id:' + id,
   });
 
   useEffect(() => {
+    loadNotes();
     loadOverrides();
   }, [id]);
 
@@ -425,6 +425,7 @@ const Page = ({
             {...props}
             entity={task}
             isLoading={loading}
+            notes={notes}
             overrides={overrides}
             sectionIcon={<TaskIcon size="large" />}
             title={_('Task')}
@@ -547,13 +548,9 @@ export const TaskPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-const taskIdFilter = id => Filter.fromString('task_id=' + id).all();
-
 const mapStateToProps = (rootState, {id}) => {
   const permSel = permissionsSelector(rootState);
-  const notesSel = notesSelector(rootState);
   return {
-    notes: notesSel.getEntities(taskIdFilter(id)),
     permissions: permSel.getEntities(permissionsResourceFilter(id)),
   };
 };
@@ -561,7 +558,6 @@ const mapStateToProps = (rootState, {id}) => {
 const load = gmp => {
   const loadTaskFunc = loadTask(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
-  const loadNotesFunc = loadNotes(gmp);
 
   if (gmp.settings.enableHyperionOnly) {
     return id => dispatch => Promise.resolve(); // promise is required by withEntityContainer
@@ -571,7 +567,6 @@ const load = gmp => {
     Promise.all([
       dispatch(loadTaskFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-      dispatch(loadNotesFunc(taskIdFilter(id))),
     ]);
 };
 
