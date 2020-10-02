@@ -39,6 +39,7 @@ import {
 } from 'web/graphql/__mocks__/tasks';
 
 import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
+import {createGetNotesQueryMock} from 'web/graphql/__mocks__/notes';
 import {createGetOverridesQueryMock} from 'web/graphql/__mocks__/overrides';
 
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
@@ -121,9 +122,6 @@ describe('Task Detailspage tests', () => {
       reportformats: {
         get: getEntities,
       },
-      notes: {
-        get: getEntities,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -135,6 +133,9 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
+    const [notesMock, notesResultFunc] = createGetNotesQueryMock({
+      filterString: 'task_id:12345',
+    });
     const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
       filterString: 'task_id:12345',
     });
@@ -147,7 +148,7 @@ describe('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, overridesMock, scheduleMock],
+      queryMocks: [mock, notesMock, overridesMock, scheduleMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -161,6 +162,7 @@ describe('Task Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
     expect(scheduleResultFunc).toHaveBeenCalled();
+    expect(notesResultFunc).toHaveBeenCalled();
     expect(overridesResultFunc).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('Task: foo');
@@ -267,9 +269,6 @@ describe('Task Detailspage tests', () => {
       reportformats: {
         get: getEntities,
       },
-      notes: {
-        get: getEntities,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -282,6 +281,9 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
+    const [notesMock, notesResultFunc] = createGetNotesQueryMock({
+      filterString: 'task_id:12345',
+    });
     const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
       filterString: 'task_id:12345',
     });
@@ -294,7 +296,7 @@ describe('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, overridesMock, scheduleMock],
+      queryMocks: [mock, notesMock, overridesMock, scheduleMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -308,6 +310,7 @@ describe('Task Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
     expect(scheduleResultFunc).toHaveBeenCalled();
+    expect(notesResultFunc).toHaveBeenCalled();
     expect(overridesResultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
@@ -336,9 +339,6 @@ describe('Task Detailspage tests', () => {
       reportformats: {
         get: getEntities,
       },
-      notes: {
-        get: getEntities,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -351,6 +351,9 @@ describe('Task Detailspage tests', () => {
 
     const id = '12345';
     const [mock, resultFunc] = createGetTaskQueryMock(id);
+    const [notesMock, notesResultFunc] = createGetNotesQueryMock({
+      filterString: 'task_id:12345',
+    });
     const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
       filterString: 'task_id:12345',
     });
@@ -363,7 +366,7 @@ describe('Task Detailspage tests', () => {
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, overridesMock, scheduleMock],
+      queryMocks: [mock, notesMock, overridesMock, scheduleMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -377,6 +380,7 @@ describe('Task Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
     expect(scheduleResultFunc).toHaveBeenCalled();
+    expect(notesResultFunc).toHaveBeenCalled();
     expect(overridesResultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
@@ -405,9 +409,6 @@ describe('Task Detailspage tests', () => {
       reportformats: {
         get: getEntities,
       },
-      notes: {
-        get: getEntities,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -424,6 +425,9 @@ describe('Task Detailspage tests', () => {
     const [deleteTaskMock, deleteTaskResultFunc] = createDeleteTaskQueryMock(
       id,
     );
+    const [notesMock, notesResultFunc] = createGetNotesQueryMock({
+      filterString: 'task_id:12345',
+    });
     const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
       filterString: 'task_id:12345',
     });
@@ -440,6 +444,7 @@ describe('Task Detailspage tests', () => {
         getTaskMock,
         cloneTaskMock,
         deleteTaskMock,
+        notesMock,
         overridesMock,
         scheduleMock,
       ],
@@ -456,6 +461,7 @@ describe('Task Detailspage tests', () => {
 
     expect(getTaskResultFunc).toHaveBeenCalled();
     expect(scheduleResultFunc).toHaveBeenCalled();
+    expect(notesResultFunc).toHaveBeenCalled();
     expect(overridesResultFunc).toHaveBeenCalled();
 
     const icons = screen.getAllByTestId('svg-icon');
