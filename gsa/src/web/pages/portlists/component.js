@@ -234,13 +234,13 @@ const PortListComponent = ({
             id,
             name,
             comment,
-          });
+          }).then(onSaved, onSaveError);
         }
         return createPortList({
           name,
           comment,
           portRange: from_file ? text : port_range,
-        });
+        }).then(onCreated, onCreateError);
       })
       .then(() => closePortListDialog());
   };

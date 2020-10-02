@@ -248,8 +248,8 @@ const TargetComponent = props => {
           portRange: from_file ? text : port_range,
         });
       })
-      .then(response => {
-        port_list_id = response;
+      .then(resp => {
+        port_list_id = resp.data.createPortList.id;
         closePortListDialog();
         return refetchPortLists();
       })
