@@ -242,10 +242,10 @@ const TaskComponent = ({
     taskWizardVisible: false,
     reportImportDialogVisible: false,
     target_id: UNSET_VALUE,
-    alert_ids: [],
+    alertIds: [],
     scanner_id: UNSET_VALUE,
     schedule_id: UNSET_VALUE,
-    config_id: defaultScanConfigId,
+    configId: defaultScanConfigId,
     tag_id: undefined,
     scanConfigs: undefined,
   });
@@ -275,7 +275,7 @@ const TaskComponent = ({
   };
 
   const handleAlertsChange = alertIds => {
-    dispatchState({alert_ids: alertIds});
+    dispatchState({alertIds});
   };
 
   const handleScheduleChange = scheduleId => {
@@ -334,9 +334,9 @@ const TaskComponent = ({
       name: inputTask ? inputTask.name : _('Unnamed'),
       comment: inputTask ? inputTask.comment : '',
       id: inputTask ? inputTask.id : undefined,
-      in_assets: inputTask ? inputTask.inAssets : undefined,
-      auto_delete: inputTask ? inputTask.autoDelete : undefined,
-      auto_delete_data: inputTask ? inputTask.autoDeleteData : undefined,
+      inAssets: inputTask ? inputTask.inAssets : undefined,
+      autoDelete: inputTask ? inputTask.autoDelete : undefined,
+      autoDelteData: inputTask ? inputTask.autoDeleteData : undefined,
       title: inputTask
         ? _('Edit Container Task {{name}}', inputTask)
         : _('New Container Task'),
@@ -406,7 +406,7 @@ const TaskComponent = ({
         dispatchState({
           target_id: undefined,
           scanner_id: undefined,
-          config_id: undefined,
+          configId: undefined,
         });
       }
 
@@ -506,16 +506,16 @@ const TaskComponent = ({
         name: task.name,
         schedule_id,
         target_id: hasId(task.target) ? task.target.id : undefined,
-        alert_ids: map(task.alerts, alert => alert.id),
+        alertIds: map(task.alerts, alert => alert.id),
         alterable: task.alterable,
-        apply_overrides: task.applyOverrides,
-        auto_delete: task.autoDelete,
-        auto_delete_data: task.autoDeleteData,
+        applyOverrides: task.applyOverrides,
+        autoDelete: task.autoDelete,
+        autoDelteData: task.autoDeleteData,
         comment: task.comment,
-        config_id: hasId(task.config) ? task.config.id : undefined,
-        hosts_ordering: task.hostsOrdering,
+        configId: hasId(task.config) ? task.config.id : undefined,
+        hostsOrdering: task.hostsOrdering,
         id: task.id,
-        in_assets: task.inAssets,
+        inAssets: task.inAssets,
         max_checks: task.maxChecks,
         max_hosts: task.maxHosts,
         title: _('Edit Task {{name}}', task),
@@ -532,17 +532,17 @@ const TaskComponent = ({
 
       dispatchState({
         taskDialogVisible: true,
-        alert_ids: alertIds,
-        config_id: configId,
+        alertIds,
+        configId: configId,
         scanner_id: scannerId,
         schedule_id: defaultScheduleId,
         target_id: defaultTargetId,
         title: _('New Task'),
-        apply_overrides: undefined,
-        auto_delete: undefined,
-        auto_delete_data: undefined,
+        applyOverrides: undefined,
+        autoDelete: undefined,
+        autoDelteData: undefined,
         comment: undefined,
-        hosts_ordering: undefined,
+        hostsOrdering: undefined,
         id: undefined,
         max_checks: undefined,
         max_hosts: undefined,
@@ -565,7 +565,7 @@ const TaskComponent = ({
         hosts: settings.client_address,
         port_list_id: defaultPortListId,
         alert_id: defaultAlertId,
-        config_id: defaultScanConfigId,
+        configId: defaultScanConfigId,
         ssh_credential: defaultSshCredential,
         smb_credential: defaultSmbCredential,
         esxi_credential: defaultEsxiCredential,
@@ -608,7 +608,7 @@ const TaskComponent = ({
         task_name: _('New Quick Task'),
         target_hosts: settings.client_address,
         port_list_id: defaultPortListId,
-        config_id: configId,
+        configId,
         ssh_credential: defaultSshCredential,
         smb_credential: defaultSmbCredential,
         esxi_credential: defaultEsxiCredential,
@@ -709,7 +709,7 @@ const TaskComponent = ({
 
   const handleScanConfigChange = configId => {
     dispatchState({
-      config_id: configId,
+      configId,
     });
   };
 
@@ -789,22 +789,22 @@ const TaskComponent = ({
     taskWizardVisible,
     reportImportDialogVisible,
     alterable,
-    apply_overrides,
+    applyOverrides,
     error,
     max_checks,
     max_hosts,
     min_qod,
     schedule_periods,
     source_iface,
-    auto_delete,
-    auto_delete_data,
+    autoDelete,
+    autoDelteData,
     comment,
     id,
-    in_assets,
+    inAssets,
     task,
     title,
     name,
-    hosts_ordering,
+    hostsOrdering,
     port_list_id,
     alert_id,
     ssh_credential,
@@ -817,8 +817,8 @@ const TaskComponent = ({
     start_minute,
     start_hour,
     reschedule,
-    alert_ids,
-    config_id,
+    alertIds,
+    configId,
     scanner_id,
     schedule_id,
     tag_id,
@@ -877,17 +877,17 @@ const TaskComponent = ({
                         {({create: createschedule}) => (
                           <TaskDialog
                             alerts={alerts}
-                            alert_ids={alert_ids}
+                            alert_ids={alertIds}
                             alterable={alterable}
-                            apply_overrides={apply_overrides}
-                            auto_delete={auto_delete}
-                            auto_delete_data={auto_delete_data}
+                            apply_overrides={applyOverrides}
+                            auto_delete={autoDelete}
+                            auto_delete_data={autoDelteData}
                             comment={comment}
-                            config_id={config_id}
+                            config_id={configId}
                             error={error}
-                            hosts_ordering={hosts_ordering}
+                            hosts_ordering={hostsOrdering}
                             id={id}
-                            in_assets={in_assets}
+                            in_assets={inAssets}
                             isLoadingAlerts={isLoadingAlerts}
                             isLoadingConfigs={isLoadingConfigs}
                             isLoadingScanners={isLoadingScanners}
@@ -940,9 +940,9 @@ const TaskComponent = ({
           name={name}
           comment={comment}
           id={id}
-          in_assets={in_assets}
-          auto_delete={auto_delete}
-          auto_delete_data={auto_delete_data}
+          in_assets={inAssets}
+          auto_delete={autoDelete}
+          auto_delete_data={autoDelteData}
           title={title}
           onClose={handleCloseContainerTaskDialog}
           onSave={handleSaveContainerTask}
@@ -954,7 +954,7 @@ const TaskComponent = ({
           hosts={hosts}
           port_list_id={port_list_id}
           alert_id={alert_id}
-          config_id={config_id}
+          config_id={configId}
           ssh_credential={ssh_credential}
           smb_credential={smb_credential}
           esxi_credential={esxi_credential}
@@ -974,7 +974,7 @@ const TaskComponent = ({
           target_hosts={target_hosts}
           port_list_id={port_list_id}
           alert_id={alert_id}
-          config_id={config_id}
+          config_id={configId}
           ssh_credential={ssh_credential}
           smb_credential={smb_credential}
           esxi_credential={esxi_credential}
