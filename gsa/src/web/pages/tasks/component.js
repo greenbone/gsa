@@ -128,6 +128,7 @@ const TaskComponent = ({
   const gmp = useGmp();
   const dispatch = useDispatch();
 
+  // Loaders
   const loadTags = useCallback(
     () => dispatch(loadTagsAction(gmp)(TAGS_FILTER)),
     [gmp, dispatch],
@@ -138,6 +139,7 @@ const TaskComponent = ({
     [dispatch, gmp],
   );
 
+  // Selectors
   const tagsSel = useSelector(tagsSelector);
   const userDefaults = useSelector(getUserSettingsDefaults);
 
