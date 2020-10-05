@@ -200,90 +200,60 @@ const AlertComponent = ({
         const {data: credentials} = response;
         if (state.credentialType === 'scp') {
           dispatchState({
-            type: 'setState',
-            newState: {
-              method_data_scp_credential: credential_id,
-              credentials,
-            },
+            method_data_scp_credential: credential_id,
+            credentials,
           });
         } else if (state.credentialType === 'smb') {
           dispatchState({
-            type: 'setState',
-            newState: {
-              method_data_smb_credential: credential_id,
-              credentials,
-            },
+            method_data_smb_credential: credential_id,
+            credentials,
           });
         } else if (state.credentialType === 'verinice') {
           dispatchState({
-            type: 'setState',
-            newState: {
-              method_data_verinice_server_credential: credential_id,
-              credentials,
-            },
+            method_data_verinice_server_credential: credential_id,
+            credentials,
           });
         } else if (state.credentialType === 'vfire') {
           dispatchState({
-            type: 'setState',
-            newState: {
-              method_data_vfire_credential: credential_id,
-              credentials,
-            },
+            method_data_vfire_credential: credential_id,
+            credentials,
           });
         } else if (state.credentialType === 'tippingpoint') {
           dispatchState({
-            type: 'setState',
-            newState: {
-              method_data_tp_sms_credential: credential_id,
-              credentials,
-            },
+            method_data_tp_sms_credential: credential_id,
+            credentials,
           });
         } else if (state.credentialType === 'email') {
           dispatchState({
-            type: 'setState',
-            newState: {
-              method_data_recipient_credential: credential_id,
-              credentials,
-            },
+            method_data_recipient_credential: credential_id,
+            credentials,
           });
         } else if (state.credentialType === 'pw') {
           dispatchState({
-            type: 'setState',
-            newState: {
-              method_data_pkcs12_credential: credential_id,
-              credentials,
-            },
+            method_data_pkcs12_credential: credential_id,
+            credentials,
           });
         }
       })
       .catch(error => {
-        dispatchState({
-          type: 'setState',
-          newState: {credentialError: error.message},
-        });
+        dispatchState({credentialError: error.message});
       });
   };
 
   const openCredentialDialog = ({type, types}) => {
     state.credentialType = type;
     dispatchState({
-      type: 'setState',
-      newState: {
-        credentialDialogVisible: true,
-        credentialDialogTitle: _('New Credential'),
-        credentialTypes: types,
-        credentialType: type,
-      },
+      credentialDialogVisible: true,
+      credentialDialogTitle: _('New Credential'),
+      credentialTypes: types,
+      credentialType: type,
     });
 
     handleInteraction();
   };
 
   const closeCredentialDialog = () => {
-    dispatchState({
-      type: 'setState',
-      newState: {credentialDialogVisible: false},
-    });
+    dispatchState({credentialDialogVisible: false});
   };
 
   const handleCloseCredentialDialog = () => {
@@ -292,10 +262,7 @@ const AlertComponent = ({
   };
 
   const openContentComposerDialog = () => {
-    dispatchState({
-      type: 'setState',
-      newState: {contentComposerDialogVisible: true},
-    });
+    dispatchState({contentComposerDialogVisible: true});
   };
 
   const handleOpenContentComposerDialog = () => {
@@ -311,14 +278,11 @@ const AlertComponent = ({
       filter_id,
     } = state;
     dispatchState({
-      type: 'setState',
-      newState: {
-        composerIncludeNotes: method_data_composer_include_notes,
-        composerIncludeOverrides: method_data_composer_include_overrides,
-        composerFilterId: filter_id,
-        composerStoreAsDefault: NO_VALUE,
-        contentComposerDialogVisible: false,
-      },
+      composerIncludeNotes: method_data_composer_include_notes,
+      composerIncludeOverrides: method_data_composer_include_overrides,
+      composerFilterId: filter_id,
+      composerStoreAsDefault: NO_VALUE,
+      contentComposerDialogVisible: false,
     });
   };
 
@@ -338,14 +302,11 @@ const AlertComponent = ({
       saveReportComposerDefaults(defaults);
     }
     dispatchState({
-      type: 'setState',
-      newState: {
-        filter_id: filterId,
-        method_data_composer_include_notes: includeNotes,
-        method_data_composer_include_overrides: includeOverrides,
-        composerStoreAsDefault: NO_VALUE,
-        contentComposerDialogVisible: false,
-      },
+      filter_id: filterId,
+      method_data_composer_include_notes: includeNotes,
+      method_data_composer_include_overrides: includeOverrides,
+      composerStoreAsDefault: NO_VALUE,
+      contentComposerDialogVisible: false,
     });
     handleInteraction();
   };
@@ -545,244 +506,228 @@ const AlertComponent = ({
             : undefined;
 
           dispatchState({
-            type: 'setState',
-            newState: {
-              alertDialogVisible: true,
-              id: alert.id,
-              alert,
-              active: alert.active,
-              name: alert.name,
-              comment: alert.comment,
-              filters,
-              filter_id: isDefined(alert.filter) ? alert.filter.id : undefined,
-              composerFilterId: isDefined(alert.filter)
-                ? alert.filter.id
-                : undefined,
-              composerIncludeNotes: getValue(
-                method.data.composer_include_notes,
+            alertDialogVisible: true,
+            id: alert.id,
+            alert,
+            active: alert.active,
+            name: alert.name,
+            comment: alert.comment,
+            filters,
+            filter_id: isDefined(alert.filter) ? alert.filter.id : undefined,
+            composerFilterId: isDefined(alert.filter)
+              ? alert.filter.id
+              : undefined,
+            composerIncludeNotes: getValue(method.data.composer_include_notes),
+            composerIncludeOverrides: getValue(
+              method.data.composer_include_overrides,
+            ),
+            composerStoreAsDefault: NO_VALUE,
+            credentials,
+            result_filters,
+            secinfo_filters,
+            report_formats,
+            report_format_ids: method.data.report_formats,
+
+            condition: condition.type,
+            condition_data_count: parseInt(getValue(condition.data.count, 1)),
+            condition_data_direction: getValue(
+              condition.data.direction,
+              DEFAULT_DIRECTION,
+            ),
+            condition_data_filters,
+            condition_data_filter_id,
+            condition_data_at_least_filter_id: condition_data_filter_id,
+            condition_data_at_least_count: parseInt(
+              getValue(condition.data.count, 1),
+            ),
+            condition_data_severity: parseSeverity(
+              getValue(condition.data.severity, DEFAULT_SEVERITY),
+            ),
+
+            event: event_type,
+            event_data_status: getValue(
+              event.data.status,
+              DEFAULT_EVENT_STATUS,
+            ),
+            event_data_feed_event: feed_event,
+            event_data_secinfo_type: getValue(
+              event.data.secinfo_type,
+              DEFAULT_SECINFO_TYPE,
+            ),
+
+            method: alert.method.type,
+
+            method_data_composer_include_notes: getValue(
+              method.data.composer_include_notes,
+            ),
+            method_data_composer_include_overrides: getValue(
+              method.data.composer_include_overrides,
+            ),
+
+            method_data_defense_center_ip: getValue(
+              method.data.defense_center_ip,
+              '',
+            ),
+            method_data_defense_center_port: parseInt(
+              getValue(
+                method.data.defense_center_port,
+                DEFAULT_DEFENSE_CENTER_PORT,
               ),
-              composerIncludeOverrides: getValue(
-                method.data.composer_include_overrides,
-              ),
-              composerStoreAsDefault: NO_VALUE,
-              credentials,
-              result_filters,
-              secinfo_filters,
+            ),
+
+            method_data_details_url: getValue(
+              method.data.details_url,
+              DEFAULT_DETAILS_URL,
+            ),
+            method_data_recipient_credential: selectSaveId(
+              emailCredentials,
+              recipient_credential_id,
+              UNSET_VALUE,
+            ),
+            method_data_to_address: getValue(alert.method.data.to_address, ''),
+            method_data_from_address: getValue(
+              alert.method.data.from_address,
+              '',
+            ),
+            method_data_subject,
+            method_data_message,
+            method_data_message_attach,
+            method_data_notice,
+            method_data_notice_report_format: selectSaveId(
               report_formats,
-              report_format_ids: method.data.report_formats,
+              getValue(
+                method.data.notice_report_format,
+                DEFAULT_NOTICE_REPORT_FORMAT,
+              ),
+            ),
+            method_data_notice_attach_format: selectSaveId(
+              report_formats,
+              getValue(
+                method.data.notice_attach_format,
+                DEFAULT_NOTICE_ATTACH_FORMAT,
+              ),
+            ),
 
-              condition: condition.type,
-              condition_data_count: parseInt(getValue(condition.data.count, 1)),
-              condition_data_direction: getValue(
-                condition.data.direction,
-                DEFAULT_DIRECTION,
-              ),
-              condition_data_filters,
-              condition_data_filter_id,
-              condition_data_at_least_filter_id: condition_data_filter_id,
-              condition_data_at_least_count: parseInt(
-                getValue(condition.data.count, 1),
-              ),
-              condition_data_severity: parseSeverity(
-                getValue(condition.data.severity, DEFAULT_SEVERITY),
-              ),
+            method_data_scp_credential: selectSaveId(
+              credentials,
+              scp_credential_id,
+            ),
+            method_data_scp_report_format: selectSaveId(
+              report_formats,
+              getValue(method.data.scp_report_format),
+            ),
+            method_data_scp_path: getValue(
+              method.data.scp_path,
+              DEFAULT_SCP_PATH,
+            ),
+            method_data_scp_host: getValue(method.data.scp_host, ''),
+            method_data_scp_known_hosts: getValue(
+              method.data.scp_known_hosts,
+              '',
+            ),
 
-              event: event_type,
-              event_data_status: getValue(
-                event.data.status,
-                DEFAULT_EVENT_STATUS,
-              ),
-              event_data_feed_event: feed_event,
-              event_data_secinfo_type: getValue(
-                event.data.secinfo_type,
-                DEFAULT_SECINFO_TYPE,
-              ),
+            method_data_send_port: getValue(method.data.send_port, ''),
+            method_data_send_host: getValue(method.data.send_host, ''),
+            method_data_send_report_format: selectSaveId(
+              report_formats,
+              getValue(method.data.send_report_format),
+            ),
 
-              method: alert.method.type,
+            method_data_smb_credential: getValue(
+              method.data.smb_credential,
+              '',
+            ),
+            method_data_smb_file_path: getValue(method.data.smb_file_path, ''),
+            method_data_smb_file_path_type: getValue(
+              method.data.smb_file_path_type,
+              '',
+            ),
+            method_data_smb_report_format: getValue(
+              method.data.smb_report_format,
+              '',
+            ),
+            method_data_smb_share_path: getValue(
+              method.data.smb_share_path,
+              '',
+            ),
 
-              method_data_composer_include_notes: getValue(
-                method.data.composer_include_notes,
-              ),
-              method_data_composer_include_overrides: getValue(
-                method.data.composer_include_overrides,
-              ),
+            method_data_snmp_agent: getValue(method.data.snmp_agent, ''),
+            method_data_snmp_community: getValue(
+              method.data.snmp_community,
+              '',
+            ),
+            method_data_snmp_message: getValue(method.data.snmp_message, ''),
 
-              method_data_defense_center_ip: getValue(
-                method.data.defense_center_ip,
-                '',
-              ),
-              method_data_defense_center_port: parseInt(
-                getValue(
-                  method.data.defense_center_port,
-                  DEFAULT_DEFENSE_CENTER_PORT,
-                ),
-              ),
-
-              method_data_details_url: getValue(
-                method.data.details_url,
-                DEFAULT_DETAILS_URL,
-              ),
-              method_data_recipient_credential: selectSaveId(
-                emailCredentials,
-                recipient_credential_id,
-                UNSET_VALUE,
-              ),
-              method_data_to_address: getValue(
-                alert.method.data.to_address,
-                '',
-              ),
-              method_data_from_address: getValue(
-                alert.method.data.from_address,
-                '',
-              ),
-              method_data_subject,
-              method_data_message,
-              method_data_message_attach,
-              method_data_notice,
-              method_data_notice_report_format: selectSaveId(
-                report_formats,
-                getValue(
-                  method.data.notice_report_format,
-                  DEFAULT_NOTICE_REPORT_FORMAT,
-                ),
-              ),
-              method_data_notice_attach_format: selectSaveId(
-                report_formats,
-                getValue(
-                  method.data.notice_attach_format,
-                  DEFAULT_NOTICE_ATTACH_FORMAT,
-                ),
-              ),
-
-              method_data_scp_credential: selectSaveId(
-                credentials,
-                scp_credential_id,
-              ),
-              method_data_scp_report_format: selectSaveId(
-                report_formats,
-                getValue(method.data.scp_report_format),
-              ),
-              method_data_scp_path: getValue(
-                method.data.scp_path,
-                DEFAULT_SCP_PATH,
-              ),
-              method_data_scp_host: getValue(method.data.scp_host, ''),
-              method_data_scp_known_hosts: getValue(
-                method.data.scp_known_hosts,
-                '',
-              ),
-
-              method_data_send_port: getValue(method.data.send_port, ''),
-              method_data_send_host: getValue(method.data.send_host, ''),
-              method_data_send_report_format: selectSaveId(
-                report_formats,
-                getValue(method.data.send_report_format),
-              ),
-
-              method_data_smb_credential: getValue(
-                method.data.smb_credential,
-                '',
-              ),
-              method_data_smb_file_path: getValue(
-                method.data.smb_file_path,
-                '',
-              ),
-              method_data_smb_file_path_type: getValue(
-                method.data.smb_file_path_type,
-                '',
-              ),
-              method_data_smb_report_format: getValue(
-                method.data.smb_report_format,
-                '',
-              ),
-              method_data_smb_share_path: getValue(
-                method.data.smb_share_path,
-                '',
-              ),
-
-              method_data_snmp_agent: getValue(method.data.snmp_agent, ''),
-              method_data_snmp_community: getValue(
-                method.data.snmp_community,
-                '',
-              ),
-              method_data_snmp_message: getValue(method.data.snmp_message, ''),
-
-              method_data_start_task_task: selectSaveId(
-                tasks,
-                getValue(method.data.start_task_task),
-              ),
-
-              method_data_tp_sms_credential: selectSaveId(
-                credentials,
-                tp_sms_credential_id,
-              ),
-              method_data_tp_sms_hostname: getValue(
-                method.data.tp_sms_hostname,
-                '',
-              ),
-              method_data_tp_sms_tls_workaround: parseYesNo(
-                getValue(method.data.tp_sms_hostname, NO_VALUE),
-              ),
-
-              method_data_verinice_server_report_format: select_verinice_report_id(
-                report_formats,
-                getValue(method.data.verinice_server_report_format),
-              ),
-              method_data_verinice_server_url: getValue(
-                method.data.verinice_server_url,
-              ),
-              method_data_verinice_server_credential: selectSaveId(
-                credentials,
-                verinice_credential_id,
-              ),
-
-              method_data_pkcs12_credential: selectSaveId(
-                passwordOnlyCredentials,
-                pkcs12_credential_id,
-                '0',
-              ),
-              method_data_vfire_credential: selectSaveId(
-                vFireCredentials,
-                vfire_credential_id,
-              ),
-              method_data_vfire_base_url: getValue(method.data.vfire_base_url),
-              method_data_vfire_call_description: getValue(
-                method.data.vfire_call_description,
-              ),
-              method_data_vfire_call_impact_name: getValue(
-                method.data.vfire_call_impact_name,
-              ),
-              method_data_vfire_call_partition_name: getValue(
-                method.data.vfire_call_partition_name,
-              ),
-              method_data_vfire_call_template_name: getValue(
-                method.data.vfire_call_template_name,
-              ),
-              method_data_vfire_call_type_name: getValue(
-                method.data.vfire_call_type_name,
-              ),
-              method_data_vfire_call_urgency_name: getValue(
-                method.data.vfire_call_urgency_name,
-              ),
-              method_data_vfire_client_id: getValue(
-                method.data.vfire_client_id,
-              ),
-              method_data_vfire_session_type: getValue(
-                method.data.vfire_session_type,
-              ),
-
-              method_data_URL: getValue(method.data.URL, ''),
-              method_data_delta_type: getValue(
-                alert.method.data.delta_type,
-                '',
-              ),
-              method_data_delta_report_id: getValue(
-                alert.method.data.delta_report_id,
-                '',
-              ),
+            method_data_start_task_task: selectSaveId(
               tasks,
-              title: _('Edit Alert {{name}}', {name: shorten(alert.name)}),
-            },
+              getValue(method.data.start_task_task),
+            ),
+
+            method_data_tp_sms_credential: selectSaveId(
+              credentials,
+              tp_sms_credential_id,
+            ),
+            method_data_tp_sms_hostname: getValue(
+              method.data.tp_sms_hostname,
+              '',
+            ),
+            method_data_tp_sms_tls_workaround: parseYesNo(
+              getValue(method.data.tp_sms_hostname, NO_VALUE),
+            ),
+
+            method_data_verinice_server_report_format: select_verinice_report_id(
+              report_formats,
+              getValue(method.data.verinice_server_report_format),
+            ),
+            method_data_verinice_server_url: getValue(
+              method.data.verinice_server_url,
+            ),
+            method_data_verinice_server_credential: selectSaveId(
+              credentials,
+              verinice_credential_id,
+            ),
+
+            method_data_pkcs12_credential: selectSaveId(
+              passwordOnlyCredentials,
+              pkcs12_credential_id,
+              '0',
+            ),
+            method_data_vfire_credential: selectSaveId(
+              vFireCredentials,
+              vfire_credential_id,
+            ),
+            method_data_vfire_base_url: getValue(method.data.vfire_base_url),
+            method_data_vfire_call_description: getValue(
+              method.data.vfire_call_description,
+            ),
+            method_data_vfire_call_impact_name: getValue(
+              method.data.vfire_call_impact_name,
+            ),
+            method_data_vfire_call_partition_name: getValue(
+              method.data.vfire_call_partition_name,
+            ),
+            method_data_vfire_call_template_name: getValue(
+              method.data.vfire_call_template_name,
+            ),
+            method_data_vfire_call_type_name: getValue(
+              method.data.vfire_call_type_name,
+            ),
+            method_data_vfire_call_urgency_name: getValue(
+              method.data.vfire_call_urgency_name,
+            ),
+            method_data_vfire_client_id: getValue(method.data.vfire_client_id),
+            method_data_vfire_session_type: getValue(
+              method.data.vfire_session_type,
+            ),
+
+            method_data_URL: getValue(method.data.URL, ''),
+            method_data_delta_type: getValue(alert.method.data.delta_type, ''),
+            method_data_delta_report_id: getValue(
+              alert.method.data.delta_report_id,
+              '',
+            ),
+            tasks,
+            title: _('Edit Alert {{name}}', {name: shorten(alert.name)}),
           });
         },
       );
@@ -806,99 +751,96 @@ const AlertComponent = ({
             : undefined;
 
           dispatchState({
-            type: 'setState',
-            newState: {
-              active: undefined,
-              alert: undefined,
-              alertDialogVisible: true,
-              name: undefined,
-              comment: undefined,
-              condition: undefined,
-              condition_data_at_least_count: undefined,
-              condition_data_at_least_filter_id: result_filter_id,
-              condition_data_count: undefined,
-              condition_data_direction: undefined,
-              condition_data_filters: result_filters,
-              condition_data_filt_id: result_filter_id,
-              condition_data_severity: undefined,
-              credentials,
-              event: undefined,
-              event_data_status: DEFAULT_EVENT_STATUS,
-              event_data_feed_event: undefined,
-              event_data_secinfo_type: undefined,
-              filter_id: filterId,
-              filters,
-              composerFilterId: reportComposerDefaults.reportResultFilterId,
-              composerIncludeNotes: reportComposerDefaults.includeNotes,
-              composerIncludeOverrides: reportComposerDefaults.includeOverrides,
-              composerStoreAsDefault: NO_VALUE,
-              id: undefined,
-              method: undefined,
-              method_data_composer_include_notes: undefined,
-              method_data_composer_include_overrides: undefined,
-              method_data_defense_center_ip: undefined,
-              method_data_defense_center_port: undefined,
-              method_data_details_url: undefined,
-              method_data_to_address: undefined,
-              method_data_from_address: undefined,
-              method_data_subject: undefined,
-              method_data_message: undefined,
-              method_data_message_attach: undefined,
-              method_data_notice: undefined,
-              method_data_notice_report_format: selectSaveId(
-                report_formats,
-                DEFAULT_NOTICE_REPORT_FORMAT,
-              ),
-              method_data_notice_attach_format: selectSaveId(
-                report_formats,
-                DEFAULT_NOTICE_ATTACH_FORMAT,
-              ),
-              method_data_scp_credential: undefined,
-              method_data_scp_path: DEFAULT_SCP_PATH,
-              method_data_scp_report_format: report_format_id,
-              method_data_scp_host: undefined,
-              method_data_scp_known_hosts: undefined,
-              method_data_send_port: undefined,
-              method_data_send_host: undefined,
-              method_data_snmp_agent: undefined,
-              method_data_snmp_community: undefined,
-              method_data_snmp_message: undefined,
-              method_data_tp_sms_credential: undefined,
-              method_data_tp_sms_hostname: undefined,
-              method_data_tp_sms_tls_workaround: undefined,
-              method_data_verinice_server_url: undefined,
-              method_data_verinice_server_credential: undefined,
-              method_data_URL: undefined,
-              method_data_delta_type: undefined,
-              method_data_delta_report_id: undefined,
-              method_data_recipient_credential: UNSET_VALUE,
-              method_data_send_report_format: report_format_id,
-              method_data_start_task_task: selectSaveId(tasks),
-              method_data_smb_credential: selectSaveId(smbCredentials),
-              method_data_smb_share_path: undefined,
-              method_data_smb_file_path: undefined,
-              method_data_smb_file_path_type: undefined,
-              method_data_verinice_server_report_format: select_verinice_report_id(
-                report_formats,
-              ),
-              method_data_pkcs12_credential: UNSET_VALUE,
-              method_data_vfire_credential: undefined,
-              method_data_vfire_base_url: undefined,
-              method_data_vfire_call_description: undefined,
-              method_data_vfire_call_impact_name: undefined,
-              method_data_vfire_call_partition_name: undefined,
-              method_data_vfire_call_template_name: undefined,
-              method_data_vfire_call_type_name: undefined,
-              method_data_vfire_call_urgency_name: undefined,
-              method_data_vfire_client_id: undefined,
-              method_data_vfire_session_type: undefined,
-              result_filters,
-              secinfo_filters,
+            active: undefined,
+            alert: undefined,
+            alertDialogVisible: true,
+            name: undefined,
+            comment: undefined,
+            condition: undefined,
+            condition_data_at_least_count: undefined,
+            condition_data_at_least_filter_id: result_filter_id,
+            condition_data_count: undefined,
+            condition_data_direction: undefined,
+            condition_data_filters: result_filters,
+            condition_data_filt_id: result_filter_id,
+            condition_data_severity: undefined,
+            credentials,
+            event: undefined,
+            event_data_status: DEFAULT_EVENT_STATUS,
+            event_data_feed_event: undefined,
+            event_data_secinfo_type: undefined,
+            filter_id: filterId,
+            filters,
+            composerFilterId: reportComposerDefaults.reportResultFilterId,
+            composerIncludeNotes: reportComposerDefaults.includeNotes,
+            composerIncludeOverrides: reportComposerDefaults.includeOverrides,
+            composerStoreAsDefault: NO_VALUE,
+            id: undefined,
+            method: undefined,
+            method_data_composer_include_notes: undefined,
+            method_data_composer_include_overrides: undefined,
+            method_data_defense_center_ip: undefined,
+            method_data_defense_center_port: undefined,
+            method_data_details_url: undefined,
+            method_data_to_address: undefined,
+            method_data_from_address: undefined,
+            method_data_subject: undefined,
+            method_data_message: undefined,
+            method_data_message_attach: undefined,
+            method_data_notice: undefined,
+            method_data_notice_report_format: selectSaveId(
               report_formats,
-              report_format_ids: [],
-              tasks,
-              title: _('New Alert'),
-            },
+              DEFAULT_NOTICE_REPORT_FORMAT,
+            ),
+            method_data_notice_attach_format: selectSaveId(
+              report_formats,
+              DEFAULT_NOTICE_ATTACH_FORMAT,
+            ),
+            method_data_scp_credential: undefined,
+            method_data_scp_path: DEFAULT_SCP_PATH,
+            method_data_scp_report_format: report_format_id,
+            method_data_scp_host: undefined,
+            method_data_scp_known_hosts: undefined,
+            method_data_send_port: undefined,
+            method_data_send_host: undefined,
+            method_data_snmp_agent: undefined,
+            method_data_snmp_community: undefined,
+            method_data_snmp_message: undefined,
+            method_data_tp_sms_credential: undefined,
+            method_data_tp_sms_hostname: undefined,
+            method_data_tp_sms_tls_workaround: undefined,
+            method_data_verinice_server_url: undefined,
+            method_data_verinice_server_credential: undefined,
+            method_data_URL: undefined,
+            method_data_delta_type: undefined,
+            method_data_delta_report_id: undefined,
+            method_data_recipient_credential: UNSET_VALUE,
+            method_data_send_report_format: report_format_id,
+            method_data_start_task_task: selectSaveId(tasks),
+            method_data_smb_credential: selectSaveId(smbCredentials),
+            method_data_smb_share_path: undefined,
+            method_data_smb_file_path: undefined,
+            method_data_smb_file_path_type: undefined,
+            method_data_verinice_server_report_format: select_verinice_report_id(
+              report_formats,
+            ),
+            method_data_pkcs12_credential: UNSET_VALUE,
+            method_data_vfire_credential: undefined,
+            method_data_vfire_base_url: undefined,
+            method_data_vfire_call_description: undefined,
+            method_data_vfire_call_impact_name: undefined,
+            method_data_vfire_call_partition_name: undefined,
+            method_data_vfire_call_template_name: undefined,
+            method_data_vfire_call_type_name: undefined,
+            method_data_vfire_call_urgency_name: undefined,
+            method_data_vfire_client_id: undefined,
+            method_data_vfire_session_type: undefined,
+            result_filters,
+            secinfo_filters,
+            report_formats,
+            report_format_ids: [],
+            tasks,
+            title: _('New Alert'),
           });
         },
       );
@@ -907,23 +849,17 @@ const AlertComponent = ({
 
   const closeAlertDialog = () => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        alertDialogVisible: false,
-      },
+      alertDialogVisible: false,
     });
   };
 
   const handleCloseAlertDialog = () => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        composerIncludeNotes: undefined,
-        composerIncludeOverrides: undefined,
-        composerFilterId: undefined,
-        composerFilterString: undefined,
-        composerStoreAsDefault: NO_VALUE,
-      },
+      composerIncludeNotes: undefined,
+      composerIncludeOverrides: undefined,
+      composerFilterId: undefined,
+      composerFilterString: undefined,
+      composerStoreAsDefault: NO_VALUE,
     });
 
     closeAlertDialog();
@@ -978,73 +914,49 @@ const AlertComponent = ({
 
   const handlePasswordOnlyCredentialChange = credential => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        method_data_pkcs12_credential: credential,
-      },
+      method_data_pkcs12_credential: credential,
     });
   };
 
   const handleScpCredentialChange = credential => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        method_data_scp_credential: credential,
-      },
+      method_data_scp_credential: credential,
     });
   };
 
   const handleSmbCredentialChange = credential => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        method_data_smb_credential: credential,
-      },
+      method_data_smb_credential: credential,
     });
   };
 
   const handleTippingPointCredentialChange = credential => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        method_data_tp_sms_credential: credential,
-      },
+      method_data_tp_sms_credential: credential,
     });
   };
 
   const handleVeriniceCredentialChange = credential => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        method_data_verinice_server_credential: credential,
-      },
+      method_data_verinice_server_credential: credential,
     });
   };
 
   const handleEmailCredentialChange = credential => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        method_data_recipient_credential: credential,
-      },
+      method_data_recipient_credential: credential,
     });
   };
 
   const handleVfireCredentialChange = credential => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        method_data_vfire_credential: credential,
-      },
+      method_data_vfire_credential: credential,
     });
   };
 
   const handleReportFormatsChange = report_format_ids => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        report_format_ids,
-      },
+      report_format_ids,
     });
   };
 
@@ -1052,19 +964,13 @@ const AlertComponent = ({
     handleInteraction();
     name = capitalizeFirstLetter(name);
     dispatchState({
-      type: 'setState',
-      newState: {
-        [`composer${name}`]: value,
-      },
+      [`composer${name}`]: value,
     });
   };
 
   const handleFilterIdChange = value => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        composerFilterId: value === UNSET_VALUE ? undefined : value,
-      },
+      composerFilterId: value === UNSET_VALUE ? undefined : value,
     });
 
     handleInteraction();
@@ -1329,12 +1235,7 @@ const AlertComponent = ({
               title={credentialDialogTitle}
               types={credentialTypes}
               onClose={handleCloseCredentialDialog}
-              onErrorClose={() =>
-                dispatchState({
-                  type: 'setState',
-                  newState: {credentialError: undefined},
-                })
-              }
+              onErrorClose={() => dispatchState({credentialError: undefined})}
               onSave={handleCreateCredential}
             />
           )}

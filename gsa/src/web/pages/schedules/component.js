@@ -61,39 +61,33 @@ const ScheduleComponent = ({
       const {interval, freq, monthdays, weekdays} = recurrence;
 
       dispatch({
-        type: 'setState',
-        newState: {
-          comment: schedule.comment,
-          startDate,
-          dialogVisible: true,
-          duration: durationInSeconds > 0 ? duration : undefined,
-          freq,
-          id: schedule.id,
-          interval,
-          monthdays,
-          name: schedule.name,
-          title: _('Edit Schedule {{name}}', {name: schedule.name}),
-          timezone: schedule.timezone,
-          weekdays,
-        },
+        comment: schedule.comment,
+        startDate,
+        dialogVisible: true,
+        duration: durationInSeconds > 0 ? duration : undefined,
+        freq,
+        id: schedule.id,
+        interval,
+        monthdays,
+        name: schedule.name,
+        title: _('Edit Schedule {{name}}', {name: schedule.name}),
+        timezone: schedule.timezone,
+        weekdays,
       });
     } else {
       dispatch({
-        type: 'setState',
-        newState: {
-          comment: undefined,
-          dialogVisible: true,
-          duration: undefined,
-          freq: undefined,
-          id: undefined,
-          interval: undefined,
-          monthdays: undefined,
-          name: undefined,
-          startDate: undefined,
-          timezone,
-          title: undefined,
-          weekdays: undefined,
-        },
+        comment: undefined,
+        dialogVisible: true,
+        duration: undefined,
+        freq: undefined,
+        id: undefined,
+        interval: undefined,
+        monthdays: undefined,
+        name: undefined,
+        startDate: undefined,
+        timezone,
+        title: undefined,
+        weekdays: undefined,
       });
     }
 
@@ -101,7 +95,7 @@ const ScheduleComponent = ({
   };
 
   const closeScheduleDialog = () => {
-    dispatch({type: 'setState', newState: {dialogVisible: false}});
+    dispatch({dialogVisible: false});
   };
 
   const handleCloseScheduleDialog = () => {

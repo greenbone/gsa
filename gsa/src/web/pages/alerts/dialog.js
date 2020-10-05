@@ -245,12 +245,9 @@ const AlertDialog = props => {
 
   useEffect(() => {
     dispatchState({
-      type: 'setState',
-      newState: {
-        stateEvent: isDefined(props.event)
-          ? props.event
-          : EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
-      },
+      stateEvent: isDefined(props.event)
+        ? props.event
+        : EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
     });
   }, [props.event]);
 
@@ -293,7 +290,7 @@ const AlertDialog = props => {
     }
     // in addition to changing the event in the dialog, change it here as well
     // to have it handy in render()
-    dispatchState({type: 'setState', newState: {stateEvent: value}});
+    dispatchState({stateEvent: value});
   };
 
   const {
