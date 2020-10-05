@@ -30,6 +30,7 @@ import {useBulkTag, ENTITY_TYPES} from 'web/graphql/tags';
 
 import TagDialog from 'web/pages/tags/dialog';
 
+import reducer from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useGmp from 'web/utils/useGmp';
@@ -42,19 +43,6 @@ const initialState = {
   tag: {},
   tags: [],
   tagDialogVisible: false,
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'setState':
-      const {newState} = action;
-      return {
-        ...state,
-        ...newState,
-      };
-    default:
-      return state;
-  }
 };
 
 export const BulkTagComponent = ({
@@ -81,7 +69,7 @@ export const BulkTagComponent = ({
 
     return gmp.tags.getAll({filter: tagFilter}).then(resp => {
       const {data} = resp;
-      dispatch({type: 'setState', newState: {tags: data}});
+      dispatch({tags: data});
     });
   }, [gmp.tags, entitiesType]);
 
@@ -113,12 +101,12 @@ export const BulkTagComponent = ({
   );
 
   const closeTagDialog = () => {
-    dispatch({type: 'setState', newState: {tagDialogVisible: false}});
+    dispatch({tagDialogVisible: false});
   };
 
   const openTagDialog = () => {
     renewSession();
-    dispatch({type: 'setState', newState: {tagDialogVisible: true}});
+    dispatch({tagDialogVisible: true});
   };
 
   const handleCreateTag = data => {
@@ -130,11 +118,8 @@ export const BulkTagComponent = ({
       .then(response => {
         const newTags = [...tags, response.data];
         dispatch({
-          type: 'setState',
-          newState: {
-            tag: response.data,
-            tags: newTags,
-          },
+          tag: response.data,
+          tags: newTags,
         });
       })
       .then(closeTagDialog);
@@ -148,7 +133,7 @@ export const BulkTagComponent = ({
   const handleTagChange = id => {
     renewSession();
     return gmp.tag.get({id}).then(resp => {
-      dispatch({type: 'setState', newState: {tag: resp.data}});
+      dispatch({tag: resp.data});
     });
   };
 
