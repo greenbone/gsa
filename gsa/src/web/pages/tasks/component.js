@@ -17,9 +17,9 @@
  */
 /* eslint-disable no-shadow */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
-import {connect} from 'react-redux';
+import {connect, useSelector, useDispatch} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -38,13 +38,13 @@ import ScanConfig, {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 
 import {
-  loadEntities as loadTags,
+  loadEntities as loadTagsAction,
   selector as tagsSelector,
 } from 'web/store/entities/tags';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {loadUserSettingDefaults as loadUserSettingsDefaultsAction} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 import compose from 'web/utils/compose';
@@ -91,9 +91,25 @@ import ContainerTaskDialog from './containerdialog';
 
 const log = logger.getLogger('web.pages.tasks.component');
 
+const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
+
 const TaskComponent = props => {
-  //GMP and Redux
+  // GMP and Redux
   const gmp = useGmp();
+  const dispatch = useDispatch();
+
+  const loadTags = useCallback(
+    () => dispatch(loadTagsAction(gmp)(TAGS_FILTER)),
+    [gmp, dispatch],
+  );
+
+  const loadUserSettingsDefaults = useCallback(
+    () => dispatch(loadUserSettingsDefaultsAction(gmp)()),
+    [dispatch, gmp],
+  );
+
+  const tagsSel = useSelector(tagsSelector);
+  const isLoadingTags = tagsSel.isLoadingAllEntities(ALL_FILTER);
 
   // GraphQL Queries and Mutations
   const [modifyTask] = useModifyTask();
@@ -215,7 +231,7 @@ const TaskComponent = props => {
   }, [scanConfigData]);
 
   useEffect(() => {
-    props.loadUserSettingsDefaults();
+    loadUserSettingsDefaults();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const handleInteraction = () => {
     const {onInteraction} = props;
@@ -468,7 +484,7 @@ const TaskComponent = props => {
     loadScanners();
     loadSchedules();
     loadTargets();
-    props.loadTags();
+    loadTags();
 
     if (isDefined(task)) {
       const canAccessSchedules =
@@ -794,7 +810,6 @@ const TaskComponent = props => {
   ]);
 
   const {
-    isLoadingTags,
     tags,
     children,
     onCloned,
@@ -1092,8 +1107,6 @@ TaskComponent.propTypes = {
   onTaskWizardSaved: PropTypes.func,
 };
 
-const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
-
 const mapStateToProps = rootState => {
   const userDefaults = getUserSettingsDefaults(rootState);
   const tagsSel = tagsSelector(rootState);
@@ -1115,11 +1128,4 @@ const mapStateToProps = rootState => {
   };
 };
 
-const mapDispatchToProp = (dispatch, {gmp}) => ({
-  loadTags: () => dispatch(loadTags(gmp)(TAGS_FILTER)),
-  loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
-});
-
-export default compose(connect(mapStateToProps, mapDispatchToProp))(
-  TaskComponent,
-);
+export default compose(connect(mapStateToProps, undefined))(TaskComponent);
