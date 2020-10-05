@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-const stateReducer = (state, newState) => {
+const stateReducer = (state, newState = {}) => {
   return {
     ...state,
     ...newState,
