@@ -336,7 +336,7 @@ const TaskComponent = ({
       id: inputTask ? inputTask.id : undefined,
       inAssets: inputTask ? inputTask.inAssets : undefined,
       autoDelete: inputTask ? inputTask.autoDelete : undefined,
-      autoDelteData: inputTask ? inputTask.autoDeleteData : undefined,
+      autoDeleteData: inputTask ? inputTask.autoDeleteData : undefined,
       title: inputTask
         ? _('Edit Container Task {{name}}', inputTask)
         : _('New Container Task'),
@@ -510,7 +510,7 @@ const TaskComponent = ({
         alterable: task.alterable,
         applyOverrides: task.applyOverrides,
         autoDelete: task.autoDelete,
-        autoDelteData: task.autoDeleteData,
+        autoDeleteData: task.autoDeleteData,
         comment: task.comment,
         configId: hasId(task.config) ? task.config.id : undefined,
         hostsOrdering: task.hostsOrdering,
@@ -540,7 +540,7 @@ const TaskComponent = ({
         title: _('New Task'),
         applyOverrides: undefined,
         autoDelete: undefined,
-        autoDelteData: undefined,
+        autoDeleteData: undefined,
         comment: undefined,
         hostsOrdering: undefined,
         id: undefined,
@@ -566,9 +566,9 @@ const TaskComponent = ({
         portListId: defaultPortListId,
         alert_id: defaultAlertId,
         configId: defaultScanConfigId,
-        ssh_credential: defaultSshCredential,
-        smb_credential: defaultSmbCredential,
-        esxi_credential: defaultEsxiCredential,
+        sshCredential: defaultSshCredential,
+        smbCredential: defaultSmbCredential,
+        esxiCredential: defaultEsxiCredential,
         scannerId: defaultScannerId,
       });
     });
@@ -609,9 +609,9 @@ const TaskComponent = ({
         target_hosts: settings.client_address,
         portListId: defaultPortListId,
         configId,
-        ssh_credential: defaultSshCredential,
-        smb_credential: defaultSmbCredential,
-        esxi_credential: defaultEsxiCredential,
+        sshCredential: defaultSshCredential,
+        smbCredential: defaultSmbCredential,
+        esxiCredential: defaultEsxiCredential,
         scannerId: defaultScannerId,
         start_date: now,
         start_minute: now.minutes(),
@@ -797,7 +797,7 @@ const TaskComponent = ({
     schedulePeriods,
     sourceIface,
     autoDelete,
-    autoDelteData,
+    autoDeleteData,
     comment,
     id,
     inAssets,
@@ -807,9 +807,9 @@ const TaskComponent = ({
     hostsOrdering,
     portListId,
     alert_id,
-    ssh_credential,
-    smb_credential,
-    esxi_credential,
+    sshCredential,
+    smbCredential,
+    esxiCredential,
     task_name,
     target_hosts,
     scanConfigs,
@@ -881,7 +881,7 @@ const TaskComponent = ({
                             alterable={alterable}
                             apply_overrides={applyOverrides}
                             auto_delete={autoDelete}
-                            auto_delete_data={autoDelteData}
+                            auto_delete_data={autoDeleteData}
                             comment={comment}
                             config_id={configId}
                             error={error}
@@ -942,7 +942,7 @@ const TaskComponent = ({
           id={id}
           in_assets={inAssets}
           auto_delete={autoDelete}
-          auto_delete_data={autoDelteData}
+          auto_delete_data={autoDeleteData}
           title={title}
           onClose={handleCloseContainerTaskDialog}
           onSave={handleSaveContainerTask}
@@ -955,9 +955,9 @@ const TaskComponent = ({
           port_list_id={portListId}
           alert_id={alert_id}
           config_id={configId}
-          ssh_credential={ssh_credential}
-          smb_credential={smb_credential}
-          esxi_credential={esxi_credential}
+          ssh_credential={sshCredential}
+          smb_credential={smbCredential}
+          esxi_credential={esxiCredential}
           scanner_id={scannerId}
           onClose={handleCloseTaskWizard}
           onSave={handleSaveTaskWizard}
@@ -975,9 +975,9 @@ const TaskComponent = ({
           port_list_id={portListId}
           alert_id={alert_id}
           config_id={configId}
-          ssh_credential={ssh_credential}
-          smb_credential={smb_credential}
-          esxi_credential={esxi_credential}
+          ssh_credential={sshCredential}
+          smb_credential={smbCredential}
+          esxi_credential={esxiCredential}
           scanner_id={scannerId}
           start_minute={start_minute}
           start_hour={start_hour}
