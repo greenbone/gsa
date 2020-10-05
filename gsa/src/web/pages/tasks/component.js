@@ -49,7 +49,7 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 import {UNSET_VALUE} from 'web/utils/render';
 import useCapabilities from 'web/utils/useCapabilities';
 
@@ -92,6 +92,9 @@ import ContainerTaskDialog from './containerdialog';
 const log = logger.getLogger('web.pages.tasks.component');
 
 const TaskComponent = props => {
+  //GMP and Redux
+  const gmp = useGmp();
+
   // GraphQL Queries and Mutations
   const [modifyTask] = useModifyTask();
   const [createTask] = useCreateTask();
@@ -543,7 +546,7 @@ const TaskComponent = props => {
   };
 
   const openTaskWizard = () => {
-    const {gmp, defaultScanConfigId, defaultScannerId} = props;
+    const {defaultScanConfigId, defaultScannerId} = props;
 
     gmp.wizard.task().then(response => {
       const settings = response.data;
@@ -570,7 +573,7 @@ const TaskComponent = props => {
   };
 
   const handleSaveTaskWizard = data => {
-    const {onTaskWizardSaved, onTaskWizardError, gmp} = props;
+    const {onTaskWizardSaved, onTaskWizardError} = props;
 
     handleInteraction();
 
@@ -582,7 +585,6 @@ const TaskComponent = props => {
 
   const openAdvancedTaskWizard = () => {
     const {
-      gmp,
       timezone,
       defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
       defaultScannerId,
@@ -627,7 +629,7 @@ const TaskComponent = props => {
   };
 
   const handleSaveAdvancedTaskWizard = data => {
-    const {gmp, onAdvancedTaskWizardSaved, onAdvancedTaskWizardError} = props;
+    const {onAdvancedTaskWizardSaved, onAdvancedTaskWizardError} = props;
 
     handleInteraction();
 
@@ -638,7 +640,7 @@ const TaskComponent = props => {
   };
 
   const openModifyTaskWizard = () => {
-    const {gmp, timezone} = props;
+    const {timezone} = props;
 
     gmp.wizard.modifyTask().then(response => {
       const settings = response.data;
@@ -670,7 +672,7 @@ const TaskComponent = props => {
   };
 
   const handleSaveModifyTaskWizard = data => {
-    const {onModifyTaskWizardSaved, onModifyTaskWizardError, gmp} = props;
+    const {onModifyTaskWizardSaved, onModifyTaskWizardError} = props;
 
     handleInteraction();
 
@@ -701,7 +703,7 @@ const TaskComponent = props => {
   };
 
   const handleReportImport = data => {
-    const {onReportImported, onReportImportError, gmp} = props;
+    const {onReportImported, onReportImportError} = props;
 
     handleInteraction();
 
@@ -1044,7 +1046,6 @@ TaskComponent.propTypes = {
   defaultSmbCredential: PropTypes.id,
   defaultSshCredential: PropTypes.id,
   defaultTargetId: PropTypes.id,
-  gmp: PropTypes.gmp.isRequired,
   isLoadingAlerts: PropTypes.bool,
   isLoadingConfigs: PropTypes.bool,
   isLoadingScanners: PropTypes.bool,
@@ -1119,7 +1120,6 @@ const mapDispatchToProp = (dispatch, {gmp}) => ({
   loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProp),
-)(TaskComponent);
+export default compose(connect(mapStateToProps, mapDispatchToProp))(
+  TaskComponent,
+);
