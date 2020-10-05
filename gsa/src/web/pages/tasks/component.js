@@ -564,7 +564,7 @@ const TaskComponent = ({
         taskWizardVisible: true,
         hosts: settings.client_address,
         portListId: defaultPortListId,
-        alert_id: defaultAlertId,
+        alertId: defaultAlertId,
         configId: defaultScanConfigId,
         sshCredential: defaultSshCredential,
         smbCredential: defaultSmbCredential,
@@ -604,19 +604,19 @@ const TaskComponent = ({
 
       dispatchState({
         advancedTaskWizardVisible: true,
-        alert_id: defaultAlertId,
-        task_name: _('New Quick Task'),
-        target_hosts: settings.client_address,
+        alertId: defaultAlertId,
+        taskName: _('New Quick Task'),
+        targetHosts: settings.client_address,
         portListId: defaultPortListId,
         configId,
         sshCredential: defaultSshCredential,
         smbCredential: defaultSmbCredential,
         esxiCredential: defaultEsxiCredential,
         scannerId: defaultScannerId,
-        start_date: now,
-        start_minute: now.minutes(),
-        start_hour: now.hours(),
-        start_timezone: timezone,
+        startDate: now,
+        startMinute: now.minutes(),
+        startHour: now.hours(),
+        startTimezone: timezone,
       });
     });
     handleInteraction();
@@ -649,11 +649,11 @@ const TaskComponent = ({
         modifyTaskWizardVisible: true,
         tasks: settings.tasks,
         reschedule: NO_VALUE,
-        task_id: selectSaveId(settings.tasks),
-        start_date: now,
-        start_minute: now.minutes(),
-        start_hour: now.hours(),
-        start_timezone: timezone,
+        taskId: selectSaveId(settings.tasks),
+        startDate: now,
+        startMinute: now.minutes(),
+        startHour: now.hours(),
+        startTimezone: timezone,
       });
     });
     handleInteraction();
@@ -681,7 +681,7 @@ const TaskComponent = ({
     dispatchState({
       reportImportDialogVisible: true,
       tasks: [task],
-      task_id: task.id,
+      taskId: task.id,
     });
 
     handleInteraction();
@@ -806,16 +806,16 @@ const TaskComponent = ({
     name,
     hostsOrdering,
     portListId,
-    alert_id,
+    alertId,
     sshCredential,
     smbCredential,
     esxiCredential,
-    task_name,
-    target_hosts,
+    taskName,
+    targetHosts,
     scanConfigs,
-    start_date,
-    start_minute,
-    start_hour,
+    startDate,
+    startMinute,
+    startHour,
     reschedule,
     alertIds,
     configId,
@@ -824,8 +824,8 @@ const TaskComponent = ({
     tagId,
     targetId,
     tasks,
-    task_id,
-    start_timezone,
+    taskId,
+    startTimezone,
     hosts,
   } = state;
 
@@ -953,7 +953,7 @@ const TaskComponent = ({
         <TaskWizard
           hosts={hosts}
           port_list_id={portListId}
-          alert_id={alert_id}
+          alert_id={alertId}
           config_id={configId}
           ssh_credential={sshCredential}
           smb_credential={smbCredential}
@@ -969,19 +969,19 @@ const TaskComponent = ({
         <AdvancedTaskWizard
           credentials={credentials}
           scan_configs={scanConfigs}
-          start_date={start_date}
-          task_name={task_name}
-          target_hosts={target_hosts}
+          start_date={startDate}
+          task_name={taskName}
+          target_hosts={targetHosts}
           port_list_id={portListId}
-          alert_id={alert_id}
+          alert_id={alertId}
           config_id={configId}
           ssh_credential={sshCredential}
           smb_credential={smbCredential}
           esxi_credential={esxiCredential}
           scanner_id={scannerId}
-          start_minute={start_minute}
-          start_hour={start_hour}
-          start_timezone={start_timezone}
+          start_minute={startMinute}
+          start_hour={startHour}
+          start_timezone={startTimezone}
           onClose={handleCloseAdvancedTaskWizard}
           onSave={handleSaveAdvancedTaskWizard}
         />
@@ -989,13 +989,13 @@ const TaskComponent = ({
 
       {modifyTaskWizardVisible && (
         <ModifyTaskWizard
-          start_date={start_date}
+          start_date={startDate}
           tasks={tasks}
           reschedule={reschedule}
-          task_id={task_id}
-          start_minute={start_minute}
-          start_hour={start_hour}
-          start_timezone={start_timezone}
+          task_id={taskId}
+          start_minute={startMinute}
+          start_hour={startHour}
+          start_timezone={startTimezone}
           onClose={handleCloseModifyTaskWizard}
           onSave={handleSaveModifyTaskWizard}
         />
@@ -1004,7 +1004,7 @@ const TaskComponent = ({
       {reportImportDialogVisible && (
         <ImportReportDialog
           newContainerTask={false}
-          task_id={task_id}
+          task_id={taskId}
           tasks={tasks}
           onClose={handleCloseReportImportDialog}
           onSave={handleReportImport}
