@@ -19,7 +19,7 @@
 
 import React, {useState, useEffect, useCallback} from 'react';
 
-import {connect, useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -47,7 +47,6 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import {loadUserSettingDefaults as loadUserSettingsDefaultsAction} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 import {UNSET_VALUE} from 'web/utils/render';
@@ -109,7 +108,28 @@ const TaskComponent = props => {
   );
 
   const tagsSel = useSelector(tagsSelector);
+  const userDefaults = useSelector(getUserSettingsDefaults);
+
+  const timezone = useSelector(getTimezone);
+  const defaultAlertId = userDefaults.getValueByName('defaultalert');
+  const defaultEsxiCredential = userDefaults.getValueByName(
+    'defaultesxicredential',
+  );
+  const defaultPortListId = userDefaults.getValueByName('defaultportlist');
+  const defaultScanConfigId = userDefaults.getValueByName(
+    'defaultopenvasscanconfig',
+  );
+  const defaultScannerId = userDefaults.getValueByName('defaultopenvasscanner');
+  const defaultScheduleId = userDefaults.getValueByName('defaultschedule');
+  const defaultSshCredential = userDefaults.getValueByName(
+    'defaultsshcredential',
+  );
+  const defaultSmbCredential = userDefaults.getValueByName(
+    'defaultsmbcredential',
+  );
+  const defaultTargetId = userDefaults.getValueByName('defaulttarget');
   const isLoadingTags = tagsSel.isLoadingAllEntities(ALL_FILTER);
+  const tags = tagsSel.getEntities(TAGS_FILTER);
 
   // GraphQL Queries and Mutations
   const [modifyTask] = useModifyTask();
@@ -178,16 +198,6 @@ const TaskComponent = props => {
   });
 
   const capabilities = useCapabilities();
-
-  // default values
-  const {
-    defaultPortListId,
-    defaultAlertId,
-    defaultScanConfigId,
-    defaultSshCredential,
-    defaultSmbCredential,
-    defaultEsxiCredential,
-  } = props;
 
   // Dialog and wizard visibility flags
   const [advancedTaskWizardVisible, toggleAdvancedTaskWizardVisible] = useState(
@@ -522,21 +532,19 @@ const TaskComponent = props => {
 
       toggleTaskDialogVisible(true);
     } else {
-      const {
-        defaultAlertId,
-        defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
-        defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID,
-        defaultScheduleId,
-        defaultTargetId,
-      } = props;
-
-      const alert_ids = isDefined(defaultAlertId) ? [defaultAlertId] : [];
+      const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
+      const scannerId = isDefined(defaultScannerId)
+        ? defaultScannerId
+        : OPENVAS_DEFAULT_SCANNER_ID;
+      const configId = isDefined(defaultScanConfigId)
+        ? defaultScanConfigId
+        : FULL_AND_FAST_SCAN_CONFIG_ID;
 
       setDialogState(state => ({
         ...state,
-        alert_ids,
-        config_id: defaultScanConfigId,
-        scanner_id: defaultScannerId,
+        alert_ids: alertIds,
+        config_id: configId,
+        scanner_id: scannerId,
         schedule_id: defaultScheduleId,
         target_id: defaultTargetId,
         title: _('New Task'),
@@ -562,8 +570,6 @@ const TaskComponent = props => {
   };
 
   const openTaskWizard = () => {
-    const {defaultScanConfigId, defaultScannerId} = props;
-
     gmp.wizard.task().then(response => {
       const settings = response.data;
       toggleTaskWizardVisible(true);
@@ -600,11 +606,9 @@ const TaskComponent = props => {
   };
 
   const openAdvancedTaskWizard = () => {
-    const {
-      timezone,
-      defaultScanConfigId = FULL_AND_FAST_SCAN_CONFIG_ID,
-      defaultScannerId,
-    } = props;
+    const configId = isDefined(defaultScanConfigId)
+      ? defaultScanConfigId
+      : FULL_AND_FAST_SCAN_CONFIG_ID;
 
     loadCredentials();
     loadScanConfigs();
@@ -621,7 +625,7 @@ const TaskComponent = props => {
         task_name: _('New Quick Task'),
         target_hosts: settings.client_address,
         port_list_id: defaultPortListId,
-        config_id: defaultScanConfigId,
+        config_id: configId,
         ssh_credential: defaultSshCredential,
         smb_credential: defaultSmbCredential,
         esxi_credential: defaultEsxiCredential,
@@ -810,7 +814,6 @@ const TaskComponent = props => {
   ]);
 
   const {
-    tags,
     children,
     onCloned,
     onCloneError,
@@ -1049,33 +1052,7 @@ const TaskComponent = props => {
 };
 
 TaskComponent.propTypes = {
-  alerts: PropTypes.arrayOf(PropTypes.model),
   children: PropTypes.func.isRequired,
-  credentials: PropTypes.arrayOf(PropTypes.model),
-  defaultAlertId: PropTypes.id,
-  defaultEsxiCredential: PropTypes.id,
-  defaultPortListId: PropTypes.id,
-  defaultScanConfigId: PropTypes.id,
-  defaultScannerId: PropTypes.id,
-  defaultScheduleId: PropTypes.id,
-  defaultSmbCredential: PropTypes.id,
-  defaultSshCredential: PropTypes.id,
-  defaultTargetId: PropTypes.id,
-  isLoadingAlerts: PropTypes.bool,
-  isLoadingConfigs: PropTypes.bool,
-  isLoadingScanners: PropTypes.bool,
-  isLoadingSchedules: PropTypes.bool,
-  isLoadingTags: PropTypes.bool,
-  isLoadingTargets: PropTypes.bool,
-  loadAlerts: PropTypes.func,
-  loadCredentials: PropTypes.func.isRequired,
-  loadTags: PropTypes.func.isRequired,
-  loadUserSettingsDefaults: PropTypes.func.isRequired,
-  scanConfigs: PropTypes.arrayOf(PropTypes.model),
-  scanners: PropTypes.arrayOf(PropTypes.model),
-  tags: PropTypes.arrayOf(PropTypes.model),
-  targets: PropTypes.arrayOf(PropTypes.model),
-  timezone: PropTypes.string.isRequired,
   onAdvancedTaskWizardError: PropTypes.func,
   onAdvancedTaskWizardSaved: PropTypes.func,
   onCloneError: PropTypes.func,
@@ -1107,25 +1084,4 @@ TaskComponent.propTypes = {
   onTaskWizardSaved: PropTypes.func,
 };
 
-const mapStateToProps = rootState => {
-  const userDefaults = getUserSettingsDefaults(rootState);
-  const tagsSel = tagsSelector(rootState);
-  return {
-    timezone: getTimezone(rootState),
-    defaultAlertId: userDefaults.getValueByName('defaultalert'),
-    defaultEsxiCredential: userDefaults.getValueByName('defaultesxicredential'),
-    defaultPortListId: userDefaults.getValueByName('defaultportlist'),
-    defaultScanConfigId: userDefaults.getValueByName(
-      'defaultopenvasscanconfig',
-    ),
-    defaultScannerId: userDefaults.getValueByName('defaultopenvasscanner'),
-    defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
-    defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
-    defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
-    defaultTargetId: userDefaults.getValueByName('defaulttarget'),
-    isLoadingTags: tagsSel.isLoadingAllEntities(ALL_FILTER),
-    tags: tagsSel.getEntities(TAGS_FILTER),
-  };
-};
-
-export default compose(connect(mapStateToProps, undefined))(TaskComponent);
+export default TaskComponent;
