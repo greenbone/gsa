@@ -241,12 +241,12 @@ const TaskComponent = ({
     taskDialogVisible: false,
     taskWizardVisible: false,
     reportImportDialogVisible: false,
-    target_id: UNSET_VALUE,
+    targetId: UNSET_VALUE,
     alertIds: [],
-    scanner_id: UNSET_VALUE,
-    schedule_id: UNSET_VALUE,
+    scannerId: UNSET_VALUE,
+    scheduleId: UNSET_VALUE,
     configId: defaultScanConfigId,
-    tag_id: undefined,
+    tagId: undefined,
     scanConfigs: undefined,
   });
 
@@ -271,7 +271,7 @@ const TaskComponent = ({
 
   // Handlers
   const handleTargetChange = targetId => {
-    dispatchState({target_id: targetId});
+    dispatchState({targetId});
   };
 
   const handleAlertsChange = alertIds => {
@@ -279,7 +279,7 @@ const TaskComponent = ({
   };
 
   const handleScheduleChange = scheduleId => {
-    dispatchState({schedule_id: scheduleId});
+    dispatchState({scheduleId});
   };
 
   const handleTaskStart = task => {
@@ -317,14 +317,14 @@ const TaskComponent = ({
     const {data} = resp;
 
     refetchSchedules();
-    dispatchState({schedule_id: data.createSchedule?.id});
+    dispatchState({scheduleId: data.createSchedule?.id});
   };
 
   const handleTargetCreated = resp => {
     const {data} = resp;
     refetchTargets();
 
-    dispatchState({target_id: data?.createTarget?.id});
+    dispatchState({targetId: data?.createTarget?.id});
   };
 
   const openContainerTaskDialog = inputTask => {
@@ -404,8 +404,8 @@ const TaskComponent = ({
         // arguments need to be undefined if the task is not changeable
 
         dispatchState({
-          target_id: undefined,
-          scanner_id: undefined,
+          targetId: undefined,
+          scannerId: undefined,
           configId: undefined,
         });
       }
@@ -491,20 +491,20 @@ const TaskComponent = ({
     if (isDefined(task)) {
       const canAccessSchedules =
         capabilities.mayAccess('schedules') && isDefined(task.schedule);
-      const schedule_id = canAccessSchedules ? task.schedule.id : UNSET_VALUE;
-      const schedule_periods = canAccessSchedules
+      const scheduleId = canAccessSchedules ? task.schedule.id : UNSET_VALUE;
+      const schedulePeriods = canAccessSchedules
         ? task.schedulePeriods
         : undefined;
 
       dispatchState({
         taskDialogVisible: true,
         error: undefined, // remove old errors
-        min_qod: task.minQod,
-        source_iface: task.sourceIface,
-        schedule_periods,
-        scanner_id: hasId(task.scanner) ? task.scanner.id : undefined,
+        minQod: task.minQod,
+        sourceIface: task.sourceIface,
+        schedulePeriods,
+        scannerId: hasId(task.scanner) ? task.scanner.id : undefined,
         name: task.name,
-        schedule_id,
+        scheduleId,
         target_id: hasId(task.target) ? task.target.id : undefined,
         alertIds: map(task.alerts, alert => alert.id),
         alterable: task.alterable,
@@ -516,8 +516,8 @@ const TaskComponent = ({
         hostsOrdering: task.hostsOrdering,
         id: task.id,
         inAssets: task.inAssets,
-        max_checks: task.maxChecks,
-        max_hosts: task.maxHosts,
+        maxChecks: task.maxChecks,
+        maxHosts: task.maxHosts,
         title: _('Edit Task {{name}}', task),
         task,
       });
@@ -534,9 +534,9 @@ const TaskComponent = ({
         taskDialogVisible: true,
         alertIds,
         configId: configId,
-        scanner_id: scannerId,
-        schedule_id: defaultScheduleId,
-        target_id: defaultTargetId,
+        scannerId: scannerId,
+        scheduleId: defaultScheduleId,
+        targetId: defaultTargetId,
         title: _('New Task'),
         applyOverrides: undefined,
         autoDelete: undefined,
@@ -544,12 +544,12 @@ const TaskComponent = ({
         comment: undefined,
         hostsOrdering: undefined,
         id: undefined,
-        max_checks: undefined,
-        max_hosts: undefined,
-        min_qod: undefined,
+        maxChecks: undefined,
+        maxHosts: undefined,
+        minQod: undefined,
         name: undefined,
-        schedule_periods: undefined,
-        source_iface: undefined,
+        schedulePeriods: undefined,
+        sourceIface: undefined,
         task: undefined,
       });
 
@@ -563,13 +563,13 @@ const TaskComponent = ({
       dispatchState({
         taskWizardVisible: true,
         hosts: settings.client_address,
-        port_list_id: defaultPortListId,
+        portListId: defaultPortListId,
         alert_id: defaultAlertId,
         configId: defaultScanConfigId,
         ssh_credential: defaultSshCredential,
         smb_credential: defaultSmbCredential,
         esxi_credential: defaultEsxiCredential,
-        scanner_id: defaultScannerId,
+        scannerId: defaultScannerId,
       });
     });
     handleInteraction();
@@ -607,12 +607,12 @@ const TaskComponent = ({
         alert_id: defaultAlertId,
         task_name: _('New Quick Task'),
         target_hosts: settings.client_address,
-        port_list_id: defaultPortListId,
+        portListId: defaultPortListId,
         configId,
         ssh_credential: defaultSshCredential,
         smb_credential: defaultSmbCredential,
         esxi_credential: defaultEsxiCredential,
-        scanner_id: defaultScannerId,
+        scannerId: defaultScannerId,
         start_date: now,
         start_minute: now.minutes(),
         start_hour: now.hours(),
@@ -715,7 +715,7 @@ const TaskComponent = ({
 
   const handleScannerChange = scannerId => {
     dispatchState({
-      scanner_id: scannerId,
+      scannerId,
     });
   };
 
@@ -791,11 +791,11 @@ const TaskComponent = ({
     alterable,
     applyOverrides,
     error,
-    max_checks,
-    max_hosts,
-    min_qod,
-    schedule_periods,
-    source_iface,
+    maxChecks,
+    maxHosts,
+    minQod,
+    schedulePeriods,
+    sourceIface,
     autoDelete,
     autoDelteData,
     comment,
@@ -805,7 +805,7 @@ const TaskComponent = ({
     title,
     name,
     hostsOrdering,
-    port_list_id,
+    portListId,
     alert_id,
     ssh_credential,
     smb_credential,
@@ -819,10 +819,10 @@ const TaskComponent = ({
     reschedule,
     alertIds,
     configId,
-    scanner_id,
-    schedule_id,
-    tag_id,
-    target_id,
+    scannerId,
+    scheduleId,
+    tagId,
+    targetId,
     tasks,
     task_id,
     start_timezone,
@@ -894,20 +894,20 @@ const TaskComponent = ({
                             isLoadingSchedules={isLoadingSchedules}
                             isLoadingTargets={isLoadingTargets}
                             isLoadingTags={isLoadingTags}
-                            max_checks={max_checks}
-                            max_hosts={max_hosts}
-                            min_qod={min_qod}
+                            max_checks={maxChecks}
+                            max_hosts={maxHosts}
+                            min_qod={minQod}
                             name={name}
                             scan_configs={scanConfigs}
-                            scanner_id={scanner_id}
+                            scanner_id={scannerId}
                             scanners={scanners}
-                            schedule_id={schedule_id}
-                            schedule_periods={schedule_periods}
+                            schedule_id={scheduleId}
+                            schedule_periods={schedulePeriods}
                             schedules={schedules}
-                            source_iface={source_iface}
-                            tag_id={tag_id}
+                            source_iface={sourceIface}
+                            tag_id={tagId}
                             tags={tags}
-                            target_id={target_id}
+                            target_id={targetId}
                             targets={targets}
                             task={task}
                             title={title}
@@ -952,13 +952,13 @@ const TaskComponent = ({
       {taskWizardVisible && (
         <TaskWizard
           hosts={hosts}
-          port_list_id={port_list_id}
+          port_list_id={portListId}
           alert_id={alert_id}
           config_id={configId}
           ssh_credential={ssh_credential}
           smb_credential={smb_credential}
           esxi_credential={esxi_credential}
-          scanner_id={scanner_id}
+          scanner_id={scannerId}
           onClose={handleCloseTaskWizard}
           onSave={handleSaveTaskWizard}
           onNewClick={handleTaskWizardNewClick}
@@ -972,13 +972,13 @@ const TaskComponent = ({
           start_date={start_date}
           task_name={task_name}
           target_hosts={target_hosts}
-          port_list_id={port_list_id}
+          port_list_id={portListId}
           alert_id={alert_id}
           config_id={configId}
           ssh_credential={ssh_credential}
           smb_credential={smb_credential}
           esxi_credential={esxi_credential}
-          scanner_id={scanner_id}
+          scanner_id={scannerId}
           start_minute={start_minute}
           start_hour={start_hour}
           start_timezone={start_timezone}
