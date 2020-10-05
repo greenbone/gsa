@@ -92,7 +92,38 @@ const log = logger.getLogger('web.pages.tasks.component');
 
 const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'task');
 
-const TaskComponent = props => {
+const TaskComponent = ({
+  children,
+  onAdvancedTaskWizardError,
+  onAdvancedTaskWizardSaved,
+  onCloneError,
+  onCloned,
+  onContainerCreateError,
+  onContainerCreated,
+  onContainerSaveError,
+  onContainerSaved,
+  onCreateError,
+  onCreated,
+  onDeleteError,
+  onDeleted,
+  onDownloadError,
+  onDownloaded,
+  onInteraction,
+  onModifyTaskWizardError,
+  onModifyTaskWizardSaved,
+  onReportImportError,
+  onReportImported,
+  onResumeError,
+  onResumed,
+  onSaveError,
+  onSaved,
+  onStartError,
+  onStarted,
+  onStopError,
+  onStopped,
+  onTaskWizardError,
+  onTaskWizardSaved,
+}) => {
   // GMP and Redux
   const gmp = useGmp();
   const dispatch = useDispatch();
@@ -244,7 +275,6 @@ const TaskComponent = props => {
     loadUserSettingsDefaults();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
@@ -272,24 +302,18 @@ const TaskComponent = props => {
   };
 
   const handleTaskStart = task => {
-    const {onStarted, onStartError} = props;
-
     handleInteraction();
 
     return startTask(task.id).then(onStarted, onStartError);
   };
 
   const handleTaskStop = task => {
-    const {onStopped, onStopError} = props;
-
     handleInteraction();
 
     return stopTask(task.id).then(onStopped, onStopError);
   };
 
   const handleTaskResume = task => {
-    const {onResumed, onResumeError} = props;
-
     handleInteraction();
 
     return resumeTask(task.id).then(onResumed, onResumeError);
@@ -361,7 +385,6 @@ const TaskComponent = props => {
     handleInteraction();
 
     if (isDefined(data.id)) {
-      const {onContainerSaved, onContainerSaveError} = props;
       return modifyTask({
         id: data.id,
         name: data.name,
@@ -370,7 +393,6 @@ const TaskComponent = props => {
         .then(onContainerSaved, onContainerSaveError)
         .then(() => closeContainerTaskDialog());
     }
-    const {onContainerCreated, onContainerCreateError} = props;
     return createContainerTask({name: data.name, comment: data.comment})
       .then(result => onContainerCreated(result), onContainerCreateError) // queries return a promise and result is what gets returned by django
       .then(() => closeContainerTaskDialog());
@@ -415,7 +437,6 @@ const TaskComponent = props => {
           config_id: undefined,
         }));
       }
-      const {onSaved, onSaveError} = props;
 
       const mutationData = {
         alertIds: alert_ids,
@@ -465,7 +486,6 @@ const TaskComponent = props => {
       sourceIface: source_iface,
       targetId: target_id,
     };
-    const {onCreated, onCreateError} = props;
     return createTask(mutationData)
       .then(result => onCreated(result), onCreateError)
       .then(() => closeTaskDialog());
@@ -595,8 +615,6 @@ const TaskComponent = props => {
   };
 
   const handleSaveTaskWizard = data => {
-    const {onTaskWizardSaved, onTaskWizardError} = props;
-
     handleInteraction();
 
     return gmp.wizard
@@ -649,8 +667,6 @@ const TaskComponent = props => {
   };
 
   const handleSaveAdvancedTaskWizard = data => {
-    const {onAdvancedTaskWizardSaved, onAdvancedTaskWizardError} = props;
-
     handleInteraction();
 
     return gmp.wizard
@@ -660,8 +676,6 @@ const TaskComponent = props => {
   };
 
   const openModifyTaskWizard = () => {
-    const {timezone} = props;
-
     gmp.wizard.modifyTask().then(response => {
       const settings = response.data;
       const now = date().tz(timezone);
@@ -692,8 +706,6 @@ const TaskComponent = props => {
   };
 
   const handleSaveModifyTaskWizard = data => {
-    const {onModifyTaskWizardSaved, onModifyTaskWizardError} = props;
-
     handleInteraction();
 
     return gmp.wizard
@@ -723,8 +735,6 @@ const TaskComponent = props => {
   };
 
   const handleReportImport = data => {
-    const {onReportImported, onReportImportError} = props;
-
     handleInteraction();
 
     return gmp.report
@@ -812,19 +822,6 @@ const TaskComponent = props => {
     alertError,
     credentialError,
   ]);
-
-  const {
-    children,
-    onCloned,
-    onCloneError,
-    onCreated,
-    onCreateError,
-    onDeleted,
-    onDeleteError,
-    onDownloaded,
-    onDownloadError,
-    onInteraction,
-  } = props;
 
   const {
     alterable,
