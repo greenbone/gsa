@@ -17,17 +17,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-const stateReducer = (state, action) => {
-  switch (action.type) {
-    case 'setState':
-      const {newState} = action;
-      return {
-        ...state,
-        ...newState,
-      };
-    default:
-      return state;
-  }
+const stateReducer = (state, newState) => {
+  return {
+    ...state,
+    ...newState,
+  };
 };
 
 export default stateReducer;
