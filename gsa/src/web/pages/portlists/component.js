@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useState, useReducer} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -25,186 +25,231 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
+import reducer from 'web/utils/stateReducer';
+import readFileToText from 'web/utils/readFileToText.js';
 
 import EntityComponent from 'web/entity/component';
 
 import ImportPortListDialog from './importdialog';
 import PortListsDialog from './dialog';
 import PortRangeDialog from './portrangedialog';
+import {useCreatePortList, useModifyPortList} from 'web/graphql/portlists';
 
-class PortListComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const PortListComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onImported,
+  onImportError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+}) => {
+  const gmp = useGmp();
 
-    this.state = {
-      importDialogVisible: false,
-      portListDialogVisible: false,
-      portRangeDialogVisible: false,
-    };
+  const [state, dispatch] = useReducer(reducer, {
+    importDialogVisible: false,
+    portListDialogVisible: false,
+    portRangeDialogVisible: false,
+  });
 
-    this.created_port_ranges = [];
-    this.deleted_port_ranges = [];
+  const [createPortList] = useCreatePortList();
+  const [modifyPortList] = useModifyPortList();
 
-    this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
-    this.handleClosePortListDialog = this.handleClosePortListDialog.bind(this);
-    this.handleCloseNewPortRangeDialog = this.handleCloseNewPortRangeDialog.bind(
-      this,
-    );
-    this.openImportDialog = this.openImportDialog.bind(this);
-    this.openNewPortRangeDialog = this.openNewPortRangeDialog.bind(this);
-    this.openPortListDialog = this.openPortListDialog.bind(this);
-    this.handleDeletePortRange = this.handleDeletePortRange.bind(this);
-    this.handleImportPortList = this.handleImportPortList.bind(this);
-    this.handleSavePortList = this.handleSavePortList.bind(this);
-    this.handleSavePortRange = this.handleSavePortRange.bind(this);
-    this.handleTmpAddPortRange = this.handleTmpAddPortRange.bind(this);
-    this.handleTmpDeletePortRange = this.handleTmpDeletePortRange.bind(this);
-  }
+  const [createdPortRanges, setCreatedPortRanges] = useState([]);
+  const [deletedPortRanges, setDeletedPortRanges] = useState([]);
 
-  openPortListDialog(entity) {
-    const {gmp} = this.props;
-
+  const openPortListDialog = entity => {
     if (entity) {
       gmp.portlist.get(entity).then(response => {
-        const port_list = response.data;
-        this.created_port_ranges = [];
-        this.deleted_port_ranges = [];
-        this.setState({
-          comment: port_list.comment,
-          id: port_list.id,
-          port_list,
-          name: port_list.name,
-          portListDialogVisible: true,
-          port_ranges: port_list.port_ranges,
-          title: _('Edit Port List {{name}}', {name: shorten(port_list.name)}),
+        const portList = response.data;
+        setCreatedPortRanges([]);
+        setDeletedPortRanges([]);
+
+        dispatch({
+          type: 'setState',
+          newState: {
+            comment: portList.comment,
+            id: portList.id,
+            portList,
+            name: portList.name,
+            portListDialogVisible: true,
+            portRanges: portList.port_ranges,
+            title: _('Edit Port List {{name}}', {
+              name: shorten(portList.name),
+            }),
+          },
         });
       });
     } else {
-      this.created_port_ranges = [];
-      this.deleted_port_ranges = [];
-      this.setState({
-        comment: undefined,
-        id: undefined,
-        name: undefined,
-        port_list: undefined,
-        portListDialogVisible: true,
-        title: _('New Port List'),
+      setCreatedPortRanges([]);
+      setDeletedPortRanges([]);
+      dispatch({
+        type: 'setState',
+        newState: {
+          comment: undefined,
+          id: undefined,
+          name: undefined,
+          portList: undefined,
+          portListDialogVisible: true,
+          title: _('New Port List'),
+        },
       });
     }
 
-    this.handleInteraction();
-  }
+    handleInteraction();
+  };
 
-  closePortListDialog() {
-    this.setState({portListDialogVisible: false});
-  }
-
-  handleClosePortListDialog() {
-    this.closePortListDialog();
-    this.handleInteraction();
-  }
-
-  openImportDialog() {
-    this.setState({importDialogVisible: true});
-    this.handleInteraction();
-  }
-
-  closeImportDialog() {
-    this.setState({importDialogVisible: false});
-  }
-
-  handleCloseImportDialog() {
-    this.closeImportDialog();
-    this.handleInteraction();
-  }
-
-  openNewPortRangeDialog(port_list) {
-    this.setState({
-      portRangeDialogVisible: true,
-      id: port_list.id,
+  const closePortListDialog = () => {
+    dispatch({
+      type: 'setState',
+      newState: {portListDialogVisible: false},
     });
-    this.handleInteraction();
-  }
+  };
 
-  closeNewPortRangeDialog() {
-    this.setState({portRangeDialogVisible: false});
-  }
+  const handleClosePortListDialog = () => {
+    closePortListDialog();
+    handleInteraction();
+  };
 
-  handleCloseNewPortRangeDialog() {
-    this.closeNewPortRangeDialog();
-    this.handleInteraction();
-  }
+  const openImportDialog = () => {
+    dispatch({
+      type: 'setState',
+      newState: {importDialogVisible: true},
+    });
+    handleInteraction();
+  };
 
-  handleDeletePortRange(range) {
-    const {gmp} = this.props;
+  const closeImportDialog = () => {
+    dispatch({
+      type: 'setState',
+      newState: {importDialogVisible: false},
+    });
+  };
 
+  const handleCloseImportDialog = () => {
+    closeImportDialog();
+    handleInteraction();
+  };
+
+  const openNewPortRangeDialog = portList => {
+    dispatch({
+      type: 'setState',
+      newState: {
+        portRangeDialogVisible: true,
+        id: portList.id,
+      },
+    });
+    handleInteraction();
+  };
+
+  const closeNewPortRangeDialog = () => {
+    dispatch({
+      type: 'setState',
+      newState: {portRangeDialogVisible: false},
+    });
+  };
+
+  const handleCloseNewPortRangeDialog = () => {
+    closeNewPortRangeDialog();
+    handleInteraction();
+  };
+
+  const handleDeletePortRange = range => {
     return gmp.portlist.deletePortRange(range).then(response => {
       const {data} = response;
-      this.setState({port_list: data});
+      dispatch({
+        type: 'setState',
+        newState: {portList: data},
+      });
     });
-  }
+  };
 
-  handleSavePortRange(data) {
-    const {gmp} = this.props;
-
+  const handleSavePortRange = data => {
     return gmp.portlist
       .createPortRange(data)
       .then(response => response.data.id);
-  }
+  };
 
-  handleImportPortList(data) {
-    const {gmp, onImported, onImportError} = this.props;
-
-    this.handleInteraction();
+  const handleImportPortList = data => {
+    handleInteraction();
 
     return gmp.portlist
       .import(data)
       .then(onImported, onImportError)
-      .then(() => this.closeImportDialog());
-  }
+      .then(() => closeImportDialog());
+  };
 
-  handleSavePortList(save, data) {
-    const created_port_ranges_copy = [...this.created_port_ranges];
+  const handleSavePortList = data => {
+    const createdPortRangesCopy = [...createdPortRanges];
 
-    this.handleInteraction();
+    handleInteraction();
 
-    let promises = created_port_ranges_copy.map(range => {
+    let promises = createdPortRangesCopy.map(range => {
       const saveData = {
         ...range,
         port_range_start: range.start,
         port_range_end: range.end,
         port_type: range.protocol_type,
       };
-      return this.handleSavePortRange(saveData).then(id => {
+      return handleSavePortRange(saveData).then(id => {
         range.isTmp = false;
         range.id = id;
-        this.created_port_ranges = this.created_port_ranges.filter(
-          prange => prange !== range,
+        setCreatedPortRanges(
+          // .filter returns a new array => can be set.
+          createdPortRanges.filter(prange => prange !== range),
         );
       });
     });
-    const deleted_port_ranges_copy = [...this.deleted_port_ranges];
+    const deletedPortRangesCopy = [...deletedPortRanges];
     promises = [
       ...promises,
-      ...deleted_port_ranges_copy.map(range =>
-        this.handleDeletePortRange(range).then(
-          (this.deleted_port_ranges = this.deleted_port_ranges.filter(
-            prange => prange !== range,
-          )),
+      ...deletedPortRangesCopy.map(range =>
+        handleDeletePortRange(range).then(
+          setDeletedPortRanges(
+            deletedPortRanges.filter(prange => prange !== range),
+          ),
         ),
       ),
     ];
-    return Promise.all(promises)
-      .then(() => save(data))
-      .then(() => this.closePortListDialog());
-  }
 
-  handleTmpAddPortRange(values) {
-    const {port_ranges} = this.state;
+    const {id, from_file, file, name, comment, port_range} = data;
+    return Promise.all(promises)
+      .then(() => {
+        if (from_file) {
+          return readFileToText(file);
+        }
+        return Promise.resolve();
+      })
+      .then(text => {
+        if (isDefined(id)) {
+          return modifyPortList({
+            id,
+            name,
+            comment,
+          }).then(onSaved, onSaveError);
+        }
+        return createPortList({
+          name,
+          comment,
+          portRange: from_file ? text : port_range,
+        }).then(onCreated, onCreateError);
+      })
+      .then(() => closePortListDialog());
+  };
+
+  const handleTmpAddPortRange = values => {
+    const {portRanges} = state;
     const {port_range_end, port_range_start, port_type} = values;
 
-    this.handleInteraction();
+    handleInteraction();
 
     // reject port ranges with missing values
     if (!port_range_start || !port_range_end) {
@@ -224,7 +269,7 @@ class PortListComponent extends React.Component {
 
     // check if new port range overlaps with existing and temporarily existing
     // ones, only relevant if protocol_type is the same
-    for (const range of port_ranges) {
+    for (const range of portRanges) {
       const start = parseInt(range.start);
       const end = parseInt(range.end);
       if (
@@ -251,127 +296,112 @@ class PortListComponent extends React.Component {
       start: values.port_range_start,
       isTmp: true,
     };
-
-    this.created_port_ranges.push(newRange);
-    this.setState({
-      port_ranges: [...port_ranges, newRange],
+    // was this.created_port_ranges.push() therefore cannot be set directly
+    setCreatedPortRanges(oldRanges => [...oldRanges, newRange]);
+    dispatch({
+      type: 'setState',
+      newState: {
+        portRanges: [...portRanges, newRange],
+      },
     });
-    this.closeNewPortRangeDialog();
-  }
+    closeNewPortRangeDialog();
+  };
 
-  handleTmpDeletePortRange(port_range) {
-    const {port_ranges} = this.state;
-    let new_port_ranges = port_ranges;
+  const handleTmpDeletePortRange = portRange => {
+    const {portRanges} = state;
+    let newPortRanges = portRanges;
 
-    if (port_range.isTmp) {
-      this.created_port_ranges = this.created_port_ranges.filter(
-        range => range !== port_range,
+    if (portRange.isTmp) {
+      setCreatedPortRanges(
+        createdPortRanges.filter(range => range !== portRange),
       );
     } else {
-      this.deleted_port_ranges.push(port_range);
+      setDeletedPortRanges(oldRanges => [...oldRanges, portRange]);
     }
 
-    new_port_ranges = port_ranges.filter(range => range !== port_range);
-    this.setState({port_ranges: new_port_ranges});
+    newPortRanges = portRanges.filter(range => range !== portRange);
 
-    this.handleInteraction();
-  }
+    dispatch({type: 'setState', newState: {portRanges: newPortRanges}});
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
+    handleInteraction();
+  };
+
+  const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  render() {
-    const {
-      children,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
+  const {
+    comment,
+    id,
+    importDialogVisible,
+    name,
+    portList,
+    portListDialogVisible,
+    portRangeDialogVisible,
+    title,
+    portRanges,
+  } = state;
 
-    const {
-      comment,
-      id,
-      importDialogVisible,
-      name,
-      port_list,
-      portListDialogVisible,
-      portRangeDialogVisible,
-      title,
-      port_ranges,
-    } = this.state;
-
-    return (
-      <EntityComponent
-        name="portlist"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
-        onCloneError={onCloneError}
-        onDeleted={onDeleted}
-        onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
-        onDownloadError={onDownloadError}
-        onInteraction={onInteraction}
-        onSaved={onSaved}
-        onSaveError={onSaveError}
-      >
-        {({save, ...other}) => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: this.openPortListDialog,
-              edit: this.openPortListDialog,
-              import: this.openImportDialog,
-            })}
-            {portListDialogVisible && (
-              <PortListsDialog
-                comment={comment}
-                id={id}
-                name={name}
-                port_list={port_list}
-                title={title}
-                port_ranges={port_ranges}
-                onClose={this.handleClosePortListDialog}
-                onNewPortRangeClick={this.openNewPortRangeDialog}
-                onSave={(...args) => this.handleSavePortList(save, ...args)}
-                onTmpDeletePortRange={this.handleTmpDeletePortRange}
-              />
-            )}
-            {importDialogVisible && (
-              <ImportPortListDialog
-                onClose={this.handleCloseImportDialog}
-                onSave={this.handleImportPortList}
-              />
-            )}
-            {portRangeDialogVisible && (
-              <PortRangeDialog
-                id={id}
-                onClose={this.handleCloseNewPortRangeDialog}
-                onSave={this.handleTmpAddPortRange}
-              />
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
-    );
-  }
-}
+  return (
+    <EntityComponent
+      name="portlist"
+      onCreated={onCreated}
+      onCreateError={onCreateError}
+      onCloned={onCloned}
+      onCloneError={onCloneError}
+      onDeleted={onDeleted}
+      onDeleteError={onDeleteError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onDownloadError}
+      onInteraction={onInteraction}
+      onSaved={onSaved}
+      onSaveError={onSaveError}
+    >
+      {({...other}) => (
+        <React.Fragment>
+          {children({
+            ...other,
+            create: openPortListDialog,
+            edit: openPortListDialog,
+            import: openImportDialog,
+          })}
+          {portListDialogVisible && (
+            <PortListsDialog
+              comment={comment}
+              id={id}
+              name={name}
+              port_list={portList}
+              title={title}
+              port_ranges={portRanges}
+              onClose={handleClosePortListDialog}
+              onNewPortRangeClick={openNewPortRangeDialog}
+              onSave={handleSavePortList}
+              onTmpDeletePortRange={handleTmpDeletePortRange}
+            />
+          )}
+          {importDialogVisible && (
+            <ImportPortListDialog
+              onClose={handleCloseImportDialog}
+              onSave={handleImportPortList}
+            />
+          )}
+          {portRangeDialogVisible && (
+            <PortRangeDialog
+              id={id}
+              onClose={handleCloseNewPortRangeDialog}
+              onSave={handleTmpAddPortRange}
+            />
+          )}
+        </React.Fragment>
+      )}
+    </EntityComponent>
+  );
+};
 
 PortListComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -387,6 +417,6 @@ PortListComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withGmp(PortListComponent);
+export default PortListComponent;
 
 // vim: set ts=2 sw=2 tw=80:
