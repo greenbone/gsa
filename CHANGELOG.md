@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Only show schedule options in advanced and modify task wizard if user has correct permissions [#2472](https://github.com/greenbone/gsa/pull/2472)
 
 ### Removed
+- Remove secinfo filter from user settings dialog and elsewhere [#2495](https://github.com/greenbone/gsa/pull/2495)
 - Removed export/download for report formats [#2427](https://github.com/greenbone/gsa/pull/2427)
 
 [20.8.1]: https://github.com/greenbone/gsa/compare/v20.8.0...gsa-20.08

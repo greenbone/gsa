@@ -115,7 +115,6 @@ let UserSettingsDialog = ({
   ovalFilter,
   certBundFilter,
   dfnCertFilter,
-  secInfoFilter,
   onClose,
   onSave,
   capabilities,
@@ -177,7 +176,6 @@ let UserSettingsDialog = ({
     ovalFilter,
     certBundFilter,
     dfnCertFilter,
-    secInfoFilter,
   };
 
   const validationSchema = {
@@ -297,7 +295,6 @@ let UserSettingsDialog = ({
                     ovalFilter={values.ovalFilter}
                     certBundFilter={values.certBundFilter}
                     dfnCertFilter={values.dfnCertFilter}
-                    secInfoFilter={values.secInfoFilter}
                     filters={filters}
                     onChange={onValueChange}
                   />
@@ -367,7 +364,6 @@ UserSettingsDialog.propTypes = {
   scannersFilter: PropTypes.string,
   schedules: PropTypes.array,
   schedulesFilter: PropTypes.string,
-  secInfoFilter: PropTypes.string,
   severityClass: PropTypes.string,
   tagsFilter: PropTypes.string,
   targets: PropTypes.array,
