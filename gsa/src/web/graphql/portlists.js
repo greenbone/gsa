@@ -133,3 +133,44 @@ export const useModifyPortList = options => {
   );
   return [modifyPortList, data];
 };
+
+export const CREATE_PORT_RANGE = gql`
+  mutation createPortRange($input: CreatePortRangeInput!) {
+    createPortRange(input: $input) {
+      id
+    }
+  }
+`;
+
+export const useCreatePortRange = options => {
+  const [queryCreatePortRange, {data, ...other}] = useMutation(
+    CREATE_PORT_RANGE,
+    options,
+  );
+  const createPortRange = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreatePortRange({...options, variables: {input: inputObject}}),
+    [queryCreatePortRange],
+  );
+  const portRangeId = data?.createPortRange?.id;
+  return [createPortRange, {...other, id: portRangeId}];
+};
+
+export const DELETE_PORT_RANGE = gql`
+  mutation deletePortRange($id: UUID!) {
+    deletePortRange(id: $id) {
+      ok
+    }
+  }
+`;
+
+export const useDeletePortRange = options => {
+  const [queryDeletePortRange, data] = useMutation(DELETE_PORT_RANGE, options);
+  const deletePortRange = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryDeletePortRange({...options, variables: {id}}),
+    [queryDeletePortRange],
+  );
+  return [deletePortRange, data];
+};
