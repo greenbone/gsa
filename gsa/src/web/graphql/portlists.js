@@ -204,13 +204,20 @@ export const GET_PORT_LIST = gql`
   }
 `;
 
-export const useGetPortList = (id, options) => {
-  const {data, ...other} = useLazyQuery(GET_PORT_LIST, {
-    ...options,
-    variables: {id},
-  });
+export const useLazyGetPortList = options => {
+  const [queryPortList, {data, ...other}] = useLazyQuery(
+    GET_PORT_LIST,
+    options,
+  );
+
   const portList = isDefined(data?.portList)
     ? PortList.fromObject(data.portList)
     : undefined;
-  return {portList, ...other};
+
+  const getPortList = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryPortList({...options, variables: {id}}),
+    [queryPortList],
+  );
+  return [getPortList, {...other, portList}];
 };
