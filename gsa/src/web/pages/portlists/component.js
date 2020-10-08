@@ -21,6 +21,8 @@ import _ from 'gmp/locale';
 
 import {parseInt} from 'gmp/parser';
 
+import {parsePortRangeType} from 'gmp/models/portlist';
+
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
@@ -34,7 +36,12 @@ import EntityComponent from 'web/entity/component';
 import ImportPortListDialog from './importdialog';
 import PortListsDialog from './dialog';
 import PortRangeDialog from './portrangedialog';
-import {useCreatePortList, useModifyPortList} from 'web/graphql/portlists';
+import {
+  useCreatePortList,
+  useModifyPortList,
+  useCreatePortRange,
+  useDeletePortRange,
+} from 'web/graphql/portlists';
 
 const PortListComponent = ({
   children,
@@ -62,6 +69,8 @@ const PortListComponent = ({
 
   const [createPortList] = useCreatePortList();
   const [modifyPortList] = useModifyPortList();
+  const [createPortRange] = useCreatePortRange();
+  const [deletePortRange] = useDeletePortRange();
 
   const [createdPortRanges, setCreatedPortRanges] = useState([]);
   const [deletedPortRanges, setDeletedPortRanges] = useState([]);
@@ -172,10 +181,14 @@ const PortListComponent = ({
     });
   };
 
-  const handleSavePortRange = data => {
-    return gmp.portlist
-      .createPortRange(data)
-      .then(response => response.data.id);
+  const handleSavePortRange = ({id, start, end, protocol_type}) => {
+    const portRangeType = parsePortRangeType(protocol_type);
+    return createPortRange({
+      portListId: id,
+      start,
+      end,
+      portRangeType,
+    }).then(response => response.data.createPortRange.id);
   };
 
   const handleImportPortList = data => {
