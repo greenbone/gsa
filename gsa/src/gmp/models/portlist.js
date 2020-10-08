@@ -22,6 +22,17 @@ import Model, {parseModelFromElement} from '../model';
 
 import {parseInt, parseBoolean} from '../parser';
 
+export const parsePortRangeType = type => {
+  switch (type) {
+    case 'tcp':
+      return 'TCP';
+    case 'udp':
+      return 'UDP';
+    default:
+      _('Unknown type ({{type}})', {type});
+  }
+};
+
 class PortRange extends Model {
   static entityType = 'portrange';
 
