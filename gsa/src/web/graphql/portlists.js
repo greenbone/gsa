@@ -174,3 +174,43 @@ export const useDeletePortRange = options => {
   );
   return [deletePortRange, data];
 };
+
+export const GET_PORT_LIST = gql`
+  query PortList($id: UUID!) {
+    portList(id: $id) {
+      name
+      id
+      owner
+      creationTime
+      modificationTime
+      writable
+      inUse
+      portCount {
+        all
+        tcp
+        udp
+      }
+      portRanges {
+        id
+        start
+        end
+        protocolType
+      }
+      targets {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const useGetPortList = (id, options) => {
+  const {data, ...other} = useLazyQuery(GET_PORT_LIST, {
+    ...options,
+    variables: {id},
+  });
+  const portList = isDefined(data?.portList)
+    ? PortList.fromObject(data.portList)
+    : undefined;
+  return {portList, ...other};
+};
