@@ -196,10 +196,6 @@ export const GET_PORT_LIST = gql`
         end
         protocolType
       }
-      targets {
-        id
-        name
-      }
     }
   }
 `;

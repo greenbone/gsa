@@ -41,6 +41,7 @@ import {
   useModifyPortList,
   useCreatePortRange,
   useDeletePortRange,
+  useLazyGetPortList,
 } from 'web/graphql/portlists';
 
 const PortListComponent = ({
@@ -71,6 +72,7 @@ const PortListComponent = ({
   const [modifyPortList] = useModifyPortList();
   const [createPortRange] = useCreatePortRange();
   const [deletePortRange] = useDeletePortRange();
+  const [getPortList, {portList: fetchedPortList}] = useLazyGetPortList();
 
   const [createdPortRanges, setCreatedPortRanges] = useState([]);
   const [deletedPortRanges, setDeletedPortRanges] = useState([]);
@@ -171,14 +173,15 @@ const PortListComponent = ({
     handleInteraction();
   };
 
-  const handleDeletePortRange = range => {
-    return gmp.portlist.deletePortRange(range).then(response => {
-      const {data} = response;
-      dispatch({
-        type: 'setState',
-        newState: {portList: data},
+  const handleDeletePortRange = ({id: portRangeId}) => {
+    return deletePortRange(portRangeId)
+      .then(() => getPortList(id))
+      .then(() => {
+        dispatch({
+          type: 'setState',
+          newState: {portList: fetchedPortList},
+        });
       });
-    });
   };
 
   const handleSavePortRange = ({id, start, end, protocol_type}) => {
