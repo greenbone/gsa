@@ -21,11 +21,11 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
+import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
+
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {hasId} from 'gmp/utils/id';
-
-import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
@@ -122,7 +122,7 @@ class ScannerComponent extends React.Component {
           scanner: undefined,
           scannerDialogVisible: true,
           title: undefined,
-          type: GMP_SCANNER_TYPE,
+          type: OSP_SCANNER_TYPE,
           which_cert: undefined,
         }),
       );
@@ -138,18 +138,13 @@ class ScannerComponent extends React.Component {
     this.handleInteraction();
   }
 
-  openCredentialsDialog(type) {
-    const base =
-      type === GMP_SCANNER_TYPE
-        ? USERNAME_PASSWORD_CREDENTIAL_TYPE
-        : CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
-
+  openCredentialsDialog() {
     this.handleInteraction();
 
     this.setState({
-      base,
+      base: CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
       credentialDialogVisible: true,
-      credentialTypes: [base],
+      credentialTypes: [CLIENT_CERTIFICATE_CREDENTIAL_TYPE],
     });
   }
 
@@ -420,10 +415,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(ScannerComponent);
 
 // vim: set ts=2 sw=2 tw=80:
