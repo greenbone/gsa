@@ -28,7 +28,6 @@ import Scanner, {
   CVE_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {testModel} from 'gmp/models/testing';
@@ -188,41 +187,35 @@ describe('Scanner model tests', () => {
   test('isClonable() should return correct true/false', () => {
     const elem1 = {type: CVE_SCANNER_TYPE};
     const elem2 = {type: OPENVAS_SCANNER_TYPE};
-    const elem3 = {type: GMP_SCANNER_TYPE};
-    const elem4 = {type: OSP_SCANNER_TYPE};
-    const elem5 = {type: GREENBONE_SENSOR_SCANNER_TYPE};
+    const elem3 = {type: OSP_SCANNER_TYPE};
+    const elem4 = {type: GREENBONE_SENSOR_SCANNER_TYPE};
 
     const scanner1 = Scanner.fromElement(elem1);
     const scanner2 = Scanner.fromElement(elem2);
     const scanner3 = Scanner.fromElement(elem3);
     const scanner4 = Scanner.fromElement(elem4);
-    const scanner5 = Scanner.fromElement(elem5);
 
     expect(scanner1.isClonable()).toEqual(false);
     expect(scanner2.isClonable()).toEqual(false);
     expect(scanner3.isClonable()).toEqual(true);
     expect(scanner4.isClonable()).toEqual(true);
-    expect(scanner5.isClonable()).toEqual(true);
   });
 
   test('isWritable() should return correct true/false', () => {
     const elem1 = {type: CVE_SCANNER_TYPE};
     const elem2 = {type: OPENVAS_SCANNER_TYPE};
-    const elem3 = {type: GMP_SCANNER_TYPE};
-    const elem4 = {type: OSP_SCANNER_TYPE};
-    const elem5 = {type: GREENBONE_SENSOR_SCANNER_TYPE};
+    const elem3 = {type: OSP_SCANNER_TYPE};
+    const elem4 = {type: GREENBONE_SENSOR_SCANNER_TYPE};
 
     const scanner1 = Scanner.fromElement(elem1);
     const scanner2 = Scanner.fromElement(elem2);
     const scanner3 = Scanner.fromElement(elem3);
     const scanner4 = Scanner.fromElement(elem4);
-    const scanner5 = Scanner.fromElement(elem5);
 
     expect(scanner1.isClonable()).toEqual(false);
     expect(scanner2.isClonable()).toEqual(false);
     expect(scanner3.isClonable()).toEqual(true);
     expect(scanner4.isClonable()).toEqual(true);
-    expect(scanner5.isClonable()).toEqual(true);
   });
 
   test('hasUnixSocket() should return correct true/false', () => {
@@ -241,14 +234,14 @@ describe('Scanner model function tests', () => {
     const type1 = scannerTypeName(OSP_SCANNER_TYPE);
     const type2 = scannerTypeName(OPENVAS_SCANNER_TYPE);
     const type3 = scannerTypeName(CVE_SCANNER_TYPE);
-    const type4 = scannerTypeName(GMP_SCANNER_TYPE);
+    const type4 = scannerTypeName(4);
     const type5 = scannerTypeName(GREENBONE_SENSOR_SCANNER_TYPE);
     const type6 = scannerTypeName(42);
 
     expect(type1).toEqual('OSP Scanner');
     expect(type2).toEqual('OpenVAS Scanner');
     expect(type3).toEqual('CVE Scanner');
-    expect(type4).toEqual('GMP Scanner');
+    expect(type4).toEqual('Unknown type (4)');
     expect(type5).toEqual('Greenbone Sensor');
     expect(type6).toEqual('Unknown type (42)');
   });
