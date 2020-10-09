@@ -22,13 +22,13 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
-import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 setLocale('en');
 
