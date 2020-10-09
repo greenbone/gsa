@@ -36,7 +36,6 @@ import {
   ospScannersFilter,
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 
@@ -881,8 +880,7 @@ const mapStateToProps = rootState => {
     ? scannerList.filter(
         scanner =>
           scanner.scannerType === OPENVAS_SCANNER_TYPE ||
-          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE ||
-          scanner.scannerType === GMP_SCANNER_TYPE,
+          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
       )
     : undefined;
 
