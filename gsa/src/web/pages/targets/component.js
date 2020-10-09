@@ -22,12 +22,16 @@ import React, {useState} from 'react';
 import _ from 'gmp/locale';
 
 import {ALL_FILTER} from 'gmp/models/filter';
+import {
+  convertCredentialTypeEnum,
+  convertAuthAlgorithmEnum,
+  convertPrivacyAlgorithmEnum,
+} from 'gmp/models/credential';
 
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes.js';
-import useGmp from 'web/utils/useGmp';
 import {UNSET_VALUE} from 'web/utils/render.js';
 
 import EntityComponent from 'web/entity/component.js';
@@ -38,7 +42,10 @@ import PortListDialog from 'web/pages/portlists/dialog.js';
 
 import TargetDialog from './dialog.js';
 
-import {useLazyGetCredentials} from 'web/graphql/credentials';
+import {
+  useCreateCredential,
+  useLazyGetCredentials,
+} from 'web/graphql/credentials';
 
 import {useLazyGetPortLists, useCreatePortList} from 'web/graphql/portlists';
 
@@ -53,11 +60,10 @@ const id_or__ = value => {
 };
 
 const TargetComponent = props => {
-  const gmp = useGmp();
-
   const [createTarget] = useCreateTarget();
   const [modifyTarget] = useModifyTarget();
   const [createPortList] = useCreatePortList();
+  const [createCredential] = useCreateCredential();
 
   const [
     loadCredentials,
@@ -210,22 +216,28 @@ const TargetComponent = props => {
   };
 
   const handleCreateCredential = data => {
-    let credential_id;
-
     handleInteraction();
 
-    return gmp.credential
-      .create(data)
-      .then(response => {
-        const {data: credential} = response;
-
-        credential_id = credential.id;
-        closeCredentialsDialog();
-        return loadCredentials();
+    return readFileToText(data.private_key)
+      .then(privateKey => {
+        return createCredential({
+          allowInsecure: data.allow_insecure,
+          authAlgorithm: convertAuthAlgorithmEnum(data.auth_algorithm),
+          comment: data.comment,
+          community: data.community,
+          login: data.credential_login,
+          name: data.name,
+          keyPhrase: data.passphrase,
+          password: data.password,
+          privacyAlgorithm: convertPrivacyAlgorithmEnum(data.privacy_algorithm),
+          privacyPassword: data.privacy_password,
+          privateKey: privateKey,
+          type: convertCredentialTypeEnum(data.credential_type),
+        });
       })
-      .then(credentials => {
-        setIdField(credential_id);
-        refetchCredentials();
+      .then(() => {
+        closeCredentialsDialog();
+        return refetchCredentials();
       });
   };
 
