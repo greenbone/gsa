@@ -33,7 +33,6 @@ import Comment from 'web/components/comment/comment';
 
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ProvideViewIcon from 'web/components/icon/provideviewicon';
-import SensorIcon from 'web/components/icon/sensoricon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
@@ -80,7 +79,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const {scanner, observers} = entity;
+  const {observers} = entity;
 
   const obs = [];
 

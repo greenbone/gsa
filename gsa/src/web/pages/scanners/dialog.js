@@ -58,10 +58,7 @@ import {
   scannerTypeName,
 } from 'gmp/models/scanner';
 
-import {
-  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from 'gmp/models/credential';
+import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
 const AVAILABLE_SCANNER_TYPES = [
   OSP_SCANNER_TYPE,
@@ -70,10 +67,6 @@ const AVAILABLE_SCANNER_TYPES = [
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
-};
-
-const username_password_credentials_filter = credential => {
-  return credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
 };
 
 const render_certificate_info = (info, tz) => {

@@ -24,7 +24,7 @@ import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import Scanner, {OSP_SCANNER_TYPE, GMP_SCANNER_TYPE} from 'gmp/models/scanner';
+import Scanner, {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
