@@ -54,7 +54,6 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 
 import {
   OSP_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
@@ -66,7 +65,6 @@ import {
 
 const AVAILABLE_SCANNER_TYPES = [
   OSP_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 ];
 
@@ -76,14 +74,6 @@ const client_cert_credentials_filter = credential => {
 
 const username_password_credentials_filter = credential => {
   return credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
-};
-
-const filter_credentials = (credentials, type) => {
-  const cred_filter =
-    type === GMP_SCANNER_TYPE
-      ? username_password_credentials_filter
-      : client_cert_credentials_filter;
-  return filter(credentials, cred_filter);
 };
 
 const render_certificate_info = (info, tz) => {
@@ -148,7 +138,10 @@ const ScannerDialog = ({
   const handleTypeChange = (value, name) => {
     if (onScannerTypeChange) {
       value = parseInt(value);
-      const scan_credentials = filter_credentials(credentials, value);
+      const scan_credentials = filter(
+        credentials,
+        client_cert_credentials_filter,
+      );
 
       onScannerTypeChange(value, name);
       onScannerTypeChange(
@@ -173,13 +166,9 @@ const ScannerDialog = ({
   const {gmp} = props;
 
   if (gmp.settings.enableGreenboneSensor) {
-    SCANNER_TYPES = [
-      GMP_SCANNER_TYPE,
-      OSP_SCANNER_TYPE,
-      GREENBONE_SENSOR_SCANNER_TYPE,
-    ];
+    SCANNER_TYPES = [OSP_SCANNER_TYPE, GREENBONE_SENSOR_SCANNER_TYPE];
   } else {
-    SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
+    SCANNER_TYPES = [OSP_SCANNER_TYPE];
   }
 
   let {credential_id} = props;
@@ -189,7 +178,10 @@ const ScannerDialog = ({
     value: scannerType,
   }));
 
-  const scanner_credentials = filter_credentials(credentials, type);
+  const scanner_credentials = filter(
+    credentials,
+    client_cert_credentials_filter,
+  );
   const is_edit = isDefined(scanner);
   const isInUse = isDefined(scanner) && scanner.isInUse();
   const show_cred_info =

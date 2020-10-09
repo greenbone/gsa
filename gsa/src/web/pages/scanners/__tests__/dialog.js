@@ -45,18 +45,6 @@ const ospScanner = {
   port: '1357',
 };
 
-const gmpScanner = {
-  _id: '1234',
-  ca_pub: '',
-  name: 'john',
-  credential: {
-    _id: '2345',
-  },
-  comment: 'lorem ipsum amet',
-  type: GMP_SCANNER_TYPE,
-  host: 'mypc',
-};
-
 const cred1 = Credential.fromElement({
   _id: '5678',
   name: 'foo',
@@ -195,7 +183,7 @@ describe('ScannerDialog component tests', () => {
   });
 
   test('should save valid form state', () => {
-    const scanner = Scanner.fromElement(gmpScanner);
+    const scanner = Scanner.fromElement(ospScanner);
 
     const handleClose = jest.fn();
     const handleCredentialChange = jest.fn();
@@ -229,9 +217,9 @@ describe('ScannerDialog component tests', () => {
       ca_pub: undefined,
       host: 'mypc',
       name: 'john',
-      comment: 'lorem ipsum amet',
-      credential_id: '2345',
-      type: 4,
+      comment: 'lorem ipsum',
+      credential_id: '5678',
+      type: 1,
       id: '1234',
       port: '9391',
       which_cert: undefined,
@@ -239,7 +227,7 @@ describe('ScannerDialog component tests', () => {
   });
 
   test('should change fields in create dialog', () => {
-    const scanner = Scanner.fromElement(gmpScanner);
+    const scanner = Scanner.fromElement(ospScanner);
 
     const handleClose = jest.fn();
     const handleCredentialChange = jest.fn();
@@ -268,7 +256,7 @@ describe('ScannerDialog component tests', () => {
     const inputs = baseElement.querySelectorAll('input');
 
     expect(inputs[0]).toHaveAttribute('value', 'john');
-    expect(inputs[1]).toHaveAttribute('value', 'lorem ipsum amet');
+    expect(inputs[1]).toHaveAttribute('value', 'lorem ipsum');
 
     const nameInput = getByName('name');
     fireEvent.change(nameInput, {target: {value: 'ipsum'}});
@@ -284,8 +272,8 @@ describe('ScannerDialog component tests', () => {
       host: 'mypc',
       name: 'ipsum',
       comment: 'lorem',
-      credential_id: '2345',
-      type: 4,
+      credential_id: '5678',
+      type: 1,
       id: '1234',
       port: '9391',
       which_cert: undefined,
