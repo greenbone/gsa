@@ -22,13 +22,13 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import Task, {TASK_STATUS} from 'gmp/models/task';
-import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 setLocale('en');
 
@@ -172,7 +172,11 @@ describe('Task Row tests', () => {
       last_report: lastReport,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
-      scanner: {_id: 'id', name: 'scanner', type: GMP_SCANNER_TYPE},
+      scanner: {
+        _id: 'id',
+        name: 'scanner',
+        type: GREENBONE_SENSOR_SCANNER_TYPE,
+      },
       observers: {
         __text: 'anon nymous',
         role: [{name: 'lorem'}],
