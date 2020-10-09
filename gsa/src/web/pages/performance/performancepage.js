@@ -28,10 +28,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
-import {
-  GMP_SCANNER_TYPE,
-  GREENBONE_SENSOR_SCANNER_TYPE,
-} from 'gmp/models/scanner';
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
@@ -328,20 +325,16 @@ class PerformancePage extends React.Component {
               </Divider>
             </FormGroup>
 
-            <FormGroup
-              title={
-                gmp.settings.enableGreenboneSensor
-                  ? _('Report for GMP Scanner or Greenbone Sensor')
-                  : _('Report for GMP Scanner')
-              }
-            >
-              <Select
-                name="scannerId"
-                value={sensorId}
-                items={renderSelectItems(scanners, 0)}
-                onChange={this.handleValueChange}
-              />
-            </FormGroup>
+            {gmp.settings.enableGreenboneSensor && (
+              <FormGroup title={_('Report for Greenbone Sensor')}>
+                <Select
+                  name="scannerId"
+                  value={sensorId}
+                  items={renderSelectItems(scanners, 0)}
+                  onChange={this.handleValueChange}
+                />
+              </FormGroup>
+            )}
 
             {reports.map(report => (
               <div key={report.name}>
@@ -376,10 +369,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
 
   if (gmp.settings.enableGreenboneSensor) {
     SLAVE_SCANNER_FILTER = Filter.fromString(
-      'type=' + GMP_SCANNER_TYPE + ' type=' + GREENBONE_SENSOR_SCANNER_TYPE,
+      'type=' + GREENBONE_SENSOR_SCANNER_TYPE,
     );
   } else {
-    SLAVE_SCANNER_FILTER = Filter.fromString('type=' + GMP_SCANNER_TYPE);
+    SLAVE_SCANNER_FILTER = Filter.fromString('');
   }
 
   return {
@@ -393,10 +386,10 @@ const mapStateToProps = (rootState, {gmp}) => {
 
   if (gmp.settings.enableGreenboneSensor) {
     SLAVE_SCANNER_FILTER = Filter.fromString(
-      'type=' + GMP_SCANNER_TYPE + ' type=' + GREENBONE_SENSOR_SCANNER_TYPE,
+      'type=' + GREENBONE_SENSOR_SCANNER_TYPE,
     );
   } else {
-    SLAVE_SCANNER_FILTER = Filter.fromString('type=' + GMP_SCANNER_TYPE);
+    SLAVE_SCANNER_FILTER = Filter.fromString('');
   }
   const select = scannerSelector(rootState);
   return {
@@ -407,10 +400,7 @@ const mapStateToProps = (rootState, {gmp}) => {
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(PerformancePage);
 
 // vim: set ts=2 sw=2 tw=80:
