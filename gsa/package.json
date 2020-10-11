@@ -44,7 +44,7 @@
     "graphql": "^14.7.0",
     "history": "^4.10.1",
     "hoist-non-react-statics": "^3.3.2",
-    "i18next": "^19.7.0",
+    "i18next": "^19.8.2",
     "i18next-xhr-backend": "3.2.2",
     "ical.js": "^1.4.0",
     "memoize-one": "^5.1.1",
