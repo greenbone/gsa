@@ -89,7 +89,7 @@ const useFormValidation = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formValues, dependencies]);
 
-  const handleSubmit = vals => {
+  const handleSubmit = values => {
     setShouldWarn(true);
 
     const hasErrorInState = Object.keys(formValues).some(key => {
@@ -104,7 +104,7 @@ const useFormValidation = (
       );
     } else {
       // eslint-disable-next-line callback-return
-      return onValidationSuccess(vals); // if nothing is wrong, call onSave
+      return onValidationSuccess(values); // if nothing is wrong, call onSave
     }
   };
 
