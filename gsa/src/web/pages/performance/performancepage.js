@@ -371,8 +371,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     SLAVE_SCANNER_FILTER = Filter.fromString(
       'type=' + GREENBONE_SENSOR_SCANNER_TYPE,
     );
-  } else {
-    SLAVE_SCANNER_FILTER = Filter.fromString('');
   }
 
   return {
@@ -388,8 +386,6 @@ const mapStateToProps = (rootState, {gmp}) => {
     SLAVE_SCANNER_FILTER = Filter.fromString(
       'type=' + GREENBONE_SENSOR_SCANNER_TYPE,
     );
-  } else {
-    SLAVE_SCANNER_FILTER = Filter.fromString('');
   }
   const select = scannerSelector(rootState);
   return {
