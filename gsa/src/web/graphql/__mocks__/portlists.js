@@ -68,7 +68,7 @@ const createPortRangeResult = {
 };
 
 export const createCreatePortRangeQueryMock = () =>
-  createGenericQueryMock(CREATE_PORT_RANGE, createPortrangeResult, {
+  createGenericQueryMock(CREATE_PORT_RANGE, createPortRangeResult, {
     input: createPortRangeInput,
   });
 

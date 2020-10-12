@@ -26,6 +26,7 @@ import {
   useCreatePortList,
   useModifyPortList,
   useDeletePortRange,
+  useCreatePortRange,
 } from '../portlists';
 import {
   createGetPortListsQueryMock,
@@ -37,6 +38,37 @@ import {
   createCreatePortRangeQueryMock,
   createPortRangeInput,
 } from '../__mocks__/portlists';
+
+const CreatePortRangeComponent = () => {
+  const [createPortRange, {id: portRangeId}] = useCreatePortRange();
+  return (
+    <div>
+      {portRangeId && <span data-testid="portRange">{portRangeId}</span>}
+      <button
+        data-testid="create"
+        onClick={() => createPortRange(createPortRangeInput)}
+      />
+    </div>
+  );
+};
+
+describe('useCreatePortRange tests', () => {
+  test('should create a port range after user interaction', async () => {
+    const [mock, resultFunc] = createCreatePortRangeQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CreatePortRangeComponent />);
+
+    const button = screen.getByTestId('create');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('portRange')).toHaveTextContent('34567');
+  });
+});
 
 const DeletePortRangeComponent = () => {
   const [deletePortRange] = useDeletePortRange();
