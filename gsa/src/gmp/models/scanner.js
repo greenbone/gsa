@@ -52,8 +52,6 @@ export function scannerTypeInt(scannerType) {
     return OPENVAS_SCANNER_TYPE;
   } else if (scannerType === 'CVE_SCANNER_TYPE') {
     return CVE_SCANNER_TYPE;
-  } else if (scannerType === 'GMP_SCANNER_TYPE') {
-    return GMP_SCANNER_TYPE;
   } else if (scannerType === 'GREENBONE_SENSOR_SCANNER_TYPE') {
     return GREENBONE_SENSOR_SCANNER_TYPE;
   }

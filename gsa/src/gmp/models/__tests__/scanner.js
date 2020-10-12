@@ -314,8 +314,8 @@ describe('Scanner model tests', () => {
 
     const object1 = {type: 'CVE_SCANNER_TYPE'};
     const object2 = {type: 'OPENVAS_SCANNER_TYPE'};
-    const object4 = {type: 'OSP_SCANNER_TYPE'};
-    const object5 = {type: 'GREENBONE_SENSOR_SCANNER_TYPE'};
+    const object3 = {type: 'OSP_SCANNER_TYPE'};
+    const object4 = {type: 'GREENBONE_SENSOR_SCANNER_TYPE'};
 
     scanner1 = Scanner.fromObject(object1);
     scanner2 = Scanner.fromObject(object2);
