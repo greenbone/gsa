@@ -83,7 +83,7 @@ const useFormValidation = (
   };
 
   useEffect(() => {
-    Object.keys(formValues).forEach(key => {
+    Object.keys(validationSchema).forEach(key => {
       validate(formValues[key], key, dependencies);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
