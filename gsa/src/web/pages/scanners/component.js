@@ -21,12 +21,9 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {
-  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from 'gmp/models/credential';
+import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
-import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
+import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -84,13 +81,8 @@ const ScannerComponent = ({
   );
 
   // eslint-disable-next-line no-shadow
-  const openCredentialsDialog = useCallback(scannerType => {
-    const credentialType =
-      scannerType === GMP_SCANNER_TYPE
-        ? USERNAME_PASSWORD_CREDENTIAL_TYPE
-        : CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
-
-    setCredentialTypes([credentialType]);
+  const openCredentialsDialog = useCallback(() => {
+    setCredentialTypes([CLIENT_CERTIFICATE_CREDENTIAL_TYPE]);
     setCredentialDialogVisible(true);
   }, []);
 
@@ -278,7 +270,7 @@ const ScannerComponent = ({
             id: undefined,
             name: undefined,
             port: undefined,
-            type: GMP_SCANNER_TYPE,
+            type: OSP_SCANNER_TYPE,
             title: undefined, // use default title from dialog
             whichCert: undefined,
             visible: true,

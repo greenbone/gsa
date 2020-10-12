@@ -52,10 +52,7 @@ import Actions from './actions';
 import TaskStatus from './status';
 import Trend from './trend';
 
-import {
-  GMP_SCANNER_TYPE,
-  GREENBONE_SENSOR_SCANNER_TYPE,
-} from 'gmp/models/scanner';
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 export const renderReport = (report, links) => {
   if (!hasValue(report)) {
@@ -135,9 +132,8 @@ const Row = ({
             {entity.alterable === 1 && (
               <AlterableIcon size="small" title={_('Task is alterable')} />
             )}
-            {hasValue(scanner) &&
-              (scanner.scannerType === GMP_SCANNER_TYPE ||
-                scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE) && (
+            {isDefined(scanner) &&
+              scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE && (
                 <SensorIcon
                   size="small"
                   title={_('Task is configured to run on sensor {{name}}', {

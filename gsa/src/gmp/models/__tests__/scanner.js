@@ -28,7 +28,6 @@ import Scanner, {
   CVE_SCANNER_TYPE,
   OPENVAS_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 import {testModel} from 'gmp/models/testing';
@@ -262,83 +261,71 @@ describe('Scanner model tests', () => {
   });
 
   test('isClonable() should return correct true/false', () => {
-    const elem1 = {type: CVE_SCANNER_TYPE};
-    const elem2 = {type: OPENVAS_SCANNER_TYPE};
-    const elem3 = {type: GMP_SCANNER_TYPE};
-    const elem4 = {type: OSP_SCANNER_TYPE};
-    const elem5 = {type: GREENBONE_SENSOR_SCANNER_TYPE};
-
-    let scanner1 = Scanner.fromElement(elem1);
-    let scanner2 = Scanner.fromElement(elem2);
-    let scanner3 = Scanner.fromElement(elem3);
-    let scanner4 = Scanner.fromElement(elem4);
-    let scanner5 = Scanner.fromElement(elem5);
-
-    expect(scanner1.isClonable()).toEqual(false);
-    expect(scanner2.isClonable()).toEqual(false);
-    expect(scanner3.isClonable()).toEqual(true);
-    expect(scanner4.isClonable()).toEqual(true);
-    expect(scanner5.isClonable()).toEqual(true);
-
     // Hyperion
 
     const object1 = {type: 'CVE_SCANNER_TYPE'};
     const object2 = {type: 'OPENVAS_SCANNER_TYPE'};
-    const object3 = {type: 'GMP_SCANNER_TYPE'};
-    const object4 = {type: 'OSP_SCANNER_TYPE'};
-    const object5 = {type: 'GREENBONE_SENSOR_SCANNER_TYPE'};
+    const object3 = {type: 'OSP_SCANNER_TYPE'};
+    const object4 = {type: 'GREENBONE_SENSOR_SCANNER_TYPE'};
 
-    scanner1 = Scanner.fromObject(object1);
-    scanner2 = Scanner.fromObject(object2);
-    scanner3 = Scanner.fromObject(object3);
-    scanner4 = Scanner.fromObject(object4);
-    scanner5 = Scanner.fromObject(object5);
+    let scanner1 = Scanner.fromObject(object1);
+    let scanner2 = Scanner.fromObject(object2);
+    let scanner3 = Scanner.fromObject(object3);
+    let scanner4 = Scanner.fromObject(object4);
 
     expect(scanner1.isClonable()).toEqual(false);
     expect(scanner2.isClonable()).toEqual(false);
     expect(scanner3.isClonable()).toEqual(true);
     expect(scanner4.isClonable()).toEqual(true);
-    expect(scanner5.isClonable()).toEqual(true);
+
+    const elem1 = {type: CVE_SCANNER_TYPE};
+    const elem2 = {type: OPENVAS_SCANNER_TYPE};
+    const elem3 = {type: OSP_SCANNER_TYPE};
+    const elem4 = {type: GREENBONE_SENSOR_SCANNER_TYPE};
+
+    scanner1 = Scanner.fromElement(elem1);
+    scanner2 = Scanner.fromElement(elem2);
+    scanner3 = Scanner.fromElement(elem3);
+    scanner4 = Scanner.fromElement(elem4);
+
+    expect(scanner1.isClonable()).toEqual(false);
+    expect(scanner2.isClonable()).toEqual(false);
+    expect(scanner3.isClonable()).toEqual(true);
+    expect(scanner4.isClonable()).toEqual(true);
   });
 
   test('isWritable() should return correct true/false', () => {
     const elem1 = {type: CVE_SCANNER_TYPE};
     const elem2 = {type: OPENVAS_SCANNER_TYPE};
-    const elem3 = {type: GMP_SCANNER_TYPE};
-    const elem4 = {type: OSP_SCANNER_TYPE};
-    const elem5 = {type: GREENBONE_SENSOR_SCANNER_TYPE};
+    const elem3 = {type: OSP_SCANNER_TYPE};
+    const elem4 = {type: GREENBONE_SENSOR_SCANNER_TYPE};
 
     let scanner1 = Scanner.fromElement(elem1);
     let scanner2 = Scanner.fromElement(elem2);
     let scanner3 = Scanner.fromElement(elem3);
     let scanner4 = Scanner.fromElement(elem4);
-    let scanner5 = Scanner.fromElement(elem5);
 
-    expect(scanner1.isClonable()).toEqual(false);
-    expect(scanner2.isClonable()).toEqual(false);
-    expect(scanner3.isClonable()).toEqual(true);
-    expect(scanner4.isClonable()).toEqual(true);
-    expect(scanner5.isClonable()).toEqual(true);
+    expect(scanner1.isWritable()).toEqual(false);
+    expect(scanner2.isWritable()).toEqual(false);
+    expect(scanner3.isWritable()).toEqual(true);
+    expect(scanner4.isWritable()).toEqual(true);
 
     // Hyperion
 
     const object1 = {type: 'CVE_SCANNER_TYPE'};
     const object2 = {type: 'OPENVAS_SCANNER_TYPE'};
-    const object3 = {type: 'GMP_SCANNER_TYPE'};
-    const object4 = {type: 'OSP_SCANNER_TYPE'};
-    const object5 = {type: 'GREENBONE_SENSOR_SCANNER_TYPE'};
+    const object3 = {type: 'OSP_SCANNER_TYPE'};
+    const object4 = {type: 'GREENBONE_SENSOR_SCANNER_TYPE'};
 
     scanner1 = Scanner.fromObject(object1);
     scanner2 = Scanner.fromObject(object2);
     scanner3 = Scanner.fromObject(object3);
     scanner4 = Scanner.fromObject(object4);
-    scanner5 = Scanner.fromObject(object5);
 
-    expect(scanner1.isClonable()).toEqual(false);
-    expect(scanner2.isClonable()).toEqual(false);
-    expect(scanner3.isClonable()).toEqual(true);
-    expect(scanner4.isClonable()).toEqual(true);
-    expect(scanner5.isClonable()).toEqual(true);
+    expect(scanner1.isWritable()).toEqual(false);
+    expect(scanner2.isWritable()).toEqual(false);
+    expect(scanner3.isWritable()).toEqual(true);
+    expect(scanner4.isWritable()).toEqual(true);
   });
 
   test('hasUnixSocket() should return correct true/false', () => {
@@ -366,14 +353,14 @@ describe('Scanner model function tests', () => {
     const type1 = scannerTypeName(OSP_SCANNER_TYPE);
     const type2 = scannerTypeName(OPENVAS_SCANNER_TYPE);
     const type3 = scannerTypeName(CVE_SCANNER_TYPE);
-    const type4 = scannerTypeName(GMP_SCANNER_TYPE);
+    const type4 = scannerTypeName(4);
     const type5 = scannerTypeName(GREENBONE_SENSOR_SCANNER_TYPE);
     const type6 = scannerTypeName(42);
 
     expect(type1).toEqual('OSP Scanner');
     expect(type2).toEqual('OpenVAS Scanner');
     expect(type3).toEqual('CVE Scanner');
-    expect(type4).toEqual('GMP Scanner');
+    expect(type4).toEqual('Unknown type (4)');
     expect(type5).toEqual('Greenbone Sensor');
     expect(type6).toEqual('Unknown type (42)');
   });

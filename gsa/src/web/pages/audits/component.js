@@ -36,7 +36,6 @@ import {withRouter} from 'react-router-dom';
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 
@@ -625,8 +624,7 @@ const mapStateToProps = (rootState, {match}) => {
     ? scannerList.filter(
         scanner =>
           scanner.scannerType === OPENVAS_SCANNER_TYPE ||
-          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE ||
-          scanner.scannerType === GMP_SCANNER_TYPE,
+          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
       )
     : undefined;
 
@@ -665,8 +663,5 @@ export default compose(
   withCapabilities,
   withDownload,
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProp,
-  ),
+  connect(mapStateToProps, mapDispatchToProp),
 )(AuditComponent);

@@ -22,7 +22,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
-import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -158,7 +158,11 @@ describe('Audit Row tests', () => {
       last_report: lastReport,
       permissions: {permission: [{name: 'everything'}]},
       target: {_id: 'id', name: 'target'},
-      scanner: {_id: 'id', name: 'scanner', type: GMP_SCANNER_TYPE},
+      scanner: {
+        _id: 'id',
+        name: 'scanner',
+        type: GREENBONE_SENSOR_SCANNER_TYPE,
+      },
       observers: {
         __text: 'anon nymous',
         role: [{name: 'lorem'}],
