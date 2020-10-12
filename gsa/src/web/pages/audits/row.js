@@ -44,7 +44,7 @@ import TableData from 'web/components/table/data';
 import Actions from './actions';
 import AuditStatus from 'web/pages/tasks/status';
 
-import {GMP_SCANNER_TYPE} from 'gmp/models/scanner';
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import ComplianceStatusBar from 'web/components/bar/compliancestatusbar';
 
@@ -109,14 +109,15 @@ const Row = ({
             {entity.alterable === 1 && (
               <AlterableIcon size="small" title={_('Audit is alterable')} />
             )}
-            {isDefined(scanner) && scanner.scannerType === GMP_SCANNER_TYPE && (
-              <SensorIcon
-                size="small"
-                title={_('Audit is configured to run on sensor {{name}}', {
-                  name: scanner.name,
-                })}
-              />
-            )}
+            {isDefined(scanner) &&
+              scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE && (
+                <SensorIcon
+                  size="small"
+                  title={_('Audit is configured to run on sensor {{name}}', {
+                    name: scanner.name,
+                  })}
+                />
+              )}
             <ObserverIcon
               displayName={_('Audit')}
               entity={entity}

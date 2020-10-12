@@ -30,10 +30,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import date from 'gmp/models/date';
 import Filter from 'gmp/models/filter';
-import {
-  GMP_SCANNER_TYPE,
-  GREENBONE_SENSOR_SCANNER_TYPE,
-} from 'gmp/models/scanner';
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
@@ -81,6 +78,10 @@ const DURATIONS = {
   month: DURATION_MONTH,
   year: DURATION_YEAR,
 };
+
+const SENSOR_SCANNER_FILTER = Filter.fromString(
+  'type=' + GREENBONE_SENSOR_SCANNER_TYPE,
+);
 
 const ToolBar = ({onDurationChangeClick}) => {
   return (
@@ -182,21 +183,10 @@ const PerformancePage = () => {
   const [duration, setDuration] = useState('day');
   const [scannerId, setScannerId] = useState(0);
 
-  const SLAVE_SCANNER_FILTER = gmp.settings.enableGreenboneSensor
-    ? Filter.fromString(
-        'type=' + GMP_SCANNER_TYPE + ' type=' + GREENBONE_SENSOR_SCANNER_TYPE,
-      )
-    : Filter.fromString('type=' + GMP_SCANNER_TYPE);
-  const scanners = sensorSelector.getEntities(SLAVE_SCANNER_FILTER) ?? [];
+  const scanners = sensorSelector.getEntities(SENSOR_SCANNER_FILTER) ?? [];
 
   const loadSensorScanners = useCallback(() => {
-    const slaveScannerFilter = gmp.settings.enableGreenboneSensor
-      ? Filter.fromString(
-          'type=' + GMP_SCANNER_TYPE + ' type=' + GREENBONE_SENSOR_SCANNER_TYPE,
-        )
-      : Filter.fromString('type=' + GMP_SCANNER_TYPE);
-
-    dispatch(loadScanners(gmp)(slaveScannerFilter));
+    dispatch(loadScanners(gmp)(SENSOR_SCANNER_FILTER));
   }, [dispatch, gmp]);
 
   const handleStartEndChange = useCallback(
@@ -330,20 +320,16 @@ const PerformancePage = () => {
             </Divider>
           </FormGroup>
 
-          <FormGroup
-            title={
-              gmp.settings.enableGreenboneSensor
-                ? _('Report for GMP Scanner or Greenbone Sensor')
-                : _('Report for GMP Scanner')
-            }
-          >
-            <Select
-              name="scannerId"
-              value={sensorId}
-              items={renderSelectItems(scanners, 0)}
-              onChange={handleSensorIdChange}
-            />
-          </FormGroup>
+          {gmp.settings.enableGreenboneSensor && (
+            <FormGroup title={_('Report for Greenbone Sensor')}>
+              <Select
+                name="scannerId"
+                value={sensorId}
+                items={renderSelectItems(scanners, 0)}
+                onChange={this.handleValueChange}
+              />
+            </FormGroup>
+          )}
 
           {reports.map(report => (
             <div key={report.name}>

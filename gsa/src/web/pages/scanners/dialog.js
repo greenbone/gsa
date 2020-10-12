@@ -25,15 +25,11 @@ import {longDate} from 'gmp/locale/date';
 
 import {
   OSP_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
 
-import {
-  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-} from 'gmp/models/credential';
+import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
 import {parseInt} from 'gmp/parser';
 
@@ -66,24 +62,11 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 
 const AVAILABLE_SCANNER_TYPES = [
   OSP_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 ];
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
-};
-
-const username_password_credentials_filter = credential => {
-  return credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
-};
-
-const filter_credentials = (credentials, type) => {
-  const cred_filter =
-    type === GMP_SCANNER_TYPE
-      ? username_password_credentials_filter
-      : client_cert_credentials_filter;
-  return filter(credentials, cred_filter);
 };
 
 const render_certificate_info = (info, tz) => {
@@ -150,9 +133,9 @@ const ScannerDialog = ({
     newScannerType => {
       if (onScannerTypeChange) {
         newScannerType = parseInt(newScannerType);
-        const scan_credentials = filter_credentials(
+        const scan_credentials = filter(
           credentials,
-          newScannerType,
+          client_cert_credentials_filter,
         );
         const credentialId = selectSaveId(scan_credentials, credential_id);
 
@@ -175,13 +158,9 @@ const ScannerDialog = ({
   let SCANNER_TYPES;
 
   if (gmp.settings.enableGreenboneSensor) {
-    SCANNER_TYPES = [
-      GMP_SCANNER_TYPE,
-      OSP_SCANNER_TYPE,
-      GREENBONE_SENSOR_SCANNER_TYPE,
-    ];
+    SCANNER_TYPES = [OSP_SCANNER_TYPE, GREENBONE_SENSOR_SCANNER_TYPE];
   } else {
-    SCANNER_TYPES = [GMP_SCANNER_TYPE, OSP_SCANNER_TYPE];
+    SCANNER_TYPES = [OSP_SCANNER_TYPE];
   }
 
   const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
@@ -189,7 +168,10 @@ const ScannerDialog = ({
     value: scannerType,
   }));
 
-  const scanner_credentials = filter_credentials(credentials, type);
+  const scanner_credentials = filter(
+    credentials,
+    client_cert_credentials_filter,
+  );
   const is_edit = isDefined(scanner);
   const isInUse = isDefined(scanner) && scanner.isInUse();
   const show_cred_info =
