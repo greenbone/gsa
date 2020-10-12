@@ -364,32 +364,21 @@ PerformancePage.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const SENSOR_SCANNER_FILTER = Filter.fromString(
+  'type=' + GREENBONE_SENSOR_SCANNER_TYPE,
+);
+
 const mapDispatchToProps = (dispatch, {gmp}) => {
-  let SLAVE_SCANNER_FILTER;
-
-  if (gmp.settings.enableGreenboneSensor) {
-    SLAVE_SCANNER_FILTER = Filter.fromString(
-      'type=' + GREENBONE_SENSOR_SCANNER_TYPE,
-    );
-  }
-
   return {
     onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-    loadScanners: () => dispatch(loadScanners(gmp)(SLAVE_SCANNER_FILTER)),
+    loadScanners: () => dispatch(loadScanners(gmp)(SENSOR_SCANNER_FILTER)),
   };
 };
 
-const mapStateToProps = (rootState, {gmp}) => {
-  let SLAVE_SCANNER_FILTER;
-
-  if (gmp.settings.enableGreenboneSensor) {
-    SLAVE_SCANNER_FILTER = Filter.fromString(
-      'type=' + GREENBONE_SENSOR_SCANNER_TYPE,
-    );
-  }
+const mapStateToProps = rootState => {
   const select = scannerSelector(rootState);
   return {
-    scanners: select.getEntities(SLAVE_SCANNER_FILTER),
+    scanners: select.getEntities(SENSOR_SCANNER_FILTER),
     timezone: getTimezone(rootState),
   };
 };
