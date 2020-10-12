@@ -93,7 +93,7 @@ const useFormValidation = (
     setShouldWarn(true);
 
     const hasErrorInState = Object.keys(formValues).some(key => {
-      return validityStatus[key].isValid === false;
+      return validityStatus[key]?.isValid === false;
     }, []); // checks if any field is invalid
 
     if (hasErrorInState) {
