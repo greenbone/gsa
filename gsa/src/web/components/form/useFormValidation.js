@@ -23,6 +23,8 @@ import styled from 'styled-components';
 
 import {_, _l} from 'gmp/locale/lang';
 
+import {isFunction} from 'gmp/utils/identity';
+
 import Theme from 'web/utils/theme';
 
 export const syncVariables = (values, formValues, dependencies = {}) => {
@@ -69,10 +71,15 @@ const useFormValidation = (
 
   // eslint-disable-next-line no-shadow
   const validate = (value, name, dependencies) => {
-    setValidityStatus(prevValidityStatus => ({
-      ...prevValidityStatus,
-      [name]: validationRules[name](value, dependencies),
-    }));
+    setValidityStatus(prevValidityStatus => {
+      const validationRule = validationRules[name];
+      return {
+        ...prevValidityStatus,
+        [name]: isFunction(validationRule)
+          ? validationRule(value, dependencies)
+          : undefined,
+      };
+    });
   };
 
   useEffect(() => {
