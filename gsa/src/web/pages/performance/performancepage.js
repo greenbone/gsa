@@ -326,7 +326,7 @@ const PerformancePage = () => {
                 name="scannerId"
                 value={sensorId}
                 items={renderSelectItems(scanners, 0)}
-                onChange={this.handleValueChange}
+                onChange={handleSensorIdChange}
               />
             </FormGroup>
           )}
