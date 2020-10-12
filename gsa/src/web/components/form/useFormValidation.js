@@ -17,7 +17,7 @@
  */
 import 'core-js/features/object/keys';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
 import styled from 'styled-components';
 
@@ -61,13 +61,13 @@ const useFormValidation = (
 
   const [validityStatus, setValidityStatus] = useState(validationSchema); // use the same shape as stateschema
 
-  const handleValueChange = (value, name) => {
+  const handleValueChange = useCallback((value, name) => {
     setFormValues(prevValues => ({...prevValues, [name]: value}));
-  };
+  }, []);
 
-  const handleDependencyChange = (value, name) => {
+  const handleDependencyChange = useCallback((value, name) => {
     setDependencies(prevValues => ({...prevValues, [name]: value}));
-  };
+  }, []);
 
   // eslint-disable-next-line no-shadow
   const validate = (value, name, dependencies) => {
