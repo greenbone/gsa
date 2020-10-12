@@ -25,6 +25,7 @@ import {
   useLazyGetPortLists,
   useCreatePortList,
   useModifyPortList,
+  useDeletePortRange,
 } from '../portlists';
 import {
   createGetPortListsQueryMock,
@@ -32,7 +33,33 @@ import {
   createPortListInput,
   modifyPortListInput,
   createModifyPortListQueryMock,
+  createDeletePortRangeQueryMock,
+  createCreatePortRangeQueryMock,
+  createPortRangeInput,
 } from '../__mocks__/portlists';
+
+const DeletePortRangeComponent = () => {
+  const [deletePortRange] = useDeletePortRange();
+  return (
+    <button data-testid="delete" onClick={() => deletePortRange('34567')} />
+  );
+};
+
+describe('useDeletePortRange tests', () => {
+  test('should delete a port range after user interaction', async () => {
+    const [mock, resultFunc] = createDeletePortRangeQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeletePortRangeComponent />);
+
+    const button = screen.getByTestId('delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
 
 const GetLazyPortListsComponent = () => {
   const [loadPortLists, {counts, loading, portLists}] = useLazyGetPortLists({

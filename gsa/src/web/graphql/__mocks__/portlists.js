@@ -18,7 +18,13 @@
 
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
-import {GET_PORT_LISTS, CREATE_PORT_LIST, MODIFY_PORT_LIST} from '../portlists';
+import {
+  GET_PORT_LISTS,
+  CREATE_PORT_LIST,
+  MODIFY_PORT_LIST,
+  CREATE_PORT_RANGE,
+  DELETE_PORT_RANGE,
+} from '../portlists';
 
 const portlist1 = deepFreeze({
   id: '12345',
@@ -47,6 +53,41 @@ const mockPortLists = {
     lastPageCursor: 'cG9ydGxpc3Q6Mw==',
   },
 };
+
+export const createPortRangeInput = {
+  portListId: '23456',
+  start: 13,
+  end: 24,
+  portRangeType: 'TCP',
+};
+
+const createPortRangeResult = {
+  createPortRange: {
+    id: '34567',
+  },
+};
+
+export const createCreatePortRangeQueryMock = () =>
+  createGenericQueryMock(CREATE_PORT_RANGE, createPortrangeResult, {
+    input: createPortRangeInput,
+  });
+
+const deletePortRangeInput = {
+  id: '34567',
+};
+
+const deletePortRangeResult = {
+  deletePortRange: {
+    ok: true,
+  },
+};
+
+export const createDeletePortRangeQueryMock = () =>
+  createGenericQueryMock(
+    DELETE_PORT_RANGE,
+    deletePortRangeResult,
+    deletePortRangeInput,
+  );
 
 export const createGetPortListsQueryMock = (filterString = 'foo') =>
   createGenericQueryMock(
