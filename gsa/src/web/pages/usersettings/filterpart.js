@@ -61,7 +61,6 @@ const FilterPart = ({
   ovalFilter,
   certBundFilter,
   dfnCertFilter,
-  secInfoFilter,
   filters = [],
   onChange,
 }) => {
@@ -355,14 +354,6 @@ const FilterPart = ({
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('SecInfo Filter')} titleSize="3">
-        <Select
-          name="secInfoFilter"
-          value={secInfoFilter}
-          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
-          onChange={onChange}
-        />
-      </FormGroup>
     </React.Fragment>
   );
 };
@@ -392,7 +383,6 @@ FilterPart.propTypes = {
   rolesFilter: PropTypes.string,
   scannersFilter: PropTypes.string,
   schedulesFilter: PropTypes.string,
-  secInfoFilter: PropTypes.string,
   tagsFilter: PropTypes.string,
   targetsFilter: PropTypes.string,
   tasksFilter: PropTypes.string,

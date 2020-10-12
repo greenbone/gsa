@@ -1433,7 +1433,6 @@
   "Search by content": "Suche nach Inhalt",
   "SecInfo": "Sicherheitsinfos",
   "SecInfo Displays": "SecInfo-Anzeigen",
-  "SecInfo Filter": "Alle-Sicherheitsinfos-Filter",
   "Secret Key": "Geheimer Schlüssel",
   "Security note: The SMB protocol does not offer a fingerprint to establish complete mutual trust. Thus a man-in-the-middle attack can not be fully prevented.": "Sicherheitshinweis: Das SMB-Protokoll bietet keinen Fingerprint an, um komplettes gegenseitiges Vertrauen herzustellen. Ein Man-in-the-Middle-Angriff kann somit nicht völlig ausgeschlossen werden.",
   "Select": "Auswählen",
