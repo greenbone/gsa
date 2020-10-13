@@ -175,6 +175,7 @@ class WizardCommand extends HttpCommand {
   }
 
   runQuickFirstScan(args) {
+    console.log(args);
     return this.httpPost({
       ...convert_data('event_data', args, event_data_quick_first_scan_fields),
       cmd: 'run_wizard',

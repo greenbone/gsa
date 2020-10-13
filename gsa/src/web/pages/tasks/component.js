@@ -74,6 +74,7 @@ import {
   useStartTask,
   useStopTask,
   useResumeTask,
+  useRunQuickFirstScan,
 } from 'web/graphql/tasks';
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
@@ -173,6 +174,7 @@ const TaskComponent = ({
   const [startTask] = useStartTask();
   const [stopTask] = useStopTask();
   const [resumeTask] = useResumeTask();
+  const [runQuickFirstScan] = useRunQuickFirstScan();
 
   // GraphQL Loaders and Data
   const [
@@ -595,8 +597,7 @@ const TaskComponent = ({
   const handleSaveTaskWizard = data => {
     handleInteraction();
 
-    return gmp.wizard
-      .runQuickFirstScan(data)
+    return runQuickFirstScan(data)
       .then(onTaskWizardSaved, onTaskWizardError)
       .then(() => closeTaskWizard());
   };

@@ -25,6 +25,8 @@ import Task from 'gmp/models/task';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import {CREATE_TARGET} from 'web/graphql/targets';
+
 export const CLONE_TASK = gql`
   mutation cloneTask($id: UUID!) {
     cloneTask(id: $id) {
@@ -537,4 +539,48 @@ export const useExportTasksByIds = options => {
   );
 
   return exportTasksByIds;
+};
+
+export const useRunQuickFirstScan = () => {
+  const [createTarget] = useMutation(CREATE_TARGET);
+
+  const [createTask] = useMutation(CREATE_TASK);
+
+  const [startTask] = useMutation(START_TASK);
+
+  const runQuickFirstScan = useCallback(
+    data => {
+      const {hosts} = data;
+      const targetInputObject = {
+        name: `Target for immediate scan of IP ${hosts}`,
+        hosts,
+        portListId: '33d0cd82-57c6-11e1-8ed1-406186ea4fc5',
+      };
+      return createTarget({
+        variables: {input: targetInputObject},
+      }).then(resp => {
+        const targetId = resp?.data?.createTarget?.id;
+
+        return createTask({
+          variables: {
+            input: {
+              name: `Immediate scan of IP ${hosts}`,
+              configId: 'daba56c8-73ec-11df-a475-002264764cea', // Full and Fast
+              targetId,
+              scannerId: '08b69003-5fc2-4037-a479-93b440211c73', // OpenVAS Default
+            },
+          },
+        }).then(resp => {
+          const taskId = resp?.data?.createTask?.id;
+
+          return startTask({variables: {id: taskId}}).then(
+            result => result.data.startTask.reportId,
+          );
+        });
+      });
+    },
+    [createTarget, createTask, startTask],
+  );
+
+  return [runQuickFirstScan];
 };
