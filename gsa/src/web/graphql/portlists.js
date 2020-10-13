@@ -200,20 +200,18 @@ export const GET_PORT_LIST = gql`
   }
 `;
 
-export const useLazyGetPortList = options => {
-  const [queryPortList, {data, ...other}] = useLazyQuery(
-    GET_PORT_LIST,
+export const useLazyGetPortList = (id, options) => {
+  const [queryPortList, {data, ...other}] = useLazyQuery(GET_PORT_LIST, {
+    variables: {
+      id,
+    },
     options,
-  );
+  });
 
   const portList = isDefined(data?.portList)
     ? PortList.fromObject(data.portList)
     : undefined;
 
-  const getPortList = useCallback(
-    // eslint-disable-next-line no-shadow
-    (id, options) => queryPortList({...options, variables: {id}}),
-    [queryPortList],
-  );
+  const getPortList = useCallback(id => queryPortList({id}), [queryPortList]);
   return [getPortList, {...other, portList}];
 };

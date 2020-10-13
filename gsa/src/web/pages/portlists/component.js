@@ -63,6 +63,7 @@ const PortListComponent = ({
   const gmp = useGmp();
 
   const [state, dispatch] = useReducer(reducer, {
+    id: undefined,
     importDialogVisible: false,
     portListDialogVisible: false,
     portRangeDialogVisible: false,
@@ -72,7 +73,9 @@ const PortListComponent = ({
   const [modifyPortList] = useModifyPortList();
   const [createPortRange] = useCreatePortRange();
   const [deletePortRange] = useDeletePortRange();
-  const [getPortList, {portList: fetchedPortList}] = useLazyGetPortList();
+
+  const {id} = state;
+  const [getPortList, {portList: fetchedPortList}] = useLazyGetPortList(id);
 
   const [createdPortRanges, setCreatedPortRanges] = useState([]);
   const [deletedPortRanges, setDeletedPortRanges] = useState([]);
@@ -350,7 +353,6 @@ const PortListComponent = ({
 
   const {
     comment,
-    id,
     importDialogVisible,
     name,
     portList,
