@@ -63,7 +63,7 @@ import reducer from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
 import useGmp from 'web/utils/useGmp';
-import readFileToText from 'web/utils/readFileToText.js';
+import readFileToText from 'web/utils/readFileToText';
 
 import CredentialsDialog from '../credentials/dialog';
 
