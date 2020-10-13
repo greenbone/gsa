@@ -51,7 +51,6 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  console.log(entity);
   const handleFilterChanged = () => {
     const filter = Filter.fromString('family="' + entity.family + '"');
     onFilterChanged(filter);

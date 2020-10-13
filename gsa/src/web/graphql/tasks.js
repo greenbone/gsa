@@ -553,40 +553,42 @@ export const useRunQuickFirstScan = () => {
   const [createTask] = useMutation(CREATE_TASK);
   const [startTask] = useMutation(START_TASK);
 
-  const date = dateTimeWithTimeZone(sessionTimeout, userTimezone);
-
   const runQuickFirstScan = useCallback(
     data => {
+      const date = dateTimeWithTimeZone(sessionTimeout, userTimezone);
+
       const {hosts} = data;
       const targetInputObject = {
         name: `Target for immediate scan of IP ${hosts} - ${date}`,
         hosts,
         portListId: '33d0cd82-57c6-11e1-8ed1-406186ea4fc5', // All IANA assigned TCP
       };
+
       return createTarget({
         variables: {input: targetInputObject},
       }).then(resp => {
         const targetId = resp?.data?.createTarget?.id;
 
+        const taskInputObject = {
+          name: `Immediate scan of IP ${hosts}`,
+          configId: 'daba56c8-73ec-11df-a475-002264764cea', // Full and Fast
+          targetId,
+          scannerId: '08b69003-5fc2-4037-a479-93b440211c73', // OpenVAS Default
+        };
+
         return createTask({
-          variables: {
-            input: {
-              name: `Immediate scan of IP ${hosts}`,
-              configId: 'daba56c8-73ec-11df-a475-002264764cea', // Full and Fast
-              targetId,
-              scannerId: '08b69003-5fc2-4037-a479-93b440211c73', // OpenVAS Default
-            },
-          },
+          variables: {input: taskInputObject},
         }).then(resp => {
+          // eslint-disable no-shadow
           const taskId = resp?.data?.createTask?.id;
 
           return startTask({variables: {id: taskId}}).then(
-            result => result.data.startTask.reportId,
+            result => result?.data?.startTask?.reportId,
           );
         });
       });
     },
-    [createTarget, createTask, startTask],
+    [createTarget, createTask, startTask, sessionTimeout, userTimezone],
   );
 
   return [runQuickFirstScan];
