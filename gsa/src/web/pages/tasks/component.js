@@ -47,7 +47,7 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import {loadUserSettingDefaults as loadUserSettingsDefaultsAction} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
-import stateReducer from 'web/utils/stateReducer';
+import stateReducer, {updateState} from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 import {UNSET_VALUE} from 'web/utils/render';
@@ -252,11 +252,13 @@ const TaskComponent = ({
 
   useEffect(() => {
     if (isDefined(scanConfigData)) {
-      dispatchState({
-        scanConfigs: scanConfigData.scanConfigs.nodes.map(scanConfig =>
-          ScanConfig.fromElement(scanConfig),
-        ),
-      });
+      dispatchState(
+        updateState({
+          scanConfigs: scanConfigData.scanConfigs.nodes.map(scanConfig =>
+            ScanConfig.fromElement(scanConfig),
+          ),
+        }),
+      );
     }
   }, [scanConfigData]);
 
@@ -271,15 +273,15 @@ const TaskComponent = ({
 
   // Handlers
   const handleTargetChange = targetId => {
-    dispatchState({targetId});
+    dispatchState(updateState({targetId}));
   };
 
   const handleAlertsChange = alertIds => {
-    dispatchState({alertIds});
+    dispatchState(updateState({alertIds}));
   };
 
   const handleScheduleChange = scheduleId => {
-    dispatchState({scheduleId});
+    dispatchState(updateState({scheduleId}));
   };
 
   const handleTaskStart = task => {
@@ -301,7 +303,7 @@ const TaskComponent = ({
   };
 
   const closeTaskWizard = () => {
-    dispatchState({taskWizardVisible: false});
+    dispatchState(updateState({taskWizardVisible: false}));
   };
 
   const handleTaskWizardNewClick = () => {
@@ -317,36 +319,38 @@ const TaskComponent = ({
     const {data} = resp;
 
     refetchSchedules();
-    dispatchState({scheduleId: data.createSchedule?.id});
+    dispatchState(updateState({scheduleId: data.createSchedule?.id}));
   };
 
   const handleTargetCreated = resp => {
     const {data} = resp;
     refetchTargets();
 
-    dispatchState({targetId: data?.createTarget?.id});
+    dispatchState(updateState({targetId: data?.createTarget?.id}));
   };
 
   const openContainerTaskDialog = inputTask => {
-    dispatchState({
-      containerTaskDialogVisible: true,
-      task: inputTask,
-      name: inputTask ? inputTask.name : _('Unnamed'),
-      comment: inputTask ? inputTask.comment : '',
-      id: inputTask ? inputTask.id : undefined,
-      inAssets: inputTask ? inputTask.inAssets : undefined,
-      autoDelete: inputTask ? inputTask.autoDelete : undefined,
-      autoDeleteData: inputTask ? inputTask.autoDeleteData : undefined,
-      title: inputTask
-        ? _('Edit Container Task {{name}}', inputTask)
-        : _('New Container Task'),
-    });
+    dispatchState(
+      updateState({
+        containerTaskDialogVisible: true,
+        task: inputTask,
+        name: inputTask ? inputTask.name : _('Unnamed'),
+        comment: inputTask ? inputTask.comment : '',
+        id: inputTask ? inputTask.id : undefined,
+        inAssets: inputTask ? inputTask.inAssets : undefined,
+        autoDelete: inputTask ? inputTask.autoDelete : undefined,
+        autoDeleteData: inputTask ? inputTask.autoDeleteData : undefined,
+        title: inputTask
+          ? _('Edit Container Task {{name}}', inputTask)
+          : _('New Container Task'),
+      }),
+    );
 
     handleInteraction();
   };
 
   const closeContainerTaskDialog = () => {
-    dispatchState({containerTaskDialogVisible: false});
+    dispatchState(updateState({containerTaskDialogVisible: false}));
   };
 
   const handleCloseContainerTaskDialog = () => {
@@ -403,11 +407,13 @@ const TaskComponent = ({
       if (isDefined(task) && !task.isChangeable()) {
         // arguments need to be undefined if the task is not changeable
 
-        dispatchState({
-          targetId: undefined,
-          scannerId: undefined,
-          configId: undefined,
-        });
+        dispatchState(
+          updateState({
+            targetId: undefined,
+            scannerId: undefined,
+            configId: undefined,
+          }),
+        );
       }
 
       const mutationData = {
@@ -472,7 +478,7 @@ const TaskComponent = ({
   };
 
   const closeTaskDialog = () => {
-    dispatchState({taskDialogVisible: false});
+    dispatchState(updateState({taskDialogVisible: false}));
   };
 
   const handleCloseTaskDialog = () => {
@@ -496,31 +502,33 @@ const TaskComponent = ({
         ? task.schedulePeriods
         : undefined;
 
-      dispatchState({
-        taskDialogVisible: true,
-        error: undefined, // remove old errors
-        minQod: task.minQod,
-        sourceIface: task.sourceIface,
-        schedulePeriods,
-        scannerId: hasId(task.scanner) ? task.scanner.id : undefined,
-        name: task.name,
-        scheduleId,
-        target_id: hasId(task.target) ? task.target.id : undefined,
-        alertIds: map(task.alerts, alert => alert.id),
-        alterable: task.alterable,
-        applyOverrides: task.applyOverrides,
-        autoDelete: task.autoDelete,
-        autoDeleteData: task.autoDeleteData,
-        comment: task.comment,
-        configId: hasId(task.config) ? task.config.id : undefined,
-        hostsOrdering: task.hostsOrdering,
-        id: task.id,
-        inAssets: task.inAssets,
-        maxChecks: task.maxChecks,
-        maxHosts: task.maxHosts,
-        title: _('Edit Task {{name}}', task),
-        task,
-      });
+      dispatchState(
+        updateState({
+          taskDialogVisible: true,
+          error: undefined, // remove old errors
+          minQod: task.minQod,
+          sourceIface: task.sourceIface,
+          schedulePeriods,
+          scannerId: hasId(task.scanner) ? task.scanner.id : undefined,
+          name: task.name,
+          scheduleId,
+          target_id: hasId(task.target) ? task.target.id : undefined,
+          alertIds: map(task.alerts, alert => alert.id),
+          alterable: task.alterable,
+          applyOverrides: task.applyOverrides,
+          autoDelete: task.autoDelete,
+          autoDeleteData: task.autoDeleteData,
+          comment: task.comment,
+          configId: hasId(task.config) ? task.config.id : undefined,
+          hostsOrdering: task.hostsOrdering,
+          id: task.id,
+          inAssets: task.inAssets,
+          maxChecks: task.maxChecks,
+          maxHosts: task.maxHosts,
+          title: _('Edit Task {{name}}', task),
+          task,
+        }),
+      );
     } else {
       const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
       const scannerId = isDefined(defaultScannerId)
@@ -530,28 +538,30 @@ const TaskComponent = ({
         ? defaultScanConfigId
         : FULL_AND_FAST_SCAN_CONFIG_ID;
 
-      dispatchState({
-        taskDialogVisible: true,
-        alertIds,
-        configId: configId,
-        scannerId: scannerId,
-        scheduleId: defaultScheduleId,
-        targetId: defaultTargetId,
-        title: _('New Task'),
-        applyOverrides: undefined,
-        autoDelete: undefined,
-        autoDeleteData: undefined,
-        comment: undefined,
-        hostsOrdering: undefined,
-        id: undefined,
-        maxChecks: undefined,
-        maxHosts: undefined,
-        minQod: undefined,
-        name: undefined,
-        schedulePeriods: undefined,
-        sourceIface: undefined,
-        task: undefined,
-      });
+      dispatchState(
+        updateState({
+          taskDialogVisible: true,
+          alertIds,
+          configId: configId,
+          scannerId: scannerId,
+          scheduleId: defaultScheduleId,
+          targetId: defaultTargetId,
+          title: _('New Task'),
+          applyOverrides: undefined,
+          autoDelete: undefined,
+          autoDeleteData: undefined,
+          comment: undefined,
+          hostsOrdering: undefined,
+          id: undefined,
+          maxChecks: undefined,
+          maxHosts: undefined,
+          minQod: undefined,
+          name: undefined,
+          schedulePeriods: undefined,
+          sourceIface: undefined,
+          task: undefined,
+        }),
+      );
 
       handleInteraction();
     }
@@ -560,17 +570,19 @@ const TaskComponent = ({
   const openTaskWizard = () => {
     gmp.wizard.task().then(response => {
       const settings = response.data;
-      dispatchState({
-        taskWizardVisible: true,
-        hosts: settings.client_address,
-        portListId: defaultPortListId,
-        alertId: defaultAlertId,
-        configId: defaultScanConfigId,
-        sshCredential: defaultSshCredential,
-        smbCredential: defaultSmbCredential,
-        esxiCredential: defaultEsxiCredential,
-        scannerId: defaultScannerId,
-      });
+      dispatchState(
+        updateState({
+          taskWizardVisible: true,
+          hosts: settings.client_address,
+          portListId: defaultPortListId,
+          alertId: defaultAlertId,
+          configId: defaultScanConfigId,
+          sshCredential: defaultSshCredential,
+          smbCredential: defaultSmbCredential,
+          esxiCredential: defaultEsxiCredential,
+          scannerId: defaultScannerId,
+        }),
+      );
     });
     handleInteraction();
   };
@@ -602,28 +614,30 @@ const TaskComponent = ({
 
       const now = date().tz(timezone);
 
-      dispatchState({
-        advancedTaskWizardVisible: true,
-        alertId: defaultAlertId,
-        taskName: _('New Quick Task'),
-        targetHosts: settings.client_address,
-        portListId: defaultPortListId,
-        configId,
-        sshCredential: defaultSshCredential,
-        smbCredential: defaultSmbCredential,
-        esxiCredential: defaultEsxiCredential,
-        scannerId: defaultScannerId,
-        startDate: now,
-        startMinute: now.minutes(),
-        startHour: now.hours(),
-        startTimezone: timezone,
-      });
+      dispatchState(
+        updateState({
+          advancedTaskWizardVisible: true,
+          alertId: defaultAlertId,
+          taskName: _('New Quick Task'),
+          targetHosts: settings.client_address,
+          portListId: defaultPortListId,
+          configId,
+          sshCredential: defaultSshCredential,
+          smbCredential: defaultSmbCredential,
+          esxiCredential: defaultEsxiCredential,
+          scannerId: defaultScannerId,
+          startDate: now,
+          startMinute: now.minutes(),
+          startHour: now.hours(),
+          startTimezone: timezone,
+        }),
+      );
     });
     handleInteraction();
   };
 
   const closeAdvancedTaskWizard = () => {
-    dispatchState({advancedTaskWizardVisible: false});
+    dispatchState(updateState({advancedTaskWizardVisible: false}));
   };
 
   const handleCloseAdvancedTaskWizard = () => {
@@ -645,22 +659,24 @@ const TaskComponent = ({
       const settings = response.data;
       const now = date().tz(timezone);
 
-      dispatchState({
-        modifyTaskWizardVisible: true,
-        tasks: settings.tasks,
-        reschedule: NO_VALUE,
-        taskId: selectSaveId(settings.tasks),
-        startDate: now,
-        startMinute: now.minutes(),
-        startHour: now.hours(),
-        startTimezone: timezone,
-      });
+      dispatchState(
+        updateState({
+          modifyTaskWizardVisible: true,
+          tasks: settings.tasks,
+          reschedule: NO_VALUE,
+          taskId: selectSaveId(settings.tasks),
+          startDate: now,
+          startMinute: now.minutes(),
+          startHour: now.hours(),
+          startTimezone: timezone,
+        }),
+      );
     });
     handleInteraction();
   };
 
   const closeModifyTaskWizard = () => {
-    dispatchState({modifyTaskWizardVisible: false});
+    dispatchState(updateState({modifyTaskWizardVisible: false}));
   };
 
   const handleCloseModifyTaskWizard = () => {
@@ -678,19 +694,23 @@ const TaskComponent = ({
   };
 
   const openReportImportDialog = task => {
-    dispatchState({
-      reportImportDialogVisible: true,
-      tasks: [task],
-      taskId: task.id,
-    });
+    dispatchState(
+      updateState({
+        reportImportDialogVisible: true,
+        tasks: [task],
+        taskId: task.id,
+      }),
+    );
 
     handleInteraction();
   };
 
   const closeReportImportDialog = () => {
-    dispatchState({
-      reportImportDialogVisible: false,
-    });
+    dispatchState(
+      updateState({
+        reportImportDialogVisible: false,
+      }),
+    );
   };
 
   const handleCloseReportImportDialog = () => {
@@ -708,49 +728,55 @@ const TaskComponent = ({
   };
 
   const handleScanConfigChange = configId => {
-    dispatchState({
-      configId,
-    });
+    dispatchState(updateState({configId}));
   };
 
   const handleScannerChange = scannerId => {
-    dispatchState({
-      scannerId,
-    });
+    dispatchState(updateState({scannerId}));
   };
 
   const handleTaskDialogErrorClose = () => {
-    dispatchState({
-      error: undefined,
-    });
+    dispatchState(updateState({error: undefined}));
   };
 
   useEffect(() => {
     // display first loading error in the dialog
     if (scanConfigError) {
-      dispatchState({
-        error: _('Error while loading scan configs.'),
-      });
+      dispatchState(
+        updateState({
+          error: _('Error while loading scan configs.'),
+        }),
+      );
     } else if (scannerError) {
-      dispatchState({
-        error: _('Error while loading scanners.'),
-      });
+      dispatchState(
+        updateState({
+          error: _('Error while loading scanners.'),
+        }),
+      );
     } else if (scheduleError) {
-      dispatchState({
-        error: _('Error while loading schedules.'),
-      });
+      dispatchState(
+        updateState({
+          error: _('Error while loading schedules.'),
+        }),
+      );
     } else if (targetError) {
-      dispatchState({
-        error: _('Error while loading targets.'),
-      });
+      dispatchState(
+        updateState({
+          error: _('Error while loading targets.'),
+        }),
+      );
     } else if (alertError) {
-      dispatchState({
-        error: _('Error while loading alerts.'),
-      });
+      dispatchState(
+        updateState({
+          error: _('Error while loading alerts.'),
+        }),
+      );
     } else if (credentialError) {
-      dispatchState({
-        error: _('Error while loading credentials.'),
-      });
+      dispatchState(
+        updateState({
+          error: _('Error while loading credentials.'),
+        }),
+      );
     }
 
     // log error all objects to be able to inspect them the console

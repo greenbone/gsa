@@ -49,7 +49,7 @@ import {
   isSecinfoEvent,
 } from 'gmp/models/alert';
 
-import reducer from 'web/utils/stateReducer';
+import reducer, {updateState} from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -241,14 +241,16 @@ const StyledDivider = styled(Divider)`
 const AlertDialog = props => {
   const capabilities = useCapabilities();
 
-  const [state, dispatchState] = useReducer(reducer, DEFAULTS);
+  const [state, dispatch] = useReducer(reducer, DEFAULTS);
 
   useEffect(() => {
-    dispatchState({
-      stateEvent: isDefined(props.event)
-        ? props.event
-        : EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
-    });
+    dispatch(
+      updateState({
+        stateEvent: isDefined(props.event)
+          ? props.event
+          : EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+      }),
+    );
   }, [props.event]);
 
   const handleEventChange = (value, onValueChange) => {
@@ -290,7 +292,7 @@ const AlertDialog = props => {
     }
     // in addition to changing the event in the dialog, change it here as well
     // to have it handy in render()
-    dispatchState({stateEvent: value});
+    dispatch(updateState({stateEvent: value}));
   };
 
   const {

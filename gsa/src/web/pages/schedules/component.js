@@ -29,7 +29,7 @@ import {useCreateSchedule, useModifySchedule} from 'web/graphql/schedules';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
-import reducer from 'web/utils/stateReducer';
+import reducer, {updateState} from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 
 import ScheduleDialog from './dialog';
@@ -60,42 +60,46 @@ const ScheduleComponent = ({
 
       const {interval, freq, monthdays, weekdays} = recurrence;
 
-      dispatch({
-        comment: schedule.comment,
-        startDate,
-        dialogVisible: true,
-        duration: durationInSeconds > 0 ? duration : undefined,
-        freq,
-        id: schedule.id,
-        interval,
-        monthdays,
-        name: schedule.name,
-        title: _('Edit Schedule {{name}}', {name: schedule.name}),
-        timezone: schedule.timezone,
-        weekdays,
-      });
+      dispatch(
+        updateState({
+          comment: schedule.comment,
+          startDate,
+          dialogVisible: true,
+          duration: durationInSeconds > 0 ? duration : undefined,
+          freq,
+          id: schedule.id,
+          interval,
+          monthdays,
+          name: schedule.name,
+          title: _('Edit Schedule {{name}}', {name: schedule.name}),
+          timezone: schedule.timezone,
+          weekdays,
+        }),
+      );
     } else {
-      dispatch({
-        comment: undefined,
-        dialogVisible: true,
-        duration: undefined,
-        freq: undefined,
-        id: undefined,
-        interval: undefined,
-        monthdays: undefined,
-        name: undefined,
-        startDate: undefined,
-        timezone,
-        title: undefined,
-        weekdays: undefined,
-      });
+      dispatch(
+        updateState({
+          comment: undefined,
+          dialogVisible: true,
+          duration: undefined,
+          freq: undefined,
+          id: undefined,
+          interval: undefined,
+          monthdays: undefined,
+          name: undefined,
+          startDate: undefined,
+          timezone,
+          title: undefined,
+          weekdays: undefined,
+        }),
+      );
     }
 
     handleInteraction();
   };
 
   const closeScheduleDialog = () => {
-    dispatch({dialogVisible: false});
+    dispatch(updateState({dialogVisible: false}));
   };
 
   const handleCloseScheduleDialog = () => {

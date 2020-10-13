@@ -30,7 +30,7 @@ import {useBulkTag, ENTITY_TYPES} from 'web/graphql/tags';
 
 import TagDialog from 'web/pages/tags/dialog';
 
-import reducer from 'web/utils/stateReducer';
+import reducer, {updateState} from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 import SelectionType, {getEntityIds} from 'web/utils/selectiontype';
 import useGmp from 'web/utils/useGmp';
@@ -69,7 +69,7 @@ export const BulkTagComponent = ({
 
     return gmp.tags.getAll({filter: tagFilter}).then(resp => {
       const {data} = resp;
-      dispatch({tags: data});
+      dispatch(updateState({tags: data}));
     });
   }, [gmp.tags, entitiesType]);
 
@@ -101,12 +101,12 @@ export const BulkTagComponent = ({
   );
 
   const closeTagDialog = () => {
-    dispatch({tagDialogVisible: false});
+    dispatch(updateState({tagDialogVisible: false}));
   };
 
   const openTagDialog = () => {
     renewSession();
-    dispatch({tagDialogVisible: true});
+    dispatch(updateState({tagDialogVisible: true}));
   };
 
   const handleCreateTag = data => {
@@ -117,10 +117,12 @@ export const BulkTagComponent = ({
       .then(response => gmp.tag.get(response.data))
       .then(response => {
         const newTags = [...tags, response.data];
-        dispatch({
-          tag: response.data,
-          tags: newTags,
-        });
+        dispatch(
+          updateState({
+            tag: response.data,
+            tags: newTags,
+          }),
+        );
       })
       .then(closeTagDialog);
   };
@@ -133,7 +135,7 @@ export const BulkTagComponent = ({
   const handleTagChange = id => {
     renewSession();
     return gmp.tag.get({id}).then(resp => {
-      dispatch({tag: resp.data});
+      dispatch(updateState({tag: resp.data}));
     });
   };
 

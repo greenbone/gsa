@@ -26,7 +26,7 @@ import {shorten} from 'gmp/utils/string';
 
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
-import reducer from 'web/utils/stateReducer';
+import reducer, {updateState} from 'web/utils/stateReducer';
 import readFileToText from 'web/utils/readFileToText.js';
 
 import EntityComponent from 'web/entity/component';
@@ -73,9 +73,8 @@ const PortListComponent = ({
         setCreatedPortRanges([]);
         setDeletedPortRanges([]);
 
-        dispatch({
-          type: 'setState',
-          newState: {
+        dispatch(
+          updateState({
             comment: portList.comment,
             id: portList.id,
             portList,
@@ -85,33 +84,29 @@ const PortListComponent = ({
             title: _('Edit Port List {{name}}', {
               name: shorten(portList.name),
             }),
-          },
-        });
+          }),
+        );
       });
     } else {
       setCreatedPortRanges([]);
       setDeletedPortRanges([]);
-      dispatch({
-        type: 'setState',
-        newState: {
+      dispatch(
+        updateState({
           comment: undefined,
           id: undefined,
           name: undefined,
           portList: undefined,
           portListDialogVisible: true,
           title: _('New Port List'),
-        },
-      });
+        }),
+      );
     }
 
     handleInteraction();
   };
 
   const closePortListDialog = () => {
-    dispatch({
-      type: 'setState',
-      newState: {portListDialogVisible: false},
-    });
+    dispatch(updateState({portListDialogVisible: false}));
   };
 
   const handleClosePortListDialog = () => {
@@ -120,18 +115,12 @@ const PortListComponent = ({
   };
 
   const openImportDialog = () => {
-    dispatch({
-      type: 'setState',
-      newState: {importDialogVisible: true},
-    });
+    dispatch(updateState({importDialogVisible: true}));
     handleInteraction();
   };
 
   const closeImportDialog = () => {
-    dispatch({
-      type: 'setState',
-      newState: {importDialogVisible: false},
-    });
+    dispatch(updateState({importDialogVisible: false}));
   };
 
   const handleCloseImportDialog = () => {
@@ -140,21 +129,17 @@ const PortListComponent = ({
   };
 
   const openNewPortRangeDialog = portList => {
-    dispatch({
-      type: 'setState',
-      newState: {
+    dispatch(
+      updateState({
         portRangeDialogVisible: true,
         id: portList.id,
-      },
-    });
+      }),
+    );
     handleInteraction();
   };
 
   const closeNewPortRangeDialog = () => {
-    dispatch({
-      type: 'setState',
-      newState: {portRangeDialogVisible: false},
-    });
+    dispatch(updateState({portRangeDialogVisible: false}));
   };
 
   const handleCloseNewPortRangeDialog = () => {
@@ -165,10 +150,7 @@ const PortListComponent = ({
   const handleDeletePortRange = range => {
     return gmp.portlist.deletePortRange(range).then(response => {
       const {data} = response;
-      dispatch({
-        type: 'setState',
-        newState: {portList: data},
-      });
+      dispatch(updateState({portList: data}));
     });
   };
 
@@ -298,12 +280,11 @@ const PortListComponent = ({
     };
     // was this.created_port_ranges.push() therefore cannot be set directly
     setCreatedPortRanges(oldRanges => [...oldRanges, newRange]);
-    dispatch({
-      type: 'setState',
-      newState: {
+    dispatch(
+      updateState({
         portRanges: [...portRanges, newRange],
-      },
-    });
+      }),
+    );
     closeNewPortRangeDialog();
   };
 
@@ -321,7 +302,7 @@ const PortListComponent = ({
 
     newPortRanges = portRanges.filter(range => range !== portRange);
 
-    dispatch({type: 'setState', newState: {portRanges: newPortRanges}});
+    dispatch(updateState({portRanges: newPortRanges}));
 
     handleInteraction();
   };

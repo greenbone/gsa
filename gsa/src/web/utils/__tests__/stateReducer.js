@@ -18,15 +18,15 @@
  */
 
 import React, {useReducer} from 'react';
-import stateReducer from 'web/utils/stateReducer';
+import stateReducer, {updateState} from 'web/utils/stateReducer';
 import {render, screen, fireEvent} from 'web/utils/testing';
 
 const TestComponent = () => {
   const [state, dispatch] = useReducer(stateReducer, {foo: ''});
 
-  const handleSetFoo = () => dispatch({foo: 'bar'});
-  const handleSetLorem = () => dispatch({lorem: 'ipsum'});
-  const handleSetUndef = () => dispatch();
+  const handleSetFoo = () => dispatch(updateState({foo: 'bar'}));
+  const handleSetLorem = () => dispatch(updateState({lorem: 'ipsum'}));
+  const handleSetUndef = () => dispatch(updateState());
 
   const {foo, lorem, undef} = state;
 
