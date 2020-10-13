@@ -578,9 +578,8 @@ export const useRunQuickFirstScan = () => {
 
         return createTask({
           variables: {input: taskInputObject},
-        }).then(resp => {
-          // eslint-disable no-shadow
-          const taskId = resp?.data?.createTask?.id;
+        }).then(response => {
+          const taskId = response?.data?.createTask?.id;
 
           return startTask({variables: {id: taskId}}).then(
             result => result?.data?.startTask?.reportId,
