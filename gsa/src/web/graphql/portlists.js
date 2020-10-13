@@ -208,10 +208,10 @@ export const useLazyGetPortList = (id, options) => {
     options,
   });
 
-  const portList = isDefined(data?.portList)
-    ? PortList.fromObject(data.portList)
-    : undefined;
+  const portList = data?.portList;
+  console.log(data);
 
   const getPortList = useCallback(id => queryPortList({id}), [queryPortList]);
+
   return [getPortList, {...other, portList}];
 };

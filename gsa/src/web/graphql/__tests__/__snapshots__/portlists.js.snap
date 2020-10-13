@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useLazyGetPortList tests should query port list after user interaction 1`] = `
+<div>
+  <button
+    data-testid="load"
+  />
+  <div
+    data-testid="no-portlist"
+  />
+</div>
+`;

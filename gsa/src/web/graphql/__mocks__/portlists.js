@@ -20,6 +20,7 @@ import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
 import {
   GET_PORT_LISTS,
+  GET_PORT_LIST,
   CREATE_PORT_LIST,
   MODIFY_PORT_LIST,
   CREATE_PORT_RANGE,
@@ -34,6 +35,12 @@ const portlist1 = deepFreeze({
 const portlist2 = deepFreeze({
   id: '23456',
   name: 'moar ports',
+  inUse: false,
+  creationTime: '2020-10-13T06:42:16+00:00',
+  modificationTime: '2020-10-13T06:42:16+00:00',
+  owner: 'admin',
+  portCount: {all: 5, tcp: 5, udp: 0},
+  portRange: {id: '34567', start: 1, end: 5, protocolType: 'tcp'},
 });
 
 const mockPortLists = {
@@ -53,6 +60,9 @@ const mockPortLists = {
     lastPageCursor: 'cG9ydGxpc3Q6Mw==',
   },
 };
+
+export const createGetLazyPortListQueryMock = (id = '23456') =>
+  createGenericQueryMock(GET_PORT_LIST, {portList: portlist2}, {id});
 
 export const createPortRangeInput = {
   portListId: '23456',

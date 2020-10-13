@@ -23,6 +23,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 import {
   useLazyGetPortLists,
+  useLazyGetPortList,
   useCreatePortList,
   useModifyPortList,
   useDeletePortRange,
@@ -30,6 +31,7 @@ import {
 } from '../portlists';
 import {
   createGetPortListsQueryMock,
+  createGetLazyPortListQueryMock,
   createCreatePortListQueryMock,
   createPortListInput,
   modifyPortListInput,
@@ -243,5 +245,61 @@ describe('Portlist mutation tests', () => {
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Portlist modified.',
     );
+  });
+});
+
+const GetLazyPortListComponent = () => {
+  const [getPortList, {portList, loading}] = useLazyGetPortList('23456');
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getPortList()} />
+      {isDefined(portList) ? (
+        <div key={portList.id} data-testid="portlist">
+          <span>{portList.id}</span>
+          <span>{portList.name}</span>
+        </div>
+      ) : (
+        <div data-testid="no-portlist" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetPortList tests', () => {
+  test.only('should query port list after user interaction', async () => {
+    const [mock, resultFunc] = createGetLazyPortListQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    const {element} = render(<GetLazyPortListComponent />);
+
+    let portListElement = screen.queryAllByTestId('portlist');
+    expect(portListElement).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-portlist')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(element).toMatchSnapshot();
+
+    await wait();
+
+    portListElement = await screen.getByTestId('portlist');
+
+    expect(portListElement).toHaveTextContent(
+      'c35f82f1-7798-4b84-b2c4-761a33068956',
+    );
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 });

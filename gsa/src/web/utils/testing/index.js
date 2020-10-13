@@ -194,6 +194,7 @@ export const createGenericQueryMock = (query, result, variables) => {
     request: queryRequest,
     newData: resultFunc,
   };
+
   return [queryMock, resultFunc];
 };
 
