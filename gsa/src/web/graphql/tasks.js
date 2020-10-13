@@ -20,6 +20,10 @@ import {useCallback} from 'react';
 import {gql, useQuery, useLazyQuery, useMutation} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
+
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useUserTimezone from 'web/utils/useUserTimezone';
 
 import Task from 'gmp/models/task';
 
@@ -542,17 +546,20 @@ export const useExportTasksByIds = options => {
 };
 
 export const useRunQuickFirstScan = () => {
+  const [sessionTimeout] = useUserSessionTimeout();
+  const [userTimezone] = useUserTimezone();
+
   const [createTarget] = useMutation(CREATE_TARGET);
-
   const [createTask] = useMutation(CREATE_TASK);
-
   const [startTask] = useMutation(START_TASK);
+
+  const date = dateTimeWithTimeZone(sessionTimeout, userTimezone);
 
   const runQuickFirstScan = useCallback(
     data => {
       const {hosts} = data;
       const targetInputObject = {
-        name: `Target for immediate scan of IP ${hosts}`,
+        name: `Target for immediate scan of IP ${hosts} - ${date}`,
         hosts,
         portListId: '33d0cd82-57c6-11e1-8ed1-406186ea4fc5',
       };
