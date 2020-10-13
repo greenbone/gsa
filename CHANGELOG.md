@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use <predefined> to disable feed object editing and filter creation on feed status page [#2398](https://github.com/greenbone/gsa/pull/2398)
 
 ### Fixed
+- Allow to delete processes without having had edges in BPM [#2507](https://github.com/greenbone/gsa/pull/2507)
 - Fixed TLS certificate download for users with permissions [#2496](https://github.com/greenbone/gsa/pull/2496)
 - Fixed form validation error tooltips [#2478](https://github.com/greenbone/gsa/pull/2478)
 - Only show schedule options in advanced and modify task wizard if user has correct permissions [#2472](https://github.com/greenbone/gsa/pull/2472)
