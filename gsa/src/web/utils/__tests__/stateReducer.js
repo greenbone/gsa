@@ -21,6 +21,16 @@ import React, {useReducer} from 'react';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 import {render, screen, fireEvent} from 'web/utils/testing';
 
+describe('updateState tests', () => {
+  test('Should return correct action object', () => {
+    expect(updateState()).toEqual({type: 'setState', newState: {}});
+    expect(updateState({foo: 'bar'})).toEqual({
+      type: 'setState',
+      newState: {foo: 'bar'},
+    });
+  });
+});
+
 const TestComponent = () => {
   const [state, dispatch] = useReducer(stateReducer, {foo: ''});
 
