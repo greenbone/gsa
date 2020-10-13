@@ -37,6 +37,7 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 import PropTypes from 'web/utils/proptypes';
+import {updateState} from 'web/utils/stateReducer';
 
 const ScannerPreference = ({
   displayName,
@@ -132,7 +133,7 @@ const ScannerPreferences = ({
               name={pref.name}
               value={values[pref.name]}
               onPreferenceChange={(value, name) =>
-                onValuesChange({type: 'setValue', newState: {[name]: value}})
+                onValuesChange(updateState({[name]: value}))
               }
             />
           ))}
