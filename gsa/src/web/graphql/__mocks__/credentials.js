@@ -18,7 +18,7 @@
 
 import {deepFreeze} from 'web/utils/testing';
 
-import {GET_CREDENTIALS} from '../credentials';
+import {CREATE_CREDENTIAL, GET_CREDENTIALS} from '../credentials';
 
 const credential1 = deepFreeze({
   id: '1',
@@ -85,5 +85,32 @@ export const createGetCredentialsQueryMock = (variables = {}) => {
     newData: resultFunc,
   };
 
+  return [queryMock, resultFunc];
+};
+
+export const createCreateCredentialQueryMock = (data, credentialId) => {
+  const queryResult = {
+    data: {
+      createCredential: {
+        id: credentialId,
+      },
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const variables = {
+    input: {
+      ...data,
+    },
+  };
+
+  const queryMock = {
+    request: {
+      query: CREATE_CREDENTIAL,
+      variables,
+    },
+    newData: resultFunc,
+  };
   return [queryMock, resultFunc];
 };

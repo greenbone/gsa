@@ -34,6 +34,9 @@ import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
 import {parseInt, parseSeverity, parseYesNo, NO_VALUE} from 'gmp/parser';
 
 import {
+  convertCredentialTypeEnum,
+  convertAuthAlgorithmEnum,
+  convertPrivacyAlgorithmEnum,
   email_credential_filter,
   password_only_credential_filter,
   smb_credential_filter,
@@ -47,6 +50,9 @@ import FootNote from 'web/components/footnote/footnote';
 import Layout from 'web/components/layout/layout';
 
 import {useCreateAlert} from 'web/graphql/alerts';
+
+import {useCreateCredential} from 'web/graphql/credentials';
+
 import {
   loadReportComposerDefaults as loadDefaults,
   saveReportComposerDefaults as saveDefaults,
@@ -57,6 +63,7 @@ import reducer from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
 import useGmp from 'web/utils/useGmp';
+import readFileToText from 'web/utils/readFileToText';
 
 import CredentialsDialog from '../credentials/dialog';
 
@@ -150,6 +157,7 @@ const AlertComponent = ({
     dispatch(saveDefaults(gmp)(defaults));
 
   const [createAlert] = useCreateAlert();
+  const [createCredential] = useCreateCredential();
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -157,14 +165,34 @@ const AlertComponent = ({
     }
   };
 
-  const handleCreateCredential = credentialdata => {
+  const handleCreateCredential = data => {
     handleInteraction();
 
     let credential_id;
-    gmp.credential
-      .create(credentialdata)
+    const readCertificate = readFileToText(data.certificate);
+    const readPrivateKey = readFileToText(data.private_key);
+
+    return Promise.all([readCertificate, readPrivateKey])
+      .then(([certificate, privateKey]) => {
+        return createCredential({
+          allowInsecure: data.allow_insecure,
+          authAlgorithm: convertAuthAlgorithmEnum(data.auth_algorithm),
+          certificate: certificate,
+          comment: data.comment,
+          community: data.community,
+          login: data.credential_login,
+          name: data.name,
+          keyPhrase: data.passphrase,
+          password: data.password,
+          privacyAlgorithm: convertPrivacyAlgorithmEnum(data.privacy_algorithm),
+          privacyPassword: data.privacy_password,
+          privateKey: privateKey,
+          publicKey: data.public_key,
+          type: convertCredentialTypeEnum(data.credential_type),
+        });
+      })
       .then(response => {
-        credential_id = response.data.id;
+        credential_id = response.data.createCredential.id;
         closeCredentialDialog();
       })
       .then(() => gmp.credentials.getAll())

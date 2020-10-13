@@ -79,6 +79,43 @@ export function parseCredentialType(credentialType) {
   return _('Unknown type ({{type}})', {type: credentialType});
 }
 
+export function convertCredentialTypeEnum(credentialType) {
+  if (credentialType === 'up') {
+    return 'USERNAME_PASSWORD';
+  } else if (credentialType === 'usk') {
+    return 'USERNAME_SSH_KEY';
+  } else if (credentialType === 'cc') {
+    return 'CLIENT_CERTIFICATE';
+  } else if (credentialType === 'snmp') {
+    return 'SNMP';
+  } else if (credentialType === 'smime') {
+    return 'SMIME_CERTIFICATE';
+  } else if (credentialType === 'pgp') {
+    return 'PGP_ENCRYPTION_KEY';
+  } else if (credentialType === 'pw') {
+    return 'PASSWORD_ONLY';
+  }
+  return null;
+}
+
+export function convertAuthAlgorithmEnum(authAlgorithm) {
+  if (authAlgorithm === 'md5') {
+    return 'MD5';
+  } else if (authAlgorithm === 'sha1') {
+    return 'SHA1';
+  }
+  return null;
+}
+
+export function convertPrivacyAlgorithmEnum(privacyAlgorithm) {
+  if (privacyAlgorithm === 'aes') {
+    return 'AES';
+  } else if (privacyAlgorithm === 'des') {
+    return 'DES';
+  }
+  return null;
+}
+
 export const ssh_credential_filter = credential =>
   credential.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
   credential.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE;
