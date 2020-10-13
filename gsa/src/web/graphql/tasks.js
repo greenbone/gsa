@@ -561,7 +561,7 @@ export const useRunQuickFirstScan = () => {
       const targetInputObject = {
         name: `Target for immediate scan of IP ${hosts} - ${date}`,
         hosts,
-        portListId: '33d0cd82-57c6-11e1-8ed1-406186ea4fc5',
+        portListId: '33d0cd82-57c6-11e1-8ed1-406186ea4fc5', // All IANA assigned TCP
       };
       return createTarget({
         variables: {input: targetInputObject},
