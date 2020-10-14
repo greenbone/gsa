@@ -16,6 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {ALL_IANA_ASSIGNED_TCP} from 'gmp/models/portlist';
+import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
+
 import {CREATE_TARGET} from 'web/graphql/targets';
 
 import {CREATE_TASK, START_TASK} from 'web/graphql/tasks';
@@ -25,7 +29,7 @@ export const createTargetInput = {
   name:
     'Target for immediate scan of IP 127.0.0.1, 192.168.0.1 - Wed, Oct 14, 2020 12:00 AM ',
   hosts: '127.0.0.1, 192.168.0.1',
-  portListId: '33d0cd82-57c6-11e1-8ed1-406186ea4fc5',
+  portListId: ALL_IANA_ASSIGNED_TCP,
 };
 
 const createTargetResult = {
@@ -37,9 +41,9 @@ const createTargetResult = {
 
 export const createTaskInput = {
   name: 'Immediate scan of IP 127.0.0.1, 192.168.0.1',
-  configId: 'daba56c8-73ec-11df-a475-002264764cea',
+  configId: FULL_AND_FAST_SCAN_CONFIG_ID,
   targetId: '13579',
-  scannerId: '08b69003-5fc2-4037-a479-93b440211c73',
+  scannerId: OPENVAS_DEFAULT_SCANNER_ID,
 };
 
 const createTaskResult = {

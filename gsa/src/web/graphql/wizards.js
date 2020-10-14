@@ -19,6 +19,10 @@ import {useCallback} from 'react';
 
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
+import {ALL_IANA_ASSIGNED_TCP} from 'gmp/models/portlist';
+import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
+
 import {useCreateTarget} from 'web/graphql/targets';
 
 import {useCreateTask, useStartTask} from 'web/graphql/tasks';
@@ -42,7 +46,7 @@ export const useRunQuickFirstScan = () => {
       const targetInputObject = {
         name: `Target for immediate scan of IP ${hosts} - ${date}`,
         hosts,
-        portListId: '33d0cd82-57c6-11e1-8ed1-406186ea4fc5', // All IANA assigned TCP
+        portListId: ALL_IANA_ASSIGNED_TCP,
       };
 
       return createTarget(targetInputObject).then(resp => {
@@ -50,9 +54,9 @@ export const useRunQuickFirstScan = () => {
 
         const taskInputObject = {
           name: `Immediate scan of IP ${hosts}`,
-          configId: 'daba56c8-73ec-11df-a475-002264764cea', // Full and Fast
+          configId: FULL_AND_FAST_SCAN_CONFIG_ID,
           targetId,
-          scannerId: '08b69003-5fc2-4037-a479-93b440211c73', // OpenVAS Default
+          scannerId: OPENVAS_DEFAULT_SCANNER_ID,
         };
 
         return createTask(taskInputObject).then(response => {
