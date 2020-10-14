@@ -20,6 +20,8 @@
 
 import React, {useState} from 'react';
 
+import {GraphQLError} from 'graphql'; // ES6
+
 import date, {setLocale} from 'gmp/models/date';
 
 import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
@@ -38,17 +40,25 @@ setLocale('en'); // Required for composing wizard target name
 const RunQuickFirstScanComponent = () => {
   const [runQuickFirstScan] = useRunQuickFirstScan();
   const [reportId, setReportId] = useState();
+  const [error, setError] = useState();
 
-  const handleRunQuickFirstScan = () => {
-    return runQuickFirstScan({hosts: '127.0.0.1, 192.168.0.1'}).then(id =>
-      setReportId(id),
-    );
+  const handleRunQuickFirstScan = async () => {
+    try {
+      await runQuickFirstScan({hosts: '127.0.0.1, 192.168.0.1'}).then(id =>
+        setReportId(id),
+      );
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
     <div>
       {reportId && (
         <span data-testid="started-task">{`Task started with report ${reportId}`}</span>
+      )}
+      {error && (
+        <span data-testid="error">{`There was an error in the request: ${error}`}</span>
       )}
       <button data-testid="wizard" onClick={handleRunQuickFirstScan} />
     </div>
@@ -98,6 +108,56 @@ describe('useRunQuickFirstScan tests', () => {
     const startTaskReportId = await screen.getByTestId('started-task');
     expect(startTaskReportId).toHaveTextContent(
       'Task started with report 13245',
+    );
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+  });
+
+  test('Should gracefully catch error in promise chain', async () => {
+    const error = new GraphQLError('Oops. Something went wrong :(');
+    const [targetMock, targetResult] = createWizardTargetQueryMock();
+    const [taskMock, taskResult] = createWizardTaskQueryMock([error]);
+    const [startTaskMock, startTaskResult] = createWizardStartTaskQueryMock();
+
+    const gmp = {
+      settings: {
+        enableHyperionOnly: false,
+      },
+    };
+
+    const {render, store} = rendererWith({
+      queryMocks: [targetMock, taskMock, startTaskMock],
+      store: true,
+      gmp,
+    });
+
+    const timeout = date('2020-10-14');
+
+    store.dispatch(setSessionTimeout(timeout));
+    store.dispatch(setUsername('foo'));
+
+    render(<RunQuickFirstScanComponent />);
+
+    const button = screen.getByTestId('wizard');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(targetResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(taskResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(startTaskResult).not.toHaveBeenCalled();
+
+    expect(screen.queryByTestId('started-task')).not.toBeInTheDocument();
+
+    const gqlError = screen.queryByTestId('error');
+
+    expect(gqlError).toHaveTextContent(
+      'There was an error in the request: Oops. Something went wrong :(',
     );
   });
 });

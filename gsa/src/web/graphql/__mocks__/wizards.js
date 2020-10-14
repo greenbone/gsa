@@ -61,15 +61,23 @@ export const startTaskResult = {
   },
 };
 
-export const createWizardTargetQueryMock = () =>
-  createGenericQueryMock(CREATE_TARGET, createTargetResult, {
-    input: createTargetInput,
-  });
+export const createWizardTargetQueryMock = errors =>
+  createGenericQueryMock(
+    CREATE_TARGET,
+    createTargetResult,
+    {
+      input: createTargetInput,
+    },
+    errors,
+  );
 
-export const createWizardTaskQueryMock = () =>
-  createGenericQueryMock(CREATE_TASK, createTaskResult, {
-    input: createTaskInput,
-  });
+export const createWizardTaskQueryMock = errors =>
+  createGenericQueryMock(
+    CREATE_TASK,
+    createTaskResult,
+    {input: createTaskInput},
+    errors,
+  );
 
-export const createWizardStartTaskQueryMock = () =>
-  createGenericQueryMock(START_TASK, startTaskResult, startTaskInput);
+export const createWizardStartTaskQueryMock = errors =>
+  createGenericQueryMock(START_TASK, startTaskResult, startTaskInput, errors);
