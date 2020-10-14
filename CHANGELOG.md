@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Changed
+- Implement task wizard via graphql [#2509](https://github.com/greenbone/gsa/pull/2509)
 - Implement create credential for alert and target dialog via graphql [#2486](https://github.com/greenbone/gsa/pull/2486)
 - Implement create and modify port list by graphql [#2484](https://github.com/greenbone/gsa/pull/2484)
 - Load port lists into target component with graphql [#2481](https://github.com/greenbone/gsa/pull/2481)
