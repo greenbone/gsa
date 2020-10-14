@@ -72,6 +72,7 @@ import {
   getUsername,
 } from 'web/store/usersettings/selectors';
 
+import stateReducer, {updateState} from 'web/utils/stateReducer';
 import {create_pem_certificate} from 'web/utils/cert';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
@@ -213,13 +214,8 @@ const reducer = (state, action) => {
           ? errors.counts
           : state.errorsCounts,
       };
-    case 'setPageState':
-      const {newState} = action;
-
-      return {
-        ...state,
-        ...newState,
-      };
+    case 'setState':
+      return stateReducer(state, action);
     default:
       return state;
   }
@@ -265,10 +261,7 @@ const ReportDetails = ({
   useEffect(() => {
     if (isDefined(entityFromProps)) {
       dispatchState({type: 'updateReport', entity: entityFromProps});
-      dispatchState({
-        type: 'setPageState',
-        newState: {reportFilter: filterFromProps},
-      });
+      dispatchState(updateState({reportFilter: filterFromProps}));
       setIsUpdating(false);
     } else {
       // report is not in the store and is currently loaded
@@ -324,7 +317,7 @@ const ReportDetails = ({
         // ensure the report format id is only set if we really have one
         // if no report format id is available we would create an infinite
         // render loop here
-        dispatchState({type: 'setPageState', newState: {reportFormatId}});
+        dispatchState(updateState({reportFormatId}));
       }
     }
 
@@ -368,7 +361,7 @@ const ReportDetails = ({
   const handleActivateTab = index => {
     renewSession();
 
-    dispatchState({type: 'setPageState', newState: {activeTab: index}});
+    dispatchState(updateState({activeTab: index}));
   };
 
   const handleAddToAssets = () => {
@@ -396,27 +389,21 @@ const ReportDetails = ({
   const handleFilterEditClick = () => {
     renewSession();
 
-    dispatchState({type: 'setPageState', newState: {showFilterDialog: true}});
+    dispatchState(updateState({showFilterDialog: true}));
   };
 
   const handleFilterDialogClose = () => {
     renewSession();
 
-    dispatchState({type: 'setPageState', newState: {showFilterDialog: false}});
+    dispatchState(updateState({showFilterDialog: false}));
   };
 
   const handleOpenDownloadReportDialog = () => {
-    dispatchState({
-      type: 'setPageState',
-      newState: {showDownloadReportDialog: true},
-    });
+    dispatchState(updateState({showDownloadReportDialog: true}));
   };
 
   const handleCloseDownloadReportDialog = () => {
-    dispatchState({
-      type: 'setPageState',
-      newState: {showDownloadReportDialog: false},
-    });
+    dispatchState(updateState({showDownloadReportDialog: false}));
   };
 
   const handleReportDownload = reportState => {
@@ -457,10 +444,7 @@ const ReportDetails = ({
         filter: newFilter,
       })
       .then(response => {
-        dispatchState({
-          type: 'setPageState',
-          newState: {showDownloadReportDialog: false},
-        });
+        dispatchState(updateState({showDownloadReportDialog: false}));
         const {data} = response;
         const filename = generateFilename({
           creationTime: entityFromProps.creationTime,
