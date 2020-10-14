@@ -17,13 +17,11 @@
  */
 import {useCallback} from 'react';
 
-import {useMutation} from '@apollo/client';
-
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {CREATE_TARGET} from 'web/graphql/targets';
+import {useCreateTarget} from 'web/graphql/targets';
 
-import {CREATE_TASK, START_TASK} from 'web/graphql/tasks';
+import {useCreateTask, useStartTask} from 'web/graphql/tasks';
 
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import useUserTimezone from 'web/utils/useUserTimezone';
@@ -32,9 +30,9 @@ export const useRunQuickFirstScan = () => {
   const [sessionTimeout] = useUserSessionTimeout();
   const [userTimezone] = useUserTimezone();
 
-  const [createTarget] = useMutation(CREATE_TARGET);
-  const [createTask] = useMutation(CREATE_TASK);
-  const [startTask] = useMutation(START_TASK);
+  const [createTarget] = useCreateTarget();
+  const [createTask] = useCreateTask();
+  const [startTask] = useStartTask();
 
   const runQuickFirstScan = useCallback(
     data => {
@@ -47,9 +45,7 @@ export const useRunQuickFirstScan = () => {
         portListId: '33d0cd82-57c6-11e1-8ed1-406186ea4fc5', // All IANA assigned TCP
       };
 
-      return createTarget({
-        variables: {input: targetInputObject},
-      }).then(resp => {
+      return createTarget(targetInputObject).then(resp => {
         const targetId = resp?.data?.createTarget?.id;
 
         const taskInputObject = {
@@ -59,12 +55,10 @@ export const useRunQuickFirstScan = () => {
           scannerId: '08b69003-5fc2-4037-a479-93b440211c73', // OpenVAS Default
         };
 
-        return createTask({
-          variables: {input: taskInputObject},
-        }).then(response => {
+        return createTask(taskInputObject).then(response => {
           const taskId = response?.data?.createTask?.id;
 
-          return startTask({variables: {id: taskId}}).then(
+          return startTask(taskId).then(
             result => result?.data?.startTask?.reportId,
           );
         });
