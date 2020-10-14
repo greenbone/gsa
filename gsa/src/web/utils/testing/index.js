@@ -172,10 +172,19 @@ export const deepFreeze = object => {
   return Object.freeze(object);
 };
 
-export const createGenericQueryMock = (query, result, variables) => {
-  const resultFunc = jest.fn().mockReturnValue({
-    data: result,
-  });
+export const createGenericQueryMock = (query, result, variables, errors) => {
+  let resultFunc;
+
+  if (hasValue(errors)) {
+    resultFunc = jest.fn().mockReturnValue({
+      data: result,
+      errors,
+    });
+  } else {
+    resultFunc = jest.fn().mockReturnValue({
+      data: result,
+    });
+  }
 
   let queryRequest;
 
