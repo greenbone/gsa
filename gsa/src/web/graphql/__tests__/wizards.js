@@ -40,8 +40,8 @@ const RunQuickFirstScanComponent = () => {
   const [reportId, setReportId] = useState();
 
   const handleRunQuickFirstScan = () => {
-    return runQuickFirstScan({hosts: '127.0.0.1, 192.168.0.1'}).then(
-      setReportId,
+    return runQuickFirstScan({hosts: '127.0.0.1, 192.168.0.1'}).then(id =>
+      setReportId(id),
     );
   };
 
@@ -95,9 +95,9 @@ describe('useRunQuickFirstScan tests', () => {
 
     expect(startTaskResult).toHaveBeenCalled();
 
-    // const startTaskReportId = screen.getByTestId('started-task');
-    /* expect(startTaskReportId).toHaveTextContent(
+    const startTaskReportId = await screen.getByTestId('started-task');
+    expect(startTaskReportId).toHaveTextContent(
       'Task started with report 13245',
-    );*/
+    );
   });
 });

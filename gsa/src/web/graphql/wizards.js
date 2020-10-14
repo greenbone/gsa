@@ -62,9 +62,7 @@ export const useRunQuickFirstScan = () => {
         return createTask(taskInputObject).then(response => {
           const taskId = response?.data?.createTask?.id;
 
-          return startTask(taskId).then(
-            result => result?.data?.startTask?.reportId,
-          );
+          return startTask(taskId);
         });
       });
     },
