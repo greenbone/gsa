@@ -20,16 +20,10 @@ import {useCallback} from 'react';
 import {gql, useQuery, useLazyQuery, useMutation} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
-
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import useUserTimezone from 'web/utils/useUserTimezone';
 
 import Task from 'gmp/models/task';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import {CREATE_TARGET} from 'web/graphql/targets';
 
 export const CLONE_TASK = gql`
   mutation cloneTask($id: UUID!) {
@@ -543,52 +537,4 @@ export const useExportTasksByIds = options => {
   );
 
   return exportTasksByIds;
-};
-
-export const useRunQuickFirstScan = () => {
-  const [sessionTimeout] = useUserSessionTimeout();
-  const [userTimezone] = useUserTimezone();
-
-  const [createTarget] = useMutation(CREATE_TARGET);
-  const [createTask] = useMutation(CREATE_TASK);
-  const [startTask] = useMutation(START_TASK);
-
-  const runQuickFirstScan = useCallback(
-    data => {
-      const date = dateTimeWithTimeZone(sessionTimeout, userTimezone);
-
-      const {hosts} = data;
-      const targetInputObject = {
-        name: `Target for immediate scan of IP ${hosts} - ${date}`,
-        hosts,
-        portListId: '33d0cd82-57c6-11e1-8ed1-406186ea4fc5', // All IANA assigned TCP
-      };
-
-      return createTarget({
-        variables: {input: targetInputObject},
-      }).then(resp => {
-        const targetId = resp?.data?.createTarget?.id;
-
-        const taskInputObject = {
-          name: `Immediate scan of IP ${hosts}`,
-          configId: 'daba56c8-73ec-11df-a475-002264764cea', // Full and Fast
-          targetId,
-          scannerId: '08b69003-5fc2-4037-a479-93b440211c73', // OpenVAS Default
-        };
-
-        return createTask({
-          variables: {input: taskInputObject},
-        }).then(response => {
-          const taskId = response?.data?.createTask?.id;
-
-          return startTask({variables: {id: taskId}}).then(
-            result => result?.data?.startTask?.reportId,
-          );
-        });
-      });
-    },
-    [createTarget, createTask, startTask, sessionTimeout, userTimezone],
-  );
-
-  return [runQuickFirstScan];
 };

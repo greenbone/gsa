@@ -74,8 +74,9 @@ import {
   useStartTask,
   useStopTask,
   useResumeTask,
-  useRunQuickFirstScan,
 } from 'web/graphql/tasks';
+
+import {useRunQuickFirstScan} from 'web/graphql/wizards';
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
 
