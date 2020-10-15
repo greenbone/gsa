@@ -19,7 +19,7 @@
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 
-import {fireEvent, rendererWith, waitForElement} from 'web/utils/testing';
+import {fireEvent, rendererWith, screen, waitFor} from 'web/utils/testing';
 
 import CvssCalculator from 'web/pages/extras/cvsscalculatorpage';
 
@@ -80,7 +80,7 @@ describe('CvssCalculator page tests', () => {
 
     const input = getAllByTestId('select-selected-value');
 
-    waitForElement(() => element.querySelectorAll('input'));
+    waitFor(() => element.querySelectorAll('input'));
     const vector = element.querySelectorAll('input');
 
     expect(input[0]).toHaveTextContent('Local');
@@ -104,7 +104,7 @@ describe('CvssCalculator page tests', () => {
     );
 
     const input = getAllByTestId('select-selected-value');
-    waitForElement(() => element.querySelectorAll('input'));
+    waitFor(() => element.querySelectorAll('input'));
 
     const vector = element.querySelectorAll('input');
 
@@ -136,7 +136,7 @@ describe('CvssCalculator page tests', () => {
       });
     });
 
-    waitForElement(() => getAllByTestId('select-selected-value'));
+    waitFor(() => getAllByTestId('select-selected-value'));
     const input = getAllByTestId('select-selected-value');
 
     expect(input[0]).toHaveTextContent('Network');
@@ -161,8 +161,7 @@ describe('CvssCalculator page tests', () => {
 
     const vector = element.querySelectorAll('input');
 
-    waitForElement(() => getAllByTestId('select-selected-value'));
-    const input = getAllByTestId('select-selected-value');
+    const input = await screen.findAllByTestId('select-selected-value');
 
     expect(input[0]).toHaveTextContent('Network');
     expect(input[1]).toHaveTextContent('Low');

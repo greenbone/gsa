@@ -31,7 +31,7 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
 
 import TaskPage, {ToolBarIcons} from '../listpage';
 
@@ -174,7 +174,7 @@ describe('TaskPage tests', () => {
 
     const {baseElement, getAllByTestId} = render(<TaskPage />);
 
-    await waitForElement(() => baseElement.querySelectorAll('table'));
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     const display = getAllByTestId('grid-item');
     const icons = getAllByTestId('svg-icon');
@@ -293,7 +293,7 @@ describe('TaskPage tests', () => {
 
     const {baseElement, getAllByTestId} = render(<TaskPage />);
 
-    await waitForElement(() => baseElement.querySelectorAll('table'));
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     const icons = getAllByTestId('svg-icon');
 

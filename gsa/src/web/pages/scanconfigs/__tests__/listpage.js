@@ -34,7 +34,7 @@ import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
 
@@ -54,7 +54,10 @@ const config = ScanConfig.fromElement({
   scanner: {name: 'scanner', type: '42'},
   type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
-    task: [{id: '1234', name: 'task1'}, {id: '5678', name: 'task2'}],
+    task: [
+      {id: '1234', name: 'task1'},
+      {id: '5678', name: 'task2'},
+    ],
   },
   family_count: {
     __text: 2,
@@ -138,7 +141,7 @@ describe('ScanConfigsPage tests', () => {
 
     const {baseElement} = render(<ScanConfigsPage />);
 
-    await waitForElement(() => baseElement.querySelectorAll('table'));
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     expect(baseElement).toMatchSnapshot();
   });
@@ -198,7 +201,7 @@ describe('ScanConfigsPage tests', () => {
 
     const {baseElement, getAllByTestId} = render(<ScanConfigsPage />);
 
-    await waitForElement(() => baseElement.querySelectorAll('table'));
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     const icons = getAllByTestId('svg-icon');
 

@@ -29,7 +29,7 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitForElement} from 'web/utils/testing';
+import {rendererWith, waitFor} from 'web/utils/testing';
 
 import TlsCertificatePage from '../listpage';
 
@@ -159,7 +159,7 @@ describe('TlsCertificatePage tests', () => {
 
     const {baseElement, getAllByTestId} = render(<TlsCertificatePage />);
 
-    await waitForElement(() => baseElement.querySelectorAll('table'));
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     const display = getAllByTestId('grid-item');
     const icons = getAllByTestId('svg-icon');
