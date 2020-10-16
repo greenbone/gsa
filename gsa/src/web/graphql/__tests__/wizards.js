@@ -24,7 +24,7 @@ import {GraphQLError} from 'graphql'; // ES6
 
 import date, {setLocale} from 'gmp/models/date';
 
-import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
+import {setUsername, setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
 import {useRunQuickFirstScan} from '../wizards';
@@ -36,6 +36,20 @@ import {
 } from '../__mocks__/wizards';
 
 setLocale('en'); // Required for composing wizard target name
+
+const RealDate = Date;
+
+const mockDate = new Date(1554632430000);
+
+beforeAll(() => {
+  global.Date = jest.fn(() => mockDate);
+  global.Date.now = jest.fn(() => mockDate.getTime());
+});
+
+afterAll(() => {
+  global.Date = RealDate;
+  global.Date.now = RealDate.now;
+});
 
 const RunQuickFirstScanComponent = () => {
   const [runQuickFirstScan] = useRunQuickFirstScan();
@@ -83,10 +97,8 @@ describe('useRunQuickFirstScan tests', () => {
       gmp,
     });
 
-    const timeout = date('2020-10-14');
-
-    store.dispatch(setSessionTimeout(timeout));
     store.dispatch(setUsername('foo'));
+    store.dispatch(setTimezone('UTC'));
 
     render(<RunQuickFirstScanComponent />);
 
@@ -130,10 +142,8 @@ describe('useRunQuickFirstScan tests', () => {
       gmp,
     });
 
-    const timeout = date('2020-10-14');
-
-    store.dispatch(setSessionTimeout(timeout));
     store.dispatch(setUsername('foo'));
+    store.dispatch(setTimezone('UTC'));
 
     render(<RunQuickFirstScanComponent />);
 

@@ -27,7 +27,7 @@ import {createGenericQueryMock} from 'web/utils/testing';
 
 export const createTargetInput = {
   name:
-    'Target for immediate scan of IP 127.0.0.1, 192.168.0.1 - Wed, Oct 14, 2020 12:00 AM ',
+    'Target for immediate scan of IP 127.0.0.1, 192.168.0.1 - 2019-04-07T10:20:30.000Z',
   hosts: '127.0.0.1, 192.168.0.1',
   portListId: ALL_IANA_ASSIGNED_TCP,
 };
