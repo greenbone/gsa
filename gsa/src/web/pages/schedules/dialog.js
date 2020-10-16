@@ -141,10 +141,7 @@ class ScheduleDialog extends React.Component {
     const {
       duration,
       timezone = 'UTC',
-      startDate = date()
-        .tz(timezone)
-        .startOf('hour')
-        .add(1, 'hour'),
+      startDate = date().tz(timezone).startOf('hour').add(1, 'hour'),
     } = props;
     let {freq, interval = 1, weekdays, monthdays} = this.props;
 
@@ -333,6 +330,8 @@ class ScheduleDialog extends React.Component {
       },
       timezone,
     );
+
+    console.log(event);
 
     return onSave({
       id,
