@@ -17,31 +17,10 @@
  */
 
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
-import {fireEvent, rendererWith, screen, waitFor} from 'web/utils/testing';
+import {fireEvent, rendererWith, waitFor, wait} from 'web/utils/testing';
 
 import CvssCalculator from 'web/pages/extras/cvsscalculatorpage';
-
-/* eslint-disable no-console */
-
-// this is just a little hack to silence a warning that we'll get until we
-// upgrade to 16.9: https://github.com/facebook/react/pull/14853
-const originalError = console.error;
-beforeAll(() => {
-  console.error = (...args) => {
-    if (/Warning.*not wrapped in act/.test(args[0])) {
-      return;
-    }
-    originalError.call(console, ...args);
-  };
-});
-
-afterAll(() => {
-  console.error = originalError;
-});
-
-/* eslint-enable no-console */
 
 const calculateScoreFromVector = jest.fn().mockReturnValue(
   Promise.resolve({
@@ -93,7 +72,7 @@ describe('CvssCalculator page tests', () => {
     expect(vector[0]).toHaveAttribute('value', 'AV:L/AC:L/Au:N/C:N/I:N/A:N');
   });
 
-  test('Should render userVector from url', () => {
+  test('Should render userVector from url', async () => {
     const {render} = rendererWith({
       gmp,
       store: true,
@@ -103,9 +82,9 @@ describe('CvssCalculator page tests', () => {
       <CvssCalculator location={location} />,
     );
 
-    const input = getAllByTestId('select-selected-value');
-    waitFor(() => element.querySelectorAll('input'));
+    await wait();
 
+    const input = getAllByTestId('select-selected-value');
     const vector = element.querySelectorAll('input');
 
     expect(input[0]).toHaveTextContent('Network');
@@ -128,15 +107,16 @@ describe('CvssCalculator page tests', () => {
       <CvssCalculator location={location} />,
     );
 
+    await wait();
+
     const vector = element.querySelectorAll('input');
 
-    act(() => {
-      fireEvent.change(vector[0], {
-        target: {value: 'AV:N/AC:L/Au:N/C:N/I:P/A:P'},
-      });
+    fireEvent.change(vector[0], {
+      target: {value: 'AV:N/AC:L/Au:N/C:N/I:P/A:P'},
     });
 
-    waitFor(() => getAllByTestId('select-selected-value'));
+    await wait();
+
     const input = getAllByTestId('select-selected-value');
 
     expect(input[0]).toHaveTextContent('Network');
@@ -159,9 +139,11 @@ describe('CvssCalculator page tests', () => {
       <CvssCalculator location={location} />,
     );
 
+    await wait();
+
     const vector = element.querySelectorAll('input');
 
-    const input = await screen.findAllByTestId('select-selected-value');
+    const input = getAllByTestId('select-selected-value');
 
     expect(input[0]).toHaveTextContent('Network');
     expect(input[1]).toHaveTextContent('Low');
