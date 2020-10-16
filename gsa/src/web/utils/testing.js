@@ -23,6 +23,7 @@ import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 
 import {
+  act,
   render as reactTestingRender,
   cleanup,
   queryAllByAttribute,
@@ -48,6 +49,15 @@ import configureStore from 'web/store';
 export * from '@testing-library/react';
 
 afterEach(cleanup);
+
+export async function wait(ms = 0) {
+  await act(
+    () =>
+      new Promise(resolve => {
+        setTimeout(resolve, ms);
+      }),
+  );
+}
 
 export const queryAllByName = (container, name) =>
   queryAllByAttribute('name', container, name);
@@ -103,9 +113,10 @@ const withProvider = (name, key = name) => Component => ({
 const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
-const TestingCapabilitiesProvider = withProvider('capabilities', 'value')(
-  CapabilitiesContext.Provider,
-);
+const TestingCapabilitiesProvider = withProvider(
+  'capabilities',
+  'value',
+)(CapabilitiesContext.Provider);
 
 export const rendererWith = (
   {capabilities, gmp, store, router} = {
