@@ -108,7 +108,7 @@ class TlsCertificate extends Model {
       const originObject = JSON.parse(report);
       return {
         id: originObject.origin_id,
-        timestamp: originObject.report.date,
+        timestamp: originObject?.report?.date,
       };
     });
     ret.sourceHosts = [...sourceHosts].map(host => {

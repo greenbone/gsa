@@ -16,11 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
 import styled from 'styled-components';
 
 import {_, _l} from 'gmp/locale/lang';
+
+import {isFunction} from 'gmp/utils/identity';
 
 import Theme from 'web/utils/theme';
 
@@ -58,34 +60,39 @@ const useFormValidation = (
 
   const [validityStatus, setValidityStatus] = useState(validationSchema); // use the same shape as stateschema
 
-  const handleValueChange = (value, name) => {
+  const handleValueChange = useCallback((value, name) => {
     setFormValues(prevValues => ({...prevValues, [name]: value}));
-  };
+  }, []);
 
-  const handleDependencyChange = (value, name) => {
+  const handleDependencyChange = useCallback((value, name) => {
     setDependencies(prevValues => ({...prevValues, [name]: value}));
-  };
+  }, []);
 
   // eslint-disable-next-line no-shadow
   const validate = (value, name, dependencies) => {
-    setValidityStatus(prevValidityStatus => ({
-      ...prevValidityStatus,
-      [name]: validationRules[name](value, dependencies),
-    }));
+    setValidityStatus(prevValidityStatus => {
+      const validationRule = validationRules[name];
+      return {
+        ...prevValidityStatus,
+        [name]: isFunction(validationRule)
+          ? validationRule(value, dependencies)
+          : undefined,
+      };
+    });
   };
 
   useEffect(() => {
-    Object.keys(formValues).forEach(key => {
+    Object.keys(validationSchema).forEach(key => {
       validate(formValues[key], key, dependencies);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formValues, dependencies]);
 
-  const handleSubmit = vals => {
+  const handleSubmit = values => {
     setShouldWarn(true);
 
     const hasErrorInState = Object.keys(formValues).some(key => {
-      return validityStatus[key].isValid === false;
+      return validityStatus[key]?.isValid === false;
     }, []); // checks if any field is invalid
 
     if (hasErrorInState) {
@@ -96,7 +103,7 @@ const useFormValidation = (
       );
     } else {
       // eslint-disable-next-line callback-return
-      return onValidationSuccess(vals); // if nothing is wrong, call onSave
+      return onValidationSuccess(values); // if nothing is wrong, call onSave
     }
   };
 
