@@ -285,6 +285,12 @@ describe('TlsCertificate Model tests', () => {
               },
             },
           },
+          {
+            origin: {
+              origin_id: 'ID789',
+              origin_type: 'Report',
+            },
+          },
         ],
       },
     };
@@ -296,6 +302,9 @@ describe('TlsCertificate Model tests', () => {
       {
         id: 'ID456',
         timestamp: '2019-10-10T11:09:23.022Z',
+      },
+      {
+        id: 'ID789',
       },
     ];
     const tlsCertificate = TlsCertificate.fromElement(element);
