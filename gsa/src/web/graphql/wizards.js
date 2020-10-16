@@ -35,12 +35,10 @@ import {
   DEFAULT_NOTICE_REPORT_FORMAT,
 } from 'web/pages/alerts/dialog';
 
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import useUserTimezone from 'web/utils/useUserTimezone';
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 export const useRunQuickFirstScan = () => {
-  const [sessionTimeout] = useUserSessionTimeout();
   const [userTimezone] = useUserTimezone();
 
   const [createTarget] = useCreateTarget();
@@ -49,7 +47,7 @@ export const useRunQuickFirstScan = () => {
 
   const runQuickFirstScan = useCallback(
     data => {
-      const date = dateTimeWithTimeZone(sessionTimeout, userTimezone);
+      const date = dateTimeWithTimeZone(new Date(), userTimezone);
 
       const {hosts} = data;
       const targetInputObject = {
@@ -75,14 +73,13 @@ export const useRunQuickFirstScan = () => {
         });
       });
     },
-    [createTarget, createTask, startTask, sessionTimeout, userTimezone],
+    [createTarget, createTask, startTask, userTimezone],
   );
 
   return [runQuickFirstScan];
 };
 
 export const useRunModifyTask = () => {
-  const [sessionTimeout] = useUserSessionTimeout();
   const [userTimezone] = useUserTimezone();
 
   const [createAlert] = useCreateAlert();
@@ -103,12 +100,16 @@ export const useRunModifyTask = () => {
 
       start_date.hours(start_hour);
       start_date.minutes(start_minute);
+      start_date.tz(start_timezone);
       const task = tasks[0];
       const {name, id: taskId, alerts} = task;
 
-      const date = dateTimeWithTimeZone(sessionTimeout, userTimezone);
-      const event = Event.fromData({startDate: start_date}, start_timezone);
-
+      const date = dateTimeWithTimeZone(new Date(), userTimezone);
+      const event = Event.fromData(
+        {startDate: start_date},
+        start_timezone,
+        false,
+      );
       let schedulePromise;
 
       if (!reschedule) {
@@ -172,7 +173,7 @@ export const useRunModifyTask = () => {
         });
       });
     },
-    [createAlert, createSchedule, modifyTask, sessionTimeout, userTimezone],
+    [createAlert, createSchedule, modifyTask, userTimezone],
   );
 
   return [runModifyTask];
