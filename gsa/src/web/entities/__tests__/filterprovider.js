@@ -23,7 +23,7 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {pageFilter} from 'web/store/pages/actions';
 
-import {rendererWith, screen} from 'web/utils/testing';
+import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import FilterProvider from '../filterprovider';
 
@@ -106,6 +106,54 @@ describe('FilterProvider component tests', () => {
     render(<FilterProvider gmpname="task">{renderFunc}</FilterProvider>);
 
     await screen.findByTestId('awaiting-span');
+
+    expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
+    expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
+  });
+
+  test('should allow to set a pageName for loading the pageFilter', async () => {
+    const gmpName = 'task';
+    const pageName = 'foo-bar-baz';
+    const resultingFilter = Filter.fromString('page=filter rows=42');
+
+    const pFilter = Filter.fromString('page=filter');
+
+    const emptyFilter = Filter.fromString('rows=42');
+
+    const defaultSettingFilter = Filter.fromString('foo=bar');
+
+    const getSetting = jest.fn().mockResolvedValue({});
+    const gmp = {
+      user: {
+        getSetting,
+      },
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success(gmpName, defaultSettingFilter),
+    );
+    store.dispatch(pageFilter(pageName, pFilter));
+
+    const renderFunc = jest
+      .fn()
+      .mockReturnValue(<span data-testid="awaiting-span" />);
+
+    render(
+      <FilterProvider gmpname={gmpName} pageName={pageName}>
+        {renderFunc}
+      </FilterProvider>,
+    );
+
+    await screen.findByTestId('awaiting-span');
+
+    await wait();
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
