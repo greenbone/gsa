@@ -19,7 +19,7 @@ import React from 'react';
 
 import Logger from 'gmp/log';
 
-import {rendererWith, fireEvent, waitForElement} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import LoginPage from '../loginpage';
 
@@ -146,7 +146,7 @@ describe('LoginPagetests', () => {
     fireEvent.click(button);
     expect(login).toBeCalledWith('foo', 'bar');
 
-    const error = await waitForElement(() => getByTestId('error'));
+    const error = await screen.findByTestId('error');
     expect(error).toHaveTextContent('Just a test');
   });
 

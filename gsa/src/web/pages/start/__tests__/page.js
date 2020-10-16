@@ -25,7 +25,7 @@ import Filter from 'gmp/models/filter';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, waitForElement} from 'web/utils/testing';
+import {rendererWith, screen} from 'web/utils/testing';
 
 import StartPage from '../page';
 
@@ -96,14 +96,10 @@ describe('StartPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId, queryAllByTestId} = render(
-      <StartPage />,
-    );
+    const {baseElement} = render(<StartPage />);
 
-    await waitForElement(() => queryAllByTestId('grid-item'));
-
-    const displays = getAllByTestId('grid-item');
-    const icons = getAllByTestId('svg-icon');
+    const displays = await screen.findAllByTestId('grid-item');
+    const icons = screen.getAllByTestId('svg-icon');
     const spans = baseElement.querySelectorAll('span');
 
     // Toolbar Icons
