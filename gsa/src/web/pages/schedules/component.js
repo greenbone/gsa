@@ -114,8 +114,6 @@ const ScheduleComponent = ({
   };
 
   const handleSaveSchedule = data => {
-    console.log(data);
-
     handleInteraction();
 
     const {id, ...other} = data;

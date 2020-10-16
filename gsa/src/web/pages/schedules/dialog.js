@@ -331,8 +331,6 @@ class ScheduleDialog extends React.Component {
       timezone,
     );
 
-    console.log(event);
-
     return onSave({
       id,
       name,
