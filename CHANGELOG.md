@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed TLS certificate download for users with permissions [#2496](https://github.com/greenbone/gsa/pull/2496)
 - Fixed form validation error tooltips [#2478](https://github.com/greenbone/gsa/pull/2478)
 - Only show schedule options in advanced and modify task wizard if user has correct permissions [#2472](https://github.com/greenbone/gsa/pull/2472)
+- Replace deprecated sys_siglist with strsignal [#2513](https://github.com/greenbone/gsa/pull/2513)
 
 ### Removed
 - Remove secinfo filter from user settings dialog and elsewhere [#2495](https://github.com/greenbone/gsa/pull/2495)
