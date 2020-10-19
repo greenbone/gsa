@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
@@ -56,29 +56,34 @@ const StyledInput = styled.input`
   opacity: ${props => (props.disabled ? DISABLED_OPACITY : undefined)};
 `;
 
-const Field = props => {
-  const [value, setValue] = useState(props.value);
+const Field = ({name, onChange, disabled = false, value, ...other}) => {
+  const notifyChange = useCallback(
+    val => {
+      if (isDefined(onChange) && !disabled) {
+        onChange(val, name);
+      }
+    },
+    [disabled, name, onChange],
+  );
 
-  useEffect(() => {
-    setValue(props.value);
-  }, [props.value]);
+  const handleChange = useCallback(
+    event => {
+      const val = event.target.value;
 
-  const notifyChange = val => {
-    const {name, onChange, disabled = false} = props;
+      notifyChange(val);
+    },
+    [notifyChange],
+  );
 
-    if (isDefined(onChange) && !disabled) {
-      onChange(val, name);
-    }
-  };
-  const handleChange = event => {
-    const val = event.target.value;
-
-    setValue(val);
-
-    notifyChange(val);
-  };
-
-  return <StyledInput {...props} value={value} onChange={handleChange} />;
+  return (
+    <StyledInput
+      {...other}
+      name={name}
+      disabled={disabled}
+      value={value}
+      onChange={handleChange}
+    />
+  );
 };
 
 Field.propTypes = {
