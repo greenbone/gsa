@@ -19,26 +19,34 @@
 /* eslint-disable react/prop-types */
 
 import React, {useState} from 'react';
+import {v4 as uuid} from 'uuid';
 
 import {GraphQLError} from 'graphql';
 
-import {setLocale} from 'gmp/models/date';
+import date, {setLocale} from 'gmp/models/date';
 
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
-import {useRunQuickFirstScan} from '../wizards';
+import {useRunQuickFirstScan, useRunModifyTask} from '../wizards';
 
 import {
   createWizardTargetQueryMock,
   createWizardStartTaskQueryMock,
   createWizardTaskQueryMock,
+  createWizardScheduleQueryMock,
+  createWizardAlertQueryMock,
+  createWizardModifyTaskQueryMock,
 } from '../__mocks__/wizards';
 
 setLocale('en'); // Required for composing wizard entity name
 
+jest.mock('uuid');
+
 const RealDate = Date;
 
 const mockDate = new Date(1554632430000);
+
+uuid.mockImplementation(() => 'fakeUUID123');
 
 beforeAll(() => {
   global.Date = jest.fn(() => mockDate);
@@ -140,6 +148,125 @@ describe('useRunQuickFirstScan tests', () => {
     expect(startTaskResult).not.toHaveBeenCalled();
 
     expect(screen.queryByTestId('started-task')).not.toBeInTheDocument();
+
+    const gqlError = screen.queryByTestId('error');
+
+    expect(gqlError).toHaveTextContent(
+      'There was an error in the request: Oops. Something went wrong :(',
+    );
+  });
+});
+
+const RunModifyTaskComponent = ({alertEmail, reschedule}) => {
+  const [runModifyTask] = useRunModifyTask();
+  const [ok, setOk] = useState(false);
+  const [error, setError] = useState();
+
+  const handleRunModifyTask = async () => {
+    try {
+      await runModifyTask({
+        alert_email: alertEmail,
+        start_date: date(),
+        start_minute: 13,
+        start_hour: 13,
+        start_timezone: 'Europe/Berlin',
+        reschedule,
+        tasks: [
+          {
+            name: 'myFirstTask',
+            id: '13579',
+            alerts: [{id: '34567'}],
+          },
+        ],
+      }).then(() => setOk(true));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  return (
+    <div>
+      {ok && <span data-testid="modify-task">{'Task modified'}</span>}
+      {error && (
+        <span data-testid="error">{`There was an error in the request: ${error}`}</span>
+      )}
+      <button data-testid="wizard" onClick={handleRunModifyTask} />
+    </div>
+  );
+};
+
+describe('useRunModifyTask tests', () => {
+  test('Should create schedule, alert, and modify task after user interaction', async () => {
+    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock();
+    const [alertMock, alertResult] = createWizardAlertQueryMock();
+    const [
+      modifyTaskMock,
+      modifyTaskResult,
+    ] = createWizardModifyTaskQueryMock();
+
+    const {render} = rendererWith({
+      queryMocks: [scheduleMock, alertMock, modifyTaskMock],
+    });
+
+    render(
+      <RunModifyTaskComponent alertEmail={'foo@bar.com'} reschedule={1} />,
+    );
+
+    const button = screen.getByTestId('wizard');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(scheduleResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(alertResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(modifyTaskResult).toHaveBeenCalled();
+
+    const taskModified = await screen.getByTestId('modify-task');
+    expect(taskModified).toHaveTextContent('Task modified');
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+  });
+
+  test('Should gracefully catch error in promise chain', async () => {
+    const error = new GraphQLError('Oops. Something went wrong :(');
+    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock([
+      error,
+    ]);
+    const [alertMock, alertResult] = createWizardAlertQueryMock();
+    const [
+      modifyTaskMock,
+      modifyTaskResult,
+    ] = createWizardModifyTaskQueryMock();
+
+    const {render} = rendererWith({
+      queryMocks: [scheduleMock, alertMock, modifyTaskMock],
+    });
+
+    render(
+      <RunModifyTaskComponent alertEmail={'foo@bar.com'} reschedule={1} />,
+    );
+
+    const button = screen.getByTestId('wizard');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(scheduleResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(alertResult).not.toHaveBeenCalled();
+
+    await wait();
+
+    expect(modifyTaskResult).not.toHaveBeenCalled();
+
+    expect(screen.queryByTestId('modify-task')).not.toBeInTheDocument();
 
     const gqlError = screen.queryByTestId('error');
 
