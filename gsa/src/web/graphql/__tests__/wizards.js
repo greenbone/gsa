@@ -53,6 +53,11 @@ beforeAll(() => {
   global.Date.now = jest.fn(() => mockDate.getTime());
 });
 
+afterEach(() => {
+  // if not, then the call count of each function will persist between tests
+  jest.clearAllMocks();
+});
+
 afterAll(() => {
   global.Date = RealDate;
   global.Date.now = RealDate.now;
