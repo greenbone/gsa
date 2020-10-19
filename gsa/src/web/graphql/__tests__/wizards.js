@@ -199,10 +199,10 @@ describe('useRunModifyTask tests', () => {
   test('Should create schedule, alert, and modify task after user interaction', async () => {
     const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock();
     const [alertMock, alertResult] = createWizardAlertQueryMock();
-    const [
-      modifyTaskMock,
-      modifyTaskResult,
-    ] = createWizardModifyTaskQueryMock();
+    const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
+      '12345',
+      '23456',
+    );
 
     const {render} = rendererWith({
       queryMocks: [scheduleMock, alertMock, modifyTaskMock],
@@ -273,5 +273,75 @@ describe('useRunModifyTask tests', () => {
     expect(gqlError).toHaveTextContent(
       'There was an error in the request: Oops. Something went wrong :(',
     );
+  });
+
+  test('Should not create a schedule if reschedule is 0', async () => {
+    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock();
+    const [alertMock, alertResult] = createWizardAlertQueryMock();
+    const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
+      undefined,
+      '23456',
+    );
+
+    const {render} = rendererWith({
+      queryMocks: [scheduleMock, alertMock, modifyTaskMock],
+    });
+
+    render(
+      <RunModifyTaskComponent alertEmail={'foo@bar.com'} reschedule={0} />,
+    );
+
+    const button = screen.getByTestId('wizard');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(scheduleResult).not.toHaveBeenCalled();
+
+    await wait();
+
+    expect(alertResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(modifyTaskResult).toHaveBeenCalled();
+
+    const taskModified = await screen.getByTestId('modify-task');
+    expect(taskModified).toHaveTextContent('Task modified');
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+  });
+
+  test('Should not create an alert if alert_email is empty string', async () => {
+    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock();
+    const [alertMock, alertResult] = createWizardAlertQueryMock();
+    const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
+      '12345',
+      undefined,
+    );
+
+    const {render} = rendererWith({
+      queryMocks: [scheduleMock, alertMock, modifyTaskMock],
+    });
+
+    render(<RunModifyTaskComponent alertEmail={''} reschedule={1} />);
+
+    const button = screen.getByTestId('wizard');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(scheduleResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(alertResult).not.toHaveBeenCalled();
+
+    await wait();
+
+    expect(modifyTaskResult).toHaveBeenCalled();
+
+    const taskModified = await screen.getByTestId('modify-task');
+    expect(taskModified).toHaveTextContent('Task modified');
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
   });
 });
