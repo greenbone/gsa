@@ -80,17 +80,15 @@ export const useRunModifyTask = () => {
   const [modifyTask] = useModifyTask();
 
   const runModifyTask = useCallback(
-    data => {
-      const {
-        alert_email,
-        start_date,
-        start_minute,
-        start_hour,
-        start_timezone,
-        reschedule,
-        tasks,
-      } = data;
-
+    ({
+      alert_email,
+      start_date,
+      start_minute,
+      start_hour,
+      start_timezone,
+      reschedule,
+      tasks,
+    }) => {
       start_date.hours(start_hour);
       start_date.minutes(start_minute);
 
