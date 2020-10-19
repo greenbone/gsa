@@ -20,9 +20,9 @@
 
 import React, {useState} from 'react';
 
-import {GraphQLError} from 'graphql'; // ES6
+import {GraphQLError} from 'graphql';
 
-import date, {setLocale} from 'gmp/models/date';
+import {setLocale} from 'gmp/models/date';
 
 import {setUsername, setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
@@ -35,7 +35,7 @@ import {
   createWizardTaskQueryMock,
 } from '../__mocks__/wizards';
 
-setLocale('en'); // Required for composing wizard target name
+setLocale('en'); // Required for composing wizard entity name
 
 const RealDate = Date;
 

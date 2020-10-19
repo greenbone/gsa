@@ -17,10 +17,6 @@
  */
 import {useCallback} from 'react';
 
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
-
-import date from 'gmp/models/date';
-
 import Event from 'gmp/models/event';
 
 import {ALL_IANA_ASSIGNED_TCP} from 'gmp/models/portlist';
@@ -98,7 +94,7 @@ export const useRunModifyTask = () => {
       start_date.hours(start_hour);
       start_date.minutes(start_minute);
 
-      const task = tasks[0];
+      const [task] = tasks;
       const {name, id: taskId, alerts} = task;
 
       const rightNow = new Date().toISOString();
@@ -124,6 +120,7 @@ export const useRunModifyTask = () => {
       }
 
       return schedulePromise.then(resp => {
+        // Should be undefined if no schedule is created
         const scheduleId = resp?.data?.createSchedule?.id;
 
         let alertPromise;
@@ -152,13 +149,15 @@ export const useRunModifyTask = () => {
         }
 
         return alertPromise.then(alertId => {
-          let taskAlerts = [];
-
-          if (hasValue(alerts)) {
-            alerts.forEach(alert => taskAlerts.push(alert.id));
-          }
+          const taskAlerts = [];
 
           if (hasValue(alertId)) {
+            // Should be undefined if no alert is created
+
+            if (hasValue(alerts)) {
+              alerts.forEach(alert => taskAlerts.push(alert.id));
+            }
+
             taskAlerts.push(alertId);
           }
           const modifyTaskInput = {
