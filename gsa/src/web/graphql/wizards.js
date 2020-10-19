@@ -102,7 +102,7 @@ export const useRunModifyTask = () => {
       const event = Event.fromData(
         {startDate: start_date},
         start_timezone,
-        false,
+        false, // if true, then the event will be scheduled at the given time, but at the user timezone instead. If I create an event at 22:00 Shanghai time, it will always be scheduled at 22:00 CEST (User timezone)
       );
       let schedulePromise;
 
