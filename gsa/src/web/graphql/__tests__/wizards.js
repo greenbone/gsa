@@ -243,10 +243,10 @@ describe('useRunModifyTask tests', () => {
       error,
     ]);
     const [alertMock, alertResult] = createWizardAlertQueryMock();
-    const [
-      modifyTaskMock,
-      modifyTaskResult,
-    ] = createWizardModifyTaskQueryMock();
+    const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
+      '12345',
+      '23456',
+    );
 
     const {render} = rendererWith({
       queryMocks: [scheduleMock, alertMock, modifyTaskMock],
