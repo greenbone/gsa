@@ -24,7 +24,6 @@ import {GraphQLError} from 'graphql';
 
 import {setLocale} from 'gmp/models/date';
 
-import {setUsername, setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
 import {useRunQuickFirstScan} from '../wizards';
@@ -85,20 +84,9 @@ describe('useRunQuickFirstScan tests', () => {
     const [taskMock, taskResult] = createWizardTaskQueryMock();
     const [startTaskMock, startTaskResult] = createWizardStartTaskQueryMock();
 
-    const gmp = {
-      settings: {
-        enableHyperionOnly: false,
-      },
-    };
-
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       queryMocks: [targetMock, taskMock, startTaskMock],
-      store: true,
-      gmp,
     });
-
-    store.dispatch(setUsername('foo'));
-    store.dispatch(setTimezone('UTC'));
 
     render(<RunQuickFirstScanComponent />);
 
@@ -130,20 +118,9 @@ describe('useRunQuickFirstScan tests', () => {
     const [taskMock, taskResult] = createWizardTaskQueryMock([error]);
     const [startTaskMock, startTaskResult] = createWizardStartTaskQueryMock();
 
-    const gmp = {
-      settings: {
-        enableHyperionOnly: false,
-      },
-    };
-
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       queryMocks: [targetMock, taskMock, startTaskMock],
-      store: true,
-      gmp,
     });
-
-    store.dispatch(setUsername('foo'));
-    store.dispatch(setTimezone('UTC'));
 
     render(<RunQuickFirstScanComponent />);
 
