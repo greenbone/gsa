@@ -26,7 +26,7 @@ import Theme from 'web/utils/theme';
 
 import withLayout from 'web/components/layout/withLayout';
 
-import {DISABLED_OPACTIY} from './field';
+import {DISABLED_OPACITY} from './field';
 import {Marker} from './useFormValidation';
 
 const StyledTextArea = styled.textarea`
@@ -46,7 +46,7 @@ const StyledTextArea = styled.textarea`
       return Theme.dialogGray;
     }
   }};
-  opacity: ${props => (props.disabled ? DISABLED_OPACTIY : undefined)};
+  opacity: ${props => (props.disabled ? DISABLED_OPACITY : undefined)};
 `;
 
 const TextArea = ({hasError = false, errorContent, title, ...props}) => {

@@ -26,7 +26,7 @@ import Theme from 'web/utils/theme';
 
 import withLayout from 'web/components/layout/withLayout';
 
-export const DISABLED_OPACTIY = 0.65;
+export const DISABLED_OPACITY = 0.65;
 
 const StyledInput = styled.input`
   /* use font and line settings from parents not from browser default */
@@ -53,7 +53,7 @@ const StyledInput = styled.input`
       return Theme.dialogGray;
     }
   }};
-  opacity: ${props => (props.disabled ? DISABLED_OPACTIY : undefined)};
+  opacity: ${props => (props.disabled ? DISABLED_OPACITY : undefined)};
 `;
 
 const Field = props => {
