@@ -83,8 +83,8 @@ const TextArea = ({
         {...props}
         disabled={disabled}
         hasError={hasError}
-        title={hasError ? errorContent : title}
         name={name}
+        title={hasError ? `${errorContent}` : title}
         value={value}
         onChange={handleChange}
       />
@@ -95,7 +95,7 @@ const TextArea = ({
 
 TextArea.propTypes = {
   disabled: PropTypes.bool,
-  errorContent: PropTypes.string,
+  errorContent: PropTypes.toString,
   hasError: PropTypes.bool,
   name: PropTypes.string,
   title: PropTypes.string,

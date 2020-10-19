@@ -29,7 +29,7 @@ const TextField = ({hasError = false, errorContent, title, ...props}) => {
       <Field
         {...props}
         hasError={hasError}
-        title={hasError ? errorContent : title}
+        title={hasError ? `${errorContent}` : title}
         type="text"
       />
       <Marker isVisible={hasError}>×</Marker>
@@ -38,7 +38,7 @@ const TextField = ({hasError = false, errorContent, title, ...props}) => {
 };
 
 TextField.propTypes = {
-  errorContent: PropTypes.string,
+  errorContent: PropTypes.toString,
   hasError: PropTypes.bool,
   title: PropTypes.string,
 };
