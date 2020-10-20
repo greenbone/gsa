@@ -25,7 +25,6 @@ import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
 import PasswordField from 'web/components/form/passwordfield';
-import Button from 'web/components/form/button';
 import TextField from 'web/components/form/textfield';
 import FormGroup from 'web/components/form/formgroup';
 
@@ -35,6 +34,15 @@ import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+
+import {Input, FlexColumn, Button} from '@greenbone/components/build/Library';
+
+const Paper = styled.div`
+  background: white;
+  box-shadow: 0px 14px 22px #00000029;
+  padding: 4rem;
+  max-width: 30rem;
+`;
 
 const Panel = styled.div`
   margin: 5px auto;
@@ -118,7 +126,7 @@ class LoginForm extends React.Component {
     } = this.props;
     const {username, password} = this.state;
     return (
-      <React.Fragment>
+      <Paper>
         <Layout>
           {showProtocolInsecure && (
             <Panel data-testid="protocol-insecure">
@@ -152,63 +160,53 @@ class LoginForm extends React.Component {
           )}
         </Layout>
 
-        <LoginPanel>
-          <StyledDivColumn>
-            <StyledDivRow>
-              <ProductImage />
-              {showLogin && !isIE11 && (
-                <Layout flex="column">
-                  <FormGroup title={_('Username')} titleSize="4">
-                    <TextField
-                      autoComplete="username"
-                      name="username"
-                      grow="1"
-                      placeholder={_('Username')}
-                      value={username}
-                      autoFocus="autofocus"
-                      tabIndex="1"
-                      onChange={this.handleValueChange}
-                    />
-                  </FormGroup>
-                  <FormGroup title={_('Password')} titleSize="4">
-                    <PasswordField
-                      autoComplete="current-password"
-                      name="password"
-                      grow="1"
-                      placeholder={_('Password')}
-                      value={password}
-                      onKeyDown={this.handleKeyDown}
-                      onChange={this.handleValueChange}
-                    />
-                  </FormGroup>
-                  <FormGroup size="4" offset="4">
-                    <Layout grow="1">
-                      <Button
-                        data-testid="login-button"
-                        title={_('Login')}
-                        onClick={this.handleSubmit}
-                      />
-                    </Layout>
-                  </FormGroup>
-                </Layout>
-              )}
-            </StyledDivRow>
-            {isDefined(error) && <Error data-testid="error">{error}</Error>}
-          </StyledDivColumn>
-        </LoginPanel>
+        <>
+          {showLogin && !isIE11 && (
+            <FlexColumn>
+              <Input
+                margin={'normal'}
+                type={'text'}
+                autoComplete="username"
+                name="username"
+                grow="1"
+                label={_('Username')}
+                value={username}
+                autoFocus="autofocus"
+                tabIndex="1"
+                onChange={this.handleValueChange}
+              />
+              <Input
+                margin={'normal'}
+                type={'password'}
+                autoComplete="current-password"
+                name="password"
+                grow="1"
+                label={_('Password')}
+                value={password}
+                onKeyDown={this.handleKeyDown}
+                onChange={this.handleValueChange}
+              />
+              <Button data-testid="login-button" onClick={this.handleSubmit}>
+                {_('Login')}
+              </Button>
+            </FlexColumn>
+          )}
+          {isDefined(error) && <Error data-testid="error">{error}</Error>}
+        </>
 
         {showGuestLogin && (
           <LoginPanel data-testid="guest-login">
             <Layout align={['center', 'center']}>
               <Button
                 data-testid="guest-login-button"
-                title={_('Login as Guest')}
                 onClick={onGuestLoginClick}
-              />
+              >
+                {_('Login as Guest')}asd
+              </Button>
             </Layout>
           </LoginPanel>
         )}
-      </React.Fragment>
+      </Paper>
     );
   }
 }

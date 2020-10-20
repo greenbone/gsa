@@ -21,6 +21,8 @@ import ReactDOM from 'react-dom';
 
 import App from './web/app';
 
+window.React1 = require('react');
+
 ReactDOM.render(<App />, document.getElementById('app'));
 
 // vim: set ts=2 sw=2 tw=80:
