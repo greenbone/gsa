@@ -256,12 +256,11 @@ class Event {
       weekdays,
     },
     timezone,
-    isUTC = true,
   ) {
     const event = new ical.Event();
 
     event.uid = uuid();
-    event.startDate = ical.Time.fromJSDate(startDate.toDate(), isUTC);
+    event.startDate = ical.Time.fromJSDate(startDate.toDate(), true);
 
     if (isDefined(duration)) {
       const eventDuration = new ical.Duration();
