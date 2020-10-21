@@ -63,6 +63,9 @@ afterAll(() => {
   global.Date.now = RealDate.now;
 });
 
+const startDate = date();
+const startTimezone = 'Europe/Berlin';
+
 const RunQuickFirstScanComponent = () => {
   const [runQuickFirstScan] = useRunQuickFirstScan();
   const [reportId, setReportId] = useState();
@@ -165,8 +168,8 @@ const RunModifyTaskComponent = ({alertEmail, reschedule}) => {
   const handleRunModifyTask = () => {
     runModifyTask({
       alertEmail,
-      startDate: date(),
-      startTimezone: 'Europe/Berlin',
+      startDate,
+      startTimezone,
       reschedule,
       tasks: [
         {
@@ -193,7 +196,10 @@ const RunModifyTaskComponent = ({alertEmail, reschedule}) => {
 
 describe('useRunModifyTask tests', () => {
   test('Should create schedule, alert, and modify task after user interaction', async () => {
-    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock();
+    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock(
+      startDate,
+      startTimezone,
+    );
     const [alertMock, alertResult] = createWizardAlertQueryMock();
     const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
       '12345',
@@ -230,9 +236,10 @@ describe('useRunModifyTask tests', () => {
 
   test('Should gracefully catch error in promise chain', async () => {
     const error = new GraphQLError('Oops. Something went wrong :(');
-    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock([
-      error,
-    ]);
+    const [
+      scheduleMock,
+      scheduleResult,
+    ] = createWizardScheduleQueryMock(startDate, startTimezone, [error]);
     const [alertMock, alertResult] = createWizardAlertQueryMock();
     const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
       '12345',
@@ -272,7 +279,11 @@ describe('useRunModifyTask tests', () => {
   });
 
   test('Should not create a schedule if reschedule is 0', async () => {
-    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock();
+    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock(
+      startDate,
+      startTimezone,
+      'Europe/Berlin',
+    );
     const [alertMock, alertResult] = createWizardAlertQueryMock();
     const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
       undefined,
@@ -308,7 +319,10 @@ describe('useRunModifyTask tests', () => {
   });
 
   test('Should not create an alert if alert_email is empty string', async () => {
-    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock();
+    const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock(
+      startDate,
+      startTimezone,
+    );
     const [alertMock, alertResult] = createWizardAlertQueryMock();
     const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
       '12345',
