@@ -40,7 +40,7 @@ import {
 
 import {createGenericQueryMock} from 'web/utils/testing';
 
-const mockDate = date();
+const mockDate = date('2020-03-28');
 const mockTimezone = 'Europe/Berlin';
 
 export const createTargetInput = startDate => {
