@@ -18,7 +18,6 @@
 import React, {useReducer} from 'react';
 
 import _ from 'gmp/locale';
-import date from 'gmp/models/date';
 
 import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
