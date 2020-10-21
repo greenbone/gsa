@@ -260,10 +260,8 @@ describe('ModifyTaskWizard component tests', () => {
     expect(handleSave).toHaveBeenCalledWith({
       alert_email: 'foo@bar.com',
       reschedule: 0,
-      start_date: startDate,
-      start_hour: startHour,
-      start_minute: startMinute,
-      start_timezone: startTimezone,
+      startDate,
+      startTimezone,
       task_id: taskId,
       tasks: tasks,
     });
