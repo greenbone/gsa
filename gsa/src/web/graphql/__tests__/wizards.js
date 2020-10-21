@@ -164,7 +164,7 @@ const RunModifyTaskComponent = ({alertEmail, reschedule}) => {
 
   const handleRunModifyTask = () => {
     runModifyTask({
-      alert_email: alertEmail,
+      alertEmail,
       startDate: date(),
       startTimezone: 'Europe/Berlin',
       reschedule,

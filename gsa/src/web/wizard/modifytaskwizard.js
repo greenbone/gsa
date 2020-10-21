@@ -43,41 +43,41 @@ import withCapabilities from 'web/utils/withCapabilities';
 import {WizardContent, WizardIcon} from './taskwizard';
 
 const ModifyTaskWizard = ({
-  alert_email = '',
+  alertEmail = '',
   capabilities,
   reschedule,
-  start_date,
-  start_timezone,
-  task_id,
+  startDate,
+  startTimezone,
+  taskId,
   tasks = [],
   onClose,
   onSave,
 }) => {
   const [timeState, dispatch] = useReducer(reducer, {
-    startDate: start_date,
-    startTimezone: start_timezone,
+    startDate,
+    startTimezone,
   });
 
   const handleTimeChange = (value, name) => {
-    if (name === 'start_date') {
+    if (name === 'startDate') {
       dispatch(
         updateState({
           startDate: value,
         }),
       );
-    } else if (name === 'start_hour') {
+    } else if (name === 'startHour') {
       dispatch(
         updateState({
           startDate: timeState.startDate.hours(value),
         }),
       );
-    } else if (name === 'start_minute') {
+    } else if (name === 'startMinute') {
       dispatch(
         updateState({
           startDate: timeState.startDate.minutes(value),
         }),
       );
-    } else if (name === 'start_timezone') {
+    } else if (name === 'startTimezone') {
       dispatch(
         updateState({
           startDate: timeState.startDate.tz(value),
@@ -87,15 +87,12 @@ const ModifyTaskWizard = ({
     }
   };
 
-  const {startDate, startTimezone} = timeState;
-
   const data = {
-    alert_email,
+    alertEmail,
     reschedule,
-    task_id,
+    taskId,
     tasks,
-    startDate,
-    startTimezone,
+    ...timeState,
   };
 
   return (
@@ -152,8 +149,8 @@ const ModifyTaskWizard = ({
           <Layout basis="0" grow="1" flex="column">
             <FormGroup title={_('Task')} titleSize="3">
               <Select
-                name="task_id"
-                value={state.task_id}
+                name="taskId"
+                value={state.taskId}
                 items={renderSelectItems(tasks)}
                 onChange={onValueChange}
               />
@@ -184,8 +181,8 @@ const ModifyTaskWizard = ({
                   </FormGroup>
                   <FormGroup offset="1">
                     <Datepicker
-                      name="start_date"
-                      value={startDate}
+                      name="startDate"
+                      value={timeState.startDate}
                       onChange={handleTimeChange}
                     />
                   </FormGroup>
@@ -198,8 +195,8 @@ const ModifyTaskWizard = ({
                         max={23}
                         size="2"
                         step={1}
-                        name="start_hour"
-                        value={startDate.hours()}
+                        name="startHour"
+                        value={timeState.startDate.hours()}
                         onChange={handleTimeChange}
                       />
                       <span>{_('h')}</span>
@@ -209,8 +206,8 @@ const ModifyTaskWizard = ({
                         max={59}
                         step={1}
                         size="2"
-                        name="start_minute"
-                        value={startDate.minutes()}
+                        name="startMinute"
+                        value={timeState.startDate.minutes()}
                         onChange={handleTimeChange}
                       />
                       <span>{_('m')}</span>
@@ -218,8 +215,8 @@ const ModifyTaskWizard = ({
                   </FormGroup>
                   <FormGroup offset="1">
                     <TimeZoneSelect
-                      name="start_timezone"
-                      value={startTimezone}
+                      name="startTimezone"
+                      value={timeState.startTimezone}
                       onChange={handleTimeChange}
                     />
                   </FormGroup>
@@ -231,8 +228,8 @@ const ModifyTaskWizard = ({
                 <FormGroup title={_('Email report to')} titleSize="3">
                   <TextField
                     grow="1"
-                    name="alert_email"
-                    value={state.alert_email}
+                    name="alertEmail"
+                    value={state.alertEmail}
                     size="30"
                     maxLength="80"
                     onChange={onValueChange}
@@ -247,14 +244,12 @@ const ModifyTaskWizard = ({
 };
 
 ModifyTaskWizard.propTypes = {
-  alert_email: PropTypes.string,
+  alertEmail: PropTypes.string,
   capabilities: PropTypes.capabilities.isRequired,
   reschedule: PropTypes.oneOf([NO_VALUE, YES_VALUE]),
-  start_date: PropTypes.date,
-  start_hour: PropTypes.number,
-  start_minute: PropTypes.number,
-  start_timezone: PropTypes.string,
-  task_id: PropTypes.id,
+  startDate: PropTypes.date,
+  startTimezone: PropTypes.string,
+  taskId: PropTypes.id,
   tasks: PropTypes.array,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
