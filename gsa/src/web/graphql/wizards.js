@@ -81,8 +81,6 @@ export const useRunModifyTask = () => {
 
   const runModifyTask = useCallback(
     ({alert_email, startDate, startTimezone, reschedule, tasks}) => {
-      console.log(startDate);
-
       const [task] = tasks;
       const {name, id: taskId, alerts} = task;
 
