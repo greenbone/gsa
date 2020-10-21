@@ -91,7 +91,7 @@ const RunQuickFirstScanComponent = () => {
 
 describe('useRunQuickFirstScan tests', () => {
   test('Should create target, run and start task after user interaction', async () => {
-    const [targetMock, targetResult] = createWizardTargetQueryMock();
+    const [targetMock, targetResult] = createWizardTargetQueryMock(startDate);
     const [taskMock, taskResult] = createWizardTaskQueryMock();
     const [startTaskMock, startTaskResult] = createWizardStartTaskQueryMock();
 
@@ -125,7 +125,7 @@ describe('useRunQuickFirstScan tests', () => {
 
   test('Should gracefully catch error in promise chain', async () => {
     const error = new GraphQLError('Oops. Something went wrong :(');
-    const [targetMock, targetResult] = createWizardTargetQueryMock();
+    const [targetMock, targetResult] = createWizardTargetQueryMock(startDate);
     const [taskMock, taskResult] = createWizardTaskQueryMock([error]);
     const [startTaskMock, startTaskResult] = createWizardStartTaskQueryMock();
 

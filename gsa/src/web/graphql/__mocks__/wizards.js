@@ -18,6 +18,8 @@
 
 import Event from 'gmp/models/event';
 
+import date from 'gmp/models/date';
+
 import {ALL_IANA_ASSIGNED_TCP} from 'gmp/models/portlist';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
@@ -38,13 +40,17 @@ import {
 
 import {createGenericQueryMock} from 'web/utils/testing';
 
-export const createTargetInput = {
-  input: {
-    name:
-      'Target for immediate scan of IP 127.0.0.1, 192.168.0.1 - 2019-04-07T10:20:30.000Z',
-    hosts: '127.0.0.1, 192.168.0.1',
-    portListId: ALL_IANA_ASSIGNED_TCP,
-  },
+const mockDate = date();
+const mockTimezone = 'Europe/Berlin';
+
+export const createTargetInput = startDate => {
+  return {
+    input: {
+      name: `Target for immediate scan of IP 127.0.0.1, 192.168.0.1 - ${startDate.toISOString()}`,
+      hosts: '127.0.0.1, 192.168.0.1',
+      portListId: ALL_IANA_ASSIGNED_TCP,
+    },
+  };
 };
 
 const createTargetResult = {
@@ -78,11 +84,11 @@ export const startTaskResult = {
   },
 };
 
-export const createWizardTargetQueryMock = errors =>
+export const createWizardTargetQueryMock = (startDate = mockDate, errors) =>
   createGenericQueryMock(
     CREATE_TARGET,
     createTargetResult,
-    createTargetInput,
+    createTargetInput(startDate),
     errors,
   );
 
@@ -117,8 +123,8 @@ const createScheduleResult = {
 };
 
 export const createWizardScheduleQueryMock = (
-  startDate,
-  startTimezone,
+  startDate = mockDate,
+  startTimezone = mockTimezone,
   errors,
 ) =>
   createGenericQueryMock(
