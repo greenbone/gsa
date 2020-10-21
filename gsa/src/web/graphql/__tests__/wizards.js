@@ -68,15 +68,10 @@ const RunQuickFirstScanComponent = () => {
   const [reportId, setReportId] = useState();
   const [error, setError] = useState();
 
-  const handleRunQuickFirstScan = async () => {
-    try {
-      await runQuickFirstScan({hosts: '127.0.0.1, 192.168.0.1'}).then(id =>
-        setReportId(id),
-      );
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  const handleRunQuickFirstScan = () =>
+    runQuickFirstScan({hosts: '127.0.0.1, 192.168.0.1'})
+      .then(id => setReportId(id))
+      .catch(err => setError(err.message));
 
   return (
     <div>
@@ -167,24 +162,22 @@ const RunModifyTaskComponent = ({alertEmail, reschedule}) => {
   const [ok, setOk] = useState(false);
   const [error, setError] = useState();
 
-  const handleRunModifyTask = async () => {
-    try {
-      await runModifyTask({
-        alert_email: alertEmail,
-        startDate: date(),
-        startTimezone: 'Europe/Berlin',
-        reschedule,
-        tasks: [
-          {
-            name: 'myFirstTask',
-            id: '13579',
-            alerts: [{id: '34567'}],
-          },
-        ],
-      }).then(() => setOk(true));
-    } catch (err) {
-      setError(err.message);
-    }
+  const handleRunModifyTask = () => {
+    runModifyTask({
+      alert_email: alertEmail,
+      startDate: date(),
+      startTimezone: 'Europe/Berlin',
+      reschedule,
+      tasks: [
+        {
+          name: 'myFirstTask',
+          id: '13579',
+          alerts: [{id: '34567'}],
+        },
+      ],
+    })
+      .then(() => setOk(true))
+      .catch(err => setError(err.message));
   };
 
   return (
