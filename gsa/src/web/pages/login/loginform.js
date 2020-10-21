@@ -35,7 +35,9 @@ import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-import {Input, FlexColumn, Button} from '@greenbone/components/build/Library';
+import {Input, Flex, Button} from '@greenbone/components/build/Library';
+import GreenboneLogo from 'web/components/img/greenbone_full';
+import {FlexColumn} from '@greenbone/components';
 
 const Paper = styled.div`
   background: white;
@@ -51,6 +53,13 @@ const Panel = styled.div`
   border: 1px solid ${Theme.lightGray};
   padding: 10px;
   margin-bottom: 10px;
+`;
+
+const StyledFlexColumn = styled(Flex)`
+  min-height: 12rem;
+  justify-content: space-evenly;
+  display: flex;
+  flex-direction: column;
 `;
 
 const LoginPanel = styled.div`
@@ -127,9 +136,10 @@ class LoginForm extends React.Component {
     const {username, password} = this.state;
     return (
       <Paper>
-        <Layout>
+        <FlexColumn>
+          <GreenboneLogo style={{maxWidth: '250px'}} />
           {showProtocolInsecure && (
-            <Panel data-testid="protocol-insecure">
+            <Panel style={{marginTop: '20px'}} data-testid="protocol-insecure">
               <Error>{_('Warning: Connection unencrypted')}</Error>
               <p>
                 {_(
@@ -145,7 +155,7 @@ class LoginForm extends React.Component {
               </p>
             </Panel>
           )}
-        </Layout>
+        </FlexColumn>
 
         <Layout>
           {isIE11 && (
@@ -162,7 +172,7 @@ class LoginForm extends React.Component {
 
         <>
           {showLogin && !isIE11 && (
-            <FlexColumn>
+            <StyledFlexColumn>
               <Input
                 margin={'normal'}
                 type={'text'}
@@ -173,7 +183,9 @@ class LoginForm extends React.Component {
                 value={username}
                 autoFocus="autofocus"
                 tabIndex="1"
-                onChange={this.handleValueChange}
+                onChange={e =>
+                  this.handleValueChange(e.target.value, e.target.name)
+                }
               />
               <Input
                 margin={'normal'}
@@ -184,12 +196,18 @@ class LoginForm extends React.Component {
                 label={_('Password')}
                 value={password}
                 onKeyDown={this.handleKeyDown}
-                onChange={this.handleValueChange}
+                onChange={e =>
+                  this.handleValueChange(e.target.value, e.target.name)
+                }
               />
-              <Button data-testid="login-button" onClick={this.handleSubmit}>
+              <Button
+                style={{marginTop: '2rem'}}
+                data-testid="login-button"
+                onClick={this.handleSubmit}
+              >
                 {_('Login')}
               </Button>
-            </FlexColumn>
+            </StyledFlexColumn>
           )}
           {isDefined(error) && <Error data-testid="error">{error}</Error>}
         </>
@@ -201,7 +219,7 @@ class LoginForm extends React.Component {
                 data-testid="guest-login-button"
                 onClick={onGuestLoginClick}
               >
-                {_('Login as Guest')}asd
+                {_('Login as Guest')}
               </Button>
             </Layout>
           </LoginPanel>
