@@ -18,6 +18,7 @@
 import React, {useReducer} from 'react';
 
 import _ from 'gmp/locale';
+import date from 'gmp/models/date';
 
 import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -47,8 +48,6 @@ const ModifyTaskWizard = ({
   capabilities,
   reschedule,
   start_date,
-  start_hour,
-  start_minute,
   start_timezone,
   task_id,
   tasks = [],
@@ -56,38 +55,40 @@ const ModifyTaskWizard = ({
   onSave,
 }) => {
   const [timeState, dispatch] = useReducer(reducer, {
-    startTimezone: start_timezone,
-    startHour: start_hour,
-    startMinute: start_minute,
     startDate: start_date,
+    startTimezone: start_timezone,
   });
 
-  const handleTimeChange = (prevStartDate, value, name) => {
-    if (name === 'start_hour') {
+  const handleTimeChange = (value, name) => {
+    if (name === 'start_date') {
       dispatch(
         updateState({
-          startDate: prevStartDate.hours(value),
-          startHour: value,
+          startDate: value,
+        }),
+      );
+    } else if (name === 'start_hour') {
+      dispatch(
+        updateState({
+          startDate: timeState.startDate.hours(value),
         }),
       );
     } else if (name === 'start_minute') {
       dispatch(
         updateState({
-          startDate: prevStartDate.minutes(value),
-          startMinute: value,
+          startDate: timeState.startDate.minutes(value),
         }),
       );
     } else if (name === 'start_timezone') {
       dispatch(
         updateState({
-          startDate: prevStartDate.tz(value),
+          startDate: timeState.startDate.tz(value),
           startTimezone: value,
         }),
       );
     }
   };
 
-  const {startDate, startHour, startMinute, startTimezone} = timeState;
+  const {startDate, startTimezone} = timeState;
 
   const data = {
     alert_email,
@@ -95,8 +96,6 @@ const ModifyTaskWizard = ({
     task_id,
     tasks,
     startDate,
-    startHour,
-    startMinute,
     startTimezone,
   };
 
@@ -188,7 +187,7 @@ const ModifyTaskWizard = ({
                     <Datepicker
                       name="start_date"
                       value={startDate}
-                      onChange={onValueChange}
+                      onChange={handleTimeChange}
                     />
                   </FormGroup>
                   <FormGroup offset="1">
@@ -201,10 +200,8 @@ const ModifyTaskWizard = ({
                         size="2"
                         step={1}
                         name="start_hour"
-                        value={state.startHour}
-                        onChange={(value, name) =>
-                          handleTimeChange(startDate, value, name)
-                        }
+                        value={startDate.hours()}
+                        onChange={handleTimeChange}
                       />
                       <span>{_('h')}</span>
                       <Spinner
@@ -214,10 +211,8 @@ const ModifyTaskWizard = ({
                         step={1}
                         size="2"
                         name="start_minute"
-                        value={startMinute}
-                        onChange={(value, name) =>
-                          handleTimeChange(startDate, value, name)
-                        }
+                        value={startDate.minutes()}
+                        onChange={handleTimeChange}
                       />
                       <span>{_('m')}</span>
                     </Divider>
@@ -226,9 +221,7 @@ const ModifyTaskWizard = ({
                     <TimeZoneSelect
                       name="start_timezone"
                       value={startTimezone}
-                      onChange={(value, name) =>
-                        handleTimeChange(startDate, value, name)
-                      }
+                      onChange={handleTimeChange}
                     />
                   </FormGroup>
                 </FormGroup>
