@@ -171,10 +171,8 @@ const RunModifyTaskComponent = ({alertEmail, reschedule}) => {
     try {
       await runModifyTask({
         alert_email: alertEmail,
-        start_date: date(),
-        start_minute: 13,
-        start_hour: 13,
-        start_timezone: 'Europe/Berlin',
+        startDate: date(),
+        startTimezone: 'Europe/Berlin',
         reschedule,
         tasks: [
           {
