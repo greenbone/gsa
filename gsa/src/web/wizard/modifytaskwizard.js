@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useReducer} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -36,6 +36,7 @@ import Datepicker from 'web/components/form/datepicker';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import reducer, {updateState} from 'web/utils/stateReducer';
 import {renderSelectItems} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -54,15 +55,49 @@ const ModifyTaskWizard = ({
   onClose,
   onSave,
 }) => {
+  const [timeState, dispatch] = useReducer(reducer, {
+    startTimezone: start_timezone,
+    startHour: start_hour,
+    startMinute: start_minute,
+    startDate: start_date,
+  });
+
+  const handleTimeChange = (prevStartDate, value, name) => {
+    if (name === 'start_hour') {
+      dispatch(
+        updateState({
+          startDate: prevStartDate.hours(value),
+          startHour: value,
+        }),
+      );
+    } else if (name === 'start_minute') {
+      dispatch(
+        updateState({
+          startDate: prevStartDate.minutes(value),
+          startMinute: value,
+        }),
+      );
+    } else if (name === 'start_timezone') {
+      dispatch(
+        updateState({
+          startDate: prevStartDate.tz(value),
+          startTimezone: value,
+        }),
+      );
+    }
+  };
+
+  const {startDate, startHour, startMinute, startTimezone} = timeState;
+
   const data = {
     alert_email,
-    start_date,
     reschedule,
-    start_hour,
-    start_minute,
-    start_timezone,
     task_id,
     tasks,
+    startDate,
+    startHour,
+    startMinute,
+    startTimezone,
   };
 
   return (
@@ -152,7 +187,7 @@ const ModifyTaskWizard = ({
                   <FormGroup offset="1">
                     <Datepicker
                       name="start_date"
-                      value={state.start_date}
+                      value={startDate}
                       onChange={onValueChange}
                     />
                   </FormGroup>
@@ -161,23 +196,28 @@ const ModifyTaskWizard = ({
                       <span>{_('at')}</span>
                       <Spinner
                         type="int"
-                        min="0"
-                        max="23"
+                        min={0}
+                        max={23}
                         size="2"
+                        step={1}
                         name="start_hour"
-                        value={state.start_hour}
-                        onChange={onValueChange}
+                        value={state.startHour}
+                        onChange={(value, name) =>
+                          handleTimeChange(startDate, value, name)
+                        }
                       />
                       <span>{_('h')}</span>
                       <Spinner
                         type="int"
-                        min="0"
-                        max="59"
+                        min={0}
+                        max={59}
+                        step={1}
                         size="2"
                         name="start_minute"
-                        value={state.start_minute}
-                        onChange={onValueChange}
-                        i
+                        value={startMinute}
+                        onChange={(value, name) =>
+                          handleTimeChange(startDate, value, name)
+                        }
                       />
                       <span>{_('m')}</span>
                     </Divider>
@@ -185,8 +225,10 @@ const ModifyTaskWizard = ({
                   <FormGroup offset="1">
                     <TimeZoneSelect
                       name="start_timezone"
-                      value={state.start_timezone}
-                      onChange={onValueChange}
+                      value={startTimezone}
+                      onChange={(value, name) =>
+                        handleTimeChange(startDate, value, name)
+                      }
                     />
                   </FormGroup>
                 </FormGroup>
