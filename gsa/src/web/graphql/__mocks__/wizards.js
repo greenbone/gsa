@@ -39,7 +39,7 @@ import {
 
 import {createGenericQueryMock} from 'web/utils/testing';
 
-const mockCreationDate = date(1554632430000);
+const mockDate = date(1554632430000);
 const mockTimezone = 'Europe/Berlin';
 
 export const createTargetInput = creationDate => {
@@ -83,10 +83,7 @@ export const startTaskResult = {
   },
 };
 
-export const createWizardTargetQueryMock = (
-  creationDate = mockCreationDate,
-  errors,
-) =>
+export const createWizardTargetQueryMock = (creationDate = mockDate, errors) =>
   createGenericQueryMock(
     CREATE_TARGET,
     createTargetResult,
@@ -125,8 +122,8 @@ const createScheduleResult = {
 };
 
 export const createWizardScheduleQueryMock = (
-  creationDate = mockCreationDate,
-  startDate = mockCreationDate,
+  creationDate = mockDate,
+  startDate = mockDate,
   startTimezone = mockTimezone,
   errors,
 ) =>
@@ -166,14 +163,11 @@ export const createAlertInput = creationDate => {
   };
 };
 
-export const createWizardAlertQueryMock = (
-  startDate = mockCreationDate,
-  errors,
-) =>
+export const createWizardAlertQueryMock = (creationDate = mockDate, errors) =>
   createGenericQueryMock(
     CREATE_ALERT,
     createAlertResult,
-    createAlertInput(startDate),
+    createAlertInput(creationDate),
     errors,
   );
 
