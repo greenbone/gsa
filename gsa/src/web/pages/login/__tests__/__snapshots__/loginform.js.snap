@@ -19,24 +19,6 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   align-items: center;
 }
 
-.c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
 .c0 {
   background: white;
   box-shadow: 0px 14px 22px #00000029;
@@ -71,23 +53,6 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-}
-
-.c5 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  border: 1px solid #c8d3d9;
-  padding: 10px;
-  margin-bottom: 10px;
 }
 
 .c2 {
@@ -211,19 +176,15 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
         An Error Occurred
       </p>
       <div
-        class="c5"
         data-testid="guest-login"
       >
-        <div
-          class="c6"
+        <button
+          class="sc-dIvqjp TxAgV"
+          data-testid="guest-login-button"
+          style="width: 100%; margin-top: 1rem;"
         >
-          <button
-            class="sc-dIvqjp TxAgV"
-            data-testid="guest-login-button"
-          >
-            Login as Guest
-          </button>
-        </div>
+          Login as Guest
+        </button>
       </div>
     </div>
   </div>

@@ -24,12 +24,6 @@ import _ from 'gmp/locale';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import PasswordField from 'web/components/form/passwordfield';
-import TextField from 'web/components/form/textfield';
-import FormGroup from 'web/components/form/formgroup';
-
-import ProductImage from 'web/components/img/product';
-
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
@@ -62,31 +56,11 @@ const StyledFlexColumn = styled(Flex)`
   flex-direction: column;
 `;
 
-const LoginPanel = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  border: 1px solid ${Theme.lightGray};
-  padding: 10px;
-  margin-bottom: 10px;
-`;
-
 const Error = styled.p`
   color: ${Theme.warningRed};
   font-weight: bold;
   text-align: center;
   margin: 10px;
-`;
-
-const StyledDivRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`;
-
-const StyledDivColumn = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 class LoginForm extends React.Component {
@@ -134,6 +108,7 @@ class LoginForm extends React.Component {
       onGuestLoginClick,
     } = this.props;
     const {username, password} = this.state;
+
     return (
       <Paper>
         <FlexColumn>
@@ -213,16 +188,15 @@ class LoginForm extends React.Component {
         </>
 
         {showGuestLogin && (
-          <LoginPanel data-testid="guest-login">
-            <Layout align={['center', 'center']}>
-              <Button
-                data-testid="guest-login-button"
-                onClick={onGuestLoginClick}
-              >
-                {_('Login as Guest')}
-              </Button>
-            </Layout>
-          </LoginPanel>
+          <div data-testid="guest-login">
+            <Button
+              style={{width: '100%', marginTop: '1rem'}}
+              data-testid="guest-login-button"
+              onClick={onGuestLoginClick}
+            >
+              {_('Login as Guest')}
+            </Button>
+          </div>
         )}
       </Paper>
     );

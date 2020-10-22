@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {useHistory, useLocation} from 'react-router-dom';
 
@@ -32,26 +32,19 @@ import logger from 'gmp/log';
 
 import moment from 'gmp/models/date';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
-
-import Theme from 'web/utils/theme';
 import useGmp from 'web/utils/useGmp';
-
-import Logo from 'web/components/img/greenbone';
 
 import Layout from 'web/components/layout/layout';
 
 import {useLogin} from 'web/graphql/auth';
 
-import Footer from 'web/components/structure/footer';
-import Header from 'web/components/structure/header';
-
 import {
+  setIsLoggedIn as setIsLoggedInAction,
   setSessionTimeout as setSessionTimeoutAction,
   setUsername as setUsernameAction,
   updateTimezone as updateTimezoneAction,
-  setIsLoggedIn as setIsLoggedInAction,
 } from 'web/store/usersettings/actions';
 
 import {isLoggedIn as isLoggedInSelector} from 'web/store/usersettings/selectors';
