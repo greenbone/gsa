@@ -18,6 +18,7 @@
 
 import Event from 'gmp/models/event';
 
+import date from 'gmp/models/date';
 import {ALL_IANA_ASSIGNED_TCP} from 'gmp/models/portlist';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
@@ -38,7 +39,7 @@ import {
 
 import {createGenericQueryMock} from 'web/utils/testing';
 
-const mockCreationDate = new Date(1554632430000);
+const mockCreationDate = date(1554632430000);
 const mockTimezone = 'Europe/Berlin';
 
 export const createTargetInput = creationDate => {

@@ -57,7 +57,7 @@ const RunQuickFirstScanComponent = () => {
   const handleRunQuickFirstScan = () =>
     runQuickFirstScan({hosts: '127.0.0.1, 192.168.0.1'}, mockCreationDate)
       .then(id => setReportId(id))
-      .catch(err => setError(err.message));
+      .catch(setError);
 
   return (
     <div>
@@ -142,7 +142,7 @@ describe('useRunQuickFirstScan tests', () => {
     const gqlError = screen.queryByTestId('error');
 
     expect(gqlError).toHaveTextContent(
-      'There was an error in the request: Oops. Something went wrong :(',
+      'There was an error in the request: Error: Oops. Something went wrong :(',
     );
   });
 });
@@ -170,7 +170,7 @@ const RunModifyTaskComponent = ({alertEmail, reschedule}) => {
       mockCreationDate,
     )
       .then(() => setOk(true))
-      .catch(err => setError(err.message));
+      .catch(setError);
   };
 
   return (
@@ -274,7 +274,7 @@ describe('useRunModifyTask tests', () => {
     const gqlError = screen.queryByTestId('error');
 
     expect(gqlError).toHaveTextContent(
-      'There was an error in the request: Oops. Something went wrong :(',
+      'There was an error in the request: Error: Oops. Something went wrong :(',
     );
   });
 
