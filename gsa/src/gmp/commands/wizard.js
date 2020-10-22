@@ -37,18 +37,6 @@ function convert_data(prefix, data, fields) {
   return converted;
 }
 
-const event_data_quick_first_scan_fields = [
-  'config_id',
-  'alert_id',
-  'scanner_id',
-  'smb_credential',
-  'ssh_credential',
-  'ssh_port',
-  'esxi_credential',
-  'hosts',
-  'port_list_id',
-];
-
 const event_data_quick_task_fields = [
   'config_id',
   'alert_email',
@@ -67,18 +55,6 @@ const event_data_quick_task_fields = [
   'task_name',
   'target_hosts',
   'port_list_id',
-];
-
-const event_data_modify_task_fields = [
-  'task_id',
-  'alert_email',
-  'reschedule',
-  'start_year',
-  'start_month',
-  'start_day',
-  'start_hour',
-  'start_minute',
-  'start_timezone',
 ];
 
 class WizardCommand extends HttpCommand {
@@ -174,14 +150,6 @@ class WizardCommand extends HttpCommand {
     });
   }
 
-  runQuickFirstScan(args) {
-    return this.httpPost({
-      ...convert_data('event_data', args, event_data_quick_first_scan_fields),
-      cmd: 'run_wizard',
-      name: 'quick_first_scan',
-    });
-  }
-
   runQuickTask(args) {
     const {start_date, ...other} = args;
     const event_data = convert_data(
@@ -198,26 +166,6 @@ class WizardCommand extends HttpCommand {
       ...event_data,
       cmd: 'run_wizard',
       name: 'quick_task',
-    });
-  }
-
-  runModifyTask(args) {
-    const {start_date, ...other} = args;
-
-    const event_data = convert_data(
-      'event_data',
-      other,
-      event_data_modify_task_fields,
-    );
-
-    event_data['event_data:start_day'] = start_date.date();
-    event_data['event_data:start_month'] = start_date.month() + 1;
-    event_data['event_data:start_year'] = start_date.year();
-
-    return this.httpPost({
-      ...event_data,
-      cmd: 'run_wizard',
-      name: 'modify_task',
     });
   }
 }
