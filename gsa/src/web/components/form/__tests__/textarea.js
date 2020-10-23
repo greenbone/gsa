@@ -20,7 +20,7 @@ import React from 'react';
 import Theme from 'web/utils/theme';
 import {render, fireEvent} from 'web/utils/testing';
 
-import {DISABLED_OPACTIY} from '../field';
+import {DISABLED_OPACITY} from '../field';
 import TextArea from '../textarea';
 
 describe('TextArea tests', () => {
@@ -38,7 +38,7 @@ describe('TextArea tests', () => {
     const {element} = render(<TextArea disabled={true} />);
 
     expect(element).toHaveStyleRule('cursor', 'not-allowed');
-    expect(element).toHaveStyleRule('opacity', `${DISABLED_OPACTIY}`);
+    expect(element).toHaveStyleRule('opacity', `${DISABLED_OPACITY}`);
     expect(element).toHaveStyleRule('background-color', Theme.dialogGray);
 
     expect(element).toMatchSnapshot();
