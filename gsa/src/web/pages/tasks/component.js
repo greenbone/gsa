@@ -76,7 +76,7 @@ import {
   useResumeTask,
 } from 'web/graphql/tasks';
 
-import {useRunQuickFirstScan} from 'web/graphql/wizards';
+import {useRunQuickFirstScan, useRunModifyTask} from 'web/graphql/wizards';
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
 
@@ -176,6 +176,7 @@ const TaskComponent = ({
   const [stopTask] = useStopTask();
   const [resumeTask] = useResumeTask();
   const [runQuickFirstScan] = useRunQuickFirstScan();
+  const [runModifyTask] = useRunModifyTask();
 
   // GraphQL Loaders and Data
   const [
@@ -689,8 +690,7 @@ const TaskComponent = ({
   const handleSaveModifyTaskWizard = data => {
     handleInteraction();
 
-    return gmp.wizard
-      .runModifyTask(data)
+    return runModifyTask(data)
       .then(onModifyTaskWizardSaved, onModifyTaskWizardError)
       .then(() => closeModifyTaskWizard());
   };
@@ -1017,13 +1017,11 @@ const TaskComponent = ({
 
       {modifyTaskWizardVisible && (
         <ModifyTaskWizard
-          start_date={startDate}
+          startDate={startDate}
           tasks={tasks}
           reschedule={reschedule}
-          task_id={taskId}
-          start_minute={startMinute}
-          start_hour={startHour}
-          start_timezone={startTimezone}
+          taskId={taskId}
+          startTimezone={startTimezone}
           onClose={handleCloseModifyTaskWizard}
           onSave={handleSaveModifyTaskWizard}
         />
