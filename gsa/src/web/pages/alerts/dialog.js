@@ -498,6 +498,7 @@ const AlertDialog = props => {
       onSave={onSave}
     >
       {({values, onValueChange}) => {
+        console.log(values);
         return (
           <Layout flex="column">
             <FormGroup title={_('Name')}>

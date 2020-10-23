@@ -49,7 +49,7 @@ import FootNote from 'web/components/footnote/footnote';
 
 import Layout from 'web/components/layout/layout';
 
-import {useCreateAlert} from 'web/graphql/alerts';
+import {useCreateAlert, useModifyAlert} from 'web/graphql/alerts';
 
 import {useCreateCredential} from 'web/graphql/credentials';
 
@@ -157,6 +157,7 @@ const AlertComponent = ({
     dispatch(saveDefaults(gmp)(defaults));
 
   const [createAlert] = useCreateAlert();
+  const [modifyAlert] = useModifyAlert();
   const [createCredential] = useCreateCredential();
 
   const handleInteraction = () => {
@@ -365,19 +366,23 @@ const AlertComponent = ({
         .then(closeAlertDialog);
     }
 
-    return gmp.alert
-      .save({
-        active,
-        name,
-        comment,
-        event,
-        condition,
-        filter_id,
-        method,
-        report_format_ids,
-        ...other,
-      })
-      .then(onSaved, onSaveError);
+    return modifyAlert({
+      id,
+      name,
+      comment,
+      event: convertEventEnum(event),
+      eventData: await convertDict('event_data', other, event_data_fields),
+      condition: convertConditionEnum(condition),
+      conditionData: await convertDict(
+        'condition_data',
+        other,
+        condition_data_fields,
+      ),
+      filterId: filter_id,
+      method: convertMethodEnum(method),
+      methodData: await convertDict('method_data', other, method_data_fields),
+      reportFormats: report_format_ids,
+    }).then(onSaved, onSaveError);
   };
 
   const openScpCredentialDialog = types => {
@@ -661,7 +666,7 @@ const AlertComponent = ({
 
               method_data_smb_credential: getValue(
                 method.data.smb_credential,
-                '',
+                UNSET_VALUE,
               ),
               method_data_smb_file_path: getValue(
                 method.data.smb_file_path,
@@ -673,7 +678,7 @@ const AlertComponent = ({
               ),
               method_data_smb_report_format: getValue(
                 method.data.smb_report_format,
-                '',
+                UNSET_VALUE,
               ),
               method_data_smb_share_path: getValue(
                 method.data.smb_share_path,
@@ -719,7 +724,7 @@ const AlertComponent = ({
               method_data_pkcs12_credential: selectSaveId(
                 passwordOnlyCredentials,
                 pkcs12_credential_id,
-                '0',
+                UNSET_VALUE,
               ),
               method_data_vfire_credential: selectSaveId(
                 vFireCredentials,
