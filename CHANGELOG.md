@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 - Removed unused task wizard commands for runQuickTask, runQuickFirstScan and runModifyTask [#2514](https://github.com/greenbone/gsa/pull/2514) [#2523](https://github.com/greenbone/gsa/pull/2523)
+- Removed support for uncontrolled form fields [#2520](https://github.com/greenbone/gsa/pull/2520)
 - Drop gmp scanner type from GSA [#2498](https://github.com/greenbone/gsa/pull/2498)
 - Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
