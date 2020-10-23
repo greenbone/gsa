@@ -76,7 +76,11 @@ import {
   useResumeTask,
 } from 'web/graphql/tasks';
 
-import {useRunQuickFirstScan, useRunModifyTask} from 'web/graphql/wizards';
+import {
+  useRunQuickFirstScan,
+  useRunModifyTask,
+  useRunQuickTask,
+} from 'web/graphql/wizards';
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
 
@@ -177,6 +181,7 @@ const TaskComponent = ({
   const [resumeTask] = useResumeTask();
   const [runQuickFirstScan] = useRunQuickFirstScan();
   const [runModifyTask] = useRunModifyTask();
+  const [runQuickTask] = useRunQuickTask();
 
   // GraphQL Loaders and Data
   const [
@@ -651,8 +656,7 @@ const TaskComponent = ({
   const handleSaveAdvancedTaskWizard = data => {
     handleInteraction();
 
-    return gmp.wizard
-      .runQuickTask(data)
+    return runQuickTask(data)
       .then(onAdvancedTaskWizardSaved, onAdvancedTaskWizardError)
       .then(() => closeAdvancedTaskWizard());
   };
@@ -842,8 +846,6 @@ const TaskComponent = ({
     targetHosts,
     scanConfigs,
     startDate,
-    startMinute,
-    startHour,
     reschedule,
     alertIds,
     configId,
@@ -996,20 +998,15 @@ const TaskComponent = ({
       {advancedTaskWizardVisible && (
         <AdvancedTaskWizard
           credentials={credentials}
-          scan_configs={scanConfigs}
-          start_date={startDate}
-          task_name={taskName}
-          target_hosts={targetHosts}
-          port_list_id={portListId}
-          alert_id={alertId}
-          config_id={configId}
-          ssh_credential={sshCredential}
-          smb_credential={smbCredential}
-          esxi_credential={esxiCredential}
-          scanner_id={scannerId}
-          start_minute={startMinute}
-          start_hour={startHour}
-          start_timezone={startTimezone}
+          scanConfigs={scanConfigs}
+          startDate={startDate}
+          taskName={taskName}
+          targetHosts={targetHosts}
+          configId={configId}
+          sshCredential={sshCredential}
+          smbCredential={smbCredential}
+          esxiCredential={esxiCredential}
+          startTimezone={startTimezone}
           onClose={handleCloseAdvancedTaskWizard}
           onSave={handleSaveAdvancedTaskWizard}
         />
