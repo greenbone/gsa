@@ -187,11 +187,13 @@ const RunModifyTaskComponent = ({alertEmail, reschedule}) => {
 describe('useRunModifyTask tests', () => {
   test('Should create schedule, alert, and modify task after user interaction', async () => {
     const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock(
+      'myFirstTask',
       mockCreationDate,
       mockScheduleDate,
       mockScheduleTimezone,
     );
     const [alertMock, alertResult] = createWizardAlertQueryMock(
+      'myFirstTask',
       mockCreationDate,
     );
     const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
@@ -233,12 +235,14 @@ describe('useRunModifyTask tests', () => {
       scheduleMock,
       scheduleResult,
     ] = createWizardScheduleQueryMock(
+      'myFirstTask',
       mockCreationDate,
       mockScheduleDate,
       mockScheduleTimezone,
       [error],
     );
     const [alertMock, alertResult] = createWizardAlertQueryMock(
+      'myFirstTask',
       mockCreationDate,
     );
     const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
@@ -280,11 +284,13 @@ describe('useRunModifyTask tests', () => {
 
   test('Should not create a schedule if reschedule is 0', async () => {
     const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock(
+      'myFirstTask',
       mockCreationDate,
       mockScheduleDate,
       mockScheduleTimezone,
     );
     const [alertMock, alertResult] = createWizardAlertQueryMock(
+      'myFirstTask',
       mockCreationDate,
     );
     const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
@@ -322,11 +328,13 @@ describe('useRunModifyTask tests', () => {
 
   test('Should not create an alert if alert_email is empty string', async () => {
     const [scheduleMock, scheduleResult] = createWizardScheduleQueryMock(
+      'myFirstTask',
       mockCreationDate,
       mockScheduleDate,
       mockScheduleTimezone,
     );
     const [alertMock, alertResult] = createWizardAlertQueryMock(
+      'myFirstTask',
       mockCreationDate,
     );
     const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
