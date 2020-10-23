@@ -27,36 +27,6 @@ import {forEach, map} from '../utils/array';
 
 import HttpCommand from './http';
 
-function convert_data(prefix, data, fields) {
-  const converted = {};
-  for (const name of fields) {
-    if (data.hasOwnProperty(name)) {
-      converted[prefix + ':' + name] = data[name];
-    }
-  }
-  return converted;
-}
-
-const event_data_quick_task_fields = [
-  'config_id',
-  'alert_email',
-  'scanner_id',
-  'auto_start',
-  'start_year',
-  'start_month',
-  'start_day',
-  'start_hour',
-  'start_minute',
-  'start_timezone',
-  'smb_credential',
-  'ssh_credential',
-  'ssh_port',
-  'esxi_credential',
-  'task_name',
-  'target_hosts',
-  'port_list_id',
-];
-
 class WizardCommand extends HttpCommand {
   constructor(http) {
     super(http, {cmd: 'wizard'});
@@ -147,25 +117,6 @@ class WizardCommand extends HttpCommand {
       ).filter(task => !task.isContainer());
 
       return response.setData(settings);
-    });
-  }
-
-  runQuickTask(args) {
-    const {start_date, ...other} = args;
-    const event_data = convert_data(
-      'event_data',
-      other,
-      event_data_quick_task_fields,
-    );
-
-    event_data['event_data:start_day'] = start_date.day();
-    event_data['event_data:start_month'] = start_date.month() + 1;
-    event_data['event_data:start_year'] = start_date.year();
-
-    return this.httpPost({
-      ...event_data,
-      cmd: 'run_wizard',
-      name: 'quick_task',
     });
   }
 }
