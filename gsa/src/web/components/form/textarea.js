@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useState} from 'react';
+import React, {useCallback} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
@@ -26,7 +26,7 @@ import Theme from 'web/utils/theme';
 
 import withLayout from 'web/components/layout/withLayout';
 
-import {DISABLED_OPACTIY} from './field';
+import {DISABLED_OPACITY} from './field';
 import {Marker} from './useFormValidation';
 
 const StyledTextArea = styled.textarea`
@@ -46,32 +46,45 @@ const StyledTextArea = styled.textarea`
       return Theme.dialogGray;
     }
   }};
-  opacity: ${props => (props.disabled ? DISABLED_OPACTIY : undefined)};
+  opacity: ${props => (props.disabled ? DISABLED_OPACITY : undefined)};
 `;
 
-const TextArea = ({hasError = false, errorContent, title, ...props}) => {
-  const [value, setValue] = useState(props.value);
-  const notifyChange = val => {
-    const {name, onChange, disabled = false} = props;
+const TextArea = ({
+  hasError = false,
+  errorContent,
+  title,
+  value,
+  name,
+  onChange,
+  disabled = false,
+  ...props
+}) => {
+  const notifyChange = useCallback(
+    val => {
+      if (isDefined(onChange) && !disabled) {
+        onChange(val, name);
+      }
+    },
+    [disabled, name, onChange],
+  );
 
-    if (isDefined(onChange) && !disabled) {
-      onChange(val, name);
-    }
-  };
-  const handleChange = event => {
-    const val = event.target.value;
+  const handleChange = useCallback(
+    event => {
+      const val = event.target.value;
 
-    setValue(val);
-
-    notifyChange(val);
-  };
+      notifyChange(val);
+    },
+    [notifyChange],
+  );
 
   return (
     <React.Fragment>
       <StyledTextArea
         {...props}
+        disabled={disabled}
         hasError={hasError}
-        title={hasError ? errorContent : title}
+        name={name}
+        title={hasError ? `${errorContent}` : title}
         value={value}
         onChange={handleChange}
       />
@@ -82,7 +95,7 @@ const TextArea = ({hasError = false, errorContent, title, ...props}) => {
 
 TextArea.propTypes = {
   disabled: PropTypes.bool,
-  errorContent: PropTypes.string,
+  errorContent: PropTypes.toString,
   hasError: PropTypes.bool,
   name: PropTypes.string,
   title: PropTypes.string,
