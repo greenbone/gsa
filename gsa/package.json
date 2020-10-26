@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.12.3",
-    "@apollo/client": "^3.2.4",
+    "@apollo/client": "^3.2.5",
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
     "@vx/shape": "^0.0.179",
