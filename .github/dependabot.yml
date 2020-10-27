@@ -1,31 +1,32 @@
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/gsa"
-  schedule:
-    interval: weekly
-    time: "04:00"
-  open-pull-requests-limit: 10
-  versioning-strategy: increase
-  ignore:
-  - dependency-name: husky
-    versions:
-    - "> 2.7.0"
-  - dependency-name: lint-staged
-    versions:
-    - "> 8.2.1"
-  - dependency-name: react-datepicker
-    versions:
-    - "> 1.8.0"
-  - dependency-name: "@testing-library/react"
-    versions:
-    - ">= 10.a, < 11"
-  - dependency-name: "@vx/axis"
-    versions:
-    - "> 0.0.183"
-  - dependency-name: "@vx/gradient"
-    versions:
-    - "> 0.0.183"
-  - dependency-name: "@vx/shape"
-    versions:
-    - "> 0.0.179"
+  - package-ecosystem: npm
+    directory: "/gsa"
+    schedule:
+      interval: weekly
+      time: "04:00"
+    target-branch: "gsa-21.04"
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    ignore:
+      - dependency-name: husky
+        versions:
+          - "> 2.7.0"
+      - dependency-name: lint-staged
+        versions:
+          - "> 8.2.1"
+      - dependency-name: react-datepicker
+        versions:
+          - "> 1.8.0"
+      - dependency-name: "@testing-library/react"
+        versions:
+          - ">= 10.a, < 11"
+      - dependency-name: "@vx/axis"
+        versions:
+          - "> 0.0.183"
+      - dependency-name: "@vx/gradient"
+        versions:
+          - "> 0.0.183"
+      - dependency-name: "@vx/shape"
+        versions:
+          - "> 0.0.179"
