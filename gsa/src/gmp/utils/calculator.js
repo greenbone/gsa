@@ -23,9 +23,9 @@ const parseCIA = value => {
     case 'NONE':
       return 0.0;
     case 'LOW':
-      return 0.275;
+      return 0.22;
     case 'HIGH':
-      return 0.66;
+      return 0.56;
     default:
       return undefined;
   }
@@ -155,6 +155,26 @@ export const calculateV3Score = ({
       default:
         return undefined;
     }
+  }
+};
+
+export const calculateV2Score = ({
+  accessVector,
+  accessComplexity,
+  confidentialityImpact,
+  authentication,
+  integrityImpact,
+  availabilityImpact,
+} = {}) => {
+  if (
+    !isDefined(accessVector) &&
+    !isDefined(accessComplexity) &&
+    !isDefined(confidentialityImpact) &&
+    !isDefined(authentication) &&
+    !isDefined(integrityImpact) &&
+    !isDefined(availabilityImpact)
+  ) {
+    return undefined;
   }
 };
 
