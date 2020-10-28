@@ -23,7 +23,7 @@ import {map} from 'gmp/utils/array';
 
 import {
   parseSeverity,
-  parseCvssBaseVector,
+  parseCvssV2BaseVector,
   parseDate,
   setProperties,
 } from 'gmp/parser';
@@ -95,7 +95,7 @@ class Cve extends Info {
       'cert',
     ]);
 
-    ret.cvssBaseVector = parseCvssBaseVector({
+    ret.cvssBaseVector = parseCvssV2BaseVector({
       accessComplexity: ret.complexity,
       accessVector: ret.vector,
       authentication: ret.authentication,

@@ -17,8 +17,6 @@
  */
 import React, {useState, useEffect} from 'react';
 
-import {connect} from 'react-redux';
-
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
@@ -26,7 +24,13 @@ import _ from 'gmp/locale';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import {parseCvssBaseVector, parseCvssBaseFromVector} from 'gmp/parser';
+import {
+  parseCvssV2BaseVector,
+  parseCvssV3BaseVector,
+  parseCvssV2BaseFromVector,
+  parseCvssV3BaseFromVector,
+} from 'gmp/parser';
+import {calculateV3Score} from 'gmp/utils/calculator.js';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -38,14 +42,12 @@ import CvssIcon from 'web/components/icon/cvssicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
 import Layout from 'web/components/layout/layout';
+import Divider from 'web/components/layout/divider';
 
 import Section from 'web/components/section/section';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
-
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useGmp from 'web/utils/useGmp';
 
 const StyledTextField = styled(TextField)`
   width: 180px;
@@ -60,7 +62,10 @@ const ToolBarIcons = () => (
   />
 );
 
-const CvssCalculator = ({gmp, onInteraction, ...props}) => {
+const CvssV2Calculator = props => {
+  const gmp = useGmp();
+  const [, renewSession] = useUserSessionTimeout();
+
   const [state, setState] = useState({
     accessVector: 'LOCAL',
     accessComplexity: 'LOW',
@@ -104,7 +109,7 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
       availabilityImpact,
     } = state;
 
-    const cvssVector = parseCvssBaseVector({
+    const cvssVector = parseCvssV2BaseVector({
       accessComplexity,
       accessVector,
       authentication,
@@ -132,9 +137,7 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
   };
 
   const handleInteraction = () => {
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
+    renewSession();
   };
 
   const handleMetricsChange = (value, name) => {
@@ -152,7 +155,7 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
 
     handleInteraction();
 
-    const cvssValues = parseCvssBaseFromVector(userVector);
+    const cvssValues = parseCvssV2BaseFromVector(userVector);
     const {
       accessVector,
       accessComplexity,
@@ -198,12 +201,10 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
 
   return (
     <Layout flex="column">
-      <ToolBarIcons />
       <Section
         img={<CvssIcon size="large" />}
         title={_('CVSSv2 Base Score Calculator')}
       />
-
       <h3>{_('From Metrics')}:</h3>
       <FormGroup title={_('Access Vector')}>
         <Select
@@ -359,21 +360,388 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
   );
 };
 
-CvssCalculator.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  onInteraction: PropTypes.func.isRequired,
+const CvssV3Calculator = props => {
+  const [, renewSession] = useUserSessionTimeout();
+
+  const [state, setState] = useState({
+    attackVector: 'NETWORK',
+    attackComplexity: 'LOW',
+    privilegesRequired: 'NONE',
+    userInteraction: 'NONE',
+    scope: 'UNCHANGED',
+    authentication: 'NONE',
+    integrityImpact: 'NONE',
+    availabilityImpact: 'NONE',
+    cvssVector: 'AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
+    userVector: 'AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
+    cvssScore: 0,
+  });
+
+  useEffect(() => {
+    const {location} = props;
+
+    if (
+      isDefined(location) &&
+      isDefined(location.query) &&
+      isDefined(location.query.cvssVector)
+    ) {
+      const {cvssVector} = location.query;
+      setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
+      handleVectorChange();
+
+      let newScore = calculateV3Score({
+        attackVector,
+        attackComplexity,
+        privilegesRequired,
+        userInteraction,
+        scope,
+        confidentialityImpact,
+        integrityImpact,
+        availabilityImpact,
+      });
+      setState(vals => ({...vals, cvssScore: newScore}));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    handleVectorChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.userVector]);
+
+  const calculateVector = newVector => {
+    const {
+      attackVector,
+      attackComplexity,
+      privilegesRequired,
+      userInteraction,
+      scope,
+      confidentialityImpact,
+      integrityImpact,
+      availabilityImpact,
+    } = state;
+
+    const cvssVector = parseCvssV3BaseVector({
+      attackVector,
+      attackComplexity,
+      privilegesRequired,
+      userInteraction,
+      scope,
+      confidentialityImpact,
+      integrityImpact,
+      availabilityImpact,
+      ...newVector,
+    });
+
+    setState(vals => ({
+      ...vals,
+      ...newVector,
+      cvssVector,
+      userVector: cvssVector,
+    }));
+
+    let newScore = calculateV3Score({
+      attackVector,
+      attackComplexity,
+      privilegesRequired,
+      userInteraction,
+      scope,
+      confidentialityImpact,
+      integrityImpact,
+      availabilityImpact,
+    });
+    setState(vals => ({...vals, cvssScore: newScore}));
+  };
+
+  const handleInteraction = () => {
+    renewSession();
+  };
+
+  const handleMetricsChange = (value, name) => {
+    handleInteraction();
+
+    calculateVector({[name]: value});
+  };
+
+  const handleInputChange = (value, name) => {
+    setState(vals => ({...vals, [name]: value}));
+  };
+
+  const handleVectorChange = () => {
+    const {userVector} = state;
+
+    handleInteraction();
+
+    const cvssValues = parseCvssV3BaseFromVector(userVector);
+    const {
+      attackVector,
+      attackComplexity,
+      privilegesRequired,
+      userInteraction,
+      scope,
+      confidentialityImpact,
+      integrityImpact,
+      availabilityImpact,
+    } = cvssValues;
+
+    if (
+      isDefined(attackVector) &&
+      isDefined(attackComplexity) &&
+      isDefined(privilegesRequired) &&
+      isDefined(userInteraction) &&
+      isDefined(scope) &&
+      isDefined(confidentialityImpact) &&
+      isDefined(integrityImpact) &&
+      isDefined(availabilityImpact)
+    ) {
+      /* only override cvss values and vector if user vector has valid input */
+
+      setState(vals => ({...vals, ...cvssValues, cvssVector: userVector}));
+
+      let newScore = calculateV3Score({
+        attackVector,
+        attackComplexity,
+        privilegesRequired,
+        userInteraction,
+        scope,
+        confidentialityImpact,
+        integrityImpact,
+        availabilityImpact,
+      });
+      setState(vals => ({...vals, cvssScore: newScore}));
+    }
+  };
+
+  const handleKeyDown = event => {
+    const key_code = event.keyCode;
+    if (key_code === KeyCode.ENTER) {
+      handleVectorChange();
+    }
+  };
+
+  const {
+    attackVector,
+    attackComplexity,
+    privilegesRequired,
+    userInteraction,
+    scope,
+    availabilityImpact,
+    confidentialityImpact,
+    userVector,
+    cvssScore,
+    cvssVector,
+    integrityImpact,
+  } = state;
+
+  return (
+    <Layout flex="column">
+      <Section
+        img={<CvssIcon size="large" />}
+        title={_('CVSSv3 Base Score Calculator')}
+      />
+      <h3>{_('From Metrics')}:</h3>
+      <FormGroup title={_('Attack Vector')}>
+        <Select
+          items={[
+            {
+              value: 'LOCAL',
+              label: _('Local'),
+            },
+            {
+              value: 'ADJACENT_NETWORK',
+              label: _('Adjacent'),
+            },
+            {
+              value: 'NETWORK',
+              label: _('Network'),
+            },
+            {
+              value: 'PHYSICAL',
+              label: _('Physical'),
+            },
+          ]}
+          name="attackVector"
+          value={attackVector}
+          menuPosition="adjust"
+          onChange={handleMetricsChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Attack Complexity')}>
+        <Select
+          items={[
+            {
+              value: 'LOW',
+              label: _('Low'),
+            },
+            {
+              value: 'HIGH',
+              label: _('High'),
+            },
+          ]}
+          name="attackComplexity"
+          value={attackComplexity}
+          menuPosition="adjust"
+          onChange={handleMetricsChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Privileges Required')}>
+        <Select
+          items={[
+            {
+              value: 'NONE',
+              label: _('None'),
+            },
+            {
+              value: 'LOW',
+              label: _('Low'),
+            },
+            {
+              value: 'HIGH',
+              label: _('High'),
+            },
+          ]}
+          name="privilegesRequired"
+          value={privilegesRequired}
+          menuPosition="adjust"
+          onChange={handleMetricsChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('User Interaction')}>
+        <Select
+          items={[
+            {
+              value: 'NONE',
+              label: _('None'),
+            },
+            {
+              value: 'REQUIRED',
+              label: _('Required'),
+            },
+          ]}
+          name="userInteraction"
+          value={userInteraction}
+          menuPosition="adjust"
+          onChange={handleMetricsChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Scope')}>
+        <Select
+          items={[
+            {
+              value: 'UNCHANGED',
+              label: _('Unchanged'),
+            },
+            {
+              value: 'CHANGED',
+              label: _('Changed'),
+            },
+          ]}
+          name="scope"
+          value={scope}
+          menuPosition="adjust"
+          onChange={handleMetricsChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Confidentiality')}>
+        <Select
+          items={[
+            {
+              value: 'NONE',
+              label: _('None'),
+            },
+            {
+              value: 'LOW',
+              label: _('Low'),
+            },
+            {
+              value: 'HIGH',
+              label: _('High'),
+            },
+          ]}
+          name="confidentialityImpact"
+          value={confidentialityImpact}
+          onChange={handleMetricsChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Integrity')}>
+        <Select
+          items={[
+            {
+              value: 'NONE',
+              label: _('None'),
+            },
+            {
+              value: 'LOW',
+              label: _('Low'),
+            },
+            {
+              value: 'HIGH',
+              label: _('High'),
+            },
+          ]}
+          name="integrityImpact"
+          value={integrityImpact}
+          menuPosition="adjust"
+          onChange={handleMetricsChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Availability')}>
+        <Select
+          items={[
+            {
+              value: 'NONE',
+              label: _('None'),
+            },
+            {
+              value: 'LOW',
+              label: _('Low'),
+            },
+            {
+              value: 'HIGH',
+              label: _('High'),
+            },
+          ]}
+          name="availabilityImpact"
+          value={availabilityImpact}
+          menuPosition="adjust"
+          onChange={handleMetricsChange}
+        />
+      </FormGroup>
+
+      <h3>{_('From Vector')}:</h3>
+      <FormGroup title={_('CVSS v3.1 Vector')}>
+        <StyledTextField
+          name="userVector"
+          value={userVector}
+          onChange={handleInputChange}
+          onBlur={handleVectorChange}
+          onKeyDown={handleKeyDown}
+        />
+      </FormGroup>
+
+      <h3>{_('Results')}:</h3>
+      <FormGroup title={_('CVSS Base Vector')}>
+        <span>{cvssVector}</span>
+      </FormGroup>
+      <FormGroup title={_('Severity')}>
+        <SeverityBar severity={cvssScore} />
+      </FormGroup>
+    </Layout>
+  );
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-});
+const CvssCalculator = props => {
+  return (
+    <Layout flex="column">
+      <ToolBarIcons />
+      <Divider margin="10px" flex="row" grow="1">
+        <CvssV2Calculator />
+        <CvssV3Calculator />
+      </Divider>
+    </Layout>
+  );
+};
 
-export default compose(
-  withGmp,
-  connect(
-    undefined,
-    mapDispatchToProps,
-  ),
-)(CvssCalculator);
+export default CvssCalculator;
 
 // vim: set ts=2 sw=2 tw=80:
