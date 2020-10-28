@@ -21,13 +21,9 @@ import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
-import {
-  parseSeverity,
-  parseCvssV2BaseVector,
-  parseDate,
-  setProperties,
-} from 'gmp/parser';
+import {parseSeverity, parseDate, setProperties} from 'gmp/parser';
 
+import {parseCvssV2BaseVector} from 'gmp/utils/calculator';
 import Info from './info';
 
 const delete_empty = (obj, props) => {

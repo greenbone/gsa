@@ -25,12 +25,12 @@ import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
 import {
+  calculateV3Score,
   parseCvssV2BaseVector,
   parseCvssV3BaseVector,
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
-} from 'gmp/parser';
-import {calculateV3Score} from 'gmp/utils/calculator.js';
+} from 'gmp/utils/calculator';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -534,7 +534,7 @@ const CvssV3Calculator = props => {
   } = state;
 
   return (
-    <Layout flex="column" grow="1">
+    <Layout flex="column" grow>
       <Section
         img={<CvssIcon size="large" />}
         title={_('CVSSv3 Base Score Calculator')}
@@ -734,7 +734,7 @@ const CvssCalculator = props => {
   return (
     <Layout flex="column">
       <ToolBarIcons />
-      <Divider margin="10px" flex="row" align={['center', 'center']} grow>
+      <Divider margin="10px" flex="row" align={['center', 'start']} grow>
         <CvssV2Calculator grow="1" />
         <CvssV3Calculator grow="1" />
       </Divider>

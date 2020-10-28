@@ -18,6 +18,509 @@
 
 import {isDefined} from 'gmp/utils/identity';
 
+const toFixed1 = value => {
+  let result = +(
+    Math.round(+(value.toString() + 'e' + 1)).toString() +
+    'e' +
+    -1
+  );
+  // if no fractional part then add a .0 to the number
+  if (result.toString().indexOf('.') == -1) result = result + '.0';
+  return result;
+};
+
+export const parseCvssV2BaseVector = ({
+  accessComplexity,
+  accessVector,
+  authentication,
+  availabilityImpact,
+  confidentialityImpact,
+  integrityImpact,
+} = {}) => {
+  if (
+    !isDefined(accessVector) &&
+    !isDefined(accessComplexity) &&
+    !isDefined(authentication) &&
+    !isDefined(confidentialityImpact) &&
+    !isDefined(integrityImpact) &&
+    !isDefined(availabilityImpact)
+  ) {
+    return undefined;
+  }
+
+  let av;
+  let ac;
+  let au;
+  let c;
+  let i;
+  let a;
+  let vector = 'AV:';
+
+  switch (accessVector) {
+    case 'LOCAL':
+      vector += 'L';
+      av = 0.395;
+      break;
+    case 'NETWORK':
+      vector += 'N';
+      av = 1.0;
+      break;
+    case 'ADJACENT_NETWORK':
+      vector += 'A';
+      av = 0.646;
+      break;
+    default:
+      vector += 'ERROR';
+      av = undefined;
+  }
+
+  vector += '/AC:';
+  switch (accessComplexity) {
+    case 'LOW':
+      vector += 'L';
+      ac = 0.71;
+      break;
+    case 'MEDIUM':
+      vector += 'M';
+      ac = 0.61;
+      break;
+    case 'HIGH':
+      vector += 'H';
+      ac = 0.35;
+      break;
+    default:
+      vector += 'ERROR';
+      ac = undefined;
+  }
+
+  vector += '/Au:';
+  switch (authentication) {
+    case 'NONE':
+      vector += 'N';
+      au = 0.704;
+      break;
+    case 'MULTIPLE_INSTANCES':
+      vector += 'M';
+      au = 0.45;
+      break;
+    case 'SINGLE_INSTANCE':
+      vector += 'S';
+      au = 0.56;
+      break;
+    default:
+      vector += 'ERROR';
+      au = undefined;
+  }
+
+  vector += '/C:';
+  switch (confidentialityImpact) {
+    case 'NONE':
+      vector += 'N';
+      c = 0.0;
+      break;
+    case 'PARTIAL':
+      vector += 'P';
+      c = 0.275;
+      break;
+    case 'COMPLETE':
+      vector += 'C';
+      c = 0.66;
+      break;
+    default:
+      vector += 'ERROR';
+      c = undefined;
+  }
+
+  vector += '/I:';
+  switch (integrityImpact) {
+    case 'NONE':
+      vector += 'N';
+      i = 0.0;
+      break;
+    case 'PARTIAL':
+      vector += 'P';
+      i = 0.275;
+      break;
+    case 'COMPLETE':
+      vector += 'C';
+      i = 0.66;
+      break;
+    default:
+      vector += 'ERROR';
+      i = undefined;
+  }
+
+  vector += '/A:';
+  switch (availabilityImpact) {
+    case 'NONE':
+      vector += 'N';
+      a = 0.0;
+      break;
+    case 'PARTIAL':
+      vector += 'P';
+      a = 0.275;
+      break;
+    case 'COMPLETE':
+      vector += 'C';
+      a = 0.66;
+      break;
+    default:
+      vector += 'ERROR';
+      a = undefined;
+  }
+  let impact = toFixed1(10.41 * (1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a)));
+  if (impact > 10.0) {
+    impact = 10.0;
+  }
+  let exploit = toFixed1(20 * ac * av * au);
+  let f_impact = 0.0;
+  if (impact !== 0.0) {
+    f_impact = 1.176;
+  }
+  let base = toFixed1((0.6 * impact + 0.4 * exploit - 1.5) * f_impact);
+  console.log(base);
+
+  return vector;
+};
+
+export const parseCvssV3BaseVector = ({
+  attackVector,
+  attackComplexity,
+  privilegesRequired,
+  userInteraction,
+  scope,
+  confidentialityImpact,
+  integrityImpact,
+  availabilityImpact,
+} = {}) => {
+  if (
+    !isDefined(attackVector) &&
+    !isDefined(attackComplexity) &&
+    !isDefined(privilegesRequired) &&
+    !isDefined(userInteraction) &&
+    !isDefined(scope) &&
+    !isDefined(confidentialityImpact) &&
+    !isDefined(integrityImpact) &&
+    !isDefined(availabilityImpact)
+  ) {
+    return undefined;
+  }
+
+  let vector = 'AV:';
+
+  switch (attackVector) {
+    case 'LOCAL':
+      vector += 'L';
+      break;
+    case 'NETWORK':
+      vector += 'N';
+      break;
+    case 'ADJACENT_NETWORK':
+      vector += 'A';
+      break;
+    case 'PHYSICAL':
+      vector += 'P';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/AC:';
+  switch (attackComplexity) {
+    case 'LOW':
+      vector += 'L';
+      break;
+    case 'HIGH':
+      vector += 'H';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/PR:';
+  switch (privilegesRequired) {
+    case 'NONE':
+      vector += 'N';
+      break;
+    case 'LOW':
+      vector += 'L';
+      break;
+    case 'HIGH':
+      vector += 'H';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/UI:';
+  switch (userInteraction) {
+    case 'NONE':
+      vector += 'N';
+      break;
+    case 'REQUIRED':
+      vector += 'R';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/S:';
+  switch (scope) {
+    case 'UNCHANGED':
+      vector += 'U';
+      break;
+    case 'CHANGED':
+      vector += 'C';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/C:';
+  switch (confidentialityImpact) {
+    case 'NONE':
+      vector += 'N';
+      break;
+    case 'LOW':
+      vector += 'L';
+      break;
+    case 'HIGH':
+      vector += 'H';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/I:';
+  switch (integrityImpact) {
+    case 'NONE':
+      vector += 'N';
+      break;
+    case 'LOW':
+      vector += 'L';
+      break;
+    case 'HIGH':
+      vector += 'H';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+
+  vector += '/A:';
+  switch (availabilityImpact) {
+    case 'NONE':
+      vector += 'N';
+      break;
+    case 'LOW':
+      vector += 'L';
+      break;
+    case 'HIGH':
+      vector += 'H';
+      break;
+    default:
+      vector += 'ERROR';
+  }
+  return vector;
+};
+
+export const parseCvssV2BaseFromVector = vector => {
+  if (!isDefined(vector) || vector.trim().length === 0) {
+    return {};
+  }
+
+  let av;
+  let ac;
+  let au;
+  let c;
+  let i;
+  let a;
+
+  const values = vector.split('/');
+
+  for (const currentvalue of values) {
+    let [metric, value] = currentvalue.split(':');
+
+    metric = metric.toLowerCase();
+    value = isDefined(value) ? value.toLowerCase() : '';
+
+    switch (metric) {
+      case 'av':
+        if (value === 'l') {
+          av = 'LOCAL';
+        } else if (value === 'a') {
+          av = 'ADJACENT_NETWORK';
+        } else if (value === 'n') {
+          av = 'NETWORK';
+        }
+        break;
+      case 'ac':
+        if (value === 'h') {
+          ac = 'HIGH';
+        } else if (value === 'm') {
+          ac = 'MEDIUM';
+        } else if (value === 'l') {
+          ac = 'LOW';
+        }
+        break;
+      case 'au':
+        if (value === 'm') {
+          au = 'MULTIPLE_INSTANCES';
+        } else if (value === 's') {
+          au = 'SINGLE_INSTANCE';
+        } else if (value === 'n') {
+          au = 'NONE';
+        }
+        break;
+      case 'c':
+        if (value === 'c') {
+          c = 'COMPLETE';
+        } else if (value === 'p') {
+          c = 'PARTIAL';
+        } else if (value === 'n') {
+          c = 'NONE';
+        }
+        break;
+      case 'i':
+        if (value === 'c') {
+          i = 'COMPLETE';
+        } else if (value === 'p') {
+          i = 'PARTIAL';
+        } else if (value === 'n') {
+          i = 'NONE';
+        }
+        break;
+      case 'a':
+        if (value === 'c') {
+          a = 'COMPLETE';
+        } else if (value === 'p') {
+          a = 'PARTIAL';
+        } else if (value === 'n') {
+          a = 'NONE';
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  return {
+    accessVector: av,
+    accessComplexity: ac,
+    authentication: au,
+    confidentialityImpact: c,
+    integrityImpact: i,
+    availabilityImpact: a,
+  };
+};
+
+export const parseCvssV3BaseFromVector = vector => {
+  if (!isDefined(vector) || vector.trim().length === 0) {
+    return {};
+  }
+
+  let av;
+  let ac;
+  let pr;
+  let ui;
+  let s;
+  let c;
+  let i;
+  let a;
+
+  const values = vector.split('/');
+
+  for (const currentvalue of values) {
+    let [metric, value] = currentvalue.split(':');
+
+    metric = metric.toLowerCase();
+    value = isDefined(value) ? value.toLowerCase() : '';
+
+    switch (metric) {
+      case 'av':
+        if (value === 'l') {
+          av = 'LOCAL';
+        } else if (value === 'a') {
+          av = 'ADJACENT_NETWORK';
+        } else if (value === 'n') {
+          av = 'NETWORK';
+        } else if (value === 'p') {
+          av = 'PHYSICAL';
+        }
+        break;
+      case 'ac':
+        if (value === 'h') {
+          ac = 'HIGH';
+        } else if (value === 'l') {
+          ac = 'LOW';
+        }
+        break;
+      case 'pr':
+        if (value === 'h') {
+          pr = 'HIGH';
+        } else if (value === 'l') {
+          pr = 'LOW';
+        } else if (value === 'n') {
+          pr = 'NONE';
+        }
+        break;
+      case 'ui':
+        if (value === 'r') {
+          ui = 'REQUIRED';
+        } else if (value === 'n') {
+          ui = 'NONE';
+        }
+        break;
+      case 's':
+        if (value === 'u') {
+          s = 'UNCHANGED';
+        } else if (value === 'c') {
+          s = 'CHANGED';
+        }
+        break;
+      case 'c':
+        if (value === 'h') {
+          c = 'HIGH';
+        } else if (value === 'l') {
+          c = 'LOW';
+        } else if (value === 'n') {
+          c = 'NONE';
+        }
+        break;
+      case 'i':
+        if (value === 'h') {
+          i = 'HIGH';
+        } else if (value === 'l') {
+          i = 'LOW';
+        } else if (value === 'n') {
+          i = 'NONE';
+        }
+        break;
+      case 'a':
+        if (value === 'h') {
+          a = 'HIGH';
+        } else if (value === 'l') {
+          a = 'LOW';
+        } else if (value === 'n') {
+          a = 'NONE';
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  return {
+    attackVector: av,
+    attackComplexity: ac,
+    privilegesRequired: pr,
+    userInteraction: ui,
+    scope: s,
+    confidentialityImpact: c,
+    integrityImpact: i,
+    availabilityImpact: a,
+  };
+};
+
 const parseCIA = value => {
   switch (value) {
     case 'NONE':
