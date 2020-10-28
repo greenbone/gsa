@@ -25,7 +25,7 @@ const toFixed1 = value => {
     -1
   );
   // if no fractional part then add a .0 to the number
-  if (result.toString().indexOf('.') == -1) result = result + '.0';
+  if (result.toString().indexOf('.') === -1) result = result + '.0';
   return result;
 };
 
@@ -168,19 +168,13 @@ export const parseCvssV2BaseVector = ({
       vector += 'ERROR';
       a = undefined;
   }
-  let impact = toFixed1(10.41 * (1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a)));
-  if (impact > 10.0) {
-    impact = 10.0;
-  }
-  let exploit = toFixed1(20 * ac * av * au);
-  let f_impact = 0.0;
-  if (impact !== 0.0) {
-    f_impact = 1.176;
-  }
-  let base = toFixed1((0.6 * impact + 0.4 * exploit - 1.5) * f_impact);
-  console.log(base);
+  let raw_impact = 10.41 * (1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a));
 
-  return vector;
+  let raw_exploit = 20 * ac * av * au;
+  let f_impact = raw_impact === 0.0 ? 0.0 : 1.176;
+  let base = toFixed1((0.6 * raw_impact + 0.4 * raw_exploit - 1.5) * f_impact);
+
+  return [vector, base];
 };
 
 export const parseCvssV3BaseVector = ({
@@ -206,7 +200,7 @@ export const parseCvssV3BaseVector = ({
     return undefined;
   }
 
-  let vector = 'AV:';
+  let vector = 'CVSS:3.1/AV:';
 
   switch (attackVector) {
     case 'LOCAL':
@@ -561,8 +555,6 @@ const parseAC = value => {
 };
 
 const parsePR = ({privilegesRequired, scope}) => {
-  console.log('scope');
-  console.log(scope);
   switch (privilegesRequired) {
     case 'NONE':
       return 0.85;

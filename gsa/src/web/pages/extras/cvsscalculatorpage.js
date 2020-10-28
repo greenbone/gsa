@@ -62,8 +62,7 @@ const ToolBarIcons = () => (
   />
 );
 
-const CvssV2Calculator = props => {
-  const gmp = useGmp();
+const CvssV2Calculator = ({props}) => {
   const [, renewSession] = useUserSessionTimeout();
 
   const [state, setState] = useState({
@@ -80,7 +79,6 @@ const CvssV2Calculator = props => {
 
   useEffect(() => {
     const {location} = props;
-
     if (
       isDefined(location) &&
       isDefined(location.query) &&
@@ -88,7 +86,7 @@ const CvssV2Calculator = props => {
     ) {
       const {cvssVector} = location.query;
       setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
-      calculateScore(cvssVector);
+      //calculateScore(cvssVector);
       handleVectorChange();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,7 +107,7 @@ const CvssV2Calculator = props => {
       availabilityImpact,
     } = state;
 
-    const cvssVector = parseCvssV2BaseVector({
+    const [cvssVector, cvssScore] = parseCvssV2BaseVector({
       accessComplexity,
       accessVector,
       authentication,
@@ -124,16 +122,10 @@ const CvssV2Calculator = props => {
       ...newVector,
       cvssVector,
       userVector: cvssVector,
+      cvssScore: cvssScore,
     }));
 
-    calculateScore(cvssVector);
-  };
-
-  const calculateScore = cvssVector => {
-    gmp.cvsscalculator.calculateScoreFromVector(cvssVector).then(response => {
-      const {data: cvssScore} = response;
-      setState(vals => ({...vals, cvssScore}));
-    });
+    //calculateScore(cvssVector);
   };
 
   const handleInteraction = () => {
@@ -174,9 +166,8 @@ const CvssV2Calculator = props => {
       isDefined(availabilityImpact)
     ) {
       /* only override cvss values and vector if user vector has valid input */
-
-      setState(vals => ({...vals, ...cvssValues, cvssVector: userVector}));
-      calculateScore(userVector);
+      /* this is not the beeest practice ... */
+      calculateVector(cvssValues);
     }
   };
 
@@ -360,7 +351,7 @@ const CvssV2Calculator = props => {
   );
 };
 
-const CvssV3Calculator = props => {
+const CvssV3Calculator = ({props}) => {
   const [, renewSession] = useUserSessionTimeout();
 
   const [state, setState] = useState({
@@ -372,8 +363,8 @@ const CvssV3Calculator = props => {
     authentication: 'NONE',
     integrityImpact: 'NONE',
     availabilityImpact: 'NONE',
-    cvssVector: 'AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
-    userVector: 'AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
+    cvssVector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
+    userVector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
     cvssScore: 0,
   });
 
@@ -735,8 +726,8 @@ const CvssCalculator = props => {
     <Layout flex="column">
       <ToolBarIcons />
       <Divider margin="10px" flex="row" align={['center', 'start']} grow>
-        <CvssV2Calculator grow="1" />
-        <CvssV3Calculator grow="1" />
+        <CvssV2Calculator grow="1" props={props} />
+        <CvssV3Calculator grow="1" props={props} />
       </Divider>
     </Layout>
   );
