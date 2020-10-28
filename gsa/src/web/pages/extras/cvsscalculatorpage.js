@@ -47,7 +47,6 @@ import Divider from 'web/components/layout/divider';
 import Section from 'web/components/section/section';
 
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import useGmp from 'web/utils/useGmp';
 
 const StyledTextField = styled(TextField)`
   width: 180px;
