@@ -150,7 +150,6 @@ describe('CvssCalculator page tests', () => {
     await wait();
 
     const input = getAllByTestId('select-selected-value');
-    console.log(input);
 
     /* CVSSv2 input */
     expect(input[0]).toHaveTextContent('Network');
