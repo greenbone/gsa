@@ -61,7 +61,7 @@ const ToolBarIcons = () => (
   />
 );
 
-const CvssV2Calculator = ({props}) => {
+const CvssV2Calculator = props => {
   const [, renewSession] = useUserSessionTimeout();
 
   const [state, setState] = useState({
@@ -78,6 +78,7 @@ const CvssV2Calculator = ({props}) => {
 
   useEffect(() => {
     const {location} = props;
+
     if (
       isDefined(location) &&
       isDefined(location.query) &&
@@ -85,7 +86,8 @@ const CvssV2Calculator = ({props}) => {
     ) {
       const {cvssVector} = location.query;
       setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
-      //calculateScore(cvssVector);
+      console.log('NewVector: ', cvssVector);
+      console.log('UserVector: ', state.userVector);
       handleVectorChange();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,6 +117,7 @@ const CvssV2Calculator = ({props}) => {
       integrityImpact,
       ...newVector,
     });
+    console.log(cvssVector, cvssScore);
 
     setState(vals => ({
       ...vals,
@@ -123,8 +126,6 @@ const CvssV2Calculator = ({props}) => {
       userVector: cvssVector,
       cvssScore: cvssScore,
     }));
-
-    //calculateScore(cvssVector);
   };
 
   const handleInteraction = () => {
@@ -143,30 +144,47 @@ const CvssV2Calculator = ({props}) => {
 
   const handleVectorChange = () => {
     const {userVector} = state;
+    console.log('me');
+    console.log(userVector);
 
     handleInteraction();
 
-    const cvssValues = parseCvssV2BaseFromVector(userVector);
+    //const cvssValues = parseCvssV2BaseFromVector(userVector);
     const {
       accessVector,
       accessComplexity,
-      confidentialityImpact,
       authentication,
+      confidentialityImpact,
       integrityImpact,
       availabilityImpact,
-    } = cvssValues;
+      cvssScore,
+    } = parseCvssV2BaseFromVector(userVector);
+    //const {cvssScore} = cvssValues
+    console.log(accessComplexity);
+    console.log(cvssScore);
 
     if (
       isDefined(accessVector) &&
       isDefined(accessComplexity) &&
-      isDefined(confidentialityImpact) &&
       isDefined(authentication) &&
+      isDefined(confidentialityImpact) &&
       isDefined(integrityImpact) &&
-      isDefined(availabilityImpact)
+      isDefined(availabilityImpact) &&
+      isDefined(cvssScore)
     ) {
       /* only override cvss values and vector if user vector has valid input */
-      /* this is not the beeest practice ... */
-      calculateVector(cvssValues);
+      console.log('Cvssscore', cvssScore);
+      setState(vals => ({
+        ...vals,
+        accessVector,
+        accessComplexity,
+        authentication,
+        confidentialityImpact,
+        integrityImpact,
+        availabilityImpact,
+        cvssVector: userVector,
+        cvssScore,
+      }));
     }
   };
 
@@ -178,15 +196,15 @@ const CvssV2Calculator = ({props}) => {
   };
 
   const {
-    accessComplexity,
     accessVector,
+    accessComplexity,
     authentication,
-    availabilityImpact,
     confidentialityImpact,
+    availabilityImpact,
+    integrityImpact,
     userVector,
     cvssScore,
     cvssVector,
-    integrityImpact,
   } = state;
 
   return (
@@ -350,7 +368,7 @@ const CvssV2Calculator = ({props}) => {
   );
 };
 
-const CvssV3Calculator = ({props}) => {
+const CvssV3Calculator = props => {
   const [, renewSession] = useUserSessionTimeout();
 
   const [state, setState] = useState({
@@ -377,9 +395,11 @@ const CvssV3Calculator = ({props}) => {
     ) {
       const {cvssVector} = location.query;
       setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
+      console.log('NewVector: ', cvssVector);
+      console.log('UserVector: ', state.userVector);
       handleVectorChange();
 
-      let newScore = calculateV3Score({
+      const newScore = calculateV3Score({
         attackVector,
         attackComplexity,
         privilegesRequired,
@@ -430,7 +450,7 @@ const CvssV3Calculator = ({props}) => {
       userVector: cvssVector,
     }));
 
-    let newScore = calculateV3Score({
+    const newScore = calculateV3Score({
       attackVector,
       attackComplexity,
       privilegesRequired,
@@ -459,6 +479,8 @@ const CvssV3Calculator = ({props}) => {
 
   const handleVectorChange = () => {
     const {userVector} = state;
+    console.log('userweg');
+    console.log(userVector);
 
     handleInteraction();
 
@@ -488,7 +510,7 @@ const CvssV3Calculator = ({props}) => {
 
       setState(vals => ({...vals, ...cvssValues, cvssVector: userVector}));
 
-      let newScore = calculateV3Score({
+      const newScore = calculateV3Score({
         attackVector,
         attackComplexity,
         privilegesRequired,
@@ -725,8 +747,8 @@ const CvssCalculator = props => {
     <Layout flex="column">
       <ToolBarIcons />
       <Divider margin="10px" flex="row" align={['center', 'start']} grow>
-        <CvssV2Calculator grow="1" props={props} />
-        <CvssV3Calculator grow="1" props={props} />
+        <CvssV2Calculator {...props} grow="1" />
+        <CvssV3Calculator {...props} grow="1" />
       </Divider>
     </Layout>
   );
