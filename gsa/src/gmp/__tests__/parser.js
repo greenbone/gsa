@@ -44,6 +44,7 @@ import {
   parseCvssV2BaseVector,
   parseCvssV3BaseVector,
   parseCvssV2BaseFromVector,
+  parseCvssV3BaseFromVector,
 } from '../utils/calculator';
 
 describe('parseInt tests', () => {
@@ -1011,6 +1012,310 @@ describe('parseCvssV2BaseFromVector tests', () => {
       confidentialityImpact: 'COMPLETE',
       integrityImpact: 'COMPLETE',
       cvssScore: 7.1,
+    });
+  });
+});
+
+describe('parseCvssV3BaseFromVector tests', () => {
+  test('should return empty object', () => {
+    expect(parseCvssV3BaseFromVector()).toEqual({});
+    expect(parseCvssV3BaseFromVector('')).toEqual({});
+    expect(parseCvssV3BaseFromVector(' ')).toEqual({});
+  });
+
+  test('should set vectors to undefined', () => {
+    expect(parseCvssV3BaseFromVector('foo')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+  });
+
+  test('should parse av', () => {
+    expect(parseCvssV3BaseFromVector('AV:L')).toEqual({
+      attackVector: 'LOCAL',
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('AV:A')).toEqual({
+      attackVector: 'ADJACENT_NETWORK',
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('AV:N')).toEqual({
+      attackVector: 'NETWORK',
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('AV:L')).toEqual({
+      attackVector: 'LOCAL',
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+  });
+
+  test('should parse ac', () => {
+    expect(parseCvssV3BaseFromVector('AC:L')).toEqual({
+      attackVector: undefined,
+      attackComplexity: 'LOW',
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('AC:H')).toEqual({
+      attackVector: undefined,
+      attackComplexity: 'HIGH',
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+  });
+
+  test('should parse pr', () => {
+    expect(parseCvssV3BaseFromVector('PR:H')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: 'HIGH',
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('PR:L')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: 'LOW',
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('PR:N')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: 'NONE',
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+  });
+
+  test('should parse ui', () => {
+    expect(parseCvssV3BaseFromVector('UI:R')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: 'REQUIRED',
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('UI:N')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: 'NONE',
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+  });
+
+  test('should parse s', () => {
+    expect(parseCvssV3BaseFromVector('S:C')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: 'CHANGED',
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('S:U')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: 'UNCHANGED',
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+  });
+
+  test('should parse c', () => {
+    expect(parseCvssV3BaseFromVector('C:H')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: 'HIGH',
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('C:L')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: 'LOW',
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('C:N')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: 'NONE',
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+  });
+
+  test('should parse i', () => {
+    expect(parseCvssV3BaseFromVector('I:H')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: 'HIGH',
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('I:L')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: 'LOW',
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('I:N')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: undefined,
+      confidentialityImpact: undefined,
+      integrityImpact: 'NONE',
+      cvssScore: undefined,
+    });
+  });
+
+  test('should parse a', () => {
+    expect(parseCvssV3BaseFromVector('A:H')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: 'HIGH',
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('A:L')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: 'LOW',
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+    expect(parseCvssV3BaseFromVector('A:N')).toEqual({
+      attackVector: undefined,
+      attackComplexity: undefined,
+      privilegesRequired: undefined,
+      userInteraction: undefined,
+      scope: undefined,
+      availabilityImpact: 'NONE',
+      confidentialityImpact: undefined,
+      integrityImpact: undefined,
+      cvssScore: undefined,
+    });
+  });
+
+  test('should parse full vector', () => {
+    expect(
+      parseCvssV3BaseFromVector('CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:N'),
+    ).toEqual({
+      attackVector: 'PHYSICAL',
+      attackComplexity: 'LOW',
+      privilegesRequired: 'NONE',
+      userInteraction: 'NONE',
+      scope: 'CHANGED',
+      availabilityImpact: 'NONE',
+      confidentialityImpact: 'NONE',
+      integrityImpact: 'HIGH',
+      cvssScore: 5.2,
     });
   });
 });
