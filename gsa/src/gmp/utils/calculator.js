@@ -38,13 +38,10 @@ const toFixed1 = value => {
  * Calculating the CVSS v2 BaseScore
  */
 const baseScore = ({av, ac, au, c, i, a}) => {
-  const raw_impact = 10.41 * (1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a));
+  let raw_impact = 10.41 * (1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a));
   const raw_exploit = 20 * ac * av * au;
   const f_impact = raw_impact === 0.0 ? 0.0 : 1.176;
-  const base = toFixed1(
-    (0.6 * raw_impact + 0.4 * raw_exploit - 1.5) * f_impact,
-  );
-  return base;
+  return toFixed1((0.6 * raw_impact + 0.4 * raw_exploit - 1.5) * f_impact);
 };
 
 /*
@@ -82,13 +79,13 @@ export const parseCvssV2BaseVector = ({
       vector += 'L';
       av = 0.395;
       break;
-    case 'NETWORK':
-      vector += 'N';
-      av = 1.0;
-      break;
     case 'ADJACENT_NETWORK':
       vector += 'A';
       av = 0.646;
+      break;
+    case 'NETWORK':
+      vector += 'N';
+      av = 1.0;
       break;
     default:
       vector += 'ERROR';
@@ -231,34 +228,34 @@ export const parseCvssV2BaseFromVector = vector => {
           av = 0.395;
         } else if (value === 'a') {
           accessVector = 'ADJACENT_NETWORK';
-          av = 1.0;
+          av = 0.646;
         } else if (value === 'n') {
           accessVector = 'NETWORK';
-          av = 0.646;
+          av = 1.0;
         }
         break;
       case 'ac':
         if (value === 'h') {
           accessComplexity = 'HIGH';
-          ac = 0.71;
+          ac = 0.35;
         } else if (value === 'm') {
           accessComplexity = 'MEDIUM';
           ac = 0.61;
         } else if (value === 'l') {
           accessComplexity = 'LOW';
-          ac = 0.35;
+          ac = 0.71;
         }
         break;
       case 'au':
         if (value === 'm') {
           authentication = 'MULTIPLE_INSTANCES';
-          au = 0.704;
+          au = 0.45;
         } else if (value === 's') {
           authentication = 'SINGLE_INSTANCE';
-          au = 0.45;
+          au = 0.56;
         } else if (value === 'n') {
           authentication = 'NONE';
-          au = 0.56;
+          au = 0.704;
         }
         break;
       case 'c':
