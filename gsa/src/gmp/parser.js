@@ -16,13 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import 'core-js/features/object/entries';
+import 'core-js/features/string/starts-with';
+
 import {isDefined, isString, isNumber, isArray} from './utils/identity';
 import {isEmpty} from './utils/string';
 
 import date, {duration} from './models/date';
-
-import 'core-js/features/object/entries';
-import 'core-js/features/string/starts-with';
 
 export const parseSeverity = value =>
   isEmpty(value) ? undefined : parseFloat(value);
@@ -42,6 +42,13 @@ export const parseProgressElement = value => {
 
 export const parseText = text => {
   if (isDefined(text) && isDefined(text.__text)) {
+    text = text.__text;
+  }
+  return text;
+};
+
+export const parseTextElement = (text = {}) => {
+  if (isDefined(text.__text)) {
     return {
       text: text.__text,
       textExcerpt: text.__excerpt,
@@ -52,13 +59,6 @@ export const parseText = text => {
     text,
     textExcerpt: '0',
   };
-};
-
-export const parseTextElement = (text = {}) => {
-  if (isDefined(text.__text)) {
-    return text.__text;
-  }
-  return text;
 };
 
 export const parseInt = value => {
