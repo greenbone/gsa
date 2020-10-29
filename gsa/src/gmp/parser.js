@@ -39,9 +39,16 @@ export const parseProgressElement = value => {
 
 export const parseText = text => {
   if (isDefined(text) && isDefined(text.__text)) {
-    text = text.__text;
+    return {
+      text: text.__text,
+      textExcerpt: text.__excerpt,
+    };
   }
-  return text;
+
+  return {
+    text,
+    textExcerpt: '0',
+  };
 };
 
 export const parseTextElement = (text = {}) => {
