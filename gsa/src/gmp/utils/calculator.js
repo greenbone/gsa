@@ -38,7 +38,7 @@ const toFixed1 = value => {
  * Calculating the CVSS v2 BaseScore
  */
 const baseScore = ({av, ac, au, c, i, a}) => {
-  let raw_impact = 10.41 * (1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a));
+  const raw_impact = 10.41 * (1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a));
   const raw_exploit = 20 * ac * av * au;
   const f_impact = raw_impact === 0.0 ? 0.0 : 1.176;
   return toFixed1((0.6 * raw_impact + 0.4 * raw_exploit - 1.5) * f_impact);
@@ -650,8 +650,12 @@ const V3ScoreBase = ({av, ac, pr, ui, s, c, i, a} = {}) => {
   impact =
     s === 6.42 ? s * impact : s * impact - 3.25 * Math.pow(impact - 0.02, 15);
   if (s === 7.52) {
-    if (pr === 0.62) pr = 0.68;
-    if (pr === 0.27) pr = 0.27;
+    if (pr === 0.62) {
+      pr = 0.68;
+    }
+    if (pr === 0.27) {
+      pr = 0.27;
+    }
   }
   const exploitability = 8.22 * av * ac * pr * ui;
   if (impact <= 0) {
