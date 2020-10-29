@@ -21,8 +21,6 @@ import {isDate, isDuration} from 'gmp/models/date';
 
 import {
   parseCsv,
-  parseCvssV2BaseVector,
-  parseCvssV2BaseFromVector,
   parseBoolean,
   parseDate,
   parseDuration,
@@ -41,6 +39,11 @@ import {
   NO_VALUE,
   setProperties,
 } from '../parser';
+
+import {
+  parseCvssV2BaseVector,
+  parseCvssV2BaseFromVector,
+} from '../utils/calculator';
 
 describe('parseInt tests', () => {
   test('should parse int number string', () => {

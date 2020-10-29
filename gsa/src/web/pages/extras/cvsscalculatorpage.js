@@ -703,17 +703,15 @@ const CvssV3Calculator = props => {
   );
 };
 
-const CvssCalculator = props => {
-  return (
-    <Layout flex="column">
-      <ToolBarIcons />
-      <Divider margin="10px" flex="row" align={['center', 'start']} grow>
-        <CvssV2Calculator {...props} grow="1" />
-        <CvssV3Calculator {...props} grow="1" />
-      </Divider>
-    </Layout>
-  );
-};
+const CvssCalculator = props => (
+  <Layout flex="column">
+    <ToolBarIcons />
+    <Divider margin="10px" flex="row" align={['center', 'start']} grow>
+      <CvssV2Calculator {...props} grow="1" />
+      <CvssV3Calculator {...props} grow="1" />
+    </Divider>
+  </Layout>
+);
 
 export default CvssCalculator;
 
