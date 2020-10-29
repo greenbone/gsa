@@ -143,7 +143,6 @@ const CvssV2Calculator = props => {
 
     renewSession();
 
-    //const cvssValues = parseCvssV2BaseFromVector(userVector);
     const {
       accessVector,
       accessComplexity,
@@ -153,7 +152,6 @@ const CvssV2Calculator = props => {
       availabilityImpact,
       cvssScore,
     } = parseCvssV2BaseFromVector(userVector);
-    //const {cvssScore} = cvssValues
 
     if (
       isDefined(accessVector) &&
