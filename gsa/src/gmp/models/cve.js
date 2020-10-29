@@ -91,7 +91,7 @@ class Cve extends Info {
       'cert',
     ]);
 
-    ret.cvssBaseVector = parseCvssV2BaseVector({
+    [ret.cvssBaseVector] = parseCvssV2BaseVector({
       accessComplexity: ret.complexity,
       accessVector: ret.vector,
       authentication: ret.authentication,

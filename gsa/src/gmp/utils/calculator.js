@@ -493,11 +493,9 @@ export const parseCvssV3BaseVector = ({
       vector += 'ERROR';
       a = undefined;
   }
-  console.log(av, ac, pr, ui, s, c, i, a);
-  let base = V3ScoreBase({av, ac, pr, ui, s, c, i, a});
-  console.log(base);
+  const base = V3ScoreBase({av, ac, pr, ui, s, c, i, a});
 
-  return vector;
+  return [vector, base];
 };
 
 export const parseCvssV3BaseFromVector = vector => {
@@ -626,9 +624,7 @@ export const parseCvssV3BaseFromVector = vector => {
     }
   }
 
-  console.log(av, ac, pr, ui, s, c, i, a);
-  let base = V3ScoreBase({av, ac, pr, ui, s, c, i, a});
-  console.log(base);
+  const base = V3ScoreBase({av, ac, pr, ui, s, c, i, a});
 
   return {
     attackVector,
@@ -639,144 +635,19 @@ export const parseCvssV3BaseFromVector = vector => {
     confidentialityImpact,
     integrityImpact,
     availabilityImpact,
+    cvssScore: base,
   };
 };
 
-const parseCIA = value => {
-  switch (value) {
-    case 'NONE':
-      return 0.0;
-    case 'LOW':
-      return 0.22;
-    case 'HIGH':
-      return 0.56;
-    default:
-      return undefined;
-  }
-};
-
-const parseAV = value => {
-  switch (value) {
-    case 'LOCAL':
-      return 0.55;
-    case 'NETWORK':
-      return 0.85;
-    case 'ADJACENT_NETWORK':
-      return 0.62;
-    case 'PHYSICAL':
-      return 0.2;
-    default:
-      return undefined;
-  }
-};
-
-const parseAC = value => {
-  switch (value) {
-    case 'LOW':
-      return 0.44;
-    case 'HIGH':
-      return 0.77;
-    default:
-      return undefined;
-  }
-};
-
-const parsePR = ({privilegesRequired, scope}) => {
-  switch (privilegesRequired) {
-    case 'NONE':
-      return 0.85;
-    case 'LOW':
-      if (scope === 'CHANGED') {
-        return 0.68;
-      }
-      return 0.62;
-    case 'HIGH':
-      if (scope === 'CHANGED') {
-        return 0.5;
-      }
-      return 0.27;
-    default:
-      return undefined;
-  }
-};
-
-const parseUI = value => {
-  switch (value) {
-    case 'NONE':
-      return 0.85;
-    case 'REQUIRED':
-      return 0.62;
-    default:
-      return undefined;
-  }
-};
-
 const roundUp = value => {
-  let intput = Math.round(value * 100000);
+  const intput = Math.round(value * 100000);
   if (intput % 10000 === 0) {
     return intput / 100000;
   }
   return (Math.floor(intput / 10000) + 1) / 10;
 };
 
-export const calculateV3Score = ({
-  attackVector,
-  attackComplexity,
-  privilegesRequired,
-  userInteraction,
-  scope,
-  confidentialityImpact,
-  integrityImpact,
-  availabilityImpact,
-} = {}) => {
-  if (
-    !isDefined(attackVector) &&
-    !isDefined(attackComplexity) &&
-    !isDefined(privilegesRequired) &&
-    !isDefined(userInteraction) &&
-    !isDefined(scope) &&
-    !isDefined(confidentialityImpact) &&
-    !isDefined(integrityImpact) &&
-    !isDefined(availabilityImpact)
-  ) {
-    return undefined;
-  }
-
-  const c = parseCIA(confidentialityImpact);
-  const i = parseCIA(integrityImpact);
-  const a = parseCIA(availabilityImpact);
-
-  let impact = 1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a);
-
-  switch (scope) {
-    case 'UNCHANGED':
-      impact = 6.42 * impact;
-      break;
-    case 'CHANGED':
-      impact = 7.52 * impact - 3.25 * Math.pow(impact - 0.02, 15);
-      break;
-    default:
-      return undefined;
-  }
-  const av = parseAV(attackVector);
-  const ac = parseAC(attackComplexity);
-  const pr = parsePR({privilegesRequired, scope});
-  const ui = parseUI(userInteraction);
-  const exploitability = 8.22 * av * ac * pr * ui;
-  if (impact <= 0) {
-    return 0;
-  }
-  switch (scope) {
-    case 'UNCHANGED':
-      return roundUp(Math.min(exploitability + impact, 10));
-    case 'CHANGED':
-      return roundUp(Math.min(1.08 * (exploitability + impact), 10));
-    default:
-      return undefined;
-  }
-};
-
-export const V3ScoreBase = ({av, ac, pr, ui, s, c, i, a} = {}) => {
+const V3ScoreBase = ({av, ac, pr, ui, s, c, i, a} = {}) => {
   let impact = 1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a);
 
   impact =
