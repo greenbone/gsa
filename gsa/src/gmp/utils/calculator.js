@@ -22,7 +22,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 /* from https://nvd.nist.gov/site-media/js/nvdApp/cvssV2/cvssV2.service.js */
 const toFixed1 = value => {
-  let result = +(`${Math.round(+(`${value}` + 'e' + 1))}` + 'e' + -1);
+  let result = +(`${Math.round(+(`${value}e` + 1))}e` + -1);
   // if no fractional part then add a .0 to the number
   if (!`${result}`.includes('.')) {
     result = result + '.0';
