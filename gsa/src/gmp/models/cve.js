@@ -91,7 +91,7 @@ class Cve extends Info {
       'cert',
     ]);
 
-    [ret.cvssBaseVector] = parseCvssV2BaseVector({
+    const vector = parseCvssV2BaseVector({
       accessComplexity: ret.complexity,
       accessVector: ret.vector,
       authentication: ret.authentication,
@@ -99,6 +99,7 @@ class Cve extends Info {
       confidentialityImpact: ret.confidentiality_impact,
       integrityImpact: ret.integrity_impact,
     });
+    ret.cvssBaseVector = vector[0];
 
     // use consistent names for cvss values
     rename_props(ret, {

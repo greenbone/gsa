@@ -62,7 +62,7 @@ export const parseCvssV2BaseVector = ({
     !isDefined(integrityImpact) &&
     !isDefined(availabilityImpact)
   ) {
-    return undefined;
+    return [undefined, undefined];
   }
 
   let av;
@@ -333,7 +333,7 @@ export const parseCvssV3BaseVector = ({
     !isDefined(integrityImpact) &&
     !isDefined(availabilityImpact)
   ) {
-    return undefined;
+    return [undefined, undefined];
   }
 
   let av;
