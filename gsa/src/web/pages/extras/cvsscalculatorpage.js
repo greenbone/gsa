@@ -86,8 +86,10 @@ const CvssV2Calculator = props => {
       isDefined(location.query.cvssVector)
     ) {
       const {cvssVector} = location.query;
-      setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
-      handleVectorChange();
+      if (!cvssVector.includes('CVSS:3')) {
+        setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
+        handleVectorChange();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -385,8 +387,10 @@ const CvssV3Calculator = props => {
       isDefined(location.query.cvssVector)
     ) {
       const {cvssVector} = location.query;
-      setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
-      handleVectorChange();
+      if (cvssVector.includes('CVSS:3')) {
+        setState(vals => ({...vals, cvssVector, userVector: cvssVector}));
+        handleVectorChange();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
