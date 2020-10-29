@@ -516,9 +516,12 @@ describe('parseDuration tests', () => {
 
 describe('parseCvssV2BaseVector tests', () => {
   test('should return undefined', () => {
-    expect(parseCvssV2BaseVector()).toBeUndefined();
-    expect(parseCvssV2BaseVector({})).toBeUndefined();
-    expect(parseCvssV2BaseVector({foo: 'bar'})).toBeUndefined();
+    expect(parseCvssV2BaseVector()[0]).toBeUndefined();
+    expect(parseCvssV2BaseVector()[1]).toBeUndefined();
+    expect(parseCvssV2BaseVector({})[0]).toBeUndefined();
+    expect(parseCvssV2BaseVector({})[1]).toBeUndefined();
+    expect(parseCvssV2BaseVector({foo: 'bar'})[0]).toBeUndefined();
+    expect(parseCvssV2BaseVector({foo: 'bar'})[1]).toBeUndefined();
   });
 
   test('should parse accessVector', () => {
