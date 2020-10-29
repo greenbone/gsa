@@ -42,6 +42,7 @@ import {
 
 import {
   parseCvssV2BaseVector,
+  parseCvssV3BaseVector,
   parseCvssV2BaseFromVector,
 } from '../utils/calculator';
 
@@ -633,6 +634,157 @@ describe('parseCvssV2BaseVector tests', () => {
     ]);
     expect(parseCvssV2BaseVector({availabilityImpact: 'COMPLETE'})).toEqual([
       'AV:ERROR/AC:ERROR/Au:ERROR/C:ERROR/I:ERROR/A:C',
+      undefined,
+    ]);
+  });
+});
+
+describe('parseCvssV3BaseVector tests', () => {
+  test('should return undefined', () => {
+    expect(parseCvssV3BaseVector()[0]).toBeUndefined();
+    expect(parseCvssV3BaseVector()[1]).toBeUndefined();
+    expect(parseCvssV3BaseVector({})[0]).toBeUndefined();
+    expect(parseCvssV3BaseVector({})[1]).toBeUndefined();
+    expect(parseCvssV3BaseVector({foo: 'bar'})[0]).toBeUndefined();
+    expect(parseCvssV3BaseVector({foo: 'bar'})[1]).toBeUndefined();
+  });
+
+  test('should parse attackVector', () => {
+    expect(parseCvssV3BaseVector({attackVector: 'foo'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({attackVector: 'LOCAL'})).toEqual([
+      'CVSS:3.1/AV:L/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({attackVector: 'NETWORK'})).toEqual([
+      'CVSS:3.1/AV:N/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({attackVector: 'PHYSICAL'})).toEqual([
+      'CVSS:3.1/AV:P/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+  });
+
+  test('should parse attackComplexity', () => {
+    expect(parseCvssV3BaseVector({attackComplexity: 'foo'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({attackComplexity: 'LOW'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:L/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({attackComplexity: 'HIGH'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:H/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+  });
+
+  test('should parse privilegesRequired', () => {
+    expect(parseCvssV3BaseVector({privilegesRequired: 'foo'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({privilegesRequired: 'NONE'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:N/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({privilegesRequired: 'HIGH'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:H/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({privilegesRequired: 'LOW'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:L/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+  });
+
+  test('should parse userInteraction', () => {
+    expect(parseCvssV3BaseVector({userInteraction: 'foo'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({userInteraction: 'NONE'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:N/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({userInteraction: 'REQUIRED'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:R/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+  });
+
+  test('should parse scope', () => {
+    expect(parseCvssV3BaseVector({scope: 'foo'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({scope: 'UNCHANGED'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:U/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({scope: 'CHANGED'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:C/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+  });
+
+  test('should parse confidentialityImpact', () => {
+    expect(parseCvssV3BaseVector({confidentialityImpact: 'foo'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({confidentialityImpact: 'NONE'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:N/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({confidentialityImpact: 'LOW'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:L/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({confidentialityImpact: 'HIGH'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:H/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+  });
+
+  test('should parse integrityImpact', () => {
+    expect(parseCvssV3BaseVector({integrityImpact: 'foo'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({integrityImpact: 'NONE'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:N/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({integrityImpact: 'LOW'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:L/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({integrityImpact: 'HIGH'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:H/A:ERROR',
+      undefined,
+    ]);
+  });
+
+  test('should parse availabilityImpact', () => {
+    expect(parseCvssV3BaseVector({availabilityImpact: 'foo'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:ERROR',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({availabilityImpact: 'NONE'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:N',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({availabilityImpact: 'LOW'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:L',
+      undefined,
+    ]);
+    expect(parseCvssV3BaseVector({availabilityImpact: 'HIGH'})).toEqual([
+      'CVSS:3.1/AV:ERROR/AC:ERROR/PR:ERROR/UI:ERROR/S:ERROR/C:ERROR/I:ERROR/A:H',
       undefined,
     ]);
   });

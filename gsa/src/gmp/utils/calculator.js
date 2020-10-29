@@ -489,7 +489,10 @@ export const parseCvssV3BaseVector = ({
       vector += 'ERROR';
       a = undefined;
   }
-  const base = V3ScoreBase({av, ac, pr, ui, s, c, i, a});
+  let base = V3ScoreBase({av, ac, pr, ui, s, c, i, a});
+  if (isNaN(base)) {
+    base = undefined;
+  }
 
   return [vector, base];
 };
@@ -620,7 +623,10 @@ export const parseCvssV3BaseFromVector = vector => {
     }
   }
 
-  const base = V3ScoreBase({av, ac, pr, ui, s, c, i, a});
+  let base = V3ScoreBase({av, ac, pr, ui, s, c, i, a});
+  if (isNaN(base)) {
+    base = undefined;
+  }
 
   return {
     attackVector,
