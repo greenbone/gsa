@@ -21,6 +21,9 @@ import {isEmpty} from './utils/string';
 
 import date, {duration} from './models/date';
 
+import 'core-js/features/object/entries';
+import 'core-js/features/string/starts-with';
+
 export const parseSeverity = value =>
   isEmpty(value) ? undefined : parseFloat(value);
 
