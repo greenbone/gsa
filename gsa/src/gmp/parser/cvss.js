@@ -20,7 +20,12 @@ import {isDefined} from 'gmp/utils/identity';
 
 /* CVSS v2 .... */
 
-/* from https://nvd.nist.gov/site-media/js/nvdApp/cvssV2/cvssV2.service.js */
+/**
+ * (from https://nvd.nist.gov/site-media/js/nvdApp/cvssV2/cvssV2.service.js)
+ * Handles percision and rounding of numbers to one decimal place
+ * @param value
+ * @returns {number}
+ */
 const toFixed1 = value => {
   if (isNaN(value)) {
     return undefined;
@@ -192,7 +197,12 @@ export const parseCvssV2BaseVector = ({
 };
 
 /*
- * Parsing the CVSS v2 Vector to a valid Metric Values and BaseScore
+ * Parsing the CVSS v2 Vector to valid Metric Values and BaseScore
+ * @param vector    a valid CVSS v2 vector:
+ *                  AV:L/AC:L/Au:N/C:N/I:N/A:N
+ * @return {}       if the vector is valid:
+ *                  the different metric values and the calculated
+ *                  v2 base score
  */
 export const parseCvssV2BaseFromVector = vector => {
   if (!isDefined(vector) || vector.trim().length === 0) {
@@ -313,6 +323,17 @@ export const parseCvssV2BaseFromVector = vector => {
 
 /* CVSSv3.1 .... */
 
+/*
+ * Parsing the CVSS v3 Metric Values to a valid Vector and BaseScore
+ * @param attackVector              AV Metric Value
+ * @param attackComplexity          AC Metric Value
+ * @param privilegesRequired        PR Metric Value
+ * @param userInteraction           UI Metric Value
+ * @param scope                     S Metric Value
+ * @param confidentialityImpact     C Metric Value
+ * @param integrityImpact           I Metric Value
+ * @param availabilityImpact        A Metric Value
+ */
 export const parseCvssV3BaseVector = ({
   attackVector,
   attackComplexity,
@@ -497,6 +518,14 @@ export const parseCvssV3BaseVector = ({
   return [vector, base];
 };
 
+/*
+ * Parsing the CVSS v3.1 Vector to valid Metric Values and BaseScore
+ * @param vector    a valid CVSS v3.1 vector:
+ *                  CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N
+ * @return {}       if the vector is valid:
+ *                  the different metric values and the calculated
+ *                  v3.1 base score
+ */
 export const parseCvssV3BaseFromVector = vector => {
   if (!isDefined(vector) || vector.trim().length === 0) {
     return {};
