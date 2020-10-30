@@ -29,7 +29,7 @@ import {
   parseCvssV3BaseVector,
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
-} from 'gmp/utils/calculator';
+} from 'gmp/parser/cvss';
 
 import SeverityBar from 'web/components/bar/severitybar';
 

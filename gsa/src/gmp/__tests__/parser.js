@@ -45,7 +45,7 @@ import {
   parseCvssV3BaseVector,
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
-} from '../utils/calculator';
+} from '../parser/cvss';
 
 describe('parseInt tests', () => {
   test('should parse int number string', () => {

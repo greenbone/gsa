@@ -23,7 +23,7 @@ import {map} from 'gmp/utils/array';
 
 import {parseSeverity, parseDate, setProperties} from 'gmp/parser';
 
-import {parseCvssV2BaseVector} from 'gmp/utils/calculator';
+import {parseCvssV2BaseVector} from 'gmp/parser/cvss';
 import Info from './info';
 
 const delete_empty = (obj, props) => {
