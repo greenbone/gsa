@@ -197,7 +197,7 @@ const CvssV2Calculator = props => {
   } = state;
 
   return (
-    <Layout flex="column" grow="1">
+    <Layout flex="column" grow>
       <Section
         img={<CvssIcon size="large" />}
         title={_('CVSSv2 Base Score Calculator')}
@@ -708,9 +708,9 @@ const CvssV3Calculator = props => {
 const CvssCalculator = props => (
   <Layout flex="column">
     <ToolBarIcons />
-    <Divider margin="10px" flex="row" align={['center', 'start']} grow>
-      <CvssV2Calculator {...props} grow="1" />
-      <CvssV3Calculator {...props} grow="1" />
+    <Divider margin="20px" flex="row" align={['center', 'start']} grow>
+      <CvssV2Calculator {...props} />
+      <CvssV3Calculator {...props} />
     </Divider>
   </Layout>
 );
