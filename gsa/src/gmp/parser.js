@@ -95,7 +95,7 @@ export const YES_VALUE = 1;
 export const NO_VALUE = 0;
 
 export const parseYesNo = value =>
-  value === '1' || value === 1 || value === true ? YES_VALUE : NO_VALUE;
+  value === '1' || value === 1 ? YES_VALUE : NO_VALUE;
 
 export function parseYes(value) {
   return value === 'yes' ? YES_VALUE : NO_VALUE;
