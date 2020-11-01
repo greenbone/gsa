@@ -21,13 +21,9 @@ import {isArray, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
-import {
-  parseSeverity,
-  parseCvssBaseVector,
-  parseDate,
-  setProperties,
-} from 'gmp/parser';
+import {parseSeverity, parseDate, setProperties} from 'gmp/parser';
 
+import {parseCvssV2BaseVector} from 'gmp/parser/cvss';
 import Info from './info';
 
 const delete_empty = (obj, props) => {
@@ -95,7 +91,7 @@ class Cve extends Info {
       'cert',
     ]);
 
-    ret.cvssBaseVector = parseCvssBaseVector({
+    const vector = parseCvssV2BaseVector({
       accessComplexity: ret.complexity,
       accessVector: ret.vector,
       authentication: ret.authentication,
@@ -103,6 +99,7 @@ class Cve extends Info {
       confidentialityImpact: ret.confidentiality_impact,
       integrityImpact: ret.integrity_impact,
     });
+    ret.cvssBaseVector = vector[0];
 
     // use consistent names for cvss values
     rename_props(ret, {
