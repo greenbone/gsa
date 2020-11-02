@@ -386,7 +386,9 @@ const AlertComponent = ({
       method: hasValue(method) ? convertMethodEnum(method) : null,
       methodData: await convertDict('method_data', other, method_data_fields),
       reportFormats: report_format_ids,
-    }).then(onSaved, onSaveError);
+    })
+      .then(onSaved, onSaveError)
+      .then(closeAlertDialog);
   };
 
   const openScpCredentialDialog = types => {
@@ -1282,10 +1284,7 @@ const AlertComponent = ({
               onNewTippingPointCredentialClick={
                 openTippingPointCredentialDialog
               }
-              onSave={d => {
-                handleInteraction();
-                return handleSaveAlert(d).then(() => closeAlertDialog());
-              }}
+              onSave={handleSaveAlert}
               onReportFormatsChange={handleReportFormatsChange}
               onEmailCredentialChange={handleEmailCredentialChange}
               onPasswordOnlyCredentialChange={
