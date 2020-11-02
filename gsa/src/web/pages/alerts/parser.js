@@ -181,7 +181,6 @@ export const convertConditionEnum = condition => {
 };
 
 export const convertEventEnum = (event, feedEvent = '') => {
-  // Currently does not support all event types. Need updating.
   switch (event) {
     case EVENT_TYPE_TASK_RUN_STATUS_CHANGED:
       return 'TASK_RUN_STATUS_CHANGED';

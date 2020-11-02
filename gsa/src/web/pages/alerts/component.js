@@ -373,7 +373,7 @@ const AlertComponent = ({
       name,
       comment,
       event: hasValue(event)
-        ? convertEventEnum(event, event_data_feed_event)
+        ? convertEventEnum(event, event_data_feed_event) // Added second arg because the dialog ALWAYS sends NEW_SECINFO_ARRIVED if event type is secinfo; the radio can only accept one value.
         : null,
       eventData: await convertDict('event_data', other, event_data_fields),
       condition: hasValue(condition) ? convertConditionEnum(condition) : null,
@@ -425,7 +425,6 @@ const AlertComponent = ({
     const credentialPromise = gmp.credentials.getAll().then(r => r.data);
 
     loadReportComposerDefaults();
-    console.log(alert.event);
 
     if (isDefined(alert)) {
       const alertPromise = gmp.alert.editAlertSettings(alert).then(r => r.data);
@@ -673,7 +672,7 @@ const AlertComponent = ({
 
               method_data_smb_credential: getValue(
                 method.data.smb_credential,
-                UNSET_VALUE,
+                UNSET_VALUE, // default value for uuids should always be null from now on, since a UUID type is expected.
               ),
               method_data_smb_file_path: getValue(
                 method.data.smb_file_path,
@@ -731,7 +730,7 @@ const AlertComponent = ({
               method_data_pkcs12_credential: selectSaveId(
                 passwordOnlyCredentials,
                 pkcs12_credential_id,
-                UNSET_VALUE,
+                UNSET_VALUE, // same here. uuids should never be anything but either a valid uuid or null.
               ),
               method_data_vfire_credential: selectSaveId(
                 vFireCredentials,
