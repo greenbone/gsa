@@ -345,6 +345,8 @@ const AlertComponent = ({
   }) => {
     handleInteraction();
 
+    const {event_data_feed_event} = other;
+
     if (!isDefined(id)) {
       return createAlert({
         name,
@@ -358,7 +360,7 @@ const AlertComponent = ({
         filterId: filter_id,
         method: convertMethodEnum(method),
         methodData: await convertDict('method_data', other, method_data_fields),
-        event: convertEventEnum(event),
+        event: convertEventEnum(event, event_data_feed_event),
         eventData: await convertDict('event_data', other, event_data_fields),
         reportFormats: report_format_ids,
       })
@@ -370,7 +372,9 @@ const AlertComponent = ({
       id,
       name,
       comment,
-      event: hasValue(event) ? convertEventEnum(event) : null,
+      event: hasValue(event)
+        ? convertEventEnum(event, event_data_feed_event)
+        : null,
       eventData: await convertDict('event_data', other, event_data_fields),
       condition: hasValue(condition) ? convertConditionEnum(condition) : null,
       conditionData: await convertDict(
@@ -419,6 +423,7 @@ const AlertComponent = ({
     const credentialPromise = gmp.credentials.getAll().then(r => r.data);
 
     loadReportComposerDefaults();
+    console.log(alert.event);
 
     if (isDefined(alert)) {
       const alertPromise = gmp.alert.editAlertSettings(alert).then(r => r.data);

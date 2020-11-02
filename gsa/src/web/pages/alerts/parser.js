@@ -180,7 +180,7 @@ export const convertConditionEnum = condition => {
   }
 };
 
-export const convertEventEnum = event => {
+export const convertEventEnum = (event, feedEvent = '') => {
   // Currently does not support all event types. Need updating.
   switch (event) {
     case EVENT_TYPE_TASK_RUN_STATUS_CHANGED:
@@ -188,6 +188,9 @@ export const convertEventEnum = event => {
     case EVENT_TYPE_UPDATED_SECINFO:
       return 'UPDATED_SECINFO_ARRIVED';
     case EVENT_TYPE_NEW_SECINFO:
+      if (feedEvent === 'updated') {
+        return 'UPDATED_SECINFO_ARRIVED';
+      }
       return 'NEW_SECINFO_ARRIVED';
     case EVENT_TYPE_TICKET_RECEIVED:
       return 'TICKET_RECEIVED';
