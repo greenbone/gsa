@@ -115,8 +115,10 @@ const CreateModifyAlertComponent = () => {
   const [createAlert] = useCreateAlert();
   const [modifyAlert] = useModifyAlert();
 
-  const handleCreateResult = id => {
-    setNotification(`Alert with id ${id} created.`);
+  const handleCreateResult = resp => {
+    const {data} = resp;
+
+    setNotification(`Alert with id ${data.createAlert.id} created.`);
   };
 
   const handleModifyResult = resp => {

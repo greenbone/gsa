@@ -144,9 +144,7 @@ export const useCreateAlert = options => {
   const createAlert = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreateAlert({...options, variables: {input: inputObject}}).then(
-        result => result.data.createAlert.id,
-      ),
+      queryCreateAlert({...options, variables: {input: inputObject}}),
     [queryCreateAlert],
   );
   const alertId = data?.createAlert?.id;

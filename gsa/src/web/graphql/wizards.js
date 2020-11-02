@@ -136,7 +136,8 @@ export const useRunModifyTask = () => {
           alertPromise = Promise.resolve();
         }
 
-        return alertPromise.then(alertId => {
+        return alertPromise.then(response => {
+          const alertId = response?.data?.createAlert?.id;
           const taskAlerts = [];
 
           if (hasValue(alertId)) {
@@ -215,7 +216,8 @@ export const useRunQuickTask = () => {
       alertPromise = Promise.resolve();
     }
 
-    return alertPromise.then(alertId => {
+    return alertPromise.then(resp => {
+      const alertId = resp?.data?.createAlert?.id;
       let schedulePromise;
 
       if (autoStart === '1') {
@@ -233,8 +235,8 @@ export const useRunQuickTask = () => {
         schedulePromise = Promise.resolve();
       }
 
-      return schedulePromise.then(resp => {
-        const scheduleId = resp?.data?.createSchedule?.id;
+      return schedulePromise.then(response => {
+        const scheduleId = response?.data?.createSchedule?.id;
 
         const createTargetInput = {
           name: `Target for ${taskName} - ${creationDateString}`,
