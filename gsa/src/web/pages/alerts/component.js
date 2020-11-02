@@ -26,7 +26,7 @@ import {
   method_data_fields,
 } from 'gmp/commands/alerts';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
 import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
@@ -370,16 +370,16 @@ const AlertComponent = ({
       id,
       name,
       comment,
-      event: convertEventEnum(event),
+      event: hasValue(event) ? convertEventEnum(event) : null,
       eventData: await convertDict('event_data', other, event_data_fields),
-      condition: convertConditionEnum(condition),
+      condition: hasValue(condition) ? convertConditionEnum(condition) : null,
       conditionData: await convertDict(
         'condition_data',
         other,
         condition_data_fields,
       ),
       filterId: filter_id,
-      method: convertMethodEnum(method),
+      method: hasValue(method) ? convertMethodEnum(method) : null,
       methodData: await convertDict('method_data', other, method_data_fields),
       reportFormats: report_format_ids,
     }).then(onSaved, onSaveError);
