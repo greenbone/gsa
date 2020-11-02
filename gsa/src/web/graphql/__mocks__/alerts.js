@@ -18,7 +18,7 @@
 
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
-import {GET_ALERTS, CREATE_ALERT} from '../alerts';
+import {GET_ALERTS, CREATE_ALERT, MODIFY_ALERT} from '../alerts';
 
 const alert1 = deepFreeze({
   id: '1',
@@ -146,4 +146,32 @@ export const createAlertInput = {
 export const createCreateAlertQueryMock = () =>
   createGenericQueryMock(CREATE_ALERT, createAlertResult, {
     input: createAlertInput,
+  });
+
+const modifyAlertResult = {
+  modifyAlert: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const modifyAlertInput = {
+  id: '12345',
+  name: 'foo',
+  event: 'NEW_SECINFO_ARRIVED',
+  condition: 'ALWAYS',
+  method: 'HTTP_GET',
+  methodData: {
+    URL: 'yourdomain.com',
+    composer_include_notes: 1,
+    composer_include_overrides: 0,
+    delta_report_id: '23456',
+    delta_type: 'PREVIOUS',
+    details_url: 'https://secinfo.greenbone.net/etc',
+  },
+};
+
+export const createModifyAlertQueryMock = () =>
+  createGenericQueryMock(MODIFY_ALERT, modifyAlertResult, {
+    input: modifyAlertInput,
   });
