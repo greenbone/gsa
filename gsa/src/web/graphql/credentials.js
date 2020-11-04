@@ -121,7 +121,7 @@ export const useCreateCredential = options => {
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
       queryCreateCredential({...options, variables: {input: inputObject}}).then(
-        result => result.data.createCredential.id,
+        result => result?.data?.createCredential?.id,
       ),
     [queryCreateCredential],
   );

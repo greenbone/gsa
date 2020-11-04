@@ -142,7 +142,7 @@ export const useCreateSchedule = options => {
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
       queryCreateSchedule({...options, variables: {input: inputObject}}).then(
-        result => result.data.createSchedule.id,
+        result => result?.data?.createSchedule?.id,
       ),
     [queryCreateSchedule],
   );

@@ -31,7 +31,6 @@ import {
   createAlertInput,
   modifyAlertInput,
 } from '../__mocks__/alerts';
-import Identifiers from 'web/pages/hosts/identifiers';
 
 const GetLazyAlertsComponent = () => {
   const [getAlerts, {counts, loading, alerts}] = useLazyGetAlerts();

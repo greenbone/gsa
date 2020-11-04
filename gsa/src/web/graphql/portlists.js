@@ -109,7 +109,7 @@ export const useCreatePortList = options => {
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
       queryCreatePortList({...options, variables: {input: inputObject}}).then(
-        result => result.data.createPortList.id,
+        result => result?.data?.createPortList?.id,
       ),
     [queryCreatePortList],
   );
