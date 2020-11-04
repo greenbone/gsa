@@ -167,12 +167,10 @@ class AuditComponent extends React.Component {
     return this.cmd.resume(audit).then(onResumed, onResumeError);
   }
 
-  handleAlertCreated(resp) {
-    const {data} = resp;
-
+  handleAlertCreated(alertId) {
     this.props.loadAlerts();
 
-    this.setState(({alertIds}) => ({alertIds: [data.id, ...alertIds]}));
+    this.setState(({alertIds}) => ({alertIds: [alertId, ...alertIds]}));
   }
 
   handleScheduleCreated(resp) {

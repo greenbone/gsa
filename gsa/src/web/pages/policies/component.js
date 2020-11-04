@@ -140,12 +140,10 @@ class PolicyComponent extends React.Component {
     this.setState({[name]: value});
   }
 
-  handleAlertCreated(resp) {
-    const {data} = resp;
-
+  handleAlertCreated(alertId) {
     this.props.loadAlerts();
 
-    this.setState(({alertIds}) => ({alertIds: [data.id, ...alertIds]}));
+    this.setState(({alertIds}) => ({alertIds: [alertId, ...alertIds]}));
   }
 
   handleScheduleCreated(resp) {
