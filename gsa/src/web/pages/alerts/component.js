@@ -192,8 +192,8 @@ const AlertComponent = ({
           type: convertCredentialTypeEnum(data.credential_type),
         });
       })
-      .then(id => {
-        credential_id = id;
+      .then(createdId => {
+        credential_id = createdId;
         closeCredentialDialog();
       })
       .then(() => gmp.credentials.getAll())
