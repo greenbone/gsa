@@ -108,7 +108,9 @@ export const useCreatePortList = options => {
   const createPortList = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreatePortList({...options, variables: {input: inputObject}}),
+      queryCreatePortList({...options, variables: {input: inputObject}}).then(
+        result => result.data.createPortList.id,
+      ),
     [queryCreatePortList],
   );
   const portListId = data?.createPortList?.id;

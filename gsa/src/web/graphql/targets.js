@@ -110,7 +110,9 @@ export const useCreateTarget = options => {
   const createTarget = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreateTarget({...options, variables: {input: inputObject}}),
+      queryCreateTarget({...options, variables: {input: inputObject}}).then(
+        result => result?.data?.createTarget?.id,
+      ),
     [queryCreateTarget],
   );
   const targetId = data?.createTarget?.id;
