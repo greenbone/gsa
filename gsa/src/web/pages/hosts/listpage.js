@@ -43,6 +43,8 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/hosts';
 
+import {goto_entity_details} from 'web/utils/graphql';
+
 import HostsFilterDialog from './filterdialog';
 import HostsTable from './table';
 import HostComponent from './component';
@@ -79,7 +81,7 @@ const Page = ({
 }) => (
   <HostComponent
     entitiesCounts={entitiesCounts}
-    onTargetCreated={goto_details('target', props)}
+    onTargetCreated={goto_entity_details('target', props)}
     onTargetCreateError={onError}
     onCreated={onChanged}
     onDeleted={onChanged}
