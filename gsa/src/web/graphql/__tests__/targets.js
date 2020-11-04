@@ -78,17 +78,14 @@ const modifyTargetMock = {
   newData: modifyTargetResult,
 };
 
-const TestComponent = () => {
+const CreateModifyTargetTestComponent = () => {
   const [notification, setNotification] = useState('');
 
   const [createTarget] = useCreateTarget();
   const [modifyTarget] = useModifyTarget();
 
-  const handleCreateResult = resp => {
-    const {data} = resp;
-    setNotification(
-      `Target created with id ${data.createTarget.id} and status ${data.createTarget.status}.`,
-    );
+  const handleCreateResult = id => {
+    setNotification(`Target created with id ${id}.`);
   };
 
   const handleModifyResult = resp => {
@@ -115,7 +112,7 @@ describe('Target mutation tests', () => {
   test('should create a target', async () => {
     const {render} = rendererWith({queryMocks: [createTargetMock]});
 
-    const {element} = render(<TestComponent />);
+    const {element} = render(<CreateModifyTargetTestComponent />);
 
     const buttons = element.querySelectorAll('button');
 
@@ -125,14 +122,14 @@ describe('Target mutation tests', () => {
 
     expect(createTargetResult).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
-      'Target created with id 12345 and status 200.',
+      'Target created with id 12345.',
     );
   });
 
   test('should modify a target', async () => {
     const {render} = rendererWith({queryMocks: [modifyTargetMock]});
 
-    const {element} = render(<TestComponent />);
+    const {element} = render(<CreateModifyTargetTestComponent />);
 
     const buttons = element.querySelectorAll('button');
 

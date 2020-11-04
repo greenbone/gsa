@@ -324,18 +324,15 @@ const TaskComponent = ({
     refetchAlerts();
   };
 
-  const handleScheduleCreated = resp => {
-    const {data} = resp;
-
+  const handleScheduleCreated = scheduleId => {
     refetchSchedules();
-    dispatchState(updateState({scheduleId: data.createSchedule?.id}));
+    dispatchState(updateState({scheduleId}));
   };
 
-  const handleTargetCreated = resp => {
-    const {data} = resp;
+  const handleTargetCreated = targetId => {
     refetchTargets();
 
-    dispatchState(updateState({targetId: data?.createTarget?.id}));
+    dispatchState(updateState({targetId}));
   };
 
   const openContainerTaskDialog = inputTask => {

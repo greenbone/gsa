@@ -121,7 +121,7 @@ const Page = ({
   <AlertComponent
     onCloned={goto_details('alert', props)}
     onCloneError={onError}
-    onCreated={goto_entity_details('alert', 'createAlert', props)}
+    onCreated={goto_entity_details('alert', props)}
     onDeleted={goto_list('alerts', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}

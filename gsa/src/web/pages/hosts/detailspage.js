@@ -73,6 +73,7 @@ import {
 } from 'web/store/entities/permissions';
 
 import PropTypes from 'web/utils/proptypes';
+import {goto_entity_details} from 'web/utils/graphql';
 
 import HostDetails from './details';
 import HostComponent from './component';
@@ -266,7 +267,7 @@ const Page = ({
   const goto_host = goto_details('host', props);
   return (
     <HostComponent
-      onTargetCreated={goto_details('target', props)}
+      onTargetCreated={goto_entity_details('target', props)}
       onTargetCreateError={onError}
       onCreated={goto_host}
       onDeleted={goto_list('hosts', props)}

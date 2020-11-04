@@ -393,7 +393,9 @@ export const useCreateTask = options => {
   const createTask = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreateTask({...options, variables: {input: inputObject}}),
+      queryCreateTask({...options, variables: {input: inputObject}}).then(
+        result => result?.data?.createTask?.id,
+      ),
     [queryCreateTask],
   );
   const taskId = data?.createTask?.id;
