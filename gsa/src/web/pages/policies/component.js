@@ -146,20 +146,16 @@ class PolicyComponent extends React.Component {
     this.setState(({alertIds}) => ({alertIds: [alertId, ...alertIds]}));
   }
 
-  handleScheduleCreated(resp) {
-    const {data} = resp;
-
+  handleScheduleCreated(scheduleId) {
     this.props.loadSchedules();
 
-    this.setState({scheduleId: data.id});
+    this.setState({scheduleId});
   }
 
-  handleTargetCreated(resp) {
-    const {data} = resp;
-
+  handleTargetCreated(targetId) {
     this.props.loadTargets();
 
-    this.setState({targetId: data.id});
+    this.setState({targetId});
   }
 
   openEditPolicyDialog(policy) {
