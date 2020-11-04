@@ -30,8 +30,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import {goto_details} from 'web/entity/component';
-
 import DashboardControls from 'web/components/dashboard/controls';
 
 import HostIcon from 'web/components/icon/hosticon';
