@@ -177,11 +177,8 @@ const CreateModifyScheduleComponent = () => {
   const [createSchedule] = useCreateSchedule();
   const [modifySchedule] = useModifySchedule();
 
-  const handleCreateResult = resp => {
-    const {data} = resp;
-    setNotification(
-      `Schedule created with id ${data.createSchedule.id} and status ${data.createSchedule.status}.`,
-    );
+  const handleCreateResult = id => {
+    setNotification(`Schedule created with id ${id}.`);
   };
 
   const handleModifyResult = resp => {
@@ -226,7 +223,7 @@ describe('Schedule mutation tests', () => {
 
     expect(createScheduleResult).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
-      'Schedule created with id 12345 and status 200.',
+      'Schedule created with id 12345.',
     );
   });
 
