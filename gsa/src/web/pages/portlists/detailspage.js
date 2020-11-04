@@ -152,7 +152,7 @@ const Page = ({
   <PortListComponent
     onCloned={goto_details('portlist', props)}
     onCloneError={onError}
-    onCreated={goto_entity_details('portlist', 'createPortList', props)}
+    onCreated={goto_entity_details('portlist', props)}
     onDeleted={goto_list('portlists', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}

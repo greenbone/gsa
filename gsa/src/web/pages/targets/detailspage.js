@@ -153,7 +153,7 @@ const Page = ({
     <TargetComponent
       onCloned={goto_details('target', props)}
       onCloneError={onError}
-      onCreated={goto_entity_details('target', 'createTarget', props)}
+      onCreated={goto_entity_details('target', props)}
       onDeleted={goto_list('targets', props)}
       onDeleteError={onError}
       onDownloaded={onDownloaded}
