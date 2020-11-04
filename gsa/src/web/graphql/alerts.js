@@ -144,11 +144,28 @@ export const useCreateAlert = options => {
   const createAlert = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreateAlert({...options, variables: {input: inputObject}}).then(
-        result => result.data.createAlert.id,
-      ),
+      queryCreateAlert({...options, variables: {input: inputObject}}),
     [queryCreateAlert],
   );
   const alertId = data?.createAlert?.id;
   return [createAlert, {...other, id: alertId}];
+};
+
+export const MODIFY_ALERT = gql`
+  mutation modifyAlert($input: ModifyAlertInput!) {
+    modifyAlert(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const useModifyAlert = options => {
+  const [queryModifyAlert, data] = useMutation(MODIFY_ALERT, options);
+  const modifyAlert = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryModifyAlert({...options, variables: {input: inputObject}}),
+    [queryModifyAlert],
+  );
+  return [modifyAlert, data];
 };

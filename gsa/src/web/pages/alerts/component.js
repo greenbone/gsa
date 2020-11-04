@@ -26,7 +26,7 @@ import {
   method_data_fields,
 } from 'gmp/commands/alerts';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
 import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
@@ -49,7 +49,7 @@ import FootNote from 'web/components/footnote/footnote';
 
 import Layout from 'web/components/layout/layout';
 
-import {useCreateAlert} from 'web/graphql/alerts';
+import {useCreateAlert, useModifyAlert} from 'web/graphql/alerts';
 
 import {useCreateCredential} from 'web/graphql/credentials';
 
@@ -157,6 +157,7 @@ const AlertComponent = ({
     dispatch(saveDefaults(gmp)(defaults));
 
   const [createAlert] = useCreateAlert();
+  const [modifyAlert] = useModifyAlert();
   const [createCredential] = useCreateCredential();
 
   const handleInteraction = () => {
@@ -344,6 +345,8 @@ const AlertComponent = ({
   }) => {
     handleInteraction();
 
+    const {event_data_feed_event} = other;
+
     if (!isDefined(id)) {
       return createAlert({
         name,
@@ -357,7 +360,7 @@ const AlertComponent = ({
         filterId: filter_id,
         method: convertMethodEnum(method),
         methodData: await convertDict('method_data', other, method_data_fields),
-        event: convertEventEnum(event),
+        event: convertEventEnum(event, event_data_feed_event),
         eventData: await convertDict('event_data', other, event_data_fields),
         reportFormats: report_format_ids,
       })
@@ -365,19 +368,27 @@ const AlertComponent = ({
         .then(closeAlertDialog);
     }
 
-    return gmp.alert
-      .save({
-        active,
-        name,
-        comment,
-        event,
-        condition,
-        filter_id,
-        method,
-        report_format_ids,
-        ...other,
-      })
-      .then(onSaved, onSaveError);
+    return modifyAlert({
+      id,
+      name,
+      comment,
+      event: hasValue(event)
+        ? convertEventEnum(event, event_data_feed_event) // Added second arg because the dialog ALWAYS sends NEW_SECINFO_ARRIVED if event type is secinfo; the radio can only accept one value.
+        : null,
+      eventData: await convertDict('event_data', other, event_data_fields),
+      condition: hasValue(condition) ? convertConditionEnum(condition) : null,
+      conditionData: await convertDict(
+        'condition_data',
+        other,
+        condition_data_fields,
+      ),
+      filterId: filter_id,
+      method: hasValue(method) ? convertMethodEnum(method) : null,
+      methodData: await convertDict('method_data', other, method_data_fields),
+      reportFormats: report_format_ids,
+    })
+      .then(onSaved, onSaveError)
+      .then(closeAlertDialog);
   };
 
   const openScpCredentialDialog = types => {
@@ -661,7 +672,7 @@ const AlertComponent = ({
 
               method_data_smb_credential: getValue(
                 method.data.smb_credential,
-                '',
+                UNSET_VALUE, // default value for uuids should always be null from now on, since a UUID type is expected.
               ),
               method_data_smb_file_path: getValue(
                 method.data.smb_file_path,
@@ -673,7 +684,7 @@ const AlertComponent = ({
               ),
               method_data_smb_report_format: getValue(
                 method.data.smb_report_format,
-                '',
+                UNSET_VALUE,
               ),
               method_data_smb_share_path: getValue(
                 method.data.smb_share_path,
@@ -719,7 +730,7 @@ const AlertComponent = ({
               method_data_pkcs12_credential: selectSaveId(
                 passwordOnlyCredentials,
                 pkcs12_credential_id,
-                '0',
+                UNSET_VALUE, // same here. uuids should never be anything but either a valid uuid or null.
               ),
               method_data_vfire_credential: selectSaveId(
                 vFireCredentials,
@@ -1272,10 +1283,7 @@ const AlertComponent = ({
               onNewTippingPointCredentialClick={
                 openTippingPointCredentialDialog
               }
-              onSave={d => {
-                handleInteraction();
-                return handleSaveAlert(d).then(() => closeAlertDialog());
-              }}
+              onSave={handleSaveAlert}
               onReportFormatsChange={handleReportFormatsChange}
               onEmailCredentialChange={handleEmailCredentialChange}
               onPasswordOnlyCredentialChange={
