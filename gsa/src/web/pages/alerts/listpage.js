@@ -45,10 +45,10 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/alerts';
+import usePageFilter from 'web/utils/usePageFilter.js';
 
 import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
-import usePageFilter from 'web/utils/usePageFilter.js';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (

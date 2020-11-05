@@ -172,6 +172,11 @@ describe('Alert listpage tests', () => {
     expect(row[1]).toHaveTextContent('Always');
     expect(row[1]).toHaveTextContent('Alemba vFire');
 
+    expect(row[2]).toHaveTextContent('alert 2');
+    expect(row[2]).toHaveTextContent('Updated NVT arrived');
+    expect(row[2]).toHaveTextContent('Filter matches at least 3 NVTs');
+    expect(row[2]).toHaveTextContent('Email to foo@bar.com');
+
     // Hyperion currently does not support filter
     // expect(row[1]).toHaveTextContent('report results filter');
     expect(row[1]).toHaveTextContent('Yes');
