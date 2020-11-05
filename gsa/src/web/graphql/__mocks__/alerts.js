@@ -20,12 +20,13 @@ import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
 import {GET_ALERTS, CREATE_ALERT, MODIFY_ALERT} from '../alerts';
 
-const alert1 = deepFreeze({
+export const alert1 = deepFreeze({
   id: '1',
   name: 'alert 1',
-  inUse: true,
+  inUse: false,
   writable: true,
   active: true,
+  comment: 'bar',
   creationTime: '2020-08-06T11:34:15+00:00',
   modificationTime: '2020-08-06T11:34:15+00:00',
   owner: 'admin',
@@ -60,7 +61,7 @@ const alert1 = deepFreeze({
   ],
 });
 
-const alert2 = deepFreeze({
+export const alert2 = deepFreeze({
   id: '2',
   name: 'alert 2',
   inUse: true,

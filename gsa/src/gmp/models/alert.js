@@ -94,7 +94,7 @@ class Alert extends Model {
   static entityType = 'alert';
 
   static parseObject(object) {
-    const ret = super.parseElement(object);
+    const ret = super.parseObject(object);
 
     const types = ['condition', 'method', 'event'];
 

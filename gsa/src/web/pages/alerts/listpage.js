@@ -87,7 +87,7 @@ const AlertsPage = ({
   // Task list state variables and methods
   const [
     getAlerts,
-    {counts, alerts, error, loading: isLoading, refetch, called, pageInfo},
+    {counts, alerts, error, loading: isLoading, refetch, called},
   ] = useLazyGetAlerts();
 
   // Side effects
