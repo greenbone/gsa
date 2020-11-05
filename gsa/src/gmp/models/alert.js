@@ -123,6 +123,7 @@ class Alert extends Model {
     } else {
       ret.tasks = [];
     }
+
     return ret;
   }
 

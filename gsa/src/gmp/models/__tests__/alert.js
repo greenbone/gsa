@@ -32,7 +32,114 @@ import {testModel} from 'gmp/models/testing';
 
 testModel(Alert, 'alert', {testIsActive: false});
 
-describe('Alert Model tests', () => {
+describe('Alert Model parseObject tests', () => {
+  test('should parse condition, event, and method', () => {
+    const obj = {
+      condition: {
+        type: 'text',
+      },
+      event: {
+        type: 'lorem',
+        data: {
+          value: 'ipsum',
+          name: 'dolor',
+        },
+      },
+      method: {
+        type: 'foo',
+        data: {
+          value: '42',
+          name: 'bar',
+        },
+      },
+    };
+    const alert = Alert.fromObject(obj);
+
+    expect(alert.condition).toEqual({
+      data: {},
+      type: 'text',
+    });
+    expect(alert.event).toEqual({
+      data: {
+        dolor: {value: 'ipsum'},
+      },
+      type: 'lorem',
+    });
+    expect(alert.method).toEqual({
+      data: {
+        bar: {value: '42'},
+      },
+      type: 'foo',
+    });
+  });
+
+  // event/condition/method data will not have subvalues from hyperion, therefore this test is removed.
+
+  // alert.filter does not exist in hyperion
+
+  test('should return given tasks as array of instances of task model', () => {
+    const obj = {
+      tasks: [{id: 't1'}],
+    };
+    const alert = Alert.fromObject(obj);
+
+    expect(alert.tasks.length).toEqual(1);
+
+    const [task] = alert.tasks;
+    expect(task).toBeInstanceOf(Model);
+    expect(task.entityType).toEqual('task');
+    expect(task.id).toEqual('t1');
+  });
+
+  test('should return empty array if no tasks are given', () => {
+    const alert = Alert.fromObject({});
+
+    expect(alert.tasks).toEqual([]);
+  });
+
+  test('should parse report format ids', () => {
+    const obj = {
+      method: {
+        data: {
+          value: ['123', '456', '789'],
+          name: 'report_formats',
+        },
+      },
+    };
+    const alert = Alert.fromObject(obj);
+
+    expect(alert.method.data.report_formats.value).toEqual([
+      '123',
+      '456',
+      '789',
+    ]);
+  });
+
+  test('should return undefined if no report format ids are given', () => {
+    const alert = Alert.fromObject({
+      method: {
+        data: {
+          value: 'bar',
+          name: 'foo',
+        },
+      },
+    });
+
+    expect(alert.method.data.report_formats).toBeUndefined();
+  });
+
+  // notice is already string from Hyperion
+
+  test('isActive() should return correct true/false', () => {
+    const alert1 = Alert.fromObject({active: '0'});
+    const alert2 = Alert.fromObject({active: '1'});
+
+    expect(alert1.isActive()).toBe(false);
+    expect(alert2.isActive()).toBe(true);
+  });
+});
+
+describe('Alert Model parseElement tests', () => {
   test('should parse condition, event, and method', () => {
     const elem = {
       condition: {
