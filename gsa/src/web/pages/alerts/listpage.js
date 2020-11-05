@@ -15,11 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
 import {ALERTS_FILTER_FILTER} from 'gmp/models/filter';
+
+import {hasValue} from 'gmp/utils/identity.js';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities.js';
@@ -37,6 +39,8 @@ import AlertIcon from 'web/components/icon/alerticon';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog.js';
 
+import {useLazyGetAlerts} from 'web/graphql/alerts';
+
 import {
   loadEntities,
   selector as entitiesSelector,
@@ -44,6 +48,7 @@ import {
 
 import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
+import usePageFilter from 'web/utils/usePageFilter.js';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (
@@ -76,48 +81,73 @@ const AlertsPage = ({
   onError,
   onInteraction,
   ...props
-}) => (
-  <AlertComponent
-    onCreated={onChanged}
-    onSaved={onChanged}
-    onCloned={onChanged}
-    onCloneError={onError}
-    onDeleted={onChanged}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onTestSuccess={showSuccess}
-    onTestError={showError}
-  >
-    {({clone, create, delete: delete_func, download, edit, save, test}) => (
-      <React.Fragment>
-        <PageTitle title={_('Alerts')} />
-        <EntitiesPage
-          {...props}
-          filterEditDialog={AlertFilterDialog}
-          filtersFilter={ALERTS_FILTER_FILTER}
-          sectionIcon={<AlertIcon size="large" />}
-          table={AlertTable}
-          title={_('Alerts')}
-          toolBarIcons={ToolBarIcons}
-          onAlertCloneClick={clone}
-          onAlertCreateClick={create}
-          onAlertDeleteClick={delete_func}
-          onAlertDownloadClick={download}
-          onAlertEditClick={edit}
-          onAlertTestClick={test}
-          onAlertSaveClick={save}
-          onError={onError}
-          onInteraction={onInteraction}
-          onPermissionChanged={onChanged}
-          onPermissionDownloaded={onDownloaded}
-          onPermissionDownloadError={onError}
-        />
-      </React.Fragment>
-    )}
-  </AlertComponent>
-);
+}) => {
+  const [filter, isLoadingFilter] = usePageFilter('alert');
+
+  // Task list state variables and methods
+  const [
+    getAlerts,
+    {counts, alerts, error, loading: isLoading, refetch, called, pageInfo},
+  ] = useLazyGetAlerts();
+
+  // Side effects
+  useEffect(() => {
+    // load tasks initially after the filter is resolved
+    if (!isLoadingFilter && hasValue(filter) && !called) {
+      getAlerts({
+        filterString: filter.toFilterString(),
+        first: filter.get('rows'),
+      });
+    }
+  }, [isLoadingFilter, filter, getAlerts, called]);
+  return (
+    <AlertComponent
+      onCreated={refetch}
+      onSaved={refetch}
+      onCloned={refetch}
+      onCloneError={onError}
+      onDeleted={refetch}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+      onTestSuccess={showSuccess}
+      onTestError={showError}
+    >
+      {({clone, create, delete: delete_func, download, edit, save, test}) => (
+        <React.Fragment>
+          <PageTitle title={_('Alerts')} />
+          <EntitiesPage
+            {...props}
+            entities={alerts}
+            entitiesCounts={counts}
+            entitiesError={error}
+            filterEditDialog={AlertFilterDialog}
+            filtersFilter={ALERTS_FILTER_FILTER}
+            isLoading={isLoading}
+            isUpdating={isLoading}
+            sectionIcon={<AlertIcon size="large" />}
+            table={AlertTable}
+            title={_('Alerts')}
+            toolBarIcons={ToolBarIcons}
+            onAlertCloneClick={clone}
+            onAlertCreateClick={create}
+            onAlertDeleteClick={delete_func}
+            onAlertDownloadClick={download}
+            onAlertEditClick={edit}
+            onAlertTestClick={test}
+            onAlertSaveClick={save}
+            onError={onError}
+            onInteraction={onInteraction}
+            onPermissionChanged={onChanged}
+            onPermissionDownloaded={onDownloaded}
+            onPermissionDownloadError={onError}
+          />
+        </React.Fragment>
+      )}
+    </AlertComponent>
+  );
+};
 
 AlertsPage.propTypes = {
   showError: PropTypes.func.isRequired,

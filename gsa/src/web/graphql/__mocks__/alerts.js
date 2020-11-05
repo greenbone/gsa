@@ -118,8 +118,8 @@ const mockAlerts = {
   },
 };
 
-export const createGetAlertsQueryMock = () =>
-  createGenericQueryMock(GET_ALERTS, {alerts: mockAlerts});
+export const createGetAlertsQueryMock = variables =>
+  createGenericQueryMock(GET_ALERTS, {alerts: mockAlerts}, variables);
 
 const createAlertResult = {
   createAlert: {

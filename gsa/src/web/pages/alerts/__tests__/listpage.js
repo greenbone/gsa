@@ -25,6 +25,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import Filter from 'gmp/models/filter';
 import Alert from 'gmp/models/alert';
 
+import {createGetAlertsQueryMock} from 'web/graphql/__mocks__/alerts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {entitiesLoadingActions} from 'web/store/entities/alerts';
@@ -100,7 +101,7 @@ const renewSession = jest.fn().mockResolvedValue({
 });
 
 describe('Alert listpage tests', () => {
-  test('should render full alert listpage', async () => {
+  test.only('should render full alert listpage', async () => {
     const gmp = {
       alerts: {
         get: getAlerts,
@@ -112,11 +113,17 @@ describe('Alert listpage tests', () => {
       user: {currentSettings},
     };
 
+    const [mock, resultFunc] = createGetAlertsQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -144,6 +151,8 @@ describe('Alert listpage tests', () => {
     const {baseElement} = render(<AlertPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const icons = screen.getAllByTestId('svg-icon');
     const inputs = baseElement.querySelectorAll('input');
@@ -176,7 +185,7 @@ describe('Alert listpage tests', () => {
 
     const row = baseElement.querySelectorAll('tr');
 
-    expect(row[1]).toHaveTextContent('foo');
+    expect(row[1]).toHaveTextContent('alert 1');
     expect(row[1]).toHaveTextContent('(bar)');
     expect(row[1]).toHaveTextContent('Task run status changed to Done');
     expect(row[1]).toHaveTextContent('Always');
