@@ -67,6 +67,7 @@ export const alert2 = deepFreeze({
   inUse: true,
   writable: false,
   active: true,
+  comment: 'lorem',
   creationTime: '2020-08-06T11:30:41+00:00',
   modificationTime: '2020-08-07T09:26:05+00:00',
   owner: 'admin',

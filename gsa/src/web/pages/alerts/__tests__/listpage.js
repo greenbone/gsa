@@ -166,20 +166,23 @@ describe('Alert listpage tests', () => {
     const row = baseElement.querySelectorAll('tr');
 
     expect(row[1]).toHaveTextContent('alert 1');
-    // somehow querying comment will cause things to fail
-    // expect(row[1]).toHaveTextContent('(bar)');
+    expect(row[1]).toHaveTextContent('(bar)');
     expect(row[1]).toHaveTextContent('Task run status changed to Done');
     expect(row[1]).toHaveTextContent('Always');
     expect(row[1]).toHaveTextContent('Alemba vFire');
 
+    expect(row[1]).toHaveTextContent('Yes');
+
     expect(row[2]).toHaveTextContent('alert 2');
+    expect(row[2]).toHaveTextContent('(lorem)');
     expect(row[2]).toHaveTextContent('Updated NVT arrived');
     expect(row[2]).toHaveTextContent('Filter matches at least 3 NVTs');
     expect(row[2]).toHaveTextContent('Email to foo@bar.com');
 
+    expect(row[2]).toHaveTextContent('Yes');
+
     // Hyperion currently does not support filter
     // expect(row[1]).toHaveTextContent('report results filter');
-    expect(row[1]).toHaveTextContent('Yes');
 
     expect(icons[13]).toHaveAttribute('title', 'Move Alert to trashcan');
     expect(icons[14]).toHaveAttribute('title', 'Edit Alert');
