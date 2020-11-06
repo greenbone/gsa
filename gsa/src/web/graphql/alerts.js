@@ -51,6 +51,11 @@ export const GET_ALERTS = gql`
           owner
           creationTime
           modificationTime
+          filter {
+            trash
+            name
+            id
+          }
           tasks {
             id
             name

@@ -30,6 +30,11 @@ export const alert1 = deepFreeze({
   creationTime: '2020-08-06T11:34:15+00:00',
   modificationTime: '2020-08-06T11:34:15+00:00',
   owner: 'admin',
+  filter: {
+    trash: 0,
+    name: 'resultFilter',
+    id: '75c8145d-b00c-408f-8907-6664d5ce6108',
+  },
   method: {
     type: 'Alemba vFire',
     data: [
@@ -71,6 +76,7 @@ export const alert2 = deepFreeze({
   creationTime: '2020-08-06T11:30:41+00:00',
   modificationTime: '2020-08-07T09:26:05+00:00',
   owner: 'admin',
+  filter: null,
   method: {
     type: 'Email',
     data: [
