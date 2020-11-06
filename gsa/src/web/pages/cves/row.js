@@ -45,7 +45,7 @@ const Row = ({
 }) => (
   <TableBody>
     <TableRow>
-      <TableData rowSpan="2">
+      <TableData>
         <span>
           <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
             {entity.name}
@@ -53,22 +53,15 @@ const Row = ({
         </span>
         <Comment text={entity.comment} />
       </TableData>
-      <TableData>{na(entity.cvssAccessVector)}</TableData>
-      <TableData>{na(entity.cvssAccessComplexity)}</TableData>
-      <TableData>{na(entity.cvssAuthentication)}</TableData>
-      <TableData>{na(entity.cvssConfidentialityImpact)}</TableData>
-      <TableData>{na(entity.cvssIntegrityImpact)}</TableData>
-      <TableData>{na(entity.cvssAvailabilityImpact)}</TableData>
+      <TableData>{na(entity.cvssBaseVector)}</TableData>
       <TableData>
         <DateTime date={entity.creationTime} />
       </TableData>
       <TableData>
         <SeverityBar severity={entity.severity} />
       </TableData>
+      <TableData>{shorten(entity.description, 160)}</TableData>
       <ActionsComponent {...props} entity={entity} />
-    </TableRow>
-    <TableRow>
-      <TableData colSpan="9">{shorten(entity.description, 250)}</TableData>
     </TableRow>
   </TableBody>
 );
