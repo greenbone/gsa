@@ -100,6 +100,30 @@ export const GET_ALERTS = gql`
   }
 `;
 
+export const CLONE_ALERT = gql`
+  mutation cloneAlert($id: UUID!) {
+    cloneAlert(id: $id) {
+      id
+    }
+  }
+`;
+
+export const DELETE_ALERT = gql`
+  mutation deleteAlert($id: UUID!) {
+    deleteAlert(id: $id) {
+      ok
+    }
+  }
+`;
+
+export const TEST_ALERT = gql`
+  mutation testAlert($id: UUID!) {
+    testAlert(id: $id) {
+      ok
+    }
+  }
+`;
+
 export const useLazyGetAlerts = (variables, options) => {
   const [queryAlerts, {data, ...other}] = useLazyQuery(GET_ALERTS, {
     ...options,
@@ -171,4 +195,38 @@ export const useModifyAlert = options => {
     [queryModifyAlert],
   );
   return [modifyAlert, data];
+};
+
+export const useCloneAlert = options => {
+  const [queryCloneAlert, {data, ...other}] = useMutation(CLONE_ALERT, options);
+  const cloneAlert = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryCloneAlert({...options, variables: {id}}).then(
+        result => result.data.cloneAlert.id,
+      ),
+    [queryCloneAlert],
+  );
+  const alertId = data?.cloneAlert?.id;
+  return [cloneAlert, {...other, id: alertId}];
+};
+
+export const useDeleteAlert = options => {
+  const [queryDeleteAlert, data] = useMutation(DELETE_ALERT, options);
+  const deleteAlert = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryDeleteAlert({...options, variables: {id}}),
+    [queryDeleteAlert],
+  );
+  return [deleteAlert, data];
+};
+
+export const useTestAlert = options => {
+  const [queryTestAlert, data] = useMutation(TEST_ALERT, options);
+  const testAlert = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryTestAlert({...options, variables: {id}}),
+    [queryTestAlert],
+  );
+  return [testAlert, data];
 };
