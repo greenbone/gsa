@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+- Implemented parseObject for alert model implement [#2552](https://github.com/greenbone/gsa/pull/2552)
 - Added getNotes query [#2485](https://github.com/greenbone/gsa/pull/2485)
 - Create and modify schedule from graphql [#2477](https://github.com/greenbone/gsa/pull/2477)
 - Support more enum types for create alert [#2462](https://github.com/greenbone/gsa/pull/2462)
@@ -16,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Changed
+- Implement get_alerts on alerts listpage via graphql [#2552](https://github.com/greenbone/gsa/pull/2552)
 - Implement modify alert via graphql [#2549](https://github.com/greenbone/gsa/pull/2549)
 - Implement advanced task wizard via graphql [#2523](https://github.com/greenbone/gsa/pull/2523)
 - Implement modify task wizard via graphql [#2514](https://github.com/greenbone/gsa/pull/2514)
