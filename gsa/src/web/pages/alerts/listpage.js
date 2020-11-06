@@ -84,7 +84,7 @@ const AlertsPage = ({
 }) => {
   const [filter, isLoadingFilter] = usePageFilter('alert');
 
-  // Task list state variables and methods
+  // Alert list state variables and methods
   const [
     getAlerts,
     {counts, alerts, error, loading: isLoading, refetch, called},
@@ -92,7 +92,7 @@ const AlertsPage = ({
 
   // Side effects
   useEffect(() => {
-    // load tasks initially after the filter is resolved
+    // load alerts initially after the filter is resolved
     if (!isLoadingFilter && hasValue(filter) && !called) {
       getAlerts({
         filterString: filter.toFilterString(),
