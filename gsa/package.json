@@ -50,7 +50,7 @@
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
     "prop-types": "^15.6.2",
-    "qhistory": "^1.0.3",
+    "qhistory": "^1.1.0",
     "qs": "^6.9.4",
     "react": "^16.14.0",
     "react-beautiful-dnd": "^13.0.0",
