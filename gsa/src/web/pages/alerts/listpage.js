@@ -54,6 +54,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/alerts';
 import usePageFilter from 'web/utils/usePageFilter.js';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout.js';
 
 import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
@@ -81,13 +82,8 @@ const AlertFilterDialog = createFilterDialog({
   sortFields: SORT_FIELDS,
 });
 
-const AlertsPage = ({
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => {
+const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
+  const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('alert');
   const {
     dialogState: notificationDialogState,
@@ -117,7 +113,7 @@ const AlertsPage = ({
   );
   const handleTestAlert = useCallback(
     alert => testAlert(alert.id).then(showSuccess, showError),
-    [testAlert, refetch, showError, showSuccess],
+    [testAlert, showError, showSuccess],
   );
 
   // Side effects
@@ -140,7 +136,7 @@ const AlertsPage = ({
       onDeleteError={onError}
       onDownloaded={onDownloaded}
       onDownloadError={onError}
-      onInteraction={onInteraction}
+      onInteraction={renewSession}
       onTestSuccess={showSuccess}
       onTestError={showError}
     >
@@ -168,7 +164,7 @@ const AlertsPage = ({
             onAlertTestClick={handleTestAlert}
             onAlertSaveClick={save}
             onError={onError}
-            onInteraction={onInteraction}
+            onInteraction={renewSession}
             onPermissionChanged={onChanged}
             onPermissionDownloaded={onDownloaded}
             onPermissionDownloadError={onError}
@@ -184,12 +180,9 @@ const AlertsPage = ({
 };
 
 AlertsPage.propTypes = {
-  showError: PropTypes.func.isRequired,
-  showSuccess: PropTypes.func.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export default withEntitiesContainer('alert', {
