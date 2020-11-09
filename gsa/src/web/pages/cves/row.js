@@ -26,6 +26,8 @@ import Comment from 'web/components/comment/comment';
 
 import DateTime from 'web/components/date/datetime';
 
+import Link from 'web/components/link/link';
+
 import TableBody from 'web/components/table/body';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
@@ -53,7 +55,11 @@ const Row = ({
         </span>
         <Comment text={entity.comment} />
       </TableData>
-      <TableData>{na(entity.cvssBaseVector)}</TableData>
+      <TableData>
+        <Link to="cvsscalculator" query={{cvssVector: entity.cvssBaseVector}}>
+          {entity.cvssBaseVector}
+        </Link>
+      </TableData>
       <TableData>
         <DateTime date={entity.creationTime} />
       </TableData>
