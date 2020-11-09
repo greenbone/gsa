@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -39,7 +39,15 @@ import AlertIcon from 'web/components/icon/alerticon';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog.js';
 
-import {useLazyGetAlerts} from 'web/graphql/alerts';
+import DialogNotification from 'web/components/notification/dialognotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+
+import {
+  useLazyGetAlerts,
+  useCloneAlert,
+  useDeleteAlert,
+  useTestAlert,
+} from 'web/graphql/alerts';
 
 import {
   loadEntities,
@@ -74,8 +82,6 @@ const AlertFilterDialog = createFilterDialog({
 });
 
 const AlertsPage = ({
-  showError,
-  showSuccess,
   onChanged,
   onDownloaded,
   onError,
@@ -83,12 +89,36 @@ const AlertsPage = ({
   ...props
 }) => {
   const [filter, isLoadingFilter] = usePageFilter('alert');
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+    showSuccess,
+  } = useDialogNotification();
 
   // Alert list state variables and methods
   const [
     getAlerts,
     {counts, alerts, error, loading: isLoading, refetch, called},
   ] = useLazyGetAlerts();
+
+  const [cloneAlert] = useCloneAlert();
+  const [deleteAlert] = useDeleteAlert();
+  const [testAlert] = useTestAlert();
+
+  // Alert methods
+  const handleCloneAlert = useCallback(
+    alert => cloneAlert(alert.id).then(refetch, showError),
+    [cloneAlert, refetch, showError],
+  );
+  const handleDeleteAlert = useCallback(
+    alert => deleteAlert(alert.id).then(refetch, showError),
+    [deleteAlert, refetch, showError],
+  );
+  const handleTestAlert = useCallback(
+    alert => testAlert(alert.id).then(showSuccess, showError),
+    [testAlert, refetch, showError],
+  );
 
   // Side effects
   useEffect(() => {
@@ -114,7 +144,7 @@ const AlertsPage = ({
       onTestSuccess={showSuccess}
       onTestError={showError}
     >
-      {({clone, create, delete: delete_func, download, edit, save, test}) => (
+      {({create, download, edit, save}) => (
         <React.Fragment>
           <PageTitle title={_('Alerts')} />
           <EntitiesPage
@@ -130,18 +160,22 @@ const AlertsPage = ({
             table={AlertTable}
             title={_('Alerts')}
             toolBarIcons={ToolBarIcons}
-            onAlertCloneClick={clone}
+            onAlertCloneClick={handleCloneAlert}
             onAlertCreateClick={create}
-            onAlertDeleteClick={delete_func}
+            onAlertDeleteClick={handleDeleteAlert}
             onAlertDownloadClick={download}
             onAlertEditClick={edit}
-            onAlertTestClick={test}
+            onAlertTestClick={handleTestAlert}
             onAlertSaveClick={save}
             onError={onError}
             onInteraction={onInteraction}
             onPermissionChanged={onChanged}
             onPermissionDownloaded={onDownloaded}
             onPermissionDownloadError={onError}
+          />
+          <DialogNotification
+            {...notificationDialogState}
+            onCloseClick={closeNotificationDialog}
           />
         </React.Fragment>
       )}
