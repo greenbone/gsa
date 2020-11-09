@@ -58,6 +58,8 @@ import useUserSessionTimeout from 'web/utils/useUserSessionTimeout.js';
 
 import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
+import useGmpSettings from 'web/utils/useGmpSettings.js';
+import useReload from 'web/components/loading/useReload.js';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (
@@ -83,6 +85,8 @@ const AlertFilterDialog = createFilterDialog({
 });
 
 const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
+  // Page methods and hooks
+  const gmpSettings = useGmpSettings();
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('alert');
   const {
@@ -101,6 +105,24 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
   const [cloneAlert] = useCloneAlert();
   const [deleteAlert] = useDeleteAlert();
   const [testAlert] = useTestAlert();
+
+  const timeoutFunc = useCallback(
+    ({isVisible}) => {
+      if (!isVisible) {
+        return gmpSettings.reloadIntervalInactive;
+      }
+      if (hasValue(alerts) && alerts.some(alert => alert.isActive())) {
+        return gmpSettings.reloadIntervalActive;
+      }
+      return gmpSettings.reloadInterval;
+    },
+    [alerts, gmpSettings],
+  );
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetch,
+    timeoutFunc,
+  );
 
   // Alert methods
   const handleCloneAlert = useCallback(
@@ -126,6 +148,15 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
       });
     }
   }, [isLoadingFilter, filter, getAlerts, called]);
+
+  useEffect(() => {
+    // start reloading if alerts are available and no timer is running yet
+    if (hasValue(alerts) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [alerts, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => stopReload, [stopReload]);
   return (
     <AlertComponent
       onCreated={refetch}
