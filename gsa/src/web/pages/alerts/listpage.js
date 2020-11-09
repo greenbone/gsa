@@ -60,6 +60,8 @@ import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
 import useGmpSettings from 'web/utils/useGmpSettings.js';
 import useReload from 'web/components/loading/useReload.js';
+import usePrevious from 'web/utils/usePrevious.js';
+import useChangeFilter from 'web/utils/useChangeFilter.js';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (
@@ -89,6 +91,13 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
   const gmpSettings = useGmpSettings();
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('alert');
+  const prevFilter = usePrevious(filter);
+  const simpleFilter = filter.withoutView();
+  const {
+    change: changeFilter,
+    remove: removeFilter,
+    reset: resetFilter,
+  } = useChangeFilter('alert');
   const {
     dialogState: notificationDialogState,
     closeDialog: closeNotificationDialog,
@@ -148,6 +157,16 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
       });
     }
   }, [isLoadingFilter, filter, getAlerts, called]);
+  useEffect(() => {
+    // reload if filter has changed
+    if (hasValue(refetch) && !filter.equals(prevFilter)) {
+      refetch({
+        filterString: filter.toFilterString(),
+        first: undefined,
+        last: undefined,
+      });
+    }
+  }, [filter, prevFilter, simpleFilter, refetch]);
 
   useEffect(() => {
     // start reloading if alerts are available and no timer is running yet
@@ -195,6 +214,10 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
             onAlertTestClick={handleTestAlert}
             onAlertSaveClick={save}
             onError={onError}
+            onFilterChanged={changeFilter}
+            onFilterCreated={changeFilter}
+            onFilterReset={resetFilter}
+            onFilterRemoved={removeFilter}
             onInteraction={renewSession}
             onPermissionChanged={onChanged}
             onPermissionDownloaded={onDownloaded}
