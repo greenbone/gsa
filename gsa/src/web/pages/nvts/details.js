@@ -21,8 +21,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {TAG_NA} from 'gmp/models/nvt';
-
 import PropTypes from 'web/utils/proptypes';
 
 import DetailsBlock from 'web/entity/block';
