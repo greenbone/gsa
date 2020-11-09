@@ -545,8 +545,8 @@ const AlertComponent = ({
               name: alert.name,
               comment: alert.comment,
               filters,
-              filter_id: isDefined(alert.filter) ? alert.filter.id : undefined,
-              composerFilterId: isDefined(alert.filter)
+              filter_id: hasValue(alert.filter) ? alert.filter.id : undefined,
+              composerFilterId: hasValue(alert.filter)
                 ? alert.filter.id
                 : undefined,
               composerIncludeNotes: getValue(

@@ -182,7 +182,7 @@ describe('Alert listpage tests', () => {
     expect(row[2]).toHaveTextContent('Yes');
 
     // Hyperion currently does not support filter
-    // expect(row[1]).toHaveTextContent('report results filter');
+    expect(row[1]).toHaveTextContent('report results filter');
 
     expect(icons[13]).toHaveAttribute('title', 'Move Alert to trashcan');
     expect(icons[14]).toHaveAttribute('title', 'Edit Alert');
