@@ -63,6 +63,7 @@ import useFilterSortBy from 'web/utils/useFilterSortby.js';
 import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
 import useReload from 'web/components/loading/useReload.js';
+import {usePagination} from 'web/entities/usePagination.js';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (
@@ -140,45 +141,12 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
   );
 
   // Pagination methods
-  const getNextAlerts = () => {
-    refetch({
-      filterString: simpleFilter.toFilterString(),
-      after: pageInfo.endCursor,
-      before: undefined,
-      first: filter.get('rows'),
-      last: undefined,
-    });
-  };
-
-  const getPreviousAlerts = () => {
-    refetch({
-      filterString: simpleFilter.toFilterString(),
-      after: undefined,
-      before: pageInfo.startCursor,
-      first: undefined,
-      last: filter.get('rows'),
-    });
-  };
-
-  const getFirstAlerts = () => {
-    refetch({
-      filterString: simpleFilter.toFilterString(),
-      after: undefined,
-      before: undefined,
-      first: filter.get('rows'),
-      last: undefined,
-    });
-  };
-
-  const getLastAlerts = () => {
-    refetch({
-      filterString: simpleFilter.toFilterString(),
-      after: pageInfo.lastPageCursor,
-      before: undefined,
-      first: filter.get('rows'),
-      last: undefined,
-    });
-  };
+  const [getFirst, getLast, getNext, getPrevious] = usePagination({
+    simpleFilter,
+    filter,
+    pageInfo,
+    refetch,
+  });
 
   // Alert methods
   const handleCloneAlert = useCallback(
@@ -272,10 +240,10 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
             onPermissionDownloaded={onDownloaded}
             onPermissionDownloadError={onError}
             onSortChange={handleSortChange}
-            onFirstClick={getFirstAlerts}
-            onLastClick={getLastAlerts}
-            onNextClick={getNextAlerts}
-            onPreviousClick={getPreviousAlerts}
+            onFirstClick={getFirst}
+            onLastClick={getLast}
+            onNextClick={getNext}
+            onPreviousClick={getPrevious}
           />
           <DialogNotification
             {...notificationDialogState}
