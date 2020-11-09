@@ -117,7 +117,7 @@ const AlertsPage = ({
   );
   const handleTestAlert = useCallback(
     alert => testAlert(alert.id).then(showSuccess, showError),
-    [testAlert, refetch, showError],
+    [testAlert, refetch, showError, showSuccess],
   );
 
   // Side effects

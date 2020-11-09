@@ -108,9 +108,9 @@ export const CLONE_ALERT = gql`
   }
 `;
 
-export const DELETE_ALERT = gql`
-  mutation deleteAlert($id: UUID!) {
-    deleteAlert(id: $id) {
+export const DELETE_ALERTS_BY_IDS = gql`
+  mutation deleteAlertsByIds($ids: [UUID]!) {
+    deleteAlertsByIds(ids: $ids) {
       ok
     }
   }
@@ -211,16 +211,6 @@ export const useCloneAlert = options => {
   return [cloneAlert, {...other, id: alertId}];
 };
 
-export const useDeleteAlert = options => {
-  const [queryDeleteAlert, data] = useMutation(DELETE_ALERT, options);
-  const deleteAlert = useCallback(
-    // eslint-disable-next-line no-shadow
-    (id, options) => queryDeleteAlert({...options, variables: {id}}),
-    [queryDeleteAlert],
-  );
-  return [deleteAlert, data];
-};
-
 export const useTestAlert = options => {
   const [queryTestAlert, data] = useMutation(TEST_ALERT, options);
   const testAlert = useCallback(
@@ -229,4 +219,14 @@ export const useTestAlert = options => {
     [queryTestAlert],
   );
   return [testAlert, data];
+};
+
+export const useDeleteAlert = options => {
+  const [queryDeleteAlert, data] = useMutation(DELETE_ALERTS_BY_IDS, options);
+  const deleteAlert = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryDeleteAlert({...options, variables: {ids: [id]}}),
+    [queryDeleteAlert],
+  );
+  return [deleteAlert, data];
 };
