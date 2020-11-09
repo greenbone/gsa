@@ -216,7 +216,7 @@ class PortListComponent extends React.Component {
     }
 
     // reject port ranges with start value lower than end value
-    if (port_range_start > port_range_end) {
+    if (parseInt(port_range_start) > parseInt(port_range_end)) {
       return Promise.reject(
         new Error(_('The end of the port range can not be below its start!')),
       );
