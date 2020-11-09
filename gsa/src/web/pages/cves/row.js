@@ -36,7 +36,6 @@ import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
 
 import PropTypes from 'web/utils/proptypes';
-import {na} from 'web/utils/render';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
