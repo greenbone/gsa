@@ -19,19 +19,19 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import {createEntitiesFooter} from '../../entities/footer.js';
-import {withEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
-import withRowDetails from '../../entities/withRowDetails.js';
+import {createEntitiesFooter} from 'web/entities/footer';
+import {withEntitiesHeader} from 'web/entities/header';
+import {createEntitiesTable} from 'web/entities/table';
+import withRowDetails from 'web/entities/withRowDetails';
 
-import TableHead from '../../components/table/head.js';
-import TableHeader from '../../components/table/header.js';
-import TableRow from '../../components/table/row.js';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 
-import CveDetails from './details.js';
-import CveRow from './row.js';
+import CveDetails from './details';
+import CveRow from './row';
 
 const Header = ({
   actionsColumn,
@@ -45,7 +45,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="15%"
+          width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -53,55 +53,15 @@ const Header = ({
           title={_('Name')}
         />
         <TableHead
-          width="11%"
+          width="13%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'vector' : false}
+          sortBy={sort ? 'cvssBaseVector' : false}
           onSortChange={onSortChange}
-          title={_('Vector')}
+          title={_('CVSS Base Vector')}
         />
         <TableHead
-          width="11%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'complexity' : false}
-          onSortChange={onSortChange}
-          title={_('Complexity')}
-        />
-        <TableHead
-          width="11%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'authentication' : false}
-          onSortChange={onSortChange}
-          title={_('Authentication')}
-        />
-        <TableHead
-          width="11%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'confidentiality_impact' : false}
-          onSortChange={onSortChange}
-          title={_('Confidentiality Impact')}
-        />
-        <TableHead
-          width="11%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'integrity_impact' : false}
-          onSortChange={onSortChange}
-          title={_('Integrity Impact')}
-        />
-        <TableHead
-          width="11%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'availability_impact' : false}
-          onSortChange={onSortChange}
-          title={_('Availability Impact')}
-        />
-        <TableHead
-          width="11%"
+          width="13%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'published' : false}
@@ -115,6 +75,14 @@ const Header = ({
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
           title={_('Severity')}
+        />
+        <TableHead
+          width="66%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'description' : false}
+          onSortChange={onSortChange}
+          title={_('Description')}
         />
         {actionsColumn}
       </TableRow>
