@@ -26,9 +26,11 @@ import PropTypes from 'web/utils/proptypes';
 
 import ViewOtherIcon from 'web/components/icon/viewothericon';
 
+const hyperionEntityTypes = ['task', 'alert'];
+
 const ObserverIcon = ({entity, userName, displayName = _('Entity')}) => {
   let owner;
-  if (entity.entityType === 'task') {
+  if (hyperionEntityTypes.includes(entity.entityType)) {
     owner = hasValue(entity.owner) ? entity.owner : undefined;
   } else {
     owner = isDefined(entity.owner) ? entity.owner.name : undefined;

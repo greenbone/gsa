@@ -20,15 +20,21 @@ import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
 import {GET_ALERTS, CREATE_ALERT, MODIFY_ALERT} from '../alerts';
 
-const alert1 = deepFreeze({
+export const alert1 = deepFreeze({
   id: '1',
   name: 'alert 1',
-  inUse: true,
+  inUse: false,
   writable: true,
   active: true,
+  comment: 'bar',
   creationTime: '2020-08-06T11:34:15+00:00',
   modificationTime: '2020-08-06T11:34:15+00:00',
   owner: 'admin',
+  filter: {
+    trash: 0,
+    name: 'resultFilter',
+    id: '75c8145d-b00c-408f-8907-6664d5ce6108',
+  },
   method: {
     type: 'Alemba vFire',
     data: [
@@ -60,15 +66,17 @@ const alert1 = deepFreeze({
   ],
 });
 
-const alert2 = deepFreeze({
+export const alert2 = deepFreeze({
   id: '2',
   name: 'alert 2',
   inUse: true,
   writable: false,
   active: true,
+  comment: 'lorem',
   creationTime: '2020-08-06T11:30:41+00:00',
   modificationTime: '2020-08-07T09:26:05+00:00',
   owner: 'admin',
+  filter: null,
   method: {
     type: 'Email',
     data: [
@@ -118,8 +126,8 @@ const mockAlerts = {
   },
 };
 
-export const createGetAlertsQueryMock = () =>
-  createGenericQueryMock(GET_ALERTS, {alerts: mockAlerts});
+export const createGetAlertsQueryMock = variables =>
+  createGenericQueryMock(GET_ALERTS, {alerts: mockAlerts}, variables);
 
 const createAlertResult = {
   createAlert: {

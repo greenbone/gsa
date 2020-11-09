@@ -47,9 +47,15 @@ export const GET_ALERTS = gql`
           id
           inUse
           writable
+          comment
           owner
           creationTime
           modificationTime
+          filter {
+            trash
+            name
+            id
+          }
           tasks {
             id
             name
