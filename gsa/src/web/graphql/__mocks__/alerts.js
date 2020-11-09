@@ -18,7 +18,14 @@
 
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
-import {GET_ALERTS, CREATE_ALERT, MODIFY_ALERT} from '../alerts';
+import {
+  GET_ALERTS,
+  CREATE_ALERT,
+  MODIFY_ALERT,
+  DELETE_ALERTS_BY_IDS,
+  TEST_ALERT,
+  CLONE_ALERT,
+} from '../alerts';
 
 export const alert1 = deepFreeze({
   id: '1',
@@ -183,3 +190,36 @@ export const createModifyAlertQueryMock = () =>
   createGenericQueryMock(MODIFY_ALERT, modifyAlertResult, {
     input: modifyAlertInput,
   });
+
+const deleteAlertResult = {
+  deleteAlertByIds: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const createDeleteAlertQueryMock = (alertId = '1') =>
+  createGenericQueryMock(DELETE_ALERTS_BY_IDS, deleteAlertResult, {
+    ids: [alertId],
+  });
+
+const testAlertResult = {
+  testAlert: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const createTestAlertQueryMock = (alertId = '1') =>
+  createGenericQueryMock(TEST_ALERT, testAlertResult, {id: alertId});
+
+export const createCloneAlertQueryMock = (alertId = '1', newAlertId = '2') =>
+  createGenericQueryMock(
+    CLONE_ALERT,
+    {
+      cloneAlert: {
+        id: newAlertId,
+      },
+    },
+    {id: alertId},
+  );

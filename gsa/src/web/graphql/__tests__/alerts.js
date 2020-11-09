@@ -23,13 +23,23 @@ import Button from 'web/components/form/button';
 
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
-import {useLazyGetAlerts, useCreateAlert, useModifyAlert} from '../alerts';
+import {
+  useLazyGetAlerts,
+  useCreateAlert,
+  useModifyAlert,
+  useCloneAlert,
+  useDeleteAlert,
+  useTestAlert,
+} from '../alerts';
 import {
   createGetAlertsQueryMock,
   createModifyAlertQueryMock,
   createCreateAlertQueryMock,
   createAlertInput,
   modifyAlertInput,
+  createDeleteAlertQueryMock,
+  createTestAlertQueryMock,
+  createCloneAlertQueryMock,
 } from '../__mocks__/alerts';
 
 const GetLazyAlertsComponent = () => {
@@ -176,5 +186,75 @@ describe('useModifyAlert test', () => {
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Alert modified with ok=true.',
     );
+  });
+});
+
+const DeleteAlertComponent = () => {
+  const [deleteAlert] = useDeleteAlert();
+  return <button data-testid="delete" onClick={() => deleteAlert('foo')} />;
+};
+
+describe('useDeleteAlert tests', () => {
+  test('should delete an alert after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteAlertQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteAlertComponent />);
+
+    const button = screen.getByTestId('delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const TestAlertComponent = () => {
+  const [testAlert] = useTestAlert();
+  return <button data-testid="delete" onClick={() => testAlert('foo')} />;
+};
+
+describe('useTestAlert tests', () => {
+  test('should testf an alert after user interaction', async () => {
+    const [mock, resultFunc] = createTestAlertQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<TestAlertComponent />);
+
+    const button = screen.getByTestId('delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const CloneAlertComponent = () => {
+  const [cloneAlert, {id: alertId}] = useCloneAlert();
+  return (
+    <div>
+      {alertId && <span data-testid="cloned-alert">{alertId}</span>}
+      <button data-testid="clone" onClick={() => cloneAlert('foo')} />
+    </div>
+  );
+};
+
+describe('useCloneAlert tests', () => {
+  test('should clone a alert after user interaction', async () => {
+    const [mock, resultFunc] = createCloneAlertQueryMock('foo', 'foo2');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CloneAlertComponent />);
+
+    const button = screen.getByTestId('clone');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('cloned-alert')).toHaveTextContent('foo2');
   });
 });
