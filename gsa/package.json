@@ -84,7 +84,7 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.1",
     "@types/jest": "^26.0.15",
-    "babel-plugin-i18next-extract": "^0.7.2",
+    "babel-plugin-i18next-extract": "^0.8.0",
     "eslint-config-prettier": "^6.15.0",
     "husky": "^2.7.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
