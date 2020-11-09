@@ -75,7 +75,16 @@ describe('Alert Model parseObject tests', () => {
 
   // event/condition/method data will not have subvalues from hyperion, therefore this test is removed.
 
-  // alert.filter does not exist in hyperion
+  test('should return given filter as instance of filter model', () => {
+    const obj = {filter: {id: '1', name: 'foo', trash: 0}};
+    const alert = Alert.fromObject(obj);
+
+    expect(alert.filter).toBeInstanceOf(Model);
+    expect(alert.filter.entityType).toEqual('filter');
+    expect(alert.filter.id).toEqual('1');
+    expect(alert.filter.name).toEqual('foo');
+    expect(alert.filter.trash).toEqual(0);
+  });
 
   test('should return given tasks as array of instances of task model', () => {
     const obj = {

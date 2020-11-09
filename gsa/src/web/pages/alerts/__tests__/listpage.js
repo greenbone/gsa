@@ -165,6 +165,8 @@ describe('Alert listpage tests', () => {
 
     const row = baseElement.querySelectorAll('tr');
 
+    expect(row[1]).toHaveTextContent('resultFilter');
+
     expect(row[1]).toHaveTextContent('alert 1');
     expect(row[1]).toHaveTextContent('(bar)');
     expect(row[1]).toHaveTextContent('Task run status changed to Done');
@@ -180,9 +182,6 @@ describe('Alert listpage tests', () => {
     expect(row[2]).toHaveTextContent('Email to foo@bar.com');
 
     expect(row[2]).toHaveTextContent('Yes');
-
-    // Hyperion currently does not support filter
-    // expect(row[1]).toHaveTextContent('report results filter');
 
     expect(icons[13]).toHaveAttribute('title', 'Move Alert to trashcan');
     expect(icons[14]).toHaveAttribute('title', 'Edit Alert');

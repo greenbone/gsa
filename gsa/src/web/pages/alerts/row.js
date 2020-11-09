@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import StartIcon from 'web/components/icon/starticon';
@@ -100,7 +100,7 @@ Actions.propTypes = {
 };
 
 const render_filter = (filter, caps, links = true) => {
-  if (!isDefined(filter)) {
+  if (!hasValue(filter)) {
     return null;
   }
 
