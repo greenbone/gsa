@@ -55,13 +55,14 @@ import {
 } from 'web/store/entities/alerts';
 import usePageFilter from 'web/utils/usePageFilter.js';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout.js';
+import useGmpSettings from 'web/utils/useGmpSettings.js';
+import usePrevious from 'web/utils/usePrevious.js';
+import useChangeFilter from 'web/utils/useChangeFilter.js';
+import useFilterSortBy from 'web/utils/useFilterSortby.js';
 
 import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
-import useGmpSettings from 'web/utils/useGmpSettings.js';
 import useReload from 'web/components/loading/useReload.js';
-import usePrevious from 'web/utils/usePrevious.js';
-import useChangeFilter from 'web/utils/useChangeFilter.js';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (
@@ -104,6 +105,11 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
     showError,
     showSuccess,
   } = useDialogNotification();
+
+  const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
+    filter,
+    changeFilter,
+  );
 
   // Alert list state variables and methods
   const [
@@ -203,6 +209,8 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
             isLoading={isLoading}
             isUpdating={isLoading}
             sectionIcon={<AlertIcon size="large" />}
+            sortBy={sortBy}
+            sortDir={sortDir}
             table={AlertTable}
             title={_('Alerts')}
             toolBarIcons={ToolBarIcons}
@@ -222,6 +230,7 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
             onPermissionChanged={onChanged}
             onPermissionDownloaded={onDownloaded}
             onPermissionDownloadError={onError}
+            onSortChange={handleSortChange}
           />
           <DialogNotification
             {...notificationDialogState}
