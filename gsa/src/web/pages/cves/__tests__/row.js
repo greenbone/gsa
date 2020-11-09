@@ -81,7 +81,6 @@ describe('CVE Row tests', () => {
     // CVSS Base Vector
     const links = baseElement.querySelectorAll('a');
 
-    //expect(baseElement).toHaveTextContent('AV:N/AC:M/Au:N/C:C/I:C/A:C');
     expect(links[0]).toHaveAttribute(
       'href',
       '/cvsscalculator?cvssVector=AV%3AN%2FAC%3AM%2FAu%3AN%2FC%3AC%2FI%3AC%2FA%3AC',
@@ -110,7 +109,7 @@ describe('CVE Row tests', () => {
       store: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <CveRow
         entity={entity}
         onToggleDetailsClick={handleToggleDetailsClick}
