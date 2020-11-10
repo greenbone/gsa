@@ -68,7 +68,7 @@ import {goto_entity_details} from 'web/utils/graphql';
 import AlertComponent from './component';
 import AlertDetails from './details';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   onAlertCloneClick,
   onAlertCreateClick,
