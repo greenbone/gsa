@@ -42,28 +42,41 @@ import {createFilterDialog} from 'web/components/powerfilter/dialog.js';
 import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
+import useReload from 'web/components/loading/useReload.js';
+import useDownload from 'web/components/form/useDownload.js';
+import Download from 'web/components/form/download.js';
+
 import {
   useLazyGetAlerts,
   useCloneAlert,
   useDeleteAlert,
   useTestAlert,
+  useDeleteAlertsByFilter,
+  useDeleteAlertsByIds,
+  useExportAlertsByFilter,
+  useExportAlertsByIds,
 } from 'web/graphql/alerts';
 
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/alerts';
+import {
+  useBulkDeleteEntities,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions.js';
+import {usePagination} from 'web/entities/usePagination.js';
+
 import usePageFilter from 'web/utils/usePageFilter.js';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout.js';
 import useGmpSettings from 'web/utils/useGmpSettings.js';
 import usePrevious from 'web/utils/usePrevious.js';
 import useChangeFilter from 'web/utils/useChangeFilter.js';
 import useFilterSortBy from 'web/utils/useFilterSortby.js';
+import useSelection from 'web/utils/useSelection.js';
 
 import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
-import useReload from 'web/components/loading/useReload.js';
-import {usePagination} from 'web/entities/usePagination.js';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onAlertCreateClick}) => (
@@ -91,6 +104,7 @@ const AlertFilterDialog = createFilterDialog({
 const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
   // Page methods and hooks
   const gmpSettings = useGmpSettings();
+  const [downloadRef, handleDownload] = useDownload();
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('alert');
   const prevFilter = usePrevious(filter);
@@ -106,7 +120,13 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
     showError,
     showSuccess,
   } = useDialogNotification();
-
+  const {
+    selectionType,
+    selected = [],
+    changeSelectionType,
+    select,
+    deselect,
+  } = useSelection();
   const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
     filter,
     changeFilter,
@@ -121,6 +141,15 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
   const [cloneAlert] = useCloneAlert();
   const [deleteAlert] = useDeleteAlert();
   const [testAlert] = useTestAlert();
+
+  const exportAlertsByFilter = useExportAlertsByFilter();
+  const exportAlertsByIds = useExportAlertsByIds();
+  const bulkExportAlerts = useBulkExportEntities();
+
+  const [deleteAlertsByIds] = useDeleteAlertsByIds();
+  const [deleteAlertsByFilter] = useDeleteAlertsByFilter();
+
+  const bulkDeleteAlerts = useBulkDeleteEntities();
 
   const timeoutFunc = useCallback(
     ({isVisible}) => {
@@ -161,6 +190,34 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
     alert => testAlert(alert.id).then(showSuccess, showError),
     [testAlert, showError, showSuccess],
   );
+
+  // Bulk action methods
+  const handleBulkDeleteAlerts = () => {
+    return bulkDeleteAlerts({
+      selectionType,
+      filter,
+      selected,
+      entities: alerts,
+      deleteByIdsFunc: deleteAlertsByIds,
+      deleteByFilterFunc: deleteAlertsByFilter,
+      onDeleted: refetch,
+      onError: showError,
+    });
+  };
+
+  const handleBulkExportAlerts = () => {
+    return bulkExportAlerts({
+      entities: alerts,
+      selected,
+      filter,
+      resourceType: 'alerts',
+      selectionType,
+      exportByFilterFunc: exportAlertsByFilter,
+      exportByIdsFunc: exportAlertsByIds,
+      onDownload: handleDownload,
+      onError: showError,
+    });
+  };
 
   // Side effects
   useEffect(() => {
@@ -230,6 +287,10 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
             onAlertEditClick={edit}
             onAlertTestClick={handleTestAlert}
             onAlertSaveClick={save}
+            onDeleteBulk={handleBulkDeleteAlerts}
+            onDownloadBulk={handleBulkExportAlerts}
+            onEntitySelected={select}
+            onEntityDeselected={deselect}
             onError={onError}
             onFilterChanged={changeFilter}
             onFilterCreated={changeFilter}
@@ -244,11 +305,13 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
             onLastClick={getLast}
             onNextClick={getNext}
             onPreviousClick={getPrevious}
+            onSelectionTypeChange={changeSelectionType}
           />
           <DialogNotification
             {...notificationDialogState}
             onCloseClick={closeNotificationDialog}
           />
+          <Download ref={downloadRef} />
         </React.Fragment>
       )}
     </AlertComponent>
