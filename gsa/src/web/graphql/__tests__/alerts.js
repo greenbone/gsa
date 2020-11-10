@@ -212,17 +212,17 @@ describe('useDeleteAlert tests', () => {
 
 const TestAlertComponent = () => {
   const [testAlert] = useTestAlert();
-  return <button data-testid="delete" onClick={() => testAlert('foo')} />;
+  return <button data-testid="test" onClick={() => testAlert('foo')} />;
 };
 
 describe('useTestAlert tests', () => {
-  test('should testf an alert after user interaction', async () => {
+  test('should test an alert after user interaction', async () => {
     const [mock, resultFunc] = createTestAlertQueryMock('foo');
     const {render} = rendererWith({queryMocks: [mock]});
 
     render(<TestAlertComponent />);
 
-    const button = screen.getByTestId('delete');
+    const button = screen.getByTestId('test');
     fireEvent.click(button);
 
     await wait();
