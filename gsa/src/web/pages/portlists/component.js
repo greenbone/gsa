@@ -202,7 +202,10 @@ class PortListComponent extends React.Component {
 
   handleTmpAddPortRange(values) {
     const {port_ranges} = this.state;
-    const {port_range_end, port_range_start, port_type} = values;
+    let {port_range_end, port_range_start, port_type} = values;
+
+    port_range_end = parseInt(port_range_end);
+    port_range_start = parseInt(port_range_start);
 
     this.handleInteraction();
 
@@ -216,7 +219,7 @@ class PortListComponent extends React.Component {
     }
 
     // reject port ranges with start value lower than end value
-    if (parseInt(port_range_start) > parseInt(port_range_end)) {
+    if (port_range_start > port_range_end) {
       return Promise.reject(
         new Error(_('The end of the port range can not be below its start!')),
       );
