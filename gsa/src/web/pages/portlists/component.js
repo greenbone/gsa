@@ -172,8 +172,8 @@ class PortListComponent extends React.Component {
     let promises = created_port_ranges_copy.map(range => {
       const saveData = {
         ...range,
-        port_range_start: range.start,
-        port_range_end: range.end,
+        port_range_start: parseInt(range.start),
+        port_range_end: parseInt(range.end),
         port_type: range.protocol_type,
       };
       return this.handleSavePortRange(saveData).then(id => {
