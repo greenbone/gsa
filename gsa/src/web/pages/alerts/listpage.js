@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useCallback} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -62,6 +62,7 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/alerts';
 import {
+  BulkTagComponent,
   useBulkDeleteEntities,
   useBulkExportEntities,
 } from 'web/entities/bulkactions.js';
@@ -131,6 +132,7 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
     filter,
     changeFilter,
   );
+  const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
 
   // Alert list state variables and methods
   const [
@@ -192,6 +194,16 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
   );
 
   // Bulk action methods
+  const openTagsDialog = () => {
+    renewSession();
+    setTagsDialogVisible(true);
+  };
+
+  const closeTagsDialog = () => {
+    renewSession();
+    setTagsDialogVisible(false);
+  };
+
   const handleBulkDeleteAlerts = () => {
     return bulkDeleteAlerts({
       selectionType,
@@ -270,10 +282,12 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
             entities={alerts}
             entitiesCounts={counts}
             entitiesError={error}
+            entitiesSelected={selected}
             filterEditDialog={AlertFilterDialog}
             filtersFilter={ALERTS_FILTER_FILTER}
             isLoading={isLoading}
             isUpdating={isLoading}
+            selectionType={selectionType}
             sectionIcon={<AlertIcon size="large" />}
             sortBy={sortBy}
             sortDir={sortDir}
@@ -306,12 +320,23 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
             onNextClick={getNext}
             onPreviousClick={getPrevious}
             onSelectionTypeChange={changeSelectionType}
+            onTagsBulk={openTagsDialog}
           />
           <DialogNotification
             {...notificationDialogState}
             onCloseClick={closeNotificationDialog}
           />
           <Download ref={downloadRef} />
+          {tagsDialogVisible && (
+            <BulkTagComponent
+              entities={alerts}
+              selected={selected}
+              filter={filter}
+              selectionType={selectionType}
+              entitiesCounts={counts}
+              onClose={closeTagsDialog}
+            />
+          )}
         </React.Fragment>
       )}
     </AlertComponent>
