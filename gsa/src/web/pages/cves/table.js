@@ -53,12 +53,12 @@ const Header = ({
           title={_('Name')}
         />
         <TableHead
-          width="13%"
+          width="66%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'cvssBaseVector' : false}
+          sortBy={sort ? 'description' : false}
           onSortChange={onSortChange}
-          title={_('CVSS Base Vector')}
+          title={_('Description')}
         />
         <TableHead
           width="13%"
@@ -69,20 +69,20 @@ const Header = ({
           title={_('Published')}
         />
         <TableHead
+          width="13%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'cvssBaseVector' : false}
+          onSortChange={onSortChange}
+          title={_('CVSS Base Vector')}
+        />
+        <TableHead
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'severity' : false}
           onSortChange={onSortChange}
           title={_('Severity')}
-        />
-        <TableHead
-          width="66%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'description' : false}
-          onSortChange={onSortChange}
-          title={_('Description')}
         />
         {actionsColumn}
       </TableRow>

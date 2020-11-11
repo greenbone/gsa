@@ -115,10 +115,10 @@ describe('Cve table tests', () => {
 
     const header = baseElement.querySelectorAll('th');
     expect(header[0]).toHaveTextContent('Name');
-    expect(header[1]).toHaveTextContent('CVSS Base Vector');
+    expect(header[1]).toHaveTextContent('Description');
     expect(header[2]).toHaveTextContent('Published');
-    expect(header[3]).toHaveTextContent('Severity');
-    expect(header[4]).toHaveTextContent('Description');
+    expect(header[3]).toHaveTextContent('CVSS Base Vector');
+    expect(header[4]).toHaveTextContent('Severity');
   });
 
   test('should unfold all details', () => {

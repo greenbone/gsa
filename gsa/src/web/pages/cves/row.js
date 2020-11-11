@@ -54,18 +54,18 @@ const Row = ({
         </span>
         <Comment text={entity.comment} />
       </TableData>
+      <TableData>{shorten(entity.description, 160)}</TableData>
+      <TableData>
+        <DateTime date={entity.creationTime} />
+      </TableData>
       <TableData>
         <Link to="cvsscalculator" query={{cvssVector: entity.cvssBaseVector}}>
           {entity.cvssBaseVector}
         </Link>
       </TableData>
       <TableData>
-        <DateTime date={entity.creationTime} />
-      </TableData>
-      <TableData>
         <SeverityBar severity={entity.severity} />
       </TableData>
-      <TableData>{shorten(entity.description, 160)}</TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   </TableBody>
