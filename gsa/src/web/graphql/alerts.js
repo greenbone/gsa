@@ -18,7 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {gql, useLazyQuery, useMutation} from '@apollo/client';
+import {gql, useLazyQuery, useMutation, useQuery} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -101,6 +101,55 @@ export const GET_ALERTS = gql`
         limit
         length
       }
+    }
+  }
+`;
+
+export const GET_ALERT = gql`
+  query Alert($id: UUID!) {
+    alert(id: $id) {
+      name
+      id
+      inUse
+      writable
+      comment
+      owner
+      creationTime
+      modificationTime
+      filter {
+        trash
+        name
+        id
+      }
+      tasks {
+        id
+        name
+      }
+      event {
+        type
+        data {
+          name
+          value
+        }
+      }
+      condition {
+        type
+        data {
+          name
+          value
+        }
+      }
+      method {
+        type
+        data {
+          name
+          value
+        }
+      }
+      permissions {
+        name
+      }
+      active
     }
   }
 `;
@@ -234,4 +283,12 @@ export const useDeleteAlert = options => {
     [queryDeleteAlert],
   );
   return [deleteAlert, data];
+};
+
+export const useGetAlert = (id, options) => {
+  const {data, ...other} = useQuery(GET_ALERT, {...options, variables: {id}});
+  const alert = isDefined(data?.alert)
+    ? Alert.fromObject(data.alert)
+    : undefined;
+  return {alert, ...other};
 };

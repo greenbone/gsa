@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import {
   EVENT_TYPE_UPDATED_SECINFO,
@@ -57,7 +57,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
           <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(comment) && (
+          {hasValue(comment) && (
             <TableRow>
               <TableData>{_('Comment')}</TableData>
               <TableData>{comment}</TableData>
@@ -79,7 +79,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
           </TableRow>
 
           {capabilities.mayAccess('report') &&
-            isDefined(method.data.delta_type) &&
+            hasValue(method.data.delta_type) &&
             method.data.delta_type.value === DELTA_TYPE_PREVIOUS && (
               <TableRow>
                 <TableData>{_('Delta Report')}</TableData>
@@ -90,8 +90,8 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
             )}
 
           {capabilities.mayAccess('report') &&
-            isDefined(method.data.delta_type) &&
-            isDefined(method.data.delta_report_id) &&
+            hasValue(method.data.delta_type) &&
+            hasValue(method.data.delta_report_id) &&
             method.data.delta_type.value === DELTA_TYPE_REPORT && (
               <TableRow>
                 <TableData>{_('Delta Report')}</TableData>
@@ -119,9 +119,9 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
             </TableData>
           </TableRow>
 
-          {isDefined(method.data) &&
-            isDefined(method.data.details_url) &&
-            isDefined(method.data.details_url.value) &&
+          {hasValue(method.data) &&
+            hasValue(method.data.details_url) &&
+            hasValue(method.data.details_url.value) &&
             (event.type === EVENT_TYPE_NEW_SECINFO ||
               event.type === EVENT_TYPE_UPDATED_SECINFO) && (
               <TableRow>
@@ -130,7 +130,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
               </TableRow>
             )}
 
-          {capabilities.mayAccess('filter') && isDefined(filter) && (
+          {capabilities.mayAccess('filter') && hasValue(filter) && (
             <TableRow>
               <TableData>{_('Results Filter')}</TableData>
               <TableData>
