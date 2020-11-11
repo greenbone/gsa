@@ -25,6 +25,9 @@ import {
   DELETE_ALERTS_BY_IDS,
   TEST_ALERT,
   CLONE_ALERT,
+  EXPORT_ALERTS_BY_IDS,
+  EXPORT_ALERTS_BY_FILTER,
+  DELETE_ALERTS_BY_FILTER,
 } from '../alerts';
 
 export const alert1 = deepFreeze({
@@ -223,3 +226,50 @@ export const createCloneAlertQueryMock = (alertId = '1', newAlertId = '2') =>
     },
     {id: alertId},
   );
+
+const exportAlertsByIdsResult = {
+  exportAlertsByIds: {
+    exportedEntities: '<get_alerts_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportAlertsByIdsQueryMock = (
+  ids = ['foo', 'bar', 'lorem'],
+) =>
+  createGenericQueryMock(EXPORT_ALERTS_BY_IDS, exportAlertsByIdsResult, {ids});
+
+const exportAlertsByFilterResult = {
+  exportAlertsByFilter: {
+    exportedEntities: '<get_alerts_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportAlertsByFilterQueryMock = (filterString = 'foo') => {
+  return createGenericQueryMock(
+    EXPORT_ALERTS_BY_FILTER,
+    exportAlertsByFilterResult,
+    {filterString},
+  );
+};
+
+const bulkDeleteByIdsResult = {
+  deleteAlertsByIds: {
+    ok: true,
+  },
+};
+
+export const createDeleteAlertsByIdsQueryMock = (taskIds = ['1', '2', '3']) =>
+  createGenericQueryMock(DELETE_ALERTS_BY_IDS, bulkDeleteByIdsResult, {
+    ids: taskIds,
+  });
+
+const bulkDeleteByFilterResult = {
+  deleteAlertsByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeleteAlertsByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(DELETE_ALERTS_BY_FILTER, bulkDeleteByFilterResult, {
+    filterString,
+  });

@@ -27,6 +27,10 @@ import Alert from 'gmp/models/alert';
 
 import {
   createGetAlertsQueryMock,
+  createExportAlertsByFilterQueryMock,
+  createExportAlertsByIdsQueryMock,
+  createDeleteAlertsByFilterQueryMock,
+  createDeleteAlertsByIdsQueryMock,
   alert1,
   alert2,
 } from 'web/graphql/__mocks__/alerts';
@@ -463,7 +467,7 @@ describe('Alert listpage tests', () => {
 });
 
 describe('Alert listpage ToolBarIcons test', () => {
-  test('should render', () => {
+  test('should render', async () => {
     const handleAlertCreateClick = jest.fn();
 
     const gmp = {
@@ -479,6 +483,8 @@ describe('Alert listpage ToolBarIcons test', () => {
     const {element} = render(
       <ToolBarIcons onAlertCreateClick={handleAlertCreateClick} />,
     );
+
+    await wait();
 
     const icons = screen.getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
