@@ -25,6 +25,7 @@ import {parseYesNo, YES_VALUE} from '../parser.js';
 import Model, {parseModelFromElement} from '../model.js';
 import Task from './task';
 import Filter from './filter';
+import Tag from './tag';
 
 export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
 export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
@@ -127,6 +128,14 @@ class Alert extends Model {
 
     if (hasValue(object.filter)) {
       ret.filter = Filter.fromObject(object.filter);
+    }
+
+    if (hasValue(object.userTags)) {
+      ret.userTags = object.userTags.tags.map(tag => {
+        return Tag.fromObject(tag);
+      });
+    } else {
+      ret.userTags = [];
     }
 
     return ret;

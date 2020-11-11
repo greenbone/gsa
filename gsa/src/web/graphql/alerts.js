@@ -150,6 +150,15 @@ export const GET_ALERT = gql`
         name
       }
       active
+      userTags {
+        count
+        tags {
+          name
+          id
+          value
+          comment
+        }
+      }
     }
   }
 `;
