@@ -30,6 +30,10 @@ import {
   useCloneAlert,
   useDeleteAlert,
   useTestAlert,
+  useDeleteAlertsByIds,
+  useDeleteAlertsByFilter,
+  useExportAlertsByIds,
+  useExportAlertsByFilter,
 } from '../alerts';
 import {
   createGetAlertsQueryMock,
@@ -40,6 +44,10 @@ import {
   createDeleteAlertQueryMock,
   createTestAlertQueryMock,
   createCloneAlertQueryMock,
+  createDeleteAlertsByFilterQueryMock,
+  createExportAlertsByIdsQueryMock,
+  createExportAlertsByFilterQueryMock,
+  createDeleteAlertsByIdsQueryMock,
 } from '../__mocks__/alerts';
 
 const GetLazyAlertsComponent = () => {
@@ -256,5 +264,105 @@ describe('useCloneAlert tests', () => {
     expect(resultFunc).toHaveBeenCalled();
 
     expect(screen.getByTestId('cloned-alert')).toHaveTextContent('foo2');
+  });
+});
+
+const DeleteAlertsByIdsComponent = () => {
+  const [deleteAlertsByIds] = useDeleteAlertsByIds();
+  return (
+    <button
+      data-testid="bulk-delete"
+      onClick={() => deleteAlertsByIds(['foo', 'bar'])}
+    />
+  );
+};
+
+describe('useDeleteAlertsByIds tests', () => {
+  test('should delete a list of alerts after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteAlertsByIdsQueryMock(['foo', 'bar']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteAlertsByIdsComponent />);
+    const button = screen.getByTestId('bulk-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteAlertsByFilterComponent = () => {
+  const [deleteAlertsByFilter] = useDeleteAlertsByFilter();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deleteAlertsByFilter('foo')}
+    />
+  );
+};
+
+describe('useDeleteAlertsByFilter tests', () => {
+  test('should delete a list of alerts by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteAlertsByFilterQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteAlertsByFilterComponent />);
+    const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportAlertsByIdsComponent = () => {
+  const exportAlertsByIds = useExportAlertsByIds();
+  return (
+    <button
+      data-testid="bulk-export"
+      onClick={() => exportAlertsByIds(['foo'])}
+    />
+  );
+};
+
+describe('useExportAlertsByIds tests', () => {
+  test('should export a list of alerts after user interaction', async () => {
+    const [mock, resultFunc] = createExportAlertsByIdsQueryMock(['foo']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportAlertsByIdsComponent />);
+    const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportAlertsByFilterComponent = () => {
+  const exportAlertsByFilter = useExportAlertsByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportAlertsByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportAlertsByFilter tests', () => {
+  test('should export a list of alerts by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportAlertsByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportAlertsByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 });
