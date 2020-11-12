@@ -47,6 +47,7 @@ export const GET_ALERTS = gql`
           id
           inUse
           writable
+          active
           comment
           owner
           creationTime
@@ -84,7 +85,6 @@ export const GET_ALERTS = gql`
           permissions {
             name
           }
-          active
         }
       }
       pageInfo {
@@ -112,6 +112,7 @@ export const GET_ALERT = gql`
       id
       inUse
       writable
+      active
       comment
       owner
       creationTime
@@ -149,7 +150,6 @@ export const GET_ALERT = gql`
       permissions {
         name
       }
-      active
       userTags {
         count
         tags {

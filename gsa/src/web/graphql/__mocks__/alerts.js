@@ -28,6 +28,7 @@ import {
   EXPORT_ALERTS_BY_IDS,
   EXPORT_ALERTS_BY_FILTER,
   DELETE_ALERTS_BY_FILTER,
+  GET_ALERT,
 } from '../alerts';
 
 export const alert1 = deepFreeze({
@@ -44,6 +45,17 @@ export const alert1 = deepFreeze({
     trash: 0,
     name: 'resultFilter',
     id: '75c8145d-b00c-408f-8907-6664d5ce6108',
+  },
+  userTags: {
+    count: 1,
+    tags: [
+      {
+        id: '66d6484d-1bdf-4b24-b5de-e358e0d115ec',
+        name: 'alert:unnamed',
+        value: null,
+        comment: null,
+      },
+    ],
   },
   method: {
     type: 'Alemba vFire',
@@ -87,6 +99,7 @@ export const alert2 = deepFreeze({
   modificationTime: '2020-08-07T09:26:05+00:00',
   owner: 'admin',
   filter: null,
+  userTags: null,
   method: {
     type: 'Email',
     data: [
@@ -138,6 +151,9 @@ const mockAlerts = {
 
 export const createGetAlertsQueryMock = variables =>
   createGenericQueryMock(GET_ALERTS, {alerts: mockAlerts}, variables);
+
+export const createGetAlertQueryMock = (alertId = 'foo') =>
+  createGenericQueryMock(GET_ALERT, {alert: alert1}, {id: alertId});
 
 const createAlertResult = {
   createAlert: {
