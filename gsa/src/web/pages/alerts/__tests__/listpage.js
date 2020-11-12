@@ -448,7 +448,7 @@ describe('Alert listpage tests', () => {
 });
 
 describe('Alert listpage ToolBarIcons test', () => {
-  test('should render', async () => {
+  test('should render', () => {
     const handleAlertCreateClick = jest.fn();
 
     const gmp = {
@@ -464,8 +464,6 @@ describe('Alert listpage ToolBarIcons test', () => {
     const {element} = render(
       <ToolBarIcons onAlertCreateClick={handleAlertCreateClick} />,
     );
-
-    await wait();
 
     const icons = screen.getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
