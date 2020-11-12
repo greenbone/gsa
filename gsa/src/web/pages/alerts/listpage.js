@@ -283,6 +283,7 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
             entitiesCounts={counts}
             entitiesError={error}
             entitiesSelected={selected}
+            filter={filter}
             filterEditDialog={AlertFilterDialog}
             filtersFilter={ALERTS_FILTER_FILTER}
             isLoading={isLoading}
@@ -349,9 +350,6 @@ AlertsPage.propTypes = {
   onError: PropTypes.func.isRequired,
 };
 
-export default withEntitiesContainer('alert', {
-  entitiesSelector,
-  loadEntities,
-})(AlertsPage);
+export default AlertsPage;
 
 // vim: set ts=2 sw=2 tw=80:
