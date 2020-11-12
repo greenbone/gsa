@@ -683,6 +683,11 @@ const load = ({
     filter = DEFAULT_FILTER;
   }
 
+  // to avoid confusion of loaded results with different sort terms and
+  // directions, always load the report with sort=name from gvmd (the user's
+  // sort term will be handled by GSA in the browser)
+  filter.delete('sort-reverse');
+  filter.set('sort', 'name');
   return loadReportIfNeeded(reportId, deltaReportId, filter).then(() =>
     loadReport(reportId, deltaReportId, filter),
   );
@@ -717,10 +722,7 @@ export default compose(
   withGmp,
   withDialogNotification,
   withDownload,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(DeltaReportDetailsWrapper);
 
 // vim: set ts=2 sw=2 tw=80:
