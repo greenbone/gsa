@@ -101,7 +101,7 @@ describe('Alert Model parseObject tests', () => {
     expect(task.id).toEqual('t1');
   });
 
-  test('should return empty array if no alerts are given', () => {
+  test('should return empty array if no tasks are given', () => {
     const alert = Alert.fromObject({});
 
     expect(alert.tasks).toEqual([]);
