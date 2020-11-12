@@ -24,10 +24,9 @@ import {ALERTS_FILTER_FILTER} from 'gmp/models/filter';
 import {hasValue} from 'gmp/utils/identity.js';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities.js';
+import useCapabilities from 'web/utils/useCapabilities.js';
 
 import EntitiesPage from 'web/entities/page.js';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer.js';
 
 import ManualIcon from 'web/components/icon/manualicon.js';
 import NewIcon from 'web/components/icon/newicon.js';
@@ -58,10 +57,6 @@ import {
 } from 'web/graphql/alerts';
 
 import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/alerts';
-import {
   BulkTagComponent,
   useBulkDeleteEntities,
   useBulkExportEntities,
@@ -79,8 +74,9 @@ import useSelection from 'web/utils/useSelection.js';
 import AlertComponent from './component.js';
 import AlertTable, {SORT_FIELDS} from './table.js';
 
-export const ToolBarIcons = withCapabilities(
-  ({capabilities, onAlertCreateClick}) => (
+export const ToolBarIcons = ({onAlertCreateClick}) => {
+  const capabilities = useCapabilities();
+  return (
     <IconDivider>
       <ManualIcon
         page="scanning"
@@ -91,8 +87,8 @@ export const ToolBarIcons = withCapabilities(
         <NewIcon title={_('New Alert')} onClick={onAlertCreateClick} />
       )}
     </IconDivider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
   onAlertCreateClick: PropTypes.func.isRequired,
