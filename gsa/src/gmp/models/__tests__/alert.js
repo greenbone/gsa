@@ -68,6 +68,7 @@ describe('Alert Model parseObject tests', () => {
     expect(alert.method).toEqual({
       data: {
         bar: {value: '42'},
+        report_formats: [],
       },
       type: 'foo',
     });
@@ -100,7 +101,7 @@ describe('Alert Model parseObject tests', () => {
     expect(task.id).toEqual('t1');
   });
 
-  test('should return empty array if no tasks are given', () => {
+  test('should return empty array if no alerts are given', () => {
     const alert = Alert.fromObject({});
 
     expect(alert.tasks).toEqual([]);
@@ -110,21 +111,17 @@ describe('Alert Model parseObject tests', () => {
     const obj = {
       method: {
         data: {
-          value: ['123', '456', '789'],
+          value: '123, 456, 789',
           name: 'report_formats',
         },
       },
     };
     const alert = Alert.fromObject(obj);
 
-    expect(alert.method.data.report_formats.value).toEqual([
-      '123',
-      '456',
-      '789',
-    ]);
+    expect(alert.method.data.report_formats).toEqual(['123', '456', '789']);
   });
 
-  test('should return undefined if no report format ids are given', () => {
+  test('should return empty array if no report format ids are given', () => {
     const alert = Alert.fromObject({
       method: {
         data: {
@@ -134,7 +131,7 @@ describe('Alert Model parseObject tests', () => {
       },
     });
 
-    expect(alert.method.data.report_formats).toBeUndefined();
+    expect(alert.method.data.report_formats).toEqual([]);
   });
 
   // notice is already string from Hyperion

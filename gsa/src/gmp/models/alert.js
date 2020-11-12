@@ -129,6 +129,15 @@ class Alert extends Model {
       ret.filter = Filter.fromObject(object.filter);
     }
 
+    const methDatRepForm = ret.method.data.report_formats;
+
+    if (hasValue(methDatRepForm)) {
+      const methDatRepFormSplit = methDatRepForm.value.split(',');
+      ret.method.data.report_formats = methDatRepFormSplit.map(rf => rf.trim());
+    } else {
+      ret.method.data.report_formats = [];
+    }
+
     return ret;
   }
 
