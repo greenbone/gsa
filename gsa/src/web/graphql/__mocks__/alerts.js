@@ -152,8 +152,8 @@ const mockAlerts = {
 export const createGetAlertsQueryMock = variables =>
   createGenericQueryMock(GET_ALERTS, {alerts: mockAlerts}, variables);
 
-export const createGetAlertQueryMock = (alertId = 'foo') =>
-  createGenericQueryMock(GET_ALERT, {alert: alert1}, {id: alertId});
+export const createGetAlertQueryMock = (alertIqd = 'foo') =>
+  createGenericQueryMock(GET_ALERT, {alert: alert1}, {id: '1'});
 
 const createAlertResult = {
   createAlert: {

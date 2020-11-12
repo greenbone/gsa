@@ -32,9 +32,23 @@ import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 import {entityLoadingActions} from 'web/store/entities/alerts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
+import {
+  createGetAlertQueryMock,
+  createCloneAlertQueryMock,
+  createDeleteAlertQueryMock,
+  alert1,
+} from 'web/graphql/__mocks__/alerts';
+
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: '1',
+  }),
+}));
 
 setLocale('en');
 
@@ -91,8 +105,9 @@ const alertInUse = Alert.fromElement({
   inUse: true,
 });
 
+const parsedAlert = Alert.fromObject(alert1);
 const getAlert = jest.fn().mockResolvedValue({
-  data: alert,
+  data: parsedAlert,
 });
 
 const getEntities = jest.fn().mockResolvedValue({
@@ -112,7 +127,7 @@ const renewSession = jest.fn().mockResolvedValue({
 });
 
 describe('Alert Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+  test('should render full Detailspage', async () => {
     const gmp = {
       alert: {
         get: getAlert,
@@ -129,21 +144,28 @@ describe('Alert Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetAlertQueryMock('1');
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', alert));
+    store.dispatch(entityLoadingActions.success('1', alert1));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement, element} = render(<Detailspage id="1" />);
 
-    expect(element).toHaveTextContent('Alert: foo');
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(element).toHaveTextContent('Alert: alert 1');
 
     const links = baseElement.querySelectorAll('a');
     const icons = screen.getAllByTestId('svg-icon');
@@ -157,28 +179,48 @@ describe('Alert Detailspage tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Alerts List');
     expect(links[1]).toHaveAttribute('href', '/alerts');
 
-    expect(element).toHaveTextContent('ID:1234');
-    expect(element).toHaveTextContent('Created:Tue, Jul 16, 2019 8:31 AM CEST');
-    expect(element).toHaveTextContent(
-      'Modified:Tue, Jul 16, 2019 8:44 AM CEST',
-    );
+    expect(element).toHaveTextContent('ID:1');
+    expect(element).toHaveTextContent('Created:Thu, Aug 6, 2020 1:34 PM CEST');
+    expect(element).toHaveTextContent('Modified:Thu, Aug 6, 2020 1:34 PM CEST');
     expect(element).toHaveTextContent('Owner:admin');
 
     const tabs = screen.getAllByTestId('entities-tab-title');
     expect(tabs[0]).toHaveTextContent('User Tags');
     expect(tabs[1]).toHaveTextContent('Permissions');
 
-    expect(element).toHaveTextContent('foo');
-    expect(element).toHaveTextContent('bar');
-
     expect(element).toHaveTextContent('Task run status changed to Done');
     expect(element).toHaveTextContent('Always');
-    expect(element).toHaveTextContent('SMB');
-    expect(element).toHaveTextContent('report results filter');
+    expect(element).toHaveTextContent('Alemba vFire');
+
+    expect(element).toHaveTextContent('Results Filter');
+    expect(element).toHaveTextContent('resultFilter');
+
+    expect(element).toHaveTextContent('Base URL');
+    expect(element).toHaveTextContent('127.0.0.1');
+
+    expect(element).toHaveTextContent('Alemba Client ID');
+    expect(element).toHaveTextContent('clientID');
+
+    expect(element).toHaveTextContent('Call Template');
+    expect(element).toHaveTextContent('bar');
+
+    expect(element).toHaveTextContent('Call Type');
+    expect(element).toHaveTextContent('foo');
+
+    expect(element).toHaveTextContent('Active');
     expect(element).toHaveTextContent('Yes');
+
+    expect(element).toHaveTextContent('Impact');
+    expect(element).toHaveTextContent('baz');
+
+    expect(element).toHaveTextContent('Partition');
+    expect(element).toHaveTextContent('lorem');
+
+    expect(element).toHaveTextContent('Urgency');
+    expect(element).toHaveTextContent('hello');
   });
 
-  test('should render user tags tab', () => {
+  test('should render user tags tab', async () => {
     const gmp = {
       alert: {
         get: getAlert,
@@ -196,29 +238,36 @@ describe('Alert Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetAlertQueryMock('1');
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', alert));
+    store.dispatch(entityLoadingActions.success('1', alert1));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="1" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
-    expect(tabs[0]).toHaveTextContent('User Tags');
+    expect(baseElement).toHaveTextContent('User Tags(1)');
     fireEvent.click(tabs[0]);
 
-    expect(baseElement).toHaveTextContent('No user tags available');
+    expect(baseElement).toHaveTextContent('alert:unnamed');
   });
 
-  test('should render permissions tab', () => {
+  test('should render permissions tab', async () => {
     const gmp = {
       alert: {
         get: getAlert,
@@ -236,19 +285,26 @@ describe('Alert Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetAlertQueryMock('1');
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', alert));
+    store.dispatch(entityLoadingActions.success('1', alert1));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="1" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -259,14 +315,6 @@ describe('Alert Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const clone = jest.fn().mockResolvedValue({
-      data: {id: 'foo'},
-    });
-
-    const deleteFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const exportFunc = jest.fn().mockResolvedValue({
       foo: 'bar',
     });
@@ -274,8 +322,6 @@ describe('Alert Detailspage tests', () => {
     const gmp = {
       alert: {
         get: getAlert,
-        clone,
-        delete: deleteFunc,
         export: exportFunc,
       },
       permissions: {
@@ -291,21 +337,28 @@ describe('Alert Detailspage tests', () => {
       },
     };
     const [renewQueryMock] = createRenewSessionQueryMock();
+    const [mock, resultFunc] = createGetAlertQueryMock('1');
+    const [cloneMock, cloneResult] = createCloneAlertQueryMock();
+    const [deleteMock, deleteResult] = createDeleteAlertQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewQueryMock],
+      queryMocks: [renewQueryMock, mock, cloneMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', alert));
+    store.dispatch(entityLoadingActions.success('1', alert1));
 
-    render(<Detailspage id="12345" />);
+    render(<Detailspage id="1" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const icons = screen.getAllByTestId('svg-icon');
 
@@ -314,21 +367,21 @@ describe('Alert Detailspage tests', () => {
 
     await wait();
 
-    expect(clone).toHaveBeenCalledWith(alert);
+    expect(cloneResult).toHaveBeenCalled();
 
     expect(icons[5]).toHaveAttribute('title', 'Move Alert to trashcan');
     fireEvent.click(icons[5]);
 
     await wait();
 
-    expect(deleteFunc).toHaveBeenCalledWith({id: alert.id});
+    expect(deleteResult).toHaveBeenCalledWith();
 
     expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
     fireEvent.click(icons[6]);
 
     await wait();
 
-    expect(exportFunc).toHaveBeenCalledWith(alert);
+    expect(exportFunc).toHaveBeenCalledWith(parsedAlert);
   });
 });
 
