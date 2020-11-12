@@ -18,17 +18,30 @@
 
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
-import {GET_ALERTS, CREATE_ALERT} from '../alerts';
+import {
+  GET_ALERTS,
+  CREATE_ALERT,
+  MODIFY_ALERT,
+  DELETE_ALERTS_BY_IDS,
+  TEST_ALERT,
+  CLONE_ALERT,
+} from '../alerts';
 
-const alert1 = deepFreeze({
+export const alert1 = deepFreeze({
   id: '1',
   name: 'alert 1',
-  inUse: true,
+  inUse: false,
   writable: true,
   active: true,
+  comment: 'bar',
   creationTime: '2020-08-06T11:34:15+00:00',
   modificationTime: '2020-08-06T11:34:15+00:00',
   owner: 'admin',
+  filter: {
+    trash: 0,
+    name: 'resultFilter',
+    id: '75c8145d-b00c-408f-8907-6664d5ce6108',
+  },
   method: {
     type: 'Alemba vFire',
     data: [
@@ -60,15 +73,17 @@ const alert1 = deepFreeze({
   ],
 });
 
-const alert2 = deepFreeze({
+export const alert2 = deepFreeze({
   id: '2',
   name: 'alert 2',
   inUse: true,
   writable: false,
   active: true,
+  comment: 'lorem',
   creationTime: '2020-08-06T11:30:41+00:00',
   modificationTime: '2020-08-07T09:26:05+00:00',
   owner: 'admin',
+  filter: null,
   method: {
     type: 'Email',
     data: [
@@ -118,8 +133,8 @@ const mockAlerts = {
   },
 };
 
-export const createGetAlertsQueryMock = () =>
-  createGenericQueryMock(GET_ALERTS, {alerts: mockAlerts});
+export const createGetAlertsQueryMock = variables =>
+  createGenericQueryMock(GET_ALERTS, {alerts: mockAlerts}, variables);
 
 const createAlertResult = {
   createAlert: {
@@ -147,3 +162,64 @@ export const createCreateAlertQueryMock = () =>
   createGenericQueryMock(CREATE_ALERT, createAlertResult, {
     input: createAlertInput,
   });
+
+const modifyAlertResult = {
+  modifyAlert: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const modifyAlertInput = {
+  id: '12345',
+  name: 'foo',
+  event: 'NEW_SECINFO_ARRIVED',
+  condition: 'ALWAYS',
+  method: 'HTTP_GET',
+  methodData: {
+    URL: 'yourdomain.com',
+    composer_include_notes: 1,
+    composer_include_overrides: 0,
+    delta_report_id: '23456',
+    delta_type: 'PREVIOUS',
+    details_url: 'https://secinfo.greenbone.net/etc',
+  },
+};
+
+export const createModifyAlertQueryMock = () =>
+  createGenericQueryMock(MODIFY_ALERT, modifyAlertResult, {
+    input: modifyAlertInput,
+  });
+
+const deleteAlertResult = {
+  deleteAlertByIds: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const createDeleteAlertQueryMock = (alertId = '1') =>
+  createGenericQueryMock(DELETE_ALERTS_BY_IDS, deleteAlertResult, {
+    ids: [alertId],
+  });
+
+const testAlertResult = {
+  testAlert: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const createTestAlertQueryMock = (alertId = '1') =>
+  createGenericQueryMock(TEST_ALERT, testAlertResult, {id: alertId});
+
+export const createCloneAlertQueryMock = (alertId = '1', newAlertId = '2') =>
+  createGenericQueryMock(
+    CLONE_ALERT,
+    {
+      cloneAlert: {
+        id: newAlertId,
+      },
+    },
+    {id: alertId},
+  );

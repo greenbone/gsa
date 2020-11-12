@@ -194,9 +194,7 @@ const CreateModifyPortListComponent = () => {
         data-testid="create"
         title={'Create portlist'}
         onClick={() =>
-          createPortList(createPortListInput).then(resp =>
-            handleCreateResult(resp.data.createPortList.id),
-          )
+          createPortList(createPortListInput).then(handleCreateResult)
         }
       />
       <button

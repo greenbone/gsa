@@ -43,6 +43,8 @@ import Loading from 'web/components/loading/loading';
 
 import Layout from 'web/components/layout/layout';
 
+import stateReducer from 'web/utils/stateReducer';
+
 import NvtFamilies from './nvtfamilies';
 import NvtPreferences, {NvtPreferencePropType} from './nvtpreferences';
 import ScannerPreferences, {
@@ -85,12 +87,8 @@ const createScannerPreferenceValues = (preferences = []) => {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setValue':
-      const {newState} = action;
-      return {
-        ...state,
-        ...newState,
-      };
+    case 'setState':
+      return stateReducer(state, action);
     case 'setAll':
       const {formValues} = action;
       return formValues;

@@ -50,6 +50,7 @@ import {
   useBulkExportEntities,
   useBulkDeleteEntities,
 } from 'web/entities/bulkactions';
+import {usePagination} from 'web/entities/usePagination';
 
 import {
   useLazyGetTasks,
@@ -171,8 +172,8 @@ const TasksListPage = () => {
   const bulkExportTasks = useBulkExportEntities();
 
   const [deleteTask] = useDeleteTask();
-    const [deleteTasksByIds] = useDeleteTasksByIds();
-    const [deleteTasksByFilter] = useDeleteTasksByFilter();
+  const [deleteTasksByIds] = useDeleteTasksByIds();
+  const [deleteTasksByFilter] = useDeleteTasksByFilter();
   const bulkDeleteTasks = useBulkDeleteEntities();
   const [cloneTask] = useCloneTask();
 
@@ -195,45 +196,12 @@ const TasksListPage = () => {
   );
 
   // Pagination methods
-  const getNextTasks = () => {
-    refetch({
-      filterString: simpleFilter.toFilterString(),
-      after: pageInfo.endCursor,
-      before: undefined,
-      first: filter.get('rows'),
-      last: undefined,
-    });
-  };
-
-  const getPreviousTasks = () => {
-    refetch({
-      filterString: simpleFilter.toFilterString(),
-      after: undefined,
-      before: pageInfo.startCursor,
-      first: undefined,
-      last: filter.get('rows'),
-    });
-  };
-
-  const getFirstTasks = () => {
-    refetch({
-      filterString: simpleFilter.toFilterString(),
-      after: undefined,
-      before: undefined,
-      first: filter.get('rows'),
-      last: undefined,
-    });
-  };
-
-  const getLastTasks = () => {
-    refetch({
-      filterString: simpleFilter.toFilterString(),
-      after: pageInfo.lastPageCursor,
-      before: undefined,
-      first: filter.get('rows'),
-      last: undefined,
-    });
-  };
+  const [getFirst, getLast, getNext, getPrevious] = usePagination({
+    simpleFilter,
+    filter,
+    pageInfo,
+    refetch,
+  });
 
   // Task methods
   const handleCloneTask = useCallback(
@@ -397,10 +365,10 @@ const TasksListPage = () => {
             onFilterRemoved={removeFilter}
             onInteraction={renewSession}
             onModifyTaskWizardClick={modifytaskwizard}
-            onFirstClick={getFirstTasks}
-            onLastClick={getLastTasks}
-            onNextClick={getNextTasks}
-            onPreviousClick={getPreviousTasks}
+            onFirstClick={getFirst}
+            onLastClick={getLast}
+            onNextClick={getNext}
+            onPreviousClick={getPrevious}
             onReportImportClick={reportimport}
             onSelectionTypeChange={changeSelectionType}
             onSortChange={handleSortChange}

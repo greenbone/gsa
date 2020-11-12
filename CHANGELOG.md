@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+- Implemented parseObject for alert model implement [#2552](https://github.com/greenbone/gsa/pull/2552)
 - Added getNotes query [#2485](https://github.com/greenbone/gsa/pull/2485)
 - Create and modify schedule from graphql [#2477](https://github.com/greenbone/gsa/pull/2477)
 - Support more enum types for create alert [#2462](https://github.com/greenbone/gsa/pull/2462)
@@ -16,6 +17,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Changed
+- Implement clone, delete and test alert via graphql [#2567](https://github.com/greenbone/gsa/pull/2567)
+- Implement get_alerts on alerts listpage via graphql [#2552](https://github.com/greenbone/gsa/pull/2552)
+- Implement modify alert via graphql [#2549](https://github.com/greenbone/gsa/pull/2549)
+- Implement advanced task wizard via graphql [#2523](https://github.com/greenbone/gsa/pull/2523)
+- Implement modify task wizard via graphql [#2514](https://github.com/greenbone/gsa/pull/2514)
+- Implement task wizard via graphql [#2509](https://github.com/greenbone/gsa/pull/2509)
+- Implement create credential for alert and target dialog via graphql [#2486](https://github.com/greenbone/gsa/pull/2486)
 - Implement create and modify port list by graphql [#2484](https://github.com/greenbone/gsa/pull/2484)
 - Load port lists into target component with graphql [#2481](https://github.com/greenbone/gsa/pull/2481)
 - Load credentials in task component and target component via graphql [#2453](https://github.com/greenbone/gsa/pull/2453)
@@ -25,6 +33,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 ### Removed
+- Removed unused task wizard commands for runQuickTask, runQuickFirstScan and runModifyTask [#2514](https://github.com/greenbone/gsa/pull/2514) [#2523](https://github.com/greenbone/gsa/pull/2523)
+- Removed support for uncontrolled form fields [#2520](https://github.com/greenbone/gsa/pull/2520)
+- Drop gmp scanner type from GSA [#2498](https://github.com/greenbone/gsa/pull/2498)
 - Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
 - Removed severity class 'bsi' [#2434](https://github.com/greenbone/gsa/pull/2434)
@@ -38,7 +49,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.8.1] - unreleased
 
 ### Added
-- Added form validation for user setting "rows per page" [#2478](https://github.com/greenbone/gsa/pull/2478)
+- Added form validation for user setting "rows per page"
+  [#2478](https://github.com/greenbone/gsa/pull/2478), [#2505](https://github.com/greenbone/gsa/pull/2505)
 - Added option for "Start Task" event upon "New SecInfo arrived" condition in alerts dialog [#2418](https://github.com/greenbone/gsa/pull/2418)
 
 ### Changed
@@ -49,10 +61,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use <predefined> to disable feed object editing and filter creation on feed status page [#2398](https://github.com/greenbone/gsa/pull/2398)
 
 ### Fixed
+- Fixed TLS certificate download for users with permissions [#2496](https://github.com/greenbone/gsa/pull/2496)
 - Fixed form validation error tooltips [#2478](https://github.com/greenbone/gsa/pull/2478)
 - Only show schedule options in advanced and modify task wizard if user has correct permissions [#2472](https://github.com/greenbone/gsa/pull/2472)
 
 ### Removed
+- Remove secinfo filter from user settings dialog and elsewhere [#2495](https://github.com/greenbone/gsa/pull/2495)
 - Removed export/download for report formats [#2427](https://github.com/greenbone/gsa/pull/2427)
 
 [20.8.1]: https://github.com/greenbone/gsa/compare/v20.8.0...gsa-20.08

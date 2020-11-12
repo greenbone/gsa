@@ -115,7 +115,7 @@ const Page = ({
   <ScheduleComponent
     onCloned={goto_details('schedule', props)}
     onCloneError={onError}
-    onCreated={goto_entity_details('schedule', 'createSchedule', props)}
+    onCreated={goto_entity_details('schedule', props)}
     onDeleted={goto_list('schedules', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}

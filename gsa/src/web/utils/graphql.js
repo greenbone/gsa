@@ -21,7 +21,7 @@ export const toFruitfulQuery = query => gql => vars => {
   return query(gql, {variables: vars});
 };
 
-export const goto_entity_details = (entityName, op, props) => result => {
+export const goto_entity_details = (entityName, props) => createdId => {
   const {history} = props;
-  return history.push('/' + entityName + '/' + result.data[op].id);
+  return history.push('/' + entityName + '/' + createdId);
 };

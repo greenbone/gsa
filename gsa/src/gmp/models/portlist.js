@@ -34,6 +34,8 @@ export const parsePortRangeType = type => {
   }
 };
 
+export const ALL_IANA_ASSIGNED_TCP = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5';
+
 class PortRange extends Model {
   static entityType = 'portrange';
 

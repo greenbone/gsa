@@ -26,7 +26,7 @@ import {
   method_data_fields,
 } from 'gmp/commands/alerts';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {first} from 'gmp/utils/array';
 import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
@@ -34,6 +34,9 @@ import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
 import {parseInt, parseSeverity, parseYesNo, NO_VALUE} from 'gmp/parser';
 
 import {
+  convertCredentialTypeEnum,
+  convertAuthAlgorithmEnum,
+  convertPrivacyAlgorithmEnum,
   email_credential_filter,
   password_only_credential_filter,
   smb_credential_filter,
@@ -46,17 +49,21 @@ import FootNote from 'web/components/footnote/footnote';
 
 import Layout from 'web/components/layout/layout';
 
-import {useCreateAlert} from 'web/graphql/alerts';
+import {useCreateAlert, useModifyAlert} from 'web/graphql/alerts';
+
+import {useCreateCredential} from 'web/graphql/credentials';
+
 import {
   loadReportComposerDefaults as loadDefaults,
   saveReportComposerDefaults as saveDefaults,
 } from 'web/store/usersettings/actions';
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
 
-import reducer from 'web/utils/stateReducer';
+import reducer, {updateState} from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
 import useGmp from 'web/utils/useGmp';
+import readFileToText from 'web/utils/readFileToText';
 
 import CredentialsDialog from '../credentials/dialog';
 
@@ -150,6 +157,8 @@ const AlertComponent = ({
     dispatch(saveDefaults(gmp)(defaults));
 
   const [createAlert] = useCreateAlert();
+  const [modifyAlert] = useModifyAlert();
+  const [createCredential] = useCreateCredential();
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -157,105 +166,111 @@ const AlertComponent = ({
     }
   };
 
-  const handleCreateCredential = credentialdata => {
+  const handleCreateCredential = data => {
     handleInteraction();
 
     let credential_id;
-    gmp.credential
-      .create(credentialdata)
-      .then(response => {
-        credential_id = response.data.id;
+    const readCertificate = readFileToText(data.certificate);
+    const readPrivateKey = readFileToText(data.private_key);
+
+    return Promise.all([readCertificate, readPrivateKey])
+      .then(([certificate, privateKey]) => {
+        return createCredential({
+          allowInsecure: data.allow_insecure,
+          authAlgorithm: convertAuthAlgorithmEnum(data.auth_algorithm),
+          certificate: certificate,
+          comment: data.comment,
+          community: data.community,
+          login: data.credential_login,
+          name: data.name,
+          keyPhrase: data.passphrase,
+          password: data.password,
+          privacyAlgorithm: convertPrivacyAlgorithmEnum(data.privacy_algorithm),
+          privacyPassword: data.privacy_password,
+          privateKey: privateKey,
+          publicKey: data.public_key,
+          type: convertCredentialTypeEnum(data.credential_type),
+        });
+      })
+      .then(createdId => {
+        credential_id = createdId;
         closeCredentialDialog();
       })
       .then(() => gmp.credentials.getAll())
       .then(response => {
         const {data: credentials} = response;
         if (state.credentialType === 'scp') {
-          dispatchState({
-            type: 'setState',
-            newState: {
+          dispatchState(
+            updateState({
               method_data_scp_credential: credential_id,
               credentials,
-            },
-          });
+            }),
+          );
         } else if (state.credentialType === 'smb') {
-          dispatchState({
-            type: 'setState',
-            newState: {
+          dispatchState(
+            updateState({
               method_data_smb_credential: credential_id,
               credentials,
-            },
-          });
+            }),
+          );
         } else if (state.credentialType === 'verinice') {
-          dispatchState({
-            type: 'setState',
-            newState: {
+          dispatchState(
+            updateState({
               method_data_verinice_server_credential: credential_id,
               credentials,
-            },
-          });
+            }),
+          );
         } else if (state.credentialType === 'vfire') {
-          dispatchState({
-            type: 'setState',
-            newState: {
+          dispatchState(
+            updateState({
               method_data_vfire_credential: credential_id,
               credentials,
-            },
-          });
+            }),
+          );
         } else if (state.credentialType === 'tippingpoint') {
-          dispatchState({
-            type: 'setState',
-            newState: {
+          dispatchState(
+            updateState({
               method_data_tp_sms_credential: credential_id,
               credentials,
-            },
-          });
+            }),
+          );
         } else if (state.credentialType === 'email') {
-          dispatchState({
-            type: 'setState',
-            newState: {
+          dispatchState(
+            updateState({
               method_data_recipient_credential: credential_id,
               credentials,
-            },
-          });
+            }),
+          );
         } else if (state.credentialType === 'pw') {
-          dispatchState({
-            type: 'setState',
-            newState: {
+          dispatchState(
+            updateState({
               method_data_pkcs12_credential: credential_id,
               credentials,
-            },
-          });
+            }),
+          );
         }
       })
       .catch(error => {
-        dispatchState({
-          type: 'setState',
-          newState: {credentialError: error.message},
-        });
+        dispatchState(updateState({credentialError: error.message}));
       });
   };
 
   const openCredentialDialog = ({type, types}) => {
     state.credentialType = type;
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         credentialDialogVisible: true,
         credentialDialogTitle: _('New Credential'),
         credentialTypes: types,
         credentialType: type,
-      },
-    });
+      }),
+    );
 
     handleInteraction();
   };
 
   const closeCredentialDialog = () => {
-    dispatchState({
-      type: 'setState',
-      newState: {credentialDialogVisible: false},
-    });
+    dispatchState(updateState({credentialDialogVisible: false}));
   };
 
   const handleCloseCredentialDialog = () => {
@@ -264,10 +279,7 @@ const AlertComponent = ({
   };
 
   const openContentComposerDialog = () => {
-    dispatchState({
-      type: 'setState',
-      newState: {contentComposerDialogVisible: true},
-    });
+    dispatchState(updateState({contentComposerDialogVisible: true}));
   };
 
   const handleOpenContentComposerDialog = () => {
@@ -282,16 +294,15 @@ const AlertComponent = ({
       method_data_composer_include_overrides,
       filter_id,
     } = state;
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         composerIncludeNotes: method_data_composer_include_notes,
         composerIncludeOverrides: method_data_composer_include_overrides,
         composerFilterId: filter_id,
         composerStoreAsDefault: NO_VALUE,
         contentComposerDialogVisible: false,
-      },
-    });
+      }),
+    );
   };
 
   const handleSaveComposerContent = ({
@@ -309,16 +320,15 @@ const AlertComponent = ({
       };
       saveReportComposerDefaults(defaults);
     }
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         filter_id: filterId,
         method_data_composer_include_notes: includeNotes,
         method_data_composer_include_overrides: includeOverrides,
         composerStoreAsDefault: NO_VALUE,
         contentComposerDialogVisible: false,
-      },
-    });
+      }),
+    );
     handleInteraction();
   };
 
@@ -335,6 +345,8 @@ const AlertComponent = ({
   }) => {
     handleInteraction();
 
+    const {event_data_feed_event} = other;
+
     if (!isDefined(id)) {
       return createAlert({
         name,
@@ -348,7 +360,7 @@ const AlertComponent = ({
         filterId: filter_id,
         method: convertMethodEnum(method),
         methodData: await convertDict('method_data', other, method_data_fields),
-        event: convertEventEnum(event),
+        event: convertEventEnum(event, event_data_feed_event),
         eventData: await convertDict('event_data', other, event_data_fields),
         reportFormats: report_format_ids,
       })
@@ -356,19 +368,27 @@ const AlertComponent = ({
         .then(closeAlertDialog);
     }
 
-    return gmp.alert
-      .save({
-        active,
-        name,
-        comment,
-        event,
-        condition,
-        filter_id,
-        method,
-        report_format_ids,
-        ...other,
-      })
-      .then(onSaved, onSaveError);
+    return modifyAlert({
+      id,
+      name,
+      comment,
+      event: hasValue(event)
+        ? convertEventEnum(event, event_data_feed_event) // Added second arg because the dialog ALWAYS sends NEW_SECINFO_ARRIVED if event type is secinfo; the radio can only accept one value.
+        : null,
+      eventData: await convertDict('event_data', other, event_data_fields),
+      condition: hasValue(condition) ? convertConditionEnum(condition) : null,
+      conditionData: await convertDict(
+        'condition_data',
+        other,
+        condition_data_fields,
+      ),
+      filterId: filter_id,
+      method: hasValue(method) ? convertMethodEnum(method) : null,
+      methodData: await convertDict('method_data', other, method_data_fields),
+      reportFormats: report_format_ids,
+    })
+      .then(onSaved, onSaveError)
+      .then(closeAlertDialog);
   };
 
   const openScpCredentialDialog = types => {
@@ -516,9 +536,8 @@ const AlertComponent = ({
             ? getValue(method.data.vfire_credential)
             : undefined;
 
-          dispatchState({
-            type: 'setState',
-            newState: {
+          dispatchState(
+            updateState({
               alertDialogVisible: true,
               id: alert.id,
               alert,
@@ -526,8 +545,8 @@ const AlertComponent = ({
               name: alert.name,
               comment: alert.comment,
               filters,
-              filter_id: isDefined(alert.filter) ? alert.filter.id : undefined,
-              composerFilterId: isDefined(alert.filter)
+              filter_id: hasValue(alert.filter) ? alert.filter.id : undefined,
+              composerFilterId: hasValue(alert.filter)
                 ? alert.filter.id
                 : undefined,
               composerIncludeNotes: getValue(
@@ -653,7 +672,7 @@ const AlertComponent = ({
 
               method_data_smb_credential: getValue(
                 method.data.smb_credential,
-                '',
+                UNSET_VALUE, // default value for uuids should always be null from now on, since a UUID type is expected.
               ),
               method_data_smb_file_path: getValue(
                 method.data.smb_file_path,
@@ -665,7 +684,7 @@ const AlertComponent = ({
               ),
               method_data_smb_report_format: getValue(
                 method.data.smb_report_format,
-                '',
+                UNSET_VALUE,
               ),
               method_data_smb_share_path: getValue(
                 method.data.smb_share_path,
@@ -711,7 +730,7 @@ const AlertComponent = ({
               method_data_pkcs12_credential: selectSaveId(
                 passwordOnlyCredentials,
                 pkcs12_credential_id,
-                '0',
+                UNSET_VALUE, // same here. uuids should never be anything but either a valid uuid or null.
               ),
               method_data_vfire_credential: selectSaveId(
                 vFireCredentials,
@@ -754,8 +773,8 @@ const AlertComponent = ({
               ),
               tasks,
               title: _('Edit Alert {{name}}', {name: shorten(alert.name)}),
-            },
-          });
+            }),
+          );
         },
       );
     } else {
@@ -777,9 +796,8 @@ const AlertComponent = ({
             ? reportComposerDefaults.reportResultFilterId
             : undefined;
 
-          dispatchState({
-            type: 'setState',
-            newState: {
+          dispatchState(
+            updateState({
               active: undefined,
               alert: undefined,
               alertDialogVisible: true,
@@ -870,33 +888,31 @@ const AlertComponent = ({
               report_format_ids: [],
               tasks,
               title: _('New Alert'),
-            },
-          });
+            }),
+          );
         },
       );
     }
   };
 
   const closeAlertDialog = () => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         alertDialogVisible: false,
-      },
-    });
+      }),
+    );
   };
 
   const handleCloseAlertDialog = () => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         composerIncludeNotes: undefined,
         composerIncludeOverrides: undefined,
         composerFilterId: undefined,
         composerFilterString: undefined,
         composerStoreAsDefault: NO_VALUE,
-      },
-    });
+      }),
+    );
 
     closeAlertDialog();
     handleInteraction();
@@ -949,95 +965,85 @@ const AlertComponent = ({
   };
 
   const handlePasswordOnlyCredentialChange = credential => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         method_data_pkcs12_credential: credential,
-      },
-    });
+      }),
+    );
   };
 
   const handleScpCredentialChange = credential => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         method_data_scp_credential: credential,
-      },
-    });
+      }),
+    );
   };
 
   const handleSmbCredentialChange = credential => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         method_data_smb_credential: credential,
-      },
-    });
+      }),
+    );
   };
 
   const handleTippingPointCredentialChange = credential => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         method_data_tp_sms_credential: credential,
-      },
-    });
+      }),
+    );
   };
 
   const handleVeriniceCredentialChange = credential => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         method_data_verinice_server_credential: credential,
-      },
-    });
+      }),
+    );
   };
 
   const handleEmailCredentialChange = credential => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         method_data_recipient_credential: credential,
-      },
-    });
+      }),
+    );
   };
 
   const handleVfireCredentialChange = credential => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         method_data_vfire_credential: credential,
-      },
-    });
+      }),
+    );
   };
 
   const handleReportFormatsChange = report_format_ids => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         report_format_ids,
-      },
-    });
+      }),
+    );
   };
 
   const handleValueChange = (value, name) => {
     handleInteraction();
     name = capitalizeFirstLetter(name);
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         [`composer${name}`]: value,
-      },
-    });
+      }),
+    );
   };
 
   const handleFilterIdChange = value => {
-    dispatchState({
-      type: 'setState',
-      newState: {
+    dispatchState(
+      updateState({
         composerFilterId: value === UNSET_VALUE ? undefined : value,
-      },
-    });
+      }),
+    );
 
     handleInteraction();
   };
@@ -1277,10 +1283,7 @@ const AlertComponent = ({
               onNewTippingPointCredentialClick={
                 openTippingPointCredentialDialog
               }
-              onSave={d => {
-                handleInteraction();
-                return handleSaveAlert(d).then(() => closeAlertDialog());
-              }}
+              onSave={handleSaveAlert}
               onReportFormatsChange={handleReportFormatsChange}
               onEmailCredentialChange={handleEmailCredentialChange}
               onPasswordOnlyCredentialChange={
@@ -1302,10 +1305,7 @@ const AlertComponent = ({
               types={credentialTypes}
               onClose={handleCloseCredentialDialog}
               onErrorClose={() =>
-                dispatchState({
-                  type: 'setState',
-                  newState: {credentialError: undefined},
-                })
+                dispatchState(updateState({credentialError: undefined}))
               }
               onSave={handleCreateCredential}
             />

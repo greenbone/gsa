@@ -153,9 +153,9 @@ const AlertActions = ({
     setShowTriggerAlertDialog(false);
   };
 
-  const onAlertCreated = response => {
+  const onAlertCreated = createdId => {
     loadAlerts();
-    setAlertId(response.data.id);
+    setAlertId(createdId);
   };
 
   const mayAccessAlerts = capabilities.mayOp('get_alerts');

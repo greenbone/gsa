@@ -29,7 +29,7 @@ import {useCreateSchedule, useModifySchedule} from 'web/graphql/schedules';
 
 import {getTimezone} from 'web/store/usersettings/selectors';
 
-import reducer from 'web/utils/stateReducer';
+import reducer, {updateState} from 'web/utils/stateReducer';
 import PropTypes from 'web/utils/proptypes';
 
 import ScheduleDialog from './dialog';
@@ -60,9 +60,8 @@ const ScheduleComponent = ({
 
       const {interval, freq, monthdays, weekdays} = recurrence;
 
-      dispatch({
-        type: 'setState',
-        newState: {
+      dispatch(
+        updateState({
           comment: schedule.comment,
           startDate,
           dialogVisible: true,
@@ -75,12 +74,11 @@ const ScheduleComponent = ({
           title: _('Edit Schedule {{name}}', {name: schedule.name}),
           timezone: schedule.timezone,
           weekdays,
-        },
-      });
+        }),
+      );
     } else {
-      dispatch({
-        type: 'setState',
-        newState: {
+      dispatch(
+        updateState({
           comment: undefined,
           dialogVisible: true,
           duration: undefined,
@@ -93,15 +91,15 @@ const ScheduleComponent = ({
           timezone,
           title: undefined,
           weekdays: undefined,
-        },
-      });
+        }),
+      );
     }
 
     handleInteraction();
   };
 
   const closeScheduleDialog = () => {
-    dispatch({type: 'setState', newState: {dialogVisible: false}});
+    dispatch(updateState({dialogVisible: false}));
   };
 
   const handleCloseScheduleDialog = () => {

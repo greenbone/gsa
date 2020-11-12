@@ -148,6 +148,9 @@ describe('Enum conversion tests', () => {
     expect(convertEventEnum(EVENT_TYPE_OWNED_TICKET_CHANGED)).toEqual(
       'OWNED_TICKET_CHANGED',
     );
+    expect(convertEventEnum(EVENT_TYPE_NEW_SECINFO, 'updated')).toEqual(
+      'UPDATED_SECINFO_ARRIVED',
+    );
     expect(convertEventEnum('foobar')).toEqual(null);
     expect(convertEventEnum()).toEqual(null);
   });

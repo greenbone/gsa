@@ -47,10 +47,10 @@ const scanner = deepFreeze({
   type: 'OPENVAS_SCANNER_TYPE',
 });
 
-const gmpScanner = deepFreeze({
+const greenboneSensor = deepFreeze({
   id: '242526',
   name: 'scanner 2',
-  type: 'GMP_SCANNER_TYPE',
+  type: 'GREENBONE_SENSOR_SCANNER_TYPE',
 });
 
 // ScanConfig
@@ -178,7 +178,7 @@ const task = deepFreeze({
   target: target,
   schedule: schedule,
   alerts: [alert],
-  scanner: gmpScanner,
+  scanner: greenboneSensor,
   scanConfig: scanConfig,
   preferences: preferences,
   hostsOrdering: 'sequential',

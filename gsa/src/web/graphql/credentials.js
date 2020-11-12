@@ -17,7 +17,7 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useLazyQuery} from '@apollo/client';
+import {gql, useLazyQuery, useMutation} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -102,4 +102,29 @@ export const useLazyGetCredentials = (variables, options) => {
   );
   const pageInfo = data?.credentials?.pageInfo;
   return [getCredentials, {...other, counts, credentials, pageInfo}];
+};
+
+export const CREATE_CREDENTIAL = gql`
+  mutation createCredential($input: CreateCredentialInput!) {
+    createCredential(input: $input) {
+      id
+    }
+  }
+`;
+
+export const useCreateCredential = options => {
+  const [queryCreateCredential, {data, ...other}] = useMutation(
+    CREATE_CREDENTIAL,
+    options,
+  );
+  const createCredential = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreateCredential({...options, variables: {input: inputObject}}).then(
+        result => result?.data?.createCredential?.id,
+      ),
+    [queryCreateCredential],
+  );
+  const credentialId = data?.createCredential?.id;
+  return [createCredential, {...other, id: credentialId}];
 };

@@ -27,9 +27,10 @@ const FilterProvider = ({
   children,
   fallbackFilter,
   gmpname,
+  pageName = gmpname,
   locationQueryFilterString,
 }) => {
-  const [filter, isLoading] = usePageFilter(gmpname, {
+  const [filter, isLoading] = usePageFilter(pageName, {
     fallbackFilter,
     locationQueryFilterString,
   });
@@ -44,6 +45,7 @@ FilterProvider.propTypes = {
   fallbackFilter: PropTypes.filter,
   gmpname: PropTypes.string,
   locationQueryFilterString: PropTypes.string,
+  pageName: PropTypes.string,
 };
 
 export default FilterProvider;

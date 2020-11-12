@@ -141,7 +141,9 @@ export const useCreateSchedule = options => {
   const createSchedule = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreateSchedule({...options, variables: {input: inputObject}}),
+      queryCreateSchedule({...options, variables: {input: inputObject}}).then(
+        result => result?.data?.createSchedule?.id,
+      ),
     [queryCreateSchedule],
   );
   const scheduleId = data?.createSchedule?.id;

@@ -25,15 +25,7 @@ describe('goto_entity_details test', () => {
       history: [],
     };
 
-    const result = {
-      data: {
-        getFoo: {
-          id: 'bar',
-        },
-      },
-    };
-
-    goto_entity_details('foo', 'getFoo', props)(result);
+    goto_entity_details('foo', props)('bar');
 
     expect(props.history).toEqual(['/foo/bar']);
   });

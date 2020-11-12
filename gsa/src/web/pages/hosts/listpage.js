@@ -30,8 +30,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import {goto_details} from 'web/entity/component';
-
 import DashboardControls from 'web/components/dashboard/controls';
 
 import HostIcon from 'web/components/icon/hosticon';
@@ -42,6 +40,8 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/hosts';
+
+import {goto_entity_details} from 'web/utils/graphql';
 
 import HostsFilterDialog from './filterdialog';
 import HostsTable from './table';
@@ -79,7 +79,7 @@ const Page = ({
 }) => (
   <HostComponent
     entitiesCounts={entitiesCounts}
-    onTargetCreated={goto_details('target', props)}
+    onTargetCreated={goto_entity_details('target', props)}
     onTargetCreateError={onError}
     onCreated={onChanged}
     onDeleted={onChanged}

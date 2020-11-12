@@ -36,7 +36,6 @@ import {withRouter} from 'react-router-dom';
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
-  GMP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 
@@ -168,28 +167,22 @@ class AuditComponent extends React.Component {
     return this.cmd.resume(audit).then(onResumed, onResumeError);
   }
 
-  handleAlertCreated(resp) {
-    const {data} = resp;
-
+  handleAlertCreated(alertId) {
     this.props.loadAlerts();
 
-    this.setState(({alertIds}) => ({alertIds: [data.id, ...alertIds]}));
+    this.setState(({alertIds}) => ({alertIds: [alertId, ...alertIds]}));
   }
 
-  handleScheduleCreated(resp) {
-    const {data} = resp;
-
+  handleScheduleCreated(scheduleId) {
     this.props.loadSchedules();
 
-    this.setState({scheduleId: data.id});
+    this.setState({scheduleId});
   }
 
-  handleTargetCreated(resp) {
-    const {data} = resp;
-
+  handleTargetCreated(targetId) {
     this.props.loadTargets();
 
-    this.setState({targetId: data.id});
+    this.setState({targetId});
   }
 
   handleSaveAudit({
@@ -625,8 +618,7 @@ const mapStateToProps = (rootState, {match}) => {
     ? scannerList.filter(
         scanner =>
           scanner.scannerType === OPENVAS_SCANNER_TYPE ||
-          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE ||
-          scanner.scannerType === GMP_SCANNER_TYPE,
+          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
       )
     : undefined;
 
@@ -665,8 +657,5 @@ export default compose(
   withCapabilities,
   withDownload,
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProp,
-  ),
+  connect(mapStateToProps, mapDispatchToProp),
 )(AuditComponent);

@@ -63,11 +63,12 @@ import {
 } from 'web/store/entities/reportformats';
 
 import PropTypes from 'web/utils/proptypes';
+import {goto_entity_details} from 'web/utils/graphql';
 
 import AlertComponent from './component';
 import AlertDetails from './details';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   onAlertCloneClick,
   onAlertCreateClick,
@@ -120,7 +121,7 @@ const Page = ({
   <AlertComponent
     onCloned={goto_details('alert', props)}
     onCloneError={onError}
-    onCreated={goto_details('alert', props)}
+    onCreated={goto_entity_details('alert', props)}
     onDeleted={goto_list('alerts', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}

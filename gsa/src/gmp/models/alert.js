@@ -16,13 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined, isObject} from '../utils/identity';
+import {hasValue, isDefined, isObject} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 import {forEach, map} from '../utils/array';
 
 import {parseYesNo, YES_VALUE} from '../parser.js';
 
 import Model, {parseModelFromElement} from '../model.js';
+import Task from './task';
+import Filter from './filter';
 
 export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
 export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
@@ -91,6 +93,44 @@ const create_values = data => {
 
 class Alert extends Model {
   static entityType = 'alert';
+
+  static parseObject(object) {
+    const ret = super.parseObject(object);
+
+    const types = ['condition', 'method', 'event'];
+
+    for (const type of types) {
+      if (isObject(ret[type])) {
+        const data = {};
+
+        forEach(ret[type].data, value => {
+          data[value.name] = {value: value.value};
+        });
+
+        ret[type] = {
+          type: ret[type].type,
+          data,
+        };
+      } else {
+        ret[type] = {
+          type: ret[type],
+          data: {},
+        };
+      }
+    }
+
+    if (hasValue(object.tasks)) {
+      ret.tasks = map(object.tasks, task => Task.fromObject(task));
+    } else {
+      ret.tasks = [];
+    }
+
+    if (hasValue(object.filter)) {
+      ret.filter = Filter.fromObject(object.filter);
+    }
+
+    return ret;
+  }
 
   static parseElement(element) {
     const ret = super.parseElement(element);

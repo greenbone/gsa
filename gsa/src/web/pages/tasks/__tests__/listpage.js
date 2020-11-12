@@ -558,25 +558,25 @@ describe('TaskPage ToolBarIcons test', () => {
 
     const divs = baseElement.querySelectorAll('div');
 
-    fireEvent.click(divs[5]);
-    expect(handleTaskWizardClick).toHaveBeenCalled();
-    expect(divs[5]).toHaveTextContent('Task Wizard');
-
     fireEvent.click(divs[6]);
-    expect(handleAdvancedTaskWizardClick).toHaveBeenCalled();
-    expect(divs[6]).toHaveTextContent('Advanced Task Wizard');
+    expect(handleTaskWizardClick).toHaveBeenCalled();
+    expect(divs[6]).toHaveTextContent('Task Wizard');
 
     fireEvent.click(divs[7]);
-    expect(handleModifyTaskWizardClick).toHaveBeenCalled();
-    expect(divs[7]).toHaveTextContent('Modify Task Wizard');
+    expect(handleAdvancedTaskWizardClick).toHaveBeenCalled();
+    expect(divs[7]).toHaveTextContent('Advanced Task Wizard');
 
-    fireEvent.click(divs[9]);
-    expect(handleTaskCreateClick).toHaveBeenCalled();
-    expect(divs[9]).toHaveTextContent('New Task');
+    fireEvent.click(divs[8]);
+    expect(handleModifyTaskWizardClick).toHaveBeenCalled();
+    expect(divs[8]).toHaveTextContent('Modify Task Wizard');
 
     fireEvent.click(divs[10]);
+    expect(handleTaskCreateClick).toHaveBeenCalled();
+    expect(divs[10]).toHaveTextContent('New Task');
+
+    fireEvent.click(divs[11]);
     expect(handleContainerTaskCreateClick).toHaveBeenCalled();
-    expect(divs[10]).toHaveTextContent('New Container Task');
+    expect(divs[11]).toHaveTextContent('New Container Task');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
