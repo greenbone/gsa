@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {getEntityType} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
@@ -70,7 +70,7 @@ const EntityNameTableData = ({
         userName={username}
       />
     </Layout>
-    {isDefined(entity.comment) && <Comment>({entity.comment})</Comment>}
+    {hasValue(entity.comment) && <Comment>({entity.comment})</Comment>}
     {children}
   </TableData>
 );

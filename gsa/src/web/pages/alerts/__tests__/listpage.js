@@ -27,6 +27,10 @@ import Alert from 'gmp/models/alert';
 
 import {
   createGetAlertsQueryMock,
+  createExportAlertsByFilterQueryMock,
+  createExportAlertsByIdsQueryMock,
+  createDeleteAlertsByFilterQueryMock,
+  createDeleteAlertsByIdsQueryMock,
   alert1,
   alert2,
 } from 'web/graphql/__mocks__/alerts';
@@ -191,19 +195,9 @@ describe('Alert listpage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       alerts: {
         get: getAlerts,
-        deleteByFilter,
-        exportByFilter,
       },
       filters: {
         get: getFilters,
@@ -212,17 +206,28 @@ describe('Alert listpage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const filterString = 'foo=bar rows=2';
+
     const [mock, resultFunc] = createGetAlertsQueryMock({
-      filterString: 'foo=bar rows=2',
+      filterString,
       first: 2,
     });
+
+    const [exportMock, exportResult] = createExportAlertsByIdsQueryMock([
+      '1',
+      '2',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteAlertsByIdsQueryMock([
+      '1',
+      '2',
+    ]);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -261,7 +266,7 @@ describe('Alert listpage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // move page contents to trashcan
     expect(icons[24]).toHaveAttribute(
@@ -272,23 +277,13 @@ describe('Alert listpage tests', () => {
 
     await wait();
 
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected alerts', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       alerts: {
         get: getAlerts,
-        delete: deleteByIds,
-        export: exportByIds,
       },
       filters: {
         get: getFilters,
@@ -297,17 +292,21 @@ describe('Alert listpage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
-    const [mock] = createGetAlertsQueryMock({
-      filterString: 'foo=bar rows=2',
+    const filterString = 'foo=bar rows=2';
+    const [mock, resultFunc] = createGetAlertsQueryMock({
+      filterString,
       first: 2,
     });
+
+    const [exportMock, exportResult] = createExportAlertsByIdsQueryMock(['1']);
+    const [deleteMock, deleteResult] = createDeleteAlertsByIdsQueryMock(['1']);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -319,22 +318,11 @@ describe('Alert listpage tests', () => {
       defaultFilterLoadingActions.success('alert', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([alert], filter, loadedFilter, counts),
-    );
-
     const {element} = render(<AlertPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -359,7 +347,7 @@ describe('Alert listpage tests', () => {
 
     await wait();
 
-    expect(exportByIds).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // move selected alert to trashcan
     expect(icons[14]).toHaveAttribute('title', 'Move selection to trashcan');
@@ -367,23 +355,13 @@ describe('Alert listpage tests', () => {
 
     await wait();
 
-    expect(deleteByIds).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered alerts', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       alerts: {
         get: getAlerts,
-        deleteByFilter,
-        exportByFilter,
       },
       filters: {
         get: getFilters,
@@ -397,12 +375,19 @@ describe('Alert listpage tests', () => {
       first: 2,
     });
 
+    const [exportMock, exportResult] = createExportAlertsByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+    const [deleteMock, deleteResult] = createDeleteAlertsByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
+      queryMocks: [mock, deleteMock, exportMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -450,7 +435,7 @@ describe('Alert listpage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // move all filtered alerts to trashcan
     expect(icons[24]).toHaveAttribute('title', 'Move all filtered to trashcan');
@@ -458,7 +443,7 @@ describe('Alert listpage tests', () => {
 
     await wait();
 
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 });
 

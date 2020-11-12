@@ -113,6 +113,14 @@ export const CLONE_ALERT = gql`
   }
 `;
 
+export const TEST_ALERT = gql`
+  mutation testAlert($id: UUID!) {
+    testAlert(id: $id) {
+      ok
+    }
+  }
+`;
+
 export const DELETE_ALERTS_BY_IDS = gql`
   mutation deleteAlertsByIds($ids: [UUID]!) {
     deleteAlertsByIds(ids: $ids) {
@@ -121,10 +129,26 @@ export const DELETE_ALERTS_BY_IDS = gql`
   }
 `;
 
-export const TEST_ALERT = gql`
-  mutation testAlert($id: UUID!) {
-    testAlert(id: $id) {
+export const DELETE_ALERTS_BY_FILTER = gql`
+  mutation deleteAlertsByFilter($filterString: String!) {
+    deleteAlertsByFilter(filterString: $filterString) {
       ok
+    }
+  }
+`;
+
+export const EXPORT_ALERTS_BY_FILTER = gql`
+  mutation exportAlertsByFilter($filterString: String) {
+    exportAlertsByFilter(filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
+export const EXPORT_ALERTS_BY_IDS = gql`
+  mutation exportAlertsByIds($ids: [UUID]!) {
+    exportAlertsByIds(ids: $ids) {
+      exportedEntities
     }
   }
 `;
@@ -234,4 +258,72 @@ export const useDeleteAlert = options => {
     [queryDeleteAlert],
   );
   return [deleteAlert, data];
+};
+
+export const useExportAlertsByFilter = options => {
+  const [queryExportAlertsByFilter] = useMutation(
+    EXPORT_ALERTS_BY_FILTER,
+    options,
+  );
+  const exportAlertsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportAlertsByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportAlertsByFilter, options],
+  );
+
+  return exportAlertsByFilter;
+};
+
+export const useExportAlertsByIds = options => {
+  const [queryExportAlertsByIds] = useMutation(EXPORT_ALERTS_BY_IDS, options);
+
+  const exportAlertsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    alertIds =>
+      queryExportAlertsByIds({
+        ...options,
+        variables: {
+          ids: alertIds,
+        },
+      }),
+    [queryExportAlertsByIds, options],
+  );
+
+  return exportAlertsByIds;
+};
+
+export const useDeleteAlertsByIds = options => {
+  const [queryDeleteAlertsByIds, data] = useMutation(
+    DELETE_ALERTS_BY_IDS,
+    options,
+  );
+  const deleteAlertsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteAlertsByIds({...options, variables: {ids}}),
+    [queryDeleteAlertsByIds],
+  );
+  return [deleteAlertsByIds, data];
+};
+
+export const useDeleteAlertsByFilter = options => {
+  const [queryDeleteAlertsByFilter, data] = useMutation(
+    DELETE_ALERTS_BY_FILTER,
+    options,
+  );
+  const deleteAlertsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filterString, options) =>
+      queryDeleteAlertsByFilter({
+        ...options,
+        variables: {filterString},
+      }),
+    [queryDeleteAlertsByFilter],
+  );
+  return [deleteAlertsByFilter, data];
 };

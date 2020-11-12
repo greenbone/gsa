@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Changed
+- Implement bulk actions for alerts via graphQL [#2569](https://github.com/greenbone/gsa/pull/2569)
 - Implement clone, delete and test alert via graphql [#2567](https://github.com/greenbone/gsa/pull/2567)
 - Implement get_alerts on alerts listpage via graphql [#2552](https://github.com/greenbone/gsa/pull/2552)
 - Implement modify alert via graphql [#2549](https://github.com/greenbone/gsa/pull/2549)
