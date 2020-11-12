@@ -258,9 +258,9 @@ const bulkDeleteByIdsResult = {
   },
 };
 
-export const createDeleteAlertsByIdsQueryMock = (taskIds = ['1', '2', '3']) =>
+export const createDeleteAlertsByIdsQueryMock = (alertIds = ['1', '2', '3']) =>
   createGenericQueryMock(DELETE_ALERTS_BY_IDS, bulkDeleteByIdsResult, {
-    ids: taskIds,
+    ids: alertIds,
   });
 
 const bulkDeleteByFilterResult = {
