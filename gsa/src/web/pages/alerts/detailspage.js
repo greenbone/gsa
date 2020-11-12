@@ -43,6 +43,7 @@ import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import {useExportEntity} from 'web/entity/useExportEntity';
 
 import AlertIcon from 'web/components/icon/alerticon';
 import ExportIcon from 'web/components/icon/exporticon';
@@ -51,7 +52,12 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {useGetAlert, useCloneAlert, useDeleteAlert} from 'web/graphql/alerts';
+import {
+  useGetAlert,
+  useCloneAlert,
+  useDeleteAlert,
+  useExportAlertsByIds,
+} from 'web/graphql/alerts';
 
 import {selector, loadEntity} from 'web/store/entities/alerts';
 
@@ -128,8 +134,11 @@ const Page = ({
   const gmpSettings = useGmpSettings();
   const {alert, refetch, loading} = useGetAlert(id);
 
+  const exportEntity = useExportEntity();
+
   const [cloneAlert] = useCloneAlert();
   const [deleteAlert] = useDeleteAlert();
+  const exportAlert = useExportAlertsByIds();
 
   // Alert methods
 
@@ -143,6 +152,16 @@ const Page = ({
     return deleteAlert(deletedAlert.id)
       .then(goto_list('alerts', {history}))
       .catch(onError);
+  };
+
+  const handleDownloadAlert = exportedAlert => {
+    exportEntity({
+      entity: exportedAlert,
+      exportFunc: exportAlert,
+      resourceType: 'alerts',
+      onDownload: onDownloaded,
+      onError,
+    });
   };
 
   const timeoutFunc = useCallback(
@@ -196,7 +215,7 @@ const Page = ({
           onAlertCloneClick={handleCloneAlert}
           onAlertCreateClick={create}
           onAlertDeleteClick={handleDeleteAlert}
-          onAlertDownloadClick={download}
+          onAlertDownloadClick={handleDownloadAlert}
           onAlertEditClick={edit}
           onAlertSaveClick={save}
           onInteraction={onInteraction}
