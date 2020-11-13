@@ -121,7 +121,6 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
-  history,
   permissions = [],
   reportFormats,
   onChanged,
@@ -144,13 +143,13 @@ const Page = ({
 
   const handleCloneAlert = clonedAlert => {
     return cloneAlert(clonedAlert.id)
-      .then(alertId => goto_entity_details('alert', {history})(alertId))
+      .then(alertId => goto_entity_details('alert', props)(alertId))
       .catch(onError);
   };
 
   const handleDeleteAlert = deletedAlert => {
     return deleteAlert(deletedAlert.id)
-      .then(goto_list('alerts', {history}))
+      .then(goto_list('alerts', props))
       .catch(onError);
   };
 
