@@ -19,6 +19,7 @@ import React, {useCallback, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
+import {hasValue} from 'gmp/utils/identity';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -80,7 +81,6 @@ import AlertComponent from './component';
 import AlertDetails from './details';
 import useGmpSettings from 'web/utils/useGmpSettings';
 import useReload from 'web/components/loading/useReload';
-import {hasValue} from 'gmp/utils/identity';
 
 export const ToolBarIcons = ({
   entity,
