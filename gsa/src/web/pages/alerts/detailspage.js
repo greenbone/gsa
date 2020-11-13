@@ -34,6 +34,8 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
+import Download from 'web/components/form/download';
+import useDownload from 'web/components/form/useDownload';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
@@ -124,13 +126,13 @@ const Page = ({
   permissions = [],
   reportFormats,
   onChanged,
-  onDownloaded,
   onError,
   onInteraction,
   ...props
 }) => {
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
+  const [downloadRef, handleDownload] = useDownload();
   const {alert, refetch, loading} = useGetAlert(id);
 
   const exportEntity = useExportEntity();
@@ -158,7 +160,7 @@ const Page = ({
       entity: exportedAlert,
       exportFunc: exportAlert,
       resourceType: 'alerts',
-      onDownload: onDownloaded,
+      onDownload: handleDownload,
       onError,
     });
   };
@@ -198,12 +200,12 @@ const Page = ({
       onCreated={goto_entity_details('alert', props)}
       onDeleted={goto_list('alerts', props)}
       onDeleteError={onError}
-      onDownloaded={onDownloaded}
+      onDownloaded={handleDownload}
       onDownloadError={onError}
       onInteraction={onInteraction}
       onSaved={onChanged}
     >
-      {({create, download, edit, save}) => (
+      {({create, edit, save}) => (
         <EntityPage
           {...props}
           entity={alert}
@@ -260,7 +262,7 @@ const Page = ({
                           entity={alert}
                           permissions={permissions}
                           onChanged={onChanged}
-                          onDownloaded={onDownloaded}
+                          onDownloaded={handleDownload}
                           onError={onError}
                           onInteraction={onInteraction}
                         />
@@ -268,6 +270,7 @@ const Page = ({
                     </TabPanels>
                   </Tabs>
                 </Layout>
+                <Download ref={downloadRef} />
               </React.Fragment>
             );
           }}
@@ -282,7 +285,6 @@ Page.propTypes = {
   permissions: PropTypes.array,
   reportFormats: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
