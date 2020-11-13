@@ -145,7 +145,7 @@ describe('Alert Detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetAlertQueryMock('1');
+    const [mock, resultFunc] = createGetAlertQueryMock('1', alert1);
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -239,7 +239,7 @@ describe('Alert Detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetAlertQueryMock('1');
+    const [mock, resultFunc] = createGetAlertQueryMock('1', alert1);
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -286,7 +286,7 @@ describe('Alert Detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetAlertQueryMock('1');
+    const [mock, resultFunc] = createGetAlertQueryMock('1', alert1);
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -333,7 +333,7 @@ describe('Alert Detailspage tests', () => {
       },
     };
     const [renewQueryMock] = createRenewSessionQueryMock();
-    const [mock, resultFunc] = createGetAlertQueryMock('1');
+    const [mock, resultFunc] = createGetAlertQueryMock('1', alert1);
     const [cloneMock, cloneResult] = createCloneAlertQueryMock();
     const [deleteMock, deleteResult] = createDeleteAlertQueryMock();
     const [exportMock, exportResult] = createExportAlertsByIdsQueryMock(['1']);
