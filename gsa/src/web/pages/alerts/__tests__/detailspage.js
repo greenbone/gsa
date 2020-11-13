@@ -36,6 +36,7 @@ import {
   createGetAlertQueryMock,
   createCloneAlertQueryMock,
   createDeleteAlertQueryMock,
+  createExportAlertsByIdsQueryMock,
   alert1,
 } from 'web/graphql/__mocks__/alerts';
 
@@ -315,14 +316,9 @@ describe('Alert Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const exportFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       alert: {
         get: getAlert,
-        export: exportFunc,
       },
       permissions: {
         get: getEntities,
@@ -340,13 +336,14 @@ describe('Alert Detailspage tests', () => {
     const [mock, resultFunc] = createGetAlertQueryMock('1');
     const [cloneMock, cloneResult] = createCloneAlertQueryMock();
     const [deleteMock, deleteResult] = createDeleteAlertQueryMock();
+    const [exportMock, exportResult] = createExportAlertsByIdsQueryMock(['1']);
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewQueryMock, mock, cloneMock, deleteMock],
+      queryMocks: [renewQueryMock, mock, cloneMock, deleteMock, exportMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -374,14 +371,14 @@ describe('Alert Detailspage tests', () => {
 
     await wait();
 
-    expect(deleteResult).toHaveBeenCalledWith();
+    expect(deleteResult).toHaveBeenCalled();
 
     expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
     fireEvent.click(icons[6]);
 
     await wait();
 
-    expect(exportFunc).toHaveBeenCalledWith(parsedAlert);
+    expect(exportResult).toHaveBeenCalled();
   });
 });
 
