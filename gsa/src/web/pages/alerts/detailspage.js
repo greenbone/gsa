@@ -130,11 +130,13 @@ const Page = ({
   onInteraction,
   ...props
 }) => {
+  // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
   const [downloadRef, handleDownload] = useDownload();
   const {alert, refetch, loading} = useGetAlert(id);
 
+  // Alert related mutations
   const exportEntity = useExportEntity();
 
   const [cloneAlert] = useCloneAlert();
@@ -142,7 +144,6 @@ const Page = ({
   const exportAlert = useExportAlertsByIds();
 
   // Alert methods
-
   const handleCloneAlert = clonedAlert => {
     return cloneAlert(clonedAlert.id)
       .then(alertId => goto_entity_details('alert', props)(alertId))
@@ -165,6 +166,7 @@ const Page = ({
     });
   };
 
+  // Timeout and reload
   const timeoutFunc = useCallback(
     ({isVisible}) => {
       if (!isVisible) {
