@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425)
 - Added getOverrides query [#2405](https://github.com/greenbone/gsa/pull/2405)
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
+- Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
 -Implement get_alert via graphql and preliminary refactor of alert detailspage [#2571](https://github.com/greenbone/gsa/pull/2571)
@@ -31,6 +32,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Load credentials in task component and target component via graphql [#2453](https://github.com/greenbone/gsa/pull/2453)
 - Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425)
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
+
+- The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Fixed
 
