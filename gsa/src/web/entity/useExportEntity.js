@@ -26,7 +26,7 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import {generateFilename} from 'web/utils/render';
 import useUserName from 'web/utils/useUserName';
 
-export const useExportEntity = () => {
+const useExportEntity = () => {
   const username = useUserName();
   const userDefaultsSelector = useSelector(getUserSettingsDefaults);
   const listExportFileName = userDefaultsSelector.getValueByName(
@@ -55,3 +55,5 @@ export const useExportEntity = () => {
 
   return exportEntity;
 };
+
+export default useExportEntity;

@@ -23,7 +23,7 @@ import {setLocale} from 'gmp/locale/lang';
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
-import {useExportEntity} from 'web/entity/useExportEntity';
+import useExportEntity from 'web/entity/useExportEntity';
 
 jest.mock('web/utils/render', () => ({
   ...jest.requireActual('web/utils/render'),

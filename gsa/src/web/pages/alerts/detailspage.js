@@ -46,7 +46,7 @@ import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
-import {useExportEntity} from 'web/entity/useExportEntity';
+import useExportEntity from 'web/entity/useExportEntity';
 
 import AlertIcon from 'web/components/icon/alerticon';
 import ExportIcon from 'web/components/icon/exporticon';
