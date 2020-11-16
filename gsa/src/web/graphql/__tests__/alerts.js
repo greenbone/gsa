@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+/* eslint-disable react/prop-types */
 
 import React, {useState} from 'react';
 
@@ -34,6 +35,7 @@ import {
   useDeleteAlertsByFilter,
   useExportAlertsByIds,
   useExportAlertsByFilter,
+  useGetAlert,
 } from '../alerts';
 import {
   createGetAlertsQueryMock,
@@ -48,6 +50,7 @@ import {
   createExportAlertsByIdsQueryMock,
   createExportAlertsByFilterQueryMock,
   createDeleteAlertsByIdsQueryMock,
+  createGetAlertQueryMock,
 } from '../__mocks__/alerts';
 
 const GetLazyAlertsComponent = () => {
@@ -364,5 +367,47 @@ describe('useExportAlertsByFilter tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const GetAlertComponent = ({id}) => {
+  const {loading, alert, error} = useGetAlert(id);
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      {error && <div data-testid="error">{error.message}</div>}
+      {alert && (
+        <div data-testid="alert">
+          <span data-testid="id">{alert.id}</span>
+          <span data-testid="name">{alert.name}</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+describe('useGetAlert tests', () => {
+  test('should load alert', async () => {
+    const [queryMock, resultFunc] = createGetAlertQueryMock('1');
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<GetAlertComponent id="1" />);
+
+    expect(screen.queryByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('alert')).toBeInTheDocument();
+
+    expect(screen.getByTestId('id')).toHaveTextContent('1');
+    expect(screen.getByTestId('name')).toHaveTextContent('alert 1');
   });
 });

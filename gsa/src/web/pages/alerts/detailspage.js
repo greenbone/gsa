@@ -15,9 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
+import {hasValue} from 'gmp/utils/identity';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -33,6 +35,8 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
+import Download from 'web/components/form/download';
+import useDownload from 'web/components/form/useDownload';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
@@ -42,6 +46,7 @@ import EntityTags from 'web/entity/tags';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useExportEntity from 'web/entity/useExportEntity';
 
 import AlertIcon from 'web/components/icon/alerticon';
 import ExportIcon from 'web/components/icon/exporticon';
@@ -49,6 +54,13 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+
+import {
+  useGetAlert,
+  useCloneAlert,
+  useDeleteAlert,
+  useExportAlertsByIds,
+} from 'web/graphql/alerts';
 
 import {selector, loadEntity} from 'web/store/entities/alerts';
 
@@ -67,6 +79,8 @@ import {goto_entity_details} from 'web/utils/graphql';
 
 import AlertComponent from './component';
 import AlertDetails from './details';
+import useGmpSettings from 'web/utils/useGmpSettings';
+import useReload from 'web/components/loading/useReload';
 
 export const ToolBarIcons = ({
   entity,
@@ -109,104 +123,170 @@ ToolBarIcons.propTypes = {
 };
 
 const Page = ({
-  entity,
   permissions = [],
   reportFormats,
   onChanged,
-  onDownloaded,
   onError,
   onInteraction,
   ...props
-}) => (
-  <AlertComponent
-    onCloned={goto_details('alert', props)}
-    onCloneError={onError}
-    onCreated={goto_entity_details('alert', props)}
-    onDeleted={goto_list('alerts', props)}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<AlertIcon size="large" />}
-        title={_('Alert')}
-        toolBarIcons={ToolBarIcons}
-        onAlertCloneClick={clone}
-        onAlertCreateClick={create}
-        onAlertDeleteClick={delete_func}
-        onAlertDownloadClick={download}
-        onAlertEditClick={edit}
-        onAlertSaveClick={save}
-        onInteraction={onInteraction}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('Alert: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <AlertDetails
-                        entity={entity}
-                        reportFormats={reportFormats}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </AlertComponent>
-);
+}) => {
+  // Page methods
+  const {id} = useParams();
+  const gmpSettings = useGmpSettings();
+  const [downloadRef, handleDownload] = useDownload();
+  const {alert, refetch, loading} = useGetAlert(id);
+
+  // Alert related mutations
+  const exportEntity = useExportEntity();
+
+  const [cloneAlert] = useCloneAlert();
+  const [deleteAlert] = useDeleteAlert();
+  const exportAlert = useExportAlertsByIds();
+
+  // Alert methods
+  const handleCloneAlert = clonedAlert => {
+    return cloneAlert(clonedAlert.id)
+      .then(alertId => goto_entity_details('alert', props)(alertId))
+      .catch(onError);
+  };
+
+  const handleDeleteAlert = deletedAlert => {
+    return deleteAlert(deletedAlert.id)
+      .then(goto_list('alerts', props))
+      .catch(onError);
+  };
+
+  const handleDownloadAlert = exportedAlert => {
+    exportEntity({
+      entity: exportedAlert,
+      exportFunc: exportAlert,
+      resourceType: 'alerts',
+      onDownload: handleDownload,
+      onError,
+    });
+  };
+
+  // Timeout and reload
+  const timeoutFunc = useCallback(
+    ({isVisible}) => {
+      if (!isVisible) {
+        return gmpSettings.reloadIntervalInactive;
+      }
+      if (alert.isActive()) {
+        return gmpSettings.reloadIntervalActive;
+      }
+      return gmpSettings.reloadInterval;
+    },
+    [alert, gmpSettings],
+  );
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetch,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if alert is available and no timer is running yet
+    if (hasValue(alert) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [alert, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
+
+  return (
+    <AlertComponent
+      onCloned={goto_details('alert', props)}
+      onCloneError={onError}
+      onCreated={goto_entity_details('alert', props)}
+      onDeleted={goto_list('alerts', props)}
+      onDeleteError={onError}
+      onDownloaded={handleDownload}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
+    >
+      {({create, edit, save}) => (
+        <EntityPage
+          {...props}
+          entity={alert}
+          isLoading={loading}
+          sectionIcon={<AlertIcon size="large" />}
+          title={_('Alert')}
+          toolBarIcons={ToolBarIcons}
+          onAlertCloneClick={handleCloneAlert}
+          onAlertCreateClick={create}
+          onAlertDeleteClick={handleDeleteAlert}
+          onAlertDownloadClick={handleDownloadAlert}
+          onAlertEditClick={edit}
+          onAlertSaveClick={save}
+          onInteraction={onInteraction}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('Alert: {{name}}', {name: alert.name})} />
+                <Layout grow="1" flex="column">
+                  <TabLayout grow="1" align={['start', 'end']}>
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={alert.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <AlertDetails
+                          entity={alert}
+                          reportFormats={reportFormats}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={alert}
+                          onChanged={onChanged}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={alert}
+                          permissions={permissions}
+                          onChanged={onChanged}
+                          onDownloaded={handleDownload}
+                          onError={onError}
+                          onInteraction={onInteraction}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+                <Download ref={downloadRef} />
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </AlertComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,
   permissions: PropTypes.array,
   reportFormats: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
