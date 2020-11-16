@@ -1,0 +1,84 @@
+/* Copyright (C) 2020 Greenbone Networks GmbH
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+import {gql, useQuery} from '@apollo/client';
+import Permission from 'gmp/models/permission';
+
+export const GET_PERMISSIONS = gql`
+  query Permission(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    permissions(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
+      edges {
+        node {
+          name
+          id
+        }
+      }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
+      }
+    }
+  }
+`;
+
+export const useGetPermissions = (variables, options) => {
+  const {data, ...other} = useQuery(GET_PERMISSIONS, {
+    ...options,
+    variables,
+  });
+  const permissions = isDefined(data?.permissions)
+    ? data.permissions.edges.map(entity => Permission.fromObject(entity.node))
+    : undefined;
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.permissions?.counts || {};
+  const counts = isDefined(data?.permissions?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const pageInfo = data?.permissions?.pageInfo;
+  return {...other, counts, permissions, pageInfo};
+};
