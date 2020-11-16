@@ -17,7 +17,6 @@
  */
 
 import {useCallback} from 'react';
-import PropTypes from 'web/utils/proptypes';
 
 const usePagination = ({simpleFilter, filter, pageInfo, refetch}) => {
   const getNext = useCallback(() => {
@@ -61,13 +60,6 @@ const usePagination = ({simpleFilter, filter, pageInfo, refetch}) => {
   }, [filter, simpleFilter, pageInfo, refetch]);
 
   return [getFirst, getLast, getNext, getPrevious];
-};
-
-usePagination.propTypes = {
-  filter: PropTypes.filter.required,
-  pageInfo: PropTypes.object.required,
-  refetch: PropTypes.func.isRequired,
-  simpleFilter: PropTypes.filter.required,
 };
 
 export default usePagination;
