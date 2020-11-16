@@ -18,43 +18,14 @@
  */
 
 import {gql, useQuery} from '@apollo/client';
+import {isDefined} from 'gmp/utils/identity';
 import Permission from 'gmp/models/permission';
 
 export const GET_PERMISSIONS = gql`
-  query Permission(
-    $filterString: FilterString
-    $after: String
-    $before: String
-    $first: Int
-    $last: Int
-  ) {
-    permissions(
-      filterString: $filterString
-      after: $after
-      before: $before
-      first: $first
-      last: $last
-    ) {
-      edges {
-        node {
-          name
-          id
-        }
-      }
-      counts {
-        total
-        filtered
-        offset
-        limit
-        length
-      }
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-        lastPageCursor
-      }
+  query Permission($filterString: String) {
+    permissions(filterString: $filterString) {
+      name
+      id
     }
   }
 `;
@@ -65,20 +36,7 @@ export const useGetPermissions = (variables, options) => {
     variables,
   });
   const permissions = isDefined(data?.permissions)
-    ? data.permissions.edges.map(entity => Permission.fromObject(entity.node))
+    ? data.permissions.map(entity => Permission.fromObject(entity))
     : undefined;
-
-  const {total, filtered, offset = -1, limit, length} =
-    data?.permissions?.counts || {};
-  const counts = isDefined(data?.permissions?.counts)
-    ? new CollectionCounts({
-        all: total,
-        filtered: filtered,
-        first: offset + 1,
-        length: length,
-        rows: limit,
-      })
-    : undefined;
-  const pageInfo = data?.permissions?.pageInfo;
-  return {...other, counts, permissions, pageInfo};
+  return {...other, permissions};
 };

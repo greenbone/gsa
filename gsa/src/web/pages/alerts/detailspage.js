@@ -81,6 +81,8 @@ import AlertComponent from './component';
 import AlertDetails from './details';
 import useGmpSettings from 'web/utils/useGmpSettings';
 import useReload from 'web/components/loading/useReload';
+import {useGetPermissions} from 'web/graphql/permissions';
+import {useGetReportFormats} from 'web/graphql/report_formats';
 
 export const ToolBarIcons = ({
   entity,
@@ -122,19 +124,16 @@ ToolBarIcons.propTypes = {
   onAlertEditClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
-  permissions = [],
-  reportFormats,
-  onChanged,
-  onError,
-  onInteraction,
-  ...props
-}) => {
+const Page = ({onChanged, onError, onInteraction, ...props}) => {
   // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
   const [downloadRef, handleDownload] = useDownload();
   const {alert, refetch, loading} = useGetAlert(id);
+  const {permissions} = useGetPermissions({
+    filterString: permissionsResourceFilter(id).toFilterString(),
+  });
+  const {reportFormats} = useGetReportFormats();
 
   // Alert related mutations
   const exportEntity = useExportEntity();

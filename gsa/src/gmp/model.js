@@ -125,12 +125,12 @@ class Model {
   static fromObject(object = {}) {
     const f = new this();
     f.setProperties(this.parseObject(object));
+    console.log(f, object);
     return f;
   }
 
   static parseObject(object = {}) {
     const copy = parseDefaultProperties(object);
-
     // use hasValue instead of isDefined for all things graphql related, since no value is null in Django.
 
     if (hasValue(object.end_time)) {

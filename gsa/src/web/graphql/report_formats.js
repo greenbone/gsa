@@ -18,7 +18,9 @@
  */
 
 import {gql, useQuery} from '@apollo/client';
+import CollectionCounts from 'gmp/collection/collectioncounts';
 import ReportFormat from 'gmp/models/reportformat';
+import {isDefined} from 'gmp/utils/identity';
 
 export const GET_REPORT_FORMATS = gql`
   query ReportFormat(
