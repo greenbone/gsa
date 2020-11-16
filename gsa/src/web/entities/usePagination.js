@@ -18,7 +18,7 @@
 
 import {useCallback} from 'react';
 
-export const usePagination = ({simpleFilter, filter, pageInfo, refetch}) => {
+const usePagination = ({simpleFilter, filter, pageInfo, refetch}) => {
   const getNext = useCallback(() => {
     refetch({
       filterString: simpleFilter.toFilterString(),
@@ -61,3 +61,5 @@ export const usePagination = ({simpleFilter, filter, pageInfo, refetch}) => {
 
   return [getFirst, getLast, getNext, getPrevious];
 };
+
+export default usePagination;

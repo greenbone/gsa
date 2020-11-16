@@ -61,7 +61,7 @@ import {
   useBulkDeleteEntities,
   useBulkExportEntities,
 } from 'web/entities/bulkactions.js';
-import {usePagination} from 'web/entities/usePagination.js';
+import usePagination from 'web/entities/usePagination.js';
 
 import usePageFilter from 'web/utils/usePageFilter.js';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout.js';

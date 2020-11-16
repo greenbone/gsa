@@ -20,7 +20,7 @@ import React, {useState} from 'react';
 import Filter from 'gmp/models/filter';
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
-import {usePagination} from '../usePagination';
+import usePagination from '../usePagination';
 
 const refetch = jest.fn();
 const filter = Filter.fromString('sort=name first=1 rows=7');

@@ -50,7 +50,7 @@ import {
   useBulkExportEntities,
   useBulkDeleteEntities,
 } from 'web/entities/bulkactions';
-import {usePagination} from 'web/entities/usePagination';
+import usePagination from 'web/entities/usePagination';
 
 import {
   useLazyGetTasks,
