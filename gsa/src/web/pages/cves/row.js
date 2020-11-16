@@ -26,6 +26,8 @@ import Comment from 'web/components/comment/comment';
 
 import DateTime from 'web/components/date/datetime';
 
+import Link from 'web/components/link/link';
+
 import TableBody from 'web/components/table/body';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
@@ -34,7 +36,6 @@ import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
 
 import PropTypes from 'web/utils/proptypes';
-import {na} from 'web/utils/render';
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -45,7 +46,7 @@ const Row = ({
 }) => (
   <TableBody>
     <TableRow>
-      <TableData rowSpan="2">
+      <TableData>
         <span>
           <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
             {entity.name}
@@ -53,22 +54,19 @@ const Row = ({
         </span>
         <Comment text={entity.comment} />
       </TableData>
-      <TableData>{na(entity.cvssAccessVector)}</TableData>
-      <TableData>{na(entity.cvssAccessComplexity)}</TableData>
-      <TableData>{na(entity.cvssAuthentication)}</TableData>
-      <TableData>{na(entity.cvssConfidentialityImpact)}</TableData>
-      <TableData>{na(entity.cvssIntegrityImpact)}</TableData>
-      <TableData>{na(entity.cvssAvailabilityImpact)}</TableData>
+      <TableData>{shorten(entity.description, 160)}</TableData>
       <TableData>
         <DateTime date={entity.creationTime} />
+      </TableData>
+      <TableData>
+        <Link to="cvsscalculator" query={{cvssVector: entity.cvssBaseVector}}>
+          {entity.cvssBaseVector}
+        </Link>
       </TableData>
       <TableData>
         <SeverityBar severity={entity.severity} />
       </TableData>
       <ActionsComponent {...props} entity={entity} />
-    </TableRow>
-    <TableRow>
-      <TableData colSpan="9">{shorten(entity.description, 250)}</TableData>
     </TableRow>
   </TableBody>
 );
