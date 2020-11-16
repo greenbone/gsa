@@ -125,7 +125,6 @@ class Model {
   static fromObject(object = {}) {
     const f = new this();
     f.setProperties(this.parseObject(object));
-    console.log(f, object);
     return f;
   }
 

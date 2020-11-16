@@ -302,19 +302,10 @@ const load = gmp => {
     ]);
 };
 
-const mapStateToProps = (rootState, {id}) => {
-  const permissionsSel = permissionsSelector(rootState);
-  const reportFormatsSel = reportFormatsSelector(rootState);
-  return {
-    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
-    reportFormats: reportFormatsSel.getAllEntities(),
-  };
-};
-
 export default withEntityContainer('alert', {
   entitySelector: selector,
   load,
-  mapStateToProps,
+  undefined,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:
