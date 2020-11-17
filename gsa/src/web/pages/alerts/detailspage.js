@@ -170,7 +170,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
   );
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
-    () => refetchAlerts(),
+    refetchAlerts,
     timeoutFunc,
   );
 
