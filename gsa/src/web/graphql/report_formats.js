@@ -39,6 +39,8 @@ export const GET_REPORT_FORMATS = gql`
     ) {
       edges {
         node {
+          id
+          name
           summary
           description
           predefined
