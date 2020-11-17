@@ -24,6 +24,7 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from '../utils/proptypes.js';
 import withCapabilities from '../utils/withCapabilities.js';
 
+import {hyperionEntityTypes} from 'web/entity/icon/observericon';
 import DetailsLink from '../components/link/detailslink.js';
 import Link from '../components/link/link.js';
 import {getEntityType, normalizeType} from 'gmp/utils/entitytype.js';
@@ -44,9 +45,13 @@ const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
     );
   }
 
-  if (isDefined(deleted) && deleted !== 0) {
+  if (isDefined(deleted)) {
     // FIXME is this still used?
-    return <b>{_('Orphan')}</b>;
+    if (hyperionEntityTypes.includes(type) && deleted === true) {
+      return <b>{_('Orphan')}</b>;
+    } else if (deleted === 1) {
+      return <b>{_('Orphan')}</b>;
+    }
   }
 
   if (

@@ -26,7 +26,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import ViewOtherIcon from 'web/components/icon/viewothericon';
 
-const hyperionEntityTypes = ['task', 'alert'];
+export const hyperionEntityTypes = ['task', 'alert'];
 
 const ObserverIcon = ({entity, userName, displayName = _('Entity')}) => {
   let owner;
