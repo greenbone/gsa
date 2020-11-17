@@ -119,8 +119,8 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
   const [downloadRef, handleDownload] = useDownload();
-  const {alert, refetch, loading} = useGetAlert(id);
-  const {permissions} = useGetPermissions({
+  const {alert, refetch: refetchAlerts, loading} = useGetAlert(id);
+  const {permissions, refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
   const {reportFormats} = useGetReportFormats();
@@ -170,7 +170,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
   );
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetch,
+    refetchAlerts,
     timeoutFunc,
   );
 
@@ -251,7 +251,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
                         <EntityPermissions
                           entity={alert}
                           permissions={permissions}
-                          onChanged={onChanged}
+                          onChanged={refetchPermissions}
                           onDownloaded={handleDownload}
                           onError={onError}
                           onInteraction={onInteraction}
