@@ -48,7 +48,7 @@
     "ical.js": "^1.4.0",
     "memoize-one": "^5.1.1",
     "moment": "^2.29.1",
-    "moment-timezone": "^0.5.31",
+    "moment-timezone": "^0.5.32",
     "prop-types": "^15.6.2",
     "qhistory": "^1.1.0",
     "qs": "^6.9.4",
