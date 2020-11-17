@@ -39,6 +39,13 @@ export const parseModelFromElement = (element, entityType) => {
   return m;
 };
 
+export const parseModelFromObject = (object, entityType) => {
+  const m = new Model(entityType);
+  const props = Model.parseObject(object);
+  m.setProperties(props);
+  return m;
+};
+
 class Model {
   static entityType = 'unknown';
 
