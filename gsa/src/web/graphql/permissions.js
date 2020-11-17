@@ -22,10 +22,62 @@ import {isDefined} from 'gmp/utils/identity';
 import Permission from 'gmp/models/permission';
 
 export const GET_PERMISSIONS = gql`
-  query Permission($filterString: String) {
+  query Permission($filterString: FilterString) {
     permissions(filterString: $filterString) {
-      name
-      id
+      edges {
+        node {
+          name
+          id
+          owner
+          comment
+          writable
+          inUse
+          creationTime
+          modificationTime
+          permissions {
+            name
+          }
+          resource {
+            name
+            id
+            type
+            trash
+            deleted
+            permissions {
+              name
+            }
+          }
+          subject {
+            name
+            id
+            type
+            trash
+          }
+          userTags {
+            count
+            tags {
+              name
+              id
+              value
+              comment
+            }
+          }
+        }
+      }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
+      }
     }
   }
 `;
@@ -36,7 +88,7 @@ export const useGetPermissions = (variables, options) => {
     variables,
   });
   const permissions = isDefined(data?.permissions)
-    ? data.permissions.map(entity => Permission.fromObject(entity))
+    ? data.permissions.edges.map(entity => Permission.fromObject(entity.node))
     : undefined;
   return {...other, permissions};
 };
