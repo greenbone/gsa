@@ -20,6 +20,7 @@
 import {gql, useQuery} from '@apollo/client';
 import {isDefined} from 'gmp/utils/identity';
 import Permission from 'gmp/models/permission';
+import CollectionCounts from 'gmp/collection/collectioncounts';
 
 export const GET_PERMISSIONS = gql`
   query Permission($filterString: FilterString) {
@@ -90,5 +91,18 @@ export const useGetPermissions = (variables, options) => {
   const permissions = isDefined(data?.permissions)
     ? data.permissions.edges.map(entity => Permission.fromObject(entity.node))
     : undefined;
-  return {...other, permissions};
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.permissions?.counts || {};
+  const counts = isDefined(data?.permissions?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const pageInfo = data?.permissions?.pageInfo;
+  return {...other, counts, permissions, pageInfo};
 };
