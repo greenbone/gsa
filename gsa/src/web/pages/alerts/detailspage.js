@@ -62,17 +62,7 @@ import {
   useExportAlertsByIds,
 } from 'web/graphql/alerts';
 
-import {selector, loadEntity} from 'web/store/entities/alerts';
-
-import {
-  selector as permissionsSelector,
-  loadEntities as loadPermissions,
-} from 'web/store/entities/permissions';
-
-import {
-  loadAllEntities as loadAllReportFormats,
-  selector as reportFormatsSelector,
-} from 'web/store/entities/reportformats';
+import {selector} from 'web/store/entities/alerts';
 
 import PropTypes from 'web/utils/proptypes';
 import {goto_entity_details} from 'web/utils/graphql';
@@ -193,7 +183,6 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
 
   // stop reload on unmount
   useEffect(() => stopReload, [stopReload]);
-
   return (
     <AlertComponent
       onCloned={goto_details('alert', props)}
@@ -283,24 +272,12 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
 
 Page.propTypes = {
   entity: PropTypes.model,
-  permissions: PropTypes.array,
-  reportFormats: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
-const load = gmp => {
-  const loadEntityFunc = loadEntity(gmp);
-  const loadPermissionsFunc = loadPermissions(gmp);
-  const loadAllReportFormatsFunc = loadAllReportFormats(gmp);
-  return id => dispatch =>
-    Promise.all([
-      dispatch(loadEntityFunc(id)),
-      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-      dispatch(loadAllReportFormatsFunc()),
-    ]);
-};
+const load = gmp => id => dispatch => Promise.resolve();
 
 export default withEntityContainer('alert', {
   entitySelector: selector,
