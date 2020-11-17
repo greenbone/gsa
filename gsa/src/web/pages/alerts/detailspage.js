@@ -170,7 +170,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
   );
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetchAlerts,
+    () => refetchAlerts(),
     timeoutFunc,
   );
 
@@ -242,7 +242,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
                       <TabPanel>
                         <EntityTags
                           entity={alert}
-                          onChanged={onChanged}
+                          onChanged={() => refetchAlerts()}
                           onError={onError}
                           onInteraction={onInteraction}
                         />
@@ -251,7 +251,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
                         <EntityPermissions
                           entity={alert}
                           permissions={permissions}
-                          onChanged={refetchPermissions}
+                          onChanged={() => refetchPermissions()}
                           onDownloaded={handleDownload}
                           onError={onError}
                           onInteraction={onInteraction}
