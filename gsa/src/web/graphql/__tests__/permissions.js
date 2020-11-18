@@ -16,11 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable react/prop-types */
-import React, {useState} from 'react';
+import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
+import {rendererWith, screen, wait} from 'web/utils/testing';
 import {useGetPermissions} from '../permissions';
 import {createGetPermissionsQueryMock} from '../__mocks__/permissions';
 

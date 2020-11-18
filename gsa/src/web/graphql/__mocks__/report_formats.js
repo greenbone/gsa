@@ -20,7 +20,7 @@ import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
 import {GET_REPORT_FORMATS} from '../report_formats';
 
-export const reportFormat1 = deepFreeze({
+/* export const reportFormat1 = deepFreeze({
   id: '4983',
   name: 'blah',
   owner: 'admin',
@@ -38,26 +38,56 @@ export const reportFormat1 = deepFreeze({
   trustTime: '2020-08-17T14:07:27+02:00',
   active: false,
   extension: 'bleh',
+}); */
+
+export const reportFormat1 = deepFreeze({
+  id: '665',
+  name: 'foo',
+  owner: 'admin',
+  comment: 'comm',
+  writable: true,
+  inUse: true,
+  creationTime: '2020-08-17T12:07:28+00:00',
+  modificationTime: '2020-09-29T12:16:51+00:00',
+  permissions: [{name: 'get_alerts'}],
+  userTags: {
+    count: 1,
+    tags: [
+      {
+        name: 'sometag',
+        id: '235',
+        value: 'november',
+        comment: 'nocomment',
+      },
+    ],
+  },
+  summary: 'source',
+  description: 'desc',
+  predefined: true,
+  trust: 'yes',
+  trustTime: '2020-08-17T14:07:27+02:00',
+  active: false,
+  extension: 'xml',
 });
 
 export const reportFormat2 = deepFreeze({
-  id: '46789',
-  name: 'interrupted',
+  id: '789',
+  name: 'bar',
   owner: 'admin',
-  predefined: true,
-  comment: null,
+  comment: 'lorem ipsum',
   writable: true,
-  inUse: false,
+  inUse: true,
   creationTime: '2020-08-17T12:07:28+00:00',
   modificationTime: '2020-09-29T12:16:51+00:00',
-  permisssions: [{name: 'no'}],
+  permissions: [{name: 'Everything'}],
   userTags: null,
-  summary: 'and they lived happily ever after',
-  description: 'A very generic ending',
+  summary: 'something happened',
+  description: 'desc',
+  predefined: true,
   trust: 'yes',
   trustTime: '2020-08-17T14:07:27+02:00',
-  active: true,
-  extension: 'lol.no',
+  active: false,
+  extension: 'xml',
 });
 
 const mockReportFormats = {
