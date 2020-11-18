@@ -91,9 +91,9 @@ export const alert1 = deepFreeze({
 export const alert2 = deepFreeze({
   id: '2',
   name: 'alert 2',
-  inUse: true,
-  writable: false,
-  active: true,
+  inUse: false,
+  writable: true,
+  active: false,
   comment: 'lorem',
   creationTime: '2020-08-06T11:30:41+00:00',
   modificationTime: '2020-08-07T09:26:05+00:00',
@@ -119,6 +119,38 @@ export const alert2 = deepFreeze({
   condition: {
     type: 'Filter count at least',
     data: [{name: 'count', value: '3'}],
+  },
+  permissions: [{name: 'get_alerts'}],
+  tasks: null,
+});
+
+export const alert3 = deepFreeze({
+  id: '3',
+  name: 'alert 3',
+  inUse: true,
+  writable: true,
+  active: false,
+  comment: 'ipsum',
+  creationTime: '2020-11-11T15:44:20+00:00',
+  modificationTime: '2020-11-11T15:44:20+00:00',
+  owner: 'admin',
+  filter: null,
+  userTags: null,
+  method: {
+    type: 'HTTP Get',
+    data: [
+      {name: 'URL', value: '127.0.0.1'},
+      {name: 'delta_type', value: 'None'},
+      {name: 'details_url', value: '"https://secinfo.greenbone.net/'},
+    ],
+  },
+  event: {
+    type: 'Task run status changed',
+    data: [{name: 'status', value: 'Done'}],
+  },
+  condition: {
+    type: 'Always',
+    data: [],
   },
   permissions: [{name: 'Everything'}],
   tasks: null,

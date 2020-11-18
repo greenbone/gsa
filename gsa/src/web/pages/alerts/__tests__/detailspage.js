@@ -22,10 +22,8 @@ import {setLocale} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Alert from 'gmp/models/alert';
-import Filter from 'gmp/models/filter';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
@@ -38,6 +36,8 @@ import {
   createDeleteAlertQueryMock,
   createExportAlertsByIdsQueryMock,
   alert1,
+  alert2,
+  alert3,
 } from 'web/graphql/__mocks__/alerts';
 
 import {createGetReportFormatsQueryMock} from 'web/graphql/__mocks__/report_formats';
@@ -93,35 +93,9 @@ const alert = Alert.fromElement({
   },
 });
 
-const observedAlert = Alert.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
-  name: 'foo',
-  comment: 'bar',
-  permissions: {permission: [{name: 'get_alerts'}]},
-});
-
-const alertInUse = Alert.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
-  name: 'foo',
-  comment: 'bar',
-  permissions: {permission: [{name: 'everything'}]},
-  inUse: true,
-});
-
 const parsedAlert = Alert.fromObject(alert1);
-const getAlert = jest.fn().mockResolvedValue({
-  data: parsedAlert,
-});
-
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+const parsedAlert2 = Alert.fromObject(alert2);
+const parsedAlert3 = Alert.fromObject(alert3);
 
 const currentSettings = jest.fn().mockResolvedValue({
   foo: 'bar',
@@ -134,15 +108,6 @@ const renewSession = jest.fn().mockResolvedValue({
 describe('Alert Detailspage tests', () => {
   test('should render full Detailspage', async () => {
     const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -236,15 +201,6 @@ describe('Alert Detailspage tests', () => {
 
   test('should render user tags tab', async () => {
     const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -291,15 +247,6 @@ describe('Alert Detailspage tests', () => {
 
   test('should render permissions tab', async () => {
     const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -394,15 +341,6 @@ describe('Alert Detailspage tests', () => {
 
   test('should call commands', async () => {
     const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -494,7 +432,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     const {element} = render(
       <ToolBarIcons
-        entity={alert}
+        entity={parsedAlert}
         onAlertCloneClick={handleAlertCloneClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
@@ -533,7 +471,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={alert}
+        entity={parsedAlert}
         onAlertCloneClick={handleAlertCloneClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
@@ -545,19 +483,19 @@ describe('Alert ToolBarIcons tests', () => {
     const icons = screen.getAllByTestId('svg-icon');
 
     fireEvent.click(icons[3]);
-    expect(handleAlertCloneClick).toHaveBeenCalledWith(alert);
+    expect(handleAlertCloneClick).toHaveBeenCalledWith(parsedAlert);
     expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
 
     fireEvent.click(icons[4]);
-    expect(handleAlertEditClick).toHaveBeenCalledWith(alert);
+    expect(handleAlertEditClick).toHaveBeenCalledWith(parsedAlert);
     expect(icons[4]).toHaveAttribute('title', 'Edit Alert');
 
     fireEvent.click(icons[5]);
-    expect(handleAlertDeleteClick).toHaveBeenCalledWith(alert);
+    expect(handleAlertDeleteClick).toHaveBeenCalledWith(parsedAlert);
     expect(icons[5]).toHaveAttribute('title', 'Move Alert to trashcan');
 
     fireEvent.click(icons[6]);
-    expect(handleAlertDownloadClick).toHaveBeenCalledWith(alert);
+    expect(handleAlertDownloadClick).toHaveBeenCalledWith(parsedAlert);
     expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
   });
 
@@ -578,7 +516,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={observedAlert}
+        entity={parsedAlert2}
         onAlertCloneClick={handleAlertCloneClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
@@ -591,7 +529,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
     fireEvent.click(icons[3]);
-    expect(handleAlertCloneClick).toHaveBeenCalledWith(observedAlert);
+    expect(handleAlertCloneClick).toHaveBeenCalledWith(parsedAlert2);
     expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
 
     expect(icons[4]).toHaveAttribute(
@@ -609,7 +547,7 @@ describe('Alert ToolBarIcons tests', () => {
     );
 
     fireEvent.click(icons[6]);
-    expect(handleAlertDownloadClick).toHaveBeenCalledWith(observedAlert);
+    expect(handleAlertDownloadClick).toHaveBeenCalledWith(parsedAlert2);
     expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
   });
 
@@ -630,7 +568,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={alertInUse}
+        entity={parsedAlert3}
         onAlertCloneClick={handleAlertCloneClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
@@ -643,7 +581,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
     fireEvent.click(icons[3]);
-    expect(handleAlertCloneClick).toHaveBeenCalledWith(alertInUse);
+    expect(handleAlertCloneClick).toHaveBeenCalledWith(parsedAlert3);
     expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
 
     expect(icons[4]).toHaveAttribute('title', 'Edit Alert');
@@ -655,7 +593,7 @@ describe('Alert ToolBarIcons tests', () => {
     expect(icons[5]).toHaveAttribute('title', 'Alert is still in use');
 
     fireEvent.click(icons[6]);
-    expect(handleAlertDownloadClick).toHaveBeenCalledWith(alertInUse);
+    expect(handleAlertDownloadClick).toHaveBeenCalledWith(parsedAlert3);
     expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
   });
 });
