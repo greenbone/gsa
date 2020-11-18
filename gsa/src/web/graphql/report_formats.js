@@ -41,6 +41,24 @@ export const GET_REPORT_FORMATS = gql`
         node {
           id
           name
+          owner
+          comment
+          writable
+          inUse
+          creationTime
+          modificationTime
+          permissions {
+            name
+          }
+          userTags {
+            count
+            tags {
+              name
+              id
+              value
+              comment
+            }
+          }
           summary
           description
           predefined
