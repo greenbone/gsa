@@ -125,6 +125,10 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
   });
   const {reportFormats} = useGetReportFormats();
 
+  if (hasValue(reportFormats)) {
+    console.log(reportFormats[0]);
+  }
+
   // Alert related mutations
   const exportEntity = useExportEntity();
 
