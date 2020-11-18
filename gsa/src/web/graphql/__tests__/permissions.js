@@ -54,7 +54,7 @@ const GetPermissionsComponent = () => {
   );
 };
 
-describe('useLazyGetPermission tests', () => {
+describe('useGetPermission tests', () => {
   test('should query permissions', async () => {
     const [mock, resultFunc] = createGetPermissionsQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
