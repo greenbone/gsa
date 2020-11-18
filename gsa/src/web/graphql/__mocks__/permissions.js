@@ -69,17 +69,17 @@ export const perm2 = deepFreeze({
   permissions: [{name: 'Everything'}],
   resource: {
     deleted: false,
-    name: 'alert 2',
+    name: 'alert 1',
     permissions: [{name: 'get_alerts'}],
     trash: false,
-    id: '2',
+    id: '1',
     type: 'alert',
   },
   subject: {
-    id: '234',
-    name: 'admin',
+    id: '344',
+    name: 'stormtroopers',
     trash: false,
-    type: 'user',
+    type: 'role',
   },
   userTags: {
     count: 1,

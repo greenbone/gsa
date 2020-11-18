@@ -40,6 +40,10 @@ import {
   alert1,
 } from 'web/graphql/__mocks__/alerts';
 
+import {createGetReportFormatsQueryMock} from 'web/graphql/__mocks__/report_formats';
+
+import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
+
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
@@ -146,13 +150,20 @@ describe('Alert Detailspage tests', () => {
     };
 
     const [mock, resultFunc] = createGetAlertQueryMock('1', alert1);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=1 first=1 rows=-1',
+    });
+    const [
+      reportFormatsMock,
+      reportFormatsResult,
+    ] = createGetReportFormatsQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock],
+      queryMocks: [mock, permissionMock, reportFormatsMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -165,6 +176,8 @@ describe('Alert Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+    expect(reportFormatsResult).toHaveBeenCalled();
 
     expect(element).toHaveTextContent('Alert: alert 1');
 
@@ -240,13 +253,20 @@ describe('Alert Detailspage tests', () => {
     };
 
     const [mock, resultFunc] = createGetAlertQueryMock('1', alert1);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=1 first=1 rows=-1',
+    });
+    const [
+      reportFormatsMock,
+      reportFormatsResult,
+    ] = createGetReportFormatsQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock],
+      queryMocks: [mock, permissionMock, reportFormatsMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -259,7 +279,8 @@ describe('Alert Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
-
+    expect(permissionResult).toHaveBeenCalled();
+    expect(reportFormatsResult).toHaveBeenCalled();
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(baseElement).toHaveTextContent('User Tags(1)');
@@ -287,13 +308,20 @@ describe('Alert Detailspage tests', () => {
     };
 
     const [mock, resultFunc] = createGetAlertQueryMock('1', alert1);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=1 first=1 rows=-1',
+    });
+    const [
+      reportFormatsMock,
+      reportFormatsResult,
+    ] = createGetReportFormatsQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock],
+      queryMocks: [mock, permissionMock, reportFormatsMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -306,13 +334,62 @@ describe('Alert Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+    expect(reportFormatsResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[1]).toHaveTextContent('Permissions');
     fireEvent.click(tabs[1]);
 
-    expect(baseElement).toHaveTextContent('No permissions available');
+    // permission 1
+    expect(baseElement).toHaveTextContent('Name');
+    expect(baseElement).toHaveTextContent('get_foo');
+
+    expect(baseElement).toHaveTextContent('Description');
+    expect(baseElement).toHaveTextContent(
+      'User admin has read access to Alert alert 1',
+    );
+
+    expect(baseElement).toHaveTextContent('Resource Type');
+    expect(baseElement).toHaveTextContent('Alert');
+
+    expect(baseElement).toHaveTextContent('Resource');
+    expect(baseElement).toHaveTextContent('alert 1');
+
+    expect(baseElement).toHaveTextContent('Subject Type');
+    expect(baseElement).toHaveTextContent('User');
+
+    expect(baseElement).toHaveTextContent('Subject');
+    expect(baseElement).toHaveTextContent('admin');
+
+    // permission 2
+    expect(baseElement).toHaveTextContent('Name');
+    expect(baseElement).toHaveTextContent('get_bar');
+
+    expect(baseElement).toHaveTextContent('Description');
+    expect(baseElement).toHaveTextContent(
+      'Role stormtroopers has read access to Alert alert 1',
+    );
+
+    expect(baseElement).toHaveTextContent('Resource Type');
+    expect(baseElement).toHaveTextContent('Alert');
+
+    expect(baseElement).toHaveTextContent('Resource');
+    expect(baseElement).toHaveTextContent('alert 1');
+
+    expect(baseElement).toHaveTextContent('Subject Type');
+    expect(baseElement).toHaveTextContent('Role');
+
+    expect(baseElement).toHaveTextContent('Subject');
+    expect(baseElement).toHaveTextContent('admin');
+
+    const detailsLinks = screen.getAllByTestId('details-link');
+
+    expect(detailsLinks[0]).toHaveAttribute('href', '/alert/1');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/user/234');
+    expect(detailsLinks[2]).toHaveAttribute('href', '/alert/1');
+    expect(detailsLinks[3]).toHaveAttribute('href', '/role/344');
   });
 
   test('should call commands', async () => {
@@ -337,13 +414,28 @@ describe('Alert Detailspage tests', () => {
     const [cloneMock, cloneResult] = createCloneAlertQueryMock();
     const [deleteMock, deleteResult] = createDeleteAlertQueryMock();
     const [exportMock, exportResult] = createExportAlertsByIdsQueryMock(['1']);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=1 first=1 rows=-1',
+    });
+    const [
+      reportFormatsMock,
+      reportFormatsResult,
+    ] = createGetReportFormatsQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewQueryMock, mock, cloneMock, deleteMock, exportMock],
+      queryMocks: [
+        renewQueryMock,
+        mock,
+        cloneMock,
+        deleteMock,
+        exportMock,
+        permissionMock,
+        reportFormatsMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -356,6 +448,8 @@ describe('Alert Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+    expect(reportFormatsResult).toHaveBeenCalled();
 
     const icons = screen.getAllByTestId('svg-icon');
 
