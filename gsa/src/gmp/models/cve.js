@@ -23,7 +23,10 @@ import {map} from 'gmp/utils/array';
 
 import {parseSeverity, parseDate, setProperties} from 'gmp/parser';
 
-import {parseCvssV2BaseVector} from 'gmp/parser/cvss';
+import {
+  parseCvssV2BaseFromVector,
+  parseCvssV3BaseFromVector,
+} from 'gmp/parser/cvss';
 import Info from './info';
 
 const delete_empty = (obj, props) => {
@@ -47,14 +50,16 @@ class Cve extends Info {
   static entityType = 'cve';
 
   static parseElement(element) {
+    //console.log(element)
     const ret = super.parseElement(element, 'cve');
+    console.log(element);
 
     if (isDefined(ret.update_time)) {
       ret.updateTime = parseDate(ret.update_time);
       delete ret.update_time;
     }
-
-    ret.severity = parseSeverity(ret.cvss);
+    // divide by ten because we now use integer 0-100 in cves
+    ret.severity = parseSeverity(ret.score / 10);
     delete ret.cvss;
 
     if (isDefined(ret.nvts)) {
@@ -90,32 +95,59 @@ class Cve extends Info {
       'availability_impact',
       'cert',
     ]);
-
-    const vector = parseCvssV2BaseVector({
-      accessComplexity: ret.complexity,
-      accessVector: ret.vector,
-      authentication: ret.authentication,
-      availabilityImpact: ret.availability_impact,
-      confidentialityImpact: ret.confidentiality_impact,
-      integrityImpact: ret.integrity_impact,
-    });
-    ret.cvssBaseVector = vector[0];
-
-    // use consistent names for cvss values
-    rename_props(ret, {
-      vector: 'cvssAccessVector',
-      complexity: 'cvssAccessComplexity',
-      authentication: 'cvssAuthentication',
-      confidentiality_impact: 'cvssConfidentialityImpact',
-      integrity_impact: 'cvssIntegrityImpact',
-      availability_impact: 'cvssAvailabilityImpact',
-    });
-
-    if (isEmpty(ret.products)) {
-      ret.products = [];
+    if (ret.cvss_vector.includes('CVSS:3')) {
+      const {
+        attackVector,
+        attackComplexity,
+        privilegesRequired,
+        userInteraction,
+        scope,
+        confidentialityImpact,
+        integrityImpact,
+        availabilityImpact,
+        cvssScore,
+      } = parseCvssV3BaseFromVector(ret.cvss_vector);
+      ret.cvss_type = 'v3';
+      ret.cvssAttackVector = attackVector;
+      ret.cvssAttackComplexity = attackComplexity;
+      ret.cvssPrivilegesRequired = privilegesRequired;
+      ret.cvssUserInteraction = userInteraction;
+      ret.cvssScope = scope;
+      ret.cvssConfidentialityImpact = confidentialityImpact;
+      ret.cvssIntegrityImpact = integrityImpact;
+      ret.cvssAvailabilityImpact = availabilityImpact;
+      // use consistent names for cvss values
     } else {
-      ret.products = ret.products.split(' ');
+      const {
+        accessVector,
+        accessComplexity,
+        authentication,
+        confidentialityImpact,
+        integrityImpact,
+        availabilityImpact,
+        cvssScore,
+      } = parseCvssV2BaseFromVector(ret.cvss_vector);
+      ret.cvss_type = 'v2';
+      // use consistent names for cvss values
+      rename_props(ret, {
+        accessVector: 'cvssAccessVector',
+        accessComplexity: 'cvssAccessComplexity',
+        authentication: 'cvssAuthentication',
+        confidentialityImpact: 'cvssConfidentialityImpact',
+        integrityImpact: 'cvssIntegrityImpact',
+        availabilityImpact: 'cvssAvailabilityImpact',
+      });
+      ret.cvssAccessVector = accessVector;
+      ret.cvssAccessComplexity = accessComplexity;
+      ret.cvssAuthentication = authentication;
+      ret.cvssConfidentialityImpact = confidentialityImpact;
+      ret.cvssIntegrityImpact = integrityImpact;
+      ret.cvssAvailabilityImpact = availabilityImpact;
     }
+
+    ret.cvssBaseVector = ret.cvss_vector;
+
+    ret.products = isEmpty(ret.products) ? [] : ret.products.split(' ');
 
     if (isDefined(ret.raw_data) && isDefined(ret.raw_data.entry)) {
       const {entry} = ret.raw_data;
@@ -145,12 +177,12 @@ class Cve extends Info {
         ret.description = entry.summary;
       }
 
-      const products = entry['vulnerable-software-list'];
-      if (isDefined(products)) {
-        ret.products = isArray(products.product)
-          ? products.product
-          : [products.product];
-      }
+      // const products = entry['vulnerable-software-list'];
+      // if (isDefined(products)) {
+      //   ret.products = isArray(products.product)
+      //     ? products.product
+      //     : [products.product];
+      // }
 
       delete ret.raw_data;
     } else {
