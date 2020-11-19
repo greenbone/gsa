@@ -243,7 +243,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
                       <TabPanel>
                         <EntityTags
                           entity={alert}
-                          onChanged={() => refetchAlerts()}
+                          onChanged={() => refetchAlerts()} // Must be called like this instead of simply onChanged={refetchAlerts} because we don't want this query to be called with new arguments on tag related actions
                           onError={onError}
                           onInteraction={onInteraction}
                         />
@@ -252,7 +252,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
                         <EntityPermissions
                           entity={alert}
                           permissions={permissions}
-                          onChanged={() => refetchPermissions()}
+                          onChanged={() => refetchPermissions()} // Same here, for permissions. We want same query variables.
                           onDownloaded={handleDownload}
                           onError={onError}
                           onInteraction={onInteraction}
@@ -278,7 +278,7 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-const load = gmp => id => dispatch => Promise.resolve();
+const load = gmp => id => dispatch => Promise.resolve(); // Must keep this for now before we can get rid of withEntityContainer
 
 export default withEntityContainer('alert', {
   entitySelector: selector,
