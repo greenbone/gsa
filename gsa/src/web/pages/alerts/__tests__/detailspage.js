@@ -98,17 +98,14 @@ describe('Alert Detailspage tests', () => {
     ] = createGetReportFormatsQueryMock();
 
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: caps,
       router: true,
       store: true,
       queryMocks: [mock, permissionMock, reportFormatsMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('1', alert1));
 
     const {baseElement, element} = render(<Detailspage />);
 
@@ -201,9 +198,6 @@ describe('Alert Detailspage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('1', alert1));
 
     const {baseElement} = render(<Detailspage />);
 
@@ -249,9 +243,6 @@ describe('Alert Detailspage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('1', alert1));
 
     const {baseElement} = render(<Detailspage />);
 
@@ -357,9 +348,6 @@ describe('Alert Detailspage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('1', alert1));
 
     render(<Detailspage />);
 
