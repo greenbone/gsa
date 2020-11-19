@@ -121,7 +121,12 @@ const Page = ({onError, ...props}) => {
   const gmpSettings = useGmpSettings();
   const [, renewSessionTimeout] = useUserSessionTimeout();
   const [downloadRef, handleDownload] = useDownload();
-  const {alert, refetch: refetchAlert, loading} = useGetAlert(id);
+  const {
+    alert,
+    refetch: refetchAlert,
+    loading,
+    error: entityError,
+  } = useGetAlert(id);
   const {permissions, refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
@@ -201,6 +206,7 @@ const Page = ({onError, ...props}) => {
         <EntityPage
           {...props}
           entity={alert}
+          entityError={entityError}
           isLoading={loading}
           sectionIcon={<AlertIcon size="large" />}
           title={_('Alert')}
