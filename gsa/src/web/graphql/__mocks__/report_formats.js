@@ -20,26 +20,6 @@ import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
 import {GET_REPORT_FORMATS} from '../report_formats';
 
-/* export const reportFormat1 = deepFreeze({
-  id: '4983',
-  name: 'blah',
-  owner: 'admin',
-  predefined: true,
-  comment: 'not good enough',
-  writable: false,
-  inUse: true,
-  creationTime: '2020-08-17T12:07:28+00:00',
-  modificationTime: '2020-09-29T12:16:51+00:00',
-  permisssions: [{name: 'get_alerts'}],
-  userTags: null,
-  summary: 'once upon a time',
-  description: 'A very generic fairytale',
-  trust: 'yes',
-  trustTime: '2020-08-17T14:07:27+02:00',
-  active: false,
-  extension: 'bleh',
-}); */
-
 export const reportFormat1 = deepFreeze({
   id: '665',
   name: 'foo',
