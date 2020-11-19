@@ -37,15 +37,6 @@ const delete_empty = (obj, props) => {
   }
 };
 
-const rename_props = (obj, rename = {}) => {
-  for (const [oldname, newname] of Object.entries(rename)) {
-    if (isDefined(obj[oldname])) {
-      obj[newname] = obj[oldname];
-      delete obj[oldname];
-    }
-  }
-};
-
 class Cve extends Info {
   static entityType = 'cve';
 
@@ -84,16 +75,9 @@ class Cve extends Info {
     } else {
       ret.certs = [];
     }
-
-    delete_empty(ret, [
-      'vector',
-      'complexity',
-      'authentication',
-      'confidentiality_impact',
-      'integrity_impact',
-      'availability_impact',
-      'cert',
-    ]);
+    if (isEmpty(ret.cvss_vector)) {
+      ret.cvss_vector = '';
+    }
     if (ret.cvss_vector.includes('CVSS:3')) {
       const {
         attackVector,
