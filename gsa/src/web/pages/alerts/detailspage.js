@@ -37,6 +37,7 @@ import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 import Download from 'web/components/form/download';
 import useDownload from 'web/components/form/useDownload';
+import useReload from 'web/components/loading/useReload';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
@@ -61,18 +62,17 @@ import {
   useDeleteAlert,
   useExportAlertsByIds,
 } from 'web/graphql/alerts';
+import {useGetPermissions} from 'web/graphql/permissions';
+import {useGetReportFormats} from 'web/graphql/report_formats';
 
 import {selector} from 'web/store/entities/alerts';
 
 import PropTypes from 'web/utils/proptypes';
 import {goto_entity_details} from 'web/utils/graphql';
+import useGmpSettings from 'web/utils/useGmpSettings';
 
 import AlertComponent from './component';
 import AlertDetails from './details';
-import useGmpSettings from 'web/utils/useGmpSettings';
-import useReload from 'web/components/loading/useReload';
-import {useGetPermissions} from 'web/graphql/permissions';
-import {useGetReportFormats} from 'web/graphql/report_formats';
 
 export const ToolBarIcons = ({
   entity,
