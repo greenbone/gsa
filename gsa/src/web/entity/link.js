@@ -19,12 +19,12 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {hyperionEntityTypes} from 'gmp/utils/entitytype';
 import {hasValue} from 'gmp/utils/identity';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes.js';
 import withCapabilities from '../utils/withCapabilities.js';
 
-import {hyperionEntityTypes} from 'web/entity/icon/observericon';
 import DetailsLink from '../components/link/detailslink.js';
 import Link from '../components/link/link.js';
 import {getEntityType, normalizeType} from 'gmp/utils/entitytype.js';

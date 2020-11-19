@@ -19,14 +19,13 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
+import {hyperionEntityTypes} from 'gmp/utils/entitytype';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
 import ViewOtherIcon from 'web/components/icon/viewothericon';
-
-export const hyperionEntityTypes = ['task', 'alert'];
 
 const ObserverIcon = ({entity, userName, displayName = _('Entity')}) => {
   let owner;
