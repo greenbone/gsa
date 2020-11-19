@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React, {useCallback, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 import {hasValue} from 'gmp/utils/identity';
@@ -121,6 +121,7 @@ const Page = props => {
   // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
+  const history = useHistory();
   const [, renewSessionTimeout] = useUserSessionTimeout();
   const [downloadRef, handleDownload] = useDownload();
   const {
@@ -151,13 +152,13 @@ const Page = props => {
   // Alert methods
   const handleCloneAlert = clonedAlert => {
     return cloneAlert(clonedAlert.id)
-      .then(alertId => goto_entity_details('alert', props)(alertId))
+      .then(alertId => goto_entity_details('alert', {history})(alertId))
       .catch(showError);
   };
 
   const handleDeleteAlert = deletedAlert => {
     return deleteAlert(deletedAlert.id)
-      .then(goto_list('alerts', props))
+      .then(goto_list('alerts', {history}))
       .catch(showError);
   };
 
@@ -199,12 +200,13 @@ const Page = props => {
 
   // stop reload on unmount
   useEffect(() => stopReload, [stopReload]);
+  console.log(props);
   return (
     <AlertComponent
-      onCloned={goto_details('alert', props)}
+      onCloned={goto_details('alert', {history})}
       onCloneError={showError}
-      onCreated={goto_entity_details('alert', props)}
-      onDeleted={goto_list('alerts', props)}
+      onCreated={goto_entity_details('alert', {history})}
+      onDeleted={goto_list('alerts', {history})}
       onDeleteError={showError}
       onDownloaded={handleDownload}
       onDownloadError={showError}
@@ -216,6 +218,7 @@ const Page = props => {
           {...props}
           entity={alert}
           entityError={entityError}
+          entityType={'alert'}
           isLoading={loading}
           sectionIcon={<AlertIcon size="large" />}
           title={_('Alert')}
