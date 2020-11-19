@@ -291,13 +291,6 @@ const Page = props => {
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  onChanged: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
 const load = gmp => id => dispatch => Promise.resolve(); // Must keep this for now before we can get rid of withEntityContainer
 
 export default withEntityContainer('alert', {
