@@ -585,7 +585,7 @@ class AlertDialog extends React.Component {
                     />
                   )}
 
-                  {secinfoEvent && (
+                  {(secinfoEvent || taskEvent) && (
                     <FilterCountLeastConditionPart
                       prefix="condition_data"
                       condition={values.condition}
