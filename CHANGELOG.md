@@ -59,6 +59,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added option for "Start Task" event upon "New SecInfo arrived" condition in alerts dialog [#2418](https://github.com/greenbone/gsa/pull/2418)
 
 ### Changed
+- Show "Filter x matches at least y results" condition to task events in alert dialog [#2580](https://github.com/greenbone/gsa/pull/2580)
+- Always send sort=name with delta report request filters [#2570](https://github.com/greenbone/gsa/pull/2570)
+- Changed trash icon to delete icon on host detailspage [#2565](https://github.com/greenbone/gsa/pull/2565)
 - Change tooltip of override icon in result details [#2467](https://github.com/greenbone/gsa/pull/2467)
 - For edit config/policy dialog, only send name and comment if config or policy is in use, and add in use notification [#2463](https://github.com/greenbone/gsa/pull/2463)
 - Changed visual appearance of compliance status bar [#2457](https://github.com/greenbone/gsa/pull/2457)
@@ -66,6 +69,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use <predefined> to disable feed object editing and filter creation on feed status page [#2398](https://github.com/greenbone/gsa/pull/2398)
 
 ### Fixed
+- Fixed sanity check for port ranges [#2566](https://github.com/greenbone/gsa/pull/2566)
+- Replace deprecated sys_siglist with strsignal [#2513](https://github.com/greenbone/gsa/pull/2513)
+- Allow to delete processes without having had edges in BPM [#2507](https://github.com/greenbone/gsa/pull/2507)
 - Fixed TLS certificate download for users with permissions [#2496](https://github.com/greenbone/gsa/pull/2496)
 - Fixed form validation error tooltips [#2478](https://github.com/greenbone/gsa/pull/2478)
 - Only show schedule options in advanced and modify task wizard if user has correct permissions [#2472](https://github.com/greenbone/gsa/pull/2472)

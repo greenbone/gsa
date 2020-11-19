@@ -177,8 +177,8 @@ const PortListComponent = ({
     let promises = createdPortRangesCopy.map(range => {
       const saveData = {
         ...range,
-        port_range_start: range.start,
-        port_range_end: range.end,
+        port_range_start: parseInt(range.start),
+        port_range_end: parseInt(range.end),
         port_type: range.protocol_type,
       };
       return handleSavePortRange(saveData).then(id => {
@@ -229,7 +229,10 @@ const PortListComponent = ({
 
   const handleTmpAddPortRange = values => {
     const {portRanges} = state;
-    const {port_range_end, port_range_start, port_type} = values;
+    let {port_range_end, port_range_start, port_type} = values;
+
+    port_range_end = parseInt(port_range_end);
+    port_range_start = parseInt(port_range_start);
 
     handleInteraction();
 

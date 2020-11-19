@@ -579,7 +579,7 @@ const AlertDialog = props => {
                   />
                 )}
 
-                {secinfoEvent && (
+                {(secinfoEvent || taskEvent) && (
                   <FilterCountLeastConditionPart
                     prefix="condition_data"
                     condition={values.condition}

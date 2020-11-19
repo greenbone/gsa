@@ -293,7 +293,7 @@ class ProcessMap extends React.Component {
   handleDeleteElement() {
     if (isDefined(this.selectedElement)) {
       const {id} = this.selectedElement;
-      const {processes, edges} = this.state;
+      const {processes, edges = {}} = this.state;
       if (isDefined(id)) {
         if (this.selectedElement && this.selectedElement.type === 'edge') {
           delete edges[id];

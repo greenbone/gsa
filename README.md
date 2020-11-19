@@ -39,9 +39,9 @@ For detailed installation requirements and instructions, please see the file
 [INSTALL.md](INSTALL.md).
 
 If you are not familiar or comfortable building from source code, we recommend
-that you use the Greenbone Community Edition, a prepared virtual machine with a
-readily available setup. Information regarding the virtual machine is available
-at <https://www.greenbone.net/en/community-edition/>.
+that you use the Greenbone Security Manager TRIAL (GSM TRIAL), a prepared virtual
+machine with a readily available setup. Information regarding the virtual machine
+is available at <https://www.greenbone.net/en/testnow>.
 
 ## Usage
 
