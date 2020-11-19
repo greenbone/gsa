@@ -50,6 +50,7 @@ const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
     if (hyperionEntityTypes.includes(type) && deleted === true) {
       return <b>{_('Orphan')}</b>;
     } else if (deleted === 1) {
+      // explicitly use deleted === 1. If we use deleted !== 0, and the entityType is not from hyperion and deleted === false, this can cause Orphan to be returned
       return <b>{_('Orphan')}</b>;
     }
   }
