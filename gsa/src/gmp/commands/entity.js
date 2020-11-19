@@ -16,13 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import logger from '../log.js';
+import logger from 'gmp/log';
 
-import DefaultTransform from '../http/transform/default.js';
+import DefaultTransform from 'gmp/http/transform/default';
 
-import GmpCommand, {BULK_SELECT_BY_IDS} from './gmp.js';
+import GmpCommand, {BULK_SELECT_BY_IDS} from './gmp';
 
 const log = logger.getLogger('gmp.commands.entity');
 

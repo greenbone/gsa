@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import logger from '../log';
+import logger from 'gmp/log';
 
-import {map} from '../utils/array';
+import {map} from 'gmp/utils/array';
 
-import registerCommand from '../command';
-import {parseModelFromElement} from '../model';
+import registerCommand from 'gmp/command';
+import {parseModelFromElement} from 'gmp/model';
 
-import Alert from '../models/alert';
-import Credential from '../models/credential';
-import Filter from '../models/filter';
+import Alert from 'gmp/models/alert';
+import Credential from 'gmp/models/credential';
+import Filter from 'gmp/models/filter';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

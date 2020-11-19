@@ -20,7 +20,7 @@ import {
   parseCollectionList,
   parseInfoEntities,
   parseInfoCounts,
-} from '../collection/parser';
+} from 'gmp/collection/parser';
 
 import EntitiesCommand from './entities';
 

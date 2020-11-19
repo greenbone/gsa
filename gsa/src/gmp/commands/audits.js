@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import logger from '../log';
+import logger from 'gmp/log';
 
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import {NO_VALUE} from '../parser';
+import {NO_VALUE} from 'gmp/parser';
 
-import Audit, {HOSTS_ORDERING_SEQUENTIAL} from '../models/audit';
+import Audit, {HOSTS_ORDERING_SEQUENTIAL} from 'gmp/models/audit';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

@@ -18,7 +18,7 @@
 
 import 'core-js/features/object/entries';
 
-import {isDefined} from '../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 class Settings {
   constructor() {

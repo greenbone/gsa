@@ -17,9 +17,9 @@
  */
 import {BROWSER_LANGUAGE} from './languages';
 
-import logger from '../log';
+import logger from 'gmp/log';
 
-import {isArray, isDefined} from '../utils/identity';
+import {isArray, isDefined} from 'gmp/utils/identity';
 
 const log = logger.getLogger('gmp.locale.detector');
 

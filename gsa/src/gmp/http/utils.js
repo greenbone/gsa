@@ -19,7 +19,7 @@ import 'core-js/features/object/entries';
 import 'core-js/features/string/ends-with';
 import 'core-js/features/string/starts-with';
 
-import {isDefined} from '../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 export const buildUrlParams = params => {
   let argcount = 0;

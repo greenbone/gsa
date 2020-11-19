@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined} from '../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import InfoEntitiesCommand from './infoentities.js';
-import InfoEntityCommand from './infoentity.js';
+import InfoEntitiesCommand from './infoentities';
+import InfoEntityCommand from './infoentity';
 
-import registerCommand from '../command.js';
+import registerCommand from 'gmp/command';
 
-import Cpe from '../models/cpe.js';
+import Cpe from 'gmp/models/cpe';
 
 const info_filter = info => isDefined(info.cpe);
 
