@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+- Implement get_report_formats and get_permissions via graphQL on alert detailspage [#2585](https://github.com/greenbone/gsa/pull/2585)
 - Implemented parseObject for alert model implement [#2552](https://github.com/greenbone/gsa/pull/2552)
 - Added getNotes query [#2485](https://github.com/greenbone/gsa/pull/2485)
 - Create and modify schedule from graphql [#2477](https://github.com/greenbone/gsa/pull/2477)
