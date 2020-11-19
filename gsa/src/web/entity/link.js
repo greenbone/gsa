@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import PropTypes from '../utils/proptypes.js';
 import withCapabilities from '../utils/withCapabilities.js';
@@ -45,11 +45,11 @@ const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
     );
   }
 
-  if (isDefined(deleted)) {
+  if (hasValue(deleted)) {
     // FIXME is this still used?
     if (hyperionEntityTypes.includes(type) && deleted === true) {
       return <b>{_('Orphan')}</b>;
-    } else if (deleted === 1) {
+    } else if (deleted !== 0) {
       return <b>{_('Orphan')}</b>;
     }
   }
