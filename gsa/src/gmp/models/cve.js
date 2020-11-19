@@ -29,19 +29,10 @@ import {
 } from 'gmp/parser/cvss';
 import Info from './info';
 
-const delete_empty = (obj, props) => {
-  for (const prop of props) {
-    if (isEmpty(obj[prop])) {
-      delete obj[prop];
-    }
-  }
-};
-
 class Cve extends Info {
   static entityType = 'cve';
 
   static parseElement(element) {
-    //console.log(element)
     const ret = super.parseElement(element, 'cve');
 
     if (isDefined(ret.update_time)) {
