@@ -114,13 +114,13 @@ ToolBarIcons.propTypes = {
   onAlertEditClick: PropTypes.func.isRequired,
 };
 
-const Page = ({onChanged, onError, onInteraction, ...props}) => {
+const Page = ({onError, onInteraction, ...props}) => {
   // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
 
   const [downloadRef, handleDownload] = useDownload();
-  const {alert, refetch: refetchAlerts, loading} = useGetAlert(id);
+  const {alert, refetch: refetchAlert, loading} = useGetAlert(id);
   const {permissions, refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
@@ -171,7 +171,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
   );
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetchAlerts,
+    refetchAlert,
     timeoutFunc,
   );
 
@@ -194,7 +194,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
       onDownloaded={handleDownload}
       onDownloadError={onError}
       onInteraction={onInteraction}
-      onSaved={onChanged}
+      onSaved={() => refetchAlert()}
     >
       {({create, edit, save}) => (
         <EntityPage
@@ -243,7 +243,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
                       <TabPanel>
                         <EntityTags
                           entity={alert}
-                          onChanged={() => refetchAlerts()} // Must be called like this instead of simply onChanged={refetchAlerts} because we don't want this query to be called with new arguments on tag related actions
+                          onChanged={() => refetchAlert()} // Must be called like this instead of simply onChanged={refetchAlert} because we don't want this query to be called with new arguments on tag related actions
                           onError={onError}
                           onInteraction={onInteraction}
                         />
