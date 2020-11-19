@@ -64,8 +64,8 @@ import withEntityContainer, {
 } from 'web/entity/withEntityContainer';
 
 import CreateIcon from 'web/entity/icon/createicon';
+import DeleteIcon from 'web/entity/icon/deleteicon';
 import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
 
 import {selector as hostsSelector, loadEntity} from 'web/store/entities/hosts';
 
@@ -107,7 +107,7 @@ const ToolBarIcons = ({
           displayName={_('Host')}
           onClick={onHostEditClick}
         />
-        <TrashIcon
+        <DeleteIcon
           entity={entity}
           displayName={_('Host')}
           onClick={onHostDeleteClick}

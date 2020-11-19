@@ -326,7 +326,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   justify-content: space-between;
 }
 
-.c56 {
+.c57 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -411,7 +411,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   margin-left: 5px;
 }
 
-.c55 {
+.c56 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -434,14 +434,14 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   margin-left: -5px;
 }
 
-.c55 > * {
+.c56 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c55 > * {
+.c56 > * {
   margin-left: 5px;
 }
 
@@ -467,7 +467,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   display: inline-flex;
 }
 
-.c54 {
+.c55 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -678,7 +678,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   width: 150px;
 }
 
-.c57 {
+.c58 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -818,7 +818,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   margin-right: 5px;
 }
 
-.c58 {
+.c59 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -937,6 +937,16 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   text-align: center;
 }
 
+.c53 {
+  height: 13px;
+  box-sizing: content-box;
+  display: inline-block;
+  width: 100px;
+  background: #c83814;
+  vertical-align: middle;
+  text-align: center;
+}
+
 .c51 {
   z-index: 1;
   font-weight: bold;
@@ -954,10 +964,10 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   background: #4f91c7;
 }
 
-.c53 {
+.c54 {
   height: 13px;
   width: 50%;
-  background: #c83814;
+  background: #70c000;
 }
 
 .c52 {
@@ -1062,6 +1072,13 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 }
 
 @media print {
+  .c53 {
+    background: none;
+    border: 0;
+  }
+}
+
+@media print {
   .c51 {
     color: black;
   }
@@ -1074,7 +1091,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 }
 
 @media print {
-  .c53 {
+  .c54 {
     background: none;
   }
 }
@@ -1554,12 +1571,12 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       class="c44"
                     >
                       <div
-                        class="c49"
+                        class="c53"
                         data-testid="progressbar-box"
                         title="50%"
                       >
                         <div
-                          class="c53"
+                          class="c54"
                           data-testid="progress"
                         />
                         <div
@@ -1575,10 +1592,10 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       class="c0"
                     >
                       <div
-                        class="c54"
+                        class="c55"
                       >
                         <div
-                          class="c55"
+                          class="c56"
                           margin="5px"
                         >
                           <span
@@ -1671,7 +1688,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     colspan="5"
                   >
                     <div
-                      class="c56"
+                      class="c57"
                     >
                       <div
                         class="c2"
@@ -1688,7 +1705,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             role="combobox"
                           >
                             <div
-                              class="c57"
+                              class="c58"
                               width="180px"
                             >
                               <div
@@ -1767,7 +1784,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               class="c45"
             >
               <div
-                class="c58"
+                class="c59"
               >
                 (Applied filter: )
               </div>

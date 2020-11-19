@@ -23,7 +23,7 @@ import ExportIcon from 'web/components/icon/exporticon';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
-import DeleteIcon from 'web/entity/icon/deleteicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -83,7 +83,7 @@ const ToolBarIcons = ({
       <CreateIcon entity={entity} onClick={onScheduleCreateClick} />
       <CloneIcon entity={entity} onClick={onScheduleCloneClick} />
       <EditIcon entity={entity} onClick={onScheduleEditClick} />
-      <DeleteIcon entity={entity} onClick={onScheduleDeleteClick} />
+      <TrashIcon entity={entity} onClick={onScheduleDeleteClick} />
       <ExportIcon
         value={entity}
         title={_('Export Schedule as XML')}

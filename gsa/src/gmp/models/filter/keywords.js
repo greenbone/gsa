@@ -18,7 +18,6 @@
 
 export const EXTRA_KEYWORDS = [
   'apply_overrides',
-  'autofp',
   'delta_states',
   'first',
   'levels',

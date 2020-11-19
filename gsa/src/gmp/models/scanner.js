@@ -30,7 +30,6 @@ import Credential from './credential';
 export const OSP_SCANNER_TYPE = 1;
 export const OPENVAS_SCANNER_TYPE = 2;
 export const CVE_SCANNER_TYPE = 3;
-export const GMP_SCANNER_TYPE = 4;
 export const GREENBONE_SENSOR_SCANNER_TYPE = 5;
 
 export const OPENVAS_DEFAULT_SCANNER_ID =
@@ -53,8 +52,6 @@ export function scannerTypeName(scannerType) {
     return _('OpenVAS Scanner');
   } else if (scannerType === CVE_SCANNER_TYPE) {
     return _('CVE Scanner');
-  } else if (scannerType === GMP_SCANNER_TYPE) {
-    return _('GMP Scanner');
   } else if (scannerType === GREENBONE_SENSOR_SCANNER_TYPE) {
     return _('Greenbone Sensor');
   }

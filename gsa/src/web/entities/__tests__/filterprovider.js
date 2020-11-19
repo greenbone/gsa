@@ -23,7 +23,7 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {pageFilter} from 'web/store/pages/actions';
 
-import {rendererWith, waitForElement} from 'web/utils/testing';
+import {rendererWith, screen} from 'web/utils/testing';
 
 import FilterProvider from '../filterprovider';
 
@@ -57,16 +57,15 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    const {baseElement, getByTestId} = render(
+    render(
       <FilterProvider locationQuery={locationQuery} gmpname="task">
         {renderFunc}
       </FilterProvider>,
     );
 
-    await waitForElement(() => getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
-    expect(baseElement).toMatchSnapshot();
   });
 
   test('should prefer pageFilter over defaultSettingFilter', async () => {
@@ -101,11 +100,9 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    const {getByTestId} = render(
-      <FilterProvider gmpname="task">{renderFunc}</FilterProvider>,
-    );
+    render(<FilterProvider gmpname="task">{renderFunc}</FilterProvider>);
 
-    await waitForElement(() => getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
@@ -145,13 +142,13 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    const {getByTestId} = render(
+    render(
       <FilterProvider gmpname={gmpName} pageName={pageName}>
         {renderFunc}
       </FilterProvider>,
     );
 
-    await waitForElement(() => getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
@@ -186,11 +183,9 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    const {getByTestId} = render(
-      <FilterProvider gmpname="task">{renderFunc}</FilterProvider>,
-    );
+    render(<FilterProvider gmpname="task">{renderFunc}</FilterProvider>);
 
-    await waitForElement(() => getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
@@ -225,13 +220,13 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    const {getByTestId} = render(
+    render(
       <FilterProvider gmpname="task" fallbackFilter={fallbackFilter}>
         {renderFunc}
       </FilterProvider>,
     );
 
-    await waitForElement(() => getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
@@ -265,13 +260,13 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    const {getByTestId} = render(
+    render(
       <FilterProvider gmpname="task" fallbackFilter={fallbackFilter}>
         {renderFunc}
       </FilterProvider>,
     );
 
-    await waitForElement(() => getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });
@@ -301,11 +296,9 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    const {getByTestId} = render(
-      <FilterProvider gmpname="task">{renderFunc}</FilterProvider>,
-    );
+    render(<FilterProvider gmpname="task">{renderFunc}</FilterProvider>);
 
-    await waitForElement(() => getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });
@@ -339,13 +332,13 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    const {getByTestId} = render(
+    render(
       <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
         {renderFunc}
       </FilterProvider>,
     );
 
-    await waitForElement(() => getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });
@@ -373,13 +366,13 @@ describe('FilterProvider component tests', () => {
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
-    const {getByTestId} = render(
+    render(
       <FilterProvider fallbackFilter={fallbackFilter} gmpname="task">
         {renderFunc}
       </FilterProvider>,
     );
 
-    await waitForElement(() => getByTestId('awaiting-span'));
+    await screen.findByTestId('awaiting-span');
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
   });

@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2020 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,33 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import styled from 'styled-components';
 
-import PropTypes from 'web/utils/proptypes';
+const DialogInlineNotification = styled.div`
+  font-size: 14px;
+  margin-bottom: 0px;
+  display: flex;
+  justify-content: center;
+`;
 
-import Field from './field';
-import {Marker} from './useFormValidation';
-
-const TextField = ({hasError = false, errorContent, title, ...props}) => {
-  return (
-    <React.Fragment>
-      <Field
-        {...props}
-        hasError={hasError}
-        title={hasError ? `${errorContent}` : title}
-        type="text"
-      />
-      <Marker isVisible={hasError}>×</Marker>
-    </React.Fragment>
-  );
-};
-
-TextField.propTypes = {
-  errorContent: PropTypes.toString,
-  hasError: PropTypes.bool,
-  title: PropTypes.string,
-};
-
-export default TextField;
-
-// vim: set ts=2 sw=2 tw=80:
+export default DialogInlineNotification;

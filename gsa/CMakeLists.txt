@@ -19,7 +19,7 @@ cmake_minimum_required (VERSION 3.0)
 
 message ("-- Configuring gsa")
 
-project (gsa VERSION 20.8.0 LANGUAGES)
+project (gsa VERSION 21.4.0 LANGUAGES)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -567,7 +567,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/pagination/pagination.js
      ${GSA_SRC_DIR}/src/web/components/panel/infopanel.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/applyoverridesgroup.js
-     ${GSA_SRC_DIR}/src/web/components/powerfilter/autofpgroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/createnamedfiltergroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/dialog.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/dialogproptypes.js
@@ -1079,6 +1078,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/usersettings/generalpart.js
      ${GSA_SRC_DIR}/src/web/pages/usersettings/severitypart.js
      ${GSA_SRC_DIR}/src/web/pages/usersettings/usersettingspage.js
+     ${GSA_SRC_DIR}/src/web/pages/usersettings/validationrules.js
      ${GSA_SRC_DIR}/src/web/pages/vulns/dashboard/cvssdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/vulns/dashboard/hostsdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/vulns/dashboard/index.js

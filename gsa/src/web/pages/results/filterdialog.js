@@ -37,7 +37,6 @@ import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup'
 import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
-import AutoFpGroup from 'web/components/powerfilter/autofpgroup';
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
@@ -112,8 +111,6 @@ const ResultsFilterDialogComponent = ({
         filter={filter}
         onChange={onFilterValueChange}
       />
-
-      <AutoFpGroup filter={filter} onChange={onFilterValueChange} />
 
       <SeverityLevelsGroup
         filter={filter}

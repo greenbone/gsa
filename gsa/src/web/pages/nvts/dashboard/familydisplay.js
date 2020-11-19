@@ -43,7 +43,7 @@ import {registerDisplay} from 'web/components/dashboard/registry';
 
 import {NvtsFamilyLoader} from './loaders';
 
-const transformFamilyData = (data = {}, {severityClass}) => {
+const transformFamilyData = (data = {}) => {
   const {groups = []} = data;
   const totalNvts = groups.reduce(
     (prev, current) => prev + parseFloat(current.count),
@@ -53,7 +53,7 @@ const transformFamilyData = (data = {}, {severityClass}) => {
   const tdata = groups.map(family => {
     const {count, value} = family;
     const severity = parseSeverity(family.stats.severity.mean);
-    const riskFactor = resultSeverityRiskFactor(severity, severityClass);
+    const riskFactor = resultSeverityRiskFactor(severity);
     const formattedSeverity = severityFormat(severity);
     const toolTip = _('{{value}}: {{count}} (severity: {{severity}})', {
       value: value,

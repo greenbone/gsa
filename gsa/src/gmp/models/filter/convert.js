@@ -54,7 +54,6 @@ const convertNoRelationAndKeyword = (keyword, value, relation) => ({value});
 
 const KEYWORD_CONVERTERS = {
   apply_overrides: convertBooleanInt,
-  autofp: convertInt,
   first: convertFirst,
   min_qod: convertInt,
   notes: convertBooleanInt,

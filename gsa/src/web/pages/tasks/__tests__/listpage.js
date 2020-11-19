@@ -31,7 +31,7 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitForElement, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
 
 import TaskPage, {ToolBarIcons} from '../listpage';
 
@@ -174,7 +174,7 @@ describe('TaskPage tests', () => {
 
     const {baseElement, getAllByTestId} = render(<TaskPage />);
 
-    await waitForElement(() => baseElement.querySelectorAll('table'));
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     const display = getAllByTestId('grid-item');
     const icons = getAllByTestId('svg-icon');
@@ -293,7 +293,7 @@ describe('TaskPage tests', () => {
 
     const {baseElement, getAllByTestId} = render(<TaskPage />);
 
-    await waitForElement(() => baseElement.querySelectorAll('table'));
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     const icons = getAllByTestId('svg-icon');
 
@@ -380,25 +380,25 @@ describe('TaskPage ToolBarIcons test', () => {
 
     const divs = baseElement.querySelectorAll('div');
 
-    fireEvent.click(divs[5]);
-    expect(handleTaskWizardClick).toHaveBeenCalled();
-    expect(divs[5]).toHaveTextContent('Task Wizard');
-
     fireEvent.click(divs[6]);
-    expect(handleAdvancedTaskWizardClick).toHaveBeenCalled();
-    expect(divs[6]).toHaveTextContent('Advanced Task Wizard');
+    expect(handleTaskWizardClick).toHaveBeenCalled();
+    expect(divs[6]).toHaveTextContent('Task Wizard');
 
     fireEvent.click(divs[7]);
-    expect(handleModifyTaskWizardClick).toHaveBeenCalled();
-    expect(divs[7]).toHaveTextContent('Modify Task Wizard');
+    expect(handleAdvancedTaskWizardClick).toHaveBeenCalled();
+    expect(divs[7]).toHaveTextContent('Advanced Task Wizard');
 
-    fireEvent.click(divs[9]);
-    expect(handleTaskCreateClick).toHaveBeenCalled();
-    expect(divs[9]).toHaveTextContent('New Task');
+    fireEvent.click(divs[8]);
+    expect(handleModifyTaskWizardClick).toHaveBeenCalled();
+    expect(divs[8]).toHaveTextContent('Modify Task Wizard');
 
     fireEvent.click(divs[10]);
+    expect(handleTaskCreateClick).toHaveBeenCalled();
+    expect(divs[10]).toHaveTextContent('New Task');
+
+    fireEvent.click(divs[11]);
     expect(handleContainerTaskCreateClick).toHaveBeenCalled();
-    expect(divs[10]).toHaveTextContent('New Container Task');
+    expect(divs[11]).toHaveTextContent('New Container Task');
   });
 
   test('should not show icons if user does not have the right permissions', () => {

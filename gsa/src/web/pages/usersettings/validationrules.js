@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2020 Greenbone Networks GmbH
+/* Copyright (C) 2020 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,33 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import {_l} from 'gmp/locale/lang';
 
-import PropTypes from 'web/utils/proptypes';
+const VALID_ROWSPERPAGE_ERROR_MESSAGE = _l(
+  '"Rows per page" requires a value of 1 or greater.',
+);
 
-import Field from './field';
-import {Marker} from './useFormValidation';
-
-const TextField = ({hasError = false, errorContent, title, ...props}) => {
-  return (
-    <React.Fragment>
-      <Field
-        {...props}
-        hasError={hasError}
-        title={hasError ? `${errorContent}` : title}
-        type="text"
-      />
-      <Marker isVisible={hasError}>×</Marker>
-    </React.Fragment>
-  );
+export const userSettingsRules = {
+  rowsPerPage: value => {
+    const isValid = value > 0;
+    const error = isValid ? '' : VALID_ROWSPERPAGE_ERROR_MESSAGE;
+    return {isValid, error};
+  },
 };
-
-TextField.propTypes = {
-  errorContent: PropTypes.toString,
-  hasError: PropTypes.bool,
-  title: PropTypes.string,
-};
-
-export default TextField;
 
 // vim: set ts=2 sw=2 tw=80:

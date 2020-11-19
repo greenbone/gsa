@@ -61,14 +61,18 @@ export class PolicyCommand extends EntityCommand {
   }
 
   save({id, name, comment = '', trend, select, scannerPreferenceValues}) {
-    const data = {
-      ...convert(trend, 'trend:'),
-      ...convert(
-        scannerPreferenceValues,
-        'preference:scanner:scanner:scanner:',
-      ),
-      ...convertSelect(select, 'select:'),
+    const trendData = isDefined(trend) ? convert(trend, 'trend:') : {};
+    const scannerPreferenceData = isDefined(scannerPreferenceValues)
+      ? convert(scannerPreferenceValues, 'preference:scanner:scanner:scanner:')
+      : {};
 
+    const selectData = isDefined(select)
+      ? convertSelect(select, 'select:')
+      : {};
+    const data = {
+      ...trendData,
+      ...scannerPreferenceData,
+      ...selectData,
       cmd: 'save_config',
       id,
       comment,
