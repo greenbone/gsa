@@ -70,10 +70,10 @@ import {selector} from 'web/store/entities/alerts';
 import PropTypes from 'web/utils/proptypes';
 import {goto_entity_details} from 'web/utils/graphql';
 import useGmpSettings from 'web/utils/useGmpSettings';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import AlertComponent from './component';
 import AlertDetails from './details';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 export const ToolBarIcons = ({
   entity,
