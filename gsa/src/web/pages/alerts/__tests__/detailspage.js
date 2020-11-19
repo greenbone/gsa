@@ -190,13 +190,14 @@ describe('Alert Detailspage tests', () => {
       reportFormatsMock,
       reportFormatsResult,
     ] = createGetReportFormatsQueryMock();
+    const [renewQueryMock, renewQueryResult] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock, reportFormatsMock],
+      queryMocks: [mock, permissionMock, reportFormatsMock, renewQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -217,6 +218,7 @@ describe('Alert Detailspage tests', () => {
     fireEvent.click(tabs[0]);
 
     expect(baseElement).toHaveTextContent('alert:unnamed');
+    expect(renewQueryResult).toHaveBeenCalled();
   });
 
   test('should render permissions tab', async () => {
@@ -236,13 +238,14 @@ describe('Alert Detailspage tests', () => {
       reportFormatsMock,
       reportFormatsResult,
     ] = createGetReportFormatsQueryMock();
+    const [renewQueryMock, renewQueryResult] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock, reportFormatsMock],
+      queryMocks: [mock, permissionMock, reportFormatsMock, renewQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -262,6 +265,8 @@ describe('Alert Detailspage tests', () => {
 
     expect(tabs[1]).toHaveTextContent('Permissions');
     fireEvent.click(tabs[1]);
+
+    expect(renewQueryResult).toHaveBeenCalled();
 
     // permission 1
     expect(baseElement).toHaveTextContent('Name');
