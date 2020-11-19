@@ -47,7 +47,7 @@ const GetReportFormatsComponent = () => {
   );
 };
 
-describe('useGetTasks tests', () => {
+describe('useGetReportFormats tests', () => {
   test('should query useGetReportFormats', async () => {
     const [mock, resultFunc] = createGetReportFormatsQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
