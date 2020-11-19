@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 import {testModel} from 'gmp/models/testing';
 
 describe('Model tests', () => {
@@ -40,6 +40,30 @@ describe('parseModelFromElement tests', () => {
       _id: '1',
     };
     const model = parseModelFromElement(element, 'foo');
+
+    expect(model.id).toEqual('1');
+    expect(model).toBeInstanceOf(Model);
+    expect(model.entityType).toEqual('foo');
+  });
+});
+
+describe('parseModelFromObject tests', () => {
+  test('should parse model', () => {
+    const obj = {
+      id: '1',
+    };
+    const model = parseModelFromObject(obj);
+
+    expect(model.id).toEqual('1');
+    expect(model).toBeInstanceOf(Model);
+    expect(model.entityType).toEqual('unknown');
+  });
+
+  test('should parse model and set entity type', () => {
+    const obj = {
+      id: '1',
+    };
+    const model = parseModelFromObject(obj, 'foo');
 
     expect(model.id).toEqual('1');
     expect(model).toBeInstanceOf(Model);
