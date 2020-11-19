@@ -37,14 +37,9 @@ const caps = new Capabilities(['everything']);
 const entity = Cve.fromElement({
   _id: 'CVE-2020-9992',
   name: 'CVE-2020-9992',
-  vector: 'NETWORK',
-  complexity: 'MEDIUM',
-  authentication: 'NONE',
-  confidentiality_impact: 'COMPLETE',
-  integrity_impact: 'COMPLETE',
-  availability_impact: 'COMPLETE',
-  creationTime: '2019-08-10T12:51:27Z',
-  cvss: '9.3',
+  cvss_vector: 'AV:N/AC:M/Au:N/C:C/I:C/A:C',
+  creationTime: '2020-10-22T19:15:00Z',
+  score: '93',
   description: 'foo bar baz',
   usage_type: 'cve',
 });
@@ -52,14 +47,9 @@ const entity = Cve.fromElement({
 const entity2 = Cve.fromElement({
   _id: 'CVE-2020-9983',
   name: 'CVE-2020-9983',
-  vector: 'NETWORK',
-  complexity: 'MEDIUM',
-  authenticatAUDIT_STATUSion: 'NONE',
-  confidentiality_impact: 'PARTIAL',
-  integrity_impact: 'PARTIAL',
-  availability_impact: 'PARTIAL',
+  cvss_vector: 'AV:N/AC:M/Au:N/C:P/I:P/A:P',
   creationTime: '2019-06-24T10:12:27Z',
-  cvss: '9.3',
+  score: '93',
   description: 'foo bar baz',
   usage_type: 'cve',
 });
@@ -67,14 +57,19 @@ const entity2 = Cve.fromElement({
 const entity3 = Cve.fromElement({
   _id: 'CVE-2020-9976',
   name: 'CVE-2020-9976',
-  vector: 'NETWORK',
-  complexity: 'MEDIUM',
-  authentication: 'NONE',
-  confidentiality_impact: 'COMPLETE',
-  integrity_impact: 'COMPLETE',
-  availability_impact: 'COMPLETE',
+  cvss_vector: 'AV:N/AC:M/Au:N/C:P/I:P/A:P',
   creationTime: '2020-09-10T12:51:27Z',
-  cvss: '9.3',
+  score: '93',
+  description: 'foo bar baz',
+  usage_type: 'cve',
+});
+
+const entity_v3 = Cve.fromElement({
+  _id: 'CVE-2020-9997',
+  name: 'CVE-2020-9997',
+  cvss_vector: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:H',
+  creationTime: '2020-10-22T19:15:00Z',
+  score: '71',
   description: 'foo bar baz',
   usage_type: 'cve',
 });
@@ -84,7 +79,7 @@ const counts = new CollectionCounts({
   all: 1,
   filtered: 1,
   length: 1,
-  rows: 2,
+  rows: 3,
 });
 
 const filter = Filter.fromString('rows=2');
@@ -108,7 +103,7 @@ describe('Cve table tests', () => {
     const {baseElement} = render(
       <CveTable
         filter={filter}
-        entities={[entity, entity2, entity3]}
+        entities={[entity, entity2, entity3, entity_v3]}
         entitiesCounts={counts}
       />,
     );
@@ -138,7 +133,7 @@ describe('Cve table tests', () => {
     const {element, getAllByTestId} = render(
       <CveTable
         filter={filter}
-        entities={[entity, entity2, entity3]}
+        entities={[entity, entity2, entity3, entity_v3]}
         entitiesCounts={counts}
       />,
     );
@@ -151,5 +146,6 @@ describe('Cve table tests', () => {
     expect(icons[0]).toHaveAttribute('title', 'Unfold all details');
     expect(element).toHaveTextContent('Availability ImpactCOMPLETE');
     expect(element).toHaveTextContent('Confidentiality ImpactPARTIAL');
+    expect(element).toHaveTextContent('Attack VectorLOCAL');
   });
 });
