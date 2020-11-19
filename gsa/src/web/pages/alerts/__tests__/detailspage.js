@@ -110,7 +110,7 @@ describe('Alert Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('1', alert1));
 
-    const {baseElement, element} = render(<Detailspage id="1" />);
+    const {baseElement, element} = render(<Detailspage />);
 
     await wait();
 
@@ -205,7 +205,7 @@ describe('Alert Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('1', alert1));
 
-    const {baseElement} = render(<Detailspage id="1" />);
+    const {baseElement} = render(<Detailspage />);
 
     await wait();
 
@@ -253,7 +253,7 @@ describe('Alert Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('1', alert1));
 
-    const {baseElement} = render(<Detailspage id="1" />);
+    const {baseElement} = render(<Detailspage />);
 
     await wait();
 
@@ -361,7 +361,7 @@ describe('Alert Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('1', alert1));
 
-    render(<Detailspage id="1" />);
+    render(<Detailspage />);
 
     await wait();
 
