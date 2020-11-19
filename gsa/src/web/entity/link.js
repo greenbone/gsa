@@ -49,7 +49,7 @@ const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
     // FIXME is this still used?
     if (hyperionEntityTypes.includes(type) && deleted === true) {
       return <b>{_('Orphan')}</b>;
-    } else if (deleted !== 0) {
+    } else if (deleted === 1) {
       return <b>{_('Orphan')}</b>;
     }
   }

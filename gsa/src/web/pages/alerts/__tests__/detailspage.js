@@ -67,32 +67,6 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const alert = Alert.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
-  name: 'foo',
-  comment: 'bar',
-  permissions: {permission: [{name: 'everything'}]},
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
-  active: 1,
-  condition: 'Always',
-  event: {
-    data: {
-      name: 'status',
-      __text: 'Done',
-    },
-    __text: 'Task run status changed',
-  },
-  filter: {
-    _id: 'filter id',
-    name: 'report results filter',
-  },
-  method: {
-    __text: 'SMB',
-  },
-});
-
 const parsedAlert = Alert.fromObject(alert1);
 const parsedAlert2 = Alert.fromObject(alert2);
 const parsedAlert3 = Alert.fromObject(alert3);
@@ -332,6 +306,7 @@ describe('Alert Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('admin');
 
     const detailsLinks = screen.getAllByTestId('details-link');
+    expect(detailsLinks).toHaveLength(4);
 
     expect(detailsLinks[0]).toHaveAttribute('href', '/alert/1');
     expect(detailsLinks[1]).toHaveAttribute('href', '/user/234');

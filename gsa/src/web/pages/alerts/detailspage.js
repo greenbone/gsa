@@ -118,12 +118,13 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
   // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
+
   const [downloadRef, handleDownload] = useDownload();
   const {alert, refetch: refetchAlerts, loading} = useGetAlert(id);
   const {permissions, refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
-  const {reportFormats} = useGetReportFormats();
+  const {reportFormats = []} = useGetReportFormats();
 
   // Alert related mutations
   const exportEntity = useExportEntity();
