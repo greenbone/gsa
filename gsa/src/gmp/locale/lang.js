@@ -21,9 +21,9 @@ import 'core-js/features/array/includes';
 import i18next from 'i18next';
 import XHRBackend from 'i18next-xhr-backend';
 
-import logger from '../log';
+import logger from 'gmp/log';
 
-import {isDefined} from '../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {setLocale as setDateLocale} from './date';
 import Detector from './detector';
@@ -75,11 +75,7 @@ export const initLocale = ({
   backend = XHRBackend,
   detector = Detector,
   options = I18N_OPTIONS,
-} = {}) =>
-  i18next
-    .use(backend)
-    .use(detector)
-    .init(options);
+} = {}) => i18next.use(backend).use(detector).init(options);
 
 /**
  * Subscribe to get notified about locale changes

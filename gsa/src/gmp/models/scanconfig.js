@@ -16,15 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../utils/identity';
-import {forEach, map} from '../utils/array';
-import {isEmpty} from '../utils/string';
+import {isDefined} from 'gmp/utils/identity';
+import {forEach, map} from 'gmp/utils/array';
+import {isEmpty} from 'gmp/utils/string';
 
-import {parseInt, parseBoolean} from '../parser';
+import {parseInt, parseBoolean} from 'gmp/parser';
 
-import Model, {parseModelFromElement} from '../model';
+import Model, {parseModelFromElement} from 'gmp/model';
 
-import _ from '../locale';
+import _ from 'gmp/locale';
 
 export const EMPTY_SCAN_CONFIG_ID = '085569ce-73ed-11df-83c3-002264764cea';
 export const FULL_AND_FAST_SCAN_CONFIG_ID =

@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import TlsCertificate from '../models/tlscertificate';
+import TlsCertificate from 'gmp/models/tlscertificate';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

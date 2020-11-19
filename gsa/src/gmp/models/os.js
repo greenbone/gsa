@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import Asset from './asset';
-import {parseSeverity} from '../parser';
+import {parseSeverity} from 'gmp/parser';
 
 class OperatingSystem extends Asset {
   static entityType = 'operatingsystem';

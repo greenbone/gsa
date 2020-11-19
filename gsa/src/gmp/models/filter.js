@@ -18,12 +18,12 @@
 import 'core-js/features/array/find-index';
 import 'core-js/features/array/includes';
 
-import {isDefined, isString, isArray, hasValue} from '../utils/identity';
-import {forEach, map} from '../utils/array';
+import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
+import {forEach, map} from 'gmp/utils/array';
 
-import Model, {parseModelFromElement} from '../model.js';
+import Model, {parseModelFromElement} from 'gmp/model.js';
 
-import {setProperties} from '../parser';
+import {setProperties} from 'gmp/parser';
 
 import convert from './filter/convert.js';
 import FilterTerm, {AND} from './filter/filterterm.js';
