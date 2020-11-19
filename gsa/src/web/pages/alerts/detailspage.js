@@ -46,9 +46,7 @@ import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import withEntityContainer, {
-  permissionsResourceFilter,
-} from 'web/entity/withEntityContainer';
+import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 import useExportEntity from 'web/entity/useExportEntity';
 
 import AlertIcon from 'web/components/icon/alerticon';
@@ -66,8 +64,6 @@ import {
 } from 'web/graphql/alerts';
 import {useGetPermissions} from 'web/graphql/permissions';
 import {useGetReportFormats} from 'web/graphql/report_formats';
-
-import {selector} from 'web/store/entities/alerts';
 
 import PropTypes from 'web/utils/proptypes';
 import {goto_entity_details} from 'web/utils/graphql';
@@ -117,7 +113,7 @@ ToolBarIcons.propTypes = {
   onAlertEditClick: PropTypes.func.isRequired,
 };
 
-const Page = props => {
+const Page = () => {
   // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
@@ -200,7 +196,6 @@ const Page = props => {
 
   // stop reload on unmount
   useEffect(() => stopReload, [stopReload]);
-  console.log(props);
   return (
     <AlertComponent
       onCloned={goto_details('alert', {history})}
@@ -215,7 +210,6 @@ const Page = props => {
     >
       {({create, edit, save}) => (
         <EntityPage
-          {...props}
           entity={alert}
           entityError={entityError}
           entityType={'alert'}
@@ -294,12 +288,6 @@ const Page = props => {
   );
 };
 
-const load = gmp => id => dispatch => Promise.resolve(); // Must keep this for now before we can get rid of withEntityContainer
-
-export default withEntityContainer('alert', {
-  entitySelector: selector,
-  load,
-  undefined,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:
