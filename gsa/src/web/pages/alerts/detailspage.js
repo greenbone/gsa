@@ -73,6 +73,7 @@ import useGmpSettings from 'web/utils/useGmpSettings';
 
 import AlertComponent from './component';
 import AlertDetails from './details';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 export const ToolBarIcons = ({
   entity,
@@ -114,11 +115,11 @@ ToolBarIcons.propTypes = {
   onAlertEditClick: PropTypes.func.isRequired,
 };
 
-const Page = ({onError, onInteraction, ...props}) => {
+const Page = ({onError, ...props}) => {
   // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
-
+  const [, renewSessionTimeout] = useUserSessionTimeout();
   const [downloadRef, handleDownload] = useDownload();
   const {alert, refetch: refetchAlert, loading} = useGetAlert(id);
   const {permissions, refetch: refetchPermissions} = useGetPermissions({
@@ -193,7 +194,7 @@ const Page = ({onError, onInteraction, ...props}) => {
       onDeleteError={onError}
       onDownloaded={handleDownload}
       onDownloadError={onError}
-      onInteraction={onInteraction}
+      onInteraction={renewSessionTimeout}
       onSaved={() => refetchAlert()}
     >
       {({create, edit, save}) => (
@@ -210,7 +211,7 @@ const Page = ({onError, onInteraction, ...props}) => {
           onAlertDownloadClick={handleDownloadAlert}
           onAlertEditClick={edit}
           onAlertSaveClick={save}
-          onInteraction={onInteraction}
+          onInteraction={renewSessionTimeout}
         >
           {({activeTab = 0, onActivateTab}) => {
             return (
@@ -245,7 +246,7 @@ const Page = ({onError, onInteraction, ...props}) => {
                           entity={alert}
                           onChanged={() => refetchAlert()} // Must be called like this instead of simply onChanged={refetchAlert} because we don't want this query to be called with new arguments on tag related actions
                           onError={onError}
-                          onInteraction={onInteraction}
+                          onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -255,7 +256,7 @@ const Page = ({onError, onInteraction, ...props}) => {
                           onChanged={() => refetchPermissions()} // Same here, for permissions. We want same query variables.
                           onDownloaded={handleDownload}
                           onError={onError}
-                          onInteraction={onInteraction}
+                          onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                     </TabPanels>
