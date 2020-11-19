@@ -27,8 +27,7 @@ import Alert from 'gmp/models/alert';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
-import {entityLoadingActions} from 'web/store/entities/alerts';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import {
   createGetAlertQueryMock,
