@@ -38,6 +38,8 @@ import Tabs from 'web/components/tab/tabs';
 import Download from 'web/components/form/download';
 import useDownload from 'web/components/form/useDownload';
 import useReload from 'web/components/loading/useReload';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import DialogNotification from 'web/components/notification/dialognotification';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
@@ -115,12 +117,19 @@ ToolBarIcons.propTypes = {
   onAlertEditClick: PropTypes.func.isRequired,
 };
 
-const Page = ({onError, ...props}) => {
+const Page = props => {
   // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
   const [, renewSessionTimeout] = useUserSessionTimeout();
   const [downloadRef, handleDownload] = useDownload();
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+
+  // Load alert related entities
   const {
     alert,
     refetch: refetchAlert,
@@ -143,13 +152,13 @@ const Page = ({onError, ...props}) => {
   const handleCloneAlert = clonedAlert => {
     return cloneAlert(clonedAlert.id)
       .then(alertId => goto_entity_details('alert', props)(alertId))
-      .catch(onError);
+      .catch(showError);
   };
 
   const handleDeleteAlert = deletedAlert => {
     return deleteAlert(deletedAlert.id)
       .then(goto_list('alerts', props))
-      .catch(onError);
+      .catch(showError);
   };
 
   const handleDownloadAlert = exportedAlert => {
@@ -158,7 +167,7 @@ const Page = ({onError, ...props}) => {
       exportFunc: exportAlert,
       resourceType: 'alerts',
       onDownload: handleDownload,
-      onError,
+      showError,
     });
   };
 
@@ -193,12 +202,12 @@ const Page = ({onError, ...props}) => {
   return (
     <AlertComponent
       onCloned={goto_details('alert', props)}
-      onCloneError={onError}
+      onCloneError={showError}
       onCreated={goto_entity_details('alert', props)}
       onDeleted={goto_list('alerts', props)}
-      onDeleteError={onError}
+      onDeleteError={showError}
       onDownloaded={handleDownload}
-      onDownloadError={onError}
+      onDownloadError={showError}
       onInteraction={renewSessionTimeout}
       onSaved={() => refetchAlert()}
     >
@@ -251,7 +260,7 @@ const Page = ({onError, ...props}) => {
                         <EntityTags
                           entity={alert}
                           onChanged={() => refetchAlert()} // Must be called like this instead of simply onChanged={refetchAlert} because we don't want this query to be called with new arguments on tag related actions
-                          onError={onError}
+                          onError={showError}
                           onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
@@ -261,13 +270,17 @@ const Page = ({onError, ...props}) => {
                           permissions={permissions}
                           onChanged={() => refetchPermissions()} // Same here, for permissions. We want same query variables.
                           onDownloaded={handleDownload}
-                          onError={onError}
+                          onError={showError}
                           onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>
+                <DialogNotification
+                  {...notificationDialogState}
+                  onCloseClick={closeNotificationDialog}
+                />
                 <Download ref={downloadRef} />
               </React.Fragment>
             );
