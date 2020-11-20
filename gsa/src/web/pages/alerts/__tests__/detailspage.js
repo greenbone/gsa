@@ -27,8 +27,7 @@ import Alert from 'gmp/models/alert';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
-import {entityLoadingActions} from 'web/store/entities/alerts';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import {
   createGetAlertQueryMock,
@@ -98,19 +97,16 @@ describe('Alert Detailspage tests', () => {
     ] = createGetReportFormatsQueryMock();
 
     const {render, store} = rendererWith({
-      capabilities: caps,
       gmp,
+      capabilities: caps,
       router: true,
       store: true,
       queryMocks: [mock, permissionMock, reportFormatsMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('1', alert1));
-
-    const {baseElement, element} = render(<Detailspage id="1" />);
+    const {baseElement, element} = render(<Detailspage />);
 
     await wait();
 
@@ -190,21 +186,19 @@ describe('Alert Detailspage tests', () => {
       reportFormatsMock,
       reportFormatsResult,
     ] = createGetReportFormatsQueryMock();
+    const [renewQueryMock, renewQueryResult] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock, reportFormatsMock],
+      queryMocks: [mock, permissionMock, reportFormatsMock, renewQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('1', alert1));
-
-    const {baseElement} = render(<Detailspage id="1" />);
+    const {baseElement} = render(<Detailspage />);
 
     await wait();
 
@@ -217,6 +211,7 @@ describe('Alert Detailspage tests', () => {
     fireEvent.click(tabs[0]);
 
     expect(baseElement).toHaveTextContent('alert:unnamed');
+    expect(renewQueryResult).toHaveBeenCalled();
   });
 
   test('should render permissions tab', async () => {
@@ -236,21 +231,19 @@ describe('Alert Detailspage tests', () => {
       reportFormatsMock,
       reportFormatsResult,
     ] = createGetReportFormatsQueryMock();
+    const [renewQueryMock, renewQueryResult] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock, reportFormatsMock],
+      queryMocks: [mock, permissionMock, reportFormatsMock, renewQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('1', alert1));
-
-    const {baseElement} = render(<Detailspage id="1" />);
+    const {baseElement} = render(<Detailspage />);
 
     await wait();
 
@@ -262,6 +255,8 @@ describe('Alert Detailspage tests', () => {
 
     expect(tabs[1]).toHaveTextContent('Permissions');
     fireEvent.click(tabs[1]);
+
+    expect(renewQueryResult).toHaveBeenCalled();
 
     // permission 1
     expect(baseElement).toHaveTextContent('Name');
@@ -352,11 +347,8 @@ describe('Alert Detailspage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('1', alert1));
-
-    render(<Detailspage id="1" />);
+    render(<Detailspage />);
 
     await wait();
 

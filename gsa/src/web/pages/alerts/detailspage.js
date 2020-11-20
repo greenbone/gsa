@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useCallback, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {useHistory, useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 import {hasValue} from 'gmp/utils/identity';
@@ -38,15 +38,15 @@ import Tabs from 'web/components/tab/tabs';
 import Download from 'web/components/form/download';
 import useDownload from 'web/components/form/useDownload';
 import useReload from 'web/components/loading/useReload';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import DialogNotification from 'web/components/notification/dialognotification';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import withEntityContainer, {
-  permissionsResourceFilter,
-} from 'web/entity/withEntityContainer';
+import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 import useExportEntity from 'web/entity/useExportEntity';
 
 import AlertIcon from 'web/components/icon/alerticon';
@@ -55,6 +55,7 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+import useEntityTimeout from 'web/entity/useEntityTimeout';
 
 import {
   useGetAlert,
@@ -65,11 +66,10 @@ import {
 import {useGetPermissions} from 'web/graphql/permissions';
 import {useGetReportFormats} from 'web/graphql/report_formats';
 
-import {selector} from 'web/store/entities/alerts';
-
 import PropTypes from 'web/utils/proptypes';
 import {goto_entity_details} from 'web/utils/graphql';
 import useGmpSettings from 'web/utils/useGmpSettings';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import AlertComponent from './component';
 import AlertDetails from './details';
@@ -114,13 +114,26 @@ ToolBarIcons.propTypes = {
   onAlertEditClick: PropTypes.func.isRequired,
 };
 
-const Page = ({onChanged, onError, onInteraction, ...props}) => {
+const Page = () => {
   // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
-
+  const history = useHistory();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
   const [downloadRef, handleDownload] = useDownload();
-  const {alert, refetch: refetchAlerts, loading} = useGetAlert(id);
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+
+  // Load alert related entities
+  const {
+    alert,
+    refetch: refetchAlert,
+    loading,
+    error: entityError,
+  } = useGetAlert(id);
   const {permissions, refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
@@ -136,14 +149,14 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
   // Alert methods
   const handleCloneAlert = clonedAlert => {
     return cloneAlert(clonedAlert.id)
-      .then(alertId => goto_entity_details('alert', props)(alertId))
-      .catch(onError);
+      .then(alertId => goto_entity_details('alert', {history})(alertId))
+      .catch(showError);
   };
 
   const handleDeleteAlert = deletedAlert => {
     return deleteAlert(deletedAlert.id)
-      .then(goto_list('alerts', props))
-      .catch(onError);
+      .then(goto_list('alerts', {history}))
+      .catch(showError);
   };
 
   const handleDownloadAlert = exportedAlert => {
@@ -152,26 +165,15 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
       exportFunc: exportAlert,
       resourceType: 'alerts',
       onDownload: handleDownload,
-      onError,
+      showError,
     });
   };
 
   // Timeout and reload
-  const timeoutFunc = useCallback(
-    ({isVisible}) => {
-      if (!isVisible) {
-        return gmpSettings.reloadIntervalInactive;
-      }
-      if (alert.isActive()) {
-        return gmpSettings.reloadIntervalActive;
-      }
-      return gmpSettings.reloadInterval;
-    },
-    [alert, gmpSettings],
-  );
+  const timeoutFunc = useEntityTimeout({entity: alert, gmpSettings});
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetchAlerts,
+    refetchAlert,
     timeoutFunc,
   );
 
@@ -186,20 +188,21 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
   useEffect(() => stopReload, [stopReload]);
   return (
     <AlertComponent
-      onCloned={goto_details('alert', props)}
-      onCloneError={onError}
-      onCreated={goto_entity_details('alert', props)}
-      onDeleted={goto_list('alerts', props)}
-      onDeleteError={onError}
+      onCloned={goto_details('alert', {history})}
+      onCloneError={showError}
+      onCreated={goto_entity_details('alert', {history})}
+      onDeleted={goto_list('alerts', {history})}
+      onDeleteError={showError}
       onDownloaded={handleDownload}
-      onDownloadError={onError}
-      onInteraction={onInteraction}
-      onSaved={onChanged}
+      onDownloadError={showError}
+      onInteraction={renewSessionTimeout}
+      onSaved={() => refetchAlert()}
     >
       {({create, edit, save}) => (
         <EntityPage
-          {...props}
           entity={alert}
+          entityError={entityError}
+          entityType={'alert'}
           isLoading={loading}
           sectionIcon={<AlertIcon size="large" />}
           title={_('Alert')}
@@ -210,7 +213,7 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
           onAlertDownloadClick={handleDownloadAlert}
           onAlertEditClick={edit}
           onAlertSaveClick={save}
-          onInteraction={onInteraction}
+          onInteraction={renewSessionTimeout}
         >
           {({activeTab = 0, onActivateTab}) => {
             return (
@@ -243,9 +246,9 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
                       <TabPanel>
                         <EntityTags
                           entity={alert}
-                          onChanged={() => refetchAlerts()} // Must be called like this instead of simply onChanged={refetchAlerts} because we don't want this query to be called with new arguments on tag related actions
-                          onError={onError}
-                          onInteraction={onInteraction}
+                          onChanged={() => refetchAlert()} // Must be called like this instead of simply onChanged={refetchAlert} because we don't want this query to be called with new arguments on tag related actions
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -254,13 +257,17 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
                           permissions={permissions}
                           onChanged={() => refetchPermissions()} // Same here, for permissions. We want same query variables.
                           onDownloaded={handleDownload}
-                          onError={onError}
-                          onInteraction={onInteraction}
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>
+                <DialogNotification
+                  {...notificationDialogState}
+                  onCloseClick={closeNotificationDialog}
+                />
                 <Download ref={downloadRef} />
               </React.Fragment>
             );
@@ -271,19 +278,6 @@ const Page = ({onChanged, onError, onInteraction, ...props}) => {
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  onChanged: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-const load = gmp => id => dispatch => Promise.resolve(); // Must keep this for now before we can get rid of withEntityContainer
-
-export default withEntityContainer('alert', {
-  entitySelector: selector,
-  load,
-  undefined,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:

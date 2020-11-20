@@ -62,6 +62,7 @@ import {
   useBulkExportEntities,
 } from 'web/entities/bulkactions.js';
 import usePagination from 'web/entities/usePagination.js';
+import useEntitiesTimeout from 'web/entities/useEntitiesTimeout.js';
 
 import usePageFilter from 'web/utils/usePageFilter.js';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout.js';
@@ -149,18 +150,10 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
 
   const bulkDeleteAlerts = useBulkDeleteEntities();
 
-  const timeoutFunc = useCallback(
-    ({isVisible}) => {
-      if (!isVisible) {
-        return gmpSettings.reloadIntervalInactive;
-      }
-      if (hasValue(alerts) && alerts.some(alert => alert.isActive())) {
-        return gmpSettings.reloadIntervalActive;
-      }
-      return gmpSettings.reloadInterval;
-    },
-    [alerts, gmpSettings],
-  );
+  const timeoutFunc = useEntitiesTimeout({
+    entities: alerts,
+    gmpSettings,
+  });
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,

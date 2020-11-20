@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
+- Refactor alerts detailspage to not use withEntityContainer [#2587](https://github.com/greenbone/gsa/pull/2587)
 -Implement get_alert via graphql and preliminary refactor of alert detailspage [#2571](https://github.com/greenbone/gsa/pull/2571)
 - Implement bulk actions for alerts via graphQL [#2569](https://github.com/greenbone/gsa/pull/2569)
 - Implement clone, delete and test alert via graphql [#2567](https://github.com/greenbone/gsa/pull/2567)
