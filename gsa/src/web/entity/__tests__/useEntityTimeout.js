@@ -17,15 +17,16 @@
  */
 import React from 'react';
 
-import {parseModelFromObject} from 'gmp/model';
-
 import {
   DEFAULT_RELOAD_INTERVAL_INACTIVE,
   DEFAULT_RELOAD_INTERVAL_ACTIVE,
   DEFAULT_RELOAD_INTERVAL,
 } from 'gmp/gmpsettings';
-import useGmpSettings from 'web/utils/useGmpSettings';
+
+import {parseModelFromObject} from 'gmp/model';
+
 import {rendererWith, screen} from 'web/utils/testing';
+import useGmpSettings from 'web/utils/useGmpSettings';
 
 import useEntityTimeout from '../useEntityTimeout';
 
@@ -78,6 +79,7 @@ describe('useEntityTimeout tests', () => {
   });
 
   test('Should not crash when entity is undefined', () => {
+    // because entity can be undefined before it's loaded
     const {render} = rendererWith({gmp});
     render(<TestComponent isVisible={true} />);
 

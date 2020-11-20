@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import {useCallback} from 'react';
-import {hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 const useEntitiesTimeout = ({entities, gmpSettings}) => {
   const timeoutFunc = useCallback(
@@ -24,7 +24,7 @@ const useEntitiesTimeout = ({entities, gmpSettings}) => {
       if (!isVisible) {
         return gmpSettings.reloadIntervalInactive;
       }
-      if (hasValue(entities) && entities.some(entity => entity.isActive())) {
+      if (isDefined(entities) && entities.some(entity => entity.isActive())) {
         return gmpSettings.reloadIntervalActive;
       }
       return gmpSettings.reloadInterval;
