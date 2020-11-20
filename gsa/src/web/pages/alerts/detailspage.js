@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {useHistory, useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
@@ -55,6 +55,7 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+import useEntityTimeout from 'web/entity/useEntityTimeout';
 
 import {
   useGetAlert,
@@ -169,18 +170,7 @@ const Page = () => {
   };
 
   // Timeout and reload
-  const timeoutFunc = useCallback(
-    ({isVisible}) => {
-      if (!isVisible) {
-        return gmpSettings.reloadIntervalInactive;
-      }
-      if (alert.isActive()) {
-        return gmpSettings.reloadIntervalActive;
-      }
-      return gmpSettings.reloadInterval;
-    },
-    [alert, gmpSettings],
-  );
+  const timeoutFunc = useEntityTimeout({entity: alert, gmpSettings});
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchAlert,
