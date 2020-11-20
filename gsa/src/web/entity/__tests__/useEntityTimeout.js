@@ -27,7 +27,7 @@ import {
 import useGmpSettings from 'web/utils/useGmpSettings';
 import {rendererWith, screen} from 'web/utils/testing';
 
-import useEntitiesTimeout from '../useEntitiesTimeout';
+import useEntityTimeout from '../useEntityTimeout';
 
 const gmp = {
   settings: {
@@ -37,10 +37,10 @@ const gmp = {
   },
 };
 
-const TestComponent = ({isVisible, entities}) => {
+const TestComponent = ({isVisible, entity}) => {
   const gmpSettings = useGmpSettings();
-  const timeoutFunc = useEntitiesTimeout({
-    entities,
+  const timeoutFunc = useEntityTimeout({
+    entity,
     gmpSettings,
   });
 
@@ -50,36 +50,34 @@ const TestComponent = ({isVisible, entities}) => {
 const activeEntity = parseModelFromObject({active: true});
 const inactiveEntity = parseModelFromObject({active: false});
 
-const entities = [activeEntity, inactiveEntity];
-
-describe('useEntitiesTimeout tests', () => {
+describe('useEntityTimeout tests', () => {
   test('Should return correct interval when isVisible is false', () => {
     const {render} = rendererWith({gmp});
-    render(<TestComponent isVisible={false} entities={entities} />);
+    render(<TestComponent isVisible={false} entity={activeEntity} />);
 
     const reloadInterval = screen.getByTestId('reload-interval');
 
     expect(reloadInterval).toHaveTextContent(DEFAULT_RELOAD_INTERVAL_INACTIVE);
   });
 
-  test('Should return correct interval when there is an active entity', () => {
+  test('Should return correct interval when entity is active', () => {
     const {render} = rendererWith({gmp});
-    render(<TestComponent isVisible={true} entities={entities} />);
+    render(<TestComponent isVisible={true} entity={activeEntity} />);
 
     const reloadInterval = screen.getByTestId('reload-interval');
 
     expect(reloadInterval).toHaveTextContent(DEFAULT_RELOAD_INTERVAL_ACTIVE);
   });
-  test('Should return correct interval when there is no active entity', () => {
+  test('Should return correct interval when entity is inactive', () => {
     const {render} = rendererWith({gmp});
-    render(<TestComponent isVisible={true} entities={[inactiveEntity]} />);
+    render(<TestComponent isVisible={true} entity={inactiveEntity} />);
 
     const reloadInterval = screen.getByTestId('reload-interval');
 
     expect(reloadInterval).toHaveTextContent(DEFAULT_RELOAD_INTERVAL);
   });
 
-  test('Should not crash when entities are undefined', () => {
+  test('Should not crash when entity is undefined', () => {
     const {render} = rendererWith({gmp});
     render(<TestComponent isVisible={true} />);
 
