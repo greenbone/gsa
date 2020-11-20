@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import logger from '../log.js';
+import logger from 'gmp/log';
 
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import Permission from '../models/permission';
+import Permission from 'gmp/models/permission';
 
-import {apiType} from '../utils/entitytype';
+import {apiType} from 'gmp/utils/entitytype';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

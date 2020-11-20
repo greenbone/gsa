@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import Ticket from '../models/ticket';
+import Ticket from 'gmp/models/ticket';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 import {isDefined} from 'gmp/utils/identity';
 
 const convertNote = note => {

@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import Model, {parseModelFromElement} from '../model';
+import Model, {parseModelFromElement} from 'gmp/model';
 
-import {_l} from '../locale/lang';
+import {_l} from 'gmp/locale/lang';
 
-import {isDefined} from '../utils/identity';
-import {map} from '../utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
-import {parseYesNo, NO_VALUE, parseDate} from '../parser';
+import {parseYesNo, NO_VALUE, parseDate} from 'gmp/parser';
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
 export const USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'usk';

@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import OperatingSystem from '../models/os';
+import OperatingSystem from 'gmp/models/os';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
