@@ -140,6 +140,7 @@ describe('Cve table tests', () => {
 
     expect(element).not.toHaveTextContent('Availability ImpactCOMPLETE');
     expect(element).not.toHaveTextContent('Confidentiality ImpactPARTIAL');
+    expect(element).not.toHaveTextContent('Attack VectorLOCAL');
 
     const icons = getAllByTestId('svg-icon');
     fireEvent.click(icons[0]);
