@@ -21,7 +21,7 @@ import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
-import {parseFloat, parseSeverity} from 'gmp/parser';
+import {parseFloat, parseSeverity, parseText} from 'gmp/parser';
 
 import Info from './info';
 
@@ -116,7 +116,7 @@ class Nvt extends Info {
 
   static parseElement(element) {
     const ret = super.parseElement(element, 'nvt');
-
+    //console.log(element)
     ret.nvtType = ret._type;
 
     ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
@@ -148,7 +148,14 @@ class Nvt extends Info {
 
     delete ret.refs;
 
-    ret.severity = parseSeverity(ret.cvss_base);
+    if (isDefined(ret.severities)) {
+      const {severities} = ret;
+      const {severity} = severities;
+      ret.severity = parseSeverity(severity.score / 10);
+      ret.severity_origin = parseText(severity.origin);
+    } else {
+      ret.severity = parseSeverity(ret.cvss_base);
+    }
     delete ret.cvss_base;
 
     if (isDefined(ret.preferences)) {
