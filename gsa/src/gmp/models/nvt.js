@@ -116,7 +116,7 @@ class Nvt extends Info {
 
   static parseElement(element) {
     const ret = super.parseElement(element, 'nvt');
-    //console.log(element)
+
     ret.nvtType = ret._type;
 
     ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
