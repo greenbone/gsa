@@ -39,6 +39,13 @@ export const parseModelFromElement = (element, entityType) => {
   return m;
 };
 
+export const parseModelFromObject = (object, entityType) => {
+  const m = new Model(entityType);
+  const props = Model.parseObject(object);
+  m.setProperties(props);
+  return m;
+};
+
 class Model {
   static entityType = 'unknown';
 
@@ -130,7 +137,6 @@ class Model {
 
   static parseObject(object = {}) {
     const copy = parseDefaultProperties(object);
-
     // use hasValue instead of isDefined for all things graphql related, since no value is null in Django.
 
     if (hasValue(object.end_time)) {

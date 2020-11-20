@@ -37,6 +37,7 @@ import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 import Download from 'web/components/form/download';
 import useDownload from 'web/components/form/useDownload';
+import useReload from 'web/components/loading/useReload';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
@@ -61,26 +62,17 @@ import {
   useDeleteAlert,
   useExportAlertsByIds,
 } from 'web/graphql/alerts';
+import {useGetPermissions} from 'web/graphql/permissions';
+import {useGetReportFormats} from 'web/graphql/report_formats';
 
-import {selector, loadEntity} from 'web/store/entities/alerts';
-
-import {
-  selector as permissionsSelector,
-  loadEntities as loadPermissions,
-} from 'web/store/entities/permissions';
-
-import {
-  loadAllEntities as loadAllReportFormats,
-  selector as reportFormatsSelector,
-} from 'web/store/entities/reportformats';
+import {selector} from 'web/store/entities/alerts';
 
 import PropTypes from 'web/utils/proptypes';
 import {goto_entity_details} from 'web/utils/graphql';
+import useGmpSettings from 'web/utils/useGmpSettings';
 
 import AlertComponent from './component';
 import AlertDetails from './details';
-import useGmpSettings from 'web/utils/useGmpSettings';
-import useReload from 'web/components/loading/useReload';
 
 export const ToolBarIcons = ({
   entity,
@@ -122,19 +114,17 @@ ToolBarIcons.propTypes = {
   onAlertEditClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
-  permissions = [],
-  reportFormats,
-  onChanged,
-  onError,
-  onInteraction,
-  ...props
-}) => {
+const Page = ({onChanged, onError, onInteraction, ...props}) => {
   // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
+
   const [downloadRef, handleDownload] = useDownload();
-  const {alert, refetch, loading} = useGetAlert(id);
+  const {alert, refetch: refetchAlerts, loading} = useGetAlert(id);
+  const {permissions, refetch: refetchPermissions} = useGetPermissions({
+    filterString: permissionsResourceFilter(id).toFilterString(),
+  });
+  const {reportFormats = []} = useGetReportFormats();
 
   // Alert related mutations
   const exportEntity = useExportEntity();
@@ -181,7 +171,7 @@ const Page = ({
   );
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetch,
+    refetchAlerts,
     timeoutFunc,
   );
 
@@ -194,7 +184,6 @@ const Page = ({
 
   // stop reload on unmount
   useEffect(() => stopReload, [stopReload]);
-
   return (
     <AlertComponent
       onCloned={goto_details('alert', props)}
@@ -254,7 +243,7 @@ const Page = ({
                       <TabPanel>
                         <EntityTags
                           entity={alert}
-                          onChanged={onChanged}
+                          onChanged={() => refetchAlerts()} // Must be called like this instead of simply onChanged={refetchAlerts} because we don't want this query to be called with new arguments on tag related actions
                           onError={onError}
                           onInteraction={onInteraction}
                         />
@@ -263,7 +252,7 @@ const Page = ({
                         <EntityPermissions
                           entity={alert}
                           permissions={permissions}
-                          onChanged={onChanged}
+                          onChanged={() => refetchPermissions()} // Same here, for permissions. We want same query variables.
                           onDownloaded={handleDownload}
                           onError={onError}
                           onInteraction={onInteraction}
@@ -284,38 +273,17 @@ const Page = ({
 
 Page.propTypes = {
   entity: PropTypes.model,
-  permissions: PropTypes.array,
-  reportFormats: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };
 
-const load = gmp => {
-  const loadEntityFunc = loadEntity(gmp);
-  const loadPermissionsFunc = loadPermissions(gmp);
-  const loadAllReportFormatsFunc = loadAllReportFormats(gmp);
-  return id => dispatch =>
-    Promise.all([
-      dispatch(loadEntityFunc(id)),
-      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-      dispatch(loadAllReportFormatsFunc()),
-    ]);
-};
-
-const mapStateToProps = (rootState, {id}) => {
-  const permissionsSel = permissionsSelector(rootState);
-  const reportFormatsSel = reportFormatsSelector(rootState);
-  return {
-    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
-    reportFormats: reportFormatsSel.getAllEntities(),
-  };
-};
+const load = gmp => id => dispatch => Promise.resolve(); // Must keep this for now before we can get rid of withEntityContainer
 
 export default withEntityContainer('alert', {
   entitySelector: selector,
   load,
-  mapStateToProps,
+  undefined,
 })(Page);
 
 // vim: set ts=2 sw=2 tw=80:

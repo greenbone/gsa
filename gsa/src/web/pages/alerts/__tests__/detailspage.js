@@ -22,10 +22,8 @@ import {setLocale} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Alert from 'gmp/models/alert';
-import Filter from 'gmp/models/filter';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
@@ -38,7 +36,13 @@ import {
   createDeleteAlertQueryMock,
   createExportAlertsByIdsQueryMock,
   alert1,
+  alert2,
+  alert3,
 } from 'web/graphql/__mocks__/alerts';
+
+import {createGetReportFormatsQueryMock} from 'web/graphql/__mocks__/report_formats';
+
+import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
@@ -63,61 +67,9 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const alert = Alert.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
-  name: 'foo',
-  comment: 'bar',
-  permissions: {permission: [{name: 'everything'}]},
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
-  active: 1,
-  condition: 'Always',
-  event: {
-    data: {
-      name: 'status',
-      __text: 'Done',
-    },
-    __text: 'Task run status changed',
-  },
-  filter: {
-    _id: 'filter id',
-    name: 'report results filter',
-  },
-  method: {
-    __text: 'SMB',
-  },
-});
-
-const observedAlert = Alert.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
-  name: 'foo',
-  comment: 'bar',
-  permissions: {permission: [{name: 'get_alerts'}]},
-});
-
-const alertInUse = Alert.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
-  name: 'foo',
-  comment: 'bar',
-  permissions: {permission: [{name: 'everything'}]},
-  inUse: true,
-});
-
 const parsedAlert = Alert.fromObject(alert1);
-const getAlert = jest.fn().mockResolvedValue({
-  data: parsedAlert,
-});
-
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+const parsedAlert2 = Alert.fromObject(alert2);
+const parsedAlert3 = Alert.fromObject(alert3);
 
 const currentSettings = jest.fn().mockResolvedValue({
   foo: 'bar',
@@ -130,15 +82,6 @@ const renewSession = jest.fn().mockResolvedValue({
 describe('Alert Detailspage tests', () => {
   test('should render full Detailspage', async () => {
     const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -146,13 +89,20 @@ describe('Alert Detailspage tests', () => {
     };
 
     const [mock, resultFunc] = createGetAlertQueryMock('1', alert1);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=1 first=1 rows=-1',
+    });
+    const [
+      reportFormatsMock,
+      reportFormatsResult,
+    ] = createGetReportFormatsQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock],
+      queryMocks: [mock, permissionMock, reportFormatsMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -165,6 +115,8 @@ describe('Alert Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+    expect(reportFormatsResult).toHaveBeenCalled();
 
     expect(element).toHaveTextContent('Alert: alert 1');
 
@@ -223,15 +175,6 @@ describe('Alert Detailspage tests', () => {
 
   test('should render user tags tab', async () => {
     const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -240,13 +183,20 @@ describe('Alert Detailspage tests', () => {
     };
 
     const [mock, resultFunc] = createGetAlertQueryMock('1', alert1);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=1 first=1 rows=-1',
+    });
+    const [
+      reportFormatsMock,
+      reportFormatsResult,
+    ] = createGetReportFormatsQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock],
+      queryMocks: [mock, permissionMock, reportFormatsMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -259,7 +209,8 @@ describe('Alert Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
-
+    expect(permissionResult).toHaveBeenCalled();
+    expect(reportFormatsResult).toHaveBeenCalled();
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(baseElement).toHaveTextContent('User Tags(1)');
@@ -270,15 +221,6 @@ describe('Alert Detailspage tests', () => {
 
   test('should render permissions tab', async () => {
     const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -287,13 +229,20 @@ describe('Alert Detailspage tests', () => {
     };
 
     const [mock, resultFunc] = createGetAlertQueryMock('1', alert1);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=1 first=1 rows=-1',
+    });
+    const [
+      reportFormatsMock,
+      reportFormatsResult,
+    ] = createGetReportFormatsQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock],
+      queryMocks: [mock, permissionMock, reportFormatsMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -306,26 +255,67 @@ describe('Alert Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+    expect(reportFormatsResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[1]).toHaveTextContent('Permissions');
     fireEvent.click(tabs[1]);
 
-    expect(baseElement).toHaveTextContent('No permissions available');
+    // permission 1
+    expect(baseElement).toHaveTextContent('Name');
+    expect(baseElement).toHaveTextContent('get_foo');
+
+    expect(baseElement).toHaveTextContent('Description');
+    expect(baseElement).toHaveTextContent(
+      'User admin has read access to Alert alert 1',
+    );
+
+    expect(baseElement).toHaveTextContent('Resource Type');
+    expect(baseElement).toHaveTextContent('Alert');
+
+    expect(baseElement).toHaveTextContent('Resource');
+    expect(baseElement).toHaveTextContent('alert 1');
+
+    expect(baseElement).toHaveTextContent('Subject Type');
+    expect(baseElement).toHaveTextContent('User');
+
+    expect(baseElement).toHaveTextContent('Subject');
+    expect(baseElement).toHaveTextContent('admin');
+
+    // permission 2
+    expect(baseElement).toHaveTextContent('Name');
+    expect(baseElement).toHaveTextContent('get_bar');
+
+    expect(baseElement).toHaveTextContent('Description');
+    expect(baseElement).toHaveTextContent(
+      'Role stormtroopers has read access to Alert alert 1',
+    );
+
+    expect(baseElement).toHaveTextContent('Resource Type');
+    expect(baseElement).toHaveTextContent('Alert');
+
+    expect(baseElement).toHaveTextContent('Resource');
+    expect(baseElement).toHaveTextContent('alert 1');
+
+    expect(baseElement).toHaveTextContent('Subject Type');
+    expect(baseElement).toHaveTextContent('Role');
+
+    expect(baseElement).toHaveTextContent('Subject');
+    expect(baseElement).toHaveTextContent('admin');
+
+    const detailsLinks = screen.getAllByTestId('details-link');
+    expect(detailsLinks).toHaveLength(4);
+
+    expect(detailsLinks[0]).toHaveAttribute('href', '/alert/1');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/user/234');
+    expect(detailsLinks[2]).toHaveAttribute('href', '/alert/1');
+    expect(detailsLinks[3]).toHaveAttribute('href', '/role/344');
   });
 
   test('should call commands', async () => {
     const gmp = {
-      alert: {
-        get: getAlert,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      reportformats: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -337,13 +327,28 @@ describe('Alert Detailspage tests', () => {
     const [cloneMock, cloneResult] = createCloneAlertQueryMock();
     const [deleteMock, deleteResult] = createDeleteAlertQueryMock();
     const [exportMock, exportResult] = createExportAlertsByIdsQueryMock(['1']);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=1 first=1 rows=-1',
+    });
+    const [
+      reportFormatsMock,
+      reportFormatsResult,
+    ] = createGetReportFormatsQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewQueryMock, mock, cloneMock, deleteMock, exportMock],
+      queryMocks: [
+        renewQueryMock,
+        mock,
+        cloneMock,
+        deleteMock,
+        exportMock,
+        permissionMock,
+        reportFormatsMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -356,6 +361,8 @@ describe('Alert Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+    expect(reportFormatsResult).toHaveBeenCalled();
 
     const icons = screen.getAllByTestId('svg-icon');
 
@@ -400,7 +407,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     const {element} = render(
       <ToolBarIcons
-        entity={alert}
+        entity={parsedAlert}
         onAlertCloneClick={handleAlertCloneClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
@@ -439,7 +446,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={alert}
+        entity={parsedAlert}
         onAlertCloneClick={handleAlertCloneClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
@@ -451,19 +458,19 @@ describe('Alert ToolBarIcons tests', () => {
     const icons = screen.getAllByTestId('svg-icon');
 
     fireEvent.click(icons[3]);
-    expect(handleAlertCloneClick).toHaveBeenCalledWith(alert);
+    expect(handleAlertCloneClick).toHaveBeenCalledWith(parsedAlert);
     expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
 
     fireEvent.click(icons[4]);
-    expect(handleAlertEditClick).toHaveBeenCalledWith(alert);
+    expect(handleAlertEditClick).toHaveBeenCalledWith(parsedAlert);
     expect(icons[4]).toHaveAttribute('title', 'Edit Alert');
 
     fireEvent.click(icons[5]);
-    expect(handleAlertDeleteClick).toHaveBeenCalledWith(alert);
+    expect(handleAlertDeleteClick).toHaveBeenCalledWith(parsedAlert);
     expect(icons[5]).toHaveAttribute('title', 'Move Alert to trashcan');
 
     fireEvent.click(icons[6]);
-    expect(handleAlertDownloadClick).toHaveBeenCalledWith(alert);
+    expect(handleAlertDownloadClick).toHaveBeenCalledWith(parsedAlert);
     expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
   });
 
@@ -484,7 +491,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={observedAlert}
+        entity={parsedAlert2}
         onAlertCloneClick={handleAlertCloneClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
@@ -497,7 +504,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
     fireEvent.click(icons[3]);
-    expect(handleAlertCloneClick).toHaveBeenCalledWith(observedAlert);
+    expect(handleAlertCloneClick).toHaveBeenCalledWith(parsedAlert2);
     expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
 
     expect(icons[4]).toHaveAttribute(
@@ -515,7 +522,7 @@ describe('Alert ToolBarIcons tests', () => {
     );
 
     fireEvent.click(icons[6]);
-    expect(handleAlertDownloadClick).toHaveBeenCalledWith(observedAlert);
+    expect(handleAlertDownloadClick).toHaveBeenCalledWith(parsedAlert2);
     expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
   });
 
@@ -536,7 +543,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={alertInUse}
+        entity={parsedAlert3}
         onAlertCloneClick={handleAlertCloneClick}
         onAlertDeleteClick={handleAlertDeleteClick}
         onAlertDownloadClick={handleAlertDownloadClick}
@@ -549,7 +556,7 @@ describe('Alert ToolBarIcons tests', () => {
 
     expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
     fireEvent.click(icons[3]);
-    expect(handleAlertCloneClick).toHaveBeenCalledWith(alertInUse);
+    expect(handleAlertCloneClick).toHaveBeenCalledWith(parsedAlert3);
     expect(icons[3]).toHaveAttribute('title', 'Clone Alert');
 
     expect(icons[4]).toHaveAttribute('title', 'Edit Alert');
@@ -561,7 +568,7 @@ describe('Alert ToolBarIcons tests', () => {
     expect(icons[5]).toHaveAttribute('title', 'Alert is still in use');
 
     fireEvent.click(icons[6]);
-    expect(handleAlertDownloadClick).toHaveBeenCalledWith(alertInUse);
+    expect(handleAlertDownloadClick).toHaveBeenCalledWith(parsedAlert3);
     expect(icons[6]).toHaveAttribute('title', 'Export Alert as XML');
   });
 });

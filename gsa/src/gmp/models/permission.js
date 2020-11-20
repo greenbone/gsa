@@ -16,13 +16,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../utils/identity';
+import {hasValue, isDefined} from '../utils/identity';
 import {isEmpty} from '../utils/string';
 
-import Model, {parseModelFromElement} from '../model';
+import Model, {parseModelFromElement, parseModelFromObject} from '../model';
 
 class Permission extends Model {
   static entityType = 'permission';
+
+  static parseObject(object) {
+    const ret = super.parseObject(object);
+
+    if (hasValue(object.resource) && !isEmpty(object.resource.id)) {
+      ret.resource = parseModelFromObject(
+        object.resource,
+        object.resource.type,
+      );
+    } else {
+      delete ret.resource;
+    }
+
+    if (hasValue(object.subject) && !isEmpty(object.subject.id)) {
+      ret.subject = parseModelFromObject(object.subject, object.subject.type);
+    } else {
+      delete ret.subject;
+    }
+
+    return ret;
+  }
 
   static parseElement(element) {
     const ret = super.parseElement(element);

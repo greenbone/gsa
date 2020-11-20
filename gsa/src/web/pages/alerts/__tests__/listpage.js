@@ -185,7 +185,7 @@ describe('Alert listpage tests', () => {
     expect(row[2]).toHaveTextContent('Filter matches at least 3 NVTs');
     expect(row[2]).toHaveTextContent('Email to foo@bar.com');
 
-    expect(row[2]).toHaveTextContent('Yes');
+    expect(row[2]).toHaveTextContent('No');
 
     expect(icons[13]).toHaveAttribute('title', 'Move Alert to trashcan');
     expect(icons[14]).toHaveAttribute('title', 'Edit Alert');
