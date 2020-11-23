@@ -92,14 +92,6 @@ const getConfig = jest.fn().mockResolvedValue({
   data: config,
 });
 
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
 const currentSettings = jest.fn().mockResolvedValue({
   foo: 'bar',
 });
@@ -113,9 +105,6 @@ describe('Task Detailspage tests', () => {
     const gmp = {
       scanconfig: {
         get: getConfig,
-      },
-      reportformats: {
-        get: getEntities,
       },
       settings: {
         manualUrl,
@@ -248,9 +237,6 @@ describe('Task Detailspage tests', () => {
       scanconfig: {
         get: getConfig,
       },
-      reportformats: {
-        get: getEntities,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -325,9 +311,6 @@ describe('Task Detailspage tests', () => {
       scanconfig: {
         get: getConfig,
       },
-      reportformats: {
-        get: getEntities,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -400,9 +383,6 @@ describe('Task Detailspage tests', () => {
     const gmp = {
       scanconfig: {
         get: getConfig,
-      },
-      reportformats: {
-        get: getEntities,
       },
       settings: {
         manualUrl,
