@@ -7,10 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+- Added CVSS Origin to NVT Details Page [#2588](https://github.com/greenbone/gsa/pull/2588)
+- Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 - Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425) 
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
-- Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
-- Added CVSS Origin to NVT Details Page [#2588](https://github.com/greenbone/gsa/pull/2588)
 
 ### Changed
 
