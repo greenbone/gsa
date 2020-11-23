@@ -323,7 +323,7 @@ const Page = ({
   ...props
 }) => {
   const {id} = useParams();
-  const {task, refetch, loading} = useGetTask(id);
+  const {task, refetch: refetchTask, loading} = useGetTask(id);
   const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
@@ -352,7 +352,7 @@ const Page = ({
   );
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetch,
+    refetchTask,
     timeoutFunc,
   );
 
@@ -391,19 +391,19 @@ const Page = ({
       onCloneError={onError}
       onCreated={goto_task_details(history)}
       onContainerCreated={goto_task_details(history)}
-      onContainerSaved={refetch}
+      onContainerSaved={() => refetchTask()}
       onDeleted={goto_list('tasks', {history})}
       onDeleteError={onError}
       onDownloaded={onDownloaded}
       onDownloadError={onError}
       onInteraction={onInteraction}
       onReportImported={onChanged}
-      onResumed={refetch}
+      onResumed={() => refetchTask()}
       onResumeError={onError}
-      onSaved={refetch}
-      onStarted={refetch}
+      onSaved={() => refetchTask()}
+      onStarted={() => refetchTask()}
       onStartError={onError}
-      onStopped={refetch}
+      onStopped={() => refetchTask()}
       onStopError={onError}
     >
       {({
@@ -469,7 +469,7 @@ const Page = ({
                         <TabPanel>
                           <EntityTags
                             entity={task}
-                            onChanged={refetch}
+                            onChanged={() => refetchTask()}
                             onError={onError}
                             onInteraction={onInteraction}
                           />
