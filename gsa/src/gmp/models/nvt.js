@@ -152,7 +152,7 @@ class Nvt extends Info {
       const {severities} = ret;
       const {severity} = severities;
       ret.severity = parseSeverity(severity.score / 10);
-      ret.severity_origin = parseText(severity.origin);
+      ret.severityOrigin = parseText(severity.origin);
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
     }

@@ -45,7 +45,7 @@ import Solution from './solution';
 import Pre from './preformatted';
 
 const NvtDetails = ({entity, links = true}) => {
-  const {tags = {}, severity, qod, family, solution, severity_origin} = entity;
+  const {tags = {}, severity, qod, family, solution, severityOrigin} = entity;
   return (
     <Layout flex="column" grow="1">
       {isDefined(tags.summary) && (
@@ -80,7 +80,7 @@ const NvtDetails = ({entity, links = true}) => {
               )}
             <TableRow>
               <TableData>{_('CVSS Origin')}</TableData>
-              <TableData>{na(severity_origin)}</TableData>
+              <TableData>{na(severityOrigin)}</TableData>
             </TableRow>
           </TableBody>
         </InfoTable>
