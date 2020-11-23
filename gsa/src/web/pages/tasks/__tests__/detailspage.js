@@ -22,9 +22,7 @@ import {setLocale} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import Filter from 'gmp/models/filter';
 import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {entityLoadingActions} from 'web/store/entities/tasks';
@@ -75,24 +73,6 @@ const manualUrl = 'test/';
 const {detailsMockTask: task} = getMockTasks(); // mock task
 
 // mock gmp commands
-const config = ScanConfig.fromElement({
-  _id: '314',
-  name: 'foo',
-  comment: 'bar',
-  scanner: {name: 'scanner1', type: '0'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
-  tasks: {
-    task: [
-      {id: '12345', name: 'foo'},
-      {id: '678910', name: 'task2'},
-    ],
-  },
-});
-
-const getConfig = jest.fn().mockResolvedValue({
-  data: config,
-});
-
 const currentSettings = jest.fn().mockResolvedValue({
   foo: 'bar',
 });
