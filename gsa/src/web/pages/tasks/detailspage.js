@@ -114,10 +114,6 @@ import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
 
-const goto_task_details = history => id => {
-  return history.push(`/task/${id}`);
-};
-
 export const ToolBarIcons = ({
   entity,
   links,
@@ -414,7 +410,7 @@ const Page = () => {
       onCloned={goto_details('task', {history})}
       onCloneError={showError}
       onCreated={goto_entity_details('task', {history})}
-      onContainerCreated={goto_task_details(history)}
+      onContainerCreated={goto_entity_details('task', {history})}
       onContainerSaved={() => refetchTask()}
       onDeleted={goto_list('tasks', {history})}
       onDeleteError={showError}
