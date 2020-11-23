@@ -95,6 +95,7 @@ export const useLazyGetScanConfig = (id, options) => {
     : undefined;
 
   const loadScanConfig = useCallback(
+    // eslint-disable-next-line no-shadow
     (id, options) => queryScanConfig({...options, variables: {id}}),
     [queryScanConfig],
   );
