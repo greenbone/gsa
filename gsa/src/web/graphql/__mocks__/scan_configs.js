@@ -21,7 +21,7 @@ import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 import {GET_SCAN_CONFIG} from '../scan_configs';
 
 export const scanConfig1 = deepFreeze({
-  id: '235',
+  id: '314',
   name: 'Half empty and slow',
   creationTime: '2020-08-17T12:18:14+00:00',
   comment: "Most NVT's",
@@ -70,5 +70,7 @@ export const scanConfig1 = deepFreeze({
   writable: true,
 });
 
-export const createGetScanConfigQueryMock = (id, result = scanConfig1) =>
-  createGenericQueryMock(GET_SCAN_CONFIG, {scanConfig: result}, {id});
+export const createGetScanConfigQueryMock = (
+  id = '314',
+  result = scanConfig1,
+) => createGenericQueryMock(GET_SCAN_CONFIG, {scanConfig: result}, {id});

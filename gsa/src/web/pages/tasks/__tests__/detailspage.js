@@ -50,6 +50,7 @@ import {
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scan_configs';
 
 if (!isDefined(window.URL)) {
   window.URL = {};
@@ -103,9 +104,6 @@ const renewSession = jest.fn().mockResolvedValue({
 describe('Task Detailspage tests', () => {
   test('should render full Detailspage', async () => {
     const gmp = {
-      scanconfig: {
-        get: getConfig,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -130,6 +128,7 @@ describe('Task Detailspage tests', () => {
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
       filterString: 'resource_uuid=12345 first=1 rows=-1',
     });
+    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -142,6 +141,7 @@ describe('Task Detailspage tests', () => {
         overridesMock,
         scheduleMock,
         permissionMock,
+        scanConfigMock,
       ],
     });
 
@@ -156,6 +156,7 @@ describe('Task Detailspage tests', () => {
     expect(notesResultFunc).toHaveBeenCalled();
     expect(overridesResultFunc).toHaveBeenCalled();
     expect(permissionResult).toHaveBeenCalled();
+    expect(scanConfigResult).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('Task: foo');
 
@@ -234,9 +235,6 @@ describe('Task Detailspage tests', () => {
 
   test('should render user tags tab', async () => {
     const gmp = {
-      scanconfig: {
-        get: getConfig,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -264,6 +262,7 @@ describe('Task Detailspage tests', () => {
     });
 
     const [renewQueryMock, renewQueryResult] = createRenewSessionQueryMock();
+    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -277,6 +276,7 @@ describe('Task Detailspage tests', () => {
         scheduleMock,
         permissionMock,
         renewQueryMock,
+        scanConfigMock,
       ],
     });
 
@@ -293,6 +293,7 @@ describe('Task Detailspage tests', () => {
     expect(notesResultFunc).toHaveBeenCalled();
     expect(overridesResultFunc).toHaveBeenCalled();
     expect(permissionResult).toHaveBeenCalled();
+    expect(scanConfigResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -308,9 +309,6 @@ describe('Task Detailspage tests', () => {
 
   test('should render permissions tab', async () => {
     const gmp = {
-      scanconfig: {
-        get: getConfig,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -340,6 +338,7 @@ describe('Task Detailspage tests', () => {
       noPermissions,
     );
     const [renewQueryMock, renewQueryResult] = createRenewSessionQueryMock();
+    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -353,6 +352,7 @@ describe('Task Detailspage tests', () => {
         overridesMock,
         scheduleMock,
         permissionMock,
+        scanConfigMock,
       ],
     });
 
@@ -366,6 +366,7 @@ describe('Task Detailspage tests', () => {
     expect(scheduleResultFunc).toHaveBeenCalled();
     expect(notesResultFunc).toHaveBeenCalled();
     expect(overridesResultFunc).toHaveBeenCalled();
+    expect(scanConfigResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -381,9 +382,6 @@ describe('Task Detailspage tests', () => {
 
   test('should call mutations', async () => {
     const gmp = {
-      scanconfig: {
-        get: getConfig,
-      },
       settings: {
         manualUrl,
         reloadInterval,
@@ -415,6 +413,7 @@ describe('Task Detailspage tests', () => {
       },
       noPermissions,
     );
+    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -429,6 +428,7 @@ describe('Task Detailspage tests', () => {
         overridesMock,
         scheduleMock,
         permissionMock,
+        scanConfigMock,
       ],
     });
 
@@ -445,6 +445,7 @@ describe('Task Detailspage tests', () => {
     expect(scheduleResultFunc).toHaveBeenCalled();
     expect(notesResultFunc).toHaveBeenCalled();
     expect(overridesResultFunc).toHaveBeenCalled();
+    expect(scanConfigResult).toHaveBeenCalled();
 
     const icons = screen.getAllByTestId('svg-icon');
 
