@@ -110,10 +110,6 @@ const renewSession = jest.fn().mockResolvedValue({
 
 describe('Task Detailspage tests', () => {
   test('should render full Detailspage', async () => {
-    const getTask = jest.fn().mockResolvedValue({
-      data: task,
-    });
-
     const gmp = {
       scanconfig: {
         get: getConfig,
