@@ -199,6 +199,7 @@ class Permissions extends React.Component {
       userId,
       users,
     } = this.state;
+    console.log(this.state);
 
     const extra = (
       <SectionElements

@@ -84,15 +84,9 @@ import {useLazyGetNotes} from 'web/graphql/notes';
 import {useLazyGetOverrides} from 'web/graphql/overrides';
 
 import {useCloneTask, useDeleteTask, useGetTask} from 'web/graphql/tasks';
+import {useGetPermissions} from 'web/graphql/permissions';
 
-import {
-  selector as permissionsSelector,
-  loadEntities as loadPermissions,
-} from 'web/store/entities/permissions';
-import {
-  selector as taskSelector,
-  loadEntity as loadTask,
-} from 'web/store/entities/tasks';
+import {selector as taskSelector} from 'web/store/entities/tasks';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
@@ -322,7 +316,6 @@ Details.propTypes = {
 
 const Page = ({
   history,
-  permissions = [],
   onChanged,
   onDownloaded,
   onError,
@@ -331,6 +324,9 @@ const Page = ({
 }) => {
   const {id} = useParams();
   const {task, refetch, loading} = useGetTask(id);
+  const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
+    filterString: permissionsResourceFilter(id).toFilterString(),
+  });
 
   const [clone] = useCloneTask();
   const cloneTask = cTask =>
@@ -482,7 +478,7 @@ const Page = ({
                           <TaskPermissions
                             entity={task}
                             permissions={permissions}
-                            onChanged={onChanged}
+                            onChanged={() => refetchPermissions()}
                             onDownloaded={onDownloaded}
                             onInteraction={onInteraction}
                             onError={onError}
@@ -502,7 +498,6 @@ const Page = ({
 };
 
 Page.propTypes = {
-  entity: PropTypes.model,
   history: PropTypes.object.isRequired,
   permissions: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
@@ -548,27 +543,7 @@ export const TaskPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-const mapStateToProps = (rootState, {id}) => {
-  const permSel = permissionsSelector(rootState);
-  return {
-    permissions: permSel.getEntities(permissionsResourceFilter(id)),
-  };
-};
-
-const load = gmp => {
-  const loadTaskFunc = loadTask(gmp);
-  const loadPermissionsFunc = loadPermissions(gmp);
-
-  if (gmp.settings.enableHyperionOnly) {
-    return id => dispatch => Promise.resolve(); // promise is required by withEntityContainer
-  }
-
-  return id => dispatch =>
-    Promise.all([
-      dispatch(loadTaskFunc(id)),
-      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-    ]);
-};
+const load = gmp => id => dispatch => Promise.resolve();
 
 export const reloadInterval = ({entity}) => {
   if (!hasValue(entity) || entity.isContainer()) {
@@ -582,7 +557,7 @@ export const reloadInterval = ({entity}) => {
 export default withEntityContainer('task', {
   load,
   entitySelector: taskSelector,
-  mapStateToProps,
+  undefined,
   reloadInterval,
 })(Page);
 
