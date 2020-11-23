@@ -21,10 +21,6 @@ import {setLocale} from 'gmp/locale/lang';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
-
-import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
-
 import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
