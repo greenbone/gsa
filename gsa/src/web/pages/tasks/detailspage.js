@@ -321,6 +321,7 @@ Details.propTypes = {
 };
 
 const Page = () => {
+  // Page methods
   const {id} = useParams();
   const gmpSettings = useGmpSettings();
   const history = useHistory();
@@ -332,11 +333,19 @@ const Page = () => {
     showError,
   } = useDialogNotification();
 
+  // Load task related entities
   const {task, refetch: refetchTask, loading, error: entityError} = useGetTask(
     id,
   );
   const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
+  });
+  const [loadNotes, {notes}] = useLazyGetNotes({
+    filterString: 'task_id:' + id,
+  });
+
+  const [loadOverrides, {overrides}] = useLazyGetOverrides({
+    filterString: 'task_id:' + id,
   });
 
   // Task related mutations
@@ -369,6 +378,7 @@ const Page = () => {
     });
   };
 
+  // Timeout and reload
   const timeoutFunc = useEntityTimeout({entity: task, gmpSettings});
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
@@ -386,19 +396,12 @@ const Page = () => {
   // stop reload on unmount
   useEffect(() => stopReload, [stopReload]);
 
+  // Other side effects
   useEffect(() => {
     if (hasValue(task) && task.usageType === 'audit') {
       return history.replace(`/audit/${task.id}`);
     }
   }, [history]);
-
-  const [loadNotes, {notes}] = useLazyGetNotes({
-    filterString: 'task_id:' + id,
-  });
-
-  const [loadOverrides, {overrides}] = useLazyGetOverrides({
-    filterString: 'task_id:' + id,
-  });
 
   useEffect(() => {
     loadNotes();
