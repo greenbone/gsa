@@ -67,12 +67,19 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
+import useDownload from 'web/components/form/useDownload';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import DialogNotification from 'web/components/notification/dialognotification';
+import Download from 'web/components/form/download';
+
 import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
+import useExportEntity from 'web/entity/useExportEntity';
+import useEntityTimeout from 'web/entity/useEntityTimeout';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -93,6 +100,8 @@ import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 import useGmpSettings from 'web/utils/useGmpSettings';
+import {goto_entity_details} from 'web/utils/graphql';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import ImportReportIcon from './icons/importreporticon';
 import NewIconMenu from './icons/newiconmenu';
@@ -104,14 +113,6 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
-import useExportEntity from 'web/entity/useExportEntity';
-import {goto_entity_details} from 'web/utils/graphql';
-import useDownload from 'web/components/form/useDownload';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-import DialogNotification from 'web/components/notification/dialognotification';
-import Download from 'web/components/form/download';
-import useEntityTimeout from 'web/entity/useEntityTimeout';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const goto_task_details = history => id => {
   return history.push(`/task/${id}`);
