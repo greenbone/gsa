@@ -19,6 +19,8 @@
 
 import {gql, useLazyQuery} from '@apollo/client';
 import ScanConfig from 'gmp/models/scanconfig';
+import CollectionCounts from 'gmp/collection/collectioncounts';
+
 import {isDefined} from 'gmp/utils/identity';
 import {useCallback} from 'react';
 
@@ -85,6 +87,73 @@ export const GET_SCAN_CONFIG = gql`
   }
 `;
 
+export const GET_SCAN_CONFIGS = gql`
+  query ScanConfigs($filterString: FilterString) {
+    scanConfigs(filterString: $filterString) {
+      edges {
+        node {
+          id
+          name
+          comment
+          writable
+          inUse
+          creationTime
+          modificationTime
+          permissions {
+            name
+          }
+          userTags {
+            count
+            tags {
+              id
+              name
+              value
+              comment
+            }
+          }
+          trash
+          type
+          familyCount
+          nvtCount
+          usageType
+          maxNvtCount
+          knownNvtCount
+          predefined
+          families {
+            name
+            nvtCount
+            maxNvtCount
+            growing
+          }
+          preferences {
+            nvt {
+              oid
+              name
+            }
+            hrName
+            name
+            id
+            type
+            value
+            default
+            alt
+          }
+          tasks {
+            name
+            id
+          }
+          nvtSelectors {
+            name
+            include
+            type
+            familyOrNvt
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const useLazyGetScanConfig = (id, options) => {
   const [queryScanConfig, {data, ...other}] = useLazyQuery(GET_SCAN_CONFIG, {
     ...options,
@@ -100,4 +169,33 @@ export const useLazyGetScanConfig = (id, options) => {
     [queryScanConfig],
   );
   return [loadScanConfig, {scanConfig, ...other}];
+};
+
+export const useLazyGetScanConfigs = (variables, options) => {
+  const [queryScanConfigs, {data, ...other}] = useLazyQuery(GET_SCAN_CONFIGS, {
+    ...options,
+    variables,
+  });
+  const scanConfigs = isDefined(data?.scanConfigs)
+    ? data.scanConfigs.edges.map(entity => ScanConfig.fromObject(entity.node))
+    : undefined;
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.scanConfigs?.counts || {};
+  const counts = isDefined(data?.scanConfigs?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const getScanConfigs = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => queryScanConfigs({...options, variables}),
+    [queryScanConfigs],
+  );
+  const pageInfo = data?.scanConfigs?.pageInfo;
+  return [getScanConfigs, {...other, counts, scanConfigs, pageInfo}];
 };
