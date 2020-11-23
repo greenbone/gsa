@@ -37,10 +37,15 @@ import {
   createCloneTaskQueryMock,
   createDeleteTaskQueryMock,
 } from 'web/graphql/__mocks__/tasks';
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
 import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 import {createGetNotesQueryMock} from 'web/graphql/__mocks__/notes';
 import {createGetOverridesQueryMock} from 'web/graphql/__mocks__/overrides';
+import {
+  createGetPermissionsQueryMock,
+  noPermissions,
+} from 'web/graphql/__mocks__/permissions';
 
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
@@ -110,14 +115,8 @@ describe('Task Detailspage tests', () => {
     });
 
     const gmp = {
-      task: {
-        get: getTask,
-      },
       scanconfig: {
         get: getConfig,
-      },
-      permissions: {
-        get: getEntities,
       },
       reportformats: {
         get: getEntities,
@@ -143,18 +142,25 @@ describe('Task Detailspage tests', () => {
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
 
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=12345 first=1 rows=-1',
+    });
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, notesMock, overridesMock, scheduleMock],
+      queryMocks: [
+        mock,
+        notesMock,
+        overridesMock,
+        scheduleMock,
+        permissionMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('12345', task));
 
     const {baseElement} = render(<Detailspage id="12345" />);
 
@@ -164,6 +170,7 @@ describe('Task Detailspage tests', () => {
     expect(scheduleResultFunc).toHaveBeenCalled();
     expect(notesResultFunc).toHaveBeenCalled();
     expect(overridesResultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('Task: foo');
 
@@ -241,30 +248,9 @@ describe('Task Detailspage tests', () => {
   });
 
   test('should render user tags tab', async () => {
-    const getTask = jest.fn().mockResolvedValue({
-      data: task,
-    });
-
-    const getTags = jest.fn().mockResolvedValue({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    });
-
     const gmp = {
-      task: {
-        get: getTask,
-      },
       scanconfig: {
         get: getConfig,
-      },
-      permissions: {
-        get: getEntities,
-      },
-      tags: {
-        get: getTags,
       },
       reportformats: {
         get: getEntities,
@@ -291,16 +277,28 @@ describe('Task Detailspage tests', () => {
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
 
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=12345 first=1 rows=-1',
+    });
+
+    const [renewQueryMock, renewQueryResult] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, notesMock, overridesMock, scheduleMock],
+      queryMocks: [
+        mock,
+        notesMock,
+        overridesMock,
+        scheduleMock,
+        permissionMock,
+        renewQueryMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', task));
 
@@ -312,29 +310,24 @@ describe('Task Detailspage tests', () => {
     expect(scheduleResultFunc).toHaveBeenCalled();
     expect(notesResultFunc).toHaveBeenCalled();
     expect(overridesResultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[0]).toHaveTextContent('User Tags');
     fireEvent.click(tabs[0]);
 
+    await wait();
+
+    expect(renewQueryResult).toHaveBeenCalled();
+
     expect(baseElement).toHaveTextContent('No user tags available');
   });
 
   test('should render permissions tab', async () => {
-    const getTask = jest.fn().mockResolvedValue({
-      data: task,
-    });
-
     const gmp = {
-      task: {
-        get: getTask,
-      },
       scanconfig: {
         get: getConfig,
-      },
-      permissions: {
-        get: getEntities,
       },
       reportformats: {
         get: getEntities,
@@ -361,18 +354,30 @@ describe('Task Detailspage tests', () => {
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
 
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
+      {
+        filterString: 'resource_uuid=12345 first=1 rows=-1',
+      },
+      noPermissions,
+    );
+    const [renewQueryMock, renewQueryResult] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, notesMock, overridesMock, scheduleMock],
+      queryMocks: [
+        mock,
+        renewQueryMock,
+        notesMock,
+        overridesMock,
+        scheduleMock,
+        permissionMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('12345', task));
 
     const {baseElement} = render(<Detailspage id="12345" />);
 
@@ -388,23 +393,17 @@ describe('Task Detailspage tests', () => {
     expect(tabs[1]).toHaveTextContent('Permissions');
     fireEvent.click(tabs[1]);
 
+    await wait();
+    expect(permissionResult).toHaveBeenCalled();
+    expect(renewQueryResult).toHaveBeenCalled();
+
     expect(baseElement).toHaveTextContent('No permissions available');
   });
 
   test('should call mutations', async () => {
-    const getTask = jest.fn().mockResolvedValue({
-      data: task,
-    });
-
     const gmp = {
-      task: {
-        get: getTask,
-      },
       scanconfig: {
         get: getConfig,
-      },
-      permissions: {
-        get: getEntities,
       },
       reportformats: {
         get: getEntities,
@@ -434,6 +433,12 @@ describe('Task Detailspage tests', () => {
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
+    const [permissionMock] = createGetPermissionsQueryMock(
+      {
+        filterString: 'resource_uuid=12345 first=1 rows=-1',
+      },
+      noPermissions,
+    );
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -447,6 +452,7 @@ describe('Task Detailspage tests', () => {
         notesMock,
         overridesMock,
         scheduleMock,
+        permissionMock,
       ],
     });
 
