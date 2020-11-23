@@ -17,8 +17,8 @@
  */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, {useEffect, useCallback} from 'react';
-import {useParams} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {useHistory, useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
@@ -69,12 +69,10 @@ import TableRow from 'web/components/table/row';
 
 import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
-import {goto_list} from 'web/entity/component';
+import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import withEntityContainer, {
-  permissionsResourceFilter,
-} from 'web/entity/withEntityContainer';
+import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
@@ -83,10 +81,13 @@ import TrashIcon from 'web/entity/icon/trashicon';
 import {useLazyGetNotes} from 'web/graphql/notes';
 import {useLazyGetOverrides} from 'web/graphql/overrides';
 
-import {useCloneTask, useDeleteTask, useGetTask} from 'web/graphql/tasks';
+import {
+  useCloneTask,
+  useDeleteTask,
+  useExportTasksByIds,
+  useGetTask,
+} from 'web/graphql/tasks';
 import {useGetPermissions} from 'web/graphql/permissions';
-
-import {selector as taskSelector} from 'web/store/entities/tasks';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
@@ -103,6 +104,14 @@ import StopIcon from './icons/stopicon';
 import TaskDetails from './details';
 import TaskStatus from './status';
 import TaskComponent from './component';
+import useExportEntity from 'web/entity/useExportEntity';
+import {goto_entity_details} from 'web/utils/graphql';
+import useDownload from 'web/components/form/useDownload';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import DialogNotification from 'web/components/notification/dialognotification';
+import Download from 'web/components/form/download';
+import useEntityTimeout from 'web/entity/useEntityTimeout';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 const goto_task_details = history => id => {
   return history.push(`/task/${id}`);
@@ -314,42 +323,56 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  history,
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => {
+const Page = () => {
   const {id} = useParams();
-  const {task, refetch: refetchTask, loading} = useGetTask(id);
+  const gmpSettings = useGmpSettings();
+  const history = useHistory();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+  const [downloadRef, handleDownload] = useDownload();
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+
+  const {task, refetch: refetchTask, loading, error: entityError} = useGetTask(
+    id,
+  );
   const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
 
-  const [clone] = useCloneTask();
-  const cloneTask = cTask =>
-    clone(cTask.id).then(goto_task_details(history)).catch(onError);
+  // Task related mutations
+  const exportEntity = useExportEntity();
 
-  const [del] = useDeleteTask();
-  const deleteTask = dTask =>
-    del(dTask.id).then(goto_list('tasks', {history})).catch(onError);
+  const [cloneTask] = useCloneTask();
+  const [deleteTask] = useDeleteTask();
+  const exportTask = useExportTasksByIds();
 
-  const gmpSettings = useGmpSettings();
+  // Task methods
+  const handleCloneTask = clonedTask => {
+    return cloneTask(clonedTask.id)
+      .then(taskId => goto_entity_details('task', {history})(taskId))
+      .catch(showError);
+  };
 
-  const timeoutFunc = useCallback(
-    ({isVisible}) => {
-      if (!isVisible) {
-        return gmpSettings.reloadIntervalInactive;
-      }
-      if (task.isActive()) {
-        return gmpSettings.reloadIntervalActive;
-      }
-      return gmpSettings.reloadInterval;
-    },
-    [task, gmpSettings],
-  );
+  const handleDeleteTask = deletedTask => {
+    return deleteTask(deletedTask.id)
+      .then(goto_list('tasks', {history}))
+      .catch(showError);
+  };
+
+  const handleDownloadTask = exportedTask => {
+    exportEntity({
+      entity: exportedTask,
+      exportFunc: exportTask,
+      resourceType: 'tasks',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  const timeoutFunc = useEntityTimeout({entity: task, gmpSettings});
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchTask,
@@ -387,54 +410,46 @@ const Page = ({
 
   return (
     <TaskComponent
-      onCloned={onChanged}
-      onCloneError={onError}
-      onCreated={goto_task_details(history)}
+      onCloned={goto_details('task', {history})}
+      onCloneError={showError}
+      onCreated={goto_entity_details('task', {history})}
       onContainerCreated={goto_task_details(history)}
       onContainerSaved={() => refetchTask()}
       onDeleted={goto_list('tasks', {history})}
-      onDeleteError={onError}
-      onDownloaded={onDownloaded}
-      onDownloadError={onError}
-      onInteraction={onInteraction}
-      onReportImported={onChanged}
+      onDeleteError={showError}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onInteraction={renewSessionTimeout}
+      onReportImported={() => refetchTask()}
       onResumed={() => refetchTask()}
-      onResumeError={onError}
+      onResumeError={showError}
       onSaved={() => refetchTask()}
       onStarted={() => refetchTask()}
-      onStartError={onError}
+      onStartError={showError}
       onStopped={() => refetchTask()}
-      onStopError={onError}
+      onStopError={showError}
     >
-      {({
-        create,
-        createcontainer,
-        download,
-        edit,
-        start,
-        stop,
-        resume,
-        reportimport,
-      }) => {
+      {({create, createcontainer, edit, start, stop, resume, reportimport}) => {
         return (
           <EntityPage
-            {...props}
             entity={task}
+            entityError={entityError}
+            entityType={'task'}
             isLoading={loading}
             notes={notes}
             overrides={overrides}
             sectionIcon={<TaskIcon size="large" />}
             title={_('Task')}
             toolBarIcons={ToolBarIcons}
-            onChanged={onChanged}
+            onChanged={() => refetchTask()}
             onContainerTaskCreateClick={createcontainer}
-            onError={onError}
-            onInteraction={onInteraction}
+            onError={showError}
+            onInteraction={renewSessionTimeout}
             onReportImportClick={reportimport}
-            onTaskCloneClick={cloneTask} // Clone is special because TaskComponent doesn't define it, so I'm assuming that EntityComponent is passing this method instead
+            onTaskCloneClick={handleCloneTask} // Clone is special because TaskComponent doesn't define it, so I'm assuming that EntityComponent is passing this method instead
             onTaskCreateClick={create}
-            onTaskDeleteClick={deleteTask}
-            onTaskDownloadClick={download}
+            onTaskDeleteClick={handleDeleteTask}
+            onTaskDownloadClick={handleDownloadTask}
             onTaskEditClick={edit}
             onTaskResumeClick={resume}
             onTaskStartClick={start}
@@ -470,8 +485,8 @@ const Page = ({
                           <EntityTags
                             entity={task}
                             onChanged={() => refetchTask()}
-                            onError={onError}
-                            onInteraction={onInteraction}
+                            onError={showError}
+                            onInteraction={renewSessionTimeout}
                           />
                         </TabPanel>
                         <TabPanel>
@@ -479,14 +494,19 @@ const Page = ({
                             entity={task}
                             permissions={permissions}
                             onChanged={() => refetchPermissions()}
-                            onDownloaded={onDownloaded}
-                            onInteraction={onInteraction}
-                            onError={onError}
+                            onDownloaded={handleDownload}
+                            onInteraction={renewSessionTimeout}
+                            onError={showError}
                           />
                         </TabPanel>
                       </TabPanels>
                     </Tabs>
                   </Layout>
+                  <DialogNotification
+                    {...notificationDialogState}
+                    onCloseClick={closeNotificationDialog}
+                  />
+                  <Download ref={downloadRef} />
                 </React.Fragment>
               );
             }}
@@ -495,15 +515,6 @@ const Page = ({
       }}
     </TaskComponent>
   );
-};
-
-Page.propTypes = {
-  history: PropTypes.object.isRequired,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 export const TaskPermissions = withComponentDefaults({
@@ -543,8 +554,6 @@ export const TaskPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-const load = gmp => id => dispatch => Promise.resolve();
-
 export const reloadInterval = ({entity}) => {
   if (!hasValue(entity) || entity.isContainer()) {
     return NO_RELOAD;
@@ -554,11 +563,6 @@ export const reloadInterval = ({entity}) => {
     : USE_DEFAULT_RELOAD_INTERVAL;
 };
 
-export default withEntityContainer('task', {
-  load,
-  entitySelector: taskSelector,
-  undefined,
-  reloadInterval,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:
