@@ -19,8 +19,8 @@
 import React from 'react';
 
 import {rendererWith, screen, wait} from 'web/utils/testing';
-import {useGetReportFormats} from '../report_formats';
-import {createGetReportFormatsQueryMock} from '../__mocks__/report_formats';
+import {useGetReportFormats} from '../reportformats';
+import {createGetReportFormatsQueryMock} from '../__mocks__/reportformats';
 
 const GetReportFormatsComponent = () => {
   const {counts, loading, reportFormats} = useGetReportFormats();

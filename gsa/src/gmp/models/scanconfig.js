@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../utils/identity';
+import {hasValue, isDefined} from '../utils/identity';
 import {forEach, map} from '../utils/array';
 import {isEmpty} from '../utils/string';
 
@@ -59,6 +59,16 @@ export const parseTrend = parseInt;
 
 class ScanConfig extends Model {
   static entityType = 'scanconfig';
+
+  static parseObject(object) {
+    const ret = super.parseObject(object);
+
+    if (hasValue(object.type)) {
+      ret.scanConfigType = object.type;
+    }
+
+    return ret;
+  }
 
   static parseElement(element) {
     const ret = super.parseElement(element);

@@ -39,7 +39,7 @@ import {
   alert3,
 } from 'web/graphql/__mocks__/alerts';
 
-import {createGetReportFormatsQueryMock} from 'web/graphql/__mocks__/report_formats';
+import {createGetReportFormatsQueryMock} from 'web/graphql/__mocks__/reportformats';
 
 import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 

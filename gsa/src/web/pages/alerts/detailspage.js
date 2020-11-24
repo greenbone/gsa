@@ -64,7 +64,7 @@ import {
   useExportAlertsByIds,
 } from 'web/graphql/alerts';
 import {useGetPermissions} from 'web/graphql/permissions';
-import {useGetReportFormats} from 'web/graphql/report_formats';
+import {useGetReportFormats} from 'web/graphql/reportformats';
 
 import PropTypes from 'web/utils/proptypes';
 import {goto_entity_details} from 'web/utils/graphql';
