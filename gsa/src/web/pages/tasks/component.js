@@ -35,7 +35,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId, hasId} from 'gmp/utils/id';
 
 import date from 'gmp/models/date';
-import ScanConfig, {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 
 import {
@@ -62,7 +62,7 @@ import {useLazyGetCredentials} from 'web/graphql/credentials';
 
 import {useLazyGetScanners} from 'web/graphql/scanners';
 
-import {useGetScanConfigs} from 'web/graphql/scanconfigs';
+import {useLazyGetScanConfigs} from 'web/graphql/scanconfigs';
 
 import {useLazyGetSchedules} from 'web/graphql/schedules';
 
@@ -211,11 +211,10 @@ const TaskComponent = ({
     filterString: ALL_FILTER.toFilterString(),
   });
 
-  const scanConfigQuery = useGetScanConfigs();
   const [
     loadScanConfigs,
-    {data: scanConfigData, loading: isLoadingConfigs, error: scanConfigError},
-  ] = scanConfigQuery({
+    {scanConfigs, loading: isLoadingConfigs, error: scanConfigError},
+  ] = useLazyGetScanConfigs({
     filterString: ALL_FILTER.toFilterString(),
   });
 
@@ -259,18 +258,6 @@ const TaskComponent = ({
     tagId: undefined,
     scanConfigs: undefined,
   });
-
-  useEffect(() => {
-    if (isDefined(scanConfigData)) {
-      dispatchState(
-        updateState({
-          scanConfigs: scanConfigData.scanConfigs.nodes.map(scanConfig =>
-            ScanConfig.fromElement(scanConfig),
-          ),
-        }),
-      );
-    }
-  }, [scanConfigData]);
 
   useEffect(() => {
     loadUserSettingsDefaults();
@@ -844,7 +831,6 @@ const TaskComponent = ({
     esxiCredential,
     taskName,
     targetHosts,
-    scanConfigs,
     startDate,
     reschedule,
     alertIds,

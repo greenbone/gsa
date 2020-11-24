@@ -119,9 +119,25 @@ const mockPermissions = {
   },
 };
 
-export const createGetPermissionsQueryMock = variables =>
-  createGenericQueryMock(
-    GET_PERMISSIONS,
-    {permissions: mockPermissions},
-    variables,
-  );
+export const noPermissions = {
+  edges: [],
+  counts: {
+    total: 10,
+    filtered: 0,
+    offset: 0,
+    limit: 10,
+    length: 0,
+  },
+  pageInfo: {
+    hasNextPage: false,
+    hasPreviousPage: false,
+    startCursor: 'YWxlcnQ6MA==',
+    endCursor: 'YWxlcnQ6OQ==',
+    lastPageCursor: 'YWxlcnQ6MA==',
+  },
+};
+
+export const createGetPermissionsQueryMock = (
+  variables,
+  results = mockPermissions,
+) => createGenericQueryMock(GET_PERMISSIONS, {permissions: results}, variables);

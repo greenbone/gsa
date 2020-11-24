@@ -18,7 +18,7 @@
 
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
-import {GET_REPORT_FORMATS} from '../report_formats';
+import {GET_REPORT_FORMATS} from '../reportformats';
 
 export const reportFormat1 = deepFreeze({
   id: '665',

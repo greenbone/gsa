@@ -20,8 +20,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Don't send scanner and config values in task dialog if task status is not new [#2598](https://github.com/greenbone/gsa/pull/2598)
-- Refactor alerts detailspage to not use withEntityContainer [#2587](https://github.com/greenbone/gsa/pull/2587)
--Implement get_alert via graphql and preliminary refactor of alert detailspage [#2571](https://github.com/greenbone/gsa/pull/2571)
+- Refactor task detailspage to not use withEntityContainer [#2596](https://github.com/greenbone/gsa/pull/2596)
+- Refactor alert detailspage to not use withEntityContainer [#2587](https://github.com/greenbone/gsa/pull/2587)
+- Implement get_alert via graphql and preliminary refactor of alert detailspage [#2571](https://github.com/greenbone/gsa/pull/2571)
 - Implement bulk actions for alerts via graphQL [#2569](https://github.com/greenbone/gsa/pull/2569)
 - Implement clone, delete and test alert via graphql [#2567](https://github.com/greenbone/gsa/pull/2567)
 - Implement get_alerts on alerts listpage via graphql [#2552](https://github.com/greenbone/gsa/pull/2552)

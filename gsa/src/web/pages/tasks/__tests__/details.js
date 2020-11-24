@@ -21,39 +21,16 @@ import {setLocale} from 'gmp/locale/lang';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
-
-import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
-
 import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
+import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
+
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import Details from '../details';
 
 setLocale('en');
-
-const scanConfig = {
-  uuid: '314',
-  name: 'foo',
-  comment: 'bar',
-  scanner: {name: 'scanner1', scannerType: 0},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
-};
-const parsedConfig = ScanConfig.fromObject(scanConfig);
-
-const getConfig = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: parsedConfig,
-  }),
-);
-
-const gmp = {
-  scanconfig: {
-    get: getConfig,
-  },
-};
 
 describe('Task Details tests', () => {
   test('should render full task details', async () => {
@@ -63,22 +40,20 @@ describe('Task Details tests', () => {
     const [scheduleMock, resultFunc] = createGetScheduleQueryMock(
       'c35f82f1-7798-4b84-b2c4-761a33068956',
     );
+    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       capabilities: caps,
       router: true,
-      store: true,
-      gmp,
-      queryMocks: [scheduleMock],
+      queryMocks: [scheduleMock, scanConfigMock],
     });
-
-    store.dispatch(scanconfigActions.success('314', scanConfig));
 
     const {element, getAllByTestId} = render(<Details entity={task} />);
 
     await wait();
     expect(element).toMatchSnapshot();
     expect(resultFunc).toHaveBeenCalled();
+    expect(scanConfigResult).toHaveBeenCalled();
 
     const headings = screen.getAllByRole('heading');
     const detailslinks = getAllByTestId('details-link');
@@ -95,7 +70,7 @@ describe('Task Details tests', () => {
     expect(detailslinks[2]).toHaveAttribute('href', '/scanner/212223');
     expect(element).toHaveTextContent('scanner 1');
     expect(element).toHaveTextContent('OpenVAS Scanner');
-    expect(element).toHaveTextContent('Scan Configfoo');
+    expect(element).toHaveTextContent('Scan Config');
     expect(detailslinks[3]).toHaveAttribute('href', '/scanconfig/314');
     expect(element).toHaveTextContent('Order for target hostssequential');
     expect(element).toHaveTextContent('Network Source Interface');
