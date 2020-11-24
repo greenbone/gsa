@@ -1,37 +1,215 @@
 /* Copyright (C) 2020 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: AGPL-3.0-or-later
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {useCallback} from 'react';
 
 import {gql, useLazyQuery} from '@apollo/client';
+import ScanConfig from 'gmp/models/scanconfig';
+import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import {toFruitfulQuery} from 'web/utils/graphql';
+import {isDefined} from 'gmp/utils/identity';
 
-export const GET_SCAN_CONFIGS = gql`
-  query ScanConfigs($filterString: FilterString) {
-    scanConfigs(filterString: $filterString) {
-      nodes {
+export const GET_SCAN_CONFIG = gql`
+  query ScanConfig($id: UUID!) {
+    scanConfig(id: $id) {
+      id
+      name
+      comment
+      writable
+      inUse
+      creationTime
+      modificationTime
+      permissions {
         name
-        type
+      }
+      userTags {
+        count
+        tags {
+          id
+          name
+          value
+          comment
+        }
+      }
+      trash
+      type
+      familyCount
+      nvtCount
+      usageType
+      maxNvtCount
+      knownNvtCount
+      predefined
+      families {
+        name
+        nvtCount
+        maxNvtCount
+        growing
+      }
+      preferences {
+        nvt {
+          oid
+          name
+        }
+        hrName
+        name
         id
+        type
+        value
+        default
+        alt
+      }
+      tasks {
+        name
+        id
+      }
+      nvtSelectors {
+        name
+        include
+        type
+        familyOrNvt
       }
     }
   }
 `;
 
-export const useGetScanConfigs = () => {
-  return toFruitfulQuery(useLazyQuery)(GET_SCAN_CONFIGS);
+export const GET_SCAN_CONFIGS = gql`
+  query ScanConfigs($filterString: FilterString) {
+    scanConfigs(filterString: $filterString) {
+      edges {
+        node {
+          id
+          name
+          comment
+          writable
+          inUse
+          creationTime
+          modificationTime
+          permissions {
+            name
+          }
+          userTags {
+            count
+            tags {
+              id
+              name
+              value
+              comment
+            }
+          }
+          trash
+          type
+          familyCount
+          nvtCount
+          usageType
+          maxNvtCount
+          knownNvtCount
+          predefined
+          families {
+            name
+            nvtCount
+            maxNvtCount
+            growing
+          }
+          preferences {
+            nvt {
+              oid
+              name
+            }
+            hrName
+            name
+            id
+            type
+            value
+            default
+            alt
+          }
+          tasks {
+            name
+            id
+          }
+          nvtSelectors {
+            name
+            include
+            type
+            familyOrNvt
+          }
+        }
+      }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
+      }
+    }
+  }
+`;
+
+export const useLazyGetScanConfig = (id, options) => {
+  const [queryScanConfig, {data, ...other}] = useLazyQuery(GET_SCAN_CONFIG, {
+    ...options,
+    variables: {id},
+  });
+  const scanConfig = isDefined(data?.scanConfig)
+    ? ScanConfig.fromObject(data.scanConfig)
+    : undefined;
+
+  const loadScanConfig = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryScanConfig({...options, variables: {id}}),
+    [queryScanConfig],
+  );
+  return [loadScanConfig, {scanConfig, ...other}];
+};
+
+export const useLazyGetScanConfigs = (variables, options) => {
+  const [queryScanConfigs, {data, ...other}] = useLazyQuery(GET_SCAN_CONFIGS, {
+    ...options,
+    variables,
+  });
+  const scanConfigs = isDefined(data?.scanConfigs)
+    ? data.scanConfigs.edges.map(entity => ScanConfig.fromObject(entity.node))
+    : undefined;
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.scanConfigs?.counts || {};
+  const counts = isDefined(data?.scanConfigs?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const getScanConfigs = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => queryScanConfigs({...options, variables}),
+    [queryScanConfigs],
+  );
+  const pageInfo = data?.scanConfigs?.pageInfo;
+  return [getScanConfigs, {...other, counts, scanConfigs, pageInfo}];
 };

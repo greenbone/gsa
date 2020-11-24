@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useCallback} from 'react';
-
-import {useDispatch} from 'react-redux';
+import React, {useEffect} from 'react';
 
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
@@ -30,10 +28,7 @@ import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
-import {loadEntity as scanConfigLoader} from 'web/store/entities/scanconfigs';
-
 import PropTypes from 'web/utils/proptypes';
-import useGmp from 'web/utils/useGmp';
 import {renderYesNo} from 'web/utils/render';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
@@ -49,6 +44,7 @@ import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
 
 import {useLazyGetSchedule} from 'web/graphql/schedules';
+import {useLazyGetScanConfig} from 'web/graphql/scanconfigs';
 
 export const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();
@@ -63,14 +59,8 @@ export const compareAlerts = (alertA, alertB) => {
 };
 
 const TaskDetails = ({entity, links = true}) => {
-  const gmp = useGmp();
-  const dispatch = useDispatch();
-
   // Loaders
-  const loadScanConfig = useCallback(
-    id => dispatch(scanConfigLoader(gmp)(id)),
-    [gmp, dispatch],
-  );
+  const [loadScanConfig, {scanConfig = undefined}] = useLazyGetScanConfig();
 
   const [loadSchedule, {schedule}] = useLazyGetSchedule(entity?.schedule?.id);
 
@@ -89,7 +79,6 @@ const TaskDetails = ({entity, links = true}) => {
     autoDelete,
     autoDeleteData,
     averageDuration,
-    config,
     hostsOrdering,
     inAssets,
     reports,
@@ -165,7 +154,7 @@ const TaskDetails = ({entity, links = true}) => {
                 <TableData>{_('Type')}</TableData>
                 <TableData>{scannerTypeName(scanner.scannerType)}</TableData>
               </TableRow>
-              {hasValue(config) && (
+              {hasValue(scanConfig) && (
                 <TableRow>
                   <TableData>{_('Scan Config')}</TableData>
                   <TableData>
@@ -173,31 +162,31 @@ const TaskDetails = ({entity, links = true}) => {
                       <DetailsLink
                         textOnly={!links}
                         type="scanconfig"
-                        id={config.id}
+                        id={scanConfig.id}
                       >
-                        {config.name}
+                        {scanConfig.name}
                       </DetailsLink>
                     </span>
                   </TableData>
                 </TableRow>
               )}
-              {hasValue(config) &&
-                config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
+              {hasValue(scanConfig) &&
+                scanConfig.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
                 hasValue(hostsOrdering) && (
                   <TableRow>
                     <TableData>{_('Order for target hosts')}</TableData>
                     <TableData>{hostsOrdering}</TableData>
                   </TableRow>
                 )}
-              {hasValue(config) &&
-                config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
+              {hasValue(scanConfig) &&
+                scanConfig.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
                   <TableRow>
                     <TableData>{_('Network Source Interface')}</TableData>
                     <TableData>{sourceIface}</TableData>
                   </TableRow>
                 )}
-              {hasValue(config) &&
-                config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
+              {hasValue(scanConfig) &&
+                scanConfig.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
                 hasValue(maxChecks) && (
                   <TableRow>
                     <TableData>
@@ -206,8 +195,8 @@ const TaskDetails = ({entity, links = true}) => {
                     <TableData>{maxChecks}</TableData>
                   </TableRow>
                 )}
-              {hasValue(config) &&
-                config.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
+              {hasValue(scanConfig) &&
+                scanConfig.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
                 hasValue(maxHosts) && (
                   <TableRow>
                     <TableData>

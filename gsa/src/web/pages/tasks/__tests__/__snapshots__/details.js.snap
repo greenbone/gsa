@@ -263,7 +263,7 @@ exports[`Task Details tests should render full task details 1`] = `
                     data-testid="details-link"
                     href="/scanconfig/314"
                   >
-                    foo
+                    Half empty and slow
                   </a>
                 </span>
               </div>
