@@ -21,7 +21,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import Badge from 'web/components/badge/badge';
 
@@ -40,6 +40,12 @@ import ManualIcon from 'web/components/icon/manualicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import AuditIcon from 'web/components/icon/auditicon';
+
+import {
+  NO_RELOAD,
+  USE_DEFAULT_RELOAD_INTERVAL,
+  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
+} from 'web/components/loading/reload';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -85,10 +91,16 @@ import AuditDetails from './details';
 import AuditStatus from 'web/pages/tasks/status';
 import AuditComponent from './component';
 
-import {
-  TaskPermissions as AuditPermissions,
-  reloadInterval,
-} from 'web/pages/tasks/detailspage';
+import {TaskPermissions as AuditPermissions} from 'web/pages/tasks/detailspage';
+
+const reloadInterval = ({entity}) => {
+  if (!hasValue(entity) || entity.isContainer()) {
+    return NO_RELOAD;
+  }
+  return entity.isActive()
+    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
+    : USE_DEFAULT_RELOAD_INTERVAL;
+};
 
 export const ToolBarIcons = ({
   entity,

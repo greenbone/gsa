@@ -49,12 +49,6 @@ import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import TaskIcon from 'web/components/icon/taskicon';
 
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/reload';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
@@ -553,15 +547,6 @@ export const TaskPermissions = withComponentDefaults({
     },
   ],
 })(EntityPermissions);
-
-export const reloadInterval = ({entity}) => {
-  if (!hasValue(entity) || entity.isContainer()) {
-    return NO_RELOAD;
-  }
-  return entity.isActive()
-    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : USE_DEFAULT_RELOAD_INTERVAL;
-};
 
 export default Page;
 
