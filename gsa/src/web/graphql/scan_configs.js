@@ -150,6 +150,20 @@ export const GET_SCAN_CONFIGS = gql`
           }
         }
       }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
+      }
     }
   }
 `;
