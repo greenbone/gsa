@@ -107,18 +107,13 @@ export const renderYesNo = value => {
   }
 };
 
-export const getCVSSOrigin = origin => {
+export const getTranslatableSeverityOrigin = origin => {
   switch (origin) {
     case 'Third Party':
-    case 'third party':
-    case 'ThirdParty':
-    case 'Third party':
-      return _('Thrid Party');
+      return _('Third Party');
     case 'Vendor':
-    case 'vendor':
       return _('Vendor');
     case 'Greenbone':
-    case 'greenbone':
       return _('Greenbone');
     case 'NVD':
       return _('NVD');
