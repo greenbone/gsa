@@ -26,6 +26,7 @@ import _ from 'gmp/locale';
 import logger from 'gmp/log';
 
 import {ALL_FILTER} from 'gmp/models/filter';
+import {TASK_STATUS} from 'gmp/models/task';
 
 import {NO_VALUE} from 'gmp/parser';
 
@@ -409,6 +410,8 @@ const TaskComponent = ({
         );
       }
 
+      const statusIsNew = task.status === TASK_STATUS.new;
+
       const mutationData = {
         alertIds: alert_ids,
         alterable,
@@ -416,15 +419,15 @@ const TaskComponent = ({
         autoDelete: auto_delete,
         autoDeleteData: auto_delete_data,
         comment,
-        configId: config_id,
+        configId: statusIsNew ? config_id : undefined,
         hostsOrdering: hosts_ordering,
         inAssets: in_assets,
         maxChecks: max_checks,
         maxHosts: max_hosts,
         minQod: min_qod,
         name,
-        scannerId: scanner_id,
-        scannerType: scanner_type,
+        scannerId: statusIsNew ? scanner_id : undefined,
+        scannerType: statusIsNew ? scanner_type : undefined,
         scheduleId: schedule_id,
         schedulePeriods: schedule_periods,
         sourceIface: source_iface,
