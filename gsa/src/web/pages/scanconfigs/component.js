@@ -58,7 +58,22 @@ export const createSelectedNvts = (configFamily, nvts) => {
   return selected;
 };
 
-const ScanConfigComponent = props => {
+const ScanConfigComponent = ({
+  children,
+  onCloneError,
+  onCloned,
+  onCreateError,
+  onCreated,
+  onDeleteError,
+  onDeleted,
+  onDownloadError,
+  onDownloaded,
+  onImportError,
+  onImported,
+  onInteraction,
+  onSaveError,
+  onSaved,
+}) => {
   const gmp = useGmp();
   const [state, dispatchState] = useReducer(stateReducer, {
     createConfigDialogVisible: false,
@@ -161,15 +176,11 @@ const ScanConfigComponent = props => {
   const loadFamily = (familyName, silent = false) => {
     const {config} = state;
 
-    /* this.setState(({isLoadingFamily}) => ({
-      isLoadingFamily: silent ? isLoadingFamily : true,
-    })); */
-
     dispatchState(
       updateState({
         isLoadingFamily: silent ? state.isLoadingFamily : true,
       }),
-    ); // what does this do?
+    );
 
     return gmp.scanconfig
       .editScanConfigFamilySettings({
@@ -282,8 +293,6 @@ const ScanConfigComponent = props => {
   };
 
   const handleImportConfig = data => {
-    const {onImported, onImportError} = props;
-
     handleInteraction();
 
     return gmp.scanconfig
@@ -344,7 +353,6 @@ const ScanConfigComponent = props => {
   };
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
@@ -435,21 +443,6 @@ const ScanConfigComponent = props => {
       loadFamilies(silent),
     ]);
   };
-
-  const {
-    children,
-    onCloned,
-    onCloneError,
-    onCreated,
-    onCreateError,
-    onDeleted,
-    onDeleteError,
-    onDownloaded,
-    onDownloadError,
-    onInteraction,
-    onSaved,
-    onSaveError,
-  } = props;
 
   const {
     config,
