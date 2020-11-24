@@ -21,8 +21,11 @@ import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-import {useLazyGetScanConfigs} from '../scan_configs';
-import {createGetScanConfigsQueryMock} from '../__mocks__/scan_configs';
+import {useLazyGetScanConfigs, useLazyGetScanConfig} from '../scan_configs';
+import {
+  createGetScanConfigsQueryMock,
+  createGetScanConfigQueryMock,
+} from '../__mocks__/scan_configs';
 
 const GetLazyScanConfigsComponent = () => {
   const [
@@ -98,5 +101,54 @@ describe('useLazyGetScanConfigs tests', () => {
     expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
     expect(screen.getByTestId('length')).toHaveTextContent(1);
+  });
+});
+
+const GetLazyScanConfigComponent = () => {
+  const [getScanConfig, {scanConfig, loading}] = useLazyGetScanConfig();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getScanConfig('314')} />
+      {isDefined(scanConfig) ? (
+        <div key={scanConfig.id} data-testid="scanConfig">
+          {scanConfig.id}
+        </div>
+      ) : (
+        <div data-testid="no-scanConfig" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetScanConfig tests', () => {
+  test('should query scanConfig after user interaction', async () => {
+    const [mock, resultFunc] = createGetScanConfigQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazyScanConfigComponent />);
+
+    let scanConfigElement = screen.queryAllByTestId('scanConfig');
+    expect(scanConfigElement).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-scanConfig')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    scanConfigElement = screen.getByTestId('scanConfig');
+
+    expect(scanConfigElement).toHaveTextContent('314');
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 });
