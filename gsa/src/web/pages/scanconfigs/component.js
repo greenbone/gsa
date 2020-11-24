@@ -30,7 +30,7 @@ import {selectSaveId} from 'gmp/utils/id';
 import {YES_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 
 import EntityComponent from 'web/entity/component';
@@ -59,6 +59,7 @@ export const createSelectedNvts = (configFamily, nvts) => {
 };
 
 const ScanConfigComponent = props => {
+  const gmp = useGmp();
   const [state, dispatchState] = useReducer(stateReducer, {
     createConfigDialogVisible: false,
     editConfigDialogVisible: false,
@@ -99,7 +100,6 @@ const ScanConfigComponent = props => {
   };
 
   const handleSaveScanConfig = d => {
-    const {gmp} = props;
     const {config} = state;
 
     handleInteraction();
@@ -159,7 +159,6 @@ const ScanConfigComponent = props => {
   };
 
   const loadFamily = (familyName, silent = false) => {
-    const {gmp} = props;
     const {config} = state;
 
     /* this.setState(({isLoadingFamily}) => ({
@@ -234,7 +233,6 @@ const ScanConfigComponent = props => {
   };
 
   const loadNvt = nvtOid => {
-    const {gmp} = props;
     const {config} = state;
 
     dispatchState(
@@ -284,7 +282,7 @@ const ScanConfigComponent = props => {
   };
 
   const handleImportConfig = data => {
-    const {gmp, onImported, onImportError} = props;
+    const {onImported, onImportError} = props;
 
     handleInteraction();
 
@@ -295,8 +293,6 @@ const ScanConfigComponent = props => {
   };
 
   const handleSaveConfigFamily = ({familyName, configId, selected}) => {
-    const {gmp} = props;
-
     handleInteraction();
 
     return gmp.scanconfig
@@ -318,7 +314,6 @@ const ScanConfigComponent = props => {
     nvtOid,
     preferenceValues,
   }) => {
-    const {gmp} = props;
     const {editConfigFamilyDialogVisible, familyName} = state;
 
     handleInteraction();
@@ -356,8 +351,6 @@ const ScanConfigComponent = props => {
   };
 
   const loadScanners = () => {
-    const {gmp} = props;
-
     dispatchState(
       updateState({
         isLoadingScanners: true,
@@ -387,8 +380,6 @@ const ScanConfigComponent = props => {
   };
 
   const loadScanConfig = (configId, silent = false) => {
-    const {gmp} = props;
-
     dispatchState(
       updateState({
         isLoadingConfig: silent ? state.isLoadingConfig : true,
@@ -414,8 +405,6 @@ const ScanConfigComponent = props => {
   };
 
   const loadFamilies = (silent = false) => {
-    const {gmp} = props;
-
     dispatchState(
       updateState({
         isLoadingFamilies: silent ? state.isLoadingFamilies : true,
@@ -601,7 +590,6 @@ const ScanConfigComponent = props => {
 
 ScanConfigComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -617,6 +605,6 @@ ScanConfigComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withGmp(ScanConfigComponent);
+export default ScanConfigComponent;
 
 // vim: set ts=2 sw=2 tw=80:
