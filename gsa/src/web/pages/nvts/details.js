@@ -25,7 +25,7 @@ import {TAG_NA} from 'gmp/models/nvt';
 
 import PropTypes from 'web/utils/proptypes';
 
-import {na} from 'web/utils/render';
+import {na, getCVSSOrigin} from 'web/utils/render';
 
 import DetailsBlock from 'web/entity/block';
 
@@ -80,7 +80,7 @@ const NvtDetails = ({entity, links = true}) => {
               )}
             <TableRow>
               <TableData>{_('CVSS Origin')}</TableData>
-              <TableData>{na(severityOrigin)}</TableData>
+              <TableData>{na(getCVSSOrigin(severityOrigin))}</TableData>
             </TableRow>
           </TableBody>
         </InfoTable>
