@@ -25,6 +25,8 @@ import {TAG_NA} from 'gmp/models/nvt';
 
 import PropTypes from 'web/utils/proptypes';
 
+import {na, getTranslatableSeverityOrigin} from 'web/utils/render';
+
 import DetailsBlock from 'web/entity/block';
 
 import Severitybar from 'web/components/bar/severitybar';
@@ -43,7 +45,7 @@ import Solution from './solution';
 import Pre from './preformatted';
 
 const NvtDetails = ({entity, links = true}) => {
-  const {tags = {}, severity, qod, family, solution} = entity;
+  const {tags = {}, severity, qod, family, solution, severityOrigin} = entity;
   return (
     <Layout flex="column" grow="1">
       {isDefined(tags.summary) && (
@@ -76,6 +78,12 @@ const NvtDetails = ({entity, links = true}) => {
                   </TableData>
                 </TableRow>
               )}
+            <TableRow>
+              <TableData>{_('CVSS Origin')}</TableData>
+              <TableData>
+                {na(getTranslatableSeverityOrigin(severityOrigin))}
+              </TableData>
+            </TableRow>
           </TableBody>
         </InfoTable>
       </DetailsBlock>
