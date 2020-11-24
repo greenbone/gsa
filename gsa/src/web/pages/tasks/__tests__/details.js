@@ -24,7 +24,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
-import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scan_configs';
+import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
 
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 

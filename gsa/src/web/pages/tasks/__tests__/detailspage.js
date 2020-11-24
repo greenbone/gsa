@@ -46,7 +46,7 @@ import {
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scan_configs';
+import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
 
 if (!isDefined(window.URL)) {
   window.URL = {};

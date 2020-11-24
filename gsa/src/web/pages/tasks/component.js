@@ -61,7 +61,7 @@ import {useLazyGetCredentials} from 'web/graphql/credentials';
 
 import {useLazyGetScanners} from 'web/graphql/scanners';
 
-import {useLazyGetScanConfigs} from 'web/graphql/scan_configs';
+import {useLazyGetScanConfigs} from 'web/graphql/scanconfigs';
 
 import {useLazyGetSchedules} from 'web/graphql/schedules';
 

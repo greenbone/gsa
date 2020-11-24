@@ -44,7 +44,7 @@ import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
 
 import {useLazyGetSchedule} from 'web/graphql/schedules';
-import {useLazyGetScanConfig} from 'web/graphql/scan_configs';
+import {useLazyGetScanConfig} from 'web/graphql/scanconfigs';
 
 export const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();

@@ -21,11 +21,11 @@ import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-import {useLazyGetScanConfigs, useLazyGetScanConfig} from '../scan_configs';
+import {useLazyGetScanConfigs, useLazyGetScanConfig} from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
   createGetScanConfigQueryMock,
-} from '../__mocks__/scan_configs';
+} from '../__mocks__/scanconfigs';
 
 const GetLazyScanConfigsComponent = () => {
   const [

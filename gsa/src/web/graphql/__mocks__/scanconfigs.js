@@ -18,7 +18,7 @@
 
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
-import {GET_SCAN_CONFIG, GET_SCAN_CONFIGS} from '../scan_configs';
+import {GET_SCAN_CONFIG, GET_SCAN_CONFIGS} from '../scanconfigs';
 
 export const scanConfig1 = deepFreeze({
   id: '314',

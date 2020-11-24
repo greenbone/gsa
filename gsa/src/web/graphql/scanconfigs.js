@@ -16,13 +16,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {useCallback} from 'react';
 
 import {gql, useLazyQuery} from '@apollo/client';
 import ScanConfig from 'gmp/models/scanconfig';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import {isDefined} from 'gmp/utils/identity';
-import {useCallback} from 'react';
 
 export const GET_SCAN_CONFIG = gql`
   query ScanConfig($id: UUID!) {
