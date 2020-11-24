@@ -31,7 +31,20 @@ import {testModel} from 'gmp/models/testing';
 
 testModel(ScanConfig, 'scanconfig');
 
-describe('ScanConfig model tests', () => {
+describe('ScanConfig model parseObject tests', () => {
+  test('should parse scanConfigType', () => {
+    const obj = {
+      type: 0,
+    };
+    const scanConfig = ScanConfig.fromObject(obj);
+
+    expect(scanConfig.scanConfigType).toEqual(0);
+  });
+
+  // more tests here later
+});
+
+describe('ScanConfig model parseElement tests', () => {
   test('should parse families', () => {
     const elem = {
       families: {
