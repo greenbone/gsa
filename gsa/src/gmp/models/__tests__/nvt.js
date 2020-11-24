@@ -162,6 +162,7 @@ describe('nvt Model tests', () => {
           origin: 'Vendor',
         },
       },
+      cvss_base: '6.6',
     });
     const nvt2 = Nvt.fromElement({
       severities: {
@@ -170,12 +171,13 @@ describe('nvt Model tests', () => {
           origin: 'Greenbone',
         },
       },
+      cvss_base: '',
     });
     const nvt3 = Nvt.fromElement({
       severities: {
         severity: {
           score: 10,
-          origin: 'Third Party',
+          origin: '',
         },
       },
     });
@@ -188,7 +190,7 @@ describe('nvt Model tests', () => {
     expect(nvt2.severityOrigin).toEqual('Greenbone');
     expect(nvt3.cvss_base).toBeUndefined();
     expect(nvt3.severity).toEqual(1.0);
-    expect(nvt3.severityOrigin).toEqual('Third Party');
+    expect(nvt3.severityOrigin).toEqual('');
   });
 
   test('should parse preferences', () => {
