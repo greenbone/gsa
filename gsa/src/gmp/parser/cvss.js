@@ -30,7 +30,7 @@ const toFixed1 = value => {
   if (isNaN(value)) {
     return undefined;
   }
-  let result = +(`${Math.round(+(`${value}e` + 1))}e` + -1);
+  const result = +(`${Math.round(+(`${value}e` + 1))}e` + -1);
   // if no fractional part then add a .0 to the number
   return result;
 };
