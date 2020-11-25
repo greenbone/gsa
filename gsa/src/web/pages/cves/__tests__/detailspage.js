@@ -22,11 +22,8 @@ import {setLocale} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Cve from 'gmp/models/cve';
-
-import Filter from 'gmp/models/filter';
 
 import {entityLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -188,7 +185,8 @@ describe('CVE Detailspage tests', () => {
     expect(baseElement).toMatchSnapshot();
 
     const links = baseElement.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
+    const icons = getAllByTestId('svg-icon');    console.log(element);
+    console.log(baseElement);
 
     expect(icons[0]).toHaveAttribute('title', 'Help: CVEs');
     expect(links[0]).toHaveAttribute(
