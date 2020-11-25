@@ -181,9 +181,6 @@ describe('CVE Detailspage tests', () => {
       <CvePage id="CVE-2020-9997" />,
     );
 
-    expect(element).toMatchSnapshot();
-    expect(baseElement).toMatchSnapshot();
-
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
 
