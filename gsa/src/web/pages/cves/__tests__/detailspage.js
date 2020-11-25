@@ -185,8 +185,7 @@ describe('CVE Detailspage tests', () => {
     expect(baseElement).toMatchSnapshot();
 
     const links = baseElement.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');    console.log(element);
-    console.log(baseElement);
+    const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: CVEs');
     expect(links[0]).toHaveAttribute(
