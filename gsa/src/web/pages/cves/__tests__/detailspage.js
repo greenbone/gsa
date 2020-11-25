@@ -172,7 +172,7 @@ describe('CVE Detailspage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
+    store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('CVE-2020-9997', entity_v2));
