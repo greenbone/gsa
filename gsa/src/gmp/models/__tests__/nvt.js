@@ -141,7 +141,7 @@ describe('nvt Model tests', () => {
     expect(nvt3.xrefs).toEqual([{ref: 'customId', type: 'custom-type'}]);
   });
 
-  test('should parse severity', () => {
+  test('should parse severity from cvss_base', () => {
     const nvt1 = Nvt.fromElement({cvss_base: '8.5'});
     const nvt2 = Nvt.fromElement({cvss_base: ''});
     const nvt3 = Nvt.fromElement({nvt: {cvss_base: '9.5'}});
@@ -152,6 +152,45 @@ describe('nvt Model tests', () => {
     expect(nvt2.cvss_base).toBeUndefined();
     expect(nvt3.cvss_base).toBeUndefined();
     expect(nvt3.severity).toEqual(9.5);
+  });
+
+  test('should parse severity and origin from severities', () => {
+    const nvt1 = Nvt.fromElement({
+      severities: {
+        severity: {
+          score: 94,
+          origin: 'Vendor',
+        },
+      },
+      cvss_base: '6.6',
+    });
+    const nvt2 = Nvt.fromElement({
+      severities: {
+        severity: {
+          score: 74,
+          origin: 'Greenbone',
+        },
+      },
+      cvss_base: '',
+    });
+    const nvt3 = Nvt.fromElement({
+      severities: {
+        severity: {
+          score: 10,
+          origin: '',
+        },
+      },
+    });
+
+    expect(nvt1.severity).toEqual(9.4);
+    expect(nvt1.severityOrigin).toEqual('Vendor');
+    expect(nvt1.cvss_base).toBeUndefined();
+    expect(nvt2.severity).toEqual(7.4);
+    expect(nvt2.cvss_base).toBeUndefined();
+    expect(nvt2.severityOrigin).toEqual('Greenbone');
+    expect(nvt3.cvss_base).toBeUndefined();
+    expect(nvt3.severity).toEqual(1.0);
+    expect(nvt3.severityOrigin).toEqual('');
   });
 
   test('should parse preferences', () => {
