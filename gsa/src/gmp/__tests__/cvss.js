@@ -386,7 +386,7 @@ const cvss_v2_entries = {
 describe('CVSS parser tests', () => {
   describe('CVSS v2 parser tests', () => {
     test('should return false if user has no token', () => {
-      cvss_v2_entries['entries'].forEach(element => {
+      cvss_v2_entries.entries.forEach(element => {
         const {
           accessVector,
           accessComplexity,
@@ -395,8 +395,8 @@ describe('CVSS parser tests', () => {
           availabilityImpact,
           integrityImpact,
           cvssScore,
-        } = parseCvssV2BaseFromVector(element['vector']);
-        expect(cvssScore).toEqual(element['value']);
+        } = parseCvssV2BaseFromVector(element.vector);
+        expect(cvssScore).toEqual(element.value);
         const cvssV2 = parseCvssV2BaseVector({
           accessVector,
           accessComplexity,
@@ -405,8 +405,8 @@ describe('CVSS parser tests', () => {
           availabilityImpact,
           integrityImpact,
         });
-        expect(cvssV2[0]).toEqual(element['vector']);
-        expect(cvssV2[1]).toEqual(element['value']);
+        expect(cvssV2[0]).toEqual(element.vector);
+        expect(cvssV2[1]).toEqual(element.value);
       });
     });
   });
@@ -1680,7 +1680,7 @@ const cvss_v3_entries = {
 describe('CVSS parser tests', () => {
   describe('CVSS v2 parser tests', () => {
     test('should return false if user has no token', () => {
-      cvss_v3_entries['entries'].forEach(element => {
+      cvss_v3_entries.entries.forEach(element => {
         const {
           attackVector,
           attackComplexity,
@@ -1691,8 +1691,8 @@ describe('CVSS parser tests', () => {
           availabilityImpact,
           integrityImpact,
           cvssScore,
-        } = parseCvssV3BaseFromVector(element['vector']);
-        expect(cvssScore).toEqual(element['value']);
+        } = parseCvssV3BaseFromVector(element.vector);
+        expect(cvssScore).toEqual(element.value);
         const cvssV2 = parseCvssV3BaseVector({
           attackVector,
           attackComplexity,
@@ -1703,8 +1703,8 @@ describe('CVSS parser tests', () => {
           availabilityImpact,
           integrityImpact,
         });
-        expect(cvssV2[0]).toEqual(element['vector']);
-        expect(cvssV2[1]).toEqual(element['value']);
+        expect(cvssV2[0]).toEqual(element.vector);
+        expect(cvssV2[1]).toEqual(element.value);
       });
     });
   });
