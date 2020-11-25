@@ -31,7 +31,7 @@ import Filter from 'gmp/models/filter';
 import {entityLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith} from 'web/utils/testing';
 
 import CvePage from '../detailspage';
 
@@ -150,14 +150,6 @@ const renewSession = jest.fn().mockResolvedValue({
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
 describe('CVE Detailspage tests', () => {
   test('should render full Detailspage', () => {
     const getCve = jest.fn().mockResolvedValue({
@@ -209,8 +201,6 @@ describe('CVE Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Export CVE');
 
-    console.log(element);
-    console.log(baseElement);
     expect(element).toHaveTextContent('CVE: CVE-2020-9997');
 
     expect(element).toHaveTextContent('CVE-2020-9997');
