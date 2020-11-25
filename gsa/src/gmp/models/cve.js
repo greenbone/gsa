@@ -23,25 +23,11 @@ import {map} from 'gmp/utils/array';
 
 import {parseSeverity, parseDate, setProperties} from 'gmp/parser';
 
-import {parseCvssV2BaseVector} from 'gmp/parser/cvss';
+import {
+  parseCvssV2BaseFromVector,
+  parseCvssV3BaseFromVector,
+} from 'gmp/parser/cvss';
 import Info from './info';
-
-const delete_empty = (obj, props) => {
-  for (const prop of props) {
-    if (isEmpty(obj[prop])) {
-      delete obj[prop];
-    }
-  }
-};
-
-const rename_props = (obj, rename = {}) => {
-  for (const [oldname, newname] of Object.entries(rename)) {
-    if (isDefined(obj[oldname])) {
-      obj[newname] = obj[oldname];
-      delete obj[oldname];
-    }
-  }
-};
 
 class Cve extends Info {
   static entityType = 'cve';
@@ -53,8 +39,8 @@ class Cve extends Info {
       ret.updateTime = parseDate(ret.update_time);
       delete ret.update_time;
     }
-
-    ret.severity = parseSeverity(ret.cvss);
+    // divide by ten because we now use integer 0-100 in cves
+    ret.severity = parseSeverity(ret.score / 10);
     delete ret.cvss;
 
     if (isDefined(ret.nvts)) {
@@ -80,42 +66,47 @@ class Cve extends Info {
     } else {
       ret.certs = [];
     }
-
-    delete_empty(ret, [
-      'vector',
-      'complexity',
-      'authentication',
-      'confidentiality_impact',
-      'integrity_impact',
-      'availability_impact',
-      'cert',
-    ]);
-
-    const vector = parseCvssV2BaseVector({
-      accessComplexity: ret.complexity,
-      accessVector: ret.vector,
-      authentication: ret.authentication,
-      availabilityImpact: ret.availability_impact,
-      confidentialityImpact: ret.confidentiality_impact,
-      integrityImpact: ret.integrity_impact,
-    });
-    ret.cvssBaseVector = vector[0];
-
-    // use consistent names for cvss values
-    rename_props(ret, {
-      vector: 'cvssAccessVector',
-      complexity: 'cvssAccessComplexity',
-      authentication: 'cvssAuthentication',
-      confidentiality_impact: 'cvssConfidentialityImpact',
-      integrity_impact: 'cvssIntegrityImpact',
-      availability_impact: 'cvssAvailabilityImpact',
-    });
-
-    if (isEmpty(ret.products)) {
-      ret.products = [];
-    } else {
-      ret.products = ret.products.split(' ');
+    if (isEmpty(ret.cvss_vector)) {
+      ret.cvss_vector = '';
     }
+    if (ret.cvss_vector.includes('CVSS:3')) {
+      const {
+        attackVector,
+        attackComplexity,
+        privilegesRequired,
+        userInteraction,
+        scope,
+        confidentialityImpact,
+        integrityImpact,
+        availabilityImpact,
+      } = parseCvssV3BaseFromVector(ret.cvss_vector);
+      ret.cvssAttackVector = attackVector;
+      ret.cvssAttackComplexity = attackComplexity;
+      ret.cvssPrivilegesRequired = privilegesRequired;
+      ret.cvssUserInteraction = userInteraction;
+      ret.cvssScope = scope;
+      ret.cvssConfidentialityImpact = confidentialityImpact;
+      ret.cvssIntegrityImpact = integrityImpact;
+      ret.cvssAvailabilityImpact = availabilityImpact;
+    } else {
+      const {
+        accessVector,
+        accessComplexity,
+        authentication,
+        confidentialityImpact,
+        integrityImpact,
+        availabilityImpact,
+      } = parseCvssV2BaseFromVector(ret.cvss_vector);
+      ret.cvssAccessVector = accessVector;
+      ret.cvssAccessComplexity = accessComplexity;
+      ret.cvssAuthentication = authentication;
+      ret.cvssConfidentialityImpact = confidentialityImpact;
+      ret.cvssIntegrityImpact = integrityImpact;
+      ret.cvssAvailabilityImpact = availabilityImpact;
+    }
+
+    ret.cvssBaseVector = ret.cvss_vector;
+    ret.products = isEmpty(ret.products) ? [] : ret.products.split(' ');
 
     if (isDefined(ret.raw_data) && isDefined(ret.raw_data.entry)) {
       const {entry} = ret.raw_data;
