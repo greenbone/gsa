@@ -28,118 +28,77 @@ import Nvt from 'gmp/models/nvt';
 
 import {isDefined} from 'gmp/utils/identity';
 
-export const GET_NVTS = gql`
-  query Nvts(
-    $filterString: FilterString
-    $after: String
-    $before: String
-    $first: Int
-    $last: Int
-  ) {
-    nvts(
-      filterString: $filterString
-      after: $after
-      before: $before
-      first: $first
-      last: $last
-    ) {
-      edges {
-        node {
-          oid
-          name
-          family
-          cvssBase
-          tags
-          qod {
-            value
-            type
-          }
-          severities {
-            score
-            severitiesList {
-              date
-              origin
-              score
-              type
-              value
-            }
-          }
-          refs {
-            warning
-            refList {
-              id
-              type
-            }
-          }
-          preferences {
-            timeout
-            defaultTimeout
-            preferenceList {
-              nvt {
-                oid
-                name
-              }
-              hrName
-              name
-              id
-              type
-              value
-              default
-              alt
-            }
-          }
-          solution {
-            type
-            method
-            description
-          }
+export const GET_NVT = gql`
+  query Nvt($oid: String!) {
+    nvt(oid: $oid) {
+      oid
+      name
+      family
+      cvssBase
+      tags
+      qod {
+        value
+        type
+      }
+      severities {
+        score
+        severitiesList {
+          date
+          origin
+          score
+          type
+          value
         }
       }
-      counts {
-        total
-        filtered
-        offset
-        limit
-        length
+      refs {
+        warning
+        refList {
+          id
+          type
+        }
       }
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-        lastPageCursor
+      preferences {
+        timeout
+        defaultTimeout
+        preferenceList {
+          nvt {
+            oid
+            name
+          }
+          hrName
+          name
+          id
+          type
+          value
+          default
+          alt
+        }
+      }
+      solution {
+        type
+        method
+        description
       }
     }
   }
 `;
 
-export const useLazyGetNvts = (variables, options) => {
-  const [queryNvts, {data, ...other}] = useLazyQuery(GET_NVTS, {
+export const useLazyGetNvt = (oid, options) => {
+  const [queryNvt, {data, refetch, ...other}] = useLazyQuery(GET_NVT, {
     ...options,
-    variables,
+    variables: {
+      oid,
+    },
   });
-  const nvts = isDefined(data?.nvts)
-    ? data.nvts.edges.map(entity => Nvt.fromObject(entity.node))
-    : undefined;
 
-  const {total, filtered, offset = -1, limit, length} =
-    data?.nvts?.counts || {};
-  const counts = isDefined(data?.nvts?.counts)
-    ? new CollectionCounts({
-        all: total,
-        filtered: filtered,
-        first: offset + 1,
-        length: length,
-        rows: limit,
-      })
-    : undefined;
-  const getNvts = useCallback(
-    // eslint-disable-next-line no-shadow
-    (variables, options) => queryNvts({...options, variables}),
-    [queryNvts],
+  const nvt = isDefined(data?.nvt) ? Nvt.fromObject(data.nvt) : undefined;
+
+  // eslint-disable-next-line no-shadow
+  const getNvt = useCallback(
+    (oid, options) => queryNvt({...options, variables: {oid}}),
+    [queryNvt],
   );
-  const pageInfo = data?.nvts?.pageInfo;
-  return [getNvts, {...other, counts, nvts, pageInfo}];
+  return [getNvt, {...other, nvt, refetch}];
 };
 
 // vim: set ts=2 sw=2 tw=80:

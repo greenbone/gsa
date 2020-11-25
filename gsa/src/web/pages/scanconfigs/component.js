@@ -35,12 +35,15 @@ import stateReducer, {updateState} from 'web/utils/stateReducer';
 
 import EntityComponent from 'web/entity/component';
 import {useCreateScanConfig} from 'web/graphql/scanconfigs';
+import {GET_NVT, useLazyGetNvt} from 'web/graphql/nvts';
 
 import EditConfigFamilyDialog from './editconfigfamilydialog';
 import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
+import {useApolloClient} from '@apollo/client';
+import Nvt from 'gmp/models/nvt';
 
 export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};
@@ -76,6 +79,7 @@ const ScanConfigComponent = ({
   onSaved,
 }) => {
   const gmp = useGmp();
+  const client = useApolloClient();
   const [state, dispatchState] = useReducer(stateReducer, {
     createConfigDialogVisible: false,
     editConfigDialogVisible: false,
@@ -85,6 +89,7 @@ const ScanConfigComponent = ({
   });
 
   const [createScanConfig] = useCreateScanConfig();
+  const [getNvt, {nvt, refetch}] = useLazyGetNvt();
 
   const openEditConfigDialog = config => {
     dispatchState(
@@ -255,21 +260,22 @@ const ScanConfigComponent = ({
   };
 
   const loadNvt = nvtOid => {
-    const {config} = state;
-
     dispatchState(
       updateState({
         isLoadingNvt: true,
       }),
     );
 
-    return gmp.nvt
-      .getConfigNvt({
-        configId: config.id,
-        oid: nvtOid,
+    return client
+      .query({
+        query: GET_NVT,
+        variables: {oid: nvtOid},
+        fetchPolicy: 'cache-first',
       })
-      .then(response => {
-        const {data: loadedNvt} = response;
+      .then(result => {
+        const fetchedNvt = result?.data?.nvt;
+
+        const loadedNvt = Nvt.fromObject(fetchedNvt);
 
         dispatchState(
           updateState({
@@ -473,7 +479,6 @@ const ScanConfigComponent = ({
     isLoadingFamily,
     isLoadingNvt,
     isLoadingScanners,
-    nvt,
     scannerId,
     scanners,
     title,
