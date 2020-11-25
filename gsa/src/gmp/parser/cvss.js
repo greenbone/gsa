@@ -679,13 +679,15 @@ const V3ScoreBase = ({av, ac, pr, ui, s, c, i, a} = {}) => {
   let impact = 1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a);
 
   impact =
-    s === 6.42 ? s * impact : s * impact - 3.25 * Math.pow(impact - 0.02, 15);
+    s === 6.42
+      ? s * impact
+      : s * (impact - 0.029) - 3.25 * Math.pow(impact - 0.02, 15);
   if (s === 7.52) {
     if (pr === 0.62) {
       pr = 0.68;
     }
     if (pr === 0.27) {
-      pr = 0.27;
+      pr = 0.5;
     }
   }
   const exploitability = 8.22 * av * ac * pr * ui;
