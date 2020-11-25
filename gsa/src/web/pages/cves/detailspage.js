@@ -18,7 +18,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import DateTime from 'web/components/date/datetime';
 
 import CveIcon from 'web/components/icon/cveicon';
 import ExportIcon from 'web/components/icon/exporticon';
@@ -164,11 +164,17 @@ const EntityInfo = ({entity}) => {
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Published:')}</div>
-      <div>{dateTimeWithTimeZone(publishedTime)}</div>
+      <div>
+        <DateTime date={publishedTime} />
+      </div>
       <div>{_('Modified:')}</div>
-      <div>{dateTimeWithTimeZone(updateTime)}</div>
+      <div>
+        <DateTime date={updateTime} />
+      </div>
       <div>{_('Last updated:')}</div>
-      <div>{dateTimeWithTimeZone(lastModifiedTime)}</div>
+      <div>
+        <DateTime date={lastModifiedTime} />
+      </div>
     </InfoLayout>
   );
 };

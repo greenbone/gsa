@@ -198,9 +198,15 @@ describe('CVE Detailspage tests', () => {
     expect(element).toHaveTextContent('CVE: CVE-2020-9997');
 
     expect(element).toHaveTextContent('CVE-2020-9997');
-    expect(element).toHaveTextContent('Published:Thu, Oct 22, 2020 9:15 PM ');
-    expect(element).toHaveTextContent('Modified:Fri, Oct 30, 2020 12:44 PM');
-    expect(element).toHaveTextContent('Last updated:Mon, Oct 26, 2020 9:27 PM');
+    expect(element).toHaveTextContent(
+      'Published:Thu, Oct 22, 2020 7:15 PM UTC',
+    );
+    expect(element).toHaveTextContent(
+      'Modified:Fri, Oct 30, 2020 11:44 AM UTC',
+    );
+    expect(element).toHaveTextContent(
+      'Last updated:Mon, Oct 26, 2020 8:27 PM UTC',
+    );
 
     expect(element).toHaveTextContent('Attack VectorLOCAL');
     expect(element).toHaveTextContent('Attack ComplexityLOW');
