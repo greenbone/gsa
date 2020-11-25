@@ -18,7 +18,7 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useLazyQuery} from '@apollo/client';
+import {gql, useLazyQuery, useMutation} from '@apollo/client';
 import ScanConfig from 'gmp/models/scanconfig';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -168,6 +168,14 @@ export const GET_SCAN_CONFIGS = gql`
   }
 `;
 
+export const CREATE_SCAN_CONFIG = gql`
+  mutation createScanConfig($input: CreateScanConfigInput!) {
+    createScanConfig(input: $input) {
+      id
+    }
+  }
+`;
+
 export const useLazyGetScanConfig = (id, options) => {
   const [queryScanConfig, {data, ...other}] = useLazyQuery(GET_SCAN_CONFIG, {
     ...options,
@@ -212,4 +220,21 @@ export const useLazyGetScanConfigs = (variables, options) => {
   );
   const pageInfo = data?.scanConfigs?.pageInfo;
   return [getScanConfigs, {...other, counts, scanConfigs, pageInfo}];
+};
+
+export const useCreateScanConfig = options => {
+  const [queryCreateScanConfig, {data, ...other}] = useMutation(
+    CREATE_SCAN_CONFIG,
+    options,
+  );
+  const createScanConfig = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreateScanConfig({...options, variables: {input: inputObject}}).then(
+        result => result?.data?.createScanConfig?.id,
+      ),
+    [queryCreateScanConfig],
+  );
+  const scanConfigId = data?.createScanConfig?.id;
+  return [createScanConfig, {...other, id: scanConfigId}];
 };

@@ -34,6 +34,7 @@ import useGmp from 'web/utils/useGmp';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 
 import EntityComponent from 'web/entity/component';
+import {useCreateScanConfig} from 'web/graphql/scanconfigs';
 
 import EditConfigFamilyDialog from './editconfigfamilydialog';
 import EditScanConfigDialog from './editdialog';
@@ -83,6 +84,8 @@ const ScanConfigComponent = ({
     importDialogVisible: false,
   });
 
+  const [createScanConfig] = useCreateScanConfig();
+
   const openEditConfigDialog = config => {
     dispatchState(
       updateState({
@@ -118,7 +121,15 @@ const ScanConfigComponent = ({
     const {config} = state;
 
     handleInteraction();
-    const {name, comment, id} = d;
+    const {name, comment, id, baseScanConfig} = d;
+    if (!isDefined(id)) {
+      return createScanConfig({
+        configId: baseScanConfig,
+        name,
+        comment,
+      });
+    }
+
     let saveData = d;
     if (config.isInUse()) {
       saveData = {name, comment, id};
@@ -484,7 +495,7 @@ const ScanConfigComponent = ({
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({save, ...other}) => (
+        {({...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -500,7 +511,9 @@ const ScanConfigComponent = ({
                 onClose={handleCloseCreateConfigDialog}
                 onSave={d => {
                   handleInteraction();
-                  return save(d).then(() => closeCreateConfigDialog());
+                  return handleSaveScanConfig(d).then(() =>
+                    closeCreateConfigDialog(),
+                  );
                 }}
               />
             )}
