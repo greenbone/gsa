@@ -19,7 +19,7 @@ import React, {useEffect, useReducer, useState} from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -72,7 +72,7 @@ const createPrefValues = (preferences = []) => {
 };
 
 const convertTimeout = value =>
-  !isDefined(value) || value.trim().length === 0 ? undefined : value;
+  !hasValue(value) || value.trim().length === 0 ? undefined : value;
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -115,7 +115,7 @@ const EditNvtDetailsDialog = ({
   nvtSeverity,
   nvtSummary,
   timeout,
-  preferences,
+  preferences = [],
   title,
   onClose,
   onSave,
@@ -129,7 +129,7 @@ const EditNvtDetailsDialog = ({
 
   const [controlledTimeout, setControlledTimeout] = useState(timeout);
   const [useDefaultTimeout, setDefaultTimeout] = useState(
-    isDefined(timeout) ? '0' : '1',
+    hasValue(timeout) ? '0' : '1',
   );
 
   useEffect(() => {
@@ -141,7 +141,7 @@ const EditNvtDetailsDialog = ({
 
   useEffect(() => {
     setControlledTimeout(timeout);
-    setDefaultTimeout(isDefined(timeout) ? '0' : '1');
+    setDefaultTimeout(hasValue(timeout) ? '0' : '1');
   }, [timeout]);
 
   const handleChangeTimeout = value => {
@@ -201,14 +201,14 @@ const EditNvtDetailsDialog = ({
               </TableBody>
             </SimpleTable>
 
-            {isDefined(nvtSummary) && (
+            {hasValue(nvtSummary) && (
               <div>
                 <h1>{_('Summary')}</h1>
                 <Preformatted>{nvtSummary}</Preformatted>
               </div>
             )}
 
-            {isDefined(nvtAffectedSoftware) && (
+            {hasValue(nvtAffectedSoftware) && (
               <div>
                 <h1>{_('Affected Software/OS')}</h1>
                 <Preformatted>{nvtAffectedSoftware}</Preformatted>
@@ -225,7 +225,7 @@ const EditNvtDetailsDialog = ({
                       <SeverityBar severity={nvtSeverity} />
                     </TableData>
                   </TableRow>
-                  {isDefined(nvtCvssVector) && (
+                  {hasValue(nvtCvssVector) && (
                     <TableRow>
                       <TableData>{_('CVSS base vector')}</TableData>
                       <TableData>
@@ -264,7 +264,7 @@ const EditNvtDetailsDialog = ({
                         />
                         <span>
                           {_('Apply default timeout')}
-                          {isDefined(defaultTimeout)
+                          {hasValue(defaultTimeout)
                             ? ' (' + defaultTimeout + ')'
                             : ''}
                         </span>
@@ -279,18 +279,18 @@ const EditNvtDetailsDialog = ({
                         <TextField
                           disabled={state.useDefaultTimeout === '1'}
                           name="timeout"
-                          value={isDefined(state.timeout) ? state.timeout : ''}
+                          value={hasValue(state.timeout) ? state.timeout : ''}
                           onChange={handleChangeTimeout}
                         />
                       </Divider>
                     </Divider>
                   </TableData>
                   <TableData>
-                    {isDefined(defaultTimeout) ? defaultTimeout : ''}
+                    {hasValue(defaultTimeout) ? defaultTimeout : ''}
                   </TableData>
                 </TableRow>
                 {preferences.map(pref => {
-                  const prefValue = isDefined(preferenceValues[pref.name])
+                  const prefValue = hasValue(preferenceValues[pref.name])
                     ? preferenceValues[pref.name].value
                     : undefined;
                   return (

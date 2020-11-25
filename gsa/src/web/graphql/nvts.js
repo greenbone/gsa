@@ -36,6 +36,13 @@ export const GET_NVT = gql`
       family
       cvssBase
       tags
+      creationTime
+      modificationTime
+      preferenceCount
+      timeout
+      defaultTimeout
+      category
+      summery
       qod {
         value
         type

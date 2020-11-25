@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useReducer} from 'react';
+import React, {useEffect, useReducer} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -79,7 +79,6 @@ const ScanConfigComponent = ({
   onSaved,
 }) => {
   const gmp = useGmp();
-  const client = useApolloClient();
   const [state, dispatchState] = useReducer(stateReducer, {
     createConfigDialogVisible: false,
     editConfigDialogVisible: false,
@@ -89,7 +88,7 @@ const ScanConfigComponent = ({
   });
 
   const [createScanConfig] = useCreateScanConfig();
-  const [getNvt, {nvt, refetch}] = useLazyGetNvt();
+  const [getNvt, {nvt, loading: isLoadingNvt}] = useLazyGetNvt();
 
   const openEditConfigDialog = config => {
     dispatchState(
@@ -266,33 +265,7 @@ const ScanConfigComponent = ({
       }),
     );
 
-    return client
-      .query({
-        query: GET_NVT,
-        variables: {oid: nvtOid},
-        fetchPolicy: 'cache-first',
-      })
-      .then(result => {
-        const fetchedNvt = result?.data?.nvt;
-
-        const loadedNvt = Nvt.fromObject(fetchedNvt);
-
-        dispatchState(
-          updateState({
-            nvt: loadedNvt,
-            editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{name}}', {
-              name: shorten(loadedNvt.name),
-            }),
-          }),
-        );
-      })
-      .finally(() => {
-        dispatchState(
-          updateState({
-            isLoadingNvt: false,
-          }),
-        );
-      });
+    getNvt(nvtOid);
   };
 
   const closeEditNvtDetailsDialog = () => {
@@ -461,6 +434,18 @@ const ScanConfigComponent = ({
     ]);
   };
 
+  useEffect(() => {
+    if (isDefined(nvt) && !isLoadingNvt) {
+      dispatchState(
+        updateState({
+          editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{name}}', {
+            name: shorten(nvt.name),
+          }),
+        }),
+      );
+    }
+  }, [isLoadingNvt]);
+
   const {
     config,
     createConfigDialogVisible,
@@ -477,7 +462,6 @@ const ScanConfigComponent = ({
     isLoadingConfig,
     isLoadingFamilies,
     isLoadingFamily,
-    isLoadingNvt,
     isLoadingScanners,
     scannerId,
     scanners,
