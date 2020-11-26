@@ -35,6 +35,7 @@ import 'gmp/commands/feedstatus';
 import 'gmp/commands/filters';
 import 'gmp/commands/groups';
 import 'gmp/commands/hosts';
+import 'gmp/commands/login';
 import 'gmp/commands/notes';
 import 'gmp/commands/nvt';
 import 'gmp/commands/nvtfamilies';

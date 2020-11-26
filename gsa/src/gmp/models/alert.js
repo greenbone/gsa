@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined, isObject} from 'gmp/utils/identity';
+import {hasValue, isDefined, isObject} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {forEach, map} from 'gmp/utils/array';
 
