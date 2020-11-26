@@ -20,8 +20,8 @@ import {forEach, map} from 'gmp/utils/array';
 import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model, {parseModelFromElement} from '../model';
-import {parseSeverity, parseQod} from '../parser';
+import Model, {parseModelFromElement} from 'gmp/model';
+import {parseSeverity, parseQod} from 'gmp/parser';
 
 import Nvt from './nvt';
 

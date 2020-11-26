@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+- Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
+- Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section [#2536](https://github.com/greenbone/gsa/pull/2536)
 - Implement get_report_formats and get_permissions via graphQL on alert detailspage [#2585](https://github.com/greenbone/gsa/pull/2585)
 - Implemented parseObject for alert model implement [#2552](https://github.com/greenbone/gsa/pull/2552)
 - Added getNotes query [#2485](https://github.com/greenbone/gsa/pull/2485)
@@ -16,17 +18,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425)
 - Added getOverrides query [#2405](https://github.com/greenbone/gsa/pull/2405)
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
-- Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
 - Don't send scanner and config values in task dialog if task status is not new [#2598](https://github.com/greenbone/gsa/pull/2598)
 - Refactor task detailspage to not use withEntityContainer [#2596](https://github.com/greenbone/gsa/pull/2596)
 - Refactor alert detailspage to not use withEntityContainer [#2587](https://github.com/greenbone/gsa/pull/2587)
+- CVE Tables Page can now be used with the updated xml-format and CVSSv3(.1) [#2583](https://github.com/greenbone/gsa/pull/2583)
 - Implement get_alert via graphql and preliminary refactor of alert detailspage [#2571](https://github.com/greenbone/gsa/pull/2571)
 - Implement bulk actions for alerts via graphQL [#2569](https://github.com/greenbone/gsa/pull/2569)
 - Implement clone, delete and test alert via graphql [#2567](https://github.com/greenbone/gsa/pull/2567)
 - Implement get_alerts on alerts listpage via graphql [#2552](https://github.com/greenbone/gsa/pull/2552)
 - Implement modify alert via graphql [#2549](https://github.com/greenbone/gsa/pull/2549)
+- The CVSS v2 BaseScore calculator calculates the score on the client side now [#2536](https://github.com/greenbone/gsa/pull/2536)
 - Implement advanced task wizard via graphql [#2523](https://github.com/greenbone/gsa/pull/2523)
 - Implement modify task wizard via graphql [#2514](https://github.com/greenbone/gsa/pull/2514)
 - Implement task wizard via graphql [#2509](https://github.com/greenbone/gsa/pull/2509)
@@ -36,8 +39,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Load credentials in task component and target component via graphql [#2453](https://github.com/greenbone/gsa/pull/2453)
 - Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425)
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
-
-- The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Fixed
 
@@ -63,6 +64,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added option for "Start Task" event upon "New SecInfo arrived" condition in alerts dialog [#2418](https://github.com/greenbone/gsa/pull/2418)
 
 ### Changed
+- Allow äüöÄÜÖß in form validation rule for "name" [#2586](https://github.com/greenbone/gsa/pull/2586)
 - Show "Filter x matches at least y results" condition to task events in alert dialog [#2580](https://github.com/greenbone/gsa/pull/2580)
 - Always send sort=name with delta report request filters [#2570](https://github.com/greenbone/gsa/pull/2570)
 - Changed trash icon to delete icon on host detailspage [#2565](https://github.com/greenbone/gsa/pull/2565)

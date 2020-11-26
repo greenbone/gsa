@@ -18,7 +18,7 @@
 
 import {_l} from 'gmp/locale/lang';
 
-import Model from '../model';
+import Model from 'gmp/model';
 
 import {parseBoolean, parseDate} from 'gmp/parser';
 import {forEach} from 'gmp/utils/array';

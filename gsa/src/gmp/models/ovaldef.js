@@ -20,7 +20,7 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import {parseSeverity, parseYesNo, YES_VALUE, parseDate} from '../parser';
+import {parseSeverity, parseYesNo, YES_VALUE, parseDate} from 'gmp/parser';
 
 import Info from './info';
 

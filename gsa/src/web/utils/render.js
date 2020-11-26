@@ -106,6 +106,21 @@ export const renderYesNo = value => {
   }
 };
 
+export const getTranslatableSeverityOrigin = origin => {
+  switch (origin) {
+    case 'Third Party':
+      return _('Third Party');
+    case 'Vendor':
+      return _('Vendor');
+    case 'Greenbone':
+      return _('Greenbone');
+    case 'NVD':
+      return _('NVD');
+    default:
+      return origin;
+  }
+};
+
 const getPermissionTypeName = type => {
   switch (type) {
     case 'aggregates':

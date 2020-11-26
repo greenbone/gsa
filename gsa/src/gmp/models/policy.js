@@ -16,13 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../utils/identity';
-import {forEach, map} from '../utils/array';
-import {isEmpty} from '../utils/string';
+import {isDefined} from 'gmp/utils/identity';
+import {forEach, map} from 'gmp/utils/array';
+import {isEmpty} from 'gmp/utils/string';
 
-import {parseInt, parseBoolean} from '../parser';
+import {parseInt, parseBoolean} from 'gmp/parser';
 
-import Model, {parseModelFromElement} from '../model';
+import Model, {parseModelFromElement} from 'gmp/model';
 
 import {parseCount, parseTrend} from './scanconfig';
 

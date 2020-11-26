@@ -1310,7 +1310,7 @@ describe('parseCvssV3BaseFromVector tests', () => {
       availabilityImpact: 'NONE',
       confidentialityImpact: 'NONE',
       integrityImpact: 'HIGH',
-      cvssScore: 5.2,
+      cvssScore: 5.3,
     });
   });
 });

@@ -16,60 +16,59 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from './utils/identity';
-import {isEmpty} from './utils/string';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
-import logger from './log.js';
+import logger from 'gmp/log';
 
-import './commands/alerts.js';
-import './commands/audits.js';
-import './commands/auth.js';
-import './commands/certbund.js';
-import './commands/credentials.js';
-import './commands/cpes.js';
-import './commands/cves.js';
-import './commands/cvsscalculator.js';
-import './commands/dashboards.js';
-import './commands/dfncert.js';
-import './commands/feedstatus.js';
-import './commands/filters.js';
-import './commands/groups.js';
-import './commands/hosts.js';
-import './commands/login.js';
-import './commands/notes.js';
-import './commands/nvt.js';
-import './commands/nvtfamilies';
-import './commands/os.js';
-import './commands/ovaldefs.js';
-import './commands/overrides.js';
-import './commands/performance.js';
-import './commands/permissions.js';
-import './commands/policies.js';
-import './commands/portlists.js';
-import './commands/reportformats.js';
-import './commands/reports.js';
-import './commands/results.js';
-import './commands/roles.js';
-import './commands/scanconfigs.js';
-import './commands/scanners.js';
-import './commands/schedules.js';
-import './commands/tags.js';
-import './commands/targets.js';
-import './commands/tasks.js';
-import './commands/tickets.js';
-import './commands/tlscertificates.js';
-import './commands/trashcan.js';
-import './commands/users.js';
-import './commands/vulns.js';
-import './commands/wizard.js';
+import 'gmp/commands/alerts';
+import 'gmp/commands/audits';
+import 'gmp/commands/auth';
+import 'gmp/commands/certbund';
+import 'gmp/commands/credentials';
+import 'gmp/commands/cpes';
+import 'gmp/commands/cves';
+import 'gmp/commands/cvsscalculator';
+import 'gmp/commands/dashboards';
+import 'gmp/commands/dfncert';
+import 'gmp/commands/feedstatus';
+import 'gmp/commands/filters';
+import 'gmp/commands/groups';
+import 'gmp/commands/hosts';
+import 'gmp/commands/notes';
+import 'gmp/commands/nvt';
+import 'gmp/commands/nvtfamilies';
+import 'gmp/commands/os';
+import 'gmp/commands/ovaldefs';
+import 'gmp/commands/overrides';
+import 'gmp/commands/performance';
+import 'gmp/commands/permissions';
+import 'gmp/commands/policies';
+import 'gmp/commands/portlists';
+import 'gmp/commands/reportformats';
+import 'gmp/commands/reports';
+import 'gmp/commands/results';
+import 'gmp/commands/roles';
+import 'gmp/commands/scanconfigs';
+import 'gmp/commands/scanners';
+import 'gmp/commands/schedules';
+import 'gmp/commands/tags';
+import 'gmp/commands/targets';
+import 'gmp/commands/tasks';
+import 'gmp/commands/tickets';
+import 'gmp/commands/tlscertificates';
+import 'gmp/commands/trashcan';
+import 'gmp/commands/users';
+import 'gmp/commands/vulns';
+import 'gmp/commands/wizard';
 
-import GmpHttp from './http/gmp.js';
-import {buildServerUrl, buildUrlParams} from './http/utils.js';
-import DefaultTransform from './http/transform/default';
+import GmpHttp from 'gmp/http/gmp';
+import {buildServerUrl, buildUrlParams} from 'gmp/http/utils';
+import DefaultTransform from 'gmp/http/transform/default';
 
-import {getCommands} from './command.js';
+import {getCommands} from 'gmp/command';
 
-import {setLocale} from './locale/lang';
+import {setLocale} from 'gmp/locale/lang';
 
 const log = logger.getLogger('gmp');
 

@@ -15,15 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import {parseModelFromElement} from '../model';
+import {parseModelFromElement} from 'gmp/model';
 
-import Credential from '../models/credential';
-import Task from '../models/task';
-import Settings from '../models/settings';
+import Credential from 'gmp/models/credential';
+import Task from 'gmp/models/task';
+import Settings from 'gmp/models/settings';
 
-import {forEach, map} from '../utils/array';
+import {forEach, map} from 'gmp/utils/array';
 
 import HttpCommand from './http';
 

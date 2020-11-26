@@ -15,29 +15,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import {apiType} from '../utils/entitytype';
-import {isDefined} from '../utils/identity';
-import {map} from '../utils/array';
+import {apiType} from 'gmp/utils/entitytype';
+import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
-import Alert from '../models/alert';
-import Scanconfig from '../models/scanconfig';
-import Credential from '../models/credential';
-import Filter from '../models/filter';
-import Group from '../models/group';
-import Note from '../models/note';
-import Override from '../models/override';
-import Permission from '../models/permission';
-import PortList from '../models/portlist';
-import ReportFormat from '../models/reportformat';
-import Role from '../models/role';
-import Scanner from '../models/scanner';
-import Schedule from '../models/schedule';
-import Tag from '../models/tag';
-import Target from '../models/target';
-import Task from '../models/task';
-import Ticket from '../models/ticket';
+import Alert from 'gmp/models/alert';
+import Scanconfig from 'gmp/models/scanconfig';
+import Credential from 'gmp/models/credential';
+import Filter from 'gmp/models/filter';
+import Group from 'gmp/models/group';
+import Note from 'gmp/models/note';
+import Override from 'gmp/models/override';
+import Permission from 'gmp/models/permission';
+import PortList from 'gmp/models/portlist';
+import ReportFormat from 'gmp/models/reportformat';
+import Role from 'gmp/models/role';
+import Scanner from 'gmp/models/scanner';
+import Schedule from 'gmp/models/schedule';
+import Tag from 'gmp/models/tag';
+import Target from 'gmp/models/target';
+import Task from 'gmp/models/task';
+import Ticket from 'gmp/models/ticket';
 
 import HttpCommand from './http';
 

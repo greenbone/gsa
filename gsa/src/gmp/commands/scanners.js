@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import logger from '../log.js';
+import logger from 'gmp/log';
 
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import Scanner from '../models/scanner';
+import Scanner from 'gmp/models/scanner';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

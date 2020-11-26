@@ -16,10 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {hasValue, isDefined} from '../utils/identity';
-import {isEmpty} from '../utils/string';
+import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
-import Model, {parseModelFromElement, parseModelFromObject} from '../model';
+import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 
 class Permission extends Model {
   static entityType = 'permission';

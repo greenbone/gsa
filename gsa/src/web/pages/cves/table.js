@@ -53,7 +53,7 @@ const Header = ({
           title={_('Name')}
         />
         <TableHead
-          width="66%"
+          width="62%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'description' : false}
@@ -69,7 +69,7 @@ const Header = ({
           title={_('Published')}
         />
         <TableHead
-          width="13%"
+          width="17%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'cvssBaseVector' : false}

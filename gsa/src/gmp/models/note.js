@@ -15,11 +15,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isModelElement} from '../utils/identity';
-import {isEmpty} from '../utils/string';
+import {isModelElement} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
-import Model, {parseModelFromElement} from '../model';
-import {parseCsv, parseSeverity, parseTextElement, parseYesNo} from '../parser';
+import Model, {parseModelFromElement} from 'gmp/model';
+import {
+  parseCsv,
+  parseSeverity,
+  parseTextElement,
+  parseYesNo,
+} from 'gmp/parser';
 
 import Nvt from './nvt';
 

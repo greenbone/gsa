@@ -16,16 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import logger from '../log';
+import logger from 'gmp/log';
 
-import {forEach, map} from '../utils/array';
-import {isDefined} from '../utils/identity';
+import {forEach, map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 
-import registerCommand from '../command';
-import {YES_VALUE, NO_VALUE} from '../parser';
+import registerCommand from 'gmp/command';
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-import Nvt from '../models/nvt';
-import ScanConfig from '../models/scanconfig';
+import Nvt from 'gmp/models/nvt';
+import ScanConfig from 'gmp/models/scanconfig';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

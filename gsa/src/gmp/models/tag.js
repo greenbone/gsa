@@ -21,7 +21,7 @@ import {isEmpty} from 'gmp/utils/string';
 
 import {parseInt} from 'gmp/parser';
 
-import Model from '../model';
+import Model from 'gmp/model';
 
 class Tag extends Model {
   static entityType = 'tag';
