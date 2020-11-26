@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined, isArray, isString} from 'gmp/utils/identity';
+import {isDefined, isArray, isString, hasValue} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
@@ -112,6 +112,40 @@ const getOtherRefs = refs => {
 
 class Nvt extends Info {
   static entityType = 'nvt';
+
+  static parseObject(object) {
+    const ret = super.parseElement(object, 'nvt');
+
+    ret.nvtType = ret.type;
+    ret.id = ret.oid;
+    ret.tags = parseTags(ret.tags);
+    ret.severity = parseSeverity(ret.cvssBase);
+    delete ret.cvssBase;
+
+    if (hasValue(ret.preferences)) {
+      ret.preferences = map(ret.preferences.preferenceList, preference => {
+        const pref = {...preference};
+        delete pref.nvt;
+        return pref;
+      });
+    } else {
+      ret.preferences = [];
+    }
+
+    if (hasValue(ret.defaultTimeout)) {
+      ret.defaultTimeout = parseFloat(ret.defaultTimeout);
+    } else {
+      delete ret.defaultTimeout;
+    }
+
+    if (hasValue(ret.timeout)) {
+      ret.timeout = parseFloat(ret.timeout);
+    } else {
+      delete ret.timeout;
+    }
+
+    return ret;
+  }
 
   static parseElement(element) {
     const ret = super.parseElement(element, 'nvt');
