@@ -35,7 +35,7 @@ import stateReducer, {updateState} from 'web/utils/stateReducer';
 
 import EntityComponent from 'web/entity/component';
 import {useCreateScanConfig} from 'web/graphql/scanconfigs';
-import {useLazyGetNvt} from 'web/graphql/nvts';
+import {useLazyGetNvt, useLazyGetNvts} from 'web/graphql/nvts';
 
 import EditConfigFamilyDialog from './editconfigfamilydialog';
 import EditScanConfigDialog from './editdialog';
@@ -43,7 +43,8 @@ import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
 
-export const createSelectedNvts = (configFamily, nvts) => {
+export const createSelectedNvts = (config, familyName, nvts) => {
+  const configFamily = config?.families[familyName];
   const selected = {};
   const nvtsCount = isDefined(configFamily) ? configFamily.nvts.count : 0;
 
@@ -53,7 +54,7 @@ export const createSelectedNvts = (configFamily, nvts) => {
     });
   } else {
     forEach(nvts, nvt => {
-      selected[nvt.oid] = nvt.selected;
+      selected[nvt.oid] = nvt.family === familyName ? 1 : 0;
     });
   }
 
@@ -87,6 +88,10 @@ const ScanConfigComponent = ({
 
   const [createScanConfig] = useCreateScanConfig();
   const [getNvt, {nvt, loading: isLoadingNvt}] = useLazyGetNvt();
+  const [
+    getFamilyNvts,
+    {nvts: familyNvts, loading: isLoadingFamily, error: familyNvtsError},
+  ] = useLazyGetNvts();
 
   const openEditConfigDialog = config => {
     dispatchState(
@@ -192,38 +197,17 @@ const ScanConfigComponent = ({
     dispatchState(
       updateState({
         isLoadingFamily: silent ? state.isLoadingFamily : true,
+        familyName,
       }),
     );
 
-    return gmp.scanconfig
-      .editScanConfigFamilySettings({
-        id: config.id,
-        familyName,
-      })
-      .then(response => {
-        const {data} = response;
-        const {nvts} = data;
-
-        const configFamily = config.families[familyName];
-        const selected = createSelectedNvts(configFamily, nvts);
-
-        dispatchState(
-          updateState({
-            familyNvts: data.nvts,
-            familySelectedNvts: selected,
-            isLoadingFamily: false,
-          }),
-        );
-      })
-      .catch(error => {
-        dispatchState(
-          updateState({
-            isLoadingFamily: false,
-            selected: {}, // ensure selected is defined to stop loading indicator
-          }),
-        );
-        throw error;
-      });
+    getFamilyNvts({
+      family: familyName,
+      details: true,
+      preferences: true,
+      preferenceCount: true,
+      configId: config.id,
+    });
   };
 
   const closeEditConfigFamilyDialog = () => {
@@ -434,7 +418,28 @@ const ScanConfigComponent = ({
     }
   }, [isLoadingNvt]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log(nvt);
+  useEffect(() => {
+    if (isDefined(familyNvtsError)) {
+      dispatchState(
+        updateState({
+          selected: {}, // ensure selected is defined to stop loading indicator
+        }),
+      );
+      throw familyNvtsError;
+    } else if (isDefined(familyNvts) && !isLoadingFamily) {
+      const {config, familyName} = state;
+      const selected = createSelectedNvts(config, familyName, familyNvts);
+
+      dispatchState(
+        updateState({
+          familyNvts,
+          familySelectedNvts: selected,
+        }),
+      );
+    }
+  }, [isLoadingFamily]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  console.log(state?.familySelectedNvts?.length);
   const {
     config,
     createConfigDialogVisible,
@@ -445,12 +450,10 @@ const ScanConfigComponent = ({
     editNvtDetailsDialogTitle,
     families,
     familyName,
-    familyNvts,
     familySelectedNvts,
     importDialogVisible,
     isLoadingConfig,
     isLoadingFamilies,
-    isLoadingFamily,
     isLoadingScanners,
     scannerId,
     scanners,
@@ -539,7 +542,7 @@ const ScanConfigComponent = ({
           familyName={familyName}
           isLoadingFamily={isLoadingFamily}
           nvts={familyNvts}
-          selected={familySelectedNvts}
+          selected={familyNvts}
           title={editConfigFamilyDialogTitle}
           onClose={handleCloseEditConfigFamilyDialog}
           onEditNvtDetailsClick={openEditNvtDetailsDialog}

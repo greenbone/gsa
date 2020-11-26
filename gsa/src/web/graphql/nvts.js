@@ -88,6 +88,88 @@ export const GET_NVT = gql`
   }
 `;
 
+export const GET_NVTS = gql`
+  query Nvts(
+    $details: Boolean
+    $preferences: Boolean
+    $preferenceCount: Boolean
+    $timeout: Boolean
+    $configId: String
+    $preferencesConfigId: String
+    $family: String
+    $sortOrder: String
+    $sortField: String
+  ) {
+    nvts(
+      details: $details
+      preferences: $preferences
+      preferenceCount: $preferenceCount
+      timeout: $timeout
+      configId: $configId
+      preferencesConfigId: $preferencesConfigId
+      family: $family
+      sortOrder: $sortOrder
+      sortField: $sortField
+    ) {
+      oid
+      name
+      family
+      cvssBase
+      tags
+      creationTime
+      modificationTime
+      preferenceCount
+      timeout
+      defaultTimeout
+      category
+      summery
+      qod {
+        value
+        type
+      }
+      severities {
+        score
+        severitiesList {
+          date
+          origin
+          score
+          type
+          value
+        }
+      }
+      refs {
+        warning
+        refList {
+          id
+          type
+        }
+      }
+      preferences {
+        timeout
+        defaultTimeout
+        preferenceList {
+          nvt {
+            oid
+            name
+          }
+          hrName
+          name
+          id
+          type
+          value
+          default
+          alt
+        }
+      }
+      solution {
+        type
+        method
+        description
+      }
+    }
+  }
+`;
+
 export const useLazyGetNvt = (oid, options) => {
   const [queryNvt, {data, refetch, ...other}] = useLazyQuery(GET_NVT, {
     ...options,
@@ -104,6 +186,24 @@ export const useLazyGetNvt = (oid, options) => {
     [queryNvt],
   );
   return [getNvt, {...other, nvt, refetch}];
+};
+
+export const useLazyGetNvts = (variables, options) => {
+  const [queryNvts, {data, refetch, ...other}] = useLazyQuery(GET_NVTS, {
+    ...options,
+    variables,
+  });
+
+  const nvts = isDefined(data?.nvts)
+    ? data.nvts.map(nvt => Nvt.fromObject(nvt))
+    : undefined;
+
+  const getNvts = useCallback(
+    (variables, options) => queryNvts({...options, variables}),
+    [queryNvts],
+  );
+
+  return [getNvts, {...other, nvts}];
 };
 
 // vim: set ts=2 sw=2 tw=80:
