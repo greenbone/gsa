@@ -119,6 +119,8 @@ class Nvt extends Info {
     ret.nvtType = ret.type;
     ret.id = ret.oid;
     ret.tags = parseTags(ret.tags);
+    ret.severity = parseSeverity(ret.cvssBase);
+    delete ret.cvssBase;
 
     if (hasValue(ret.preferences)) {
       ret.preferences = map(ret.preferences.preferenceList, preference => {

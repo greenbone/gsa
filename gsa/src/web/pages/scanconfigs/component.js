@@ -207,6 +207,7 @@ const ScanConfigComponent = ({
       preferences: true,
       preferenceCount: true,
       configId: config.id,
+      timeout: true,
     });
   };
 
