@@ -30,11 +30,8 @@ const toFixed1 = value => {
   if (isNaN(value)) {
     return undefined;
   }
-  let result = +(`${Math.round(+(`${value}e` + 1))}e` + -1);
+  const result = +(`${Math.round(+(`${value}e` + 1))}e` + -1);
   // if no fractional part then add a .0 to the number
-  if (!`${result}`.includes('.')) {
-    result = result + '.0';
-  }
   return result;
 };
 
@@ -52,11 +49,11 @@ const baseScore = ({av, ac, au, c, i, a}) => {
  * Parsing the CVSS v2 Metric Values to a valid Vector and BaseScore
  */
 export const parseCvssV2BaseVector = ({
-  accessComplexity,
   accessVector,
+  accessComplexity,
   authentication,
-  availabilityImpact,
   confidentialityImpact,
+  availabilityImpact,
   integrityImpact,
 } = {}) => {
   if (
@@ -394,11 +391,11 @@ export const parseCvssV3BaseVector = ({
   switch (attackComplexity) {
     case 'HIGH':
       vector += 'H';
-      ac = 0.77;
+      ac = 0.44;
       break;
     case 'LOW':
       vector += 'L';
-      ac = 0.44;
+      ac = 0.77;
       break;
     default:
       vector += 'ERROR';
@@ -575,10 +572,10 @@ export const parseCvssV3BaseFromVector = vector => {
       case 'ac':
         if (value === 'h') {
           attackComplexity = 'HIGH';
-          ac = 0.77;
+          ac = 0.44;
         } else if (value === 'l') {
           attackComplexity = 'LOW';
-          ac = 0.44;
+          ac = 0.77;
         }
         break;
       case 'pr':
@@ -682,13 +679,15 @@ const V3ScoreBase = ({av, ac, pr, ui, s, c, i, a} = {}) => {
   let impact = 1.0 - (1.0 - c) * (1.0 - i) * (1.0 - a);
 
   impact =
-    s === 6.42 ? s * impact : s * impact - 3.25 * Math.pow(impact - 0.02, 15);
+    s === 6.42
+      ? s * impact
+      : s * (impact - 0.029) - 3.25 * Math.pow(impact - 0.02, 15);
   if (s === 7.52) {
     if (pr === 0.62) {
       pr = 0.68;
     }
     if (pr === 0.27) {
-      pr = 0.27;
+      pr = 0.5;
     }
   }
   const exploitability = 8.22 * av * ac * pr * ui;
