@@ -1678,7 +1678,7 @@ const cvss_v3_entries = {
 };
 
 describe('CVSS parser tests', () => {
-  describe('CVSS v2 parser tests', () => {
+  describe('CVSS v3 parser tests', () => {
     test('should return false if user has no token', () => {
       cvss_v3_entries.entries.forEach(element => {
         const {
