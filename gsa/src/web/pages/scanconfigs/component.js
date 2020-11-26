@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useReducer} from 'react';
+import React, {useEffect, useReducer} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -34,6 +34,8 @@ import useGmp from 'web/utils/useGmp';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 
 import EntityComponent from 'web/entity/component';
+import {useCreateScanConfig} from 'web/graphql/scanconfigs';
+import {useLazyGetNvt, useLazyGetNvts} from 'web/graphql/nvts';
 
 import EditConfigFamilyDialog from './editconfigfamilydialog';
 import EditScanConfigDialog from './editdialog';
@@ -41,7 +43,8 @@ import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
 
-export const createSelectedNvts = (configFamily, nvts) => {
+export const createSelectedNvts = (config, familyName, nvts) => {
+  const configFamily = config?.families[familyName];
   const selected = {};
   const nvtsCount = isDefined(configFamily) ? configFamily.nvts.count : 0;
 
@@ -51,7 +54,7 @@ export const createSelectedNvts = (configFamily, nvts) => {
     });
   } else {
     forEach(nvts, nvt => {
-      selected[nvt.oid] = nvt.selected;
+      selected[nvt.oid] = nvt.family === familyName ? 1 : 0;
     });
   }
 
@@ -82,6 +85,13 @@ const ScanConfigComponent = ({
     editNvtDetailsDialogVisible: false,
     importDialogVisible: false,
   });
+
+  const [createScanConfig] = useCreateScanConfig();
+  const [getNvt, {nvt, loading: isLoadingNvt}] = useLazyGetNvt();
+  const [
+    getFamilyNvts,
+    {nvts: familyNvts, loading: isLoadingFamily, error: familyNvtsError},
+  ] = useLazyGetNvts();
 
   const openEditConfigDialog = config => {
     dispatchState(
@@ -118,7 +128,15 @@ const ScanConfigComponent = ({
     const {config} = state;
 
     handleInteraction();
-    const {name, comment, id} = d;
+    const {name, comment, id, baseScanConfig} = d;
+    if (!isDefined(id)) {
+      return createScanConfig({
+        configId: baseScanConfig,
+        name,
+        comment,
+      });
+    }
+
     let saveData = d;
     if (config.isInUse()) {
       saveData = {name, comment, id};
@@ -179,38 +197,18 @@ const ScanConfigComponent = ({
     dispatchState(
       updateState({
         isLoadingFamily: silent ? state.isLoadingFamily : true,
+        familyName,
       }),
     );
 
-    return gmp.scanconfig
-      .editScanConfigFamilySettings({
-        id: config.id,
-        familyName,
-      })
-      .then(response => {
-        const {data} = response;
-        const {nvts} = data;
-
-        const configFamily = config.families[familyName];
-        const selected = createSelectedNvts(configFamily, nvts);
-
-        dispatchState(
-          updateState({
-            familyNvts: data.nvts,
-            familySelectedNvts: selected,
-            isLoadingFamily: false,
-          }),
-        );
-      })
-      .catch(error => {
-        dispatchState(
-          updateState({
-            isLoadingFamily: false,
-            selected: {}, // ensure selected is defined to stop loading indicator
-          }),
-        );
-        throw error;
-      });
+    getFamilyNvts({
+      family: familyName,
+      details: true,
+      preferences: true,
+      preferenceCount: true,
+      configId: config.id,
+      timeout: true,
+    });
   };
 
   const closeEditConfigFamilyDialog = () => {
@@ -240,42 +238,7 @@ const ScanConfigComponent = ({
       }),
     );
 
-    loadNvt(nvtOid);
-  };
-
-  const loadNvt = nvtOid => {
-    const {config} = state;
-
-    dispatchState(
-      updateState({
-        isLoadingNvt: true,
-      }),
-    );
-
-    return gmp.nvt
-      .getConfigNvt({
-        configId: config.id,
-        oid: nvtOid,
-      })
-      .then(response => {
-        const {data: loadedNvt} = response;
-
-        dispatchState(
-          updateState({
-            nvt: loadedNvt,
-            editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{name}}', {
-              name: shorten(loadedNvt.name),
-            }),
-          }),
-        );
-      })
-      .finally(() => {
-        dispatchState(
-          updateState({
-            isLoadingNvt: false,
-          }),
-        );
-      });
+    getNvt(nvtOid);
   };
 
   const closeEditNvtDetailsDialog = () => {
@@ -444,6 +407,35 @@ const ScanConfigComponent = ({
     ]);
   };
 
+  useEffect(() => {
+    if (isDefined(nvt) && !isLoadingNvt) {
+      dispatchState(
+        updateState({
+          editNvtDetailsDialogTitle: _('Edit Scan Config NVT {{name}}', {
+            name: shorten(nvt.name),
+          }),
+        }),
+      );
+    }
+  }, [isLoadingNvt]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (isDefined(familyNvtsError)) {
+      dispatchState(
+        updateState({
+          selected: {}, // ensure selected is defined to stop loading indicator
+        }),
+      );
+      throw familyNvtsError;
+    } else if (isDefined(familyNvts) && !isLoadingFamily) {
+      dispatchState(
+        updateState({
+          familyNvts,
+        }),
+      );
+    }
+  }, [isLoadingFamily]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const {
     config,
     createConfigDialogVisible,
@@ -454,15 +446,10 @@ const ScanConfigComponent = ({
     editNvtDetailsDialogTitle,
     families,
     familyName,
-    familyNvts,
-    familySelectedNvts,
     importDialogVisible,
     isLoadingConfig,
     isLoadingFamilies,
-    isLoadingFamily,
-    isLoadingNvt,
     isLoadingScanners,
-    nvt,
     scannerId,
     scanners,
     title,
@@ -484,7 +471,7 @@ const ScanConfigComponent = ({
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({save, ...other}) => (
+        {({...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -500,7 +487,9 @@ const ScanConfigComponent = ({
                 onClose={handleCloseCreateConfigDialog}
                 onSave={d => {
                   handleInteraction();
-                  return save(d).then(() => closeCreateConfigDialog());
+                  return handleSaveScanConfig(d).then(() =>
+                    closeCreateConfigDialog(),
+                  );
                 }}
               />
             )}
@@ -548,7 +537,7 @@ const ScanConfigComponent = ({
           familyName={familyName}
           isLoadingFamily={isLoadingFamily}
           nvts={familyNvts}
-          selected={familySelectedNvts}
+          selected={familyNvts}
           title={editConfigFamilyDialogTitle}
           onClose={handleCloseEditConfigFamilyDialog}
           onEditNvtDetailsClick={openEditNvtDetailsDialog}
