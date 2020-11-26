@@ -383,31 +383,29 @@ const cvss_v2_entries = {
   ],
 };
 
-describe('CVSS parser tests', () => {
-  describe('CVSS v2 parser tests', () => {
-    test('should return false if user has no token', () => {
-      cvss_v2_entries.entries.forEach(element => {
-        const {
-          accessVector,
-          accessComplexity,
-          authentication,
-          confidentialityImpact,
-          availabilityImpact,
-          integrityImpact,
-          cvssScore,
-        } = parseCvssV2BaseFromVector(element.vector);
-        expect(cvssScore).toEqual(element.value);
-        const cvssV2 = parseCvssV2BaseVector({
-          accessVector,
-          accessComplexity,
-          authentication,
-          confidentialityImpact,
-          availabilityImpact,
-          integrityImpact,
-        });
-        expect(cvssV2[0]).toEqual(element.vector);
-        expect(cvssV2[1]).toEqual(element.value);
+describe('CVSS v2 parser tests', () => {
+  test('should return correct severity value for cvss v2 vector', () => {
+    cvss_v2_entries.entries.forEach(element => {
+      const {
+        accessVector,
+        accessComplexity,
+        authentication,
+        confidentialityImpact,
+        availabilityImpact,
+        integrityImpact,
+        cvssScore,
+      } = parseCvssV2BaseFromVector(element.vector);
+      expect(cvssScore).toEqual(element.value);
+      const cvssV2 = parseCvssV2BaseVector({
+        accessVector,
+        accessComplexity,
+        authentication,
+        confidentialityImpact,
+        availabilityImpact,
+        integrityImpact,
       });
+      expect(cvssV2[0]).toEqual(element.vector);
+      expect(cvssV2[1]).toEqual(element.value);
     });
   });
 });
@@ -1677,35 +1675,33 @@ const cvss_v3_entries = {
   ],
 };
 
-describe('CVSS parser tests', () => {
-  describe('CVSS v3 parser tests', () => {
-    test('should return false if user has no token', () => {
-      cvss_v3_entries.entries.forEach(element => {
-        const {
-          attackVector,
-          attackComplexity,
-          privilegesRequired,
-          userInteraction,
-          scope,
-          confidentialityImpact,
-          availabilityImpact,
-          integrityImpact,
-          cvssScore,
-        } = parseCvssV3BaseFromVector(element.vector);
-        expect(cvssScore).toEqual(element.value);
-        const cvssV2 = parseCvssV3BaseVector({
-          attackVector,
-          attackComplexity,
-          privilegesRequired,
-          userInteraction,
-          scope,
-          confidentialityImpact,
-          availabilityImpact,
-          integrityImpact,
-        });
-        expect(cvssV2[0]).toEqual(element.vector);
-        expect(cvssV2[1]).toEqual(element.value);
+describe('CVSS v3 parser tests', () => {
+  test('should return correct severity value for cvss v3 vector', () => {
+    cvss_v3_entries.entries.forEach(element => {
+      const {
+        attackVector,
+        attackComplexity,
+        privilegesRequired,
+        userInteraction,
+        scope,
+        confidentialityImpact,
+        availabilityImpact,
+        integrityImpact,
+        cvssScore,
+      } = parseCvssV3BaseFromVector(element.vector);
+      expect(cvssScore).toEqual(element.value);
+      const cvssV3 = parseCvssV3BaseVector({
+        attackVector,
+        attackComplexity,
+        privilegesRequired,
+        userInteraction,
+        scope,
+        confidentialityImpact,
+        availabilityImpact,
+        integrityImpact,
       });
+      expect(cvssV3[0]).toEqual(element.vector);
+      expect(cvssV3[1]).toEqual(element.value);
     });
   });
 });
