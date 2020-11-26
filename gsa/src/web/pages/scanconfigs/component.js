@@ -176,7 +176,6 @@ const ScanConfigComponent = ({
     dispatchState(
       updateState({
         isLoadingFamily: silent ? state.isLoadingFamily : true,
-        familyName,
       }),
     );
 
