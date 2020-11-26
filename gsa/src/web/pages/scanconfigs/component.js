@@ -35,15 +35,13 @@ import stateReducer, {updateState} from 'web/utils/stateReducer';
 
 import EntityComponent from 'web/entity/component';
 import {useCreateScanConfig} from 'web/graphql/scanconfigs';
-import {GET_NVT, useLazyGetNvt} from 'web/graphql/nvts';
+import {useLazyGetNvt} from 'web/graphql/nvts';
 
 import EditConfigFamilyDialog from './editconfigfamilydialog';
 import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
-import {useApolloClient} from '@apollo/client';
-import Nvt from 'gmp/models/nvt';
 
 export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};
@@ -255,16 +253,6 @@ const ScanConfigComponent = ({
       }),
     );
 
-    loadNvt(nvtOid);
-  };
-
-  const loadNvt = nvtOid => {
-    dispatchState(
-      updateState({
-        isLoadingNvt: true,
-      }),
-    );
-
     getNvt(nvtOid);
   };
 
@@ -444,8 +432,9 @@ const ScanConfigComponent = ({
         }),
       );
     }
-  }, [isLoadingNvt]);
+  }, [isLoadingNvt]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  console.log(nvt);
   const {
     config,
     createConfigDialogVisible,

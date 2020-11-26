@@ -117,15 +117,29 @@ class Nvt extends Info {
     const ret = super.parseElement(object, 'nvt');
 
     ret.nvtType = ret.type;
+    ret.id = ret.oid;
+    ret.tags = parseTags(ret.tags);
 
     if (hasValue(ret.preferences)) {
-      ret.preferences = map(ret.preferences, preference => {
+      ret.preferences = map(ret.preferences.preferenceList, preference => {
         const pref = {...preference};
         delete pref.nvt;
         return pref;
       });
     } else {
       ret.preferences = [];
+    }
+
+    if (hasValue(ret.defaultTimeout)) {
+      ret.defaultTimeout = parseFloat(ret.defaultTimeout);
+    } else {
+      delete ret.defaultTimeout;
+    }
+
+    if (hasValue(ret.timeout)) {
+      ret.timeout = parseFloat(ret.timeout);
+    } else {
+      delete ret.timeout;
     }
 
     return ret;

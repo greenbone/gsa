@@ -22,8 +22,6 @@ import {useLazyQuery} from '@apollo/client';
 
 import gql from 'graphql-tag';
 
-import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import Nvt from 'gmp/models/nvt';
 
 import {isDefined} from 'gmp/utils/identity';
