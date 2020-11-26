@@ -115,7 +115,7 @@ const EditNvtDetailsDialog = ({
   nvtSeverity,
   nvtSummary,
   timeout,
-  preferences,
+  preferences = [],
   title,
   onClose,
   onSave,
