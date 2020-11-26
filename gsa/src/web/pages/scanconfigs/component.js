@@ -22,12 +22,9 @@ import _ from 'gmp/locale';
 
 import {ospScannersFilter} from 'gmp/models/scanner';
 
-import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
-
-import {YES_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
@@ -42,24 +39,6 @@ import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
-
-export const createSelectedNvts = (config, familyName, nvts) => {
-  const configFamily = config?.families[familyName];
-  const selected = {};
-  const nvtsCount = isDefined(configFamily) ? configFamily.nvts.count : 0;
-
-  if (nvtsCount === nvts.length) {
-    forEach(nvts, nvt => {
-      selected[nvt.oid] = YES_VALUE;
-    });
-  } else {
-    forEach(nvts, nvt => {
-      selected[nvt.oid] = nvt.family === familyName ? 1 : 0;
-    });
-  }
-
-  return selected;
-};
 
 const ScanConfigComponent = ({
   children,

@@ -28,6 +28,7 @@ import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
+import {forEach} from 'gmp/utils/array';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
@@ -74,7 +75,6 @@ import AlertComponent from 'web/pages/alerts/component';
 
 import AuditDialog from 'web/pages/audits/dialog';
 
-import {createSelectedNvts} from 'web/pages/scanconfigs/component';
 import EditPolicyFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
 import EditPolicyDialog from 'web/pages/scanconfigs/editdialog';
 import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
@@ -85,6 +85,23 @@ import ScheduleComponent from 'web/pages/schedules/component';
 import TargetComponent from 'web/pages/targets/component';
 
 import PolicyDialog from './dialog';
+
+const createSelectedNvts = (configFamily, nvts) => {
+  const selected = {};
+  const nvtsCount = isDefined(configFamily) ? configFamily.nvts.count : 0;
+
+  if (nvtsCount === nvts.length) {
+    forEach(nvts, nvt => {
+      selected[nvt.oid] = YES_VALUE;
+    });
+  } else {
+    forEach(nvts, nvt => {
+      selected[nvt.oid] = nvt.selected;
+    });
+  }
+
+  return selected;
+};
 
 class PolicyComponent extends React.Component {
   constructor(...args) {
