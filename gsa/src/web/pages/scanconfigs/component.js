@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useReducer} from 'react';
+import React, {useEffect, useReducer} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -28,6 +28,11 @@ import {shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
 
 import {YES_VALUE} from 'gmp/parser';
+
+import {
+  useImportScanConfig,
+  useCreateScanConfig,
+} from 'web/graphql/scanconfigs';
 
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
@@ -41,7 +46,7 @@ import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
-import {useImportScanConfig} from 'web/graphql/scanconfigs';
+import {useLazyGetScanners} from 'web/graphql/scanners';
 
 export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};
@@ -86,6 +91,11 @@ const ScanConfigComponent = ({
   });
 
   const [importScanConfig] = useImportScanConfig();
+  const [createScanConfig] = useCreateScanConfig();
+  const [
+    loadScanners,
+    {scanners, loading: isLoadingScanners},
+  ] = useLazyGetScanners();
 
   const openEditConfigDialog = config => {
     dispatchState(
@@ -122,7 +132,15 @@ const ScanConfigComponent = ({
     const {config} = state;
 
     handleInteraction();
-    const {name, comment, id} = d;
+    const {name, comment, id, baseScanConfig} = d;
+    if (!isDefined(id)) {
+      return createScanConfig({
+        configId: baseScanConfig,
+        name,
+        comment,
+      });
+    }
+
     let saveData = d;
     if (config.isInUse()) {
       saveData = {name, comment, id};
@@ -363,35 +381,6 @@ const ScanConfigComponent = ({
     }
   };
 
-  const loadScanners = () => {
-    dispatchState(
-      updateState({
-        isLoadingScanners: true,
-      }),
-    );
-
-    return gmp.scanners
-      .getAll()
-      .then(response => {
-        let {data: scanners} = response;
-        scanners = scanners.filter(ospScannersFilter);
-        dispatchState(
-          updateState({
-            scanners,
-            scannerId: selectSaveId(scanners),
-            isLoadingScanners: false,
-          }),
-        );
-      })
-      .finally(() => {
-        dispatchState(
-          updateState({
-            isLoadingScanners: false,
-          }),
-        );
-      });
-  };
-
   const loadScanConfig = (configId, silent = false) => {
     dispatchState(
       updateState({
@@ -449,6 +438,18 @@ const ScanConfigComponent = ({
     ]);
   };
 
+  useEffect(() => {
+    if (isDefined(scanners) && !isLoadingScanners) {
+      const filteredScanners = scanners.filter(ospScannersFilter);
+      dispatchState(
+        updateState({
+          scanners: filteredScanners,
+          scannerId: selectSaveId(filteredScanners),
+        }),
+      );
+    }
+  }, [isLoadingScanners]);
+
   const {
     config,
     createConfigDialogVisible,
@@ -466,10 +467,8 @@ const ScanConfigComponent = ({
     isLoadingFamilies,
     isLoadingFamily,
     isLoadingNvt,
-    isLoadingScanners,
     nvt,
     scannerId,
-    scanners,
     title,
   } = state;
 
@@ -489,7 +488,7 @@ const ScanConfigComponent = ({
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({save, ...other}) => (
+        {({...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -505,7 +504,9 @@ const ScanConfigComponent = ({
                 onClose={handleCloseCreateConfigDialog}
                 onSave={d => {
                   handleInteraction();
-                  return save(d).then(() => closeCreateConfigDialog());
+                  return handleSaveScanConfig(d).then(() =>
+                    closeCreateConfigDialog(),
+                  );
                 }}
               />
             )}
@@ -526,7 +527,7 @@ const ScanConfigComponent = ({
                 nvtPreferences={config.preferences.nvt}
                 scannerId={scannerId}
                 scannerPreferences={config.preferences.scanner}
-                scanners={scanners}
+                scanners={state.scanners}
                 title={title}
                 onClose={handleCloseEditConfigDialog}
                 onEditConfigFamilyClick={openEditConfigFamilyDialog}
