@@ -32,6 +32,7 @@ import {YES_VALUE} from 'gmp/parser';
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
+import readFileToText from 'web/utils/readFileToText';
 
 import EntityComponent from 'web/entity/component';
 
@@ -40,6 +41,7 @@ import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
+import {useImportScanConfig} from 'web/graphql/scanconfigs';
 
 export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};
@@ -82,6 +84,8 @@ const ScanConfigComponent = ({
     editNvtDetailsDialogVisible: false,
     importDialogVisible: false,
   });
+
+  const [importScanConfig] = useImportScanConfig();
 
   const openEditConfigDialog = config => {
     dispatchState(
@@ -292,11 +296,12 @@ const ScanConfigComponent = ({
     handleInteraction();
   };
 
-  const handleImportConfig = data => {
+  const handleImportConfig = async data => {
     handleInteraction();
 
-    return gmp.scanconfig
-      .import(data)
+    const readUploadedXml = readFileToText(data.xml_file);
+
+    return importScanConfig(await readUploadedXml)
       .then(onImported, onImportError)
       .then(() => closeImportDialog());
   };

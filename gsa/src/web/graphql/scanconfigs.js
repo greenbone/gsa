@@ -18,7 +18,7 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useLazyQuery} from '@apollo/client';
+import {gql, useLazyQuery, useMutation} from '@apollo/client';
 import ScanConfig from 'gmp/models/scanconfig';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -167,6 +167,31 @@ export const GET_SCAN_CONFIGS = gql`
     }
   }
 `;
+
+export const IMPORT_SCAN_CONFIG = gql`
+  mutation importScanConfig($config: String) {
+    importScanConfig(config: $config) {
+      id
+    }
+  }
+`;
+
+export const useImportScanConfig = options => {
+  const [queryImportScanConfig, {data, ...other}] = useMutation(
+    IMPORT_SCAN_CONFIG,
+    options,
+  );
+  const importScanConfig = useCallback(
+    // eslint-disable-next-line no-shadow
+    (config, options) =>
+      queryImportScanConfig({...options, variables: {config}}).then(
+        result => result.data.importScanConfig.id,
+      ),
+    [queryImportScanConfig],
+  );
+  const configId = data?.importScanConfig?.id;
+  return [importScanConfig, {...other, id: configId}];
+};
 
 export const useLazyGetScanConfig = (id, options) => {
   const [queryScanConfig, {data, ...other}] = useLazyQuery(GET_SCAN_CONFIG, {
