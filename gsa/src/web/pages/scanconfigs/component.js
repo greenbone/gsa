@@ -448,7 +448,7 @@ const ScanConfigComponent = ({
         }),
       );
     }
-  }, [isLoadingScanners]);
+  }, [isLoadingScanners]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
     config,
