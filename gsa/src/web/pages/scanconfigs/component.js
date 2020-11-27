@@ -33,6 +33,7 @@ import {
   useImportScanConfig,
   useCreateScanConfig,
 } from 'web/graphql/scanconfigs';
+import {useLazyGetScanners} from 'web/graphql/scanners';
 
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
@@ -46,7 +47,6 @@ import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
-import {useLazyGetScanners} from 'web/graphql/scanners';
 
 export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};
@@ -94,7 +94,7 @@ const ScanConfigComponent = ({
   const [createScanConfig] = useCreateScanConfig();
   const [
     loadScanners,
-    {scanners, loading: isLoadingScanners},
+    {scanners: loadedScanners, loading: isLoadingScanners},
   ] = useLazyGetScanners();
 
   const openEditConfigDialog = config => {
@@ -439,8 +439,8 @@ const ScanConfigComponent = ({
   };
 
   useEffect(() => {
-    if (isDefined(scanners) && !isLoadingScanners) {
-      const filteredScanners = scanners.filter(ospScannersFilter);
+    if (isDefined(loadedScanners) && !isLoadingScanners) {
+      const filteredScanners = loadedScanners.filter(ospScannersFilter);
       dispatchState(
         updateState({
           scanners: filteredScanners,
@@ -469,6 +469,7 @@ const ScanConfigComponent = ({
     isLoadingNvt,
     nvt,
     scannerId,
+    scanners,
     title,
   } = state;
 
@@ -527,7 +528,7 @@ const ScanConfigComponent = ({
                 nvtPreferences={config.preferences.nvt}
                 scannerId={scannerId}
                 scannerPreferences={config.preferences.scanner}
-                scanners={state.scanners}
+                scanners={scanners}
                 title={title}
                 onClose={handleCloseEditConfigDialog}
                 onEditConfigFamilyClick={openEditConfigFamilyDialog}
