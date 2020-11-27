@@ -108,7 +108,7 @@ export const createGetScanConfigsQueryMock = (variables = {}) =>
     variables,
   );
 
-const createScanConfigInput = {
+export const createScanConfigInput = {
   configId: 'foo',
   name: 'bar',
   comment: 'lorem',

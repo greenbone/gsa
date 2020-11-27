@@ -16,15 +16,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, {useState} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-import {useLazyGetScanConfigs, useLazyGetScanConfig} from '../scanconfigs';
+import {
+  useLazyGetScanConfigs,
+  useLazyGetScanConfig,
+  useCreateScanConfig,
+} from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
   createGetScanConfigQueryMock,
+  createCreateScanConfigQueryMock,
+  createScanConfigInput,
 } from '../__mocks__/scanconfigs';
 
 const GetLazyScanConfigsComponent = () => {
@@ -150,5 +156,50 @@ describe('useLazyGetScanConfig tests', () => {
     expect(scanConfigElement).toHaveTextContent('314');
 
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+  });
+});
+
+const CreateScanConfigComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [createScanConfig] = useCreateScanConfig();
+
+  const handleCreateResult = id => {
+    setNotification(`ScanConfig created with id ${id}.`);
+  };
+
+  return (
+    <div>
+      <button
+        title={'Create ScanConfig'}
+        onClick={() =>
+          createScanConfig(createScanConfigInput).then(handleCreateResult)
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('ScanConfig mutation tests', () => {
+  test('should create a scan config', async () => {
+    const [
+      createScanConfigMock,
+      createScanConfigResult,
+    ] = createCreateScanConfigQueryMock();
+    const {render} = rendererWith({queryMocks: [createScanConfigMock]});
+
+    const {element} = render(<CreateScanConfigComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(createScanConfigResult).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'ScanConfig created with id 12345.',
+    );
   });
 });
