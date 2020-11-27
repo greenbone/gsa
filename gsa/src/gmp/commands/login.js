@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import _ from '../locale';
+import _ from 'gmp/locale';
 
 import HttpCommand from './http';
 
 import registerCommand from '../command';
 
-import Login from '../models/login';
+import Login from 'gmp/models/login';
 
 class LoginCommand extends HttpCommand {
   constructor(http) {

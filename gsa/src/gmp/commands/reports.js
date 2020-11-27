@@ -15,17 +15,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import logger from '../log';
+import logger from 'gmp/log';
 
-import {isDefined} from '../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import Report from '../models/report';
+import Report from 'gmp/models/report';
 
-import {ALL_FILTER} from '../models/filter';
+import {ALL_FILTER} from 'gmp/models/filter';
 
-import DefaultTransform from '../http/transform/default';
+import DefaultTransform from 'gmp/http/transform/default';
 
 import {convertBoolean} from './convert';
 import EntitiesCommand from './entities';

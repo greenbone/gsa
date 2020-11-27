@@ -22,7 +22,7 @@ import {parseSeverity, parseDate, parseText} from 'gmp/parser';
 import {isDefined, isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model, {parseModelFromElement} from '../model';
+import Model, {parseModelFromElement} from 'gmp/model';
 
 export const TICKET_STATUS = {
   open: 'Open',

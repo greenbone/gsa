@@ -19,7 +19,7 @@ import logger from 'gmp/log';
 
 import registerCommand from 'gmp/command';
 
-import {NO_VALUE} from '../parser';
+import {NO_VALUE} from 'gmp/parser';
 
 import Task, {
   HOSTS_ORDERING_SEQUENTIAL,

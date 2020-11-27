@@ -17,10 +17,10 @@
  */
 import {_l} from 'gmp/locale/lang';
 
-import {isDefined, isArray, hasValue} from '../utils/identity';
-import {isEmpty} from '../utils/string';
-import {map} from '../utils/array';
-import {normalizeType} from '../utils/entitytype';
+import {isDefined, isArray, hasValue} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+import {map} from 'gmp/utils/array';
+import {normalizeType} from 'gmp/utils/entitytype';
 
 import {
   parseInt,
@@ -29,9 +29,9 @@ import {
   parseYes,
   parseDuration,
   NO_VALUE,
-} from '../parser';
+} from 'gmp/parser';
 
-import Model, {parseModelFromElement} from '../model';
+import Model, {parseModelFromElement} from 'gmp/model';
 
 import Report from './report';
 import Schedule from './schedule';

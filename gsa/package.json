@@ -23,7 +23,7 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@babel/core": "^7.12.3",
+    "@babel/core": "^7.12.7",
     "@apollo/client": "^3.2.4",
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
@@ -45,7 +45,7 @@
     "graphql": "^14.7.0",
     "history": "^4.10.1",
     "hoist-non-react-statics": "^3.3.2",
-    "i18next": "^19.8.3",
+    "i18next": "^19.8.4",
     "i18next-xhr-backend": "3.2.2",
     "ical.js": "^1.4.0",
     "memoize-one": "^5.1.1",
@@ -82,10 +82,10 @@
   },
   "devDependencies": {
     "@apollo/react-testing": "^3.1.3",
-    "@babel/cli": "^7.12.1",
-    "@storybook/react": "^6.0.28",
+    "@babel/cli": "^7.12.7",
+    "@storybook/react": "^6.1.2",
     "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/react": "^11.1.2",
+    "@testing-library/react": "^11.2.2",
     "@types/jest": "^26.0.15",
     "babel-plugin-i18next-extract": "^0.8.2",
     "eslint-config-prettier": "^6.15.0",
@@ -94,7 +94,7 @@
     "jest-junit": "^12.0.0",
     "jest-styled-components": "^6.3.4",
     "lint-staged": "^8.2.1",
-    "prettier": "^2.1.2"
+    "prettier": "^2.2.0"
   },
   "jest": {
     "collectCoverageFrom": [

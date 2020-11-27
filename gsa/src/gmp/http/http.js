@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import logger from '../log';
+import logger from 'gmp/log';
 
-import _ from '../locale';
+import _ from 'gmp/locale';
 
 import {isDefined, hasValue, isArray} from '../utils/identity';
 
@@ -109,10 +109,10 @@ class Http {
       ...other,
     };
 
-    const promise = new Promise(function(resolve, reject) {
+    const promise = new Promise(function (resolve, reject) {
       xhr = new XMLHttpRequest();
 
-      xhr.onloadstart = function() {
+      xhr.onloadstart = function () {
         // defer setting the responseType to avoid InvalidStateError with IE 11
         if (isDefined(responseType)) {
           xhr.responseType = responseType;
@@ -124,7 +124,7 @@ class Http {
       xhr.timeout = self.timeout;
       xhr.withCredentials = true; // allow to set Cookies
 
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           self.handleSuccess(resolve, reject, this, options);
         } else {
@@ -132,15 +132,15 @@ class Http {
         }
       };
 
-      xhr.onerror = function() {
+      xhr.onerror = function () {
         self.handleRequestError(resolve, reject, this, options);
       };
 
-      xhr.ontimeout = function() {
+      xhr.ontimeout = function () {
         self.handleTimeout(resolve, reject, this, options);
       };
 
-      xhr.onabort = function() {
+      xhr.onabort = function () {
         log.debug('Canceled http request', method, url);
       };
 

@@ -16,14 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import InfoEntitiesCommand from './infoentities.js';
-import InfoEntityCommand from './infoentity.js';
+import InfoEntitiesCommand from './infoentities';
+import InfoEntityCommand from './infoentity';
 
-import registerCommand from '../command.js';
+import registerCommand from 'gmp/command';
 
-import Cve from '../models/cve.js';
+import Cve from 'gmp/models/cve';
 
 const info_filter = info => isDefined(info.cve);
 

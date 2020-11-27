@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import registerCommand from '../command';
+import registerCommand from 'gmp/command';
 
-import logger from '../log';
+import logger from 'gmp/log';
 
-import {isArray} from '../utils/identity';
+import {isArray} from 'gmp/utils/identity';
 
-import Group from '../models/group';
+import Group from 'gmp/models/group';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';

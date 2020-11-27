@@ -15,18 +15,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import logger from '../log.js';
+import logger from 'gmp/log';
 
-import {isDefined, isString} from '../utils/identity';
-import {map, forEach} from '../utils/array';
+import {isDefined, isString} from 'gmp/utils/identity';
+import {map, forEach} from 'gmp/utils/array';
 
-import {parseCollectionList} from '../collection/parser.js';
+import {parseCollectionList} from 'gmp/collection/parser';
 
-import Filter, {ALL_FILTER} from '../models/filter.js';
+import Filter, {ALL_FILTER} from 'gmp/models/filter';
 
-import DefaultTransform from '../http/transform/default.js';
+import DefaultTransform from 'gmp/http/transform/default';
 
-import GmpCommand, {BULK_SELECT_BY_IDS, BULK_SELECT_BY_FILTER} from './gmp.js';
+import GmpCommand, {BULK_SELECT_BY_IDS, BULK_SELECT_BY_FILTER} from './gmp';
 
 const log = logger.getLogger('gmp.commands.entities');
 

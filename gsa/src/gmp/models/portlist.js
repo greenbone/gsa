@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined} from '../utils/identity';
-import {map} from '../utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
-import Model, {parseModelFromElement} from '../model';
+import Model, {parseModelFromElement} from 'gmp/model';
 
-import {parseInt, parseBoolean} from '../parser';
+import {parseInt, parseBoolean} from 'gmp/parser';
 
 export const ALL_IANA_ASSIGNED_TCP = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5';
 

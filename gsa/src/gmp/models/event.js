@@ -42,7 +42,7 @@ const convertIcalDate = (idate, timezone) => {
 
 const setEventDuration = (event, duration) => {
   // setting the duration of an event directly isn't possible in
-  // ical.js 1.2.2 yet. Therefore add same logic from ical.js master here
+  // ical 1.2.2 yet. Therefore add same logic from ical master here
   if (event.component.hasProperty('dtend')) {
     event.component.removeProperty('dtend');
   }
@@ -361,7 +361,7 @@ class Event {
           }
           retries = 0;
         } catch (err) {
-          // ical.js raises an exception if the same date occurs twice
+          // ical raises an exception if the same date occurs twice
           // See https://github.com/mozilla-comm/ical.js/blob/master/lib/ical/recur_iterator.js#L373
           // But this may be valid e.g. when last day of month and the 31 of a
           // month are set in the rrule. Therefore ignore error and retry to get
