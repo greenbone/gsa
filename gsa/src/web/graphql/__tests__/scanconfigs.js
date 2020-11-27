@@ -33,7 +33,6 @@ import {
   createCreateScanConfigQueryMock,
   createScanConfigInput,
   createImportScanConfigQueryMock,
-  importScanConfigInput,
 } from '../__mocks__/scanconfigs';
 
 const GetLazyScanConfigsComponent = () => {
