@@ -182,8 +182,6 @@ class Model {
       delete copy.owner;
     }
 
-    copy.summary = parseText(object.summary);
-
     return copy;
   }
 

@@ -40,7 +40,7 @@ export const GET_NVT = gql`
       timeout
       defaultTimeout
       category
-      summery
+      summary
       qod {
         value
         type
@@ -122,7 +122,7 @@ export const GET_NVTS = gql`
       timeout
       defaultTimeout
       category
-      summery
+      summary
       qod {
         value
         type
