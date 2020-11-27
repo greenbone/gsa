@@ -22,6 +22,7 @@ import {
   CREATE_SCAN_CONFIG,
   GET_SCAN_CONFIG,
   GET_SCAN_CONFIGS,
+  IMPORT_SCAN_CONFIG,
 } from '../scanconfigs';
 
 export const scanConfig1 = deepFreeze({
@@ -125,3 +126,20 @@ export const createCreateScanConfigQueryMock = () =>
   createGenericQueryMock(CREATE_SCAN_CONFIG, createScanConfigResult, {
     input: createScanConfigInput,
   });
+
+export const importScanConfigInput = {
+  config: '<get_configs_response />',
+};
+
+export const importScanConfigResult = {
+  importScanConfig: {
+    id: '13245',
+  },
+};
+
+export const createImportScanConfigQueryMock = () =>
+  createGenericQueryMock(
+    IMPORT_SCAN_CONFIG,
+    importScanConfigResult,
+    importScanConfigInput,
+  );

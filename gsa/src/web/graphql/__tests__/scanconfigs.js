@@ -25,12 +25,15 @@ import {
   useLazyGetScanConfigs,
   useLazyGetScanConfig,
   useCreateScanConfig,
+  useImportScanConfig,
 } from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
   createGetScanConfigQueryMock,
   createCreateScanConfigQueryMock,
   createScanConfigInput,
+  createImportScanConfigQueryMock,
+  importScanConfigInput,
 } from '../__mocks__/scanconfigs';
 
 const GetLazyScanConfigsComponent = () => {
@@ -200,6 +203,51 @@ describe('ScanConfig mutation tests', () => {
     expect(createScanConfigResult).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'ScanConfig created with id 12345.',
+    );
+  });
+});
+
+const ImportScanConfigComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [importScanConfig] = useImportScanConfig();
+
+  const handleCreateResult = id => {
+    setNotification(`ScanConfig imported with id ${id}.`);
+  };
+
+  return (
+    <div>
+      <button
+        title={'Import ScanConfig'}
+        onClick={() =>
+          importScanConfig('<get_configs_response />').then(handleCreateResult)
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Import Scan Config tests', () => {
+  test.only('should import a scan config', async () => {
+    const [
+      importScanConfigQueryMock,
+      importScanConfigQueryResult,
+    ] = createImportScanConfigQueryMock();
+    const {render} = rendererWith({queryMocks: [importScanConfigQueryMock]});
+
+    const {element} = render(<ImportScanConfigComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(importScanConfigQueryResult).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'ScanConfig imported with id 13245.',
     );
   });
 });
