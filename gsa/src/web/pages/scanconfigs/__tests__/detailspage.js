@@ -28,11 +28,12 @@ import Filter from 'gmp/models/filter';
 import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {createGetScannersQueryMock} from 'web/graphql/__mocks__/scanners';
 
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, act} from 'web/utils/testing';
+import {rendererWith, fireEvent, act, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -548,11 +549,6 @@ describe('Scan Config Detailspage tests', () => {
         foo: 'bar',
       }),
     );
-    const getAllScanners = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: scanners,
-      }),
-    );
     const deleteFunc = jest.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
@@ -577,9 +573,6 @@ describe('Scan Config Detailspage tests', () => {
       nvtfamilies: {
         get: getNvtFamilies,
       },
-      scanners: {
-        getAll: getAllScanners,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -588,12 +581,13 @@ describe('Scan Config Detailspage tests', () => {
     };
 
     const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [scannerQueryMock, scannerQueryResult] = createGetScannersQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewSessionQueryMock],
+      queryMocks: [renewSessionQueryMock, scannerQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -602,29 +596,30 @@ describe('Scan Config Detailspage tests', () => {
 
     const {getAllByTestId} = render(<Detailspage id="12345" />);
     const icons = getAllByTestId('svg-icon');
+
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
     expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    await act(async () => {
-      fireEvent.click(icons[3]);
-      expect(clone).toHaveBeenCalledWith(config);
-      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    fireEvent.click(icons[3]);
+    expect(clone).toHaveBeenCalledWith(config);
 
-      fireEvent.click(icons[4]);
-      expect(getNvtFamilies).toHaveBeenCalled();
-      expect(getAllScanners).toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
+    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
+    fireEvent.click(icons[4]);
 
-      fireEvent.click(icons[5]);
-      expect(deleteFunc).toHaveBeenCalledWith(configId);
-      expect(icons[5]).toHaveAttribute('title', 'Move Scan Config to trashcan');
+    await wait();
+    expect(getNvtFamilies).toHaveBeenCalled();
+    expect(scannerQueryResult).toHaveBeenCalled();
 
-      fireEvent.click(icons[6]);
-      expect(exportFunc).toHaveBeenCalledWith(config);
-      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
-    });
+    expect(icons[5]).toHaveAttribute('title', 'Move Scan Config to trashcan');
+    fireEvent.click(icons[5]);
+    expect(deleteFunc).toHaveBeenCalledWith(configId);
+
+    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    fireEvent.click(icons[6]);
+    expect(exportFunc).toHaveBeenCalledWith(config);
 
     expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
   });
@@ -755,11 +750,6 @@ describe('Scan Config Detailspage tests', () => {
         foo: 'bar',
       }),
     );
-    const getAllScanners = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: scanners,
-      }),
-    );
     const deleteFunc = jest.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
@@ -784,9 +774,6 @@ describe('Scan Config Detailspage tests', () => {
       nvtfamilies: {
         get: getNvtFamilies,
       },
-      scanners: {
-        getAll: getAllScanners,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -795,13 +782,14 @@ describe('Scan Config Detailspage tests', () => {
     };
 
     const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [scannerQueryMock, scannerQueryResult] = createGetScannersQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewSessionQueryMock],
+      queryMocks: [renewSessionQueryMock, scannerQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -816,24 +804,29 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    await act(async () => {
-      fireEvent.click(icons[3]);
-      expect(clone).toHaveBeenCalledWith(config3);
-      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
+    fireEvent.click(icons[3]);
+    await wait();
+    expect(clone).toHaveBeenCalledWith(config3);
+    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
 
-      fireEvent.click(icons[4]);
-      expect(getNvtFamilies).toHaveBeenCalled();
-      expect(getAllScanners).toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
+    fireEvent.click(icons[4]);
+    await wait();
 
-      fireEvent.click(icons[5]);
-      expect(deleteFunc).not.toHaveBeenCalled();
-      expect(icons[5]).toHaveAttribute('title', 'Scan Config is still in use');
+    expect(getNvtFamilies).toHaveBeenCalled();
+    expect(scannerQueryResult).toHaveBeenCalled();
+    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
 
-      fireEvent.click(icons[6]);
-      expect(exportFunc).toHaveBeenCalledWith(config3);
-      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
-    });
+    fireEvent.click(icons[5]);
+    await wait();
+
+    expect(deleteFunc).not.toHaveBeenCalled();
+    expect(icons[5]).toHaveAttribute('title', 'Scan Config is still in use');
+
+    fireEvent.click(icons[6]);
+    await wait();
+
+    expect(exportFunc).toHaveBeenCalledWith(config3);
+    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
 
     expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
   });

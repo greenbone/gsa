@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useReducer} from 'react';
+import React, {useEffect, useReducer} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -29,9 +29,16 @@ import {selectSaveId} from 'gmp/utils/id';
 
 import {YES_VALUE} from 'gmp/parser';
 
+import {
+  useImportScanConfig,
+  useCreateScanConfig,
+} from 'web/graphql/scanconfigs';
+import {useLazyGetScanners} from 'web/graphql/scanners';
+
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
+import readFileToText from 'web/utils/readFileToText';
 
 import EntityComponent from 'web/entity/component';
 
@@ -83,6 +90,13 @@ const ScanConfigComponent = ({
     importDialogVisible: false,
   });
 
+  const [importScanConfig] = useImportScanConfig();
+  const [createScanConfig] = useCreateScanConfig();
+  const [
+    loadScanners,
+    {scanners: loadedScanners, loading: isLoadingScanners},
+  ] = useLazyGetScanners();
+
   const openEditConfigDialog = config => {
     dispatchState(
       updateState({
@@ -118,7 +132,15 @@ const ScanConfigComponent = ({
     const {config} = state;
 
     handleInteraction();
-    const {name, comment, id} = d;
+    const {name, comment, id, baseScanConfig} = d;
+    if (!isDefined(id)) {
+      return createScanConfig({
+        configId: baseScanConfig,
+        name,
+        comment,
+      });
+    }
+
     let saveData = d;
     if (config.isInUse()) {
       saveData = {name, comment, id};
@@ -292,11 +314,12 @@ const ScanConfigComponent = ({
     handleInteraction();
   };
 
-  const handleImportConfig = data => {
+  const handleImportConfig = async data => {
     handleInteraction();
 
-    return gmp.scanconfig
-      .import(data)
+    const readUploadedXml = readFileToText(data.xml_file);
+
+    return importScanConfig(await readUploadedXml)
       .then(onImported, onImportError)
       .then(() => closeImportDialog());
   };
@@ -358,35 +381,6 @@ const ScanConfigComponent = ({
     }
   };
 
-  const loadScanners = () => {
-    dispatchState(
-      updateState({
-        isLoadingScanners: true,
-      }),
-    );
-
-    return gmp.scanners
-      .getAll()
-      .then(response => {
-        let {data: scanners} = response;
-        scanners = scanners.filter(ospScannersFilter);
-        dispatchState(
-          updateState({
-            scanners,
-            scannerId: selectSaveId(scanners),
-            isLoadingScanners: false,
-          }),
-        );
-      })
-      .finally(() => {
-        dispatchState(
-          updateState({
-            isLoadingScanners: false,
-          }),
-        );
-      });
-  };
-
   const loadScanConfig = (configId, silent = false) => {
     dispatchState(
       updateState({
@@ -444,6 +438,18 @@ const ScanConfigComponent = ({
     ]);
   };
 
+  useEffect(() => {
+    if (isDefined(loadedScanners) && !isLoadingScanners) {
+      const filteredScanners = loadedScanners.filter(ospScannersFilter);
+      dispatchState(
+        updateState({
+          scanners: filteredScanners,
+          scannerId: selectSaveId(filteredScanners),
+        }),
+      );
+    }
+  }, [isLoadingScanners]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const {
     config,
     createConfigDialogVisible,
@@ -461,7 +467,6 @@ const ScanConfigComponent = ({
     isLoadingFamilies,
     isLoadingFamily,
     isLoadingNvt,
-    isLoadingScanners,
     nvt,
     scannerId,
     scanners,
@@ -484,7 +489,7 @@ const ScanConfigComponent = ({
         onSaved={onSaved}
         onSaveError={onSaveError}
       >
-        {({save, ...other}) => (
+        {({...other}) => (
           <React.Fragment>
             {children({
               ...other,
@@ -500,7 +505,9 @@ const ScanConfigComponent = ({
                 onClose={handleCloseCreateConfigDialog}
                 onSave={d => {
                   handleInteraction();
-                  return save(d).then(() => closeCreateConfigDialog());
+                  return handleSaveScanConfig(d).then(() =>
+                    closeCreateConfigDialog(),
+                  );
                 }}
               />
             )}
