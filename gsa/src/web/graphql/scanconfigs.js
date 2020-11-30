@@ -247,6 +247,15 @@ export const useLazyGetScanConfigs = (variables, options) => {
   return [getScanConfigs, {...other, counts, scanConfigs, pageInfo}];
 };
 
+export const useGetScanConfig = (id, options) => {
+  const {data, ...other} = useQuery(GET_SCAN_CONFIG, {
+    ...options,
+    variables: {id},
+  });
+  const scanConfig = isDefined(data?.scanConfig)
+    ? ScanConfig.fromObject(data.scanConfig)
+    : undefined;
+  return {scanConfig, ...other};
 export const useCreateScanConfig = options => {
   const [queryCreateScanConfig, {data, ...other}] = useMutation(
     CREATE_SCAN_CONFIG,
