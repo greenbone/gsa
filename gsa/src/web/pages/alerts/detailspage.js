@@ -194,7 +194,7 @@ const Page = () => {
       onDownloaded={handleDownload}
       onDownloadError={showError}
       onInteraction={renewSessionTimeout}
-      onSaved={() => refetchAlert()}
+      onSaved={() => refetchAlert()} // Must be called like this instead of simply onChanged={refetchAlert} because we don't want this query to be called with new arguments on tag related actions
     >
       {({create, edit, save}) => (
         <EntityPage
@@ -244,7 +244,7 @@ const Page = () => {
                       <TabPanel>
                         <EntityTags
                           entity={alert}
-                          onChanged={() => refetchAlert()} // Must be called like this instead of simply onChanged={refetchAlert} because we don't want this query to be called with new arguments on tag related actions
+                          onChanged={() => refetchAlert()}
                           onError={showError}
                           onInteraction={renewSessionTimeout}
                         />
