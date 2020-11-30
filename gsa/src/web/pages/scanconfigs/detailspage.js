@@ -145,10 +145,11 @@ ToolBarIcons.propTypes = {
 };
 
 export const NvtFamilies = ({entity}) => {
-  const {family_list = [], families} = entity;
+  const {familyList = [], families} = entity;
+  console.log(families);
   return (
     <Layout>
-      {family_list.length > 0 && (
+      {familyList.length > 0 && (
         <StripedTable>
           <TableHeader>
             <TableRow>
@@ -173,7 +174,7 @@ export const NvtFamilies = ({entity}) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {family_list.map(family => (
+            {familyList.map(family => (
               <TableRow key={family.name}>
                 <TableData>
                   <span>
@@ -426,7 +427,7 @@ const Page = () => {
                       <EntitiesTab entities={preferences.scanner}>
                         {_('Scanner Preferences')}
                       </EntitiesTab>
-                      <EntitiesTab entities={scanConfig.family_list}>
+                      <EntitiesTab entities={scanConfig.familyList}>
                         {_('NVT Families')}
                       </EntitiesTab>
                       <EntitiesTab entities={preferences.nvt}>

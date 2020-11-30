@@ -67,6 +67,38 @@ class ScanConfig extends Model {
       ret.scanConfigType = object.type;
     }
 
+    // for displaying the selected nvts (1 of 33) an object for accessing the
+    // family by name is required
+    const families = {};
+
+    if (hasValue(object.families)) {
+      ret.familyList = map(object.families, family => {
+        const {name} = family;
+        const newFamily = {
+          name,
+          trend: hasValue(family) && family.growing ? 1 : 0,
+          nvts: {
+            count: parseCount(family.nvtCount),
+            max: parseCount(family.maxNvtCount),
+          },
+        };
+        families[name] = newFamily;
+        return newFamily;
+      });
+    } else {
+      ret.familyList = [];
+    }
+
+    if (hasValue(ret.familyCount)) {
+      families.count = parseCount(ret.familyCount);
+
+      delete ret.familyCount;
+    } else {
+      families.count = 0;
+    }
+
+    ret.families = families;
+
     return ret;
   }
 
