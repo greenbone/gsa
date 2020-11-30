@@ -379,9 +379,9 @@ const Page = () => {
   useEffect(() => stopReload, [stopReload]);
   return (
     <ScanConfigComponent
-      onCloned={goto_details('scanconfig', {history})}
+      onCloned={goto_entity_details('scanconfig', {history})}
       onCloneError={showError}
-      onCreated={goto_list('scanconfig', {history})} // replace with goto_entity_details later
+      onCreated={goto_entity_details('scanconfig', {history})} // replace with goto_entity_details later
       onDeleted={goto_list('scanconfigs', {history})}
       onDeleteError={showError}
       onDownloaded={handleDownload}
