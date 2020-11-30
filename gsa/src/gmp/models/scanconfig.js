@@ -99,6 +99,57 @@ class ScanConfig extends Model {
 
     ret.families = families;
 
+    if (isDefined(ret.nvtCount)) {
+      ret.nvts = {
+        // number of selected nvts
+        count: ret.nvtCount,
+      };
+
+      delete ret.nvtCount;
+
+      if (isDefined(ret.knownNvtCount)) {
+        // number of known nvts by the scanner from last sync. should always be
+        // equal or less then nvt_count because only the db may contain nvts not
+        // known nvts by the scanner e.g. an imported scan config contains
+        // private nvts
+        ret.nvts.known = ret.knownNvtCount;
+        delete ret.knownNvtCount;
+      }
+
+      if (isDefined(ret.maxNvtCount)) {
+        // sum of all available nvts of all selected families
+        ret.nvts.max = ret.maxNvtCount;
+        delete ret.maxNvtCount;
+      }
+    } else {
+      ret.nvts = {};
+    }
+
+    const nvt_preferences = [];
+    const scanner_preferences = [];
+
+    if (isDefined(object.preferences)) {
+      forEach(object.preferences, preference => {
+        const pref = {...preference};
+        if (!hasValue(pref.nvt.name)) {
+          delete pref.nvt;
+
+          scanner_preferences.push(pref);
+        } else {
+          const nvt = {...pref.nvt};
+          pref.nvt = nvt;
+          pref.nvt.oid = preference.nvt.oid;
+
+          nvt_preferences.push(pref);
+        }
+      });
+    }
+
+    ret.preferences = {
+      scanner: scanner_preferences,
+      nvt: nvt_preferences,
+    };
+
     return ret;
   }
 

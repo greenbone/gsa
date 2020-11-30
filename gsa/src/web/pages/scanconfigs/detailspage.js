@@ -146,7 +146,6 @@ ToolBarIcons.propTypes = {
 
 export const NvtFamilies = ({entity}) => {
   const {familyList = [], families} = entity;
-  console.log(families);
   return (
     <Layout>
       {familyList.length > 0 && (
