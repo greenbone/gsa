@@ -58,7 +58,12 @@ import useReload from 'web/components/loading/useReload';
 import DialogNotification from 'web/components/notification/dialognotification';
 import Download from 'web/components/form/download';
 
-import {useGetScanConfig} from 'web/graphql/scanconfigs';
+import {
+  useCloneScanConfig,
+  useDeleteScanConfig,
+  useExportScanConfigsByIds,
+  useGetScanConfig,
+} from 'web/graphql/scanconfigs';
 import {useGetPermissions} from 'web/graphql/permissions';
 
 import EntityPage from 'web/entity/page';
@@ -73,10 +78,12 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+import useExportEntity from 'web/entity/useExportEntity';
 
 import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import {goto_entity_details} from 'web/utils/graphql';
 
 import ScanConfigDetails from './details';
 import ScanConfigComponent from './component';
@@ -321,6 +328,38 @@ const Page = () => {
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
 
+  // ScanConfig related mutations
+  const exportEntity = useExportEntity();
+
+  const [cloneScanConfig] = useCloneScanConfig();
+  const [deleteScanConfig] = useDeleteScanConfig();
+  const exportScanConfig = useExportScanConfigsByIds();
+
+  // ScanConfig methods
+  const handleCloneScanConfig = clonedScanConfig => {
+    return cloneScanConfig(clonedScanConfig.id)
+      .then(scanConfigId =>
+        goto_entity_details('scanconfig', {history})(scanConfigId),
+      )
+      .catch(showError);
+  };
+
+  const handleDeleteScanConfig = deletedScanConfig => {
+    return deleteScanConfig(deletedScanConfig.id)
+      .then(goto_list('scanconfigs', {history}))
+      .catch(showError);
+  };
+
+  const handleDownloadScanConfig = exportedScanConfig => {
+    exportEntity({
+      entity: exportedScanConfig,
+      exportFunc: exportScanConfig,
+      resourceType: 'scanConfigs',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
   // Timeout and reload
   const timeoutFunc = useEntityTimeout(scanConfig);
 
@@ -330,7 +369,7 @@ const Page = () => {
   );
 
   useEffect(() => {
-    // start reloading if alert is available and no timer is running yet
+    // start reloading if scanConfig is available and no timer is running yet
     if (hasValue(scanConfig) && !hasRunningTimer) {
       startReload();
     }
@@ -342,7 +381,7 @@ const Page = () => {
     <ScanConfigComponent
       onCloned={goto_details('scanconfig', {history})}
       onCloneError={showError}
-      onCreated={goto_details('scanconfig', {history})}
+      onCreated={goto_list('scanconfig', {history})} // replace with goto_entity_details later
       onDeleted={goto_list('scanconfigs', {history})}
       onDeleteError={showError}
       onDownloaded={handleDownload}
@@ -351,15 +390,7 @@ const Page = () => {
       onInteraction={renewSessionTimeout}
       onSaved={() => refetchScanConfig()}
     >
-      {({
-        clone,
-        create,
-        delete: delete_func,
-        download,
-        edit,
-        import: import_func,
-        save,
-      }) => (
+      {({create, edit, import: import_func, save}) => (
         <EntityPage
           entity={scanConfig}
           entityError={entityError}
@@ -369,10 +400,10 @@ const Page = () => {
           toolBarIcons={ToolBarIcons}
           title={_('Scan Config')}
           onInteraction={renewSessionTimeout}
-          onScanConfigCloneClick={clone}
+          onScanConfigCloneClick={handleCloneScanConfig}
           onScanConfigCreateClick={create}
-          onScanConfigDeleteClick={delete_func}
-          onScanConfigDownloadClick={download}
+          onScanConfigDeleteClick={handleDeleteScanConfig}
+          onScanConfigDownloadClick={handleDownloadScanConfig}
           onScanConfigEditClick={edit}
           onScanConfigSaveClick={save}
           onScanConfigImportClick={import_func}
