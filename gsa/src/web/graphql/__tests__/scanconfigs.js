@@ -229,7 +229,7 @@ const ImportScanConfigComponent = () => {
 };
 
 describe('Import Scan Config tests', () => {
-  test.only('should import a scan config', async () => {
+  test('should import a scan config', async () => {
     const [
       importScanConfigQueryMock,
       importScanConfigQueryResult,
