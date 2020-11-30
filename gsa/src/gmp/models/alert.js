@@ -25,7 +25,6 @@ import {parseYesNo, YES_VALUE} from 'gmp/parser';
 import Model, {parseModelFromElement} from 'gmp/model.js';
 import Task from './task';
 import Filter from './filter';
-import Tag from './tag';
 
 export const EVENT_TYPE_UPDATED_SECINFO = 'Updated SecInfo arrived';
 export const EVENT_TYPE_NEW_SECINFO = 'New SecInfo arrived';
@@ -137,14 +136,6 @@ class Alert extends Model {
       ret.method.data.report_formats = methDatRepFormSplit.map(rf => rf.trim());
     } else {
       ret.method.data.report_formats = [];
-    }
-
-    if (hasValue(object.userTags)) {
-      ret.userTags = object.userTags.tags.map(tag => {
-        return Tag.fromObject(tag);
-      });
-    } else {
-      ret.userTags = [];
     }
 
     return ret;
