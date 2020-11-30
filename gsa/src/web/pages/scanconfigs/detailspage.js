@@ -76,7 +76,6 @@ import TrashIcon from 'web/entity/icon/trashicon';
 
 import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
-import useGmpSettings from 'web/utils/useGmpSettings';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import ScanConfigDetails from './details';
@@ -302,7 +301,6 @@ Details.propTypes = {
 const Page = () => {
   // Page methods
   const {id} = useParams();
-  const gmpSettings = useGmpSettings();
   const history = useHistory();
   const [, renewSessionTimeout] = useUserSessionTimeout();
   const [downloadRef, handleDownload] = useDownload();
@@ -324,7 +322,7 @@ const Page = () => {
   });
 
   // Timeout and reload
-  const timeoutFunc = useEntityTimeout({entity: scanConfig, gmpSettings});
+  const timeoutFunc = useEntityTimeout(scanConfig);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchScanConfig,
