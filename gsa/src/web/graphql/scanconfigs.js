@@ -18,7 +18,7 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useLazyQuery, useMutation} from '@apollo/client';
+import {gql, useLazyQuery, useQuery, useMutation} from '@apollo/client';
 import ScanConfig from 'gmp/models/scanconfig';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
