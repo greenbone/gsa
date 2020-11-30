@@ -22,7 +22,7 @@ import {isEmpty} from 'gmp/utils/string';
 
 import {parseInt, parseBoolean} from 'gmp/parser';
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 
 import _ from 'gmp/locale';
 
@@ -149,6 +149,12 @@ class ScanConfig extends Model {
       scanner: scanner_preferences,
       nvt: nvt_preferences,
     };
+
+    if (isDefined(object.tasks)) {
+      ret.tasks = map(object.tasks, task => parseModelFromObject(task, 'task'));
+    } else {
+      ret.tasks = [];
+    }
 
     return ret;
   }
