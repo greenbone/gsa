@@ -280,6 +280,8 @@ export const useGetScanConfig = (id, options) => {
     ? ScanConfig.fromObject(data.scanConfig)
     : undefined;
   return {scanConfig, ...other};
+};
+
 export const useCreateScanConfig = options => {
   const [queryCreateScanConfig, {data, ...other}] = useMutation(
     CREATE_SCAN_CONFIG,
