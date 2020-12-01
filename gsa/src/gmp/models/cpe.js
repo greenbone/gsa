@@ -30,8 +30,8 @@ class Cpe extends Info {
   static parseElement(element) {
     const ret = super.parseElement(element, 'cpe');
 
-    ret.severity = parseSeverity(ret.max_cvss);
-    delete ret.max_cvss;
+    ret.severity = parseSeverity(ret.score / 10);
+    delete ret.score;
 
     if (isDefined(ret.cves) && isDefined(ret.cves.cve)) {
       ret.cves = map(ret.cves.cve, cve => ({
