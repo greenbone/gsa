@@ -32,7 +32,6 @@ class Cpe extends Info {
 
     ret.severity = parseSeverity(ret.score / 10);
     delete ret.score;
-    delete ret.max_cvss;
 
     if (isDefined(ret.cves) && isDefined(ret.cves.cve)) {
       ret.cves = map(ret.cves.cve, cve => ({

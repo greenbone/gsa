@@ -32,7 +32,7 @@ describe('Ovaldef model tests', () => {
     const ovaldef = Ovaldef.fromElement({score: '85'});
 
     expect(ovaldef.severity).toEqual(8.5);
-    expect(ovaldef.max_cvss).toBeUndefined();
+    expect(ovaldef.score).toBeUndefined();
   });
 
   test('should parse deprecated', () => {

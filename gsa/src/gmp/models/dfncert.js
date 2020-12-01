@@ -30,7 +30,6 @@ class DfnCertAdv extends Info {
 
     ret.severity = parseSeverity(ret.score / 10);
     delete ret.score;
-    delete ret.max_cvss;
 
     const {raw_data} = ret;
 
