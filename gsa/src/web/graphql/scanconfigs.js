@@ -31,6 +31,7 @@ export const GET_SCAN_CONFIG = gql`
       name
       comment
       writable
+      owner
       inUse
       creationTime
       modificationTime

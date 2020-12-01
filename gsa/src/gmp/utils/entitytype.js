@@ -143,11 +143,6 @@ export const apiType = type => {
 };
 
 // An array of hyperion entity types that might need special parsing in components
-export const hyperionEntityTypes = [
-  'task',
-  'alert',
-  'scanconfig',
-  'permission',
-];
+export const hyperionEntityTypes = ['task', 'alert', 'permission'];
 
 // vim: set ts=2 sw=2 tw=80:
