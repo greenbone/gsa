@@ -131,16 +131,16 @@ class ScanConfig extends Model {
     if (isDefined(object.preferences)) {
       forEach(object.preferences, preference => {
         const pref = {...preference};
-        if (!hasValue(pref.nvt.name)) {
-          delete pref.nvt;
-
-          scanner_preferences.push(pref);
-        } else {
+        if (hasValue(pref.nvt.name)) {
           const nvt = {...pref.nvt};
           pref.nvt = nvt;
           pref.nvt.oid = preference.nvt.oid;
 
           nvt_preferences.push(pref);
+        } else {
+          delete pref.nvt;
+
+          scanner_preferences.push(pref);
         }
       });
     }
