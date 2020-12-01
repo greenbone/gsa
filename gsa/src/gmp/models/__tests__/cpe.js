@@ -24,8 +24,8 @@ testModel(Cpe, 'cpe');
 
 describe('CPE model tests', () => {
   test('should parse severity correctly', () => {
-    const cpe = Cpe.fromElement({max_cvss: '5.0'});
-    const cpe2 = Cpe.fromElement({max_cvss: '10'});
+    const cpe = Cpe.fromElement({score: '50'});
+    const cpe2 = Cpe.fromElement({score: '100'});
 
     expect(cpe.max_cvss).toBeUndefined();
     expect(cpe.severity).toEqual(5.0);

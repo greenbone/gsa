@@ -30,8 +30,8 @@ describe('DfnCertAdv model tests', () => {
   });
 
   test('should parse severity correctly', () => {
-    const dfnCertAdv = DfnCertAdv.fromElement({max_cvss: '5.0'});
-    const dfnCertAdv2 = DfnCertAdv.fromElement({max_cvss: '10'});
+    const dfnCertAdv = DfnCertAdv.fromElement({score: '50'});
+    const dfnCertAdv2 = DfnCertAdv.fromElement({score: '100'});
 
     expect(dfnCertAdv.max_cvss).toBeUndefined();
     expect(dfnCertAdv.severity).toEqual(5.0);

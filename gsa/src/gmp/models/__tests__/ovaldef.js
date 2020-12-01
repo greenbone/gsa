@@ -29,7 +29,7 @@ testModel(Ovaldef, 'ovaldef');
 
 describe('Ovaldef model tests', () => {
   test('should parse severity', () => {
-    const ovaldef = Ovaldef.fromElement({max_cvss: '8.5'});
+    const ovaldef = Ovaldef.fromElement({score: '85'});
 
     expect(ovaldef.severity).toEqual(8.5);
     expect(ovaldef.max_cvss).toBeUndefined();
