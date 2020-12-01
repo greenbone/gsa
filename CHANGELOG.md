@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Fixed
+- Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
 
 ### Removed
 - Removed support for uncontrolled form fields [#2520](https://github.com/greenbone/gsa/pull/2520)
