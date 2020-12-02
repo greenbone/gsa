@@ -138,7 +138,7 @@ class ScanConfig extends Model {
     const nvtPreferences = [];
     const scannerPreferences = [];
 
-    if (isDefined(object.preferences)) {
+    if (hasValue(object.preferences)) {
       forEach(object.preferences, preference => {
         const pref = {...preference};
         if (hasValue(pref.nvt.name)) {
