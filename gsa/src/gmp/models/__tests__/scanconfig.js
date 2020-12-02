@@ -222,13 +222,7 @@ describe('ScanConfig model parseObject tests', () => {
   });
 
   test('should parse type', () => {
-    const scanConfig = ScanConfig.fromElement({type: '21'});
-
-    expect(scanConfig.scanConfigType).toEqual(21);
-  });
-
-  test('should parse type', () => {
-    const scanConfig = ScanConfig.fromElement({type: '21'});
+    const scanConfig = ScanConfig.fromObject({type: 21});
 
     expect(scanConfig.scanConfigType).toEqual(21);
   });
