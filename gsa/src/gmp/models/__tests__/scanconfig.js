@@ -125,6 +125,25 @@ describe('ScanConfig model parseObject tests', () => {
     expect(scanConfig.familyCount).toBeUndefined();
   });
 
+  test('should parse nvtCount', () => {
+    const obj = {
+      nvtCount: 42,
+      knownNvtCount: 21,
+      maxNvtCount: 1337,
+    };
+    const res = {
+      count: 42,
+      known: 21,
+      max: 1337,
+    };
+    const scanConfig = ScanConfig.fromObject(obj);
+
+    expect(scanConfig.nvts).toEqual(res);
+    expect(scanConfig.nvtCount).toBeUndefined();
+    expect(scanConfig.knownNvtCount).toBeUndefined();
+    expect(scanConfig.maxNvtCount).toBeUndefined();
+  });
+
   // more tests here later
 });
 
