@@ -109,7 +109,7 @@ class ScanConfig extends Model {
 
     ret.families = families;
 
-    if (isDefined(ret.nvtCount)) {
+    if (hasValue(ret.nvtCount)) {
       ret.nvts = {
         // number of selected nvts
         count: ret.nvtCount,
@@ -160,7 +160,7 @@ class ScanConfig extends Model {
       nvt: nvtPreferences,
     };
 
-    if (isDefined(object.tasks)) {
+    if (hasValue(object.tasks)) {
       ret.tasks = map(object.tasks, task => parseModelFromObject(task, 'task'));
     } else {
       ret.tasks = [];
