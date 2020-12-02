@@ -135,7 +135,6 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('Scan Config: Half empty and slow');
 
     const links = baseElement.querySelectorAll('a');
