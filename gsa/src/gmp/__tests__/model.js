@@ -135,6 +135,22 @@ describe('fromObject tests', () => {
 
     expect(model2.userTags).toEqual([]);
   });
+
+  test('should parse predefined', () => {
+    const obj = {
+      predefined: true,
+    };
+
+    const obj2 = {
+      predefined: false,
+    };
+
+    const model = Model.fromObject(obj);
+    const model2 = Model.fromObject(obj2);
+
+    expect(model.predefined).toEqual(true);
+    expect(model2.predefined).toEqual(false);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

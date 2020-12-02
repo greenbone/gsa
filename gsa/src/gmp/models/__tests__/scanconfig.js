@@ -115,6 +115,12 @@ describe('ScanConfig model parseObject tests', () => {
     expect(scanConfig.familyList).toEqual([]);
   });
 
+  test('should return empty familyList array if null families are given', () => {
+    const scanConfig = ScanConfig.fromObject({families: null});
+
+    expect(scanConfig.familyList).toEqual([]);
+  });
+
   test('should parse familyCount', () => {
     const obj = {
       familyCount: 42,
@@ -144,8 +150,14 @@ describe('ScanConfig model parseObject tests', () => {
     expect(scanConfig.maxNvtCount).toBeUndefined();
   });
 
-  test('should return empty object if no nvt_counts are given', () => {
-    const scanConfig = ScanConfig.fromElement({});
+  test('should return empty object if no nvtCounts are given', () => {
+    const scanConfig = ScanConfig.fromObject({});
+
+    expect(scanConfig.nvts).toEqual({});
+  });
+
+  test('should return empty object if null nvtCounts are given', () => {
+    const scanConfig = ScanConfig.fromObject({nvtCount: null});
 
     expect(scanConfig.nvts).toEqual({});
   });
@@ -221,6 +233,13 @@ describe('ScanConfig model parseObject tests', () => {
     expect(scanConfig.preferences.nvt).toEqual([]);
   });
 
+  test('should return empty arrays if null preferences are given', () => {
+    const scanConfig = ScanConfig.fromObject({preferences: null});
+
+    expect(scanConfig.preferences.scanner).toEqual([]);
+    expect(scanConfig.preferences.nvt).toEqual([]);
+  });
+
   test('should parse type', () => {
     const scanConfig = ScanConfig.fromObject({type: 21});
 
@@ -228,17 +247,15 @@ describe('ScanConfig model parseObject tests', () => {
   });
 
   test('should parse tasks', () => {
-    const elem = {
-      tasks: {
-        task: [
-          {
-            _id: '123',
-            name: 'foo',
-          },
-        ],
-      },
+    const obj = {
+      tasks: [
+        {
+          id: '123',
+          name: 'foo',
+        },
+      ],
     };
-    const scanConfig = ScanConfig.fromElement(elem);
+    const scanConfig = ScanConfig.fromObject(obj);
 
     expect(scanConfig.tasks[0]).toBeInstanceOf(Model);
     expect(scanConfig.tasks[0].id).toEqual('123');
@@ -246,7 +263,13 @@ describe('ScanConfig model parseObject tests', () => {
   });
 
   test('should return empty array if no tasks are given', () => {
-    const scanConfig = ScanConfig.fromElement({});
+    const scanConfig = ScanConfig.fromObject({});
+
+    expect(scanConfig.tasks).toEqual([]);
+  });
+
+  test('should return empty array if null tasks are given', () => {
+    const scanConfig = ScanConfig.fromObject({tasks: null});
 
     expect(scanConfig.tasks).toEqual([]);
   });
