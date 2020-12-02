@@ -27,6 +27,7 @@ import {
   useCreateScanConfig,
   useImportScanConfig,
   useGetScanConfig,
+  useExportScanConfigsByIds,
 } from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
@@ -34,6 +35,7 @@ import {
   createCreateScanConfigQueryMock,
   createScanConfigInput,
   createImportScanConfigQueryMock,
+  createExportScanConfigsByIdsQueryMock,
 } from '../__mocks__/scanconfigs';
 
 const GetLazyScanConfigsComponent = () => {
@@ -291,5 +293,30 @@ describe('useGetScanConfig tests', () => {
 
     expect(screen.getByTestId('id')).toHaveTextContent('314');
     expect(screen.getByTestId('name')).toHaveTextContent('Half empty and slow');
+  });
+});
+
+const ExportScanConfigsByIdsComponent = () => {
+  const exportScanConfigsByIds = useExportScanConfigsByIds();
+  return (
+    <button
+      data-testid="bulk-export"
+      onClick={() => exportScanConfigsByIds(['314'])}
+    />
+  );
+};
+
+describe('useExportScanConfigsByIds tests', () => {
+  test('should export a list of scanConfigs after user interaction', async () => {
+    const [mock, resultFunc] = createExportScanConfigsByIdsQueryMock(['314']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportScanConfigsByIdsComponent />);
+    const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 });
