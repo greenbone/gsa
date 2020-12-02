@@ -47,6 +47,10 @@ export const parseCount = count => {
   return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;
 };
 
+export const parseCountInt = count => {
+  return hasValue(count) && count !== -1 ? parseInt(count) : undefined;
+};
+
 export const filterEmptyScanConfig = config =>
   config.id !== EMPTY_SCAN_CONFIG_ID;
 
@@ -78,8 +82,8 @@ class ScanConfig extends Model {
           name,
           trend: hasValue(family) && family.growing ? 1 : 0,
           nvts: {
-            count: parseCount(family.nvtCount),
-            max: parseCount(family.maxNvtCount),
+            count: parseCountInt(family.nvtCount),
+            max: parseCountInt(family.maxNvtCount),
           },
         };
         families[name] = newFamily;

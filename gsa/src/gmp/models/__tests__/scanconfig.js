@@ -41,6 +41,74 @@ describe('ScanConfig model parseObject tests', () => {
     expect(scanConfig.scanConfigType).toEqual(0);
   });
 
+  test('should parse families', () => {
+    const obj = {
+      families: [
+        {
+          name: 'foo',
+          nvtCount: 42,
+          maxNvtCount: 42,
+          growing: true,
+        },
+      ],
+    };
+
+    const res = [
+      {
+        name: 'foo',
+        trend: SCANCONFIG_TREND_DYNAMIC,
+        nvts: {
+          count: 42,
+          max: 42,
+        },
+      },
+    ];
+    const scanConfig = ScanConfig.fromObject(obj);
+
+    expect(scanConfig.familyList).toEqual(res);
+  });
+
+  test('should parse special nvt counts', () => {
+    const obj = {
+      families: [
+        {
+          name: 'foo',
+          nvtCount: -1,
+          maxNvtCount: null,
+          growing: true,
+        },
+      ],
+    };
+    const scanConfig = ScanConfig.fromObject(obj);
+
+    expect(scanConfig.familyList[0].nvts.count).toBeUndefined();
+    expect(scanConfig.familyList[0].nvts.max).toBeUndefined();
+  });
+
+  test('should parse to families', () => {
+    const obj = {
+      families: [
+        {
+          name: 'foo',
+          nvtCount: 42,
+          maxNvtCount: 42,
+          growing: true,
+        },
+      ],
+    };
+    const res = {
+      name: 'foo',
+      trend: SCANCONFIG_TREND_DYNAMIC,
+      nvts: {
+        count: 42,
+        max: 42,
+      },
+    };
+    const scanConfig = ScanConfig.fromObject(obj);
+
+    expect(scanConfig.families.foo).toEqual(res);
+  });
+
   // more tests here later
 });
 
