@@ -32,6 +32,7 @@ import {YES_VALUE} from 'gmp/parser';
 import {
   useImportScanConfig,
   useCreateScanConfig,
+  useLoadScanConfigPromise,
 } from 'web/graphql/scanconfigs';
 import {useLazyGetScanners} from 'web/graphql/scanners';
 
@@ -47,6 +48,7 @@ import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
+import ScanConfig from 'gmp/models/scanconfig';
 
 export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};
@@ -90,6 +92,7 @@ const ScanConfigComponent = ({
     importDialogVisible: false,
   });
 
+  const loadConfigPromise = useLoadScanConfigPromise();
   const [importScanConfig] = useImportScanConfig();
   const [createScanConfig] = useCreateScanConfig();
   const [
@@ -388,12 +391,13 @@ const ScanConfigComponent = ({
       }),
     );
 
-    return gmp.scanconfig
-      .get({id: configId})
+    return loadConfigPromise(configId)
       .then(response => {
+        const scanConfig = ScanConfig.fromObject(response?.data?.scanConfig);
+        console.log(scanConfig);
         dispatchState(
           updateState({
-            config: response.data,
+            config: scanConfig,
           }),
         );
       })
