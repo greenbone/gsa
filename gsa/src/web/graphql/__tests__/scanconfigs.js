@@ -26,6 +26,7 @@ import {
   useLazyGetScanConfig,
   useCreateScanConfig,
   useImportScanConfig,
+  useGetScanConfig,
 } from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
@@ -248,5 +249,47 @@ describe('Import Scan Config tests', () => {
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'ScanConfig imported with id 13245.',
     );
+  });
+});
+
+const GetScanConfigComponent = ({id}) => {
+  const {loading, scanConfig, error} = useGetScanConfig(id);
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      {error && <div data-testid="error">{error.message}</div>}
+      {scanConfig && (
+        <div data-testid="scanConfig">
+          <span data-testid="id">{scanConfig.id}</span>
+          <span data-testid="name">{scanConfig.name}</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+describe('useGetScanConfig tests', () => {
+  test('should load scanConfig', async () => {
+    const [queryMock, resultFunc] = createGetScanConfigQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<GetScanConfigComponent id="314" />);
+
+    expect(screen.queryByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('scanConfig')).toBeInTheDocument();
+
+    expect(screen.getByTestId('id')).toHaveTextContent('314');
+    expect(screen.getByTestId('name')).toHaveTextContent('Half empty and slow');
   });
 });
