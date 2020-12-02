@@ -123,7 +123,7 @@ describe('fromObject tests', () => {
     const model2 = Model.fromObject(object2);
 
     expect(model.userTags.length).toEqual(1);
-    const tag = model.userTags[0];
+    const [tag] = model.userTags;
 
     expect(tag).toBeInstanceOf(Model);
 
