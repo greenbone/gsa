@@ -109,6 +109,22 @@ describe('ScanConfig model parseObject tests', () => {
     expect(scanConfig.families.foo).toEqual(res);
   });
 
+  test('should return empty familyList array if no families are given', () => {
+    const scanConfig = ScanConfig.fromObject({});
+
+    expect(scanConfig.familyList).toEqual([]);
+  });
+
+  test('should parse familyCount', () => {
+    const obj = {
+      familyCount: 42,
+    };
+    const scanConfig = ScanConfig.fromObject(obj);
+
+    expect(scanConfig.families.count).toEqual(42);
+    expect(scanConfig.familyCount).toBeUndefined();
+  });
+
   // more tests here later
 });
 

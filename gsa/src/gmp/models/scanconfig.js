@@ -82,8 +82,14 @@ class ScanConfig extends Model {
           name,
           trend: hasValue(family) && family.growing ? 1 : 0,
           nvts: {
-            count: parseCountInt(family.nvtCount),
-            max: parseCountInt(family.maxNvtCount),
+            count:
+              hasValue(family.nvtCount) && family.nvtCount !== -1
+                ? family.nvtCount
+                : undefined,
+            max:
+              hasValue(family.maxNvtCount) && family.maxNvtCount !== -1
+                ? family.maxNvtCount
+                : undefined,
           },
         };
         families[name] = newFamily;
@@ -94,7 +100,7 @@ class ScanConfig extends Model {
     }
 
     if (hasValue(ret.familyCount)) {
-      families.count = parseCount(ret.familyCount);
+      families.count = ret.familyCount;
 
       delete ret.familyCount;
     } else {
