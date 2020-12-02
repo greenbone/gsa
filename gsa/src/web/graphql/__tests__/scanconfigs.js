@@ -28,6 +28,7 @@ import {
   useImportScanConfig,
   useGetScanConfig,
   useExportScanConfigsByIds,
+  useDeleteScanConfig,
 } from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
@@ -36,6 +37,7 @@ import {
   createScanConfigInput,
   createImportScanConfigQueryMock,
   createExportScanConfigsByIdsQueryMock,
+  createDeleteScanConfigsByIdsQueryMock,
 } from '../__mocks__/scanconfigs';
 
 const GetLazyScanConfigsComponent = () => {
@@ -313,6 +315,28 @@ describe('useExportScanConfigsByIds tests', () => {
 
     render(<ExportScanConfigsByIdsComponent />);
     const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteScanConfigComponent = () => {
+  const [deleteScanConfig] = useDeleteScanConfig();
+  return (
+    <button data-testid="delete" onClick={() => deleteScanConfig('314')} />
+  );
+};
+
+describe('useDeleteScanConfigsByIds tests', () => {
+  test('should delete a list of scanConfigs after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteScanConfigsByIdsQueryMock(['314']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteScanConfigComponent />);
+    const button = screen.getByTestId('delete');
     fireEvent.click(button);
 
     await wait();
