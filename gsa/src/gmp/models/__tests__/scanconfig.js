@@ -144,7 +144,121 @@ describe('ScanConfig model parseObject tests', () => {
     expect(scanConfig.maxNvtCount).toBeUndefined();
   });
 
-  // more tests here later
+  test('should return empty object if no nvt_counts are given', () => {
+    const scanConfig = ScanConfig.fromElement({});
+
+    expect(scanConfig.nvts).toEqual({});
+  });
+
+  test('should parse preferences', () => {
+    const obj = {
+      preferences: [
+        {
+          alt: ['postgres', 'regress'],
+          default: 'postgres',
+          hrName: 'Postgres Username:',
+          id: 1,
+          name: 'Postgres Username:',
+          type: 'entry',
+          value: 'regress',
+          nvt: {
+            oid: 'oid',
+            name: 'PostgreSQL Detection',
+          },
+        },
+        {
+          alt: ['a', 'b'],
+          default: 'c',
+          hrName: 'foo',
+          id: 2,
+          name: 'foo',
+          type: 'bar',
+          value: 'lorem',
+          nvt: {
+            oid: null,
+            name: null,
+          },
+        },
+      ],
+    };
+    const nvtPreferences = [
+      {
+        alt: ['postgres', 'regress'],
+        default: 'postgres',
+        hrName: 'Postgres Username:',
+        id: 1,
+        name: 'Postgres Username:',
+        type: 'entry',
+        value: 'regress',
+        nvt: {
+          oid: 'oid',
+          name: 'PostgreSQL Detection',
+        },
+      },
+    ];
+    const scannerPreferences = [
+      {
+        alt: ['a', 'b'],
+        default: 'c',
+        hrName: 'foo',
+        id: 2,
+        name: 'foo',
+        type: 'bar',
+        value: 'lorem',
+      },
+    ];
+
+    const scanConfig = ScanConfig.fromObject(obj);
+
+    expect(scanConfig.preferences.scanner).toEqual(scannerPreferences);
+    expect(scanConfig.preferences.nvt).toEqual(nvtPreferences);
+  });
+
+  test('should return empty arrays if no preferences are given', () => {
+    const scanConfig = ScanConfig.fromElement({});
+
+    expect(scanConfig.preferences.scanner).toEqual([]);
+    expect(scanConfig.preferences.nvt).toEqual([]);
+  });
+
+  test('should parse type', () => {
+    const scanConfig = ScanConfig.fromElement({type: '21'});
+
+    expect(scanConfig.scanConfigType).toEqual(21);
+  });
+
+  test('should parse type', () => {
+    const scanConfig = ScanConfig.fromElement({type: '21'});
+
+    expect(scanConfig.scanConfigType).toEqual(21);
+  });
+
+  test('should parse tasks', () => {
+    const elem = {
+      tasks: {
+        task: [
+          {
+            _id: '123',
+            name: 'foo',
+          },
+        ],
+      },
+    };
+    const scanConfig = ScanConfig.fromElement(elem);
+
+    expect(scanConfig.tasks[0]).toBeInstanceOf(Model);
+    expect(scanConfig.tasks[0].id).toEqual('123');
+    expect(scanConfig.tasks[0].entityType).toEqual('task');
+  });
+
+  test('should return empty array if no tasks are given', () => {
+    const scanConfig = ScanConfig.fromElement({});
+
+    expect(scanConfig.tasks).toEqual([]);
+  });
+
+  // predefined is already boolean
+  // has no scanner attribute
 });
 
 describe('ScanConfig model parseElement tests', () => {

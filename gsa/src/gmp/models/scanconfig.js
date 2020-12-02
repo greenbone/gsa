@@ -135,8 +135,8 @@ class ScanConfig extends Model {
       ret.nvts = {};
     }
 
-    const nvt_preferences = [];
-    const scanner_preferences = [];
+    const nvtPreferences = [];
+    const scannerPreferences = [];
 
     if (isDefined(object.preferences)) {
       forEach(object.preferences, preference => {
@@ -146,18 +146,18 @@ class ScanConfig extends Model {
           pref.nvt = nvt;
           pref.nvt.oid = preference.nvt.oid;
 
-          nvt_preferences.push(pref);
+          nvtPreferences.push(pref);
         } else {
           delete pref.nvt;
 
-          scanner_preferences.push(pref);
+          scannerPreferences.push(pref);
         }
       });
     }
 
     ret.preferences = {
-      scanner: scanner_preferences,
-      nvt: nvt_preferences,
+      scanner: scannerPreferences,
+      nvt: nvtPreferences,
     };
 
     if (isDefined(object.tasks)) {
@@ -232,8 +232,8 @@ class ScanConfig extends Model {
       ret.nvts = {};
     }
 
-    const nvt_preferences = [];
-    const scanner_preferences = [];
+    const nvtPreferences = [];
+    const scannerPreferences = [];
 
     if (isDefined(element.preferences)) {
       forEach(element.preferences.preference, preference => {
@@ -241,21 +241,21 @@ class ScanConfig extends Model {
         if (isEmpty(pref.nvt.name)) {
           delete pref.nvt;
 
-          scanner_preferences.push(pref);
+          scannerPreferences.push(pref);
         } else {
           const nvt = {...pref.nvt};
           pref.nvt = nvt;
           pref.nvt.oid = preference.nvt._oid;
           delete pref.nvt._oid;
 
-          nvt_preferences.push(pref);
+          nvtPreferences.push(pref);
         }
       });
     }
 
     ret.preferences = {
-      scanner: scanner_preferences,
-      nvt: nvt_preferences,
+      scanner: scannerPreferences,
+      nvt: nvtPreferences,
     };
 
     ret.scanConfigType = parseInt(element.type);
