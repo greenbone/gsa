@@ -215,7 +215,7 @@ describe('ScanConfig model parseObject tests', () => {
   });
 
   test('should return empty arrays if no preferences are given', () => {
-    const scanConfig = ScanConfig.fromElement({});
+    const scanConfig = ScanConfig.fromObject({});
 
     expect(scanConfig.preferences.scanner).toEqual([]);
     expect(scanConfig.preferences.nvt).toEqual([]);
