@@ -35,7 +35,7 @@ export const nonWritableConfig = deepFreeze({
   comment: "Most NVT's",
   families: [
     {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
-    {name: 'family2', growing: true, maxNvtCount: 5, nvtCount: 0},
+    {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
   ],
   familyCount: 1,
   owner: 'admin',

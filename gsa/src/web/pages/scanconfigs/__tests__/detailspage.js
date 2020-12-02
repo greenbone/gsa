@@ -226,7 +226,16 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
 
-    // family trend is not supported by hyperion
+    // families trend is not supported by hyperion
+
+    expect(icons[9]).toHaveAttribute(
+      'title',
+      'The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.',
+    );
+    expect(icons[10]).toHaveAttribute(
+      'title',
+      'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
+    );
   });
 
   test('should render nvt preferences tab', async () => {
