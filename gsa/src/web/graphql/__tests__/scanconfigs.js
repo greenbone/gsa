@@ -380,11 +380,11 @@ describe('useCloneScanConfig tests', () => {
 });
 
 const GetPromisedScanConfigComponent = () => {
-  const loadConfigPromise = useLoadScanConfigPromise();
+  const loadScanConfigPromise = useLoadScanConfigPromise();
   const [scanConfig, setScanConfig] = useState();
 
   const handleLoadScanConfig = configId => {
-    return loadConfigPromise(configId).then(response =>
+    return loadScanConfigPromise(configId).then(response =>
       setScanConfig(response),
     );
   };

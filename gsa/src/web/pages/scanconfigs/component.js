@@ -91,7 +91,7 @@ const ScanConfigComponent = ({
     importDialogVisible: false,
   });
 
-  const loadConfigPromise = useLoadScanConfigPromise();
+  const loadScanConfigPromise = useLoadScanConfigPromise();
   const [importScanConfig] = useImportScanConfig();
   const [createScanConfig] = useCreateScanConfig();
   const [
@@ -390,7 +390,7 @@ const ScanConfigComponent = ({
       }),
     );
 
-    return loadConfigPromise(configId)
+    return loadScanConfigPromise(configId)
       .then(scanConfig => {
         dispatchState(
           updateState({
