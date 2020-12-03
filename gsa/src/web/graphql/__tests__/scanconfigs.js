@@ -42,7 +42,6 @@ import {
   createDeleteScanConfigsByIdsQueryMock,
   createCloneScanConfigQueryMock,
 } from '../__mocks__/scanconfigs';
-import ScanConfig from 'gmp/models/scanconfig';
 
 const GetLazyScanConfigsComponent = () => {
   const [
