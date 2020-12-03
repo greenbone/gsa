@@ -47,10 +47,6 @@ export const parseCount = count => {
   return !isEmpty(count) && count !== '-1' ? parseInt(count) : undefined;
 };
 
-export const parseCountInt = count => {
-  return hasValue(count) && count !== -1 ? parseInt(count) : undefined;
-};
-
 export const filterEmptyScanConfig = config =>
   config.id !== EMPTY_SCAN_CONFIG_ID;
 
