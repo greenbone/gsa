@@ -362,11 +362,17 @@ export const useLoadScanConfigPromise = () => {
   const client = useApolloClient();
 
   const loadScanConfig = configId =>
-    client.query({
-      query: GET_SCAN_CONFIG,
-      variables: {id: configId},
-      fetchPolicy: 'no-cache', // do not cache, since this is used when a change is saved
-    });
+    client
+      .query({
+        query: GET_SCAN_CONFIG,
+        variables: {id: configId},
+        fetchPolicy: 'no-cache', // do not cache, since this is used when a change is saved
+      })
+      .then(response => {
+        const scanConfig = ScanConfig.fromObject(response?.data?.scanConfig);
+
+        return scanConfig;
+      });
 
   return loadScanConfig;
 };

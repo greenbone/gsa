@@ -30,6 +30,7 @@ import {
   useExportScanConfigsByIds,
   useDeleteScanConfig,
   useCloneScanConfig,
+  useLoadScanConfigPromise,
 } from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
@@ -374,5 +375,54 @@ describe('useCloneScanConfig tests', () => {
     expect(resultFunc).toHaveBeenCalled();
 
     expect(screen.getByTestId('cloned-scanConfig')).toHaveTextContent('354');
+  });
+});
+
+const GetPromisedScanConfigComponent = () => {
+  const loadConfigPromise = useLoadScanConfigPromise();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getScanConfig('314')} />
+      {isDefined(scanConfig) ? (
+        <div key={scanConfig.id} data-testid="scanConfig">
+          {scanConfig.id}
+        </div>
+      ) : (
+        <div data-testid="no-scanConfig" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetScanConfig tests', () => {
+  test('should query scanConfig after user interaction', async () => {
+    const [mock, resultFunc] = createGetScanConfigQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazyScanConfigComponent />);
+
+    let scanConfigElement = screen.queryAllByTestId('scanConfig');
+    expect(scanConfigElement).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-scanConfig')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    scanConfigElement = screen.getByTestId('scanConfig');
+
+    expect(scanConfigElement).toHaveTextContent('314');
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 });

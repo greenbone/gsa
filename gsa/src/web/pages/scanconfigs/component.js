@@ -48,7 +48,6 @@ import EditScanConfigDialog from './editdialog';
 import EditNvtDetailsDialog from './editnvtdetailsdialog';
 import ImportDialog from './importdialog';
 import ScanConfigDialog from './dialog';
-import ScanConfig from 'gmp/models/scanconfig';
 
 export const createSelectedNvts = (configFamily, nvts) => {
   const selected = {};
@@ -392,9 +391,7 @@ const ScanConfigComponent = ({
     );
 
     return loadConfigPromise(configId)
-      .then(response => {
-        const scanConfig = ScanConfig.fromObject(response?.data?.scanConfig);
-        console.log(scanConfig);
+      .then(scanConfig => {
         dispatchState(
           updateState({
             config: scanConfig,
