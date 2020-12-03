@@ -93,7 +93,6 @@ import {useGetPermissions} from 'web/graphql/permissions';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
-import useGmpSettings from 'web/utils/useGmpSettings';
 import {goto_entity_details} from 'web/utils/graphql';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
@@ -317,7 +316,6 @@ Details.propTypes = {
 const Page = () => {
   // Page methods
   const {id} = useParams();
-  const gmpSettings = useGmpSettings();
   const history = useHistory();
   const [, renewSessionTimeout] = useUserSessionTimeout();
   const [downloadRef, handleDownload] = useDownload();
@@ -373,7 +371,7 @@ const Page = () => {
   };
 
   // Timeout and reload
-  const timeoutFunc = useEntityTimeout({entity: task, gmpSettings});
+  const timeoutFunc = useEntityTimeout(task);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchTask,

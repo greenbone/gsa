@@ -100,6 +100,57 @@ describe('fromObject tests', () => {
     expect(model.comment).toEqual('lorem ipsum');
     expect(model2.comment).toBeUndefined();
   });
+  test('should parse tags', () => {
+    const object = {
+      userTags: {
+        count: 1,
+        tags: [
+          {
+            id: 'foo',
+            name: 'bar:unnamed',
+            value: 'yes',
+            comment: 'YAS',
+          },
+        ],
+      },
+    };
+
+    const object2 = {
+      userTags: null,
+    };
+
+    const model = Model.fromObject(object);
+    const model2 = Model.fromObject(object2);
+
+    expect(model.userTags.length).toEqual(1);
+    const [tag] = model.userTags;
+
+    expect(tag).toBeInstanceOf(Model);
+
+    expect(tag.id).toEqual('foo');
+    expect(tag.name).toEqual('bar:unnamed');
+    expect(tag.entityType).toEqual('tag');
+    expect(tag.value).toEqual('yes');
+    expect(tag.comment).toEqual('YAS');
+
+    expect(model2.userTags).toEqual([]);
+  });
+
+  test('should parse predefined', () => {
+    const obj = {
+      predefined: true,
+    };
+
+    const obj2 = {
+      predefined: false,
+    };
+
+    const model = Model.fromObject(obj);
+    const model2 = Model.fromObject(obj2);
+
+    expect(model.predefined).toEqual(true);
+    expect(model2.predefined).toEqual(false);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

@@ -26,6 +26,10 @@ import {
   useLazyGetScanConfig,
   useCreateScanConfig,
   useImportScanConfig,
+  useGetScanConfig,
+  useExportScanConfigsByIds,
+  useDeleteScanConfig,
+  useCloneScanConfig,
 } from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
@@ -33,6 +37,9 @@ import {
   createCreateScanConfigQueryMock,
   createScanConfigInput,
   createImportScanConfigQueryMock,
+  createExportScanConfigsByIdsQueryMock,
+  createDeleteScanConfigsByIdsQueryMock,
+  createCloneScanConfigQueryMock,
 } from '../__mocks__/scanconfigs';
 
 const GetLazyScanConfigsComponent = () => {
@@ -248,5 +255,124 @@ describe('Import Scan Config tests', () => {
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'ScanConfig imported with id 13245.',
     );
+  });
+});
+
+const GetScanConfigComponent = ({id}) => {
+  const {loading, scanConfig, error} = useGetScanConfig(id);
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      {error && <div data-testid="error">{error.message}</div>}
+      {scanConfig && (
+        <div data-testid="scanConfig">
+          <span data-testid="id">{scanConfig.id}</span>
+          <span data-testid="name">{scanConfig.name}</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+describe('useGetScanConfig tests', () => {
+  test('should load scanConfig', async () => {
+    const [queryMock, resultFunc] = createGetScanConfigQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<GetScanConfigComponent id="314" />);
+
+    expect(screen.queryByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('scanConfig')).toBeInTheDocument();
+
+    expect(screen.getByTestId('id')).toHaveTextContent('314');
+    expect(screen.getByTestId('name')).toHaveTextContent('Half empty and slow');
+  });
+});
+
+const ExportScanConfigsByIdsComponent = () => {
+  const exportScanConfigsByIds = useExportScanConfigsByIds();
+  return (
+    <button
+      data-testid="bulk-export"
+      onClick={() => exportScanConfigsByIds(['314'])}
+    />
+  );
+};
+
+describe('useExportScanConfigsByIds tests', () => {
+  test('should export a list of scanConfigs after user interaction', async () => {
+    const [mock, resultFunc] = createExportScanConfigsByIdsQueryMock(['314']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportScanConfigsByIdsComponent />);
+    const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteScanConfigComponent = () => {
+  const [deleteScanConfig] = useDeleteScanConfig();
+  return (
+    <button data-testid="delete" onClick={() => deleteScanConfig('314')} />
+  );
+};
+
+describe('useDeleteScanConfigsByIds tests', () => {
+  test('should delete a list of scanConfigs after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteScanConfigsByIdsQueryMock(['314']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteScanConfigComponent />);
+    const button = screen.getByTestId('delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const CloneScanConfigComponent = () => {
+  const [cloneScanConfig, {id: scanConfigId}] = useCloneScanConfig();
+  return (
+    <div>
+      {scanConfigId && (
+        <span data-testid="cloned-scanConfig">{scanConfigId}</span>
+      )}
+      <button data-testid="clone" onClick={() => cloneScanConfig('314')} />
+    </div>
+  );
+};
+
+describe('useCloneScanConfig tests', () => {
+  test('should clone a scanConfig after user interaction', async () => {
+    const [mock, resultFunc] = createCloneScanConfigQueryMock('314', '354');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CloneScanConfigComponent />);
+
+    const button = screen.getByTestId('clone');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('cloned-scanConfig')).toHaveTextContent('354');
   });
 });

@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+- Implement scan config detailspage queries and mutations [#2610](https://github.com/greenbone/gsa/pull/2610)
 - Implement create_scan_config, import_scan_config via graphql [#2604](https://github.com/greenbone/gsa/pull/2604)
 - Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section [#2536](https://github.com/greenbone/gsa/pull/2536)

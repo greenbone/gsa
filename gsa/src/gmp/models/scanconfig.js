@@ -22,7 +22,7 @@ import {isEmpty} from 'gmp/utils/string';
 
 import {parseInt, parseBoolean} from 'gmp/parser';
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 
 import _ from 'gmp/locale';
 
@@ -65,6 +65,101 @@ class ScanConfig extends Model {
 
     if (hasValue(object.type)) {
       ret.scanConfigType = object.type;
+    }
+
+    // for displaying the selected nvts (1 of 33) an object for accessing the
+    // family by name is required
+    const families = {};
+
+    if (hasValue(object.families)) {
+      ret.familyList = map(object.families, family => {
+        const {name} = family;
+        const newFamily = {
+          name,
+          trend: hasValue(family) && family.growing ? 1 : 0,
+          nvts: {
+            count:
+              hasValue(family.nvtCount) && family.nvtCount !== -1
+                ? family.nvtCount
+                : undefined,
+            max:
+              hasValue(family.maxNvtCount) && family.maxNvtCount !== -1
+                ? family.maxNvtCount
+                : undefined,
+          },
+        };
+        families[name] = newFamily;
+        return newFamily;
+      });
+    } else {
+      ret.familyList = [];
+    }
+
+    if (hasValue(ret.familyCount)) {
+      families.count = ret.familyCount;
+
+      delete ret.familyCount;
+    } else {
+      families.count = 0;
+    }
+
+    ret.families = families;
+
+    if (hasValue(ret.nvtCount)) {
+      ret.nvts = {
+        // number of selected nvts
+        count: ret.nvtCount,
+      };
+
+      delete ret.nvtCount;
+
+      if (isDefined(ret.knownNvtCount)) {
+        // number of known nvts by the scanner from last sync. should always be
+        // equal or less then nvt_count because only the db may contain nvts not
+        // known nvts by the scanner e.g. an imported scan config contains
+        // private nvts
+        ret.nvts.known = ret.knownNvtCount;
+        delete ret.knownNvtCount;
+      }
+
+      if (isDefined(ret.maxNvtCount)) {
+        // sum of all available nvts of all selected families
+        ret.nvts.max = ret.maxNvtCount;
+        delete ret.maxNvtCount;
+      }
+    } else {
+      ret.nvts = {};
+    }
+
+    const nvtPreferences = [];
+    const scannerPreferences = [];
+
+    if (hasValue(object.preferences)) {
+      forEach(object.preferences, preference => {
+        const pref = {...preference};
+        if (hasValue(pref.nvt.name)) {
+          const nvt = {...pref.nvt};
+          pref.nvt = nvt;
+          pref.nvt.oid = preference.nvt.oid;
+
+          nvtPreferences.push(pref);
+        } else {
+          delete pref.nvt;
+
+          scannerPreferences.push(pref);
+        }
+      });
+    }
+
+    ret.preferences = {
+      scanner: scannerPreferences,
+      nvt: nvtPreferences,
+    };
+
+    if (hasValue(object.tasks)) {
+      ret.tasks = map(object.tasks, task => parseModelFromObject(task, 'task'));
+    } else {
+      ret.tasks = [];
     }
 
     return ret;
@@ -133,8 +228,8 @@ class ScanConfig extends Model {
       ret.nvts = {};
     }
 
-    const nvt_preferences = [];
-    const scanner_preferences = [];
+    const nvtPreferences = [];
+    const scannerPreferences = [];
 
     if (isDefined(element.preferences)) {
       forEach(element.preferences.preference, preference => {
@@ -142,21 +237,21 @@ class ScanConfig extends Model {
         if (isEmpty(pref.nvt.name)) {
           delete pref.nvt;
 
-          scanner_preferences.push(pref);
+          scannerPreferences.push(pref);
         } else {
           const nvt = {...pref.nvt};
           pref.nvt = nvt;
           pref.nvt.oid = preference.nvt._oid;
           delete pref.nvt._oid;
 
-          nvt_preferences.push(pref);
+          nvtPreferences.push(pref);
         }
       });
     }
 
     ret.preferences = {
-      scanner: scanner_preferences,
-      nvt: nvt_preferences,
+      scanner: scannerPreferences,
+      nvt: nvtPreferences,
     };
 
     ret.scanConfigType = parseInt(element.type);

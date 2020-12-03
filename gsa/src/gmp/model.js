@@ -155,11 +155,10 @@ class Model {
       copy.userCapabilities = new Capabilities();
     }
 
-    if (hasValue(object.user_tags)) {
-      copy.userTags = map(object.user_tags.tag, tag => {
-        return parseModelFromElement(tag, 'tag');
-      });
-      delete copy.user_tags;
+    if (hasValue(object.userTags)) {
+      copy.userTags = object.userTags.tags.map(tag =>
+        parseModelFromObject(tag, 'tag'),
+      );
     } else {
       copy.userTags = [];
     }

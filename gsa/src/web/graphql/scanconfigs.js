@@ -18,7 +18,7 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useLazyQuery, useMutation} from '@apollo/client';
+import {gql, useLazyQuery, useMutation, useQuery} from '@apollo/client';
 import ScanConfig from 'gmp/models/scanconfig';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -31,6 +31,7 @@ export const GET_SCAN_CONFIG = gql`
       name
       comment
       writable
+      owner
       inUse
       creationTime
       modificationTime
@@ -176,10 +177,34 @@ export const IMPORT_SCAN_CONFIG = gql`
   }
 `;
 
+export const CLONE_SCAN_CONFIG = gql`
+  mutation cloneScanConfig($id: UUID!) {
+    cloneScanConfig(id: $id) {
+      id
+    }
+  }
+`;
+
+export const EXPORT_SCAN_CONFIGS_BY_IDS = gql`
+  mutation exportScanConfigsByIds($ids: [UUID]!) {
+    exportScanConfigsByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
 export const CREATE_SCAN_CONFIG = gql`
   mutation createScanConfig($input: CreateScanConfigInput!) {
     createScanConfig(input: $input) {
       id
+    }
+  }
+`;
+
+export const DELETE_SCAN_CONFIGS_BY_IDS = gql`
+  mutation deleteScanConfigsByIds($ids: [UUID]!) {
+    deleteScanConfigsByIds(ids: $ids) {
+      ok
     }
   }
 `;
@@ -247,6 +272,17 @@ export const useLazyGetScanConfigs = (variables, options) => {
   return [getScanConfigs, {...other, counts, scanConfigs, pageInfo}];
 };
 
+export const useGetScanConfig = (id, options) => {
+  const {data, ...other} = useQuery(GET_SCAN_CONFIG, {
+    ...options,
+    variables: {id},
+  });
+  const scanConfig = isDefined(data?.scanConfig)
+    ? ScanConfig.fromObject(data.scanConfig)
+    : undefined;
+  return {scanConfig, ...other};
+};
+
 export const useCreateScanConfig = options => {
   const [queryCreateScanConfig, {data, ...other}] = useMutation(
     CREATE_SCAN_CONFIG,
@@ -262,4 +298,56 @@ export const useCreateScanConfig = options => {
   );
   const scanConfigId = data?.createScanConfig?.id;
   return [createScanConfig, {...other, id: scanConfigId}];
+};
+
+export const useDeleteScanConfig = options => {
+  const [queryDeleteScanConfig, data] = useMutation(
+    DELETE_SCAN_CONFIGS_BY_IDS,
+    options,
+  );
+  const deleteScanConfig = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryDeleteScanConfig({...options, variables: {ids: [id]}}),
+    [queryDeleteScanConfig],
+  );
+  return [deleteScanConfig, data];
+};
+
+export const useExportScanConfigsByIds = options => {
+  const [queryExportScanConfigsByIds] = useMutation(
+    EXPORT_SCAN_CONFIGS_BY_IDS,
+    options,
+  );
+
+  const exportScanConfigsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    scanConfigIds =>
+      queryExportScanConfigsByIds({
+        ...options,
+        variables: {
+          ids: scanConfigIds,
+        },
+      }),
+    [queryExportScanConfigsByIds, options],
+  );
+
+  return exportScanConfigsByIds;
+};
+
+export const useCloneScanConfig = options => {
+  const [queryCloneScanConfig, {data, ...other}] = useMutation(
+    CLONE_SCAN_CONFIG,
+    options,
+  );
+  const cloneScanConfig = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryCloneScanConfig({...options, variables: {id}}).then(
+        result => result.data.cloneScanConfig.id,
+      ),
+    [queryCloneScanConfig],
+  );
+  const scanConfigId = data?.cloneScanConfig?.id;
+  return [cloneScanConfig, {...other, id: scanConfigId}];
 };

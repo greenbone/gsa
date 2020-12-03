@@ -138,7 +138,7 @@ const ScanConfigComponent = ({
         configId: baseScanConfig,
         name,
         comment,
-      });
+      }).then(onCreated, onCreateError);
     }
 
     let saveData = d;

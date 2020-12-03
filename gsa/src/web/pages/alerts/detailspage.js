@@ -68,7 +68,6 @@ import {useGetReportFormats} from 'web/graphql/reportformats';
 
 import PropTypes from 'web/utils/proptypes';
 import {goto_entity_details} from 'web/utils/graphql';
-import useGmpSettings from 'web/utils/useGmpSettings';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import AlertComponent from './component';
@@ -117,7 +116,6 @@ ToolBarIcons.propTypes = {
 const Page = () => {
   // Page methods
   const {id} = useParams();
-  const gmpSettings = useGmpSettings();
   const history = useHistory();
   const [, renewSessionTimeout] = useUserSessionTimeout();
   const [downloadRef, handleDownload] = useDownload();
@@ -170,7 +168,7 @@ const Page = () => {
   };
 
   // Timeout and reload
-  const timeoutFunc = useEntityTimeout({entity: alert, gmpSettings});
+  const timeoutFunc = useEntityTimeout(alert);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchAlert,
@@ -196,7 +194,7 @@ const Page = () => {
       onDownloaded={handleDownload}
       onDownloadError={showError}
       onInteraction={renewSessionTimeout}
-      onSaved={() => refetchAlert()}
+      onSaved={() => refetchAlert()} // Must be called like this instead of simply onChanged={refetchAlert} because we don't want this query to be called with new arguments on tag related actions
     >
       {({create, edit, save}) => (
         <EntityPage
@@ -246,7 +244,7 @@ const Page = () => {
                       <TabPanel>
                         <EntityTags
                           entity={alert}
-                          onChanged={() => refetchAlert()} // Must be called like this instead of simply onChanged={refetchAlert} because we don't want this query to be called with new arguments on tag related actions
+                          onChanged={() => refetchAlert()}
                           onError={showError}
                           onInteraction={renewSessionTimeout}
                         />

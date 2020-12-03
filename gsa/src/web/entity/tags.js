@@ -108,7 +108,7 @@ class EntityTagsTable extends React.Component {
 
   render() {
     const {entity, onTagDisableClick, onTagRemoveClick} = this.props;
-    const {userTags} = entity;
+    const {userTags = []} = entity;
     const count = userTags.length;
     const entityType = getEntityType(entity);
     return (

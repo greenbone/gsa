@@ -28,7 +28,6 @@ import {
 import {parseModelFromObject} from 'gmp/model';
 
 import {rendererWith, screen} from 'web/utils/testing';
-import useGmpSettings from 'web/utils/useGmpSettings';
 
 import useEntityTimeout from '../useEntityTimeout';
 
@@ -41,11 +40,7 @@ const gmp = {
 };
 
 const TestComponent = ({isVisible, entity}) => {
-  const gmpSettings = useGmpSettings();
-  const timeoutFunc = useEntityTimeout({
-    entity,
-    gmpSettings,
-  });
+  const timeoutFunc = useEntityTimeout(entity);
 
   return <span data-testid="reload-interval">{timeoutFunc({isVisible})}</span>;
 };
