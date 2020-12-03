@@ -26,7 +26,7 @@ import {
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
 
-import {rendererWith, fireEvent, getAllByTestId} from 'web/utils/testing';
+import {rendererWith, fireEvent, getAllByTestId, wait} from 'web/utils/testing';
 
 import EditScanConfigDialog from '../editdialog';
 
@@ -129,7 +129,7 @@ const trend = {
 const scannerPreferences = [
   {
     name: 'scannerpref0',
-    hr_name: 'Scanner Preference 1',
+    hrName: 'Scanner Preference 1',
     value: 0,
   },
 ];
@@ -292,7 +292,7 @@ describe('EditScanConfigDialog component tests', () => {
     );
   });
 
-  test('should render dialog for osp config', () => {
+  test('should render dialog for osp config', async () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
     const handleOpenEditConfigFamilyDialog = jest.fn();
@@ -324,6 +324,8 @@ describe('EditScanConfigDialog component tests', () => {
         onSave={handleSave}
       />,
     );
+
+    await wait();
 
     expect(baseElement).toMatchSnapshot();
 

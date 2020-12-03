@@ -81,7 +81,7 @@ const ScannerPreference = ({
               yesValue={1}
               noValue={0}
               name={name}
-              value={value}
+              value={parseInt(value)} // scanner preferences are "1" and "0" and should be preconverted for the right radio button to be checked.
               convert={parseInt}
               onChange={onPreferenceChange}
             />
