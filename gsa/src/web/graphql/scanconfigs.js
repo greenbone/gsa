@@ -365,7 +365,7 @@ export const useLoadScanConfigPromise = () => {
     client.query({
       query: GET_SCAN_CONFIG,
       variables: {id: configId},
-      fetchPolicy: 'network-only', // do not cache, since this is used when a change is saved
+      fetchPolicy: 'no-cache', // do not cache, since this is used when a change is saved
     });
 
   return loadScanConfig;
