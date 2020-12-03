@@ -42,6 +42,7 @@ import {
   createDeleteScanConfigsByIdsQueryMock,
   createCloneScanConfigQueryMock,
 } from '../__mocks__/scanconfigs';
+import ScanConfig from 'gmp/models/scanconfig';
 
 const GetLazyScanConfigsComponent = () => {
   const [
@@ -380,13 +381,17 @@ describe('useCloneScanConfig tests', () => {
 
 const GetPromisedScanConfigComponent = () => {
   const loadConfigPromise = useLoadScanConfigPromise();
+  const [scanConfig, setScanConfig] = useState();
 
-  if (loading) {
-    return <span data-testid="loading">Loading</span>;
-  }
+  const handleLoadScanConfig = configId => {
+    return loadConfigPromise(configId).then(response =>
+      setScanConfig(response),
+    );
+  };
+
   return (
     <div>
-      <button data-testid="load" onClick={() => getScanConfig('314')} />
+      <button data-testid="load" onClick={() => handleLoadScanConfig('314')} />
       {isDefined(scanConfig) ? (
         <div key={scanConfig.id} data-testid="scanConfig">
           {scanConfig.id}
@@ -398,11 +403,13 @@ const GetPromisedScanConfigComponent = () => {
   );
 };
 
-describe('useLazyGetScanConfig tests', () => {
+describe('useLoadScanConfigPromise tests', () => {
   test('should query scanConfig after user interaction', async () => {
     const [mock, resultFunc] = createGetScanConfigQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
-    render(<GetLazyScanConfigComponent />);
+    render(<GetPromisedScanConfigComponent />);
+
+    await wait();
 
     let scanConfigElement = screen.queryAllByTestId('scanConfig');
     expect(scanConfigElement).toHaveLength(0);
@@ -412,9 +419,6 @@ describe('useLazyGetScanConfig tests', () => {
     const button = screen.getByTestId('load');
     fireEvent.click(button);
 
-    const loading = await screen.findByTestId('loading');
-    expect(loading).toHaveTextContent('Loading');
-
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
@@ -422,7 +426,5 @@ describe('useLazyGetScanConfig tests', () => {
     scanConfigElement = screen.getByTestId('scanConfig');
 
     expect(scanConfigElement).toHaveTextContent('314');
-
-    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 });
