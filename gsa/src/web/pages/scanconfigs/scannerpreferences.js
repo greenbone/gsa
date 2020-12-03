@@ -129,7 +129,7 @@ const ScannerPreferences = ({
             <ScannerPreference
               key={pref.name}
               defaultValue={pref.default}
-              displayName={pref.hr_name}
+              displayName={pref.hrName}
               name={pref.name}
               value={values[pref.name]}
               onPreferenceChange={(value, name) =>
@@ -145,7 +145,7 @@ const ScannerPreferences = ({
 
 export const ScannerPreferencePropType = PropTypes.shape({
   default: PropTypes.any,
-  hr_name: PropTypes.string.isRequired,
+  hrName: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.any,
 });
