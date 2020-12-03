@@ -235,6 +235,7 @@ const TagComponent = ({
       name,
       comment,
       active,
+      value,
       resourceAction: hasValue(resources_action)
         ? RESOURCES_ACTION[resources_action]
         : null,
