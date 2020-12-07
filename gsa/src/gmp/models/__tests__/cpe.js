@@ -32,8 +32,8 @@ describe('CPE model tests', () => {
     expect(cpe2.severity).toEqual(10);
   });
 
-  test('should parse "(null)" max_cvss as undefined severity', () => {
-    const cpe = Cpe.fromElement({max_cvss: '(null)'});
+  test('should parse "(null)" score as undefined severity', () => {
+    const cpe = Cpe.fromElement({score: '(null)'});
 
     expect(cpe.severity).toBeUndefined();
   });
