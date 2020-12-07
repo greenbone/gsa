@@ -72,7 +72,7 @@ import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
-import useEntityTimeout from 'web/entity/useEntityTimeout';
+import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
@@ -361,7 +361,7 @@ const Page = () => {
   };
 
   // Timeout and reload
-  const timeoutFunc = useEntityTimeout(scanConfig);
+  const timeoutFunc = useEntityReloadInterval(scanConfig);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchScanConfig,
