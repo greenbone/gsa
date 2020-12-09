@@ -272,6 +272,7 @@ const ScanConfigsPage = props => {
             entitiesCounts={counts}
             entitiesError={error}
             entitiesSelected={selected}
+            filter={filter}
             filterEditDialog={ScanConfigFilterDialog}
             filtersFilter={SCANCONFIGS_FILTER_FILTER}
             isLoading={isLoading}
