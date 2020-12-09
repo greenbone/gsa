@@ -429,3 +429,17 @@ export const useLoadScanConfigPromise = () => {
 
   return loadScanConfig;
 };
+
+export const useDeleteScanConfigsByIds = options => {
+  const [queryDeleteScanConfigsByIds, data] = useMutation(
+    DELETE_SCAN_CONFIGS_BY_IDS,
+    options,
+  );
+  const deleteScanConfigsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) =>
+      queryDeleteScanConfigsByIds({...options, variables: {ids}}),
+    [queryDeleteScanConfigsByIds],
+  );
+  return [deleteScanConfigsByIds, data];
+};

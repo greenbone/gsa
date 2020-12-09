@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -24,10 +24,12 @@ import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
 import {hasValue} from 'gmp/utils/identity';
 
 import EntitiesPage from 'web/entities/page';
-import {BulkTagComponent} from 'web/entities/bulkactions';
-import useEntitiesReloadInterval, {
-  noopReload,
-} from 'web/entities/useEntitiesReloadInterval';
+import {
+  BulkTagComponent,
+  useBulkDeleteEntities,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions';
+
 import usePagination from 'web/entities/usePagination';
 
 import ManualIcon from 'web/components/icon/manualicon';
@@ -47,7 +49,15 @@ import DialogNotification from 'web/components/notification/dialognotification';
 import Download from 'web/components/form/download';
 import useReload from 'web/components/loading/useReload';
 
-import {useLazyGetScanConfigs} from 'web/graphql/scanconfigs';
+import {
+  useCloneScanConfig,
+  useDeleteScanConfig,
+  useDeleteScanConfigsByFilter,
+  useDeleteScanConfigsByIds,
+  useExportScanConfigsByFilter,
+  useExportScanConfigsByIds,
+  useLazyGetScanConfigs,
+} from 'web/graphql/scanconfigs';
 
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import usePageFilter from 'web/utils/usePageFilter';
@@ -61,6 +71,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import ScanConfigComponent from './component';
 import Table, {SORT_FIELDS} from './table';
+import useGmpSettings from 'web/utils/useGmpSettings';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onScanConfigCreateClick, onScanConfigImportClick}) => (
@@ -97,6 +108,7 @@ const ScanConfigFilterDialog = createFilterDialog({
 
 const ScanConfigsPage = props => {
   // Page methods and hooks
+  const gmpSettings = useGmpSettings();
   const [downloadRef, handleDownload] = useDownload();
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('scanconfig');
@@ -131,9 +143,29 @@ const ScanConfigsPage = props => {
     {counts, scanConfigs, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetScanConfigs();
 
+  const exportScanConfigsByFilter = useExportScanConfigsByFilter();
+  const exportScanConfigsByIds = useExportScanConfigsByIds();
+  const bulkExportScanConfigs = useBulkExportEntities();
+
+  const [deleteScanConfig] = useDeleteScanConfig();
+  const [deleteScanConfigsByIds] = useDeleteScanConfigsByIds();
+  const [deleteScanConfigsByFilter] = useDeleteScanConfigsByFilter();
+  const bulkDeleteScanConfigs = useBulkDeleteEntities();
+  const [cloneScanConfig] = useCloneScanConfig();
+
+  const timeoutFunc = useCallback(
+    ({isVisible}) => {
+      if (!isVisible) {
+        return gmpSettings.reloadIntervalInactive;
+      }
+      return gmpSettings.reloadInterval;
+    },
+    [gmpSettings],
+  );
+
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,
-    noopReload, // scanconfig does not have active field
+    timeoutFunc, // scanconfig does not have active field
   );
 
   // Pagination methods
@@ -144,6 +176,16 @@ const ScanConfigsPage = props => {
     refetch,
   });
 
+  // ScanConfig methods
+  const handleCloneScanConfig = useCallback(
+    task => cloneScanConfig(task.id).then(refetch, showError),
+    [cloneScanConfig, refetch, showError],
+  );
+  const handleDeleteScanConfig = useCallback(
+    task => deleteScanConfig(task.id).then(refetch, showError),
+    [deleteScanConfig, refetch, showError],
+  );
+
   // Bulk action methods
   const openTagsDialog = () => {
     renewSession();
@@ -153,6 +195,33 @@ const ScanConfigsPage = props => {
   const closeTagsDialog = () => {
     renewSession();
     setTagsDialogVisible(false);
+  };
+
+  const handleBulkDeleteScanConfigs = () => {
+    return bulkDeleteScanConfigs({
+      selectionType,
+      filter,
+      selected,
+      entities: scanConfigs,
+      deleteByIdsFunc: deleteScanConfigsByIds,
+      deleteByFilterFunc: deleteScanConfigsByFilter,
+      onDeleted: refetch,
+      onError: showError,
+    });
+  };
+
+  const handleBulkExportScanConfigs = () => {
+    return bulkExportScanConfigs({
+      entities: scanConfigs,
+      selected,
+      filter,
+      resourceType: 'scanconfigs',
+      selectionType,
+      exportByFilterFunc: exportScanConfigsByFilter,
+      exportByIdsFunc: exportScanConfigsByIds,
+      onDownload: handleDownload,
+      onError: showError,
+    });
   };
 
   // Side effects
@@ -198,14 +267,7 @@ const ScanConfigsPage = props => {
       onInteraction={renewSession}
       onSaved={refetch}
     >
-      {({
-        clone,
-        create,
-        delete: delete_func,
-        download,
-        edit,
-        import: import_func,
-      }) => (
+      {({create, download, edit, import: import_func}) => (
         <React.Fragment>
           <PageTitle title={_('Scan Configs')} />
           <EntitiesPage
@@ -225,6 +287,8 @@ const ScanConfigsPage = props => {
             table={Table}
             title={_('Scan Configs')}
             toolBarIcons={ToolBarIcons}
+            onDeleteBulk={handleBulkDeleteScanConfigs}
+            onDownloadBulk={handleBulkExportScanConfigs}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}
@@ -234,9 +298,9 @@ const ScanConfigsPage = props => {
             onFilterRemoved={removeFilter}
             onInteraction={renewSession}
             onScanConfigImportClick={import_func}
-            onScanConfigCloneClick={clone}
+            onScanConfigCloneClick={handleCloneScanConfig}
             onScanConfigCreateClick={create}
-            onScanConfigDeleteClick={delete_func}
+            onScanConfigDeleteClick={handleDeleteScanConfig}
             onScanConfigDownloadClick={download}
             onScanConfigEditClick={edit}
             onSortChange={handleSortChange}
