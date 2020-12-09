@@ -25,7 +25,9 @@ import {hasValue} from 'gmp/utils/identity';
 
 import EntitiesPage from 'web/entities/page';
 import {BulkTagComponent} from 'web/entities/bulkactions';
-import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
+import useEntitiesReloadInterval, {
+  noopReload,
+} from 'web/entities/useEntitiesReloadInterval';
 import usePagination from 'web/entities/usePagination';
 
 import ManualIcon from 'web/components/icon/manualicon';
@@ -129,11 +131,9 @@ const ScanConfigsPage = props => {
     {counts, scanConfigs, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetScanConfigs();
 
-  const timeoutFunc = useEntitiesReloadInterval(scanConfigs);
-
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,
-    timeoutFunc,
+    noopReload, // scanconfig does not have active field
   );
 
   // Pagination methods

@@ -199,6 +199,14 @@ export const EXPORT_SCAN_CONFIGS_BY_IDS = gql`
   }
 `;
 
+export const EXPORT_SCAN_CONFIGS_BY_FILTER = gql`
+  mutation exportScanConfigsByFilter($filterString: String) {
+    exportScanConfigsByFilter(filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
 export const CREATE_SCAN_CONFIG = gql`
   mutation createScanConfig($input: CreateScanConfigInput!) {
     createScanConfig(input: $input) {
@@ -214,6 +222,51 @@ export const DELETE_SCAN_CONFIGS_BY_IDS = gql`
     }
   }
 `;
+
+export const DELETE_SCAN_CONFIGS_BY_FILTER = gql`
+  mutation deleteScanConfigsByFilter($filterString: String!) {
+    deleteScanConfigsByFilter(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
+export const useDeleteScanConfigsByFilter = options => {
+  const [queryDeleteScanConfigsByFilter, data] = useMutation(
+    DELETE_SCAN_CONFIGS_BY_FILTER,
+    options,
+  );
+  const deleteScanConfigsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filterString, options) =>
+      queryDeleteScanConfigsByFilter({
+        ...options,
+        variables: {filterString},
+      }),
+    [queryDeleteScanConfigsByFilter],
+  );
+  return [deleteScanConfigsByFilter, data];
+};
+
+export const useExportScanConfigsByFilter = options => {
+  const [queryExportScanConfigsByFilter] = useMutation(
+    EXPORT_SCAN_CONFIGS_BY_FILTER,
+    options,
+  );
+  const exportScanConfigsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportScanConfigsByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportScanConfigsByFilter, options],
+  );
+
+  return exportScanConfigsByFilter;
+};
 
 export const useImportScanConfig = options => {
   const [queryImportScanConfig, {data, ...other}] = useMutation(
