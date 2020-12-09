@@ -323,7 +323,7 @@ const Page = () => {
     refetch: refetchScanConfig,
     loading,
     error: entityError,
-  } = useGetScanConfig(id);
+  } = useGetScanConfig(id, {fetchPolicy: 'no-cache'}); // if we allow caching, all scanner preferences will be parsed as auto_enable_dependencies
   const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });

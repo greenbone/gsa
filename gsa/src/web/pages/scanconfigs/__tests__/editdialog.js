@@ -129,7 +129,7 @@ const trend = {
 const scannerPreferences = [
   {
     name: 'scannerpref0',
-    hr_name: 'Scanner Preference 1',
+    hrName: 'Scanner Preference 1',
     value: 0,
   },
 ];

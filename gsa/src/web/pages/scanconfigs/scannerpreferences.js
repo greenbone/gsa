@@ -81,7 +81,7 @@ const ScannerPreference = ({
               yesValue={1}
               noValue={0}
               name={name}
-              value={value}
+              value={parseInt(value)} // scanner preferences are "1" and "0" and should be preconverted for the right radio button to be checked.
               convert={parseInt}
               onChange={onPreferenceChange}
             />
@@ -129,7 +129,7 @@ const ScannerPreferences = ({
             <ScannerPreference
               key={pref.name}
               defaultValue={pref.default}
-              displayName={pref.hr_name}
+              displayName={pref.hrName}
               name={pref.name}
               value={values[pref.name]}
               onPreferenceChange={(value, name) =>
@@ -145,7 +145,7 @@ const ScannerPreferences = ({
 
 export const ScannerPreferencePropType = PropTypes.shape({
   default: PropTypes.any,
-  hr_name: PropTypes.string.isRequired,
+  hrName: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.any,
 });

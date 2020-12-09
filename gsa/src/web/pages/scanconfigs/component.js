@@ -32,6 +32,7 @@ import {YES_VALUE} from 'gmp/parser';
 import {
   useImportScanConfig,
   useCreateScanConfig,
+  useLoadScanConfigPromise,
 } from 'web/graphql/scanconfigs';
 import {useLazyGetScanners} from 'web/graphql/scanners';
 
@@ -90,6 +91,7 @@ const ScanConfigComponent = ({
     importDialogVisible: false,
   });
 
+  const loadScanConfigPromise = useLoadScanConfigPromise();
   const [importScanConfig] = useImportScanConfig();
   const [createScanConfig] = useCreateScanConfig();
   const [
@@ -388,12 +390,11 @@ const ScanConfigComponent = ({
       }),
     );
 
-    return gmp.scanconfig
-      .get({id: configId})
-      .then(response => {
+    return loadScanConfigPromise(configId)
+      .then(scanConfig => {
         dispatchState(
           updateState({
-            config: response.data,
+            config: scanConfig,
           }),
         );
       })

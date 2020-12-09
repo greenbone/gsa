@@ -18,7 +18,13 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useLazyQuery, useMutation, useQuery} from '@apollo/client';
+import {
+  gql,
+  useApolloClient,
+  useLazyQuery,
+  useMutation,
+  useQuery,
+} from '@apollo/client';
 import ScanConfig from 'gmp/models/scanconfig';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -350,4 +356,23 @@ export const useCloneScanConfig = options => {
   );
   const scanConfigId = data?.cloneScanConfig?.id;
   return [cloneScanConfig, {...other, id: scanConfigId}];
+};
+
+export const useLoadScanConfigPromise = () => {
+  const client = useApolloClient();
+
+  const loadScanConfig = configId =>
+    client
+      .query({
+        query: GET_SCAN_CONFIG,
+        variables: {id: configId},
+        fetchPolicy: 'no-cache', // do not cache, since this is used when a change is saved
+      })
+      .then(response => {
+        const scanConfig = ScanConfig.fromObject(response?.data?.scanConfig);
+
+        return scanConfig;
+      });
+
+  return loadScanConfig;
 };

@@ -30,6 +30,7 @@ import {
   useExportScanConfigsByIds,
   useDeleteScanConfig,
   useCloneScanConfig,
+  useLoadScanConfigPromise,
 } from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
@@ -374,5 +375,55 @@ describe('useCloneScanConfig tests', () => {
     expect(resultFunc).toHaveBeenCalled();
 
     expect(screen.getByTestId('cloned-scanConfig')).toHaveTextContent('354');
+  });
+});
+
+const GetPromisedScanConfigComponent = () => {
+  const loadScanConfigPromise = useLoadScanConfigPromise();
+  const [scanConfig, setScanConfig] = useState();
+
+  const handleLoadScanConfig = configId => {
+    return loadScanConfigPromise(configId).then(response =>
+      setScanConfig(response),
+    );
+  };
+
+  return (
+    <div>
+      <button data-testid="load" onClick={() => handleLoadScanConfig('314')} />
+      {isDefined(scanConfig) ? (
+        <div key={scanConfig.id} data-testid="scanConfig">
+          {scanConfig.id}
+        </div>
+      ) : (
+        <div data-testid="no-scanConfig" />
+      )}
+    </div>
+  );
+};
+
+describe('useLoadScanConfigPromise tests', () => {
+  test('should query scanConfig after user interaction', async () => {
+    const [mock, resultFunc] = createGetScanConfigQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetPromisedScanConfigComponent />);
+
+    await wait();
+
+    let scanConfigElement = screen.queryAllByTestId('scanConfig');
+    expect(scanConfigElement).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-scanConfig')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    scanConfigElement = screen.getByTestId('scanConfig');
+
+    expect(scanConfigElement).toHaveTextContent('314');
   });
 });
