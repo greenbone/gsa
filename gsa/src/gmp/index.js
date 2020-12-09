@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Gmp from './gmp.js';
+import Gmp from 'gmp/gmp';
 
 export default Gmp;
 
