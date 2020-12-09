@@ -20,7 +20,11 @@ import React, {useEffect, useState, useCallback} from 'react';
 import _ from 'gmp/locale';
 
 import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
-
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/scanconfigs';
 import {hasValue} from 'gmp/utils/identity';
 
 import EntitiesPage from 'web/entities/page';
@@ -29,8 +33,6 @@ import {
   useBulkDeleteEntities,
   useBulkExportEntities,
 } from 'web/entities/bulkactions';
-
-import usePagination from 'web/entities/usePagination';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import UploadIcon from 'web/components/icon/uploadicon';
@@ -140,7 +142,7 @@ const ScanConfigsPage = props => {
   // ScanConfig list state variables and methods
   const [
     getScanConfigs,
-    {counts, scanConfigs, error, loading: isLoading, refetch, called, pageInfo},
+    {counts, scanConfigs, error, loading: isLoading, refetch, called},
   ] = useLazyGetScanConfigs();
 
   const exportScanConfigsByFilter = useExportScanConfigsByFilter();
@@ -169,12 +171,6 @@ const ScanConfigsPage = props => {
   );
 
   // Pagination methods
-  const [getFirst, getLast, getNext, getPrevious] = usePagination({
-    simpleFilter,
-    filter,
-    pageInfo,
-    refetch,
-  });
 
   // ScanConfig methods
   const handleCloneScanConfig = useCallback(
@@ -215,7 +211,7 @@ const ScanConfigsPage = props => {
       entities: scanConfigs,
       selected,
       filter,
-      resourceType: 'scanconfigs',
+      resourceType: 'scanConfigs',
       selectionType,
       exportByFilterFunc: exportScanConfigsByFilter,
       exportByIdsFunc: exportScanConfigsByIds,
@@ -304,10 +300,6 @@ const ScanConfigsPage = props => {
             onScanConfigDownloadClick={download}
             onScanConfigEditClick={edit}
             onSortChange={handleSortChange}
-            onFirstClick={getFirst}
-            onLastClick={getLast}
-            onNextClick={getNext}
-            onPreviousClick={getPrevious}
             onSelectionTypeChange={changeSelectionType}
             onTagsBulk={openTagsDialog}
           />
@@ -339,6 +331,9 @@ ScanConfigsPage.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
-export default ScanConfigsPage;
+export default withEntitiesContainer('scanconfig', {
+  entitiesSelector,
+  loadEntities,
+})(ScanConfigsPage);
 
 // vim: set ts=2 sw=2 tw=80:
