@@ -21,7 +21,9 @@ import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 import {
   CLONE_SCAN_CONFIG,
   CREATE_SCAN_CONFIG,
+  DELETE_SCAN_CONFIGS_BY_FILTER,
   DELETE_SCAN_CONFIGS_BY_IDS,
+  EXPORT_SCAN_CONFIGS_BY_FILTER,
   EXPORT_SCAN_CONFIGS_BY_IDS,
   GET_SCAN_CONFIG,
   GET_SCAN_CONFIGS,
@@ -334,7 +336,7 @@ export const createExportScanConfigsByIdsQueryMock = (
   );
 
 const bulkDeleteByIdsResult = {
-  deleteAlertsByIds: {
+  deleteScanConfigsByIds: {
     ok: true,
   },
 };
@@ -345,3 +347,33 @@ export const createDeleteScanConfigsByIdsQueryMock = (
   createGenericQueryMock(DELETE_SCAN_CONFIGS_BY_IDS, bulkDeleteByIdsResult, {
     ids: scanConfigIds,
   });
+
+const bulkDeleteByFilterResult = {
+  deleteScanConfigsByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeleteScanConfigsByFilterQueryMock = (
+  filterString = 'foo',
+) =>
+  createGenericQueryMock(
+    DELETE_SCAN_CONFIGS_BY_FILTER,
+    bulkDeleteByFilterResult,
+    {filterString},
+  );
+
+const exportScanConfigsByFilterResult = {
+  exportScanConfigsByFilter: {
+    exportedEntities: '<get_configs_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportScanConfigsByFilterQueryMock = (
+  filterString = 'foo',
+) =>
+  createGenericQueryMock(
+    EXPORT_SCAN_CONFIGS_BY_FILTER,
+    exportScanConfigsByFilterResult,
+    {filterString},
+  );

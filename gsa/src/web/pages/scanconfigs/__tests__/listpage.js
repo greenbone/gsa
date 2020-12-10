@@ -100,7 +100,7 @@ const getConfigs = jest.fn().mockResolvedValue({
 const getSetting = jest.fn().mockResolvedValue({filter: null});
 
 describe('ScanConfigsPage tests', () => {
-  test.only('should render full ScanConfigsPage', async () => {
+  test('should render full ScanConfigsPage', async () => {
     const gmp = {
       scanconfigs: {
         get: getConfigs,
@@ -157,7 +157,7 @@ describe('ScanConfigsPage tests', () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  test('should call commands for bulk actions', async () => {
+  test.only('should call commands for bulk actions', async () => {
     const deleteByFilter = jest.fn().mockResolvedValue({
       foo: 'bar',
     });
@@ -181,11 +181,17 @@ describe('ScanConfigsPage tests', () => {
       user: {currentSettings, getSetting, renewSession},
     };
 
+    const [mock, resultFunc] = createGetScanConfigsQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setUsername('admin'));
@@ -211,22 +217,23 @@ describe('ScanConfigsPage tests', () => {
 
     const {baseElement, getAllByTestId} = render(<ScanConfigsPage />);
 
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
     await waitFor(() => baseElement.querySelectorAll('table'));
 
     const icons = getAllByTestId('svg-icon');
 
-    await act(async () => {
-      expect(icons[21]).toHaveAttribute(
-        'title',
-        'Move page contents to trashcan',
-      );
-      fireEvent.click(icons[21]);
-      expect(deleteByFilter).toHaveBeenCalled();
+    console.log(icons[8]);
 
-      expect(icons[22]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[22]);
-      expect(exportByFilter).toHaveBeenCalled();
-    });
+    expect(icons[7]).toHaveAttribute('title', 'Move page contents to trashcan');
+    fireEvent.click(icons[7]);
+    expect(deleteByFilter).toHaveBeenCalled();
+
+    expect(icons[8]).toHaveAttribute('title', 'Export page contents');
+    fireEvent.click(icons[8]);
+    expect(exportByFilter).toHaveBeenCalled();
   });
 });
 
