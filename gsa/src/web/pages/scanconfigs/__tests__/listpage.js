@@ -28,13 +28,15 @@ import ScanConfig, {
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
 
+import {createGetScanConfigsQueryMock} from 'web/graphql/__mocks__/scanconfigs';
+
 import {setUsername} from 'web/store/usersettings/actions';
 
 import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent, wait} from 'web/utils/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
 
@@ -98,7 +100,7 @@ const getConfigs = jest.fn().mockResolvedValue({
 const getSetting = jest.fn().mockResolvedValue({filter: null});
 
 describe('ScanConfigsPage tests', () => {
-  test('should render full ScanConfigsPage', async () => {
+  test.only('should render full ScanConfigsPage', async () => {
     const gmp = {
       scanconfigs: {
         get: getConfigs,
@@ -110,11 +112,17 @@ describe('ScanConfigsPage tests', () => {
       user: {currentSettings, getSetting: getSetting},
     };
 
+    const [mock, resultFunc] = createGetScanConfigsQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setUsername('admin'));
@@ -139,6 +147,10 @@ describe('ScanConfigsPage tests', () => {
     );
 
     const {baseElement} = render(<ScanConfigsPage />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     await waitFor(() => baseElement.querySelectorAll('table'));
 
