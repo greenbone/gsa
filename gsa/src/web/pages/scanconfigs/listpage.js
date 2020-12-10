@@ -20,19 +20,11 @@ import React, {useEffect, useState, useCallback} from 'react';
 import _ from 'gmp/locale';
 
 import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/scanconfigs';
 import {hasValue} from 'gmp/utils/identity';
-
-import EntitiesPage from 'web/entities/page';
-import {
-  BulkTagComponent,
-  useBulkDeleteEntities,
-  useBulkExportEntities,
-} from 'web/entities/bulkactions';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import UploadIcon from 'web/components/icon/uploadicon';
@@ -51,6 +43,14 @@ import DialogNotification from 'web/components/notification/dialognotification';
 import Download from 'web/components/form/download';
 import useReload from 'web/components/loading/useReload';
 
+import EntitiesPage from 'web/entities/page';
+import {
+  BulkTagComponent,
+  useBulkDeleteEntities,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
 import {
   useCloneScanConfig,
   useDeleteScanConfig,
@@ -67,13 +67,13 @@ import usePrevious from 'web/utils/usePrevious';
 import useChangeFilter from 'web/utils/useChangeFilter';
 import useSelection from 'web/utils/useSelection';
 import useFilterSortBy from 'web/utils/useFilterSortby';
+import useGmpSettings from 'web/utils/useGmpSettings';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import ScanConfigComponent from './component';
 import Table, {SORT_FIELDS} from './table';
-import useGmpSettings from 'web/utils/useGmpSettings';
 
 export const ToolBarIcons = withCapabilities(
   ({capabilities, onScanConfigCreateClick, onScanConfigImportClick}) => (
