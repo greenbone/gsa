@@ -105,6 +105,8 @@ export const GET_SCAN_CONFIGS = gql`
           writable
           inUse
           owner
+          familyGrowing
+          nvtGrowing
           creationTime
           modificationTime
           permissions {
