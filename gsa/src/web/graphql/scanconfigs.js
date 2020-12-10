@@ -104,6 +104,7 @@ export const GET_SCAN_CONFIGS = gql`
           comment
           writable
           inUse
+          owner
           creationTime
           modificationTime
           permissions {
