@@ -28,7 +28,8 @@ import ScanConfig, {
 } from 'gmp/models/scanconfig';
 
 import {
-  createDeleteScanConfigsByFilterQueryMock,
+  createDeleteScanConfigsByIdsQueryMock,
+  createExportScanConfigsByIdsQueryMock,
   createGetScanConfigsQueryMock,
 } from 'web/graphql/__mocks__/scanconfigs';
 
@@ -38,10 +39,15 @@ import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent, wait} from 'web/utils/testing';
+import {
+  rendererWith,
+  waitFor,
+  fireEvent,
+  wait,
+  screen,
+} from 'web/utils/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
-import {createExportTasksByFilterQueryMock} from 'web/graphql/__mocks__/tasks';
 
 window.URL.createObjectURL = jest.fn();
 
@@ -160,28 +166,16 @@ describe('ScanConfigsPage tests', () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  test.only('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const renewSession = jest.fn().mockResolvedValue({data: {}});
-
+  test('should call commands for bulk actions', async () => {
     const gmp = {
       scanconfigs: {
         get: getConfigs,
-        deleteByFilter,
-        exportByFilter,
       },
       filters: {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting, renewSession},
+      user: {currentSettings, getSetting},
     };
 
     const [mock, resultFunc] = createGetScanConfigsQueryMock({
@@ -190,21 +184,21 @@ describe('ScanConfigsPage tests', () => {
     });
 
     const [
-      exportByFilterMock,
-      exportByFilterResult,
-    ] = createExportTasksByFilterQueryMock('foo=bar rows=2');
+      exportByIdsMock,
+      exportByIdsResult,
+    ] = createExportScanConfigsByIdsQueryMock(['314']);
 
     const [
-      deleteByFilterMock,
-      deleteByFilterResult,
-    ] = createDeleteScanConfigsByFilterQueryMock('foo=bar rows=2');
+      deleteByIdsMock,
+      deleteByIdsResult,
+    ] = createDeleteScanConfigsByIdsQueryMock(['314']);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock, exportByFilterMock, deleteByFilterMock],
+      queryMocks: [mock, exportByIdsMock, deleteByIdsMock],
     });
 
     store.dispatch(setUsername('admin'));
@@ -228,21 +222,26 @@ describe('ScanConfigsPage tests', () => {
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
-    const {getAllByTestId} = render(<ScanConfigsPage />);
+    const {baseElement} = render(<ScanConfigsPage />);
 
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
 
-    const icons = getAllByTestId('svg-icon');
-    expect(icons.length).toBe(9);
-    expect(icons[7]).toHaveAttribute('title', 'Move page contents to trashcan');
-    fireEvent.click(icons[7]);
-    expect(deleteByFilterResult).toHaveBeenCalled();
+    const icons = screen.getAllByTestId('svg-icon');
 
-    expect(icons[8]).toHaveAttribute('title', 'Export page contents');
-    fireEvent.click(icons[8]);
-    expect(exportByFilterResult).toHaveBeenCalled();
+    expect(baseElement).toMatchSnapshot();
+
+    expect(icons[21]).toHaveAttribute(
+      'title',
+      'Move page contents to trashcan',
+    );
+    fireEvent.click(icons[21]);
+    expect(deleteByIdsResult).toHaveBeenCalled();
+
+    expect(icons[22]).toHaveAttribute('title', 'Export page contents');
+    fireEvent.click(icons[22]);
+    expect(exportByIdsResult).toHaveBeenCalled();
   });
 });
 
