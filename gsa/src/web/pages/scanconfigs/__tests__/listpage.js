@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -229,7 +228,7 @@ describe('ScanConfigsPage tests', () => {
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<ScanConfigsPage />);
+    const {getAllByTestId} = render(<ScanConfigsPage />);
 
     await wait();
 
