@@ -28,6 +28,7 @@ import {
   CONDITION_TYPE_FILTER_COUNT_CHANGED,
   CONDITION_TYPE_SEVERITY_AT_LEAST,
   CONDITION_DIRECTION_DECREASED,
+  CONDITION_DIRECTION_INCREASED,
 } from 'gmp/models/alert';
 
 const Condition = ({condition = {}, event}) => {
@@ -85,10 +86,11 @@ const Condition = ({condition = {}, event}) => {
   }
 
   if (condition.type === 'Severity changed') {
-    if (isDefined(condition.data.direction)) {
-      if (condition.data.direction.value === CONDITION_DIRECTION_DECREASED) {
-        return _('Severity level decreased');
-      }
+    if (condition?.data?.direction?.value === CONDITION_DIRECTION_DECREASED) {
+      return _('Severity level decreased');
+    } else if (
+      condition?.data?.direction?.value === CONDITION_DIRECTION_INCREASED
+    ) {
       return _('Severity level increased');
     }
     return _('Severity level changed');
