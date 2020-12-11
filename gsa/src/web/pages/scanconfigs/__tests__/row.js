@@ -27,7 +27,7 @@ import ScanConfig, {
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
 
-import {nonWritableConfig} from 'web/graphql/__mocks__/scanconfigs';
+import {editableConfig} from 'web/graphql/__mocks__/scanconfigs';
 
 import {setUsername} from 'web/store/usersettings/actions';
 
@@ -38,7 +38,7 @@ import Row from '../row';
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
 
-const entity = ScanConfig.fromObject(nonWritableConfig);
+const entity = ScanConfig.fromObject(editableConfig);
 
 describe('Scan Config row tests', () => {
   // deactivate console.error for tests
@@ -134,7 +134,7 @@ describe('Scan Config row tests', () => {
     expect(icons[0]).toHaveAttribute('title', 'Scan Config owned by user');
   });
 
-  test('should call click handlers', () => {
+  test('should call click handlers', async () => {
     const handleToggleDetailsClick = jest.fn();
     const handleScanConfigClone = jest.fn();
     const handleScanConfigDelete = jest.fn();
@@ -164,22 +164,45 @@ describe('Scan Config row tests', () => {
 
     const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(icons[2]);
+    expect(icons[0]).toHaveAttribute('title', 'Scan Config owned by admin');
+
+    expect(icons[1]).toHaveAttribute(
+      'title',
+      'The family selection is DYNAMIC. New families will automatically be added and considered.',
+    );
+
+    expect(icons[2]).toHaveAttribute(
+      'title',
+      'The NVT selection is STATIC. New NVTs of selected families will NOT automatically be added and considered.',
+    );
+
+    expect(icons[3]).toHaveAttribute('title', 'Move Scan Config to trashcan');
+    fireEvent.click(icons[3]);
+
+    await wait();
 
     expect(handleScanConfigDelete).toHaveBeenCalledWith(entity);
-    expect(icons[2]).toHaveAttribute('title', 'Move Scan Config to trashcan');
 
-    fireEvent.click(icons[3]);
-    expect(handleScanConfigEdit).toHaveBeenCalledWith(entity);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Scan Config');
-
+    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
     fireEvent.click(icons[4]);
-    expect(handleScanConfigClone).toHaveBeenCalledWith(entity);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Scan Config');
 
+    await wait();
+
+    expect(handleScanConfigEdit).toHaveBeenCalledWith(entity);
+
+    expect(icons[5]).toHaveAttribute('title', 'Clone Scan Config');
     fireEvent.click(icons[5]);
+
+    await wait();
+
+    expect(handleScanConfigClone).toHaveBeenCalledWith(entity);
+
+    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config');
+    fireEvent.click(icons[6]);
+
+    await wait();
+
     expect(handleScanConfigDownload).toHaveBeenCalledWith(entity);
-    expect(icons[5]).toHaveAttribute('title', 'Export Scan Config');
   });
 
   test('should not call click handlers without permissions', () => {

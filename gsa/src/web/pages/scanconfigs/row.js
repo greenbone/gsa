@@ -93,48 +93,50 @@ const ScanConfigRow = ({
   links = true,
   onToggleDetailsClick,
   ...props
-}) => (
-  <TableRow>
-    <EntityNameTableData
-      entity={entity}
-      link={links}
-      type="scanconfig"
-      displayName={_('Scan Config')}
-      onToggleDetailsClick={onToggleDetailsClick}
-    />
-    <TableData>{getTranslatedType(entity.scanConfigType)}</TableData>
-    <TableData>{na(entity.families.count)}</TableData>
-    <TableData>
-      <Trend
-        trend={entity.families.trend}
-        titleDynamic={_(
-          'The family selection is DYNAMIC. New families ' +
-            'will automatically be added and considered.',
-        )}
-        titleStatic={_(
-          'The family selection is STATIC. New families ' +
-            'will NOT automatically be added and considered.',
-        )}
+}) => {
+  return (
+    <TableRow>
+      <EntityNameTableData
+        entity={entity}
+        link={links}
+        type="scanconfig"
+        displayName={_('Scan Config')}
+        onToggleDetailsClick={onToggleDetailsClick}
       />
-    </TableData>
-    <TableData>{na(entity.nvts.count)}</TableData>
-    <TableData>
-      <Trend
-        trend={entity.nvts.trend}
-        titleDynamic={_(
-          'The NVT selection is DYNAMIC. New NVTs of ' +
-            'selected families will automatically be added and considered.',
-        )}
-        titleStatic={_(
-          'The NVT selection is STATIC. New NVTs of ' +
-            'selected families will NOT automatically be added and ' +
-            'considered.',
-        )}
-      />
-    </TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+      <TableData>{getTranslatedType(entity.scanConfigType)}</TableData>
+      <TableData>{na(entity.families.count)}</TableData>
+      <TableData>
+        <Trend
+          trend={entity.families.trend}
+          titleDynamic={_(
+            'The family selection is DYNAMIC. New families ' +
+              'will automatically be added and considered.',
+          )}
+          titleStatic={_(
+            'The family selection is STATIC. New families ' +
+              'will NOT automatically be added and considered.',
+          )}
+        />
+      </TableData>
+      <TableData>{na(entity.nvts.count)}</TableData>
+      <TableData>
+        <Trend
+          trend={entity.nvts.trend}
+          titleDynamic={_(
+            'The NVT selection is DYNAMIC. New NVTs of ' +
+              'selected families will automatically be added and considered.',
+          )}
+          titleStatic={_(
+            'The NVT selection is STATIC. New NVTs of ' +
+              'selected families will NOT automatically be added and ' +
+              'considered.',
+          )}
+        />
+      </TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 ScanConfigRow.propTypes = {
   actionsComponent: PropTypes.component,
