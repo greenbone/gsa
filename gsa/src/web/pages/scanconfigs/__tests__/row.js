@@ -27,32 +27,18 @@ import ScanConfig, {
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
 
+import {nonWritableConfig} from 'web/graphql/__mocks__/scanconfigs';
+
 import {setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, wait} from 'web/utils/testing';
 
 import Row from '../row';
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
 
-const entity = ScanConfig.fromElement({
-  _id: '1234',
-  name: 'foo',
-  comment: 'bar',
-  in_use: '0',
-  writable: '1',
-  type: OPENVAS_SCAN_CONFIG_TYPE,
-  permissions: {permission: [{name: 'everything'}]},
-  family_count: {
-    __text: 2,
-    growing: SCANCONFIG_TREND_STATIC,
-  },
-  nvt_count: {
-    __text: 4,
-    growing: SCANCONFIG_TREND_DYNAMIC,
-  },
-});
+const entity = ScanConfig.fromObject(nonWritableConfig);
 
 describe('Scan Config row tests', () => {
   // deactivate console.error for tests
@@ -60,7 +46,7 @@ describe('Scan Config row tests', () => {
   const consoleError = console.error;
   console.error = () => {};
 
-  test('should render', () => {
+  test('should render', async () => {
     const handleToggleDetailsClick = jest.fn();
     const handleScanConfigClone = jest.fn();
     const handleScanConfigDelete = jest.fn();
@@ -84,42 +70,39 @@ describe('Scan Config row tests', () => {
       />,
     );
 
+    await wait();
+
     expect(baseElement).toMatchSnapshot();
-    expect(baseElement).toHaveTextContent('foo');
-    expect(baseElement).toHaveTextContent('(bar)');
+    expect(baseElement).toHaveTextContent('Half empty and slow');
+    expect(baseElement).toHaveTextContent("(Most NVT's)");
     expect(baseElement).toHaveTextContent('OpenVAS');
 
     const icons = getAllByTestId('svg-icon');
-    expect(icons[0]).toHaveAttribute(
-      'title',
-      'The family selection is STATIC. New families will NOT automatically be added and considered.',
-    );
+    expect(icons[0]).toHaveAttribute('title', 'Scan Config owned by admin');
     expect(icons[1]).toHaveAttribute(
       'title',
-      'The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered.',
+      'The family selection is DYNAMIC. New families will automatically be added and considered.',
+    );
+    expect(icons[2]).toHaveAttribute(
+      'title',
+      'The NVT selection is STATIC. New NVTs of selected families will NOT automatically be added and considered.',
     );
   });
 
   test('should render observer icon', () => {
-    const config = ScanConfig.fromElement({
-      _id: '1234',
+    const config = ScanConfig.fromObject({
+      id: '1234',
       name: 'foo',
       comment: 'bar',
-      in_use: '0',
-      writable: '1',
-      owner: {
-        name: 'user',
-      },
+      inUse: false,
+      writable: true,
+      owner: 'user',
       type: OPENVAS_SCAN_CONFIG_TYPE,
-      permissions: {permission: [{name: 'everything'}]},
-      family_count: {
-        __text: 2,
-        growing: SCANCONFIG_TREND_STATIC,
-      },
-      nvt_count: {
-        __text: 4,
-        growing: SCANCONFIG_TREND_DYNAMIC,
-      },
+      permissions: [{name: 'Everything'}],
+      familyCount: 2,
+      familoyGrowing: SCANCONFIG_TREND_STATIC,
+      nvtCount: 4,
+      nvtGrowing: SCANCONFIG_TREND_DYNAMIC,
     });
 
     const handleToggleDetailsClick = jest.fn();
@@ -177,11 +160,12 @@ describe('Scan Config row tests', () => {
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[1]);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '1234');
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     const icons = getAllByTestId('svg-icon');
 
     fireEvent.click(icons[2]);
+
     expect(handleScanConfigDelete).toHaveBeenCalledWith(entity);
     expect(icons[2]).toHaveAttribute('title', 'Move Scan Config to trashcan');
 
