@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined, isString} from './utils/identity';
+import {isDefined, isString} from 'gmp/utils/identity';
 
 export const DEFAULT_LOG_LEVEL = 'error';
 export const LOG_LEVEL_DEBUG = 'debug';
