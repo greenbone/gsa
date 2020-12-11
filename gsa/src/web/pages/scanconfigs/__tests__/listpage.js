@@ -28,7 +28,10 @@ import ScanConfig, {
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
 
-import {createGetScanConfigsQueryMock} from 'web/graphql/__mocks__/scanconfigs';
+import {
+  createDeleteScanConfigsByFilterQueryMock,
+  createGetScanConfigsQueryMock,
+} from 'web/graphql/__mocks__/scanconfigs';
 
 import {setUsername} from 'web/store/usersettings/actions';
 
@@ -39,6 +42,7 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {rendererWith, waitFor, fireEvent, wait} from 'web/utils/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
+import {createExportTasksByFilterQueryMock} from 'web/graphql/__mocks__/tasks';
 
 window.URL.createObjectURL = jest.fn();
 
@@ -186,12 +190,22 @@ describe('ScanConfigsPage tests', () => {
       first: 2,
     });
 
+    const [
+      exportByFilterMock,
+      exportByFilterResult,
+    ] = createExportTasksByFilterQueryMock('foo=bar rows=2');
+
+    const [
+      deleteByFilterMock,
+      deleteByFilterResult,
+    ] = createDeleteScanConfigsByFilterQueryMock('foo=bar rows=2');
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
+      queryMocks: [mock, exportByFilterMock, deleteByFilterMock],
     });
 
     store.dispatch(setUsername('admin'));
@@ -221,19 +235,15 @@ describe('ScanConfigsPage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
-
     const icons = getAllByTestId('svg-icon');
-
-    console.log(icons[8]);
-
+    expect(icons.length).toBe(9);
     expect(icons[7]).toHaveAttribute('title', 'Move page contents to trashcan');
     fireEvent.click(icons[7]);
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteByFilterResult).toHaveBeenCalled();
 
     expect(icons[8]).toHaveAttribute('title', 'Export page contents');
     fireEvent.click(icons[8]);
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportByFilterResult).toHaveBeenCalled();
   });
 });
 

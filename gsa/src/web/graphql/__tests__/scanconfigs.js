@@ -31,6 +31,9 @@ import {
   useDeleteScanConfig,
   useCloneScanConfig,
   useLoadScanConfigPromise,
+  useExportScanConfigsByFilter,
+  useDeleteScanConfigsByIds,
+  useDeleteScanConfigsByFilter,
 } from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
@@ -39,8 +42,10 @@ import {
   createScanConfigInput,
   createImportScanConfigQueryMock,
   createExportScanConfigsByIdsQueryMock,
-  createDeleteScanConfigsByIdsQueryMock,
   createCloneScanConfigQueryMock,
+  createDeleteScanConfigsByFilterQueryMock,
+  createExportScanConfigsByFilterQueryMock,
+  createDeleteScanConfigsByIdsQueryMock,
 } from '../__mocks__/scanconfigs';
 
 const GetLazyScanConfigsComponent = () => {
@@ -425,5 +430,83 @@ describe('useLoadScanConfigPromise tests', () => {
     scanConfigElement = screen.getByTestId('scanConfig');
 
     expect(scanConfigElement).toHaveTextContent('314');
+  });
+});
+
+const DeleteScanConfigsByIdsComponent = () => {
+  const [deleteScanConfigsByIds] = useDeleteScanConfigsByIds();
+  return (
+    <button
+      data-testid="bulk-delete"
+      onClick={() => deleteScanConfigsByIds(['foo', 'bar'])}
+    />
+  );
+};
+
+describe('useDeleteScanConfigsByIds tests', () => {
+  test('should delete a list of tasks after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteScanConfigsByIdsQueryMock([
+      'foo',
+      'bar',
+    ]);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteScanConfigsByIdsComponent />);
+    const button = screen.getByTestId('bulk-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteScanConfigsByFilterComponent = () => {
+  const [deleteScanConfigsByFilter] = useDeleteScanConfigsByFilter();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deleteScanConfigsByFilter('foo')}
+    />
+  );
+};
+
+describe('useDeleteScanConfigsByFilter tests', () => {
+  test('should delete a list of tasks by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteScanConfigsByFilterQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteScanConfigsByFilterComponent />);
+    const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportScanConfigsByFilterComponent = () => {
+  const exportScanConfigsByFilter = useExportScanConfigsByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportScanConfigsByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportScanConfigsByFilter tests', () => {
+  test('should export a list of tasks by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportScanConfigsByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportScanConfigsByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 });

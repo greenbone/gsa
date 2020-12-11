@@ -38,6 +38,8 @@ export const GET_SCAN_CONFIG = gql`
       comment
       writable
       owner
+      familyGrowing
+      nvtGrowing
       inUse
       creationTime
       modificationTime
