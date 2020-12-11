@@ -148,8 +148,7 @@ class Nvt extends Info {
     delete ret.refs;
 
     if (isDefined(ret.severities)) {
-      const {severities} = ret;
-      const {severity} = severities;
+      const {severity} = ret.severities;
       ret.severity = parseSeverity(severity.score / 10);
       ret.severityOrigin = parseText(severity.origin);
     } else {

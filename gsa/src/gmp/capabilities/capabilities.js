@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../utils/identity';
-import {map} from '../utils/array';
-import {pluralizeType} from '../utils/entitytype';
+import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
+import {pluralizeType} from 'gmp/utils/entitytype';
 
 const types = {
   audit: 'task',

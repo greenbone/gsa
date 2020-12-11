@@ -44,6 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Fixed
+- Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
 
 ### Removed
 - Removed unused task wizard commands for runQuickTask, runQuickFirstScan and runModifyTask [#2514](https://github.com/greenbone/gsa/pull/2514) [#2523](https://github.com/greenbone/gsa/pull/2523)
