@@ -19,10 +19,10 @@
 import 'core-js/features/object/entries';
 import 'core-js/features/string/starts-with';
 
-import {isDefined, isString, isNumber, isArray} from './utils/identity';
-import {isEmpty} from './utils/string';
+import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
-import date, {duration} from './models/date';
+import date, {duration} from 'gmp/models/date';
 
 export const parseSeverity = value =>
   isEmpty(value) ? undefined : parseFloat(value);

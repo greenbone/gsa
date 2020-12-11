@@ -18,9 +18,9 @@
 import 'core-js/features/set';
 import 'core-js/features/symbol';
 
-import {isDefined} from '../utils/identity';
-import {map} from '../utils/array';
-import {pluralizeType} from '../utils/entitytype';
+import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
+import {pluralizeType} from 'gmp/utils/entitytype';
 
 const types = {
   audit: 'task',
