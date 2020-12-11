@@ -274,6 +274,27 @@ describe('ScanConfig model parseObject tests', () => {
     expect(scanConfig.tasks).toEqual([]);
   });
 
+  test('should parse trend', () => {
+    const obj = {
+      familyGrowing: true,
+      nvtGrowing: false,
+    };
+
+    const obj2 = {
+      familyGrowing: null,
+      nvtGrowing: null,
+    };
+
+    const scanConfig = ScanConfig.fromObject(obj);
+    const scanConfig2 = ScanConfig.fromObject(obj2);
+
+    expect(scanConfig.families.trend).toEqual(1);
+    expect(scanConfig.nvts.trend).toEqual(0);
+
+    expect(scanConfig2.families).toEqual({count: 0});
+    expect(scanConfig2.nvts).toEqual({});
+  });
+
   // predefined is already boolean
   // has no scanner attribute
 });
