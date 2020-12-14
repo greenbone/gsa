@@ -162,15 +162,16 @@ const ScanConfigsPage = props => {
       }
       return gmpSettings.reloadInterval;
     },
-    [gmpSettings],
+    [gmpSettings], // scanconfig does not have active field so it can't use the same function as the other entities
   );
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,
-    timeoutFunc, // scanconfig does not have active field
+    timeoutFunc,
   );
 
   // Pagination methods
+  // usePagination does not work with this page yet. Not sure why. Keep withEntitiesContainer for now.
 
   // ScanConfig methods
   const handleCloneScanConfig = useCallback(
