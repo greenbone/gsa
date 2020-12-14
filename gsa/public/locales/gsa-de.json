@@ -1530,6 +1530,7 @@
   "TLS Certificates are always included for now": "TLS-Zertifikate werden bis auf Weiteres immer hinzugefügt",
   "TLS Certificates by Modification Time (Total: {{count}})": "TLS-Zertifikate nach Änderungszeit (Gesamt: {{count}})",
   "TLS Certificates by Status (Total: {{count}})": "TLS-Zertifikate nach Status (Gesamt: {{count}})",
+  "TLS Certificates for this Host": "TLS-Zertifikate für diesen Host",
   "Table: CERT-Bund Advisories by CVSS": "Tabelle: CERT-Bund-Advisories nach CVSS",
   "Table: CERT-Bund Advisories by Creation Time": "Tabelle: CERT-Bund-Advisories nach Erstellungszeit",
   "Table: CERT-Bund Advisories by Severity Class": "Tabelle: CERT-Bund-Advisories nach Schweregradklasse",
