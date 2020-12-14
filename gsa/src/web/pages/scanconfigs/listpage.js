@@ -175,11 +175,11 @@ const ScanConfigsPage = props => {
 
   // ScanConfig methods
   const handleCloneScanConfig = useCallback(
-    task => cloneScanConfig(task.id).then(refetch, showError),
+    scanConfig => cloneScanConfig(scanConfig.id).then(refetch, showError),
     [cloneScanConfig, refetch, showError],
   );
   const handleDeleteScanConfig = useCallback(
-    task => deleteScanConfig(task.id).then(refetch, showError),
+    scanConfig => deleteScanConfig(scanConfig.id).then(refetch, showError),
     [deleteScanConfig, refetch, showError],
   );
 
