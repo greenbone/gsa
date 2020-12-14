@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.8.1] - unreleased
 
 ### Added
+- Added icon to host detailspage to link to TLS certificates [#2624](https://github.com/greenbone/gsa/pull/2624)
 - Added form validation for user setting "rows per page"
   [#2478](https://github.com/greenbone/gsa/pull/2478), [#2505](https://github.com/greenbone/gsa/pull/2505)
 - Added option for "Start Task" event upon "New SecInfo arrived" condition in alerts dialog [#2418](https://github.com/greenbone/gsa/pull/2418)
@@ -24,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Fixed compiling gsad with libmicrohttp 0.9.71 and later [#2625](https://github.com/greenbone/gsa/pull/2625)
+- Fixed display of alert condition "Severity changed" [#2623](https://github.com/greenbone/gsa/pull/2623)
 - Fixed sanity check for port ranges [#2566](https://github.com/greenbone/gsa/pull/2566)
 - Allow to delete processes without having had edges in BPM [#2507](https://github.com/greenbone/gsa/pull/2507)
 - Fixed TLS certificate download for users with permissions [#2496](https://github.com/greenbone/gsa/pull/2496)
