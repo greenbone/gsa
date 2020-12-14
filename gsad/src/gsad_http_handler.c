@@ -841,7 +841,11 @@ cleanup_http_handlers ()
  *
  * @return MHD_NO in case of problems. MHD_YES if all is OK.
  */
+#if MHD_VERSION < 0x00097002
 int
+#else
+enum MHD_Result
+#endif
 handle_request (void *cls, http_connection_t *connection, const char *url,
                 const char *method, const char *version,
                 const char *upload_data, size_t *upload_data_size,

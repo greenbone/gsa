@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use <predefined> to disable feed object editing and filter creation on feed status page [#2398](https://github.com/greenbone/gsa/pull/2398)
 
 ### Fixed
+- Fixed compiling gsad with libmicrohttp 0.9.71 and later [#2625](https://github.com/greenbone/gsa/pull/2625)
 - Fixed display of alert condition "Severity changed" [#2623](https://github.com/greenbone/gsa/pull/2623)
 - Fixed sanity check for port ranges [#2566](https://github.com/greenbone/gsa/pull/2566)
 - Allow to delete processes without having had edges in BPM [#2507](https://github.com/greenbone/gsa/pull/2507)

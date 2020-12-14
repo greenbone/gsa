@@ -100,7 +100,11 @@ params_append_bin (params_t *, const char *, const char *, int, int);
 gboolean
 params_iterator_next (params_iterator_t *, char **, param_t **);
 
+#if MHD_VERSION < 0x00097002
 int
+#else
+enum MHD_Result
+#endif
 params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
                 const char *value);
 
