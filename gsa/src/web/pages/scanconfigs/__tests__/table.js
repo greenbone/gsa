@@ -46,7 +46,7 @@ const config = ScanConfig.fromObject({
 });
 
 const config2 = ScanConfig.fromObject({
-  _id: '123456',
+  id: '123456',
   name: 'lorem',
   comment: 'ipsum',
   owner: 'admin',
@@ -59,7 +59,7 @@ const config2 = ScanConfig.fromObject({
 });
 
 const config3 = ScanConfig.fromObject({
-  _id: '1234567',
+  id: '1234567',
   name: 'hello',
   comment: 'world',
   owner: 'admin',
