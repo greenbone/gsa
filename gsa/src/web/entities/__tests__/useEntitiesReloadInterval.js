@@ -29,9 +29,8 @@ import {
 import {parseModelFromObject} from 'gmp/model';
 
 import {rendererWith, screen} from 'web/utils/testing';
-import useGmpSettings from 'web/utils/useGmpSettings';
 
-import useEntitiesTimeout from '../useEntitiesTimeout';
+import useEntitiesReloadInterval from '../useEntitiesReloadInterval';
 
 const gmp = {
   settings: {
@@ -42,11 +41,7 @@ const gmp = {
 };
 
 const TestComponent = ({isVisible, entities}) => {
-  const gmpSettings = useGmpSettings();
-  const timeoutFunc = useEntitiesTimeout({
-    entities,
-    gmpSettings,
-  });
+  const timeoutFunc = useEntitiesReloadInterval(entities);
 
   return <span data-testid="reload-interval">{timeoutFunc({isVisible})}</span>;
 };
@@ -56,7 +51,7 @@ const inactiveEntity = parseModelFromObject({active: false});
 
 const entities = [activeEntity, inactiveEntity];
 
-describe('useEntitiesTimeout tests', () => {
+describe('useEntitiesReloadInterval tests', () => {
   test('Should return correct interval when isVisible is false', () => {
     const {render} = rendererWith({gmp});
     render(<TestComponent isVisible={false} entities={entities} />);

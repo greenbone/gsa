@@ -76,7 +76,10 @@ class ScanConfig extends Model {
         const {name} = family;
         const newFamily = {
           name,
-          trend: hasValue(family) && family.growing ? 1 : 0,
+          trend:
+            hasValue(family) && family.growing
+              ? SCANCONFIG_TREND_DYNAMIC
+              : SCANCONFIG_TREND_STATIC,
           nvts: {
             count:
               hasValue(family.nvtCount) && family.nvtCount !== -1
@@ -103,7 +106,15 @@ class ScanConfig extends Model {
       families.count = 0;
     }
 
+    if (hasValue(ret.familyGrowing)) {
+      families.trend = ret.familyGrowing
+        ? SCANCONFIG_TREND_DYNAMIC
+        : SCANCONFIG_TREND_STATIC;
+    }
+
     ret.families = families;
+
+    ret.nvts = {};
 
     if (hasValue(ret.nvtCount)) {
       ret.nvts = {
@@ -127,8 +138,12 @@ class ScanConfig extends Model {
         ret.nvts.max = ret.maxNvtCount;
         delete ret.maxNvtCount;
       }
-    } else {
-      ret.nvts = {};
+    }
+
+    if (hasValue(ret.nvtGrowing)) {
+      ret.nvts.trend = ret.nvtGrowing
+        ? SCANCONFIG_TREND_DYNAMIC
+        : SCANCONFIG_TREND_STATIC;
     }
 
     const nvtPreferences = [];

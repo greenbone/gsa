@@ -62,11 +62,10 @@ import {
   useBulkExportEntities,
 } from 'web/entities/bulkactions.js';
 import usePagination from 'web/entities/usePagination.js';
-import useEntitiesTimeout from 'web/entities/useEntitiesTimeout.js';
+import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval.js';
 
 import usePageFilter from 'web/utils/usePageFilter.js';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout.js';
-import useGmpSettings from 'web/utils/useGmpSettings.js';
 import usePrevious from 'web/utils/usePrevious.js';
 import useChangeFilter from 'web/utils/useChangeFilter.js';
 import useFilterSortBy from 'web/utils/useFilterSortby.js';
@@ -101,7 +100,6 @@ const AlertFilterDialog = createFilterDialog({
 
 const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
   // Page methods and hooks
-  const gmpSettings = useGmpSettings();
   const [downloadRef, handleDownload] = useDownload();
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('alert');
@@ -150,10 +148,7 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
 
   const bulkDeleteAlerts = useBulkDeleteEntities();
 
-  const timeoutFunc = useEntitiesTimeout({
-    entities: alerts,
-    gmpSettings,
-  });
+  const timeoutFunc = useEntitiesReloadInterval(alerts);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,

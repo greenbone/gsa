@@ -55,7 +55,7 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-import useEntityTimeout from 'web/entity/useEntityTimeout';
+import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 
 import {
   useGetAlert,
@@ -168,7 +168,7 @@ const Page = () => {
   };
 
   // Timeout and reload
-  const timeoutFunc = useEntityTimeout(alert);
+  const timeoutFunc = useEntityReloadInterval(alert);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchAlert,

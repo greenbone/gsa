@@ -20,7 +20,7 @@ import {useCallback} from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import useGmpSettings from 'web/utils/useGmpSettings';
 
-const useEntityTimeout = entity => {
+const useEntityReloadInterval = entity => {
   const gmpSettings = useGmpSettings();
   const timeoutFunc = useCallback(
     ({isVisible}) => {
@@ -38,4 +38,4 @@ const useEntityTimeout = entity => {
   return timeoutFunc;
 };
 
-export default useEntityTimeout;
+export default useEntityReloadInterval;
