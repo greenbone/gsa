@@ -14410,6 +14410,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   entity_t entity;
   GString *command, *group_elements, *role_elements;
   params_t *groups, *roles;
+  user_t *current_user;
 
   /* List of hosts user has/lacks access rights. */
   hosts = params_value (params, "access_hosts");
@@ -14456,7 +14457,11 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append (command, buf);
   g_free (buf);
 
-  if (login)
+  current_user = credentials_get_user (credentials);
+
+  if (login
+      /* gvmd forbids users from modifying their own names. */
+      && strcmp (login, user_get_username (current_user)))
     {
       buf = g_markup_printf_escaped ("<new_name>%s</new_name>", login);
       g_string_append (command, buf);
@@ -14540,8 +14545,6 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   ret = gmp (connection, credentials, &response, &entity, response_data,
              command->str);
   g_string_free (command, TRUE);
-
-  user_t *current_user = credentials_get_user (credentials);
 
   switch (ret)
     {
