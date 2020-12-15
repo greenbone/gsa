@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added option for "Start Task" event upon "New SecInfo arrived" condition in alerts dialog [#2418](https://github.com/greenbone/gsa/pull/2418)
 
 ### Changed
+- Disable clone icon for superadmins [#2633](https://github.com/greenbone/gsa/pull/2633)
 - Allow äüöÄÜÖß in form validation rule for "name" [#2586](https://github.com/greenbone/gsa/pull/2586)
 - Show "Filter x matches at least y results" condition to task events in alert dialog [#2580](https://github.com/greenbone/gsa/pull/2580)
 - Always send sort=name with delta report request filters [#2570](https://github.com/greenbone/gsa/pull/2570)
