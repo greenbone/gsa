@@ -70,12 +70,12 @@ const MultiplePermissionDialog = withCapabilities(
     const hasRelated = related.length > 0;
 
     const defaultValues = {
-      includeRelated,
       permission,
       subjectType,
     };
 
     const values = {
+      includeRelated,
       groupId,
       id,
       entityType,
