@@ -14522,7 +14522,9 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       params_iterator_init (&iter, roles);
       while (params_iterator_next (&iter, &name, &param))
         {
-          if (param->value && strcmp (param->value, "--"))
+          if (param->value && strcmp (param->value, "--")
+              /* Skip "Super Admin" which may not be added to a user. */
+              && strcmp (param->value, "9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5"))
             g_string_append_printf (role_elements, "<role id=\"%s\"/>",
                                     param->value ? param->value : "");
         }
