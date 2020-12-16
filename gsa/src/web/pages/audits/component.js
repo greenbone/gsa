@@ -18,6 +18,7 @@
 import React from 'react';
 
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 
@@ -27,17 +28,23 @@ import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
 import {hasId} from 'gmp/utils/id';
-
-import withDownload from 'web/components/form/withDownload';
-import {withRouter} from 'react-router-dom';
+import {isDefined} from 'gmp/utils/identity';
 
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
+
+import withDownload from 'web/components/form/withDownload';
+
+import EntityComponent from 'web/entity/component';
+
+import AlertComponent from 'web/pages/alerts/component';
+import AuditDialog from 'web/pages/audits/dialog';
+import ScheduleComponent from 'web/pages/schedules/component';
+import TargetComponent from 'web/pages/targets/component';
 
 import {
   loadEntities as loadAlerts,
@@ -79,14 +86,6 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import {UNSET_VALUE, generateFilename} from 'web/utils/render';
-
-import EntityComponent from 'web/entity/component';
-
-import ScheduleComponent from 'web/pages/schedules/component';
-import AlertComponent from 'web/pages/alerts/component';
-import TargetComponent from 'web/pages/targets/component';
-
-import AuditDialog from 'web/pages/audits/dialog';
 
 const REPORT_FORMATS_FILTER = Filter.fromString(
   'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',

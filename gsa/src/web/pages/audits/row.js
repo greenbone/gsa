@@ -20,14 +20,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
+
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-import withUserName from 'web/utils/withUserName';
-
-import {RowDetailsToggle} from 'web/entities/row';
-
-import ObserverIcon from 'web/entity/icon/observericon';
+import ComplianceStatusBar from 'web/components/bar/compliancestatusbar';
 
 import Comment from 'web/components/comment/comment';
 
@@ -41,15 +38,17 @@ import Layout from 'web/components/layout/layout';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
-import Actions from './actions';
-import AuditStatus from 'web/pages/tasks/status';
+import {RowDetailsToggle} from 'web/entities/row';
 
-import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
-
-import ComplianceStatusBar from 'web/components/bar/compliancestatusbar';
+import ObserverIcon from 'web/entity/icon/observericon';
 
 import {renderReport} from 'web/pages/tasks/row';
+import AuditStatus from 'web/pages/tasks/status';
 
+import PropTypes from 'web/utils/proptypes';
+import withUserName from 'web/utils/withUserName';
+
+import Actions from './actions';
 const getComplianceStatus = report => {
   if (!isDefined(report)) {
     return -1;

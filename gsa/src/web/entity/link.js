@@ -19,12 +19,15 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {hyperionEntityTypes, getEntityType, normalizeType} from 'gmp/utils/entitytype';
+import {
+  hyperionEntityTypes,
+  getEntityType,
+  normalizeType,
+} from 'gmp/utils/entitytype';
 import {hasValue} from 'gmp/utils/identity';
 
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
-
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';

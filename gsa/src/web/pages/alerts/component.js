@@ -26,13 +26,6 @@ import {
   method_data_fields,
 } from 'gmp/commands/alerts';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-import {first} from 'gmp/utils/array';
-import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
-
-import {parseInt, parseSeverity, parseYesNo, NO_VALUE} from 'gmp/parser';
-
 import {
   convertCredentialTypeEnum,
   convertAuthAlgorithmEnum,
@@ -43,15 +36,24 @@ import {
   vFire_credential_filter,
 } from 'gmp/models/credential';
 
-import EntityComponent from 'web/entity/component';
+import {parseInt, parseSeverity, parseYesNo, NO_VALUE} from 'gmp/parser';
+
+import {hasValue, isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
+import {first} from 'gmp/utils/array';
+import {capitalizeFirstLetter, shorten} from 'gmp/utils/string';
 
 import FootNote from 'web/components/footnote/footnote';
 
 import Layout from 'web/components/layout/layout';
 
+import EntityComponent from 'web/entity/component';
+
 import {useCreateAlert, useModifyAlert} from 'web/graphql/alerts';
 
 import {useCreateCredential} from 'web/graphql/credentials';
+
+import CredentialsDialog from 'web/pages/credentials/dialog';
 
 import {
   loadReportComposerDefaults as loadDefaults,
@@ -64,8 +66,6 @@ import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
 import useGmp from 'web/utils/useGmp';
 import readFileToText from 'web/utils/readFileToText';
-
-import CredentialsDialog from '../credentials/dialog';
 
 import AlertDialog, {
   ATTACH_MESSAGE_DEFAULT,

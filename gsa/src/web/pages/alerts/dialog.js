@@ -21,9 +21,6 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-
 import {parseInt, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
@@ -49,8 +46,9 @@ import {
   isSecinfoEvent,
 } from 'gmp/models/alert';
 
-import reducer, {updateState} from 'web/utils/stateReducer';
-import PropTypes from 'web/utils/proptypes';
+import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
+
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Select from 'web/components/form/select';
@@ -64,7 +62,9 @@ import ReportIcon from 'web/components/icon/reporticon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
+import reducer, {updateState} from 'web/utils/stateReducer';
 import useCapabilities from 'web/utils/useCapabilities';
 
 import AlembaVfireMethodPart from './alembavfiremethodpart';

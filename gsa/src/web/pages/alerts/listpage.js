@@ -23,8 +23,6 @@ import {ALERTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {hasValue} from 'gmp/utils/identity';
 
-import EntitiesPage from 'web/entities/page';
-
 import useDownload from 'web/components/form/useDownload';
 import Download from 'web/components/form/download';
 
@@ -42,6 +40,16 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
+import EntitiesPage from 'web/entities/page';
+
+import {
+  BulkTagComponent,
+  useBulkDeleteEntities,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions';
+import usePagination from 'web/entities/usePagination';
+import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
+
 import {
   useLazyGetAlerts,
   useCloneAlert,
@@ -53,13 +61,7 @@ import {
   useExportAlertsByIds,
 } from 'web/graphql/alerts';
 
-import {
-  BulkTagComponent,
-  useBulkDeleteEntities,
-  useBulkExportEntities,
-} from 'web/entities/bulkactions';
-import usePagination from 'web/entities/usePagination';
-import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
+import PropTypes from 'web/utils/proptypes';
 
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
@@ -68,8 +70,6 @@ import usePageFilter from 'web/utils/usePageFilter';
 import usePrevious from 'web/utils/usePrevious';
 import useSelection from 'web/utils/useSelection';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-
-import PropTypes from 'web/utils/proptypes';
 
 import AlertComponent from './component';
 import AlertTable, {SORT_FIELDS} from './table';

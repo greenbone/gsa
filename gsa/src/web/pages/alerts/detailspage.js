@@ -21,6 +21,9 @@ import {useHistory, useParams} from 'react-router-dom';
 import _ from 'gmp/locale';
 import {hasValue} from 'gmp/utils/identity';
 
+import Download from 'web/components/form/download';
+import useDownload from 'web/components/form/useDownload';
+
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
 
@@ -29,25 +32,19 @@ import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
 
+import useReload from 'web/components/loading/useReload';
+
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import DialogNotification from 'web/components/notification/dialognotification';
+
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-import Download from 'web/components/form/download';
-import useDownload from 'web/components/form/useDownload';
-import useReload from 'web/components/loading/useReload';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-import DialogNotification from 'web/components/notification/dialognotification';
 
-import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
-import EntityPermissions from 'web/entity/permissions';
-import EntitiesTab from 'web/entity/tab';
-import EntityTags from 'web/entity/tags';
-import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
-import useExportEntity from 'web/entity/useExportEntity';
 
 import AlertIcon from 'web/components/icon/alerticon';
 import ExportIcon from 'web/components/icon/exporticon';
@@ -55,7 +52,14 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+
+import EntityPage from 'web/entity/page';
+import EntityPermissions from 'web/entity/permissions';
+import EntitiesTab from 'web/entity/tab';
+import EntityTags from 'web/entity/tags';
 import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
+import useExportEntity from 'web/entity/useExportEntity';
+import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
 import {
   useGetAlert,

@@ -33,8 +33,8 @@ import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import NewIcon from 'web/components/icon/newicon';
-import PropTypes from 'web/utils/proptypes';
 
+import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
 

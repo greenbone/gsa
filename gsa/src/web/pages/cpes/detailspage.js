@@ -32,16 +32,16 @@ import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
 
+import DetailsLink from 'web/components/link/detailslink';
+
+import Loading from 'web/components/loading/loading';
+
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import DetailsLink from 'web/components/link/detailslink';
-
-import Loading from 'web/components/loading/loading';
 
 import Table from 'web/components/table/stripedtable';
 import TableHeader from 'web/components/table/header';
