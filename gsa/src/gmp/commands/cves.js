@@ -16,14 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import registerCommand from 'gmp/command';
+
+import Cve from 'gmp/models/cve';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import InfoEntitiesCommand from './infoentities';
 import InfoEntityCommand from './infoentity';
-
-import registerCommand from 'gmp/command';
-
-import Cve from 'gmp/models/cve';
 
 const info_filter = info => isDefined(info.cve);
 
