@@ -20,10 +20,6 @@ import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
-import {forEach, first} from 'gmp/utils/array';
-import {isDefined, isArray} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
@@ -49,9 +45,9 @@ import {
   filterEmptyScanConfig,
 } from 'gmp/models/scanconfig';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-import useCapabilities from 'web/utils/useCapabilities';
+import {forEach, first} from 'gmp/utils/array';
+import {isDefined, isArray} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -67,6 +63,10 @@ import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 import AutoDeleteReportsGroup from './autodeletereportsgroup';

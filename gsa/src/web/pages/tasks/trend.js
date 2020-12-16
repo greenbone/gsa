@@ -20,13 +20,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import TrendUpIcon from 'web/components/icon/trendupicon';
 import TrendDownIcon from 'web/components/icon/trenddownicon';
 import TrendMoreIcon from 'web/components/icon/trendmoreicon';
 import TrendLessIcon from 'web/components/icon/trendlessicon';
 import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
+
+import PropTypes from 'web/utils/proptypes';
 
 const Trend = ({name}) => {
   let title;

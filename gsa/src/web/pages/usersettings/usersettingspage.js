@@ -56,6 +56,11 @@ import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
+import Table from 'web/components/table/table';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+
 import {
   loadEntities as loadAlerts,
   loadEntity as loadAlert,
@@ -105,11 +110,6 @@ import {
   updateTimezone,
   renewSessionTimeout,
 } from 'web/store/usersettings/actions';
-
-import Table from 'web/components/table/table';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
 
 import compose from 'web/utils/compose';
 import Languages, {BROWSER_LANGUAGE} from 'web/utils/languages';

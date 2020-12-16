@@ -20,14 +20,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
+
 import {hasValue, isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import withUserName from 'web/utils/withUserName';
-
-import {RowDetailsToggle} from 'web/entities/row';
-
-import ObserverIcon from 'web/entity/icon/observericon';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -48,11 +43,16 @@ import Link from 'web/components/link/link';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
+import {RowDetailsToggle} from 'web/entities/row';
+
+import ObserverIcon from 'web/entity/icon/observericon';
+
+import PropTypes from 'web/utils/proptypes';
+import withUserName from 'web/utils/withUserName';
+
 import Actions from './actions';
 import TaskStatus from './status';
 import Trend from './trend';
-
-import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 export const renderReport = (report, links) => {
   if (!hasValue(report)) {

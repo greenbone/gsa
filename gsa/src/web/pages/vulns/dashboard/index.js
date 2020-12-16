@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import Dashboard from '../../../components/dashboard/dashboard';
+import Dashboard from 'web/components/dashboard/dashboard';
 
 import {VulnsCvssDisplay, VulnsCvssTableDisplay} from './cvssdisplay';
 import {VulnsHostsDisplay, VulnsHostsTableDisplay} from './hostsdisplay';

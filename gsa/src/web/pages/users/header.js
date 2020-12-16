@@ -19,13 +19,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
-import {withEntitiesHeader} from 'web/entities/header';
-
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+
+import {withEntitiesHeader} from 'web/entities/header';
+
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({
   actionsColumn,

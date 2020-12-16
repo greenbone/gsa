@@ -20,9 +20,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
-
 import {
   ACCESS_ALLOW_ALL,
   ACCESS_DENY_ALL,
@@ -32,8 +29,8 @@ import {
   AUTH_METHOD_RADIUS,
 } from 'gmp/models/user';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 
 import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -46,6 +43,9 @@ import TextField from 'web/components/form/textfield';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 class Dialog extends React.Component {
   constructor(...args) {

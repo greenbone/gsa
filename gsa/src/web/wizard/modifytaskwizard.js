@@ -21,8 +21,6 @@ import _ from 'gmp/locale';
 
 import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Select from 'web/components/form/select';
@@ -36,8 +34,9 @@ import Datepicker from 'web/components/form/datepicker';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import reducer, {updateState} from 'web/utils/stateReducer';
+import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
+import reducer, {updateState} from 'web/utils/stateReducer';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import {WizardContent, WizardIcon} from './taskwizard';

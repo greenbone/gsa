@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import {setProperties, parseInt, parseSeverity} from '../../parser';
+import {setProperties, parseInt, parseSeverity} from 'gmp/parser';
 
 class ReportPort {
   constructor() {

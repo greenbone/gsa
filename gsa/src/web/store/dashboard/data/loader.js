@@ -21,10 +21,10 @@ import {connect} from 'react-redux';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import compose from '../../../utils/compose';
-import withGmp from '../../../utils/withGmp';
-import withSubscription from '../../../utils/withSubscription';
-import PropTypes from '../../../utils/proptypes';
+import compose from 'web/utils/compose';
+import withGmp from 'web/utils/withGmp';
+import withSubscription from 'web/utils/withSubscription';
+import PropTypes from 'web/utils/proptypes';
 
 import {
   receivedDashboardData,

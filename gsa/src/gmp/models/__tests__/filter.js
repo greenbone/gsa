@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isArray} from '../../utils/identity';
+import {isArray} from 'gmp/utils/identity';
 
 import Filter, {UNKNOWN_FILTER_ID} from '../filter';
 import FilterTerm from '../filter/filterterm';
