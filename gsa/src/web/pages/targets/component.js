@@ -31,16 +31,16 @@ import {
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes.js';
-import {UNSET_VALUE} from 'web/utils/render.js';
+import PropTypes from 'web/utils/proptypes';
+import {UNSET_VALUE} from 'web/utils/render';
 
-import EntityComponent from 'web/entity/component.js';
+import EntityComponent from 'web/entity/component';
 
-import CredentialsDialog from 'web/pages/credentials/dialog.js';
+import CredentialsDialog from '../credentials/dialog';
 
-import PortListDialog from 'web/pages/portlists/dialog.js';
+import PortListDialog from '../portlists/dialog';
 
-import TargetDialog from './dialog.js';
+import TargetDialog from './dialog';
 
 import {
   useCreateCredential,
