@@ -25,14 +25,14 @@ import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
-import IconDivider from 'web/components/layout/icondivider';
-
-import PropTypes from 'web/utils/proptypes';
-
 import DownloadExeIcon from 'web/components/icon/downloadexeicon';
 import DownloadDebIcon from 'web/components/icon/downloaddebicon';
 import DownloadKeyIcon from 'web/components/icon/downloadkeyicon';
 import DownloadRpmIcon from 'web/components/icon/downloadrpmicon';
+
+import IconDivider from 'web/components/layout/icondivider';
+
+import PropTypes from 'web/utils/proptypes';
 
 const CredentialDownloadIcon = ({credential, onDownload}) => {
   const type = credential.credential_type;

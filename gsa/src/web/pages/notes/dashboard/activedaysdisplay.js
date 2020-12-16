@@ -31,8 +31,6 @@ import {parseFloat} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
 import DonutChart from 'web/components/chart/donut';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
 import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons'; // eslint-disable-line max-len
@@ -45,6 +43,8 @@ import {
   activeDaysColorScale,
 } from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
+
+import PropTypes from 'web/utils/proptypes';
 
 import {NotesActiveDaysLoader} from './loaders';
 

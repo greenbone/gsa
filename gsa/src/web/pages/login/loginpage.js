@@ -35,9 +35,6 @@ import moment from 'gmp/models/date';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Theme from 'web/utils/theme';
-import useGmp from 'web/utils/useGmp';
-
 import Logo from 'web/components/img/greenbone';
 
 import Layout from 'web/components/layout/layout';
@@ -55,6 +52,9 @@ import {
 } from 'web/store/usersettings/actions';
 
 import {isLoggedIn as isLoggedInSelector} from 'web/store/usersettings/selectors';
+
+import Theme from 'web/utils/theme';
+import useGmp from 'web/utils/useGmp';
 
 import LoginForm from './loginform';
 

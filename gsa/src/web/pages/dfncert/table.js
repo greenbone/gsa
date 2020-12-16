@@ -28,10 +28,10 @@ import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 import withRowDetails from 'web/entities/withRowDetails';
 
+import PropTypes from 'web/utils/proptypes';
+
 import DfnCertAdvDetails from './details';
 import DfnCertAdvRow from './row';
-
-import PropTypes from 'web/utils/proptypes';
 
 const Header = ({
   actionsColumn,

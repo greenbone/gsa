@@ -22,8 +22,6 @@ import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import DetailsBlock from 'web/entity/block';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import Layout from 'web/components/layout/layout';
@@ -35,6 +33,8 @@ import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+
+import DetailsBlock from 'web/entity/block';
 
 import PropTypes from 'web/utils/proptypes';
 

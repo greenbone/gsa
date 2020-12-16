@@ -21,15 +21,15 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {KeyCode} from 'gmp/utils/event';
-import {isDefined} from 'gmp/utils/identity';
-
 import {
   parseCvssV2BaseVector,
   parseCvssV3BaseVector,
   parseCvssV2BaseFromVector,
   parseCvssV3BaseFromVector,
 } from 'gmp/parser/cvss';
+
+import {KeyCode} from 'gmp/utils/event';
+import {isDefined} from 'gmp/utils/identity';
 
 import SeverityBar from 'web/components/bar/severitybar';
 

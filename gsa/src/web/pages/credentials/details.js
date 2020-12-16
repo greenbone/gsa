@@ -26,11 +26,10 @@ import {
   getCredentialTypeName,
 } from 'gmp/models/credential';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Footnote from 'web/components/footnote/footnote';
 
 import Divider from 'web/components/layout/divider';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -42,7 +41,7 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-import HorizontalSep from 'web/components/layout/horizontalsep';
+import PropTypes from 'web/utils/proptypes';
 
 const CredentialDetails = ({entity}) => {
   const {

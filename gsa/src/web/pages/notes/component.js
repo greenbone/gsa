@@ -20,10 +20,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {hasId} from 'gmp/utils/id';
-import {isDefined, isArray} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
-
 import {
   ACTIVE_NO_VALUE,
   ACTIVE_YES_ALWAYS_VALUE,
@@ -36,10 +32,14 @@ import {
   ANY,
 } from 'gmp/models/override';
 
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import {hasId} from 'gmp/utils/id';
+import {isDefined, isArray} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
+
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
 import NoteDialog from './dialog';
 

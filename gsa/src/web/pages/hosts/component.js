@@ -20,21 +20,18 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-
-import PropTypes from 'web/utils/proptypes';
-
-import SelectionType from 'web/utils/selectiontype';
 
 import EntityComponent from 'web/entity/component';
 
-import withGmp from 'web/utils/withGmp';
-
+import HostDialog from 'web/pages/hosts/dialog';
 import TargetComponent from 'web/pages/targets/component';
 
-import HostDialog from 'web/pages/hosts/dialog';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
+import withGmp from 'web/utils/withGmp';
 
 class HostComponent extends React.Component {
   constructor(...args) {

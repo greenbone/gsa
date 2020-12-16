@@ -24,9 +24,6 @@ import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
@@ -42,6 +39,8 @@ import {
 } from 'web/store/entities/hosts';
 
 import {goto_entity_details} from 'web/utils/graphql';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import HostsFilterDialog from './filterdialog';
 import HostsTable from './table';
