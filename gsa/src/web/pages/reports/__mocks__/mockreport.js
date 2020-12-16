@@ -251,7 +251,16 @@ export const getMockReport = () => {
     apps: {count: 4},
     os: {count: 2},
     ssl_certs: {count: 2},
-    result_count: {__text: 3, full: 3, filtered: 2},
+    result_count: {
+      __text: 3,
+      full: 3,
+      filtered: 2,
+      hole: {filtered: 1},
+      info: {filtered: 1},
+      warning: {filtered: 1},
+      log: {filtered: 1},
+      false_positive: {filtered: 1},
+    },
     results: {result: [result1, result2, result3]},
     hosts: {count: 2},
     host: [host1, host2],
@@ -262,6 +271,10 @@ export const getMockReport = () => {
     errors: {
       count: 2,
       error: [error1, error2],
+    },
+    severity: {
+      full: 10.0,
+      filtered: 10.0,
     },
   };
 
