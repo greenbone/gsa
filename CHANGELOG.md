@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Ensure superadmins can edit themselves [#2633](https://github.com/greenbone/gsa/pull/2633)
+- Disable clone icon for superadmins [#2634](https://github.com/greenbone/gsa/pull/2634)
 - Allow äüöÄÜÖß in form validation rule for "name" [#2586](https://github.com/greenbone/gsa/pull/2586)
 - Show "Filter x matches at least y results" condition to task events in alert dialog [#2580](https://github.com/greenbone/gsa/pull/2580)
 - Always send sort=name with delta report request filters [#2570](https://github.com/greenbone/gsa/pull/2570)

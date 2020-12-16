@@ -122,6 +122,37 @@ describe('User model tests', () => {
     expect(user1.sources).toBeUndefined();
     expect(user3.authMethod).toEqual(AUTH_METHOD_PASSWORD);
   });
+
+  test('isSuperAdmin() should return correct true/false', () => {
+    const user1 = User.fromElement({
+      role: [
+        {
+          _id: '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5', // ID for Superadmin
+        },
+      ],
+    });
+    const user2 = User.fromElement({
+      role: [
+        {
+          _id: '42',
+        },
+      ],
+    });
+    const user3 = User.fromElement({
+      role: [
+        {
+          _id: '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5', // ID for Superadmin
+        },
+        {
+          _id: '42',
+        },
+      ],
+    });
+
+    expect(user1.isSuperAdmin()).toEqual(true);
+    expect(user2.isSuperAdmin()).toEqual(false);
+    expect(user3.isSuperAdmin()).toEqual(true);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
