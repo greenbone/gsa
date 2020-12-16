@@ -19,15 +19,15 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {hyperionEntityTypes} from 'gmp/utils/entitytype';
+import {hyperionEntityTypes, getEntityType, normalizeType} from 'gmp/utils/entitytype';
 import {hasValue} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes.js';
-import withCapabilities from '../utils/withCapabilities.js';
+import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 
-import DetailsLink from '../components/link/detailslink.js';
-import Link from '../components/link/link.js';
-import {getEntityType, normalizeType} from 'gmp/utils/entitytype.js';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
   const {id, name, userCapabilities, deleted} = entity;

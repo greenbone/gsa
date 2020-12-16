@@ -21,21 +21,21 @@ import _ from 'gmp/locale';
 
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
-import {renderSelectItems} from '../../utils/render.js';
+import FileField from 'web/components/form/filefield';
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+import TextField from 'web/components/form/textfield';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
-import PropTypes from '../../utils/proptypes.js';
-import withPrefix from '../../utils/withPrefix.js';
+import NewIcon from 'web/components/icon/newicon';
 
-import FileField from '../../components/form/filefield.js';
-import FormGroup from '../../components/form/formgroup.js';
-import Select from '../../components/form/select.js';
-import TextField from '../../components/form/textfield.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import NewIcon from '../../components/icon/newicon.js';
+import {renderSelectItems} from 'web/utils/render';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import PropTypes from 'web/utils/proptypes';
+import withPrefix from 'web/utils/withPrefix';
 
 const TIPPINGPOINT_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 

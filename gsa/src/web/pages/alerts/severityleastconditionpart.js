@@ -19,13 +19,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Divider from '../../components/layout/divider.js';
+import Spinner from 'web/components/form/spinner';
+import Radio from 'web/components/form/radio';
 
-import PropTypes from '../../utils/proptypes.js';
-import withPrefix from '../../utils/withPrefix.js';
+import Divider from 'web/components/layout/divider';
 
-import Spinner from '../../components/form/spinner.js';
-import Radio from '../../components/form/radio.js';
+import PropTypes from 'web/utils/proptypes';
+import withPrefix from 'web/utils/withPrefix';
 
 const VALUE = 'Severity at least';
 

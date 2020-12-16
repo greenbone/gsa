@@ -21,29 +21,26 @@ import _ from 'gmp/locale';
 
 import {ALERTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import {hasValue} from 'gmp/utils/identity.js';
+import {hasValue} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-import useCapabilities from 'web/utils/useCapabilities.js';
+import EntitiesPage from 'web/entities/page';
 
-import EntitiesPage from 'web/entities/page.js';
+import useDownload from 'web/components/form/useDownload';
+import Download from 'web/components/form/download';
 
-import ManualIcon from 'web/components/icon/manualicon.js';
-import NewIcon from 'web/components/icon/newicon.js';
+import ManualIcon from 'web/components/icon/manualicon';
+import NewIcon from 'web/components/icon/newicon';
+import AlertIcon from 'web/components/icon/alerticon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
-import AlertIcon from 'web/components/icon/alerticon';
-
-import {createFilterDialog} from 'web/components/powerfilter/dialog.js';
+import useReload from 'web/components/loading/useReload';
 
 import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
-import useReload from 'web/components/loading/useReload.js';
-import useDownload from 'web/components/form/useDownload.js';
-import Download from 'web/components/form/download.js';
+import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
 import {
   useLazyGetAlerts,
@@ -60,19 +57,22 @@ import {
   BulkTagComponent,
   useBulkDeleteEntities,
   useBulkExportEntities,
-} from 'web/entities/bulkactions.js';
-import usePagination from 'web/entities/usePagination.js';
-import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval.js';
+} from 'web/entities/bulkactions';
+import usePagination from 'web/entities/usePagination';
+import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 
-import usePageFilter from 'web/utils/usePageFilter.js';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout.js';
-import usePrevious from 'web/utils/usePrevious.js';
-import useChangeFilter from 'web/utils/useChangeFilter.js';
-import useFilterSortBy from 'web/utils/useFilterSortby.js';
-import useSelection from 'web/utils/useSelection.js';
+import useCapabilities from 'web/utils/useCapabilities';
+import useChangeFilter from 'web/utils/useChangeFilter';
+import useFilterSortBy from 'web/utils/useFilterSortby';
+import usePageFilter from 'web/utils/usePageFilter';
+import usePrevious from 'web/utils/usePrevious';
+import useSelection from 'web/utils/useSelection';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
-import AlertComponent from './component.js';
-import AlertTable, {SORT_FIELDS} from './table.js';
+import PropTypes from 'web/utils/proptypes';
+
+import AlertComponent from './component';
+import AlertTable, {SORT_FIELDS} from './table';
 
 export const ToolBarIcons = ({onAlertCreateClick}) => {
   const capabilities = useCapabilities();

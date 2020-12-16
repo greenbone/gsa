@@ -18,9 +18,9 @@
 
 import React from 'react';
 
-import Layout from '../components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 const DetailsBlock = ({id, children, className, title}) => (
   <Layout flex="column" id={id} className={className}>
