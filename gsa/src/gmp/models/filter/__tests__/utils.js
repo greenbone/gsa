@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import Filter from 'gmp/models/filter';
-import {filter_string} from 'gmp/models/utils';
+import {filter_string} from 'gmp/models/filter/utils';
 
 describe('filter_string function tests', () => {
   test('should return string for non Filter objects', () => {
