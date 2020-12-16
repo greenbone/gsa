@@ -21,13 +21,13 @@ import _ from 'gmp/locale';
 
 import {hasValue} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
 import DialogFooter from 'web/components/dialog/footer';
 import DialogTitle from 'web/components/dialog/title';
 import ScrollableContent from 'web/components/dialog/scrollablecontent';
+
+import PropTypes from 'web/utils/proptypes'
 
 const DialogNotification = ({title, message, onCloseClick}) =>
   hasValue(message) ? (

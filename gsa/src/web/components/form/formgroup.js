@@ -24,6 +24,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {parseInt} from 'gmp/parser';
 
 import Layout from 'web/components/layout/layout';
+
 import PropTypes from 'web/utils/proptypes';
 
 const COLUMNS = [

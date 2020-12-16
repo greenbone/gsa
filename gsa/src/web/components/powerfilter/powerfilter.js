@@ -27,24 +27,24 @@ import Filter, {RESET_FILTER} from 'gmp/models/filter';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined, isString} from 'gmp/utils/identity';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
-
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
 import EditIcon from 'web/components/icon/editicon';
 import ManualIcon from 'web/components/icon/manualicon';
-import RefreshIcon from '../icon/refreshicon';
-import ResetIcon from '../icon/reseticon';
+import RefreshIcon from 'web/components/icon/refreshicon';
+import ResetIcon from 'web/components/icon/reseticon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
 const DEFAULT_FILTER_ID = '0';
 
@@ -278,9 +278,6 @@ PowerFilter.propTypes = {
   onUpdate: PropTypes.func,
 };
 
-export default compose(
-  withCapabilities,
-  withGmp,
-)(PowerFilter);
+export default compose(withCapabilities, withGmp)(PowerFilter);
 
 // vim: set ts=2 sw=2 tw=80:

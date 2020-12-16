@@ -21,10 +21,10 @@ import _ from 'gmp/locale';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
 
 import Radio from './radio';
 

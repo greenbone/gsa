@@ -19,9 +19,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {parseInt} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import FormGroup from 'web/components/form/formgroup';
 import YesNoRadio from 'web/components/form/yesnoradio';

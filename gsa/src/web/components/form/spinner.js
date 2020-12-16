@@ -20,16 +20,16 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import {parseFloat, parseInt} from 'gmp/parser';
+
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 import {fixedValue} from 'gmp/utils/number';
 
-import {parseFloat, parseInt} from 'gmp/parser';
+import withLayout from 'web/components/layout/withLayout';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-import withLayout from '../layout/withLayout';
 
 import NumberField from './numberfield';
 
