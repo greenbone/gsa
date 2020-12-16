@@ -25,18 +25,34 @@ import _ from 'gmp/locale';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 
-import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
-import {selectSaveId} from 'gmp/utils/id';
-
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
 import {
   ospScannersFilter,
   OPENVAS_DEFAULT_SCANNER_ID,
   OPENVAS_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
+
+import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import {selectSaveId} from 'gmp/utils/id';
+
+import EntityComponent from 'web/entity/component';
+
+import AlertComponent from 'web/pages/alerts/component';
+
+import AuditDialog from 'web/pages/audits/dialog';
+
+import {createSelectedNvts} from 'web/pages/scanconfigs/component';
+import EditPolicyFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
+import EditPolicyDialog from 'web/pages/scanconfigs/editdialog';
+import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
+import ImportDialog from 'web/pages/scanconfigs/importdialog';
+
+import ScheduleComponent from 'web/pages/schedules/component';
+
+import TargetComponent from 'web/pages/targets/component';
 
 import {
   loadEntities as loadAlerts,
@@ -67,22 +83,6 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
-
-import EntityComponent from 'web/entity/component';
-
-import AlertComponent from 'web/pages/alerts/component';
-
-import AuditDialog from 'web/pages/audits/dialog';
-
-import {createSelectedNvts} from 'web/pages/scanconfigs/component';
-import EditPolicyFamilyDialog from 'web/pages/scanconfigs/editconfigfamilydialog';
-import EditPolicyDialog from 'web/pages/scanconfigs/editdialog';
-import EditNvtDetailsDialog from 'web/pages/scanconfigs/editnvtdetailsdialog';
-import ImportDialog from 'web/pages/scanconfigs/importdialog';
-
-import ScheduleComponent from 'web/pages/schedules/component';
-
-import TargetComponent from 'web/pages/targets/component';
 
 import PolicyDialog from './dialog';
 

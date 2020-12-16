@@ -24,17 +24,18 @@ import {parseInt} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
+import EntityComponent from 'web/entity/component';
+
+import {useCreatePortList, useModifyPortList} from 'web/graphql/portlists';
+
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 import reducer, {updateState} from 'web/utils/stateReducer';
-import readFileToText from 'web/utils/readFileToText.js';
-
-import EntityComponent from 'web/entity/component';
+import readFileToText from 'web/utils/readFileToText';
 
 import ImportPortListDialog from './importdialog';
 import PortListsDialog from './dialog';
 import PortRangeDialog from './portrangedialog';
-import {useCreatePortList, useModifyPortList} from 'web/graphql/portlists';
 
 const PortListComponent = ({
   children,

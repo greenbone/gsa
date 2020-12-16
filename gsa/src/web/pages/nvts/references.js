@@ -21,8 +21,6 @@ import _ from 'gmp/locale';
 
 import DetailsBlock from 'web/entity/block';
 
-import PropTypes from 'web/utils/proptypes';
-
 import CertLink from 'web/components/link/certlink';
 import CveLink from 'web/components/link/cvelink';
 import ExternalLink from 'web/components/link/externallink';
@@ -31,6 +29,8 @@ import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+
+import PropTypes from 'web/utils/proptypes';
 
 const References = ({nvt, links = true}) => {
   const {cves = [], bids = [], certs = [], xrefs = []} = nvt;
