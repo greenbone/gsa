@@ -17,13 +17,13 @@
  */
 import React from 'react';
 
+import {TASK_STATUS} from 'gmp/models/task';
+
 import {render} from 'web/utils/testing';
 
-import Theme from 'web/utils/theme.js';
+import Theme from 'web/utils/theme';
 
 import StatusBar from '../statusbar';
-
-import {TASK_STATUS} from 'gmp/models/task';
 
 describe('StatusBar tests', () => {
   test('should render', () => {

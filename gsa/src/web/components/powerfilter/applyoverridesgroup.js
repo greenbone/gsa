@@ -23,10 +23,10 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {parseInt} from 'gmp/parser';
 
-import PropTypes from '../../utils/proptypes.js';
+import FormGroup from 'web/components/form/formgroup';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
-import FormGroup from '../form/formgroup.js';
-import YesNoRadio from '../form/yesnoradio.js';
+import PropTypes from 'web/utils/proptypes';
 
 const ApplyOverridesGroup = ({
   filter,
