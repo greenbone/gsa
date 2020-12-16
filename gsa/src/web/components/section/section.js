@@ -21,15 +21,15 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
 import {withFolding, withFoldToggle} from 'web/components/folding/folding';
 
 import FoldIcon from 'web/components/icon/foldstateicon';
 
 import Layout from 'web/components/layout/layout';
 
-import SectionHeader from './header.js';
+import PropTypes from 'web/utils/proptypes';
+
+import SectionHeader from './header';
 
 const FoldableLayout = withFolding(Layout);
 

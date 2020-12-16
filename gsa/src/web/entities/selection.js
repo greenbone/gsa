@@ -18,9 +18,9 @@
 
 import React from 'react';
 
-import PropTypes from '../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Checkbox from '../components/form/checkbox.js';
+import Checkbox from 'web/components/form/checkbox';
 
 export class EntitySelection extends React.Component {
   constructor(...args) {
