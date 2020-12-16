@@ -31,12 +31,6 @@ import {DEFAULT_OID_VALUE} from 'gmp/models/override';
 
 import Layout from 'web/components/layout/layout';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderNvtName} from 'web/utils/render';
-
-import DetailsBlock from 'web/entity/block';
-import {Col} from 'web/entity/page';
-
 import DetailsLink from 'web/components/link/detailslink';
 
 import InfoTable from 'web/components/table/infotable';
@@ -44,9 +38,15 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import References from '../nvts/references';
-import Solution from '../nvts/solution';
-import P from '../nvts/preformatted';
+import DetailsBlock from 'web/entity/block';
+import {Col} from 'web/entity/page';
+
+import References from 'web/pages/nvts/references';
+import Solution from 'web/pages/nvts/solution';
+import P from 'web/pages/nvts/preformatted';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderNvtName} from 'web/utils/render';
 
 import Diff, {Added, Removed} from './diff';
 

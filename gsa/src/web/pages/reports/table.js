@@ -21,8 +21,6 @@ import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
 import {createEntitiesFooter} from 'web/entities/footer';
 import {createEntitiesTable} from 'web/entities/table';
 
@@ -31,6 +29,8 @@ import SeverityClassLabel from 'web/components/label/severityclass';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+
+import PropTypes from 'web/utils/proptypes';
 
 import ReportRow from './row';
 

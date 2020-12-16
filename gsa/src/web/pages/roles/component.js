@@ -25,11 +25,6 @@ import Filter from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
-
 import EntityComponent from 'web/entity/component';
 
 import {
@@ -41,6 +36,11 @@ import {
   loadAllEntities as loadAllUsers,
   selector as userSelector,
 } from 'web/store/entities/users';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
 import RoleDialog from './dialog';
 

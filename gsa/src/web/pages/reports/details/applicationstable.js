@@ -19,8 +19,6 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -32,8 +30,11 @@ import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
-import {createEntitiesTable} from 'web/entities/table';
 import CpeIcon from 'web/components/icon/cpeicon';
+
+import {createEntitiesTable} from 'web/entities/table';
+
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => {
   return (

@@ -26,14 +26,10 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {selectSaveId} from 'gmp/utils/id';
 import {isString} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
 
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
 } from 'web/components/dialog/composercontent'; /* eslint-disable-line max-len */
-import ThresholdMessage from 'web/pages/reports/thresholdmessage';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import CheckBox from 'web/components/form/checkbox';
@@ -42,6 +38,11 @@ import Select from 'web/components/form/select';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import ThresholdMessage from 'web/pages/reports/thresholdmessage';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 
 const StyledDiv = styled.div`
   text-align: end;

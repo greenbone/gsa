@@ -34,6 +34,8 @@ import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import withDownload from 'web/components/form/withDownload';
 
+import PageTitle from 'web/components/layout/pagetitle';
+
 import Reload, {
   NO_RELOAD,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
@@ -44,6 +46,7 @@ import withDialogNotification from 'web/components/notification/withDialogNotifi
 import FilterProvider from 'web/entities/filterprovider';
 
 import DownloadReportDialog from 'web/pages/reports/downloadreportdialog';
+import TargetComponent from 'web/pages/targets/component';
 
 import {
   loadAllEntities as loadFiltersAction,
@@ -80,9 +83,6 @@ import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 import usePrevious from 'web/utils/usePrevious';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-
-import TargetComponent from '../targets/component';
-import PageTitle from 'web/components/layout/pagetitle';
 
 import Page from './detailscontent';
 import FilterDialog from './detailsfilterdialog';
