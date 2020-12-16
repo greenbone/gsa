@@ -22,8 +22,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
@@ -34,6 +32,9 @@ import Layout from 'web/components/layout/layout';
 import useFormValidation, {
   syncVariables,
 } from 'web/components/form/useFormValidation';
+
+import PropTypes from 'web/utils/proptypes';
+
 import {createProcessRules} from './validationrules';
 
 const CreateProcessDialog = ({

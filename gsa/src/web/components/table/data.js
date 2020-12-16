@@ -20,9 +20,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import PropTypes from 'web/utils/proptypes';
+import Layout from 'web/components/layout/layout';
 
-import Layout from '../layout/layout';
+import PropTypes from 'web/utils/proptypes';
 
 const TableData = ({
   children,

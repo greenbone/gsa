@@ -24,10 +24,6 @@ import _ from 'gmp/locale';
 
 import {isFunction} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
-import Theme from 'web/utils/theme';
-
 import DetailsIcon from 'web/components/icon/detailsicon';
 
 import Layout from 'web/components/layout/layout';
@@ -36,6 +32,10 @@ import DetailsLink from 'web/components/link/detailslink';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+
+import PropTypes from 'web/utils/proptypes';
+
+import Theme from 'web/utils/theme';
 
 const Indent = styled.div`
   display: flex;

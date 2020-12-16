@@ -19,12 +19,12 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
-
-import PropTypes from 'web/utils/proptypes';
+import {isDefined} from 'gmp/utils/identity';
 
 import CloneIcon from 'web/components/icon/cloneicon';
+
+import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
 
 const EntityCloneIcon = ({

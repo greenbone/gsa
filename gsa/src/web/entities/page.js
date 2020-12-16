@@ -24,10 +24,6 @@ import _ from 'gmp/locale';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-
 import Toolbar from 'web/components/bar/toolbar';
 
 import ErrorMessage from 'web/components/error/errormessage';
@@ -41,6 +37,10 @@ import PowerFilter from 'web/components/powerfilter/powerfilter';
 import Section from 'web/components/section/section';
 
 import {loadAllEntities, selector} from 'web/store/entities/filters';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
 const exclude_props = [
   'children',

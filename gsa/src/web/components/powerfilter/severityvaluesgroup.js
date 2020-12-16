@@ -17,9 +17,9 @@
  */
 import React, {useState} from 'react';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {parseSeverity} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import FormGroup from 'web/components/form/formgroup';
 import NumberField from 'web/components/form/numberfield';

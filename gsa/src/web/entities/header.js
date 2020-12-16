@@ -19,13 +19,13 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import PropTypes from 'web/utils/proptypes';
-
-import SelectionType from 'web/utils/selectiontype';
-
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+
+import PropTypes from 'web/utils/proptypes';
+
+import SelectionType from 'web/utils/selectiontype';
 
 const defaultactions = (
   <TableHead width="8%" align="center" title={_l('Actions')} />

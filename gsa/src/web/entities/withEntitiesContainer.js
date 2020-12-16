@@ -21,12 +21,12 @@ import {connect} from 'react-redux';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import FilterProvider from 'web/entities/filterprovider';
-
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 import Reload from 'web/components/loading/reload';
 import withDownload from 'web/components/form/withDownload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
+
+import FilterProvider from 'web/entities/filterprovider';
 
 import {pageFilter} from 'web/store/pages/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';

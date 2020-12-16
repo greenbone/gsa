@@ -25,10 +25,9 @@ import DateTime from 'web/components/date/datetime';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Layout from 'web/components/layout/layout';
 
+import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 const OwnerInfo = ({owner}) =>

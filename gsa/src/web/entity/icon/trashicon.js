@@ -19,13 +19,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
+
+import TrashcanIcon from 'web/components/icon/trashcanicon';
 
 import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
-
-import TrashcanIcon from 'web/components/icon/trashcanicon';
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 const EntityTrashIcon = ({
   displayName,
