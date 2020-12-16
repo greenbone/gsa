@@ -24,15 +24,11 @@ import {color as d3color} from 'd3-color';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import Layout from 'web/components/layout/layout';
+
 import PropTypes from 'web/utils/proptypes';
 import {setRef} from 'web/utils/render';
 import Theme from 'web/utils/theme';
-
-import arc from './utils/arc';
-import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
-import {shouldUpdate} from './utils/update';
-
-import Layout from 'web/components/layout/layout';
 
 import Arc2d from './donut/arc2d';
 import Arc3d from './donut/arc3d';
@@ -40,6 +36,10 @@ import Labels from './donut/labels';
 import {PieInnerPath, PieTopPath, PieOuterPath} from './donut/paths';
 import Pie from './donut/pie';
 import {DataPropType} from './donut/proptypes';
+
+import arc from './utils/arc';
+import {MENU_PLACEHOLDER_WIDTH} from './utils/constants';
+import {shouldUpdate} from './utils/update';
 
 import Legend from './legend';
 import Svg from './svg';

@@ -17,9 +17,9 @@
  */
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
+import path from 'web/components/chart/utils/path';
 
-import path from '../utils/path';
+import PropTypes from 'web/utils/proptypes';
 
 const PI2 = 2 * Math.PI;
 
