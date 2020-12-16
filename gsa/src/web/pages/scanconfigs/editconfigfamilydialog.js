@@ -25,8 +25,6 @@ import {isEmpty} from 'gmp/utils/string';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -51,6 +49,7 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
+import PropTypes from 'web/utils/proptypes';
 import {makeCompareSeverity, makeCompareString} from 'web/utils/sort';
 
 class Nvt extends React.Component {

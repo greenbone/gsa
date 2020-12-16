@@ -30,9 +30,6 @@ import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 import DialogInlineNotification from 'web/components/dialog/dialoginlinenotification';
 
@@ -43,6 +40,8 @@ import Loading from 'web/components/loading/loading';
 
 import Layout from 'web/components/layout/layout';
 
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 import stateReducer from 'web/utils/stateReducer';
 
 import NvtFamilies from './nvtfamilies';

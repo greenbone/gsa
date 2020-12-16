@@ -19,11 +19,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({
   actions = true,

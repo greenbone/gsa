@@ -20,10 +20,6 @@ import React, {useEffect, useState, useCallback} from 'react';
 import _ from 'gmp/locale';
 
 import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
-import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/scanconfigs';
 import {hasValue} from 'gmp/utils/identity';
 
 import ManualIcon from 'web/components/icon/manualicon';
@@ -61,6 +57,12 @@ import {
   useLazyGetScanConfigs,
 } from 'web/graphql/scanconfigs';
 
+import {
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/scanconfigs';
+
+import PropTypes from 'web/utils/proptypes';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import usePageFilter from 'web/utils/usePageFilter';
 import usePrevious from 'web/utils/usePrevious';
@@ -68,8 +70,6 @@ import useChangeFilter from 'web/utils/useChangeFilter';
 import useSelection from 'web/utils/useSelection';
 import useFilterSortBy from 'web/utils/useFilterSortby';
 import useGmpSettings from 'web/utils/useGmpSettings';
-
-import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import ScanConfigComponent from './component';

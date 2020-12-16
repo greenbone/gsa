@@ -33,13 +33,13 @@ import {createFilterDialog} from 'web/components/powerfilter/dialog';
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/scanners';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import ScannerComponent from './component';
 import ScannersTable, {SORT_FIELDS} from './table';

@@ -19,12 +19,10 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import date, {duration as createDuration} from 'gmp/models/date';
 import Event, {ReccurenceFrequency, WeekDays} from 'gmp/models/event';
 
-import PropTypes from 'web/utils/proptypes';
+import {isDefined} from 'gmp/utils/identity';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -39,6 +37,8 @@ import Radio from 'web/components/form/radio';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
 
 import TimeUnitSelect from './timeunitselect';
 import WeekDaySelect, {WeekDaysPropType} from './weekdayselect';

@@ -25,6 +25,8 @@ import {shorten} from 'gmp/utils/string';
 import {first} from 'gmp/utils/array';
 import {pluralizeType, typeName} from 'gmp/utils/entitytype';
 
+import EntityComponent from 'web/entity/component';
+
 import {
   useCreateTag,
   useModifyTag,
@@ -34,14 +36,11 @@ import {
   RESOURCES_ACTION,
 } from 'web/graphql/tags';
 
-import PropTypes from 'web/utils/proptypes';
+import TagDialog from 'web/pages/tags/dialog';
 
+import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 import useCapabilities from 'web/utils/useCapabilities';
-
-import EntityComponent from 'web/entity/component';
-
-import TagDialog from 'web/pages/tags/dialog';
 
 export const SELECT_MAX_RESOURCES = 200; // concerns items in TagDialog's Select
 export const MAX_RESOURCES = 40; // concerns listing in "Assigned Resources" tab

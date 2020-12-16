@@ -19,10 +19,10 @@
 import React, {useEffect} from 'react';
 import {useHistory, useParams} from 'react-router-dom';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
 import {hasValue} from 'gmp/utils/identity';
-
-import styled from 'styled-components';
 
 import DetailsLink from 'web/components/link/detailslink';
 

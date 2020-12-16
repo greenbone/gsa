@@ -25,16 +25,16 @@ import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
 import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
 
+import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import {hasId} from 'gmp/utils/id';
-
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 import EntityComponent from 'web/entity/component';
 
 import CredentialsDialog from 'web/pages/credentials/dialog';
+
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';

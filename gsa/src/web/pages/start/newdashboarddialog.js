@@ -19,8 +19,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
@@ -44,6 +42,8 @@ import {ResultsSeverityDisplay} from 'web/pages/results/dashboard/severityclassd
 import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/severityclassdisplay';
 import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/statusdisplay';
 /* eslint-enable max-len */
+
+import PropTypes from 'web/utils/proptypes';
 
 export const MAX_TITLE_LENGTH = 50;
 

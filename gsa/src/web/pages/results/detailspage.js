@@ -75,7 +75,7 @@ import NoteComponent from 'web/pages/notes/component';
 
 import OverrideComponent from 'web/pages/overrides/component';
 
-import TicketComponent from '.web/pages/tickets/component';
+import TicketComponent from 'web/pages/tickets/component';
 
 import {loadEntity, selector} from 'web/store/entities/results';
 
