@@ -21,23 +21,23 @@ import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import EntitiesFooter, {withEntitiesFooter} from 'web/entities/footer';
+import {withEntitiesHeader} from 'web/entities/header';
+import {createEntitiesTable} from 'web/entities/table';
+import withRowDetails from 'web/entities/withRowDetails';
 
-import SelectionType from '../../utils/selectiontype.js';
+import NewIcon from 'web/components/icon/newicon';
 
-import EntitiesFooter, {withEntitiesFooter} from '../../entities/footer.js';
-import {withEntitiesHeader} from '../../entities/header.js';
-import {createEntitiesTable} from '../../entities/table.js';
-import withRowDetails from '../../entities/withRowDetails.js';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 
-import NewIcon from '../../components/icon/newicon.js';
+import PropTypes from 'web/utils/proptypes';
 
-import TableHead from '../../components/table/head.js';
-import TableHeader from '../../components/table/header.js';
-import TableRow from '../../components/table/row.js';
+import SelectionType from 'web/utils/selectiontype';
 
-import HostDetails from './details.js';
-import HostRow from './row.js';
+import HostDetails from './details';
+import HostRow from './row';
 
 const Header = ({
   actionsColumn,

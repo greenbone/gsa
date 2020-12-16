@@ -19,15 +19,15 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import PropTypes from 'utils/utils/proptypes';
+import TableHead from 'web/components/table/head';
+import TableHeader from 'web/components/table/header';
+import TableRow from 'web/components/table/row';
 
 import {createEntitiesFooter} from 'web/entities/footer';
 import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
 
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
+import PropTypes from 'web/utils/proptypes';
 
 import VulnsRow from './row';
 
