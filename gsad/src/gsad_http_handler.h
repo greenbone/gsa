@@ -76,7 +76,11 @@ void
 method_router_set_post_handler (http_handler_t *router,
                                 http_handler_t *handler);
 
+#if MHD_VERSION < 0x00097002
 int
+#else
+enum MHD_Result
+#endif
 handle_request (void *cls, http_connection_t *connection, const char *url,
                 const char *method, const char *version,
                 const char *upload_data, size_t *upload_data_size,
