@@ -749,7 +749,11 @@ file_content_response (http_connection_t *connection, const char *url,
  *
  * @return MHD_YES.
  */
+#if MHD_VERSION < 0x00097002
 static int
+#else
+static enum MHD_Result
+#endif
 append_param (void *string, enum MHD_ValueKind kind, const char *key,
               const char *value)
 {
@@ -922,7 +926,11 @@ get_client_address (http_connection_t *conn, char *client_address)
  *
  * @return MHD_YES to continue iterating over post data, MHD_NO to stop.
  */
+#if MHD_VERSION < 0x00097002
 int
+#else
+enum MHD_Result
+#endif
 serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
             const char *filename, const char *content_type,
             const char *transfer_encoding, const char *data, uint64_t off,

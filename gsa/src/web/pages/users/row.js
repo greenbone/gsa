@@ -66,6 +66,7 @@ const Actions = withEntitiesActions(
       />
       <CloneIcon
         displayName={_('User')}
+        mayClone={!entity.isSuperAdmin()}
         name="user"
         entity={entity}
         title={_('Clone User')}

@@ -204,7 +204,11 @@ reconstruct_url (http_connection_t *connection, const char *url);
 int
 get_client_address (http_connection_t *conn, char *client_address);
 
+#if MHD_VERSION < 0x00097002
 int
+#else
+enum MHD_Result
+#endif
 serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
             const char *filename, const char *content_type,
             const char *transfer_encoding, const char *data, uint64_t off,
