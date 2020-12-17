@@ -21,10 +21,6 @@ import {_, _l} from 'gmp/locale/lang';
 
 import {NO_VALUE} from 'gmp/parser';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FileField from 'web/components/form/filefield';
@@ -48,6 +44,10 @@ import {
   SSH_CREDENTIAL_TYPES,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
 const DEFAULT_PORT = 22;
 

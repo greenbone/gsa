@@ -23,9 +23,9 @@ import {hyperionEntityTypes} from 'gmp/utils/entitytype';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
 import ViewOtherIcon from 'web/components/icon/viewothericon';
+
+import PropTypes from 'web/utils/proptypes';
 
 const ObserverIcon = ({entity, userName, displayName = _('Entity')}) => {
   let owner;

@@ -17,25 +17,24 @@
  */
 import React from 'react';
 
-import styled from 'styled-components';
-
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
 import {getLocale} from 'gmp/locale/lang';
 
+import date from 'gmp/models/date';
+
 import {isDefined} from 'gmp/utils/identity';
 
-import date from 'gmp/models/date';
+import CalendarIcon from 'web/components/icon/calendaricon';
 
 import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
-
-import CalendarIcon from 'web/components/icon/calendaricon';
-
-import 'react-datepicker/dist/react-datepicker.css';
 
 const StyledCalendarIcon = styled(CalendarIcon)`
   margin-left: 5px;

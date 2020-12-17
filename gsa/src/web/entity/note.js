@@ -19,13 +19,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import DetailsIcon from 'web/components/icon/detailsicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
 import DetailsLink from 'web/components/link/detailslink';
+
+import PropTypes from 'web/utils/proptypes';
 
 import EntityBox from './box';
 
@@ -36,9 +36,7 @@ const NoteBox = ({note, detailsLink = true}) => {
         <DetailsIcon />
       </DetailsLink>
     </IconDivider>
-  ) : (
-    undefined
-  );
+  ) : undefined;
   return (
     <EntityBox
       title={_('Note')}

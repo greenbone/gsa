@@ -18,9 +18,7 @@
 import React, {useState, useEffect} from 'react';
 import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
-import State from 'web/utils/state';
-import PropTypes from 'web/utils/proptypes';
-import ErrorBoundary from 'web/components/error/errorboundary';
+
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
 import DialogError from 'web/components/dialog/error';
@@ -28,6 +26,11 @@ import DialogFooter from 'web/components/dialog/twobuttonfooter';
 import DialogTitle from 'web/components/dialog/title';
 import MultiStepFooter from 'web/components/dialog/multistepfooter';
 import ScrollableContent from 'web/components/dialog/scrollablecontent';
+
+import ErrorBoundary from 'web/components/error/errorboundary';
+
+import State from 'web/utils/state';
+import PropTypes from 'web/utils/proptypes';
 
 const SaveDialogContent = ({
   onSave,

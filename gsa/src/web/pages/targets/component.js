@@ -21,26 +21,26 @@ import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
-import {ALL_FILTER} from 'gmp/models/filter';
 import {
   convertCredentialTypeEnum,
   convertAuthAlgorithmEnum,
   convertPrivacyAlgorithmEnum,
 } from 'gmp/models/credential';
+import {ALL_FILTER} from 'gmp/models/filter';
 
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes.js';
-import {UNSET_VALUE} from 'web/utils/render.js';
+import EntityComponent from 'web/entity/component';
 
-import EntityComponent from 'web/entity/component.js';
+import CredentialsDialog from 'web/pages/credentials/dialog';
 
-import CredentialsDialog from 'web/pages/credentials/dialog.js';
+import PortListDialog from 'web/pages/portlists/dialog';
 
-import PortListDialog from 'web/pages/portlists/dialog.js';
+import PropTypes from 'web/utils/proptypes';
+import {UNSET_VALUE} from 'web/utils/render';
 
-import TargetDialog from './dialog.js';
+import TargetDialog from './dialog';
 
 import {
   useCreateCredential,

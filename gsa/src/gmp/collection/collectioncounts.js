@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../utils/identity';
+import {parseInt} from 'gmp/parser';
 
-import {parseInt} from '../parser.js';
+import {isDefined} from 'gmp/utils/identity';
 
 class CollectionCounts {
   /**

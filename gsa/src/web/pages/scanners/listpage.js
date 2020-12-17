@@ -21,12 +21,6 @@ import _ from 'gmp/locale';
 
 import {SCANNERS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntitiesPage from 'web/entities/page.js';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import ScannerIcon from 'web/components/icon/scannericon';
@@ -36,10 +30,16 @@ import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/scanners';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import ScannerComponent from './component';
 import ScannersTable, {SORT_FIELDS} from './table';

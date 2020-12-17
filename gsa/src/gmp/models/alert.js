@@ -16,13 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {hasValue, isDefined, isObject} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
-import {forEach, map} from 'gmp/utils/array';
+import Model, {parseModelFromElement} from 'gmp/model';
 
 import {parseYesNo, YES_VALUE} from 'gmp/parser';
 
-import Model, {parseModelFromElement} from 'gmp/model.js';
+import {forEach, map} from 'gmp/utils/array';
+import {hasValue, isDefined, isObject} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
+
 import Task from './task';
 import Filter from './filter';
 

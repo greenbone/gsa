@@ -24,7 +24,7 @@ import {Link as RLink} from 'react-router-dom';
 
 import {isDefined, isString} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 RLink.displayName = 'RouterLink';
 

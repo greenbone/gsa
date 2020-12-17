@@ -22,10 +22,11 @@ import _ from 'gmp/locale';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import CreateIcon from 'web/components/icon/newicon';
+
+import PropTypes from 'web/utils/proptypes';
 
 const EntityCreateIcon = ({
   capabilities,

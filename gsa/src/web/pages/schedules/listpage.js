@@ -21,12 +21,6 @@ import _ from 'gmp/locale';
 
 import {SCHEDULES_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import ScheduleIcon from 'web/components/icon/scheduleicon';
@@ -36,10 +30,16 @@ import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/schedules';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import ScheduleComponent from './component';
 import SchedulesTable, {SORT_FIELDS} from './table';

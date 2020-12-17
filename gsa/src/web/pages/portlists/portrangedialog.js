@@ -21,8 +21,6 @@ import _ from 'gmp/locale';
 
 import {parseInt} from 'gmp/parser';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
@@ -30,6 +28,8 @@ import Radio from 'web/components/form/radio';
 import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
 
 const convertPort = value => (value === '' ? value : parseInt(value));
 

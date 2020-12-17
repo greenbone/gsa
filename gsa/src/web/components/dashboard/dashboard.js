@@ -24,19 +24,12 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import Logger from 'gmp/log';
-
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
+
+import Logger from 'gmp/log';
 
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
-
-import {
-  loadSettings as loadSettingsAction,
-  saveSettings as saveSettingsAction,
-  setDashboardSettingDefaults,
-} from 'web/store/dashboard/settings/actions';
-import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import {
   convertDefaultDisplays,
   convertDisplaysToGridItems,
@@ -51,6 +44,13 @@ import ErrorBoundary from 'web/components/error/errorboundary';
 import Loading from 'web/components/loading/loading';
 
 import Grid from 'web/components/sortable/grid';
+
+import {
+  loadSettings as loadSettingsAction,
+  saveSettings as saveSettingsAction,
+  setDashboardSettingDefaults,
+} from 'web/store/dashboard/settings/actions';
+import DashboardSettings from 'web/store/dashboard/settings/selectors';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';

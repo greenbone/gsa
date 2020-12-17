@@ -19,10 +19,10 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import FormGroup from 'web/components/form/formgroup';
+import YesNoRadio from 'web/components/form/yesnoradio';
 
-import FormGroup from '../../components/form/formgroup.js';
-import YesNoRadio from '../../components/form/yesnoradio.js';
+import PropTypes from 'web/utils/proptypes';
 
 export const AddResultsToAssetsGroup = ({inAssets, onChange}) => {
   return (

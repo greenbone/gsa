@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 const InnerLink = ({children, to, ...props}) => {
   return (

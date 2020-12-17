@@ -22,9 +22,6 @@ import _ from 'gmp/locale';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import {getEntityType} from 'gmp/utils/entitytype';
 
-import PropTypes from 'web/utils/proptypes';
-import withUsername from 'web/utils/withUserName';
-
 import Comment from 'web/components/comment/comment';
 
 import Layout from 'web/components/layout/layout';
@@ -34,6 +31,9 @@ import DetailsLink from 'web/components/link/detailslink';
 import TableData from 'web/components/table/data';
 
 import ObserverIcon from 'web/entity/icon/observericon';
+
+import PropTypes from 'web/utils/proptypes';
+import withUsername from 'web/utils/withUserName';
 
 import {RowDetailsToggle} from './row';
 

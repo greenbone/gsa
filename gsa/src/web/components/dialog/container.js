@@ -20,6 +20,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import {isDefined} from 'gmp/utils/identity';
+
 import PropTypes from 'web/utils/proptypes';
 
 const StyledDialogContainer = styled.div`

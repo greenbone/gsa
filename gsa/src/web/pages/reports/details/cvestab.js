@@ -18,9 +18,6 @@
 
 import React from 'react';
 
-import CvesTable from './cvestable';
-import ReportEntitiesContainer from './reportentitiescontainer';
-
 import PropTypes from 'web/utils/proptypes';
 
 import {
@@ -28,6 +25,9 @@ import {
   makeCompareString,
   makeCompareSeverity,
 } from 'web/utils/sort';
+
+import CvesTable from './cvestable';
+import ReportEntitiesContainer from './reportentitiescontainer';
 
 const cvesSortFunctions = {
   cve: makeCompareString(entity => entity.cves.join(' ')),

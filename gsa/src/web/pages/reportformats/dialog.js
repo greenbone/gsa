@@ -20,10 +20,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined, isArray, hasValue} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
-
-import PropTypes from 'web/utils/proptypes';
+import {isDefined, isArray, hasValue} from 'gmp/utils/identity';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -44,6 +42,8 @@ import TableData from 'web/components/table/data';
 import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
+
+import PropTypes from 'web/utils/proptypes';
 
 const ReportFormatListParam = ({formats, idList, name, onValueChange}) => {
   const formatOptions = map(formats, format => ({

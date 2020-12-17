@@ -25,14 +25,6 @@ import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import Badge from 'web/components/badge/badge';
 
-import Divider from 'web/components/layout/divider';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import DetailsLink from 'web/components/link/detailslink';
-import Link from 'web/components/link/link';
-
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
@@ -40,6 +32,14 @@ import ManualIcon from 'web/components/icon/manualicon';
 import ReportIcon from 'web/components/icon/reporticon';
 import ResultIcon from 'web/components/icon/resulticon';
 import AuditIcon from 'web/components/icon/auditicon';
+
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+
+import DetailsLink from 'web/components/link/detailslink';
+import Link from 'web/components/link/link';
 
 import {
   NO_RELOAD,
@@ -70,6 +70,11 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
+import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
+import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
+import StartIcon from 'web/pages/tasks/icons/starticon';
+import StopIcon from 'web/pages/tasks/icons/stopicon';
+
 import {
   selector as permissionsSelector,
   loadEntities as loadPermissions,
@@ -81,11 +86,6 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
-
-import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
-import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
-import StartIcon from 'web/pages/tasks/icons/starticon';
-import StopIcon from 'web/pages/tasks/icons/stopicon';
 
 import AuditDetails from './details';
 import AuditStatus from 'web/pages/tasks/status';

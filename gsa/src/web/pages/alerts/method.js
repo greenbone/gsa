@@ -21,8 +21,6 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {hasValue} from 'gmp/utils/identity';
-
 import {
   EMAIL_NOTICE_ATTACH,
   EMAIL_NOTICE_INCLUDE,
@@ -40,18 +38,20 @@ import {
   METHOD_TYPE_VERINICE,
 } from 'gmp/models/alert';
 
-import PropTypes from 'web/utils/proptypes';
+import {hasValue} from 'gmp/utils/identity';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
 
 import DetailsLink from 'web/components/link/detailslink';
 
-import SimpleTable from 'web/components/table/simpletable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+import SimpleTable from 'web/components/table/simpletable';
 
 import {Col} from 'web/entity/page';
+
+import PropTypes from 'web/utils/proptypes';
 
 const Table = styled(SimpleTable)`
   margin-top: 5px;

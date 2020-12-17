@@ -21,19 +21,19 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-import {
-  LOG_VALUE,
-  translatedResultSeverityRiskFactor,
-} from 'web/utils/severity';
-
-import EntityBox from 'web/entity/box';
-
 import DetailsIcon from 'web/components/icon/detailsicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
 import DetailsLink from 'web/components/link/detailslink';
+
+import EntityBox from 'web/entity/box';
+
+import PropTypes from 'web/utils/proptypes';
+import {
+  LOG_VALUE,
+  translatedResultSeverityRiskFactor,
+} from 'web/utils/severity';
 
 const OverrideBox = ({override, detailsLink = true}) => {
   let severity;
@@ -61,9 +61,7 @@ const OverrideBox = ({override, detailsLink = true}) => {
         <DetailsIcon />
       </DetailsLink>
     </IconDivider>
-  ) : (
-    undefined
-  );
+  ) : undefined;
   return (
     <EntityBox
       title={_('Override from {{- severity}} to {{- newSeverity}}', {

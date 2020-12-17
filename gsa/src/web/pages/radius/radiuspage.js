@@ -41,9 +41,10 @@ import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 
-import RadiusDialog from './dialog';
 import useGmp from 'web/utils/useGmp';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+
+import RadiusDialog from './dialog';
 
 const ToolBarIcons = ({onOpenDialogClick}) => (
   <IconDivider>

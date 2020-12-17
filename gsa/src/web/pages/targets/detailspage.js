@@ -19,9 +19,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';

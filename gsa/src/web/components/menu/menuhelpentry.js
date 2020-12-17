@@ -20,11 +20,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import PropTypes from '../../utils/proptypes.js';
+import ManualLink from 'web/components/link/manuallink';
 
-import ManualLink from '../link/manuallink.js';
+import PropTypes from 'web/utils/proptypes';
 
-import MenuEntry from './menuentry.js';
+import MenuEntry from './menuentry';
 
 const StyledManualLink = styled(ManualLink)`
   height: 100%;

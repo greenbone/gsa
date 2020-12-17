@@ -26,8 +26,6 @@ import {isDefined} from 'gmp/utils/identity';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FileField from 'web/components/form/filefield';
@@ -38,6 +36,8 @@ import TextField from 'web/components/form/textfield';
 import NewIcon from 'web/components/icon/newicon';
 
 import Section from 'web/components/section/section';
+
+import PropTypes from 'web/utils/proptypes';
 
 import PortRangesTable from './portrangestable';
 

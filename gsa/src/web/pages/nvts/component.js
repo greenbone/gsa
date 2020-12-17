@@ -18,12 +18,12 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import EntityComponent from 'web/entity/component';
 
-import OverrideComponent from '../overrides/component.js';
-import NoteComponent from '../notes/component.js';
+import OverrideComponent from 'web/pages/overrides/component';
+import NoteComponent from 'web/pages/notes/component';
 
-import EntityComponent from '../../entity/component.js';
+import PropTypes from 'web/utils/proptypes';
 
 const NvtComponent = ({
   children,

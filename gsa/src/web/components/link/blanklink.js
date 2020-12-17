@@ -17,7 +17,7 @@
  */
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 const BlankLink = ({to, children, ...props}) => (
   <a

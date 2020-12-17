@@ -71,6 +71,12 @@ import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
+import NoteComponent from 'web/pages/notes/component';
+
+import OverrideComponent from 'web/pages/overrides/component';
+
+import TicketComponent from 'web/pages/tickets/component';
+
 import {loadEntity, selector} from 'web/store/entities/results';
 
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -82,12 +88,6 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import useGmp from 'web/utils/useGmp';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-
-import NoteComponent from '../notes/component';
-
-import OverrideComponent from '../overrides/component';
-
-import TicketComponent from '../tickets/component';
 
 import ResultDetails from './details';
 

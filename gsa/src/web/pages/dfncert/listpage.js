@@ -21,15 +21,15 @@ import _ from 'gmp/locale';
 
 import Filter, {DFNCERT_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import DashboardControls from 'web/components/dashboard/controls';
 
 import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import ManualIcon from 'web/components/icon/manualicon';
 
 import PageTitle from 'web/components/layout/pagetitle';
+
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import {
   loadEntities,

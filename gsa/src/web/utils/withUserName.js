@@ -17,7 +17,7 @@
  */
 import {connect} from 'react-redux';
 
-import {getUsername} from 'web/store/usersettings/selectors.js';
+import {getUsername} from 'web/store/usersettings/selectors';
 
 const withUsername = Component =>
   connect(rootState => ({

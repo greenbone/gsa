@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import FilterTerm from '../filterterm.js';
+import FilterTerm from '../filterterm';
 
 describe('FilterTerm equals', () => {
   test('should not equal object', () => {

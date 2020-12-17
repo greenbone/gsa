@@ -21,10 +21,10 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
+import {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
+
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-
-import {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
 
 import EntityComponent from 'web/entity/component';
 

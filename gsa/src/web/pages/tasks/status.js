@@ -19,15 +19,15 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {hasValue} from 'gmp/utils/identity';
-
 import {TASK_STATUS} from 'gmp/models/task';
 
-import PropTypes from 'web/utils/proptypes';
+import {hasValue} from 'gmp/utils/identity';
 
 import DetailsLink from 'web/components/link/detailslink';
 
 import StatusBar from 'web/components/bar/statusbar';
+
+import PropTypes from 'web/utils/proptypes';
 
 const StyledDetailsLink = styled(DetailsLink)`
   &:hover {

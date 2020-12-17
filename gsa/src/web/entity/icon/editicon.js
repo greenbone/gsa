@@ -19,12 +19,13 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {isDefined} from 'gmp/utils/identity';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
+import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
 import EditIcon from 'web/components/icon/editicon';
+
+import PropTypes from 'web/utils/proptypes';
 
 const EntityEditIcon = ({
   disabled,

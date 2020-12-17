@@ -23,9 +23,9 @@ import {useHistory, useParams} from 'react-router-dom';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import {hasValue} from 'gmp/utils/identity';
-
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
+
+import {hasValue} from 'gmp/utils/identity';
 
 import Badge from 'web/components/badge/badge';
 

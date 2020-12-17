@@ -19,12 +19,12 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import Divider from 'web/components/layout/divider';
+import withLayout from 'web/components/layout/withLayout';
+
 import PropTypes from 'web/utils/proptypes';
 
 import {StyledElement, StyledInput, StyledTitle} from './radio';
-
-import Divider from 'web/components/layout/divider';
-import withLayout from 'web/components/layout/withLayout';
 
 const convertChecked = (value, props) => {
   const {checkedValue, unCheckedValue} = props;

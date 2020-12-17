@@ -24,10 +24,6 @@ import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-import withPrefix from 'web/utils/withPrefix';
-
 import MultiSelect from 'web/components/form/multiselect';
 import Select from 'web/components/form/select';
 import FormGroup from 'web/components/form/formgroup';
@@ -38,6 +34,10 @@ import TextField from 'web/components/form/textfield';
 import NewIcon from 'web/components/icon/newicon';
 
 import {VFIRE_CALL_DESCRIPTION} from 'web/pages/alerts/dialog';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withPrefix from 'web/utils/withPrefix';
 
 const VFIRE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 

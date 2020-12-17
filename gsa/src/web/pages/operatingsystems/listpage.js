@@ -21,23 +21,23 @@ import _ from 'gmp/locale';
 
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-
-import Layout from 'web/components/layout/layout';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import OsSvgIcon from 'web/components/icon/ossvgicon';
 
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/operatingsystems';
+
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
+import PropTypes from 'web/utils/proptypes';
 
 import OsFilterDialog from './filterdialog';
 import OsTable from './table';

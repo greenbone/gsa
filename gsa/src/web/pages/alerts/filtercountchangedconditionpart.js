@@ -19,16 +19,16 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Divider from '../../components/layout/divider.js';
-import Layout from '../../components/layout/layout.js';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+import Radio from 'web/components/form/radio';
 
-import PropTypes from '../../utils/proptypes.js';
-import {renderSelectItems} from '../../utils/render.js';
-import withPrefix from '../../utils/withPrefix.js';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
-import Select from '../../components/form/select.js';
-import Spinner from '../../components/form/spinner.js';
-import Radio from '../../components/form/radio.js';
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withPrefix from 'web/utils/withPrefix';
 
 const VALUE = 'Filter count changed';
 

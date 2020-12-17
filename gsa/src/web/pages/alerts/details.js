@@ -19,8 +19,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {hasValue} from 'gmp/utils/identity';
-
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
@@ -28,8 +26,7 @@ import {
   DELTA_TYPE_REPORT,
 } from 'gmp/models/alert';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
+import {hasValue} from 'gmp/utils/identity';
 
 import Layout from 'web/components/layout/layout';
 import HorizontalSep from 'web/components/layout/horizontalsep';
@@ -42,6 +39,9 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import Condition from './condition';
 import Event from './event';

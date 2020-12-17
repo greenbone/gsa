@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 const TableRow = ({items = [], children, ...other}) => {
   const data = items.map((item, i) => {

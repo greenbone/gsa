@@ -22,12 +22,14 @@ import _ from 'gmp/locale';
 
 import {ospScannersFilter} from 'gmp/models/scanner';
 
+import {YES_VALUE} from 'gmp/parser';
+
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
 
-import {YES_VALUE} from 'gmp/parser';
+import EntityComponent from 'web/entity/component';
 
 import {
   useImportScanConfig,
@@ -40,8 +42,6 @@ import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 import readFileToText from 'web/utils/readFileToText';
-
-import EntityComponent from 'web/entity/component';
 
 import EditConfigFamilyDialog from './editconfigfamilydialog';
 import EditScanConfigDialog from './editdialog';

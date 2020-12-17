@@ -28,6 +28,20 @@ import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
+import HorizontalSep from 'web/components/layout/horizontalsep';
+import Layout from 'web/components/layout/layout';
+
+import DetailsLink from 'web/components/link/detailslink';
+
+import DetailsTable from 'web/components/table/detailstable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
+
+import DetailsBlock from 'web/entity/block';
+
+import {compareAlerts} from 'web/pages/tasks/details';
+
 import {
   loadEntity as loadSchedule,
   selector as scheduleSelector,
@@ -42,20 +56,6 @@ import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';
 import withGmp from 'web/utils/withGmp';
 import {renderYesNo} from 'web/utils/render';
-
-import HorizontalSep from 'web/components/layout/horizontalsep';
-import Layout from 'web/components/layout/layout';
-
-import DetailsLink from 'web/components/link/detailslink';
-
-import DetailsTable from 'web/components/table/detailstable';
-import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
-
-import DetailsBlock from 'web/entity/block';
-
-import {compareAlerts} from 'web/pages/tasks/details';
 
 class AuditDetails extends React.Component {
   componentDidMount() {
@@ -322,10 +322,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(AuditDetails);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -20,16 +20,13 @@ import React, {useEffect} from 'react';
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
-import {hasValue} from 'gmp/utils/identity';
-
-import {YES_VALUE} from 'gmp/parser';
-
 import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderYesNo} from 'web/utils/render';
+import {YES_VALUE} from 'gmp/parser';
+
+import {hasValue} from 'gmp/utils/identity';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
@@ -45,6 +42,9 @@ import DetailsBlock from 'web/entity/block';
 
 import {useLazyGetSchedule} from 'web/graphql/schedules';
 import {useLazyGetScanConfig} from 'web/graphql/scanconfigs';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
 
 export const compareAlerts = (alertA, alertB) => {
   const nameA = alertA.name.toLowerCase();

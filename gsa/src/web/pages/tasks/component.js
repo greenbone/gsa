@@ -25,7 +25,10 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
+import date from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
+import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
 import {TASK_STATUS} from 'gmp/models/task';
 
 import {NO_VALUE} from 'gmp/parser';
@@ -33,26 +36,6 @@ import {NO_VALUE} from 'gmp/parser';
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId, hasId} from 'gmp/utils/id';
-
-import date from 'gmp/models/date';
-import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
-import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
-
-import {
-  loadEntities as loadTagsAction,
-  selector as tagsSelector,
-} from 'web/store/entities/tags';
-
-import {getTimezone} from 'web/store/usersettings/selectors';
-
-import {loadUserSettingDefaults as loadUserSettingsDefaultsAction} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-
-import stateReducer, {updateState} from 'web/utils/stateReducer';
-import PropTypes from 'web/utils/proptypes';
-import useGmp from 'web/utils/useGmp';
-import {UNSET_VALUE} from 'web/utils/render';
-import useCapabilities from 'web/utils/useCapabilities';
 
 import EntityComponent from 'web/entity/component';
 
@@ -85,13 +68,29 @@ import {
 
 import ImportReportDialog from 'web/pages/reports/importdialog';
 
-import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
-import ModifyTaskWizard from 'web/wizard/modifytaskwizard';
-import TaskWizard from 'web/wizard/taskwizard';
-
 import ScheduleComponent from 'web/pages/schedules/component';
 import AlertComponent from 'web/pages/alerts/component';
 import TargetComponent from 'web/pages/targets/component';
+
+import {
+  loadEntities as loadTagsAction,
+  selector as tagsSelector,
+} from 'web/store/entities/tags';
+
+import {getTimezone} from 'web/store/usersettings/selectors';
+
+import {loadUserSettingDefaults as loadUserSettingsDefaultsAction} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+
+import stateReducer, {updateState} from 'web/utils/stateReducer';
+import PropTypes from 'web/utils/proptypes';
+import useGmp from 'web/utils/useGmp';
+import {UNSET_VALUE} from 'web/utils/render';
+import useCapabilities from 'web/utils/useCapabilities';
+
+import AdvancedTaskWizard from 'web/wizard/advancedtaskwizard';
+import ModifyTaskWizard from 'web/wizard/modifytaskwizard';
+import TaskWizard from 'web/wizard/taskwizard';
 
 import TaskDialog from './dialog';
 import ContainerTaskDialog from './containerdialog';

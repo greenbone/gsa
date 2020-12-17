@@ -26,13 +26,10 @@ import {
   ssh_credential_filter,
 } from 'gmp/models/credential';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
 
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
@@ -42,9 +39,10 @@ import Radio from 'web/components/form/radio';
 import Datepicker from 'web/components/form/datepicker';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
 
-import Layout from 'web/components/layout/layout';
-
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
 import reducer, {updateState} from 'web/utils/stateReducer';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import {WizardContent, WizardIcon} from './taskwizard';
 

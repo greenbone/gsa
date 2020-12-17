@@ -25,21 +25,21 @@ import {canAddDisplay} from 'web/components/dashboard/utils';
 
 import Layout from 'web/components/layout/layout';
 
-import {TASKS_DISPLAYS} from '../tasks/dashboard';
-import {REPORTS_DISPLAYS} from '../reports/dashboard';
-import {RESULTS_DISPLAYS} from '../results/dashboard';
-import {NOTES_DISPLAYS} from '../notes/dashboard';
-import {OVERRIDES_DISPLAYS} from '../overrides/dashboard';
-import {VULNS_DISPLAYS} from '../vulns/dashboard';
-import {HOSTS_DISPLAYS} from '../hosts/dashboard';
-import {OS_DISPLAYS} from '../operatingsystems/dashboard';
-import {NVTS_DISPLAYS} from '../nvts/dashboard';
-import {OVALDEF_DISPLAYS} from '../ovaldefs/dashboard';
-import {CERTBUND_DISPLAYS} from '../certbund/dashboard';
-import {CVES_DISPLAYS} from '../cves/dashboard';
-import {CPES_DISPLAYS} from '../cpes/dashboard';
-import {DFNCERT_DISPLAYS} from '../dfncert/dashboard';
-import {TICKETS_DISPLAYS} from '../tickets/dashboard';
+import {TASKS_DISPLAYS} from 'web/pages/tasks/dashboard';
+import {REPORTS_DISPLAYS} from 'web/pages/reports/dashboard';
+import {RESULTS_DISPLAYS} from 'web/pages/results/dashboard';
+import {NOTES_DISPLAYS} from 'web/pages/notes/dashboard';
+import {OVERRIDES_DISPLAYS} from 'web/pages/overrides/dashboard';
+import {VULNS_DISPLAYS} from 'web/pages/vulns/dashboard';
+import {HOSTS_DISPLAYS} from 'web/pages/hosts/dashboard';
+import {OS_DISPLAYS} from 'web/pages/operatingsystems/dashboard';
+import {NVTS_DISPLAYS} from 'web/pages/nvts/dashboard';
+import {OVALDEF_DISPLAYS} from 'web/pages/ovaldefs/dashboard';
+import {CERTBUND_DISPLAYS} from 'web/pages/certbund/dashboard';
+import {CVES_DISPLAYS} from 'web/pages/cves/dashboard';
+import {CPES_DISPLAYS} from 'web/pages/cpes/dashboard';
+import {DFNCERT_DISPLAYS} from 'web/pages/dfncert/dashboard';
+import {TICKETS_DISPLAYS} from 'web/pages/tickets/dashboard';
 
 import {DEFAULT_DISPLAYS} from './newdashboarddialog';
 

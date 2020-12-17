@@ -19,9 +19,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import ConfirmationDialog from '../dialog/confirmationdialog';
+import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
 
-import PropTypes from 'web/utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 import {withTextOnly} from './link';
 

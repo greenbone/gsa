@@ -23,8 +23,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {OSP_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
@@ -36,6 +34,8 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
+
+import PropTypes from 'web/utils/proptypes';
 
 const PolicyDetails = ({entity}) => {
   const {comment, policy_type, scanner, audits = []} = entity;

@@ -20,10 +20,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
-import {hasId} from 'gmp/utils/id';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
@@ -38,6 +34,12 @@ import {
   ACTIVE_YES_UNTIL_VALUE,
 } from 'gmp/models/override';
 
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import {hasId} from 'gmp/utils/id';
+
+import EntityComponent from 'web/entity/component';
+
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 import {
@@ -47,8 +49,6 @@ import {
   MEDIUM_VALUE,
   LOW_VALUE,
 } from 'web/utils/severity';
-
-import EntityComponent from 'web/entity/component';
 
 import OverrideDialog from './dialog';
 

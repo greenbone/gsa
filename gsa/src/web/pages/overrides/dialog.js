@@ -22,8 +22,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
-
 import {
   ANY,
   MANUAL,
@@ -39,7 +37,18 @@ import {
   RESULT_UUID,
 } from 'gmp/models/override';
 
+import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
+
 import DateTime from 'web/components/date/datetime';
+
+import SaveDialog from 'web/components/dialog/savedialog';
+
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import Spinner from 'web/components/form/spinner';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
+import Select from 'web/components/form/select';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
@@ -63,15 +72,6 @@ import {
   _HIGH,
   translatedResultSeverityRiskFactor,
 } from 'web/utils/severity';
-
-import SaveDialog from 'web/components/dialog/savedialog';
-
-import FormGroup from 'web/components/form/formgroup';
-import Radio from 'web/components/form/radio';
-import Spinner from 'web/components/form/spinner';
-import TextArea from 'web/components/form/textarea';
-import TextField from 'web/components/form/textfield';
-import Select from 'web/components/form/select';
 
 const OverrideDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,

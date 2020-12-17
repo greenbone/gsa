@@ -20,15 +20,12 @@ import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {shortDate} from 'gmp/locale/date';
 
-import {parseInt, parseDate} from 'gmp/parser';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import {parseInt, parseDate} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import LineChart, {lineDataPropType} from 'web/components/chart/line';
 
@@ -38,6 +35,9 @@ import withFilterSelection from 'web/components/dashboard/display/withFilterSele
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {totalCount} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
+
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 import {HostsModifiedLoader} from './loaders';
 

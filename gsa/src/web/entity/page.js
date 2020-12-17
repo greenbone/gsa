@@ -27,8 +27,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Toolbar from 'web/components/bar/toolbar';
 
 import ErrorMessage from 'web/components/error/errormessage';
@@ -38,6 +36,8 @@ import Layout from 'web/components/layout/layout';
 import Loading from 'web/components/loading/loading';
 
 import Section from 'web/components/section/section';
+
+import PropTypes from 'web/utils/proptypes';
 
 import EntityInfo from './info';
 

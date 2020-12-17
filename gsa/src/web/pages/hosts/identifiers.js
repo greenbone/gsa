@@ -24,8 +24,6 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import DateTime from 'web/components/date/datetime';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
@@ -40,6 +38,8 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
+
+import PropTypes from 'web/utils/proptypes';
 
 const Action = styled.a`
   cursor: pointer;

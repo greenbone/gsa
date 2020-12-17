@@ -28,9 +28,9 @@ import {
   setProperties,
   NO_VALUE,
   YES_VALUE,
-} from './parser.js';
+} from './parser';
 
-import Capabilities from './capabilities/capabilities.js';
+import Capabilities from './capabilities/capabilities';
 
 export const parseModelFromElement = (element, entityType) => {
   const m = new Model(entityType);

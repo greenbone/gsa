@@ -21,9 +21,6 @@ import _ from 'gmp/locale';
 
 import {TARGETS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import TargetIcon from 'web/components/icon/targeticon';
@@ -38,6 +35,9 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/targets';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import TargetsFilterDialog from './filterdialog';
 import TargetsTable from './table';

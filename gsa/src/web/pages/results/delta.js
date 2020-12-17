@@ -21,7 +21,7 @@ import _ from 'gmp/locale';
 
 import {Delta} from 'gmp/models/result';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 const ResultDelta = ({delta}) => {
   switch (delta.delta_type) {

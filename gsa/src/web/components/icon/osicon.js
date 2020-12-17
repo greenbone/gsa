@@ -22,14 +22,13 @@ import _ from 'gmp/locale';
 
 import {isDefined, isString} from 'gmp/utils/identity';
 
-import OperatingSystems from 'web/utils/os';
-
-import PropTypes from 'web/utils/proptypes';
-
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import Img from 'web/components/img/img';
+
+import OperatingSystems from 'web/utils/os';
+import PropTypes from 'web/utils/proptypes';
 
 const OsIcon = ({
   displayOsCpe = true,

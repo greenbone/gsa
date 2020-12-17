@@ -34,9 +34,9 @@ import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'
 
 import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay'; // eslint-disable-line max-len
 
-import {TaskStatusLoader} from './loaders';
+import Theme from 'web/utils/theme';
 
-import Theme from 'web/utils/theme.js';
+import {TaskStatusLoader} from './loaders';
 
 const red = interpolateHcl('#d62728', '#ff9896');
 const green = interpolateHcl('#2ca02c', '#98df8a');

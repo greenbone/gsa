@@ -26,9 +26,6 @@ import logger from 'gmp/log';
 
 import {ALL_FILTER} from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-import useGmp from 'web/utils/useGmp';
-
 import StartIcon from 'web/components/icon/starticon';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -48,6 +45,9 @@ import {
 } from 'web/store/usersettings/actions';
 
 import {getReportComposerDefaults} from 'web/store/usersettings/selectors';
+
+import PropTypes from 'web/utils/proptypes';
+import useGmp from 'web/utils/useGmp';
 import useCapabilities from 'web/utils/useCapabilities';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 

@@ -37,9 +37,6 @@ import {filter, map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FootNote from 'web/components/footnote/footnote';
@@ -56,9 +53,11 @@ import NewIcon from 'web/components/icon/newicon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import useGmp from 'web/utils/useGmp';
-
 import {getTimezone} from 'web/store/usersettings/selectors';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import useGmp from 'web/utils/useGmp';
 
 const AVAILABLE_SCANNER_TYPES = [
   OSP_SCANNER_TYPE,

@@ -21,9 +21,6 @@ import _ from 'gmp/locale';
 
 import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import DashboardControls from 'web/components/dashboard/controls';
 
 import Layout from 'web/components/layout/layout';
@@ -31,6 +28,9 @@ import PageTitle from 'web/components/layout/pagetitle';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
+
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import {
   loadEntities,

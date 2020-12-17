@@ -23,10 +23,11 @@ import FilterTerm from 'gmp/models/filter/filterterm';
 import {isDefined} from 'gmp/utils/identity';
 
 import DonutChart from 'web/components/chart/donut';
-import PropTypes from 'web/utils/proptypes';
 
-import DataDisplay from '../datadisplay';
-import {renderDonutChartIcons} from '../datadisplayicons';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons';
+
+import PropTypes from 'web/utils/proptypes';
 
 class StatusDisplay extends React.Component {
   constructor(...args) {
