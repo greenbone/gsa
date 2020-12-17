@@ -31,6 +31,8 @@ export const AUTH_METHOD_RADIUS = 'radius';
 export const ACCESS_ALLOW_ALL = '0';
 export const ACCESS_DENY_ALL = '1';
 
+const SUPERADMIN_ROLE_ID = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5';
+
 class User extends Model {
   static entityType = 'user';
 
@@ -84,6 +86,12 @@ class User extends Model {
     }
 
     return ret;
+  }
+
+  isSuperAdmin() {
+    return isDefined(
+      this.roles.find(element => element.id === SUPERADMIN_ROLE_ID),
+    );
   }
 }
 

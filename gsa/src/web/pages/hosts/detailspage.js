@@ -34,6 +34,7 @@ import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import OsIcon from 'web/components/icon/osicon';
 import ResultIcon from 'web/components/icon/resulticon';
+import TlsCertificateIcon from 'web/components/icon/tlscertificateicon';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -125,6 +126,13 @@ const ToolBarIcons = ({
           title={_('Results for this Host')}
         >
           <ResultIcon />
+        </Link>
+        <Link
+          to="tlsCertificates"
+          filter={'host_id=' + entity.id}
+          title={_('TLS Certificates for this Host')}
+        >
+          <TlsCertificateIcon />
         </Link>
       </IconDivider>
     </Divider>
