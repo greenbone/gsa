@@ -1588,7 +1588,11 @@ exec_gmp_post (http_connection_t *con, gsad_connection_info_t *con_info,
  * @param[in]  name    Name.
  * @param[in]  value   Value.
  */
+#if MHD_VERSION < 0x00097002
 int
+#else
+enum MHD_Result
+#endif
 params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
                 const char *value)
 {
@@ -2177,7 +2181,11 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
  *
  * @return MHD_NO in case of problems. MHD_YES if all is OK.
  */
-int
+#if MHD_VERSION < 0x00097002
+static int
+#else
+static enum MHD_Result
+#endif
 redirect_handler (void *cls, struct MHD_Connection *connection, const char *url,
                   const char *method, const char *version,
                   const char *upload_data, size_t *upload_data_size,
@@ -2513,9 +2521,17 @@ mhd_logger (void *arg, const char *fmt, va_list ap)
 
 static struct MHD_Daemon *
 start_unix_http_daemon (const char *unix_socket_path,
+#if MHD_VERSION < 0x00097002
                         int handler (void *, struct MHD_Connection *,
                                      const char *, const char *, const char *,
                                      const char *, size_t *, void **),
+#else
+                        enum MHD_Result handler (void *,
+                                                 struct MHD_Connection *,
+                                                 const char *, const char *,
+                                                 const char *, const char *,
+                                                 size_t *, void **),
+#endif
                         http_handler_t *http_handlers)
 {
   struct sockaddr_un addr;
@@ -2569,9 +2585,16 @@ start_unix_http_daemon (const char *unix_socket_path,
 
 static struct MHD_Daemon *
 start_http_daemon (int port,
+#if MHD_VERSION < 0x00097002
                    int handler (void *, struct MHD_Connection *, const char *,
                                 const char *, const char *, const char *,
                                 size_t *, void **),
+#else
+                   enum MHD_Result handler (void *, struct MHD_Connection *,
+                                            const char *, const char *,
+                                            const char *, const char *,
+                                            size_t *, void **),
+#endif
                    http_handler_t *http_handlers,
                    struct sockaddr_storage *address)
 {

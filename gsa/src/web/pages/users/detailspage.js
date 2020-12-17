@@ -81,7 +81,11 @@ const ToolBarIcons = ({
     </IconDivider>
     <IconDivider>
       <CreateIcon entity={entity} onClick={onUserCreateClick} />
-      <CloneIcon entity={entity} onClick={onUserCloneClick} />
+      <CloneIcon
+        entity={entity}
+        mayClone={!entity.isSuperAdmin()}
+        onClick={onUserCloneClick}
+      />
       <EditIcon entity={entity} onClick={onUserEditClick} />
       <DeleteIcon entity={entity} onClick={onUserDeleteClick} />
       <ExportIcon
