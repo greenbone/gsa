@@ -198,7 +198,11 @@ const CvssCalculator = ({gmp, onInteraction, ...props}) => {
 
   return (
     <Layout flex="column">
-      <ToolBarIcons />
+      <span>
+        {' '}
+        {/* span prevents Toolbar from growing */}
+        <ToolBarIcons />
+      </span>
       <Section
         img={<CvssIcon size="large" />}
         title={_('CVSSv2 Base Score Calculator')}
@@ -370,10 +374,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    undefined,
-    mapDispatchToProps,
-  ),
+  connect(undefined, mapDispatchToProps),
 )(CvssCalculator);
 
 // vim: set ts=2 sw=2 tw=80:
