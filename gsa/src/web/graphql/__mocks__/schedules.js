@@ -38,6 +38,25 @@ DTSTART:20190716T040000
 END:VEVENT
 END:VCALENDAR
 `,
+  timezone: 'UTC',
+  userTags: {
+    count: 1,
+    tags: [
+      {
+        id: '123',
+        name: 'schedule:unnamed',
+        value: null,
+        comment: null,
+      },
+    ],
+  },
+  permissions: [{name: 'Everything'}],
+  owner: 'admin',
+  comment: null,
+  writable: true,
+  inUse: false,
+  creationTime: '2020-08-06T11:34:15+00:00',
+  modificationTime: '2020-08-06T11:34:15+00:00',
 });
 
 const schedule2 = deepFreeze({
@@ -53,6 +72,15 @@ DTSTART:20190716T040000
 END:VEVENT
 END:VCALENDAR
 `,
+  timezone: 'UTC',
+  userTags: null,
+  permissions: null,
+  owner: 'admin',
+  comment: null,
+  writable: true,
+  inUse: false,
+  creationTime: '2020-08-06T11:34:15+00:00',
+  modificationTime: '2020-08-06T11:34:15+00:00',
 });
 
 const schedule3 = deepFreeze({
@@ -68,6 +96,15 @@ DTSTART:20190716T040000
 END:VEVENT
 END:VCALENDAR
 `,
+  timezone: 'UTC',
+  userTags: null,
+  permissions: null,
+  owner: 'admin',
+  comment: null,
+  writable: true,
+  inUse: false,
+  creationTime: '2020-08-06T11:34:15+00:00',
+  modificationTime: '2020-08-06T11:34:15+00:00',
 });
 
 const schedule4 = deepFreeze({
@@ -83,6 +120,15 @@ DTSTART:20190716T040000
 END:VEVENT
 END:VCALENDAR
 `,
+  timezone: 'UTC',
+  userTags: null,
+  permissions: null,
+  owner: 'admin',
+  comment: null,
+  writable: true,
+  inUse: false,
+  creationTime: '2020-08-06T11:34:15+00:00',
+  modificationTime: '2020-08-06T11:34:15+00:00',
 });
 
 const mockSchedules = {

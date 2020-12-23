@@ -31,9 +31,28 @@ import {isDefined} from 'gmp/utils/identity';
 export const GET_SCHEDULE = gql`
   query Schedule($id: UUID!) {
     schedule(id: $id) {
-      name
       id
+      name
       icalendar
+      timezone
+      owner
+      comment
+      writable
+      inUse
+      creationTime
+      modificationTime
+      permissions {
+        name
+      }
+      userTags {
+        count
+        tags {
+          name
+          id
+          value
+          comment
+        }
+      }
     }
   }
 `;
@@ -72,9 +91,28 @@ export const GET_SCHEDULES = gql`
     ) {
       edges {
         node {
-          name
           id
+          name
           icalendar
+          timezone
+          owner
+          comment
+          writable
+          inUse
+          creationTime
+          modificationTime
+          permissions {
+            name
+          }
+          userTags {
+            count
+            tags {
+              name
+              id
+              value
+              comment
+            }
+          }
         }
       }
       counts {
