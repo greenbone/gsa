@@ -207,4 +207,119 @@ export const useModifySchedule = options => {
   return [modifySchedule, data];
 };
 
+export const DELETE_SCHEDULES_BY_IDS = gql`
+  mutation deleteSchedulesByIds($ids: [UUID]!) {
+    deleteSchedulesByIds(ids: $ids) {
+      ok
+    }
+  }
+`;
+
+export const DELETE_SCHEDULES_BY_FILTER = gql`
+  mutation deleteSchedulesByFilter($filterString: String!) {
+    deleteSchedulesByFilter(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
+export const EXPORT_SCHEDULES_BY_FILTER = gql`
+  mutation exportSchedulesByFilter($filterString: String) {
+    exportSchedulesByFilter(filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
+export const EXPORT_SCHEDULES_BY_IDS = gql`
+  mutation exportSchedulesByIds($ids: [UUID]!) {
+    exportSchedulesByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useDeleteSchedule = options => {
+  const [queryDeleteSchedule, data] = useMutation(
+    DELETE_SCHEDULES_BY_IDS,
+    options,
+  );
+  const deleteSchedule = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryDeleteSchedule({...options, variables: {ids: [id]}}),
+    [queryDeleteSchedule],
+  );
+  return [deleteSchedule, data];
+};
+
+export const useExportSchedulesByFilter = options => {
+  const [queryExportSchedulesByFilter] = useMutation(
+    EXPORT_SCHEDULES_BY_FILTER,
+    options,
+  );
+  const exportSchedulesByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportSchedulesByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportSchedulesByFilter, options],
+  );
+
+  return exportSchedulesByFilter;
+};
+
+export const useExportSchedulesByIds = options => {
+  const [queryExportSchedulesByIds] = useMutation(
+    EXPORT_SCHEDULES_BY_IDS,
+    options,
+  );
+
+  const exportSchedulesByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    scheduleIds =>
+      queryExportSchedulesByIds({
+        ...options,
+        variables: {
+          ids: scheduleIds,
+        },
+      }),
+    [queryExportSchedulesByIds, options],
+  );
+
+  return exportSchedulesByIds;
+};
+
+export const useDeleteSchedulesByIds = options => {
+  const [queryDeleteSchedulesByIds, data] = useMutation(
+    DELETE_SCHEDULES_BY_IDS,
+    options,
+  );
+  const deleteSchedulesByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteSchedulesByIds({...options, variables: {ids}}),
+    [queryDeleteSchedulesByIds],
+  );
+  return [deleteSchedulesByIds, data];
+};
+
+export const useDeleteSchedulesByFilter = options => {
+  const [queryDeleteSchedulesByFilter, data] = useMutation(
+    DELETE_SCHEDULES_BY_FILTER,
+    options,
+  );
+  const deleteSchedulesByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filterString, options) =>
+      queryDeleteSchedulesByFilter({
+        ...options,
+        variables: {filterString},
+      }),
+    [queryDeleteSchedulesByFilter],
+  );
+  return [deleteSchedulesByFilter, data];
+};
 // vim: set ts=2 sw=2 tw=80:

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -39,11 +39,22 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
+import {
+  BulkTagComponent,
+  useBulkDeleteEntities,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions';
 import EntitiesPage from 'web/entities/page';
 import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 import usePagination from 'web/entities/usePagination';
 
-import {useLazyGetSchedules} from 'web/graphql/schedules';
+import {
+  useLazyGetSchedules,
+  useExportSchedulesByFilter,
+  useExportSchedulesByIds,
+  useDeleteSchedulesByIds,
+  useDeleteSchedulesByFilter,
+} from 'web/graphql/schedules';
 
 import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
@@ -108,6 +119,7 @@ const SchedulesPage = () => {
     filter,
     changeFilter,
   );
+  const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
 
   // Schedule list state variables and methods
   const [
@@ -122,6 +134,15 @@ const SchedulesPage = () => {
     timeoutFunc,
   );
 
+  const exportSchedulesByFilter = useExportSchedulesByFilter();
+  const exportSchedulesByIds = useExportSchedulesByIds();
+  const bulkExportSchedules = useBulkExportEntities();
+
+  const [deleteSchedulesByIds] = useDeleteSchedulesByIds();
+  const [deleteSchedulesByFilter] = useDeleteSchedulesByFilter();
+
+  const bulkDeleteSchedules = useBulkDeleteEntities();
+
   // Pagination methods
   const [getFirst, getLast, getNext, getPrevious] = usePagination({
     simpleFilter,
@@ -129,6 +150,44 @@ const SchedulesPage = () => {
     pageInfo,
     refetch,
   });
+
+  // Bulk action methods
+  const openTagsDialog = () => {
+    renewSessionTimeout();
+    setTagsDialogVisible(true);
+  };
+
+  const closeTagsDialog = () => {
+    renewSessionTimeout();
+    setTagsDialogVisible(false);
+  };
+
+  const handleBulkDeleteSchedules = () => {
+    return bulkDeleteSchedules({
+      selectionType,
+      filter,
+      selected,
+      entities: schedules,
+      deleteByIdsFunc: deleteSchedulesByIds,
+      deleteByFilterFunc: deleteSchedulesByFilter,
+      onDeleted: refetch,
+      onError: showError,
+    });
+  };
+
+  const handleBulkExportSchedules = () => {
+    return bulkExportSchedules({
+      entities: schedules,
+      selected,
+      filter,
+      resourceType: 'schedules',
+      selectionType,
+      exportByFilterFunc: exportSchedulesByFilter,
+      exportByIdsFunc: exportSchedulesByIds,
+      onDownload: handleDownload,
+      onError: showError,
+    });
+  };
 
   // Side effects
   useEffect(() => {
@@ -193,6 +252,8 @@ const SchedulesPage = () => {
             title={_('Schedules')}
             toolBarIcons={ToolBarIcons}
             onChanged={refetch}
+            onDeleteBulk={handleBulkDeleteSchedules}
+            onDownloadBulk={handleBulkExportSchedules}
             onDownloaded={handleDownload}
             onEntitySelected={select}
             onEntityDeselected={deselect}
@@ -214,12 +275,23 @@ const SchedulesPage = () => {
             onNextClick={getNext}
             onPreviousClick={getPrevious}
             onSelectionTypeChange={changeSelectionType}
+            onTagsBulk={openTagsDialog}
           />
           <DialogNotification
             {...notificationDialogState}
             onCloseClick={closeNotificationDialog}
           />
           <Download ref={downloadRef} />
+          {tagsDialogVisible && (
+            <BulkTagComponent
+              entities={schedules}
+              selected={selected}
+              filter={filter}
+              selectionType={selectionType}
+              entitiesCounts={counts}
+              onClose={closeTagsDialog}
+            />
+          )}
         </React.Fragment>
       )}
     </ScheduleComponent>
