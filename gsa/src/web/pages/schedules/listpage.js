@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -54,6 +54,8 @@ import {
   useExportSchedulesByIds,
   useDeleteSchedulesByIds,
   useDeleteSchedulesByFilter,
+  useCloneSchedule,
+  useDeleteSchedule,
 } from 'web/graphql/schedules';
 
 import PropTypes from 'web/utils/proptypes';
@@ -67,6 +69,7 @@ import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import ScheduleComponent from './component';
 import SchedulesTable, {SORT_FIELDS} from './table';
+import useExportEntity from 'web/entity/useExportEntity';
 
 export const ToolBarIcons = ({onScheduleCreateClick}) => {
   const capabilities = useCapabilities();
@@ -127,12 +130,13 @@ const SchedulesPage = () => {
     {counts, schedules, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetSchedules();
 
-  const timeoutFunc = useEntitiesReloadInterval(schedules);
+  const exportEntity = useExportEntity();
 
-  const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetch,
-    timeoutFunc,
-  );
+  const [cloneSchedule] = useCloneSchedule();
+  const [deleteSchedule] = useDeleteSchedule();
+  const exportSchedule = useExportSchedulesByIds();
+
+  const timeoutFunc = useEntitiesReloadInterval(schedules);
 
   const exportSchedulesByFilter = useExportSchedulesByFilter();
   const exportSchedulesByIds = useExportSchedulesByIds();
@@ -143,6 +147,11 @@ const SchedulesPage = () => {
 
   const bulkDeleteSchedules = useBulkDeleteEntities();
 
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetch,
+    timeoutFunc,
+  );
+
   // Pagination methods
   const [getFirst, getLast, getNext, getPrevious] = usePagination({
     simpleFilter,
@@ -150,6 +159,26 @@ const SchedulesPage = () => {
     pageInfo,
     refetch,
   });
+
+  // Schedule methods
+  const handleDownloadSchedule = exportedSchedule => {
+    exportEntity({
+      entity: exportedSchedule,
+      exportFunc: exportSchedule,
+      resourceType: 'schedules',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  const handleCloneSchedule = useCallback(
+    schedule => cloneSchedule(schedule.id).then(refetch, showError),
+    [cloneSchedule, refetch, showError],
+  );
+  const handleDeleteSchedule = useCallback(
+    schedule => deleteSchedule(schedule.id).then(refetch, showError),
+    [deleteSchedule, refetch, showError],
+  );
 
   // Bulk action methods
   const openTagsDialog = () => {
@@ -231,7 +260,7 @@ const SchedulesPage = () => {
       onDownloadError={showError}
       onInteraction={renewSessionTimeout}
     >
-      {({clone, create, delete: delete_func, download, edit, save}) => (
+      {({create, edit, save}) => (
         <React.Fragment>
           <PageTitle title={_('Schedules')} />
           <EntitiesPage
@@ -263,10 +292,10 @@ const SchedulesPage = () => {
             onFilterReset={resetFilter}
             onFilterRemoved={removeFilter}
             onInteraction={renewSessionTimeout}
-            onScheduleCloneClick={clone}
+            onScheduleCloneClick={handleCloneSchedule}
             onScheduleCreateClick={create}
-            onScheduleDeleteClick={delete_func}
-            onScheduleDownloadClick={download}
+            onScheduleDeleteClick={handleDeleteSchedule}
+            onScheduleDownloadClick={handleDownloadSchedule}
             onScheduleEditClick={edit}
             onScheduleSaveClick={save}
             onSortChange={handleSortChange}

@@ -322,4 +322,29 @@ export const useDeleteSchedulesByFilter = options => {
   );
   return [deleteSchedulesByFilter, data];
 };
+
+export const CLONE_SCHEDULE = gql`
+  mutation cloneSchedule($id: UUID!) {
+    cloneSchedule(id: $id) {
+      id
+    }
+  }
+`;
+
+export const useCloneSchedule = options => {
+  const [queryCloneSchedule, {data, ...other}] = useMutation(
+    CLONE_SCHEDULE,
+    options,
+  );
+  const cloneSchedule = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryCloneSchedule({...options, variables: {id}}).then(
+        result => result.data.cloneSchedule.id,
+      ),
+    [queryCloneSchedule],
+  );
+  const scheduleId = data?.cloneSchedule?.id;
+  return [cloneSchedule, {...other, id: scheduleId}];
+};
 // vim: set ts=2 sw=2 tw=80:
