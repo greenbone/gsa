@@ -43,19 +43,10 @@ window.URL.createObjectURL = jest.fn();
 const schedule = Schedule.fromElement({
   comment: 'hello world',
   creation_time: '2020-12-23T14:14:11Z',
-  icalendar: `BEGIN:VCALENDAR VERSION:2.0
-    PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 
-     21.4.0~dev1~git-0f6ee4c-master//EN
-    BEGIN:VEVENT
-    DTSTART:20201223T150000Z
-    DURATION:PT0S
-    UID:6e5ebd05-87e5-4478-b9cf-756246bd772a
-    DTSTAMP:20201223T141420Z
-    END:VEVENT
-    END:VCALENDAR
-    `,
+  icalendar:
+    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:3dfd6e6f-4e79-4f18-a5c2-adb3fca56bd3\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
   in_use: 0,
-  modification_time: '2020-12-23T14:14:21Z',
+  modification_time: '2021-01-04T11:54:12Z',
   name: 'schedule 1',
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},

@@ -1461,21 +1461,21 @@ exports[`SchedulePage tests should render full SchedulePage 1`] = `
                     <div
                       class="c44"
                     >
-                      -
+                      Mon, Jan 4, 2021 11:54 AM UTC
                     </div>
                   </td>
                   <td>
                     <div
                       class="c44"
                     >
-                      -
+                      Mon, Jan 11, 2021 11:54 AM UTC
                     </div>
                   </td>
                   <td>
                     <div
                       class="c44"
                     >
-                      Once
+                      Every week
                     </div>
                   </td>
                   <td>
