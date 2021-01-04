@@ -136,23 +136,22 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    expect(baseElement).toMatchSnapshot();
-
-    const icons = screen.getAllByTestId('svg-icon');
     const inputs = baseElement.querySelectorAll('input');
     const selects = screen.getAllByTestId('select-selected-value');
 
     // Toolbar Icons
-    expect(icons[0]).toHaveAttribute('title', 'Help: Schedules');
-    expect(icons[1]).toHaveTextContent('new.svg');
+    expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('New Schedule')[0]).toBeInTheDocument();
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[2]).toHaveAttribute('title', 'Update Filter');
-    expect(icons[3]).toHaveAttribute('title', 'Remove Filter');
-    expect(icons[4]).toHaveAttribute('title', 'Reset to Default Filter');
-    expect(icons[5]).toHaveAttribute('title', 'Help: Powerfilter');
-    expect(icons[6]).toHaveAttribute('title', 'Edit Filter');
+    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Reset to Default Filter')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
     expect(selects[0]).toHaveTextContent('--');
 
@@ -174,10 +173,12 @@ describe('SchedulePage tests', () => {
     expect(row[1]).toHaveTextContent('Mon, Jan 11, 2021 11:54 AM UTC');
     expect(row[1]).toHaveTextContent('Entire Operation');
 
-    expect(icons[13]).toHaveAttribute('title', 'Move Schedule to trashcan');
-    expect(icons[14]).toHaveAttribute('title', 'Edit Schedule');
-    expect(icons[15]).toHaveAttribute('title', 'Clone Schedule');
-    expect(icons[16]).toHaveAttribute('title', 'Export Schedule');
+    expect(
+      screen.getAllByTitle('Move Schedule to trashcan')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Edit Schedule')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Clone Schedule')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Export Schedule')[0]).toBeInTheDocument();
   });
   test('should allow to bulk action on page contents', async () => {
     const deleteByFilter = jest.fn().mockResolvedValue({
@@ -234,22 +235,21 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    const icons = screen.getAllByTestId('svg-icon');
-
     // export page contents
-    expect(icons[19]).toHaveAttribute('title', 'Export page contents');
-    fireEvent.click(icons[19]);
+    const exportIcon = screen.getAllByTitle('Export page contents');
+
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
 
     await wait();
 
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
-    expect(icons[18]).toHaveAttribute(
-      'title',
-      'Move page contents to trashcan',
-    );
-    fireEvent.click(icons[18]);
+    const deleteIcon = screen.getAllByTitle('Move page contents to trashcan');
+
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
 
     await wait();
 
@@ -326,19 +326,21 @@ describe('SchedulePage tests', () => {
     fireEvent.click(inputs[1]);
     await wait();
 
-    const icons = screen.getAllByTestId('svg-icon');
-
     // export selected schedule
-    expect(icons[15]).toHaveAttribute('title', 'Export selection');
-    fireEvent.click(icons[15]);
+    const exportIcon = screen.getAllByTitle('Export selection');
+
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
 
     await wait();
 
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected schedule to trashcan
-    expect(icons[14]).toHaveAttribute('title', 'Move selection to trashcan');
-    fireEvent.click(icons[14]);
+    const deleteIcon = screen.getAllByTitle('Move selection to trashcan');
+
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
 
     await wait();
 
@@ -411,19 +413,21 @@ describe('SchedulePage tests', () => {
     const selected = screen.getAllByTestId('select-selected-value');
     expect(selected[1]).toHaveTextContent('Apply to all filtered');
 
-    const icons = screen.getAllByTestId('svg-icon');
-
     // export all filtered schedules
-    expect(icons[19]).toHaveAttribute('title', 'Export all filtered');
-    fireEvent.click(icons[19]);
+    const exportIcon = screen.getAllByTitle('Export all filtered');
+
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
 
     await wait();
 
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered schedules to trashcan
-    expect(icons[18]).toHaveAttribute('title', 'Move all filtered to trashcan');
-    fireEvent.click(icons[18]);
+    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan');
+
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
 
     await wait();
 
@@ -445,15 +449,14 @@ describe('SchedulePage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />,
     );
     expect(element).toMatchSnapshot();
 
-    const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: Schedules');
+    expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-schedules',
@@ -473,15 +476,14 @@ describe('SchedulePage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
-      <ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />,
-    );
+    render(<ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />);
 
-    const icons = getAllByTestId('svg-icon');
+    const newIcon = screen.getAllByTitle('New Schedule');
 
-    fireEvent.click(icons[1]);
+    expect(newIcon[0]).toBeInTheDocument();
+
+    fireEvent.click(newIcon[0]);
     expect(handleScheduleCreateClick).toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'New Schedule');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
@@ -501,7 +503,7 @@ describe('SchedulePage ToolBarIcons test', () => {
       <ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />,
     );
 
-    const icons = queryAllByTestId('svg-icon');
+    const icons = queryAllByTestId('svg-icon'); // this test is probably approppriate to keep in the old format
     expect(icons.length).toBe(1);
     expect(icons[0]).toHaveAttribute('title', 'Help: Schedules');
   });
