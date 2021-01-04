@@ -452,7 +452,6 @@ describe('SchedulePage ToolBarIcons test', () => {
     const {element} = render(
       <ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />,
     );
-    expect(element).toMatchSnapshot();
 
     const links = element.querySelectorAll('a');
 
