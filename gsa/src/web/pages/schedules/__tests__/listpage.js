@@ -31,13 +31,7 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-import {
-  rendererWith,
-  waitFor,
-  fireEvent,
-  screen,
-  wait,
-} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import SchedulePage, {ToolBarIcons} from '../listpage';
 
@@ -140,7 +134,7 @@ describe('SchedulePage tests', () => {
 
     const {baseElement} = render(<SchedulePage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
     expect(baseElement).toMatchSnapshot();
 
