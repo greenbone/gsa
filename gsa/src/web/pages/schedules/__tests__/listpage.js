@@ -16,21 +16,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {act} from 'react-dom/test-utils';
-
-import {setLocale} from 'gmp/locale/lang';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
 
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {entitiesLoadingActions} from 'web/store/entities/schedules';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
+
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
 import {
   rendererWith,
