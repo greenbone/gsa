@@ -32,7 +32,13 @@ import {entitiesLoadingActions} from 'web/store/entities/schedules';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {
+  rendererWith,
+  waitFor,
+  fireEvent,
+  screen,
+  wait,
+} from 'web/utils/testing';
 
 import SchedulePage, {ToolBarIcons} from '../listpage';
 
@@ -138,9 +144,49 @@ describe('SchedulePage tests', () => {
     await waitFor(() => baseElement.querySelectorAll('table'));
 
     expect(baseElement).toMatchSnapshot();
-  });
 
-  test('should call commands for bulk actions', async () => {
+    const icons = screen.getAllByTestId('svg-icon');
+    const inputs = baseElement.querySelectorAll('input');
+    const selects = screen.getAllByTestId('select-selected-value');
+
+    // Toolbar Icons
+    expect(icons[0]).toHaveAttribute('title', 'Help: Schedules');
+    expect(icons[1]).toHaveTextContent('new.svg');
+
+    // Powerfilter
+    expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
+    expect(icons[2]).toHaveAttribute('title', 'Update Filter');
+    expect(icons[3]).toHaveAttribute('title', 'Remove Filter');
+    expect(icons[4]).toHaveAttribute('title', 'Reset to Default Filter');
+    expect(icons[5]).toHaveAttribute('title', 'Help: Powerfilter');
+    expect(icons[6]).toHaveAttribute('title', 'Edit Filter');
+    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
+    expect(selects[0]).toHaveTextContent('--');
+
+    // Table
+    const header = baseElement.querySelectorAll('th');
+
+    expect(header[0]).toHaveTextContent('Name');
+    expect(header[1]).toHaveTextContent('First Run');
+    expect(header[2]).toHaveTextContent('Next Run');
+    expect(header[3]).toHaveTextContent('Recurrence');
+    expect(header[4]).toHaveTextContent('Duration');
+    expect(header[5]).toHaveTextContent('Actions');
+
+    const row = baseElement.querySelectorAll('tr');
+
+    expect(row[1]).toHaveTextContent('schedule 1');
+    expect(row[1]).toHaveTextContent('(hello world)');
+    expect(row[1]).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
+    expect(row[1]).toHaveTextContent('Mon, Jan 11, 2021 11:54 AM UTC');
+    expect(row[1]).toHaveTextContent('Entire Operation');
+
+    expect(icons[13]).toHaveAttribute('title', 'Move Schedule to trashcan');
+    expect(icons[14]).toHaveAttribute('title', 'Edit Schedule');
+    expect(icons[15]).toHaveAttribute('title', 'Clone Schedule');
+    expect(icons[16]).toHaveAttribute('title', 'Export Schedule');
+  });
+  test('should allow to bulk action on page contents', async () => {
     const deleteByFilter = jest.fn().mockResolvedValue({
       foo: 'bar',
     });
@@ -191,24 +237,204 @@ describe('SchedulePage tests', () => {
       entitiesLoadingActions.success([schedule], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<SchedulePage />);
+    render(<SchedulePage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    const icons = getAllByTestId('svg-icon');
+    const icons = screen.getAllByTestId('svg-icon');
 
-    await act(async () => {
-      expect(icons[18]).toHaveAttribute(
-        'title',
-        'Move page contents to trashcan',
-      );
-      fireEvent.click(icons[18]);
-      expect(deleteByFilter).toHaveBeenCalled();
+    // export page contents
+    expect(icons[19]).toHaveAttribute('title', 'Export page contents');
+    fireEvent.click(icons[19]);
 
-      expect(icons[19]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[19]);
-      expect(exportByFilter).toHaveBeenCalled();
+    await wait();
+
+    expect(exportByFilter).toHaveBeenCalled();
+
+    // move page contents to trashcan
+    expect(icons[18]).toHaveAttribute(
+      'title',
+      'Move page contents to trashcan',
+    );
+    fireEvent.click(icons[18]);
+
+    await wait();
+
+    expect(deleteByFilter).toHaveBeenCalled();
+  });
+
+  test('should allow to bulk action on selected schedules', async () => {
+    const deleteByIds = jest.fn().mockResolvedValue({
+      foo: 'bar',
     });
+
+    const exportByIds = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      schedules: {
+        get: getSchedules,
+        delete: deleteByIds,
+        export: exportByIds,
+      },
+      filters: {
+        get: getFilters,
+      },
+      settings: {manualUrl, reloadInterval},
+      user: {renewSession, currentSettings, getSetting: getSetting},
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('schedule', defaultSettingfilter),
+    );
+
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([schedule], filter, loadedFilter, counts),
+    );
+
+    const {element} = render(<SchedulePage />);
+
+    await wait();
+
+    const selectFields = screen.getAllByTestId('select-open-button');
+    fireEvent.click(selectFields[1]);
+
+    const selectItems = screen.getAllByTestId('select-item');
+    fireEvent.click(selectItems[1]);
+
+    const selected = screen.getAllByTestId('select-selected-value');
+    expect(selected[1]).toHaveTextContent('Apply to selection');
+
+    const inputs = element.querySelectorAll('input');
+
+    // select an schedule
+    fireEvent.click(inputs[1]);
+    await wait();
+
+    const icons = screen.getAllByTestId('svg-icon');
+
+    // export selected schedule
+    expect(icons[15]).toHaveAttribute('title', 'Export selection');
+    fireEvent.click(icons[15]);
+
+    await wait();
+
+    expect(exportByIds).toHaveBeenCalled();
+
+    // move selected schedule to trashcan
+    expect(icons[14]).toHaveAttribute('title', 'Move selection to trashcan');
+    fireEvent.click(icons[14]);
+
+    await wait();
+
+    expect(deleteByIds).toHaveBeenCalled();
+  });
+
+  test('should allow to bulk action on filtered schedules', async () => {
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      schedules: {
+        get: getSchedules,
+        deleteByFilter,
+        exportByFilter,
+      },
+      filters: {
+        get: getFilters,
+      },
+      settings: {manualUrl, reloadInterval},
+      user: {renewSession, currentSettings, getSetting: getSetting},
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('schedule', defaultSettingfilter),
+    );
+
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([schedule], filter, loadedFilter, counts),
+    );
+
+    render(<SchedulePage />);
+
+    await wait();
+
+    const selectFields = screen.getAllByTestId('select-open-button');
+    fireEvent.click(selectFields[1]);
+
+    const selectItems = screen.getAllByTestId('select-item');
+    fireEvent.click(selectItems[2]);
+
+    await wait();
+
+    const selected = screen.getAllByTestId('select-selected-value');
+    expect(selected[1]).toHaveTextContent('Apply to all filtered');
+
+    const icons = screen.getAllByTestId('svg-icon');
+
+    // export all filtered schedules
+    expect(icons[19]).toHaveAttribute('title', 'Export all filtered');
+    fireEvent.click(icons[19]);
+
+    await wait();
+
+    expect(exportByFilter).toHaveBeenCalled();
+
+    // move all filtered schedules to trashcan
+    expect(icons[18]).toHaveAttribute('title', 'Move all filtered to trashcan');
+    fireEvent.click(icons[18]);
+
+    await wait();
+
+    expect(deleteByFilter).toHaveBeenCalled();
   });
 });
 
