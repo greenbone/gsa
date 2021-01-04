@@ -63,7 +63,7 @@ import PropTypes from 'web/utils/proptypes';
 import ScheduleComponent from './component';
 import ScheduleDetails from './details';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   onScheduleCloneClick,
   onScheduleCreateClick,
