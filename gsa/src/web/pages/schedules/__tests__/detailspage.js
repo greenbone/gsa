@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,15 +17,15 @@
  */
 import React from 'react';
 
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
