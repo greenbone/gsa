@@ -145,15 +145,14 @@ describe('Schedule Detailspage tests', () => {
     expect(element).toHaveTextContent('Schedule: schedule 1');
 
     const links = baseElement.querySelectorAll('a');
-    const icons = screen.getAllByTestId('svg-icon');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: Schedules');
+    expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-schedules',
     );
 
-    expect(icons[1]).toHaveAttribute('title', 'Schedules List');
+    expect(screen.getAllByTitle('Schedules List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/schedules');
 
     expect(element).toHaveTextContent('ID:1234');
@@ -359,17 +358,16 @@ describe('Schedule ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
 
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-schedules',
     );
-    expect(icons[0]).toHaveAttribute('title', 'Help: Schedules');
+    expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
 
     expect(links[1]).toHaveAttribute('href', '/schedules');
-    expect(icons[1]).toHaveAttribute('title', 'Schedules List');
+    expect(screen.getAllByTitle('Schedules List')[0]).toBeInTheDocument();
   });
 
   test('should call click handlers', () => {
@@ -398,23 +396,26 @@ describe('Schedule ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
+    const cloneIcon = screen.getAllByTitle('Clone Schedule');
+    const editIcon = screen.getAllByTitle('Edit Schedule');
+    const deleteIcon = screen.getAllByTitle('Move Schedule to trashcan');
+    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
 
-    fireEvent.click(icons[3]);
+    expect(cloneIcon[0]).toBeInTheDocument();
+    fireEvent.click(cloneIcon[0]);
     expect(handleScheduleCloneClick).toHaveBeenCalledWith(schedule);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Schedule');
 
-    fireEvent.click(icons[4]);
+    expect(editIcon[0]).toBeInTheDocument();
+    fireEvent.click(editIcon[0]);
     expect(handleScheduleEditClick).toHaveBeenCalledWith(schedule);
-    expect(icons[4]).toHaveAttribute('title', 'Edit Schedule');
 
-    fireEvent.click(icons[5]);
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
     expect(handleScheduleDeleteClick).toHaveBeenCalledWith(schedule);
-    expect(icons[5]).toHaveAttribute('title', 'Move Schedule to trashcan');
 
-    fireEvent.click(icons[6]);
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
     expect(handleScheduleDownloadClick).toHaveBeenCalledWith(schedule);
-    expect(icons[6]).toHaveAttribute('title', 'Export Schedule as XML');
   });
 
   test('should not call click handlers without permission', () => {
@@ -443,30 +444,32 @@ describe('Schedule ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
-
-    expect(icons[3]).toHaveAttribute('title', 'Clone Schedule');
-    fireEvent.click(icons[3]);
-    expect(handleScheduleCloneClick).toHaveBeenCalledWith(noPermSchedule);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Schedule');
-
-    expect(icons[4]).toHaveAttribute(
-      'title',
-      'Permission to edit Schedule denied',
-    );
-    fireEvent.click(icons[4]);
-    expect(handleScheduleEditClick).not.toHaveBeenCalled();
-
-    fireEvent.click(icons[5]);
-    expect(handleScheduleDeleteClick).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute(
-      'title',
+    const cloneIcon = screen.getAllByTitle('Clone Schedule');
+    const editIcon = screen.getAllByTitle('Permission to edit Schedule denied');
+    const deleteIcon = screen.getAllByTitle(
       'Permission to move Schedule to trashcan denied',
     );
+    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
 
-    fireEvent.click(icons[6]);
+    expect(cloneIcon[0]).toBeInTheDocument();
+    fireEvent.click(cloneIcon[0]);
+
+    expect(handleScheduleCloneClick).toHaveBeenCalledWith(noPermSchedule);
+
+    expect(editIcon[0]).toBeInTheDocument();
+    fireEvent.click(editIcon[0]);
+
+    expect(handleScheduleEditClick).not.toHaveBeenCalled();
+
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
+
+    expect(handleScheduleDeleteClick).not.toHaveBeenCalled();
+
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
+
     expect(handleScheduleDownloadClick).toHaveBeenCalledWith(noPermSchedule);
-    expect(icons[6]).toHaveAttribute('title', 'Export Schedule as XML');
   });
 
   test('should (not) call click handlers for schedule in use', () => {
@@ -494,24 +497,28 @@ describe('Schedule ToolBarIcons tests', () => {
         onScheduleCreateClick={handleScheduleCreateClick}
       />,
     );
+    const cloneIcon = screen.getAllByTitle('Clone Schedule');
+    const editIcon = screen.getAllByTitle('Edit Schedule');
+    const deleteIcon = screen.getAllByTitle('Schedule is still in use');
+    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
 
-    const icons = screen.getAllByTestId('svg-icon');
+    expect(cloneIcon[0]).toBeInTheDocument();
+    fireEvent.click(cloneIcon[0]);
 
-    expect(icons[3]).toHaveAttribute('title', 'Clone Schedule');
-    fireEvent.click(icons[3]);
     expect(handleScheduleCloneClick).toHaveBeenCalledWith(scheduleInUse);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Schedule');
 
-    expect(icons[4]).toHaveAttribute('title', 'Edit Schedule');
-    fireEvent.click(icons[4]);
+    expect(editIcon[0]).toBeInTheDocument();
+    fireEvent.click(editIcon[0]);
+
     expect(handleScheduleEditClick).toHaveBeenCalled();
 
-    fireEvent.click(icons[5]);
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
     expect(handleScheduleDeleteClick).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute('title', 'Schedule is still in use');
 
-    fireEvent.click(icons[6]);
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
+
     expect(handleScheduleDownloadClick).toHaveBeenCalledWith(scheduleInUse);
-    expect(icons[6]).toHaveAttribute('title', 'Export Schedule as XML');
   });
 });
