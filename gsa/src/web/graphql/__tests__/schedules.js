@@ -33,6 +33,10 @@ import {
   createGetScheduleQueryMock,
   createCreateScheduleQueryMock,
   createModifyScheduleQueryMock,
+  createDeleteSchedulesByIdsQueryMock,
+  createDeleteSchedulesByFilterQueryMock,
+  createExportSchedulesByIdsQueryMock,
+  createExportSchedulesByFilterQueryMock,
 } from '../__mocks__/schedules';
 
 import {
@@ -40,6 +44,10 @@ import {
   useLazyGetSchedule,
   useCreateSchedule,
   useModifySchedule,
+  useDeleteSchedulesByIds,
+  useDeleteSchedulesByFilter,
+  useExportSchedulesByFilter,
+  useExportSchedulesByIds,
 } from '../schedules';
 
 const GetLazySchedulesComponent = () => {
@@ -239,5 +247,108 @@ describe('Schedule mutation tests', () => {
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Schedule modified with ok=true.',
     );
+  });
+});
+
+const DeleteSchedulesByIdsComponent = () => {
+  const [deleteSchedulesByIds] = useDeleteSchedulesByIds();
+  return (
+    <button
+      data-testid="bulk-delete"
+      onClick={() => deleteSchedulesByIds(['foo', 'bar'])}
+    />
+  );
+};
+
+describe('useDeleteSchedulesByIds tests', () => {
+  test('should delete a list of schedules after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteSchedulesByIdsQueryMock([
+      'foo',
+      'bar',
+    ]);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteSchedulesByIdsComponent />);
+    const button = screen.getByTestId('bulk-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteSchedulesByFilterComponent = () => {
+  const [deleteSchedulesByFilter] = useDeleteSchedulesByFilter();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deleteSchedulesByFilter('foo')}
+    />
+  );
+};
+
+describe('useDeleteSchedulesByFilter tests', () => {
+  test('should delete a list of schedules by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteSchedulesByFilterQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteSchedulesByFilterComponent />);
+    const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportSchedulesByIdsComponent = () => {
+  const exportSchedulesByIds = useExportSchedulesByIds();
+  return (
+    <button
+      data-testid="bulk-export"
+      onClick={() => exportSchedulesByIds(['foo'])}
+    />
+  );
+};
+
+describe('useExportSchedulesByIds tests', () => {
+  test('should export a list of schedules after user interaction', async () => {
+    const [mock, resultFunc] = createExportSchedulesByIdsQueryMock(['foo']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportSchedulesByIdsComponent />);
+    const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportSchedulesByFilterComponent = () => {
+  const exportSchedulesByFilter = useExportSchedulesByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportSchedulesByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportSchedulesByFilter tests', () => {
+  test('should export a list of schedules by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportSchedulesByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportSchedulesByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 });
