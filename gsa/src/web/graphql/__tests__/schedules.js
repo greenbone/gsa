@@ -121,22 +121,17 @@ describe('useLazyGetSchedules tests', () => {
     expect(resultFunc).toHaveBeenCalled();
 
     scheduleElements = screen.getAllByTestId('schedule');
-    expect(scheduleElements).toHaveLength(4);
+    expect(scheduleElements).toHaveLength(1);
 
-    expect(scheduleElements[0]).toHaveTextContent(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
-    );
-    expect(scheduleElements[1]).toHaveTextContent(
-      'c35f82f1-7798-4b84-b2c4-761a33068957',
-    );
+    expect(scheduleElements[0]).toHaveTextContent('foo');
 
     expect(screen.queryByTestId('no-schedules')).not.toBeInTheDocument();
 
-    expect(screen.getByTestId('total')).toHaveTextContent(4);
-    expect(screen.getByTestId('filtered')).toHaveTextContent(4);
+    expect(screen.getByTestId('total')).toHaveTextContent(1);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(1);
     expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
-    expect(screen.getByTestId('length')).toHaveTextContent(4);
+    expect(screen.getByTestId('length')).toHaveTextContent(1);
   });
 });
 
@@ -163,9 +158,7 @@ describe('useLazyGetSchedule tests', () => {
 
     scheduleElement = screen.getByTestId('schedule');
 
-    expect(scheduleElement).toHaveTextContent(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
-    );
+    expect(scheduleElement).toHaveTextContent('foo');
 
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });

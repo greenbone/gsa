@@ -198,10 +198,7 @@ describe('Task Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('Min QoD70 %');
 
     expect(headings[5]).toHaveTextContent('Schedule');
-    expect(detailslinks[7]).toHaveAttribute(
-      'href',
-      '/schedule/c35f82f1-7798-4b84-b2c4-761a33068956',
-    );
+    expect(detailslinks[7]).toHaveAttribute('href', '/schedule/foo');
     expect(baseElement).toHaveTextContent('schedule 1');
 
     expect(headings[6]).toHaveTextContent('Scan');
@@ -383,7 +380,7 @@ describe('Task Detailspage tests', () => {
       filterString: 'task_id:12345',
     });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
+      'foo',
     );
     const [permissionMock] = createGetPermissionsQueryMock(
       {

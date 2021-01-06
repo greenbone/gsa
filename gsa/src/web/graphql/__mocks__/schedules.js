@@ -26,18 +26,10 @@ import {
 } from '../schedules';
 
 const schedule1 = deepFreeze({
-  id: 'c35f82f1-7798-4b84-b2c4-761a33068956',
+  id: 'foo',
   name: 'schedule 1',
-  icalendar: `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
-BEGIN:VEVENT
-UID:c35f82f1-7798-4b84-b2c4-761a33068956
-DTSTAMP:20190715T124352Z
-DTSTART:20190716T040000
-END:VEVENT
-END:VCALENDAR
-`,
+  icalendar:
+    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:3dfd6e6f-4e79-4f18-a5c2-adb3fca56bd3\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
   timezone: 'UTC',
   userTags: {
     count: 1,
@@ -52,15 +44,15 @@ END:VCALENDAR
   },
   permissions: [{name: 'Everything'}],
   owner: 'admin',
-  comment: null,
+  comment: 'hello world',
   writable: true,
   inUse: false,
-  creationTime: '2020-08-06T11:34:15+00:00',
-  modificationTime: '2020-08-06T11:34:15+00:00',
+  creationTime: '2020-12-23T14:14:11+00:00',
+  modificationTime: '2021-01-04T11:54:12+00:00',
 });
 
 const schedule2 = deepFreeze({
-  id: 'c35f82f1-7798-4b84-b2c4-761a33068957',
+  id: 'bar',
   name: 'schedule 2',
   icalendar: `BEGIN:VCALENDAR
 VERSION:2.0
@@ -136,29 +128,20 @@ const mockSchedules = {
     {
       node: schedule1,
     },
-    {
-      node: schedule2,
-    },
-    {
-      node: schedule3,
-    },
-    {
-      node: schedule4,
-    },
   ],
   counts: {
-    total: 4,
-    filtered: 4,
+    total: 1,
+    filtered: 1,
     offset: 0,
     limit: 10,
-    length: 4,
+    length: 1,
   },
   pageInfo: {
     hasNextPage: false,
     hasPreviousPage: false,
-    startCursor: 'schedule:0',
-    endCursor: 'schedule:1',
-    lastPageCursor: 'schedule:5',
+    startCursor: 'c2NoZWR1bGU6MA==',
+    endCursor: 'c2NoZWR1bGU6MA==',
+    lastPageCursor: 'c2NoZWR1bGU6MA==',
   },
 };
 

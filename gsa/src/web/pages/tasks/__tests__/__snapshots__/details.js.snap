@@ -449,7 +449,7 @@ exports[`Task Details tests should render full task details 1`] = `
                   <a
                     class="c2"
                     data-testid="details-link"
-                    href="/schedule/c35f82f1-7798-4b84-b2c4-761a33068956"
+                    href="/schedule/foo"
                   >
                     schedule 1
                   </a>
@@ -468,7 +468,9 @@ exports[`Task Details tests should render full task details 1`] = `
             <td>
               <div
                 class="c1"
-              />
+              >
+                Mon, Jan 11, 2021 11:54 AM UTC
+              </div>
             </td>
           </tr>
         </tbody>
