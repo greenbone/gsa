@@ -23,17 +23,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
-import Schedule from 'gmp/models/schedule';
 
-import {entitiesLoadingActions} from 'web/store/entities/schedules';
-
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
-
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-
-import SchedulePage, {ToolBarIcons} from '../listpage';
 import {
   createDeleteSchedulesByFilterQueryMock,
   createDeleteSchedulesByIdsQueryMock,
@@ -42,24 +32,17 @@ import {
   createGetSchedulesQueryMock,
 } from 'web/graphql/__mocks__/schedules';
 
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+
+import SchedulePage, {ToolBarIcons} from '../listpage';
+
 setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
-
-const schedule = Schedule.fromElement({
-  comment: 'hello world',
-  creation_time: '2020-12-23T14:14:11Z',
-  icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:foo\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
-  in_use: 0,
-  modification_time: '2021-01-04T11:54:12Z',
-  name: 'schedule 1',
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'Everything'}},
-  timezone: 'UTC',
-  writable: 1,
-  _id: 'foo',
-});
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
@@ -84,14 +67,6 @@ const getFilters = jest.fn().mockReturnValue(
     },
   }),
 );
-
-const getSchedules = jest.fn().mockResolvedValue({
-  data: [schedule],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
 
 const renewSession = jest.fn().mockResolvedValue({
   foo: 'bar',
@@ -127,19 +102,6 @@ describe('SchedulePage tests', () => {
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('schedule', defaultSettingfilter),
-    );
-
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([schedule], filter, loadedFilter, counts),
     );
 
     const {baseElement} = render(<SchedulePage />);
@@ -230,19 +192,6 @@ describe('SchedulePage tests', () => {
       defaultFilterLoadingActions.success('schedule', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([schedule], filter, loadedFilter, counts),
-    );
-
     render(<SchedulePage />);
 
     await wait();
@@ -305,19 +254,6 @@ describe('SchedulePage tests', () => {
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('schedule', defaultSettingfilter),
-    );
-
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([schedule], filter, loadedFilter, counts),
     );
 
     const {element} = render(<SchedulePage />);
@@ -398,19 +334,6 @@ describe('SchedulePage tests', () => {
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('schedule', defaultSettingfilter),
-    );
-
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([schedule], filter, loadedFilter, counts),
     );
 
     render(<SchedulePage />);
