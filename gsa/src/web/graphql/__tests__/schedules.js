@@ -37,6 +37,8 @@ import {
   createDeleteSchedulesByFilterQueryMock,
   createExportSchedulesByIdsQueryMock,
   createExportSchedulesByFilterQueryMock,
+  createCloneScheduleQueryMock,
+  createDeleteScheduleQueryMock,
 } from '../__mocks__/schedules';
 
 import {
@@ -48,7 +50,9 @@ import {
   useDeleteSchedulesByFilter,
   useExportSchedulesByFilter,
   useExportSchedulesByIds,
+  useCloneSchedule,
 } from '../schedules';
+import {useCloneScanConfig} from '../scanconfigs';
 
 const GetLazySchedulesComponent = () => {
   const [getSchedules, {counts, loading, schedules}] = useLazyGetSchedules();
@@ -345,6 +349,57 @@ describe('useExportSchedulesByFilter tests', () => {
 
     render(<ExportSchedulesByFilterComponent />);
     const button = screen.getByTestId('filter-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const CloneScheduleComponent = () => {
+  const [cloneSchedule, {id: scheduleId}] = useCloneSchedule();
+  return (
+    <div>
+      {scheduleId && <span data-testid="cloned-schedule">{scheduleId}</span>}
+      <button data-testid="clone" onClick={() => cloneSchedule('foo')} />
+    </div>
+  );
+};
+
+describe('useCloneSchedule tests', () => {
+  test('should clone a schedule after user interaction', async () => {
+    const [mock, resultFunc] = createCloneScheduleQueryMock('foo', 'foo2');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CloneScheduleComponent />);
+
+    const button = screen.getByTestId('clone');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('cloned-schedule')).toHaveTextContent('foo2');
+  });
+});
+
+const DeleteScheduleComponent = () => {
+  const [deleteSchedule] = useDeleteSchedulesByIds();
+  return (
+    <button data-testid="delete" onClick={() => deleteSchedule(['foo'])} />
+  );
+};
+
+describe('useDeleteSchedule tests', () => {
+  test('should delete an schedule after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteScheduleQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteScheduleComponent />);
+
+    const button = screen.getByTestId('delete');
     fireEvent.click(button);
 
     await wait();

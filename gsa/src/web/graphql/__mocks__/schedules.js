@@ -27,6 +27,7 @@ import {
   EXPORT_SCHEDULES_BY_FILTER,
   DELETE_SCHEDULES_BY_IDS,
   DELETE_SCHEDULES_BY_FILTER,
+  CLONE_SCHEDULE,
 } from '../schedules';
 
 const schedule1 = deepFreeze({
@@ -212,3 +213,29 @@ export const createDeleteSchedulesByFilterQueryMock = (filterString = 'foo') =>
   createGenericQueryMock(DELETE_SCHEDULES_BY_FILTER, bulkDeleteByFilterResult, {
     filterString,
   });
+
+const deleteScheduleResult = {
+  deleteScheduleByIds: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const createDeleteScheduleQueryMock = (scheduleId = '1') =>
+  createGenericQueryMock(DELETE_SCHEDULES_BY_IDS, deleteScheduleResult, {
+    ids: [scheduleId],
+  });
+
+export const createCloneScheduleQueryMock = (
+  scheduleId = '1',
+  newScheduleId = '2',
+) =>
+  createGenericQueryMock(
+    CLONE_SCHEDULE,
+    {
+      cloneSchedule: {
+        id: newScheduleId,
+      },
+    },
+    {id: scheduleId},
+  );
