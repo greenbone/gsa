@@ -23,6 +23,10 @@ import {
   GET_SCHEDULE,
   CREATE_SCHEDULE,
   MODIFY_SCHEDULE,
+  EXPORT_SCHEDULES_BY_IDS,
+  EXPORT_SCHEDULES_BY_FILTER,
+  DELETE_SCHEDULES_BY_IDS,
+  DELETE_SCHEDULES_BY_FILTER,
 } from '../schedules';
 
 const schedule1 = deepFreeze({
@@ -156,4 +160,55 @@ const modifyScheduleResult = {
 export const createModifyScheduleQueryMock = () =>
   createGenericQueryMock(MODIFY_SCHEDULE, modifyScheduleResult, {
     input: modifyScheduleInput,
+  });
+
+const exportSchedulesByIdsResult = {
+  exportSchedulesByIds: {
+    exportedEntities:
+      '<get_schedules_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportSchedulesByIdsQueryMock = (ids = ['foo']) =>
+  createGenericQueryMock(EXPORT_SCHEDULES_BY_IDS, exportSchedulesByIdsResult, {
+    ids,
+  });
+
+const exportSchedulesByFilterResult = {
+  exportSchedulesByFilter: {
+    exportedEntities:
+      '<get_schedules_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportSchedulesByFilterQueryMock = (
+  filterString = 'foo',
+) => {
+  return createGenericQueryMock(
+    EXPORT_SCHEDULES_BY_FILTER,
+    exportSchedulesByFilterResult,
+    {filterString},
+  );
+};
+
+const bulkDeleteByIdsResult = {
+  deleteSchedulesByIds: {
+    ok: true,
+  },
+};
+
+export const createDeleteSchedulesByIdsQueryMock = (scheduleIds = ['foo']) =>
+  createGenericQueryMock(DELETE_SCHEDULES_BY_IDS, bulkDeleteByIdsResult, {
+    ids: scheduleIds,
+  });
+
+const bulkDeleteByFilterResult = {
+  deleteSchedulesByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeleteSchedulesByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(DELETE_SCHEDULES_BY_FILTER, bulkDeleteByFilterResult, {
+    filterString,
   });
