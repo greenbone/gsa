@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,16 +17,16 @@
  */
 import React from 'react';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import {rendererWith, screen, wait} from 'web/utils/testing';
+import {setLocale} from 'gmp/locale/lang';
 
-import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
+import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+
+import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import Details from '../details';
 

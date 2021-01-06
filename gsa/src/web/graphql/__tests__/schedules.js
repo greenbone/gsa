@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+/* eslint-disable react/prop-types */
 
 import React, {useState} from 'react';
 
@@ -26,13 +27,6 @@ import Button from 'web/components/form/button';
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import {
-  useLazyGetSchedules,
-  useLazyGetSchedule,
-  useCreateSchedule,
-  useModifySchedule,
-} from '../schedules';
-
-import {
   createScheduleInput,
   modifyScheduleInput,
   createGetSchedulesQueryMock,
@@ -41,7 +35,12 @@ import {
   createModifyScheduleQueryMock,
 } from '../__mocks__/schedules';
 
-/* eslint-disable react/prop-types */
+import {
+  useLazyGetSchedules,
+  useLazyGetSchedule,
+  useCreateSchedule,
+  useModifySchedule,
+} from '../schedules';
 
 const GetLazySchedulesComponent = () => {
   const [getSchedules, {counts, loading, schedules}] = useLazyGetSchedules();

@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,36 +17,34 @@
  */
 import React from 'react';
 
+import Capabilities from 'gmp/capabilities/capabilities';
+
 import {setLocale} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Capabilities from 'gmp/capabilities/capabilities';
-
-import {entityLoadingActions} from 'web/store/entities/tasks';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-
+import {createGetNotesQueryMock} from 'web/graphql/__mocks__/notes';
+import {createGetOverridesQueryMock} from 'web/graphql/__mocks__/overrides';
+import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
+import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {
+  createGetPermissionsQueryMock,
+  noPermissions,
+} from 'web/graphql/__mocks__/permissions';
 import {
   createGetTaskQueryMock,
   createCloneTaskQueryMock,
   createDeleteTaskQueryMock,
 } from 'web/graphql/__mocks__/tasks';
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
-
-import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
-import {createGetNotesQueryMock} from 'web/graphql/__mocks__/notes';
-import {createGetOverridesQueryMock} from 'web/graphql/__mocks__/overrides';
-import {
-  createGetPermissionsQueryMock,
-  noPermissions,
-} from 'web/graphql/__mocks__/permissions';
 
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+import {entityLoadingActions} from 'web/store/entities/tasks';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
 
 if (!isDefined(window.URL)) {
   window.URL = {};
