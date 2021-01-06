@@ -52,7 +52,6 @@ import {
   useExportSchedulesByIds,
   useCloneSchedule,
 } from '../schedules';
-import {useCloneScanConfig} from '../scanconfigs';
 
 const GetLazySchedulesComponent = () => {
   const [getSchedules, {counts, loading, schedules}] = useLazyGetSchedules();
