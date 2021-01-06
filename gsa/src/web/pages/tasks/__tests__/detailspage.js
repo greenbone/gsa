@@ -98,7 +98,7 @@ describe('Task Detailspage tests', () => {
       filterString: 'task_id:12345',
     });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
+      'foo',
     );
 
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
@@ -227,7 +227,7 @@ describe('Task Detailspage tests', () => {
       filterString: 'task_id:12345',
     });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
+      'foo',
     );
 
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
@@ -301,7 +301,7 @@ describe('Task Detailspage tests', () => {
       filterString: 'task_id:12345',
     });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
+      'foo',
     );
 
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
@@ -1052,10 +1052,7 @@ describe('Task ToolBarIcons tests', () => {
     const icons = getAllByTestId('svg-icon');
     const detailsLinks = getAllByTestId('details-link');
 
-    expect(detailsLinks[0]).toHaveAttribute(
-      'href',
-      '/schedule/c35f82f1-7798-4b84-b2c4-761a33068956',
-    );
+    expect(detailsLinks[0]).toHaveAttribute('href', '/schedule/foo');
     expect(detailsLinks[0]).toHaveAttribute(
       'title',
       'View Details of Schedule schedule 1 (Next due: over)',

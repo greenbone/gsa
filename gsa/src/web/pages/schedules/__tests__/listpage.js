@@ -43,7 +43,7 @@ const schedule = Schedule.fromElement({
   comment: 'hello world',
   creation_time: '2020-12-23T14:14:11Z',
   icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:3dfd6e6f-4e79-4f18-a5c2-adb3fca56bd3\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
+    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:foo\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
   in_use: 0,
   modification_time: '2021-01-04T11:54:12Z',
   name: 'schedule 1',
@@ -51,7 +51,7 @@ const schedule = Schedule.fromElement({
   permissions: {permission: {name: 'Everything'}},
   timezone: 'UTC',
   writable: 1,
-  _id: '41fc25b4-fc21-4b81-ab30-35c95adc032a',
+  _id: 'foo',
 });
 
 const caps = new Capabilities(['everything']);

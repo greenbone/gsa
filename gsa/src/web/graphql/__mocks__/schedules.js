@@ -51,78 +51,6 @@ const schedule1 = deepFreeze({
   modificationTime: '2021-01-04T11:54:12+00:00',
 });
 
-const schedule2 = deepFreeze({
-  id: 'bar',
-  name: 'schedule 2',
-  icalendar: `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
-BEGIN:VEVENT
-UID:c35f82f1-7798-4b84-b2c4-761a33068956
-DTSTAMP:20190715T124352Z
-DTSTART:20190716T040000
-END:VEVENT
-END:VCALENDAR
-`,
-  timezone: 'UTC',
-  userTags: null,
-  permissions: null,
-  owner: 'admin',
-  comment: null,
-  writable: true,
-  inUse: false,
-  creationTime: '2020-08-06T11:34:15+00:00',
-  modificationTime: '2020-08-06T11:34:15+00:00',
-});
-
-const schedule3 = deepFreeze({
-  id: '12345',
-  name: 'schedule 3',
-  icalendar: `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
-BEGIN:VEVENT
-UID:c35f82f1-7798-4b84-b2c4-761a33068956
-DTSTAMP:20190715T124352Z
-DTSTART:20190716T040000
-END:VEVENT
-END:VCALENDAR
-`,
-  timezone: 'UTC',
-  userTags: null,
-  permissions: null,
-  owner: 'admin',
-  comment: null,
-  writable: true,
-  inUse: false,
-  creationTime: '2020-08-06T11:34:15+00:00',
-  modificationTime: '2020-08-06T11:34:15+00:00',
-});
-
-const schedule4 = deepFreeze({
-  id: '121314',
-  name: 'schedule 4',
-  icalendar: `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
-BEGIN:VEVENT
-UID:c35f82f1-7798-4b84-b2c4-761a33068956
-DTSTAMP:20190715T124352Z
-DTSTART:20190716T040000
-END:VEVENT
-END:VCALENDAR
-`,
-  timezone: 'UTC',
-  userTags: null,
-  permissions: null,
-  owner: 'admin',
-  comment: null,
-  writable: true,
-  inUse: false,
-  creationTime: '2020-08-06T11:34:15+00:00',
-  modificationTime: '2020-08-06T11:34:15+00:00',
-});
-
 const mockSchedules = {
   edges: [
     {
@@ -192,7 +120,7 @@ export const createScheduleInput = {
   VERSION:2.0
   PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
   BEGIN:VEVENT
-  UID:c35f82f1-7798-4b84-b2c4-761a33068956
+  UID:foo
   DTSTAMP:20190715T124352Z
   DTSTART:20190716T040000
   END:VEVENT

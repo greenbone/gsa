@@ -94,7 +94,7 @@ END:VCALENDAR
 
 // Schedule
 const schedule = deepFreeze({
-  id: 'c35f82f1-7798-4b84-b2c4-761a33068956',
+  id: 'foo',
   name: 'schedule 1',
   timezone: 'UTC',
   duration: 0,

@@ -37,9 +37,7 @@ describe('Task Details tests', () => {
     const {detailsMockTask: task} = getMockTasks();
 
     const caps = new Capabilities(['everything']);
-    const [scheduleMock, resultFunc] = createGetScheduleQueryMock(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
-    );
+    const [scheduleMock, resultFunc] = createGetScheduleQueryMock('foo');
     const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
     const {render} = rendererWith({
