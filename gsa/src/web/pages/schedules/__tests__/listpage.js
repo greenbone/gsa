@@ -34,6 +34,7 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import SchedulePage, {ToolBarIcons} from '../listpage';
+import {createGetSchedulesQueryMock} from 'web/graphql/__mocks__/schedules';
 
 setLocale('en');
 
@@ -93,9 +94,6 @@ const renewSession = jest.fn().mockResolvedValue({
 describe('SchedulePage tests', () => {
   test('should render full SchedulePage', async () => {
     const gmp = {
-      schedules: {
-        get: getSchedules,
-      },
       filters: {
         get: getFilters,
       },
@@ -103,11 +101,17 @@ describe('SchedulePage tests', () => {
       user: {currentSettings, getSetting},
     };
 
+    const [mock, resultFunc] = createGetSchedulesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -135,6 +139,8 @@ describe('SchedulePage tests', () => {
     const {baseElement} = render(<SchedulePage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const inputs = baseElement.querySelectorAll('input');
     const selects = screen.getAllByTestId('select-selected-value');
@@ -180,7 +186,7 @@ describe('SchedulePage tests', () => {
     expect(screen.getAllByTitle('Clone Schedule')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Export Schedule')[0]).toBeInTheDocument();
   });
-  test('should allow to bulk action on page contents', async () => {
+  test.only('should allow to bulk action on page contents', async () => {
     const deleteByFilter = jest.fn().mockResolvedValue({
       foo: 'bar',
     });
@@ -191,7 +197,6 @@ describe('SchedulePage tests', () => {
 
     const gmp = {
       schedules: {
-        get: getSchedules,
         deleteByFilter,
         exportByFilter,
       },
@@ -202,11 +207,17 @@ describe('SchedulePage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const [mock, resultFunc] = createGetSchedulesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -235,6 +246,7 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
+    expect(resultFunc).toHaveBeenCalled();
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents');
 
