@@ -34,7 +34,13 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import SchedulePage, {ToolBarIcons} from '../listpage';
-import {createGetSchedulesQueryMock} from 'web/graphql/__mocks__/schedules';
+import {
+  createDeleteSchedulesByFilterQueryMock,
+  createDeleteSchedulesByIdsQueryMock,
+  createExportSchedulesByFilterQueryMock,
+  createExportSchedulesByIdsQueryMock,
+  createGetSchedulesQueryMock,
+} from 'web/graphql/__mocks__/schedules';
 
 setLocale('en');
 
@@ -186,20 +192,8 @@ describe('SchedulePage tests', () => {
     expect(screen.getAllByTitle('Clone Schedule')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Export Schedule')[0]).toBeInTheDocument();
   });
-  test.only('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
+  test('should allow to bulk action on page contents', async () => {
     const gmp = {
-      schedules: {
-        deleteByFilter,
-        exportByFilter,
-      },
       filters: {
         get: getFilters,
       },
@@ -212,12 +206,19 @@ describe('SchedulePage tests', () => {
       first: 2,
     });
 
+    const [exportMock, exportResult] = createExportSchedulesByIdsQueryMock([
+      'foo',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteSchedulesByIdsQueryMock([
+      'foo',
+    ]);
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -255,7 +256,7 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getAllByTitle('Move page contents to trashcan');
@@ -265,24 +266,11 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected schedules', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
-      schedules: {
-        get: getSchedules,
-        delete: deleteByIds,
-        export: exportByIds,
-      },
       filters: {
         get: getFilters,
       },
@@ -290,11 +278,24 @@ describe('SchedulePage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const [mock, resultFunc] = createGetSchedulesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportSchedulesByIdsQueryMock([
+      'foo',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteSchedulesByIdsQueryMock([
+      'foo',
+    ]);
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -323,6 +324,8 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
+    expect(resultFunc).toHaveBeenCalled();
+
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
 
@@ -346,7 +349,7 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    expect(exportByIds).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // move selected schedule to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan');
@@ -356,24 +359,11 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    expect(deleteByIds).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered schedules', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
-      schedules: {
-        get: getSchedules,
-        deleteByFilter,
-        exportByFilter,
-      },
       filters: {
         get: getFilters,
       },
@@ -381,11 +371,24 @@ describe('SchedulePage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const [mock, resultFunc] = createGetSchedulesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportSchedulesByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+    const [deleteMock, deleteResult] = createDeleteSchedulesByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -414,6 +417,8 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
+    expect(resultFunc).toHaveBeenCalled();
+
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
 
@@ -433,7 +438,7 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // move all filtered schedules to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan');
@@ -443,7 +448,7 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 });
 
