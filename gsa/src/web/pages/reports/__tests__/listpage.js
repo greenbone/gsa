@@ -17,23 +17,22 @@
  */
 import React from 'react';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
+import {setLocale} from 'gmp/locale/lang';
+
 import Filter from 'gmp/models/filter';
 
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
 import {entitiesActions} from 'web/store/entities/reports';
+
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
-
 import ReportPage, {ToolBarIcons} from '../listpage';
 
 // setup
@@ -169,6 +168,19 @@ describe('Report listpage tests', () => {
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
     expect(selects[0]).toHaveTextContent('--');
 
+    // Dashboard
+    expect(
+      screen.getAllByTitle('Add new Dashboard Display')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Reset to Defaults')[0]).toBeInTheDocument();
+
+    const display = screen.getAllByTestId('grid-item');
+    expect(display[0]).toHaveTextContent(
+      'Reports by Severity Class (Total: 0)',
+    );
+    expect(display[1]).toHaveTextContent('Reports with High Results');
+    expect(display[2]).toHaveTextContent('Reports by CVSS (Total: 0)');
+
     // Table
     const header = baseElement.querySelectorAll('th');
 
@@ -180,14 +192,25 @@ describe('Report listpage tests', () => {
     expect(header[5]).toHaveTextContent('Medium');
     expect(header[6]).toHaveTextContent('Low');
 
+    // Row
     const row = baseElement.querySelectorAll('tr');
 
     expect(row[1]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM CEST');
+    expect(row[1]).toHaveTextContent('Done');
+    expect(row[1]).toHaveTextContent('foo');
+    expect(row[1]).toHaveTextContent('10.0 (High)');
+    expect(row[1]).toHaveTextContent('351024'); // 3 high, 5 medium, 10 low, 2 log, 4 false positive
 
     expect(
       screen.getAllByTitle('Select Report for delta comparison')[0],
     ).toBeInTheDocument();
     expect(screen.getAllByTitle('Delete Report')[0]).toBeInTheDocument();
+
+    // Footer
+    expect(
+      screen.getAllByTitle('Add tag to page contents')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Delete page contents')[0]).toBeInTheDocument();
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -318,9 +341,9 @@ describe('Report listpage tests', () => {
     const selected = screen.getAllByTestId('select-selected-value');
     expect(selected[1]).toHaveTextContent('Apply to selection');
 
+    // select a report
     const inputs = element.querySelectorAll('input');
 
-    // select a report
     fireEvent.click(inputs[1]);
     await wait();
 
@@ -400,7 +423,7 @@ describe('Report listpage tests', () => {
     const selected = screen.getAllByTestId('select-selected-value');
     expect(selected[1]).toHaveTextContent('Apply to all filtered');
 
-    // delete all fitlered reports
+    // delete all filtered reports
     fireEvent.click(screen.getAllByTitle('Delete all filtered')[0]);
 
     await wait();
