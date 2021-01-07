@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -44,7 +44,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 import ScheduleComponent from './component';
 import SchedulesTable, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({capabilities, onScheduleCreateClick}) => (
     <IconDivider>
       <ManualIcon
