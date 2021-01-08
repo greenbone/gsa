@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
@@ -25,10 +25,14 @@ import {
   useMutation,
   useQuery,
 } from '@apollo/client';
-import ScanConfig from 'gmp/models/scanconfig';
+
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import {isDefined} from 'gmp/utils/identity';
+import ScanConfig from 'gmp/models/scanconfig';
+
+import {hasValue, isDefined} from 'gmp/utils/identity';
+
+import readFileToText from 'web/utils/readFileToText';
 
 export const GET_SCAN_CONFIG = gql`
   query ScanConfig($id: UUID!) {
@@ -231,6 +235,64 @@ export const DELETE_SCAN_CONFIGS_BY_IDS = gql`
 export const DELETE_SCAN_CONFIGS_BY_FILTER = gql`
   mutation deleteScanConfigsByFilter($filterString: String!) {
     deleteScanConfigsByFilter(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
+export const MODIFY_SCAN_CONFIG_SET_NAME = gql`
+  mutation modifyScanConfigSetName($input: ModifyScanConfigSetNameInput!) {
+    modifyScanConfigSetName(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const MODIFY_SCAN_CONFIG_SET_COMMENT = gql`
+  mutation modifyScanConfigSetComment(
+    $input: ModifyScanConfigSetCommentInput!
+  ) {
+    modifyScanConfigSetComment(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const MODIFY_SCAN_CONFIG_SET_FAMILY_SELECTION = gql`
+  mutation modifyScanConfigSetFamilySelection(
+    $input: ModifyScanConfigSetFamilySelectionInput!
+  ) {
+    modifyScanConfigSetFamilySelection(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const MODIFY_SCAN_CONFIG_SET_NVT_PREFERENCE = gql`
+  mutation modifyScanConfigSetNvtPreference(
+    $input: ModifyScanConfigSetNvtPreferenceInput!
+  ) {
+    modifyScanConfigSetNvtPreference(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const MODIFY_SCAN_CONFIG_SET_NVT_SELECTION = gql`
+  mutation modifyScanConfigSetNvtSelection(
+    $input: ModifyScanConfigSetNvtSelectionInput!
+  ) {
+    modifyScanConfigSetNvtSelection(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const MODIFY_SCAN_CONFIG_SET_SCANNER_PREFERENCE = gql`
+  mutation modifyScanConfigSetScannerPreference(
+    $input: ModifyScanConfigSetScannerPreferenceInput!
+  ) {
+    modifyScanConfigSetScannerPreference(input: $input) {
       ok
     }
   }
@@ -447,4 +509,206 @@ export const useDeleteScanConfigsByIds = options => {
     [queryDeleteScanConfigsByIds],
   );
   return [deleteScanConfigsByIds, data];
+};
+
+export const useModifyScanConfig = options => {
+  const [queryModifyScanConfigSetName] = useMutation(
+    MODIFY_SCAN_CONFIG_SET_NAME,
+    options,
+  );
+  const [queryModifyScanConfigSetComment] = useMutation(
+    MODIFY_SCAN_CONFIG_SET_COMMENT,
+    options,
+  );
+  const [queryModifyScanConfigSetScannerPreference] = useMutation(
+    MODIFY_SCAN_CONFIG_SET_SCANNER_PREFERENCE,
+    options,
+  );
+  const [queryModifyScanConfigSetFamilySelection] = useMutation(
+    MODIFY_SCAN_CONFIG_SET_FAMILY_SELECTION,
+    options,
+  );
+
+  const modifyScanConfig = useCallback(
+    (saveData, options) => {
+      const {name, id} = saveData;
+      return queryModifyScanConfigSetName({
+        ...options,
+        variables: {
+          input: {
+            name,
+            id,
+          },
+        },
+      }).then(() => {
+        const {comment} = saveData;
+
+        return queryModifyScanConfigSetComment({
+          ...options,
+          variables: {
+            input: {
+              id,
+              comment,
+            },
+          },
+        }).then(() => {
+          const {scannerPreferenceValues} = saveData;
+
+          let setScannerPreferencePromise;
+
+          if (hasValue(scannerPreferenceValues)) {
+            const prefKeys = Object.keys(scannerPreferenceValues);
+
+            const prefPromises = [];
+
+            prefKeys.forEach(key => {
+              prefPromises.push(
+                queryModifyScanConfigSetScannerPreference({
+                  ...options,
+                  variables: {
+                    input: {
+                      id,
+                      name: 'scanner:scanner:scanner:' + key,
+                      value: scannerPreferenceValues[key],
+                    },
+                  },
+                }),
+              );
+            });
+            setScannerPreferencePromise = Promise.all(prefPromises);
+          } else {
+            setScannerPreferencePromise = Promise.resolve();
+          }
+
+          return setScannerPreferencePromise.then(() => {
+            const {select, trend} = saveData;
+
+            let setConfigFamilySelectionPromise;
+            if (hasValue(select) && hasValue(trend)) {
+              const families = [];
+              const familyKeys = Object.keys(select);
+
+              familyKeys.forEach(key => {
+                if (select[key] === 1) {
+                  families.push({name: key, growing: trend[key]});
+                }
+              });
+
+              setConfigFamilySelectionPromise = queryModifyScanConfigSetFamilySelection(
+                {
+                  ...options,
+                  variables: {
+                    input: {
+                      id,
+                      families,
+                    },
+                  },
+                },
+              );
+            } else {
+              setConfigFamilySelectionPromise = Promise.resolve();
+            }
+
+            return setConfigFamilySelectionPromise;
+          });
+        });
+      });
+    },
+    [
+      queryModifyScanConfigSetName,
+      queryModifyScanConfigSetComment,
+      queryModifyScanConfigSetScannerPreference,
+      queryModifyScanConfigSetFamilySelection,
+    ],
+  );
+
+  return modifyScanConfig;
+};
+
+export const useModifyScanConfigSetNvtSelection = options => {
+  const [queryModifyScanConfigSetNvtSelection] = useMutation(
+    MODIFY_SCAN_CONFIG_SET_NVT_SELECTION,
+    options,
+  );
+
+  const modifyScanConfigSetNvtSelection = useCallback(
+    ({id, family, selected}, options) => {
+      const oidKeys = Object.keys(selected);
+      const nvtOids = [];
+
+      oidKeys.forEach(key => {
+        if (selected[key] === 1) {
+          nvtOids.push(key);
+        }
+      });
+      return queryModifyScanConfigSetNvtSelection({
+        ...options,
+        variables: {
+          input: {
+            id,
+            family,
+            nvtOids,
+          },
+        },
+      });
+    },
+    [queryModifyScanConfigSetNvtSelection],
+  );
+
+  return modifyScanConfigSetNvtSelection;
+};
+
+const convertHyperionPreferences = (values = {}, nvtOid) => {
+  const ret = {};
+  for (const [prop, data] of Object.entries(values)) {
+    const {id, type, value} = data;
+    if (isDefined(value)) {
+      const typestring = nvtOid + ':' + id + ':' + type + ':' + prop;
+      if (type === 'file') {
+        ret[typestring] = readFileToText(value);
+      } else {
+        ret[typestring] = value;
+      }
+    }
+  }
+  return ret;
+};
+
+export const useModifyScanConfigSetNvtPreference = options => {
+  const [queryModifyScanConfigSetNvtPreference] = useMutation(
+    MODIFY_SCAN_CONFIG_SET_NVT_PREFERENCE,
+    options,
+  );
+
+  const modifyScanConfigSetNvtPreference = useCallback(
+    async ({id, oid, preferenceValues}, options) => {
+      const convertedPrefValues = await convertHyperionPreferences(
+        preferenceValues,
+        oid,
+      );
+      const prefKeys = Object.keys(convertedPrefValues);
+      const promises = [];
+
+      prefKeys.forEach(key => {
+        promises.push(
+          queryModifyScanConfigSetNvtPreference({
+            ...options,
+            variables: {
+              input: {
+                id,
+                nvtOid: oid,
+                name: key,
+                value: convertedPrefValues[key],
+              },
+            },
+          }),
+        );
+      });
+
+      return Promise.all(promises);
+    },
+    [queryModifyScanConfigSetNvtPreference],
+  );
+
+  return modifyScanConfigSetNvtPreference;
 };
