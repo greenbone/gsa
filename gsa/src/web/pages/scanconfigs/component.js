@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -25,9 +25,9 @@ import {ospScannersFilter} from 'gmp/models/scanner';
 import {YES_VALUE} from 'gmp/parser';
 
 import {forEach} from 'gmp/utils/array';
+import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
-import {selectSaveId} from 'gmp/utils/id';
 
 import EntityComponent from 'web/entity/component';
 
@@ -35,13 +35,16 @@ import {
   useImportScanConfig,
   useCreateScanConfig,
   useLoadScanConfigPromise,
+  useModifyScanConfig,
+  useModifyScanConfigSetNvtSelection,
+  useModifyScanConfigSetNvtPreference,
 } from 'web/graphql/scanconfigs';
 import {useLazyGetScanners} from 'web/graphql/scanners';
 
 import PropTypes from 'web/utils/proptypes';
-import useGmp from 'web/utils/useGmp';
-import stateReducer, {updateState} from 'web/utils/stateReducer';
 import readFileToText from 'web/utils/readFileToText';
+import stateReducer, {updateState} from 'web/utils/stateReducer';
+import useGmp from 'web/utils/useGmp';
 
 import EditConfigFamilyDialog from './editconfigfamilydialog';
 import EditScanConfigDialog from './editdialog';
@@ -94,6 +97,9 @@ const ScanConfigComponent = ({
   const loadScanConfigPromise = useLoadScanConfigPromise();
   const [importScanConfig] = useImportScanConfig();
   const [createScanConfig] = useCreateScanConfig();
+  const modifyScanConfig = useModifyScanConfig();
+  const modifyScanConfigSetNvtSelection = useModifyScanConfigSetNvtSelection();
+  const modifyScanConfigSetNvtPreference = useModifyScanConfigSetNvtPreference();
   const [
     loadScanners,
     {scanners: loadedScanners, loading: isLoadingScanners},
@@ -148,7 +154,7 @@ const ScanConfigComponent = ({
       saveData = {name, comment, id};
     }
 
-    return gmp.scanconfig.save(saveData).then(() => closeEditConfigDialog());
+    return modifyScanConfig(saveData).then(() => closeEditConfigDialog());
   };
 
   const openCreateConfigDialog = () => {
@@ -328,13 +334,11 @@ const ScanConfigComponent = ({
 
   const handleSaveConfigFamily = ({familyName, configId, selected}) => {
     handleInteraction();
-
-    return gmp.scanconfig
-      .saveScanConfigFamily({
-        id: configId,
-        familyName,
-        selected,
-      })
+    return modifyScanConfigSetNvtSelection({
+      id: configId,
+      family: familyName,
+      selected,
+    })
       .then(() => loadEditScanConfigSettings(configId, true))
       .then(() => {
         closeEditConfigFamilyDialog();
@@ -349,16 +353,14 @@ const ScanConfigComponent = ({
     preferenceValues,
   }) => {
     const {editConfigFamilyDialogVisible, familyName} = state;
-
     handleInteraction();
 
-    return gmp.scanconfig
-      .saveScanConfigNvt({
-        id: configId,
-        timeout: useDefaultTimeout === '1' ? undefined : timeout,
-        oid: nvtOid,
-        preferenceValues,
-      })
+    return modifyScanConfigSetNvtPreference({
+      id: configId,
+      timeout: useDefaultTimeout === '1' ? undefined : timeout,
+      oid: nvtOid,
+      preferenceValues,
+    })
       .then(() => {
         let promise;
 
