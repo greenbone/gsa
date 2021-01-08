@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,6 +17,7 @@
  */
 /* eslint-disable react/prop-types */
 import React, {useState} from 'react';
+import {GraphQLError} from 'graphql';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -34,6 +35,8 @@ import {
   useExportScanConfigsByFilter,
   useDeleteScanConfigsByIds,
   useDeleteScanConfigsByFilter,
+  useModifyScanConfig,
+  useModifyScanConfigSetNvtPreference,
 } from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
@@ -46,6 +49,11 @@ import {
   createDeleteScanConfigsByFilterQueryMock,
   createExportScanConfigsByFilterQueryMock,
   createDeleteScanConfigsByIdsQueryMock,
+  createModifyScanConfigSetCommentQueryMock,
+  createModifyScanConfigSetNameQueryMock,
+  createModifyScanConfigSetScannerPreferenceQueryMock,
+  createModifyScanConfigSetFamilySelectionQueryMock,
+  createModifyScanConfigSetNvtPreferenceQueryMock,
 } from '../__mocks__/scanconfigs';
 
 const GetLazyScanConfigsComponent = () => {
@@ -508,5 +516,273 @@ describe('useExportScanConfigsByFilter tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ModifyScanConfigComponent = ({input}) => {
+  const modifyScanConfig = useModifyScanConfig();
+  const [notification, setNotification] = useState();
+  const [error, setError] = useState();
+
+  const handleModifyScanConfig = () =>
+    modifyScanConfig(input)
+      .then(() => setNotification('Scan Config modified.'))
+      .catch(setError);
+
+  return (
+    <div>
+      {notification && <span data-testid="notification">{notification}</span>}
+      {error && (
+        <span data-testid="error">{`There was an error in the request: ${error}`}</span>
+      )}
+      <button
+        data-testid="modify-scan-config"
+        onClick={handleModifyScanConfig}
+      />
+    </div>
+  );
+};
+const ModifyScanConfigSetNvtPreferenceComponent = ({input}) => {
+  const [notification, setNotification] = useState('');
+
+  const modifyScanConfigSetNvtSelection = useModifyScanConfigSetNvtPreference();
+
+  const handleModifyResult = () => {
+    setNotification(`NVT preference modified.`);
+  };
+
+  return (
+    <div>
+      <button
+        data-testid="modify-nvt-preference"
+        onClick={() =>
+          modifyScanConfigSetNvtSelection(input).then(handleModifyResult)
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('useModifyScanConfig tests', () => {
+  test('should modify scan config', async () => {
+    const saveConfigInput = {
+      id: '314',
+      name: 'very fast',
+      comment: 'foo',
+      scannerPreferenceValues: {nomushrooms: 'absolutelynot'},
+      select: {hello: 1},
+      trend: {hello: 0},
+    };
+
+    const [
+      setNameMock,
+      setNameResult,
+    ] = createModifyScanConfigSetNameQueryMock();
+    const [
+      setCommentMock,
+      setCommentResult,
+    ] = createModifyScanConfigSetCommentQueryMock();
+    const [
+      setScannerPreferenceMock,
+      setScannerPreferenceResult,
+    ] = createModifyScanConfigSetScannerPreferenceQueryMock();
+    const [
+      setFamilySelectionMock,
+      setFamilySelectionResult,
+    ] = createModifyScanConfigSetFamilySelectionQueryMock();
+
+    const {render} = rendererWith({
+      queryMocks: [
+        setNameMock,
+        setCommentMock,
+        setScannerPreferenceMock,
+        setFamilySelectionMock,
+      ],
+    });
+
+    render(<ModifyScanConfigComponent input={saveConfigInput} />);
+
+    await wait();
+
+    const button = screen.getByTestId('modify-scan-config');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(setNameResult).toHaveBeenCalled();
+    expect(setCommentResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(setScannerPreferenceResult).toHaveBeenCalled();
+    await wait();
+
+    expect(setFamilySelectionResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(screen.queryByTestId('notification')).toHaveTextContent(
+      'Scan Config modified.',
+    );
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+  });
+
+  test('should modify in use scan config', async () => {
+    const saveConfigInput = {
+      id: '314',
+      name: 'very fast',
+      comment: 'foo',
+    }; // in use configs don't have all args
+
+    const [
+      setNameMock,
+      setNameResult,
+    ] = createModifyScanConfigSetNameQueryMock();
+    const [
+      setCommentMock,
+      setCommentResult,
+    ] = createModifyScanConfigSetCommentQueryMock();
+    const [
+      setScannerPreferenceMock,
+      setScannerPreferenceResult,
+    ] = createModifyScanConfigSetScannerPreferenceQueryMock();
+    const [
+      setFamilySelectionMock,
+      setFamilySelectionResult,
+    ] = createModifyScanConfigSetFamilySelectionQueryMock();
+
+    const {render} = rendererWith({
+      queryMocks: [
+        setNameMock,
+        setCommentMock,
+        setScannerPreferenceMock,
+        setFamilySelectionMock,
+      ],
+    });
+
+    render(<ModifyScanConfigComponent input={saveConfigInput} />);
+
+    await wait();
+
+    const button = screen.getByTestId('modify-scan-config');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(setNameResult).toHaveBeenCalled();
+    expect(setCommentResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(setScannerPreferenceResult).not.toHaveBeenCalled();
+    await wait();
+
+    expect(setFamilySelectionResult).not.toHaveBeenCalled();
+
+    await wait();
+
+    expect(screen.queryByTestId('notification')).toHaveTextContent(
+      'Scan Config modified.',
+    );
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+  });
+
+  test('should catch error state', async () => {
+    const saveConfigInput = {
+      id: '314',
+      name: 'very fast',
+      comment: 'foo',
+      scannerPreferenceValues: {nomushrooms: 'absolutelynot'},
+      select: {hello: 1},
+      trend: {hello: 0},
+    };
+    const error = new GraphQLError('Oops. Something went wrong :(');
+
+    const [
+      setNameMock,
+      setNameResult,
+    ] = createModifyScanConfigSetNameQueryMock();
+    const [
+      setCommentMock,
+      setCommentResult,
+    ] = createModifyScanConfigSetCommentQueryMock();
+    const [
+      setScannerPreferenceMock,
+      setScannerPreferenceResult,
+    ] = createModifyScanConfigSetScannerPreferenceQueryMock([error]);
+    const [
+      setFamilySelectionMock,
+      setFamilySelectionResult,
+    ] = createModifyScanConfigSetFamilySelectionQueryMock();
+
+    const {render} = rendererWith({
+      queryMocks: [
+        setNameMock,
+        setCommentMock,
+        setScannerPreferenceMock,
+        setFamilySelectionMock,
+      ],
+    });
+
+    render(<ModifyScanConfigComponent input={saveConfigInput} />);
+
+    await wait();
+
+    const button = screen.getByTestId('modify-scan-config');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(setNameResult).toHaveBeenCalled();
+    expect(setCommentResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(setScannerPreferenceResult).toHaveBeenCalled();
+    await wait();
+
+    expect(setFamilySelectionResult).not.toHaveBeenCalled();
+
+    await wait();
+
+    expect(screen.queryByTestId('notification')).not.toBeInTheDocument();
+
+    const gqlError = screen.queryByTestId('error');
+    expect(gqlError).toBeInTheDocument();
+    expect(gqlError).toHaveTextContent(
+      'There was an error in the request: Error: Oops. Something went wrong :(',
+    );
+  });
+  test('should modify nvt preferences', async () => {
+    const input = {
+      id: '314',
+      oid: '1.2.3.4',
+      preferenceValues: {'username:': {id: 1, value: 'admin', type: 'entry'}},
+    };
+    const [
+      queryMock,
+      resultFunc,
+    ] = createModifyScanConfigSetNvtPreferenceQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<ModifyScanConfigSetNvtPreferenceComponent input={input} />);
+
+    await wait();
+
+    const button = screen.queryByTestId('modify-nvt-preference');
+
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    await wait();
+
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'NVT preference modified.',
+    );
   });
 });
