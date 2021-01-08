@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 20202-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,7 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
+import {
+  deepFreeze,
+  createGenericQueryMock,
+  createGenericMutationResult,
+} from 'web/utils/testing';
 
 import {
   CLONE_SCAN_CONFIG,
@@ -28,6 +32,12 @@ import {
   GET_SCAN_CONFIG,
   GET_SCAN_CONFIGS,
   IMPORT_SCAN_CONFIG,
+  MODIFY_SCAN_CONFIG_SET_COMMENT,
+  MODIFY_SCAN_CONFIG_SET_FAMILY_SELECTION,
+  MODIFY_SCAN_CONFIG_SET_NAME,
+  MODIFY_SCAN_CONFIG_SET_NVT_PREFERENCE,
+  MODIFY_SCAN_CONFIG_SET_NVT_SELECTION,
+  MODIFY_SCAN_CONFIG_SET_SCANNER_PREFERENCE,
 } from '../scanconfigs';
 
 export const nonWritableConfig = deepFreeze({
@@ -384,4 +394,86 @@ export const createExportScanConfigsByFilterQueryMock = (
     EXPORT_SCAN_CONFIGS_BY_FILTER,
     exportScanConfigsByFilterResult,
     {filterString},
+  );
+
+const modifyScanConfigSetNameInput = {
+  id: '314',
+  name: 'very fast',
+};
+
+export const createModifyScanConfigSetNameQueryMock = errors =>
+  createGenericQueryMock(
+    MODIFY_SCAN_CONFIG_SET_NAME,
+    createGenericMutationResult('modifyScanConfigSetName'),
+    {input: modifyScanConfigSetNameInput},
+    errors,
+  );
+
+const modifyScanConfigSetCommentInput = {
+  id: '314',
+  comment: 'foo',
+};
+
+export const createModifyScanConfigSetCommentQueryMock = errors =>
+  createGenericQueryMock(
+    MODIFY_SCAN_CONFIG_SET_COMMENT,
+    createGenericMutationResult('modifyScanConfigSetComment'),
+    {input: modifyScanConfigSetCommentInput},
+    errors,
+  );
+
+const modifyScanConfigSetScannerPreferenceInput = {
+  id: '314',
+  name: 'scanner:scanner:scanner:nomushrooms',
+  value: 'absolutelynot',
+};
+
+export const createModifyScanConfigSetScannerPreferenceQueryMock = errors =>
+  createGenericQueryMock(
+    MODIFY_SCAN_CONFIG_SET_SCANNER_PREFERENCE,
+    createGenericMutationResult('modifyScanConfigSetScannerPreference'),
+    {input: modifyScanConfigSetScannerPreferenceInput},
+    errors,
+  );
+
+const modifyScanConfigSetFamilySelectionInput = {
+  id: '314',
+  families: [{name: 'hello', growing: 0}],
+};
+
+export const createModifyScanConfigSetFamilySelectionQueryMock = errors =>
+  createGenericQueryMock(
+    MODIFY_SCAN_CONFIG_SET_FAMILY_SELECTION,
+    createGenericMutationResult('modifyScanConfigSetFamilySelection'),
+    {input: modifyScanConfigSetFamilySelectionInput},
+    errors,
+  );
+
+export const modifyScanConfigSetNvtPreferenceInput = {
+  id: '314',
+  nvtOid: '1.2.3.4',
+  name: '1.2.3.4:1:entry:username:',
+  value: 'admin',
+};
+
+export const createModifyScanConfigSetNvtPreferenceQueryMock = errors =>
+  createGenericQueryMock(
+    MODIFY_SCAN_CONFIG_SET_NVT_PREFERENCE,
+    createGenericMutationResult('modifyScanConfigSetNvtPreference'),
+    {input: modifyScanConfigSetNvtPreferenceInput},
+    errors,
+  );
+
+const modifyScanConfigSetNvtSelectionInput = {
+  id: '314',
+  family: 'a bunch of nvts',
+  nvtOids: ['1.2.3.4', '2.3.4.5'],
+};
+
+export const createModifyScanConfigSetNvtSelectionQueryMock = errors =>
+  createGenericQueryMock(
+    MODIFY_SCAN_CONFIG_SET_NVT_SELECTION,
+    createGenericMutationResult('modifyScanConfigSetNvtSelection'),
+    {input: modifyScanConfigSetNvtSelectionInput},
+    errors,
   );
