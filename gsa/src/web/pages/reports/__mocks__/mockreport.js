@@ -251,7 +251,16 @@ export const getMockReport = () => {
     apps: {count: 4},
     os: {count: 2},
     ssl_certs: {count: 2},
-    result_count: {__text: 3, full: 3, filtered: 2},
+    result_count: {
+      __text: 24,
+      full: 24,
+      filtered: 24,
+      hole: {filtered: 3},
+      info: {filtered: 10},
+      warning: {filtered: 5},
+      log: {filtered: 2},
+      false_positive: {filtered: 4},
+    },
     results: {result: [result1, result2, result3]},
     hosts: {count: 2},
     host: [host1, host2],
@@ -263,6 +272,10 @@ export const getMockReport = () => {
       count: 2,
       error: [error1, error2],
     },
+    severity: {
+      full: 10.0,
+      filtered: 10.0,
+    },
   };
 
   const entity = Report.fromElement({
@@ -271,6 +284,7 @@ export const getMockReport = () => {
     modification_time: '2019-06-03T11:00:22Z',
     name: '2019-06-03T11:00:22Z',
     owner: {name: 'admin'},
+    task: task1,
     _id: '1234',
   });
 
