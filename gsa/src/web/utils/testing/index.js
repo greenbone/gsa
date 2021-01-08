@@ -21,6 +21,7 @@ import 'jest-styled-components';
 import '@testing-library/jest-dom/extend-expect';
 
 import React from 'react';
+import {MockedProvider} from '@apollo/client/testing';
 
 import {
   act,
@@ -40,12 +41,11 @@ import EverythingCapabilities from 'gmp/capabilities/everything';
 
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
-import GmpContext from 'web/components/provider/gmpprovider';
 import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
+import GmpContext from 'web/components/provider/gmpprovider';
 
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
-import {MockedProvider} from '@apollo/client/testing';
 
 export * from '@testing-library/react';
 
@@ -204,6 +204,15 @@ export const createGenericQueryMock = (query, result, variables, errors) => {
     newData: resultFunc,
   };
   return [queryMock, resultFunc];
+};
+
+export const createGenericMutationResult = queryName => {
+  const mutationResult = {};
+  mutationResult[queryName] = {
+    ok: true,
+  };
+
+  return mutationResult;
 };
 
 // vim: set ts=2 sw=2 tw=80:
