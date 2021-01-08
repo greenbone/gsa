@@ -49,7 +49,6 @@ describe('Task Details tests', () => {
     const {element, getAllByTestId} = render(<Details entity={task} />);
 
     await wait();
-    expect(element).toMatchSnapshot();
     expect(resultFunc).toHaveBeenCalled();
     expect(scanConfigResult).toHaveBeenCalled();
 
