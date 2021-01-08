@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -47,18 +47,20 @@ import NoteComponent from './component';
 import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard';
 import NoteIcon from 'web/components/icon/noteicon';
 
-const ToolBarIcons = withCapabilities(({capabilities, onNoteCreateClick}) => (
-  <IconDivider>
-    <ManualIcon
-      page="reports"
-      anchor="managing-notes"
-      title={_('Help: Notes')}
-    />
-    {capabilities.mayCreate('note') && (
-      <NewIcon title={_('New Note')} onClick={onNoteCreateClick} />
-    )}
-  </IconDivider>
-));
+export const ToolBarIcons = withCapabilities(
+  ({capabilities, onNoteCreateClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="reports"
+        anchor="managing-notes"
+        title={_('Help: Notes')}
+      />
+      {capabilities.mayCreate('note') && (
+        <NewIcon title={_('New Note')} onClick={onNoteCreateClick} />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onNoteCreateClick: PropTypes.func,
