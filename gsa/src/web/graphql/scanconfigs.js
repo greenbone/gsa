@@ -590,9 +590,11 @@ export const useModifyScanConfig = options => {
               const familyKeys = Object.keys(select);
 
               familyKeys.forEach(key => {
-                if (select[key] === 1) {
-                  families.push({name: key, growing: trend[key]});
-                }
+                families.push({
+                  name: key,
+                  growing: trend[key],
+                  all: select[key],
+                });
               });
 
               setConfigFamilySelectionPromise = queryModifyScanConfigSetFamilySelection(
