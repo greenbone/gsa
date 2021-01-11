@@ -438,7 +438,7 @@ export const createModifyScanConfigSetScannerPreferenceQueryMock = errors =>
 
 const modifyScanConfigSetFamilySelectionInput = {
   id: '314',
-  families: [{name: 'hello', growing: 0}],
+  families: [{name: 'hello', growing: 0, all: 1}],
 };
 
 export const createModifyScanConfigSetFamilySelectionQueryMock = errors =>
@@ -467,7 +467,7 @@ export const createModifyScanConfigSetNvtPreferenceQueryMock = errors =>
 const modifyScanConfigSetNvtSelectionInput = {
   id: '314',
   family: 'a bunch of nvts',
-  nvtOids: ['1.2.3.4', '2.3.4.5'],
+  nvtOids: ['foo'],
 };
 
 export const createModifyScanConfigSetNvtSelectionQueryMock = errors =>

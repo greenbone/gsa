@@ -334,6 +334,7 @@ const ScanConfigComponent = ({
 
   const handleSaveConfigFamily = ({familyName, configId, selected}) => {
     handleInteraction();
+
     return modifyScanConfigSetNvtSelection({
       id: configId,
       family: familyName,

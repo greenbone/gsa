@@ -37,6 +37,7 @@ import {
   useDeleteScanConfigsByFilter,
   useModifyScanConfig,
   useModifyScanConfigSetNvtPreference,
+  useModifyScanConfigSetNvtSelection,
 } from '../scanconfigs';
 import {
   createGetScanConfigsQueryMock,
@@ -54,6 +55,7 @@ import {
   createModifyScanConfigSetScannerPreferenceQueryMock,
   createModifyScanConfigSetFamilySelectionQueryMock,
   createModifyScanConfigSetNvtPreferenceQueryMock,
+  createModifyScanConfigSetNvtSelectionQueryMock,
 } from '../__mocks__/scanconfigs';
 
 const GetLazyScanConfigsComponent = () => {
@@ -545,7 +547,7 @@ const ModifyScanConfigComponent = ({input}) => {
 const ModifyScanConfigSetNvtPreferenceComponent = ({input}) => {
   const [notification, setNotification] = useState('');
 
-  const modifyScanConfigSetNvtSelection = useModifyScanConfigSetNvtPreference();
+  const modifyScanConfigSetNvtPreference = useModifyScanConfigSetNvtPreference();
 
   const handleModifyResult = () => {
     setNotification(`NVT preference modified.`);
@@ -555,6 +557,28 @@ const ModifyScanConfigSetNvtPreferenceComponent = ({input}) => {
     <div>
       <button
         data-testid="modify-nvt-preference"
+        onClick={() =>
+          modifyScanConfigSetNvtPreference(input).then(handleModifyResult)
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+const ModifyScanConfigSetNvtSelectionComponent = ({input}) => {
+  const [notification, setNotification] = useState('');
+
+  const modifyScanConfigSetNvtSelection = useModifyScanConfigSetNvtSelection();
+
+  const handleModifyResult = () => {
+    setNotification(`NVT selection modified.`);
+  };
+
+  return (
+    <div>
+      <button
+        data-testid="modify-nvt-selection"
         onClick={() =>
           modifyScanConfigSetNvtSelection(input).then(handleModifyResult)
         }
@@ -783,6 +807,38 @@ describe('useModifyScanConfig tests', () => {
 
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'NVT preference modified.',
+    );
+  });
+
+  test('should modify nvt selection', async () => {
+    const input = {
+      id: '314',
+      family: 'a bunch of nvts',
+      selected: {foo: 1, bar: 0},
+    };
+    const [
+      queryMock,
+      resultFunc,
+    ] = createModifyScanConfigSetNvtSelectionQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<ModifyScanConfigSetNvtSelectionComponent input={input} />);
+
+    await wait();
+
+    const button = screen.queryByTestId('modify-nvt-selection');
+
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    await wait();
+
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'NVT selection modified.',
     );
   });
 });
