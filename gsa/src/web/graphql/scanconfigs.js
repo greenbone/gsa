@@ -530,6 +530,7 @@ export const useModifyScanConfig = options => {
   );
 
   const modifyScanConfig = useCallback(
+    // eslint-disable-next-line no-shadow
     (saveData, options) => {
       const {name, id} = saveData;
       return queryModifyScanConfigSetName({
@@ -632,6 +633,7 @@ export const useModifyScanConfigSetNvtSelection = options => {
   );
 
   const modifyScanConfigSetNvtSelection = useCallback(
+    // eslint-disable-next-line no-shadow
     ({id, family, selected}, options) => {
       const oidKeys = Object.keys(selected);
       const nvtOids = [];
@@ -681,6 +683,7 @@ export const useModifyScanConfigSetNvtPreference = options => {
   );
 
   const modifyScanConfigSetNvtPreference = useCallback(
+    // eslint-disable-next-line no-shadow
     async ({id, oid, preferenceValues}, options) => {
       const convertedPrefValues = await convertHyperionPreferences(
         preferenceValues,
