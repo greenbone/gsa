@@ -46,22 +46,22 @@ import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import withEntityContainer, {
-  permissionsResourceFilter,
-} from 'web/entity/withEntityContainer';
+import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
-import {selector, loadEntity} from 'web/store/entities/schedules';
-
-import {
-  selector as permissionsSelector,
-  loadEntities as loadPermissions,
-} from 'web/store/entities/permissions';
+import {useGetSchedule} from 'web/graphql/schedules';
 
 import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
 
 import ScheduleComponent from './component';
 import ScheduleDetails from './details';
+import {useHistory, useParams} from 'react-router-dom';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useDownload from 'web/components/form/useDownload';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import {useGetPermissions} from 'web/graphql/permissions';
+import DialogNotification from 'web/components/notification/dialognotification';
+import Download from 'web/components/form/download';
 
 export const ToolBarIcons = ({
   entity,
@@ -103,126 +103,119 @@ ToolBarIcons.propTypes = {
   onScheduleEditClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
-  entity,
-  permissions = [],
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <ScheduleComponent
-    onCloned={goto_details('schedule', props)}
-    onCloneError={onError}
-    onCreated={goto_entity_details('schedule', props)}
-    onDeleted={goto_list('schedules', props)}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({clone, create, delete: delete_func, download, edit, save}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<ScheduleIcon size="large" />}
-        title={_('Schedule')}
-        toolBarIcons={ToolBarIcons}
-        onInteraction={onInteraction}
-        onScheduleCloneClick={clone}
-        onScheduleCreateClick={create}
-        onScheduleDeleteClick={delete_func}
-        onScheduleDownloadClick={download}
-        onScheduleEditClick={edit}
-        onScheduleSaveClick={save}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('Schedule: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const Page = () => {
+  // Page methods
+  const {id} = useParams();
+  const history = useHistory();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+  const [downloadRef, handleDownload] = useDownload();
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <ScheduleDetails entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </ScheduleComponent>
-);
-
-Page.propTypes = {
-  entity: PropTypes.model,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
+  // Load schedule related entities
+  const {
+    schedule,
+    refetch: refetchSchedule,
+    loading,
+    error: entityError,
+  } = useGetSchedule(id);
+  const {permissions, refetch: refetchPermissions} = useGetPermissions({
+    filterString: permissionsResourceFilter(id).toFilterString(),
+  });
+  return (
+    <ScheduleComponent
+      onCloned={goto_details('schedule', {history})}
+      onCloneError={showError}
+      onCreated={goto_entity_details('schedule', {history})}
+      onDeleted={goto_list('schedules', {history})}
+      onDeleteError={showError}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onInteraction={renewSessionTimeout}
+      onSaved={() => refetchSchedule()}
+    >
+      {({clone, create, delete: delete_func, download, edit, save}) => (
+        <EntityPage
+          entity={schedule}
+          entityError={entityError}
+          entityType={'schedule'}
+          isLoading={loading}
+          sectionIcon={<ScheduleIcon size="large" />}
+          title={_('Schedule')}
+          toolBarIcons={ToolBarIcons}
+          onInteraction={renewSessionTimeout}
+          onScheduleCloneClick={clone}
+          onScheduleCreateClick={create}
+          onScheduleDeleteClick={delete_func}
+          onScheduleDownloadClick={download}
+          onScheduleEditClick={edit}
+          onScheduleSaveClick={save}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle
+                  title={_('Schedule: {{name}}', {name: schedule.name})}
+                />
+                <Layout grow="1" flex="column">
+                  <TabLayout grow="1" align={['start', 'end']}>
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={schedule.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <ScheduleDetails entity={schedule} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={schedule}
+                          onChanged={() => refetchSchedule()}
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
+                        />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityPermissions
+                          entity={schedule}
+                          permissions={permissions}
+                          onChanged={() => refetchPermissions()}
+                          onDownloaded={handleDownload}
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+                <DialogNotification
+                  {...notificationDialogState}
+                  onCloseClick={closeNotificationDialog}
+                />
+                <Download ref={downloadRef} />
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </ScheduleComponent>
+  );
 };
 
-const load = gmp => {
-  const loadEntityFunc = loadEntity(gmp);
-  const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch =>
-    Promise.all([
-      dispatch(loadEntityFunc(id)),
-      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-    ]);
-};
-
-const mapStateToProps = (rootState, {id}) => {
-  const permissionsSel = permissionsSelector(rootState);
-  return {
-    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
-  };
-};
-
-export default withEntityContainer('schedule', {
-  entitySelector: selector,
-  load,
-  mapStateToProps,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:

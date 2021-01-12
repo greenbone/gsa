@@ -18,7 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {useLazyQuery, useMutation} from '@apollo/client';
+import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
 
 import gql from 'graphql-tag';
 
@@ -238,6 +238,17 @@ export const EXPORT_SCHEDULES_BY_IDS = gql`
     }
   }
 `;
+
+export const useGetSchedule = (id, options) => {
+  const {data, ...other} = useQuery(GET_SCHEDULE, {
+    ...options,
+    variables: {id},
+  });
+  const schedule = isDefined(data?.schedule)
+    ? Schedule.fromObject(data.schedule)
+    : undefined;
+  return {schedule, ...other};
+};
 
 export const useDeleteSchedule = options => {
   const [queryDeleteSchedule, data] = useMutation(
