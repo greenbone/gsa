@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -65,7 +65,7 @@ const scanConfig = deepFreeze({
 
 // Schedule
 const schedule = deepFreeze({
-  id: 'c35f82f1-7798-4b84-b2c4-761a33068956',
+  id: 'foo',
   name: 'schedule 1',
 });
 

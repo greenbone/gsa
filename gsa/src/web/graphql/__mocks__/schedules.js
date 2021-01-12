@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -23,66 +23,37 @@ import {
   GET_SCHEDULE,
   CREATE_SCHEDULE,
   MODIFY_SCHEDULE,
+  EXPORT_SCHEDULES_BY_IDS,
+  EXPORT_SCHEDULES_BY_FILTER,
+  DELETE_SCHEDULES_BY_IDS,
+  DELETE_SCHEDULES_BY_FILTER,
+  CLONE_SCHEDULE,
 } from '../schedules';
 
 const schedule1 = deepFreeze({
-  id: 'c35f82f1-7798-4b84-b2c4-761a33068956',
+  id: 'foo',
   name: 'schedule 1',
-  icalendar: `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
-BEGIN:VEVENT
-UID:c35f82f1-7798-4b84-b2c4-761a33068956
-DTSTAMP:20190715T124352Z
-DTSTART:20190716T040000
-END:VEVENT
-END:VCALENDAR
-`,
-});
-
-const schedule2 = deepFreeze({
-  id: 'c35f82f1-7798-4b84-b2c4-761a33068957',
-  name: 'schedule 2',
-  icalendar: `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
-BEGIN:VEVENT
-UID:c35f82f1-7798-4b84-b2c4-761a33068956
-DTSTAMP:20190715T124352Z
-DTSTART:20190716T040000
-END:VEVENT
-END:VCALENDAR
-`,
-});
-
-const schedule3 = deepFreeze({
-  id: '12345',
-  name: 'schedule 3',
-  icalendar: `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
-BEGIN:VEVENT
-UID:c35f82f1-7798-4b84-b2c4-761a33068956
-DTSTAMP:20190715T124352Z
-DTSTART:20190716T040000
-END:VEVENT
-END:VCALENDAR
-`,
-});
-
-const schedule4 = deepFreeze({
-  id: '121314',
-  name: 'schedule 4',
-  icalendar: `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
-BEGIN:VEVENT
-UID:c35f82f1-7798-4b84-b2c4-761a33068956
-DTSTAMP:20190715T124352Z
-DTSTART:20190716T040000
-END:VEVENT
-END:VCALENDAR
-`,
+  icalendar:
+    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1~git-5f8b6cf-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nUID:foo\nDTSTAMP:20210111T134141Z\nEND:VEVENT\nEND:VCALENDAR',
+  timezone: 'UTC',
+  userTags: {
+    count: 1,
+    tags: [
+      {
+        id: '123',
+        name: 'schedule:unnamed',
+        value: null,
+        comment: null,
+      },
+    ],
+  },
+  permissions: [{name: 'Everything'}],
+  owner: 'admin',
+  comment: 'hello world',
+  writable: true,
+  inUse: false,
+  creationTime: '2020-12-23T14:14:11+00:00',
+  modificationTime: '2021-01-04T11:54:12+00:00',
 });
 
 const mockSchedules = {
@@ -90,29 +61,20 @@ const mockSchedules = {
     {
       node: schedule1,
     },
-    {
-      node: schedule2,
-    },
-    {
-      node: schedule3,
-    },
-    {
-      node: schedule4,
-    },
   ],
   counts: {
-    total: 4,
-    filtered: 4,
+    total: 1,
+    filtered: 1,
     offset: 0,
     limit: 10,
-    length: 4,
+    length: 1,
   },
   pageInfo: {
     hasNextPage: false,
     hasPreviousPage: false,
-    startCursor: 'schedule:0',
-    endCursor: 'schedule:1',
-    lastPageCursor: 'schedule:5',
+    startCursor: 'c2NoZWR1bGU6MA==',
+    endCursor: 'c2NoZWR1bGU6MA==',
+    lastPageCursor: 'c2NoZWR1bGU6MA==',
   },
 };
 
@@ -163,7 +125,7 @@ export const createScheduleInput = {
   VERSION:2.0
   PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
   BEGIN:VEVENT
-  UID:c35f82f1-7798-4b84-b2c4-761a33068956
+  UID:foo
   DTSTAMP:20190715T124352Z
   DTSTART:20190716T040000
   END:VEVENT
@@ -200,3 +162,80 @@ export const createModifyScheduleQueryMock = () =>
   createGenericQueryMock(MODIFY_SCHEDULE, modifyScheduleResult, {
     input: modifyScheduleInput,
   });
+
+const exportSchedulesByIdsResult = {
+  exportSchedulesByIds: {
+    exportedEntities:
+      '<get_schedules_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportSchedulesByIdsQueryMock = (ids = ['foo']) =>
+  createGenericQueryMock(EXPORT_SCHEDULES_BY_IDS, exportSchedulesByIdsResult, {
+    ids,
+  });
+
+const exportSchedulesByFilterResult = {
+  exportSchedulesByFilter: {
+    exportedEntities:
+      '<get_schedules_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportSchedulesByFilterQueryMock = (
+  filterString = 'foo',
+) => {
+  return createGenericQueryMock(
+    EXPORT_SCHEDULES_BY_FILTER,
+    exportSchedulesByFilterResult,
+    {filterString},
+  );
+};
+
+const bulkDeleteByIdsResult = {
+  deleteSchedulesByIds: {
+    ok: true,
+  },
+};
+
+export const createDeleteSchedulesByIdsQueryMock = (scheduleIds = ['foo']) =>
+  createGenericQueryMock(DELETE_SCHEDULES_BY_IDS, bulkDeleteByIdsResult, {
+    ids: scheduleIds,
+  });
+
+const bulkDeleteByFilterResult = {
+  deleteSchedulesByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeleteSchedulesByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(DELETE_SCHEDULES_BY_FILTER, bulkDeleteByFilterResult, {
+    filterString,
+  });
+
+const deleteScheduleResult = {
+  deleteScheduleByIds: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const createDeleteScheduleQueryMock = (scheduleId = '1') =>
+  createGenericQueryMock(DELETE_SCHEDULES_BY_IDS, deleteScheduleResult, {
+    ids: [scheduleId],
+  });
+
+export const createCloneScheduleQueryMock = (
+  scheduleId = '1',
+  newScheduleId = '2',
+) =>
+  createGenericQueryMock(
+    CLONE_SCHEDULE,
+    {
+      cloneSchedule: {
+        id: newScheduleId,
+      },
+    },
+    {id: scheduleId},
+  );

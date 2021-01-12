@@ -52,7 +52,7 @@ const schedule = Schedule.fromElement({
   comment: 'hello world',
   creation_time: '2020-12-23T14:14:11Z',
   icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:3dfd6e6f-4e79-4f18-a5c2-adb3fca56bd3\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
+    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1~git-5f8b6cf-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nUID:84198224-d124-4194-a9e8-6f99ded72482\nDTSTAMP:20210111T134141Z\nEND:VEVENT\nEND:VCALENDAR',
   in_use: 0,
   modification_time: '2021-01-04T11:54:12Z',
   name: 'schedule 1',
@@ -171,13 +171,13 @@ describe('Schedule Detailspage tests', () => {
     expect(element).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
 
     expect(element).toHaveTextContent('Next Run');
-    expect(element).toHaveTextContent('Mon, Jan 11, 2021 11:54 AM UTC');
+    expect(element).toHaveTextContent('-');
 
     expect(element).toHaveTextContent('Timezone');
     expect(element).toHaveTextContent('UTC');
 
     expect(element).toHaveTextContent('Recurrence');
-    expect(element).toHaveTextContent('Every week');
+    expect(element).toHaveTextContent('Once');
 
     expect(element).toHaveTextContent('Duration');
     expect(element).toHaveTextContent('Entire Operation');
