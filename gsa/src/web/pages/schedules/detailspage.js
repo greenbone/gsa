@@ -16,14 +16,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React, {useEffect} from 'react';
+import {useHistory, useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
+import {hasValue} from 'gmp/utils/identity';
+
+import useDownload from 'web/components/form/useDownload';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+
+import Download from 'web/components/form/download';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
@@ -33,6 +39,11 @@ import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
+
+import useReload from 'web/components/loading/useReload';
+
+import DialogNotification from 'web/components/notification/dialognotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -46,8 +57,11 @@ import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
+import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
+import useExportEntity from 'web/entity/useExportEntity';
 import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
+import {useGetPermissions} from 'web/graphql/permissions';
 import {
   useCloneSchedule,
   useDeleteSchedulesByIds,
@@ -57,20 +71,10 @@ import {
 
 import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import ScheduleComponent from './component';
 import ScheduleDetails from './details';
-import {useHistory, useParams} from 'react-router-dom';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import useDownload from 'web/components/form/useDownload';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-import {useGetPermissions} from 'web/graphql/permissions';
-import DialogNotification from 'web/components/notification/dialognotification';
-import Download from 'web/components/form/download';
-import useExportEntity from 'web/entity/useExportEntity';
-import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
-import useReload from 'web/components/loading/useReload';
-import {hasValue} from 'gmp/utils/identity';
 
 export const ToolBarIcons = ({
   entity,
