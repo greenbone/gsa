@@ -60,9 +60,6 @@ const nvt = NVT.fromElement({
   },
 });
 
-const caps = new Capabilities(['everything']);
-const wrongCaps = new Capabilities(['get_config']);
-
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
