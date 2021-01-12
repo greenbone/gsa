@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -48,7 +48,12 @@ import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
-import {useGetSchedule} from 'web/graphql/schedules';
+import {
+  useCloneSchedule,
+  useDeleteSchedulesByIds,
+  useExportSchedulesByIds,
+  useGetSchedule,
+} from 'web/graphql/schedules';
 
 import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
@@ -62,6 +67,10 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 import {useGetPermissions} from 'web/graphql/permissions';
 import DialogNotification from 'web/components/notification/dialognotification';
 import Download from 'web/components/form/download';
+import useExportEntity from 'web/entity/useExportEntity';
+import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
+import useReload from 'web/components/loading/useReload';
+import {hasValue} from 'gmp/utils/identity';
 
 export const ToolBarIcons = ({
   entity,
@@ -125,6 +134,56 @@ const Page = () => {
   const {permissions, refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
+
+  // Schedule related mutations
+  const exportEntity = useExportEntity();
+
+  const [cloneSchedule] = useCloneSchedule();
+  const [deleteSchedule] = useDeleteSchedulesByIds();
+  const exportSchedule = useExportSchedulesByIds();
+
+  // Schedule methods
+  const handleCloneSchedule = clonedSchedule => {
+    return cloneSchedule(clonedSchedule.id)
+      .then(scheduleId =>
+        goto_entity_details('schedule', {history})(scheduleId),
+      )
+      .catch(showError);
+  };
+
+  const handleDeleteSchedule = deletedSchedule => {
+    return deleteSchedule([deletedSchedule.id])
+      .then(goto_list('schedules', {history}))
+      .catch(showError);
+  };
+
+  const handleDownloadSchedule = exportedSchedule => {
+    exportEntity({
+      entity: exportedSchedule,
+      exportFunc: exportSchedule,
+      resourceType: 'schedules',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  // Timeout and reload
+  const timeoutFunc = useEntityReloadInterval(schedule);
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetchSchedule,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if schedule is available and no timer is running yet
+    if (hasValue(schedule) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [schedule, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
   return (
     <ScheduleComponent
       onCloned={goto_details('schedule', {history})}
@@ -137,7 +196,7 @@ const Page = () => {
       onInteraction={renewSessionTimeout}
       onSaved={() => refetchSchedule()}
     >
-      {({clone, create, delete: delete_func, download, edit, save}) => (
+      {({create, edit, save}) => (
         <EntityPage
           entity={schedule}
           entityError={entityError}
@@ -147,10 +206,10 @@ const Page = () => {
           title={_('Schedule')}
           toolBarIcons={ToolBarIcons}
           onInteraction={renewSessionTimeout}
-          onScheduleCloneClick={clone}
+          onScheduleCloneClick={handleCloneSchedule}
           onScheduleCreateClick={create}
-          onScheduleDeleteClick={delete_func}
-          onScheduleDownloadClick={download}
+          onScheduleDeleteClick={handleDeleteSchedule}
+          onScheduleDownloadClick={handleDownloadSchedule}
           onScheduleEditClick={edit}
           onScheduleSaveClick={save}
         >
