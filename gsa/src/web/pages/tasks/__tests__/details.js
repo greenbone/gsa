@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,16 +17,16 @@
  */
 import React from 'react';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import {rendererWith, screen, wait} from 'web/utils/testing';
+import {setLocale} from 'gmp/locale/lang';
 
-import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
+import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+
+import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import Details from '../details';
 
@@ -37,9 +37,7 @@ describe('Task Details tests', () => {
     const {detailsMockTask: task} = getMockTasks();
 
     const caps = new Capabilities(['everything']);
-    const [scheduleMock, resultFunc] = createGetScheduleQueryMock(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
-    );
+    const [scheduleMock, resultFunc] = createGetScheduleQueryMock('foo');
     const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
     const {render} = rendererWith({
@@ -51,7 +49,6 @@ describe('Task Details tests', () => {
     const {element, getAllByTestId} = render(<Details entity={task} />);
 
     await wait();
-    expect(element).toMatchSnapshot();
     expect(resultFunc).toHaveBeenCalled();
     expect(scanConfigResult).toHaveBeenCalled();
 
@@ -85,10 +82,7 @@ describe('Task Details tests', () => {
     expect(element).toHaveTextContent('Min QoD70 %');
 
     expect(headings[4]).toHaveTextContent('Schedule');
-    expect(detailslinks[4]).toHaveAttribute(
-      'href',
-      '/schedule/c35f82f1-7798-4b84-b2c4-761a33068956',
-    );
+    expect(detailslinks[4]).toHaveAttribute('href', '/schedule/foo');
     expect(element).toHaveTextContent('schedule 1');
 
     expect(headings[5]).toHaveTextContent('Scan');
