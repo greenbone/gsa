@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,36 +17,34 @@
  */
 import React from 'react';
 
+import Capabilities from 'gmp/capabilities/capabilities';
+
 import {setLocale} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Capabilities from 'gmp/capabilities/capabilities';
-
-import {entityLoadingActions} from 'web/store/entities/tasks';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-
+import {createGetNotesQueryMock} from 'web/graphql/__mocks__/notes';
+import {createGetOverridesQueryMock} from 'web/graphql/__mocks__/overrides';
+import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
+import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {
+  createGetPermissionsQueryMock,
+  noPermissions,
+} from 'web/graphql/__mocks__/permissions';
 import {
   createGetTaskQueryMock,
   createCloneTaskQueryMock,
   createDeleteTaskQueryMock,
 } from 'web/graphql/__mocks__/tasks';
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
-
-import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
-import {createGetNotesQueryMock} from 'web/graphql/__mocks__/notes';
-import {createGetOverridesQueryMock} from 'web/graphql/__mocks__/overrides';
-import {
-  createGetPermissionsQueryMock,
-  noPermissions,
-} from 'web/graphql/__mocks__/permissions';
 
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+import {entityLoadingActions} from 'web/store/entities/tasks';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
 
 if (!isDefined(window.URL)) {
   window.URL = {};
@@ -100,7 +98,7 @@ describe('Task Detailspage tests', () => {
       filterString: 'task_id:12345',
     });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
+      'foo',
     );
 
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
@@ -198,10 +196,7 @@ describe('Task Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('Min QoD70 %');
 
     expect(headings[5]).toHaveTextContent('Schedule');
-    expect(detailslinks[7]).toHaveAttribute(
-      'href',
-      '/schedule/c35f82f1-7798-4b84-b2c4-761a33068956',
-    );
+    expect(detailslinks[7]).toHaveAttribute('href', '/schedule/foo');
     expect(baseElement).toHaveTextContent('schedule 1');
 
     expect(headings[6]).toHaveTextContent('Scan');
@@ -232,7 +227,7 @@ describe('Task Detailspage tests', () => {
       filterString: 'task_id:12345',
     });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
+      'foo',
     );
 
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
@@ -306,7 +301,7 @@ describe('Task Detailspage tests', () => {
       filterString: 'task_id:12345',
     });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
+      'foo',
     );
 
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
@@ -383,7 +378,7 @@ describe('Task Detailspage tests', () => {
       filterString: 'task_id:12345',
     });
     const [scheduleMock, scheduleResultFunc] = createGetScheduleQueryMock(
-      'c35f82f1-7798-4b84-b2c4-761a33068956',
+      'foo',
     );
     const [permissionMock] = createGetPermissionsQueryMock(
       {
@@ -1057,10 +1052,7 @@ describe('Task ToolBarIcons tests', () => {
     const icons = getAllByTestId('svg-icon');
     const detailsLinks = getAllByTestId('details-link');
 
-    expect(detailsLinks[0]).toHaveAttribute(
-      'href',
-      '/schedule/c35f82f1-7798-4b84-b2c4-761a33068956',
-    );
+    expect(detailsLinks[0]).toHaveAttribute('href', '/schedule/foo');
     expect(detailsLinks[0]).toHaveAttribute(
       'title',
       'View Details of Schedule schedule 1 (Next due: over)',

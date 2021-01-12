@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -31,9 +31,28 @@ import {isDefined} from 'gmp/utils/identity';
 export const GET_SCHEDULE = gql`
   query Schedule($id: UUID!) {
     schedule(id: $id) {
-      name
       id
+      name
       icalendar
+      timezone
+      owner
+      comment
+      writable
+      inUse
+      creationTime
+      modificationTime
+      permissions {
+        name
+      }
+      userTags {
+        count
+        tags {
+          name
+          id
+          value
+          comment
+        }
+      }
     }
   }
 `;
@@ -72,9 +91,28 @@ export const GET_SCHEDULES = gql`
     ) {
       edges {
         node {
-          name
           id
+          name
           icalendar
+          timezone
+          owner
+          comment
+          writable
+          inUse
+          creationTime
+          modificationTime
+          permissions {
+            name
+          }
+          userTags {
+            count
+            tags {
+              name
+              id
+              value
+              comment
+            }
+          }
         }
       }
       counts {
@@ -169,4 +207,144 @@ export const useModifySchedule = options => {
   return [modifySchedule, data];
 };
 
+export const DELETE_SCHEDULES_BY_IDS = gql`
+  mutation deleteSchedulesByIds($ids: [UUID]!) {
+    deleteSchedulesByIds(ids: $ids) {
+      ok
+    }
+  }
+`;
+
+export const DELETE_SCHEDULES_BY_FILTER = gql`
+  mutation deleteSchedulesByFilter($filterString: String!) {
+    deleteSchedulesByFilter(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
+export const EXPORT_SCHEDULES_BY_FILTER = gql`
+  mutation exportSchedulesByFilter($filterString: String) {
+    exportSchedulesByFilter(filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
+export const EXPORT_SCHEDULES_BY_IDS = gql`
+  mutation exportSchedulesByIds($ids: [UUID]!) {
+    exportSchedulesByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useDeleteSchedule = options => {
+  const [queryDeleteSchedule, data] = useMutation(
+    DELETE_SCHEDULES_BY_IDS,
+    options,
+  );
+  const deleteSchedule = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryDeleteSchedule({...options, variables: {ids: [id]}}),
+    [queryDeleteSchedule],
+  );
+  return [deleteSchedule, data];
+};
+
+export const useExportSchedulesByFilter = options => {
+  const [queryExportSchedulesByFilter] = useMutation(
+    EXPORT_SCHEDULES_BY_FILTER,
+    options,
+  );
+  const exportSchedulesByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportSchedulesByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportSchedulesByFilter, options],
+  );
+
+  return exportSchedulesByFilter;
+};
+
+export const useExportSchedulesByIds = options => {
+  const [queryExportSchedulesByIds] = useMutation(
+    EXPORT_SCHEDULES_BY_IDS,
+    options,
+  );
+
+  const exportSchedulesByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    scheduleIds =>
+      queryExportSchedulesByIds({
+        ...options,
+        variables: {
+          ids: scheduleIds,
+        },
+      }),
+    [queryExportSchedulesByIds, options],
+  );
+
+  return exportSchedulesByIds;
+};
+
+export const useDeleteSchedulesByIds = options => {
+  const [queryDeleteSchedulesByIds, data] = useMutation(
+    DELETE_SCHEDULES_BY_IDS,
+    options,
+  );
+  const deleteSchedulesByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteSchedulesByIds({...options, variables: {ids}}),
+    [queryDeleteSchedulesByIds],
+  );
+  return [deleteSchedulesByIds, data];
+};
+
+export const useDeleteSchedulesByFilter = options => {
+  const [queryDeleteSchedulesByFilter, data] = useMutation(
+    DELETE_SCHEDULES_BY_FILTER,
+    options,
+  );
+  const deleteSchedulesByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filterString, options) =>
+      queryDeleteSchedulesByFilter({
+        ...options,
+        variables: {filterString},
+      }),
+    [queryDeleteSchedulesByFilter],
+  );
+  return [deleteSchedulesByFilter, data];
+};
+
+export const CLONE_SCHEDULE = gql`
+  mutation cloneSchedule($id: UUID!) {
+    cloneSchedule(id: $id) {
+      id
+    }
+  }
+`;
+
+export const useCloneSchedule = options => {
+  const [queryCloneSchedule, {data, ...other}] = useMutation(
+    CLONE_SCHEDULE,
+    options,
+  );
+  const cloneSchedule = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryCloneSchedule({...options, variables: {id}}).then(
+        result => result.data.cloneSchedule.id,
+      ),
+    [queryCloneSchedule],
+  );
+  const scheduleId = data?.cloneSchedule?.id;
+  return [cloneSchedule, {...other, id: scheduleId}];
+};
 // vim: set ts=2 sw=2 tw=80:
