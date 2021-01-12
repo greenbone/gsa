@@ -35,6 +35,18 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+import {
+  createGetScheduleQueryMock,
+  schedule1,
+} from 'web/graphql/__mocks__/schedules';
+import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: 'foo',
+  }),
+}));
 
 setLocale('en');
 
@@ -114,11 +126,8 @@ const renewSession = jest.fn().mockResolvedValue({
 });
 
 describe('Schedule Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+  test('should render full Detailspage', async () => {
     const gmp = {
-      schedule: {
-        get: getSchedule,
-      },
       permissions: {
         get: getEntities,
       },
@@ -128,21 +137,31 @@ describe('Schedule Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', schedule1);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=foo first=1 rows=-1',
+    });
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', schedule));
+    store.dispatch(entityLoadingActions.success('foo', schedule));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="foo" />);
 
-    expect(element).toHaveTextContent('Schedule: schedule 1');
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+
+    expect(baseElement).toHaveTextContent('Schedule: schedule 1');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -155,42 +174,40 @@ describe('Schedule Detailspage tests', () => {
     expect(screen.getAllByTitle('Schedules List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/schedules');
 
-    expect(element).toHaveTextContent('ID:1234');
-    expect(element).toHaveTextContent('Created:Wed, Dec 23, 2020 3:14 PM CET');
-    expect(element).toHaveTextContent('Modified:Mon, Jan 4, 2021 12:54 PM CET');
-    expect(element).toHaveTextContent('Owner:admin');
+    expect(baseElement).toHaveTextContent('ID:foo');
+    expect(baseElement).toHaveTextContent(
+      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+    );
+    expect(baseElement).toHaveTextContent('Owner:admin');
 
     const tabs = screen.getAllByTestId('entities-tab-title');
     expect(tabs[0]).toHaveTextContent('User Tags');
     expect(tabs[1]).toHaveTextContent('Permissions');
 
-    expect(element).toHaveTextContent('Comment');
-    expect(element).toHaveTextContent('hello world');
+    expect(baseElement).toHaveTextContent('Comment');
+    expect(baseElement).toHaveTextContent('hello world');
 
-    expect(element).toHaveTextContent('First Run');
-    expect(element).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
+    expect(baseElement).toHaveTextContent('First Run');
+    expect(baseElement).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
 
-    expect(element).toHaveTextContent('Next Run');
-    expect(element).toHaveTextContent('-');
+    expect(baseElement).toHaveTextContent('Next Run');
+    expect(baseElement).toHaveTextContent('-');
 
-    expect(element).toHaveTextContent('Timezone');
-    expect(element).toHaveTextContent('UTC');
+    expect(baseElement).toHaveTextContent('Timezone');
+    expect(baseElement).toHaveTextContent('UTC');
 
-    expect(element).toHaveTextContent('Recurrence');
-    expect(element).toHaveTextContent('Once');
+    expect(baseElement).toHaveTextContent('Recurrence');
+    expect(baseElement).toHaveTextContent('Once');
 
-    expect(element).toHaveTextContent('Duration');
-    expect(element).toHaveTextContent('Entire Operation');
+    expect(baseElement).toHaveTextContent('Duration');
+    expect(baseElement).toHaveTextContent('Entire Operation');
   });
 
-  test('should render user tags tab', () => {
+  test('should render user tags tab', async () => {
     const gmp = {
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -198,36 +215,48 @@ describe('Schedule Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', schedule1);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=foo first=1 rows=-1',
+    });
+    const [
+      renewSessionMock,
+      renewSessionResult,
+    ] = createRenewSessionQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock, renewSessionMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', schedule));
+    store.dispatch(entityLoadingActions.success('foo', schedule));
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="foo" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[0]).toHaveTextContent('User Tags');
     fireEvent.click(tabs[0]);
 
+    await wait();
+
+    expect(renewSessionResult).toHaveBeenCalled();
+
     expect(baseElement).toHaveTextContent('No user tags available');
   });
 
-  test('should render permissions tab', () => {
+  test.only('should render permissions tab', async () => {
     const gmp = {
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -235,24 +264,43 @@ describe('Schedule Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', schedule1);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
+      {
+        filterString: 'resource_uuid=foo first=1 rows=-1',
+      },
+      {data: {permissions: null}},
+    );
+    const [
+      renewSessionMock,
+      renewSessionResult,
+    ] = createRenewSessionQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock, renewSessionMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', schedule));
+    store.dispatch(entityLoadingActions.success('foo', schedule));
 
     const {baseElement} = render(<Detailspage id="12345" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[1]).toHaveTextContent('Permissions');
     fireEvent.click(tabs[1]);
+
+    expect(renewSessionResult).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('No permissions available');
   });

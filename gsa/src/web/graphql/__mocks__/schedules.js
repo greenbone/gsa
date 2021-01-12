@@ -30,7 +30,23 @@ import {
   CLONE_SCHEDULE,
 } from '../schedules';
 
-const schedule1 = deepFreeze({
+export const schedule1 = deepFreeze({
+  id: 'foo',
+  name: 'schedule 1',
+  icalendar:
+    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1~git-5f8b6cf-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nUID:foo\nDTSTAMP:20210111T134141Z\nEND:VEVENT\nEND:VCALENDAR',
+  timezone: 'UTC',
+  userTags: null,
+  permissions: [{name: 'Everything'}],
+  owner: 'admin',
+  comment: 'hello world',
+  writable: true,
+  inUse: false,
+  creationTime: '2020-12-23T14:14:11+00:00',
+  modificationTime: '2021-01-04T11:54:12+00:00',
+});
+
+const inUseSchedule = deepFreeze({
   id: 'foo',
   name: 'schedule 1',
   icalendar:
@@ -51,7 +67,33 @@ const schedule1 = deepFreeze({
   owner: 'admin',
   comment: 'hello world',
   writable: true,
-  inUse: false,
+  inUse: true,
+  creationTime: '2020-12-23T14:14:11+00:00',
+  modificationTime: '2021-01-04T11:54:12+00:00',
+});
+
+const noPermSchedule = deepFreeze({
+  id: 'foo',
+  name: 'schedule 1',
+  icalendar:
+    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1~git-5f8b6cf-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nUID:foo\nDTSTAMP:20210111T134141Z\nEND:VEVENT\nEND:VCALENDAR',
+  timezone: 'UTC',
+  userTags: {
+    count: 1,
+    tags: [
+      {
+        id: '123',
+        name: 'schedule:unnamed',
+        value: null,
+        comment: null,
+      },
+    ],
+  },
+  permissions: [{name: 'get_schedules'}],
+  owner: 'admin',
+  comment: 'hello world',
+  writable: true,
+  inUse: true,
   creationTime: '2020-12-23T14:14:11+00:00',
   modificationTime: '2021-01-04T11:54:12+00:00',
 });
@@ -97,26 +139,10 @@ export const createGetSchedulesQueryMock = (variables = {}) => {
   return [queryMock, resultFunc];
 };
 
-export const createGetScheduleQueryMock = (id, schedule = schedule1) => {
-  const queryResult = {
-    data: {
-      schedule,
-    },
-  };
-
-  const resultFunc = jest.fn().mockReturnValue(queryResult);
-
-  const queryMock = {
-    request: {
-      query: GET_SCHEDULE,
-      variables: {
-        id,
-      },
-    },
-    newData: resultFunc,
-  };
-  return [queryMock, resultFunc];
-};
+export const createGetScheduleQueryMock = (
+  scheduleId = 'foo',
+  schedule = schedule1,
+) => createGenericQueryMock(GET_SCHEDULE, {schedule}, {id: scheduleId});
 
 export const createScheduleInput = {
   id: '12345',
