@@ -78,6 +78,7 @@ const nvt = NVT.fromElement({
       _type: 'VendorFix',
       __text: 'This is a description',
     },
+    timeout: '',
     refs: {
       ref: [
         {_type: 'cve', _id: 'CVE-2020-1234'},
@@ -196,85 +197,88 @@ describe('Nvt Detailspage tests', () => {
     expect(element).toHaveTextContent('CVECVE-2020-1234');
   });
 
-  // test('should render user tags tab', () => {
-  //   const gmp = {
-  //     nvt: {
-  //       get: getNvt,
-  //     },
-  //     notes: {
-  //       get: getEntities,
-  //     },
-  //     overrides: {
-  //       get: getEntities,
-  //     },
-  //     settings: {manualUrl, reloadInterval},
-  //     user: {
-  //       currentSettings,
-  //       renewSession,
-  //     },
-  //   };
+  test('should render preferences tab', () => {
+    const gmp = {
+      nvt: {
+        get: getNvt,
+      },
+      notes: {
+        get: getEntities,
+      },
+      overrides: {
+        get: getEntities,
+      },
+      settings: {manualUrl, reloadInterval},
+      user: {
+        currentSettings,
+        renewSession,
+      },
+    };
 
-  //   const {render, store} = rendererWith({
-  //     capabilities: caps,
-  //     gmp,
-  //     router: true,
-  //     store: true,
-  //   });
+    const {render, store} = rendererWith({
+      capabilities: caps,
+      gmp,
+      router: true,
+      store: true,
+    });
 
-  //   store.dispatch(setTimezone('CET'));
-  //   store.dispatch(setUsername('admin'));
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
-  //   store.dispatch(entityLoadingActions.success('12345', nvt));
+    store.dispatch(entityLoadingActions.success('12345', nvt));
 
-  //   const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
 
-  //   const tabs = screen.getAllByTestId('entities-tab-title');
+    const tabs = screen.getAllByTestId('entities-tab-title');
 
-  //   expect(tabs[0]).toHaveTextContent('User Tags');
-  //   fireEvent.click(tabs[0]);
+    expect(tabs[0]).toHaveTextContent('Preferences');
+    fireEvent.click(tabs[0]);
 
-  //   expect(baseElement).toHaveTextContent('No user tags available');
-  // });
+    expect(baseElement).toHaveTextContent('Name');
+    expect(baseElement).toHaveTextContent('Timeout');
+    expect(baseElement).toHaveTextContent('Default Value');
+    expect(baseElement).toHaveTextContent('default');
+  });
 
-  // test('should render permissions tab', () => {
-  //   const gmp = {
-  //     nvt: {
-  //       get: getNvt,
-  //     },
-  //     notes: {
-  //       get: getEntities,
-  //     },
-  //     overrides: {
-  //       get: getEntities,
-  //     },
-  //     settings: {manualUrl, reloadInterval},
-  //     user: {
-  //       currentSettings,
-  //       renewSession,
-  //     },
-  //   };
+  test('should render user tags tab', () => {
+    const gmp = {
+      nvt: {
+        get: getNvt,
+      },
+      notes: {
+        get: getEntities,
+      },
+      overrides: {
+        get: getEntities,
+      },
+      settings: {manualUrl, reloadInterval},
+      user: {
+        currentSettings,
+        renewSession,
+      },
+    };
 
-  //   const {render, store} = rendererWith({
-  //     capabilities: caps,
-  //     gmp,
-  //     router: true,
-  //     store: true,
-  //   });
+    const {render, store} = rendererWith({
+      capabilities: caps,
+      gmp,
+      router: true,
+      store: true,
+    });
 
-  //   store.dispatch(setTimezone('CET'));
-  //   store.dispatch(setUsername('admin'));
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
-  //   store.dispatch(entityLoadingActions.success('12345', nvt));
+    store.dispatch(entityLoadingActions.success('12345', nvt));
 
-  //   const {baseElement} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
 
-  //   const tabs = screen.getAllByTestId('entities-tab-title');
+    const tabs = screen.getAllByTestId('entities-tab-title');
 
-  //   expect(tabs[1]).toHaveTextContent('Permissions');
-  //   fireEvent.click(tabs[1]);
+    expect(tabs[1]).toHaveTextContent('User Tags');
+    fireEvent.click(tabs[1]);
 
-  //   expect(baseElement).toHaveTextContent('No permissions available');
-  // });
+    expect(baseElement).toHaveTextContent('No user tags available');
+  });
 
   //   test('should call commands', async () => {
   //     const clone = jest.fn().mockResolvedValue({
