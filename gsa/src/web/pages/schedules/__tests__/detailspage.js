@@ -39,8 +39,7 @@ import {
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 
-import {entityLoadingActions} from 'web/store/entities/schedules';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
@@ -125,9 +124,6 @@ describe('Schedule Detailspage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('foo', schedule));
 
     const {baseElement} = render(<Detailspage id="foo" />);
 
@@ -207,9 +203,6 @@ describe('Schedule Detailspage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('foo', schedule));
 
     const {baseElement} = render(<Detailspage id="foo" />);
 
