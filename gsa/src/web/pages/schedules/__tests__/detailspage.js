@@ -32,7 +32,7 @@ import {
   createDeleteScheduleQueryMock,
   createExportSchedulesByIdsQueryMock,
   createGetScheduleQueryMock,
-  schedule1,
+  mockSchedule,
   noPermSchedule,
   inUseSchedule,
 } from 'web/graphql/__mocks__/schedules';
@@ -111,7 +111,7 @@ describe('Schedule Detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetScheduleQueryMock('foo', schedule1);
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', mockSchedule);
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
       filterString: 'resource_uuid=foo first=1 rows=-1',
     });
@@ -186,7 +186,7 @@ describe('Schedule Detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetScheduleQueryMock('foo', schedule1);
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', mockSchedule);
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
       filterString: 'resource_uuid=foo first=1 rows=-1',
     });
@@ -231,7 +231,7 @@ describe('Schedule Detailspage tests', () => {
       },
     };
     const [renewQueryMock] = createRenewSessionQueryMock();
-    const [mock, resultFunc] = createGetScheduleQueryMock('foo', schedule1);
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', mockSchedule);
     const [cloneMock, cloneResult] = createCloneScheduleQueryMock();
     const [deleteMock, deleteResult] = createDeleteScheduleQueryMock();
     const [exportMock, exportResult] = createExportSchedulesByIdsQueryMock([

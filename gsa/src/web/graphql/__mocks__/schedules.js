@@ -30,7 +30,7 @@ import {
   CLONE_SCHEDULE,
 } from '../schedules';
 
-export const schedule1 = deepFreeze({
+export const mockSchedule = deepFreeze({
   id: 'foo',
   name: 'schedule 1',
   icalendar:
@@ -101,7 +101,7 @@ export const noPermSchedule = deepFreeze({
 const mockSchedules = {
   edges: [
     {
-      node: schedule1,
+      node: mockSchedule,
     },
   ],
   counts: {
@@ -141,7 +141,7 @@ export const createGetSchedulesQueryMock = (variables = {}) => {
 
 export const createGetScheduleQueryMock = (
   scheduleId = 'foo',
-  schedule = schedule1,
+  schedule = mockSchedule,
 ) => createGenericQueryMock(GET_SCHEDULE, {schedule}, {id: scheduleId});
 
 export const createScheduleInput = {

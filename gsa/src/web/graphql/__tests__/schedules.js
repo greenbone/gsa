@@ -39,7 +39,7 @@ import {
   createExportSchedulesByFilterQueryMock,
   createCloneScheduleQueryMock,
   createDeleteScheduleQueryMock,
-  schedule1,
+  mockSchedule,
 } from '../__mocks__/schedules';
 
 import {
@@ -148,7 +148,7 @@ describe('useLazyGetSchedules tests', () => {
 
 describe('useLazyGetSchedule tests', () => {
   test('should query schedule after user interaction', async () => {
-    const [mock, resultFunc] = createGetScheduleQueryMock('foo', schedule1);
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', mockSchedule);
     const {render} = rendererWith({queryMocks: [mock]});
     render(<GetLazyScheduleComponent />);
 
