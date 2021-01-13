@@ -300,24 +300,25 @@ describe('Schedule Detailspage tests', () => {
     expect(resultFunc).toHaveBeenCalled();
     expect(permissionResult).toHaveBeenCalled();
 
-    const icons = screen.getAllByTestId('svg-icon');
-
-    expect(icons[3]).toHaveAttribute('title', 'Clone Schedule');
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getAllByTitle('Clone Schedule');
+    expect(cloneIcon[0]).toBeInTheDocument();
+    fireEvent.click(cloneIcon[0]);
 
     await wait();
 
     expect(cloneResult).toHaveBeenCalled();
 
-    expect(icons[5]).toHaveAttribute('title', 'Move Schedule to trashcan');
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getAllByTitle('Move Schedule to trashcan');
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
 
     await wait();
 
     expect(deleteResult).toHaveBeenCalled();
 
-    expect(icons[6]).toHaveAttribute('title', 'Export Schedule as XML');
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
 
     await wait();
 
