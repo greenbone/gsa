@@ -36,6 +36,9 @@ import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 import {
+  createCloneScheduleQueryMock,
+  createDeleteScheduleQueryMock,
+  createExportSchedulesByIdsQueryMock,
   createGetScheduleQueryMock,
   schedule1,
 } from 'web/graphql/__mocks__/schedules';
@@ -254,80 +257,8 @@ describe('Schedule Detailspage tests', () => {
 
     expect(baseElement).toHaveTextContent('No user tags available');
   });
-
-  test.only('should render permissions tab', async () => {
+  test.only('should call commands', async () => {
     const gmp = {
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-        renewSession,
-      },
-    };
-
-    const [mock, resultFunc] = createGetScheduleQueryMock('foo', schedule1);
-    const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
-      {
-        filterString: 'resource_uuid=foo first=1 rows=-1',
-      },
-      {data: {permissions: null}},
-    );
-    const [
-      renewSessionMock,
-      renewSessionResult,
-    ] = createRenewSessionQueryMock();
-    const {render, store} = rendererWith({
-      capabilities: caps,
-      gmp,
-      router: true,
-      store: true,
-      queryMocks: [mock, permissionMock, renewSessionMock],
-    });
-
-    store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-
-    store.dispatch(entityLoadingActions.success('foo', schedule));
-
-    const {baseElement} = render(<Detailspage id="12345" />);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-    expect(permissionResult).toHaveBeenCalled();
-
-    const tabs = screen.getAllByTestId('entities-tab-title');
-
-    expect(tabs[1]).toHaveTextContent('Permissions');
-    fireEvent.click(tabs[1]);
-
-    expect(renewSessionResult).toHaveBeenCalled();
-
-    expect(baseElement).toHaveTextContent('No permissions available');
-  });
-
-  test('should call commands', async () => {
-    const clone = jest.fn().mockResolvedValue({
-      data: {id: 'foo'},
-    });
-
-    const deleteFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const gmp = {
-      schedule: {
-        get: getSchedule,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -335,47 +266,62 @@ describe('Schedule Detailspage tests', () => {
       },
     };
     const [renewQueryMock] = createRenewSessionQueryMock();
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', schedule1);
+    const [cloneMock, cloneResult] = createCloneScheduleQueryMock();
+    const [deleteMock, deleteResult] = createDeleteScheduleQueryMock();
+    const [exportMock, exportResult] = createExportSchedulesByIdsQueryMock([
+      'foo',
+    ]);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=foo first=1 rows=-1',
+    });
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewQueryMock],
+      queryMocks: [
+        renewQueryMock,
+        mock,
+        cloneMock,
+        deleteMock,
+        exportMock,
+        permissionMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', schedule));
-
-    render(<Detailspage id="12345" />);
+    render(<Detailspage />);
 
     await wait();
 
-    const cloneIcon = screen.getAllByTitle('Clone Schedule');
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+
+    const icons = screen.getAllByTestId('svg-icon');
+
+    expect(icons[3]).toHaveAttribute('title', 'Clone Schedule');
+    fireEvent.click(icons[3]);
 
     await wait();
 
-    expect(clone).toHaveBeenCalledWith(schedule);
+    expect(cloneResult).toHaveBeenCalled();
 
-    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
-    expect(exportFunc).toHaveBeenCalledWith(schedule);
-
-    const deleteIcon = screen.getAllByTitle('Move Schedule to trashcan');
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
+    expect(icons[5]).toHaveAttribute('title', 'Move Schedule to trashcan');
+    fireEvent.click(icons[5]);
 
     await wait();
 
-    expect(deleteFunc).toHaveBeenCalledWith({id: schedule.id});
+    expect(deleteResult).toHaveBeenCalled();
+
+    expect(icons[6]).toHaveAttribute('title', 'Export Schedule as XML');
+    fireEvent.click(icons[6]);
+
+    await wait();
+
+    expect(exportResult).toHaveBeenCalled();
   });
 });
 

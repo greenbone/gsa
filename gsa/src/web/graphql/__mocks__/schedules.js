@@ -247,14 +247,14 @@ const deleteScheduleResult = {
   },
 };
 
-export const createDeleteScheduleQueryMock = (scheduleId = '1') =>
+export const createDeleteScheduleQueryMock = (scheduleId = 'foo') =>
   createGenericQueryMock(DELETE_SCHEDULES_BY_IDS, deleteScheduleResult, {
     ids: [scheduleId],
   });
 
 export const createCloneScheduleQueryMock = (
-  scheduleId = '1',
-  newScheduleId = '2',
+  scheduleId = 'foo',
+  newScheduleId = 'bar',
 ) =>
   createGenericQueryMock(
     CLONE_SCHEDULE,
