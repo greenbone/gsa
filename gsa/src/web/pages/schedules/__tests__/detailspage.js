@@ -27,7 +27,17 @@ import Schedule from 'gmp/models/schedule';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import {
+  createCloneScheduleQueryMock,
+  createDeleteScheduleQueryMock,
+  createExportSchedulesByIdsQueryMock,
+  createGetScheduleQueryMock,
+  schedule1,
+  noPermSchedule,
+  inUseSchedule,
+} from 'web/graphql/__mocks__/schedules';
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 
 import {entityLoadingActions} from 'web/store/entities/schedules';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -35,14 +45,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-import {
-  createCloneScheduleQueryMock,
-  createDeleteScheduleQueryMock,
-  createExportSchedulesByIdsQueryMock,
-  createGetScheduleQueryMock,
-  schedule1,
-} from 'web/graphql/__mocks__/schedules';
-import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -78,39 +80,9 @@ const schedule = Schedule.fromElement({
   _id: '12345',
 });
 
-const scheduleInUse = Schedule.fromElement({
-  comment: 'hello world',
-  creation_time: '2020-12-23T14:14:11Z',
-  icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:3dfd6e6f-4e79-4f18-a5c2-adb3fca56bd3\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
-  in_use: 1,
-  modification_time: '2021-01-04T11:54:12Z',
-  name: 'schedule 1',
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'Everything'}},
-  timezone: 'UTC',
-  writable: 1,
-  _id: '23456',
-});
+const scheduleInUse = Schedule.fromObject(inUseSchedule);
 
-const noPermSchedule = Schedule.fromElement({
-  comment: 'hello world',
-  creation_time: '2020-12-23T14:14:11Z',
-  icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:3dfd6e6f-4e79-4f18-a5c2-adb3fca56bd3\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
-  in_use: 0,
-  modification_time: '2021-01-04T11:54:12Z',
-  name: 'schedule 1',
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'get_schedules'}},
-  timezone: 'UTC',
-  writable: 1,
-  _id: '23456',
-});
-
-const getSchedule = jest.fn().mockResolvedValue({
-  data: schedule,
-});
+const noPerm = Schedule.fromObject(noPermSchedule);
 
 const getEntities = jest.fn().mockResolvedValue({
   data: [],
@@ -257,7 +229,7 @@ describe('Schedule Detailspage tests', () => {
 
     expect(baseElement).toHaveTextContent('No user tags available');
   });
-  test.only('should call commands', async () => {
+  test('should call commands', async () => {
     const gmp = {
       settings: {manualUrl, reloadInterval},
       user: {
@@ -430,7 +402,7 @@ describe('Schedule ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={noPermSchedule}
+        entity={noPerm}
         onScheduleCloneClick={handleScheduleCloneClick}
         onScheduleDeleteClick={handleScheduleDeleteClick}
         onScheduleDownloadClick={handleScheduleDownloadClick}
@@ -449,7 +421,7 @@ describe('Schedule ToolBarIcons tests', () => {
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
 
-    expect(handleScheduleCloneClick).toHaveBeenCalledWith(noPermSchedule);
+    expect(handleScheduleCloneClick).toHaveBeenCalledWith(noPerm);
 
     expect(editIcon[0]).toBeInTheDocument();
     fireEvent.click(editIcon[0]);
@@ -464,7 +436,7 @@ describe('Schedule ToolBarIcons tests', () => {
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
 
-    expect(handleScheduleDownloadClick).toHaveBeenCalledWith(noPermSchedule);
+    expect(handleScheduleDownloadClick).toHaveBeenCalledWith(noPerm);
   });
 
   test('should (not) call click handlers for schedule in use', () => {

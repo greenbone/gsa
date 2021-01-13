@@ -46,7 +46,7 @@ export const schedule1 = deepFreeze({
   modificationTime: '2021-01-04T11:54:12+00:00',
 });
 
-const inUseSchedule = deepFreeze({
+export const inUseSchedule = deepFreeze({
   id: 'foo',
   name: 'schedule 1',
   icalendar:
@@ -72,7 +72,7 @@ const inUseSchedule = deepFreeze({
   modificationTime: '2021-01-04T11:54:12+00:00',
 });
 
-const noPermSchedule = deepFreeze({
+export const noPermSchedule = deepFreeze({
   id: 'foo',
   name: 'schedule 1',
   icalendar:
@@ -93,7 +93,7 @@ const noPermSchedule = deepFreeze({
   owner: 'admin',
   comment: 'hello world',
   writable: true,
-  inUse: true,
+  inUse: false,
   creationTime: '2020-12-23T14:14:11+00:00',
   modificationTime: '2021-01-04T11:54:12+00:00',
 });
