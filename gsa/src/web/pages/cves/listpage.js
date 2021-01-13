@@ -42,7 +42,7 @@ import CvesTable from './table';
 
 import CvesDashboard, {CVES_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = () => (
+export const ToolBarIcons = () => (
   <ManualIcon page="managing-secinfo" anchor="cve" title={_('Help: CVEs')} />
 );
 
