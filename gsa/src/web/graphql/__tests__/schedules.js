@@ -52,6 +52,7 @@ import {
   useExportSchedulesByFilter,
   useExportSchedulesByIds,
   useCloneSchedule,
+  useGetSchedule,
 } from '../schedules';
 
 const GetLazySchedulesComponent = () => {
@@ -405,5 +406,47 @@ describe('useDeleteSchedule tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const GetScheduleComponent = ({id}) => {
+  const {loading, schedule, error} = useGetSchedule(id);
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      {error && <div data-testid="error">{error.message}</div>}
+      {schedule && (
+        <div data-testid="schedule">
+          <span data-testid="id">{schedule.id}</span>
+          <span data-testid="name">{schedule.name}</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+describe('useGetSchedule tests', () => {
+  test('should load schedule', async () => {
+    const [queryMock, resultFunc] = createGetScheduleQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<GetScheduleComponent id="foo" />);
+
+    expect(screen.queryByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('schedule')).toBeInTheDocument();
+
+    expect(screen.getByTestId('id')).toHaveTextContent('foo');
+    expect(screen.getByTestId('name')).toHaveTextContent('schedule 1');
   });
 });
