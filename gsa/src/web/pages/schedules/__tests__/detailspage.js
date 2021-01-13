@@ -222,6 +222,56 @@ describe('Schedule Detailspage tests', () => {
 
     expect(baseElement).toHaveTextContent('No user tags available');
   });
+
+  test('should render permissions tab', async () => {
+    const gmp = {
+      settings: {manualUrl, reloadInterval},
+      user: {
+        currentSettings,
+        renewSession,
+      },
+    };
+
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', mockSchedule);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
+      {
+        filterString: 'resource_uuid=foo first=1 rows=-1',
+      },
+      {permissions: null},
+    );
+    const [
+      renewSessionMock,
+      renewSessionResult,
+    ] = createRenewSessionQueryMock();
+
+    const {render, store} = rendererWith({
+      capabilities: caps,
+      gmp,
+      router: true,
+      store: true,
+      queryMocks: [mock, permissionMock, renewSessionMock],
+    });
+
+    store.dispatch(setTimezone('CET'));
+
+    const {baseElement} = render(<Detailspage id="foo" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+
+    const tabs = screen.getAllByTestId('entities-tab-title');
+
+    expect(tabs[1]).toHaveTextContent('Permissions');
+    fireEvent.click(tabs[1]);
+
+    await wait();
+
+    expect(renewSessionResult).toHaveBeenCalled();
+    expect(baseElement).toHaveTextContent('No permissions available');
+  });
+
   test('should call commands', async () => {
     const gmp = {
       settings: {manualUrl, reloadInterval},
