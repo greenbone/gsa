@@ -534,38 +534,42 @@ describe('Nvt Detailspage tests', () => {
 
   //     expect(deleteFunc).toHaveBeenCalledWith({id: nvt.id});
   //   });
-  // });
+});
 
-  // describe('Nvt ToolBarIcons tests', () => {
-  //   test('should render', () => {
-  //     const handleNvtDownloadClick = jest.fn();
+describe('Nvt ToolBarIcons tests', () => {
+  test('should render', () => {
+    const handleNvtDownloadClick = jest.fn();
+    const handleOnNoteCreateClick = jest.fn();
+    const handleOnOverrideCreateClick = jest.fn();
 
-  //     const gmp = {settings: {manualUrl}};
+    const gmp = {settings: {manualUrl}};
 
-  //     const {render} = rendererWith({
-  //       gmp,
-  //       capabilities: caps,
-  //       router: true,
-  //     });
+    const {render} = rendererWith({
+      gmp,
+      capabilities: caps,
+      router: true,
+    });
 
-  //     const {element} = render(
-  //       <ToolBarIcons
-  //         entity={nvt}
-  //         onNvtDownloadClick={handleNvtDownloadClick}
-  //       />,
-  //     );
+    const {element} = render(
+      <ToolBarIcons
+        entity={nvt}
+        onNoteCreateClick={handleOnNoteCreateClick}
+        onNvtDownloadClick={handleNvtDownloadClick}
+        onOverrideCreateClick={handleOnOverrideCreateClick}
+      />,
+    );
 
-  //     const links = element.querySelectorAll('a');
+    const links = element.querySelectorAll('a');
 
-  //     expect(links[0]).toHaveAttribute(
-  //       'href',
-  //       'test/en/managing-secinfo.html#network-vulnerability-tests-nvt',
-  //     );
-  //     expect(screen.getAllByTitle('Help: Nvts')[0]).toBeInTheDocument();
+    expect(links[0]).toHaveAttribute(
+      'href',
+      'test/en/managing-secinfo.html#network-vulnerability-tests-nvt',
+    );
+    expect(screen.getAllByTitle('Help: NVTs')[0]).toBeInTheDocument();
 
-  //     expect(links[1]).toHaveAttribute('href', '/nvts');
-  //     expect(screen.getAllByTitle('Nvts List')[0]).toBeInTheDocument();
-  //   });
+    expect(links[1]).toHaveAttribute('href', '/nvts');
+    expect(screen.getAllByTitle('NVT List')[0]).toBeInTheDocument();
+  });
 
   // test('should call click handlers', () => {
   //   const handleNvtCloneClick = jest.fn();
