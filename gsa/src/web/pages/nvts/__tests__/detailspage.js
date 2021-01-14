@@ -57,6 +57,7 @@ const nvt = NVT.fromElement({
   comment: '',
   creation_time: '2019-06-24T11:55:30Z',
   modification_time: '2019-06-24T10:12:27Z',
+  timezone: 'UTC',
   writable: 0,
   in_use: 0,
   permissions: '',
@@ -97,6 +98,7 @@ const note1 = Note.fromElement({
   end_time: '2021-02-13T07:35:20+01:00',
   modification_time: '2021-01-14T06:35:57Z',
   new_severity: -1,
+  timezone: 'UTC',
   new_threat: 'False Positive',
   nvt: {
     _oid: '12345',
@@ -135,6 +137,7 @@ const override1 = Override.fromElement({
   in_use: 0,
   end_time: '2021-03-13T11:35:20+01:00',
   modification_time: '2021-01-14T06:20:57Z',
+  timezone: 'UTC',
   new_severity: -1,
   new_threat: 'False Positive',
   nvt: {
@@ -174,6 +177,7 @@ const override2 = Override.fromElement({
   in_use: 0,
   end_time: '2021-02-13T12:35:20+01:00',
   modification_time: '2020-02-14T06:35:57Z',
+  timezone: 'UTC',
   new_severity: -1,
   new_threat: 'False Positive',
   nvt: {
@@ -266,7 +270,7 @@ describe('Nvt Detailspage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CEST'));
+    store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
@@ -288,10 +292,8 @@ describe('Nvt Detailspage tests', () => {
     expect(links[1]).toHaveAttribute('href', '/nvts');
 
     expect(element).toHaveTextContent('ID:12345');
-    expect(element).toHaveTextContent('Created:Mon, Jun 24, 2019 1:55 PM CEST');
-    expect(element).toHaveTextContent(
-      'Modified:Mon, Jun 24, 2019 12:12 PM CEST',
-    );
+    expect(element).toHaveTextContent('Mon, Jun 24, 2019 11:55 AM UTC');
+    expect(element).toHaveTextContent('Mon, Jun 24, 2019 10:12 AM UTC');
     expect(element).toHaveTextContent('Owner:(Global Object)');
 
     const tabs = screen.getAllByTestId('entities-tab-title');
@@ -377,7 +379,7 @@ describe('Nvt Detailspage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CEST'));
+    store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
@@ -420,7 +422,7 @@ describe('Nvt Detailspage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CSET'));
+    store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
