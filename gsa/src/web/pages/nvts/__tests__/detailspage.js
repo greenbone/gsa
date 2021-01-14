@@ -29,8 +29,6 @@ import Override from 'gmp/models/override';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
-
 import {entityLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -461,79 +459,6 @@ describe('Nvt Detailspage tests', () => {
 
     expect(baseElement).toHaveTextContent('No user tags available');
   });
-
-  //   test('should call commands', async () => {
-  //     const clone = jest.fn().mockResolvedValue({
-  //       data: {id: 'foo'},
-  //     });
-
-  //     const deleteFunc = jest.fn().mockResolvedValue({
-  //       foo: 'bar',
-  //     });
-
-  //     const exportFunc = jest.fn().mockResolvedValue({
-  //       foo: 'bar',
-  //     });
-
-  //     const gmp = {
-  //       nvt: {
-  //         get: getNvt,
-  //       },
-  //       notes: {
-  //         get: getEntities,
-  //       },
-  //       overrides: {
-  //         get: getEntities,
-  //       },
-  //       settings: {manualUrl, reloadInterval},
-  //       user: {
-  //         currentSettings,
-  //         renewSession,
-  //       },
-  //     };
-  //     const [renewQueryMock] = createRenewSessionQueryMock();
-
-  //     const {render, store} = rendererWith({
-  //       capabilities: caps,
-  //       gmp,
-  //       router: true,
-  //       store: true,
-  //       queryMocks: [renewQueryMock],
-  //     });
-
-  //     store.dispatch(setTimezone('CET'));
-  //     store.dispatch(setUsername('admin'));
-
-  //     store.dispatch(entityLoadingActions.success('12345', nvt));
-
-  //     render(<Detailspage id="12345" />);
-
-  //     await wait();
-
-  //     const cloneIcon = screen.getAllByTitle('Clone Nvt');
-  //     expect(cloneIcon[0]).toBeInTheDocument();
-  //     fireEvent.click(cloneIcon[0]);
-
-  //     await wait();
-
-  //     expect(clone).toHaveBeenCalledWith(nvt);
-
-  //     const exportIcon = screen.getAllByTitle('Export Nvt as XML');
-  //     expect(exportIcon[0]).toBeInTheDocument();
-  //     fireEvent.click(exportIcon[0]);
-
-  //     await wait();
-
-  //     expect(exportFunc).toHaveBeenCalledWith(nvt);
-
-  //     const deleteIcon = screen.getAllByTitle('Move Nvt to trashcan');
-  //     expect(deleteIcon[0]).toBeInTheDocument();
-  //     fireEvent.click(deleteIcon[0]);
-
-  //     await wait();
-
-  //     expect(deleteFunc).toHaveBeenCalledWith({id: nvt.id});
-  //   });
 });
 
 describe('Nvt ToolBarIcons tests', () => {
@@ -569,157 +494,57 @@ describe('Nvt ToolBarIcons tests', () => {
 
     expect(links[1]).toHaveAttribute('href', '/nvts');
     expect(screen.getAllByTitle('NVT List')[0]).toBeInTheDocument();
+
+    expect(links[2]).toHaveAttribute('href', '/results?filter=nvt%3D12345');
+    expect(
+      screen.getAllByTitle('Corresponding Results')[0],
+    ).toBeInTheDocument();
+
+    expect(links[3]).toHaveAttribute(
+      'href',
+      '/vulnerabilities?filter=uuid%3D12345',
+    );
+    expect(
+      screen.getAllByTitle('Corresponding Vulnerabilities')[0],
+    ).toBeInTheDocument();
   });
 
-  // test('should call click handlers', () => {
-  //   const handleNvtCloneClick = jest.fn();
-  //   const handleNvtDeleteClick = jest.fn();
-  //   const handleNvtDownloadClick = jest.fn();
-  //   const handleNvtEditClick = jest.fn();
-  //   const handleNvtCreateClick = jest.fn();
+  test('should call click handlers', () => {
+    const handleNvtDownloadClick = jest.fn();
+    const handleOnNoteCreateClick = jest.fn();
+    const handleOnOverrideCreateClick = jest.fn();
 
-  //   const gmp = {settings: {manualUrl}};
+    const gmp = {settings: {manualUrl}};
 
-  //   const {render} = rendererWith({
-  //     gmp,
-  //     capabilities: caps,
-  //     router: true,
-  //   });
+    const {render} = rendererWith({
+      gmp,
+      capabilities: caps,
+      router: true,
+    });
 
-  //   render(
-  //     <ToolBarIcons
-  //       entity={nvt}
-  //       onNvtCloneClick={handleNvtCloneClick}
-  //       onNvtDeleteClick={handleNvtDeleteClick}
-  //       onNvtDownloadClick={handleNvtDownloadClick}
-  //       onNvtEditClick={handleNvtEditClick}
-  //       onNvtCreateClick={handleNvtCreateClick}
-  //     />,
-  //   );
+    const {element} = render(
+      <ToolBarIcons
+        entity={nvt}
+        onNoteCreateClick={handleOnNoteCreateClick}
+        onNvtDownloadClick={handleNvtDownloadClick}
+        onOverrideCreateClick={handleOnOverrideCreateClick}
+      />,
+    );
 
-  //   const cloneIcon = screen.getAllByTitle('Clone Nvt');
-  //   const editIcon = screen.getAllByTitle('Edit Nvt');
-  //   const deleteIcon = screen.getAllByTitle('Move Nvt to trashcan');
-  //   const exportIcon = screen.getAllByTitle('Export Nvt as XML');
+    const exportIcon = screen.getAllByTitle('Export NVT');
+    const addNewNoteIcon = screen.getAllByTitle('Add new Note');
+    const addNewOverrideIcon = screen.getAllByTitle('Add new Override');
 
-  //   expect(cloneIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(cloneIcon[0]);
-  //   expect(handleNvtCloneClick).toHaveBeenCalledWith(nvt);
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
+    expect(handleNvtDownloadClick).toHaveBeenCalledWith(nvt);
 
-  //   expect(editIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(editIcon[0]);
-  //   expect(handleNvtEditClick).toHaveBeenCalledWith(nvt);
+    expect(addNewNoteIcon[0]).toBeInTheDocument();
+    fireEvent.click(addNewNoteIcon[0]);
+    expect(handleOnNoteCreateClick).toHaveBeenCalledWith(nvt);
 
-  //   expect(deleteIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(deleteIcon[0]);
-  //   expect(handleNvtDeleteClick).toHaveBeenCalledWith(nvt);
-
-  //   expect(exportIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(exportIcon[0]);
-  //   expect(handleNvtDownloadClick).toHaveBeenCalledWith(nvt);
-  // });
-
-  // test('should not call click handlers without permission', () => {
-  //   const handleNvtCloneClick = jest.fn();
-  //   const handleNvtDeleteClick = jest.fn();
-  //   const handleNvtDownloadClick = jest.fn();
-  //   const handleNvtEditClick = jest.fn();
-  //   const handleNvtCreateClick = jest.fn();
-
-  //   const gmp = {settings: {manualUrl}};
-
-  //   const {render} = rendererWith({
-  //     gmp,
-  //     capabilities: caps,
-  //     router: true,
-  //   });
-
-  //   render(
-  //     <ToolBarIcons
-  //       entity={noPermNvt}
-  //       onNvtCloneClick={handleNvtCloneClick}
-  //       onNvtDeleteClick={handleNvtDeleteClick}
-  //       onNvtDownloadClick={handleNvtDownloadClick}
-  //       onNvtEditClick={handleNvtEditClick}
-  //       onNvtCreateClick={handleNvtCreateClick}
-  //     />,
-  //   );
-
-  //   const cloneIcon = screen.getAllByTitle('Clone Nvt');
-  //   const editIcon = screen.getAllByTitle('Permission to edit Nvt denied');
-  //   const deleteIcon = screen.getAllByTitle(
-  //     'Permission to move Nvt to trashcan denied',
-  //   );
-  //   const exportIcon = screen.getAllByTitle('Export Nvt as XML');
-
-  //   expect(cloneIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(cloneIcon[0]);
-
-  //   expect(handleNvtCloneClick).toHaveBeenCalledWith(noPermNvt);
-
-  //   expect(editIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(editIcon[0]);
-
-  //   expect(handleNvtEditClick).not.toHaveBeenCalled();
-
-  //   expect(deleteIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(deleteIcon[0]);
-
-  //   expect(handleNvtDeleteClick).not.toHaveBeenCalled();
-
-  //   expect(exportIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(exportIcon[0]);
-
-  //   expect(handleNvtDownloadClick).toHaveBeenCalledWith(noPermNvt);
-  // });
-
-  // test('should (not) call click handlers for nvt in use', () => {
-  //   const handleNvtCloneClick = jest.fn();
-  //   const handleNvtDeleteClick = jest.fn();
-  //   const handleNvtDownloadClick = jest.fn();
-  //   const handleNvtEditClick = jest.fn();
-  //   const handleNvtCreateClick = jest.fn();
-
-  //   const gmp = {settings: {manualUrl}};
-
-  //   const {render} = rendererWith({
-  //     gmp,
-  //     capabilities: caps,
-  //     router: true,
-  //   });
-
-  //   render(
-  //     <ToolBarIcons
-  //       entity={nvtInUse}
-  //       onNvtCloneClick={handleNvtCloneClick}
-  //       onNvtDeleteClick={handleNvtDeleteClick}
-  //       onNvtDownloadClick={handleNvtDownloadClick}
-  //       onNvtEditClick={handleNvtEditClick}
-  //       onNvtCreateClick={handleNvtCreateClick}
-  //     />,
-  //   );
-  //   const cloneIcon = screen.getAllByTitle('Clone Nvt');
-  //   const editIcon = screen.getAllByTitle('Edit Nvt');
-  //   const deleteIcon = screen.getAllByTitle('Nvt is still in use');
-  //   const exportIcon = screen.getAllByTitle('Export Nvt as XML');
-
-  //   expect(cloneIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(cloneIcon[0]);
-
-  //   expect(handleNvtCloneClick).toHaveBeenCalledWith(nvtInUse);
-
-  //   expect(editIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(editIcon[0]);
-
-  //   expect(handleNvtEditClick).toHaveBeenCalled();
-
-  //   expect(deleteIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(deleteIcon[0]);
-  //   expect(handleNvtDeleteClick).not.toHaveBeenCalled();
-
-  //   expect(exportIcon[0]).toBeInTheDocument();
-  //   fireEvent.click(exportIcon[0]);
-
-  //   expect(handleNvtDownloadClick).toHaveBeenCalledWith(nvtInUse);
-  // });
+    expect(addNewOverrideIcon[0]).toBeInTheDocument();
+    fireEvent.click(addNewOverrideIcon[0]);
+    expect(handleOnOverrideCreateClick).toHaveBeenCalledWith(nvt);
+  });
 });
