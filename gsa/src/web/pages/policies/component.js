@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useReducer} from 'react';
-
-import {connect} from 'react-redux';
+import React, {useReducer, useEffect, useCallback} from 'react';
+import {connect, useDispatch} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -60,7 +59,7 @@ import {
 } from 'web/store/entities/alerts';
 
 import {
-  loadEntities as loadScanners,
+  loadEntities as loadScannersFromStore,
   selector as scannerSelector,
 } from 'web/store/entities/scanners';
 
@@ -88,6 +87,7 @@ import useGmp from 'web/utils/useGmp';
 import PolicyDialog from './dialog';
 
 const PolicyComponent = props => {
+  const dispatch = useDispatch();
   const gmp = useGmp();
   const [state, dispatchState] = useReducer(stateReducer, {
     createPolicyDialogVisible: false,
@@ -98,6 +98,16 @@ const PolicyComponent = props => {
     importDialogVisible: false,
   });
 
+  const loadScannersAction = () =>
+    dispatch(loadScannersFromStore(gmp)(ALL_FILTER));
+  const loadAlertsAction = () => dispatch(loadAlerts(gmp)(ALL_FILTER));
+  const loadSchedulesAction = () => dispatch(loadSchedules(gmp)(ALL_FILTER));
+  const loadTargetsAction = () => dispatch(loadTargets(gmp)(ALL_FILTER));
+  const loadUserSettingsDefaultsAction = useCallback(
+    () => dispatch(loadUserSettingDefaults(gmp)()),
+    [dispatch, gmp],
+  );
+
   const handleChange = (value, name) => {
     dispatchState(
       updateState({
@@ -107,7 +117,7 @@ const PolicyComponent = props => {
   };
 
   const handleAlertCreated = alertId => {
-    props.loadAlerts();
+    loadAlertsAction();
 
     dispatchState(
       updateState({
@@ -117,13 +127,13 @@ const PolicyComponent = props => {
   };
 
   const handleScheduleCreated = scheduleId => {
-    props.loadSchedules();
+    loadSchedulesAction();
 
     dispatchState(updateState({scheduleId}));
   };
 
   const handleTargetCreated = targetId => {
-    props.loadTargets();
+    loadTargetsAction();
 
     dispatchState(updateState({targetId}));
   };
@@ -220,10 +230,10 @@ const PolicyComponent = props => {
   };
 
   const openCreateAuditDialog = policy => {
-    props.loadAlerts();
-    props.loadScanners();
-    props.loadSchedules();
-    props.loadTargets();
+    loadAlertsAction();
+    loadScannersAction();
+    loadSchedulesAction();
+    loadTargetsAction();
 
     const {defaultAlertId, defaultScheduleId, defaultTargetId} = props;
 
@@ -672,6 +682,10 @@ const PolicyComponent = props => {
     title,
   } = state;
 
+  useEffect(() => {
+    loadUserSettingsDefaultsAction();
+  }, [loadUserSettingsDefaultsAction]);
+
   return (
     <React.Fragment>
       <EntityComponent
@@ -906,15 +920,7 @@ const mapStateToProps = rootState => {
   };
 };
 
-const mapDispatchToProp = (dispatch, {gmp}) => ({
-  loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
-  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
-  loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
-  loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
-  loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
-});
-
 export default compose(
   withCapabilities,
-  connect(mapStateToProps, mapDispatchToProp),
+  connect(mapStateToProps, undefined),
 )(PolicyComponent);
