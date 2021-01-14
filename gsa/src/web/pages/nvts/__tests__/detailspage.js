@@ -335,23 +335,23 @@ describe('Nvt Detailspage tests', () => {
     expect(element).toHaveTextContent('Override from Any to False Positive');
     expect(element).toHaveTextContent('test_override_1');
     expect(element).toHaveTextContent('Active until');
-    expect(element).toHaveTextContent('Sat, Mar 13, 2021 11:35 AM');
+    expect(element).toHaveTextContent('Sat, Mar 13, 2021 10:35 AM UTC');
     expect(element).toHaveTextContent('Modified');
-    expect(element).toHaveTextContent('Thu, Jan 14, 2021 7:20 AM');
+    expect(element).toHaveTextContent('Thu, Jan 14, 2021 6:20 AM UTC');
 
     expect(element).toHaveTextContent('test_override_2');
     expect(element).toHaveTextContent('Active until');
-    expect(element).toHaveTextContent('Sat, Feb 13, 2021 12:35 PM');
+    expect(element).toHaveTextContent('Sat, Feb 13, 2021 11:35 AM UTC');
     expect(element).toHaveTextContent('Modified');
-    expect(element).toHaveTextContent('Fri, Feb 14, 2020 7:35 AM');
+    expect(element).toHaveTextContent('Fri, Feb 14, 2020 6:35 AM UTC');
 
     expect(element).toHaveTextContent('Notes');
     expect(element).toHaveTextContent('Note');
     expect(element).toHaveTextContent('test_note');
     expect(element).toHaveTextContent('Active until');
-    expect(element).toHaveTextContent('Sat, Feb 13, 2021 7:35 AM');
+    expect(element).toHaveTextContent('Sat, Feb 13, 2021 6:35 AM UTC');
     expect(element).toHaveTextContent('Modified');
-    expect(element).toHaveTextContent('Thu, Jan 14, 2021 7:35 AM');
+    expect(element).toHaveTextContent('Thu, Jan 14, 2021 6:35 AM UTC');
   });
 
   test('should render preferences tab', () => {
