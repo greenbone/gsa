@@ -21,8 +21,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
+import {ALL_FILTER} from 'gmp/models/filter';
 
 import {
   ospScannersFilter,
@@ -34,8 +34,8 @@ import {
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
+import {shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
 
@@ -279,7 +279,7 @@ const PolicyComponent = ({
         createAuditDialogVisible: true,
         alertIds,
         alterable: undefined,
-        auto_delete: undefined,
+        autodelete: undefined,
         auto_delete_data: undefined,
         comment: '',
         policyId: isDefined(policy) ? policy.id : undefined,
