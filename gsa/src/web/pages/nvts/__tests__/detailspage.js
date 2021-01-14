@@ -377,7 +377,7 @@ describe('Nvt Detailspage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
+    store.dispatch(setTimezone('CEST'));
     store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
@@ -420,7 +420,7 @@ describe('Nvt Detailspage tests', () => {
       store: true,
     });
 
-    store.dispatch(setTimezone('CET'));
+    store.dispatch(setTimezone('CSET'));
     store.dispatch(setUsername('admin'));
 
     store.dispatch(entityLoadingActions.success('12345', nvt));
