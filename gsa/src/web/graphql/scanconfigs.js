@@ -662,14 +662,14 @@ export const useModifyScanConfigSetNvtSelection = options => {
   return modifyScanConfigSetNvtSelection;
 };
 
-const convertHyperionPreferences = (values = {}, nvtOid) => {
+const convertHyperionPreferences = async (values = {}, nvtOid) => {
   const ret = {};
   for (const [prop, data] of Object.entries(values)) {
     const {id, type, value} = data;
     if (isDefined(value)) {
       const typestring = nvtOid + ':' + id + ':' + type + ':' + prop;
       if (type === 'file') {
-        ret[typestring] = readFileToText(value);
+        ret[typestring] = await readFileToText(value);
       } else {
         ret[typestring] = value;
       }
@@ -686,31 +686,34 @@ export const useModifyScanConfigSetNvtPreference = options => {
 
   const modifyScanConfigSetNvtPreference = useCallback(
     // eslint-disable-next-line no-shadow
-    async ({id, oid, preferenceValues}, options) => {
-      const convertedPrefValues = await convertHyperionPreferences(
+    ({id, oid, preferenceValues}, options) => {
+      const convertedPrefValues = convertHyperionPreferences(
         preferenceValues,
         oid,
       );
-      const prefKeys = Object.keys(convertedPrefValues);
-      const promises = [];
 
-      prefKeys.forEach(key => {
-        promises.push(
-          queryModifyScanConfigSetNvtPreference({
-            ...options,
-            variables: {
-              input: {
-                id,
-                nvtOid: oid,
-                name: key,
-                value: convertedPrefValues[key],
+      return convertedPrefValues.then(result => {
+        const prefKeys = Object.keys(result);
+        const promises = [];
+
+        prefKeys.forEach(key => {
+          promises.push(
+            queryModifyScanConfigSetNvtPreference({
+              ...options,
+              variables: {
+                input: {
+                  id,
+                  nvtOid: oid,
+                  name: key,
+                  value: result[key],
+                },
               },
-            },
-          }),
-        );
-      });
+            }),
+          );
+        });
 
-      return Promise.all(promises);
+        return Promise.all(promises);
+      });
     },
     [queryModifyScanConfigSetNvtPreference],
   );
