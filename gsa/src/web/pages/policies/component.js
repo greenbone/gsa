@@ -17,7 +17,7 @@
  */
 
 import React, {useReducer, useEffect, useCallback} from 'react';
-import {connect, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -78,7 +78,6 @@ import {getTimezone} from 'web/store/usersettings/selectors';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -86,7 +85,22 @@ import useGmp from 'web/utils/useGmp';
 
 import PolicyDialog from './dialog';
 
-const PolicyComponent = props => {
+const PolicyComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onImported,
+  onImportError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+}) => {
   const dispatch = useDispatch();
   const gmp = useGmp();
   const [state, dispatchState] = useReducer(stateReducer, {
@@ -98,6 +112,7 @@ const PolicyComponent = props => {
     importDialogVisible: false,
   });
 
+  // Redux loaders
   const loadScannersAction = () =>
     dispatch(loadScannersFromStore(gmp)(ALL_FILTER));
   const loadAlertsAction = () => dispatch(loadAlerts(gmp)(ALL_FILTER));
@@ -107,6 +122,43 @@ const PolicyComponent = props => {
     () => dispatch(loadUserSettingDefaults(gmp)()),
     [dispatch, gmp],
   );
+
+  // Selectors
+  const alertSel = useSelector(alertSelector);
+  const userDefaults = useSelector(getUserSettingsDefaults);
+  const scannersSel = useSelector(scannerSelector);
+  const scheduleSel = useSelector(scheduleSelector);
+  const targetSel = useSelector(targetSelector);
+
+  const scannerList = scannersSel.getEntities(ALL_FILTER);
+  const scannersFromRedux = isDefined(scannerList)
+    ? scannerList.filter(
+        scanner =>
+          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
+          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
+      )
+    : undefined;
+
+  // Loaded entities
+  const timezone = useSelector(getTimezone);
+  const alerts = alertSel.getEntities(ALL_FILTER);
+  const defaultAlertId = userDefaults.getValueByName('defaultalert');
+  const defaultEsxiCredential = userDefaults.getValueByName(
+    'defaultesxicredential',
+  );
+  const defaultPortListId = userDefaults.getValueByName('defaultportlist');
+  const defaultScannerId = userDefaults.getValueByName('defaultopenvasscanner');
+  const defaultScheduleId = userDefaults.getValueByName('defaultschedule');
+  const defaultSshCredential = userDefaults.getValueByName(
+    'defaultsshcredential',
+  );
+  const defaultSmbCredential = userDefaults.getValueByName(
+    'defaultsmbcredential',
+  );
+  const defaultTargetId = userDefaults.getValueByName('defaulttarget');
+  const isLoadingScannersRedux = scannersSel.isLoadingAllEntities(ALL_FILTER);
+  const schedules = scheduleSel.getEntities(ALL_FILTER);
+  const targets = targetSel.getEntities(ALL_FILTER);
 
   const handleChange = (value, name) => {
     dispatchState(
@@ -235,8 +287,6 @@ const PolicyComponent = props => {
     loadSchedulesAction();
     loadTargetsAction();
 
-    const {defaultAlertId, defaultScheduleId, defaultTargetId} = props;
-
     const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
     dispatchState(
@@ -307,7 +357,6 @@ const PolicyComponent = props => {
 
     handleInteraction();
 
-    const {onCreated, onCreateError} = props;
     return gmp.audit
       .create({
         addTag,
@@ -470,7 +519,6 @@ const PolicyComponent = props => {
   };
 
   const handleImportPolicy = data => {
-    const {onImported, onImportError} = props;
     handleInteraction();
 
     return gmp.policy
@@ -531,7 +579,6 @@ const PolicyComponent = props => {
   };
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
@@ -621,24 +668,6 @@ const PolicyComponent = props => {
   const handleScannerChange = scannerId => {
     dispatchState(updateState({scannerId}));
   };
-
-  const {
-    alerts,
-    children,
-    schedules,
-    targets,
-    onCloned,
-    onCloneError,
-    onCreated,
-    onCreateError,
-    onDeleted,
-    onDeleteError,
-    onDownloaded,
-    onDownloadError,
-    onInteraction,
-    onSaved,
-    onSaveError,
-  } = props;
 
   const {
     alertIds,
@@ -738,14 +767,14 @@ const PolicyComponent = props => {
                             hostsOrdering={hostsOrdering}
                             id={id}
                             in_assets={in_assets}
-                            isLoadingScanners={props.isLoadingScanners}
+                            isLoadingScanners={isLoadingScannersRedux}
                             maxChecks={maxChecks}
                             maxHosts={maxHosts}
                             name={name}
                             policies={[{name: policyName, id: policyId}]}
                             policyId={policyId}
                             scannerId={scannerId}
-                            scanners={props.scanners}
+                            scanners={scannersFromRedux}
                             scheduleId={scheduleId}
                             schedulePeriods={schedulePeriods}
                             schedules={schedules}
@@ -886,41 +915,4 @@ PolicyComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-const mapStateToProps = rootState => {
-  const alertSel = alertSelector(rootState);
-  const userDefaults = getUserSettingsDefaults(rootState);
-  const scannersSel = scannerSelector(rootState);
-  const scheduleSel = scheduleSelector(rootState);
-  const targetSel = targetSelector(rootState);
-
-  const scannerList = scannersSel.getEntities(ALL_FILTER);
-  const scanners = isDefined(scannerList)
-    ? scannerList.filter(
-        scanner =>
-          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
-          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
-      )
-    : undefined;
-
-  return {
-    timezone: getTimezone(rootState),
-    alerts: alertSel.getEntities(ALL_FILTER),
-    defaultAlertId: userDefaults.getValueByName('defaultalert'),
-    defaultEsxiCredential: userDefaults.getValueByName('defaultesxicredential'),
-    defaultPortListId: userDefaults.getValueByName('defaultportlist'),
-    defaultScannerId: userDefaults.getValueByName('defaultopenvasscanner'),
-    defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
-    defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
-    defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
-    defaultTargetId: userDefaults.getValueByName('defaulttarget'),
-    isLoadingScanners: scannersSel.isLoadingAllEntities(ALL_FILTER),
-    scanners,
-    schedules: scheduleSel.getEntities(ALL_FILTER),
-    targets: targetSel.getEntities(ALL_FILTER),
-  };
-};
-
-export default compose(
-  withCapabilities,
-  connect(mapStateToProps, undefined),
-)(PolicyComponent);
+export default withCapabilities(PolicyComponent);
