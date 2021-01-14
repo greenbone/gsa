@@ -92,7 +92,6 @@ const note1 = Note.fromElement({
   _id: '5221d57f-3e62-4114-8e19-135a79b6b102',
   active: 1,
   creation_time: '2021-01-14T06:35:57Z',
-  end_time: '',
   hosts: '127.0.01.1',
   in_use: 0,
   end_time: '2021-02-13T07:35:20+01:00',
@@ -132,7 +131,6 @@ const override1 = Override.fromElement({
   _id: '5221d57f-3e62-4114-8e19-000000000001',
   active: 1,
   creation_time: '2021-01-14T05:35:57Z',
-  end_time: '',
   hosts: '127.0.01.1',
   in_use: 0,
   end_time: '2021-03-13T11:35:20+01:00',
@@ -172,7 +170,6 @@ const override2 = Override.fromElement({
   _id: '5221d57f-3e62-4114-8e19-000000000000',
   active: 1,
   creation_time: '2020-01-14T06:35:57Z',
-  end_time: '',
   hosts: '127.0.01.1',
   in_use: 0,
   end_time: '2021-02-13T12:35:20+01:00',
@@ -206,27 +203,6 @@ const override2 = Override.fromElement({
   text: 'test_override_2',
   threat: 'Internal Error',
   writable: 1,
-});
-
-const filter = Filter.fromElement({
-  filter_type: '',
-  terms: [
-    {
-      keyword: 'nvt_id',
-      relation: '=',
-      value: '12345',
-    },
-    {
-      keyword: 'first',
-      relation: '=',
-      value: 1,
-    },
-    {
-      keyword: 'rows',
-      relation: '=',
-      value: -1,
-    },
-  ],
 });
 
 const getNvt = jest.fn().mockResolvedValue({
@@ -319,7 +295,6 @@ describe('Nvt Detailspage tests', () => {
     expect(element).toHaveTextContent('Owner:(Global Object)');
 
     const tabs = screen.getAllByTestId('entities-tab-title');
-    //expect(tabs[0]).toHaveTextContent('Information');
     expect(tabs[0]).toHaveTextContent('Preferences');
     expect(tabs[1]).toHaveTextContent('User Tags');
 
@@ -522,7 +497,7 @@ describe('Nvt ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {element} = render(
+    render(
       <ToolBarIcons
         entity={nvt}
         onNoteCreateClick={handleOnNoteCreateClick}
