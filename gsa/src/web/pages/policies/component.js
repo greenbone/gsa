@@ -73,14 +73,11 @@ import {
   selector as targetSelector,
 } from 'web/store/entities/targets';
 
-import {getTimezone} from 'web/store/usersettings/selectors';
-
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 import PropTypes from 'web/utils/proptypes';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
-import withCapabilities from 'web/utils/withCapabilities';
 import useGmp from 'web/utils/useGmp';
 
 import PolicyDialog from './dialog';
@@ -140,21 +137,9 @@ const PolicyComponent = ({
     : undefined;
 
   // Loaded entities
-  const timezone = useSelector(getTimezone);
   const alerts = alertSel.getEntities(ALL_FILTER);
   const defaultAlertId = userDefaults.getValueByName('defaultalert');
-  const defaultEsxiCredential = userDefaults.getValueByName(
-    'defaultesxicredential',
-  );
-  const defaultPortListId = userDefaults.getValueByName('defaultportlist');
-  const defaultScannerId = userDefaults.getValueByName('defaultopenvasscanner');
   const defaultScheduleId = userDefaults.getValueByName('defaultschedule');
-  const defaultSshCredential = userDefaults.getValueByName(
-    'defaultsshcredential',
-  );
-  const defaultSmbCredential = userDefaults.getValueByName(
-    'defaultsmbcredential',
-  );
   const defaultTargetId = userDefaults.getValueByName('defaulttarget');
   const isLoadingScannersRedux = scannersSel.isLoadingAllEntities(ALL_FILTER);
   const schedules = scheduleSel.getEntities(ALL_FILTER);
@@ -915,4 +900,4 @@ PolicyComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withCapabilities(PolicyComponent);
+export default PolicyComponent;
