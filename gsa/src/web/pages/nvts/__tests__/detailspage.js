@@ -24,6 +24,8 @@ import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 import NVT from 'gmp/models/nvt';
+import Note from 'gmp/models/note';
+import Override from 'gmp/models/override';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -49,11 +51,11 @@ const reloadInterval = -1;
 const manualUrl = 'test/';
 
 const nvt = NVT.fromElement({
-  _id: '1.3.6.1.4.1.25623.1.0',
+  _id: '12345',
   owner: {
     name: '',
   },
-  name: '1.3.6.1.4.1.25623.1.0',
+  name: '12345',
   comment: '',
   creation_time: '2019-06-24T11:55:30Z',
   modification_time: '2019-06-24T10:12:27Z',
@@ -62,7 +64,7 @@ const nvt = NVT.fromElement({
   permissions: '',
   update_time: '2020-10-30T11:44:00.000+0000',
   nvt: {
-    _oid: '1.3.6.1.4.1.25623.1.0',
+    _oid: '12345',
     name: 'foo',
     creation_time: '2019-06-24T11:55:30Z',
     modification_time: '2019-06-24T10:12:27Z',
@@ -88,8 +90,165 @@ const nvt = NVT.fromElement({
   },
 });
 
+const note1 = Note.fromElement({
+  _id: '5221d57f-3e62-4114-8e19-135a79b6b102',
+  active: 1,
+  creation_time: '2021-01-14T06:35:57Z',
+  end_time: '',
+  hosts: '127.0.01.1',
+  in_use: 0,
+  end_time: '2021-02-13T07:35:20+01:00',
+  modification_time: '2021-01-14T06:35:57Z',
+  new_severity: -1,
+  new_threat: 'False Positive',
+  nvt: {
+    _oid: '12345',
+    name: 'foo',
+    type: 'nvt',
+  },
+  orphan: 0,
+  owner: {
+    name: 'admin',
+  },
+  permissions: {
+    permission: {
+      name: 'everything',
+    },
+  },
+  port: '',
+  result: {
+    _id: '',
+  },
+  severity: '',
+  task: {
+    _id: '',
+    name: '',
+    trash: 0,
+  },
+  text: 'test_note',
+  threat: 'Internal Error',
+  writable: 1,
+});
+
+const override1 = Override.fromElement({
+  _id: '5221d57f-3e62-4114-8e19-000000000001',
+  active: 1,
+  creation_time: '2021-01-14T05:35:57Z',
+  end_time: '',
+  hosts: '127.0.01.1',
+  in_use: 0,
+  end_time: '2021-03-13T11:35:20+01:00',
+  modification_time: '2021-01-14T06:20:57Z',
+  new_severity: -1,
+  new_threat: 'False Positive',
+  nvt: {
+    _oid: '12345',
+    name: 'foo',
+    type: 'nvt',
+  },
+  orphan: 0,
+  owner: {
+    name: 'admin',
+  },
+  permissions: {
+    permission: {
+      name: 'everything',
+    },
+  },
+  port: '',
+  result: {
+    _id: '',
+  },
+  severity: '',
+  task: {
+    _id: '',
+    name: '',
+    trash: 0,
+  },
+  text: 'test_override_1',
+  threat: 'Internal Error',
+  writable: 1,
+});
+
+const override2 = Override.fromElement({
+  _id: '5221d57f-3e62-4114-8e19-000000000000',
+  active: 1,
+  creation_time: '2020-01-14T06:35:57Z',
+  end_time: '',
+  hosts: '127.0.01.1',
+  in_use: 0,
+  end_time: '2021-02-13T12:35:20+01:00',
+  modification_time: '2020-02-14T06:35:57Z',
+  new_severity: -1,
+  new_threat: 'False Positive',
+  nvt: {
+    _oid: '12345',
+    name: 'foo',
+    type: 'nvt',
+  },
+  orphan: 0,
+  owner: {
+    name: 'admin',
+  },
+  permissions: {
+    permission: {
+      name: 'everything',
+    },
+  },
+  port: '',
+  result: {
+    _id: '',
+  },
+  severity: '',
+  task: {
+    _id: '',
+    name: '',
+    trash: 0,
+  },
+  text: 'test_override_2',
+  threat: 'Internal Error',
+  writable: 1,
+});
+
+const filter = Filter.fromElement({
+  filter_type: '',
+  terms: [
+    {
+      keyword: 'nvt_id',
+      relation: '=',
+      value: '12345',
+    },
+    {
+      keyword: 'first',
+      relation: '=',
+      value: 1,
+    },
+    {
+      keyword: 'rows',
+      relation: '=',
+      value: -1,
+    },
+  ],
+});
+
 const getNvt = jest.fn().mockResolvedValue({
   data: nvt,
+});
+
+const getNotes = jest.fn().mockResolvedValue({
+  data: [note1],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const getOverrides = jest.fn().mockResolvedValue({
+  data: [override1, override2],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
 });
 
 const getEntities = jest.fn().mockResolvedValue({
@@ -109,7 +268,7 @@ const renewSession = jest.fn().mockResolvedValue({
 });
 
 describe('Nvt Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+  test('should render full Detailspage', async () => {
     const gmp = {
       nvt: {
         get: getNvt,
@@ -119,10 +278,10 @@ describe('Nvt Detailspage tests', () => {
         currentSettings,
       },
       notes: {
-        get: getEntities,
+        get: getNotes,
       },
       overrides: {
-        get: getEntities,
+        get: getOverrides,
       },
     };
 
@@ -139,6 +298,7 @@ describe('Nvt Detailspage tests', () => {
     store.dispatch(entityLoadingActions.success('12345', nvt));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
+    await wait();
 
     expect(element).toHaveTextContent('NVT: foo');
 
@@ -153,7 +313,7 @@ describe('Nvt Detailspage tests', () => {
     expect(screen.getAllByTitle('NVT List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/nvts');
 
-    expect(element).toHaveTextContent('ID:1.3.6.1.4.1.25623.1.0');
+    expect(element).toHaveTextContent('ID:12345');
     expect(element).toHaveTextContent('Created:Mon, Jun 24, 2019 1:55 PM CEST');
     expect(element).toHaveTextContent(
       'Modified:Mon, Jun 24, 2019 12:12 PM CEST',
@@ -195,6 +355,28 @@ describe('Nvt Detailspage tests', () => {
 
     expect(element).toHaveTextContent('References');
     expect(element).toHaveTextContent('CVECVE-2020-1234');
+
+    expect(element).toHaveTextContent('Overrides');
+    expect(element).toHaveTextContent('Override from Any to False Positive');
+    expect(element).toHaveTextContent('test_override_1');
+    expect(element).toHaveTextContent('Active until');
+    expect(element).toHaveTextContent('Sat, Mar 13, 2021 11:35 AM');
+    expect(element).toHaveTextContent('Modified');
+    expect(element).toHaveTextContent('Thu, Jan 14, 2021 7:20 AM');
+
+    expect(element).toHaveTextContent('test_override_2');
+    expect(element).toHaveTextContent('Active until');
+    expect(element).toHaveTextContent('Sat, Feb 13, 2021 12:35 PM');
+    expect(element).toHaveTextContent('Modified');
+    expect(element).toHaveTextContent('Fri, Feb 14, 2020 7:35 AM');
+
+    expect(element).toHaveTextContent('Notes');
+    expect(element).toHaveTextContent('Note');
+    expect(element).toHaveTextContent('test_note');
+    expect(element).toHaveTextContent('Active until');
+    expect(element).toHaveTextContent('Sat, Feb 13, 2021 7:35 AM');
+    expect(element).toHaveTextContent('Modified');
+    expect(element).toHaveTextContent('Thu, Jan 14, 2021 7:35 AM');
   });
 
   test('should render preferences tab', () => {
