@@ -870,21 +870,7 @@ const PolicyComponent = ({
 };
 
 PolicyComponent.propTypes = {
-  alerts: PropTypes.arrayOf(PropTypes.model),
   children: PropTypes.func.isRequired,
-  defaultAlertId: PropTypes.id,
-  defaultScannerId: PropTypes.id,
-  defaultScheduleId: PropTypes.id,
-  defaultTargetId: PropTypes.id,
-  gmp: PropTypes.gmp.isRequired,
-  isLoadingScanners: PropTypes.bool,
-  loadAlerts: PropTypes.func.isRequired,
-  loadScanners: PropTypes.func.isRequired,
-  loadSchedules: PropTypes.func.isRequired,
-  loadTargets: PropTypes.func.isRequired,
-  scanners: PropTypes.arrayOf(PropTypes.model),
-  schedules: PropTypes.arrayOf(PropTypes.model),
-  targets: PropTypes.arrayOf(PropTypes.model),
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
