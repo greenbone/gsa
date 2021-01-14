@@ -22,10 +22,13 @@ import {setLocale} from 'gmp/models/date';
 import Override from 'gmp/models/override';
 
 import {rendererWith} from 'web/utils/testing';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import OverrideBox from '../override';
 
 setLocale('en');
+
+const manualUrl = 'test/';
 
 const caps = new Capabilities(['everything']);
 
@@ -40,10 +43,17 @@ const override = Override.fromElement({
 
 describe('OverrideBox component tests', () => {
   test('should render with DetailsLink', () => {
-    const {render} = rendererWith({
+    const gmp = {settings: {manualUrl}};
+
+    const {render, store} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
     const {element, getByTestId} = render(
       <OverrideBox detailsLink={true} override={override} />,
@@ -58,17 +68,25 @@ describe('OverrideBox component tests', () => {
     expect(link).toBeDefined();
     expect(link.getAttribute('href')).toEqual('/override/123');
     expect(element).toHaveTextContent('details.svg');
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019');
-    expect(element).toHaveTextContent('Active untilTue, Jan 1, 2019');
+    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM CET');
+    expect(element).toHaveTextContent(
+      'Active untilTue, Jan 1, 2019 1:00 PM CET',
+    );
     expect(element).toHaveTextContent('foo');
   });
 
   test('should render without DetailsLink', () => {
-    const {render} = rendererWith({
+    const gmp = {settings: {manualUrl}};
+
+    const {render, store} = rendererWith({
+      gmp,
       capabilities: caps,
       router: true,
+      store: true,
     });
 
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
     const {element} = render(
       <OverrideBox detailsLink={false} override={override} />,
     );
@@ -78,8 +96,10 @@ describe('OverrideBox component tests', () => {
     expect(link).toEqual(null);
     expect(element).toHaveTextContent('foo');
     expect(element).not.toHaveTextContent('details.svg');
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019');
-    expect(element).toHaveTextContent('Active untilTue, Jan 1, 2019');
+    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM CET');
+    expect(element).toHaveTextContent(
+      'Active untilTue, Jan 1, 2019 1:00 PM CET',
+    );
   });
 });
 
