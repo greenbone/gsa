@@ -73,7 +73,7 @@ import NvtComponent from './component';
 import NvtDetails from './details';
 import Preferences from './preferences';
 
-let ToolBarIcons = ({
+export let ToolBarIcons = ({
   capabilities,
   entity,
   onNoteCreateClick,
