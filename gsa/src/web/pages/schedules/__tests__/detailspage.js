@@ -27,14 +27,30 @@ import Schedule from 'gmp/models/schedule';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import {
+  createCloneScheduleQueryMock,
+  createDeleteScheduleQueryMock,
+  createExportSchedulesByIdsQueryMock,
+  createGetScheduleQueryMock,
+  mockSchedule,
+  noPermSchedule,
+  inUseSchedule,
+} from 'web/graphql/__mocks__/schedules';
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 
-import {entityLoadingActions} from 'web/store/entities/schedules';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: 'foo',
+  }),
+}));
 
 setLocale('en');
 
@@ -63,39 +79,9 @@ const schedule = Schedule.fromElement({
   _id: '12345',
 });
 
-const scheduleInUse = Schedule.fromElement({
-  comment: 'hello world',
-  creation_time: '2020-12-23T14:14:11Z',
-  icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:3dfd6e6f-4e79-4f18-a5c2-adb3fca56bd3\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
-  in_use: 1,
-  modification_time: '2021-01-04T11:54:12Z',
-  name: 'schedule 1',
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'Everything'}},
-  timezone: 'UTC',
-  writable: 1,
-  _id: '23456',
-});
+const scheduleInUse = Schedule.fromObject(inUseSchedule);
 
-const noPermSchedule = Schedule.fromElement({
-  comment: 'hello world',
-  creation_time: '2020-12-23T14:14:11Z',
-  icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.04+alpha~git-bb97c86-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nRRULE:FREQ=WEEKLY\nUID:3dfd6e6f-4e79-4f18-a5c2-adb3fca56bd3\nDTSTAMP:20210104T115412Z\nEND:VEVENT\nEND:VCALENDAR\n',
-  in_use: 0,
-  modification_time: '2021-01-04T11:54:12Z',
-  name: 'schedule 1',
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'get_schedules'}},
-  timezone: 'UTC',
-  writable: 1,
-  _id: '23456',
-});
-
-const getSchedule = jest.fn().mockResolvedValue({
-  data: schedule,
-});
+const noPerm = Schedule.fromObject(noPermSchedule);
 
 const getEntities = jest.fn().mockResolvedValue({
   data: [],
@@ -114,11 +100,8 @@ const renewSession = jest.fn().mockResolvedValue({
 });
 
 describe('Schedule Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+  test('should render full Detailspage', async () => {
     const gmp = {
-      schedule: {
-        get: getSchedule,
-      },
       permissions: {
         get: getEntities,
       },
@@ -128,21 +111,28 @@ describe('Schedule Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', mockSchedule);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=foo first=1 rows=-1',
+    });
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', schedule));
+    const {baseElement} = render(<Detailspage id="foo" />);
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    await wait();
 
-    expect(element).toHaveTextContent('Schedule: schedule 1');
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+
+    expect(baseElement).toHaveTextContent('Schedule: schedule 1');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -155,42 +145,40 @@ describe('Schedule Detailspage tests', () => {
     expect(screen.getAllByTitle('Schedules List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/schedules');
 
-    expect(element).toHaveTextContent('ID:1234');
-    expect(element).toHaveTextContent('Created:Wed, Dec 23, 2020 3:14 PM CET');
-    expect(element).toHaveTextContent('Modified:Mon, Jan 4, 2021 12:54 PM CET');
-    expect(element).toHaveTextContent('Owner:admin');
+    expect(baseElement).toHaveTextContent('ID:foo');
+    expect(baseElement).toHaveTextContent(
+      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+    );
+    expect(baseElement).toHaveTextContent('Owner:admin');
 
     const tabs = screen.getAllByTestId('entities-tab-title');
     expect(tabs[0]).toHaveTextContent('User Tags');
     expect(tabs[1]).toHaveTextContent('Permissions');
 
-    expect(element).toHaveTextContent('Comment');
-    expect(element).toHaveTextContent('hello world');
+    expect(baseElement).toHaveTextContent('Comment');
+    expect(baseElement).toHaveTextContent('hello world');
 
-    expect(element).toHaveTextContent('First Run');
-    expect(element).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
+    expect(baseElement).toHaveTextContent('First Run');
+    expect(baseElement).toHaveTextContent('Mon, Jan 4, 2021 11:54 AM UTC');
 
-    expect(element).toHaveTextContent('Next Run');
-    expect(element).toHaveTextContent('-');
+    expect(baseElement).toHaveTextContent('Next Run');
+    expect(baseElement).toHaveTextContent('-');
 
-    expect(element).toHaveTextContent('Timezone');
-    expect(element).toHaveTextContent('UTC');
+    expect(baseElement).toHaveTextContent('Timezone');
+    expect(baseElement).toHaveTextContent('UTC');
 
-    expect(element).toHaveTextContent('Recurrence');
-    expect(element).toHaveTextContent('Once');
+    expect(baseElement).toHaveTextContent('Recurrence');
+    expect(baseElement).toHaveTextContent('Once');
 
-    expect(element).toHaveTextContent('Duration');
-    expect(element).toHaveTextContent('Entire Operation');
+    expect(baseElement).toHaveTextContent('Duration');
+    expect(baseElement).toHaveTextContent('Entire Operation');
   });
 
-  test('should render user tags tab', () => {
+  test('should render user tags tab', async () => {
     const gmp = {
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -198,36 +186,45 @@ describe('Schedule Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', mockSchedule);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=foo first=1 rows=-1',
+    });
+    const [
+      renewSessionMock,
+      renewSessionResult,
+    ] = createRenewSessionQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock, renewSessionMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', schedule));
+    const {baseElement} = render(<Detailspage id="foo" />);
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[0]).toHaveTextContent('User Tags');
     fireEvent.click(tabs[0]);
 
+    await wait();
+
+    expect(renewSessionResult).toHaveBeenCalled();
+
     expect(baseElement).toHaveTextContent('No user tags available');
   });
 
-  test('should render permissions tab', () => {
+  test('should render permissions tab', async () => {
     const gmp = {
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -235,51 +232,48 @@ describe('Schedule Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', mockSchedule);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
+      {
+        filterString: 'resource_uuid=foo first=1 rows=-1',
+      },
+      {permissions: null},
+    );
+    const [
+      renewSessionMock,
+      renewSessionResult,
+    ] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock, renewSessionMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', schedule));
+    const {baseElement} = render(<Detailspage id="foo" />);
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[1]).toHaveTextContent('Permissions');
     fireEvent.click(tabs[1]);
 
+    await wait();
+
+    expect(renewSessionResult).toHaveBeenCalled();
     expect(baseElement).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
-    const clone = jest.fn().mockResolvedValue({
-      data: {id: 'foo'},
-    });
-
-    const deleteFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
-      schedule: {
-        get: getSchedule,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -287,23 +281,39 @@ describe('Schedule Detailspage tests', () => {
       },
     };
     const [renewQueryMock] = createRenewSessionQueryMock();
+    const [mock, resultFunc] = createGetScheduleQueryMock('foo', mockSchedule);
+    const [cloneMock, cloneResult] = createCloneScheduleQueryMock();
+    const [deleteMock, deleteResult] = createDeleteScheduleQueryMock();
+    const [exportMock, exportResult] = createExportSchedulesByIdsQueryMock([
+      'foo',
+    ]);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=foo first=1 rows=-1',
+    });
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewQueryMock],
+      queryMocks: [
+        renewQueryMock,
+        mock,
+        cloneMock,
+        deleteMock,
+        exportMock,
+        permissionMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', schedule));
-
-    render(<Detailspage id="12345" />);
+    render(<Detailspage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const cloneIcon = screen.getAllByTitle('Clone Schedule');
     expect(cloneIcon[0]).toBeInTheDocument();
@@ -311,15 +321,7 @@ describe('Schedule Detailspage tests', () => {
 
     await wait();
 
-    expect(clone).toHaveBeenCalledWith(schedule);
-
-    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
-    expect(exportFunc).toHaveBeenCalledWith(schedule);
+    expect(cloneResult).toHaveBeenCalled();
 
     const deleteIcon = screen.getAllByTitle('Move Schedule to trashcan');
     expect(deleteIcon[0]).toBeInTheDocument();
@@ -327,7 +329,15 @@ describe('Schedule Detailspage tests', () => {
 
     await wait();
 
-    expect(deleteFunc).toHaveBeenCalledWith({id: schedule.id});
+    expect(deleteResult).toHaveBeenCalled();
+
+    const exportIcon = screen.getAllByTitle('Export Schedule as XML');
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
+
+    await wait();
+
+    expect(exportResult).toHaveBeenCalled();
   });
 });
 
@@ -435,7 +445,7 @@ describe('Schedule ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={noPermSchedule}
+        entity={noPerm}
         onScheduleCloneClick={handleScheduleCloneClick}
         onScheduleDeleteClick={handleScheduleDeleteClick}
         onScheduleDownloadClick={handleScheduleDownloadClick}
@@ -454,7 +464,7 @@ describe('Schedule ToolBarIcons tests', () => {
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
 
-    expect(handleScheduleCloneClick).toHaveBeenCalledWith(noPermSchedule);
+    expect(handleScheduleCloneClick).toHaveBeenCalledWith(noPerm);
 
     expect(editIcon[0]).toBeInTheDocument();
     fireEvent.click(editIcon[0]);
@@ -469,7 +479,7 @@ describe('Schedule ToolBarIcons tests', () => {
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
 
-    expect(handleScheduleDownloadClick).toHaveBeenCalledWith(noPermSchedule);
+    expect(handleScheduleDownloadClick).toHaveBeenCalledWith(noPerm);
   });
 
   test('should (not) call click handlers for schedule in use', () => {
