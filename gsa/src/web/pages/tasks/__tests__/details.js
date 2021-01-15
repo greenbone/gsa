@@ -24,6 +24,8 @@ import {setLocale} from 'gmp/locale/lang';
 import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
 import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 
+import {setTimezone} from 'web/store/usersettings/actions';
+
 import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import {rendererWith, screen, wait} from 'web/utils/testing';
@@ -31,6 +33,8 @@ import {rendererWith, screen, wait} from 'web/utils/testing';
 import Details from '../details';
 
 setLocale('en');
+
+const manualUrl = 'test/';
 
 describe('Task Details tests', () => {
   test('should render full task details', async () => {
@@ -40,11 +44,14 @@ describe('Task Details tests', () => {
     const [scheduleMock, resultFunc] = createGetScheduleQueryMock('foo');
     const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWith({
       capabilities: caps,
       router: true,
+      store: true,
       queryMocks: [scheduleMock, scanConfigMock],
     });
+
+    store.dispatch(setTimezone('CET'));
 
     const {element, getAllByTestId} = render(<Details entity={task} />);
 
