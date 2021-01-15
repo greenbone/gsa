@@ -18,7 +18,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
 import DateTime from 'web/components/date/datetime';
 
 import SeverityBar from 'web/components/bar/severitybar';
