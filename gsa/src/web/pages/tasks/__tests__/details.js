@@ -34,8 +34,6 @@ import Details from '../details';
 
 setLocale('en');
 
-const manualUrl = 'test/';
-
 describe('Task Details tests', () => {
   test('should render full task details', async () => {
     const {detailsMockTask: task} = getMockTasks();
