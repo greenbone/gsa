@@ -18,7 +18,7 @@
 import React, {useEffect} from 'react';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import DateTime from 'web/components/date/datetime';
 
 import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
@@ -257,7 +257,7 @@ const TaskDetails = ({entity, links = true}) => {
                 <TableRow>
                   <TableData>{_('Next')}</TableData>
                   <TableData>
-                    {dateTimeWithTimeZone(schedule.event.nextDate)}
+                    <DateTime date={schedule.event.nextDate} />
                   </TableData>
                 </TableRow>
               )}
