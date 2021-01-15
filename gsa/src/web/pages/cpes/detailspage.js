@@ -19,6 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import DateTime from 'web/components/date/datetime';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -94,11 +95,17 @@ const EntityInfo = ({entity}) => {
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Modified:')}</div>
-      <div>{dateTimeWithTimeZone(modificationTime)}</div>
+      <div>
+        <DateTime date={modificationTime} />
+      </div>
       <div>{_('Created:')}</div>
-      <div>{dateTimeWithTimeZone(creationTime)}</div>
+      <div>
+        <DateTime date={creationTime} />
+      </div>
       <div>{_('Last updated:')}</div>
-      <div>{dateTimeWithTimeZone(updateTime)}</div>
+      <div>
+        <DateTime date={updateTime} />
+      </div>
     </InfoLayout>
   );
 };
