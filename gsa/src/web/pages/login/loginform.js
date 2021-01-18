@@ -19,23 +19,21 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import {Button, Input} from '@greenbone/components';
+
 import _ from 'gmp/locale';
 
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
 import Layout from 'web/components/layout/layout';
-
+import ProductImage from 'web/components/img/product';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-import {Input, Flex, Button} from '@greenbone/components/build/Library';
-import GreenboneLogo from 'web/components/img/greenbone_full';
-import {FlexColumn} from '@greenbone/components';
-
 const Paper = styled.div`
-  background: white;
-  box-shadow: 0px 14px 22px #00000029;
+  background: ${Theme.white};
+  box-shadow: 0px 14px 22px ${Theme.mediumGray};
   padding: 4rem;
   max-width: 30rem;
 `;
@@ -49,11 +47,9 @@ const Panel = styled.div`
   margin-bottom: 10px;
 `;
 
-const StyledFlexColumn = styled(Flex)`
+const StyledLayout = styled(Layout)`
   min-height: 12rem;
   justify-content: space-evenly;
-  display: flex;
-  flex-direction: column;
 `;
 
 const Error = styled.p`
@@ -61,6 +57,15 @@ const Error = styled.p`
   font-weight: bold;
   text-align: center;
   margin: 10px;
+`;
+
+const StyledButton = styled(Button)`
+  margin-top: 2rem;
+  width: 100%;
+`;
+
+const StyledPanel = styled(Panel)`
+  margin-top: 20px;
 `;
 
 class LoginForm extends React.Component {
@@ -111,10 +116,12 @@ class LoginForm extends React.Component {
 
     return (
       <Paper>
-        <FlexColumn>
-          <GreenboneLogo style={{maxWidth: '250px'}} />
+        <Layout align={'center'}>
+          <ProductImage />
+        </Layout>
+        <Layout flex={'column'}>
           {showProtocolInsecure && (
-            <Panel style={{marginTop: '20px'}} data-testid="protocol-insecure">
+            <StyledPanel data-testid="protocol-insecure">
               <Error>{_('Warning: Connection unencrypted')}</Error>
               <p>
                 {_(
@@ -128,9 +135,9 @@ class LoginForm extends React.Component {
                     'or ask your administrator to do so as soon as possible.',
                 )}
               </p>
-            </Panel>
+            </StyledPanel>
           )}
-        </FlexColumn>
+        </Layout>
 
         <Layout>
           {isIE11 && (
@@ -147,7 +154,7 @@ class LoginForm extends React.Component {
 
         <>
           {showLogin && !isIE11 && (
-            <StyledFlexColumn>
+            <StyledLayout flex={'column'}>
               <Input
                 margin={'normal'}
                 type={'text'}
@@ -175,27 +182,25 @@ class LoginForm extends React.Component {
                   this.handleValueChange(e.target.value, e.target.name)
                 }
               />
-              <Button
-                style={{marginTop: '2rem'}}
+              <StyledButton
                 data-testid="login-button"
                 onClick={this.handleSubmit}
               >
                 {_('Login')}
-              </Button>
-            </StyledFlexColumn>
+              </StyledButton>
+            </StyledLayout>
           )}
           {isDefined(error) && <Error data-testid="error">{error}</Error>}
         </>
 
         {showGuestLogin && (
           <div data-testid="guest-login">
-            <Button
-              style={{width: '100%', marginTop: '1rem'}}
+            <StyledButton
               data-testid="guest-login-button"
               onClick={onGuestLoginClick}
             >
               {_('Login as Guest')}
-            </Button>
+            </StyledButton>
           </div>
         )}
       </Paper>
