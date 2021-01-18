@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {forEach, map} from 'gmp/utils/array';
 import {isEmpty} from 'gmp/utils/string';
 
@@ -24,7 +24,12 @@ import {parseInt, parseBoolean} from 'gmp/parser';
 
 import Model, {parseModelFromElement} from 'gmp/model';
 
-import {parseCount, parseTrend} from './scanconfig';
+import {
+  parseCount,
+  parseTrend,
+  SCANCONFIG_TREND_DYNAMIC,
+  SCANCONFIG_TREND_STATIC,
+} from './scanconfig';
 
 class Policy extends Model {
   static entityType = 'policy';
@@ -131,6 +136,86 @@ class Policy extends Model {
     }
 
     ret.predefined = parseBoolean(element.predefined);
+
+    return ret;
+  }
+
+  static parseObject(object) {
+    const ret = super.parseObject(object);
+
+    if (hasValue(object.type)) {
+      ret.policyType = object.type;
+    }
+
+    const families = {};
+
+    if (hasValue(object.families)) {
+      ret.familyList = map(object.families, family => {
+        const {name} = family;
+        const newFamily = {
+          name,
+          trend:
+            hasValue(family) && family.growing
+              ? SCANCONFIG_TREND_DYNAMIC
+              : SCANCONFIG_TREND_STATIC,
+          nvts: {
+            count:
+              hasValue(family.nvtCount) && family.nvtCount !== -1
+                ? family.nvtCount
+                : undefined,
+            max:
+              hasValue(family.maxNvtCount) && family.maxNvtCount !== -1
+                ? family.maxNvtCount
+                : undefined,
+          },
+        };
+        families[name] = newFamily;
+        return newFamily;
+      });
+    } else {
+      ret.familyList = [];
+    }
+
+    if (hasValue(ret.familyCount)) {
+      families.count = ret.familyCount;
+
+      delete ret.familyCount;
+    } else {
+      families.count = 0;
+    }
+
+    if (hasValue(ret.familyGrowing)) {
+      families.trend = ret.familyGrowing
+        ? SCANCONFIG_TREND_DYNAMIC
+        : SCANCONFIG_TREND_STATIC;
+    }
+
+    ret.families = families;
+
+    const nvtPreferences = [];
+    const scannerPreferences = [];
+
+    if (hasValue(object.preferences)) {
+      forEach(object.preferences, preference => {
+        const pref = {...preference};
+        if (hasValue(pref.nvt.name)) {
+          const nvt = {...pref.nvt};
+          pref.nvt = nvt;
+          pref.nvt.oid = preference.nvt.oid;
+
+          nvtPreferences.push(pref);
+        } else {
+          delete pref.nvt;
+
+          scannerPreferences.push(pref);
+        }
+      });
+    }
+
+    ret.preferences = {
+      scanner: scannerPreferences,
+      nvt: nvtPreferences,
+    };
 
     return ret;
   }
