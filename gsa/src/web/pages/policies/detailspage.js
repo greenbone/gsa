@@ -147,7 +147,7 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({onChanged, onError, ...props}) => {
+const Page = () => {
   // Page methods
   const {id} = useParams();
   const history = useHistory();
@@ -226,7 +226,7 @@ const Page = ({onChanged, onError, ...props}) => {
       onDownloaded={handleDownload}
       onDownloadError={showError}
       onInteraction={renewSessionTimeout}
-      onSaved={onChanged}
+      onSaved={() => refetchPolicy()}
     >
       {({edit, save}) => (
         <EntityPage
@@ -292,7 +292,7 @@ const Page = ({onChanged, onError, ...props}) => {
                           permissions={permissions}
                           onChanged={() => refetchPermissions()}
                           onDownloaded={handleDownload}
-                          onError={onError}
+                          onError={showError}
                           onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
@@ -311,11 +311,6 @@ const Page = ({onChanged, onError, ...props}) => {
       )}
     </PolicyComponent>
   );
-};
-
-Page.propTypes = {
-  onChanged: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
 };
 
 export default Page;
