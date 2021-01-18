@@ -37,15 +37,6 @@ export const GET_POLICY = gql`
       permissions {
         name
       }
-      userTags {
-        count
-        tags {
-          name
-          id
-          value
-          comment
-        }
-      }
       type
       trash
       familyCount

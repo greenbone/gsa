@@ -58,6 +58,7 @@ import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+import useExportEntity from 'web/entity/useExportEntity';
 
 import {
   useClonePolicy,
@@ -80,7 +81,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import PolicyDetails from './details';
 import PolicyComponent from './component';
-import useExportEntity from 'web/entity/useExportEntity';
 
 export const ToolBarIcons = withCapabilities(
   ({
