@@ -16,8 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {useCallback} from 'react';
 
-import {gql, useQuery} from '@apollo/client';
+import {gql, useQuery, useMutation} from '@apollo/client';
 import Policy from 'gmp/models/policy';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -82,6 +83,30 @@ export const GET_POLICY = gql`
   }
 `;
 
+export const DELETE_POLICIES_BY_IDS = gql`
+  mutation deletePoliciesByIds($ids: [UUID]!) {
+    deletePoliciesByIds(ids: $ids) {
+      ok
+    }
+  }
+`;
+
+export const EXPORT_POLICIES_BY_IDS = gql`
+  mutation exportPoliciesByIds($ids: [UUID]!) {
+    exportPoliciesByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const CLONE_POLICY = gql`
+  mutation clonePolicy($id: UUID!) {
+    clonePolicy(id: $id) {
+      id
+    }
+  }
+`;
+
 export const useGetPolicy = (id, options) => {
   const {data, ...other} = useQuery(GET_POLICY, {
     ...options,
@@ -91,4 +116,55 @@ export const useGetPolicy = (id, options) => {
     ? Policy.fromObject(data.policy)
     : undefined;
   return {policy, ...other};
+};
+
+export const useDeletePolicy = options => {
+  const [queryDeletePolicy, data] = useMutation(
+    DELETE_POLICIES_BY_IDS,
+    options,
+  );
+  const deletePolicy = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryDeletePolicy({...options, variables: {ids: [id]}}),
+    [queryDeletePolicy],
+  );
+  return [deletePolicy, data];
+};
+
+export const useExportPoliciesByIds = options => {
+  const [queryExportPoliciesByIds] = useMutation(
+    EXPORT_POLICIES_BY_IDS,
+    options,
+  );
+
+  const exportPoliciesByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    policyIds =>
+      queryExportPoliciesByIds({
+        ...options,
+        variables: {
+          ids: policyIds,
+        },
+      }),
+    [queryExportPoliciesByIds, options],
+  );
+
+  return exportPoliciesByIds;
+};
+
+export const useClonePolicy = options => {
+  const [queryClonePolicy, {data, ...other}] = useMutation(
+    CLONE_POLICY,
+    options,
+  );
+  const clonePolicy = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryClonePolicy({...options, variables: {id}}).then(
+        result => result.data.clonePolicy.id,
+      ),
+    [queryClonePolicy],
+  );
+  const policyId = data?.clonePolicy?.id;
+  return [clonePolicy, {...other, id: policyId}];
 };

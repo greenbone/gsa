@@ -59,7 +59,12 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {useGetPolicy} from 'web/graphql/policies';
+import {
+  useClonePolicy,
+  useDeletePolicy,
+  useExportPoliciesByIds,
+  useGetPolicy,
+} from 'web/graphql/policies';
 import {useGetPermissions} from 'web/graphql/permissions';
 import {goto_entity_details} from 'web/utils/graphql';
 
@@ -75,6 +80,7 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import PolicyDetails from './details';
 import PolicyComponent from './component';
+import useExportEntity from 'web/entity/useExportEntity';
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -164,6 +170,36 @@ const Page = ({onChanged, onError, ...props}) => {
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
 
+  // Policy related mutations
+  const exportEntity = useExportEntity();
+
+  const [clonePolicy] = useClonePolicy();
+  const [deletePolicy] = useDeletePolicy();
+  const exportPolicy = useExportPoliciesByIds();
+
+  // Policy methods
+  const handleClonePolicy = clonedPolicy => {
+    return clonePolicy(clonedPolicy.id)
+      .then(policyId => goto_entity_details('policy', {history})(policyId))
+      .catch(showError);
+  };
+
+  const handleDeletePolicy = deletedPolicy => {
+    return deletePolicy(deletedPolicy.id)
+      .then(goto_list('policy', {history}))
+      .catch(showError);
+  };
+
+  const handleDownloadPolicy = exportedPolicy => {
+    exportEntity({
+      entity: exportedPolicy,
+      exportFunc: exportPolicy,
+      resourceType: 'policies',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
   // Timeout and reload
   const timeoutFunc = useEntityReloadInterval(policy);
 
@@ -183,7 +219,7 @@ const Page = ({onChanged, onError, ...props}) => {
   useEffect(() => stopReload, [stopReload]);
   return (
     <PolicyComponent
-      onCloned={goto_entity_details('policies', {history})}
+      onCloned={goto_entity_details('policy', {history})}
       onCloneError={showError}
       onDeleted={goto_list('policies', {history})}
       onDeleteError={showError}
@@ -192,7 +228,7 @@ const Page = ({onChanged, onError, ...props}) => {
       onInteraction={renewSessionTimeout}
       onSaved={onChanged}
     >
-      {({clone, delete: delete_func, download, edit, save}) => (
+      {({edit, save}) => (
         <EntityPage
           entity={policy}
           entityError={entityError}
@@ -202,9 +238,9 @@ const Page = ({onChanged, onError, ...props}) => {
           toolBarIcons={ToolBarIcons}
           title={_('Policy')}
           onInteraction={renewSessionTimeout}
-          onPolicyCloneClick={clone}
-          onPolicyDeleteClick={delete_func}
-          onPolicyDownloadClick={download}
+          onPolicyCloneClick={handleClonePolicy}
+          onPolicyDeleteClick={handleDeletePolicy}
+          onPolicyDownloadClick={handleDownloadPolicy}
           onPolicyEditClick={edit}
           onPolicySaveClick={save}
         >
