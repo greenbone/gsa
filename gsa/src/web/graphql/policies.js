@@ -60,7 +60,10 @@ export const GET_POLICY = gql`
         growing
       }
       preferences {
-        nvt
+        nvt {
+          oid
+          name
+        }
         hrName
         name
         id
