@@ -24,11 +24,11 @@ import {
   GET_POLICY,
 } from '../policies';
 
-export const policy = deepFreeze({
+export const policy1 = deepFreeze({
   id: '234',
   name: 'unnamed policy',
   comment: 'some policy description',
-  writable: false,
+  writable: true,
   owner: 'admin',
   inUse: false,
   creationTime: '2020-08-17T12:18:14+00:00',
@@ -41,7 +41,7 @@ export const policy = deepFreeze({
   usageType: 'audit',
   maxNvtCount: 345,
   knownNvtCount: 344,
-  predefined: true,
+  predefined: false,
   families: [
     {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
     {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
@@ -77,7 +77,166 @@ export const policy = deepFreeze({
   ],
 });
 
-export const createGetPolicyQueryMock = (id = '234', result = policy) =>
+export const policy2 = deepFreeze({
+  id: '234',
+  name: 'unnamed policy',
+  comment: 'some policy description',
+  writable: true,
+  owner: 'admin',
+  inUse: false,
+  creationTime: '2020-08-17T12:18:14+00:00',
+  modificationTime: '2020-09-29T12:16:50+00:00',
+  permissions: [{name: 'get_config'}],
+  type: 0,
+  trash: null,
+  familyCount: 1,
+  nvtCount: 345,
+  usageType: 'audit',
+  maxNvtCount: 345,
+  knownNvtCount: 344,
+  predefined: false,
+  families: [
+    {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
+    {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
+  ],
+  preferences: [
+    {
+      alt: ['postgres', 'regress'],
+      default: 'postgres',
+      hrName: 'Postgres Username:',
+      id: 1,
+      name: 'Postgres Username:',
+      type: 'entry',
+      value: 'regress',
+      nvt: {
+        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        name: 'PostgreSQL Detection',
+      },
+    },
+  ],
+  nvtSelectors: [
+    {
+      name: '436',
+      include: true,
+      type: 2,
+      familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
+    },
+  ],
+  tasks: [
+    {
+      name: 'foo',
+      id: '457',
+    },
+  ],
+});
+
+export const policy3 = deepFreeze({
+  id: '234',
+  name: 'unnamed policy',
+  comment: 'some policy description',
+  writable: true,
+  owner: 'admin',
+  inUse: true,
+  creationTime: '2020-08-17T12:18:14+00:00',
+  modificationTime: '2020-09-29T12:16:50+00:00',
+  permissions: [{name: 'Everything'}],
+  type: 0,
+  trash: null,
+  familyCount: 1,
+  nvtCount: 345,
+  usageType: 'audit',
+  maxNvtCount: 345,
+  knownNvtCount: 344,
+  predefined: false,
+  families: [
+    {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
+    {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
+  ],
+  preferences: [
+    {
+      alt: ['postgres', 'regress'],
+      default: 'postgres',
+      hrName: 'Postgres Username:',
+      id: 1,
+      name: 'Postgres Username:',
+      type: 'entry',
+      value: 'regress',
+      nvt: {
+        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        name: 'PostgreSQL Detection',
+      },
+    },
+  ],
+  nvtSelectors: [
+    {
+      name: '436',
+      include: true,
+      type: 2,
+      familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
+    },
+  ],
+  tasks: [
+    {
+      name: 'foo',
+      id: '457',
+    },
+  ],
+});
+
+export const policy4 = deepFreeze({
+  id: '234',
+  name: 'unnamed policy',
+  comment: 'some policy description',
+  writable: false,
+  owner: 'admin',
+  inUse: false,
+  creationTime: '2020-08-17T12:18:14+00:00',
+  modificationTime: '2020-09-29T12:16:50+00:00',
+  permissions: [{name: 'Everything'}],
+  type: 0,
+  trash: null,
+  familyCount: 1,
+  nvtCount: 345,
+  usageType: 'audit',
+  maxNvtCount: 345,
+  knownNvtCount: 344,
+  predefined: false,
+  families: [
+    {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
+    {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
+  ],
+  preferences: [
+    {
+      alt: ['postgres', 'regress'],
+      default: 'postgres',
+      hrName: 'Postgres Username:',
+      id: 1,
+      name: 'Postgres Username:',
+      type: 'entry',
+      value: 'regress',
+      nvt: {
+        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        name: 'PostgreSQL Detection',
+      },
+    },
+  ],
+  nvtSelectors: [
+    {
+      name: '436',
+      include: true,
+      type: 2,
+      familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
+    },
+  ],
+  tasks: [
+    {
+      name: 'foo',
+      id: '457',
+    },
+  ],
+});
+
+export const createGetPolicyQueryMock = (id = '234', result = policy1) =>
   createGenericQueryMock(GET_POLICY, {policy: result}, {id});
 
 export const createClonePolicyQueryMock = (

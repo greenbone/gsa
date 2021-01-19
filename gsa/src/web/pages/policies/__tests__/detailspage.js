@@ -22,20 +22,35 @@ import {setLocale} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
-import {entityLoadingActions} from 'web/store/entities/policies';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {policy as policyObject} from 'web/store/entities/policies';
+import {setTimezone} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, act} from 'web/utils/testing';
+import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+import {
+  createClonePolicyQueryMock,
+  createDeletePoliciesByIdsQueryMock,
+  createExportPoliciesByIdsQueryMock,
+  createGetPolicyQueryMock,
+  policy2 as policyObject2,
+  policy3 as policyObject3,
+  policy4 as policyObject4,
+} from 'web/graphql/__mocks__/policies';
+import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: '234',
+  }),
+}));
 
 if (!isDefined(window.URL)) {
   window.URL = {};
@@ -137,10 +152,6 @@ const policy = Policy.fromElement({
     ],
   },
 });
-
-const policyId = {
-  id: '12345',
-};
 
 const policy2 = Policy.fromElement({
   _id: '12345',
@@ -245,42 +256,43 @@ beforeEach(() => {
 });
 
 describe('Policy Detailspage tests', () => {
-  test('should render full Detailspage', () => {
-    const getPolicy = jest.fn().mockResolvedValue({
-      data: policy,
-    });
-
+  test('should render full Detailspage', async () => {
     const gmp = {
-      [entityType]: {
-        get: getPolicy,
-      },
-      permissions: {
-        get: getPermissions,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
       },
     };
 
+    const [mock, resultFunc] = createGetPolicyQueryMock();
+
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [
+      permissionQueryMock,
+      permissionResult,
+    ] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=234 first=1 rows=-1',
+    });
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', policy));
+    const {baseElement, getAllByTestId} = render(<Detailspage id="234" />);
 
-    const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
-    );
+    await wait();
 
-    expect(element).toMatchSnapshot();
-    expect(element).toHaveTextContent('Policy: foo');
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+
+    await wait();
+
+    expect(baseElement).toHaveTextContent('Policy: unnamed policy');
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
@@ -294,35 +306,22 @@ describe('Policy Detailspage tests', () => {
     expect(links[1]).toHaveAttribute('href', '/policies');
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    expect(element).toHaveTextContent('12345');
-    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
-    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:44 AM CEST');
-    expect(element).toHaveTextContent('admin');
+    expect(baseElement).toHaveTextContent('234');
+    expect(baseElement).toHaveTextContent('Mon, Aug 17, 2020 2:18 PM CEST');
+    expect(baseElement).toHaveTextContent('Tue, Sep 29, 2020 2:16 PM CEST');
+    expect(baseElement).toHaveTextContent('admin');
 
-    expect(element).toHaveTextContent('bar');
-    expect(element).toHaveTextContent('audit1');
-    expect(element).toHaveTextContent('audit2');
-    expect(element).not.toHaveTextContent('scanner');
+    expect(baseElement).toHaveTextContent('some policy description');
+    expect(baseElement).toHaveTextContent('foo');
+    expect(baseElement).not.toHaveTextContent('scanner');
 
     const detailslinks = getAllByTestId('details-link');
 
-    expect(detailslinks[0]).toHaveAttribute('href', '/audit/1234');
-    expect(detailslinks[1]).toHaveAttribute('href', '/audit/5678');
+    expect(detailslinks[0]).toHaveAttribute('href', '/audit/457');
   });
 
-  test.skip('should render nvt families tab', () => {
-    // NVTFamilies has been refactored so this test won't work until policies are implemented
-    const getPolicy = jest.fn().mockResolvedValue({
-      data: policy,
-    });
-
+  test('should render nvt families tab', async () => {
     const gmp = {
-      [entityType]: {
-        get: getPolicy,
-      },
-      permissions: {
-        get: getPermissions,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -330,35 +329,37 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetPolicyQueryMock();
+
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [permissionQueryMock] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=234 first=1 rows=-1',
+    });
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', policy));
+    const {baseElement} = render(<Detailspage id="234" />);
 
-    const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
-    );
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[10]);
 
-    expect(element).toHaveTextContent('family1');
-    expect(element).toHaveTextContent('1 of 1');
-    expect(element).toHaveTextContent('family2');
-    expect(element).toHaveTextContent('2 of 4');
-    expect(element).toHaveTextContent('family3');
-    expect(element).toHaveTextContent('0 of 2');
+    expect(baseElement).toHaveTextContent('family1');
+    expect(baseElement).toHaveTextContent('7 of 10');
+    expect(baseElement).toHaveTextContent('family2');
+    expect(baseElement).toHaveTextContent('0 of 5');
 
     const links = baseElement.querySelectorAll('a');
-
-    const icons = getAllByTestId('svg-icon');
 
     expect(links[2]).toHaveAttribute(
       'href',
@@ -372,42 +373,17 @@ describe('Policy Detailspage tests', () => {
     );
     expect(links[3]).toHaveAttribute('title', 'NVTs of family family2');
 
-    expect(links[4]).toHaveAttribute(
-      'href',
-      '/nvts?filter=family%3D%22family3%22',
-    );
-    expect(links[4]).toHaveAttribute('title', 'NVTs of family family3');
+    const staticTitle =
+      'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.';
+    const dynamicTitle =
+      'The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.';
 
-    expect(icons[7]).toHaveAttribute(
-      'title',
-      'The families selection is DYNAMIC. New families will automatically be added and considered.',
-    );
-    expect(icons[8]).toHaveAttribute(
-      'title',
-      'The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.',
-    );
-    expect(icons[9]).toHaveAttribute(
-      'title',
-      'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
-    );
-    expect(icons[10]).toHaveAttribute(
-      'title',
-      'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
-    );
+    expect(screen.getAllByTitle(staticTitle)[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle(dynamicTitle)[0]).toBeInTheDocument();
   });
 
-  test('should render nvt preferences tab', () => {
-    const getPolicy = jest.fn().mockResolvedValue({
-      data: policy,
-    });
-
+  test('should render nvt preferences tab', async () => {
     const gmp = {
-      [entityType]: {
-        get: getPolicy,
-      },
-      permissions: {
-        get: getPermissions,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -415,55 +391,44 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetPolicyQueryMock();
+
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [permissionQueryMock] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=234 first=1 rows=-1',
+    });
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', policy));
+    const {baseElement, getAllByTestId} = render(<Detailspage id="234" />);
 
-    const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
-    );
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[12]);
 
     const detailsLinks = getAllByTestId('details-link');
 
-    expect(detailsLinks[0]).toHaveAttribute('href', '/nvt/0');
-    expect(detailsLinks[0]).toHaveTextContent('nvt0');
-    expect(element).toHaveTextContent('value2');
-    expect(element).toHaveTextContent('value1');
-
-    expect(detailsLinks[1]).toHaveAttribute('href', '/nvt/1');
-    expect(detailsLinks[1]).toHaveTextContent('nvt1');
-    expect(element).toHaveTextContent('yes');
-    expect(element).toHaveTextContent('no');
-
-    expect(detailsLinks[2]).toHaveAttribute('href', '/nvt/2');
-    expect(detailsLinks[2]).toHaveTextContent('nvt2');
-    expect(element).toHaveTextContent('foo');
-    expect(element).toHaveTextContent('bar');
+    expect(detailsLinks[0]).toHaveAttribute(
+      'href',
+      '/nvt/1.3.6.1.4.1.25623.1.0.100151',
+    );
+    expect(detailsLinks[0]).toHaveTextContent('PostgreSQL Detection');
+    expect(baseElement).toHaveTextContent('postgres');
+    expect(baseElement).toHaveTextContent('regress');
   });
 
-  test('should render permissions tab', () => {
-    const getPolicy = jest.fn().mockResolvedValue({
-      data: policy,
-    });
-
+  test('should render permissions tab', async () => {
     const gmp = {
-      [entityType]: {
-        get: getPolicy,
-      },
-      permissions: {
-        get: getPermissions,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -471,23 +436,39 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetPolicyQueryMock();
+
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [
+      permissionQueryMock,
+      permissionResult,
+    ] = createGetPermissionsQueryMock(
+      {
+        filterString: 'resource_uuid=234 first=1 rows=-1',
+      },
+      {permissions: null},
+    );
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', policy));
+    const {baseElement} = render(<Detailspage id="234" />);
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
 
-    expect(element).toHaveTextContent('No permissions available');
+    expect(permissionResult).toHaveBeenCalled();
+
+    expect(baseElement).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
@@ -496,11 +477,7 @@ describe('Policy Detailspage tests', () => {
         data: policy,
       }),
     );
-    const clone = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
+
     const getNvtFamilies = jest.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
@@ -511,26 +488,10 @@ describe('Policy Detailspage tests', () => {
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
 
     const gmp = {
       [entityType]: {
         get: getPolicy,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getPermissions,
       },
       nvtfamilies: {
         get: getNvtFamilies,
@@ -545,57 +506,80 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [mock, resultFunc] = createGetPolicyQueryMock('234', policyObject);
 
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [permissionQueryMock] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=234 first=1 rows=-1',
+    });
+    const [cloneQueryMock, cloneQueryResult] = createClonePolicyQueryMock();
+    const [
+      exportQueryMock,
+      exportQueryResult,
+    ] = createExportPoliciesByIdsQueryMock(['234']);
+    const [
+      deleteQueryMock,
+      deleteQueryResult,
+    ] = createDeletePoliciesByIdsQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewSessionQueryMock],
+      queryMocks: [
+        mock,
+        renewSessionQueryMock,
+        permissionQueryMock,
+        cloneQueryMock,
+        exportQueryMock,
+        deleteQueryMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    const {getAllByTestId} = render(<Detailspage id="234" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    await act(async () => {
-      fireEvent.click(icons[2]);
-      expect(clone).toHaveBeenCalledWith(policy);
-      expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
+    fireEvent.click(icons[2]);
 
-      fireEvent.click(icons[3]);
-      expect(getNvtFamilies).toHaveBeenCalled();
-      expect(getAllScanners).toHaveBeenCalled();
-      expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
+    await wait();
 
-      fireEvent.click(icons[4]);
-      expect(deleteFunc).toHaveBeenCalledWith(policyId);
-      expect(icons[4]).toHaveAttribute('title', 'Move Policy to trashcan');
+    expect(cloneQueryResult).toHaveBeenCalled();
+    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
-      fireEvent.click(icons[5]);
-      expect(exportFunc).toHaveBeenCalledWith(policy);
-      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
-    });
+    expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
+    fireEvent.click(icons[3]);
+    await wait();
+
+    expect(getNvtFamilies).toHaveBeenCalled();
+    expect(getAllScanners).toHaveBeenCalled();
+
+    fireEvent.click(icons[4]);
+
+    await wait();
+
+    expect(deleteQueryResult).toHaveBeenCalled();
+    expect(icons[4]).toHaveAttribute('title', 'Move Policy to trashcan');
+
+    fireEvent.click(icons[5]);
+    expect(exportQueryResult).toHaveBeenCalled();
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should not call commands without permission', async () => {
     const getPolicy = jest.fn().mockReturnValue(
       Promise.resolve({
-        data: policy2,
+        data: policy,
       }),
     );
 
-    const clone = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
     const getNvtFamilies = jest.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
@@ -606,26 +590,10 @@ describe('Policy Detailspage tests', () => {
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
 
     const gmp = {
       [entityType]: {
         get: getPolicy,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getPermissions,
       },
       nvtfamilies: {
         get: getNvtFamilies,
@@ -640,66 +608,83 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [mock, resultFunc] = createGetPolicyQueryMock('234', policyObject2);
 
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [permissionQueryMock] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=234 first=1 rows=-1',
+    });
+    const [cloneQueryMock, cloneQueryResult] = createClonePolicyQueryMock();
+    const [
+      exportQueryMock,
+      exportQueryResult,
+    ] = createExportPoliciesByIdsQueryMock(['234']);
+    const [
+      deleteQueryMock,
+      deleteQueryResult,
+    ] = createDeletePoliciesByIdsQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewSessionQueryMock],
+      queryMocks: [
+        mock,
+        renewSessionQueryMock,
+        permissionQueryMock,
+        cloneQueryMock,
+        exportQueryMock,
+        deleteQueryMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy2));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    const {getAllByTestId} = render(<Detailspage id="234" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    await act(async () => {
-      fireEvent.click(icons[2]);
-      expect(clone).not.toHaveBeenCalled();
-      expect(icons[2]).toHaveAttribute(
-        'title',
-        'Permission to clone Policy denied',
-      );
+    fireEvent.click(icons[2]);
+    expect(cloneQueryResult).not.toHaveBeenCalled();
+    expect(icons[2]).toHaveAttribute(
+      'title',
+      'Permission to clone Policy denied',
+    );
 
-      fireEvent.click(icons[3]);
-      expect(getNvtFamilies).not.toHaveBeenCalled();
-      expect(getAllScanners).not.toHaveBeenCalled();
-      expect(icons[3]).toHaveAttribute(
-        'title',
-        'Permission to edit Policy denied',
-      );
+    fireEvent.click(icons[3]);
+    expect(getNvtFamilies).not.toHaveBeenCalled();
+    expect(getAllScanners).not.toHaveBeenCalled();
+    expect(icons[3]).toHaveAttribute(
+      'title',
+      'Permission to edit Policy denied',
+    );
 
-      fireEvent.click(icons[4]);
-      expect(deleteFunc).not.toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute(
-        'title',
-        'Permission to move Policy to trashcan denied',
-      );
+    fireEvent.click(icons[4]);
+    expect(deleteQueryResult).not.toHaveBeenCalled();
+    expect(icons[4]).toHaveAttribute(
+      'title',
+      'Permission to move Policy to trashcan denied',
+    );
 
-      fireEvent.click(icons[5]);
-      expect(exportFunc).toHaveBeenCalledWith(policy2);
-      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
-    });
+    fireEvent.click(icons[5]);
+
+    await wait();
+    expect(exportQueryResult).toHaveBeenCalled();
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should (not) call commands if policy is in use', async () => {
     const getPolicy = jest.fn().mockReturnValue(
       Promise.resolve({
-        data: policy3,
+        data: policy,
       }),
     );
 
-    const clone = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
     const getNvtFamilies = jest.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
@@ -710,26 +695,10 @@ describe('Policy Detailspage tests', () => {
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
 
     const gmp = {
       [entityType]: {
         get: getPolicy,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getPermissions,
       },
       nvtfamilies: {
         get: getNvtFamilies,
@@ -744,57 +713,79 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [mock, resultFunc] = createGetPolicyQueryMock('234', policyObject3);
 
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [permissionQueryMock] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=234 first=1 rows=-1',
+    });
+    const [cloneQueryMock, cloneQueryResult] = createClonePolicyQueryMock();
+    const [
+      exportQueryMock,
+      exportQueryResult,
+    ] = createExportPoliciesByIdsQueryMock(['234']);
+    const [
+      deleteQueryMock,
+      deleteQueryResult,
+    ] = createDeletePoliciesByIdsQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewSessionQueryMock],
+      queryMocks: [
+        mock,
+        renewSessionQueryMock,
+        permissionQueryMock,
+        cloneQueryMock,
+        exportQueryMock,
+        deleteQueryMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy3));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    const {getAllByTestId} = render(<Detailspage id="234" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    await act(async () => {
-      fireEvent.click(icons[2]);
-      expect(clone).toHaveBeenCalledWith(policy3);
-      expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
+    fireEvent.click(icons[2]);
 
-      fireEvent.click(icons[3]);
-      expect(getNvtFamilies).toHaveBeenCalled();
-      expect(getAllScanners).toHaveBeenCalled();
-      expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
+    await wait();
 
-      fireEvent.click(icons[4]);
-      expect(deleteFunc).not.toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute('title', 'Policy is still in use');
+    expect(cloneQueryResult).toHaveBeenCalled();
+    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
-      fireEvent.click(icons[5]);
-      expect(exportFunc).toHaveBeenCalledWith(policy3);
-      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
-    });
+    fireEvent.click(icons[3]);
+    expect(getNvtFamilies).toHaveBeenCalled();
+    expect(getAllScanners).toHaveBeenCalled();
+    expect(icons[3]).toHaveAttribute('title', 'Edit Policy');
+
+    fireEvent.click(icons[4]);
+
+    await wait();
+    expect(deleteQueryResult).not.toHaveBeenCalled();
+    expect(icons[4]).toHaveAttribute('title', 'Policy is still in use');
+
+    fireEvent.click(icons[5]);
+
+    await wait();
+    expect(exportQueryResult).toHaveBeenCalled();
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   test('should (not) call commands if policy is not writable', async () => {
     const getPolicy = jest.fn().mockReturnValue(
       Promise.resolve({
-        data: policy4,
+        data: policy,
       }),
     );
 
-    const clone = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: {id: 'foo'},
-      }),
-    );
     const getNvtFamilies = jest.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
@@ -805,26 +796,10 @@ describe('Policy Detailspage tests', () => {
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
-    const exportFunc = jest.fn().mockReturnValue(
-      Promise.resolve({
-        foo: 'bar',
-      }),
-    );
 
     const gmp = {
       [entityType]: {
         get: getPolicy,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getPermissions,
       },
       nvtfamilies: {
         get: getNvtFamilies,
@@ -839,43 +814,65 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [mock, resultFunc] = createGetPolicyQueryMock('234', policyObject4);
 
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [permissionQueryMock] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=234 first=1 rows=-1',
+    });
+    const [cloneQueryMock, cloneQueryResult] = createClonePolicyQueryMock();
+    const [
+      exportQueryMock,
+      exportQueryResult,
+    ] = createExportPoliciesByIdsQueryMock(['234']);
+    const [
+      deleteQueryMock,
+      deleteQueryResult,
+    ] = createDeletePoliciesByIdsQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewSessionQueryMock],
+      queryMocks: [
+        mock,
+        renewSessionQueryMock,
+        permissionQueryMock,
+        cloneQueryMock,
+        exportQueryMock,
+        deleteQueryMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
-    store.dispatch(entityLoadingActions.success('12345', policy4));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    const {getAllByTestId} = render(<Detailspage id="234" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[1]).toHaveAttribute('title', 'Policies List');
 
-    await act(async () => {
-      fireEvent.click(icons[2]);
-      expect(clone).toHaveBeenCalledWith(policy4);
-      expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
+    fireEvent.click(icons[2]);
 
-      fireEvent.click(icons[3]);
-      expect(getNvtFamilies).not.toHaveBeenCalled();
-      expect(getAllScanners).not.toHaveBeenCalled();
-      expect(icons[3]).toHaveAttribute('title', 'Policy is not writable');
+    await wait();
+    expect(cloneQueryResult).toHaveBeenCalled();
+    expect(icons[2]).toHaveAttribute('title', 'Clone Policy');
 
-      fireEvent.click(icons[4]);
-      expect(deleteFunc).not.toHaveBeenCalled();
-      expect(icons[4]).toHaveAttribute('title', 'Policy is not writable');
+    fireEvent.click(icons[3]);
+    expect(getNvtFamilies).not.toHaveBeenCalled();
+    expect(getAllScanners).not.toHaveBeenCalled();
+    expect(icons[3]).toHaveAttribute('title', 'Policy is not writable');
 
-      fireEvent.click(icons[5]);
-      expect(exportFunc).toHaveBeenCalledWith(policy4);
-      expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
-    });
+    fireEvent.click(icons[4]);
+    expect(deleteQueryResult).not.toHaveBeenCalled();
+    expect(icons[4]).toHaveAttribute('title', 'Policy is not writable');
+
+    fireEvent.click(icons[5]);
+    expect(exportQueryResult).toHaveBeenCalled();
+    expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
 
   // TODO: should render scanner preferences tab
@@ -905,8 +902,6 @@ describe('Policy ToolBarIcons tests', () => {
         onPolicyEditClick={handlePolicyEditClick}
       />,
     );
-
-    expect(element).toMatchSnapshot();
 
     const links = element.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');

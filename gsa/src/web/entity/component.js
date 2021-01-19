@@ -38,7 +38,6 @@ export const goto_details = (type, props) => ({data}) => {
 
 export const goto_list = (type, props) => () => {
   const {history} = props;
-  console.log(history, type);
 
   return history.push('/' + type);
 };
