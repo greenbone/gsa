@@ -22,7 +22,7 @@ import {isEmpty} from 'gmp/utils/string';
 
 import {parseInt, parseBoolean} from 'gmp/parser';
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 
 import {
   parseCount,
@@ -216,6 +216,14 @@ class Policy extends Model {
       scanner: scannerPreferences,
       nvt: nvtPreferences,
     };
+
+    if (hasValue(object.tasks)) {
+      ret.audits = map(object.tasks, task =>
+        parseModelFromObject(task, 'audit'),
+      );
+    } else {
+      ret.audits = [];
+    }
 
     return ret;
   }

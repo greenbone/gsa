@@ -38,7 +38,7 @@ import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 
 const PolicyDetails = ({entity}) => {
-  const {comment, policy_type, scanner, audits = []} = entity;
+  const {comment, policyType, scanner, audits = []} = entity;
   return (
     <Layout flex="column" grow>
       <InfoTable>
@@ -53,7 +53,7 @@ const PolicyDetails = ({entity}) => {
               <TableData>{comment}</TableData>
             </TableRow>
           )}
-          {policy_type === OSP_SCAN_CONFIG_TYPE && isDefined(scanner) && (
+          {policyType === OSP_SCAN_CONFIG_TYPE && isDefined(scanner) && (
             <TableRow>
               <TableData>{_('Scanner')}</TableData>
               <TableData>

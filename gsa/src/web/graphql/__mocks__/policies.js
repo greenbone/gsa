@@ -69,6 +69,12 @@ export const policy = deepFreeze({
       familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
     },
   ],
+  tasks: [
+    {
+      name: 'foo',
+      id: '457',
+    },
+  ],
 });
 
 export const createGetPolicyQueryMock = (id = '234', result = policy) =>

@@ -70,6 +70,10 @@ export const GET_POLICY = gql`
         type
         familyOrNvt
       }
+      tasks {
+        name
+        id
+      }
     }
   }
 `;
