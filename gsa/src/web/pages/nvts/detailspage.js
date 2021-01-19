@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -69,17 +69,28 @@ import {
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
+import useDownload from 'web/components/form/useDownload';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import useReload from 'web/components/loading/useReload';
+import DialogNotification from 'web/components/notification/dialognotification';
+import Download from 'web/components/form/download';
+
+import useCapabilities from 'web/utils/useCapabilities';
+import useGmpSettings from 'web/utils/useGmpSettings';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useGetNvt from 'web/graphql/nvts';
+
 import NvtComponent from './component';
 import NvtDetails from './details';
 import Preferences from './preferences';
 
-let ToolBarIcons = ({
-  capabilities,
+export const ToolBarIcons = ({
   entity,
   onNoteCreateClick,
   onNvtDownloadClick,
   onOverrideCreateClick,
 }) => {
+  const capabilities = useCapabilities();
   return (
     <Divider margin="10px">
       <IconDivider>
@@ -185,37 +196,63 @@ const open_dialog = (nvt, func) => {
   });
 };
 
-const Page = ({
-  entity,
-  notes,
-  overrides,
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => {
-  const defaultTimeout = isDefined(entity) ? entity.defaultTimeout : undefined;
-  const preferences = isDefined(entity) ? entity.preferences : [];
-  const userTags = isDefined(entity) ? entity.userTags : undefined;
+const Page = () => {
+  // Page methods
+  const {id} = useParams();
+  const gmpSettings = useGmpSettings();
+  const history = useHistory();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+  const [downloadRef, handleDownload] = useDownload();
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+
+  // Load nvt related entities
+  const {nvt, refetch: refetchNvt, loading, error: entityError} = useGetNvt(id);
+  const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
+    filterString: permissionsResourceFilter(id).toFilterString(),
+  });
+
+  const preferences = isDefined(entity) ? nvt.preferences : [];
+  const userTags = isDefined(entity) ? nvt.userTags : undefined;
   const numPreferences = preferences.length;
+
+  // Timeout and reload
+  const timeoutFunc = useEntityTimeout({entity: nvt, gmpSettings});
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetchScanConfig,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if alert is available and no timer is running yet
+    if (hasValue(nvt) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [nvt, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
 
   return (
     <NvtComponent
       onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onDownloadError={onError}
-      onInteraction={onInteraction}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onInteraction={renewSessionTimeout}
     >
       {({notecreate, overridecreate, download}) => (
         <EntityPage
           {...props}
-          entity={entity}
+          entity={nvt}
           toolBarIcons={ToolBarIcons}
           title={_('NVT')}
           sectionIcon={<NvtIcon size="large" />}
           onChanged={onChanged}
-          onInteraction={onInteraction}
+          onInteraction={renewSessionTimeout}
           onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
           onNvtDownloadClick={download}
           onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
@@ -223,7 +260,7 @@ const Page = ({
           {({activeTab = 0, onActivateTab}) => {
             return (
               <React.Fragment>
-                <PageTitle title={_('NVT: {{name}}', {name: entity.name})} />
+                <PageTitle title={_('NVT: {{name}}', {name: nvt.name})} />
                 <Layout grow="1" flex="column">
                   <TabLayout grow="1" align={['start', 'end']}>
                     <TabList
@@ -232,10 +269,10 @@ const Page = ({
                       onActivateTab={onActivateTab}
                     >
                       <Tab>{_('Information')}</Tab>
-                      <EntitiesTab count={numPreferences}>
+                      <EntitiesTab count={nvt.numPreferences}>
                         {_('Preferences')}
                       </EntitiesTab>
-                      <EntitiesTab entities={userTags}>
+                      <EntitiesTab entities={nvt.userTags}>
                         {_('User Tags')}
                       </EntitiesTab>
                     </TabList>
@@ -252,21 +289,26 @@ const Page = ({
                       </TabPanel>
                       <TabPanel>
                         <Preferences
-                          preferences={preferences}
+                          preferences={nvt.preferences}
                           defaultTimeout={defaultTimeout}
                         />
                       </TabPanel>
                       <TabPanel>
                         <EntityTags
                           entity={entity}
-                          onChanged={onChanged}
-                          onError={onError}
-                          onInteraction={onInteraction}
+                          onChanged={() => refetchNvt()}
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>
+                <DialogNotification
+                  {...notificationDialogState}
+                  onCloseClick={closeNotificationDialog}
+                />
+                <Download ref={downloadRef} />
               </React.Fragment>
             );
           }}
@@ -276,43 +318,6 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  notes: PropTypes.array,
-  overrides: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-const nvtIdFilter = id => Filter.fromString('nvt_id=' + id).all();
-
-const mapStateToProps = (rootState, {id}) => {
-  const notesSel = notesSelector(rootState);
-  const overridesSel = overridesSelector(rootState);
-  return {
-    notes: notesSel.getEntities(nvtIdFilter(id)),
-    overrides: overridesSel.getEntities(nvtIdFilter(id)),
-  };
-};
-
-const load = gmp => {
-  const loadEntityFunc = loadEntity(gmp);
-  const loadNotesFunc = loadNotes(gmp);
-  const loadOverridesFunc = loadOverrides(gmp);
-  return id => dispatch =>
-    Promise.all([
-      dispatch(loadEntityFunc(id)),
-      dispatch(loadNotesFunc(nvtIdFilter(id))),
-      dispatch(loadOverridesFunc(nvtIdFilter(id))),
-    ]);
-};
-
-export default withEntityContainer('nvt', {
-  load,
-  entitySelector: nvtsSelector,
-  mapStateToProps,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:
