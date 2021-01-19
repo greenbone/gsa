@@ -26,18 +26,12 @@ import EntityBox from '../box';
 
 setLocale('en');
 
-const manualUrl = 'test/';
-
 const date1 = date('2019-01-01T12:00:00Z');
 const date2 = date('2019-02-02T12:00:00Z');
 
 describe('EntityBox component tests', () => {
   test('should render', () => {
-    const gmp = {settings: {manualUrl}};
-
     const {render, store} = rendererWith({
-      gmp,
-      router: true,
       store: true,
     });
 

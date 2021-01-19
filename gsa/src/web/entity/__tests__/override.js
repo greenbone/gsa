@@ -28,8 +28,6 @@ import OverrideBox from '../override';
 
 setLocale('en');
 
-const manualUrl = 'test/';
-
 const caps = new Capabilities(['everything']);
 
 const override = Override.fromElement({
@@ -43,10 +41,7 @@ const override = Override.fromElement({
 
 describe('OverrideBox component tests', () => {
   test('should render with DetailsLink', () => {
-    const gmp = {settings: {manualUrl}};
-
     const {render, store} = rendererWith({
-      gmp,
       capabilities: caps,
       router: true,
       store: true,
@@ -76,10 +71,7 @@ describe('OverrideBox component tests', () => {
   });
 
   test('should render without DetailsLink', () => {
-    const gmp = {settings: {manualUrl}};
-
     const {render, store} = rendererWith({
-      gmp,
       capabilities: caps,
       router: true,
       store: true,

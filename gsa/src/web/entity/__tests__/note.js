@@ -28,8 +28,6 @@ import NoteBox from '../note';
 
 setLocale('en');
 
-const manualUrl = 'test/';
-
 const caps = new Capabilities(['everything']);
 
 const note = Note.fromElement({
@@ -47,17 +45,13 @@ const note = Note.fromElement({
 
 describe('NoteBox component tests', () => {
   test('should render with DetailsLink', () => {
-    const gmp = {settings: {manualUrl}};
-
     const {render, store} = rendererWith({
-      gmp,
       capabilities: caps,
       router: true,
       store: true,
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const {element, getByTestId} = render(
       <NoteBox detailsLink={true} note={note} />,
@@ -77,17 +71,13 @@ describe('NoteBox component tests', () => {
   });
 
   test('should render without DetailsLink', () => {
-    const gmp = {settings: {manualUrl}};
-
     const {render, store} = rendererWith({
-      gmp,
       capabilities: caps,
       router: true,
       store: true,
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const {element} = render(<NoteBox detailsLink={false} note={note} />);
 
