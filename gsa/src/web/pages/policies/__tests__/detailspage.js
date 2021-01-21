@@ -22,7 +22,6 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import Policy from 'gmp/models/policy';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -32,6 +31,7 @@ import {
   createDeletePoliciesByIdsQueryMock,
   createExportPoliciesByIdsQueryMock,
   createGetPolicyQueryMock,
+  policy1 as policyObject1,
   policy2 as policyObject2,
   policy3 as policyObject3,
   policy4 as policyObject4,
@@ -59,171 +59,13 @@ window.URL.createObjectURL = jest.fn();
 
 setLocale('en');
 
-const families = [
-  {
-    name: 'family1',
-    nvt_count: '1',
-    max_nvt_count: '1',
-    growing: 1,
-  },
-  {
-    name: 'family2',
-    nvt_count: '2',
-    max_nvt_count: '4',
-    growing: 0,
-  },
-  {
-    name: 'family3',
-    nvt_count: '0',
-    max_nvt_count: '2',
-    growing: 0,
-  },
-];
+const policy = Policy.fromObject(policyObject1);
 
-const preferences = {
-  preference: [
-    {
-      name: 'preference0',
-      hr_name: 'preference0',
-      id: '0',
-      value: 'yes',
-      type: 'checkbox',
-      default: 'no',
-      nvt: {
-        _oid: '0',
-        name: 'nvt0',
-      },
-    },
-    {
-      name: 'preference1',
-      hr_name: 'preference1',
-      id: '1',
-      value: 'value2',
-      type: 'radio',
-      default: 'value1',
-      alt: ['value2', 'value3'],
-      nvt: {
-        _oid: '1',
-        name: 'nvt1',
-      },
-    },
-    {
-      name: 'preference2',
-      hr_name: 'preference2',
-      id: '2',
-      type: 'entry',
-      value: 'foo',
-      default: 'bar',
-      nvt: {
-        _oid: '2',
-        name: 'nvt2',
-      },
-    },
-    {
-      name: 'scannerpref0',
-      hr_name: 'Scanner Preference 1',
-      value: 0,
-      default: 0,
-      nvt: {},
-    },
-  ],
-};
+const policy2 = Policy.fromObject(policyObject2);
 
-const policy = Policy.fromElement({
-  _id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
-  owner: {name: 'admin'},
-  writable: '1',
-  in_use: '0',
-  usage_type: 'policy',
-  family_count: {growing: 1},
-  families: {family: families},
-  preferences: preferences,
-  permissions: {permission: [{name: 'everything'}]},
-  scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
-  tasks: {
-    task: [
-      {id: '1234', name: 'audit1'},
-      {id: '5678', name: 'audit2'},
-    ],
-  },
-});
+const policy3 = Policy.fromObject(policyObject3);
 
-const policy2 = Policy.fromElement({
-  _id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
-  owner: {name: 'user'},
-  writable: '1',
-  in_use: '0',
-  usage_type: 'policy',
-  family_count: {growing: 1},
-  families: {family: families},
-  preferences: preferences,
-  permissions: {permission: [{name: 'get_config'}]},
-  scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
-  tasks: {
-    task: [
-      {id: '1234', name: 'audit1'},
-      {id: '5678', name: 'audit2'},
-    ],
-  },
-});
-
-const policy3 = Policy.fromElement({
-  _id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
-  owner: {name: 'user'},
-  writable: '1',
-  in_use: '1',
-  usage_type: 'policy',
-  family_count: {growing: 1},
-  families: {family: families},
-  preferences: preferences,
-  permissions: {permission: [{name: 'everything'}]},
-  scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
-  tasks: {
-    task: [
-      {id: '1234', name: 'audit1'},
-      {id: '5678', name: 'audit2'},
-    ],
-  },
-});
-
-const policy4 = Policy.fromElement({
-  _id: '12345',
-  name: 'foo',
-  comment: 'bar',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
-  owner: {name: 'user'},
-  writable: '0',
-  in_use: '0',
-  usage_type: 'policy',
-  family_count: {growing: 1},
-  families: {family: families},
-  preferences: preferences,
-  permissions: {permission: [{name: 'everything'}]},
-  scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
-  tasks: {
-    task: [
-      {id: '1234', name: 'audit1'},
-      {id: '5678', name: 'audit2'},
-    ],
-  },
-});
+const policy4 = Policy.fromObject(policyObject4);
 
 const scanners = [{name: 'scanner1'}, {name: 'scanner2'}];
 
@@ -469,6 +311,60 @@ describe('Policy Detailspage tests', () => {
     expect(permissionResult).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('No permissions available');
+  });
+
+  test('should render scanner preferences tab', async () => {
+    const gmp = {
+      settings: {manualUrl, reloadInterval},
+      user: {
+        currentSettings,
+        renewSession,
+      },
+    };
+
+    const [mock, resultFunc] = createGetPolicyQueryMock();
+
+    const [
+      renewSessionQueryMock,
+      renewSessionResult,
+    ] = createRenewSessionQueryMock();
+    const [permissionQueryMock] = createGetPermissionsQueryMock(
+      {
+        filterString: 'resource_uuid=234 first=1 rows=-1',
+      },
+      {permissions: null},
+    );
+    const {render, store} = rendererWith({
+      capabilities: caps,
+      gmp,
+      router: true,
+      store: true,
+      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
+    });
+
+    store.dispatch(setTimezone('CET'));
+
+    const {baseElement} = render(<Detailspage id="234" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    const spans = baseElement.querySelectorAll('span');
+    fireEvent.click(spans[9]);
+
+    await wait();
+
+    expect(renewSessionResult).toHaveBeenCalled();
+
+    expect(baseElement).toHaveTextContent('Name');
+    expect(baseElement).toHaveTextContent('brightness of alpha centauri');
+
+    expect(baseElement).toHaveTextContent('Value');
+    expect(baseElement).toHaveTextContent('brilliant');
+
+    expect(baseElement).toHaveTextContent('Default Value');
+    expect(baseElement).toHaveTextContent('dull');
   });
 
   test('should call commands', async () => {
@@ -874,8 +770,6 @@ describe('Policy Detailspage tests', () => {
     expect(exportQueryResult).toHaveBeenCalled();
     expect(icons[5]).toHaveAttribute('title', 'Export Policy as XML');
   });
-
-  // TODO: should render scanner preferences tab
 });
 
 describe('Policy ToolBarIcons tests', () => {

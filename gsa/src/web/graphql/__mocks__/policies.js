@@ -60,6 +60,19 @@ export const policy1 = deepFreeze({
         name: 'PostgreSQL Detection',
       },
     },
+    {
+      alt: null,
+      default: 'brilliant',
+      hrName: 'human readable',
+      id: null,
+      name: 'brightness of alpha centauri',
+      type: null,
+      value: 'dull',
+      nvt: {
+        oid: '',
+        name: null,
+      },
+    },
   ],
   nvtSelectors: [
     {
