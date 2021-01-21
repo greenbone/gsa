@@ -22,7 +22,7 @@ import {setLocale} from 'gmp/models/date';
 import Note from 'gmp/models/note';
 
 import {rendererWith} from 'web/utils/testing';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import NoteBox from '../note';
 

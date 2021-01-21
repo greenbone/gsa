@@ -22,7 +22,7 @@ import {setLocale} from 'gmp/models/date';
 import Override from 'gmp/models/override';
 
 import {rendererWith} from 'web/utils/testing';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import OverrideBox from '../override';
 
@@ -48,7 +48,6 @@ describe('OverrideBox component tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const {element, getByTestId} = render(
       <OverrideBox detailsLink={true} override={override} />,

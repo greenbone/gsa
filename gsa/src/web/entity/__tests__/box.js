@@ -20,7 +20,7 @@ import React from 'react';
 import date, {setLocale} from 'gmp/models/date';
 
 import {rendererWith} from 'web/utils/testing';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import EntityBox from '../box';
 
@@ -36,7 +36,6 @@ describe('EntityBox component tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const {element} = render(
       <EntityBox
