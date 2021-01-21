@@ -1,4 +1,4 @@
-/* Copyright (C) 2020-2021 Greenbone Networks GmbH
+/* Copyright (C) 2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -15,16 +15,64 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {deepFreeze} from 'web/utils/testing';
+import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
-import {GET_NOTES} from '../notes';
+import {
+  CLONE_NOTE,
+  DELETE_NOTES_BY_IDS,
+  DELETE_NOTES_BY_FILTER,
+  EXPORT_NOTES_BY_IDS,
+  EXPORT_NOTES_BY_FILTER,
+  GET_NOTE,
+  GET_NOTES,
+  CREATE_NOTE,
+  MODIFY_NOTE,
+} from '../notes';
 
 const note1 = deepFreeze({
   id: '123',
+  active: 1,
+  creation_time: '2020-12-23T14:14:11Z',
+  hosts: '127.0.0.1',
+  in_use: 0,
+  modification_time: '2021-01-04T11:54:12Z',
+  nvt: {
+    _oid: '123',
+    name: 'foo nvt',
+    type: 'nvt',
+  },
+  owner: {name: 'admin'},
+  permissions: {permission: {name: 'Everything'}},
+  port: '666',
+  task: {
+    name: 'task x',
+    _id: '42',
+  },
+  text: 'note text',
+  writable: 1,
 });
 
 const note2 = deepFreeze({
   id: '456',
+  active: 1,
+  creation_time: '2020-12-23T14:14:11Z',
+  hosts: '127.0.0.1',
+  in_use: 0,
+  modification_time: '2021-01-04T11:54:12Z',
+  nvt: {
+    _oid: '123',
+    name: 'foo nvt',
+    type: 'nvt',
+  },
+  owner: {name: 'admin'},
+  permissions: {permission: {name: 'Everything'}},
+  port: '666',
+  task: {
+    name: 'task x',
+    _id: '42',
+  },
+  text: 'note text',
+  writable: 1,
 });
 
 const mockNotes = {
@@ -70,3 +118,133 @@ export const createGetNotesQueryMock = (variables = {}) => {
   };
   return [queryMock, resultFunc];
 };
+
+export const createNoteInput = {
+  id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+  active: 1,
+  creation_time: '2020-12-23T14:14:11Z',
+  hosts: '127.0.0.1',
+  in_use: 0,
+  modification_time: '2021-01-04T11:54:12Z',
+  nvt: {
+    _oid: '123',
+    name: 'foo nvt',
+    type: 'nvt',
+  },
+  owner: {name: 'admin'},
+  permissions: {permission: {name: 'Everything'}},
+  port: '666',
+  text: 'note text',
+  writable: 1,
+};
+
+const createNoteResult = {
+  createNote: {
+    id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+    status: 200,
+  },
+};
+
+export const createCreateNoteQueryMock = () =>
+  createGenericQueryMock(CREATE_NOTE, createNoteResult, {
+    input: createNoteInput,
+  });
+
+export const modifyNoteInput = {
+  id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+  text: 'Han shot first',
+  hosts: '127.0.0.0',
+};
+
+const modifyNoteResult = {
+  modifyNote: {
+    ok: true,
+  },
+};
+
+export const createModifyNoteQueryMock = () =>
+  createGenericQueryMock(MODIFY_NOTE, modifyNoteResult, {
+    input: modifyNoteInput,
+  });
+
+const bulkDeleteByIdsResult = {
+  deleteNotesByIds: {
+    ok: true,
+  },
+};
+
+export const createDeleteNotesByIdsQueryMock = (noteIds = ['123']) =>
+  createGenericQueryMock(DELETE_NOTES_BY_IDS, bulkDeleteByIdsResult, {
+    ids: noteIds,
+  });
+
+const bulkDeleteByFilterResult = {
+  deleteNotesByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeleteNotesByFilterQueryMock = (filterString = '123') =>
+  createGenericQueryMock(DELETE_NOTES_BY_FILTER, bulkDeleteByFilterResult, {
+    filterString,
+  });
+
+const deleteNoteResult = {
+  deleteNoteByIds: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const createDeleteNoteQueryMock = (noteId = '123') =>
+  createGenericQueryMock(DELETE_NOTES_BY_IDS, deleteNoteResult, {
+    ids: [noteId],
+  });
+
+export const createCloneNoteQueryMock = (
+  noteId = '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+  newNoteId = '456',
+) =>
+  createGenericQueryMock(
+    CLONE_NOTE,
+    {
+      cloneNote: {
+        id: newNoteId,
+      },
+    },
+    {id: noteId},
+  );
+
+const exportNotesByIdsResult = {
+  exportNotesByIds: {
+    exportedEntities:
+      '<get_notes_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportNotesByIdsQueryMock = (ids = ['123']) =>
+  createGenericQueryMock(EXPORT_NOTES_BY_IDS, exportNotesByIdsResult, {
+    ids,
+  });
+
+const exportNotesByFilterResult = {
+  exportNotesByFilter: {
+    exportedEntities:
+      '<get_notes_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportNotesByFilterQueryMock = (
+  filterString = 'foo',
+) => {
+  return createGenericQueryMock(
+    EXPORT_NOTES_BY_FILTER,
+    exportNotesByFilterResult,
+    {filterString},
+  );
+};
+
+export const createGetNoteQueryMock = (
+  noteId = '123',
+  note = note1,
+) => createGenericQueryMock(GET_NOTE, {note}, {id: noteId});
