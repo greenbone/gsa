@@ -184,13 +184,19 @@ class Policy extends Model {
       families.count = 0;
     }
 
+    ret.families = families;
+
     if (hasValue(ret.familyGrowing)) {
       families.trend = ret.familyGrowing
         ? SCANCONFIG_TREND_DYNAMIC
         : SCANCONFIG_TREND_STATIC;
     }
 
-    ret.families = families;
+    if (hasValue(ret.nvtGrowing)) {
+      ret.nvts.trend = ret.nvtGrowing
+        ? SCANCONFIG_TREND_DYNAMIC
+        : SCANCONFIG_TREND_STATIC;
+    }
 
     const nvtPreferences = [];
     const scannerPreferences = [];

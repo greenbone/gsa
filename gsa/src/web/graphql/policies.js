@@ -40,6 +40,8 @@ export const GET_POLICY = gql`
       type
       trash
       familyCount
+      nvtGrowing
+      familyGrowing
       nvtCount
       usageType
       maxNvtCount

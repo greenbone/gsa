@@ -26,7 +26,7 @@ import {SCANCONFIG_TREND_DYNAMIC} from '../scanconfig';
 
 testModel(Policy, 'policy');
 
-describe('Policy model tests', () => {
+describe('Policy model parseElement tests', () => {
   test('should parse families', () => {
     const elem = {
       families: {
