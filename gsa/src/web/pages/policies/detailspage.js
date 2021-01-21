@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -60,20 +60,21 @@ import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 import useExportEntity from 'web/entity/useExportEntity';
 
+import {useGetPermissions} from 'web/graphql/permissions';
 import {
   useClonePolicy,
   useDeletePolicy,
   useExportPoliciesByIds,
   useGetPolicy,
 } from 'web/graphql/policies';
-import {useGetPermissions} from 'web/graphql/permissions';
-import {goto_entity_details} from 'web/utils/graphql';
 
 import {
   NvtFamilies,
   ScannerPreferences,
   NvtPreferences,
 } from 'web/pages/scanconfigs/detailspage';
+
+import {goto_entity_details} from 'web/utils/graphql';
 
 import PropTypes from 'web/utils/proptypes';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';

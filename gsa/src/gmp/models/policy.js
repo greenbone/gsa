@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,13 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
-import {forEach, map} from 'gmp/utils/array';
-import {isEmpty} from 'gmp/utils/string';
+import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 
 import {parseInt, parseBoolean} from 'gmp/parser';
 
-import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
+import {forEach, map} from 'gmp/utils/array';
+import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import {
   parseCount,

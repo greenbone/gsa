@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,23 +17,16 @@
  */
 import React from 'react';
 
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import Capabilities from 'gmp/capabilities/capabilities';
+
+import {setLocale} from 'gmp/locale/lang';
 
 import Policy from 'gmp/models/policy';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {isDefined} from 'gmp/utils/identity';
 
-import {policy as policyObject} from 'web/store/entities/policies';
-import {setTimezone} from 'web/store/usersettings/actions';
-
-import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
-
-import Detailspage, {ToolBarIcons} from '../detailspage';
+import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 import {
   createClonePolicyQueryMock,
   createDeletePoliciesByIdsQueryMock,
@@ -43,7 +36,14 @@ import {
   policy3 as policyObject3,
   policy4 as policyObject4,
 } from 'web/graphql/__mocks__/policies';
-import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
+import {policy as policyObject} from 'web/store/entities/policies';
+import {setTimezone} from 'web/store/usersettings/actions';
+
+import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
+
+import Detailspage, {ToolBarIcons} from '../detailspage';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
