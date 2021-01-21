@@ -186,6 +186,32 @@ class Policy extends Model {
 
     ret.families = families;
 
+    ret.nvts = {};
+
+    if (hasValue(ret.nvtCount)) {
+      ret.nvts = {
+        // number of selected nvts
+        count: ret.nvtCount,
+      };
+
+      delete ret.nvtCount;
+
+      if (isDefined(ret.knownNvtCount)) {
+        // number of known nvts by the scanner from last sync. should always be
+        // equal or less then nvt_count because only the db may contain nvts not
+        // known nvts by the scanner e.g. an imported scan config contains
+        // private nvts
+        ret.nvts.known = ret.knownNvtCount;
+        delete ret.knownNvtCount;
+      }
+
+      if (isDefined(ret.maxNvtCount)) {
+        // sum of all available nvts of all selected families
+        ret.nvts.max = ret.maxNvtCount;
+        delete ret.maxNvtCount;
+      }
+    }
+
     if (hasValue(ret.familyGrowing)) {
       families.trend = ret.familyGrowing
         ? SCANCONFIG_TREND_DYNAMIC
