@@ -77,7 +77,6 @@ describe('OverrideBox component tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
     const {element} = render(
       <OverrideBox detailsLink={false} override={override} />,
     );
