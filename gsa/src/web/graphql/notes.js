@@ -1,4 +1,4 @@
-/* Copyright (C) 2020-2021 Greenbone Networks GmbH
+/* Copyright (C) 2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -18,7 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {useLazyQuery} from '@apollo/client';
+import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
 
 import gql from 'graphql-tag';
 
@@ -95,4 +95,231 @@ export const useLazyGetNotes = (variables, options) => {
   return [getNotes, {...other, counts, notes, pageInfo}];
 };
 
+export const GET_NOTE = gql`
+  query Note($id: UUID!) {
+    note(id: $id) {
+      id
+      active
+      creationTime
+      hosts
+      nvt {
+        id
+      }
+      owner
+      result {
+        id
+      }
+      task {
+        id
+      }
+      writable
+      inUse
+      modificationTime
+      permissions {
+        name
+      }
+      # userTags {
+      #   count
+      #   tags {
+      #     name
+      #     id
+      #     value
+      #     comment
+      #   }
+      # }
+    }
+  }
+`;
+
+export const useGetNote = (id, options) => {
+  const {data, ...other} = useQuery(GET_NOTE, {
+    ...options,
+    variables: {id},
+  });
+  const note = isDefined(data?.note)
+    ? Note.fromObject(data.note)
+    : undefined;
+  return {note, ...other};
+};
+
+export const CREATE_NOTE = gql`
+  mutation createNote($input: CreateNoteInput!) {
+    createNote(input: $input) {
+      id
+    }
+  }
+`;
+
+export const useCreateNote = options => {
+  const [queryCreateNote, {data, ...other}] = useMutation(CREATE_NOTE, options);
+
+  const createNote = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreateNote({...options, variables: {input: inputObject}}),
+    [queryCreateNote],
+  );
+  const noteId = data?.createNote?.id;
+  return [createNote, {...other, id: noteId}];
+};
+
+export const MODIFY_NOTE = gql`
+  mutation modifyNote($input: ModifyNoteInput!) {
+    modifyNote(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const useModifyNote = options => {
+  const [queryModifyNote, data] = useMutation(MODIFY_NOTE, options);
+  const modifyNote = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryModifyNote({...options, variables: {input: inputObject}}),
+    [queryModifyNote],
+  );
+  return [modifyNote, data];
+};
+
+export const DELETE_NOTES_BY_IDS = gql`
+  mutation deleteNotesByIds($ids: [UUID]!) {
+    deleteNotesByIds(ids: $ids) {
+      ok
+    }
+  }
+`;
+
+export const useDeleteNotesByIds = options => {
+  const [queryDeleteNotesByIds, data] = useMutation(
+    DELETE_NOTES_BY_IDS,
+    options,
+  );
+  const deleteNotesByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteNotesByIds({...options, variables: {ids}}),
+    [queryDeleteNotesByIds],
+  );
+  return [deleteNotesByIds, data];
+};
+
+export const useDeleteNote = options => {
+  const [queryDeleteNote, data] = useMutation(
+    DELETE_NOTES_BY_IDS,
+    options,
+  );
+  const deleteNote = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryDeleteNote({...options, variables: {ids: [id]}}),
+    [queryDeleteNote],
+  );
+  return [deleteNote, data];
+};
+
+export const DELETE_NOTES_BY_FILTER = gql`
+  mutation deleteNotesByFilter($filterString: String!) {
+    deleteNotesByFilter(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
+export const useDeleteNotesByFilter = options => {
+  const [queryDeleteNotesByFilter, data] = useMutation(
+    DELETE_NOTES_BY_FILTER,
+    options,
+  );
+  const deleteNotesByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filterString, options) =>
+      queryDeleteNotesByFilter({
+        ...options,
+        variables: {filterString},
+      }),
+    [queryDeleteNotesByFilter],
+  );
+  return [deleteNotesByFilter, data];
+};
+
+export const EXPORT_NOTES_BY_FILTER = gql`
+  mutation exportNotesByFilter($filterString: String) {
+    exportNotesByFilter(filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportNotesByFilter = options => {
+  const [queryExportNotesByFilter] = useMutation(
+    EXPORT_NOTES_BY_FILTER,
+    options,
+  );
+  const exportNotesByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportNotesByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportNotesByFilter, options],
+  );
+
+  return exportNotesByFilter;
+};
+
+export const EXPORT_NOTES_BY_IDS = gql`
+  mutation exportNotesByIds($ids: [UUID]!) {
+    exportNotesByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportNotesByIds = options => {
+  const [queryExportNotesByIds] = useMutation(
+    EXPORT_NOTES_BY_IDS,
+    options,
+  );
+
+  const exportNotesByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    noteIds =>
+      queryExportNotesByIds({
+        ...options,
+        variables: {
+          ids: noteIds,
+        },
+      }),
+    [queryExportNotesByIds, options],
+  );
+
+  return exportNotesByIds;
+};
+
+export const CLONE_NOTE = gql`
+  mutation cloneNote($id: UUID!) {
+    cloneNote(id: $id) {
+      id
+    }
+  }
+`;
+
+export const useCloneNote = options => {
+  const [queryCloneNote, {data, ...other}] = useMutation(
+    CLONE_NOTE,
+    options,
+  );
+  const cloneNote = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryCloneNote({...options, variables: {id}}).then(
+        result => result.data.cloneNote.id,
+      ),
+    [queryCloneNote],
+  );
+  const noteId = data?.cloneNote?.id;
+  return [cloneNote, {...other, id: noteId}];
+};
 // vim: set ts=2 sw=2 tw=80:
