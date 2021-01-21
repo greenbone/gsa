@@ -170,25 +170,31 @@ const hostWithoutPermission = Host.fromElement({
 });
 
 // mock gmp commands
+let getHost;
+let getPermissions;
+let currentSettings;
+let renewSession;
 
-const getHost = jest.fn().mockResolvedValue({
-  data: host,
-});
+beforeEach(() => {
+  getHost = jest.fn().mockResolvedValue({
+    data: host,
+  });
 
-const getPermissions = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getPermissions = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('Host Detailspage tests', () => {
@@ -313,10 +319,7 @@ describe('Host Detailspage tests', () => {
         get: getPermissions,
       },
       settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-        renewSession,
-      },
+      user: {currentSettings, renewSession},
     };
 
     const {render, store} = rendererWith({
@@ -350,10 +353,7 @@ describe('Host Detailspage tests', () => {
         get: getPermissions,
       },
       settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-        renewSession,
-      },
+      user: {currentSettings, renewSession},
     };
 
     const {render, store} = rendererWith({
@@ -400,10 +400,7 @@ describe('Host Detailspage tests', () => {
         get: getPermissions,
       },
       settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-        renewSession,
-      },
+      user: {currentSettings, renewSession},
     };
 
     const [renewSessionQueryMock] = createRenewSessionQueryMock();
