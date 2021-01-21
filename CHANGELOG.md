@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Changed
+- Implement policy detailspage queries and mutations [#2668](https://github.com/greenbone/gsa/pull/2668)
 - Implement schedule detailspage queries and mutations [#2659](https://github.com/greenbone/gsa/pull/2659)
 - Implement graphql queries and mutations on scanconfig listpage [#2621](https://github.com/greenbone/gsa/pull/2621)
 - Don't send scanner and config values in task dialog if task status is not new [#2598](https://github.com/greenbone/gsa/pull/2598)
