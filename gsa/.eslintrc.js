@@ -9,7 +9,7 @@ module.exports = {
   extends: ['react-app', 'prettier'],
   settings: {
     react: {
-      version: '16',
+      version: 'detect',
     },
   },
   rules: {
