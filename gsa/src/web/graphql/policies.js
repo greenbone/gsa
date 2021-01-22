@@ -18,7 +18,9 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useQuery, useMutation} from '@apollo/client';
+import {gql, useQuery, useMutation, useLazyQuery} from '@apollo/client';
+
+import CollectionCounts from 'gmp/collection/collectioncounts';
 import Policy from 'gmp/models/policy';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -75,6 +77,41 @@ export const GET_POLICY = gql`
       tasks {
         name
         id
+      }
+    }
+  }
+`;
+
+export const GET_POLICIES = gql`
+  query Policies($filterString: FilterString) {
+    policies(filterString: $filterString) {
+      edges {
+        node {
+          id
+          name
+          comment
+          owner
+          permissions {
+            name
+          }
+          predefined
+          inUse
+          writable
+        }
+      }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
       }
     }
   }
@@ -164,4 +201,33 @@ export const useClonePolicy = options => {
   );
   const policyId = data?.clonePolicy?.id;
   return [clonePolicy, {...other, id: policyId}];
+};
+
+export const useLazyGetPolicies = (variables, options) => {
+  const [queryPolicies, {data, ...other}] = useLazyQuery(GET_POLICIES, {
+    ...options,
+    variables,
+  });
+  const policies = isDefined(data?.policies)
+    ? data.policies.edges.map(entity => Policy.fromObject(entity.node))
+    : undefined;
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.policies?.counts || {};
+  const counts = isDefined(data?.policies?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const getPolicies = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => queryPolicies({...options, variables}),
+    [queryPolicies],
+  );
+  const pageInfo = data?.policies?.pageInfo;
+  return [getPolicies, {...other, counts, policies, pageInfo}];
 };
