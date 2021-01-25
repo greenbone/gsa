@@ -38,7 +38,6 @@ import {
 } from 'web/graphql/__mocks__/policies';
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
-import {policy as policyObject} from 'web/store/entities/policies';
 import {setTimezone} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
@@ -209,9 +208,12 @@ describe('Policy Detailspage tests', () => {
       'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.';
     const dynamicTitle =
       'The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.';
+    const familyTitle =
+      'The families selection is DYNAMIC. New families will automatically be added and considered.';
 
     expect(screen.getAllByTitle(staticTitle)[0]).toBeInTheDocument();
     expect(screen.getAllByTitle(dynamicTitle)[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle(familyTitle)[0]).toBeInTheDocument();
   });
 
   test('should render nvt preferences tab', async () => {
@@ -392,7 +394,7 @@ describe('Policy Detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetPolicyQueryMock('234', policyObject);
+    const [mock, resultFunc] = createGetPolicyQueryMock('234', policyObject1);
 
     const [renewSessionQueryMock] = createRenewSessionQueryMock();
     const [permissionQueryMock] = createGetPermissionsQueryMock({
