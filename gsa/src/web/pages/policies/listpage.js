@@ -37,6 +37,10 @@ import PageTitle from 'web/components/layout/pagetitle';
 import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
+import {
+  useBulkDeleteEntities,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions';
 import EntitiesPage from 'web/entities/page';
 import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -53,6 +57,9 @@ import {
   useDeletePolicy,
   useExportPoliciesByIds,
   useLazyGetPolicies,
+  useExportPoliciesByFilter,
+  useDeletePoliciesByIds,
+  useDeletePoliciesByFilter,
 } from 'web/graphql/policies';
 
 import PropTypes from 'web/utils/proptypes';
@@ -131,6 +138,15 @@ const PoliciesPage = props => {
   const [deletePolicy] = useDeletePolicy();
   const exportPolicy = useExportPoliciesByIds();
 
+  const exportPoliciesByFilter = useExportPoliciesByFilter();
+  const bulkExportPolicies = useBulkExportEntities();
+
+  const [deletePoliciesByIds] = useDeletePoliciesByIds();
+  const exportPoliciesByIds = useExportPoliciesByIds();
+  const [deletePoliciesByFilter] = useDeletePoliciesByFilter();
+
+  const bulkDeletePolicies = useBulkDeleteEntities();
+
   const timeoutFunc = useEntitiesReloadInterval(policies);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
@@ -157,6 +173,34 @@ const PoliciesPage = props => {
     policy => deletePolicy(policy.id).then(refetch, showError),
     [deletePolicy, refetch, showError],
   );
+
+  // Bulk action methods
+  const handleBulkDeletePolicies = () => {
+    return bulkDeletePolicies({
+      selectionType,
+      filter,
+      selected,
+      entities: policies,
+      deleteByIdsFunc: deletePoliciesByIds,
+      deleteByFilterFunc: deletePoliciesByFilter,
+      onDeleted: refetch,
+      onError: showError,
+    });
+  };
+
+  const handleBulkExportPolicies = () => {
+    return bulkExportPolicies({
+      entities: policies,
+      selected,
+      filter,
+      resourceType: 'policies',
+      selectionType,
+      exportByFilterFunc: exportPoliciesByFilter,
+      exportByIdsFunc: exportPoliciesByIds,
+      onDownload: handleDownload,
+      onError: showError,
+    });
+  };
 
   // Side effects
   useEffect(() => {
@@ -221,6 +265,8 @@ const PoliciesPage = props => {
             title={_('Policies')}
             toolBarIcons={ToolBarIcons}
             onCreateAuditClick={createAudit}
+            onDeleteBulk={handleBulkDeletePolicies}
+            onDownloadBulk={handleBulkExportPolicies}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}
