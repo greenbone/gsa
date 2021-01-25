@@ -528,7 +528,7 @@ describe('Host listpage ToolBarIcons test', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: capabilities,
+      capabilities,
       router: true,
     });
 
@@ -559,7 +559,7 @@ describe('Host listpage ToolBarIcons test', () => {
 
     const {render} = rendererWith({
       gmp,
-      capabilities: capabilities,
+      capabilities,
       router: true,
     });
 
