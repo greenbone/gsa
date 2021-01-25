@@ -54,11 +54,11 @@ const TestComponent = ({onMount = false, timeout = 100, promise = false}) => {
   );
 };
 
-beforeAll(() => {
+beforeEach(() => {
   jest.useFakeTimers();
 });
 
-afterAll(() => {
+afterEach(() => {
   jest.useRealTimers();
 });
 
@@ -174,8 +174,6 @@ describe('useTiming tests', () => {
     render(<TestComponent onMount={true} timeout={null} />);
 
     expect(screen.getByTestId('value')).toHaveTextContent(0);
-
-    await wait();
 
     expect(screen.getByTestId('value')).toHaveTextContent(0);
     expect(screen.getByTestId('isRunning')).toHaveTextContent('no');

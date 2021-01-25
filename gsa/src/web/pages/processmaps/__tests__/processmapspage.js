@@ -60,47 +60,55 @@ const hosts = [
   {ip: '109.876.54.123', id: '9101', severity: 10},
 ];
 
-const getAllHosts = jest.fn().mockResolvedValue({
-  data: hosts,
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getHosts = jest.fn().mockResolvedValue({
-  data: hosts,
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
 const results = [
   {id: '123', severity: 4, nvt: {name: 'bar', oid: '1337'}},
   {id: '456', severity: 8, nvt: {name: 'lorem', oid: '7353'}},
 ];
 
-const getResults = jest.fn().mockResolvedValue({
-  data: results,
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getTag = jest.fn().mockResolvedValue({
-  data: '',
-});
-
 const renewDate = '2019-10-10T12:00:00Z';
-
 const [queryMock, resultFunc] = createRenewSessionQueryMock(renewDate);
 
-const renewSession = jest.fn().mockResolvedValue({data: renewDate});
+let getAllHosts;
+let getBusinessProcessMaps;
+let getHosts;
+let getResults;
+let getTag;
+let renewSession;
 
-const getBusinessProcessMaps = jest.fn().mockResolvedValue({
-  foo: 'bar',
+beforeEach(() => {
+  getAllHosts = jest.fn().mockResolvedValue({
+    data: hosts,
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  getHosts = jest.fn().mockResolvedValue({
+    data: hosts,
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  getResults = jest.fn().mockResolvedValue({
+    data: results,
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  getTag = jest.fn().mockResolvedValue({
+    data: '',
+  });
+
+  renewSession = jest.fn().mockResolvedValue({data: renewDate});
+
+  getBusinessProcessMaps = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('ProcessMapsPage tests', () => {

@@ -54,59 +54,70 @@ const manualUrl = 'test/';
 // create mock tasks
 const {listMockTask: task} = getMockTasks(); // mock task
 
-// mock gmp commands
-const getTasks = jest.fn().mockResolvedValue({
-  data: [task],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+let currentSettings;
+let getAggregates;
+let getDashboardSetting;
+let getFilters;
+let getReportFormats;
+let getTasks;
+let getUserSetting;
+let renewSession;
 
-const getAggregates = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+beforeEach(() => {
+  // mock gmp commands
+  getTasks = jest.fn().mockResolvedValue({
+    data: [task],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
+  getAggregates = jest.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
+  });
 
-const getReportFormats = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getReportFormats = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+  getDashboardSetting = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const getUserSetting = jest.fn().mockResolvedValue({
-  filter: null,
-});
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  getUserSetting = jest.fn().mockResolvedValue({
+    filter: null,
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('TasksListPage tests', () => {

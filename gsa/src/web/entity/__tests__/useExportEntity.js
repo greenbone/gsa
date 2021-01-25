@@ -25,23 +25,30 @@ import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import useExportEntity from 'web/entity/useExportEntity';
 
+setLocale('en');
+
+const entity = {id: 'foo'};
+
 jest.mock('web/utils/render', () => ({
   ...jest.requireActual('web/utils/render'),
   generateFilename: () => 'foo-20201113.xml',
 }));
 
-setLocale('en');
+let exportFunc;
+let onDownload;
+let onError;
 
-const entity = {id: 'foo'};
-const onDownload = jest.fn();
-const onError = jest.fn();
+beforeEach(() => {
+  onDownload = jest.fn();
+  onError = jest.fn();
 
-const exportFunc = jest.fn().mockResolvedValue({
-  data: {
-    exportIpsumByIds: {
-      exportedEntities: '<get_entities_response />',
+  exportFunc = jest.fn().mockResolvedValue({
+    data: {
+      exportIpsumByIds: {
+        exportedEntities: '<get_entities_response />',
+      },
     },
-  },
+  });
 });
 
 const ExportEntityComponent = () => {

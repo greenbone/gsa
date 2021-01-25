@@ -68,26 +68,33 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
+let currentSettings;
+let getFilters;
+let getSetting;
+let getPolicies;
 
-const getSetting = jest.fn().mockResolvedValue({filter: null});
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
+  getSetting = jest.fn().mockResolvedValue({filter: null});
+
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
+
+  getPolicies = jest.fn().mockResolvedValue({
+    data: [policy],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
-
-const getPolicies = jest.fn().mockResolvedValue({
-  data: [policy],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+  });
 });
 
 describe('PoliciesPage tests', () => {

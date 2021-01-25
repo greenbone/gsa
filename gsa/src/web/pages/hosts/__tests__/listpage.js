@@ -89,52 +89,62 @@ const host = Host.fromElement({
   },
 });
 
-// mock gmp commands
+let currentSettings;
+let getAggregates;
+let getDashboardSetting;
+let getFilters;
+let getHosts;
+let getSetting;
+let renewSession;
 
-const getHosts = jest.fn().mockResolvedValue({
-  data: [host],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+beforeEach(() => {
+  // mock gmp commands
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
+  getHosts = jest.fn().mockResolvedValue({
+    data: [host],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
+
+  getDashboardSetting = jest.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
+  });
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getAggregates = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const getAggregates = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+  getSetting = jest.fn().mockResolvedValue({
+    filter: null,
+  });
 
-const getSetting = jest.fn().mockResolvedValue({
-  filter: null,
-});
-
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('Host listpage tests', () => {

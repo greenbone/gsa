@@ -58,46 +58,55 @@ const tlsCertificate = TlsCertificate.fromElement({
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getAggregates;
+let getDashboardSetting;
+let getFilters;
+let getTlsCertificates;
+let getUserSetting;
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
+
+  getDashboardSetting = jest.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
+  });
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getUserSetting = jest.fn().mockResolvedValue({
+    filter: null,
+  });
 
-const getUserSetting = jest.fn().mockResolvedValue({
-  filter: null,
-});
+  getAggregates = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const getAggregates = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getTlsCertificates = jest.fn().mockResolvedValue({
-  data: [tlsCertificate],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+  getTlsCertificates = jest.fn().mockResolvedValue({
+    data: [tlsCertificate],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 });
 
 describe('TlsCertificatePage tests', () => {
