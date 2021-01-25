@@ -18,7 +18,7 @@
 
 import PropTypes from 'web/utils/proptypes';
 
-export default {
+const dialogPropType = {
   filter: PropTypes.filter,
   filterstring: PropTypes.string,
   sortFields: PropTypes.array,
@@ -28,4 +28,5 @@ export default {
   onSortOrderChange: PropTypes.func,
 };
 
+export default dialogPropType;
 // vim: set ts=2 sw=2 tw=80:
