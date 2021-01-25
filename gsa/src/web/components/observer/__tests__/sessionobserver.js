@@ -33,11 +33,9 @@ import SessionObserver, {
 let setTimeoutMock;
 let clearTimeoutMock;
 
-beforeAll(() => {
-  jest.useFakeTimers();
-});
-
 beforeEach(() => {
+  jest.useFakeTimers();
+
   setTimeoutMock = jest.fn(x => global.setTimeout(x));
   clearTimeoutMock = jest.fn(x => global.clearTimeout(x));
 

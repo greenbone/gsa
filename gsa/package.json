@@ -103,8 +103,7 @@
       "!src/gmp/index.js",
       "!src/setupTests.js",
       "!src/web/utils/testing.js"
-    ],
-    "resetMocks": false
+    ]
   },
   "browserslist": [
     ">0.5%",

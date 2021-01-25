@@ -65,22 +65,64 @@ const counts = new CollectionCounts({
   rows: 2,
 });
 
-const handleClose = jest.fn();
-const gmp = {
-  tags: {
-    getAll: jest.fn().mockResolvedValue({data: [tag1, tag2]}),
-  },
-  tag: {
-    get: jest.fn().mockResolvedValue({data: tag3}),
-    create: jest.fn().mockResolvedValue({data: {id: '34567', name: 'goat'}}),
-  },
-  tasks: {
-    getAll: jest.fn().mockResolvedValue({data: [task1, task2, task3]}),
-  },
-  settings: {
-    enableHyperionOnly: true,
+const dummyEntities = [{id: 'foo'}, {id: 'bar'}];
+const selectedEntities = [{id: 'foo'}, {id: 'bar'}, {id: 'lorem'}];
+const deleteResponse = {
+  data: {
+    ok: true,
   },
 };
+
+let deleteByFilterFunc;
+let deleteByIdsFunc;
+let exportByFilterFunc;
+let exportByIdsFunc;
+let gmp;
+let handleClose;
+let onDeleted;
+let onDownload;
+let onError;
+
+beforeEach(() => {
+  handleClose = jest.fn();
+  onDownload = jest.fn();
+  onError = jest.fn();
+  onDeleted = jest.fn();
+
+  gmp = {
+    tags: {
+      getAll: jest.fn().mockResolvedValue({data: [tag1, tag2]}),
+    },
+    tag: {
+      get: jest.fn().mockResolvedValue({data: tag3}),
+      create: jest.fn().mockResolvedValue({data: {id: '34567', name: 'goat'}}),
+    },
+    tasks: {
+      getAll: jest.fn().mockResolvedValue({data: [task1, task2, task3]}),
+    },
+    settings: {
+      enableHyperionOnly: true,
+    },
+  };
+
+  deleteByIdsFunc = jest.fn().mockResolvedValue(deleteResponse);
+  deleteByFilterFunc = jest.fn().mockResolvedValue(deleteResponse);
+
+  exportByFilterFunc = jest.fn().mockResolvedValue({
+    data: {
+      exportIpsumByFilter: {
+        exportedEntities: '<get_entities_response />',
+      },
+    },
+  });
+  exportByIdsFunc = jest.fn().mockResolvedValue({
+    data: {
+      exportIpsumByIds: {
+        exportedEntities: '<get_entities_response />',
+      },
+    },
+  });
+});
 
 describe('BulkTagComponent tests', () => {
   test('should render', async () => {
@@ -221,24 +263,6 @@ describe('BulkTagComponent tests', () => {
   });
 });
 
-const dummyEntities = [{id: 'foo'}, {id: 'bar'}];
-const selectedEntities = [{id: 'foo'}, {id: 'bar'}, {id: 'lorem'}];
-const onDownload = jest.fn();
-const exportByFilterFunc = jest.fn().mockResolvedValue({
-  data: {
-    exportIpsumByFilter: {
-      exportedEntities: '<get_entities_response />',
-    },
-  },
-});
-const exportByIdsFunc = jest.fn().mockResolvedValue({
-  data: {
-    exportIpsumByIds: {
-      exportedEntities: '<get_entities_response />',
-    },
-  },
-});
-
 const BulkExportEntitiesComponent = ({selectionType}) => {
   const [message, setMessage] = useState('Not called');
 
@@ -254,7 +278,7 @@ const BulkExportEntitiesComponent = ({selectionType}) => {
       exportByFilterFunc,
       exportByIdsFunc,
       onDownload,
-      onError: jest.fn(),
+      onError,
     });
   };
 
@@ -338,16 +362,6 @@ describe('useBulkExportEntities tests', () => {
     expect(message).toHaveTextContent('Bulk export called!');
   });
 });
-
-const deleteResponse = {
-  data: {
-    ok: true,
-  },
-};
-
-const deleteByIdsFunc = jest.fn().mockResolvedValue(deleteResponse);
-const deleteByFilterFunc = jest.fn().mockResolvedValue(deleteResponse);
-const onDeleted = jest.fn();
 
 const BulkDeleteEntitiesComponent = ({selectionType}) => {
   const [message, setMessage] = useState('Not called');

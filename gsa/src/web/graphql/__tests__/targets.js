@@ -45,38 +45,45 @@ const modifyTargetInput = {
   name: 'bar',
 };
 
-const createTargetResult = jest.fn().mockReturnValue({
-  data: {
-    createTarget: {
-      id: '12345',
-      status: 200,
+let createTargetMock;
+let createTargetResult;
+let modifyTargetMock;
+let modifyTargetResult;
+
+beforeEach(() => {
+  createTargetResult = jest.fn().mockReturnValue({
+    data: {
+      createTarget: {
+        id: '12345',
+        status: 200,
+      },
     },
-  },
-});
+  });
 
-const modifyTargetResult = jest.fn().mockReturnValue({
-  data: {
-    modifyTarget: {
-      ok: true,
+  modifyTargetResult = jest.fn().mockReturnValue({
+    data: {
+      modifyTarget: {
+        ok: true,
+      },
     },
-  },
+  });
+
+  createTargetMock = {
+    request: {
+      query: CREATE_TARGET,
+      variables: {input: createTargetInput},
+    },
+    newData: createTargetResult,
+  };
+
+  modifyTargetMock = {
+    request: {
+      query: MODIFY_TARGET,
+      variables: {input: modifyTargetInput},
+    },
+    newData: modifyTargetResult,
+  };
 });
-
-const createTargetMock = {
-  request: {
-    query: CREATE_TARGET,
-    variables: {input: createTargetInput},
-  },
-  newData: createTargetResult,
-};
-
-const modifyTargetMock = {
-  request: {
-    query: MODIFY_TARGET,
-    variables: {input: modifyTargetInput},
-  },
-  newData: modifyTargetResult,
-};
 
 const CreateModifyTargetTestComponent = () => {
   const [notification, setNotification] = useState('');

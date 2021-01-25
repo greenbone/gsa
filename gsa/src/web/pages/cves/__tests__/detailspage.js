@@ -136,16 +136,21 @@ const entity_v2 = Cve.fromElement({
 
 const caps = new Capabilities(['everything']);
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
 const reloadInterval = 1;
 const manualUrl = 'test/';
+
+let currentSettings;
+let renewSession;
+
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+});
 
 describe('CVE Detailspage tests', () => {
   test('should render full Detailspage', () => {

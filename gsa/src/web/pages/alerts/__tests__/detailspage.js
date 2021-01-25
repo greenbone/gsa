@@ -70,12 +70,17 @@ const parsedAlert = Alert.fromObject(alert1);
 const parsedAlert2 = Alert.fromObject(alert2);
 const parsedAlert3 = Alert.fromObject(alert3);
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let renewSession;
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('Alert Detailspage tests', () => {

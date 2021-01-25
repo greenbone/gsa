@@ -42,7 +42,7 @@ const cve = Cve.fromElement({
   _id: 'CVE-2020-9992',
   name: 'CVE-2020-9992',
   cvss_vector: 'AV:N/AC:M/Au:N/C:C/I:C/A:C',
-  creationTime: '2020-10-22T19:15:00Z',
+  creation_time: '2020-10-22T19:15:00Z',
   score: '93',
   description: 'foo bar baz',
   usage_type: 'cve',
@@ -51,50 +51,60 @@ const cve = Cve.fromElement({
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getAggregates;
+let getCves;
+let getFilters;
+let getDashboardSetting;
+let getSetting;
+let renewSession;
 
-const getSetting = jest.fn().mockResolvedValue({
-  filter: null,
-});
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getSetting = jest.fn().mockResolvedValue({
+    filter: null,
+  });
 
-const getAggregates = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
+  getDashboardSetting = jest.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
+  });
 
-const getCves = jest.fn().mockResolvedValue({
-  data: [cve],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getAggregates = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
+
+  getCves = jest.fn().mockResolvedValue({
+    data: [cve],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('CvesPage tests', () => {
@@ -212,6 +222,7 @@ describe('CvesPage tests', () => {
         deleteByFilter,
         exportByFilter,
         getActiveDaysAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
@@ -285,6 +296,7 @@ describe('CvesPage tests', () => {
         export: exportByIds,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {
@@ -372,6 +384,7 @@ describe('CvesPage tests', () => {
         exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {

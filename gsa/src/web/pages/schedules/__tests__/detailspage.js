@@ -83,20 +83,26 @@ const scheduleInUse = Schedule.fromObject(inUseSchedule);
 
 const noPerm = Schedule.fromObject(noPermSchedule);
 
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+let currentSettings;
+let getEntities;
+let renewSession;
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+beforeEach(() => {
+  getEntities = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('Schedule Detailspage tests', () => {
