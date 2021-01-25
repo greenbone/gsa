@@ -22,13 +22,17 @@ import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import {
   createClonePolicyQueryMock,
+  createDeletePoliciesByFilterQueryMock,
   createDeletePoliciesByIdsQueryMock,
+  createExportPoliciesByFilterQueryMock,
   createExportPoliciesByIdsQueryMock,
   createGetPolicyQueryMock,
 } from '../__mocks__/policies';
 import {
   useClonePolicy,
+  useDeletePoliciesByFilter,
   useDeletePolicy,
+  useExportPoliciesByFilter,
   useExportPoliciesByIds,
   useGetPolicy,
 } from '../policies';
@@ -145,5 +149,55 @@ describe('useClonePolicy tests', () => {
     expect(resultFunc).toHaveBeenCalled();
 
     expect(screen.getByTestId('cloned-policy')).toHaveTextContent('345');
+  });
+});
+
+const DeletePoliciesByFilterComponent = () => {
+  const [deletePoliciesByFilter] = useDeletePoliciesByFilter();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deletePoliciesByFilter('foo')}
+    />
+  );
+};
+
+describe('useDeletePoliciesByFilter tests', () => {
+  test('should delete a list of tasks by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeletePoliciesByFilterQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeletePoliciesByFilterComponent />);
+    const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportPoliciesByFilterComponent = () => {
+  const exportPoliciesByFilter = useExportPoliciesByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportPoliciesByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportPoliciesByFilter tests', () => {
+  test('should export a list of tasks by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportPoliciesByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportPoliciesByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 });
