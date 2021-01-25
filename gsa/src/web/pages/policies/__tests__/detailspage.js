@@ -76,7 +76,6 @@ const reloadInterval = -1;
 const manualUrl = 'test/';
 
 let currentSettings;
-let getPermissions;
 let renewSession;
 
 beforeEach(() => {
@@ -86,14 +85,6 @@ beforeEach(() => {
 
   renewSession = jest.fn().mockResolvedValue({
     foo: 'bar',
-  });
-
-  getPermissions = jest.fn().mockResolvedValue({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
   });
 });
 
