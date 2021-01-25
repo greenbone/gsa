@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -46,7 +46,14 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/policies';
 
-import {useLazyGetPolicies} from 'web/graphql/policies';
+import useExportEntity from 'web/entity/useExportEntity';
+
+import {
+  useClonePolicy,
+  useDeletePolicy,
+  useExportPoliciesByIds,
+  useLazyGetPolicies,
+} from 'web/graphql/policies';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -118,11 +125,37 @@ const PoliciesPage = props => {
     {counts, policies, error, loading: isLoading, refetch, called}, // like scan configs, pagination doesn't work with usePagination
   ] = useLazyGetPolicies();
 
+  const exportEntity = useExportEntity();
+
+  const [clonePolicy] = useClonePolicy();
+  const [deletePolicy] = useDeletePolicy();
+  const exportPolicy = useExportPoliciesByIds();
+
   const timeoutFunc = useEntitiesReloadInterval(policies);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,
     timeoutFunc,
+  );
+
+  // Policy methods
+  const handleDownloadPolicy = exportedPolicy => {
+    exportEntity({
+      entity: exportedPolicy,
+      exportFunc: exportPolicy,
+      resourceType: 'policies',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  const handleClonePolicy = useCallback(
+    policy => clonePolicy(policy.id).then(refetch, showError),
+    [clonePolicy, refetch, showError],
+  );
+  const handleDeletePolicy = useCallback(
+    policy => deletePolicy(policy.id).then(refetch, showError),
+    [deletePolicy, refetch, showError],
   );
 
   // Side effects
@@ -167,15 +200,7 @@ const PoliciesPage = props => {
       onInteraction={renewSessionTimeout}
       onSaved={refetch}
     >
-      {({
-        clone,
-        create,
-        createAudit,
-        delete: deleteFunc,
-        download,
-        edit,
-        import: importFunc,
-      }) => (
+      {({create, createAudit, edit, import: importFunc}) => (
         <React.Fragment>
           <PageTitle title={_('Policies')} />
           <EntitiesPage
@@ -205,10 +230,10 @@ const PoliciesPage = props => {
             onFilterRemoved={removeFilter}
             onInteraction={renewSessionTimeout}
             onPolicyImportClick={importFunc}
-            onPolicyCloneClick={clone}
+            onPolicyCloneClick={handleClonePolicy}
             onPolicyCreateClick={create}
-            onPolicyDeleteClick={deleteFunc}
-            onPolicyDownloadClick={download}
+            onPolicyDeleteClick={handleDeletePolicy}
+            onPolicyDownloadClick={handleDownloadPolicy}
             onPolicyEditClick={edit}
             onSelectionTypeChange={changeSelectionType}
             onSortChange={handleSortChange}
