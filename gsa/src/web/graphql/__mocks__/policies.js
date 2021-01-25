@@ -24,6 +24,7 @@ import {
   EXPORT_POLICIES_BY_FILTER,
   EXPORT_POLICIES_BY_IDS,
   GET_POLICY,
+  GET_POLICIES,
 } from '../policies';
 
 export const policy1 = deepFreeze({
@@ -258,6 +259,42 @@ export const policy4 = deepFreeze({
     },
   ],
 });
+
+export const listPolicy = deepFreeze({
+  id: '234',
+  name: 'unnamed policy',
+  comment: 'some policy description',
+  writable: true,
+  owner: 'admin',
+  inUse: false,
+  permissions: [{name: 'Everything'}],
+  predefined: false,
+});
+
+const mockPolicies = {
+  edges: [
+    {
+      node: listPolicy,
+    },
+  ],
+  counts: {
+    total: 1,
+    filtered: 1,
+    offset: 0,
+    limit: 10,
+    length: 1,
+  },
+  pageInfo: {
+    hasNextPage: false,
+    hasPreviousPage: false,
+    startCursor: 'YWxlcnQ6MA==',
+    endCursor: 'YWxlcnQ6OQ==',
+    lastPageCursor: 'YWxlcnQ6MA==',
+  },
+};
+
+export const createGetPoliciesQueryMock = (variables = {}) =>
+  createGenericQueryMock(GET_POLICIES, {scanConfigs: mockPolicies}, variables);
 
 export const createGetPolicyQueryMock = (id = '234', result = policy1) =>
   createGenericQueryMock(GET_POLICY, {policy: result}, {id});
