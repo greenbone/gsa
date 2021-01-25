@@ -141,6 +141,22 @@ export const CLONE_POLICY = gql`
   }
 `;
 
+export const DELETE_POLICIES_BY_FILTER = gql`
+  mutation deletePoliciesByFilter($filterString: String!) {
+    deletePoliciesByFilter(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
+export const EXPORT_POLICIES_BY_FILTER = gql`
+  mutation exportPoliciesByFilter($filterString: String) {
+    exportPoliciesByFilter(filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
 export const useGetPolicy = (id, options) => {
   const {data, ...other} = useQuery(GET_POLICY, {
     ...options,
@@ -230,4 +246,54 @@ export const useLazyGetPolicies = (variables, options) => {
   );
   const pageInfo = data?.policies?.pageInfo;
   return [getPolicies, {...other, counts, policies, pageInfo}];
+};
+
+export const useExportPoliciesByFilter = options => {
+  const [queryExportPoliciesByFilter] = useMutation(
+    EXPORT_POLICIES_BY_FILTER,
+    options,
+  );
+  const exportPoliciesByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportPoliciesByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportPoliciesByFilter, options],
+  );
+
+  return exportPoliciesByFilter;
+};
+
+export const useDeletePoliciesByIds = options => {
+  const [queryDeletePoliciesByIds, data] = useMutation(
+    DELETE_POLICIES_BY_IDS,
+    options,
+  );
+  const deletePoliciesByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeletePoliciesByIds({...options, variables: {ids}}),
+    [queryDeletePoliciesByIds],
+  );
+  return [deletePoliciesByIds, data];
+};
+
+export const useDeletePoliciesByFilter = options => {
+  const [queryDeletePoliciesByFilter, data] = useMutation(
+    DELETE_POLICIES_BY_FILTER,
+    options,
+  );
+  const deletePoliciesByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filterString, options) =>
+      queryDeletePoliciesByFilter({
+        ...options,
+        variables: {filterString},
+      }),
+    [queryDeletePoliciesByFilter],
+  );
+  return [deletePoliciesByFilter, data];
 };
