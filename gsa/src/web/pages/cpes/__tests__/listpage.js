@@ -223,6 +223,7 @@ describe('CpesPage tests', () => {
         exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {
@@ -295,6 +296,7 @@ describe('CpesPage tests', () => {
         export: exportByIds,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {
@@ -382,6 +384,7 @@ describe('CpesPage tests', () => {
         exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {

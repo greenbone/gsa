@@ -231,6 +231,8 @@ describe('NvtsPage tests', () => {
         exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getFamilyAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {
@@ -303,6 +305,8 @@ describe('NvtsPage tests', () => {
         export: exportByIds,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getFamilyAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {
@@ -390,6 +394,8 @@ describe('NvtsPage tests', () => {
         exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getFamilyAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {

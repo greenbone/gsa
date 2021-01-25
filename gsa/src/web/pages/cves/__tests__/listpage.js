@@ -212,6 +212,7 @@ describe('CvesPage tests', () => {
         deleteByFilter,
         exportByFilter,
         getActiveDaysAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
@@ -285,6 +286,7 @@ describe('CvesPage tests', () => {
         export: exportByIds,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {
@@ -372,6 +374,7 @@ describe('CvesPage tests', () => {
         exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {
