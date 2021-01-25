@@ -146,10 +146,11 @@ const getY2Scale = memoize((data = [], height) => {
 });
 
 export const lineDataPropType = PropTypes.shape({
-  label: PropTypes.any.isRequired,
   color: PropTypes.toString.isRequired,
-  width: PropTypes.number,
   dashArray: PropTypes.string,
+  label: PropTypes.any.isRequired,
+  lineWidth: PropTypes.number,
+  width: PropTypes.number,
 });
 
 const crossPropTypes = {
