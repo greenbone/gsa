@@ -184,6 +184,8 @@ const cpes = [
   },
 ];
 
-export default {
+const cpeObject = {
   find: name => cpes.find(cpe => name.includes(cpe.pattern)),
 };
+
+export default cpeObject;

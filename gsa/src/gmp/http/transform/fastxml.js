@@ -44,7 +44,9 @@ const transformRejection = rej => {
   return isDefined(xmlString) ? parse(xmlString, PARSER_OPTIONS) : undefined;
 };
 
-export default {
+const transformObject = {
   success: success(transformXmlData),
   rejection: rejection(transformRejection),
 };
+
+export default transformObject;

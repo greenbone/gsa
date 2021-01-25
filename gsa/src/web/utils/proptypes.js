@@ -217,7 +217,7 @@ const ref = ReactPropTypes.oneOfType([
   }),
 ]);
 
-export default {
+const gsaPropTypes = {
   bool: ReactPropTypes.bool,
   any: ReactPropTypes.any,
   array: ReactPropTypes.array,
@@ -263,5 +263,7 @@ export default {
   toString,
   yesno,
 };
+
+export default gsaPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -18,9 +18,10 @@
 
 const noop = arg => arg;
 
-export default {
+const noopObject = {
   success: noop,
   rejection: noop,
 };
 
+export default noopObject;
 // vim: set ts=2 sw=2 tw=80:
