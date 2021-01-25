@@ -43,16 +43,6 @@ import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-import {
-  createClonePolicyQueryMock,
-  createDeletePoliciesByIdsQueryMock,
-  createExportPoliciesByIdsQueryMock,
-  createGetPolicyQueryMock,
-  policy2 as policyObject2,
-  policy3 as policyObject3,
-  policy4 as policyObject4,
-} from 'web/graphql/__mocks__/policies';
-import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
