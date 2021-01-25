@@ -1085,9 +1085,10 @@ const operating_systems = [
   },
 ];
 
-export default {
+const osObject = {
   operating_systems,
   find: name => operating_systems.find(os => name.includes(os.pattern)),
 };
 
+export default osObject;
 // vim: set ts=2 sw=2 tw=80:

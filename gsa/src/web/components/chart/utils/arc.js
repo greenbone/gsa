@@ -127,6 +127,8 @@ class Arc {
   }
 }
 
-export default () => new Arc();
+const arcFunc = () => new Arc();
+
+export default arcFunc;
 
 // vim: set ts=2 sw=2 tw=80:
