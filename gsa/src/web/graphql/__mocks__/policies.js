@@ -294,7 +294,7 @@ const mockPolicies = {
 };
 
 export const createGetPoliciesQueryMock = (variables = {}) =>
-  createGenericQueryMock(GET_POLICIES, {scanConfigs: mockPolicies}, variables);
+  createGenericQueryMock(GET_POLICIES, {policies: mockPolicies}, variables);
 
 export const createGetPolicyQueryMock = (id = '234', result = policy1) =>
   createGenericQueryMock(GET_POLICY, {policy: result}, {id});
