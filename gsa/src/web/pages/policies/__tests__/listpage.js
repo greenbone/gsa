@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -402,7 +401,7 @@ describe('PoliciesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <ToolBarIcons
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
@@ -410,10 +409,10 @@ describe('PoliciesPage ToolBarIcons test', () => {
     );
     expect(element).toMatchSnapshot();
 
-    const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
+    expect(screen.getAllByTitle('Help: Policies')[0]).toBeInTheDocument();
+
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-policies',
@@ -434,22 +433,24 @@ describe('PoliciesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
+    const newIcon = screen.getAllByTitle('New Policy');
+    expect(newIcon[0]).toBeInTheDocument();
 
-    fireEvent.click(icons[1]);
+    fireEvent.click(newIcon[0]);
     expect(handlePolicyCreateClick).toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'New Policy');
 
-    fireEvent.click(icons[2]);
+    const importIcon = screen.getAllByTitle('Import Policy');
+    expect(importIcon[0]).toBeInTheDocument();
+
+    fireEvent.click(importIcon[0]);
     expect(handlePolicyImportClick).toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Import Policy');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
@@ -464,15 +465,13 @@ describe('PoliciesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {queryAllByTestId} = render(
+    render(
       <ToolBarIcons
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
       />,
     );
 
-    const icons = queryAllByTestId('svg-icon');
-    expect(icons.length).toBe(1);
-    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
+    expect(screen.getAllByTitle('Help: Policies')[0]).toBeInTheDocument();
   });
 });
