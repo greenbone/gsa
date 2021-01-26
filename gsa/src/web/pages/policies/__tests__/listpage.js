@@ -27,7 +27,13 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {createGetPoliciesQueryMock} from 'web/graphql/__mocks__/policies';
+import {
+  createDeletePoliciesByFilterQueryMock,
+  createDeletePoliciesByIdsQueryMock,
+  createExportPoliciesByFilterQueryMock,
+  createExportPoliciesByIdsQueryMock,
+  createGetPoliciesQueryMock,
+} from 'web/graphql/__mocks__/policies';
 
 import {setUsername} from 'web/store/usersettings/actions';
 
@@ -35,7 +41,7 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent, wait} from 'web/utils/testing';
+import {rendererWith, screen, fireEvent, wait} from 'web/utils/testing';
 
 import PoliciesPage, {ToolBarIcons} from '../listpage';
 
@@ -155,35 +161,36 @@ describe('PoliciesPage tests', () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const renewSession = jest.fn().mockResolvedValue({data: {}});
-
+  test('should allow to bulk action on page contents', async () => {
     const gmp = {
       policies: {
         get: getPolicies,
-        deleteByFilter,
-        exportByFilter,
       },
       filters: {
         get: getFilters,
       },
       settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting, renewSession},
+      user: {currentSettings, getSetting: getSetting},
     };
+
+    const [mock, resultFunc] = createGetPoliciesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportPoliciesByIdsQueryMock([
+      '234',
+    ]);
+    const [deleteMock, deleteResult] = createDeletePoliciesByIdsQueryMock([
+      '234',
+    ]);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setUsername('admin'));
@@ -194,37 +201,190 @@ describe('PoliciesPage tests', () => {
       defaultFilterLoadingActions.success('policy', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
+    render(<PoliciesPage />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    // export page contents
+    const exportIcon = screen.getAllByTitle('Export page contents');
+
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
+
+    await wait();
+
+    expect(exportResult).toHaveBeenCalled();
+
+    // move page contents to trashcan
+    const deleteIcon = screen.getAllByTitle('Move page contents to trashcan');
+
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
+
+    await wait();
+
+    expect(deleteResult).toHaveBeenCalled();
+  });
+
+  test('should allow to bulk action on selected policies', async () => {
+    const gmp = {
+      policies: {
+        get: getPolicies,
+      },
+      filters: {
+        get: getFilters,
+      },
+      settings: {manualUrl, reloadInterval},
+      user: {currentSettings, getSetting: getSetting},
+    };
+
+    const [mock, resultFunc] = createGetPoliciesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+
+    const [exportMock, exportResult] = createExportPoliciesByIdsQueryMock([
+      '234',
+    ]);
+    const [deleteMock, deleteResult] = createDeletePoliciesByIdsQueryMock([
+      '234',
+    ]);
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+      queryMocks: [mock, exportMock, deleteMock],
+    });
+
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      entitiesLoadingActions.success([policy], filter, loadedFilter, counts),
+      defaultFilterLoadingActions.success('policy', defaultSettingfilter),
     );
 
-    const {baseElement, getAllByTestId} = render(<PoliciesPage />);
+    const {element} = render(<PoliciesPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    const icons = getAllByTestId('svg-icon');
+    expect(resultFunc).toHaveBeenCalled();
 
-    await act(async () => {
-      expect(icons[18]).toHaveAttribute(
-        'title',
-        'Move page contents to trashcan',
-      );
-      fireEvent.click(icons[18]);
-      expect(deleteByFilter).toHaveBeenCalled();
+    const selectFields = screen.getAllByTestId('select-open-button');
+    fireEvent.click(selectFields[1]);
 
-      expect(icons[19]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[19]);
-      expect(exportByFilter).toHaveBeenCalled();
+    const selectItems = screen.getAllByTestId('select-item');
+    fireEvent.click(selectItems[1]);
+
+    const selected = screen.getAllByTestId('select-selected-value');
+    expect(selected[1]).toHaveTextContent('Apply to selection');
+
+    const inputs = element.querySelectorAll('input');
+
+    // select an policy
+    fireEvent.click(inputs[1]);
+    await wait();
+
+    // export selected policy
+    const exportIcon = screen.getAllByTitle('Export selection');
+
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
+
+    await wait();
+
+    expect(exportResult).toHaveBeenCalled();
+
+    // move selected policy to trashcan
+    const deleteIcon = screen.getAllByTitle('Move selection to trashcan');
+
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
+
+    await wait();
+
+    expect(deleteResult).toHaveBeenCalled();
+  });
+
+  test('should allow to bulk action on filtered policies', async () => {
+    const gmp = {
+      policies: {
+        get: getPolicies,
+      },
+      filters: {
+        get: getFilters,
+      },
+      settings: {manualUrl, reloadInterval},
+      user: {currentSettings, getSetting: getSetting},
+    };
+
+    const [mock, resultFunc] = createGetPoliciesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
     });
+
+    const [exportMock, exportResult] = createExportPoliciesByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+    const [deleteMock, deleteResult] = createDeletePoliciesByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+      queryMocks: [mock, exportMock, deleteMock],
+    });
+
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('policy', defaultSettingfilter),
+    );
+
+    render(<PoliciesPage />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    const selectFields = screen.getAllByTestId('select-open-button');
+    fireEvent.click(selectFields[1]);
+
+    const selectItems = screen.getAllByTestId('select-item');
+    fireEvent.click(selectItems[2]);
+
+    await wait();
+
+    const selected = screen.getAllByTestId('select-selected-value');
+    expect(selected[1]).toHaveTextContent('Apply to all filtered');
+
+    // export all filtered policies
+    const exportIcon = screen.getAllByTitle('Export all filtered');
+
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
+
+    await wait();
+
+    expect(exportResult).toHaveBeenCalled();
+
+    // move all filtered policies to trashcan
+    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan');
+
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
+
+    await wait();
+
+    expect(deleteResult).toHaveBeenCalled();
   });
 });
 
