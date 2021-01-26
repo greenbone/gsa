@@ -1073,7 +1073,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       name="userFilterString"
                       size="53"
                       type="text"
-                      value=""
+                      value="foo=bar"
                     />
                     <div
                       class="c15"
@@ -1218,7 +1218,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
             <div
               class="c28"
             >
-              Policies 0 of 0
+              Policies 1 of 1
             </div>
           </h2>
           <div
@@ -1283,7 +1283,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                 <span
                   class="c34"
                 >
-                  0 - 0 of 0
+                  1 - 1 of 1
                 </span>
                 <div
                   class="c2"
@@ -1366,9 +1366,9 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                           <span>
                             <span
                               class="c44"
-                              name="12345"
+                              name="234"
                             >
-                              foo
+                              unnamed policy
                             </span>
                           </span>
                         </div>
@@ -1377,7 +1377,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                         class="comment"
                       >
                         (
-                        bar
+                        some policy description
                         )
                       </div>
                     </div>
@@ -1562,7 +1562,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
               <div
                 class="c49"
               >
-                (Applied filter: )
+                (Applied filter: foo=bar rows=2)
               </div>
               <div
                 class="c32"
@@ -1601,7 +1601,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                 <span
                   class="c34"
                 >
-                  0 - 0 of 0
+                  1 - 1 of 1
                 </span>
                 <div
                   class="c2"
@@ -1640,6 +1640,12 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
         </div>
       </section>
     </div>
+    <a
+      aria-hidden="true"
+      style="display: none;"
+    >
+      Download
+    </a>
     <a
       aria-hidden="true"
       style="display: none;"

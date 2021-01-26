@@ -27,13 +27,15 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
+import {createGetPoliciesQueryMock} from 'web/graphql/__mocks__/policies';
+
 import {setUsername} from 'web/store/usersettings/actions';
 
 import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent, wait} from 'web/utils/testing';
 
 import PoliciesPage, {ToolBarIcons} from '../listpage';
 
@@ -110,11 +112,17 @@ describe('PoliciesPage tests', () => {
       user: {currentSettings, getSetting},
     };
 
+    const [mock, resultFunc] = createGetPoliciesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setUsername('admin'));
@@ -140,7 +148,9 @@ describe('PoliciesPage tests', () => {
 
     const {baseElement} = render(<PoliciesPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     expect(baseElement).toMatchSnapshot();
   });
