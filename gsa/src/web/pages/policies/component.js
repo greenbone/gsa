@@ -41,7 +41,11 @@ import {shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
 
-import {useCreatePolicy, useLoadPolicyPromise} from 'web/graphql/policies';
+import {
+  useCreatePolicy,
+  useImportPolicy,
+  useLoadPolicyPromise,
+} from 'web/graphql/policies';
 
 import AlertComponent from 'web/pages/alerts/component';
 
@@ -81,6 +85,7 @@ import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 import PropTypes from 'web/utils/proptypes';
+import readFileToText from 'web/utils/readFileToText';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 import useGmp from 'web/utils/useGmp';
 
@@ -115,6 +120,7 @@ const PolicyComponent = ({
 
   const [createPolicy] = useCreatePolicy();
   const loadPolicyPromise = useLoadPolicyPromise();
+  const [importPolicy] = useImportPolicy();
 
   // Redux loaders
   const loadScannersAction = () =>
@@ -518,11 +524,12 @@ const PolicyComponent = ({
     handleInteraction();
   };
 
-  const handleImportPolicy = data => {
+  const handleImportPolicy = async data => {
     handleInteraction();
 
-    return gmp.policy
-      .import(data)
+    const readUploadedXml = readFileToText(data.xml_file);
+
+    return importPolicy(await readUploadedXml)
       .then(onImported, onImportError)
       .then(() => closeImportDialog());
   };

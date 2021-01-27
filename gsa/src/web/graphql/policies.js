@@ -149,6 +149,14 @@ export const CREATE_POLICY = gql`
   }
 `;
 
+export const IMPORT_POLICY = gql`
+  mutation importPolicy($policy: String) {
+    importPolicy(policy: $policy) {
+      id
+    }
+  }
+`;
+
 export const useGetPolicy = (id, options) => {
   const {data, ...other} = useQuery(GET_POLICY, {
     ...options,
@@ -245,4 +253,21 @@ export const useLoadPolicyPromise = () => {
       });
 
   return loadPolicy;
+};
+
+export const useImportPolicy = options => {
+  const [queryImportPolicy, {data, ...other}] = useMutation(
+    IMPORT_POLICY,
+    options,
+  );
+  const importPolicy = useCallback(
+    // eslint-disable-next-line no-shadow
+    (policy, options) =>
+      queryImportPolicy({...options, variables: {policy}}).then(
+        result => result.data.importPolicy.id,
+      ),
+    [queryImportPolicy],
+  );
+  const policyId = data?.importPolicy?.id;
+  return [importPolicy, {...other, id: policyId}];
 };
