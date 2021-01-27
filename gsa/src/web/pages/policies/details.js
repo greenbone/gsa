@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -19,18 +19,18 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {OSP_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
 
-import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
+import InfoTable from 'web/components/table/infotable';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
@@ -38,7 +38,7 @@ import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 
 const PolicyDetails = ({entity}) => {
-  const {comment, policy_type, scanner, audits = []} = entity;
+  const {comment, policyType, scanner, audits = []} = entity;
   return (
     <Layout flex="column" grow>
       <InfoTable>
@@ -53,7 +53,7 @@ const PolicyDetails = ({entity}) => {
               <TableData>{comment}</TableData>
             </TableRow>
           )}
-          {policy_type === OSP_SCAN_CONFIG_TYPE && isDefined(scanner) && (
+          {policyType === OSP_SCAN_CONFIG_TYPE && isDefined(scanner) && (
             <TableRow>
               <TableData>{_('Scanner')}</TableData>
               <TableData>
