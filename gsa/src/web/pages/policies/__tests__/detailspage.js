@@ -182,8 +182,8 @@ describe('Policy Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[10]);
+    const tabs = screen.getAllByTestId('entities-tab-title');
+    fireEvent.click(tabs[1]);
 
     expect(baseElement).toHaveTextContent('family1');
     expect(baseElement).toHaveTextContent('7 of 10');
@@ -247,8 +247,8 @@ describe('Policy Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[12]);
+    const tabs = screen.getAllByTestId('entities-tab-title');
+    fireEvent.click(tabs[2]);
 
     const detailsLinks = getAllByTestId('details-link');
 
@@ -297,8 +297,8 @@ describe('Policy Detailspage tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[14]);
+    const tabs = screen.getAllByTestId('entities-tab-title');
+    fireEvent.click(tabs[3]);
 
     expect(permissionResult).toHaveBeenCalled();
 
@@ -342,8 +342,8 @@ describe('Policy Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[9]);
+    const tabs = screen.getAllByTestId('entities-tab-title');
+    fireEvent.click(tabs[0]);
 
     await wait();
 
