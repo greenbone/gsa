@@ -19,22 +19,24 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import {Button, Input} from '@greenbone/ui-components';
+
 import _ from 'gmp/locale';
 
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import PasswordField from 'web/components/form/passwordfield';
-import Button from 'web/components/form/button';
-import TextField from 'web/components/form/textfield';
-import FormGroup from 'web/components/form/formgroup';
-
-import ProductImage from 'web/components/img/product';
-
 import Layout from 'web/components/layout/layout';
-
+import ProductImage from 'web/components/img/product';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+
+const Paper = styled.div`
+  background: ${Theme.white};
+  box-shadow: 0px 14px 22px ${Theme.mediumGray};
+  padding: 4rem;
+  max-width: 30rem;
+`;
 
 const Panel = styled.div`
   margin: 5px auto;
@@ -45,13 +47,9 @@ const Panel = styled.div`
   margin-bottom: 10px;
 `;
 
-const LoginPanel = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  border: 1px solid ${Theme.lightGray};
-  padding: 10px;
-  margin-bottom: 10px;
+const StyledLayout = styled(Layout)`
+  min-height: 12rem;
+  justify-content: space-evenly;
 `;
 
 const Error = styled.p`
@@ -61,15 +59,13 @@ const Error = styled.p`
   margin: 10px;
 `;
 
-const StyledDivRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+const StyledButton = styled(Button)`
+  margin-top: 2rem;
+  width: 100%;
 `;
 
-const StyledDivColumn = styled.div`
-  display: flex;
-  flex-direction: column;
+const StyledPanel = styled(Panel)`
+  margin-top: 20px;
 `;
 
 class LoginForm extends React.Component {
@@ -117,11 +113,15 @@ class LoginForm extends React.Component {
       onGuestLoginClick,
     } = this.props;
     const {username, password} = this.state;
+
     return (
-      <React.Fragment>
-        <Layout>
+      <Paper>
+        <Layout align={'center'}>
+          <ProductImage />
+        </Layout>
+        <Layout flex={'column'}>
           {showProtocolInsecure && (
-            <Panel data-testid="protocol-insecure">
+            <StyledPanel data-testid="protocol-insecure">
               <Error>{_('Warning: Connection unencrypted')}</Error>
               <p>
                 {_(
@@ -135,7 +135,7 @@ class LoginForm extends React.Component {
                     'or ask your administrator to do so as soon as possible.',
                 )}
               </p>
-            </Panel>
+            </StyledPanel>
           )}
         </Layout>
 
@@ -152,63 +152,58 @@ class LoginForm extends React.Component {
           )}
         </Layout>
 
-        <LoginPanel>
-          <StyledDivColumn>
-            <StyledDivRow>
-              <ProductImage />
-              {showLogin && (
-                <Layout flex="column">
-                  <FormGroup title={_('Username')} titleSize="4">
-                    <TextField
-                      autoComplete="username"
-                      name="username"
-                      grow="1"
-                      placeholder={_('Username')}
-                      value={username}
-                      autoFocus="autofocus"
-                      tabIndex="1"
-                      onChange={this.handleValueChange}
-                    />
-                  </FormGroup>
-                  <FormGroup title={_('Password')} titleSize="4">
-                    <PasswordField
-                      autoComplete="current-password"
-                      name="password"
-                      grow="1"
-                      placeholder={_('Password')}
-                      value={password}
-                      onKeyDown={this.handleKeyDown}
-                      onChange={this.handleValueChange}
-                    />
-                  </FormGroup>
-                  <FormGroup size="4" offset="4">
-                    <Layout grow="1">
-                      <Button
-                        data-testid="login-button"
-                        title={_('Login')}
-                        onClick={this.handleSubmit}
-                      />
-                    </Layout>
-                  </FormGroup>
-                </Layout>
-              )}
-            </StyledDivRow>
-            {isDefined(error) && <Error data-testid="error">{error}</Error>}
-          </StyledDivColumn>
-        </LoginPanel>
+        <>
+          {showLogin && !isIE11 && (
+            <StyledLayout flex={'column'}>
+              <Input
+                margin={'normal'}
+                type={'text'}
+                autoComplete="username"
+                name="username"
+                grow="1"
+                label={_('Username')}
+                value={username}
+                autoFocus="autofocus"
+                tabIndex="1"
+                onChange={e =>
+                  this.handleValueChange(e.target.value, e.target.name)
+                }
+              />
+              <Input
+                margin={'normal'}
+                type={'password'}
+                autoComplete="current-password"
+                name="password"
+                grow="1"
+                label={_('Password')}
+                value={password}
+                onKeyDown={this.handleKeyDown}
+                onChange={e =>
+                  this.handleValueChange(e.target.value, e.target.name)
+                }
+              />
+              <StyledButton
+                data-testid="login-button"
+                onClick={this.handleSubmit}
+              >
+                {_('Login')}
+              </StyledButton>
+            </StyledLayout>
+          )}
+          {isDefined(error) && <Error data-testid="error">{error}</Error>}
+        </>
 
         {showGuestLogin && (
-          <LoginPanel data-testid="guest-login">
-            <Layout align={['center', 'center']}>
-              <Button
-                data-testid="guest-login-button"
-                title={_('Login as Guest')}
-                onClick={onGuestLoginClick}
-              />
-            </Layout>
-          </LoginPanel>
+          <div data-testid="guest-login">
+            <StyledButton
+              data-testid="guest-login-button"
+              onClick={onGuestLoginClick}
+            >
+              {_('Login as Guest')}
+            </StyledButton>
+          </div>
         )}
-      </React.Fragment>
+      </Paper>
     );
   }
 }
