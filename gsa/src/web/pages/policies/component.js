@@ -24,6 +24,8 @@ import _ from 'gmp/locale';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 import {ALL_FILTER} from 'gmp/models/filter';
 
+import {BASE_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
+
 import {
   ospScannersFilter,
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -38,6 +40,8 @@ import {selectSaveId} from 'gmp/utils/id';
 import {shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
+
+import {useCreatePolicy, useLoadPolicyPromise} from 'web/graphql/policies';
 
 import AlertComponent from 'web/pages/alerts/component';
 
@@ -108,6 +112,9 @@ const PolicyComponent = ({
     createAuditDialogVisible: false,
     importDialogVisible: false,
   });
+
+  const [createPolicy] = useCreatePolicy();
+  const loadPolicyPromise = useLoadPolicyPromise();
 
   // Redux loaders
   const loadScannersAction = () =>
@@ -208,9 +215,17 @@ const PolicyComponent = ({
 
   const handleSavePolicy = d => {
     const {policy} = state;
-
-    handleInteraction();
     const {name, comment, id} = d;
+    handleInteraction();
+
+    if (!isDefined(id)) {
+      return createPolicy({
+        policyId: BASE_SCAN_CONFIG_ID,
+        name,
+        comment,
+      }).then(onCreated, onCreateError);
+    }
+
     let saveData = d;
     if (policy.isInUse()) {
       saveData = {name, comment, id};
@@ -603,12 +618,12 @@ const PolicyComponent = ({
       }),
     );
 
-    return gmp.policy
-      .get({id: policyId})
-      .then(response => {
+    return loadPolicyPromise(policyId)
+      .then(policy => {
+        console.log(policy);
         dispatchState(
           updateState({
-            policy: response.data,
+            policy,
           }),
         );
       })
@@ -785,10 +800,9 @@ const PolicyComponent = ({
             {createPolicyDialogVisible && (
               <PolicyDialog
                 onClose={handleCloseCreatePolicyDialog}
-                onSave={d => {
-                  handleInteraction();
-                  return save(d).then(() => closeCreatePolicyDialog());
-                }}
+                onSave={d =>
+                  handleSavePolicy(d).then(() => closeCreatePolicyDialog())
+                }
               />
             )}
             {editPolicyDialogVisible && (
@@ -797,7 +811,7 @@ const PolicyComponent = ({
                 configFamilies={policy.families}
                 configId={policy.id}
                 configIsInUse={policy.isInUse()}
-                configType={policy.policy_type}
+                configType={policy.policyType}
                 editNvtDetailsTitle={_('Edit Policy NVT Details')}
                 editNvtFamiliesTitle={_('Edit Policy Family')}
                 families={families}

@@ -18,7 +18,7 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useQuery, useMutation, useLazyQuery} from '@apollo/client';
+import {gql, useQuery, useMutation, useLazyQuery, useApolloClient} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Policy from 'gmp/models/policy';
@@ -141,18 +141,10 @@ export const CLONE_POLICY = gql`
   }
 `;
 
-export const DELETE_POLICIES_BY_FILTER = gql`
-  mutation deletePoliciesByFilter($filterString: String!) {
-    deletePoliciesByFilter(filterString: $filterString) {
-      ok
-    }
-  }
-`;
-
-export const EXPORT_POLICIES_BY_FILTER = gql`
-  mutation exportPoliciesByFilter($filterString: String) {
-    exportPoliciesByFilter(filterString: $filterString) {
-      exportedEntities
+export const CREATE_POLICY = gql`
+  mutation createPolicy($input: CreatePolicyInput!) {
+    createPolicy(input: $input) {
+      id
     }
   }
 `;
@@ -219,81 +211,38 @@ export const useClonePolicy = options => {
   return [clonePolicy, {...other, id: policyId}];
 };
 
-export const useLazyGetPolicies = (variables, options) => {
-  const [queryPolicies, {data, ...other}] = useLazyQuery(GET_POLICIES, {
-    ...options,
-    variables,
-  });
-  const policies = isDefined(data?.policies)
-    ? data.policies.edges.map(entity => Policy.fromObject(entity.node))
-    : undefined;
+export const useCreatePolicy = options => {
+  const [queryCreatePolicy, {data, ...other}] = useMutation(
+    CREATE_POLICY,
+    options,
+  );
+  const createPolicy = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreatePolicy({...options, variables: {input: inputObject}}).then(
+        result => result?.data?.createPolicy?.id,
+      ),
+    [queryCreatePolicy],
+  );
+  const policyId = data?.createPolicy?.id;
+  return [createPolicy, {...other, id: policyId}];
+};
 
-  const {total, filtered, offset = -1, limit, length} =
-    data?.policies?.counts || {};
-  const counts = isDefined(data?.policies?.counts)
-    ? new CollectionCounts({
-        all: total,
-        filtered: filtered,
-        first: offset + 1,
-        length: length,
-        rows: limit,
+export const useLoadPolicyPromise = () => {
+  const client = useApolloClient();
+
+  const loadPolicy = policyId =>
+    client
+      .query({
+        query: GET_POLICY,
+        variables: {id: policyId},
+        fetchPolicy: 'no-cache', // do not cache, since this is used when a change is saved
       })
-    : undefined;
-  const getPolicies = useCallback(
-    // eslint-disable-next-line no-shadow
-    (variables, options) => queryPolicies({...options, variables}),
-    [queryPolicies],
-  );
-  const pageInfo = data?.policies?.pageInfo;
-  return [getPolicies, {...other, counts, policies, pageInfo}];
-};
+      .then(response => {
+        const policy = Policy.fromObject(response?.data?.policy);
 
-export const useExportPoliciesByFilter = options => {
-  const [queryExportPoliciesByFilter] = useMutation(
-    EXPORT_POLICIES_BY_FILTER,
-    options,
-  );
-  const exportPoliciesByFilter = useCallback(
-    // eslint-disable-next-line no-shadow
-    filterString =>
-      queryExportPoliciesByFilter({
-        ...options,
-        variables: {
-          filterString,
-        },
-      }),
-    [queryExportPoliciesByFilter, options],
-  );
+        return policy;
+      });
 
-  return exportPoliciesByFilter;
-};
-
-export const useDeletePoliciesByIds = options => {
-  const [queryDeletePoliciesByIds, data] = useMutation(
-    DELETE_POLICIES_BY_IDS,
-    options,
-  );
-  const deletePoliciesByIds = useCallback(
-    // eslint-disable-next-line no-shadow
-    (ids, options) => queryDeletePoliciesByIds({...options, variables: {ids}}),
-    [queryDeletePoliciesByIds],
-  );
-  return [deletePoliciesByIds, data];
-};
-
-export const useDeletePoliciesByFilter = options => {
-  const [queryDeletePoliciesByFilter, data] = useMutation(
-    DELETE_POLICIES_BY_FILTER,
-    options,
-  );
-  const deletePoliciesByFilter = useCallback(
-    // eslint-disable-next-line no-shadow
-    (filterString, options) =>
-      queryDeletePoliciesByFilter({
-        ...options,
-        variables: {filterString},
-      }),
-    [queryDeletePoliciesByFilter],
-  );
-  return [deletePoliciesByFilter, data];
+  return loadPolicy;
 };
