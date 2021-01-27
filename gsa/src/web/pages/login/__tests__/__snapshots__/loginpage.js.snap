@@ -1,7 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LoginPageTests should render LoginPage 1`] = `
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
 .c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -19,33 +51,22 @@ exports[`LoginPageTests should render LoginPage 1`] = `
   align-items: center;
 }
 
-.c1 {
-  background: white;
-  box-shadow: 0px 14px 22px #00000029;
-  padding: 4rem;
-  max-width: 30rem;
-}
-
-.c2 {
-  margin: 5px auto;
-  padding-bottom: 10px;
-  font-size: 9pt;
-  border: 1px solid #c8d3d9;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.c5 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  clear: both;
-  min-height: 12rem;
-  -webkit-box-pack: space-evenly;
-  -webkit-justify-content: space-evenly;
-  -ms-flex-pack: space-evenly;
-  justify-content: space-evenly;
+  height: 95px;
+}
+
+.c1 {
+  background: #fff;
+  box-shadow: 0px 14px 22px #787878;
+  padding: 4rem;
+  max-width: 30rem;
+}
+
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -53,13 +74,64 @@ exports[`LoginPageTests should render LoginPage 1`] = `
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  min-height: 12rem;
+  -webkit-box-pack: space-evenly;
+  -webkit-justify-content: space-evenly;
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
 }
 
-.c3 {
+.c6 {
   color: #d83636;
   font-weight: bold;
   text-align: center;
   margin: 10px;
+}
+
+.c10 {
+  box-sizing: border-box;
+  color: white;
+  background-color: text:white;
+  background: #4c4c4d;
+  hover: #212121;
+  disabled: #c2c2c2;
+  border: none;
+  border-radius: 3px;
+  font-size: 1rem;
+  font-weight: normal;
+  min-height: 2.25rem;
+  margin: 0;
+  padding-right: 1.25rem;
+  padding-left: 1.25rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.c10:hover {
+  cursor: pointer;
+  background-color: #212121;
+}
+
+.c10 + .c9 {
+  margin-left: 1.25rem;
+}
+
+.c5 {
+  margin: 5px auto;
+  padding-bottom: 10px;
+  font-size: 9pt;
+  border: 1px solid #c8d3d9;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-top: 20px;
 }
 
 .c0 {
@@ -105,20 +177,23 @@ exports[`LoginPageTests should render LoginPage 1`] = `
         class="c1"
       >
         <div
-          class="sc-bdnylx sc-dlnjPT gBYZYE Nxzgx"
+          class="c2"
         >
           <img
             alt="Greenbone Security Assistant"
-            src="greenbone_full.png"
-            style="max-width: 250px;"
+            class="c3"
+            src="/img/login-label.png"
           />
+        </div>
+        <div
+          class="c4"
+        >
           <div
-            class="c2"
+            class="c5"
             data-testid="protocol-insecure"
-            style="margin-top: 20px;"
           >
             <p
-              class="c3"
+              class="c6"
             >
               Warning: Connection unencrypted
             </p>
@@ -131,16 +206,16 @@ exports[`LoginPageTests should render LoginPage 1`] = `
           </div>
         </div>
         <div
-          class="c4"
+          class="c7"
         />
         <div
-          class="sc-bdnylx c5"
+          class="c8"
         >
           <div
-            class="MuiFormControl-root sc-jSFkmK fqGIBU"
+            class="MuiFormControl-root sc-jSgupP cSAYIk"
           >
             <div
-              class="MuiFormControl-root MuiTextField-root sc-gKAblj dnBaij MuiFormControl-marginNormal"
+              class="MuiFormControl-root MuiTextField-root sc-gKsewC kYJFYx MuiFormControl-marginNormal"
               grow="1"
               tabindex="1"
             >
@@ -167,10 +242,10 @@ exports[`LoginPageTests should render LoginPage 1`] = `
             </div>
           </div>
           <div
-            class="MuiFormControl-root sc-jSFkmK fqGIBU"
+            class="MuiFormControl-root sc-jSgupP cSAYIk"
           >
             <div
-              class="MuiFormControl-root MuiTextField-root sc-gKAblj dnBaij MuiFormControl-marginNormal"
+              class="MuiFormControl-root MuiTextField-root sc-gKsewC kYJFYx MuiFormControl-marginNormal"
               grow="1"
             >
               <label
@@ -196,9 +271,8 @@ exports[`LoginPageTests should render LoginPage 1`] = `
             </div>
           </div>
           <button
-            class="sc-dIvqjp TxAgV"
+            class="sc-dIUggk c9 c10"
             data-testid="login-button"
-            style="margin-top: 2rem;"
           >
             Login
           </button>
