@@ -24,7 +24,7 @@ import {
   EXPORT_POLICIES_BY_FILTER,
   EXPORT_POLICIES_BY_IDS,
   GET_POLICY,
-  GET_POLICIES,
+  IMPORT_POLICY,
 } from '../policies';
 
 export const policy1 = deepFreeze({
@@ -346,3 +346,16 @@ export const createCreatePolicyQueryMock = () =>
   createGenericQueryMock(CREATE_POLICY, createPolicyResult, {
     input: {policyId: 'foo', name: 'bar', comment: 'lorem'},
   });
+
+export const importPolicyInput = {
+  policy: '<get_configs_response />',
+};
+
+export const importPolicyResult = {
+  importPolicy: {
+    id: '456',
+  },
+};
+
+export const createImportPolicyQueryMock = () =>
+  createGenericQueryMock(IMPORT_POLICY, importPolicyResult, importPolicyInput);

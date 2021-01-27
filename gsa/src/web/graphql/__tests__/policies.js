@@ -32,6 +32,7 @@ import {
   createExportPoliciesByIdsQueryMock,
   createGetPoliciesQueryMock,
   createGetPolicyQueryMock,
+  createImportPolicyQueryMock,
 } from '../__mocks__/policies';
 import {
   useClonePolicy,
@@ -41,6 +42,7 @@ import {
   useExportPoliciesByIds,
   useGetPolicy,
   useLoadPolicyPromise,
+  useImportPolicy,
 } from '../policies';
 
 const GetPolicyComponent = ({id}) => {
@@ -249,6 +251,51 @@ describe('Policy mutation tests', () => {
     expect(createPolicyResult).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Policy created with id 345.',
+    );
+  });
+});
+
+const ImportPolicyComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [importPolicy] = useImportPolicy();
+
+  const handleCreateResult = id => {
+    setNotification(`Policy imported with id ${id}.`);
+  };
+
+  return (
+    <div>
+      <button
+        title={'Import Policy'}
+        onClick={() =>
+          importPolicy('<get_configs_response />').then(handleCreateResult)
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Import Policy tests', () => {
+  test('should import a policy', async () => {
+    const [
+      importPolicyQueryMock,
+      importPolicyQueryResult,
+    ] = createImportPolicyQueryMock();
+    const {render} = rendererWith({queryMocks: [importPolicyQueryMock]});
+
+    const {element} = render(<ImportPolicyComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(importPolicyQueryResult).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Policy imported with id 456.',
     );
   });
 });
