@@ -233,7 +233,7 @@ const CreatePolicyComponent = () => {
 };
 
 describe('Policy mutation tests', () => {
-  test('should create a scan config', async () => {
+  test('should create a policy', async () => {
     const [
       createPolicyMock,
       createPolicyResult,
