@@ -19,7 +19,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {Button, Input} from '@greenbone/components';
+import {Button, Input} from '@greenbone/ui-components';
 
 import _ from 'gmp/locale';
 

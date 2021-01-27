@@ -23,10 +23,9 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@greenbone/components": "git+https://github.com/chaoa/ui-components.git",
-    "@material-ui/core": "4.11.0",
-    "@babel/core": "^7.11.6",
     "@apollo/client": "^3.2.3",
+    "@babel/core": "^7.11.6",
+    "@greenbone/ui-components": "^2021.1.2",
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
     "@vx/shape": "^0.0.179",
@@ -67,8 +66,7 @@
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.4.1",
     "uuid": "^8.3.1",
-    "whatwg-fetch": "^3.4.1",
-    "core-js": "3.6.5"
+    "whatwg-fetch": "^3.4.1"
   },
   "scripts": {
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
