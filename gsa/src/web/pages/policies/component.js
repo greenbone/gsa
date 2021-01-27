@@ -620,7 +620,6 @@ const PolicyComponent = ({
 
     return loadPolicyPromise(policyId)
       .then(policy => {
-        console.log(policy);
         dispatchState(
           updateState({
             policy,

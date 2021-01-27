@@ -26,7 +26,7 @@ import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import {
   createClonePolicyQueryMock,
-  createDeletePoliciesByFilterQueryMock,
+  createCreatePolicyQueryMock,
   createDeletePoliciesByIdsQueryMock,
   createExportPoliciesByFilterQueryMock,
   createExportPoliciesByIdsQueryMock,
@@ -35,7 +35,7 @@ import {
 } from '../__mocks__/policies';
 import {
   useClonePolicy,
-  useDeletePoliciesByFilter,
+  useCreatePolicy,
   useDeletePolicy,
   useExportPoliciesByFilter,
   useExportPoliciesByIds,
@@ -203,5 +203,52 @@ describe('useLoadPolicyPromise tests', () => {
     policyElement = screen.getByTestId('policy');
 
     expect(policyElement).toHaveTextContent('234');
+  });
+});
+
+const CreatePolicyComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [createPolicy] = useCreatePolicy();
+
+  const handleCreateResult = id => {
+    setNotification(`Policy created with id ${id}.`);
+  };
+
+  return (
+    <div>
+      <button
+        title={'Create Policy'}
+        onClick={() =>
+          createPolicy({policyId: 'foo', name: 'bar', comment: 'lorem'}).then(
+            handleCreateResult,
+          )
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Policy mutation tests', () => {
+  test('should create a scan config', async () => {
+    const [
+      createPolicyMock,
+      createPolicyResult,
+    ] = createCreatePolicyQueryMock();
+    const {render} = rendererWith({queryMocks: [createPolicyMock]});
+
+    const {element} = render(<CreatePolicyComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(createPolicyResult).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Policy created with id 345.',
+    );
   });
 });

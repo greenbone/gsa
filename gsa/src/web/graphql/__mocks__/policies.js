@@ -19,7 +19,7 @@
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 import {
   CLONE_POLICY,
-  DELETE_POLICIES_BY_FILTER,
+  CREATE_POLICY,
   DELETE_POLICIES_BY_IDS,
   EXPORT_POLICIES_BY_FILTER,
   EXPORT_POLICIES_BY_IDS,
@@ -335,26 +335,14 @@ export const createDeletePoliciesByIdsQueryMock = (policyIds = ['234']) =>
     ids: policyIds,
   });
 
-const bulkDeleteByFilterResult = {
-  deletePoliciesByFilter: {
-    ok: true,
+const createPolicyResult = {
+  createPolicy: {
+    id: '345',
+    status: 200,
   },
 };
 
-export const createDeletePoliciesByFilterQueryMock = (filterString = 'foo') =>
-  createGenericQueryMock(DELETE_POLICIES_BY_FILTER, bulkDeleteByFilterResult, {
-    filterString,
+export const createCreatePolicyQueryMock = () =>
+  createGenericQueryMock(CREATE_POLICY, createPolicyResult, {
+    input: {policyId: 'foo', name: 'bar', comment: 'lorem'},
   });
-
-const exportPoliciesByFilterResult = {
-  exportPoliciesByFilter: {
-    exportedEntities: '<get_configs_response status="200" status_text="OK" />',
-  },
-};
-
-export const createExportPoliciesByFilterQueryMock = (filterString = 'foo') =>
-  createGenericQueryMock(
-    EXPORT_POLICIES_BY_FILTER,
-    exportPoliciesByFilterResult,
-    {filterString},
-  );
