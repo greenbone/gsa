@@ -157,7 +157,43 @@ describe('PoliciesPage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    expect(baseElement).toMatchSnapshot();
+    const inputs = baseElement.querySelectorAll('input');
+    const selects = screen.getAllByTestId('select-selected-value');
+
+    // Toolbar Icons
+    expect(screen.getAllByTitle('Help: Policies')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('New Policy')[0]).toBeInTheDocument();
+
+    // Powerfilter
+    expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
+    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Reset to Default Filter')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
+    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
+    expect(selects[0]).toHaveTextContent('--');
+
+    // Table
+    const header = baseElement.querySelectorAll('th');
+
+    expect(header[0]).toHaveTextContent('Name');
+    expect(header[1]).toHaveTextContent('Actions');
+    const row = baseElement.querySelectorAll('tr');
+
+    expect(row[1]).toHaveTextContent('unnamed policy');
+    expect(row[1]).toHaveTextContent('(some policy description)');
+
+    expect(
+      screen.getAllByTitle('Move Policy to trashcan')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Edit Policy')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Clone Policy')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Export Policy')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Create Audit from Policy')[0],
+    ).toBeInTheDocument();
   });
 
   test('should allow to bulk action on page contents', async () => {
