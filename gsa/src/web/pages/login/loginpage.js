@@ -35,14 +35,11 @@ import moment from 'gmp/models/date';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Logo from 'web/components/img/greenbone';
-
 import Layout from 'web/components/layout/layout';
 
 import {useLogin} from 'web/graphql/auth';
 
 import Footer from 'web/components/structure/footer';
-import Header from 'web/components/structure/header';
 
 import {
   setSessionTimeout as setSessionTimeoutAction,
@@ -60,48 +57,12 @@ import LoginForm from './loginform';
 
 const log = logger.getLogger('web.login');
 
-const GreenboneLogo = styled(Logo)`
-  width: 30vh;
-  margin: 30px auto;
-  position: sticky;
-`;
-
-const LoginBox = styled(Layout)`
-  ${'' /* flex-grow: 1; */}
-  width: 100%;
-  flex-direction: row;
-  align-items: stretch;
-`;
-
-const LoginSpacer = styled(Layout)`
-  width: 42%;
-`;
-
-const LoginLayout = styled(Layout)`
-  height: 100%;
-  padding: 20px 20px 0px 20px;
-`;
-
 const StyledLayout = styled(Layout)`
+  background: ${Theme.lightGray};
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
-`;
-
-const LoginHeader = styled(Header)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-`;
-
-const MenuSpacer = styled.div`
-  background: ${Theme.darkGray};
-  position: fixed;
-  top: 42px;
-  left: 0;
-  right: 0;
-  height: 35px;
-  z-index: ${Theme.Layers.menu};
 `;
 
 const isIE11 = () =>
@@ -247,24 +208,15 @@ const LoginPage = () => {
 
   return (
     <StyledLayout>
-      <LoginHeader />
-      <MenuSpacer />
-      <LoginBox>
-        <LoginSpacer />
-        <LoginLayout flex="column" className="login">
-          <GreenboneLogo />
-          <LoginForm
-            error={message}
-            showGuestLogin={showGuestLogin}
-            showLogin={showLogin}
-            showProtocolInsecure={showProtocolInsecure}
-            isIE11={isIE11()}
-            onGuestLoginClick={handleGuestLogin}
-            onSubmit={handleSubmit}
-          />
-        </LoginLayout>
-        <LoginSpacer />
-      </LoginBox>
+      <LoginForm
+        error={message}
+        showGuestLogin={showGuestLogin}
+        showLogin={showLogin}
+        showProtocolInsecure={showProtocolInsecure}
+        isIE11={isIE11()}
+        onGuestLoginClick={handleGuestLogin}
+        onSubmit={handleSubmit}
+      />
       <Footer />
     </StyledLayout>
   );

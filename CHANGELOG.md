@@ -59,7 +59,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
-
+- Updated copyright and footer layout [#2687](https://github.com/greenbone/gsa/pull/2687)
+- New login page layout [#2683](https://github.com/greenbone/gsa/pull/2683)
 - CVE Tables Page can now be used with the updated xml-format and CVSSv3(.1). [#2583](https://github.com/greenbone/gsa/pull/2583)
 - The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
@@ -67,6 +68,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
 
 ### Removed
+- Removed Internet Explorer 11 support [#2689](https://github.com/greenbone/gsa/pull/2689)
 - Removed support for uncontrolled form fields [#2520](https://github.com/greenbone/gsa/pull/2520)
 - Drop gmp scanner type from GSA [#2498](https://github.com/greenbone/gsa/pull/2498)
 - Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
