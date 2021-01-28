@@ -38,12 +38,9 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 import withGmp from 'web/utils/withGmp';
 
-import Logo from 'web/components/img/greenbone';
-
 import Layout from 'web/components/layout/layout';
 
 import Footer from 'web/components/structure/footer';
-import Header from 'web/components/structure/header';
 
 import {
   setSessionTimeout,
@@ -58,48 +55,12 @@ import LoginForm from './loginform';
 
 const log = logger.getLogger('web.login');
 
-const GreenboneLogo = styled(Logo)`
-  width: 30vh;
-  margin: 30px auto;
-  position: sticky;
-`;
-
-const LoginBox = styled(Layout)`
-  ${'' /* flex-grow: 1; */}
-  width: 100%;
-  flex-direction: row;
-  align-items: stretch;
-`;
-
-const LoginSpacer = styled(Layout)`
-  width: 42%;
-`;
-
-const LoginLayout = styled(Layout)`
-  height: 100%;
-  padding: 20px 20px 0px 20px;
-`;
-
 const StyledLayout = styled(Layout)`
+  background: ${Theme.lightGray};
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
-`;
-
-const LoginHeader = styled(Header)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-`;
-
-const MenuSpacer = styled.div`
-  background: ${Theme.darkGray};
-  position: fixed;
-  top: 42px;
-  left: 0;
-  right: 0;
-  height: 35px;
-  z-index: ${Theme.Layers.menu};
 `;
 
 const isIE11 = () =>
@@ -196,24 +157,15 @@ class LoginPage extends React.Component {
 
     return (
       <StyledLayout>
-        <LoginHeader />
-        <MenuSpacer />
-        <LoginBox>
-          <LoginSpacer />
-          <LoginLayout flex="column" className="login">
-            <GreenboneLogo />
-            <LoginForm
-              error={message}
-              showGuestLogin={showGuestLogin}
-              showLogin={showLogin}
-              showProtocolInsecure={showProtocolInsecure}
-              isIE11={isIE11()}
-              onGuestLoginClick={this.handleGuestLogin}
-              onSubmit={this.handleSubmit}
-            />
-          </LoginLayout>
-          <LoginSpacer />
-        </LoginBox>
+        <LoginForm
+          error={message}
+          showGuestLogin={showGuestLogin}
+          showLogin={showLogin}
+          showProtocolInsecure={showProtocolInsecure}
+          isIE11={isIE11()}
+          onGuestLoginClick={this.handleGuestLogin}
+          onSubmit={this.handleSubmit}
+        />
         <Footer />
       </StyledLayout>
     );
@@ -247,10 +199,7 @@ const mapStateToProp = (rootState, ownProps) => ({
 export default compose(
   withRouter,
   withGmp,
-  connect(
-    mapStateToProp,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProp, mapDispatchToProps),
 )(LoginPage);
 
 // vim: set ts=2 sw=2 tw=80:

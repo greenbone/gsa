@@ -25,7 +25,7 @@ import LoginPage from '../loginpage';
 
 Logger.setDefaultLevel('silent');
 
-describe('LoginPagetests', () => {
+describe('LoginPage tests', () => {
   test('should render Loginpage', () => {
     const isLoggedIn = jest.fn().mockReturnValue(false);
     const clearToken = jest.fn();
@@ -33,9 +33,7 @@ describe('LoginPagetests', () => {
 
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    const {baseElement} = render(<LoginPage />);
-
-    expect(baseElement).toMatchSnapshot();
+    render(<LoginPage />);
   });
 
   test('should allow to login with username and password', () => {
