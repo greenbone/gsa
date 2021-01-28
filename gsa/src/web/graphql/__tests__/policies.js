@@ -167,7 +167,7 @@ const DeletePoliciesByFilterComponent = () => {
 };
 
 describe('useDeletePoliciesByFilter tests', () => {
-  test('should delete a list of tasks by filter string after user interaction', async () => {
+  test('should delete a list of policies by filter string after user interaction', async () => {
     const [mock, resultFunc] = createDeletePoliciesByFilterQueryMock('foo');
     const {render} = rendererWith({queryMocks: [mock]});
 
@@ -192,7 +192,7 @@ const ExportPoliciesByFilterComponent = () => {
 };
 
 describe('useExportPoliciesByFilter tests', () => {
-  test('should export a list of tasks by filter string after user interaction', async () => {
+  test('should export a list of policies by filter string after user interaction', async () => {
     const [mock, resultFunc] = createExportPoliciesByFilterQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
