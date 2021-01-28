@@ -65,7 +65,7 @@ const About = ({gmp}) => (
           <DivP>
             {_(
               'The Greenbone Security Assistant (GSA) is the web-based ' +
-                'user interface of the Greenbone Vulnerability Manager (GVM).',
+                'user interface of the Greenbone Vulnerability Management (GVM).',
             )}
           </DivP>
           <DivP>
