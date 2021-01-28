@@ -32,7 +32,6 @@ const Footer = styled.footer`
   right: 0;
   left: 0;
   padding: 2px;
-  background-color: ${Theme.white};
   font-size: 10px;
   text-align: right;
   color: ${Theme.mediumGray};
