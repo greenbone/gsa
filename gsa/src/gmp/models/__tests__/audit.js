@@ -16,8 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'core-js/features/object/entries';
-
 import Audit, {
   HOSTS_ORDERING_RANDOM,
   HOSTS_ORDERING_REVERSE,

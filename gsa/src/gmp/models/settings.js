@@ -16,8 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import 'core-js/features/object/entries';
-
 import {isDefined} from 'gmp/utils/identity';
 
 class Settings {
