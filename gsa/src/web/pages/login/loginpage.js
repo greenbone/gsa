@@ -40,6 +40,8 @@ import withGmp from 'web/utils/withGmp';
 
 import Layout from 'web/components/layout/layout';
 
+import Footer from 'web/components/structure/footer';
+
 import {
   setSessionTimeout,
   setUsername,
@@ -164,6 +166,7 @@ class LoginPage extends React.Component {
           onGuestLoginClick={this.handleGuestLogin}
           onSubmit={this.handleSubmit}
         />
+        <Footer />
       </StyledLayout>
     );
   }
