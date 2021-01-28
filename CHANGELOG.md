@@ -9,8 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
-- Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425) 
-- Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Changed
 
@@ -25,13 +23,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Drop gmp scanner type from GSA [#2498](https://github.com/greenbone/gsa/pull/2498)
 - Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
-- Removed severity class 'bsi' [#2434](https://github.com/greenbone/gsa/pull/2434)
-- Removed Edge <= 18 support [#2408](https://github.com/greenbone/gsa/pull/2408)
-- Removed Internet Explorer 11 support [#2399](https://github.com/greenbone/gsa/pull/2399)
-- Removed parsing and testing of textExcerpt [#2316](https://github.com/greenbone/gsa/pull/2316)
-- Removed extra parsing of comment and summary in Model [#2309](https://github.com/greenbone/gsa/pull/2309)
 
-[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...master
+[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...gsa-21.04
 
 ## [20.8.1] - unreleased
 
