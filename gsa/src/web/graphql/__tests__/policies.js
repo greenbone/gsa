@@ -18,19 +18,27 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import {
   createClonePolicyQueryMock,
+  createDeletePoliciesByFilterQueryMock,
   createDeletePoliciesByIdsQueryMock,
+  createExportPoliciesByFilterQueryMock,
   createExportPoliciesByIdsQueryMock,
+  createGetPoliciesQueryMock,
   createGetPolicyQueryMock,
 } from '../__mocks__/policies';
 import {
   useClonePolicy,
+  useDeletePoliciesByFilter,
   useDeletePolicy,
+  useExportPoliciesByFilter,
   useExportPoliciesByIds,
   useGetPolicy,
+  useLazyGetPolicies,
 } from '../policies';
 
 const GetPolicyComponent = ({id}) => {
@@ -145,5 +153,127 @@ describe('useClonePolicy tests', () => {
     expect(resultFunc).toHaveBeenCalled();
 
     expect(screen.getByTestId('cloned-policy')).toHaveTextContent('345');
+  });
+});
+
+const DeletePoliciesByFilterComponent = () => {
+  const [deletePoliciesByFilter] = useDeletePoliciesByFilter();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deletePoliciesByFilter('foo')}
+    />
+  );
+};
+
+describe('useDeletePoliciesByFilter tests', () => {
+  test('should delete a list of policies by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeletePoliciesByFilterQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeletePoliciesByFilterComponent />);
+    const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportPoliciesByFilterComponent = () => {
+  const exportPoliciesByFilter = useExportPoliciesByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportPoliciesByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportPoliciesByFilter tests', () => {
+  test('should export a list of policies by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportPoliciesByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportPoliciesByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const GetLazyPoliciesComponent = () => {
+  const [getPolicies, {counts, loading, policies}] = useLazyGetPolicies();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getPolicies()} />
+      {isDefined(counts) ? (
+        <div data-testid="counts">
+          <span data-testid="total">{counts.all}</span>
+          <span data-testid="filtered">{counts.filtered}</span>
+          <span data-testid="first">{counts.first}</span>
+          <span data-testid="limit">{counts.rows}</span>
+          <span data-testid="length">{counts.length}</span>
+        </div>
+      ) : (
+        <div data-testid="no-counts" />
+      )}
+      {isDefined(policies) ? (
+        policies.map(policy => {
+          return (
+            <div key={policy.id} data-testid="policy">
+              {policy.id}
+            </div>
+          );
+        })
+      ) : (
+        <div data-testid="no-policies" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetPolicies tests', () => {
+  test('should query policies after user interaction', async () => {
+    const [mock, resultFunc] = createGetPoliciesQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazyPoliciesComponent />);
+
+    let policyElements = screen.queryAllByTestId('policy');
+    expect(policyElements).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-policies')).toBeInTheDocument();
+    expect(screen.queryByTestId('no-counts')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    policyElements = screen.getAllByTestId('policy');
+    expect(policyElements).toHaveLength(1);
+
+    expect(policyElements[0]).toHaveTextContent('234');
+
+    expect(screen.queryByTestId('no-policies')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('total')).toHaveTextContent(1);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(1);
+    expect(screen.getByTestId('first')).toHaveTextContent(1);
+    expect(screen.getByTestId('limit')).toHaveTextContent(10);
+    expect(screen.getByTestId('length')).toHaveTextContent(1);
   });
 });

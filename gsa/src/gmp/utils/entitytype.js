@@ -146,6 +146,7 @@ export const apiType = type => {
 export const hyperionEntityTypes = [
   'task',
   'alert',
+  'policy',
   'permission',
   'scanconfig',
   'schedule',

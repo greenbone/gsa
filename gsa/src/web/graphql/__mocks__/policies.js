@@ -19,9 +19,12 @@
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 import {
   CLONE_POLICY,
+  DELETE_POLICIES_BY_FILTER,
   DELETE_POLICIES_BY_IDS,
+  EXPORT_POLICIES_BY_FILTER,
   EXPORT_POLICIES_BY_IDS,
   GET_POLICY,
+  GET_POLICIES,
 } from '../policies';
 
 export const policy1 = deepFreeze({
@@ -257,6 +260,42 @@ export const policy4 = deepFreeze({
   ],
 });
 
+export const listPolicy = deepFreeze({
+  id: '234',
+  name: 'unnamed policy',
+  comment: 'some policy description',
+  writable: true,
+  owner: 'admin',
+  inUse: false,
+  permissions: [{name: 'Everything'}],
+  predefined: false,
+});
+
+const mockPolicies = {
+  edges: [
+    {
+      node: listPolicy,
+    },
+  ],
+  counts: {
+    total: 1,
+    filtered: 1,
+    offset: 0,
+    limit: 10,
+    length: 1,
+  },
+  pageInfo: {
+    hasNextPage: false,
+    hasPreviousPage: false,
+    startCursor: 'YWxlcnQ6MA==',
+    endCursor: 'YWxlcnQ6OQ==',
+    lastPageCursor: 'YWxlcnQ6MA==',
+  },
+};
+
+export const createGetPoliciesQueryMock = (variables = {}) =>
+  createGenericQueryMock(GET_POLICIES, {policies: mockPolicies}, variables);
+
 export const createGetPolicyQueryMock = (id = '234', result = policy1) =>
   createGenericQueryMock(GET_POLICY, {policy: result}, {id});
 
@@ -295,3 +334,27 @@ export const createDeletePoliciesByIdsQueryMock = (policyIds = ['234']) =>
   createGenericQueryMock(DELETE_POLICIES_BY_IDS, bulkDeleteByIdsResult, {
     ids: policyIds,
   });
+
+const bulkDeleteByFilterResult = {
+  deletePoliciesByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeletePoliciesByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(DELETE_POLICIES_BY_FILTER, bulkDeleteByFilterResult, {
+    filterString,
+  });
+
+const exportPoliciesByFilterResult = {
+  exportPoliciesByFilter: {
+    exportedEntities: '<get_configs_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportPoliciesByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(
+    EXPORT_POLICIES_BY_FILTER,
+    exportPoliciesByFilterResult,
+    {filterString},
+  );
