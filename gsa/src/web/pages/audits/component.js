@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect, useReducer} from 'react';
 
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
@@ -86,105 +86,90 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 import {UNSET_VALUE, generateFilename} from 'web/utils/render';
+import stateReducer, {updateState} from 'web/utils/stateReducer';
+import useGmp from 'web/utils/useGmp';
 
 const REPORT_FORMATS_FILTER = Filter.fromString(
   'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
 );
 
-class AuditComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const AuditComponent = props => {
+  // const dispatch = useDispatch();
+  const gmp = useGmp();
+  const cmd = gmp.audit;
 
-    this.state = {
-      showDownloadReportDialog: false,
-      auditDialogVisible: false,
-    };
+  const [state, dispatchState] = useReducer(stateReducer, {
+    showDownloadReportDialog: false,
+    auditDialogVisible: false,
+  });
 
-    const {gmp} = this.props;
+  useEffect(() => {
+    props.loadUserSettingsDefaults();
+    props.loadReportFormats();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    this.cmd = gmp.audit;
-
-    this.handleAuditResume = this.handleAuditResume.bind(this);
-
-    this.handleSaveAudit = this.handleSaveAudit.bind(this);
-
-    this.handleAuditStart = this.handleAuditStart.bind(this);
-    this.handleAuditStop = this.handleAuditStop.bind(this);
-
-    this.handleReportDownload = this.handleReportDownload.bind(this);
-
-    this.openAuditDialog = this.openAuditDialog.bind(this);
-    this.handleCloseAuditDialog = this.handleCloseAuditDialog.bind(this);
-
-    this.handleAlertCreated = this.handleAlertCreated.bind(this);
-    this.handleTargetCreated = this.handleTargetCreated.bind(this);
-    this.handleScheduleCreated = this.handleScheduleCreated.bind(this);
-
-    this.handleInteraction = this.handleInteraction.bind(this);
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleScannerChange = this.handleScannerChange.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.loadUserSettingsDefaults();
-    this.props.loadReportFormats();
-  }
-
-  handleInteraction() {
-    const {onInteraction} = this.props;
+  const handleInteraction = () => {
+    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  handleChange(value, name) {
-    this.setState({[name]: value});
-  }
+  const handleChange = (value, name) => {
+    dispatchState(
+      updateState({
+        [name]: value,
+      }),
+    );
+  };
 
-  handleAuditStart(audit) {
-    const {onStarted, onStartError} = this.props;
+  const handleAuditStart = audit => {
+    const {onStarted, onStartError} = props;
 
-    this.handleInteraction();
+    handleInteraction();
 
-    return this.cmd.start(audit).then(onStarted, onStartError);
-  }
+    return cmd.start(audit).then(onStarted, onStartError);
+  };
 
-  handleAuditStop(audit) {
-    const {onStopped, onStopError} = this.props;
+  const handleAuditStop = audit => {
+    const {onStopped, onStopError} = props;
 
-    this.handleInteraction();
+    handleInteraction();
 
-    return this.cmd.stop(audit).then(onStopped, onStopError);
-  }
+    return cmd.stop(audit).then(onStopped, onStopError);
+  };
 
-  handleAuditResume(audit) {
-    const {onResumed, onResumeError} = this.props;
+  const handleAuditResume = audit => {
+    const {onResumed, onResumeError} = props;
 
-    this.handleInteraction();
+    handleInteraction();
 
-    return this.cmd.resume(audit).then(onResumed, onResumeError);
-  }
+    return cmd.resume(audit).then(onResumed, onResumeError);
+  };
 
-  handleAlertCreated(alertId) {
-    this.props.loadAlerts();
+  const handleAlertCreated = alertId => {
+    props.loadAlerts();
 
-    this.setState(({alertIds}) => ({alertIds: [alertId, ...alertIds]}));
-  }
+    dispatchState(
+      updateState({
+        alertIds: [alertId, ...state.alertIds],
+      }),
+    );
+  };
 
-  handleScheduleCreated(scheduleId) {
-    this.props.loadSchedules();
+  const handleScheduleCreated = scheduleId => {
+    props.loadSchedules();
 
-    this.setState({scheduleId});
-  }
+    dispatchState(updateState({scheduleId}));
+  };
 
-  handleTargetCreated(targetId) {
-    this.props.loadTargets();
+  const handleTargetCreated = targetId => {
+    props.loadTargets();
 
-    this.setState({targetId});
-  }
+    dispatchState(updateState({targetId}));
+  };
 
-  handleSaveAudit({
+  const handleSaveAudit = ({
     alertIds,
     alterable,
     auto_delete,
@@ -204,16 +189,14 @@ class AuditComponent extends React.Component {
     sourceIface,
     targetId,
     audit,
-  }) {
-    const {gmp} = this.props;
-
+  }) => {
     const tagId = undefined;
     const addTag = NO_VALUE;
 
     const applyOverrides = YES_VALUE;
     const minQod = DEFAULT_MIN_QOD;
 
-    this.handleInteraction();
+    handleInteraction();
 
     if (isDefined(id)) {
       // save edit part
@@ -223,7 +206,7 @@ class AuditComponent extends React.Component {
         scannerId = undefined;
         policyId = undefined;
       }
-      const {onSaved, onSaveError} = this.props;
+      const {onSaved, onSaveError} = props;
       return gmp.audit
         .save({
           alertIds,
@@ -248,10 +231,10 @@ class AuditComponent extends React.Component {
           sourceIface,
         })
         .then(onSaved, onSaveError)
-        .then(() => this.closeAuditDialog());
+        .then(() => closeAuditDialog());
     }
 
-    const {onCreated, onCreateError} = this.props;
+    const {onCreated, onCreateError} = props;
     return gmp.audit
       .create({
         addTag,
@@ -277,26 +260,30 @@ class AuditComponent extends React.Component {
         targetId: targetId,
       })
       .then(onCreated, onCreateError)
-      .then(() => this.closeAuditDialog());
-  }
+      .then(() => closeAuditDialog());
+  };
 
-  closeAuditDialog() {
-    this.setState({auditDialogVisible: false});
-  }
+  const closeAuditDialog = () => {
+    dispatchState(
+      updateState({
+        auditDialogVisible: false,
+      }),
+    );
+  };
 
-  handleCloseAuditDialog() {
-    this.closeAuditDialog();
-    this.handleInteraction();
-  }
+  const handleCloseAuditDialog = () => {
+    closeAuditDialog();
+    handleInteraction();
+  };
 
-  openAuditDialog(audit) {
-    const {capabilities} = this.props;
+  const openAuditDialog = audit => {
+    const {capabilities} = props;
 
-    this.props.loadAlerts();
-    this.props.loadPolicies();
-    this.props.loadScanners();
-    this.props.loadSchedules();
-    this.props.loadTargets();
+    props.loadAlerts();
+    props.loadPolicies();
+    props.loadScanners();
+    props.loadSchedules();
+    props.loadTargets();
 
     if (isDefined(audit)) {
       const canAccessSchedules =
@@ -306,83 +293,88 @@ class AuditComponent extends React.Component {
         ? audit.schedule_periods
         : undefined;
 
-      this.setState({
-        auditDialogVisible: true,
-        alertIds: map(audit.alerts, alert => alert.id),
-        alterable: audit.alterable,
-        applyOverrides: audit.apply_overrides,
-        auto_delete: audit.auto_delete,
-        auto_delete_data: audit.auto_delete_data,
-        comment: audit.comment,
-        policyId: hasId(audit.config) ? audit.config.id : undefined,
-        hostsOrdering: audit.hosts_ordering,
-        id: audit.id,
-        in_assets: audit.in_assets,
-        maxChecks: audit.max_checks,
-        maxHosts: audit.max_hosts,
-        minQod: audit.min_qod,
-        name: audit.name,
-        scannerId: hasId(audit.scanner) ? audit.scanner.id : undefined,
-        scheduleId,
-        schedulePeriods,
-        sourceIface: audit.source_iface,
-        targetId: hasId(audit.target) ? audit.target.id : undefined,
-        audit,
-        title: _('Edit Audit {{name}}', audit),
-      });
+      dispatchState(
+        updateState({
+          auditDialogVisible: true,
+          alertIds: map(audit.alerts, alert => alert.id),
+          alterable: audit.alterable,
+          applyOverrides: audit.apply_overrides,
+          auto_delete: audit.auto_delete,
+          auto_delete_data: audit.auto_delete_data,
+          comment: audit.comment,
+          policyId: hasId(audit.config) ? audit.config.id : undefined,
+          hostsOrdering: audit.hosts_ordering,
+          id: audit.id,
+          in_assets: audit.in_assets,
+          maxChecks: audit.max_checks,
+          maxHosts: audit.max_hosts,
+          minQod: audit.min_qod,
+          name: audit.name,
+          scannerId: hasId(audit.scanner) ? audit.scanner.id : undefined,
+          scheduleId,
+          schedulePeriods,
+          sourceIface: audit.source_iface,
+          targetId: hasId(audit.target) ? audit.target.id : undefined,
+          audit,
+          title: _('Edit Audit {{name}}', audit),
+        }),
+      );
     } else {
       const {
         defaultAlertId,
         defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID,
         defaultScheduleId,
         defaultTargetId,
-      } = this.props;
+      } = props;
 
       const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
       const defaultScannerType = OPENVAS_SCANNER_TYPE;
 
-      this.setState({
-        auditDialogVisible: true,
-        alertIds,
-        alterable: undefined,
-        applyOverrides: undefined,
-        auto_delete: undefined,
-        auto_delete_data: undefined,
-        comment: undefined,
-        policyId: undefined,
-        hostsOrdering: undefined,
-        id: undefined,
-        in_assets: undefined,
-        maxChecks: undefined,
-        maxHosts: undefined,
-        minQod: undefined,
-        name: undefined,
-        scannerId: defaultScannerId,
-        scanner_type: defaultScannerType,
-        scheduleId: defaultScheduleId,
-        schedulePeriods: undefined,
-        sourceIface: undefined,
-        targetId: defaultTargetId,
-        audit: undefined,
-        title: _('New Audit'),
-      });
+      dispatchState(
+        updateState({
+          auditDialogVisible: true,
+          alertIds,
+          alterable: undefined,
+          applyOverrides: undefined,
+          auto_delete: undefined,
+          auto_delete_data: undefined,
+          comment: undefined,
+          policyId: undefined,
+          hostsOrdering: undefined,
+          id: undefined,
+          in_assets: undefined,
+          maxChecks: undefined,
+          maxHosts: undefined,
+          minQod: undefined,
+          name: undefined,
+          scannerId: defaultScannerId,
+          scanner_type: defaultScannerType,
+          scheduleId: defaultScheduleId,
+          schedulePeriods: undefined,
+          sourceIface: undefined,
+          targetId: defaultTargetId,
+          audit: undefined,
+          title: _('New Audit'),
+        }),
+      );
     }
-    this.handleInteraction();
-  }
+    handleInteraction();
+  };
 
-  handleReportDownload(audit) {
-    this.setState({
-      audit,
-    });
+  const handleReportDownload = audit => {
+    dispatchState(
+      updateState({
+        audit,
+      }),
+    );
 
     const {
-      gmp,
       reportExportFileName,
       username,
       reportFormats = [],
       onDownload,
-    } = this.props;
+    } = props;
 
     const [reportFormat] = reportFormats;
 
@@ -390,7 +382,7 @@ class AuditComponent extends React.Component {
       ? reportFormat.extension
       : 'unknown'; // unknown should never happen but we should be save here
 
-    this.handleInteraction();
+    handleInteraction();
 
     const {id} = audit.last_report;
 
@@ -413,148 +405,150 @@ class AuditComponent extends React.Component {
           username,
         });
         onDownload({filename, data});
-      }, this.handleError);
-  }
+      }); // handleError
+  };
 
-  handleScannerChange(scannerId) {
-    this.setState({scannerId});
-  }
-
-  render() {
-    const {
-      alerts,
-      isLoadingScanners,
-      policies,
-      reportFormats = [],
-      scanners,
-      schedules,
-      targets,
-      children,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-    } = this.props;
-
-    const {
-      alertIds,
-      alterable,
-      auto_delete,
-      auto_delete_data,
-      policyId,
-      comment,
-      hostsOrdering,
-      id,
-      in_assets,
-      maxChecks,
-      maxHosts,
-      name,
-      scannerId,
-      scheduleId,
-      schedulePeriods,
-      sourceIface,
-      targetId,
-      audit,
-      auditDialogVisible,
-      title = _('Edit Audit {{name}}', audit),
-    } = this.state;
-    const gcrFormatDefined = reportFormats.length > 0;
-    return (
-      <React.Fragment>
-        <EntityComponent
-          name="audit"
-          onCreated={onCreated}
-          onCreateError={onCreateError}
-          onCloned={onCloned}
-          onCloneError={onCloneError}
-          onDeleted={onDeleted}
-          onDeleteError={onDeleteError}
-          onDownloaded={onDownloaded}
-          onDownloadError={onDownloadError}
-          onInteraction={onInteraction}
-        >
-          {other => (
-            <React.Fragment>
-              {children({
-                ...other,
-                create: this.openAuditDialog,
-                edit: this.openAuditDialog,
-                start: this.handleAuditStart,
-                stop: this.handleAuditStop,
-                resume: this.handleAuditResume,
-                reportDownload: this.handleReportDownload,
-                gcrFormatDefined,
-              })}
-
-              {auditDialogVisible && (
-                <TargetComponent
-                  onCreated={this.handleTargetCreated}
-                  onInteraction={onInteraction}
-                >
-                  {({create: createtarget}) => (
-                    <AlertComponent
-                      onCreated={this.handleAlertCreated}
-                      onInteraction={onInteraction}
-                    >
-                      {({create: createalert}) => (
-                        <ScheduleComponent
-                          onCreated={this.handleScheduleCreated}
-                          onInteraction={onInteraction}
-                        >
-                          {({create: createschedule}) => (
-                            <AuditDialog
-                              alerts={alerts}
-                              alertIds={alertIds}
-                              alterable={alterable}
-                              auto_delete={auto_delete}
-                              auto_delete_data={auto_delete_data}
-                              comment={comment}
-                              policyId={policyId}
-                              hostsOrdering={hostsOrdering}
-                              id={id}
-                              in_assets={in_assets}
-                              isLoadingScanners={isLoadingScanners}
-                              maxChecks={maxChecks}
-                              maxHosts={maxHosts}
-                              name={name}
-                              policies={policies}
-                              scannerId={scannerId}
-                              scanners={scanners}
-                              scheduleId={scheduleId}
-                              schedulePeriods={schedulePeriods}
-                              schedules={schedules}
-                              sourceIface={sourceIface}
-                              targetId={targetId}
-                              targets={targets}
-                              audit={audit}
-                              title={title}
-                              onNewAlertClick={createalert}
-                              onNewTargetClick={createtarget}
-                              onNewScheduleClick={createschedule}
-                              onChange={this.handleChange}
-                              onClose={this.handleCloseAuditDialog}
-                              onSave={this.handleSaveAudit}
-                              onScannerChange={this.handleScannerChange}
-                            />
-                          )}
-                        </ScheduleComponent>
-                      )}
-                    </AlertComponent>
-                  )}
-                </TargetComponent>
-              )}
-            </React.Fragment>
-          )}
-        </EntityComponent>
-      </React.Fragment>
+  const handleScannerChange = scannerId => {
+    dispatchState(
+      updateState({
+        scannerId,
+      }),
     );
-  }
-}
+  };
+
+  const {
+    alerts,
+    isLoadingScanners,
+    policies,
+    reportFormats = [],
+    scanners,
+    schedules,
+    targets,
+    children,
+    onCloned,
+    onCloneError,
+    onCreated,
+    onCreateError,
+    onDeleted,
+    onDeleteError,
+    onDownloaded,
+    onDownloadError,
+    onInteraction,
+  } = props;
+
+  const {
+    alertIds,
+    alterable,
+    auto_delete,
+    auto_delete_data,
+    policyId,
+    comment,
+    hostsOrdering,
+    id,
+    in_assets,
+    maxChecks,
+    maxHosts,
+    name,
+    scannerId,
+    scheduleId,
+    schedulePeriods,
+    sourceIface,
+    targetId,
+    audit,
+    auditDialogVisible,
+    title = _('Edit Audit {{name}}', audit),
+  } = state;
+  const gcrFormatDefined = reportFormats.length > 0;
+  return (
+    <React.Fragment>
+      <EntityComponent
+        name="audit"
+        onCreated={onCreated}
+        onCreateError={onCreateError}
+        onCloned={onCloned}
+        onCloneError={onCloneError}
+        onDeleted={onDeleted}
+        onDeleteError={onDeleteError}
+        onDownloaded={onDownloaded}
+        onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
+      >
+        {other => (
+          <React.Fragment>
+            {children({
+              ...other,
+              create: openAuditDialog,
+              edit: openAuditDialog,
+              start: handleAuditStart,
+              stop: handleAuditStop,
+              resume: handleAuditResume,
+              reportDownload: handleReportDownload,
+              gcrFormatDefined,
+            })}
+
+            {auditDialogVisible && (
+              <TargetComponent
+                onCreated={handleTargetCreated}
+                onInteraction={onInteraction}
+              >
+                {({create: createtarget}) => (
+                  <AlertComponent
+                    onCreated={handleAlertCreated}
+                    onInteraction={onInteraction}
+                  >
+                    {({create: createalert}) => (
+                      <ScheduleComponent
+                        onCreated={handleScheduleCreated}
+                        onInteraction={onInteraction}
+                      >
+                        {({create: createschedule}) => (
+                          <AuditDialog
+                            alerts={alerts}
+                            alertIds={alertIds}
+                            alterable={alterable}
+                            auto_delete={auto_delete}
+                            auto_delete_data={auto_delete_data}
+                            comment={comment}
+                            policyId={policyId}
+                            hostsOrdering={hostsOrdering}
+                            id={id}
+                            in_assets={in_assets}
+                            isLoadingScanners={isLoadingScanners}
+                            maxChecks={maxChecks}
+                            maxHosts={maxHosts}
+                            name={name}
+                            policies={policies}
+                            scannerId={scannerId}
+                            scanners={scanners}
+                            scheduleId={scheduleId}
+                            schedulePeriods={schedulePeriods}
+                            schedules={schedules}
+                            sourceIface={sourceIface}
+                            targetId={targetId}
+                            targets={targets}
+                            audit={audit}
+                            title={title}
+                            onNewAlertClick={createalert}
+                            onNewTargetClick={createtarget}
+                            onNewScheduleClick={createschedule}
+                            onChange={handleChange}
+                            onClose={handleCloseAuditDialog}
+                            onSave={handleSaveAudit}
+                            onScannerChange={handleScannerChange}
+                          />
+                        )}
+                      </ScheduleComponent>
+                    )}
+                  </AlertComponent>
+                )}
+              </TargetComponent>
+            )}
+          </React.Fragment>
+        )}
+      </EntityComponent>
+    </React.Fragment>
+  );
+};
 
 AuditComponent.propTypes = {
   alerts: PropTypes.arrayOf(PropTypes.model),
