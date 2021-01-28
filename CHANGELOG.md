@@ -4,64 +4,74 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [21.04] - unreleased
+## [21.10] - unreleased
 
 ### Added
-- Implement loadScanConfigPromise for scan config component [#2612](https://github.com/greenbone/gsa/pull/2612)
-- Implement scan config detailspage queries and mutations [#2610](https://github.com/greenbone/gsa/pull/2610)
-- Implement create_scan_config, import_scan_config via graphql [#2604](https://github.com/greenbone/gsa/pull/2604)
-- Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
-- Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section [#2536](https://github.com/greenbone/gsa/pull/2536)
-- Implement get_report_formats and get_permissions via graphQL on alert detailspage [#2585](https://github.com/greenbone/gsa/pull/2585)
-- Implemented parseObject for alert model implement [#2552](https://github.com/greenbone/gsa/pull/2552)
-- Added getNotes query [#2485](https://github.com/greenbone/gsa/pull/2485)
-- Create and modify schedule from graphql [#2477](https://github.com/greenbone/gsa/pull/2477)
-- Support more enum types for create alert [#2462](https://github.com/greenbone/gsa/pull/2462)
-- Added getSchedule and getSchedules via graphQL [#2450](https://github.com/greenbone/gsa/pull/2450)
-- Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425)
-- Added getOverrides query [#2405](https://github.com/greenbone/gsa/pull/2405)
-- Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Changed
 - Implement policy detailspage queries and mutations [#2668](https://github.com/greenbone/gsa/pull/2668)
 - Implement schedule detailspage queries and mutations [#2659](https://github.com/greenbone/gsa/pull/2659)
 - Implement graphql queries and mutations on scanconfig listpage [#2621](https://github.com/greenbone/gsa/pull/2621)
+- Implement loadScanConfigPromise for scan config component [#2612](https://github.com/greenbone/gsa/pull/2612)
+- Implement scan config detailspage queries and mutations [#2610](https://github.com/greenbone/gsa/pull/2610)
+- Implement create_scan_config, import_scan_config via graphql [#2604](https://github.com/greenbone/gsa/pull/2604)
 - Don't send scanner and config values in task dialog if task status is not new [#2598](https://github.com/greenbone/gsa/pull/2598)
 - Refactor task detailspage to not use withEntityContainer [#2596](https://github.com/greenbone/gsa/pull/2596)
 - Refactor alert detailspage to not use withEntityContainer [#2587](https://github.com/greenbone/gsa/pull/2587)
-- CVE Tables Page can now be used with the updated xml-format and CVSSv3(.1) [#2583](https://github.com/greenbone/gsa/pull/2583)
+- Implement get_report_formats and get_permissions via graphQL on alert detailspage [#2585](https://github.com/greenbone/gsa/pull/2585)
 - Implement get_alert via graphql and preliminary refactor of alert detailspage [#2571](https://github.com/greenbone/gsa/pull/2571)
 - Implement bulk actions for alerts via graphQL [#2569](https://github.com/greenbone/gsa/pull/2569)
 - Implement clone, delete and test alert via graphql [#2567](https://github.com/greenbone/gsa/pull/2567)
-- Implement get_alerts on alerts listpage via graphql [#2552](https://github.com/greenbone/gsa/pull/2552)
+- Implement get_alerts on alerts listpage via graphql and parseObject for alert model [#2552](https://github.com/greenbone/gsa/pull/2552)
 - Implement modify alert via graphql [#2549](https://github.com/greenbone/gsa/pull/2549)
-- The CVSS v2 BaseScore calculator calculates the score on the client side now [#2536](https://github.com/greenbone/gsa/pull/2536)
 - Implement advanced task wizard via graphql [#2523](https://github.com/greenbone/gsa/pull/2523)
 - Implement modify task wizard via graphql [#2514](https://github.com/greenbone/gsa/pull/2514)
 - Implement task wizard via graphql [#2509](https://github.com/greenbone/gsa/pull/2509)
 - Implement create credential for alert and target dialog via graphql [#2486](https://github.com/greenbone/gsa/pull/2486)
+- Added getNotes query [#2485](https://github.com/greenbone/gsa/pull/2485)
 - Implement create and modify port list by graphql [#2484](https://github.com/greenbone/gsa/pull/2484)
 - Load port lists into target component with graphql [#2481](https://github.com/greenbone/gsa/pull/2481)
+- Create and modify schedule from graphql [#2477](https://github.com/greenbone/gsa/pull/2477)
+- Support more enum types for create alert [#2462](https://github.com/greenbone/gsa/pull/2462)
 - Load credentials in task component and target component via graphql [#2453](https://github.com/greenbone/gsa/pull/2453)
+- Added getSchedule and getSchedules via graphQL [#2450](https://github.com/greenbone/gsa/pull/2450)
 - Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425)
+- Added getOverrides query [#2405](https://github.com/greenbone/gsa/pull/2405)
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Fixed
-- Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
 
 ### Removed
 - Removed unused task wizard commands for runQuickTask, runQuickFirstScan and runModifyTask [#2514](https://github.com/greenbone/gsa/pull/2514) [#2523](https://github.com/greenbone/gsa/pull/2523)
-- Removed support for uncontrolled form fields [#2520](https://github.com/greenbone/gsa/pull/2520)
-- Drop gmp scanner type from GSA [#2498](https://github.com/greenbone/gsa/pull/2498)
-- Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
-- Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
-- Removed severity class 'bsi' [#2434](https://github.com/greenbone/gsa/pull/2434)
 - Removed Edge <= 18 support [#2408](https://github.com/greenbone/gsa/pull/2408)
 - Removed Internet Explorer 11 support [#2399](https://github.com/greenbone/gsa/pull/2399)
 - Removed parsing and testing of textExcerpt [#2316](https://github.com/greenbone/gsa/pull/2316)
 - Removed extra parsing of comment and summary in Model [#2309](https://github.com/greenbone/gsa/pull/2309)
 
-[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...master
+[21.04]: https://github.com/greenbone/gsa/compare/gsa-21.04...master
+
+
+## [21.04] - unreleased
+
+### Added
+- Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
+- Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
+
+### Changed
+
+- CVE Tables Page can now be used with the updated xml-format and CVSSv3(.1). [#2583](https://github.com/greenbone/gsa/pull/2583)
+- The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
+
+### Fixed
+- Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
+
+### Removed
+- Removed support for uncontrolled form fields [#2520](https://github.com/greenbone/gsa/pull/2520)
+- Drop gmp scanner type from GSA [#2498](https://github.com/greenbone/gsa/pull/2498)
+- Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
+- Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
+
+[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...gsa-21.04
 
 ## [20.8.1] - unreleased
 
