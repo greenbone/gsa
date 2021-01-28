@@ -29,8 +29,8 @@ import {
 
 Logger.setDefaultLevel('silent');
 
-describe('LoginPageTests', () => {
-  test('should render LoginPage', () => {
+describe('LoginPage tests', () => {
+  test('should render Loginpage', () => {
     const isLoggedIn = jest.fn().mockReturnValue(false);
     const clearToken = jest.fn();
     const gmp = {isLoggedIn, clearToken, settings: {}};
