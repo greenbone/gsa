@@ -65,7 +65,7 @@ const About = ({gmp}) => (
           <DivP>
             {_(
               'The Greenbone Security Assistant (GSA) is the web-based ' +
-                'user interface of the Greenbone Vulnerability Manager (GVM).',
+                'user interface of the Greenbone Vulnerability Management (GVM).',
             )}
           </DivP>
           <DivP>
@@ -85,7 +85,7 @@ const About = ({gmp}) => (
             '
           </DivP>
           <DivP>
-            Copyright (C) 2017-2020 by&nbsp;
+            Copyright (C) 2017-2021 by&nbsp;
             <a
               href="https://www.greenbone.net"
               target="_blank"

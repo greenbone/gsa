@@ -28,7 +28,7 @@ describe('Footer tests', () => {
 
     expect(element).toMatchSnapshot();
     expect(element).toHaveTextContent(
-      'Greenbone Security Assistant (GSA) Copyright (C) 2009-2020 by Greenbone Networks GmbH, www.greenbone.net',
+      'Greenbone Security Assistant (GSA) Copyright (C) 2009-2021 by Greenbone Networks GmbH, www.greenbone.net',
     );
   });
 });
