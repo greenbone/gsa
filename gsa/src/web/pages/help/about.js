@@ -85,7 +85,7 @@ const About = ({gmp}) => (
             '
           </DivP>
           <DivP>
-            Copyright (C) 2017-2020 by&nbsp;
+            Copyright (C) 2017-2021 by&nbsp;
             <a
               href="https://www.greenbone.net"
               target="_blank"

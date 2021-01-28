@@ -44,7 +44,7 @@ const Footer = styled.footer`
 const GreenboneFooter = () => {
   return (
     <Footer>
-      Greenbone Security Assistant (GSA) Copyright (C) 2009-2020 by Greenbone
+      Greenbone Security Assistant (GSA) Copyright (C) 2009-2021 by Greenbone
       Networks GmbH,&nbsp;
       <Link
         target="_blank"
