@@ -34,15 +34,28 @@ import SelectionType from 'web/utils/selectiontype';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 import useGmp from 'web/utils/useGmp';
 
-const HostComponent = props => {
+const HostComponent = ({
+  children,
+  createtarget,
+  entitiesCounts,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onIdentifierDeleted,
+  onIdentifierDeleteError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+}) => {
   const gmp = useGmp();
   const [state, dispatchState] = useReducer(stateReducer, {
     dialogVisible: false,
   });
 
   const handleIdentifierDelete = identifier => {
-    const {onIdentifierDeleted, onIdentifierDeleteError} = props;
-
     handleInteraction();
 
     return gmp.host
@@ -78,7 +91,6 @@ const HostComponent = props => {
   };
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
@@ -90,7 +102,6 @@ const HostComponent = props => {
 
   const openCreateTargetSelectionDialog = data => {
     const {entities, entitiesSelected, selectionType, filter} = data;
-    const {entitiesCounts} = props;
     let size;
     let filterstring;
 
@@ -110,26 +121,12 @@ const HostComponent = props => {
   };
 
   const _openTargetDialog = (count, filterstring) => {
-    const {createtarget} = props;
     createtarget({
       target_source: 'asset_hosts',
       hosts_count: count,
       hosts_filter: filterstring,
     });
   };
-
-  const {
-    children,
-    onCreated,
-    onCreateError,
-    onDeleted,
-    onDeleteError,
-    onDownloaded,
-    onDownloadError,
-    onInteraction,
-    onSaved,
-    onSaveError,
-  } = props;
 
   const {dialogVisible, host, title} = state;
 
