@@ -88,6 +88,7 @@ import withGmp from 'web/utils/withGmp';
 import {UNSET_VALUE, generateFilename} from 'web/utils/render';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 import useGmp from 'web/utils/useGmp';
+import useCapabilities from 'web/utils/useCapabilities';
 
 const REPORT_FORMATS_FILTER = Filter.fromString(
   'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
@@ -97,6 +98,7 @@ const AuditComponent = props => {
   const dispatch = useDispatch();
   const gmp = useGmp();
   const cmd = gmp.audit;
+  const capabilities = useCapabilities();
 
   const [state, dispatchState] = useReducer(stateReducer, {
     showDownloadReportDialog: false,
@@ -307,8 +309,6 @@ const AuditComponent = props => {
   };
 
   const openAuditDialog = audit => {
-    const {capabilities} = props;
-
     loadAlerts();
     loadPolicies();
     loadScanners();
