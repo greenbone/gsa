@@ -68,6 +68,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
 
 ### Removed
+- Removed Edge <= 18 support [#2691](https://github.com/greenbone/gsa/pull/2691)
 - Removed Internet Explorer 11 support [#2689](https://github.com/greenbone/gsa/pull/2689)
 - Removed support for uncontrolled form fields [#2520](https://github.com/greenbone/gsa/pull/2520)
 - Drop gmp scanner type from GSA [#2498](https://github.com/greenbone/gsa/pull/2498)
