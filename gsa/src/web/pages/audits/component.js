@@ -92,7 +92,27 @@ const REPORT_FORMATS_FILTER = Filter.fromString(
   'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
 );
 
-const AuditComponent = props => {
+const AuditComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onInteraction,
+  onStarted,
+  onStartError,
+  onStopped,
+  onStopError,
+  onResumed,
+  onResumeError,
+  onSaved,
+  onSaveError,
+  onDownload,
+}) => {
   const dispatch = useDispatch();
   const gmp = useGmp();
   const cmd = gmp.audit;
@@ -189,7 +209,6 @@ const AuditComponent = props => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInteraction = () => {
-    const {onInteraction} = props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
@@ -204,24 +223,18 @@ const AuditComponent = props => {
   };
 
   const handleAuditStart = audit => {
-    const {onStarted, onStartError} = props;
-
     handleInteraction();
 
     return cmd.start(audit).then(onStarted, onStartError);
   };
 
   const handleAuditStop = audit => {
-    const {onStopped, onStopError} = props;
-
     handleInteraction();
 
     return cmd.stop(audit).then(onStopped, onStopError);
   };
 
   const handleAuditResume = audit => {
-    const {onResumed, onResumeError} = props;
-
     handleInteraction();
 
     return cmd.resume(audit).then(onResumed, onResumeError);
@@ -286,7 +299,6 @@ const AuditComponent = props => {
         scannerId = undefined;
         policyId = undefined;
       }
-      const {onSaved, onSaveError} = props;
       return gmp.audit
         .save({
           alertIds,
@@ -314,7 +326,6 @@ const AuditComponent = props => {
         .then(() => closeAuditDialog());
     }
 
-    const {onCreated, onCreateError} = props;
     return gmp.audit
       .create({
         addTag,
@@ -398,10 +409,6 @@ const AuditComponent = props => {
         }),
       );
     } else {
-      /* const {
-        defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID,
-      } = props; */
-
       const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
       const defaultScannerType = OPENVAS_SCANNER_TYPE;
@@ -444,8 +451,6 @@ const AuditComponent = props => {
       }),
     );
 
-    const {onDownload} = props;
-
     const [reportFormat] = reportFormats;
 
     const extension = isDefined(reportFormat)
@@ -485,19 +490,6 @@ const AuditComponent = props => {
       }),
     );
   };
-
-  const {
-    children,
-    onCloned,
-    onCloneError,
-    onCreated,
-    onCreateError,
-    onDeleted,
-    onDeleteError,
-    onDownloaded,
-    onDownloadError,
-    onInteraction,
-  } = props;
 
   const {
     alertIds,
@@ -614,20 +606,7 @@ const AuditComponent = props => {
 };
 
 AuditComponent.propTypes = {
-  alerts: PropTypes.arrayOf(PropTypes.model),
   children: PropTypes.func.isRequired,
-  defaultAlertId: PropTypes.id,
-  defaultScannerId: PropTypes.id,
-  defaultScheduleId: PropTypes.id,
-  defaultTargetId: PropTypes.id,
-  isLoadingScanners: PropTypes.bool,
-  policies: PropTypes.arrayOf(PropTypes.model),
-  reportExportFileName: PropTypes.object,
-  reportFormats: PropTypes.array,
-  scanners: PropTypes.arrayOf(PropTypes.model),
-  schedules: PropTypes.arrayOf(PropTypes.model),
-  targets: PropTypes.arrayOf(PropTypes.model),
-  username: PropTypes.string,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
