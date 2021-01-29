@@ -83,8 +83,6 @@ import {getUsername} from 'web/store/usersettings/selectors';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
 import {UNSET_VALUE, generateFilename} from 'web/utils/render';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 import useGmp from 'web/utils/useGmp';
@@ -582,21 +580,12 @@ const AuditComponent = props => {
 
 AuditComponent.propTypes = {
   alerts: PropTypes.arrayOf(PropTypes.model),
-  capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
   defaultAlertId: PropTypes.id,
   defaultScannerId: PropTypes.id,
   defaultScheduleId: PropTypes.id,
   defaultTargetId: PropTypes.id,
-  gmp: PropTypes.gmp.isRequired,
   isLoadingScanners: PropTypes.bool,
-  loadAlerts: PropTypes.func.isRequired,
-  loadPolicies: PropTypes.func.isRequired,
-  loadReportFormats: PropTypes.func.isRequired,
-  loadScanners: PropTypes.func.isRequired,
-  loadSchedules: PropTypes.func.isRequired,
-  loadTargets: PropTypes.func.isRequired,
-  loadUserSettingsDefaults: PropTypes.func.isRequired,
   policies: PropTypes.arrayOf(PropTypes.model),
   reportExportFileName: PropTypes.object,
   reportFormats: PropTypes.array,
@@ -665,8 +654,6 @@ const mapStateToProps = (rootState, {match}) => {
 };
 
 export default compose(
-  withGmp,
-  withCapabilities,
   withDownload,
   withRouter,
   connect(mapStateToProps, undefined),
