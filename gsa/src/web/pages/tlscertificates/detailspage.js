@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbHH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbHH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
