@@ -41,7 +41,7 @@ import {
   useExportPoliciesByFilter,
   useExportPoliciesByIds,
   useGetPolicy,
-  useLoadPolicyPromise,
+  useLazyGetPolicy,
   useImportPolicy,
 } from '../policies';
 
@@ -160,12 +160,12 @@ describe('useClonePolicy tests', () => {
   });
 });
 
-const GetPromisedPolicyComponent = () => {
-  const loadPolicyPromise = useLoadPolicyPromise();
+const GetLazyPolicyComponent = () => {
+  const [getPolicy] = useLazyGetPolicy();
   const [policy, setPolicy] = useState();
 
   const handleLoadPolicy = policyId => {
-    return loadPolicyPromise(policyId).then(response => setPolicy(response));
+    return getPolicy(policyId).then(response => setPolicy(response));
   };
 
   return (
@@ -182,11 +182,11 @@ const GetPromisedPolicyComponent = () => {
   );
 };
 
-describe('useLoadPolicyPromise tests', () => {
+describe('useLazyGetPolicy tests', () => {
   test('should query policy after user interaction', async () => {
     const [mock, resultFunc] = createGetPolicyQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
-    render(<GetPromisedPolicyComponent />);
+    render(<GetLazyPolicyComponent />);
 
     await wait();
 

@@ -247,7 +247,7 @@ export const useLazyGetPolicy = () => {
         fetchPolicy: 'no-cache', // do not cache, since this is used when a change is saved
       })
       .then(response => {
-        if (isDefined(response?.data?.policy) {
+        if (isDefined(response?.data?.policy)) {
           policy = Policy.fromObject(response?.data?.policy);
         }
 
