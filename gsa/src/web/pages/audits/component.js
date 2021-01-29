@@ -17,7 +17,7 @@
  */
 import React, {useCallback, useEffect, useReducer} from 'react';
 
-import {connect, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
 import _ from 'gmp/locale';
@@ -132,6 +132,56 @@ const AuditComponent = props => {
     () => dispatch(loadReportFormatsAction(gmp)(REPORT_FORMATS_FILTER)),
     [gmp, dispatch],
   );
+
+  // Selectors
+  const alertSel = useSelector(alertSelector);
+  const userDefaults = useSelector(getUserSettingsDefaults);
+  const policiesSel = useSelector(policiesSelector);
+  const scannersSel = useSelector(scannerSelector);
+  const scheduleSel = useSelector(scheduleSelector);
+  const targetSel = useSelector(targetSelector);
+  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
+  const reportFormatsSel = useSelector(reportFormatsSelector);
+  const scannerList = scannersSel.getEntities(ALL_FILTER);
+  const username = useSelector(getUsername);
+
+  const alerts = alertSel.getEntities(ALL_FILTER);
+  const defaultAlertId = userDefaults.getValueByName('defaultalert');
+
+  let defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID;
+  const defaultScannerIdFromStore = userDefaults.getValueByName(
+    'defaultopenvasscanner',
+  );
+
+  if (isDefined(defaultScannerIdFromStore)) {
+    defaultScannerId = defaultScannerIdFromStore;
+  }
+
+  const defaultScheduleId = userDefaults.getValueByName('defaultschedule');
+  const defaultTargetId = userDefaults.getValueByName('defaulttarget');
+  const isLoadingScanners = scannersSel.isLoadingAllEntities(ALL_FILTER);
+  const reportExportFileName = userDefaultsSelector.getValueByName(
+    'reportexportfilename',
+  );
+  let reportFormats = [];
+  const reportFormatsFromStore = reportFormatsSel.getAllEntities(
+    REPORT_FORMATS_FILTER,
+  );
+
+  if (isDefined(reportFormatsFromStore)) {
+    reportFormats = reportFormatsFromStore;
+  }
+
+  const policies = policiesSel.getEntities(ALL_FILTER);
+  const scanners = isDefined(scannerList)
+    ? scannerList.filter(
+        scanner =>
+          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
+          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
+      )
+    : undefined;
+  const schedules = scheduleSel.getEntities(ALL_FILTER);
+  const targets = targetSel.getEntities(ALL_FILTER);
 
   useEffect(() => {
     loadUserSettingsDefaults();
@@ -348,12 +398,9 @@ const AuditComponent = props => {
         }),
       );
     } else {
-      const {
-        defaultAlertId,
+      /* const {
         defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID,
-        defaultScheduleId,
-        defaultTargetId,
-      } = props;
+      } = props; */
 
       const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
@@ -397,12 +444,7 @@ const AuditComponent = props => {
       }),
     );
 
-    const {
-      reportExportFileName,
-      username,
-      reportFormats = [],
-      onDownload,
-    } = props;
+    const {onDownload} = props;
 
     const [reportFormat] = reportFormats;
 
@@ -445,13 +487,6 @@ const AuditComponent = props => {
   };
 
   const {
-    alerts,
-    isLoadingScanners,
-    policies,
-    reportFormats = [],
-    scanners,
-    schedules,
-    targets,
     children,
     onCloned,
     onCloneError,
@@ -613,48 +648,4 @@ AuditComponent.propTypes = {
   onStopped: PropTypes.func,
 };
 
-const mapStateToProps = (rootState, {match}) => {
-  const alertSel = alertSelector(rootState);
-  const userDefaults = getUserSettingsDefaults(rootState);
-  const policiesSel = policiesSelector(rootState);
-  const scannersSel = scannerSelector(rootState);
-  const scheduleSel = scheduleSelector(rootState);
-  const targetSel = targetSelector(rootState);
-  const userDefaultsSelector = getUserSettingsDefaults(rootState);
-  const username = getUsername(rootState);
-
-  const reportFormatsSel = reportFormatsSelector(rootState);
-
-  const scannerList = scannersSel.getEntities(ALL_FILTER);
-  const scanners = isDefined(scannerList)
-    ? scannerList.filter(
-        scanner =>
-          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
-          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
-      )
-    : undefined;
-
-  return {
-    alerts: alertSel.getEntities(ALL_FILTER),
-    defaultAlertId: userDefaults.getValueByName('defaultalert'),
-    defaultScannerId: userDefaults.getValueByName('defaultopenvasscanner'),
-    defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
-    defaultTargetId: userDefaults.getValueByName('defaulttarget'),
-    isLoadingScanners: scannersSel.isLoadingAllEntities(ALL_FILTER),
-    reportExportFileName: userDefaultsSelector.getValueByName(
-      'reportexportfilename',
-    ),
-    reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
-    policies: policiesSel.getEntities(ALL_FILTER),
-    scanners,
-    schedules: scheduleSel.getEntities(ALL_FILTER),
-    targets: targetSel.getEntities(ALL_FILTER),
-    username,
-  };
-};
-
-export default compose(
-  withDownload,
-  withRouter,
-  connect(mapStateToProps, undefined),
-)(AuditComponent);
+export default compose(withDownload, withRouter)(AuditComponent);
