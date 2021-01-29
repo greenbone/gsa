@@ -236,10 +236,10 @@ export const useCreatePolicy = options => {
   return [createPolicy, {...other, id: policyId}];
 };
 
-export const useLoadPolicyPromise = () => {
+export const useLazyGetPolicy = () => {
   const client = useApolloClient();
-
-  const loadPolicy = policyId =>
+  let policy;
+  const getPolicy = policyId =>
     client
       .query({
         query: GET_POLICY,
@@ -247,12 +247,14 @@ export const useLoadPolicyPromise = () => {
         fetchPolicy: 'no-cache', // do not cache, since this is used when a change is saved
       })
       .then(response => {
-        const policy = Policy.fromObject(response?.data?.policy);
+        if (isDefined(response?.data?.policy) {
+          policy = Policy.fromObject(response?.data?.policy);
+        }
 
         return policy;
       });
 
-  return loadPolicy;
+  return [getPolicy, policy];
 };
 
 export const useImportPolicy = options => {
