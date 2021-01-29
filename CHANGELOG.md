@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Refactor Audit Component into Function [#2695](https://github.com/greenbone/gsa/pull/2695)
 - Implement policy listpage queries and mutations [#2679](https://github.com/greenbone/gsa/pull/2679)
 - Implement policy detailspage queries and mutations [#2668](https://github.com/greenbone/gsa/pull/2668)
 - Implement schedule detailspage queries and mutations [#2659](https://github.com/greenbone/gsa/pull/2659)
