@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useReducer} from 'react';
+import React, {useCallback, useEffect, useReducer} from 'react';
 
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
 import _ from 'gmp/locale';
@@ -47,36 +47,36 @@ import ScheduleComponent from 'web/pages/schedules/component';
 import TargetComponent from 'web/pages/targets/component';
 
 import {
-  loadEntities as loadAlerts,
+  loadEntities as loadAlertsAction,
   selector as alertSelector,
 } from 'web/store/entities/alerts';
 
 import {
-  loadEntities as loadPolicies,
+  loadEntities as loadPoliciesAction,
   selector as policiesSelector,
 } from 'web/store/entities/policies';
 
 import {
-  loadEntities as loadScanners,
+  loadEntities as loadScannersAction,
   selector as scannerSelector,
 } from 'web/store/entities/scanners';
 
 import {
-  loadEntities as loadSchedules,
+  loadEntities as loadSchedulesAction,
   selector as scheduleSelector,
 } from 'web/store/entities/schedules';
 
 import {
-  loadEntities as loadTargets,
+  loadEntities as loadTargetsAction,
   selector as targetSelector,
 } from 'web/store/entities/targets';
 
 import {
-  loadAllEntities as loadReportFormats,
+  loadAllEntities as loadReportFormatsAction,
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {loadUserSettingDefaults as loadUserSettingDefaultsAction} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 import {getUsername} from 'web/store/usersettings/selectors';
@@ -94,7 +94,7 @@ const REPORT_FORMATS_FILTER = Filter.fromString(
 );
 
 const AuditComponent = props => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const gmp = useGmp();
   const cmd = gmp.audit;
 
@@ -103,9 +103,39 @@ const AuditComponent = props => {
     auditDialogVisible: false,
   });
 
+  // Loaders
+  const loadAlerts = useCallback(
+    () => dispatch(loadAlertsAction(gmp)(ALL_FILTER)),
+    [gmp, dispatch],
+  );
+  const loadPolicies = useCallback(
+    () => dispatch(loadPoliciesAction(gmp)(ALL_FILTER)),
+    [gmp, dispatch],
+  );
+  const loadScanners = useCallback(
+    () => dispatch(loadScannersAction(gmp)(ALL_FILTER)),
+    [gmp, dispatch],
+  );
+  const loadSchedules = useCallback(
+    () => dispatch(loadSchedulesAction(gmp)(ALL_FILTER)),
+    [gmp, dispatch],
+  );
+  const loadTargets = useCallback(
+    () => dispatch(loadTargetsAction(gmp)(ALL_FILTER)),
+    [gmp, dispatch],
+  );
+  const loadUserSettingsDefaults = useCallback(
+    () => dispatch(loadUserSettingDefaultsAction(gmp)()),
+    [gmp, dispatch],
+  );
+  const loadReportFormats = useCallback(
+    () => dispatch(loadReportFormatsAction(gmp)(REPORT_FORMATS_FILTER)),
+    [gmp, dispatch],
+  );
+
   useEffect(() => {
-    props.loadUserSettingsDefaults();
-    props.loadReportFormats();
+    loadUserSettingsDefaults();
+    loadReportFormats();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInteraction = () => {
@@ -148,7 +178,7 @@ const AuditComponent = props => {
   };
 
   const handleAlertCreated = alertId => {
-    props.loadAlerts();
+    loadAlerts();
 
     dispatchState(
       updateState({
@@ -158,13 +188,13 @@ const AuditComponent = props => {
   };
 
   const handleScheduleCreated = scheduleId => {
-    props.loadSchedules();
+    loadSchedules();
 
     dispatchState(updateState({scheduleId}));
   };
 
   const handleTargetCreated = targetId => {
-    props.loadTargets();
+    loadTargets();
 
     dispatchState(updateState({targetId}));
   };
@@ -279,11 +309,11 @@ const AuditComponent = props => {
   const openAuditDialog = audit => {
     const {capabilities} = props;
 
-    props.loadAlerts();
-    props.loadPolicies();
-    props.loadScanners();
-    props.loadSchedules();
-    props.loadTargets();
+    loadAlerts();
+    loadPolicies();
+    loadScanners();
+    loadSchedules();
+    loadTargets();
 
     if (isDefined(audit)) {
       const canAccessSchedules =
@@ -634,21 +664,10 @@ const mapStateToProps = (rootState, {match}) => {
   };
 };
 
-const mapDispatchToProp = (dispatch, {gmp}) => ({
-  loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
-  loadPolicies: () => dispatch(loadPolicies(gmp)(ALL_FILTER)),
-  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
-  loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
-  loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
-  loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
-  loadReportFormats: () =>
-    dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
-});
-
 export default compose(
   withGmp,
   withCapabilities,
   withDownload,
   withRouter,
-  connect(mapStateToProps, mapDispatchToProp),
+  connect(mapStateToProps, undefined),
 )(AuditComponent);
