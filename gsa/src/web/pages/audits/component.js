@@ -202,11 +202,6 @@ const AuditComponent = ({
   const schedules = scheduleSel.getEntities(ALL_FILTER);
   const targets = targetSel.getEntities(ALL_FILTER);
 
-  useEffect(() => {
-    loadUserSettingsDefaults();
-    loadReportFormats();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
@@ -513,6 +508,12 @@ const AuditComponent = ({
     title = _('Edit Audit {{name}}', audit),
   } = state;
   const gcrFormatDefined = reportFormats.length > 0;
+
+  useEffect(() => {
+    loadUserSettingsDefaults();
+    loadReportFormats();
+  }, [loadUserSettingsDefaults, loadReportFormats]);
+
   return (
     <React.Fragment>
       <EntityComponent
