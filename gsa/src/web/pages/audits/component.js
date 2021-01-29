@@ -18,7 +18,6 @@
 import React, {useCallback, useEffect, useReducer} from 'react';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 
@@ -37,7 +36,8 @@ import {
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 
-import withDownload from 'web/components/form/withDownload';
+import useDownload from 'web/components/form/useDownload';
+import Download from 'web/components/form/download';
 
 import EntityComponent from 'web/entity/component';
 
@@ -81,7 +81,6 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 
 import {getUsername} from 'web/store/usersettings/selectors';
 
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE, generateFilename} from 'web/utils/render';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
@@ -111,12 +110,12 @@ const AuditComponent = ({
   onResumeError,
   onSaved,
   onSaveError,
-  onDownload,
 }) => {
   const dispatch = useDispatch();
   const gmp = useGmp();
   const cmd = gmp.audit;
   const capabilities = useCapabilities();
+  const [downloadRef, handleDownload] = useDownload();
 
   const [state, dispatchState] = useReducer(stateReducer, {
     showDownloadReportDialog: false,
@@ -479,7 +478,7 @@ const AuditComponent = ({
           resourceType: 'report',
           username,
         });
-        onDownload({filename, data});
+        handleDownload({filename, data});
       }); // handleError
   };
 
@@ -601,6 +600,7 @@ const AuditComponent = ({
           </React.Fragment>
         )}
       </EntityComponent>
+      <Download ref={downloadRef} />
     </React.Fragment>
   );
 };
@@ -627,4 +627,4 @@ AuditComponent.propTypes = {
   onStopped: PropTypes.func,
 };
 
-export default compose(withDownload, withRouter)(AuditComponent);
+export default AuditComponent;
