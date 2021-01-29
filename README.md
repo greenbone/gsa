@@ -82,6 +82,6 @@ github](https://github.com/greenbone/gsa/issues) first.
 
 ## License
 
-Copyright (C) 2009-2020 [Greenbone Networks GmbH](https://www.greenbone.net/)
+Copyright (C) 2009-2021 [Greenbone Networks GmbH](https://www.greenbone.net/)
 
 Licensed under the [GNU Affero General Public License v3.0 or later](LICENSE).
