@@ -50,52 +50,62 @@ const manualUrl = 'test/';
 
 const {entity} = getMockReport();
 
-// mock gmp commands
+let currentSettings;
+let getAggregates;
+let getDashboardSetting;
+let getFilters;
+let getReports;
+let getSetting;
+let renewSession;
 
-const getReports = jest.fn().mockResolvedValue({
-  data: [entity],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+beforeEach(() => {
+  // mock gmp commands
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
+  getReports = jest.fn().mockResolvedValue({
+    data: [entity],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
+
+  getDashboardSetting = jest.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
+  });
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getAggregates = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const getAggregates = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+  getSetting = jest.fn().mockResolvedValue({
+    filter: null,
+  });
 
-const getSetting = jest.fn().mockResolvedValue({
-  filter: null,
-});
-
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('Report listpage tests', () => {

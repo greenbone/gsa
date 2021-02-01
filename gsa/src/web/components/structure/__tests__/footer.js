@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -28,7 +28,7 @@ describe('Footer tests', () => {
 
     expect(element).toMatchSnapshot();
     expect(element).toHaveTextContent(
-      'Greenbone Security Assistant (GSA) Copyright (C) 2009-2020 by Greenbone Networks GmbH, www.greenbone.net',
+      'Greenbone Security Assistant (GSA) Copyright (C) 2009-2021 by Greenbone Networks GmbH, www.greenbone.net',
     );
   });
 });

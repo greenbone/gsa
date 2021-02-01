@@ -64,7 +64,6 @@ export const ToolBarIcons = withCapabilities(
 );
 
 ToolBarIcons.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   onHostCreateClick: PropTypes.func.isRequired,
 };
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -262,28 +262,36 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getEntities;
+let getPolicy;
+let getSchedule;
+let renewSession;
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const getPolicy = jest.fn().mockResolvedValue({
-  data: policy,
-});
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const getSchedule = jest.fn().mockResolvedValue({
-  data: schedule,
-});
+  getPolicy = jest.fn().mockResolvedValue({
+    data: policy,
+  });
 
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+  getSchedule = jest.fn().mockResolvedValue({
+    data: schedule,
+  });
+
+  getEntities = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 });
 
 describe('Audit Detailspage tests', () => {

@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-import 'core-js/features/object/entries';
-import 'core-js/features/string/starts-with';
 
 import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';

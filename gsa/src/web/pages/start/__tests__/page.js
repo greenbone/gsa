@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -35,32 +35,39 @@ window.URL.createObjectURL = jest.fn();
 
 const manualUrl = 'test/';
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
+let getAggregates;
+let getDashboardSetting;
+let getFilters;
+let saveDashboardSetting;
+
+beforeEach(() => {
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
+
+  getDashboardSetting = jest.fn().mockResolvedValue({
+    data: {defaults: {foo: 'bar'}},
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  saveDashboardSetting = jest.fn().mockResolvedValue({foo: 'bar'});
+
+  getAggregates = jest.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
-
-const getDashboardSetting = jest.fn().mockResolvedValue({
-  data: {defaults: {foo: 'bar'}},
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const saveDashboardSetting = jest.fn().mockResolvedValue({foo: 'bar'});
-
-const getAggregates = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+  });
 });
 
 describe('StartPage tests', () => {

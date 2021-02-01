@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -78,20 +78,26 @@ const entityType = 'scanconfig';
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getPermissions;
+let renewSession;
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const getPermissions = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  getPermissions = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 });
 
 describe('Scan Config Detailspage tests', () => {

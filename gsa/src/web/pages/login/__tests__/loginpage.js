@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -29,8 +29,8 @@ import {
 
 Logger.setDefaultLevel('silent');
 
-describe('LoginPageTests', () => {
-  test('should render LoginPage', () => {
+describe('LoginPage tests', () => {
+  test('should render Loginpage', () => {
     const isLoggedIn = jest.fn().mockReturnValue(false);
     const clearToken = jest.fn();
     const gmp = {isLoggedIn, clearToken, settings: {}};

@@ -115,24 +115,31 @@ const noPermOverride = Override.fromElement({
   writable: 1,
 });
 
-const getOverride = jest.fn().mockResolvedValue({
-  data: override,
-});
+let currentSettings;
+let getEntities;
+let getOverride;
+let renewSession;
 
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+beforeEach(() => {
+  getOverride = jest.fn().mockResolvedValue({
+    data: override,
+  });
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+  getEntities = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('Override detailspage tests', () => {

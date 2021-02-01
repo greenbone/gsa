@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2020 Greenbone Networks GmbH
+/* Copyright (C) 2016-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -24,6 +24,9 @@ import Theme from 'web/utils/theme';
 
 const Link = styled.a`
   color: ${Theme.mediumGray};
+  &:link {
+    color: ${Theme.green};
+  }
 `;
 
 const Footer = styled.footer`
@@ -32,7 +35,6 @@ const Footer = styled.footer`
   right: 0;
   left: 0;
   padding: 2px;
-  background-color: ${Theme.white};
   font-size: 10px;
   text-align: right;
   color: ${Theme.mediumGray};
@@ -44,7 +46,7 @@ const Footer = styled.footer`
 const GreenboneFooter = () => {
   return (
     <Footer>
-      Greenbone Security Assistant (GSA) Copyright (C) 2009-2020 by Greenbone
+      Greenbone Security Assistant (GSA) Copyright (C) 2009-2021 by Greenbone
       Networks GmbH,&nbsp;
       <Link
         target="_blank"

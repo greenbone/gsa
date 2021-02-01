@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -44,7 +44,9 @@ const transformRejection = rej => {
   return isDefined(xmlString) ? parse(xmlString, PARSER_OPTIONS) : undefined;
 };
 
-export default {
+const transformObject = {
   success: success(transformXmlData),
   rejection: rejection(transformRejection),
 };
+
+export default transformObject;

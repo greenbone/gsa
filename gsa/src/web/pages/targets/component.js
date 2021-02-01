@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2020 Greenbone Networks GmbH
+/* Copyright (C) 2016-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -176,7 +176,7 @@ const TargetComponent = props => {
         target_source: undefined,
         target_exclude_source: undefined,
         targetTitle: _('New Target'),
-        initial: {...initial},
+        ...initial,
       }));
     }
 
@@ -346,6 +346,7 @@ const TargetComponent = props => {
     exclude_file,
     file,
     hosts,
+    hosts_filter,
     id,
     in_use,
     name,
@@ -425,6 +426,7 @@ const TargetComponent = props => {
           smbCredentialId: smb_credential_id,
           snmpCredentialId: snmp_credential_id,
           sshCredentialId: ssh_credential_id,
+          hostsFilter: hosts_filter,
         };
 
         return createTarget(mutationData);
@@ -454,6 +456,8 @@ const TargetComponent = props => {
     esxi_credential_id,
     exclude_hosts,
     hosts,
+    hosts_count,
+    hosts_filter,
     id,
     in_use,
     name,
@@ -502,8 +506,8 @@ const TargetComponent = props => {
               esxi_credential_id={esxi_credential_id}
               exclude_hosts={exclude_hosts}
               hosts={hosts}
-              // hosts_count={hosts_count} // this is undefined?
-              // hosts_filter={hosts_filter} // this is undefined?
+              hosts_count={hosts_count}
+              hosts_filter={hosts_filter}
               id={id}
               in_use={in_use}
               name={name}

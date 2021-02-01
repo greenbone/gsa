@@ -5,13 +5,16 @@ exports[`Footer tests should render footer with copyright 1`] = `
   color: #787878;
 }
 
+.c1:link {
+  color: #66c430;
+}
+
 .c0 {
   position: fixed;
   bottom: 0;
   right: 0;
   left: 0;
   padding: 2px;
-  background-color: #fff;
   font-size: 10px;
   text-align: right;
   color: #787878;
@@ -23,7 +26,7 @@ exports[`Footer tests should render footer with copyright 1`] = `
 <footer
   class="c0"
 >
-  Greenbone Security Assistant (GSA) Copyright (C) 2009-2020 by Greenbone Networks GmbH, 
+  Greenbone Security Assistant (GSA) Copyright (C) 2009-2021 by Greenbone Networks GmbH, 
   <a
     class="c1"
     href="http://www.greenbone.net"

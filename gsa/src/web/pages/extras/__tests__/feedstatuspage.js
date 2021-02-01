@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -67,17 +67,17 @@ const xhr = {
 
 const response = new Response(xhr, data);
 
-const gmp = {
-  feedstatus: {
-    readFeedInformation: jest.fn(() => Promise.resolve(response)),
-  },
-  settings: {
-    manualUrl: 'http://foo.bar',
-  },
-};
-
 describe('Feed status page tests', () => {
   test('should render', async () => {
+    const gmp = {
+      feedstatus: {
+        readFeedInformation: jest.fn(() => Promise.resolve(response)),
+      },
+      settings: {
+        manualUrl: 'http://foo.bar',
+      },
+    };
+
     const {render} = rendererWith({gmp, router: true});
     const {element, getAllByTestId} = render(<FeedStatus />);
 
