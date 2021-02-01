@@ -209,40 +209,49 @@ const override2 = Override.fromElement({
   writable: 1,
 });
 
-const getNvt = jest.fn().mockResolvedValue({
-  data: nvt,
-});
+let getNvt;
+let getNotes;
+let getOverrides;
+let getEntities;
+let currentSettings;
+let renewSession;
 
-const getNotes = jest.fn().mockResolvedValue({
-  data: [note1],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+beforeEach(() => {
+  getNvt = jest.fn().mockResolvedValue({
+    data: nvt,
+  });
 
-const getOverrides = jest.fn().mockResolvedValue({
-  data: [override1, override2],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getNotes = jest.fn().mockResolvedValue({
+    data: [note1],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getOverrides = jest.fn().mockResolvedValue({
+    data: [override1, override2],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+  getEntities = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('Nvt Detailspage tests', () => {
