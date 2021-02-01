@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, {useState} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -24,20 +24,25 @@ import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import {
   createClonePolicyQueryMock,
-  createDeletePoliciesByFilterQueryMock,
+  createCreatePolicyQueryMock,
   createDeletePoliciesByIdsQueryMock,
+  createDeletePoliciesByFilterQueryMock,
   createExportPoliciesByFilterQueryMock,
   createExportPoliciesByIdsQueryMock,
   createGetPoliciesQueryMock,
   createGetPolicyQueryMock,
+  createImportPolicyQueryMock,
 } from '../__mocks__/policies';
 import {
   useClonePolicy,
-  useDeletePoliciesByFilter,
+  useCreatePolicy,
   useDeletePolicy,
+  useDeletePoliciesByFilter,
   useExportPoliciesByFilter,
   useExportPoliciesByIds,
   useGetPolicy,
+  useLazyGetPolicy,
+  useImportPolicy,
   useLazyGetPolicies,
 } from '../policies';
 
@@ -275,5 +280,145 @@ describe('useLazyGetPolicies tests', () => {
     expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
     expect(screen.getByTestId('length')).toHaveTextContent(1);
+  });
+});
+
+const GetLazyPolicyComponent = () => {
+  const [getPolicy] = useLazyGetPolicy();
+  const [policy, setPolicy] = useState();
+
+  const handleLoadPolicy = policyId => {
+    return getPolicy(policyId).then(response => setPolicy(response));
+  };
+
+  return (
+    <div>
+      <button data-testid="load" onClick={() => handleLoadPolicy('234')} />
+      {isDefined(policy) ? (
+        <div key={policy.id} data-testid="policy">
+          {policy.id}
+        </div>
+      ) : (
+        <div data-testid="no-policy" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetPolicy tests', () => {
+  test('should query policy after user interaction', async () => {
+    const [mock, resultFunc] = createGetPolicyQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazyPolicyComponent />);
+
+    await wait();
+
+    let policyElement = screen.queryAllByTestId('policy');
+    expect(policyElement).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-policy')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    policyElement = screen.getByTestId('policy');
+
+    expect(policyElement).toHaveTextContent('234');
+  });
+});
+
+const CreatePolicyComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [createPolicy] = useCreatePolicy();
+
+  const handleCreateResult = id => {
+    setNotification(`Policy created with id ${id}.`);
+  };
+
+  return (
+    <div>
+      <button
+        title={'Create Policy'}
+        onClick={() =>
+          createPolicy({policyId: 'foo', name: 'bar', comment: 'lorem'}).then(
+            handleCreateResult,
+          )
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Policy mutation tests', () => {
+  test('should create a policy', async () => {
+    const [
+      createPolicyMock,
+      createPolicyResult,
+    ] = createCreatePolicyQueryMock();
+    const {render} = rendererWith({queryMocks: [createPolicyMock]});
+
+    const {element} = render(<CreatePolicyComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(createPolicyResult).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Policy created with id 345.',
+    );
+  });
+});
+
+const ImportPolicyComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [importPolicy] = useImportPolicy();
+
+  const handleCreateResult = id => {
+    setNotification(`Policy imported with id ${id}.`);
+  };
+
+  return (
+    <div>
+      <button
+        title={'Import Policy'}
+        onClick={() =>
+          importPolicy('<get_configs_response />').then(handleCreateResult)
+        }
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Import Policy tests', () => {
+  test('should import a policy', async () => {
+    const [
+      importPolicyQueryMock,
+      importPolicyQueryResult,
+    ] = createImportPolicyQueryMock();
+    const {render} = rendererWith({queryMocks: [importPolicyQueryMock]});
+
+    const {element} = render(<ImportPolicyComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(importPolicyQueryResult).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Policy imported with id 456.',
+    );
   });
 });

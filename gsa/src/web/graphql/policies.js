@@ -18,7 +18,13 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useQuery, useMutation, useLazyQuery} from '@apollo/client';
+import {
+  gql,
+  useQuery,
+  useMutation,
+  useLazyQuery,
+  useApolloClient,
+} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import Policy from 'gmp/models/policy';
@@ -133,14 +139,6 @@ export const EXPORT_POLICIES_BY_IDS = gql`
   }
 `;
 
-export const CLONE_POLICY = gql`
-  mutation clonePolicy($id: UUID!) {
-    clonePolicy(id: $id) {
-      id
-    }
-  }
-`;
-
 export const DELETE_POLICIES_BY_FILTER = gql`
   mutation deletePoliciesByFilter($filterString: String!) {
     deletePoliciesByFilter(filterString: $filterString) {
@@ -153,6 +151,30 @@ export const EXPORT_POLICIES_BY_FILTER = gql`
   mutation exportPoliciesByFilter($filterString: String) {
     exportPoliciesByFilter(filterString: $filterString) {
       exportedEntities
+    }
+  }
+`;
+
+export const CLONE_POLICY = gql`
+  mutation clonePolicy($id: UUID!) {
+    clonePolicy(id: $id) {
+      id
+    }
+  }
+`;
+
+export const CREATE_POLICY = gql`
+  mutation createPolicy($input: CreatePolicyInput!) {
+    createPolicy(input: $input) {
+      id
+    }
+  }
+`;
+
+export const IMPORT_POLICY = gql`
+  mutation importPolicy($policy: String) {
+    importPolicy(policy: $policy) {
+      id
     }
   }
 `;
@@ -296,4 +318,59 @@ export const useDeletePoliciesByFilter = options => {
     [queryDeletePoliciesByFilter],
   );
   return [deletePoliciesByFilter, data];
+};
+
+export const useCreatePolicy = options => {
+  const [queryCreatePolicy, {data, ...other}] = useMutation(
+    CREATE_POLICY,
+    options,
+  );
+  const createPolicy = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreatePolicy({...options, variables: {input: inputObject}}).then(
+        result => result?.data?.createPolicy?.id,
+      ),
+    [queryCreatePolicy],
+  );
+  const policyId = data?.createPolicy?.id;
+  return [createPolicy, {...other, id: policyId}];
+};
+
+export const useLazyGetPolicy = () => {
+  const client = useApolloClient();
+  let policy;
+  const getPolicy = policyId =>
+    client
+      .query({
+        query: GET_POLICY,
+        variables: {id: policyId},
+        fetchPolicy: 'no-cache', // do not cache, since this is used when a change is saved
+      })
+      .then(response => {
+        if (isDefined(response?.data?.policy)) {
+          policy = Policy.fromObject(response?.data?.policy);
+        }
+
+        return policy;
+      });
+
+  return [getPolicy, policy];
+};
+
+export const useImportPolicy = options => {
+  const [queryImportPolicy, {data, ...other}] = useMutation(
+    IMPORT_POLICY,
+    options,
+  );
+  const importPolicy = useCallback(
+    // eslint-disable-next-line no-shadow
+    (policy, options) =>
+      queryImportPolicy({...options, variables: {policy}}).then(
+        result => result.data.importPolicy.id,
+      ),
+    [queryImportPolicy],
+  );
+  const policyId = data?.importPolicy?.id;
+  return [importPolicy, {...other, id: policyId}];
 };
