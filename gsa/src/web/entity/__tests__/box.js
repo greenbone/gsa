@@ -19,8 +19,8 @@ import React from 'react';
 
 import date, {setLocale} from 'gmp/models/date';
 
-import {rendererWith} from 'web/utils/testing';
 import {setTimezone} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 import EntityBox from '../box';
 
