@@ -21,8 +21,8 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/models/date';
 import Note from 'gmp/models/note';
 
-import {rendererWith} from 'web/utils/testing';
 import {setTimezone} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 import NoteBox from '../note';
 
