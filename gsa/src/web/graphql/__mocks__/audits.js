@@ -16,10 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {createGenericQueryMock} from 'web/utils/testing';
-import {CREATE_AUDIT, MODIFY_AUDIT} from '../audits';
+import {
+  createGenericQueryMock,
+  createGenericMutationResult,
+} from 'web/utils/testing';
+import {
+  CREATE_AUDIT,
+  MODIFY_AUDIT,
+  RESUME_AUDIT,
+  START_AUDIT,
+  STOP_AUDIT,
+} from '../audits';
 
-const createAuditInput = {
+export const createAuditInput = {
   name: 'a1',
   comment: 'bar',
   policyId: 'p1',
@@ -39,7 +48,7 @@ export const createCreateAuditQueryMock = () =>
     input: createAuditInput,
   });
 
-const modifyAuditInput = {
+export const modifyAuditInput = {
   id: '657',
   name: 'a1',
   comment: 'bar',
@@ -58,3 +67,23 @@ export const createModifyAuditQueryMock = () =>
   createGenericQueryMock(MODIFY_AUDIT, modifyAuditResult, {
     input: modifyAuditInput,
   });
+
+const stopAuditResult = createGenericMutationResult('stopAudit');
+
+export const createStopAuditQueryMock = auditId =>
+  createGenericQueryMock(STOP_AUDIT, stopAuditResult, {id: auditId});
+
+const resumeAuditResult = createGenericMutationResult('resumeAudit');
+
+export const createResumeAuditQueryMock = auditId =>
+  createGenericQueryMock(RESUME_AUDIT, resumeAuditResult, {id: auditId});
+
+export const createStartAuditQueryMock = (auditId, reportId) => {
+  const startAuditResult = {
+    startAudit: {
+      reportId,
+    },
+  };
+
+  return createGenericQueryMock(START_AUDIT, startAuditResult, {id: auditId});
+};

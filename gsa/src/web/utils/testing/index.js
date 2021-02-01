@@ -206,4 +206,13 @@ export const createGenericQueryMock = (query, result, variables, errors) => {
   return [queryMock, resultFunc];
 };
 
+export const createGenericMutationResult = queryName => {
+  const mutationResult = {};
+  mutationResult[queryName] = {
+    ok: true,
+  };
+
+  return mutationResult;
+};
+
 // vim: set ts=2 sw=2 tw=80:
