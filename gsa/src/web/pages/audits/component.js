@@ -41,6 +41,8 @@ import Download from 'web/components/form/download';
 
 import EntityComponent from 'web/entity/component';
 
+import {useModifyAudit} from 'web/graphql/audits';
+
 import AlertComponent from 'web/pages/alerts/component';
 import AuditDialog from 'web/pages/audits/dialog';
 import ScheduleComponent from 'web/pages/schedules/component';
@@ -202,6 +204,9 @@ const AuditComponent = ({
   const schedules = scheduleSel.getEntities(ALL_FILTER);
   const targets = targetSel.getEntities(ALL_FILTER);
 
+  // GraphQL Queries and Mutations
+  const [modifyAudit] = useModifyAudit();
+
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
@@ -293,29 +298,28 @@ const AuditComponent = ({
         scannerId = undefined;
         policyId = undefined;
       }
-      return gmp.audit
-        .save({
-          alertIds,
-          alterable,
-          autoDelete: auto_delete,
-          autoDeleteData: auto_delete_data,
-          applyOverrides,
-          comment,
-          policyId,
-          hostsOrdering,
-          id,
-          inAssets: in_assets,
-          maxChecks,
-          maxHosts,
-          minQod,
-          name,
-          scannerId,
-          scannerType,
-          scheduleId,
-          schedulePeriods,
-          targetId,
-          sourceIface,
-        })
+      return modifyAudit({
+        alertIds,
+        alterable,
+        autoDelete: auto_delete,
+        autoDeleteData: auto_delete_data,
+        applyOverrides,
+        comment,
+        policyId,
+        hostsOrdering,
+        id,
+        inAssets: in_assets,
+        maxChecks,
+        maxHosts,
+        minQod,
+        name,
+        scannerId,
+        scannerType,
+        scheduleId,
+        schedulePeriods,
+        targetId,
+        sourceIface,
+      })
         .then(onSaved, onSaveError)
         .then(() => closeAuditDialog());
     }
