@@ -21,8 +21,8 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/models/date';
 import Override from 'gmp/models/override';
 
-import {rendererWith} from 'web/utils/testing';
 import {setTimezone} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 import OverrideBox from '../override';
 
