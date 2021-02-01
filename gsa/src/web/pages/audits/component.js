@@ -41,7 +41,7 @@ import Download from 'web/components/form/download';
 
 import EntityComponent from 'web/entity/component';
 
-import {useModifyAudit} from 'web/graphql/audits';
+import {useCreateAudit, useModifyAudit} from 'web/graphql/audits';
 
 import AlertComponent from 'web/pages/alerts/component';
 import AuditDialog from 'web/pages/audits/dialog';
@@ -206,6 +206,7 @@ const AuditComponent = ({
 
   // GraphQL Queries and Mutations
   const [modifyAudit] = useModifyAudit();
+  const [createAudit] = useCreateAudit();
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -324,30 +325,29 @@ const AuditComponent = ({
         .then(() => closeAuditDialog());
     }
 
-    return gmp.audit
-      .create({
-        addTag,
-        alertIds,
-        alterable,
-        applyOverrides,
-        autoDelete: auto_delete,
-        autoDeleteData: auto_delete_data,
-        comment,
-        policyId,
-        hostsOrdering,
-        inAssets: in_assets,
-        maxChecks,
-        maxHosts,
-        minQod,
-        name,
-        scannerType,
-        scannerId,
-        scheduleId,
-        schedulePeriods,
-        sourceIface,
-        tagId,
-        targetId: targetId,
-      })
+    return createAudit({
+      // addTag, Will update hyperion later
+      alertIds,
+      alterable,
+      applyOverrides,
+      autoDelete: auto_delete,
+      autoDeleteData: auto_delete_data,
+      comment,
+      policyId,
+      hostsOrdering,
+      inAssets: in_assets,
+      maxChecks,
+      maxHosts,
+      minQod,
+      name,
+      scannerType,
+      scannerId,
+      scheduleId,
+      schedulePeriods,
+      sourceIface,
+      tagId,
+      targetId: targetId,
+    })
       .then(onCreated, onCreateError)
       .then(() => closeAuditDialog());
   };
