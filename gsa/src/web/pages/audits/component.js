@@ -41,7 +41,13 @@ import Download from 'web/components/form/download';
 
 import EntityComponent from 'web/entity/component';
 
-import {useCreateAudit, useModifyAudit} from 'web/graphql/audits';
+import {
+  useCreateAudit,
+  useModifyAudit,
+  useResumeAudit,
+  useStartAudit,
+  useStopAudit,
+} from 'web/graphql/audits';
 
 import AlertComponent from 'web/pages/alerts/component';
 import AuditDialog from 'web/pages/audits/dialog';
@@ -207,6 +213,9 @@ const AuditComponent = ({
   // GraphQL Queries and Mutations
   const [modifyAudit] = useModifyAudit();
   const [createAudit] = useCreateAudit();
+  const [startAudit] = useStartAudit();
+  const [stopAudit] = useStopAudit();
+  const [resumeAudit] = useResumeAudit();
 
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
@@ -225,19 +234,19 @@ const AuditComponent = ({
   const handleAuditStart = audit => {
     handleInteraction();
 
-    return cmd.start(audit).then(onStarted, onStartError);
+    return startAudit(audit.id).then(onStarted, onStartError);
   };
 
   const handleAuditStop = audit => {
     handleInteraction();
 
-    return cmd.stop(audit).then(onStopped, onStopError);
+    return stopAudit(audit.id).then(onStopped, onStopError);
   };
 
   const handleAuditResume = audit => {
     handleInteraction();
 
-    return cmd.resume(audit).then(onResumed, onResumeError);
+    return resumeAudit(audit.id).then(onResumed, onResumeError);
   };
 
   const handleAlertCreated = alertId => {
@@ -284,7 +293,7 @@ const AuditComponent = ({
     audit,
   }) => {
     const tagId = undefined;
-    const addTag = NO_VALUE;
+    // const addTag = NO_VALUE; addTag not supported for now. Will add later.
 
     const applyOverrides = YES_VALUE;
     const minQod = DEFAULT_MIN_QOD;
