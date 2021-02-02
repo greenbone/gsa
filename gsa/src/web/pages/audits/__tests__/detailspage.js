@@ -17,18 +17,18 @@
  */
 import React from 'react';
 
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
+
+import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 

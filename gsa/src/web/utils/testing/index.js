@@ -34,6 +34,8 @@ import {Router} from 'react-router-dom';
 
 import {Provider} from 'react-redux';
 
+import {MockedProvider} from '@apollo/client/testing';
+
 import {createMemoryHistory} from 'history';
 
 import EverythingCapabilities from 'gmp/capabilities/everything';
@@ -45,7 +47,6 @@ import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
-import {MockedProvider} from '@apollo/client/testing';
 
 export * from '@testing-library/react';
 
