@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [20.8.1] - unreleased
+## [20.8.1] - 2021-02-02
 
 ### Added
 - Added icon to host detailspage to link to TLS certificates [#2624](https://github.com/greenbone/gsa/pull/2624)
@@ -41,7 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove secinfo filter from user settings dialog and elsewhere [#2495](https://github.com/greenbone/gsa/pull/2495)
 - Removed export/download for report formats [#2427](https://github.com/greenbone/gsa/pull/2427)
 
-[20.8.1]: https://github.com/greenbone/gsa/compare/v20.8.0...gsa-20.08
+[20.8.1]: https://github.com/greenbone/gsa/compare/v20.8.0...v20.8.1
 
 ## [20.8.0] - 2020-08-11
 
