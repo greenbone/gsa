@@ -21,7 +21,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
+import DateTime from 'web/components/date/datetime';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -73,12 +73,16 @@ const EntityBox = ({
           {isDefined(end) && (
             <TableRow>
               <TableData>{_('Active until')}</TableData>
-              <TableData>{longDate(end)}</TableData>
+              <TableData>
+                <DateTime date={end} />
+              </TableData>
             </TableRow>
           )}
           <TableRow>
             <TableData>{_('Modified')}</TableData>
-            <TableData>{longDate(modified)}</TableData>
+            <TableData>
+              <DateTime date={modified} />
+            </TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
