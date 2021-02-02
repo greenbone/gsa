@@ -24,7 +24,7 @@ import _ from 'gmp/locale';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {YES_VALUE} from 'gmp/parser';
 
 import {map} from 'gmp/utils/array';
 import {hasId} from 'gmp/utils/id';
@@ -121,7 +121,6 @@ const AuditComponent = ({
 }) => {
   const dispatch = useDispatch();
   const gmp = useGmp();
-  const cmd = gmp.audit;
   const capabilities = useCapabilities();
   const [downloadRef, handleDownload] = useDownload();
 
