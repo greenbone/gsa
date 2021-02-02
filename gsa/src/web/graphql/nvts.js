@@ -18,13 +18,16 @@
 
 import {useCallback} from 'react';
 
-import {useLazyQuery, useMutation, useQuery} from '@apollo/client';
-
-import gql from 'graphql-tag';
-
-import CollectionCounts from 'gmp/collection/collectioncounts';
+import {
+  gql,
+  useApolloClient,
+  useLazyQuery,
+  useMutation,
+  useQuery,
+} from '@apollo/client';
 
 import Nvt from 'gmp/models/nvt';
+import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -72,19 +75,6 @@ export const GET_NVT = gql`
     }
   }
 `;
-
-export const useLazyGetNvt = id => {
-  const [queryNvt, {data, ...other}] = useLazyQuery(GET_NVT, {
-    variables: {
-      id,
-    },
-  });
-
-  const nvt = isDefined(data?.nvt) ? Nvt.fromObject(data.nvt) : undefined;
-
-  const getNvt = useCallback(uuid => queryNvt({id: uuid}), [queryNvt]);
-  return [getNvt, {...other, nvt}];
-};
 
 export const GET_NVTS = gql`
   query Nvts(
@@ -161,6 +151,70 @@ export const GET_NVTS = gql`
   }
 `;
 
+export const EXPORT_NVTS_BY_IDS = gql`
+  mutation exportNvtsByIds($ids: [UUID]!) {
+    exportNvtsByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const EXPORT_NVTS_BY_FILTER = gql`
+  mutation exportNvtsByFilter($filterString: String) {
+    exportNvtsByFilter(filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportNvtsByFilter = options => {
+  const [queryExportNvtsByFilter] = useMutation(EXPORT_NVTS_BY_FILTER, options);
+  const exportNvtsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportNvtsByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportNvtsByFilter, options],
+  );
+
+  return exportNvtsByFilter;
+};
+
+export const useExportNvtsByIds = options => {
+  const [queryExportNvtsByIds] = useMutation(EXPORT_NVTS_BY_IDS, options);
+
+  const exportNvtsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    scanConfigIds =>
+      queryExportNvtsByIds({
+        ...options,
+        variables: {
+          ids: scanConfigIds,
+        },
+      }),
+    [queryExportNvtsByIds, options],
+  );
+
+  return exportNvtsByIds;
+};
+
+export const useLazyGetNvt = id => {
+  const [queryNvt, {data, ...other}] = useLazyQuery(GET_NVT, {
+    variables: {
+      id,
+    },
+  });
+
+  const nvt = isDefined(data?.nvt) ? Nvt.fromObject(data.nvt) : undefined;
+
+  const getNvt = useCallback(uuid => queryNvt({id: uuid}), [queryNvt]);
+  return [getNvt, {...other, nvt}];
+};
+
 export const useLazyGetNvts = (variables, options) => {
   const [queryNvts, {data, ...other}] = useLazyQuery(GET_NVTS, {
     ...options,
@@ -190,21 +244,11 @@ export const useLazyGetNvts = (variables, options) => {
   return [getNvts, {...other, counts, nvts, pageInfo}];
 };
 
-export const createExportNvtsByIdsQueryMock = (ids = ['foo']) =>
-  createGenericQueryMock(EXPORT_NVTS_BY_IDS, exportNvtsByIdsResult, {
-    ids,
+export const useGetNvt = (id, options) => {
+  const {data, ...other} = useQuery(GET_NVT, {
+    ...options,
+    variables: {id},
   });
-
-const exportNvtsByFilterResult = {
-  exportNvtsByFilter: {
-    exportedEntities: '<get_nvts_response status="200" status_text="OK" />',
-  },
-};
-
-export const createExportNvtsByFilterQueryMock = (filterString = 'foo') => {
-  return createGenericQueryMock(
-    EXPORT_NVTS_BY_FILTER,
-    exportNvtsByFilterResult,
-    {filterString},
-  );
+  const nvt = isDefined(data?.nvt) ? nvt.fromObject(data.nvt) : undefined;
+  return {nvt, ...other};
 };

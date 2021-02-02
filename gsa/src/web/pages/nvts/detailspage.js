@@ -15,13 +15,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useHistory, useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
-import {isDefined} from 'gmp/utils/identity';
+import {
+  permissionsResourceFilter,
+  withEntityContainer,
+} from 'web/entity/withEntityContainer';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
@@ -45,6 +50,7 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
+import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 
 import DetailsBlock from 'web/entity/block';
 import Note from 'web/entity/note';
@@ -52,7 +58,6 @@ import Override from 'web/entity/override';
 import EntityPage from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import withEntityContainer from 'web/entity/withEntityContainer';
 
 import {
   selector as notesSelector,
@@ -66,6 +71,8 @@ import {
   loadEntities as loadOverrides,
 } from 'web/store/entities/overrides';
 
+import {useGetPermissions} from 'web/graphql/permissions';
+
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -78,7 +85,7 @@ import Download from 'web/components/form/download';
 import useCapabilities from 'web/utils/useCapabilities';
 import useGmpSettings from 'web/utils/useGmpSettings';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import useGetNvt from 'web/graphql/nvts';
+import {useGetNvt, useExportNvtsByIds} from 'web/graphql/nvts';
 
 import NvtComponent from './component';
 import NvtDetails from './details';
@@ -101,13 +108,13 @@ export const ToolBarIcons = ({
         />
         <ListIcon title={_('NVT List')} page="nvts" />
       </IconDivider>
-
-      <ExportIcon
-        value={entity}
-        title={_('Export NVT')}
-        onClick={onNvtDownloadClick}
-      />
-
+      <IconDivider>
+        <ExportIcon
+          value={entity}
+          title={_('Export NVT')}
+          onClick={onNvtDownloadClick}
+        />
+      </IconDivider>
       <IconDivider>
         {capabilities.mayCreate('note') && (
           <NewNoteIcon
@@ -202,6 +209,7 @@ const Page = () => {
   const gmpSettings = useGmpSettings();
   const history = useHistory();
   const [, renewSessionTimeout] = useUserSessionTimeout();
+
   const [downloadRef, handleDownload] = useDownload();
   const {
     dialogState: notificationDialogState,
@@ -210,20 +218,38 @@ const Page = () => {
   } = useDialogNotification();
 
   // Load nvt related entities
-  const {nvt, refetch: refetchNvt, loading, error: entityError} = useGetNvt(id);
+  const {nvt, refetch: refetchAll, loading, error: entityError} = useGetNvt(id);
+
   const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
 
-  const preferences = isDefined(entity) ? nvt.preferences : [];
-  const userTags = isDefined(entity) ? nvt.userTags : undefined;
+  const preferences = hasValue(nvt) ? nvt.preferences : [];
+  const userTags = hasValue(nvt) ? nvt.userTags : undefined;
   const numPreferences = preferences.length;
 
+  // NVT related mutations
+
+  const exportEntity = useExportEntity();
+  const exportNvt = useExportNvtsByIds();
+
+  // NVT methods
+
+  const handleDownloadNvt = exportedNvt => {
+    exportEntity({
+      entity: exportedNvt,
+      exportFunc: exportNvt,
+      resourceType: 'nvts',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
   // Timeout and reload
-  const timeoutFunc = useEntityTimeout({entity: nvt, gmpSettings});
+  const timeoutFunc = useEntityReloadInterval(nvt);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetchScanConfig,
+    refetchAll,
     timeoutFunc,
   );
 
@@ -239,22 +265,21 @@ const Page = () => {
 
   return (
     <NvtComponent
-      onChanged={onChanged}
+      onChanged={refetchAll}
       onDownloaded={handleDownload}
       onDownloadError={showError}
       onInteraction={renewSessionTimeout}
     >
       {({notecreate, overridecreate, download}) => (
         <EntityPage
-          {...props}
           entity={nvt}
           toolBarIcons={ToolBarIcons}
           title={_('NVT')}
           sectionIcon={<NvtIcon size="large" />}
-          onChanged={onChanged}
+          onChanged={refetchAll}
           onInteraction={renewSessionTimeout}
           onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
-          onNvtDownloadClick={download}
+          onNvtDownloadClick={handleDownloadNvt}
           onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
         >
           {({activeTab = 0, onActivateTab}) => {
@@ -290,13 +315,13 @@ const Page = () => {
                       <TabPanel>
                         <Preferences
                           preferences={nvt.preferences}
-                          defaultTimeout={defaultTimeout}
+                          defaultTimeout={nvt.defaultTimeout}
                         />
                       </TabPanel>
                       <TabPanel>
                         <EntityTags
                           entity={entity}
-                          onChanged={() => refetchNvt()}
+                          onChanged={() => refetchAll()}
                           onError={showError}
                           onInteraction={renewSessionTimeout}
                         />
