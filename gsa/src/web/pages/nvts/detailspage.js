@@ -229,12 +229,10 @@ const Page = () => {
   const numPreferences = preferences.length;
 
   // NVT related mutations
-
   const exportEntity = useExportEntity();
   const exportNvt = useExportNvtsByIds();
 
   // NVT methods
-
   const handleDownloadNvt = exportedNvt => {
     exportEntity({
       entity: exportedNvt,

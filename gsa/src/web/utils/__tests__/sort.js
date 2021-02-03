@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2020 Greenbone Networks GmbH
+/* Copyright (C) 2018-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -76,24 +76,47 @@ describe('getProperty tests', () => {
 describe('getValue tests', () => {
   test('should return value for property', () => {
     expect(getValue(v => v, {foo: 'bar'}, 'foo')).toEqual('bar');
-    expect(getValue(v => v, {foo: 'bar'}, obj => obj.foo)).toEqual('bar');
+    expect(
+      getValue(
+        v => v,
+        {foo: 'bar'},
+        obj => obj.foo,
+      ),
+    ).toEqual('bar');
   });
 
   test('should return string for property', () => {
     expect(getValue(v => '' + v, {a: 1}, 'a')).toEqual('1');
-    expect(getValue(v => '' + v, {a: 1}, obj => obj.a)).toEqual('1');
+    expect(
+      getValue(
+        v => '' + v,
+        {a: 1},
+        obj => obj.a,
+      ),
+    ).toEqual('1');
   });
 
   test('should return undefined for unknown property', () => {
     expect(getValue(v => v, {foo: 'bar'}, 'bar')).toBeUndefined();
-    expect(getValue(v => v, {foo: 'bar'}, obj => obj.bar)).toBeUndefined();
+    expect(
+      getValue(
+        v => v,
+        {foo: 'bar'},
+        obj => obj.bar,
+      ),
+    ).toBeUndefined();
   });
 
   test('should return default for unknown property', () => {
     expect(getValue(v => v, {foo: 'bar'}, 'bar', 'ipsum')).toEqual('ipsum');
-    expect(getValue(v => v, {foo: 'bar'}, obj => obj.bar, 'ipsum')).toEqual(
-      'ipsum',
-    );
+    expect(
+      getValue(
+        v => v,
+        {foo: 'bar'},
+        obj => obj.bar,
+        'ipsum',
+      ),
+    ).toEqual('ipsum');
   });
 });
 

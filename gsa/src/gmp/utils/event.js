@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2020 Greenbone Networks GmbH
+/* Copyright (C) 2016-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -48,7 +48,7 @@ export const KeyCode = {
  */
 export const debounce = (func, wait, immediate = false) => {
   let timeout;
-  return function(...args) {
+  return function (...args) {
     const context = this;
     const later = () => {
       timeout = undefined;

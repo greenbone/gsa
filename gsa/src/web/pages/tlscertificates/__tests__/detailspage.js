@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -66,16 +66,21 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getEntities;
 
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  getEntities = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 });
 
 describe('TLS Certificate Detailspage tests', () => {

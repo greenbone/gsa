@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -19,7 +19,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import DateTime from 'web/components/date/datetime';
 
 import {
   scannerTypeName,
@@ -61,12 +61,16 @@ const CertInfo = ({info}) => {
       <TableBody>
         <TableRow>
           <TableData>{_('Activation')}</TableData>
-          <TableData>{dateTimeWithTimeZone(activationTime)}</TableData>
+          <TableData>
+            <DateTime date={activationTime} />
+          </TableData>
         </TableRow>
 
         <TableRow>
           <TableData>{_('Expiration')}</TableData>
-          <TableData>{dateTimeWithTimeZone(expirationTime)}</TableData>
+          <TableData>
+            <DateTime date={expirationTime} />
+          </TableData>
         </TableRow>
 
         <TableRow>

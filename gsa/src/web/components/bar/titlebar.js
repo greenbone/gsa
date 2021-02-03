@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2020 Greenbone Networks GmbH
+/* Copyright (C) 2016-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -111,9 +111,6 @@ const mapStateToProps = rootState => ({
   loggedIn: isLoggedIn(rootState),
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps),
-)(Titlebar);
+export default compose(withGmp, connect(mapStateToProps))(Titlebar);
 
 // vim: set ts=2 sw=2 tw=80:

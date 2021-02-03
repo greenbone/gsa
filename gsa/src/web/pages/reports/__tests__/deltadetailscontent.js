@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -47,12 +47,17 @@ const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getReportComposerDefaults;
 
-const getReportComposerDefaults = jest.fn().mockResolvedValue({
-  foo: 'bar',
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  getReportComposerDefaults = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('Delta Report Details Content tests', () => {

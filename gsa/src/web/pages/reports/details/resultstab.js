@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -265,6 +265,7 @@ ResultsTab.propTypes = {
   reportFilter: PropTypes.filter.isRequired,
   reportId: PropTypes.id.isRequired,
   reportResultsCounts: PropTypes.counts,
+  results: PropTypes.array,
   resultsCounts: PropTypes.counts,
   resultsError: PropTypes.error,
   resultsFilter: PropTypes.filter,

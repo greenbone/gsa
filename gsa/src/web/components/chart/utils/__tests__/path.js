@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2020 Greenbone Networks GmbH
+/* Copyright (C) 2018-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -19,25 +19,15 @@ import path from '../path';
 
 describe('path tests', () => {
   test('should draw a move path', () => {
-    expect(
-      path()
-        .move(10, 10)
-        .toString(),
-    ).toEqual('M 10 10');
+    expect(path().move(10, 10).toString()).toEqual('M 10 10');
   });
 
   test('should draw a line path', () => {
-    expect(
-      path()
-        .line(10, 10)
-        .toString(),
-    ).toEqual('L 10 10');
+    expect(path().line(10, 10).toString()).toEqual('L 10 10');
   });
 
   test('should close a path', () => {
-    const p = path()
-      .move(10, 10)
-      .close();
+    const p = path().move(10, 10).close();
 
     expect(p.toString()).toEqual('M 10 10 Z');
   });
@@ -53,9 +43,7 @@ describe('path tests', () => {
   });
 
   test('should ignore calls after close', () => {
-    const p = path()
-      .move(10, 10)
-      .close();
+    const p = path().move(10, 10).close();
 
     expect(p.toString()).toEqual('M 10 10 Z');
 

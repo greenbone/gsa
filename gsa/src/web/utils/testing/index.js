@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2020 Greenbone Networks GmbH
+/* Copyright (C) 2018-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -34,6 +34,8 @@ import {Router} from 'react-router-dom';
 
 import {Provider} from 'react-redux';
 
+import {MockedProvider} from '@apollo/client/testing';
+
 import {createMemoryHistory} from 'history';
 
 import EverythingCapabilities from 'gmp/capabilities/everything';
@@ -45,7 +47,6 @@ import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
 
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
-import {MockedProvider} from '@apollo/client/testing';
 
 export * from '@testing-library/react';
 
@@ -204,6 +205,15 @@ export const createGenericQueryMock = (query, result, variables, errors) => {
     newData: resultFunc,
   };
   return [queryMock, resultFunc];
+};
+
+export const createGenericMutationResult = queryName => {
+  const mutationResult = {};
+  mutationResult[queryName] = {
+    ok: true,
+  };
+
+  return mutationResult;
 };
 
 // vim: set ts=2 sw=2 tw=80:

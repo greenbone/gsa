@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -87,14 +87,8 @@ class StartTimeSelection extends React.Component {
     } = this.state;
 
     onChanged({
-      startDate: startDate
-        .clone()
-        .hour(startHour)
-        .minute(startMinute),
-      endDate: endDate
-        .clone()
-        .hour(endHour)
-        .minute(endMinute),
+      startDate: startDate.clone().hour(startHour).minute(startMinute),
+      endDate: endDate.clone().hour(endHour).minute(endMinute),
     });
   }
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,9 +17,9 @@
  */
 export const getMockProcessMap = () => {
   const mockProcessMap = {
-    edges: {'11': {id: '11', source: '21', target: '22', type: 'edge'}},
+    edges: {11: {id: '11', source: '21', target: '22', type: 'edge'}},
     processes: {
-      '21': {
+      21: {
         color: '#f0a519',
         comment: 'bar',
         derivedSeverity: 5,
@@ -31,7 +31,7 @@ export const getMockProcessMap = () => {
         x: 600,
         y: 300,
       },
-      '22': {
+      22: {
         color: '#f0a519',
         comment: 'ipsum',
         derivedSeverity: 5,
@@ -43,7 +43,7 @@ export const getMockProcessMap = () => {
         x: 300,
         y: 200,
       },
-      '23': {
+      23: {
         color: '#c83814',
         comment: 'world',
         derivedSeverity: 10,

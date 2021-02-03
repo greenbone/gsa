@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -39,18 +39,24 @@ const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getReportComposerDefaults;
+let gmp;
 
-const getReportComposerDefaults = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const gmp = {
-  settings: {manualUrl},
-  user: {currentSettings, getReportComposerDefaults},
-};
+  getReportComposerDefaults = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  gmp = {
+    settings: {manualUrl},
+    user: {currentSettings, getReportComposerDefaults},
+  };
+});
 
 describe('Report Details ToolBarIcons tests', () => {
   test('should render ToolBarIcons', () => {

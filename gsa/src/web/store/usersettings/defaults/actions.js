@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2020 Greenbone Networks GmbH
+/* Copyright (C) 2018-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -53,12 +53,10 @@ export const loadUserSettingDefaults = gmp => () => (dispatch, getState) => {
 
   dispatch(loadingActions.request());
 
-  return gmp.user
-    .currentSettings()
-    .then(
-      response => dispatch(loadingActions.success(response.data)),
-      err => dispatch(loadingActions.error(err)),
-    );
+  return gmp.user.currentSettings().then(
+    response => dispatch(loadingActions.success(response.data)),
+    err => dispatch(loadingActions.error(err)),
+  );
 };
 
 export const loadUserSettingDefault = gmp => id => (dispatch, getState) => {

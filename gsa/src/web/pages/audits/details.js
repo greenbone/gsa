@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -20,7 +20,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+import DateTime from 'web/components/date/datetime';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -240,7 +240,7 @@ class AuditDetails extends React.Component {
                   <TableRow>
                     <TableData>{_('Next')}</TableData>
                     <TableData>
-                      {dateTimeWithTimeZone(schedule.event.nextDate)}
+                      <DateTime date={schedule.event.nextDate} />
                     </TableData>
                   </TableRow>
                 )}

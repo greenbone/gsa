@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -30,21 +30,14 @@ import {getMockProcessMap} from '../__mocks__/mockprocessmap';
 import ProcessPanel from '../processpanel';
 
 setLocale('en');
+
 const {processes} = getMockProcessMap();
-const {'21': process1, '22': process2} = processes;
+const {21: process1, 22: process2} = processes;
 
 const hosts = [
   {name: '123.456.78.910', id: '1234', severity: 5},
   {name: '109.876.54.321', id: '5678', severity: undefined},
 ];
-
-const getAllHosts = jest.fn().mockResolvedValue({
-  data: [hosts],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
 
 const results = [
   {id: '123', severity: 4, nvt: {name: 'bar', oid: '1337'}},
@@ -52,12 +45,24 @@ const results = [
   {id: '789', severity: 1, nvt: {oid: '987'}},
 ];
 
-const getResults = jest.fn().mockResolvedValue({
-  data: results,
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+let getAllHosts;
+let getResults;
+
+beforeEach(() => {
+  getAllHosts = jest.fn().mockResolvedValue({
+    data: [hosts],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+  getResults = jest.fn().mockResolvedValue({
+    data: results,
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 });
 
 describe('ProcessPanel tests', () => {

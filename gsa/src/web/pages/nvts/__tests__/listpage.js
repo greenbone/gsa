@@ -62,50 +62,60 @@ const nvt = NVT.fromElement({
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getAggregates;
+let getDashboardSetting;
+let getFilters;
+let getNvts;
+let getSetting;
+let renewSession;
 
-const getSetting = jest.fn().mockResolvedValue({
-  filter: null,
-});
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getSetting = jest.fn().mockResolvedValue({
+    filter: null,
+  });
 
-const getAggregates = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
+  getDashboardSetting = jest.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
+  });
 
-const getNvts = jest.fn().mockResolvedValue({
-  data: [nvt],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+  getAggregates = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
+
+  getNvts = jest.fn().mockResolvedValue({
+    data: [nvt],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('NvtsPage tests', () => {
@@ -231,6 +241,8 @@ describe('NvtsPage tests', () => {
         exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getFamilyAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {
@@ -303,6 +315,8 @@ describe('NvtsPage tests', () => {
         export: exportByIds,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getFamilyAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {
@@ -390,6 +404,8 @@ describe('NvtsPage tests', () => {
         exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
+        getFamilyAggregates: getAggregates,
+        getSeverityAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
       },
       filters: {

@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,14 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-
-import {connect} from 'react-redux';
+import React, {useReducer, useEffect, useCallback} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
+import {ALL_FILTER} from 'gmp/models/filter';
+
+import {BASE_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 
 import {
   ospScannersFilter,
@@ -35,10 +36,16 @@ import {
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
 import {selectSaveId} from 'gmp/utils/id';
+import {shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
+
+import {
+  useCreatePolicy,
+  useImportPolicy,
+  useLazyGetPolicy,
+} from 'web/graphql/policies';
 
 import AlertComponent from 'web/pages/alerts/component';
 
@@ -60,7 +67,7 @@ import {
 } from 'web/store/entities/alerts';
 
 import {
-  loadEntities as loadScanners,
+  loadEntities as loadScannersFromStore,
   selector as scannerSelector,
 } from 'web/store/entities/scanners';
 
@@ -74,209 +81,261 @@ import {
   selector as targetSelector,
 } from 'web/store/entities/targets';
 
-import {getTimezone} from 'web/store/usersettings/selectors';
-
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
+import readFileToText from 'web/utils/readFileToText';
+import stateReducer, {updateState} from 'web/utils/stateReducer';
+import useGmp from 'web/utils/useGmp';
 
 import PolicyDialog from './dialog';
 
-class PolicyComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const PolicyComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onImported,
+  onImportError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+}) => {
+  const dispatch = useDispatch();
+  const gmp = useGmp();
+  const [state, dispatchState] = useReducer(stateReducer, {
+    createPolicyDialogVisible: false,
+    editPolicyDialogVisible: false,
+    editPolicyFamilyDialogVisible: false,
+    editNvtDetailsDialogVisible: false,
+    createAuditDialogVisible: false,
+    importDialogVisible: false,
+  });
 
-    this.state = {
-      createPolicyDialogVisible: false,
-      editPolicyDialogVisible: false,
-      editPolicyFamilyDialogVisible: false,
-      editNvtDetailsDialogVisible: false,
-      createAuditDialogVisible: false,
-      importDialogVisible: false,
-    };
+  const [createPolicy] = useCreatePolicy();
+  const [getPolicy] = useLazyGetPolicy();
+  const [importPolicy] = useImportPolicy();
 
-    this.handleImportPolicy = this.handleImportPolicy.bind(this);
-    this.handleSavePolicyFamily = this.handleSavePolicyFamily.bind(this);
-    this.handleSavePolicyNvt = this.handleSavePolicyNvt.bind(this);
-    this.openCreatePolicyDialog = this.openCreatePolicyDialog.bind(this);
-    this.handleCloseCreatePolicyDialog = this.handleCloseCreatePolicyDialog.bind(
-      this,
+  // Redux loaders
+  const loadScannersAction = () =>
+    dispatch(loadScannersFromStore(gmp)(ALL_FILTER));
+  const loadAlertsAction = () => dispatch(loadAlerts(gmp)(ALL_FILTER));
+  const loadSchedulesAction = () => dispatch(loadSchedules(gmp)(ALL_FILTER));
+  const loadTargetsAction = () => dispatch(loadTargets(gmp)(ALL_FILTER));
+  const loadUserSettingsDefaultsAction = useCallback(
+    () => dispatch(loadUserSettingDefaults(gmp)()),
+    [dispatch, gmp],
+  );
+
+  // Selectors
+  const alertSel = useSelector(alertSelector);
+  const userDefaults = useSelector(getUserSettingsDefaults);
+  const scannersSel = useSelector(scannerSelector);
+  const scheduleSel = useSelector(scheduleSelector);
+  const targetSel = useSelector(targetSelector);
+
+  const scannerList = scannersSel.getEntities(ALL_FILTER);
+  const scannersFromRedux = isDefined(scannerList)
+    ? scannerList.filter(
+        scanner =>
+          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
+          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
+      )
+    : undefined;
+
+  // Loaded entities
+  const alerts = alertSel.getEntities(ALL_FILTER);
+  const defaultAlertId = userDefaults.getValueByName('defaultalert');
+  const defaultScheduleId = userDefaults.getValueByName('defaultschedule');
+  const defaultTargetId = userDefaults.getValueByName('defaulttarget');
+  const isLoadingScannersRedux = scannersSel.isLoadingAllEntities(ALL_FILTER);
+  const schedules = scheduleSel.getEntities(ALL_FILTER);
+  const targets = targetSel.getEntities(ALL_FILTER);
+
+  const handleChange = (value, name) => {
+    dispatchState(
+      updateState({
+        [name]: value,
+      }),
     );
-    this.openEditPolicyDialog = this.openEditPolicyDialog.bind(this);
-    this.handleCloseEditPolicyDialog = this.handleCloseEditPolicyDialog.bind(
-      this,
+  };
+
+  const handleAlertCreated = alertId => {
+    loadAlertsAction();
+
+    dispatchState(
+      updateState({
+        alertIds: [alertId, ...state.alertIds],
+      }),
     );
-    this.openEditPolicyFamilyDialog = this.openEditPolicyFamilyDialog.bind(
-      this,
+  };
+
+  const handleScheduleCreated = scheduleId => {
+    loadSchedulesAction();
+
+    dispatchState(updateState({scheduleId}));
+  };
+
+  const handleTargetCreated = targetId => {
+    loadTargetsAction();
+
+    dispatchState(updateState({targetId}));
+  };
+
+  const openEditPolicyDialog = policy => {
+    dispatchState(
+      updateState({
+        policy, // put policy from list with reduced data in state
+        editPolicyDialogVisible: true,
+        title: _('Edit Policy {{name}}', {name: shorten(policy.name)}),
+      }),
     );
-    this.handleCloseEditPolicyFamilyDialog = this.handleCloseEditPolicyFamilyDialog.bind(
-      this,
+
+    loadEditPolicySettings(policy.id);
+
+    loadScanners();
+
+    handleInteraction();
+  };
+
+  const closeEditPolicyDialog = () => {
+    dispatchState(
+      updateState({
+        editPolicyDialogVisible: false,
+        policy: undefined,
+        families: undefined,
+      }),
     );
-    this.openEditNvtDetailsDialog = this.openEditNvtDetailsDialog.bind(this);
-    this.handleCloseEditNvtDetailsDialog = this.handleCloseEditNvtDetailsDialog.bind(
-      this,
-    );
-    this.openImportDialog = this.openImportDialog.bind(this);
-    this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
-    this.openCreateAuditDialog = this.openCreateAuditDialog.bind(this);
-    this.handleCloseCreateAuditDialog = this.handleCloseCreateAuditDialog.bind(
-      this,
-    );
-    this.handleSaveAudit = this.handleSaveAudit.bind(this);
-    this.handleAlertCreated = this.handleAlertCreated.bind(this);
-    this.handleScheduleCreated = this.handleScheduleCreated.bind(this);
-    this.handleTargetCreated = this.handleTargetCreated.bind(this);
+  };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleScannerChange = this.handleScannerChange.bind(this);
-    this.handleSavePolicy = this.handleSavePolicy.bind(this);
-  }
+  const handleCloseEditPolicyDialog = () => {
+    closeEditPolicyDialog();
+    handleInteraction();
+  };
 
-  handleChange(value, name) {
-    this.setState({[name]: value});
-  }
-
-  handleAlertCreated(alertId) {
-    this.props.loadAlerts();
-
-    this.setState(({alertIds}) => ({alertIds: [alertId, ...alertIds]}));
-  }
-
-  handleScheduleCreated(scheduleId) {
-    this.props.loadSchedules();
-
-    this.setState({scheduleId});
-  }
-
-  handleTargetCreated(targetId) {
-    this.props.loadTargets();
-
-    this.setState({targetId});
-  }
-
-  openEditPolicyDialog(policy) {
-    this.setState({
-      policy, // put policy from list with reduced data in state
-      editPolicyDialogVisible: true,
-      title: _('Edit Policy {{name}}', {name: shorten(policy.name)}),
-    });
-
-    this.loadEditPolicySettings(policy.id);
-
-    this.loadScanners();
-
-    this.handleInteraction();
-  }
-
-  closeEditPolicyDialog() {
-    this.setState({
-      editPolicyDialogVisible: false,
-      policy: undefined,
-      families: undefined,
-    });
-  }
-
-  handleCloseEditPolicyDialog() {
-    this.closeEditPolicyDialog();
-    this.handleInteraction();
-  }
-
-  handleSavePolicy(d) {
-    const {gmp} = this.props;
-    const {policy} = this.state;
-
-    this.handleInteraction();
+  const handleSavePolicy = d => {
+    const {policy} = state;
     const {name, comment, id} = d;
+    handleInteraction();
+
+    if (!isDefined(id)) {
+      return createPolicy({
+        policyId: BASE_SCAN_CONFIG_ID,
+        name,
+        comment,
+      }).then(onCreated, onCreateError);
+    }
+
     let saveData = d;
     if (policy.isInUse()) {
       saveData = {name, comment, id};
     }
 
-    return gmp.policy.save(saveData).then(() => this.closeEditPolicyDialog());
-  }
+    return gmp.policy.save(saveData).then(() => closeEditPolicyDialog());
+  };
 
-  openCreatePolicyDialog() {
-    this.loadScanners();
+  const openCreatePolicyDialog = () => {
+    loadScanners();
 
-    this.setState({
-      createPolicyDialogVisible: true,
-    });
+    dispatchState(
+      updateState({
+        createPolicyDialogVisible: true,
+      }),
+    );
 
-    this.handleInteraction();
-  }
+    handleInteraction();
+  };
 
-  closeCreatePolicyDialog() {
-    this.setState({createPolicyDialogVisible: false});
-  }
+  const closeCreatePolicyDialog = () => {
+    dispatchState(
+      updateState({
+        createPolicyDialogVisible: false,
+      }),
+    );
+  };
 
-  handleCloseCreatePolicyDialog() {
-    this.closeCreatePolicyDialog();
-    this.handleInteraction();
-  }
+  const handleCloseCreatePolicyDialog = () => {
+    closeCreatePolicyDialog();
+    handleInteraction();
+  };
 
-  openImportDialog() {
-    this.setState({importDialogVisible: true});
-    this.handleInteraction();
-  }
+  const openImportDialog = () => {
+    dispatchState(
+      updateState({
+        importDialogVisible: true,
+      }),
+    );
+    handleInteraction();
+  };
 
-  closeImportDialog() {
-    this.setState({importDialogVisible: false});
-  }
+  const closeImportDialog = () => {
+    dispatchState(
+      updateState({
+        importDialogVisible: false,
+      }),
+    );
+  };
 
-  handleCloseImportDialog() {
-    this.closeImportDialog();
-    this.handleInteraction();
-  }
+  const handleCloseImportDialog = () => {
+    closeImportDialog();
+    handleInteraction();
+  };
 
-  openCreateAuditDialog(policy) {
-    this.props.loadAlerts();
-    this.props.loadScanners();
-    this.props.loadSchedules();
-    this.props.loadTargets();
-
-    const {defaultAlertId, defaultScheduleId, defaultTargetId} = this.props;
+  const openCreateAuditDialog = policy => {
+    loadAlertsAction();
+    loadScannersAction();
+    loadSchedulesAction();
+    loadTargetsAction();
 
     const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
-    this.setState({
-      createAuditDialogVisible: true,
-      alertIds,
-      alterable: undefined,
-      auto_delete: undefined,
-      auto_delete_data: undefined,
-      comment: '',
-      policyId: isDefined(policy) ? policy.id : undefined,
-      policyName: policy.name,
-      hostsOrdering: undefined,
-      id: undefined,
-      in_assets: undefined,
-      maxChecks: undefined,
-      maxHosts: undefined,
-      name: undefined,
-      scheduleId: defaultScheduleId,
-      schedulePeriods: undefined,
-      sourceIface: undefined,
-      targetId: defaultTargetId,
-      title: _('New Audit'),
-    });
+    dispatchState(
+      updateState({
+        createAuditDialogVisible: true,
+        alertIds,
+        alterable: undefined,
+        autodelete: undefined,
+        auto_delete_data: undefined,
+        comment: '',
+        policyId: isDefined(policy) ? policy.id : undefined,
+        policyName: policy.name,
+        hostsOrdering: undefined,
+        id: undefined,
+        in_assets: undefined,
+        maxChecks: undefined,
+        maxHosts: undefined,
+        name: undefined,
+        scheduleId: defaultScheduleId,
+        schedulePeriods: undefined,
+        sourceIface: undefined,
+        targetId: defaultTargetId,
+        title: _('New Audit'),
+      }),
+    );
 
-    this.handleInteraction();
-  }
+    handleInteraction();
+  };
 
-  closeCreateAuditDialog() {
-    this.setState({createAuditDialogVisible: false});
-  }
+  const closeCreateAuditDialog = () => {
+    dispatchState(
+      updateState({
+        createAuditDialogVisible: false,
+      }),
+    );
+  };
 
-  handleCloseCreateAuditDialog() {
-    this.closeCreateAuditDialog();
-    this.handleInteraction();
-  }
+  const handleCloseCreateAuditDialog = () => {
+    closeCreateAuditDialog();
+    handleInteraction();
+  };
 
-  handleSaveAudit({
+  const handleSaveAudit = ({
     alertIds,
     alterable,
     auto_delete,
@@ -293,9 +352,8 @@ class PolicyComponent extends React.Component {
     schedulePeriods,
     sourceIface,
     targetId,
-  }) {
-    const {gmp} = this.props;
-    const {policyId} = this.state;
+  }) => {
+    const {policyId} = state;
 
     const tagId = undefined;
     const addTag = NO_VALUE;
@@ -303,9 +361,8 @@ class PolicyComponent extends React.Component {
     const applyOverrides = YES_VALUE;
     const minQod = DEFAULT_MIN_QOD;
 
-    this.handleInteraction();
+    handleInteraction();
 
-    const {onCreated, onCreateError} = this.props;
     return gmp.audit
       .create({
         addTag,
@@ -331,30 +388,33 @@ class PolicyComponent extends React.Component {
         targetId,
       })
       .then(onCreated, onCreateError)
-      .then(() => this.closeCreateAuditDialog());
-  }
+      .then(() => closeCreateAuditDialog());
+  };
 
-  openEditPolicyFamilyDialog(familyName) {
-    this.handleInteraction();
+  const openEditPolicyFamilyDialog = familyName => {
+    handleInteraction();
 
-    this.setState({
-      editPolicyFamilyDialogVisible: true,
-      editPolicyFamilyDialogTitle: _('Edit Policy Family {{name}}', {
-        name: shorten(familyName),
+    dispatchState(
+      updateState({
+        editPolicyFamilyDialogVisible: true,
+        editPolicyFamilyDialogTitle: _('Edit Policy Family {{name}}', {
+          name: shorten(familyName),
+        }),
+        familyName,
       }),
-      familyName,
-    });
+    );
 
-    return this.loadFamily(familyName);
-  }
+    return loadFamily(familyName);
+  };
 
-  loadFamily(familyName, silent = false) {
-    const {gmp} = this.props;
-    const {policy} = this.state;
+  const loadFamily = (familyName, silent = false) => {
+    const {policy} = state;
 
-    this.setState(({isLoadingFamily}) => ({
-      isLoadingFamily: silent ? isLoadingFamily : true,
-    }));
+    dispatchState(
+      updateState({
+        isLoadingFamily: silent ? state.isLoadingFamily : true,
+      }),
+    );
 
     return gmp.policy
       .editPolicyFamilySettings({
@@ -368,52 +428,61 @@ class PolicyComponent extends React.Component {
         const policyFamily = policy.families[familyName];
         const selected = createSelectedNvts(policyFamily, nvts);
 
-        this.setState({
-          familyNvts: data.nvts,
-          familySelectedNvts: selected,
-          isLoadingFamily: false,
-        });
+        dispatchState(
+          updateState({
+            familyNvts: data.nvts,
+            familySelectedNvts: selected,
+            isLoadingFamily: false,
+          }),
+        );
       })
       .catch(error => {
-        this.setState({
-          isLoadingFamily: false,
-          selected: {}, // ensure selected is defined to stop loading indicator
-        });
+        dispatchState(
+          updateState({
+            isLoadingFamily: false,
+            selected: {}, // ensure selected is defined to stop loading indicator
+          }),
+        );
         throw error;
       });
-  }
+  };
 
-  closeEditPolicyFamilyDialog() {
-    this.setState({
-      editPolicyFamilyDialogVisible: false,
-      familyName: undefined,
-      selected: undefined,
-    });
-  }
+  const closeEditPolicyFamilyDialog = () => {
+    dispatchState(
+      updateState({
+        editPolicyFamilyDialogVisible: false,
+        familyName: undefined,
+        selected: undefined,
+      }),
+    );
+  };
 
-  handleCloseEditPolicyFamilyDialog() {
-    this.closeEditPolicyFamilyDialog();
-    this.handleInteraction();
-  }
+  const handleCloseEditPolicyFamilyDialog = () => {
+    closeEditPolicyFamilyDialog();
+    handleInteraction();
+  };
 
-  openEditNvtDetailsDialog(nvtOid) {
-    this.handleInteraction();
+  const openEditNvtDetailsDialog = nvtOid => {
+    handleInteraction();
 
-    this.setState({
-      editNvtDetailsDialogVisible: true,
-      editNvtDetailsDialogTitle: _('Edit Policy NVT {{nvtOid}}', {nvtOid}),
-    });
+    dispatchState(
+      updateState({
+        editNvtDetailsDialogVisible: true,
+        editNvtDetailsDialogTitle: _('Edit Policy NVT {{nvtOid}}', {nvtOid}),
+      }),
+    );
 
-    this.loadNvt(nvtOid);
-  }
+    loadNvt(nvtOid);
+  };
 
-  loadNvt(nvtOid) {
-    const {gmp} = this.props;
-    const {policy} = this.state;
+  const loadNvt = nvtOid => {
+    const {policy} = state;
 
-    this.setState({
-      isLoadingNvt: true,
-    });
+    dispatchState(
+      updateState({
+        isLoadingNvt: true,
+      }),
+    );
 
     return gmp.nvt
       .getConfigNvt({
@@ -423,47 +492,50 @@ class PolicyComponent extends React.Component {
       .then(response => {
         const {data: loadedNvt} = response;
 
-        this.setState({
-          nvt: loadedNvt,
-          editNvtDetailsDialogTitle: _('Edit Policy NVT {{name}}', {
-            name: shorten(loadedNvt.name),
+        dispatchState(
+          updateState({
+            nvt: loadedNvt,
+            editNvtDetailsDialogTitle: _('Edit Policy NVT {{name}}', {
+              name: shorten(loadedNvt.name),
+            }),
           }),
-        });
+        );
       })
       .finally(() => {
-        this.setState({
-          isLoadingNvt: false,
-        });
+        dispatchState(
+          updateState({
+            isLoadingNvt: false,
+          }),
+        );
       });
-  }
+  };
 
-  closeEditNvtDetailsDialog() {
-    this.setState({
-      editNvtDetailsDialogVisible: false,
-      nvt: undefined,
-    });
-  }
+  const closeEditNvtDetailsDialog = () => {
+    dispatchState(
+      updateState({
+        editNvtDetailsDialogVisible: false,
+        nvt: undefined,
+      }),
+    );
+  };
 
-  handleCloseEditNvtDetailsDialog() {
-    this.closeEditNvtDetailsDialog();
-    this.handleInteraction();
-  }
+  const handleCloseEditNvtDetailsDialog = () => {
+    closeEditNvtDetailsDialog();
+    handleInteraction();
+  };
 
-  handleImportPolicy(data) {
-    const {gmp, onImported, onImportError} = this.props;
+  const handleImportPolicy = async data => {
+    handleInteraction();
 
-    this.handleInteraction();
+    const readUploadedXml = readFileToText(data.xml_file);
 
-    return gmp.policy
-      .import(data)
+    return importPolicy(await readUploadedXml)
       .then(onImported, onImportError)
-      .then(() => this.closeImportDialog());
-  }
+      .then(() => closeImportDialog());
+  };
 
-  handleSavePolicyFamily({familyName, configId, selected}) {
-    const {gmp} = this.props;
-
-    this.handleInteraction();
+  const handleSavePolicyFamily = ({familyName, configId, selected}) => {
+    handleInteraction();
 
     return gmp.policy
       .savePolicyFamily({
@@ -471,23 +543,22 @@ class PolicyComponent extends React.Component {
         familyName,
         selected,
       })
-      .then(() => this.loadEditPolicySettings(configId, true))
+      .then(() => loadEditPolicySettings(configId, true))
       .then(() => {
-        this.closeEditPolicyFamilyDialog();
+        closeEditPolicyFamilyDialog();
       });
-  }
+  };
 
-  handleSavePolicyNvt({
+  const handleSavePolicyNvt = ({
     configId,
     timeout,
     useDefaultTimeout,
     nvtOid,
     preferenceValues,
-  }) {
-    const {gmp} = this.props;
-    const {editPolicyFamilyDialogVisible, familyName} = this.state;
+  }) => {
+    const {editPolicyFamilyDialogVisible, familyName} = state;
 
-    this.handleInteraction();
+    handleInteraction();
 
     return gmp.policy
       .savePolicyNvt({
@@ -499,10 +570,10 @@ class PolicyComponent extends React.Component {
       .then(() => {
         let promise;
 
-        const policyPromise = this.loadPolicy(configId, true);
+        const policyPromise = loadPolicy(configId, true);
 
         if (editPolicyFamilyDialogVisible) {
-          promise = this.loadFamily(familyName, true);
+          promise = loadFamily(familyName, true);
         } else {
           promise = policyPromise;
         }
@@ -510,21 +581,22 @@ class PolicyComponent extends React.Component {
         return promise;
       })
       .then(() => {
-        this.closeEditNvtDetailsDialog();
+        closeEditNvtDetailsDialog();
       });
-  }
+  };
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
+  const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  loadScanners() {
-    const {gmp} = this.props;
-
-    this.setState({isLoadingScanners: true});
+  const loadScanners = () => {
+    dispatchState(
+      updateState({
+        isLoadingScanners: true,
+      }),
+    );
 
     return gmp.scanners
       .getAll()
@@ -538,314 +610,287 @@ class PolicyComponent extends React.Component {
         };
       })
       .finally(() => {
-        this.setState({
-          isLoadingScanners: false,
-        });
+        dispatchState(
+          updateState({
+            isLoadingScanners: false,
+          }),
+        );
       });
-  }
+  };
 
-  loadPolicy(policyId, silent = false) {
-    const {gmp} = this.props;
+  const loadPolicy = (policyId, silent = false) => {
+    dispatchState(
+      updateState({
+        isLoadingPolicy: silent ? state.isLoadingPolicy : true,
+      }),
+    );
 
-    this.setState(({isLoadingConfig}) => ({
-      isLoadingPolicy: silent ? isLoadingConfig : true,
-    }));
-
-    return gmp.policy
-      .get({id: policyId})
-      .then(response => {
-        this.setState({
-          policy: response.data,
-        });
+    return getPolicy(policyId)
+      .then(policy => {
+        dispatchState(
+          updateState({
+            policy,
+          }),
+        );
       })
       .finally(() => {
-        this.setState({
-          isLoadingPolicy: false,
-        });
+        dispatchState(
+          updateState({
+            isLoadingPolicy: false,
+          }),
+        );
       });
-  }
+  };
 
-  loadFamilies(silent = false) {
-    const {gmp} = this.props;
-
-    this.setState(({isLoadingFamilies}) => ({
-      isLoadingFamilies: silent ? isLoadingFamilies : true,
-    }));
+  const loadFamilies = (silent = false) => {
+    dispatchState(
+      updateState({
+        isLoadingFamilies: silent ? state.isLoadingFamilies : true,
+      }),
+    );
 
     return gmp.nvtfamilies
       .get()
       .then(familiesResponse => {
-        this.setState({
-          families: familiesResponse.data,
-        });
+        dispatchState(
+          updateState({
+            families: familiesResponse.data,
+          }),
+        );
       })
       .finally(() => {
-        this.setState({
-          isLoadingFamilies: false,
-        });
+        dispatchState(
+          updateState({
+            isLoadingFamilies: false,
+          }),
+        );
       });
-  }
+  };
 
-  loadEditPolicySettings(policyId, silent) {
-    return Promise.all([
-      this.loadPolicy(policyId, silent),
-      this.loadFamilies(silent),
-    ]);
-  }
+  const loadEditPolicySettings = (policyId, silent) => {
+    return Promise.all([loadPolicy(policyId, silent), loadFamilies(silent)]);
+  };
 
-  handleScannerChange(scannerId) {
-    this.setState({scannerId});
-  }
+  const handleScannerChange = scannerId => {
+    dispatchState(updateState({scannerId}));
+  };
 
-  render() {
-    const {
-      alerts,
-      children,
-      schedules,
-      targets,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
+  const {
+    alertIds,
+    alterable,
+    auto_delete,
+    auto_delete_data,
+    comment,
+    createPolicyDialogVisible,
+    createAuditDialogVisible,
+    editPolicyDialogVisible,
+    editPolicyFamilyDialogVisible,
+    editPolicyFamilyDialogTitle,
+    editNvtDetailsDialogVisible,
+    editNvtDetailsDialogTitle,
+    families,
+    familyName,
+    familyNvts,
+    familySelectedNvts,
+    hostsOrdering,
+    id,
+    importDialogVisible,
+    in_assets,
+    isLoadingFamilies,
+    isLoadingFamily,
+    isLoadingNvt,
+    isLoadingPolicy,
+    isLoadingScanners,
+    maxChecks,
+    maxHosts,
+    name,
+    nvt,
+    policy,
+    policyName,
+    policyId,
+    scannerId,
+    scanners,
+    scheduleId,
+    schedulePeriods,
+    sourceIface,
+    targetId,
+    title,
+  } = state;
 
-    const {
-      alertIds,
-      alterable,
-      auto_delete,
-      auto_delete_data,
-      comment,
-      createPolicyDialogVisible,
-      createAuditDialogVisible,
-      editPolicyDialogVisible,
-      editPolicyFamilyDialogVisible,
-      editPolicyFamilyDialogTitle,
-      editNvtDetailsDialogVisible,
-      editNvtDetailsDialogTitle,
-      families,
-      familyName,
-      familyNvts,
-      familySelectedNvts,
-      hostsOrdering,
-      id,
-      importDialogVisible,
-      in_assets,
-      isLoadingFamilies,
-      isLoadingFamily,
-      isLoadingNvt,
-      isLoadingPolicy,
-      isLoadingScanners,
-      maxChecks,
-      maxHosts,
-      name,
-      nvt,
-      policy,
-      policyName,
-      policyId,
-      scannerId,
-      scanners,
-      scheduleId,
-      schedulePeriods,
-      sourceIface,
-      targetId,
-      title,
-    } = this.state;
+  useEffect(() => {
+    loadUserSettingsDefaultsAction();
+  }, [loadUserSettingsDefaultsAction]);
 
-    return (
-      <React.Fragment>
-        <EntityComponent
-          name="policy"
-          onCreated={onCreated}
-          onCreateError={onCreateError}
-          onCloned={onCloned}
-          onCloneError={onCloneError}
-          onDeleted={onDeleted}
-          onDeleteError={onDeleteError}
-          onDownloaded={onDownloaded}
-          onDownloadError={onDownloadError}
-          onInteraction={onInteraction}
-          onSaved={onSaved}
-          onSaveError={onSaveError}
-        >
-          {({save, ...other}) => (
-            <React.Fragment>
-              {children({
-                ...other,
-                createAudit: this.openCreateAuditDialog,
-                create: this.openCreatePolicyDialog,
-                edit: this.openEditPolicyDialog,
-                import: this.openImportDialog,
-              })}
-              {createAuditDialogVisible && (
-                <TargetComponent
-                  onCreated={this.handleTargetCreated}
-                  onInteraction={onInteraction}
-                >
-                  {({create: createtarget}) => (
-                    <AlertComponent
-                      onCreated={this.handleAlertCreated}
-                      onInteraction={onInteraction}
-                    >
-                      {({create: createalert}) => (
-                        <ScheduleComponent
-                          onCreated={this.handleScheduleCreated}
-                          onInteraction={onInteraction}
-                        >
-                          {({create: createschedule}) => (
-                            <AuditDialog
-                              alerts={alerts}
-                              alertIds={alertIds}
-                              alterable={alterable}
-                              auto_delete={auto_delete}
-                              auto_delete_data={auto_delete_data}
-                              comment={comment}
-                              fromPolicy={true}
-                              hostsOrdering={hostsOrdering}
-                              id={id}
-                              in_assets={in_assets}
-                              isLoadingScanners={this.props.isLoadingScanners}
-                              maxChecks={maxChecks}
-                              maxHosts={maxHosts}
-                              name={name}
-                              policies={[{name: policyName, id: policyId}]}
-                              policyId={policyId}
-                              scannerId={scannerId}
-                              scanners={this.props.scanners}
-                              scheduleId={scheduleId}
-                              schedulePeriods={schedulePeriods}
-                              schedules={schedules}
-                              sourceIface={sourceIface}
-                              targetId={targetId}
-                              targets={targets}
-                              title={title}
-                              onChange={this.handleChange}
-                              onNewAlertClick={createalert}
-                              onNewTargetClick={createtarget}
-                              onNewScheduleClick={createschedule}
-                              onClose={this.handleCloseCreateAuditDialog}
-                              onSave={this.handleSaveAudit}
-                              onScannerChange={this.handleScannerChange}
-                            />
-                          )}
-                        </ScheduleComponent>
-                      )}
-                    </AlertComponent>
-                  )}
-                </TargetComponent>
-              )}
-              {createPolicyDialogVisible && (
-                <PolicyDialog
-                  onClose={this.handleCloseCreatePolicyDialog}
-                  onSave={d => {
-                    this.handleInteraction();
-                    return save(d).then(() => this.closeCreatePolicyDialog());
-                  }}
-                />
-              )}
-              {editPolicyDialogVisible && (
-                <EditPolicyDialog
-                  comment={policy.comment}
-                  configFamilies={policy.families}
-                  configId={policy.id}
-                  configIsInUse={policy.isInUse()}
-                  configType={policy.policy_type}
-                  editNvtDetailsTitle={_('Edit Policy NVT Details')}
-                  editNvtFamiliesTitle={_('Edit Policy Family')}
-                  families={families}
-                  isLoadingConfig={isLoadingPolicy}
-                  isLoadingFamilies={isLoadingFamilies}
-                  isLoadingScanners={isLoadingScanners}
-                  name={policy.name}
-                  nvtPreferences={policy.preferences.nvt}
-                  scannerId={scannerId}
-                  scannerPreferences={policy.preferences.scanner}
-                  scanners={scanners}
-                  title={title}
-                  usageType={'policy'}
-                  onClose={this.handleCloseEditPolicyDialog}
-                  onEditConfigFamilyClick={this.openEditPolicyFamilyDialog}
-                  onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
-                  onSave={this.handleSavePolicy}
-                />
-              )}
-            </React.Fragment>
-          )}
-        </EntityComponent>
-        {importDialogVisible && (
-          <ImportDialog
-            title={_('Import Policy')}
-            text={_('Import XML policy')}
-            onClose={this.handleCloseImportDialog}
-            onSave={this.handleImportPolicy}
-          />
+  return (
+    <React.Fragment>
+      <EntityComponent
+        name="policy"
+        onCreated={onCreated}
+        onCreateError={onCreateError}
+        onCloned={onCloned}
+        onCloneError={onCloneError}
+        onDeleted={onDeleted}
+        onDeleteError={onDeleteError}
+        onDownloaded={onDownloaded}
+        onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
+        onSaved={onSaved}
+        onSaveError={onSaveError}
+      >
+        {({save, ...other}) => (
+          <React.Fragment>
+            {children({
+              ...other,
+              createAudit: openCreateAuditDialog,
+              create: openCreatePolicyDialog,
+              edit: openEditPolicyDialog,
+              import: openImportDialog,
+            })}
+            {createAuditDialogVisible && (
+              <TargetComponent
+                onCreated={handleTargetCreated}
+                onInteraction={onInteraction}
+              >
+                {({create: createtarget}) => (
+                  <AlertComponent
+                    onCreated={handleAlertCreated}
+                    onInteraction={onInteraction}
+                  >
+                    {({create: createalert}) => (
+                      <ScheduleComponent
+                        onCreated={handleScheduleCreated}
+                        onInteraction={onInteraction}
+                      >
+                        {({create: createschedule}) => (
+                          <AuditDialog
+                            alerts={alerts}
+                            alertIds={alertIds}
+                            alterable={alterable}
+                            auto_delete={auto_delete}
+                            auto_delete_data={auto_delete_data}
+                            comment={comment}
+                            fromPolicy={true}
+                            hostsOrdering={hostsOrdering}
+                            id={id}
+                            in_assets={in_assets}
+                            isLoadingScanners={isLoadingScannersRedux}
+                            maxChecks={maxChecks}
+                            maxHosts={maxHosts}
+                            name={name}
+                            policies={[{name: policyName, id: policyId}]}
+                            policyId={policyId}
+                            scannerId={scannerId}
+                            scanners={scannersFromRedux}
+                            scheduleId={scheduleId}
+                            schedulePeriods={schedulePeriods}
+                            schedules={schedules}
+                            sourceIface={sourceIface}
+                            targetId={targetId}
+                            targets={targets}
+                            title={title}
+                            onChange={handleChange}
+                            onNewAlertClick={createalert}
+                            onNewTargetClick={createtarget}
+                            onNewScheduleClick={createschedule}
+                            onClose={handleCloseCreateAuditDialog}
+                            onSave={handleSaveAudit}
+                            onScannerChange={handleScannerChange}
+                          />
+                        )}
+                      </ScheduleComponent>
+                    )}
+                  </AlertComponent>
+                )}
+              </TargetComponent>
+            )}
+            {createPolicyDialogVisible && (
+              <PolicyDialog
+                onClose={handleCloseCreatePolicyDialog}
+                onSave={d =>
+                  handleSavePolicy(d).then(() => closeCreatePolicyDialog())
+                }
+              />
+            )}
+            {editPolicyDialogVisible && (
+              <EditPolicyDialog
+                comment={policy.comment}
+                configFamilies={policy.families}
+                configId={policy.id}
+                configIsInUse={policy.isInUse()}
+                configType={policy.policyType}
+                editNvtDetailsTitle={_('Edit Policy NVT Details')}
+                editNvtFamiliesTitle={_('Edit Policy Family')}
+                families={families}
+                isLoadingConfig={isLoadingPolicy}
+                isLoadingFamilies={isLoadingFamilies}
+                isLoadingScanners={isLoadingScanners}
+                name={policy.name}
+                nvtPreferences={policy.preferences.nvt}
+                scannerId={scannerId}
+                scannerPreferences={policy.preferences.scanner}
+                scanners={scanners}
+                title={title}
+                usageType={'policy'}
+                onClose={handleCloseEditPolicyDialog}
+                onEditConfigFamilyClick={openEditPolicyFamilyDialog}
+                onEditNvtDetailsClick={openEditNvtDetailsDialog}
+                onSave={handleSavePolicy}
+              />
+            )}
+          </React.Fragment>
         )}
-        {editPolicyFamilyDialogVisible && (
-          <EditPolicyFamilyDialog
-            configId={policy.id}
-            configNameLabel={_('Policy')}
-            configName={policy.name}
-            familyName={familyName}
-            isLoadingFamily={isLoadingFamily}
-            nvts={familyNvts}
-            selected={familySelectedNvts}
-            title={editPolicyFamilyDialogTitle}
-            onClose={this.handleCloseEditPolicyFamilyDialog}
-            onEditNvtDetailsClick={this.openEditNvtDetailsDialog}
-            onSave={this.handleSavePolicyFamily}
-          />
-        )}
-        {editNvtDetailsDialogVisible && (
-          <EditNvtDetailsDialog
-            configId={policy.id}
-            configName={policy.name}
-            configNameLabel={_('Policy')}
-            defaultTimeout={isDefined(nvt) ? nvt.defaultTimeout : undefined}
-            isLoadingNvt={isLoadingNvt}
-            nvtAffectedSoftware={isDefined(nvt) ? nvt.tags.affected : undefined}
-            nvtCvssVector={
-              isDefined(nvt) ? nvt.tags.cvss_base_vector : undefined
-            }
-            nvtFamily={isDefined(nvt) ? nvt.family : undefined}
-            nvtName={isDefined(nvt) ? nvt.name : undefined}
-            nvtLastModified={isDefined(nvt) ? nvt.modificationTime : undefined}
-            nvtOid={isDefined(nvt) ? nvt.oid : undefined}
-            nvtSeverity={isDefined(nvt) ? nvt.severity : undefined}
-            nvtSummary={isDefined(nvt) ? nvt.tags.summary : undefined}
-            preferences={isDefined(nvt) ? nvt.preferences : undefined}
-            timeout={isDefined(nvt) ? nvt.timeout : undefined}
-            title={editNvtDetailsDialogTitle}
-            onClose={this.handleCloseEditNvtDetailsDialog}
-            onSave={this.handleSavePolicyNvt}
-          />
-        )}
-      </React.Fragment>
-    );
-  }
-}
+      </EntityComponent>
+      {importDialogVisible && (
+        <ImportDialog
+          title={_('Import Policy')}
+          text={_('Import XML policy')}
+          onClose={handleCloseImportDialog}
+          onSave={handleImportPolicy}
+        />
+      )}
+      {editPolicyFamilyDialogVisible && (
+        <EditPolicyFamilyDialog
+          configId={policy.id}
+          configNameLabel={_('Policy')}
+          configName={policy.name}
+          familyName={familyName}
+          isLoadingFamily={isLoadingFamily}
+          nvts={familyNvts}
+          selected={familySelectedNvts}
+          title={editPolicyFamilyDialogTitle}
+          onClose={handleCloseEditPolicyFamilyDialog}
+          onEditNvtDetailsClick={openEditNvtDetailsDialog}
+          onSave={handleSavePolicyFamily}
+        />
+      )}
+      {editNvtDetailsDialogVisible && (
+        <EditNvtDetailsDialog
+          configId={policy.id}
+          configName={policy.name}
+          configNameLabel={_('Policy')}
+          defaultTimeout={isDefined(nvt) ? nvt.defaultTimeout : undefined}
+          isLoadingNvt={isLoadingNvt}
+          nvtAffectedSoftware={isDefined(nvt) ? nvt.tags.affected : undefined}
+          nvtCvssVector={isDefined(nvt) ? nvt.tags.cvss_base_vector : undefined}
+          nvtFamily={isDefined(nvt) ? nvt.family : undefined}
+          nvtName={isDefined(nvt) ? nvt.name : undefined}
+          nvtLastModified={isDefined(nvt) ? nvt.modificationTime : undefined}
+          nvtOid={isDefined(nvt) ? nvt.oid : undefined}
+          nvtSeverity={isDefined(nvt) ? nvt.severity : undefined}
+          nvtSummary={isDefined(nvt) ? nvt.tags.summary : undefined}
+          preferences={isDefined(nvt) ? nvt.preferences : undefined}
+          timeout={isDefined(nvt) ? nvt.timeout : undefined}
+          title={editNvtDetailsDialogTitle}
+          onClose={handleCloseEditNvtDetailsDialog}
+          onSave={handleSavePolicyNvt}
+        />
+      )}
+    </React.Fragment>
+  );
+};
 
 PolicyComponent.propTypes = {
-  alerts: PropTypes.arrayOf(PropTypes.model),
   children: PropTypes.func.isRequired,
-  defaultAlertId: PropTypes.id,
-  defaultScannerId: PropTypes.id,
-  defaultScheduleId: PropTypes.id,
-  defaultTargetId: PropTypes.id,
-  gmp: PropTypes.gmp.isRequired,
-  isLoadingScanners: PropTypes.bool,
-  loadAlerts: PropTypes.func.isRequired,
-  loadScanners: PropTypes.func.isRequired,
-  loadSchedules: PropTypes.func.isRequired,
-  loadTargets: PropTypes.func.isRequired,
-  scanners: PropTypes.arrayOf(PropTypes.model),
-  schedules: PropTypes.arrayOf(PropTypes.model),
-  targets: PropTypes.arrayOf(PropTypes.model),
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -861,50 +906,4 @@ PolicyComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-const mapStateToProps = rootState => {
-  const alertSel = alertSelector(rootState);
-  const userDefaults = getUserSettingsDefaults(rootState);
-  const scannersSel = scannerSelector(rootState);
-  const scheduleSel = scheduleSelector(rootState);
-  const targetSel = targetSelector(rootState);
-
-  const scannerList = scannersSel.getEntities(ALL_FILTER);
-  const scanners = isDefined(scannerList)
-    ? scannerList.filter(
-        scanner =>
-          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
-          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
-      )
-    : undefined;
-
-  return {
-    timezone: getTimezone(rootState),
-    alerts: alertSel.getEntities(ALL_FILTER),
-    defaultAlertId: userDefaults.getValueByName('defaultalert'),
-    defaultEsxiCredential: userDefaults.getValueByName('defaultesxicredential'),
-    defaultPortListId: userDefaults.getValueByName('defaultportlist'),
-    defaultScannerId: userDefaults.getValueByName('defaultopenvasscanner'),
-    defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
-    defaultSshCredential: userDefaults.getValueByName('defaultsshcredential'),
-    defaultSmbCredential: userDefaults.getValueByName('defaultsmbcredential'),
-    defaultTargetId: userDefaults.getValueByName('defaulttarget'),
-    isLoadingScanners: scannersSel.isLoadingAllEntities(ALL_FILTER),
-    scanners,
-    schedules: scheduleSel.getEntities(ALL_FILTER),
-    targets: targetSel.getEntities(ALL_FILTER),
-  };
-};
-
-const mapDispatchToProp = (dispatch, {gmp}) => ({
-  loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
-  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
-  loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
-  loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
-  loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
-});
-
-export default compose(
-  withGmp,
-  withCapabilities,
-  connect(mapStateToProps, mapDispatchToProp),
-)(PolicyComponent);
+export default PolicyComponent;

@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,12 +17,10 @@
  */
 import React from 'react';
 
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
+
+import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
@@ -30,14 +28,20 @@ import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, act} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+import {
+  createResumeAuditQueryMock,
+  createStartAuditQueryMock,
+} from 'web/graphql/__mocks__/audits';
 
 if (!isDefined(window.URL)) {
   window.URL = {};
@@ -262,28 +266,36 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getEntities;
+let getPolicy;
+let getSchedule;
+let renewSession;
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const getPolicy = jest.fn().mockResolvedValue({
-  data: policy,
-});
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const getSchedule = jest.fn().mockResolvedValue({
-  data: schedule,
-});
+  getPolicy = jest.fn().mockResolvedValue({
+    data: policy,
+  });
 
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+  getSchedule = jest.fn().mockResolvedValue({
+    data: schedule,
+  });
+
+  getEntities = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 });
 
 describe('Audit Detailspage tests', () => {
@@ -446,22 +458,12 @@ describe('Audit Detailspage tests', () => {
       foo: 'bar',
     });
 
-    const start = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const resume = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       audit: {
         get: getAudit,
         clone,
         delete: deleteFunc,
         export: exportFunc,
-        start,
-        resume,
       },
       policy: {
         get: getPolicy,
@@ -482,13 +484,15 @@ describe('Audit Detailspage tests', () => {
       },
     };
     const [renewQueryMock] = createRenewSessionQueryMock();
+    const [startMock, startResult] = createStartAuditQueryMock('12345', 'r1');
+    const [resumeMock, resumeResult] = createResumeAuditQueryMock('12345');
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewQueryMock],
+      queryMocks: [renewQueryMock, startMock, resumeMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -496,31 +500,45 @@ describe('Audit Detailspage tests', () => {
 
     store.dispatch(entityLoadingActions.success('12345', audit5));
 
-    const {getAllByTestId} = render(<Detailspage id="12345" />);
+    render(<Detailspage id="12345" />);
 
-    const icons = getAllByTestId('svg-icon');
+    await wait();
 
-    await act(async () => {
-      fireEvent.click(icons[2]);
-      expect(clone).toHaveBeenCalledWith(audit5);
-      expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
+    const cloneIcon = screen.getAllByTitle('Clone Audit');
+    expect(cloneIcon[0]).toBeInTheDocument();
+    fireEvent.click(cloneIcon[0]);
 
-      fireEvent.click(icons[4]);
-      expect(deleteFunc).toHaveBeenCalledWith(audit5Id);
-      expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
+    await wait();
+    expect(clone).toHaveBeenCalledWith(audit5);
 
-      fireEvent.click(icons[5]);
-      expect(exportFunc).toHaveBeenCalledWith(audit5);
-      expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
+    const exportIcon = screen.getAllByTitle('Export Audit as XML');
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
 
-      fireEvent.click(icons[6]);
-      expect(start).toHaveBeenCalledWith(audit5);
-      expect(icons[6]).toHaveAttribute('title', 'Start');
+    await wait();
+    expect(exportFunc).toHaveBeenCalledWith(audit5);
 
-      fireEvent.click(icons[7]);
-      expect(resume).toHaveBeenCalledWith(audit5);
-      expect(icons[7]).toHaveAttribute('title', 'Resume');
-    });
+    const startIcon = screen.getAllByTitle('Start');
+    expect(startIcon[0]).toBeInTheDocument();
+    fireEvent.click(startIcon[0]);
+
+    await wait();
+    expect(startResult).toHaveBeenCalled();
+
+    const resumeIcon = screen.getAllByTitle('Resume');
+    expect(resumeIcon[0]).toBeInTheDocument();
+    fireEvent.click(resumeIcon[0]);
+
+    await wait();
+    expect(resumeResult).toHaveBeenCalled();
+
+    const deleteIcon = screen.getAllByTitle('Move Audit to trashcan');
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
+
+    await wait();
+
+    expect(deleteFunc).toHaveBeenCalledWith(audit5Id);
   });
 });
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2020 Greenbone Networks GmbH
+/* Copyright (C) 2018-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -153,12 +153,10 @@ export const createLoadEntity = ({
 
   dispatch(actions.request(id));
 
-  return gmp[entityType]
-    .get({id})
-    .then(
-      response => dispatch(actions.success(id, response.data)),
-      error => dispatch(actions.error(id, error)),
-    );
+  return gmp[entityType].get({id}).then(
+    response => dispatch(actions.success(id, response.data)),
+    error => dispatch(actions.error(id, error)),
+  );
 };
 
 export const createDeleteEntity = ({entityType}) => gmp => id => dispatch =>

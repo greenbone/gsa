@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -38,7 +38,10 @@ describe('Scan Config Details tests', () => {
       scanner: {name: 'scanner1', id: '42', type: OPENVAS_SCANNER_TYPE},
       type: OPENVAS_SCAN_CONFIG_TYPE,
       tasks: {
-        task: [{id: '1234', name: 'task1'}, {id: '5678', name: 'task2'}],
+        task: [
+          {id: '1234', name: 'task1'},
+          {id: '5678', name: 'task2'},
+        ],
       },
     });
     const caps = new Capabilities(['everything']);
@@ -68,7 +71,10 @@ describe('Scan Config Details tests', () => {
       scanner: {_id: '42', name: 'scanner1', type: OSP_SCANNER_TYPE},
       type: OSP_SCAN_CONFIG_TYPE,
       tasks: {
-        task: [{id: '1234', name: 'task1'}, {id: '5678', name: 'task2'}],
+        task: [
+          {id: '1234', name: 'task1'},
+          {id: '5678', name: 'task2'},
+        ],
       },
     });
     const caps = new Capabilities(['everything']);

@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -33,11 +33,9 @@ import SessionObserver, {
 let setTimeoutMock;
 let clearTimeoutMock;
 
-beforeAll(() => {
-  jest.useFakeTimers();
-});
-
 beforeEach(() => {
+  jest.useFakeTimers();
+
   setTimeoutMock = jest.fn(x => global.setTimeout(x));
   clearTimeoutMock = jest.fn(x => global.clearTimeout(x));
 

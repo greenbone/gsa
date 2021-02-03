@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -45,14 +45,19 @@ const hosts = [
   {name: '109.876.54.321', id: '5678', severity: undefined},
 ];
 
-const renewSession = jest.fn().mockResolvedValue({data: {}});
+let getAllHosts;
+let renewSession;
 
-const getAllHosts = jest.fn().mockResolvedValue({
-  data: hosts,
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+beforeEach(() => {
+  renewSession = jest.fn().mockResolvedValue({data: {}});
+
+  getAllHosts = jest.fn().mockResolvedValue({
+    data: hosts,
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 });
 
 describe('ProcessMap tests', () => {

@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -524,6 +524,7 @@ ProcessPanel.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   hostList: PropTypes.array,
   isLoadingHosts: PropTypes.bool,
+  prevElement: PropTypes.object,
   resultList: PropTypes.array,
   onAddHosts: PropTypes.func.isRequired,
   onDeleteHost: PropTypes.func.isRequired,

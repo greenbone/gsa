@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2020 Greenbone Networks GmbH
+/* Copyright (C) 2018-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -26,9 +26,7 @@ describe('arc class tests', () => {
   });
 
   test('should calculate central position', () => {
-    const c = arc()
-      .outerRadiusX(100)
-      .centroid();
+    const c = arc().outerRadiusX(100).centroid();
 
     expect(c.x).toEqual(-50);
     expect(c.y).toBeCloseTo(0); // it can't be zero due to floating point numbers

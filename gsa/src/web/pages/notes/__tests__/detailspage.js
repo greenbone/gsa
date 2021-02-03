@@ -113,24 +113,31 @@ const noPermNote = Note.fromElement({
   writable: 1,
 });
 
-const getNote = jest.fn().mockResolvedValue({
-  data: note,
-});
+let currentSettings;
+let getEntities;
+let getNote;
+let renewSession;
 
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+beforeEach(() => {
+  getNote = jest.fn().mockResolvedValue({
+    data: note,
+  });
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+  getEntities = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('Note detailspage tests', () => {

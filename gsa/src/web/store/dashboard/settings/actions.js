@@ -1,4 +1,4 @@
-/* Copyright (C) 2018-2020 Greenbone Networks GmbH
+/* Copyright (C) 2018-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -123,23 +123,19 @@ export const loadSettings = gmp => (id, defaults) => (dispatch, getState) => {
 
   dispatch(loadDashboardSettingsRequest(id));
 
-  return gmp.dashboard
-    .getSetting(id)
-    .then(
-      ({data}) => dispatch(loadDashboardSettingsSuccess(id, data, defaults)),
-      error => dispatch(loadDashboardSettingsError(id, error)),
-    );
+  return gmp.dashboard.getSetting(id).then(
+    ({data}) => dispatch(loadDashboardSettingsSuccess(id, data, defaults)),
+    error => dispatch(loadDashboardSettingsError(id, error)),
+  );
 };
 
 export const saveSettings = gmp => (id, settings) => dispatch => {
   dispatch(saveDashboardSettingsRequest(id, settings));
 
-  return gmp.dashboard
-    .saveSetting(id, settings)
-    .then(
-      () => dispatch(saveDashboardSettingsSuccess(id)),
-      error => dispatch(saveDashboardSettingsError(id, error)),
-    );
+  return gmp.dashboard.saveSetting(id, settings).then(
+    () => dispatch(saveDashboardSettingsSuccess(id)),
+    error => dispatch(saveDashboardSettingsError(id, error)),
+  );
 };
 
 export const resetSettings = gmp => id => (dispatch, getState) => {
@@ -149,12 +145,10 @@ export const resetSettings = gmp => id => (dispatch, getState) => {
 
   dispatch(resetDashboardSettingsRequest(id, defaults));
 
-  return gmp.dashboard
-    .saveSetting(id, defaults)
-    .then(
-      () => dispatch(resetDashboardSettingsSuccess(id)),
-      error => dispatch(resetDashboardSettingsError(id, error)),
-    );
+  return gmp.dashboard.saveSetting(id, defaults).then(
+    () => dispatch(resetDashboardSettingsSuccess(id)),
+    error => dispatch(resetDashboardSettingsError(id, error)),
+  );
 };
 
 // vim: set ts=2 sw=2 tw=80:

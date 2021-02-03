@@ -1,4 +1,4 @@
-/* Copyright (C) 2020 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -17,22 +17,29 @@
  */
 import React from 'react';
 
-import Date, {setLocale} from 'gmp/models/date';
+import date, {setLocale} from 'gmp/models/date';
 
-import {render} from 'web/utils/testing';
+import {setTimezone} from 'web/store/usersettings/actions';
+import {rendererWith} from 'web/utils/testing';
 
 import EntityBox from '../box';
 
 setLocale('en');
 
-const date = Date('2019-01-01T12:00:00Z');
-const date2 = Date('2019-02-02T12:00:00Z');
+const date1 = date('2019-01-01T12:00:00Z');
+const date2 = date('2019-02-02T12:00:00Z');
 
 describe('EntityBox component tests', () => {
   test('should render', () => {
+    const {render, store} = rendererWith({
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+
     const {element} = render(
       <EntityBox
-        end={date}
+        end={date1}
         modified={date2}
         text="foo"
         title="bar"
@@ -57,8 +64,10 @@ describe('EntityBox component tests', () => {
     expect(element).toHaveTextContent('tool');
     expect(element).toHaveTextContent('foo');
     expect(element).toHaveTextContent('child');
-    expect(element).toHaveTextContent('Active untilTue, Jan 1, 2019');
-    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019');
+    expect(element).toHaveTextContent(
+      'Active untilTue, Jan 1, 2019 1:00 PM CET',
+    );
+    expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM CET');
     expect(element).toHaveStyleRule('width', '400px');
   });
 });

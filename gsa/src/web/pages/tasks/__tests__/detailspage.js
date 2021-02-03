@@ -46,18 +46,6 @@ import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: '12345',
-  }),
-}));
-
 setLocale('en');
 
 const caps = new Capabilities(['everything']);
@@ -68,13 +56,30 @@ const manualUrl = 'test/';
 // create mock task
 const {detailsMockTask: task} = getMockTasks(); // mock task
 
-// mock gmp commands
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let renewSession;
 
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: '12345',
+  }),
+}));
+
+beforeEach(() => {
+  if (!isDefined(window.URL)) {
+    window.URL = {};
+  }
+  window.URL.createObjectURL = jest.fn();
+
+  // mock gmp commands
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('Task Detailspage tests', () => {

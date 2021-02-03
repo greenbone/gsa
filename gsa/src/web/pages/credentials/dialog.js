@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -488,6 +488,7 @@ CredentialsDialog.propTypes = {
   credential: PropTypes.model,
   credential_login: PropTypes.string,
   credential_type: pwtypes,
+  error: PropTypes.error,
   name: PropTypes.string,
   passphrase: PropTypes.string,
   password: PropTypes.string,

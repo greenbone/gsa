@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -848,28 +848,30 @@ describe('loadDeltaReport function tests', () => {
     expect(loadDeltaReport).toBeDefined();
     expect(isFunction(loadDeltaReport)).toBe(true);
 
-    return loadDeltaReport(gmp)(id, deltaId, filter)(dispatch, getState).then(
-      () => {
-        expect(getState).toBeCalled();
-        expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
-        expect(dispatch).toHaveBeenCalledTimes(2);
-        expect(dispatch.mock.calls[0]).toEqual([
-          {
-            type: types.ENTITY_LOADING_REQUEST,
-            entityType: 'deltaReport',
-            id: identifier,
-          },
-        ]);
-        expect(dispatch.mock.calls[1]).toEqual([
-          {
-            type: types.ENTITY_LOADING_SUCCESS,
-            entityType: 'deltaReport',
-            data: {foo: 'bar'},
-            id: identifier,
-          },
-        ]);
-      },
-    );
+    return loadDeltaReport(gmp)(
+      id,
+      deltaId,
+      filter,
+    )(dispatch, getState).then(() => {
+      expect(getState).toBeCalled();
+      expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType: 'deltaReport',
+          id: identifier,
+        },
+      ]);
+      expect(dispatch.mock.calls[1]).toEqual([
+        {
+          type: types.ENTITY_LOADING_SUCCESS,
+          entityType: 'deltaReport',
+          data: {foo: 'bar'},
+          id: identifier,
+        },
+      ]);
+    });
   });
 
   test('should not load delta report if isLoading is true', () => {

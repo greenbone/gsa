@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2020 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -66,42 +66,51 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getAudits;
+let getFilters;
+let getSetting;
+let renewSession;
+let getReportFormats;
 
-const getSetting = jest.fn().mockResolvedValue({
-  filter: null,
-});
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
+  getSetting = jest.fn().mockResolvedValue({
+    filter: null,
+  });
+
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
+
+  getAudits = jest.fn().mockResolvedValue({
+    data: [audit],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  getReportFormats = jest.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
+  });
 
-const getAudits = jest.fn().mockResolvedValue({
-  data: [audit],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getReportFormats = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('AuditPage tests', () => {

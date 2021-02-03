@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2020 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -18,9 +18,10 @@
 
 const noop = arg => arg;
 
-export default {
+const noopObject = {
   success: noop,
   rejection: noop,
 };
 
+export default noopObject;
 // vim: set ts=2 sw=2 tw=80:
