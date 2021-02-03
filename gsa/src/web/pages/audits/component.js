@@ -24,7 +24,7 @@ import _ from 'gmp/locale';
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+import {YES_VALUE} from 'gmp/parser';
 
 import {map} from 'gmp/utils/array';
 import {hasId} from 'gmp/utils/id';
@@ -40,6 +40,14 @@ import useDownload from 'web/components/form/useDownload';
 import Download from 'web/components/form/download';
 
 import EntityComponent from 'web/entity/component';
+
+import {
+  useCreateAudit,
+  useModifyAudit,
+  useResumeAudit,
+  useStartAudit,
+  useStopAudit,
+} from 'web/graphql/audits';
 
 import AlertComponent from 'web/pages/alerts/component';
 import AuditDialog from 'web/pages/audits/dialog';
@@ -113,7 +121,6 @@ const AuditComponent = ({
 }) => {
   const dispatch = useDispatch();
   const gmp = useGmp();
-  const cmd = gmp.audit;
   const capabilities = useCapabilities();
   const [downloadRef, handleDownload] = useDownload();
 
@@ -202,6 +209,13 @@ const AuditComponent = ({
   const schedules = scheduleSel.getEntities(ALL_FILTER);
   const targets = targetSel.getEntities(ALL_FILTER);
 
+  // GraphQL Queries and Mutations
+  const [modifyAudit] = useModifyAudit();
+  const [createAudit] = useCreateAudit();
+  const [startAudit] = useStartAudit();
+  const [stopAudit] = useStopAudit();
+  const [resumeAudit] = useResumeAudit();
+
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
@@ -219,19 +233,19 @@ const AuditComponent = ({
   const handleAuditStart = audit => {
     handleInteraction();
 
-    return cmd.start(audit).then(onStarted, onStartError);
+    return startAudit(audit.id).then(onStarted, onStartError);
   };
 
   const handleAuditStop = audit => {
     handleInteraction();
 
-    return cmd.stop(audit).then(onStopped, onStopError);
+    return stopAudit(audit.id).then(onStopped, onStopError);
   };
 
   const handleAuditResume = audit => {
     handleInteraction();
 
-    return cmd.resume(audit).then(onResumed, onResumeError);
+    return resumeAudit(audit.id).then(onResumed, onResumeError);
   };
 
   const handleAlertCreated = alertId => {
@@ -277,9 +291,6 @@ const AuditComponent = ({
     targetId,
     audit,
   }) => {
-    const tagId = undefined;
-    const addTag = NO_VALUE;
-
     const applyOverrides = YES_VALUE;
     const minQod = DEFAULT_MIN_QOD;
 
@@ -293,57 +304,53 @@ const AuditComponent = ({
         scannerId = undefined;
         policyId = undefined;
       }
-      return gmp.audit
-        .save({
-          alertIds,
-          alterable,
-          autoDelete: auto_delete,
-          autoDeleteData: auto_delete_data,
-          applyOverrides,
-          comment,
-          policyId,
-          hostsOrdering,
-          id,
-          inAssets: in_assets,
-          maxChecks,
-          maxHosts,
-          minQod,
-          name,
-          scannerId,
-          scannerType,
-          scheduleId,
-          schedulePeriods,
-          targetId,
-          sourceIface,
-        })
-        .then(onSaved, onSaveError)
-        .then(() => closeAuditDialog());
-    }
-
-    return gmp.audit
-      .create({
-        addTag,
+      return modifyAudit({
         alertIds,
         alterable,
-        applyOverrides,
         autoDelete: auto_delete,
         autoDeleteData: auto_delete_data,
+        applyOverrides,
         comment,
         policyId,
         hostsOrdering,
+        id,
         inAssets: in_assets,
         maxChecks,
         maxHosts,
         minQod,
         name,
-        scannerType,
         scannerId,
+        scannerType,
         scheduleId,
         schedulePeriods,
+        targetId,
         sourceIface,
-        tagId,
-        targetId: targetId,
       })
+        .then(onSaved, onSaveError)
+        .then(() => closeAuditDialog());
+    }
+
+    return createAudit({
+      alertIds,
+      alterable,
+      applyOverrides,
+      autoDelete: auto_delete,
+      autoDeleteData: auto_delete_data,
+      comment,
+      policyId,
+      hostsOrdering,
+      inAssets: in_assets,
+      maxChecks,
+      maxHosts,
+      minQod,
+      name,
+      scannerType,
+      scannerId,
+      scheduleId,
+      schedulePeriods,
+      sourceIface,
+      targetId: targetId,
+    })
       .then(onCreated, onCreateError)
       .then(() => closeAuditDialog());
   };
