@@ -38,16 +38,8 @@ const StyledDetailsLink = styled(DetailsLink)`
 const TaskStatus = ({task, links = true}) => {
   let reportId;
 
-  let currentReport;
-  let lastReport;
-  // audits are not yet in the new format
-  if (task.entityType === 'task') {
-    currentReport = task?.reports?.currentReport;
-    lastReport = task?.reports?.lastReport;
-  } else {
-    currentReport = task?.current_report;
-    lastReport = task?.last_report;
-  }
+  const currentReport = task?.reports?.currentReport;
+  const lastReport = task?.reports?.lastReport;
 
   if (hasValue(currentReport)) {
     reportId = currentReport.id;
@@ -61,7 +53,11 @@ const TaskStatus = ({task, links = true}) => {
   return (
     <StyledDetailsLink type="report" id={reportId} textOnly={!links}>
       <StatusBar
-        status={task.isContainer() ? TASK_STATUS.container : task.status}
+        status={
+          task.entityType === 'task' && task.isContainer()
+            ? TASK_STATUS.container
+            : task.status
+        }
         progress={task.progress}
       />
     </StyledDetailsLink>

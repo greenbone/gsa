@@ -22,7 +22,7 @@ import {useHistory, useParams} from 'react-router-dom';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import Badge from 'web/components/badge/badge';
 
@@ -123,6 +123,9 @@ export const ToolBarIcons = ({
   onAuditStopClick,
   onAuditResumeClick,
 }) => {
+  const reportsCounts = entity.reports.counts;
+  const currentResults = entity.results?.counts?.current;
+  const {lastReport, currentReport} = entity.reports;
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
@@ -169,28 +172,28 @@ export const ToolBarIcons = ({
       </IconDivider>
 
       <IconDivider>
-        {isDefined(entity.schedule) && (
+        {hasValue(entity.schedule) && (
           <ScheduleIcon
             schedule={entity.schedule}
-            schedulePeriods={entity.schedule_periods}
+            schedulePeriods={entity.schedulePeriods}
             links={links}
           />
         )}
         <StartIcon
-          audit={entity}
+          task={entity}
           usageType={_('audit')}
           onClick={onAuditStartClick}
         />
 
         <StopIcon
-          audit={entity}
+          task={entity}
           usageType={_('audit')}
           onClick={onAuditStopClick}
         />
 
         {!entity.isContainer() && (
           <ResumeIcon
-            audit={entity}
+            task={entity}
             usageType={_('audit')}
             onClick={onAuditResumeClick}
           />
@@ -199,26 +202,26 @@ export const ToolBarIcons = ({
 
       <Divider margin="10px">
         <IconDivider>
-          {isDefined(entity.current_report) && (
+          {hasValue(currentReport) && (
             <DetailsLink
               type="report"
-              id={entity.current_report.id}
+              id={currentReport.id}
               title={_('Current Report for Audit {{- name}} from {{- date}}', {
                 name: entity.name,
-                date: shortDate(entity.current_report.scan_start),
+                date: shortDate(currentReport.scanStart),
               })}
             >
               <ReportIcon />
             </DetailsLink>
           )}
 
-          {!isDefined(entity.current_report) && isDefined(entity.last_report) && (
+          {!hasValue(currentReport) && hasValue(lastReport) && (
             <DetailsLink
               type="report"
-              id={entity.last_report.id}
+              id={lastReport.id}
               title={_('Last Report for Audit {{- name}} from {{- date}}', {
                 name: entity.name,
-                date: shortDate(entity.last_report.scan_start),
+                date: shortDate(lastReport.scanStart),
               })}
             >
               <ReportIcon />
@@ -230,7 +233,7 @@ export const ToolBarIcons = ({
             filter={'audit_id=' + entity.id}
             title={_('Total Reports for Audit {{- name}}', entity)}
           >
-            <Badge content={entity.report_count.total}>
+            <Badge content={reportsCounts.total}>
               <ReportIcon />
             </Badge>
           </Link>
@@ -241,7 +244,7 @@ export const ToolBarIcons = ({
           filter={'audit_id=' + entity.id}
           title={_('Results for Audit {{- name}}', entity)}
         >
-          <Badge content={entity.result_count}>
+          <Badge content={currentResults}>
             <ResultIcon />
           </Badge>
         </Link>
@@ -289,7 +292,7 @@ const Details = ({entity, ...props}) => {
           <TableRow>
             <TableData>{_('Status')}</TableData>
             <TableData>
-              <AuditStatus audit={entity} />
+              <AuditStatus task={entity} />
             </TableData>
           </TableRow>
         </TableBody>
