@@ -123,5 +123,18 @@ export const host = deepFreeze({
   ],
 });
 
+export const hostWithoutPermission = deepFreeze({
+  id: '12345',
+  name: 'Foo',
+  comment: 'bar',
+  owner: {name: 'admin'},
+  creationTime: '2019-06-02T12:00:22Z',
+  modificationTime: '2019-06-03T11:00:22Z',
+  writable: true,
+  inUse: false,
+  permissions: [{name: 'get_assets'}],
+  severity: 10.0,
+});
+
 export const createGetHostQueryMock = (id = '12345', result = host) =>
   createGenericQueryMock(GET_HOST, {host: result}, {id});
