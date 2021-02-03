@@ -16,7 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useHistory, useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
@@ -46,6 +47,7 @@ import {
   USE_DEFAULT_RELOAD_INTERVAL,
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
+import useReload from 'web/components/loading/useReload';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -65,15 +67,21 @@ import EntitiesTab from 'web/entity/tab';
 import withEntityContainer, {
   permissionsResourceFilter,
 } from 'web/entity/withEntityContainer';
+import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
+import {useGetAudit} from 'web/graphql/audits';
+import {useGetPermissions} from 'web/graphql/permissions';
+
+import {TaskPermissions as AuditPermissions} from 'web/pages/tasks/detailspage';
 import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
 import StartIcon from 'web/pages/tasks/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
+import AuditStatus from 'web/pages/tasks/status';
 
 import {
   selector as permissionsSelector,
@@ -88,10 +96,12 @@ import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 
 import AuditDetails from './details';
-import AuditStatus from 'web/pages/tasks/status';
 import AuditComponent from './component';
-
-import {TaskPermissions as AuditPermissions} from 'web/pages/tasks/detailspage';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import useDownload from 'web/components/form/useDownload';
+import DialogNotification from 'web/components/notification/dialognotification';
+import Download from 'web/components/form/download';
 
 const reloadInterval = ({entity}) => {
   if (!hasValue(entity) || entity.isContainer()) {
@@ -136,19 +146,19 @@ export const ToolBarIcons = ({
         <CloneIcon
           displayName={_('Audit')}
           entity={entity}
-          name="task"
+          name="audit"
           onClick={onAuditCloneClick}
         />
         <EditIcon
           displayName={_('Audit')}
           entity={entity}
-          name="task"
+          name="audit"
           onClick={onAuditEditClick}
         />
         <TrashIcon
           displayName={_('Audit')}
           entity={entity}
-          name="task"
+          name="audit"
           onClick={onAuditDeleteClick}
         />
         <ExportIcon
@@ -167,20 +177,20 @@ export const ToolBarIcons = ({
           />
         )}
         <StartIcon
-          task={entity}
+          audit={entity}
           usageType={_('audit')}
           onClick={onAuditStartClick}
         />
 
         <StopIcon
-          task={entity}
+          audit={entity}
           usageType={_('audit')}
           onClick={onAuditStopClick}
         />
 
         {!entity.isContainer() && (
           <ResumeIcon
-            task={entity}
+            audit={entity}
             usageType={_('audit')}
             onClick={onAuditResumeClick}
           />
@@ -217,7 +227,7 @@ export const ToolBarIcons = ({
 
           <Link
             to="reports"
-            filter={'task_id=' + entity.id}
+            filter={'audit_id=' + entity.id}
             title={_('Total Reports for Audit {{- name}}', entity)}
           >
             <Badge content={entity.report_count.total}>
@@ -228,7 +238,7 @@ export const ToolBarIcons = ({
 
         <Link
           to="results"
-          filter={'task_id=' + entity.id}
+          filter={'audit_id=' + entity.id}
           title={_('Results for Audit {{- name}}', entity)}
         >
           <Badge content={entity.result_count}>
@@ -279,7 +289,7 @@ const Details = ({entity, ...props}) => {
           <TableRow>
             <TableData>{_('Status')}</TableData>
             <TableData>
-              <AuditStatus task={entity} />
+              <AuditStatus audit={entity} />
             </TableData>
           </TableRow>
         </TableBody>
@@ -296,91 +306,139 @@ Details.propTypes = {
 
 const Page = ({
   entity,
-  permissions = [],
   onChanged,
   onDownloaded,
   onError,
   onInteraction,
   ...props
-}) => (
-  <AuditComponent
-    onCloned={goto_details('audit', props)}
-    onCloneError={onError}
-    onContainerSaved={onChanged}
-    onDeleted={goto_list('audits', props)}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onSaved={onChanged}
-    onStarted={onChanged}
-    onStartError={onError}
-    onStopped={onChanged}
-    onStopError={onError}
-  >
-    {({clone, delete: deleteFunc, download, edit, start, stop, resume}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<AuditIcon size="large" />}
-        title={_('Audit')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onError={onError}
-        onInteraction={onInteraction}
-        onAuditCloneClick={clone}
-        onAuditDeleteClick={deleteFunc}
-        onAuditDownloadClick={download}
-        onAuditEditClick={edit}
-        onAuditResumeClick={resume}
-        onAuditStartClick={start}
-        onAuditStopClick={stop}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('Audit: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+}) => {
+  // Page methods
+  const {id} = useParams();
+  const history = useHistory();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+  const [downloadRef, handleDownload] = useDownload();
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <AuditPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onInteraction={onInteraction}
-                        onError={onError}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </AuditComponent>
-);
+  // Load audit related entities
+  const {
+    audit,
+    refetch: refetchAudit,
+    loading,
+    error: entityError,
+  } = useGetAudit(id);
+  const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
+    filterString: permissionsResourceFilter(id).toFilterString(),
+  });
+
+  // Timeout and reload
+  const timeoutFunc = useEntityReloadInterval(audit);
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetchAudit,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if audit is available and no timer is running yet
+    if (hasValue(audit) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [audit, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
+  return (
+    <AuditComponent
+      onCloned={goto_details('audit', {history})}
+      onCloneError={showError}
+      onContainerSaved={onChanged}
+      onDeleted={goto_list('audits', {history})}
+      onDeleteError={showError}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onInteraction={renewSessionTimeout}
+      onResumed={onChanged}
+      onResumeError={showError}
+      onSaved={onChanged}
+      onStarted={onChanged}
+      onStartError={showError}
+      onStopped={onChanged}
+      onStopError={showError}
+    >
+      {({clone, delete: deleteFunc, download, edit, start, stop, resume}) => (
+        <EntityPage
+          {...props}
+          entity={audit}
+          entityError={entityError}
+          entityType={'audit'}
+          isLoading={loading}
+          sectionIcon={<AuditIcon size="large" />}
+          title={_('Audit')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onError={showError}
+          onInteraction={renewSessionTimeout}
+          onAuditCloneClick={clone}
+          onAuditDeleteClick={deleteFunc}
+          onAuditDownloadClick={download}
+          onAuditEditClick={edit}
+          onAuditResumeClick={resume}
+          onAuditStartClick={start}
+          onAuditStopClick={stop}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('Audit: {{name}}', {name: audit.name})} />
+                <Layout grow="1" flex="column">
+                  <TabLayout grow="1" align={['start', 'end']}>
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={audit} />
+                      </TabPanel>
+                      <TabPanel>
+                        <AuditPermissions
+                          entity={audit}
+                          permissions={permissions}
+                          onChanged={() => refetchPermissions()}
+                          onDownloaded={handleDownload}
+                          onInteraction={renewSessionTimeout}
+                          onError={showError}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+                <DialogNotification
+                  {...notificationDialogState}
+                  onCloseClick={closeNotificationDialog}
+                />
+                <Download ref={downloadRef} />
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </AuditComponent>
+  );
+};
 
 Page.propTypes = {
   entity: PropTypes.model,

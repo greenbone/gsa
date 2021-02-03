@@ -17,7 +17,9 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useMutation} from '@apollo/client';
+import {gql, useMutation, useQuery} from '@apollo/client';
+import {isDefined} from 'gmp/utils/identity';
+import Audit from 'gmp/models/audit';
 
 export const CREATE_AUDIT = gql`
   mutation createAudit($input: CreateAuditInput!) {
@@ -86,6 +88,98 @@ export const RESUME_AUDIT = gql`
     }
   }
 `;
+
+export const GET_AUDIT = gql`
+  query Audit($id: UUID!) {
+    audit(id: $id) {
+      name
+      id
+      creationTime
+      modificationTime
+      permissions {
+        name
+      }
+      reports {
+        lastReport {
+          id
+          severity
+          timestamp
+          scanStart
+          scanEnd
+        }
+        currentReport {
+          id
+          scanStart
+        }
+        counts {
+          total
+          finished
+        }
+      }
+      results {
+        counts {
+          current
+        }
+      }
+      status
+      progress
+      target {
+        name
+        id
+      }
+      trend
+      alterable
+      comment
+      owner
+      preferences {
+        name
+        value
+        description
+      }
+      schedule {
+        name
+        id
+        icalendar
+        timezone
+        duration
+      }
+      alerts {
+        name
+        id
+      }
+      policy {
+        id
+        name
+        trash
+        type
+      }
+      scanner {
+        id
+        name
+        type
+      }
+      schedulePeriods
+      hostsOrdering
+      observers {
+        users
+        roles {
+          name
+        }
+        groups {
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const useGetAudit = (id, options) => {
+  const {data, ...other} = useQuery(GET_AUDIT, {...options, variables: {id}});
+  const audit = isDefined(data?.audit)
+    ? Audit.fromObject(data.audit)
+    : undefined;
+  return {audit, ...other};
+};
 
 export const useStartAudit = options => {
   const [queryStartAudit, {data, ...other}] = useMutation(START_AUDIT, options);
