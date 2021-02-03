@@ -291,9 +291,6 @@ const AuditComponent = ({
     targetId,
     audit,
   }) => {
-    const tagId = undefined;
-    // const addTag = NO_VALUE; addTag not supported for now. Will add later.
-
     const applyOverrides = YES_VALUE;
     const minQod = DEFAULT_MIN_QOD;
 
@@ -334,7 +331,6 @@ const AuditComponent = ({
     }
 
     return createAudit({
-      // addTag, Will update hyperion later
       alertIds,
       alterable,
       applyOverrides,
@@ -353,7 +349,6 @@ const AuditComponent = ({
       scheduleId,
       schedulePeriods,
       sourceIface,
-      tagId,
       targetId: targetId,
     })
       .then(onCreated, onCreateError)
