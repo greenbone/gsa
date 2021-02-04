@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Implement host detailspage queries and mutations [#2702](https://github.com/greenbone/gsa/pull/2702)
 - Implement audit component mutations [#2699](https://github.com/greenbone/gsa/pull/2699)
 - Implement policy component mutations [#2684](https://github.com/greenbone/gsa/pull/2684)
 - Refactor host component into function [#2693](https://github.com/greenbone/gsa/pull/2693)

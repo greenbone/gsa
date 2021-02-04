@@ -56,24 +56,30 @@ const filter_identifiers = (identifiers, latest = true) => {
   if (!latest || !isDefined(identifiers) || identifiers.length === 0) {
     return identifiers;
   }
-  const last_id = identifiers[0].source.id;
-  return identifiers.filter(identifier => identifier.source.id === last_id);
+  const lastId = identifiers[0].sourceId;
+  return identifiers.filter(identifier => identifier.sourceId === lastId);
 };
 
-const Source = ({source}) => {
-  const {source_type, deleted, id, data, name} = source;
+const Source = ({identifier}) => {
+  const {
+    sourceType,
+    sourceDeleted,
+    sourceId,
+    sourceData,
+    sourceName,
+  } = identifier;
 
-  if (source_type === 'Report Host Detail') {
+  if (sourceType === 'Report Host Detail') {
     return (
       <div>
         <span>{_('Report')}</span>{' '}
-        <DetailsLink textOnly={deleted} type="report" id={id}>
-          {id}
+        <DetailsLink textOnly={sourceDeleted} type="report" id={sourceId}>
+          {sourceId}
         </DetailsLink>{' '}
         <span>
           <span>(NVT</span>{' '}
-          <DetailsLink type="nvt" id={data}>
-            {data}
+          <DetailsLink type="nvt" id={sourceData}>
+            {sourceData}
           </DetailsLink>
           <span>)</span>
         </span>
@@ -81,24 +87,24 @@ const Source = ({source}) => {
     );
   }
 
-  if (source_type.startsWith('Report')) {
+  if (sourceType?.startsWith('Report')) {
     return (
       <div>
         <span>{_('Report')}</span>{' '}
-        <DetailsLink textOnly={deleted} type="report" id={id}>
-          {id}
+        <DetailsLink textOnly={sourceDeleted} type="report" id={sourceId}>
+          {sourceId}
         </DetailsLink>{' '}
         <span>{_('(Target Host)')}</span>
       </div>
     );
   }
 
-  if (source_type.startsWith('User')) {
+  if (sourceType?.startsWith('User')) {
     return (
       <div>
         <span>{_('User')}</span>{' '}
-        <DetailsLink textOnly={deleted} type="user" id={id}>
-          {name}
+        <DetailsLink textOnly={sourceDeleted} type="user" id={sourceId}>
+          {sourceName}
         </DetailsLink>
       </div>
     );
@@ -106,14 +112,14 @@ const Source = ({source}) => {
 
   return (
     <div>
-      <span>{source_type}</span>
-      <span>{id}</span>
+      <span>{sourceType}</span>
+      <span>{sourceId}</span>
     </div>
   );
 };
 
 Source.propTypes = {
-  source: PropTypes.object.isRequired,
+  identifier: PropTypes.object.isRequired,
 };
 
 const Identifiers = props => {
@@ -197,7 +203,7 @@ const Identifiers = props => {
                 <DateTime date={identifier.creationTime} />
               </TableData>
               <TableData>
-                <Source source={identifier.source} />
+                <Source identifier={identifier} />
               </TableData>
               {displayActions && (
                 <TableData align={['center', 'center']}>
