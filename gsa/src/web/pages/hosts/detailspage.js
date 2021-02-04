@@ -238,7 +238,7 @@ const Details = ({entity, ...props}) => {
                 <RouteList>
                   {routes.map((route, idx) => (
                     <li key={idx}>
-                      {route.map(host => (
+                      {route.hosts.map(host => (
                         <Hop key={host.ip}>
                           <DetailsLink
                             type="host"
