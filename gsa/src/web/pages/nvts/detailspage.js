@@ -51,6 +51,7 @@ import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
+import useExportEntity from 'web/entity/useExportEntity';
 
 import DetailsBlock from 'web/entity/block';
 import Note from 'web/entity/note';
@@ -90,6 +91,7 @@ import {useGetNvt, useExportNvtsByIds} from 'web/graphql/nvts';
 import NvtComponent from './component';
 import NvtDetails from './details';
 import Preferences from './preferences';
+import {useLazyGetNotes} from 'web/graphql/notes';
 
 export const ToolBarIcons = ({
   entity,
@@ -223,6 +225,12 @@ const Page = () => {
   const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
+  const {
+    notes,
+    refetch: refetchNotes,
+    loading: loadingNotes,
+    error: notesError,
+  } = useLazyGetNotes();
 
   const preferences = hasValue(nvt) ? nvt.preferences : [];
   const userTags = hasValue(nvt) ? nvt.userTags : undefined;
