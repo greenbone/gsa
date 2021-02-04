@@ -56,8 +56,8 @@ const filter_identifiers = (identifiers, latest = true) => {
   if (!latest || !isDefined(identifiers) || identifiers.length === 0) {
     return identifiers;
   }
-  const last_id = identifiers[0].sourceId;
-  return identifiers.filter(identifier => identifier.sourceId === last_id);
+  const lastId = identifiers[0].sourceId;
+  return identifiers.filter(identifier => identifier.sourceId === lastId);
 };
 
 const Source = ({identifier}) => {
