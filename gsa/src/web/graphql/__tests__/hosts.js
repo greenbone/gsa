@@ -18,10 +18,14 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
-import {rendererWith, screen, wait} from 'web/utils/testing';
+import {fireEvent, rendererWith, screen, wait} from 'web/utils/testing';
 
-import {createGetHostQueryMock} from '../__mocks__/hosts';
-import {useGetHost} from '../hosts';
+import {
+  createGetHostQueryMock,
+  createDeleteHostsByIdsQueryMock,
+  createExportHostsByIdsQueryMock,
+} from '../__mocks__/hosts';
+import {useDeleteHost, useExportHostsByIds, useGetHost} from '../hosts';
 
 const GetHostComponent = ({id}) => {
   const {loading, host, error} = useGetHost(id);
@@ -62,5 +66,50 @@ describe('useGetHost tests', () => {
 
     expect(screen.getByTestId('id')).toHaveTextContent('12345');
     expect(screen.getByTestId('name')).toHaveTextContent('Foo');
+  });
+});
+
+const ExportHostsByIdsComponent = () => {
+  const exportHostsByIds = useExportHostsByIds();
+  return (
+    <button
+      data-testid="bulk-export"
+      onClick={() => exportHostsByIds(['234'])}
+    />
+  );
+};
+
+describe('useExportHostsByIds tests', () => {
+  test('should export a list of hosts after user interaction', async () => {
+    const [mock, resultFunc] = createExportHostsByIdsQueryMock(['234']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportHostsByIdsComponent />);
+    const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteHostComponent = () => {
+  const [deleteHost] = useDeleteHost();
+  return <button data-testid="delete" onClick={() => deleteHost('234')} />;
+};
+
+describe('useDeleteHostsByIds tests', () => {
+  test('should delete a list of hosts after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteHostsByIdsQueryMock(['234']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteHostComponent />);
+    const button = screen.getByTestId('delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 });

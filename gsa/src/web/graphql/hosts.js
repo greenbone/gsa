@@ -16,7 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {gql, useQuery} from '@apollo/client';
+import {useCallback} from 'react';
+
+import {gql, useQuery, useMutation} from '@apollo/client';
 
 import Host from 'gmp/models/host';
 
@@ -72,6 +74,22 @@ export const GET_HOST = gql`
   }
 `;
 
+export const DELETE_HOSTS_BY_IDS = gql`
+  mutation deleteHostsByIds($ids: [UUID]!) {
+    deleteHostsByIds(ids: $ids) {
+      ok
+    }
+  }
+`;
+
+export const EXPORT_HOSTS_BY_IDS = gql`
+  mutation exportHostsByIds($ids: [UUID]!) {
+    exportHostsByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
 export const useGetHost = (id, options) => {
   const {data, ...other} = useQuery(GET_HOST, {
     ...options,
@@ -79,4 +97,32 @@ export const useGetHost = (id, options) => {
   });
   const host = isDefined(data?.host) ? Host.fromObject(data.host) : undefined;
   return {host, ...other};
+};
+
+export const useDeleteHost = options => {
+  const [queryDeleteHost, data] = useMutation(DELETE_HOSTS_BY_IDS, options);
+  const deleteHost = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryDeleteHost({...options, variables: {ids: [id]}}),
+    [queryDeleteHost],
+  );
+  return [deleteHost, data];
+};
+
+export const useExportHostsByIds = options => {
+  const [queryExportHostsByIds] = useMutation(EXPORT_HOSTS_BY_IDS, options);
+
+  const exportHostsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    hostIds =>
+      queryExportHostsByIds({
+        ...options,
+        variables: {
+          ids: hostIds,
+        },
+      }),
+    [queryExportHostsByIds, options],
+  );
+
+  return exportHostsByIds;
 };

@@ -17,7 +17,7 @@
  */
 
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
-import {GET_HOST} from '../hosts';
+import {DELETE_HOSTS_BY_IDS, EXPORT_HOSTS_BY_IDS, GET_HOST} from '../hosts';
 
 export const host = deepFreeze({
   id: '12345',
@@ -138,3 +138,25 @@ export const hostWithoutPermission = deepFreeze({
 
 export const createGetHostQueryMock = (id = '12345', result = host) =>
   createGenericQueryMock(GET_HOST, {host: result}, {id});
+
+const exportHostsByIdsResult = {
+  exportHostsByIds: {
+    exportedEntities: '<get_assets_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportHostsByIdsQueryMock = (hostIds = ['234']) =>
+  createGenericQueryMock(EXPORT_HOSTS_BY_IDS, exportHostsByIdsResult, {
+    ids: hostIds,
+  });
+
+const bulkDeleteByIdsResult = {
+  deleteHostsByIds: {
+    ok: true,
+  },
+};
+
+export const createDeleteHostsByIdsQueryMock = (hostIds = ['234']) =>
+  createGenericQueryMock(DELETE_HOSTS_BY_IDS, bulkDeleteByIdsResult, {
+    ids: hostIds,
+  });
