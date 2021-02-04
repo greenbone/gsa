@@ -96,6 +96,7 @@ export const GET_AUDIT = gql`
       id
       creationTime
       modificationTime
+      averageDuration
       permissions {
         name
       }
