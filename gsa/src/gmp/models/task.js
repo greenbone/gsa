@@ -249,8 +249,8 @@ class Task extends Model {
 
     copy.preferences = prefs;
 
-    if (isDefined(object.average_duration)) {
-      copy.averageDuration = parseDuration(object.average_duration);
+    if (hasValue(object.averageDuration)) {
+      copy.averageDuration = parseDuration(object.averageDuration);
     }
 
     if (hasValue(object.hostsOrdering)) {

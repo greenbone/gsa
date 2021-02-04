@@ -128,7 +128,6 @@ class Audit extends Model {
         }
       });
     }
-    console.log(copy.reports);
 
     if (hasValue(object.target)) {
       copy.target = parseModelFromObject(object.target, 'target');
@@ -221,8 +220,8 @@ class Audit extends Model {
 
     copy.preferences = prefs;
 
-    if (isDefined(object.average_duration)) {
-      copy.averageDuration = parseDuration(object.average_duration);
+    if (hasValue(object.averageDuration)) {
+      copy.averageDuration = parseDuration(object.averageDuration);
     }
 
     if (hasValue(object.hostsOrdering)) {
