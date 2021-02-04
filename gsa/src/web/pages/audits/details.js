@@ -22,7 +22,7 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import DateTime from 'web/components/date/datetime';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
@@ -61,40 +61,42 @@ class AuditDetails extends React.Component {
   componentDidMount() {
     const {entity} = this.props;
 
-    if (isDefined(entity.config)) {
+    if (hasValue(entity.config)) {
       this.props.loadPolicy(entity.config.id);
     }
-    if (isDefined(entity.schedule)) {
+    if (hasValue(entity.schedule)) {
       this.props.loadSchedule(entity.schedule.id);
     }
   }
 
   render() {
-    const {links = true, entity, policy, schedule} = this.props;
+    const {links = true, entity, schedule} = this.props;
     const {
       alerts,
-      auto_delete,
-      auto_delete_data,
-      average_duration,
-      config,
-      hosts_ordering,
-      in_assets,
-      last_report,
+      autoDelete,
+      autoDeleteData,
+      averageDuration,
+      policy,
+      hostsOrdering,
+      inAssets,
       preferences,
       scanner,
-      schedule_periods,
+      schedulePeriods,
       target,
-      max_checks,
-      max_hosts,
+      reports,
+      maxChecks,
+      maxHosts,
     } = entity;
+
+    const {lastReport} = reports;
+
     const {iface = {}} = preferences;
 
     let dur;
-    const hasDuration =
-      isDefined(last_report) && isDefined(last_report.scan_start);
+    const hasDuration = hasValue(lastReport) && hasValue(lastReport.scanStart);
     if (hasDuration) {
-      if (isDefined(last_report.scan_end)) {
-        const diff = last_report.scan_end.diff(last_report.scan_start);
+      if (hasValue(lastReport.scanEnd)) {
+        const diff = lastReport.scanEnd.diff(lastReport.scanStart);
         dur = duration(diff).humanize();
       } else {
         dur = _('Not finished yet');
@@ -103,12 +105,12 @@ class AuditDetails extends React.Component {
       dur = _('No scans yet');
     }
 
-    const hasAvDuration = isDefined(average_duration) && average_duration > 0;
-    const avDuration = hasAvDuration ? average_duration.humanize() : '';
+    const hasAvDuration = hasValue(averageDuration) && averageDuration > 0;
+    const avDuration = hasAvDuration ? averageDuration.humanize() : '';
 
     return (
       <Layout grow="1" flex="column">
-        {isDefined(target) && (
+        {hasValue(target) && (
           <DetailsBlock title={_('Target')}>
             <DetailsLink textOnly={!links} type="target" id={target.id}>
               {target.name}
@@ -116,7 +118,7 @@ class AuditDetails extends React.Component {
           </DetailsBlock>
         )}
 
-        {isDefined(alerts) && (
+        {hasValue(alerts) && (
           <DetailsBlock title={_('Alerts')}>
             <HorizontalSep>
               {alerts.sort(compareAlerts).map(alert => (
@@ -130,7 +132,7 @@ class AuditDetails extends React.Component {
           </DetailsBlock>
         )}
 
-        {isDefined(scanner) && (
+        {hasValue(scanner) && (
           <DetailsBlock title={_('Scanner')}>
             <DetailsTable>
               <TableBody>
@@ -152,7 +154,7 @@ class AuditDetails extends React.Component {
                   <TableData>{_('Type')}</TableData>
                   <TableData>{scannerTypeName(scanner.scannerType)}</TableData>
                 </TableRow>
-                {isDefined(config) && (
+                {hasValue(policy) && (
                   <TableRow>
                     <TableData>{_('Policy')}</TableData>
                     <TableData>
@@ -160,46 +162,46 @@ class AuditDetails extends React.Component {
                         <DetailsLink
                           textOnly={!links}
                           type="policy"
-                          id={config.id}
+                          id={policy.id}
                         >
-                          {config.name}
+                          {policy.name}
                         </DetailsLink>
                       </span>
                     </TableData>
                   </TableRow>
                 )}
-                {isDefined(policy) &&
-                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {hasValue(policy) &&
+                  policy.policyType === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
-                      <TableData>{hosts_ordering}</TableData>
+                      <TableData>{hostsOrdering}</TableData>
                     </TableRow>
                   )}
-                {isDefined(policy) &&
-                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                {hasValue(policy) &&
+                  policy.policyType === OPENVAS_SCAN_CONFIG_TYPE && (
                     <TableRow>
                       <TableData>{_('Network Source Interface')}</TableData>
                       <TableData>{iface.value}</TableData>
                     </TableRow>
                   )}
-                {isDefined(policy) &&
-                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_checks) && (
+                {hasValue(policy) &&
+                  policy.policyType === OPENVAS_SCAN_CONFIG_TYPE &&
+                  hasValue(maxChecks) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently executed NVTs per host')}
                       </TableData>
-                      <TableData>{max_checks}</TableData>
+                      <TableData>{maxChecks}</TableData>
                     </TableRow>
                   )}
-                {isDefined(policy) &&
-                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_hosts) && (
+                {hasValue(policy) &&
+                  policy.policyType === OPENVAS_SCAN_CONFIG_TYPE &&
+                  hasValue(maxHosts) && (
                     <TableRow>
                       <TableData>
                         {_('Maximum concurrently scanned hosts')}
                       </TableData>
-                      <TableData>{max_hosts}</TableData>
+                      <TableData>{maxHosts}</TableData>
                     </TableRow>
                   )}
               </TableBody>
@@ -212,13 +214,13 @@ class AuditDetails extends React.Component {
             <TableBody>
               <TableRow>
                 <TableData>{_('Add to Assets')}</TableData>
-                <TableData>{renderYesNo(in_assets)}</TableData>
+                <TableData>{renderYesNo(inAssets)}</TableData>
               </TableRow>
             </TableBody>
           </DetailsTable>
         </DetailsBlock>
 
-        {isDefined(schedule) && (
+        {hasValue(schedule) && (
           <DetailsBlock title={_('Schedule')}>
             <DetailsTable>
               <TableBody>
@@ -236,7 +238,7 @@ class AuditDetails extends React.Component {
                     </span>
                   </TableData>
                 </TableRow>
-                {isDefined(schedule.event) && (
+                {hasValue(schedule.event) && (
                   <TableRow>
                     <TableData>{_('Next')}</TableData>
                     <TableData>
@@ -262,12 +264,12 @@ class AuditDetails extends React.Component {
                   <TableData>{avDuration}</TableData>
                 </TableRow>
               )}
-              {schedule_periods > 0 && (
+              {schedulePeriods > 0 && (
                 <TableRow>
                   <TableData>{_('Period')}</TableData>
                   <TableData>
-                    {schedule_periods > 1
-                      ? _('{{nr}} more times', {nr: schedule_periods})
+                    {schedulePeriods > 1
+                      ? _('{{nr}} more times', {nr: schedulePeriods})
                       : _('Once')}
                   </TableData>
                 </TableRow>
@@ -275,11 +277,11 @@ class AuditDetails extends React.Component {
               <TableRow>
                 <TableData>{_('Auto delete Reports')}</TableData>
                 <TableData>
-                  {auto_delete === 'keep'
+                  {autoDelete === 'keep'
                     ? _(
                         'Automatically delete oldest reports but always keep ' +
                           'newest {{nr}} reports',
-                        {nr: auto_delete_data},
+                        {nr: autoDeleteData},
                       )
                     : _('Do not automatically delete reports')}
                 </TableData>
@@ -306,10 +308,10 @@ const mapStateToProps = (rootState, {entity = {}}) => {
   const scheduleSel = scheduleSelector(rootState);
   const policySel = policySelector(rootState);
   return {
-    policy: isDefined(entity.config)
+    policy: hasValue(entity.config)
       ? policySel.getEntity(entity.config.id)
       : undefined,
-    schedule: isDefined(entity.schedule)
+    schedule: hasValue(entity.schedule)
       ? scheduleSel.getEntity(entity.schedule.id)
       : undefined,
   };

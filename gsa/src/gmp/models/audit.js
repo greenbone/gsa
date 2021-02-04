@@ -51,6 +51,7 @@ import {
   getTranslatableTaskStatus as getTranslatableAuditStatus,
   isActive,
 } from './task';
+import Policy from './policy';
 
 export {
   AUTO_DELETE_KEEP,
@@ -123,10 +124,11 @@ class Audit extends Model {
       allReports.forEach(name => {
         const report = reports[name];
         if (hasValue(report)) {
-          copy.reports[name] = parseModelFromObject(report, 'report');
+          copy.reports[name] = Report.fromObject(report);
         }
       });
     }
+    console.log(copy.reports);
 
     if (hasValue(object.target)) {
       copy.target = parseModelFromObject(object.target, 'target');
@@ -145,10 +147,10 @@ class Audit extends Model {
     }
 
     if (hasValue(object.policy)) {
-      copy.policy = parseModelFromObject(object.policy, 'policy');
+      copy.policy = Policy.fromObject(object.policy);
+    } else {
+      delete copy.policy;
     }
-
-    delete copy.scanConfig;
 
     if (hasValue(object.alerts)) {
       copy.alerts = map(object.alerts, alert =>
@@ -159,13 +161,13 @@ class Audit extends Model {
     }
 
     if (hasValue(object.scanner)) {
-      copy.scanner = parseModelFromObject(object.scanner, 'scanner');
+      copy.scanner = Scanner.parseObject(object.scanner);
     } else {
       delete copy.scanner;
     }
 
     if (hasValue(object.schedule)) {
-      copy.schedule = parseModelFromObject(object.schedule, 'schedule');
+      copy.schedule = Schedule.parseObject(object.schedule);
     } else {
       delete copy.schedule;
     }
