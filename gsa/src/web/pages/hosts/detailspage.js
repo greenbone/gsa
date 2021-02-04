@@ -74,7 +74,13 @@ import CreateIcon from 'web/entity/icon/createicon';
 import DeleteIcon from 'web/entity/icon/deleteicon';
 import EditIcon from 'web/entity/icon/editicon';
 
-import {useGetHost} from 'web/graphql/hosts';
+import useExportEntity from 'web/entity/useExportEntity';
+
+import {
+  useDeleteHost,
+  useExportHostsByIds,
+  useGetHost,
+} from 'web/graphql/hosts';
 import {useGetPermissions} from 'web/graphql/permissions';
 
 import PropTypes from 'web/utils/proptypes';
@@ -288,6 +294,29 @@ const Page = () => {
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
 
+  // host related mutations
+  const exportEntity = useExportEntity();
+
+  const [deleteHost] = useDeleteHost();
+  const exportHost = useExportHostsByIds();
+
+  // host methods
+  const handleDeleteHost = deletedHost => {
+    return deleteHost(deletedHost.id)
+      .then(goto_list('hosts', {history}))
+      .catch(showError);
+  };
+
+  const handleDownloadHost = exportedHost => {
+    exportEntity({
+      entity: exportedHost,
+      exportFunc: exportHost,
+      resourceType: 'hosts',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
   // Timeout and reload
   const timeoutFunc = useEntityReloadInterval(host);
 
@@ -319,7 +348,7 @@ const Page = () => {
       onInteraction={renewSessionTimeout}
       onSaved={() => refetchHost()}
     >
-      {({create, delete: delete_func, deleteidentifier, download, edit}) => (
+      {({create, deleteidentifier, edit}) => (
         <EntityPage
           entity={host}
           entityError={entityError}
@@ -333,8 +362,8 @@ const Page = () => {
           onError={showError}
           onInteraction={renewSessionTimeout}
           onHostCreateClick={create}
-          onHostDeleteClick={delete_func}
-          onHostDownloadClick={download}
+          onHostDeleteClick={handleDeleteHost}
+          onHostDownloadClick={handleDownloadHost}
           onHostEditClick={edit}
         >
           {({activeTab = 0, onActivateTab}) => {

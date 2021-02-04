@@ -24,6 +24,8 @@ import Host from 'gmp/models/host';
 import {isDefined} from 'gmp/utils/identity';
 
 import {
+  createDeleteHostsByIdsQueryMock,
+  createExportHostsByIdsQueryMock,
   createGetHostQueryMock,
   host as hostMock,
   hostWithoutPermission as hostWithoutPermissionMock,
@@ -292,18 +294,10 @@ describe('Host Detailspage tests', () => {
     const deleteIdentifier = jest.fn().mockResolvedValue({
       foo: 'bar',
     });
-    const deleteFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-    const exportFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
 
     const gmp = {
       host: {
         deleteIdentifier,
-        delete: deleteFunc,
-        export: exportFunc,
       },
       settings: {manualUrl, reloadInterval},
       user: {currentSettings, renewSession},
@@ -319,12 +313,27 @@ describe('Host Detailspage tests', () => {
       filterString: 'resource_uuid=12345 first=1 rows=-1',
     });
 
+    const [
+      exportQueryMock,
+      exportQueryResult,
+    ] = createExportHostsByIdsQueryMock(['12345']);
+    const [
+      deleteQueryMock,
+      deleteQueryResult,
+    ] = createDeleteHostsByIdsQueryMock(['12345']);
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       router: true,
       store: true,
-      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
+      queryMocks: [
+        mock,
+        renewSessionQueryMock,
+        permissionQueryMock,
+        exportQueryMock,
+        deleteQueryMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -351,7 +360,7 @@ describe('Host Detailspage tests', () => {
 
     await wait();
 
-    expect(exportFunc).toHaveBeenCalledWith(host);
+    expect(exportQueryResult).toHaveBeenCalled();
 
     // delete host
 
@@ -359,7 +368,7 @@ describe('Host Detailspage tests', () => {
 
     await wait();
 
-    expect(deleteFunc).toHaveBeenCalledWith({id: host.id});
+    expect(deleteQueryResult).toHaveBeenCalled();
   });
 });
 
