@@ -45,11 +45,6 @@ import PageTitle from 'web/components/layout/pagetitle';
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
 
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/reload';
 import useReload from 'web/components/loading/useReload';
 
 import DialogNotification from 'web/components/notification/dialognotification';
@@ -70,9 +65,7 @@ import TableRow from 'web/components/table/row';
 import EntityPage, {Col} from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
-import withEntityContainer, {
-  permissionsResourceFilter,
-} from 'web/entity/withEntityContainer';
+import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
@@ -95,15 +88,6 @@ import StartIcon from 'web/pages/tasks/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
 import AuditStatus from 'web/pages/tasks/status';
 
-import {
-  selector as permissionsSelector,
-  loadEntities as loadPermissions,
-} from 'web/store/entities/permissions';
-import {
-  selector as auditSelector,
-  loadEntity as loadAudit,
-} from 'web/store/entities/audits';
-
 import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
@@ -111,15 +95,6 @@ import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import AuditDetails from './details';
 import AuditComponent from './component';
-
-const reloadInterval = ({entity}) => {
-  if (!hasValue(entity) || entity.isContainer()) {
-    return NO_RELOAD;
-  }
-  return entity.isActive()
-    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : USE_DEFAULT_RELOAD_INTERVAL;
-};
 
 export const ToolBarIcons = ({
   entity,
@@ -316,14 +291,7 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  entity,
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => {
+const Page = () => {
   // Page methods
   const {id} = useParams();
   const history = useHistory();
@@ -397,23 +365,21 @@ const Page = ({
     <AuditComponent
       onCloned={goto_details('audit', {history})}
       onCloneError={showError}
-      onContainerSaved={onChanged}
       onDeleted={goto_list('audits', {history})}
       onDeleteError={showError}
       onDownloaded={handleDownload}
       onDownloadError={showError}
       onInteraction={renewSessionTimeout}
-      onResumed={onChanged}
+      onResumed={() => refetchAudit()}
       onResumeError={showError}
-      onSaved={onChanged}
-      onStarted={onChanged}
+      onSaved={() => refetchAudit()}
+      onStarted={() => refetchAudit()}
       onStartError={showError}
-      onStopped={onChanged}
+      onStopped={() => refetchAudit()}
       onStopError={showError}
     >
       {({edit, start, stop, resume}) => (
         <EntityPage
-          {...props}
           entity={audit}
           entityError={entityError}
           entityType={'audit'}
@@ -421,7 +387,7 @@ const Page = ({
           sectionIcon={<AuditIcon size="large" />}
           title={_('Audit')}
           toolBarIcons={ToolBarIcons}
-          onChanged={onChanged}
+          onChanged={() => refetchAudit()}
           onError={showError}
           onInteraction={renewSessionTimeout}
           onAuditCloneClick={handleCloneAudit}
@@ -482,37 +448,6 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (rootState, {id}) => {
-  const permSel = permissionsSelector(rootState);
-  return {
-    permissions: permSel.getEntities(permissionsResourceFilter(id)),
-  };
-};
-
-const load = gmp => {
-  const loadAuditFunc = loadAudit(gmp);
-  const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch =>
-    Promise.all([
-      dispatch(loadAuditFunc(id)),
-      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-    ]);
-};
-
-export default withEntityContainer('audit', {
-  load,
-  entitySelector: auditSelector,
-  mapStateToProps,
-  reloadInterval,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:
