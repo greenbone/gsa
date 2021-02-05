@@ -16,17 +16,189 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+import {TASK_STATUS} from 'gmp/models/task';
 import {
   createGenericQueryMock,
   createGenericMutationResult,
+  deepFreeze,
 } from 'web/utils/testing';
 import {
+  CLONE_AUDIT,
   CREATE_AUDIT,
+  DELETE_AUDITS_BY_IDS,
+  EXPORT_AUDITS_BY_IDS,
+  GET_AUDIT,
   MODIFY_AUDIT,
   RESUME_AUDIT,
   START_AUDIT,
   STOP_AUDIT,
 } from '../audits';
+
+const alert = deepFreeze({id: '151617', name: 'alert 1'});
+
+const target = deepFreeze({
+  id: '159',
+  name: 'target 1',
+});
+
+// Scanner
+const scanner = deepFreeze({
+  id: '212223',
+  name: 'scanner 1',
+  type: 'OPENVAS_SCANNER_TYPE',
+});
+
+// Policy
+export const policy = deepFreeze({
+  id: '234',
+  name: 'unnamed policy',
+  type: OPENVAS_SCAN_CONFIG_TYPE,
+  trash: null,
+});
+
+// Reports
+const lastReport = deepFreeze({
+  id: '1234',
+  severity: '5.0',
+  timestamp: '2019-07-30T13:23:30Z',
+  scanStart: '2019-07-30T13:23:34Z',
+  scanEnd: '2019-07-30T13:25:43Z',
+});
+
+const currentReport = deepFreeze({
+  id: '5678',
+  timestamp: '2019-08-30T13:23:30Z',
+  scanStart: '2019-08-30T13:23:34Z',
+});
+
+const weekly = `
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager
+ 20.8+alpha~git-b4610ada-master//EN
+BEGIN:VEVENT
+DTSTART:20200615T080000Z
+DURATION:PT0S
+RRULE:FREQ=WEEKLY
+UID:c5694e2e-daea-419b-b524-bb363b4ca37b
+DTSTAMP:20200615T072702Z
+END:VEVENT
+END:VCALENDAR
+`;
+
+// Schedule
+const schedule = deepFreeze({
+  id: 'foo',
+  name: 'schedule 1',
+  timezone: 'UTC',
+  duration: 0,
+  icalendar: weekly,
+});
+
+const allPermissions = deepFreeze([
+  {
+    name: 'Everything',
+  },
+]);
+
+// Observers
+const observers = deepFreeze({
+  users: ['john', 'jane'],
+  roles: [
+    {
+      name: 'admin role',
+    },
+    {
+      name: 'user role',
+    },
+  ],
+  groups: [
+    {
+      name: 'group 1',
+    },
+    {
+      name: 'group 2',
+    },
+  ],
+});
+
+// Preferences
+const preferences = deepFreeze([
+  {
+    description: 'Add results to Asset Management',
+    name: 'in_assets',
+    value: 'yes',
+  },
+  {
+    description: 'Apply Overrides when adding Assets',
+    name: 'assets_apply_overrides',
+    value: 'yes',
+  },
+  {
+    description: 'Min QOD when adding Assets',
+    name: 'assets_min_qod',
+    value: '70',
+  },
+  {
+    description: 'Auto Delete Reports',
+    name: 'auto_delete',
+    value: 'no',
+  },
+  {
+    description: 'Auto Delete Reports Data',
+    name: 'auto_delete_data',
+    value: '5',
+  },
+  {
+    description: 'Maximum concurrently executed NVTs per host',
+    name: 'max_checks',
+    value: '4',
+  },
+  {
+    description: 'Maximum concurrently scanned hosts',
+    name: 'max_hosts',
+    value: '20',
+  },
+]);
+
+const detailsMockAudit = deepFreeze({
+  name: 'foo',
+  id: '657',
+  creationTime: '2019-07-30T13:00:00Z',
+  modificationTime: '2019-08-30T13:23:30Z',
+  permissions: allPermissions,
+  averageDuration: 3,
+  reports: {
+    lastReport,
+    currentReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
+  },
+  progress: 100,
+  status: TASK_STATUS.stopped,
+  target,
+  alterable: 0,
+  trend: null,
+  comment: 'bar',
+  owner: 'admin',
+  preferences,
+  schedule,
+  alerts: [alert],
+  policy,
+  scanner,
+  schedulePeriods: null,
+  hostsOrdering: 'sequential',
+  userTags: null,
+  observers,
+  results: {
+    counts: {
+      current: 20,
+    },
+  },
+});
 
 export const createAuditInput = {
   name: 'a1',
@@ -87,3 +259,40 @@ export const createStartAuditQueryMock = (auditId, reportId) => {
 
   return createGenericQueryMock(START_AUDIT, startAuditResult, {id: auditId});
 };
+
+export const createCloneAuditQueryMock = (
+  auditId = '657',
+  newAuditId = '567',
+) =>
+  createGenericQueryMock(
+    CLONE_AUDIT,
+    {
+      cloneAudit: {
+        id: newAuditId,
+      },
+    },
+    {id: auditId},
+  );
+
+const deleteAuditResult = createGenericMutationResult('audit');
+
+export const createDeleteAuditQueryMock = (auditId = '657') =>
+  createGenericQueryMock(DELETE_AUDITS_BY_IDS, deleteAuditResult, {
+    ids: [auditId],
+  });
+
+const exportAuditsByIdsResult = {
+  exportAuditsByIds: {
+    exportedEntities: '<get_tasks_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportAuditsByIdsQueryMock = (ids = ['657']) =>
+  createGenericQueryMock(EXPORT_AUDITS_BY_IDS, exportAuditsByIdsResult, {
+    ids,
+  });
+
+export const createGetAuditQueryMock = (
+  auditId = '657',
+  audit = detailsMockAudit,
+) => createGenericQueryMock(GET_AUDIT, {audit}, {id: auditId});
