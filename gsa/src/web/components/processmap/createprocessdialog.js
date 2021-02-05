@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -31,10 +31,12 @@ import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
 
-import useFormValidation, {
-  syncVariables,
-} from 'web/components/form/useFormValidation';
+import useFormValidation from 'web/components/form/useFormValidation';
+import useFormValues from 'web/components/form/useFormValues';
+
 import {createProcessRules} from './validationrules';
+
+const fieldsToValidate = ['name'];
 
 const CreateProcessDialog = ({
   comment = '',
@@ -49,53 +51,53 @@ const CreateProcessDialog = ({
   const buttonTitle = isEdit ? _('Save') : _('Create');
   const onSave = isEdit ? onEdit : onCreate;
 
-  const validationSchema = {
-    name,
-  };
+  const [error, setError] = useState();
 
-  const {
-    shouldWarn,
+  const [formValues, handleValueChange] = useFormValues({name, comment, id});
+
+  const {hasError, errors, validate} = useFormValidation(
+    createProcessRules,
     formValues,
-    handleValueChange,
-    validityStatus,
-    handleSubmit,
-  } = useFormValidation(validationSchema, createProcessRules, onSave);
+    {
+      fieldsToValidate,
+      onValidationSuccess: onSave,
+      onValidationError: setError,
+    },
+  );
 
   return (
     <SaveDialog
+      error={error}
       buttonTitle={buttonTitle}
       title={title}
-      defaultValues={{name, comment, id}}
+      values={formValues}
       width="500px"
       onClose={onClose}
-      onSave={vals => handleSubmit(vals)}
+      onSave={validate}
     >
-      {({values, onValueChange}) => {
-        syncVariables(values, formValues);
-        return (
-          <Layout flex="column">
-            <FormGroup title={_('Name')}>
-              <TextField
-                name="name"
-                hasError={shouldWarn && !validityStatus.name.isValid}
-                errorContent={validityStatus.name.error}
-                value={values.name}
-                data-testid="create-process-dialog-name"
-                grow="1"
-                onChange={handleValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={comment}
-                grow="1"
-                onChange={onValueChange}
-              />
-            </FormGroup>
-          </Layout>
-        );
-      }}
+      {({values}) => (
+        <Layout flex="column">
+          <FormGroup title={_('Name')}>
+            <TextField
+              name="name"
+              hasError={hasError && !!errors.name}
+              errorContent={errors.name}
+              value={values.name}
+              data-testid="create-process-dialog-name"
+              grow="1"
+              onChange={handleValueChange}
+            />
+          </FormGroup>
+          <FormGroup title={_('Comment')}>
+            <TextField
+              name="comment"
+              value={comment}
+              grow="1"
+              onChange={handleValueChange}
+            />
+          </FormGroup>
+        </Layout>
+      )}
     </SaveDialog>
   );
 };
