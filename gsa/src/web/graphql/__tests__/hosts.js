@@ -26,11 +26,17 @@ import {
   createGetHostQueryMock,
   createGetHostsQueryMock,
   createDeleteHostsByIdsQueryMock,
+  createDeleteHostsByFilterQueryMock,
+  createDeleteHostQueryMock,
   createExportHostsByIdsQueryMock,
+  createExportHostsByFilterQueryMock,
 } from '../__mocks__/hosts';
 import {
   useDeleteHost,
+  useDeleteHostsByIds,
+  useDeleteHostsByFilter,
   useExportHostsByIds,
+  useExportHostsByFilter,
   useGetHost,
   useLazyGetHosts,
 } from '../hosts';
@@ -174,6 +180,81 @@ describe('useExportHostsByIds tests', () => {
   });
 });
 
+const ExportHostsByFilterComponent = () => {
+  const exportHostsByFilter = useExportHostsByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportHostsByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportHostsByFilter tests', () => {
+  test('should export a list of hosts by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportHostsByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportHostsByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteHostsByIdsComponent = () => {
+  const [deleteHostsByIds] = useDeleteHostsByIds();
+  return (
+    <button
+      data-testid="bulk-delete"
+      onClick={() => deleteHostsByIds(['foo', 'bar'])}
+    />
+  );
+};
+
+describe('useDeleteHostsByIds tests', () => {
+  test('should delete a list of hosts after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteHostsByIdsQueryMock(['foo', 'bar']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteHostsByIdsComponent />);
+    const button = screen.getByTestId('bulk-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteHostsByFilterComponent = () => {
+  const [deleteHostsByFilter] = useDeleteHostsByFilter();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deleteHostsByFilter('foo')}
+    />
+  );
+};
+
+describe('useDeleteHostsByFilter tests', () => {
+  test('should delete a list of hosts by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteHostsByFilterQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteHostsByFilterComponent />);
+    const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
 const DeleteHostComponent = () => {
   const [deleteHost] = useDeleteHost();
   return <button data-testid="delete" onClick={() => deleteHost('234')} />;
@@ -181,7 +262,7 @@ const DeleteHostComponent = () => {
 
 describe('useDeleteHostsByIds tests', () => {
   test('should delete a list of hosts after user interaction', async () => {
-    const [mock, resultFunc] = createDeleteHostsByIdsQueryMock(['234']);
+    const [mock, resultFunc] = createDeleteHostQueryMock('234');
     const {render} = rendererWith({queryMocks: [mock]});
 
     render(<DeleteHostComponent />);

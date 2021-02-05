@@ -130,9 +130,25 @@ export const DELETE_HOSTS_BY_IDS = gql`
   }
 `;
 
+export const DELETE_HOSTS_BY_FILTER = gql`
+  mutation deleteHostsByFilter($filterString: String!) {
+    deleteHostsByFilter(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
 export const EXPORT_HOSTS_BY_IDS = gql`
   mutation exportHostsByIds($ids: [UUID]!) {
     exportHostsByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const EXPORT_HOSTS_BY_FILTER = gql`
+  mutation exportHostsByFilter($filterString: String) {
+    exportHostsByFilter(filterString: $filterString) {
       exportedEntities
     }
   }
@@ -186,6 +202,36 @@ export const useDeleteHost = options => {
   return [deleteHost, data];
 };
 
+export const useDeleteHostsByIds = options => {
+  const [queryDeleteHostsByIds, data] = useMutation(
+    DELETE_HOSTS_BY_IDS,
+    options,
+  );
+  const deleteHostsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteHostsByIds({...options, variables: {ids}}),
+    [queryDeleteHostsByIds],
+  );
+  return [deleteHostsByIds, data];
+};
+
+export const useDeleteHostsByFilter = options => {
+  const [queryDeleteHostsByFilter, data] = useMutation(
+    DELETE_HOSTS_BY_FILTER,
+    options,
+  );
+  const deleteHostsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filterString, options) =>
+      queryDeleteHostsByFilter({
+        ...options,
+        variables: {filterString},
+      }),
+    [queryDeleteHostsByFilter],
+  );
+  return [deleteHostsByFilter, data];
+};
+
 export const useExportHostsByIds = options => {
   const [queryExportHostsByIds] = useMutation(EXPORT_HOSTS_BY_IDS, options);
 
@@ -202,4 +248,24 @@ export const useExportHostsByIds = options => {
   );
 
   return exportHostsByIds;
+};
+
+export const useExportHostsByFilter = options => {
+  const [queryExportHostsByFilter] = useMutation(
+    EXPORT_HOSTS_BY_FILTER,
+    options,
+  );
+  const exportHostsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportHostsByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportHostsByFilter, options],
+  );
+
+  return exportHostsByFilter;
 };

@@ -19,7 +19,9 @@
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 import {
   DELETE_HOSTS_BY_IDS,
+  DELETE_HOSTS_BY_FILTER,
   EXPORT_HOSTS_BY_IDS,
+  EXPORT_HOSTS_BY_FILTER,
   GET_HOST,
   GET_HOSTS,
 } from '../hosts';
@@ -240,6 +242,20 @@ export const createExportHostsByIdsQueryMock = (hostIds = ['234']) =>
     ids: hostIds,
   });
 
+const exportHostsByFilterResult = {
+  exportHostsByFilter: {
+    exportedEntities: '<get_assets_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportHostsByFilterQueryMock = (filterString = 'foo') => {
+  return createGenericQueryMock(
+    EXPORT_HOSTS_BY_FILTER,
+    exportHostsByFilterResult,
+    {filterString},
+  );
+};
+
 const bulkDeleteByIdsResult = {
   deleteHostsByIds: {
     ok: true,
@@ -249,4 +265,27 @@ const bulkDeleteByIdsResult = {
 export const createDeleteHostsByIdsQueryMock = (hostIds = ['234']) =>
   createGenericQueryMock(DELETE_HOSTS_BY_IDS, bulkDeleteByIdsResult, {
     ids: hostIds,
+  });
+
+const bulkDeleteByFilterResult = {
+  deleteHostsByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeleteHostsByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(DELETE_HOSTS_BY_FILTER, bulkDeleteByFilterResult, {
+    filterString,
+  });
+
+const deleteHostResult = {
+  deleteHostByIds: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const createDeleteHostQueryMock = (hostId = 'foo') =>
+  createGenericQueryMock(DELETE_HOSTS_BY_IDS, deleteHostResult, {
+    ids: [hostId],
   });
