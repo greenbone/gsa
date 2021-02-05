@@ -215,3 +215,69 @@ export const useResumeAudit = options => {
   );
   return [resumeAudit, data];
 };
+
+export const CLONE_AUDIT = gql`
+  mutation cloneAudit($id: UUID!) {
+    cloneAudit(id: $id) {
+      id
+    }
+  }
+`;
+
+export const useCloneAudit = options => {
+  const [queryCloneAudit, {data, ...other}] = useMutation(CLONE_AUDIT, options);
+  const cloneAudit = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryCloneAudit({...options, variables: {id}}).then(
+        result => result.data.cloneAudit.id,
+      ),
+    [queryCloneAudit],
+  );
+  const policyId = data?.cloneAudit?.id;
+  return [cloneAudit, {...other, id: policyId}];
+};
+
+export const DELETE_AUDITS_BY_IDS = gql`
+  mutation deleteAuditsByIds($ids: [UUID]!) {
+    deleteAuditsByIds(ids: $ids) {
+      ok
+    }
+  }
+`;
+
+export const useDeleteAudit = options => {
+  const [queryDeleteAudit, data] = useMutation(DELETE_AUDITS_BY_IDS, options);
+  const deleteAudit = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryDeleteAudit({...options, variables: {ids: [id]}}),
+    [queryDeleteAudit],
+  );
+  return [deleteAudit, data];
+};
+
+export const EXPORT_AUDITS_BY_IDS = gql`
+  mutation exportAuditsByIds($ids: [UUID]!) {
+    exportAuditsByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportAuditsByIds = options => {
+  const [queryExportAuditsByIds] = useMutation(EXPORT_AUDITS_BY_IDS, options);
+
+  const exportAuditsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    auditIds =>
+      queryExportAuditsByIds({
+        ...options,
+        variables: {
+          ids: auditIds,
+        },
+      }),
+    [queryExportAuditsByIds, options],
+  );
+
+  return exportAuditsByIds;
+};

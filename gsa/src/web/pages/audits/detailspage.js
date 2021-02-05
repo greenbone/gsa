@@ -26,6 +26,9 @@ import {hasValue} from 'gmp/utils/identity';
 
 import Badge from 'web/components/badge/badge';
 
+import Download from 'web/components/form/download';
+import useDownload from 'web/components/form/useDownload';
+
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
@@ -48,6 +51,9 @@ import {
   USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
 } from 'web/components/loading/reload';
 import useReload from 'web/components/loading/useReload';
+
+import DialogNotification from 'web/components/notification/dialognotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -72,8 +78,14 @@ import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+import useExportEntity from 'web/entity/useExportEntity';
 
-import {useGetAudit} from 'web/graphql/audits';
+import {
+  useCloneAudit,
+  useDeleteAudit,
+  useExportAuditsByIds,
+  useGetAudit,
+} from 'web/graphql/audits';
 import {useGetPermissions} from 'web/graphql/permissions';
 
 import {TaskPermissions as AuditPermissions} from 'web/pages/tasks/detailspage';
@@ -92,16 +104,13 @@ import {
   loadEntity as loadAudit,
 } from 'web/store/entities/audits';
 
+import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import AuditDetails from './details';
 import AuditComponent from './component';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-import useDownload from 'web/components/form/useDownload';
-import DialogNotification from 'web/components/notification/dialognotification';
-import Download from 'web/components/form/download';
 
 const reloadInterval = ({entity}) => {
   if (!hasValue(entity) || entity.isContainer()) {
@@ -337,6 +346,36 @@ const Page = ({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
 
+  // Audit related mutations
+  const exportEntity = useExportEntity();
+
+  const [cloneAudit] = useCloneAudit();
+  const [deleteAudit] = useDeleteAudit();
+  const exportAudit = useExportAuditsByIds();
+
+  // Audit methods
+  const handleCloneAudit = clonedAudit => {
+    return cloneAudit(clonedAudit.id)
+      .then(auditId => goto_entity_details('audit', {history})(auditId))
+      .catch(showError);
+  };
+
+  const handleDeleteAudit = deletedAudit => {
+    return deleteAudit(deletedAudit.id)
+      .then(goto_list('audits', {history}))
+      .catch(showError);
+  };
+
+  const handleDownloadAudit = exportedAudit => {
+    exportEntity({
+      entity: exportedAudit,
+      exportFunc: exportAudit,
+      resourceType: 'audits',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
   // Timeout and reload
   const timeoutFunc = useEntityReloadInterval(audit);
 
@@ -372,7 +411,7 @@ const Page = ({
       onStopped={onChanged}
       onStopError={showError}
     >
-      {({clone, delete: deleteFunc, download, edit, start, stop, resume}) => (
+      {({edit, start, stop, resume}) => (
         <EntityPage
           {...props}
           entity={audit}
@@ -385,9 +424,9 @@ const Page = ({
           onChanged={onChanged}
           onError={showError}
           onInteraction={renewSessionTimeout}
-          onAuditCloneClick={clone}
-          onAuditDeleteClick={deleteFunc}
-          onAuditDownloadClick={download}
+          onAuditCloneClick={handleCloneAudit}
+          onAuditDeleteClick={handleDeleteAudit}
+          onAuditDownloadClick={handleDownloadAudit}
           onAuditEditClick={edit}
           onAuditResumeClick={resume}
           onAuditStartClick={start}
