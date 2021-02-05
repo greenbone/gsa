@@ -17,7 +17,12 @@
  */
 
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
-import {DELETE_HOSTS_BY_IDS, EXPORT_HOSTS_BY_IDS, GET_HOST} from '../hosts';
+import {
+  DELETE_HOSTS_BY_IDS,
+  EXPORT_HOSTS_BY_IDS,
+  GET_HOST,
+  GET_HOSTS,
+} from '../hosts';
 
 export const host = deepFreeze({
   id: '12345',
@@ -135,6 +140,91 @@ export const hostWithoutPermission = deepFreeze({
   permissions: [{name: 'get_assets'}],
   severity: 10.0,
 });
+
+export const listpageHost = deepFreeze({
+  id: '12345',
+  name: 'Foo',
+  comment: 'bar',
+  owner: {name: 'admin'},
+  creationTime: '2019-06-02T12:00:22Z',
+  modificationTime: '2019-06-03T11:00:22Z',
+  writable: true,
+  inUse: false,
+  permissions: [{name: 'everything'}],
+  severity: 10.0,
+  details: [
+    {
+      name: 'best_os_cpe',
+      value: 'cpe:/o:linux:kernel',
+    },
+    {
+      name: 'best_os_txt',
+      value: 'Linux/Unix',
+    },
+    {
+      name: 'traceroute',
+      value: '123.456.789.10,123.456.789.11',
+    },
+  ],
+  identifiers: [
+    {
+      id: '5678',
+      name: 'hostname',
+      value: 'foo',
+    },
+    {
+      id: '1112',
+      name: 'ip',
+      value: '123.456.789.10',
+    },
+    {
+      id: '1314',
+      name: 'OS',
+      value: 'cpe:/o:linux:kernel',
+    },
+  ],
+});
+
+const mockHosts = {
+  edges: [
+    {
+      node: listpageHost,
+    },
+  ],
+  counts: {
+    total: 1,
+    filtered: 1,
+    offset: 0,
+    limit: 10,
+    length: 1,
+  },
+  pageInfo: {
+    hasNextPage: false,
+    hasPreviousPage: false,
+    startCursor: 'c2NoZWR1bGU6MA==',
+    endCursor: 'c2NoZWR1bGU6MA==',
+    lastPageCursor: 'c2NoZWR1bGU6MA==',
+  },
+};
+
+export const createGetHostsQueryMock = (variables = {}) => {
+  const queryResult = {
+    data: {
+      hosts: mockHosts,
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const queryMock = {
+    request: {
+      query: GET_HOSTS,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
 
 export const createGetHostQueryMock = (id = '12345', result = host) =>
   createGenericQueryMock(GET_HOST, {host: result}, {id});

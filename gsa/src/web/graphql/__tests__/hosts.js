@@ -18,14 +18,22 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import {fireEvent, rendererWith, screen, wait} from 'web/utils/testing';
 
 import {
   createGetHostQueryMock,
+  createGetHostsQueryMock,
   createDeleteHostsByIdsQueryMock,
   createExportHostsByIdsQueryMock,
 } from '../__mocks__/hosts';
-import {useDeleteHost, useExportHostsByIds, useGetHost} from '../hosts';
+import {
+  useDeleteHost,
+  useExportHostsByIds,
+  useGetHost,
+  useLazyGetHosts,
+} from '../hosts';
 
 const GetHostComponent = ({id}) => {
   const {loading, host, error} = useGetHost(id);
@@ -66,6 +74,78 @@ describe('useGetHost tests', () => {
 
     expect(screen.getByTestId('id')).toHaveTextContent('12345');
     expect(screen.getByTestId('name')).toHaveTextContent('Foo');
+  });
+});
+
+const GetLazyHostsComponent = () => {
+  const [getHosts, {counts, loading, hosts}] = useLazyGetHosts();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getHosts()} />
+      {isDefined(counts) ? (
+        <div data-testid="counts">
+          <span data-testid="total">{counts.all}</span>
+          <span data-testid="filtered">{counts.filtered}</span>
+          <span data-testid="first">{counts.first}</span>
+          <span data-testid="limit">{counts.rows}</span>
+          <span data-testid="length">{counts.length}</span>
+        </div>
+      ) : (
+        <div data-testid="no-counts" />
+      )}
+      {isDefined(hosts) ? (
+        hosts.map(host => {
+          return (
+            <div key={host.id} data-testid="host">
+              {host.id}
+            </div>
+          );
+        })
+      ) : (
+        <div data-testid="no-hosts" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetHosts tests', () => {
+  test('should query hosts after user interaction', async () => {
+    const [mock, resultFunc] = createGetHostsQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazyHostsComponent />);
+
+    let hostElements = screen.queryAllByTestId('host');
+    expect(hostElements).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-hosts')).toBeInTheDocument();
+    expect(screen.queryByTestId('no-counts')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    hostElements = screen.getAllByTestId('host');
+    expect(hostElements).toHaveLength(1);
+
+    expect(hostElements[0]).toHaveTextContent('12345');
+
+    expect(screen.queryByTestId('no-hosts')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('total')).toHaveTextContent(1);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(1);
+    expect(screen.getByTestId('first')).toHaveTextContent(1);
+    expect(screen.getByTestId('limit')).toHaveTextContent(10);
+    expect(screen.getByTestId('length')).toHaveTextContent(1);
   });
 });
 

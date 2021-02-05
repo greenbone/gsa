@@ -18,7 +18,9 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useQuery, useMutation} from '@apollo/client';
+import {gql, useLazyQuery, useMutation, useQuery} from '@apollo/client';
+
+import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Host from 'gmp/models/host';
 
@@ -74,6 +76,52 @@ export const GET_HOST = gql`
   }
 `;
 
+export const GET_HOSTS = gql`
+  query Hosts($filterString: FilterString) {
+    hosts(filterString: $filterString) {
+      edges {
+        node {
+          id
+          name
+          comment
+          owner
+          writable
+          inUse
+          creationTime
+          modificationTime
+          permissions {
+            name
+          }
+          severity
+          details {
+            name
+            value
+          }
+          identifiers {
+            id
+            name
+            value
+          }
+        }
+      }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
+      }
+    }
+  }
+`;
+
 export const DELETE_HOSTS_BY_IDS = gql`
   mutation deleteHostsByIds($ids: [UUID]!) {
     deleteHostsByIds(ids: $ids) {
@@ -97,6 +145,35 @@ export const useGetHost = (id, options) => {
   });
   const host = isDefined(data?.host) ? Host.fromObject(data.host) : undefined;
   return {host, ...other};
+};
+
+export const useLazyGetHosts = (variables, options) => {
+  const [queryHosts, {data, ...other}] = useLazyQuery(GET_HOSTS, {
+    ...options,
+    variables,
+  });
+  const hosts = isDefined(data?.hosts)
+    ? data.hosts.edges.map(entity => Host.fromObject(entity.node))
+    : undefined;
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.hosts?.counts || {};
+  const counts = isDefined(data?.hosts?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const getHosts = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => queryHosts({...options, variables}),
+    [queryHosts],
+  );
+  const pageInfo = data?.hosts?.pageInfo;
+  return [getHosts, {...other, counts, hosts, pageInfo}];
 };
 
 export const useDeleteHost = options => {
