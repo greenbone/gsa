@@ -23,11 +23,8 @@ const VALID_ROWSPERPAGE_ERROR_MESSAGE = _l(
 );
 
 export const userSettingsRules = {
-  rowsPerPage: value => {
-    const isValid = value > 0;
-    const error = isValid ? '' : VALID_ROWSPERPAGE_ERROR_MESSAGE;
-    return {isValid, error};
-  },
+  rowsPerPage: value =>
+    value > 0 ? undefined : VALID_ROWSPERPAGE_ERROR_MESSAGE,
 };
 
 // vim: set ts=2 sw=2 tw=80:
