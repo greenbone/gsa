@@ -15,23 +15,37 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useHistory} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import IconDivider from 'web/components/layout/icondivider';
-import PageTitle from 'web/components/layout/pagetitle';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import {hasValue} from 'gmp/utils/identity';
 
 import DashboardControls from 'web/components/dashboard/controls';
+
+import Download from 'web/components/form/download';
+import useDownload from 'web/components/form/useDownload';
 
 import HostIcon from 'web/components/icon/hosticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+
+import IconDivider from 'web/components/layout/icondivider';
+import PageTitle from 'web/components/layout/pagetitle';
+
+import useReload from 'web/components/loading/useReload';
+
+import DialogNotification from 'web/components/notification/dialognotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
+
+import {useLazyGetHosts} from 'web/graphql/hosts';
 
 import {
   loadEntities,
@@ -40,7 +54,14 @@ import {
 
 import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
+
+import useCapabilities from 'web/utils/useCapabilities';
+import useChangeFilter from 'web/utils/useChangeFilter';
+import useFilterSortBy from 'web/utils/useFilterSortby';
+import usePageFilter from 'web/utils/usePageFilter';
+import usePrevious from 'web/utils/usePrevious';
+import useSelection from 'web/utils/useSelection';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import HostsFilterDialog from './filterdialog';
 import HostsTable from './table';
@@ -48,8 +69,9 @@ import HostComponent from './component';
 
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 
-export const ToolBarIcons = withCapabilities(
-  ({capabilities, onHostCreateClick}) => (
+export const ToolBarIcons = ({onHostCreateClick}) => {
+  const capabilities = useCapabilities();
+  return (
     <IconDivider>
       <ManualIcon
         page="managing-assets"
@@ -60,90 +82,163 @@ export const ToolBarIcons = withCapabilities(
         <NewIcon title={_('New Host')} onClick={onHostCreateClick} />
       )}
     </IconDivider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
   onHostCreateClick: PropTypes.func.isRequired,
 };
 
-const Page = ({
-  entitiesCounts,
-  filter,
-  onChanged,
-  onDownloaded,
-  onError,
-  onFilterChanged,
-  onInteraction,
-  ...props
-}) => (
-  <HostComponent
-    entitiesCounts={entitiesCounts}
-    onTargetCreated={goto_entity_details('target', props)}
-    onTargetCreateError={onError}
-    onCreated={onChanged}
-    onDeleted={onChanged}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({
-      create,
-      createtargetfromselection,
-      createtargetfromhost,
-      delete: delete_func,
-      download,
-      edit,
-    }) => (
-      <React.Fragment>
-        <PageTitle title={_('Hosts')} />
-        <EntitiesPage
-          {...props}
-          dashboard={() => (
-            <HostsDashboard
-              filter={filter}
-              onFilterChanged={onFilterChanged}
-              onInteraction={onInteraction}
-            />
-          )}
-          dashboardControls={() => (
-            <DashboardControls
-              dashboardId={HOSTS_DASHBOARD_ID}
-              onInteraction={onInteraction}
-            />
-          )}
-          entitiesCounts={entitiesCounts}
-          filter={filter}
-          filterEditDialog={HostsFilterDialog}
-          filtersFilter={HOSTS_FILTER_FILTER}
-          sectionIcon={<HostIcon size="large" />}
-          table={HostsTable}
-          title={_('Hosts')}
-          toolBarIcons={ToolBarIcons}
-          onError={onError}
-          onHostCreateClick={create}
-          onHostDeleteClick={delete_func}
-          onHostDownloadClick={download}
-          onHostEditClick={edit}
-          onInteraction={onInteraction}
-          onFilterChanged={onFilterChanged}
-          onTargetCreateFromSelection={createtargetfromselection}
-          onTargetCreateFromHostClick={createtargetfromhost}
-        />
-      </React.Fragment>
-    )}
-  </HostComponent>
-);
+const Page = props => {
+  const [downloadRef, handleDownload] = useDownload();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+  const [filter, isLoadingFilter] = usePageFilter('host');
+  const prevFilter = usePrevious(filter);
+  const simpleFilter = filter.withoutView();
+  const {
+    change: changeFilter,
+    remove: removeFilter,
+    reset: resetFilter,
+  } = useChangeFilter('host');
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+  const {
+    selectionType,
+    selected = [],
+    changeSelectionType,
+    select,
+    deselect,
+  } = useSelection();
+  const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
+    filter,
+    changeFilter,
+  );
+  const history = useHistory();
 
-Page.propTypes = {
-  entitiesCounts: PropTypes.counts,
-  filter: PropTypes.filter,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
+  // host list state variables and methods
+  const [
+    getHosts,
+    {counts, hosts, error, loading: isLoading, refetch, called},
+  ] = useLazyGetHosts();
+
+  const timeoutFunc = useEntitiesReloadInterval(hosts);
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetch,
+    timeoutFunc,
+  );
+
+  // Side effects
+  useEffect(() => {
+    // load hosts initially after the filter is resolved
+    if (!isLoadingFilter && hasValue(filter) && !called) {
+      getHosts({
+        filterString: filter.toFilterString(),
+        first: filter.get('rows'),
+      });
+    }
+  }, [isLoadingFilter, filter, getHosts, called]);
+  useEffect(() => {
+    // reload if filter has changed
+    if (hasValue(refetch) && !filter.equals(prevFilter)) {
+      refetch({
+        filterString: filter.toFilterString(),
+        first: undefined,
+        last: undefined,
+      });
+    }
+  }, [filter, prevFilter, simpleFilter, refetch]);
+
+  useEffect(() => {
+    // start reloading if hosts are available and no timer is running yet
+    if (hasValue(hosts) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [hosts, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => stopReload, [stopReload]);
+  return (
+    <HostComponent
+      entitiesCounts={counts}
+      onTargetCreated={goto_entity_details('target', {history})}
+      onTargetCreateError={showError}
+      onCreated={refetch}
+      onDeleted={refetch}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onInteraction={renewSessionTimeout}
+      onSaved={refetch}
+    >
+      {({
+        create,
+        createtargetfromselection,
+        createtargetfromhost,
+        delete: delete_func,
+        download,
+        edit,
+      }) => (
+        <React.Fragment>
+          <PageTitle title={_('Hosts')} />
+          <EntitiesPage
+            {...props}
+            dashboard={() => (
+              <HostsDashboard
+                filter={filter}
+                onFilterChanged={changeFilter}
+                onInteraction={renewSessionTimeout}
+              />
+            )}
+            dashboardControls={() => (
+              <DashboardControls
+                dashboardId={HOSTS_DASHBOARD_ID}
+                onInteraction={renewSessionTimeout}
+              />
+            )}
+            entities={hosts}
+            entitiesCounts={counts}
+            entitiesError={error}
+            entitiesSelected={selected}
+            filter={filter}
+            filterEditDialog={HostsFilterDialog}
+            filtersFilter={HOSTS_FILTER_FILTER}
+            isLoading={isLoading}
+            isUpdating={isLoading}
+            selectionType={selectionType}
+            sectionIcon={<HostIcon size="large" />}
+            sortBy={sortBy}
+            sortDir={sortDir}
+            table={HostsTable}
+            title={_('Hosts')}
+            toolBarIcons={ToolBarIcons}
+            onEntitySelected={select}
+            onEntityDeselected={deselect}
+            onError={showError}
+            onFilterChanged={changeFilter}
+            onFilterCreated={changeFilter}
+            onFilterReset={resetFilter}
+            onFilterRemoved={removeFilter}
+            onHostCreateClick={create}
+            onHostDeleteClick={delete_func}
+            onHostDownloadClick={download}
+            onHostEditClick={edit}
+            onInteraction={renewSessionTimeout}
+            onSelectionTypeChange={changeSelectionType}
+            onSortChange={handleSortChange}
+            onTargetCreateFromSelection={createtargetfromselection}
+            onTargetCreateFromHostClick={createtargetfromhost}
+          />
+          <DialogNotification
+            {...notificationDialogState}
+            onCloseClick={closeNotificationDialog}
+          />
+          <Download ref={downloadRef} />
+        </React.Fragment>
+      )}
+    </HostComponent>
+  );
 };
 
 export default withEntitiesContainer('host', {
