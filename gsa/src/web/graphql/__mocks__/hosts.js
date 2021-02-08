@@ -143,54 +143,10 @@ export const hostWithoutPermission = deepFreeze({
   severity: 10.0,
 });
 
-export const listpageHost = deepFreeze({
-  id: '12345',
-  name: 'Foo',
-  comment: 'bar',
-  owner: {name: 'admin'},
-  creationTime: '2019-06-02T12:00:22Z',
-  modificationTime: '2019-06-03T11:00:22Z',
-  writable: true,
-  inUse: false,
-  permissions: [{name: 'everything'}],
-  severity: 10.0,
-  details: [
-    {
-      name: 'best_os_cpe',
-      value: 'cpe:/o:linux:kernel',
-    },
-    {
-      name: 'best_os_txt',
-      value: 'Linux/Unix',
-    },
-    {
-      name: 'traceroute',
-      value: '123.456.789.10,123.456.789.11',
-    },
-  ],
-  identifiers: [
-    {
-      id: '5678',
-      name: 'hostname',
-      value: 'foo',
-    },
-    {
-      id: '1112',
-      name: 'ip',
-      value: '123.456.789.10',
-    },
-    {
-      id: '1314',
-      name: 'OS',
-      value: 'cpe:/o:linux:kernel',
-    },
-  ],
-});
-
 const mockHosts = {
   edges: [
     {
-      node: listpageHost,
+      node: host,
     },
   ],
   counts: {

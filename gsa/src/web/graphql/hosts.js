@@ -96,11 +96,33 @@ export const GET_HOSTS = gql`
           details {
             name
             value
+            source {
+              type
+              description
+            }
+            extra
+          }
+          routes {
+            hosts {
+              id
+              ip
+              distance
+              sameSource
+            }
           }
           identifiers {
             id
             name
             value
+            creationTime
+            modificationTime
+            sourceId
+            sourceName
+            sourceType
+            sourceData
+            sourceDeleted
+            osId
+            osTitle
           }
         }
       }
