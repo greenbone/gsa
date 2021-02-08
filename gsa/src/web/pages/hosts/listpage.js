@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import _ from 'gmp/locale';
@@ -41,11 +41,24 @@ import useReload from 'web/components/loading/useReload';
 import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
+import {
+  useBulkDeleteEntities,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions';
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 
-import {useLazyGetHosts} from 'web/graphql/hosts';
+import useExportEntity from 'web/entity/useExportEntity';
+
+import {
+  useDeleteHost,
+  useDeleteHostsByFilter,
+  useDeleteHostsByIds,
+  useExportHostsByFilter,
+  useExportHostsByIds,
+  useLazyGetHosts,
+} from 'web/graphql/hosts';
 
 import {
   loadEntities,
@@ -124,12 +137,70 @@ const Page = props => {
     {counts, hosts, error, loading: isLoading, refetch, called},
   ] = useLazyGetHosts();
 
+  const exportEntity = useExportEntity();
+
+  const [deleteHost] = useDeleteHost();
+  const exportHost = useExportHostsByIds();
+
+  const exportHostsByFilter = useExportHostsByFilter();
+  const bulkExportHosts = useBulkExportEntities();
+
+  const [deleteHostsByIds] = useDeleteHostsByIds();
+  const exportHostsByIds = useExportHostsByIds();
+  const [deleteHostsByFilter] = useDeleteHostsByFilter();
+
+  const bulkDeleteHosts = useBulkDeleteEntities();
+
   const timeoutFunc = useEntitiesReloadInterval(hosts);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,
     timeoutFunc,
   );
+
+  // Host methods
+  const handleDownloadHost = exportedHost => {
+    exportEntity({
+      entity: exportedHost,
+      exportFunc: exportHost,
+      resourceType: 'hosts',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  const handleDeleteHost = useCallback(
+    host => deleteHost(host.id).then(refetch, showError),
+    [deleteHost, refetch, showError],
+  );
+
+  // Bulk action methods
+  const handleBulkDeleteHosts = () => {
+    return bulkDeleteHosts({
+      selectionType,
+      filter,
+      selected,
+      entities: hosts,
+      deleteByIdsFunc: deleteHostsByIds,
+      deleteByFilterFunc: deleteHostsByFilter,
+      onDeleted: refetch,
+      onError: showError,
+    });
+  };
+
+  const handleBulkExportHosts = () => {
+    return bulkExportHosts({
+      entities: hosts,
+      selected,
+      filter,
+      resourceType: 'hosts',
+      selectionType,
+      exportByFilterFunc: exportHostsByFilter,
+      exportByIdsFunc: exportHostsByIds,
+      onDownload: handleDownload,
+      onError: showError,
+    });
+  };
 
   // Side effects
   useEffect(() => {
@@ -172,14 +243,7 @@ const Page = props => {
       onInteraction={renewSessionTimeout}
       onSaved={refetch}
     >
-      {({
-        create,
-        createtargetfromselection,
-        createtargetfromhost,
-        delete: delete_func,
-        download,
-        edit,
-      }) => (
+      {({create, createtargetfromselection, createtargetfromhost, edit}) => (
         <React.Fragment>
           <PageTitle title={_('Hosts')} />
           <EntitiesPage
@@ -213,6 +277,8 @@ const Page = props => {
             table={HostsTable}
             title={_('Hosts')}
             toolBarIcons={ToolBarIcons}
+            onDeleteBulk={handleBulkDeleteHosts}
+            onDownloadBulk={handleBulkExportHosts}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}
@@ -221,8 +287,8 @@ const Page = props => {
             onFilterReset={resetFilter}
             onFilterRemoved={removeFilter}
             onHostCreateClick={create}
-            onHostDeleteClick={delete_func}
-            onHostDownloadClick={download}
+            onHostDeleteClick={handleDeleteHost}
+            onHostDownloadClick={handleDownloadHost}
             onHostEditClick={edit}
             onInteraction={renewSessionTimeout}
             onSelectionTypeChange={changeSelectionType}
