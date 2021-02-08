@@ -26,6 +26,8 @@ import {shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
 
+import {useCreateHost, useModifyHost} from 'web/graphql/hosts';
+
 import HostDialog from 'web/pages/hosts/dialog';
 import TargetComponent from 'web/pages/targets/component';
 
@@ -54,6 +56,9 @@ const HostComponent = ({
   const [state, dispatchState] = useReducer(stateReducer, {
     dialogVisible: false,
   });
+
+  const [createHost] = useCreateHost();
+  const [modifyHost] = useModifyHost();
 
   const handleIdentifierDelete = identifier => {
     handleInteraction();
@@ -128,6 +133,22 @@ const HostComponent = ({
     });
   };
 
+  const handleSaveHost = data => {
+    handleInteraction();
+
+    const {id, comment, name} = data;
+
+    if (isDefined(id)) {
+      return modifyHost({id, comment})
+        .then(onSaved, onSaveError)
+        .then(() => closeHostDialog());
+    }
+
+    return createHost({name, comment})
+      .then(onCreated, onCreateError)
+      .then(() => closeHostDialog());
+  };
+
   const {dialogVisible, host, title} = state;
 
   return (
@@ -158,10 +179,7 @@ const HostComponent = ({
               host={host}
               title={title}
               onClose={handleCloseHostDialog}
-              onSave={d => {
-                handleInteraction();
-                return save(d).then(() => closeHostDialog());
-              }}
+              onSave={handleSaveHost}
             />
           )}
         </React.Fragment>
