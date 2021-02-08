@@ -16,13 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, {useState} from 'react';
+
+import Button from 'web/components/form/button';
 
 import {isDefined} from 'gmp/utils/identity';
 
 import {fireEvent, rendererWith, screen, wait} from 'web/utils/testing';
 
 import {
+  createCreateHostQueryMock,
   createGetHostQueryMock,
   createGetHostsQueryMock,
   createDeleteHostsByIdsQueryMock,
@@ -30,15 +33,20 @@ import {
   createDeleteHostQueryMock,
   createExportHostsByIdsQueryMock,
   createExportHostsByFilterQueryMock,
+  createModifyHostQueryMock,
+  createHostInput,
+  modifyHostInput,
 } from '../__mocks__/hosts';
 import {
+  useCreateHost,
   useDeleteHost,
-  useDeleteHostsByIds,
   useDeleteHostsByFilter,
-  useExportHostsByIds,
+  useDeleteHostsByIds,
   useExportHostsByFilter,
+  useExportHostsByIds,
   useGetHost,
   useLazyGetHosts,
+  useModifyHost,
 } from '../hosts';
 
 const GetHostComponent = ({id}) => {
@@ -272,5 +280,74 @@ describe('useDeleteHostsByIds tests', () => {
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const CreateModifyHostComponent = () => {
+  const [notification, setNotification] = useState('');
+
+  const [createHost] = useCreateHost();
+  const [modifyHost] = useModifyHost();
+
+  const handleCreateResult = id => {
+    setNotification(`Host created with id ${id}.`);
+  };
+
+  const handleModifyResult = resp => {
+    const {data} = resp;
+    setNotification(`Host modified with ok=${data.modifyHost.ok}.`);
+  };
+
+  return (
+    <div>
+      <Button
+        title={'Create host'}
+        onClick={() => createHost(createHostInput).then(handleCreateResult)}
+      />
+      <Button
+        title={'Modify host'}
+        onClick={() => modifyHost(modifyHostInput).then(handleModifyResult)}
+      />
+      <h3 data-testid="notification">{notification}</h3>
+    </div>
+  );
+};
+
+describe('Host mutation tests', () => {
+  test('should create a host', async () => {
+    const [createHostMock, createHostResult] = createCreateHostQueryMock();
+    const {render} = rendererWith({queryMocks: [createHostMock]});
+
+    const {element} = render(<CreateModifyHostComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[0]);
+
+    await wait();
+
+    expect(createHostResult).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Host created with id 12345.',
+    );
+  });
+
+  test('should modify a host', async () => {
+    const [modifyHostMock, modifyHostResult] = createModifyHostQueryMock();
+
+    const {render} = rendererWith({queryMocks: [modifyHostMock]});
+
+    const {element} = render(<CreateModifyHostComponent />);
+
+    const buttons = element.querySelectorAll('button');
+
+    fireEvent.click(buttons[1]);
+
+    await wait();
+
+    expect(modifyHostResult).toHaveBeenCalled();
+    expect(screen.getByTestId('notification')).toHaveTextContent(
+      'Host modified with ok=true.',
+    );
   });
 });

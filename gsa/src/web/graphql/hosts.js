@@ -291,3 +291,45 @@ export const useExportHostsByFilter = options => {
 
   return exportHostsByFilter;
 };
+
+export const CREATE_HOST = gql`
+  mutation createHost($input: CreateHostInput!) {
+    createHost(input: $input) {
+      id
+    }
+  }
+`;
+
+export const useCreateHost = options => {
+  const [queryCreateHost, {data, ...other}] = useMutation(CREATE_HOST, options);
+
+  const createHost = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreateHost({...options, variables: {input: inputObject}}).then(
+        result => result?.data?.createHost?.id,
+      ),
+    [queryCreateHost],
+  );
+  const hostId = data?.createHost?.id;
+  return [createHost, {...other, id: hostId}];
+};
+
+export const MODIFY_HOST = gql`
+  mutation modifyHost($input: ModifyHostInput!) {
+    modifyHost(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const useModifyHost = options => {
+  const [queryModifyHost, data] = useMutation(MODIFY_HOST, options);
+  const modifyHost = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryModifyHost({...options, variables: {input: inputObject}}),
+    [queryModifyHost],
+  );
+  return [modifyHost, data];
+};
