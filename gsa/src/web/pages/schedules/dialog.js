@@ -178,6 +178,7 @@ const deriveInitialState = props => {
   };
 };
 const ScheduleDialog = props => {
+  // decided against destructuring because it makes deriveInitialState cleaner
   const [formState, dispatchState] = useReducer(
     stateReducer,
     deriveInitialState(props),
