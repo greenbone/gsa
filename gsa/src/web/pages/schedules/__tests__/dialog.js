@@ -123,6 +123,31 @@ describe('ScheduleDialog component tests', () => {
     expect(recurrenceValue[0]).toBeInTheDocument();
   });
 
+  test('should allow to change text field', () => {
+    const {getByName, getByTestId} = render(
+      <ScheduleDialog
+        title={'New Schedule'}
+        onClose={handleClose}
+        onSave={handleSave}
+      />,
+    );
+
+    const nameInput = getByName('name');
+    expect(nameInput).toHaveAttribute('value', 'Unnamed');
+    fireEvent.change(nameInput, {target: {value: 'foo'}});
+    expect(nameInput).toHaveAttribute('value', 'foo');
+
+    const commentInput = getByName('comment');
+    expect(commentInput).toHaveAttribute('value', '');
+    fireEvent.change(commentInput, {target: {value: 'bar'}});
+    expect(commentInput).toHaveAttribute('value', 'bar');
+
+    const saveButton = getByTestId('dialog-save-button');
+    fireEvent.click(saveButton);
+
+    expect(handleSave).toHaveBeenCalled(); // handleSave in dialog is over 100 lines long and generates an icalendar. toHaveBeenCalledWith(...) is extremely difficult to test...
+  });
+
   test('should allow to close the dialog', () => {
     const {getByTestId} = render(
       <ScheduleDialog
@@ -140,7 +165,7 @@ describe('ScheduleDialog component tests', () => {
   });
 
   test('should allow changing spinner values', () => {
-    const {getAllByTestId} = render(
+    const {getAllByTestId, getByTestId} = render(
       <ScheduleDialog
         id={scheduleId}
         title={`Edit Schedule ${scheduleName}`}
@@ -189,9 +214,15 @@ describe('ScheduleDialog component tests', () => {
 
     fireEvent.click(spinnerDownButtons[3]);
     expect(spinnerInputs[3]).toHaveAttribute('value', '45');
+
+    const saveButton = getByTestId('dialog-save-button');
+    fireEvent.click(saveButton);
+
+    expect(handleSave).toHaveBeenCalled();
   });
+
   test('should allow changing select values', () => {
-    const {getAllByTestId} = render(
+    const {getAllByTestId, getByTestId} = render(
       <ScheduleDialog
         id={scheduleId}
         title={`Edit Schedule ${scheduleName}`}
@@ -237,5 +268,10 @@ describe('ScheduleDialog component tests', () => {
     expect(selectedValues[1]).toHaveTextContent(
       'Workweek (Monday till Friday)',
     );
+
+    const saveButton = getByTestId('dialog-save-button');
+    fireEvent.click(saveButton);
+
+    expect(handleSave).toHaveBeenCalled();
   });
 });
