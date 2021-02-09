@@ -87,8 +87,6 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
-
     const inputs = baseElement.querySelectorAll('input');
     const formgroups = getAllByTestId('formgroup-title');
     const spinnerInputs = getAllByTestId('spinner-input');
