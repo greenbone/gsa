@@ -1037,7 +1037,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tasks/row.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/status.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/table.js
-     ${GSA_SRC_DIR}/src/web/pages/tasks/task.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/trend.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/component.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/createdialog.js
