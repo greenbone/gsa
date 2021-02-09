@@ -17,7 +17,14 @@
  */
 
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
-import {DELETE_HOSTS_BY_IDS, EXPORT_HOSTS_BY_IDS, GET_HOST} from '../hosts';
+import {
+  DELETE_HOSTS_BY_IDS,
+  DELETE_HOSTS_BY_FILTER,
+  EXPORT_HOSTS_BY_IDS,
+  EXPORT_HOSTS_BY_FILTER,
+  GET_HOST,
+  GET_HOSTS,
+} from '../hosts';
 
 export const host = deepFreeze({
   id: '12345',
@@ -136,6 +143,47 @@ export const hostWithoutPermission = deepFreeze({
   severity: 10.0,
 });
 
+const mockHosts = {
+  edges: [
+    {
+      node: host,
+    },
+  ],
+  counts: {
+    total: 1,
+    filtered: 1,
+    offset: 0,
+    limit: 10,
+    length: 1,
+  },
+  pageInfo: {
+    hasNextPage: false,
+    hasPreviousPage: false,
+    startCursor: 'c2NoZWR1bGU6MA==',
+    endCursor: 'c2NoZWR1bGU6MA==',
+    lastPageCursor: 'c2NoZWR1bGU6MA==',
+  },
+};
+
+export const createGetHostsQueryMock = (variables = {}) => {
+  const queryResult = {
+    data: {
+      hosts: mockHosts,
+    },
+  };
+
+  const resultFunc = jest.fn().mockReturnValue(queryResult);
+
+  const queryMock = {
+    request: {
+      query: GET_HOSTS,
+      variables,
+    },
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
 export const createGetHostQueryMock = (id = '12345', result = host) =>
   createGenericQueryMock(GET_HOST, {host: result}, {id});
 
@@ -150,6 +198,20 @@ export const createExportHostsByIdsQueryMock = (hostIds = ['234']) =>
     ids: hostIds,
   });
 
+const exportHostsByFilterResult = {
+  exportHostsByFilter: {
+    exportedEntities: '<get_assets_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportHostsByFilterQueryMock = (filterString = 'foo') => {
+  return createGenericQueryMock(
+    EXPORT_HOSTS_BY_FILTER,
+    exportHostsByFilterResult,
+    {filterString},
+  );
+};
+
 const bulkDeleteByIdsResult = {
   deleteHostsByIds: {
     ok: true,
@@ -159,4 +221,27 @@ const bulkDeleteByIdsResult = {
 export const createDeleteHostsByIdsQueryMock = (hostIds = ['234']) =>
   createGenericQueryMock(DELETE_HOSTS_BY_IDS, bulkDeleteByIdsResult, {
     ids: hostIds,
+  });
+
+const bulkDeleteByFilterResult = {
+  deleteHostsByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeleteHostsByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(DELETE_HOSTS_BY_FILTER, bulkDeleteByFilterResult, {
+    filterString,
+  });
+
+const deleteHostResult = {
+  deleteHostByIds: {
+    ok: true,
+    status: 200,
+  },
+};
+
+export const createDeleteHostQueryMock = (hostId = 'foo') =>
+  createGenericQueryMock(DELETE_HOSTS_BY_IDS, deleteHostResult, {
+    ids: [hostId],
   });

@@ -18,7 +18,9 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useQuery, useMutation} from '@apollo/client';
+import {gql, useLazyQuery, useMutation, useQuery} from '@apollo/client';
+
+import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Host from 'gmp/models/host';
 
@@ -74,6 +76,74 @@ export const GET_HOST = gql`
   }
 `;
 
+export const GET_HOSTS = gql`
+  query Hosts($filterString: FilterString) {
+    hosts(filterString: $filterString) {
+      edges {
+        node {
+          id
+          name
+          comment
+          owner
+          writable
+          inUse
+          creationTime
+          modificationTime
+          permissions {
+            name
+          }
+          severity
+          details {
+            name
+            value
+            source {
+              type
+              description
+            }
+            extra
+          }
+          routes {
+            hosts {
+              id
+              ip
+              distance
+              sameSource
+            }
+          }
+          identifiers {
+            id
+            name
+            value
+            creationTime
+            modificationTime
+            sourceId
+            sourceName
+            sourceType
+            sourceData
+            sourceDeleted
+            osId
+            osTitle
+          }
+        }
+      }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
+      }
+    }
+  }
+`;
+
 export const DELETE_HOSTS_BY_IDS = gql`
   mutation deleteHostsByIds($ids: [UUID]!) {
     deleteHostsByIds(ids: $ids) {
@@ -82,9 +152,25 @@ export const DELETE_HOSTS_BY_IDS = gql`
   }
 `;
 
+export const DELETE_HOSTS_BY_FILTER = gql`
+  mutation deleteHostsByFilter($filterString: String!) {
+    deleteHostsByFilter(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
 export const EXPORT_HOSTS_BY_IDS = gql`
   mutation exportHostsByIds($ids: [UUID]!) {
     exportHostsByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const EXPORT_HOSTS_BY_FILTER = gql`
+  mutation exportHostsByFilter($filterString: String) {
+    exportHostsByFilter(filterString: $filterString) {
       exportedEntities
     }
   }
@@ -99,6 +185,35 @@ export const useGetHost = (id, options) => {
   return {host, ...other};
 };
 
+export const useLazyGetHosts = (variables, options) => {
+  const [queryHosts, {data, ...other}] = useLazyQuery(GET_HOSTS, {
+    ...options,
+    variables,
+  });
+  const hosts = isDefined(data?.hosts)
+    ? data.hosts.edges.map(entity => Host.fromObject(entity.node))
+    : undefined;
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.hosts?.counts || {};
+  const counts = isDefined(data?.hosts?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const getHosts = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => queryHosts({...options, variables}),
+    [queryHosts],
+  );
+  const pageInfo = data?.hosts?.pageInfo;
+  return [getHosts, {...other, counts, hosts, pageInfo}];
+};
+
 export const useDeleteHost = options => {
   const [queryDeleteHost, data] = useMutation(DELETE_HOSTS_BY_IDS, options);
   const deleteHost = useCallback(
@@ -107,6 +222,36 @@ export const useDeleteHost = options => {
     [queryDeleteHost],
   );
   return [deleteHost, data];
+};
+
+export const useDeleteHostsByIds = options => {
+  const [queryDeleteHostsByIds, data] = useMutation(
+    DELETE_HOSTS_BY_IDS,
+    options,
+  );
+  const deleteHostsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteHostsByIds({...options, variables: {ids}}),
+    [queryDeleteHostsByIds],
+  );
+  return [deleteHostsByIds, data];
+};
+
+export const useDeleteHostsByFilter = options => {
+  const [queryDeleteHostsByFilter, data] = useMutation(
+    DELETE_HOSTS_BY_FILTER,
+    options,
+  );
+  const deleteHostsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filterString, options) =>
+      queryDeleteHostsByFilter({
+        ...options,
+        variables: {filterString},
+      }),
+    [queryDeleteHostsByFilter],
+  );
+  return [deleteHostsByFilter, data];
 };
 
 export const useExportHostsByIds = options => {
@@ -125,4 +270,24 @@ export const useExportHostsByIds = options => {
   );
 
   return exportHostsByIds;
+};
+
+export const useExportHostsByFilter = options => {
+  const [queryExportHostsByFilter] = useMutation(
+    EXPORT_HOSTS_BY_FILTER,
+    options,
+  );
+  const exportHostsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportHostsByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportHostsByFilter, options],
+  );
+
+  return exportHostsByFilter;
 };

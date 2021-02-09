@@ -25,6 +25,14 @@ import {setLocale} from 'gmp/locale/lang';
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
 
+import {
+  createDeleteHostsByFilterQueryMock,
+  createDeleteHostsByIdsQueryMock,
+  createExportHostsByFilterQueryMock,
+  createExportHostsByIdsQueryMock,
+  createGetHostsQueryMock,
+} from 'web/graphql/__mocks__/hosts';
+
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -165,11 +173,17 @@ describe('Host listpage tests', () => {
       user: {currentSettings},
     };
 
+    const [mock, resultFunc] = createGetHostsQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -197,6 +211,8 @@ describe('Host listpage tests', () => {
     const {baseElement} = render(<HostPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const inputs = baseElement.querySelectorAll('input');
     const selects = screen.getAllByTestId('select-selected-value');
@@ -273,19 +289,9 @@ describe('Host listpage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       hosts: {
         get: getHosts,
-        deleteByFilter,
-        exportByFilter,
         getSeverityAggregates: getAggregates,
         getModifiedAggregates: getAggregates,
       },
@@ -299,11 +305,24 @@ describe('Host listpage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const [mock, resultFunc] = createGetHostsQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportHostsByIdsQueryMock([
+      '12345',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteHostsByIdsQueryMock([
+      '12345',
+    ]);
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -313,54 +332,33 @@ describe('Host listpage tests', () => {
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('host', defaultSettingfilter),
-    );
-
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([host], filter, loadedFilter, counts),
     );
 
     render(<HostPage />);
 
     await wait();
 
+    expect(resultFunc).toHaveBeenCalled();
+
     // export page contents
     fireEvent.click(screen.getAllByTitle('Export page contents')[0]);
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // delete page contents
     fireEvent.click(screen.getAllByTitle('Delete page contents')[0]);
 
     await wait();
 
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected hosts', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       hosts: {
         get: getHosts,
-        delete: deleteByIds,
-        export: exportByIds,
         getSeverityAggregates: getAggregates,
         getModifiedAggregates: getAggregates,
       },
@@ -374,11 +372,24 @@ describe('Host listpage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const [mock, resultFunc] = createGetHostsQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportHostsByIdsQueryMock([
+      '12345',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteHostsByIdsQueryMock([
+      '12345',
+    ]);
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -390,22 +401,11 @@ describe('Host listpage tests', () => {
       defaultFilterLoadingActions.success('host', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([host], filter, loadedFilter, counts),
-    );
-
     const {element} = render(<HostPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     // open drop down menu
     const selectFields = screen.getAllByTestId('select-open-button');
@@ -429,30 +429,20 @@ describe('Host listpage tests', () => {
 
     await wait();
 
-    expect(exportByIds).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // delete selected host
     fireEvent.click(screen.getAllByTitle('Delete selection')[0]);
 
     await wait();
 
-    expect(deleteByIds).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered hosts', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       hosts: {
         get: getHosts,
-        deleteByFilter,
-        exportByFilter,
         getSeverityAggregates: getAggregates,
         getModifiedAggregates: getAggregates,
       },
@@ -466,11 +456,24 @@ describe('Host listpage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const [mock, resultFunc] = createGetHostsQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportHostsByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+    const [deleteMock, deleteResult] = createDeleteHostsByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -482,22 +485,11 @@ describe('Host listpage tests', () => {
       defaultFilterLoadingActions.success('host', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([host], filter, loadedFilter, counts),
-    );
-
     render(<HostPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     // open drop down menu
     const selectFields = screen.getAllByTestId('select-open-button');
@@ -517,14 +509,14 @@ describe('Host listpage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // delete all filtered hosts
     fireEvent.click(screen.getAllByTitle('Delete all filtered')[0]);
 
     await wait();
 
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 });
 
