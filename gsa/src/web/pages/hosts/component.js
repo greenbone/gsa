@@ -26,7 +26,7 @@ import {shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
 
-import {useCreateHost, useModifyHost} from 'web/graphql/hosts';
+import {useCreateHost, useDeleteHost, useModifyHost} from 'web/graphql/hosts';
 
 import HostDialog from 'web/pages/hosts/dialog';
 import TargetComponent from 'web/pages/targets/component';
@@ -34,7 +34,6 @@ import TargetComponent from 'web/pages/targets/component';
 import PropTypes from 'web/utils/proptypes';
 import SelectionType from 'web/utils/selectiontype';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
-import useGmp from 'web/utils/useGmp';
 
 const HostComponent = ({
   children,
@@ -52,20 +51,21 @@ const HostComponent = ({
   onSaved,
   onSaveError,
 }) => {
-  const gmp = useGmp();
   const [state, dispatchState] = useReducer(stateReducer, {
     dialogVisible: false,
   });
 
   const [createHost] = useCreateHost();
   const [modifyHost] = useModifyHost();
+  const [deleteHost] = useDeleteHost();
 
   const handleIdentifierDelete = identifier => {
     handleInteraction();
 
-    return gmp.host
-      .deleteIdentifier(identifier)
-      .then(onIdentifierDeleted, onIdentifierDeleteError);
+    return deleteHost(identifier.id).then(
+      onIdentifierDeleted,
+      onIdentifierDeleteError,
+    );
   };
 
   const openHostDialog = host => {

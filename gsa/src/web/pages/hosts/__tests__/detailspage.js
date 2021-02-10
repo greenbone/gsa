@@ -291,14 +291,7 @@ describe('Host Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const deleteIdentifier = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
-      host: {
-        deleteIdentifier,
-      },
       settings: {manualUrl, reloadInterval},
       user: {currentSettings, renewSession},
     };
@@ -346,13 +339,7 @@ describe('Host Detailspage tests', () => {
     expect(resultFunc).toHaveBeenCalled();
     expect(permissionResult).toHaveBeenCalled();
 
-    // delete identifier
-
-    fireEvent.click(screen.getAllByTitle('Delete Identifier')[0]);
-
-    await wait();
-
-    expect(deleteIdentifier).toHaveBeenCalledWith(host.identifiers[0]);
+    // ToDo: delete identifier
 
     // export host
 
