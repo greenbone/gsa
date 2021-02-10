@@ -144,6 +144,14 @@ export const GET_HOSTS = gql`
   }
 `;
 
+export const DELETE_HOST = gql`
+  mutation deleteHost($id: UUID!) {
+    deleteHost(id: $id) {
+      ok
+    }
+  }
+`;
+
 export const DELETE_HOSTS_BY_IDS = gql`
   mutation deleteHostsByIds($ids: [UUID]!) {
     deleteHostsByIds(ids: $ids) {
@@ -215,10 +223,10 @@ export const useLazyGetHosts = (variables, options) => {
 };
 
 export const useDeleteHost = options => {
-  const [queryDeleteHost, data] = useMutation(DELETE_HOSTS_BY_IDS, options);
+  const [queryDeleteHost, data] = useMutation(DELETE_HOST, options);
   const deleteHost = useCallback(
     // eslint-disable-next-line no-shadow
-    (id, options) => queryDeleteHost({...options, variables: {ids: [id]}}),
+    (id, options) => queryDeleteHost({...options, variables: {id}}),
     [queryDeleteHost],
   );
   return [deleteHost, data];

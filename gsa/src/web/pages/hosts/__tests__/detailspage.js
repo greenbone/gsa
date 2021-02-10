@@ -24,7 +24,7 @@ import Host from 'gmp/models/host';
 import {isDefined} from 'gmp/utils/identity';
 
 import {
-  createDeleteHostsByIdsQueryMock,
+  createDeleteHostQueryMock,
   createExportHostsByIdsQueryMock,
   createGetHostQueryMock,
   host as hostMock,
@@ -307,13 +307,16 @@ describe('Host Detailspage tests', () => {
     });
 
     const [
+      deleteIdentifierQueryMock,
+      deleteIdentifierQueryResult,
+    ] = createDeleteHostQueryMock('5678');
+    const [
       exportQueryMock,
       exportQueryResult,
     ] = createExportHostsByIdsQueryMock(['12345']);
-    const [
-      deleteQueryMock,
-      deleteQueryResult,
-    ] = createDeleteHostsByIdsQueryMock(['12345']);
+    const [deleteQueryMock, deleteQueryResult] = createDeleteHostQueryMock(
+      '12345',
+    );
 
     const {render, store} = rendererWith({
       gmp,
@@ -326,6 +329,7 @@ describe('Host Detailspage tests', () => {
         permissionQueryMock,
         exportQueryMock,
         deleteQueryMock,
+        deleteIdentifierQueryMock,
       ],
     });
 
@@ -339,7 +343,13 @@ describe('Host Detailspage tests', () => {
     expect(resultFunc).toHaveBeenCalled();
     expect(permissionResult).toHaveBeenCalled();
 
-    // ToDo: delete identifier
+    // delete identifier
+
+    fireEvent.click(screen.getAllByTitle('Delete Identifier')[0]);
+
+    await wait();
+
+    expect(deleteIdentifierQueryResult).toHaveBeenCalled();
 
     // export host
 
