@@ -57,7 +57,6 @@ import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 import useExportEntity from 'web/entity/useExportEntity';
 import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
@@ -71,6 +70,7 @@ import {
 
 import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
+import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import ScheduleComponent from './component';
@@ -172,7 +172,7 @@ const Page = () => {
   };
 
   // Timeout and reload
-  const timeoutFunc = useEntityReloadInterval(schedule);
+  const timeoutFunc = useDefaultReloadInterval();
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchSchedule,

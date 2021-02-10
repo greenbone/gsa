@@ -48,7 +48,6 @@ import {
   useBulkExportEntities,
 } from 'web/entities/bulkactions';
 import usePagination from 'web/entities/usePagination';
-import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 
 import {
   useLazyGetAlerts,
@@ -65,6 +64,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
+import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
 import useFilterSortBy from 'web/utils/useFilterSortby';
 import usePageFilter from 'web/utils/usePageFilter';
 import usePrevious from 'web/utils/usePrevious';
@@ -148,7 +148,7 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
 
   const bulkDeleteAlerts = useBulkDeleteEntities();
 
-  const timeoutFunc = useEntitiesReloadInterval(alerts);
+  const timeoutFunc = useDefaultReloadInterval();
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,

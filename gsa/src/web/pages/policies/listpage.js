@@ -42,7 +42,6 @@ import {
   useBulkExportEntities,
 } from 'web/entities/bulkactions';
 import EntitiesPage from 'web/entities/page';
-import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import {
@@ -64,6 +63,7 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
+import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
 import useFilterSortBy from 'web/utils/useFilterSortby';
 import usePageFilter from 'web/utils/usePageFilter';
 import useChangeFilter from 'web/utils/useChangeFilter';
@@ -147,7 +147,7 @@ const PoliciesPage = props => {
 
   const bulkDeletePolicies = useBulkDeleteEntities();
 
-  const timeoutFunc = useEntitiesReloadInterval(policies);
+  const timeoutFunc = useDefaultReloadInterval();
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,

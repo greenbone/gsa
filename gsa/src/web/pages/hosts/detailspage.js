@@ -68,7 +68,6 @@ import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
-import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 
 import CreateIcon from 'web/entity/icon/createicon';
 import DeleteIcon from 'web/entity/icon/deleteicon';
@@ -85,6 +84,7 @@ import {useGetPermissions} from 'web/graphql/permissions';
 
 import PropTypes from 'web/utils/proptypes';
 import {goto_entity_details} from 'web/utils/graphql';
+import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import HostDetails from './details';
@@ -318,7 +318,7 @@ const Page = () => {
   };
 
   // Timeout and reload
-  const timeoutFunc = useEntityReloadInterval(host);
+  const timeoutFunc = useDefaultReloadInterval();
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchHost,
