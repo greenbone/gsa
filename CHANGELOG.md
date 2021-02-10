@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Refactor schedule dialog to function component [#2714](https://github.com/greenbone/gsa/pull/2714)
 - Implement host listpage queries and mutations [#2713](https://github.com/greenbone/gsa/pull/2713)
 - Implement host detailspage queries and mutations [#2702](https://github.com/greenbone/gsa/pull/2702)
 - Implement audit component mutations [#2699](https://github.com/greenbone/gsa/pull/2699)
@@ -49,6 +50,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 ### Removed
+- Removed unused task.js [#2714](https://github.com/greenbone/gsa/pull/2714)
 - Removed unused task wizard commands for runQuickTask, runQuickFirstScan and runModifyTask [#2514](https://github.com/greenbone/gsa/pull/2514) [#2523](https://github.com/greenbone/gsa/pull/2523)
 - Removed Edge <= 18 support [#2408](https://github.com/greenbone/gsa/pull/2408)
 - Removed Internet Explorer 11 support [#2399](https://github.com/greenbone/gsa/pull/2399)
