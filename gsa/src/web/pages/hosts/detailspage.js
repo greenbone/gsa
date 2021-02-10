@@ -63,7 +63,7 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import EntityPage, {Col} from 'web/entity/page';
-import {goto_details, goto_list} from 'web/entity/component';
+import {goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
@@ -339,7 +339,7 @@ const Page = () => {
     <HostComponent
       onTargetCreated={goto_entity_details('target', {history})}
       onTargetCreateError={showError}
-      onCreated={goto_details('host', {history})}
+      onCreated={goto_entity_details('host', {history})}
       onDeleted={goto_list('hosts', {history})}
       onDownloaded={handleDownload}
       onDownloadError={showError}
