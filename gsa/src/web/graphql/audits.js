@@ -107,6 +107,11 @@ export const GET_AUDIT = gql`
           timestamp
           scanStart
           scanEnd
+          complianceCount {
+            yes
+            no
+            incomplete
+          }
         }
         currentReport {
           id

@@ -54,18 +54,17 @@ const getComplianceStatus = report => {
     return -1;
   }
 
-  const complianceResultsTotal = isDefined(report.compliance_count)
-    ? parseInt(report.compliance_count.yes) +
-      parseInt(report.compliance_count.no) +
-      parseInt(report.compliance_count.incomplete)
+  const complianceResultsTotal = isDefined(report.complianceCount)
+    ? parseInt(report.complianceCount.yes) +
+      parseInt(report.complianceCount.no) +
+      parseInt(report.complianceCount.incomplete)
     : 0;
 
   const complianceStatus =
     complianceResultsTotal === 0
       ? -1 // if there are no results at all there must have been an error
       : parseInt(
-          (parseInt(report.compliance_count.yes) / complianceResultsTotal) *
-            100,
+          (parseInt(report.complianceCount.yes) / complianceResultsTotal) * 100,
         );
 
   return complianceStatus;
@@ -79,7 +78,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const {scanner, observers} = entity;
+  const {scanner, observers, reports} = entity;
 
   const obs = [];
 
@@ -142,11 +141,11 @@ const Row = ({
       <TableData>
         <AuditStatus task={entity} links={links} />
       </TableData>
-      <TableData>{renderReport(entity.last_report, links)}</TableData>
+      <TableData>{renderReport(reports?.lastReport, links)}</TableData>
       <TableData>
-        {isDefined(entity.last_report) && (
+        {isDefined(reports?.lastReport) && (
           <ComplianceStatusBar
-            complianceStatus={getComplianceStatus(entity.last_report)}
+            complianceStatus={getComplianceStatus(reports.lastReport)}
           />
         )}
       </TableData>

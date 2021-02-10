@@ -94,12 +94,12 @@ const Actions = ({
     <DownloadIcon
       value={entity}
       title={
-        gcrFormatDefined && isDefined(entity.last_report)
+        gcrFormatDefined && isDefined(entity?.reports?.lastReport)
           ? _('Download Greenbone Compliance Report')
           : _('Report download not available')
       }
       onClick={onReportDownloadClick}
-      disabled={!gcrFormatDefined || !isDefined(entity.last_report)}
+      disabled={!gcrFormatDefined || !isDefined(entity?.reports?.lastReport)}
     />
   </IconDivider>
 );

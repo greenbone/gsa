@@ -22,11 +22,10 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
-import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import Row from '../row';
 
@@ -36,19 +35,72 @@ const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
 
 const lastReport = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-07-10T12:51:27Z',
-    compliance_count: {yes: 4, no: 3, incomplete: 1},
+  id: '1234',
+  severity: '5.0',
+  timestamp: '2019-07-30T13:23:30Z',
+  scanStart: '2019-07-30T13:23:34Z',
+  scanEnd: '2019-07-30T13:25:43Z',
+  complianceCount: {
+    yes: 1,
+    no: 3,
+    incomplete: 2,
   },
 };
 
 const currentReport = {
-  report: {
-    _id: '5678',
-    timestamp: '2019-07-10T12:51:27Z',
-  },
+  id: '5678',
+  timestamp: '2019-08-30T13:23:30Z',
+  scanStart: '2019-08-30T13:23:34Z',
 };
+
+let handleAuditClone;
+let handleAuditDelete;
+let handleAuditDownload;
+let handleAuditEdit;
+let handleAuditResume;
+let handleAuditStart;
+let handleAuditStop;
+let handleReportDownload;
+let handleToggleDetailsClick;
+let audit;
+
+beforeAll(() => {
+  handleAuditClone = jest.fn();
+  handleAuditDelete = jest.fn();
+  handleAuditDownload = jest.fn();
+  handleAuditEdit = jest.fn();
+  handleAuditResume = jest.fn();
+  handleAuditStart = jest.fn();
+  handleAuditStop = jest.fn();
+  handleReportDownload = jest.fn();
+  handleToggleDetailsClick = jest.fn();
+
+  audit = Audit.fromObject({
+    name: 'foo',
+    id: '657',
+    creationTime: '2019-07-30T13:00:00Z',
+    modificationTime: '2019-08-30T13:23:30Z',
+    permissions: [{name: 'Everything'}],
+    averageDuration: 3,
+    reports: {
+      lastReport,
+      currentReport,
+      counts: {
+        total: 1,
+        finished: 1,
+      },
+    },
+    progress: 100,
+    status: AUDIT_STATUS.done,
+    target: {
+      id: '5678',
+      name: 'target',
+    },
+    alterable: 1,
+    comment: 'bar',
+    owner: 'admin',
+  });
+});
 
 describe('Audit Row tests', () => {
   // deactivate console.error for tests
@@ -57,29 +109,6 @@ describe('Audit Row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const audit = Audit.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
-      name: 'foo',
-      comment: 'bar',
-      status: AUDIT_STATUS.done,
-      alterable: '0',
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target'},
-      usage_type: 'audit',
-    });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: caps,
@@ -88,7 +117,7 @@ describe('Audit Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('username'));
+    store.dispatch(setUsername('admin'));
 
     const {baseElement, getAllByTestId} = render(
       <Row
@@ -107,8 +136,6 @@ describe('Audit Row tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
-
     // Name
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('(bar)');
@@ -122,63 +149,73 @@ describe('Audit Row tests', () => {
     const detailsLinks = getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveTextContent('Done');
-    expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/report/5678');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Compliance Status
-    expect(bars[1]).toHaveAttribute('title', '50%');
-    expect(bars[1]).toHaveTextContent('50%');
+    expect(bars[1]).toHaveAttribute('title', '16%');
+    expect(bars[1]).toHaveTextContent('16%');
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Start');
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
-    expect(icons[6]).toHaveAttribute(
-      'title',
-      'Download Greenbone Compliance Report',
-    );
+    expect(screen.getAllByTitle('Start')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Audit is not stopped')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Move Audit to trashcan')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Edit Audit')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Clone Audit')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Export Audit')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Download Greenbone Compliance Report')[0],
+    ).toBeInTheDocument();
   });
 
   test('should render icons', () => {
-    const audit = Audit.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+    audit = Audit.fromObject({
+      id: '657',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
       status: AUDIT_STATUS.new,
       alterable: '1',
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
+      reports: {
+        lastReport: {
+          id: '1234',
+          severity: '5.0',
+          timestamp: '2019-07-30T13:23:30Z',
+          scanStart: '2019-07-30T13:23:34Z',
+          scanEnd: '2019-07-30T13:25:43Z',
+          complianceCount: {
+            yes: 1,
+            no: 3,
+            incomplete: 2,
+          },
+        },
+        currentReport: {
+          id: '5678',
+          timestamp: '2019-08-30T13:23:30Z',
+          scanStart: '2019-08-30T13:23:34Z',
+        },
+      },
+      permissions: [{name: 'Everything'}],
+      target: {
+        id: '5678',
+        name: 'target',
+      },
       scanner: {
-        _id: 'id',
+        id: 'id',
         name: 'scanner',
-        type: GREENBONE_SENSOR_SCANNER_TYPE,
+        type: 'GREENBONE_SENSOR_SCANNER_TYPE',
       },
       observers: {
-        __text: 'anon nymous',
+        user: ['anon', 'nymous'],
         role: [{name: 'lorem'}],
         group: [{name: 'ipsum'}, {name: 'dolor'}],
       },
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -221,27 +258,17 @@ describe('Audit Row tests', () => {
   });
 
   test('should call click handlers for new audit', () => {
-    const audit = Audit.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+    audit = Audit.fromObject({
+      id: '314',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
       status: AUDIT_STATUS.new,
-      alterable: '0',
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      alterable: 0,
+      permissions: [{name: 'Everything'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -318,29 +345,19 @@ describe('Audit Row tests', () => {
   });
 
   test('should call click handlers for running audit', () => {
-    const audit = Audit.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+    audit = Audit.fromObject({
+      id: '314',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
-      in_use: true,
+      inUse: true,
       status: AUDIT_STATUS.running,
       alterable: '0',
-      current_report: currentReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      reports: {currentReport},
+      permissions: [{name: 'everything'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -426,29 +443,21 @@ describe('Audit Row tests', () => {
   });
 
   test('should call click handlers for stopped audit', () => {
-    const audit = Audit.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+    audit = Audit.fromObject({
+      id: '314',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
       status: AUDIT_STATUS.stopped,
       alterable: '0',
-      current_report: currentReport,
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      reports: {
+        lastReport,
+        currentReport,
+      },
+      permissions: [{name: 'everything'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -494,12 +503,12 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/5678');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Compliance Status
-    expect(bars[1]).toHaveAttribute('title', '50%');
-    expect(bars[1]).toHaveTextContent('50%');
+    expect(bars[1]).toHaveAttribute('title', '16%');
+    expect(bars[1]).toHaveTextContent('16%');
 
     // Actions
     const icons = getAllByTestId('svg-icon');
@@ -537,28 +546,18 @@ describe('Audit Row tests', () => {
   });
 
   test('should call click handlers for finished audit', () => {
-    const audit = Audit.fromElement({
-      _id: '314',
-      owner: {name: 'username'},
+    audit = Audit.fromObject({
+      id: '314',
+      owner: 'username',
       name: 'foo',
       comment: 'bar',
       status: AUDIT_STATUS.done,
       alterable: '0',
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      reports: {lastReport},
+      permissions: [{name: 'everything'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -604,12 +603,12 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Compliance Status
-    expect(bars[1]).toHaveAttribute('title', '50%');
-    expect(bars[1]).toHaveTextContent('50%');
+    expect(bars[1]).toHaveAttribute('title', '16%');
+    expect(bars[1]).toHaveTextContent('16%');
 
     // Actions
     const icons = getAllByTestId('svg-icon');
@@ -647,28 +646,18 @@ describe('Audit Row tests', () => {
   });
 
   test('should not call click handlers for audit without permission', () => {
-    const audit = Audit.fromElement({
-      _id: '314',
-      owner: {name: 'user'},
+    audit = Audit.fromObject({
+      id: '314',
+      owner: 'user',
       name: 'foo',
       comment: 'bar',
       status: AUDIT_STATUS.done,
       alterable: '0',
-      last_report: lastReport,
-      permissions: {permission: [{name: 'get_tasks'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      reports: {lastReport},
+      permissions: [{name: 'get_tasks'}],
+      target: {id: 'id', name: 'target'},
+      usagetype: 'audit',
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -717,12 +706,12 @@ describe('Audit Row tests', () => {
     expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Report
-    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Compliance Status
-    expect(bars[1]).toHaveAttribute('title', '50%');
-    expect(bars[1]).toHaveTextContent('50%');
+    expect(bars[1]).toHaveAttribute('title', '16%');
+    expect(bars[1]).toHaveTextContent('16%');
 
     // Actions
     fireEvent.click(icons[1]);

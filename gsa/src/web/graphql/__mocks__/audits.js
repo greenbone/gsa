@@ -16,8 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {AUDIT_STATUS} from 'gmp/models/audit';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
-import {TASK_STATUS} from 'gmp/models/task';
 import {
   createGenericQueryMock,
   createGenericMutationResult,
@@ -162,7 +162,7 @@ const preferences = deepFreeze([
   },
 ]);
 
-const detailsMockAudit = deepFreeze({
+export const detailsMockAudit = deepFreeze({
   name: 'foo',
   id: '657',
   creationTime: '2019-07-30T13:00:00Z',
@@ -178,7 +178,7 @@ const detailsMockAudit = deepFreeze({
     },
   },
   progress: 100,
-  status: TASK_STATUS.stopped,
+  status: AUDIT_STATUS.done,
   target,
   alterable: 0,
   trend: null,
