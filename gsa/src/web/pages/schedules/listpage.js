@@ -45,7 +45,6 @@ import {
   useBulkExportEntities,
 } from 'web/entities/bulkactions';
 import EntitiesPage from 'web/entities/page';
-import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 import usePagination from 'web/entities/usePagination';
 
 import {
@@ -61,6 +60,8 @@ import {
 import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
+import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
+import useExportEntity from 'web/entity/useExportEntity';
 import useFilterSortBy from 'web/utils/useFilterSortby';
 import usePageFilter from 'web/utils/usePageFilter';
 import usePrevious from 'web/utils/usePrevious';
@@ -69,7 +70,6 @@ import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import ScheduleComponent from './component';
 import SchedulesTable, {SORT_FIELDS} from './table';
-import useExportEntity from 'web/entity/useExportEntity';
 
 export const ToolBarIcons = ({onScheduleCreateClick}) => {
   const capabilities = useCapabilities();
@@ -136,7 +136,7 @@ const SchedulesPage = () => {
   const [deleteSchedule] = useDeleteSchedule();
   const exportSchedule = useExportSchedulesByIds();
 
-  const timeoutFunc = useEntitiesReloadInterval(schedules);
+  const timeoutFunc = useDefaultReloadInterval();
 
   const exportSchedulesByFilter = useExportSchedulesByFilter();
   const exportSchedulesByIds = useExportSchedulesByIds();
