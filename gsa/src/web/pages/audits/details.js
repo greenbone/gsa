@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
-
-import {connect} from 'react-redux';
+import React from 'react';
 
 import _ from 'gmp/locale';
 import DateTime from 'web/components/date/datetime';
@@ -40,40 +38,24 @@ import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
 
+import {useGetSchedule} from 'web/graphql/schedules';
+import {useGetPolicy} from 'web/graphql/policies';
+
 import {compareAlerts} from 'web/pages/tasks/details';
 
-import {
-  loadEntity as loadScheduleAction,
-  selector as scheduleSelector,
-} from 'web/store/entities/schedules';
-
-import {
-  loadEntity as loadPolicyAction,
-  selector as policySelector,
-} from 'web/store/entities/policies';
-
 import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
 import {renderYesNo} from 'web/utils/render';
 
-const AuditDetails = ({entity, loadPolicy, loadSchedule, ...props}) => {
-  useEffect(() => {
-    if (hasValue(entity.config)) {
-      loadPolicy(entity.config.id);
-    }
-    if (hasValue(entity.schedule)) {
-      loadSchedule(entity.schedule.id);
-    }
-  }, [entity, loadPolicy, loadSchedule]);
+const AuditDetails = ({entity, links = true}) => {
+  const {schedule} = useGetSchedule(entity.schedule.id);
 
-  const {links = true, schedule} = props;
+  const {policy} = useGetPolicy(entity.policy.id);
+
   const {
     alerts,
     autoDelete,
     autoDeleteData,
     averageDuration,
-    policy,
     hostsOrdering,
     inAssets,
     preferences,
@@ -292,35 +274,9 @@ const AuditDetails = ({entity, loadPolicy, loadSchedule, ...props}) => {
 
 AuditDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   links: PropTypes.bool,
-  loadPolicy: PropTypes.func.isRequired,
-  loadSchedule: PropTypes.func.isRequired,
-  policy: PropTypes.model,
-  schedule: PropTypes.model,
 };
 
-const mapStateToProps = (rootState, {entity = {}}) => {
-  const scheduleSel = scheduleSelector(rootState);
-  const policySel = policySelector(rootState);
-  return {
-    policy: hasValue(entity.config)
-      ? policySel.getEntity(entity.config.id)
-      : undefined,
-    schedule: hasValue(entity.schedule)
-      ? scheduleSel.getEntity(entity.schedule.id)
-      : undefined,
-  };
-};
-
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadPolicy: id => dispatch(loadPolicyAction(gmp)(id)),
-  loadSchedule: id => dispatch(loadScheduleAction(gmp)(id)),
-});
-
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(AuditDetails);
+export default AuditDetails;
 
 // vim: set ts=2 sw=2 tw=80:
