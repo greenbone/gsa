@@ -236,6 +236,25 @@ const error2 = {
   },
 };
 
+// Filters
+
+const filters = {
+  filter: ['High', 'Medium', 'Low'],
+  keywords: {
+    keyword: [
+      {column: 'apply_overrides', relation: '=', value: '0'},
+      {column: 'levels', relation: '=', value: 'hml'},
+      {column: 'rows', relation: '=', value: '100'},
+      {column: 'min_qod', relation: '=', value: '70'},
+      {column: 'first', relation: '=', value: '1'},
+      {column: 'sort-reverse', relation: '=', value: 'severity'},
+    ],
+  },
+  term:
+    'apply_overrides=0 levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity',
+  _id: '0',
+};
+
 export const getMockReport = () => {
   const report = {
     _id: '1234',
@@ -276,6 +295,7 @@ export const getMockReport = () => {
       full: 10.0,
       filtered: 10.0,
     },
+    filters: filters,
   };
 
   const entity = Report.fromElement({
