@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined, isArray, isString} from 'gmp/utils/identity';
+import {isDefined, isArray, isString, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 import {normalizeType} from 'gmp/utils/entitytype';
@@ -31,7 +31,7 @@ import {
   NO_VALUE,
 } from 'gmp/parser';
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 
 import Report from './report';
 import Schedule from './schedule';
@@ -51,6 +51,7 @@ import {
   getTranslatableTaskStatus as getTranslatableAuditStatus,
   isActive,
 } from './task';
+import Policy from './policy';
 
 export {
   AUTO_DELETE_KEEP,
@@ -108,6 +109,133 @@ class Audit extends Model {
 
   getTranslatableStatus() {
     return getTranslatableAuditStatus(this.status);
+  }
+
+  static parseObject(object) {
+    const copy = super.parseObject(object);
+    const {reports} = object;
+
+    copy.alterable = parseYesNo(object.alterable);
+    copy.resultCount = parseInt(object.resultCount); // this doesn't exist in selene yet. Need to add.
+    const allReports = ['lastReport', 'currentReport'];
+
+    if (hasValue(reports)) {
+      copy.reports = {...reports};
+      allReports.forEach(name => {
+        const report = reports[name];
+        if (hasValue(report)) {
+          copy.reports[name] = Report.fromObject(report);
+        }
+      });
+    }
+
+    if (hasValue(object.target)) {
+      copy.target = parseModelFromObject(object.target, 'target');
+    } else {
+      delete copy.target;
+    }
+
+    // slave isn't really an entity type but it has an id
+    if (isDefined(object.slave)) {
+      const data = object.slave;
+      if (isDefined(data) && !isEmpty(data._id)) {
+        copy.slave = parseModelFromElement(data, 'slave');
+      } else {
+        delete copy.slave;
+      }
+    }
+
+    if (hasValue(object.policy)) {
+      copy.policy = Policy.fromObject(object.policy);
+    } else {
+      delete copy.policy;
+    }
+
+    if (hasValue(object.alerts)) {
+      copy.alerts = map(object.alerts, alert =>
+        parseModelFromObject(alert, 'alert'),
+      );
+    } else {
+      delete copy.alerts;
+    }
+
+    if (hasValue(object.scanner)) {
+      copy.scanner = Scanner.parseObject(object.scanner);
+    } else {
+      delete copy.scanner;
+    }
+
+    if (hasValue(object.schedule)) {
+      copy.schedule = Schedule.parseObject(object.schedule);
+    } else {
+      delete copy.schedule;
+    }
+
+    copy.progress = parseProgressElement(object.progress);
+
+    const prefs = {};
+
+    if (copy.preferences && isArray(object.preferences)) {
+      for (const pref of object.preferences) {
+        switch (pref.name) {
+          case 'in_assets':
+            copy.inAssets = parseYes(pref.value);
+            break;
+          case 'assets_apply_overrides':
+            copy.applyOverrides = parseYes(pref.value);
+            break;
+          case 'assets_min_qod':
+            copy.minQod = parseInt(pref.value);
+            break;
+          case 'auto_delete':
+            copy.autoDelete =
+              pref.value === AUTO_DELETE_KEEP
+                ? AUTO_DELETE_KEEP
+                : AUTO_DELETE_NO;
+            break;
+          case 'auto_delete_data':
+            copy.autoDeleteData =
+              pref.value === '0'
+                ? AUTO_DELETE_KEEP_DEFAULT_VALUE
+                : parseInt(pref.value);
+            break;
+          case 'max_hosts':
+            copy.maxHosts = parseInt(pref.value);
+            delete copy.max_hosts;
+            break;
+          case 'max_checks':
+            copy.maxChecks = parseInt(pref.value);
+            delete copy.max_checks;
+            break;
+          case 'source_iface':
+            copy.sourceIface = pref.value; // is this defined in selene?
+            delete copy.source_iface;
+            break;
+          default:
+            prefs[pref.name] = {value: pref.value, name: pref.name};
+            break;
+        }
+      }
+    }
+
+    copy.preferences = prefs;
+
+    if (hasValue(object.averageDuration)) {
+      copy.averageDuration = parseDuration(object.averageDuration);
+    }
+
+    if (hasValue(object.hostsOrdering)) {
+      copy.hostsOrdering = object.hostsOrdering.toLowerCase();
+    }
+    if (
+      copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
+      copy.hostsOrdering !== HOSTS_ORDERING_REVERSE &&
+      copy.hostsOrdering !== HOSTS_ORDERING_SEQUENTIAL
+    ) {
+      delete copy.hostsOrdering;
+    }
+
+    return copy;
   }
 
   static parseElement(element) {
