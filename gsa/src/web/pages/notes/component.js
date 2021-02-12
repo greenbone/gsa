@@ -26,6 +26,7 @@ import {
   ACTIVE_NO_VALUE,
   ACTIVE_YES_ALWAYS_VALUE,
   ACTIVE_YES_UNTIL_VALUE,
+  DEFAULT_OID_VALUE,
   TASK_SELECTED,
   TASK_ANY,
   RESULT_UUID,
@@ -33,6 +34,8 @@ import {
   MANUAL,
   ANY,
 } from 'gmp/models/override';
+
+import {parseInt} from 'gmp/parser';
 
 import {hasId} from 'gmp/utils/id';
 import {isDefined, isArray} from 'gmp/utils/identity';
@@ -85,7 +88,7 @@ const NoteComponent = ({
           id: note.id,
           active,
           hosts: isDefined(hosts) && hosts.length > 0 ? MANUAL : ANY,
-          hosts_manual: isArray(hosts) ? hosts.join(', ') : undefined,
+          hosts_manual: isArray(hosts) ? hosts.join(',') : undefined,
           port: isDefined(port) ? MANUAL : ANY,
           port_manual: port,
           oid: isDefined(nvt) ? nvt.oid : undefined,
@@ -150,15 +153,49 @@ const NoteComponent = ({
   const handleSaveNote = data => {
     handleInteraction();
 
-    const {id, ...other} = data;
+    const {
+      severity,
+      active,
+      days,
+      hosts_manual,
+      id,
+      port_manual,
+      result_uuid,
+      task_uuid,
+      text,
+    } = data;
+
+    let daysActive;
+    if (active === ACTIVE_YES_UNTIL_VALUE) {
+      daysActive = days;
+    } else {
+      daysActive = parseInt(active);
+    }
+
+    const modifyData = {
+      id,
+      severity,
+      daysActive,
+      hosts: hosts_manual.split(','),
+      port: port_manual,
+      taskId: task_uuid,
+      resultId: result_uuid,
+      text,
+    };
 
     if (isDefined(id)) {
-      return modifyNote(data)
+      return modifyNote(modifyData)
         .then(onSaved, onSaveError)
         .then(() => closeNoteDialog());
     }
 
-    return createNote(other)
+    const createData = {
+      ...modifyData,
+      nvtOid: isDefined(data?.oid) ? data.oid : DEFAULT_OID_VALUE,
+      id: undefined,
+    };
+
+    return createNote(createData)
       .then(onCreated, onCreateError)
       .then(() => closeNoteDialog());
   };
