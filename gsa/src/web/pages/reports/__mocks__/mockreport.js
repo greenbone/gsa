@@ -30,7 +30,7 @@ const task1 = {
 };
 
 // Results
-const result1 = {
+export const result1 = {
   _id: '101',
   name: 'Result 1',
   owner: {name: 'admin'},
@@ -58,7 +58,7 @@ const result1 = {
   },
 };
 
-const result2 = {
+export const result2 = {
   _id: '102',
   name: 'Result 2',
   owner: {name: 'admin'},
@@ -86,7 +86,7 @@ const result2 = {
   },
 };
 
-const result3 = {
+export const result3 = {
   _id: '103',
   name: 'Result 3',
   owner: {name: 'admin'},
