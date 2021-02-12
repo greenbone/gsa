@@ -45,7 +45,19 @@ export const GET_NOTES = gql`
     ) {
       edges {
         node {
+          hosts
           id
+          nvt {
+            name
+          }
+          port
+          task {
+            name
+          }
+          text
+          permissions {
+            name
+          }
         }
       }
       counts {
@@ -101,32 +113,39 @@ export const GET_NOTE = gql`
       id
       active
       creationTime
+      endTime
       hosts
+      inUse
+      modificationTime
       nvt {
         id
+        name
       }
       owner
       result {
         id
+        name
       }
-      task {
-        id
-      }
-      writable
-      inUse
-      modificationTime
       permissions {
         name
       }
-      # userTags {
-      #   count
-      #   tags {
-      #     name
-      #     id
-      #     value
-      #     comment
-      #   }
-      # }
+      port
+      severity
+      task {
+        id
+        name
+      }
+      text
+      userTags {
+        count
+        tags {
+          name
+          id
+          value
+          comment
+        }
+      }
+      writable
     }
   }
 `;
@@ -136,9 +155,7 @@ export const useGetNote = (id, options) => {
     ...options,
     variables: {id},
   });
-  const note = isDefined(data?.note)
-    ? Note.fromObject(data.note)
-    : undefined;
+  const note = isDefined(data?.note) ? Note.fromObject(data.note) : undefined;
   return {note, ...other};
 };
 
@@ -204,10 +221,7 @@ export const useDeleteNotesByIds = options => {
 };
 
 export const useDeleteNote = options => {
-  const [queryDeleteNote, data] = useMutation(
-    DELETE_NOTES_BY_IDS,
-    options,
-  );
+  const [queryDeleteNote, data] = useMutation(DELETE_NOTES_BY_IDS, options);
   const deleteNote = useCallback(
     // eslint-disable-next-line no-shadow
     (id, options) => queryDeleteNote({...options, variables: {ids: [id]}}),
@@ -278,10 +292,7 @@ export const EXPORT_NOTES_BY_IDS = gql`
 `;
 
 export const useExportNotesByIds = options => {
-  const [queryExportNotesByIds] = useMutation(
-    EXPORT_NOTES_BY_IDS,
-    options,
-  );
+  const [queryExportNotesByIds] = useMutation(EXPORT_NOTES_BY_IDS, options);
 
   const exportNotesByIds = useCallback(
     // eslint-disable-next-line no-shadow
@@ -307,10 +318,7 @@ export const CLONE_NOTE = gql`
 `;
 
 export const useCloneNote = options => {
-  const [queryCloneNote, {data, ...other}] = useMutation(
-    CLONE_NOTE,
-    options,
-  );
+  const [queryCloneNote, {data, ...other}] = useMutation(CLONE_NOTE, options);
   const cloneNote = useCallback(
     // eslint-disable-next-line no-shadow
     (id, options) =>
