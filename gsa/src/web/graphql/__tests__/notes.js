@@ -160,9 +160,7 @@ const ExportNotesByIdsComponent = () => {
 
 const DeleteNoteComponent = () => {
   const [deleteNote] = useDeleteNotesByIds();
-  return (
-    <button data-testid="delete" onClick={() => deleteNote(['foo'])} />
-  );
+  return <button data-testid="delete" onClick={() => deleteNote(['123'])} />;
 };
 
 /* eslint-disable react/prop-types */
@@ -218,18 +216,17 @@ describe('useLazyGetNotes tests', () => {
     expect(resultFunc).toHaveBeenCalled();
 
     noteElements = screen.getAllByTestId('note');
-    expect(noteElements).toHaveLength(2);
+    expect(noteElements).toHaveLength(1);
 
     expect(noteElements[0]).toHaveTextContent('123');
-    expect(noteElements[1]).toHaveTextContent('456');
 
     expect(screen.queryByTestId('no-notes')).not.toBeInTheDocument();
 
-    expect(screen.getByTestId('total')).toHaveTextContent(2);
-    expect(screen.getByTestId('filtered')).toHaveTextContent(2);
+    expect(screen.getByTestId('total')).toHaveTextContent(1);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(1);
     expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
-    expect(screen.getByTestId('length')).toHaveTextContent(2);
+    expect(screen.getByTestId('length')).toHaveTextContent(1);
   });
 });
 
@@ -274,10 +271,7 @@ describe('Note mutation tests', () => {
 
 describe('useDeleteNotesByIds tests', () => {
   test('should delete a list of notes after user interaction', async () => {
-    const [mock, resultFunc] = createDeleteNotesByIdsQueryMock([
-      'foo',
-      'bar',
-    ]);
+    const [mock, resultFunc] = createDeleteNotesByIdsQueryMock(['foo', 'bar']);
     const {render} = rendererWith({queryMocks: [mock]});
 
     render(<DeleteNotesByIdsComponent />);
@@ -375,7 +369,7 @@ describe('useGetNote tests', () => {
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
-    render(<GetNoteComponent id="123" />);
+    render(<GetNoteComponent id="456" />);
 
     expect(screen.queryByTestId('loading')).toBeInTheDocument();
 
@@ -388,6 +382,6 @@ describe('useGetNote tests', () => {
 
     expect(screen.getByTestId('note')).toBeInTheDocument();
 
-    expect(screen.getByTestId('id')).toHaveTextContent('123');
+    expect(screen.getByTestId('id')).toHaveTextContent('456');
   });
 });

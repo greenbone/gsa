@@ -29,74 +29,156 @@ import {
   MODIFY_NOTE,
 } from '../notes';
 
-const note1 = deepFreeze({
-  id: '123',
-  active: 1,
-  creation_time: '2020-12-23T14:14:11Z',
-  hosts: '127.0.0.1',
-  in_use: 0,
-  modification_time: '2021-01-04T11:54:12Z',
+export const detailsNote = deepFreeze({
+  id: '456',
+  active: true,
+  creationTime: '2020-12-23T14:14:11Z',
+  endTime: '2021-12-23T14:14:11Z',
+  hosts: ['127.0.0.1', '127.0.0.2'],
+  inUse: false,
+  modificationTime: '2021-01-04T11:54:12Z',
   nvt: {
-    _oid: '123',
+    id: '123',
     name: 'foo nvt',
-    type: 'nvt',
   },
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'Everything'}},
-  port: '666',
+  owner: 'admin',
+  result: {
+    id: '1337',
+    name: 'result name',
+  },
+  permissions: [{name: 'Everything'}],
+  port: '666/tcp',
+  severity: '5.0',
   task: {
+    id: '42',
     name: 'task x',
-    _id: '42',
   },
   text: 'note text',
-  writable: 1,
+  userTags: {
+    count: 1,
+    tags: [
+      {
+        id: '123',
+        name: 'note:unnamed',
+        value: null,
+        comment: null,
+      },
+    ],
+  },
+  writable: true,
 });
 
-const note2 = deepFreeze({
+export const noPermNote = deepFreeze({
   id: '456',
-  active: 1,
-  creation_time: '2020-12-23T14:14:11Z',
-  hosts: '127.0.0.1',
-  in_use: 0,
-  modification_time: '2021-01-04T11:54:12Z',
+  active: true,
+  creationTime: '2020-12-23T14:14:11Z',
+  endTime: '2021-12-23T14:14:11Z',
+  hosts: ['127.0.0.1', '127.0.0.2'],
+  inUse: false,
+  modificationTime: '2021-01-04T11:54:12Z',
   nvt: {
-    _oid: '123',
+    id: '123',
     name: 'foo nvt',
-    type: 'nvt',
   },
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'Everything'}},
-  port: '666',
+  owner: 'admin',
+  result: {
+    id: '1337',
+    name: 'result name',
+  },
+  permissions: [{name: 'get_notes'}],
+  port: '666/tcp',
+  severity: '5.0',
   task: {
+    id: '42',
     name: 'task x',
-    _id: '42',
   },
   text: 'note text',
-  writable: 1,
+  userTags: {
+    count: 1,
+    tags: [
+      {
+        id: '123',
+        name: 'note:unnamed',
+        value: null,
+        comment: null,
+      },
+    ],
+  },
+  writable: true,
+});
+
+export const inUseNote = deepFreeze({
+  id: '456',
+  active: true,
+  creationTime: '2020-12-23T14:14:11Z',
+  endTime: '2021-12-23T14:14:11Z',
+  hosts: ['127.0.0.1', '127.0.0.2'],
+  inUse: true,
+  modificationTime: '2021-01-04T11:54:12Z',
+  nvt: {
+    id: '123',
+    name: 'foo nvt',
+  },
+  owner: 'admin',
+  result: {
+    id: '1337',
+    name: 'result name',
+  },
+  permissions: [{name: 'Everything'}],
+  port: '666/tcp',
+  severity: '5.0',
+  task: {
+    id: '42',
+    name: 'task x',
+  },
+  text: 'note text',
+  userTags: {
+    count: 1,
+    tags: [
+      {
+        id: '123',
+        name: 'note:unnamed',
+        value: null,
+        comment: null,
+      },
+    ],
+  },
+  writable: true,
+});
+
+const listNote = deepFreeze({
+  id: '123',
+  hosts: ['127.0.0.1', '127.0.0.2'],
+  nvt: {
+    name: 'foo nvt',
+  },
+  permissions: [{name: 'Everything'}],
+  port: '666/tcp',
+  task: {
+    name: 'task x',
+  },
+  text: 'note text',
 });
 
 const mockNotes = {
   edges: [
     {
-      node: note1,
-    },
-    {
-      node: note2,
+      node: listNote,
     },
   ],
   counts: {
-    total: 2,
-    filtered: 2,
+    total: 1,
+    filtered: 1,
     offset: 0,
     limit: 10,
-    length: 2,
+    length: 1,
   },
   pageInfo: {
     hasNextPage: false,
     hasPreviousPage: false,
     startCursor: 'note:0',
     endCursor: 'note:1',
-    lastPageCursor: 'note:3',
+    lastPageCursor: 'note:2',
   },
 };
 
@@ -121,21 +203,21 @@ export const createGetNotesQueryMock = (variables = {}) => {
 
 export const createNoteInput = {
   id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-  active: 1,
+  active: true,
   creation_time: '2020-12-23T14:14:11Z',
-  hosts: '127.0.0.1',
-  in_use: 0,
+  hosts: ['127.0.0.1'],
+  in_use: false,
   modification_time: '2021-01-04T11:54:12Z',
   nvt: {
-    _oid: '123',
+    id: '123',
     name: 'foo nvt',
     type: 'nvt',
   },
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},
-  port: '666',
+  port: '666/tcp',
   text: 'note text',
-  writable: 1,
+  writable: true,
 };
 
 const createNoteResult = {
@@ -173,7 +255,7 @@ const bulkDeleteByIdsResult = {
   },
 };
 
-export const createDeleteNotesByIdsQueryMock = (noteIds = ['123']) =>
+export const createDeleteNotesByIdsQueryMock = (noteIds = ['456']) =>
   createGenericQueryMock(DELETE_NOTES_BY_IDS, bulkDeleteByIdsResult, {
     ids: noteIds,
   });
@@ -184,7 +266,7 @@ const bulkDeleteByFilterResult = {
   },
 };
 
-export const createDeleteNotesByFilterQueryMock = (filterString = '123') =>
+export const createDeleteNotesByFilterQueryMock = (filterString = '456') =>
   createGenericQueryMock(DELETE_NOTES_BY_FILTER, bulkDeleteByFilterResult, {
     filterString,
   });
@@ -196,14 +278,14 @@ const deleteNoteResult = {
   },
 };
 
-export const createDeleteNoteQueryMock = (noteId = '123') =>
+export const createDeleteNoteQueryMock = (noteId = '456') =>
   createGenericQueryMock(DELETE_NOTES_BY_IDS, deleteNoteResult, {
     ids: [noteId],
   });
 
 export const createCloneNoteQueryMock = (
-  noteId = '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-  newNoteId = '456',
+  noteId = '456',
+  newNoteId = '6d00d22f-551b-4fbe-8215-d8615eff73ea',
 ) =>
   createGenericQueryMock(
     CLONE_NOTE,
@@ -217,8 +299,7 @@ export const createCloneNoteQueryMock = (
 
 const exportNotesByIdsResult = {
   exportNotesByIds: {
-    exportedEntities:
-      '<get_notes_response status="200" status_text="OK" />',
+    exportedEntities: '<get_notes_response status="200" status_text="OK" />',
   },
 };
 
@@ -229,14 +310,11 @@ export const createExportNotesByIdsQueryMock = (ids = ['123']) =>
 
 const exportNotesByFilterResult = {
   exportNotesByFilter: {
-    exportedEntities:
-      '<get_notes_response status="200" status_text="OK" />',
+    exportedEntities: '<get_notes_response status="200" status_text="OK" />',
   },
 };
 
-export const createExportNotesByFilterQueryMock = (
-  filterString = 'foo',
-) => {
+export const createExportNotesByFilterQueryMock = (filterString = 'foo') => {
   return createGenericQueryMock(
     EXPORT_NOTES_BY_FILTER,
     exportNotesByFilterResult,
@@ -244,7 +322,6 @@ export const createExportNotesByFilterQueryMock = (
   );
 };
 
-export const createGetNoteQueryMock = (
-  noteId = '123',
-  note = note1,
-) => createGenericQueryMock(GET_NOTE, {note}, {id: noteId});
+export const createGetNoteQueryMock = (noteId = '456', note = detailsNote) => {
+  return createGenericQueryMock(GET_NOTE, {note: detailsNote}, {id: noteId});
+};
