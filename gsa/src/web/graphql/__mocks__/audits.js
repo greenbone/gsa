@@ -64,6 +64,11 @@ const lastReport = deepFreeze({
   timestamp: '2019-07-30T13:23:30Z',
   scanStart: '2019-07-30T13:23:34Z',
   scanEnd: '2019-07-30T13:25:43Z',
+  complianceCount: {
+    yes: 3,
+    no: 2,
+    incomplete: 4,
+  },
 });
 
 const currentReport = deepFreeze({
@@ -167,8 +172,8 @@ export const detailsMockAudit = deepFreeze({
   id: '657',
   creationTime: '2019-07-30T13:00:00Z',
   modificationTime: '2019-08-30T13:23:30Z',
-  permissions: allPermissions,
   averageDuration: 3,
+  permissions: allPermissions,
   reports: {
     lastReport,
     currentReport,
@@ -177,11 +182,16 @@ export const detailsMockAudit = deepFreeze({
       finished: 1,
     },
   },
-  progress: 100,
+  results: {
+    counts: {
+      current: 20,
+    },
+  },
   status: AUDIT_STATUS.done,
+  progress: 100,
   target,
-  alterable: 0,
   trend: null,
+  alterable: 0,
   comment: 'bar',
   owner: 'admin',
   preferences,
@@ -191,13 +201,7 @@ export const detailsMockAudit = deepFreeze({
   scanner,
   schedulePeriods: null,
   hostsOrdering: 'sequential',
-  userTags: null,
   observers,
-  results: {
-    counts: {
-      current: 20,
-    },
-  },
 });
 
 export const createAuditInput = {

@@ -116,6 +116,7 @@ export const GET_AUDIT = gql`
         currentReport {
           id
           scanStart
+          timestamp
         }
         counts {
           total
