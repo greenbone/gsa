@@ -964,11 +964,13 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
         >
           <div
             class="c24"
+            data-testid="tab"
           >
             Information
           </div>
           <div
             class="c25"
+            data-testid="tab"
           >
             <div
               class="c26"

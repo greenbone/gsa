@@ -68,6 +68,7 @@ const Tab = ({
   onActivate,
 }) => (
   <StyledDiv
+    data-testid="tab"
     active={isActive}
     className={className}
     onClick={disabled ? undefined : onActivate}
