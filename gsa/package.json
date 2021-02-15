@@ -82,9 +82,14 @@
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@apollo/react-testing": "^3.1.3",
     "@babel/cli": "^7.12.10",
     "@storybook/react": "^6.1.15",
+=======
+    "@babel/cli": "^7.12.16",
+    "@storybook/react": "^6.1.17",
+>>>>>>> 4a2cd91b0e... Bump @babel/cli from 7.12.13 to 7.12.16 in /gsa
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@types/jest": "^26.0.20",
