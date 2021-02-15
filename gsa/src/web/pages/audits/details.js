@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import _ from 'gmp/locale';
 import DateTime from 'web/components/date/datetime';
@@ -38,8 +38,8 @@ import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
 
-import {useGetSchedule} from 'web/graphql/schedules';
-import {useGetPolicy} from 'web/graphql/policies';
+import {useGetSchedule, useLazyGetSchedule} from 'web/graphql/schedules';
+import {useGetPolicy, useLazyGetPolicy} from 'web/graphql/policies';
 
 import {compareAlerts} from 'web/pages/tasks/details';
 
@@ -47,9 +47,17 @@ import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
 
 const AuditDetails = ({entity, links = true}) => {
-  const {schedule} = useGetSchedule(entity.schedule.id);
+  const [loadSchedule, {schedule}] = useLazyGetSchedule(entity?.schedule?.id);
+  const [loadPolicy, {policy = undefined}] = useLazyGetPolicy();
 
-  const {policy} = useGetPolicy(entity.policy.id);
+  useEffect(() => {
+    if (hasValue(entity.schedule)) {
+      loadSchedule(entity.schedule.id);
+    }
+    if (hasValue(entity.policy)) {
+      loadPolicy(entity.policy.id);
+    }
+  }, [loadSchedule, loadPolicy]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
     alerts,

@@ -41,7 +41,7 @@ import {
   useExportPoliciesByFilter,
   useExportPoliciesByIds,
   useGetPolicy,
-  useLazyGetPolicy,
+  useLoadPolicyPromise,
   useImportPolicy,
   useLazyGetPolicies,
 } from '../policies';
@@ -284,7 +284,7 @@ describe('useLazyGetPolicies tests', () => {
 });
 
 const GetLazyPolicyComponent = () => {
-  const [getPolicy] = useLazyGetPolicy();
+  const [getPolicy] = useLoadPolicyPromise();
   const [policy, setPolicy] = useState();
 
   const handleLoadPolicy = policyId => {
@@ -305,7 +305,7 @@ const GetLazyPolicyComponent = () => {
   );
 };
 
-describe('useLazyGetPolicy tests', () => {
+describe('useLoadPolicyPromise tests', () => {
   test('should query policy after user interaction', async () => {
     const [mock, resultFunc] = createGetPolicyQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
