@@ -57,7 +57,7 @@ const scanner = deepFreeze({
 const auditDetailsScanner = deepFreeze({
   id: '1516',
   name: 'scanner1',
-  type: 2,
+  type: 'OPENVAS_SCANNER_TYPE',
 });
 
 // Policy

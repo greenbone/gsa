@@ -171,7 +171,11 @@ class Audit extends Model {
       delete copy.schedule;
     }
 
-    copy.progress = parseProgressElement(object.progress);
+    if (hasValue(object.progress)) {
+      copy.progress = object.progress;
+    } else {
+      copy.progress = 0;
+    }
 
     const prefs = {};
 
