@@ -93,10 +93,6 @@ class Note extends Model {
 
     return ret;
   }
-
-  isInTrash() {
-    return this.trash === 1;
-  }
 }
 
 export default Note;
