@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@greenbone/ui-components": "2021.1.2",
-    "@babel/core": "^7.12.13",
+    "@babel/core": "^7.12.16",
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
     "@vx/shape": "^0.0.179",
@@ -80,7 +80,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.12.16",
-    "@storybook/react": "^6.1.17",
+    "@storybook/react": "^6.1.18",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@types/jest": "^26.0.20",
