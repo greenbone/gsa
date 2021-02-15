@@ -136,244 +136,18 @@ exports[`Audit Details tests should render full audit details 1`] = `
   }
 }
 
-<body>
-  <div
-    id="portals"
-  />
-  <div>
-    <div
-      class="c0"
-    >
-      <div
-        class="c1"
-      >
-        <h2>
-          Target
-        </h2>
-        <div>
-          <a
-            class="c2"
-            data-testid="details-link"
-            href="/target/5678"
-          >
-            target1
-          </a>
-        </div>
-      </div>
-      <div
-        class="c1"
-      >
-        <h2>
-          Alerts
-        </h2>
-        <div>
-          <div
-            class="c3"
-          >
-            <div
-              class="c4 c5"
-              margin="5px"
-            >
-              <span>
-                <a
-                  class="c2"
-                  data-testid="details-link"
-                  href="/alert/91011"
-                >
-                  alert1
-                </a>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="c1"
-      >
-        <h2>
-          Scanner
-        </h2>
-        <div>
-          <table
-            class="c6 c7"
-          >
-            <colgroup>
-              <col
-                class="c8"
-                width="10%"
-              />
-              <col
-                class="c9"
-                width="90%"
-              />
-            </colgroup>
-            <tbody
-              class=""
-            >
-              <tr>
-                <td>
-                  <div
-                    class="c1"
-                  >
-                    Name
-                  </div>
-                </td>
-                <td>
-                  <div
-                    class="c1"
-                  >
-                    <span>
-                      <a
-                        class="c2"
-                        data-testid="details-link"
-                        href="/scanner/1516"
-                      >
-                        scanner1
-                      </a>
-                    </span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div
-                    class="c1"
-                  >
-                    Type
-                  </div>
-                </td>
-                <td>
-                  <div
-                    class="c1"
-                  >
-                    OpenVAS Scanner
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div
-        class="c1"
-      >
-        <h2>
-          Assets
-        </h2>
-        <div>
-          <table
-            class="c6 c7"
-          >
-            <colgroup>
-              <col
-                class="c8"
-                width="10%"
-              />
-              <col
-                class="c9"
-                width="90%"
-              />
-            </colgroup>
-            <tbody
-              class=""
-            >
-              <tr>
-                <td>
-                  <div
-                    class="c1"
-                  >
-                    Add to Assets
-                  </div>
-                </td>
-                <td>
-                  <div
-                    class="c1"
-                  >
-                    Unknown
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div
-        class="c1"
-      >
-        <h2>
-          Scan
-        </h2>
-        <div>
-          <table
-            class="c6 c7"
-          >
-            <colgroup>
-              <col
-                class="c8"
-                width="10%"
-              />
-              <col
-                class="c9"
-                width="90%"
-              />
-            </colgroup>
-            <tbody
-              class=""
-            >
-              <tr>
-                <td>
-                  <div
-                    class="c1"
-                  >
-                    Duration of last Scan
-                  </div>
-                </td>
-                <td>
-                  <div
-                    class="c1"
-                  >
-                    2 minutes
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div
-                    class="c1"
-                  >
-                    Auto delete Reports
-                  </div>
-                </td>
-                <td>
-                  <div
-                    class="c1"
-                  >
-                    Do not automatically delete reports
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</body>
-`;
-
-exports[`Audit Details tests should render full audit details 2`] = `
 <div
-  class="sc-bdVaJa fFytQy"
+  class="c0"
 >
   <div
-    class="sc-bdVaJa sUcSo"
+    class="c1"
   >
     <h2>
       Target
     </h2>
     <div>
       <a
-        class="sc-bwzfXH kRiXBr"
+        class="c2"
         data-testid="details-link"
         href="/target/5678"
       >
@@ -382,22 +156,22 @@ exports[`Audit Details tests should render full audit details 2`] = `
     </div>
   </div>
   <div
-    class="sc-bdVaJa sUcSo"
+    class="c1"
   >
     <h2>
       Alerts
     </h2>
     <div>
       <div
-        class="sc-bdVaJa sc-VigVT jcOsJW"
+        class="c3"
       >
         <div
-          class="sc-bdVaJa sc-gqjmRU czJloC sc-iGrrsa oqHaJ"
+          class="c4 c5"
           margin="5px"
         >
           <span>
             <a
-              class="sc-bwzfXH kRiXBr"
+              class="c2"
               data-testid="details-link"
               href="/alert/91011"
             >
@@ -409,43 +183,43 @@ exports[`Audit Details tests should render full audit details 2`] = `
     </div>
   </div>
   <div
-    class="sc-bdVaJa sUcSo"
+    class="c1"
   >
     <h2>
       Scanner
     </h2>
     <div>
       <table
-        class="sc-hwwEjo cLYybc sc-bmyXtO lhjYid"
+        class="c6 c7"
       >
         <colgroup>
           <col
-            class="sc-jtggT evqFpw"
+            class="c8"
             width="10%"
           />
           <col
-            class="sc-jtggT deyyqV"
+            class="c9"
             width="90%"
           />
         </colgroup>
         <tbody
-          class="sc-ibxdXY clQDsv"
+          class=""
         >
           <tr>
             <td>
               <div
-                class="sc-bdVaJa sUcSo"
+                class="c1"
               >
                 Name
               </div>
             </td>
             <td>
               <div
-                class="sc-bdVaJa sUcSo"
+                class="c1"
               >
                 <span>
                   <a
-                    class="sc-bwzfXH kRiXBr"
+                    class="c2"
                     data-testid="details-link"
                     href="/scanner/1516"
                   >
@@ -458,17 +232,69 @@ exports[`Audit Details tests should render full audit details 2`] = `
           <tr>
             <td>
               <div
-                class="sc-bdVaJa sUcSo"
+                class="c1"
               >
                 Type
               </div>
             </td>
             <td>
               <div
-                class="sc-bdVaJa sUcSo"
+                class="c1"
               >
-                Unknown type ()
+                OpenVAS Scanner
               </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Policy
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              >
+                <span>
+                  <a
+                    class="c2"
+                    data-testid="details-link"
+                    href="/policy/314"
+                  >
+                    foo
+                  </a>
+                </span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Order for target hosts
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Network Source Interface
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              />
             </td>
           </tr>
         </tbody>
@@ -476,41 +302,41 @@ exports[`Audit Details tests should render full audit details 2`] = `
     </div>
   </div>
   <div
-    class="sc-bdVaJa sUcSo"
+    class="c1"
   >
     <h2>
       Assets
     </h2>
     <div>
       <table
-        class="sc-hwwEjo cLYybc sc-bmyXtO lhjYid"
+        class="c6 c7"
       >
         <colgroup>
           <col
-            class="sc-jtggT evqFpw"
+            class="c8"
             width="10%"
           />
           <col
-            class="sc-jtggT deyyqV"
+            class="c9"
             width="90%"
           />
         </colgroup>
         <tbody
-          class="sc-ibxdXY clQDsv"
+          class=""
         >
           <tr>
             <td>
               <div
-                class="sc-bdVaJa sUcSo"
+                class="c1"
               >
                 Add to Assets
               </div>
             </td>
             <td>
               <div
-                class="sc-bdVaJa sUcSo"
+                class="c1"
               >
-                Unknown
+                Yes
               </div>
             </td>
           </tr>
@@ -519,39 +345,90 @@ exports[`Audit Details tests should render full audit details 2`] = `
     </div>
   </div>
   <div
-    class="sc-bdVaJa sUcSo"
+    class="c1"
+  >
+    <h2>
+      Schedule
+    </h2>
+    <div>
+      <table
+        class="c6 c7"
+      >
+        <colgroup>
+          <col
+            class="c8"
+            width="10%"
+          />
+          <col
+            class="c9"
+            width="90%"
+          />
+        </colgroup>
+        <tbody
+          class=""
+        >
+          <tr>
+            <td>
+              <div
+                class="c1"
+              >
+                Name
+              </div>
+            </td>
+            <td>
+              <div
+                class="c1"
+              >
+                <span>
+                  <a
+                    class="c2"
+                    data-testid="details-link"
+                    href="/schedule/121314"
+                  >
+                    schedule1
+                  </a>
+                </span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div
+    class="c1"
   >
     <h2>
       Scan
     </h2>
     <div>
       <table
-        class="sc-hwwEjo cLYybc sc-bmyXtO lhjYid"
+        class="c6 c7"
       >
         <colgroup>
           <col
-            class="sc-jtggT evqFpw"
+            class="c8"
             width="10%"
           />
           <col
-            class="sc-jtggT deyyqV"
+            class="c9"
             width="90%"
           />
         </colgroup>
         <tbody
-          class="sc-ibxdXY clQDsv"
+          class=""
         >
           <tr>
             <td>
               <div
-                class="sc-bdVaJa sUcSo"
+                class="c1"
               >
                 Duration of last Scan
               </div>
             </td>
             <td>
               <div
-                class="sc-bdVaJa sUcSo"
+                class="c1"
               >
                 2 minutes
               </div>
@@ -560,14 +437,14 @@ exports[`Audit Details tests should render full audit details 2`] = `
           <tr>
             <td>
               <div
-                class="sc-bdVaJa sUcSo"
+                class="c1"
               >
                 Auto delete Reports
               </div>
             </td>
             <td>
               <div
-                class="sc-bdVaJa sUcSo"
+                class="c1"
               >
                 Do not automatically delete reports
               </div>

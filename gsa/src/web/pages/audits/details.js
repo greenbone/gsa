@@ -38,8 +38,8 @@ import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
 
-import {useGetSchedule, useLazyGetSchedule} from 'web/graphql/schedules';
-import {useGetPolicy, useLazyGetPolicy} from 'web/graphql/policies';
+import {useLazyGetSchedule} from 'web/graphql/schedules';
+import {useLazyGetPolicy} from 'web/graphql/policies';
 
 import {compareAlerts} from 'web/pages/tasks/details';
 
@@ -48,7 +48,9 @@ import {renderYesNo} from 'web/utils/render';
 
 const AuditDetails = ({entity, links = true}) => {
   const [loadSchedule, {schedule}] = useLazyGetSchedule(entity?.schedule?.id);
-  const [loadPolicy, {policy = undefined}] = useLazyGetPolicy();
+  const [loadPolicy, {policy = undefined}] = useLazyGetPolicy(
+    entity?.policy?.id,
+  );
 
   useEffect(() => {
     if (hasValue(entity.schedule)) {

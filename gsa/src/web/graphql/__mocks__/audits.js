@@ -242,6 +242,11 @@ const auditDetailsPreferences = deepFreeze([
     scanner_name: 'auto_delete',
     value: 'no',
   },
+  {
+    description: 'Add results to Asset Management',
+    name: 'in_assets',
+    value: 'yes',
+  },
 ]);
 
 export const auditDetailsAudit = deepFreeze({

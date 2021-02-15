@@ -52,16 +52,12 @@ describe('Audit Details tests', () => {
     const {render} = rendererWith({
       capabilities: caps,
       router: true,
-      mocks: [scheduleMock, policyMock],
+      queryMocks: [scheduleMock, policyMock],
     });
 
-    const {element, baseElement, getAllByTestId} = render(
-      <Details entity={audit} />,
-    );
+    const {element, getAllByTestId} = render(<Details entity={audit} />);
 
     await wait();
-
-    expect(baseElement).toMatchSnapshot();
 
     expect(scheduleResult).toHaveBeenCalled();
     expect(policyResult).toHaveBeenCalled();
@@ -81,10 +77,16 @@ describe('Audit Details tests', () => {
     expect(detailslinks[2]).toHaveAttribute('href', '/scanner/1516');
     expect(element).toHaveTextContent('scanner1');
     expect(element).toHaveTextContent('OpenVAS Scanner');
+    expect(detailslinks[3]).toHaveAttribute('href', '/policy/314');
 
     expect(headings[3]).toHaveTextContent('Assets');
+    expect(element).toHaveTextContent('Add to Assets');
+    expect(element).toHaveTextContent('Yes');
 
-    expect(headings[4]).toHaveTextContent('Scan');
+    expect(headings[4]).toHaveTextContent('Schedule');
+    expect(detailslinks[4]).toHaveAttribute('href', '/schedule/121314');
+
+    expect(headings[5]).toHaveTextContent('Scan');
     expect(element).toHaveTextContent('2 minutes');
     expect(element).toHaveTextContent('Do not automatically delete reports');
   });
