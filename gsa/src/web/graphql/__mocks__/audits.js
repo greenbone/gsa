@@ -42,11 +42,22 @@ const target = deepFreeze({
   name: 'target 1',
 });
 
+const auditDetailsTarget = deepFreeze({
+  id: '5678',
+  name: 'target1',
+});
+
 // Scanner
 const scanner = deepFreeze({
   id: '212223',
   name: 'scanner 1',
   type: 'OPENVAS_SCANNER_TYPE',
+});
+
+const auditDetailsScanner = deepFreeze({
+  id: '1516',
+  name: 'scanner1',
+  type: 2,
 });
 
 // Policy
@@ -55,6 +66,35 @@ export const policy = deepFreeze({
   name: 'unnamed policy',
   type: OPENVAS_SCAN_CONFIG_TYPE,
   trash: null,
+});
+
+export const auditDetailsPolicy = deepFreeze({
+  id: '314',
+  name: 'foo',
+  comment: 'bar',
+  writable: null,
+  owner: null,
+  inUse: null,
+  creationTime: null,
+  modificationTime: null,
+  permissions: null,
+  type: OPENVAS_SCAN_CONFIG_TYPE,
+  trash: null,
+  familyCount: null,
+  familyGrowing: null,
+  nvtGrowing: null,
+  nvtCount: null,
+  usageType: null,
+  maxNvtCount: null,
+  knownNvtCount: null,
+  predefined: null,
+  families: null,
+  preferences: null,
+  nvtSelectors: null,
+  tasks: [
+    {id: '12345', name: 'foo'},
+    {id: '678910', name: 'audit2'},
+  ],
 });
 
 // Reports
@@ -69,6 +109,15 @@ const lastReport = deepFreeze({
     no: 2,
     incomplete: 4,
   },
+});
+
+const auditDetailsLastReport = deepFreeze({
+  id: '1234',
+  timestamp: '2019-07-30T13:23:30Z',
+  scanStart: '2019-07-30T13:23:34Z',
+  scanEnd: '2019-07-30T13:25:43Z',
+  severity: null,
+  complianceCount: {yes: 4, no: 3, incomplete: 1},
 });
 
 const currentReport = deepFreeze({
@@ -99,6 +148,21 @@ const schedule = deepFreeze({
   timezone: 'UTC',
   duration: 0,
   icalendar: weekly,
+});
+
+export const auditDetailsSchedule = deepFreeze({
+  id: '121314',
+  name: 'schedule1',
+  icalendar: null,
+  timezone: null,
+  userTags: null,
+  permissions: null,
+  owner: null,
+  comment: null,
+  writable: null,
+  inUse: false,
+  creationTime: null,
+  modificationTime: null,
 });
 
 const allPermissions = deepFreeze([
@@ -166,6 +230,52 @@ const preferences = deepFreeze([
     value: '20',
   },
 ]);
+
+const auditDetailsPreferences = deepFreeze([
+  {
+    name: 'Add results to Asset Management',
+    scanner_name: 'in_assets',
+    value: 'yes',
+  },
+  {
+    name: 'Auto Delete Reports',
+    scanner_name: 'auto_delete',
+    value: 'no',
+  },
+]);
+
+export const auditDetailsAudit = deepFreeze({
+  name: 'foo',
+  id: '12345',
+  creationTime: null,
+  modificationTime: null,
+  averageDuration: null,
+  permissions: [{name: 'Everything'}],
+  reports: {
+    lastReport: auditDetailsLastReport,
+    currentReport: null,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
+  },
+  results: null,
+  status: AUDIT_STATUS.done,
+  progress: null,
+  target: auditDetailsTarget,
+  trend: null,
+  alterable: 0,
+  comment: 'bar',
+  owner: 'username',
+  preferences: auditDetailsPreferences,
+  schedule: auditDetailsSchedule,
+  alerts: [{id: '91011', name: 'alert1'}],
+  policy: auditDetailsPolicy,
+  scanner: auditDetailsScanner,
+  schedulePeriods: null,
+  hostsOrdering: null,
+  observers: null,
+});
 
 export const detailsMockAudit = deepFreeze({
   name: 'foo',
