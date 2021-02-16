@@ -68,7 +68,7 @@ export const nonWritableConfig = deepFreeze({
       type: 'entry',
       value: 'regress',
       nvt: {
-        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
     },
@@ -121,7 +121,7 @@ export const inUseConfig = deepFreeze({
       type: 'entry',
       value: 'postgres',
       nvt: {
-        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
     },
@@ -174,7 +174,7 @@ export const editableConfig = deepFreeze({
       type: 'entry',
       value: 'postgres',
       nvt: {
-        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
     },
@@ -227,7 +227,7 @@ export const noPermConfig = deepFreeze({
       type: 'entry',
       value: 'postgres',
       nvt: {
-        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
     },
