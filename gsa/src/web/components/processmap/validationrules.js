@@ -22,11 +22,8 @@ import {
 } from 'web/components/form/useFormValidation';
 
 export const createProcessRules = {
-  name: value => {
-    const isValid = shouldBeValidName(value);
-    const error = isValid ? '' : VALID_NAME_ERROR_MESSAGE;
-    return {isValid, error};
-  },
+  name: value =>
+    shouldBeValidName(value) ? undefined : VALID_NAME_ERROR_MESSAGE,
 };
 
 // vim: set ts=2 sw=2 tw=80:
