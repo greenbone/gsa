@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useReducer} from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
@@ -26,6 +26,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
+import Button from 'web/components/form/button';
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
@@ -39,13 +40,13 @@ import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
+import stateReducer, {updateState} from 'web/utils/stateReducer';
 
 import TimeUnitSelect from './timeunitselect';
 import WeekDaySelect, {WeekDaysPropType} from './weekdayselect';
 import {renderDuration} from './render';
 import DaySelect from './dayselect';
 import MonthDaysSelect from './monthdaysselect';
-import Button from 'web/components/form/button';
 
 const RECURRENCE_ONCE = 'once';
 const RECURRENCE_HOURLY = ReccurenceFrequency.HOURLY;
@@ -121,121 +122,129 @@ const RepeatMonthly = {
 
 const getNthWeekday = cdate => Math.ceil(cdate.date() / 7);
 
-class ScheduleDialog extends React.Component {
-  constructor(...args) {
-    super(...args);
+const deriveInitialState = props => {
+  const {
+    duration,
+    timezone = 'UTC',
+    startDate = date().tz(timezone).startOf('hour').add(1, 'hour'),
+  } = props;
+  let {freq, interval = 1, weekdays, monthdays} = props;
 
-    this.state = this.initialState(this.props);
+  const monthly =
+    freq === ReccurenceFrequency.MONTHLY && !isDefined(weekdays)
+      ? RepeatMonthly.days
+      : RepeatMonthly.nth;
 
-    this.handleSave = this.handleSave.bind(this);
-    this.handleValueChange = this.handleValueChange.bind(this);
-    this.handleStartHoursChange = this.handleStartHoursChange.bind(this);
-    this.handleStartMinutesChange = this.handleStartMinutesChange.bind(this);
-    this.handleEndHoursChange = this.handleEndHoursChange.bind(this);
-    this.handleEndMinutesChange = this.handleEndMinutesChange.bind(this);
-    this.handleTimezoneChange = this.handleTimezoneChange.bind(this);
-    this.handleNowButtonClick = this.handleNowButtonClick.bind(this);
-  }
-
-  initialState(props) {
-    const {
-      duration,
-      timezone = 'UTC',
-      startDate = date().tz(timezone).startOf('hour').add(1, 'hour'),
-    } = props;
-    let {freq, interval = 1, weekdays, monthdays} = this.props;
-
-    const monthly =
-      freq === ReccurenceFrequency.MONTHLY && !isDefined(weekdays)
-        ? RepeatMonthly.days
-        : RepeatMonthly.nth;
-
-    let recurrenceType;
-    if (isDefined(freq)) {
-      if (!isDefined(weekdays) && !isDefined(monthdays) && interval === 1) {
-        recurrenceType = freq;
-      } else {
-        recurrenceType = RECURRENCE_CUSTOM;
-      }
+  let recurrenceType;
+  if (isDefined(freq)) {
+    if (!isDefined(weekdays) && !isDefined(monthdays) && interval === 1) {
+      recurrenceType = freq;
     } else {
-      recurrenceType = RECURRENCE_ONCE;
-      freq = ReccurenceFrequency.WEEKLY;
+      recurrenceType = RECURRENCE_CUSTOM;
     }
-
-    const endDate = isDefined(duration)
-      ? startDate.clone().add(duration)
-      : startDate.clone().add(1, 'hour');
-
-    if (!isDefined(weekdays)) {
-      weekdays = new WeekDays();
-      weekdays = weekdays.setWeekDayFromDate(startDate);
-    }
-
-    const monthlyDay = weekdays.getSelectedWeekDay();
-    let monthlyNth = weekdays.get(monthlyDay);
-    if (monthlyNth === true) {
-      monthlyNth = '' + getNthWeekday(startDate);
-    }
-
-    return {
-      endDate,
-      endOpen: !isDefined(duration),
-      freq,
-      interval,
-      monthdays: isDefined(monthdays) ? monthdays : [startDate.date()],
-      recurrenceType,
-      monthly,
-      monthlyDay,
-      monthlyNth,
-      startDate,
-      timezone,
-      weekdays,
-    };
+  } else {
+    recurrenceType = RECURRENCE_ONCE;
+    freq = ReccurenceFrequency.WEEKLY;
   }
 
-  handleValueChange(value, name) {
-    this.setState({[name]: value});
+  const endDate = isDefined(duration)
+    ? startDate.clone().add(duration)
+    : startDate.clone().add(1, 'hour');
+
+  if (!isDefined(weekdays)) {
+    weekdays = new WeekDays();
+    weekdays = weekdays.setWeekDayFromDate(startDate);
   }
 
-  handleStartHoursChange(value) {
-    this.setState(state => ({
-      startDate: state.startDate.hours(value),
-    }));
+  const monthlyDay = weekdays.getSelectedWeekDay();
+  let monthlyNth = weekdays.get(monthlyDay);
+  if (monthlyNth === true) {
+    monthlyNth = '' + getNthWeekday(startDate);
   }
 
-  handleStartMinutesChange(value) {
-    this.setState(state => ({
-      startDate: state.startDate.minutes(value),
-    }));
-  }
+  return {
+    endDate,
+    endOpen: !isDefined(duration),
+    freq,
+    interval,
+    monthdays: isDefined(monthdays) ? monthdays : [startDate.date()],
+    recurrenceType,
+    monthly,
+    monthlyDay,
+    monthlyNth,
+    startDate,
+    timezone,
+    weekdays,
+  };
+};
+const ScheduleDialog = props => {
+  // decided against destructuring because it makes deriveInitialState cleaner
+  const [formState, dispatchState] = useReducer(
+    stateReducer,
+    deriveInitialState(props),
+  );
 
-  handleNowButtonClick() {
-    const {timezone} = this.state;
+  const handleValueChange = (value, name) => {
+    dispatchState(
+      updateState({
+        [name]: value,
+      }),
+    );
+  };
+
+  const handleStartHoursChange = value => {
+    dispatchState(
+      updateState({
+        startDate: formState.startDate.hours(value),
+      }),
+    );
+  };
+
+  const handleStartMinutesChange = value => {
+    dispatchState(
+      updateState({
+        startDate: formState.startDate.minutes(value),
+      }),
+    );
+  };
+
+  const handleNowButtonClick = () => {
+    const {timezone} = formState;
     const now = date().tz(timezone);
-    this.setState({startDate: now});
-  }
+    dispatchState(
+      updateState({
+        startDate: now,
+      }),
+    );
+  };
 
-  handleEndHoursChange(value) {
-    this.setState(state => ({
-      endDate: state.endDate.hours(value),
-    }));
-  }
+  const handleEndHoursChange = value => {
+    dispatchState(
+      updateState({
+        endDate: formState.endDate.hours(value),
+      }),
+    );
+  };
 
-  handleEndMinutesChange(value) {
-    this.setState(state => ({
-      endDate: state.endDate.minutes(value),
-    }));
-  }
+  const handleEndMinutesChange = value => {
+    dispatchState(
+      updateState({
+        endDate: formState.endDate.minutes(value),
+      }),
+    );
+  };
 
-  handleTimezoneChange(value) {
-    this.setState(state => ({
-      endDate: state.endDate.tz(value),
-      startDate: state.startDate.tz(value),
-      timezone: value,
-    }));
-  }
+  const handleTimezoneChange = value => {
+    dispatchState(
+      updateState({
+        endDate: formState.endDate.tz(value),
+        startDate: formState.startDate.tz(value),
+        timezone: value,
+      }),
+    );
+  };
 
-  handleSave({
+  const handleSave = ({
     comment,
     endDate,
     endOpen = false,
@@ -251,8 +260,8 @@ class ScheduleDialog extends React.Component {
     startDate,
     timezone,
     weekdays,
-  }) {
-    const {onSave} = this.props;
+  }) => {
+    const {onSave} = props;
 
     if (!isDefined(onSave)) {
       return Promise.resolve();
@@ -338,260 +347,258 @@ class ScheduleDialog extends React.Component {
       icalendar: event.toIcalString(),
       timezone,
     });
-  }
+  };
 
-  render() {
-    const {
-      comment = '',
-      id,
-      name = _('Unnamed'),
-      title = _('New Schedule'),
-      onClose,
-    } = this.props;
+  const {
+    comment = '',
+    id,
+    name = _('Unnamed'),
+    title = _('New Schedule'),
+    onClose,
+  } = props;
 
-    const {
-      endDate,
-      endOpen,
-      freq,
-      interval,
-      monthdays,
-      recurrenceType,
-      monthly,
-      monthlyDay,
-      monthlyNth,
-      startDate,
-      timezone,
-      weekdays,
-    } = this.state;
+  const {
+    endDate,
+    endOpen,
+    freq,
+    interval,
+    monthdays,
+    recurrenceType,
+    monthly,
+    monthlyDay,
+    monthlyNth,
+    startDate,
+    timezone,
+    weekdays,
+  } = formState;
 
-    const defaultValues = {
-      comment,
-      id,
-      name,
-    };
+  const defaultValues = {
+    comment,
+    id,
+    name,
+  };
 
-    const duration = endOpen
-      ? undefined
-      : createDuration(endDate.diff(startDate));
+  const duration = endOpen
+    ? undefined
+    : createDuration(endDate.diff(startDate));
 
-    const values = {
-      endDate,
-      endOpen,
-      freq,
-      interval,
-      monthdays,
-      monthly,
-      monthlyDay,
-      monthlyNth,
-      recurrenceType,
-      startDate,
-      timezone,
-      weekdays,
-    };
+  const values = {
+    endDate,
+    endOpen,
+    freq,
+    interval,
+    monthdays,
+    monthly,
+    monthlyDay,
+    monthlyNth,
+    recurrenceType,
+    startDate,
+    timezone,
+    weekdays,
+  };
 
-    return (
-      <SaveDialog
-        title={title}
-        defaultValues={defaultValues}
-        values={values}
-        onClose={onClose}
-        onSave={this.handleSave}
-      >
-        {({values: state, onValueChange}) => (
-          <Layout flex="column">
-            <FormGroup title={_('Name')}>
-              <TextField
-                name="name"
-                grow="1"
-                value={state.name}
-                size="30"
-                onChange={onValueChange}
+  return (
+    <SaveDialog
+      title={title}
+      defaultValues={defaultValues}
+      values={values}
+      onClose={onClose}
+      onSave={handleSave}
+    >
+      {({values: state, onValueChange}) => (
+        <Layout flex="column">
+          <FormGroup title={_('Name')}>
+            <TextField
+              name="name"
+              grow="1"
+              value={state.name}
+              size="30"
+              onChange={onValueChange}
+            />
+          </FormGroup>
+
+          <FormGroup title={_('Comment')}>
+            <TextField
+              name="comment"
+              value={state.comment}
+              grow="1"
+              size="30"
+              onChange={onValueChange}
+            />
+          </FormGroup>
+
+          <FormGroup title={_('Timezone')}>
+            <TimeZoneSelect
+              name="timezone"
+              value={timezone}
+              onChange={handleTimezoneChange}
+            />
+          </FormGroup>
+
+          <FormGroup title={_('First Run')}>
+            <DatePicker
+              name="startDate"
+              value={startDate}
+              onChange={handleValueChange}
+              showYearDropdown
+            />
+            <Divider>
+              <Spinner
+                name="startHour"
+                type="int"
+                min="0"
+                max="23"
+                size="2"
+                value={startDate.hours()}
+                onChange={handleStartHoursChange}
               />
-            </FormGroup>
-
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={state.comment}
-                grow="1"
-                size="30"
-                onChange={onValueChange}
+              <span>h</span>
+              <Spinner
+                name="startMinute"
+                type="int"
+                min="0"
+                max="59"
+                size="2"
+                value={startDate.minutes()}
+                onChange={handleStartMinutesChange}
               />
-            </FormGroup>
+              <span>m</span>
+              <Button title="Now" onClick={handleNowButtonClick} />
+            </Divider>
+          </FormGroup>
 
-            <FormGroup title={_('Timezone')}>
-              <TimeZoneSelect
-                name="timezone"
-                value={timezone}
-                onChange={this.handleTimezoneChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('First Run')}>
-              <DatePicker
-                name="startDate"
-                value={startDate}
-                onChange={this.handleValueChange}
-                showYearDropdown
-              />
-              <Divider>
-                <Spinner
-                  name="startHour"
-                  type="int"
-                  min="0"
-                  max="23"
-                  size="2"
-                  value={startDate.hours()}
-                  onChange={this.handleStartHoursChange}
-                />
-                <span>h</span>
-                <Spinner
-                  name="startMinute"
-                  type="int"
-                  min="0"
-                  max="59"
-                  size="2"
-                  value={startDate.minutes()}
-                  onChange={this.handleStartMinutesChange}
-                />
-                <span>m</span>
-                <Button title="Now" onClick={this.handleNowButtonClick} />
-              </Divider>
-            </FormGroup>
-
-            <FormGroup title={_('Run Until')}>
-              <DatePicker
+          <FormGroup title={_('Run Until')}>
+            <DatePicker
+              disabled={state.endOpen}
+              name="endDate"
+              value={state.endDate}
+              onChange={handleValueChange}
+            />
+            <Divider>
+              <Spinner
                 disabled={state.endOpen}
-                name="endDate"
-                value={state.endDate}
-                onChange={this.handleValueChange}
+                name="endHour"
+                type="int"
+                min="0"
+                max="23"
+                size="2"
+                value={endDate.hour()}
+                onChange={handleEndHoursChange}
               />
-              <Divider>
-                <Spinner
-                  disabled={state.endOpen}
-                  name="endHour"
-                  type="int"
-                  min="0"
-                  max="23"
-                  size="2"
-                  value={endDate.hour()}
-                  onChange={this.handleEndHoursChange}
-                />
-                <span>h</span>
-                <Spinner
-                  disabled={state.endOpen}
-                  name="endMinute"
-                  type="int"
-                  min="0"
-                  max="59"
-                  size="2"
-                  value={endDate.minute()}
-                  onChange={this.handleEndMinutesChange}
-                />
-                <span>m</span>
-                <CheckBox
-                  title={_('Open End')}
-                  name="endOpen"
-                  checked={state.endOpen}
-                  onChange={this.handleValueChange}
-                />
-              </Divider>
-            </FormGroup>
-
-            <FormGroup title={_('Duration')}>
-              <span>{renderDuration(duration)}</span>
-            </FormGroup>
-
-            <FormGroup title={_('Recurrence')}>
-              <Select
-                name="recurrenceType"
-                items={RECURRENCE_TYPE_ITEMS}
-                value={state.recurrenceType}
-                onChange={this.handleValueChange}
+              <span>h</span>
+              <Spinner
+                disabled={state.endOpen}
+                name="endMinute"
+                type="int"
+                min="0"
+                max="59"
+                size="2"
+                value={endDate.minute()}
+                onChange={handleEndMinutesChange}
               />
-            </FormGroup>
+              <span>m</span>
+              <CheckBox
+                title={_('Open End')}
+                name="endOpen"
+                checked={state.endOpen}
+                onChange={handleValueChange}
+              />
+            </Divider>
+          </FormGroup>
 
-            {state.recurrenceType === RECURRENCE_CUSTOM && (
-              <React.Fragment>
-                <FormGroup title={_('Repeat')}>
-                  <Divider>
-                    <span>{_('Every')}</span>
-                    <Spinner
-                      name="interval"
-                      type="int"
-                      min="1"
-                      size="3"
-                      value={state.interval}
-                      onChange={this.handleValueChange}
-                    />
-                    <TimeUnitSelect
-                      name="freq"
-                      value={state.freq}
-                      onChange={this.handleValueChange}
-                    />
+          <FormGroup title={_('Duration')}>
+            <span>{renderDuration(duration)}</span>
+          </FormGroup>
+
+          <FormGroup title={_('Recurrence')}>
+            <Select
+              name="recurrenceType"
+              items={RECURRENCE_TYPE_ITEMS}
+              value={state.recurrenceType}
+              onChange={handleValueChange}
+            />
+          </FormGroup>
+
+          {state.recurrenceType === RECURRENCE_CUSTOM && (
+            <React.Fragment>
+              <FormGroup title={_('Repeat')}>
+                <Divider>
+                  <span>{_('Every')}</span>
+                  <Spinner
+                    name="interval"
+                    type="int"
+                    min="1"
+                    size="3"
+                    value={state.interval}
+                    onChange={handleValueChange}
+                  />
+                  <TimeUnitSelect
+                    name="freq"
+                    value={state.freq}
+                    onChange={handleValueChange}
+                  />
+                </Divider>
+              </FormGroup>
+
+              {state.freq === RECURRENCE_WEEKLY && (
+                <FormGroup title={_('Repeat at')}>
+                  <WeekDaySelect
+                    name="weekdays"
+                    value={weekdays}
+                    onChange={handleValueChange}
+                  />
+                </FormGroup>
+              )}
+
+              {state.freq === RECURRENCE_MONTHLY && (
+                <FormGroup title={_('Repeat at')}>
+                  <Divider flex="column">
+                    <Divider>
+                      <Radio
+                        name="monthly"
+                        checked={state.monthly === RepeatMonthly.nth}
+                        value={RepeatMonthly.nth}
+                        onChange={handleValueChange}
+                      />
+                      <Select
+                        items={NTH_DAY_ITEMS}
+                        disabled={state.monthly !== RepeatMonthly.nth}
+                        name="monthlyNth"
+                        value={state.monthlyNth}
+                        onChange={handleValueChange}
+                      />
+                      <DaySelect
+                        name="monthlyDay"
+                        disabled={state.monthly !== RepeatMonthly.nth}
+                        value={state.monthlyDay}
+                        onChange={handleValueChange}
+                      />
+                    </Divider>
+                    <Divider>
+                      <Radio
+                        title={_('Recur on day(s)')}
+                        name="monthly"
+                        checked={state.monthly === RepeatMonthly.days}
+                        value={RepeatMonthly.days}
+                        onChange={handleValueChange}
+                      />
+                      <MonthDaysSelect
+                        name="monthdays"
+                        disabled={state.monthly !== RepeatMonthly.days}
+                        value={state.monthdays}
+                        onChange={handleValueChange}
+                      />
+                    </Divider>
                   </Divider>
                 </FormGroup>
-
-                {state.freq === RECURRENCE_WEEKLY && (
-                  <FormGroup title={_('Repeat at')}>
-                    <WeekDaySelect
-                      name="weekdays"
-                      value={weekdays}
-                      onChange={this.handleValueChange}
-                    />
-                  </FormGroup>
-                )}
-
-                {state.freq === RECURRENCE_MONTHLY && (
-                  <FormGroup title={_('Repeat at')}>
-                    <Divider flex="column">
-                      <Divider>
-                        <Radio
-                          name="monthly"
-                          checked={state.monthly === RepeatMonthly.nth}
-                          value={RepeatMonthly.nth}
-                          onChange={this.handleValueChange}
-                        />
-                        <Select
-                          items={NTH_DAY_ITEMS}
-                          disabled={state.monthly !== RepeatMonthly.nth}
-                          name="monthlyNth"
-                          value={state.monthlyNth}
-                          onChange={this.handleValueChange}
-                        />
-                        <DaySelect
-                          name="monthlyDay"
-                          disabled={state.monthly !== RepeatMonthly.nth}
-                          value={state.monthlyDay}
-                          onChange={this.handleValueChange}
-                        />
-                      </Divider>
-                      <Divider>
-                        <Radio
-                          title={_('Recur on day(s)')}
-                          name="monthly"
-                          checked={state.monthly === RepeatMonthly.days}
-                          value={RepeatMonthly.days}
-                          onChange={this.handleValueChange}
-                        />
-                        <MonthDaysSelect
-                          name="monthdays"
-                          disabled={state.monthly !== RepeatMonthly.days}
-                          value={state.monthdays}
-                          onChange={this.handleValueChange}
-                        />
-                      </Divider>
-                    </Divider>
-                  </FormGroup>
-                )}
-              </React.Fragment>
-            )}
-          </Layout>
-        )}
-      </SaveDialog>
-    );
-  }
-}
+              )}
+            </React.Fragment>
+          )}
+        </Layout>
+      )}
+    </SaveDialog>
+  );
+};
 
 ScheduleDialog.propTypes = {
   comment: PropTypes.string,

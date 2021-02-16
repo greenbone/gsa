@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Implement the usage of graphql for notes [#2721](https://github.com/greenbone/gsa/pull/2721)
+- Refactor schedule dialog to function component [#2714](https://github.com/greenbone/gsa/pull/2714)
 - Implement host listpage queries and mutations [#2713](https://github.com/greenbone/gsa/pull/2713)
 - Implement host detailspage queries and mutations [#2702](https://github.com/greenbone/gsa/pull/2702)
 - Implement audit component mutations [#2699](https://github.com/greenbone/gsa/pull/2699)
@@ -47,8 +49,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Fixed
+- Fixed reload interval for pages using useEntityReloadInterval and useEntitiesReloadInterval hooks [#2716](https://github.com/greenbone/gsa/pull/2716)
 
 ### Removed
+- Removed unused task.js [#2714](https://github.com/greenbone/gsa/pull/2714)
 - Removed unused task wizard commands for runQuickTask, runQuickFirstScan and runModifyTask [#2514](https://github.com/greenbone/gsa/pull/2514) [#2523](https://github.com/greenbone/gsa/pull/2523)
 - Removed Edge <= 18 support [#2408](https://github.com/greenbone/gsa/pull/2408)
 - Removed Internet Explorer 11 support [#2399](https://github.com/greenbone/gsa/pull/2399)

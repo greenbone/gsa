@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2021 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,36 +16,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import {useCallback} from 'react';
 
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useGmpSettings from 'web/utils/useGmpSettings';
 
-class Task extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {task: {}};
-  }
+const useDefaultReloadInterval = () => {
+  const gmpSettings = useGmpSettings();
+  const timeoutFunc = useCallback(
+    ({isVisible}) =>
+      isVisible
+        ? gmpSettings.reloadInterval
+        : gmpSettings.reloadIntervalInactive,
+    [gmpSettings],
+  );
 
-  componentDidMount() {
-    this.props.gmp.task.get(this.props.params).then(task => {
-      this.setState({task: task});
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <h2>Task: {this.state.task.name}</h2>
-      </div>
-    );
-  }
-}
-
-Task.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
+  return timeoutFunc;
 };
 
-export default withGmp(Task);
-
-// vim: set ts=2 sw=2 tw=80:
+export default useDefaultReloadInterval;

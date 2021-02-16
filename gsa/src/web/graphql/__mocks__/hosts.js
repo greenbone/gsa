@@ -18,12 +18,15 @@
 
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 import {
-  DELETE_HOSTS_BY_IDS,
+  CREATE_HOST,
+  DELETE_HOST,
   DELETE_HOSTS_BY_FILTER,
-  EXPORT_HOSTS_BY_IDS,
+  DELETE_HOSTS_BY_IDS,
   EXPORT_HOSTS_BY_FILTER,
+  EXPORT_HOSTS_BY_IDS,
   GET_HOST,
   GET_HOSTS,
+  MODIFY_HOST,
 } from '../hosts';
 
 export const host = deepFreeze({
@@ -242,6 +245,39 @@ const deleteHostResult = {
 };
 
 export const createDeleteHostQueryMock = (hostId = 'foo') =>
-  createGenericQueryMock(DELETE_HOSTS_BY_IDS, deleteHostResult, {
-    ids: [hostId],
+  createGenericQueryMock(DELETE_HOST, deleteHostResult, {
+    id: hostId,
+  });
+
+export const createHostInput = {
+  name: 'Foo',
+  comment: 'bar',
+};
+
+const createHostResult = {
+  createHost: {
+    id: '12345',
+    status: 200,
+  },
+};
+
+export const createCreateHostQueryMock = () =>
+  createGenericQueryMock(CREATE_HOST, createHostResult, {
+    input: createHostInput,
+  });
+
+export const modifyHostInput = {
+  id: '12345',
+  comment: 'bar',
+};
+
+const modifyHostResult = {
+  modifyHost: {
+    ok: true,
+  },
+};
+
+export const createModifyHostQueryMock = () =>
+  createGenericQueryMock(MODIFY_HOST, modifyHostResult, {
+    input: modifyHostInput,
   });

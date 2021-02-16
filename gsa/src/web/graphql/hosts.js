@@ -144,6 +144,14 @@ export const GET_HOSTS = gql`
   }
 `;
 
+export const DELETE_HOST = gql`
+  mutation deleteHost($id: UUID!) {
+    deleteHost(id: $id) {
+      ok
+    }
+  }
+`;
+
 export const DELETE_HOSTS_BY_IDS = gql`
   mutation deleteHostsByIds($ids: [UUID]!) {
     deleteHostsByIds(ids: $ids) {
@@ -215,10 +223,10 @@ export const useLazyGetHosts = (variables, options) => {
 };
 
 export const useDeleteHost = options => {
-  const [queryDeleteHost, data] = useMutation(DELETE_HOSTS_BY_IDS, options);
+  const [queryDeleteHost, data] = useMutation(DELETE_HOST, options);
   const deleteHost = useCallback(
     // eslint-disable-next-line no-shadow
-    (id, options) => queryDeleteHost({...options, variables: {ids: [id]}}),
+    (id, options) => queryDeleteHost({...options, variables: {id}}),
     [queryDeleteHost],
   );
   return [deleteHost, data];
@@ -290,4 +298,46 @@ export const useExportHostsByFilter = options => {
   );
 
   return exportHostsByFilter;
+};
+
+export const CREATE_HOST = gql`
+  mutation createHost($input: CreateHostInput!) {
+    createHost(input: $input) {
+      id
+    }
+  }
+`;
+
+export const useCreateHost = options => {
+  const [queryCreateHost, {data, ...other}] = useMutation(CREATE_HOST, options);
+
+  const createHost = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryCreateHost({...options, variables: {input: inputObject}}).then(
+        result => result?.data?.createHost?.id,
+      ),
+    [queryCreateHost],
+  );
+  const hostId = data?.createHost?.id;
+  return [createHost, {...other, id: hostId}];
+};
+
+export const MODIFY_HOST = gql`
+  mutation modifyHost($input: ModifyHostInput!) {
+    modifyHost(input: $input) {
+      ok
+    }
+  }
+`;
+
+export const useModifyHost = options => {
+  const [queryModifyHost, data] = useMutation(MODIFY_HOST, options);
+  const modifyHost = useCallback(
+    // eslint-disable-next-line no-shadow
+    (inputObject, options) =>
+      queryModifyHost({...options, variables: {input: inputObject}}),
+    [queryModifyHost],
+  );
+  return [modifyHost, data];
 };
