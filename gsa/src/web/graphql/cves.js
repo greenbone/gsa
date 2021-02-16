@@ -54,6 +54,8 @@ export const GET_CVE = gql`
         }
       }
       updateTime
+      cvssVector
+      score
       cvssV2Vector {
         accessVector
         accessComplexity
@@ -72,7 +74,7 @@ export const GET_CVE = gql`
         confidentiality
         integrity
         availability
-        score
+        baseScore
       }
       description
       products

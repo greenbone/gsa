@@ -79,14 +79,14 @@ class Cve extends Info {
         integrityImpact,
         availabilityImpact,
       } = parseCvssV3BaseFromVector(ret.cvss_vector);
-      ret.cvssAttackVector = attackVector;
-      ret.cvssAttackComplexity = attackComplexity;
-      ret.cvssPrivilegesRequired = privilegesRequired;
-      ret.cvssUserInteraction = userInteraction;
-      ret.cvssScope = scope;
-      ret.cvssConfidentialityImpact = confidentialityImpact;
-      ret.cvssIntegrityImpact = integrityImpact;
-      ret.cvssAvailabilityImpact = availabilityImpact;
+      ret.attackVector = attackVector;
+      ret.attackComplexity = attackComplexity;
+      ret.privilegesRequired = privilegesRequired;
+      ret.userInteraction = userInteraction;
+      ret.scope = scope;
+      ret.confidentiality = confidentialityImpact;
+      ret.integrity = integrityImpact;
+      ret.availability = availabilityImpact;
     } else {
       const {
         accessVector,
@@ -96,12 +96,12 @@ class Cve extends Info {
         integrityImpact,
         availabilityImpact,
       } = parseCvssV2BaseFromVector(ret.cvss_vector);
-      ret.cvssAccessVector = accessVector;
-      ret.cvssAccessComplexity = accessComplexity;
-      ret.cvssAuthentication = authentication;
-      ret.cvssConfidentialityImpact = confidentialityImpact;
-      ret.cvssIntegrityImpact = integrityImpact;
-      ret.cvssAvailabilityImpact = availabilityImpact;
+      ret.accessVector = accessVector;
+      ret.accessComplexity = accessComplexity;
+      ret.authentication = authentication;
+      ret.confidentiality = confidentialityImpact;
+      ret.integrity = integrityImpact;
+      ret.availability = availabilityImpact;
     }
 
     ret.cvssBaseVector = ret.cvss_vector;
