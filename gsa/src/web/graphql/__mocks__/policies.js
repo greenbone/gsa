@@ -63,7 +63,7 @@ export const policy1 = deepFreeze({
       type: 'entry',
       value: 'regress',
       nvt: {
-        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
     },
@@ -76,7 +76,7 @@ export const policy1 = deepFreeze({
       type: null,
       value: 'dull',
       nvt: {
-        oid: '',
+        id: '',
         name: null,
       },
     },
@@ -131,7 +131,7 @@ export const policy2 = deepFreeze({
       type: 'entry',
       value: 'regress',
       nvt: {
-        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
     },
@@ -186,7 +186,7 @@ export const policy3 = deepFreeze({
       type: 'entry',
       value: 'regress',
       nvt: {
-        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
     },
@@ -241,7 +241,7 @@ export const policy4 = deepFreeze({
       type: 'entry',
       value: 'regress',
       nvt: {
-        oid: '1.3.6.1.4.1.25623.1.0.100151',
+        id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
     },
