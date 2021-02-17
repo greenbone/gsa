@@ -176,14 +176,14 @@ Details.propTypes = {
 };
 
 const EntityInfo = ({entity}) => {
-  const {id, publishedTime, lastModifiedTime, updateTime} = entity;
+  const {id, creationTime, modificationTime, updateTime} = entity;
   return (
     <InfoLayout>
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Published:')}</div>
       <div>
-        <DateTime date={publishedTime} />
+        <DateTime date={creationTime} />
       </div>
       <div>{_('Modified:')}</div>
       <div>
@@ -191,7 +191,7 @@ const EntityInfo = ({entity}) => {
       </div>
       <div>{_('Last updated:')}</div>
       <div>
-        <DateTime date={lastModifiedTime} />
+        <DateTime date={modificationTime} />
       </div>
     </InfoLayout>
   );

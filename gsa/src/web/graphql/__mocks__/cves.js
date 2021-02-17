@@ -47,7 +47,7 @@ export const cveEntity = deepFreeze({
     confidentiality: 'PARTIAL',
     accessVector: 'NETWORK',
     authentication: 'NONE',
-    score: 4.3,
+    baseScore: 4.3,
   },
   cvssV3Vector: {
     availability: 'NONE',

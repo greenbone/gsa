@@ -59,12 +59,12 @@ const Row = ({
         <DateTime date={entity.creationTime} />
       </TableData>
       <TableData>
-        <Link to="cvsscalculator" query={{cvssVector: entity.cvssBaseVector}}>
-          {entity.cvssBaseVector}
+        <Link to="cvsscalculator" query={{cvssVector: entity.cvssVector}}>
+          {entity.cvssVector}
         </Link>
       </TableData>
       <TableData>
-        <SeverityBar severity={entity.severity} />
+        <SeverityBar severity={entity.score / 10} />
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>

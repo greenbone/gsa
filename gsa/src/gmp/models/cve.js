@@ -43,27 +43,26 @@ class Cve extends Info {
     delete ret.cvss;
 
     if (isDefined(ret.nvts)) {
-      ret.nvts = map(ret.nvts.nvt, nvt => {
+      ret.nvtRefs = map(ret.nvts.nvt, nvt => {
         return setProperties({
           ...nvt,
           id: nvt._oid,
-          oid: nvt._oid,
         });
       });
     }
 
     if (isDefined(ret.cert)) {
-      ret.certs = map(ret.cert.cert_ref, ref => {
+      ret.certRefs = map(ret.cert.cert_ref, ref => {
         return {
           name: ref.name,
           title: ref.title,
-          cert_type: ref._type,
+          type: ref._type,
         };
       });
 
       delete ret.cert;
     } else {
-      ret.certs = [];
+      ret.certRefs = [];
     }
     if (isEmpty(ret.cvss_vector)) {
       ret.cvss_vector = '';
@@ -104,7 +103,7 @@ class Cve extends Info {
       ret.availability = availabilityImpact;
     }
 
-    ret.cvssBaseVector = ret.cvss_vector;
+    ret.cvssVector = ret.cvss_vector;
     ret.products = isEmpty(ret.products) ? [] : ret.products.split(' ');
 
     if (isDefined(ret.raw_data) && isDefined(ret.raw_data.entry)) {

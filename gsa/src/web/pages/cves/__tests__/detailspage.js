@@ -26,11 +26,29 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import Cve from 'gmp/models/cve';
 
 import {entityLoadingActions} from 'web/store/entities/cves';
+import {
+  createExportCvesByIdsQueryMock,
+  createGetCveQueryMock,
+  cveEntity,
+} from 'web/graphql/__mocks__/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith} from 'web/utils/testing';
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {
+  createGetPermissionsQueryMock,
+  noPermissions,
+} from 'web/graphql/__mocks__/permissions';
+
+import {rendererWith, wait} from 'web/utils/testing';
 
 import CvePage from '../detailspage';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: 'CVE-314',
+  }),
+}));
 
 if (!isDefined(window.URL)) {
   window.URL = {};
@@ -133,13 +151,17 @@ const entity_v2 = Cve.fromElement({
     },
   },
 });
+const cve = Cve.fromObject(cveEntity);
 
 const caps = new Capabilities(['everything']);
+const wrongCaps = new Capabilities(['get_config']);
 
-const reloadInterval = 1;
+const entityType = 'cve';
+const reloadInterval = -1;
 const manualUrl = 'test/';
 
 let currentSettings;
+let getPermissions;
 let renewSession;
 
 beforeEach(() => {
@@ -153,38 +175,50 @@ beforeEach(() => {
 });
 
 describe('CVE Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+  test('should render full Detailspage', async () => {
     const getCve = jest.fn().mockResolvedValue({
-      data: entity_v2,
+      data: cve,
     });
 
     const gmp = {
-      cve: {
+      [entityType]: {
         get: getCve,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      permissions: {
+        get: getPermissions,
+      },
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
-        renewSession,
       },
     };
 
+    const [mock, resultFunc] = createGetCveQueryMock();
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+
+    const [permissionQueryMock] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=314 first=1 rows=-1',
+    });
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('CVE-2020-9997', entity_v2));
+    // store.dispatch(entityLoadingActions.success('CVE-314', entity_v2));
 
     const {baseElement, element, getAllByTestId} = render(
-      <CvePage id="CVE-2020-9997" />,
+      <CvePage id="CVE-314" />,
     );
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
@@ -200,42 +234,46 @@ describe('CVE Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Export CVE');
 
-    expect(element).toHaveTextContent('CVE: CVE-2020-9997');
+    expect(baseElement).toHaveTextContent('CVE: foo');
 
-    expect(element).toHaveTextContent('CVE-2020-9997');
-    expect(element).toHaveTextContent(
-      'Published:Thu, Oct 22, 2020 7:15 PM UTC',
+    expect(baseElement).toHaveTextContent('CVE-314');
+    expect(baseElement).toHaveTextContent(
+      'Published:Mon, Aug 17, 2020 12:18 PM UTC',
     );
-    expect(element).toHaveTextContent(
-      'Modified:Fri, Oct 30, 2020 11:44 AM UTC',
+    expect(baseElement).toHaveTextContent(
+      'Modified:Tue, Sep 29, 2020 12:16 PM UTC',
     );
-    expect(element).toHaveTextContent(
-      'Last updated:Mon, Oct 26, 2020 8:27 PM UTC',
+    expect(baseElement).toHaveTextContent(
+      'Last updated:Tue, Sep 29, 2020 12:16 PM UTC',
     );
 
-    expect(element).toHaveTextContent('Attack VectorLOCAL');
-    expect(element).toHaveTextContent('Attack ComplexityLOW');
-    expect(element).toHaveTextContent('Privileges RequiredNONE');
-    expect(element).toHaveTextContent('User InteractionREQUIRED');
-    expect(element).toHaveTextContent('ScopeUNCHANGED');
-    expect(element).toHaveTextContent('Confidentiality ImpactHIGH');
-    expect(element).toHaveTextContent('Integrity ImpactNONE');
-    expect(element).toHaveTextContent('Availability ImpactNONE');
+    expect(baseElement).toHaveTextContent('Attack VectorLOCAL');
+    expect(baseElement).toHaveTextContent('Attack ComplexityLOW');
+    expect(baseElement).toHaveTextContent('Privileges RequiredNONE');
+    expect(baseElement).toHaveTextContent('User InteractionREQUIRED');
+    expect(baseElement).toHaveTextContent('ScopeUNCHANGED');
+    expect(baseElement).toHaveTextContent('Confidentiality ImpactHIGH');
+    expect(baseElement).toHaveTextContent('Integrity ImpactNONE');
+    expect(baseElement).toHaveTextContent('Availability ImpactNONE');
     const progressBars = getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Medium');
     expect(progressBars[0]).toHaveTextContent('5.5 (Medium)');
-    expect(element).toHaveTextContent('References');
-    expect(element).toHaveTextContent(
+    expect(baseElement).toHaveTextContent('References');
+    expect(baseElement).toHaveTextContent(
       'MISChttps://support.apple.com/kb/HT211289',
     );
     expect(element).toHaveTextContent(
       'MISChttps://support.apple.com/kb/HT211291',
     );
-    expect(element).toHaveTextContent('CERT Advisories referencing this CVE');
-    expect(element).toHaveTextContent('CB-K20/0730');
-    expect(element).toHaveTextContent('Apple macOS: Mehrere Schwachstellen');
-    expect(element).toHaveTextContent('Vulnerable Products');
-    expect(element).toHaveTextContent('cpe:/o:apple:mac_os_x:10.15.5');
-    expect(element).toHaveTextContent('cpe:/o:apple:watchos:6.2.8');
+    expect(baseElement).toHaveTextContent(
+      'CERT Advisories referencing this CVE',
+    );
+    expect(baseElement).toHaveTextContent('CB-K20/0730');
+    expect(baseElement).toHaveTextContent(
+      'Apple macOS: Mehrere Schwachstellen',
+    );
+    expect(baseElement).toHaveTextContent('Vulnerable Products');
+    expect(baseElement).toHaveTextContent('cpe:/o:apple:mac_os_x:10.15.5');
+    expect(baseElement).toHaveTextContent('cpe:/o:apple:watchos:6.2.8');
   });
 });
