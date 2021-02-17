@@ -17,44 +17,98 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {
-  syncVariables,
-  shouldBeNonEmpty,
-} from 'web/components/form/useFormValidation';
+/* eslint-disable react/prop-types */
+
+import React, {useState} from 'react';
+
+import {rendererWith, fireEvent, screen} from 'web/utils/testing';
+
+import TextField from '../textfield';
+import Button from '../button';
+
+import useFormValidation, {shouldBeNonEmpty} from '../useFormValidation';
+import useFormValues from '../useFormValues';
 
 /*
- * This suite only tests functions associated with useFormValidation. * The hook itself should be tested with whichever dialog
+ * This suite only tests functions associated with useFormValidation.
+ * The hook itself should be tested with whichever dialog
  * component it is called with.
  */
 
-describe('Testing useFormValidation utilities', () => {
-  test('syncVariables tests', () => {
-    const obj1 = {
-      key1: 'foo',
-      key2: 'bar',
-      key3: 'lorem',
-      key4: 'ipsum',
-    };
+const validationRules = {
+  foo: value => {
+    if (value !== '' && value !== 'foo') {
+      throw Error('Value must be foo!');
+    }
+  },
+};
+const fieldsToValidate = ['foo'];
 
-    const obj2 = {
-      key1: 'cat',
-      key2: 'dog',
-    };
+const UseFormValidationTestComponent = ({onSave}) => {
+  const [values, handleValueChange] = useFormValues({foo: ''});
+  const [error, setError] = useState();
+  const {hasError, errors, validate} = useFormValidation(
+    validationRules,
+    values,
+    {
+      onValidationSuccess: onSave,
+      onValidationError: setError,
+      fieldsToValidate,
+    },
+  );
+  return (
+    <React.Fragment>
+      <div data-testid="value">{values.foo}</div>
+      {hasError && <span data-testid="error">{error}</span>}
+      <TextField
+        name="foo"
+        data-testid="foo"
+        value={values.foo}
+        hasError={hasError && !!errors.foo}
+        errorContent={errors.foo}
+        onChange={handleValueChange}
+      />
+      <Button data-testid="button" onClick={() => validate(values)} />
+    </React.Fragment>
+  );
+};
 
-    const obj3 = {
-      key4: 'goat',
-    };
+describe('useFormValidation tests', () => {
+  test('should validate form value successfully', async () => {
+    const {render} = rendererWith();
+    const handleSave = jest.fn();
 
-    syncVariables(obj1, obj2, obj3);
+    render(<UseFormValidationTestComponent onSave={handleSave} />);
 
-    expect(obj1).toEqual({
-      key1: 'cat',
-      key2: 'dog',
-      key3: 'lorem',
-      key4: 'goat',
-    });
+    fireEvent.change(screen.getByTestId('foo'), {target: {value: 'foo'}});
+
+    fireEvent.click(screen.getByTestId('button'));
+
+    expect(handleSave).toHaveBeenCalled();
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
   });
 
+  test('should show error if validation fails', async () => {
+    const {render} = rendererWith();
+    const handleSave = jest.fn();
+
+    render(<UseFormValidationTestComponent onSave={handleSave} />);
+
+    fireEvent.change(screen.getByTestId('foo'), {target: {value: 'ipsum'}});
+
+    expect(screen.getByTestId('value')).toHaveTextContent('ipsum');
+
+    fireEvent.click(screen.getByTestId('button'));
+
+    expect(screen.getByTestId('error')).toHaveTextContent(
+      'This form received invalid values. Please check the inputs and' +
+        ' submit again.',
+    );
+    expect(handleSave).not.toHaveBeenCalled();
+  });
+});
+
+describe('Testing useFormValidation utilities', () => {
   test('testNonemptyString tests', () => {
     const term1 = 'lorem ipsum';
     const term2 = ' ';
