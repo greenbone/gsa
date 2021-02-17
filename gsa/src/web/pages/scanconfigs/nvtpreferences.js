@@ -55,7 +55,7 @@ class NvtPreferenceDisplay extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={title}
-            value={preference.nvt.oid}
+            value={preference.nvt.id}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>
@@ -66,7 +66,7 @@ class NvtPreferenceDisplay extends React.Component {
 
 export const NvtPreferencePropType = PropTypes.shape({
   nvt: PropTypes.shape({
-    oid: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
   name: PropTypes.string.isRequired,

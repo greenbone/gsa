@@ -71,7 +71,7 @@ export const GET_SCAN_CONFIG = gql`
       }
       preferences {
         nvt {
-          oid
+          id
           name
         }
         hrName
@@ -139,7 +139,7 @@ export const GET_SCAN_CONFIGS = gql`
           }
           preferences {
             nvt {
-              oid
+              id
               name
             }
             hrName
