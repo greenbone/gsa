@@ -214,7 +214,7 @@ export const ToolBarIcons = ({
 
           <Link
             to="reports"
-            filter={'audit_id=' + entity.id}
+            filter={'task_id=' + entity.id}
             title={_('Total Reports for Audit {{- name}}', entity)}
           >
             <Badge content={reportsCounts.total}>
@@ -225,7 +225,7 @@ export const ToolBarIcons = ({
 
         <Link
           to="results"
-          filter={'audit_id=' + entity.id}
+          filter={'task_id=' + entity.id}
           title={_('Results for Audit {{- name}}', entity)}
         >
           <Badge content={currentResults}>
