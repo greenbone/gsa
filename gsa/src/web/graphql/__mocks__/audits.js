@@ -61,11 +61,30 @@ const auditDetailsScanner = deepFreeze({
 });
 
 // Policy
-export const policy = deepFreeze({
+export const auditPolicy = deepFreeze({
   id: '234',
   name: 'unnamed policy',
+  comment: null,
+  writable: null,
+  owner: null,
+  inUse: null,
+  creationTime: null,
+  modificationTime: null,
+  permissions: null,
   type: OPENVAS_SCAN_CONFIG_TYPE,
   trash: null,
+  familyCount: null,
+  familyGrowing: null,
+  nvtGrowing: null,
+  nvtCount: null,
+  usageType: null,
+  maxNvtCount: null,
+  knownNvtCount: null,
+  predefined: null,
+  families: null,
+  preferences: null,
+  nvtSelectors: null,
+  tasks: null,
 });
 
 export const auditDetailsPolicy = deepFreeze({
@@ -142,12 +161,20 @@ END:VCALENDAR
 `;
 
 // Schedule
-const schedule = deepFreeze({
+export const auditSchedule = deepFreeze({
   id: 'foo',
   name: 'schedule 1',
   timezone: 'UTC',
   duration: 0,
   icalendar: weekly,
+  permissions: null,
+  userTags: null,
+  owner: null,
+  comment: null,
+  writable: null,
+  inUse: null,
+  creationTime: null,
+  modificationTime: null,
 });
 
 export const auditDetailsSchedule = deepFreeze({
@@ -310,9 +337,46 @@ export const detailsMockAudit = deepFreeze({
   comment: 'bar',
   owner: 'admin',
   preferences,
-  schedule,
+  schedule: auditSchedule,
   alerts: [alert],
-  policy,
+  policy: auditPolicy,
+  scanner,
+  schedulePeriods: null,
+  hostsOrdering: 'sequential',
+  observers,
+});
+
+export const unscheduledAudit = deepFreeze({
+  name: 'foo',
+  id: '657',
+  creationTime: '2019-07-30T13:00:00Z',
+  modificationTime: '2019-08-30T13:23:30Z',
+  averageDuration: 3,
+  permissions: allPermissions,
+  reports: {
+    lastReport,
+    currentReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
+  },
+  results: {
+    counts: {
+      current: 20,
+    },
+  },
+  status: AUDIT_STATUS.stopped,
+  progress: 100,
+  target,
+  trend: null,
+  alterable: 0,
+  comment: 'bar',
+  owner: 'admin',
+  preferences,
+  schedule: null,
+  alerts: [alert],
+  policy: auditPolicy,
   scanner,
   schedulePeriods: null,
   hostsOrdering: 'sequential',

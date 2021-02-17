@@ -25,23 +25,34 @@ import {setLocale} from 'gmp/locale/lang';
 import Filter from 'gmp/models/filter';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Policy from 'gmp/models/policy';
-import Schedule from 'gmp/models/schedule';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import {
+  auditPolicy,
+  auditSchedule,
+  createCloneAuditQueryMock,
+  createDeleteAuditQueryMock,
+  createExportAuditsByIdsQueryMock,
+  createGetAuditQueryMock,
+  createResumeAuditQueryMock,
+  createStartAuditQueryMock,
+  unscheduledAudit,
+} from 'web/graphql/__mocks__/audits';
+import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {createGetPolicyQueryMock} from 'web/graphql/__mocks__/policies';
+import {
+  createGetPermissionsQueryMock,
+  noPermissions,
+} from 'web/graphql/__mocks__/permissions';
 
-import {entityLoadingActions} from 'web/store/entities/audits';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-import {
-  createResumeAuditQueryMock,
-  createStartAuditQueryMock,
-} from 'web/graphql/__mocks__/audits';
 
 if (!isDefined(window.URL)) {
   window.URL = {};
@@ -49,6 +60,13 @@ if (!isDefined(window.URL)) {
 window.URL.createObjectURL = jest.fn();
 
 setLocale('en');
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: '657',
+  }),
+}));
 
 const policy = Policy.fromElement({
   _id: '314',
@@ -62,12 +80,6 @@ const policy = Policy.fromElement({
       {id: '678910', name: 'audit2'},
     ],
   },
-});
-
-const schedule = Schedule.fromElement({
-  _id: '121314',
-  name: 'schedule1',
-  permissions: {permission: [{name: 'everything'}]},
 });
 
 const lastReport = {
@@ -209,10 +221,6 @@ const audit5 = Audit.fromElement({
   usage_type: 'audit',
 });
 
-const audit5Id = {
-  id: '12345',
-};
-
 const audit6 = Audit.fromElement({
   _id: '12345',
   owner: {name: 'admin'},
@@ -268,8 +276,6 @@ const manualUrl = 'test/';
 
 let currentSettings;
 let getEntities;
-let getPolicy;
-let getSchedule;
 let renewSession;
 
 beforeEach(() => {
@@ -279,14 +285,6 @@ beforeEach(() => {
 
   renewSession = jest.fn().mockResolvedValue({
     foo: 'bar',
-  });
-
-  getPolicy = jest.fn().mockResolvedValue({
-    data: policy,
-  });
-
-  getSchedule = jest.fn().mockResolvedValue({
-    data: schedule,
   });
 
   getEntities = jest.fn().mockResolvedValue({
@@ -299,24 +297,8 @@ beforeEach(() => {
 });
 
 describe('Audit Detailspage tests', () => {
-  test('should render full Detailspage', () => {
-    const getAudit = jest.fn().mockResolvedValue({
-      data: audit,
-    });
-
+  test('should render full Detailspage', async () => {
     const gmp = {
-      audit: {
-        get: getAudit,
-      },
-      policy: {
-        get: getPolicy,
-      },
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
       reportformats: {
         get: getEntities,
       },
@@ -326,25 +308,37 @@ describe('Audit Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetAuditQueryMock();
+    const [scheduleMock, scheduleResult] = createGetScheduleQueryMock(
+      'foo',
+      auditSchedule,
+    );
+    const [policyMock, policyResult] = createGetPolicyQueryMock(
+      '234',
+      auditPolicy,
+    );
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, scheduleMock, policyMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', audit));
+    const {baseElement, getAllByTestId} = render(<Detailspage />);
 
-    const {baseElement, element, getAllByTestId} = render(
-      <Detailspage id="12345" />,
-    );
+    await wait();
 
-    expect(element).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot();
 
-    expect(element).toHaveTextContent('Audit: foo');
+    expect(resultFunc).toHaveBeenCalled();
+    expect(scheduleResult).toHaveBeenCalled();
+    expect(policyResult).toHaveBeenCalled();
+
+    expect(baseElement).toHaveTextContent('Audit: foo');
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
@@ -358,59 +352,63 @@ describe('Audit Detailspage tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Audit List');
     expect(links[1]).toHaveAttribute('href', '/audits');
 
-    expect(element).toHaveTextContent('12345');
-    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
-    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:44 AM CEST');
-    expect(element).toHaveTextContent('admin');
+    expect(baseElement).toHaveTextContent('657');
+    expect(baseElement).toHaveTextContent('Tue, Jul 30, 2019 3:00 PM CEST');
+    expect(baseElement).toHaveTextContent('Fri, Aug 30, 2019 3:23 PM CEST');
+    expect(baseElement).toHaveTextContent('admin');
 
-    expect(element).toHaveTextContent('foo');
-    expect(element).toHaveTextContent('bar');
+    expect(baseElement).toHaveTextContent('foo');
+    expect(baseElement).toHaveTextContent('bar');
 
     const progressBars = getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Done');
     expect(progressBars[0]).toHaveTextContent('Done');
 
-    const headings = element.querySelectorAll('h2');
+    const headings = baseElement.querySelectorAll('h2');
     const detailslinks = getAllByTestId('details-link');
 
     expect(headings[1]).toHaveTextContent('Target');
-    expect(detailslinks[2]).toHaveAttribute('href', '/target/5678');
-    expect(element).toHaveTextContent('target1');
+    expect(detailslinks[3]).toHaveAttribute('href', '/target/159');
+    expect(baseElement).toHaveTextContent('target 1');
 
     expect(headings[2]).toHaveTextContent('Alerts');
-    expect(detailslinks[3]).toHaveAttribute('href', '/alert/91011');
-    expect(element).toHaveTextContent('alert1');
+    expect(detailslinks[4]).toHaveAttribute('href', '/alert/151617');
+    expect(baseElement).toHaveTextContent('alert 1');
 
     expect(headings[3]).toHaveTextContent('Scanner');
-    expect(detailslinks[4]).toHaveAttribute('href', '/scanner/1516');
-    expect(element).toHaveTextContent('scanner1');
-    expect(element).toHaveTextContent('OpenVAS Scanner');
+    expect(detailslinks[5]).toHaveAttribute('href', '/scanner/212223');
+    expect(baseElement).toHaveTextContent('scanner 1');
+    expect(baseElement).toHaveTextContent('OpenVAS Scanner');
+
+    expect(detailslinks[6]).toHaveAttribute('href', '/policy/234');
+    expect(baseElement).toHaveTextContent('unnamed policy');
+    expect(baseElement).toHaveTextContent('Order for target hosts');
+    expect(baseElement).toHaveTextContent('sequential');
+    expect(baseElement).toHaveTextContent('Network Source Interface');
+    expect(baseElement).toHaveTextContent(
+      'Maximum concurrently executed NVTs per host',
+    );
+    expect(baseElement).toHaveTextContent('4');
+    expect(baseElement).toHaveTextContent('Maximum concurrently scanned hosts');
+    expect(baseElement).toHaveTextContent('20');
 
     expect(headings[4]).toHaveTextContent('Assets');
+    expect(baseElement).toHaveTextContent('Add to Assets');
+    expect(baseElement).toHaveTextContent('Yes');
 
-    expect(headings[5]).toHaveTextContent('Scan');
-    expect(element).toHaveTextContent('2 minutes');
-    expect(element).toHaveTextContent('Do not automatically delete reports');
+    expect(headings[5]).toHaveTextContent('Schedule');
+    expect(detailslinks[7]).toHaveAttribute('href', '/schedule/foo');
+    expect(baseElement).toHaveTextContent('schedule 1');
+
+    expect(headings[6]).toHaveTextContent('Scan');
+    expect(baseElement).toHaveTextContent('2 minutes');
+    expect(baseElement).toHaveTextContent(
+      'Do not automatically delete reports',
+    );
   });
 
-  test('should render permissions tab', () => {
-    const getAudit = jest.fn().mockResolvedValue({
-      data: audit2,
-    });
-
+  test('should render permissions tab', async () => {
     const gmp = {
-      audit: {
-        get: getAudit,
-      },
-      policy: {
-        get: getPolicy,
-      },
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
       reportformats: {
         get: getEntities,
       },
@@ -421,59 +419,39 @@ describe('Audit Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetAuditQueryMock();
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
+      {
+        filterString: 'resource_uuid=657 first=1 rows=-1',
+      },
+      noPermissions,
+    );
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', audit2));
+    const {baseElement} = render(<Detailspage />);
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[16]);
 
-    expect(element).toHaveTextContent('No permissions available');
+    expect(baseElement).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
-    const getAudit = jest.fn().mockResolvedValue({
-      data: audit5,
-    });
-
-    const clone = jest.fn().mockResolvedValue({
-      data: {id: 'foo'},
-    });
-
-    const deleteFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
-      audit: {
-        get: getAudit,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      policy: {
-        get: getPolicy,
-      },
-      schedule: {
-        get: getSchedule,
-      },
-      permissions: {
-        get: getEntities,
-      },
       reportformats: {
         get: getEntities,
       },
@@ -483,40 +461,53 @@ describe('Audit Detailspage tests', () => {
         renewSession,
       },
     };
+
+    const [mock, resultFunc] = createGetAuditQueryMock('657', unscheduledAudit);
+
     const [renewQueryMock] = createRenewSessionQueryMock();
-    const [startMock, startResult] = createStartAuditQueryMock('12345', 'r1');
-    const [resumeMock, resumeResult] = createResumeAuditQueryMock('12345');
+    const [startMock, startResult] = createStartAuditQueryMock('657', 'r1');
+    const [resumeMock, resumeResult] = createResumeAuditQueryMock('657');
+    const [cloneMock, cloneResult] = createCloneAuditQueryMock('657', '456');
+    const [exportMock, exportResult] = createExportAuditsByIdsQueryMock();
+    const [deleteMock, deleteResult] = createDeleteAuditQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewQueryMock, startMock, resumeMock],
+      queryMocks: [
+        mock,
+        renewQueryMock,
+        startMock,
+        resumeMock,
+        cloneMock,
+        exportMock,
+        deleteMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', audit5));
-
-    render(<Detailspage id="12345" />);
+    render(<Detailspage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const cloneIcon = screen.getAllByTitle('Clone Audit');
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
 
     await wait();
-    expect(clone).toHaveBeenCalledWith(audit5);
+    expect(cloneResult).toHaveBeenCalled();
 
     const exportIcon = screen.getAllByTitle('Export Audit as XML');
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
 
     await wait();
-    expect(exportFunc).toHaveBeenCalledWith(audit5);
+    expect(exportResult).toHaveBeenCalled();
 
     const startIcon = screen.getAllByTitle('Start');
     expect(startIcon[0]).toBeInTheDocument();
@@ -538,7 +529,7 @@ describe('Audit Detailspage tests', () => {
 
     await wait();
 
-    expect(deleteFunc).toHaveBeenCalledWith(audit5Id);
+    expect(deleteResult).toHaveBeenCalled();
   });
 });
 
