@@ -22,14 +22,9 @@ import styled from 'styled-components';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import {isFunction} from 'gmp/utils/identity';
+import {hasValue, isDefined, isFunction} from 'gmp/utils/identity';
 
 import Theme from 'web/utils/theme';
-
-export const syncVariables = (values, formValues, dependencies = {}) => {
-  Object.keys(formValues).forEach(key => (values[key] = formValues[key]));
-  Object.keys(dependencies).forEach(key => (values[key] = dependencies[key]));
-}; // sync all form states with the values known to SaveDialog
 
 const StyledMarker = styled.div`
   color: ${Theme.darkRed};
@@ -48,74 +43,77 @@ export const Marker = props => (
 );
 
 const useFormValidation = (
-  validationSchema,
   validationRules,
-  onValidationSuccess,
-  deps = {},
+  values,
+  {onValidationSuccess, onValidationError, fieldsToValidate},
 ) => {
-  const [formValues, setFormValues] = useState(validationSchema);
-  const [dependencies, setDependencies] = useState(deps);
-  const [errorMessage, setErrorMessage] = useState();
-  const [shouldWarn, setShouldWarn] = useState(false); // shouldWarn is false when first rendered. Only when calling handleSubmit for the first time will this be set to true.
+  const [hasError, setHasError] = useState(false);
+  const [errors, setErrors] = useState(() => {
+    const fieldNames = fieldsToValidate ?? Object.keys(values);
+    return fieldNames.reduce((status, name) => {
+      status[name] = {};
+      return status;
+    }, {});
+  });
 
-  const [validityStatus, setValidityStatus] = useState(validationSchema); // use the same shape as stateschema
-
-  const handleValueChange = useCallback((value, name) => {
-    setFormValues(prevValues => ({...prevValues, [name]: value}));
-  }, []);
-
-  const handleDependencyChange = useCallback((value, name) => {
-    setDependencies(prevValues => ({...prevValues, [name]: value}));
-  }, []);
-
-  // eslint-disable-next-line no-shadow
-  const validate = (value, name, dependencies) => {
-    setValidityStatus(prevValidityStatus => {
+  const validateValue = useCallback(
+    (value, name) => {
       const validationRule = validationRules[name];
-      return {
-        ...prevValidityStatus,
-        [name]: isFunction(validationRule)
-          ? validationRule(value, dependencies)
-          : undefined,
-      };
-    });
-  };
+      let validity;
+
+      try {
+        validity = isFunction(validationRule)
+          ? validationRule(value, values)
+          : undefined;
+      } catch (e) {
+        validity = e.message;
+      }
+
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        [name]: validity,
+      }));
+
+      return validity;
+    },
+    [validationRules, values],
+  );
 
   useEffect(() => {
-    Object.keys(validationSchema).forEach(key => {
-      validate(formValues[key], key, dependencies);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formValues, dependencies]);
+    // update validity status e.g. to remove errors if a user has set a
+    // correct value now
+    const fieldNames = fieldsToValidate ?? Object.keys(values);
+    fieldNames.forEach(name => validateValue(values[name], name, values));
+  }, [fieldsToValidate, validateValue, values]);
 
-  const handleSubmit = values => {
-    setShouldWarn(true);
+  const validate = useCallback(
+    formValues => {
+      const fieldNames = fieldsToValidate ?? Object.keys(formValues);
 
-    const hasErrorInState = Object.keys(formValues).some(key => {
-      return validityStatus[key]?.isValid === false;
-    }, []); // checks if any field is invalid
+      const hasErrorInState = fieldNames.some(name => hasValue(errors[name])); // checks if any field is invalid
 
-    if (hasErrorInState) {
-      setErrorMessage(
-        _(
-          'This form received invalid values. Please check the inputs and submit again.',
-        ),
-      );
-    } else {
-      // eslint-disable-next-line callback-return
-      return onValidationSuccess(values); // if nothing is wrong, call onSave
-    }
-  };
+      setHasError(hasErrorInState);
+
+      if (hasErrorInState) {
+        if (isDefined(onValidationError)) {
+          onValidationError(
+            _(
+              'This form received invalid values. Please check the inputs and ' +
+                'submit again.',
+            ),
+          );
+        }
+      } else if (isDefined(onValidationSuccess)) {
+        onValidationSuccess(formValues);
+      }
+    },
+    [fieldsToValidate, onValidationError, onValidationSuccess, errors],
+  );
 
   return {
-    dependencies,
-    errorMessage,
-    shouldWarn,
-    validityStatus,
-    formValues,
-    handleDependencyChange,
-    handleSubmit,
-    handleValueChange,
+    hasError,
+    errors,
+    validate,
   };
 };
 

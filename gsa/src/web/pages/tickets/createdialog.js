@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -25,13 +25,15 @@ import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
 import Layout from 'web/components/layout/layout';
-import useFormValidation, {
-  syncVariables,
-} from 'web/components/form/useFormValidation';
-import {createTicketRules as validationRules} from './validationrules';
+import useFormValidation from 'web/components/form/useFormValidation';
+import useFormValues from 'web/components/form/useFormValues';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
+
+import {createTicketRules as validationRules} from './validationrules';
+
+const fieldsToValidate = ['note'];
 
 const CreateTicketDialog = ({
   resultId,
@@ -42,54 +44,55 @@ const CreateTicketDialog = ({
   onSave,
   onUserIdChange,
 }) => {
-  const validationSchema = {
-    note: '',
-  };
+  const [error, setError] = useState();
 
-  const {
-    shouldWarn,
+  const [formValues, handleValueChange] = useFormValues({note: ''});
+  const {hasError, errors, validate} = useFormValidation(
+    validationRules,
     formValues,
-    handleValueChange,
-    validityStatus,
-    handleSubmit,
-  } = useFormValidation(validationSchema, validationRules, onSave);
+    {
+      onValidationSuccess: onSave,
+      onValidationError: setError,
+      fieldsToValidate,
+    },
+  );
 
   return (
     <SaveDialog
+      error={error}
       title={title}
       onClose={onClose}
-      onSave={vals => handleSubmit(vals)}
+      onErrorClose={() => setError()}
+      onSave={validate}
       values={{
         resultId,
         userId,
+        ...formValues,
       }}
     >
-      {({values, onValueChange}) => {
-        syncVariables(values, formValues);
-        return (
-          <Layout flex="column">
-            <FormGroup title={_('Assign To User')}>
-              <Select
-                name="userId"
-                value={values.userId}
-                items={renderSelectItems(users)}
-                onChange={onUserIdChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Note')}>
-              <TextArea
-                hasError={shouldWarn && !validityStatus.note.isValid} // default false if undefined (if we don't want to do validation on this textarea)
-                errorContent={validityStatus.note.error}
-                name="note"
-                grow="1"
-                rows="5"
-                value={values.note}
-                onChange={handleValueChange}
-              />
-            </FormGroup>
-          </Layout>
-        );
-      }}
+      {({values}) => (
+        <Layout flex="column">
+          <FormGroup title={_('Assign To User')}>
+            <Select
+              name="userId"
+              value={values.userId}
+              items={renderSelectItems(users)}
+              onChange={onUserIdChange}
+            />
+          </FormGroup>
+          <FormGroup title={_('Note')}>
+            <TextArea
+              hasError={hasError && !!errors.note} // default false if undefined (if we don't want to do validation on this textarea)
+              errorContent={errors.note}
+              name="note"
+              grow="1"
+              rows="5"
+              value={values.note}
+              onChange={handleValueChange}
+            />
+          </FormGroup>
+        </Layout>
+      )}
     </SaveDialog>
   );
 };
