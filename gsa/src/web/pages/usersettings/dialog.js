@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useState} from 'react';
 
 import styled from 'styled-components';
 
@@ -29,6 +29,9 @@ import {isDefined} from 'gmp/utils/identity';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
+import useFormValues from 'web/components/form/useFormValues';
+import useFormValidation from 'web/components/form/useFormValidation';
+
 import Section from 'web/components/section/section';
 
 import compose from 'web/utils/compose';
@@ -36,20 +39,18 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
-import useFormValidation, {
-  syncVariables,
-} from 'web/components/form/useFormValidation';
-import {userSettingsRules} from './validationrules';
-
 import DefaultsPart from './defaultspart';
 import FilterPart from './filterpart';
 import GeneralPart from './generalpart';
 import SeverityPart from './severitypart';
+import {userSettingsRules} from './validationrules';
 
 // necessary to stretch FormGroups to full width inside of Section
 const FormGroupSizer = styled.div`
   width: 100%;
 `;
+
+const fieldsToValidate = ['rowsPerPage'];
 
 let UserSettingsDialog = ({
   alerts,
@@ -177,131 +178,131 @@ let UserSettingsDialog = ({
     dfnCertFilter,
   };
 
-  const validationSchema = {
-    rowsPerPage,
-  };
+  const [error, setError] = useState();
+  const [formValues, handleValueChange] = useFormValues(settings);
 
-  const {
-    shouldWarn,
+  const {hasError, errors, validate} = useFormValidation(
+    userSettingsRules,
     formValues,
-    handleValueChange,
-    validityStatus,
-    handleSubmit,
-  } = useFormValidation(validationSchema, userSettingsRules, onSave);
+    {
+      onValidationSuccess: onSave,
+      onValidationError: setError,
+      fieldsToValidate,
+    },
+  );
 
   return (
     <SaveDialog
+      error={error}
       title={_('Edit User Settings')}
       onClose={onClose}
-      onSave={handleSubmit}
-      defaultValues={settings}
+      onErrorClose={() => setError()}
+      onSave={validate}
+      values={formValues}
     >
-      {({values, onValueChange}) => {
-        syncVariables(values, formValues);
-        return (
-          <React.Fragment>
-            <Section title={_('General Settings')} foldable>
+      {({values}) => (
+        <React.Fragment>
+          <Section title={_('General Settings')} foldable>
+            <FormGroupSizer>
+              <GeneralPart
+                timezone={values.timezone}
+                oldPassword={values.oldPassword}
+                newPassword={values.newPassword}
+                confPassword={values.confPassword}
+                userInterfaceLanguage={values.userInterfaceLanguage}
+                rowsPerPage={values.rowsPerPage}
+                maxRowsPerPage={values.maxRowsPerPage}
+                detailsExportFileName={values.detailsExportFileName}
+                listExportFileName={values.listExportFileName}
+                reportExportFileName={values.reportExportFileName}
+                autoCacheRebuild={values.autoCacheRebuild}
+                errors={errors}
+                shouldWarn={hasError}
+                onChange={handleValueChange}
+              />
+            </FormGroupSizer>
+          </Section>
+          <Section title={_('Severity Settings')} foldable>
+            <FormGroupSizer>
+              <SeverityPart
+                defaultSeverity={values.defaultSeverity}
+                severityClass={values.severityClass}
+                onChange={handleValueChange}
+              />
+            </FormGroupSizer>
+          </Section>
+          <Section title={_('Defaults Settings')} foldable>
+            <FormGroupSizer>
+              <DefaultsPart
+                alerts={alerts}
+                credentials={credentials}
+                openVasScanConfigs={openVasScanConfigs}
+                ospScanConfigs={ospScanConfigs}
+                openVasScanners={openVasScanners}
+                ospScanners={ospScanners}
+                portLists={portLists}
+                reportFormats={reportFormats}
+                schedules={schedules}
+                targets={targets}
+                defaultAlert={values.defaultAlert}
+                defaultEsxiCredential={values.defaultEsxiCredential}
+                defaultOspScanConfig={values.defaultOspScanConfig}
+                defaultOspScanner={values.defaultOspScanner}
+                defaultOpenvasScanConfig={values.defaultOpenvasScanConfig}
+                defaultOpenvasScanner={values.defaultOpenvasScanner}
+                defaultPortList={values.defaultPortList}
+                defaultReportFormat={values.defaultReportFormat}
+                defaultSmbCredential={values.defaultSmbCredential}
+                defaultSnmpCredential={values.defaultSnmpCredential}
+                defaultSshCredential={values.defaultSshCredential}
+                defaultSchedule={values.defaultSchedule}
+                defaultTarget={values.defaultTarget}
+                onChange={handleValueChange}
+              />
+            </FormGroupSizer>
+          </Section>
+          {capabilities.mayAccess('filter') && (
+            <Section title={_('Filter Settings')} foldable>
               <FormGroupSizer>
-                <GeneralPart
-                  timezone={values.timezone}
-                  oldPassword={values.oldPassword}
-                  newPassword={values.newPassword}
-                  confPassword={values.confPassword}
-                  userInterfaceLanguage={values.userInterfaceLanguage}
-                  rowsPerPage={values.rowsPerPage}
-                  maxRowsPerPage={values.maxRowsPerPage}
-                  detailsExportFileName={values.detailsExportFileName}
-                  listExportFileName={values.listExportFileName}
-                  reportExportFileName={values.reportExportFileName}
-                  autoCacheRebuild={values.autoCacheRebuild}
-                  validityStatus={validityStatus}
-                  shouldWarn={shouldWarn}
+                <FilterPart
+                  alertsFilter={values.alertsFilter}
+                  configsFilter={values.configsFilter}
+                  credentialsFilter={values.credentialsFilter}
+                  filtersFilter={values.filtersFilter}
+                  groupsFilter={values.groupsFilter}
+                  hostsFilter={values.hostsFilter}
+                  notesFilter={values.notesFilter}
+                  operatingSystemsFilter={values.operatingSystemsFilter}
+                  overridesFilter={values.overridesFilter}
+                  permissionsFilter={values.permissionsFilter}
+                  portListsFilter={values.portListsFilter}
+                  reportsFilter={values.reportsFilter}
+                  reportFormatsFilter={values.reportFormatsFilter}
+                  resultsFilter={values.resultsFilter}
+                  rolesFilter={values.rolesFilter}
+                  scannersFilter={values.scannersFilter}
+                  schedulesFilter={values.schedulesFilter}
+                  tagsFilter={values.tagsFilter}
+                  targetsFilter={values.targetsFilter}
+                  tasksFilter={values.tasksFilter}
+                  ticketsFilter={values.ticketsFilter}
+                  tlsCertificatesFilter={values.tlsCertificatesFilter}
+                  usersFilter={values.usersFilter}
+                  vulnerabilitiesFilter={values.vulnerabilitiesFilter}
+                  cpeFilter={values.cpeFilter}
+                  cveFilter={values.cveFilter}
+                  nvtFilter={values.nvtFilter}
+                  ovalFilter={values.ovalFilter}
+                  certBundFilter={values.certBundFilter}
+                  dfnCertFilter={values.dfnCertFilter}
+                  filters={filters}
                   onChange={handleValueChange}
                 />
               </FormGroupSizer>
             </Section>
-            <Section title={_('Severity Settings')} foldable>
-              <FormGroupSizer>
-                <SeverityPart
-                  dynamicSeverity={values.dynamicSeverity}
-                  defaultSeverity={values.defaultSeverity}
-                  onChange={onValueChange}
-                />
-              </FormGroupSizer>
-            </Section>
-            <Section title={_('Defaults Settings')} foldable>
-              <FormGroupSizer>
-                <DefaultsPart
-                  alerts={alerts}
-                  credentials={credentials}
-                  openVasScanConfigs={openVasScanConfigs}
-                  ospScanConfigs={ospScanConfigs}
-                  openVasScanners={openVasScanners}
-                  ospScanners={ospScanners}
-                  portLists={portLists}
-                  reportFormats={reportFormats}
-                  schedules={schedules}
-                  targets={targets}
-                  defaultAlert={values.defaultAlert}
-                  defaultEsxiCredential={values.defaultEsxiCredential}
-                  defaultOspScanConfig={values.defaultOspScanConfig}
-                  defaultOspScanner={values.defaultOspScanner}
-                  defaultOpenvasScanConfig={values.defaultOpenvasScanConfig}
-                  defaultOpenvasScanner={values.defaultOpenvasScanner}
-                  defaultPortList={values.defaultPortList}
-                  defaultReportFormat={values.defaultReportFormat}
-                  defaultSmbCredential={values.defaultSmbCredential}
-                  defaultSnmpCredential={values.defaultSnmpCredential}
-                  defaultSshCredential={values.defaultSshCredential}
-                  defaultSchedule={values.defaultSchedule}
-                  defaultTarget={values.defaultTarget}
-                  onChange={onValueChange}
-                />
-              </FormGroupSizer>
-            </Section>
-            {capabilities.mayAccess('filter') && (
-              <Section title={_('Filter Settings')} foldable>
-                <FormGroupSizer>
-                  <FilterPart
-                    alertsFilter={values.alertsFilter}
-                    configsFilter={values.configsFilter}
-                    credentialsFilter={values.credentialsFilter}
-                    filtersFilter={values.filtersFilter}
-                    groupsFilter={values.groupsFilter}
-                    hostsFilter={values.hostsFilter}
-                    notesFilter={values.notesFilter}
-                    operatingSystemsFilter={values.operatingSystemsFilter}
-                    overridesFilter={values.overridesFilter}
-                    permissionsFilter={values.permissionsFilter}
-                    portListsFilter={values.portListsFilter}
-                    reportsFilter={values.reportsFilter}
-                    reportFormatsFilter={values.reportFormatsFilter}
-                    resultsFilter={values.resultsFilter}
-                    rolesFilter={values.rolesFilter}
-                    scannersFilter={values.scannersFilter}
-                    schedulesFilter={values.schedulesFilter}
-                    tagsFilter={values.tagsFilter}
-                    targetsFilter={values.targetsFilter}
-                    tasksFilter={values.tasksFilter}
-                    ticketsFilter={values.ticketsFilter}
-                    tlsCertificatesFilter={values.tlsCertificatesFilter}
-                    usersFilter={values.usersFilter}
-                    vulnerabilitiesFilter={values.vulnerabilitiesFilter}
-                    cpeFilter={values.cpeFilter}
-                    cveFilter={values.cveFilter}
-                    nvtFilter={values.nvtFilter}
-                    ovalFilter={values.ovalFilter}
-                    certBundFilter={values.certBundFilter}
-                    dfnCertFilter={values.dfnCertFilter}
-                    filters={filters}
-                    onChange={onValueChange}
-                  />
-                </FormGroupSizer>
-              </Section>
-            )}
-          </React.Fragment>
-        );
-      }}
+          )}
+        </React.Fragment>
+      )}
     </SaveDialog>
   );
 };

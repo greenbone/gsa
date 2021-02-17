@@ -49,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Fixed
+- Fixed ScanConfigs and Policies page after changes in [Hyperion](https://github.com/greenbone/hyperion/pull/15) [#2733](https://github.com/greenbone/gsa/pull/2733)
 - Fixed reload interval for pages using useEntityReloadInterval and useEntitiesReloadInterval hooks [#2716](https://github.com/greenbone/gsa/pull/2716)
 
 ### Removed
@@ -69,6 +70,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
+- Refactored useFormValidation hook [#2704](https://github.com/greenbone/gsa/pull/2704)
 - Updated copyright and footer layout [#2687](https://github.com/greenbone/gsa/pull/2687)
 - New login page layout [#2683](https://github.com/greenbone/gsa/pull/2683)
 - CVE Tables Page can now be used with the updated xml-format and CVSSv3(.1). [#2583](https://github.com/greenbone/gsa/pull/2583)

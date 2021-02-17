@@ -169,7 +169,7 @@ describe('Policy model parseObject tests', () => {
           type: 'entry',
           value: 'regress',
           nvt: {
-            oid: 'oid',
+            id: 'oid',
             name: 'PostgreSQL Detection',
           },
         },
@@ -182,7 +182,7 @@ describe('Policy model parseObject tests', () => {
           type: 'bar',
           value: 'lorem',
           nvt: {
-            oid: null,
+            id: null,
             name: null,
           },
         },
@@ -198,7 +198,7 @@ describe('Policy model parseObject tests', () => {
         type: 'entry',
         value: 'regress',
         nvt: {
-          oid: 'oid',
+          id: 'oid',
           name: 'PostgreSQL Detection',
         },
       },
@@ -445,7 +445,7 @@ describe('Policy model parseElement tests', () => {
         name: 'lorem',
         nvt: {
           name: 'foo',
-          oid: '456def',
+          id: '456def',
         },
         value: 'ipsum',
       },

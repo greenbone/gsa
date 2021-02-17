@@ -269,10 +269,10 @@ export const NvtPreferences = ({entity}) => {
           </TableHeader>
           <TableBody>
             {preferences.nvt.map(pref => (
-              <TableRow key={pref.nvt.oid + pref.nvt.name + pref.name}>
+              <TableRow key={pref.nvt.id + pref.nvt.name + pref.name}>
                 <TableData>
                   <span>
-                    <DetailsLink id={pref.nvt.oid} type="nvt">
+                    <DetailsLink id={pref.nvt.id} type="nvt">
                       {pref.nvt.name}
                     </DetailsLink>
                   </span>
