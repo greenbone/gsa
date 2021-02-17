@@ -846,7 +846,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                     </a>
                     <a
                       class="c6"
-                      href="/reports?filter=audit_id%3D657"
+                      href="/reports?filter=task_id%3D657"
                       title="Total Reports for Audit foo"
                     >
                       <div
@@ -872,7 +872,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                 </div>
                 <a
                   class="c6"
-                  href="/results?filter=audit_id%3D657"
+                  href="/results?filter=task_id%3D657"
                   title="Results for Audit foo"
                 >
                   <div

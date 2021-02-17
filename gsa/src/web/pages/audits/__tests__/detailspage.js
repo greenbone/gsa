@@ -68,178 +68,222 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-const policy = Policy.fromElement({
-  _id: '314',
+const policy = {
+  id: '314',
   name: 'foo',
   comment: 'bar',
   scanner: {name: 'scanner1', type: '0'},
-  policy_type: OPENVAS_SCAN_CONFIG_TYPE,
-  tasks: {
-    task: [
-      {id: '12345', name: 'foo'},
-      {id: '678910', name: 'audit2'},
-    ],
-  },
-});
-
-const lastReport = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-07-30T13:23:30Z',
-    scan_start: '2019-07-30T13:23:34Z',
-    scan_end: '2019-07-30T13:25:43Z',
-    compliance_count: {yes: 4, no: 3, incomplete: 1},
-  },
-};
-
-const currentReport = {
-  report: {
-    _id: '12342',
-    timestamp: '2019-07-30T13:23:30Z',
-    scan_start: '2019-07-30T13:23:34Z',
-  },
-};
-
-const preferences = {
-  preference: [
-    {
-      name: 'Add results to Asset Management',
-      scanner_name: 'in_assets',
-      value: 'yes',
-    },
-    {
-      name: 'Auto Delete Reports',
-      scanner_name: 'auto_delete',
-      value: 'no',
-    },
+  type: OPENVAS_SCAN_CONFIG_TYPE,
+  tasks: [
+    {id: '12345', name: 'foo'},
+    {id: '678910', name: 'audit2'},
   ],
 };
 
-const audit = Audit.fromElement({
-  _id: '12345',
-  owner: {name: 'admin'},
+const lastReport = {
+  id: '1234',
+  timestamp: '2019-07-30T13:23:30Z',
+  scanStart: '2019-07-30T13:23:34Z',
+  scanEnd: '2019-07-30T13:25:43Z',
+  complianceCount: {yes: 4, no: 3, incomplete: 1},
+};
+
+const currentReport = {
+  id: '12342',
+  timestamp: '2019-07-30T13:23:30Z',
+  scanStart: '2019-07-30T13:23:34Z',
+};
+
+const preferences = [
+  {
+    description: 'Add results to Asset Management',
+    name: 'in_assets',
+    value: 'yes',
+  },
+  {
+    description: 'Auto Delete Reports',
+    name: 'auto_delete',
+    value: 'no',
+  },
+];
+
+const audit = Audit.fromObject({
+  id: '12345',
+  owner: 'admin',
   name: 'foo',
   comment: 'bar',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
+  creationTime: '2019-07-16T06:31:29Z',
+  modificationTime: '2019-07-16T06:44:55Z',
   status: AUDIT_STATUS.done,
-  alterable: '1',
-  last_report: lastReport,
-  report_count: {__text: '1'},
-  result_count: '1',
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: '5678', name: 'target1'},
-  alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
-  config: policy,
-  preferences: preferences,
-  usage_type: 'audit',
+  alterable: true,
+  reports: {
+    lastReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
+  },
+  results: {
+    counts: {
+      current: 1,
+    },
+  },
+  permissions: [{name: 'everything'}],
+  target: {id: '5678', name: 'target1'},
+  alert: {id: '91011', name: 'alert1'},
+  scanner: {id: '1516', name: 'scanner1', type: '2'},
+  policy,
+  preferences,
+  usageType: 'audit',
 });
 
-const audit2 = Audit.fromElement({
-  _id: '12345',
-  owner: {name: 'admin'},
+const audit2 = Audit.fromObject({
+  id: '12345',
+  owner: 'admin',
   name: 'foo',
   comment: 'bar',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
+  creationTime: '2019-07-16T06:31:29Z',
+  modificationTime: '2019-07-16T06:44:55Z',
   status: AUDIT_STATUS.done,
-  alterable: '0',
-  last_report: lastReport,
-  report_count: {__text: '1'},
-  result_count: '1',
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: '5678', name: 'target1'},
-  alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
-  config: policy,
-  preferences: preferences,
-  usage_type: 'audit',
+  alterable: false,
+  reports: {
+    lastReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
+  },
+  results: {
+    counts: {
+      current: 1,
+    },
+  },
+  permissions: [{name: 'everything'}],
+  target: {id: '5678', name: 'target1'},
+  alert: {id: '91011', name: 'alert1'},
+  scanner: {id: '1516', name: 'scanner1', type: '2'},
+  policy,
+  preferences,
+  usageType: 'audit',
 });
 
-const audit3 = Audit.fromElement({
-  _id: '12345',
-  owner: {name: 'admin'},
+const audit3 = Audit.fromObject({
+  id: '12345',
+  owner: 'admin',
   name: 'foo',
   comment: 'bar',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
+  creationTime: '2019-07-16T06:31:29Z',
+  modificationTime: '2019-07-16T06:44:55Z',
   status: AUDIT_STATUS.new,
-  alterable: '0',
-  report_count: {__text: '0'},
-  result_count: '0',
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: '5678', name: 'target1'},
-  alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
-  config: policy,
-  preferences: preferences,
-  usage_type: 'audit',
+  alterable: false,
+  reports: {
+    counts: {
+      total: 0,
+    },
+  },
+  results: {
+    counts: {
+      current: 0,
+    },
+  },
+  permissions: [{name: 'everything'}],
+  target: {id: '5678', name: 'target1'},
+  alert: {id: '91011', name: 'alert1'},
+  scanner: {id: '1516', name: 'scanner1', type: '2'},
+  policy,
+  preferences,
+  usageType: 'audit',
 });
 
-const audit4 = Audit.fromElement({
-  _id: '12345',
-  owner: {name: 'admin'},
+const audit4 = Audit.fromObject({
+  id: '12345',
+  owner: 'admin',
   name: 'foo',
   comment: 'bar',
-  in_use: '1',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
+  inUse: true,
+  creationTime: '2019-07-16T06:31:29Z',
+  modificationTime: '2019-07-16T06:44:55Z',
   status: AUDIT_STATUS.running,
-  alterable: '0',
-  current_report: currentReport,
-  report_count: {__text: '1'},
-  result_count: '0',
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: '5678', name: 'target1'},
-  alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
-  config: policy,
-  preferences: preferences,
-  usage_type: 'audit',
+  alterable: false,
+  reports: {
+    currentReport,
+    counts: {
+      total: 1,
+    },
+  },
+  results: {
+    counts: {
+      current: 0,
+    },
+  },
+  permissions: [{name: 'everything'}],
+  target: {id: '5678', name: 'target1'},
+  alert: {id: '91011', name: 'alert1'},
+  scanner: {id: '1516', name: 'scanner1', type: '2'},
+  policy,
+  preferences,
+  usageType: 'audit',
 });
 
-const audit5 = Audit.fromElement({
-  _id: '12345',
-  owner: {name: 'admin'},
+const audit5 = Audit.fromObject({
+  id: '12345',
+  owner: 'admin',
   name: 'foo',
   comment: 'bar',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
+  creationTime: '2019-07-16T06:31:29Z',
+  modificationTime: '2019-07-16T06:44:55Z',
   status: AUDIT_STATUS.stopped,
-  alterable: '0',
-  current_report: currentReport,
-  last_report: lastReport,
-  report_count: {__text: '2'},
-  result_count: '10',
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: '5678', name: 'target1'},
-  alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
-  config: policy,
-  preferences: preferences,
-  usage_type: 'audit',
+  alterable: false,
+  reports: {
+    currentReport,
+    lastReport,
+    counts: {
+      total: 2,
+      finished: 1,
+    },
+  },
+  results: {
+    counts: {
+      current: 10,
+    },
+  },
+  permissions: [{name: 'everything'}],
+  target: {id: '5678', name: 'target1'},
+  alert: {id: '91011', name: 'alert1'},
+  scanner: {id: '1516', name: 'scanner1', type: '2'},
+  policy,
+  preferences,
+  usageType: 'audit',
 });
 
-const audit6 = Audit.fromElement({
-  _id: '12345',
-  owner: {name: 'admin'},
+const audit6 = Audit.fromObject({
+  id: '12345',
+  owner: 'admin',
   name: 'foo',
   comment: 'bar',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
+  creationTime: '2019-07-16T06:31:29Z',
+  modificationTime: '2019-07-16T06:44:55Z',
   status: AUDIT_STATUS.done,
-  alterable: '0',
-  last_report: lastReport,
-  report_count: {__text: '1'},
-  result_count: '1',
-  permissions: {permission: [{name: 'get_tasks'}]},
-  target: {_id: '5678', name: 'target1'},
-  alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
-  config: policy,
-  preferences: preferences,
-  usage_type: 'audit',
+  alterable: false,
+  reports: {
+    lastReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
+  },
+  results: {
+    counts: {
+      current: 1,
+    },
+  },
+  permissions: [{name: 'get_tasks'}],
+  target: {id: '5678', name: 'target1'},
+  alert: {id: '91011', name: 'alert1'},
+  scanner: {id: '1516', name: 'scanner1', type: '2'},
+  policy,
+  preferences,
+  usageType: 'audit',
 });
 
 const audit7 = Audit.fromElement({
@@ -250,7 +294,7 @@ const audit7 = Audit.fromElement({
   creation_time: '2019-07-16T06:31:29Z',
   modification_time: '2019-07-16T06:44:55Z',
   status: AUDIT_STATUS.done,
-  alterable: '0',
+  alterable: false,
   last_report: lastReport,
   report_count: {__text: '1'},
   result_count: '1',
