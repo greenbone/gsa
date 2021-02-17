@@ -44,6 +44,7 @@ import useReload from 'web/components/loading/useReload';
 import useDownload from 'web/components/form/useDownload';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
+import Download from 'web/components/form/download';
 
 // /////////////////////////////////////////////////////////////////
 
@@ -101,7 +102,7 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
-  const {certs = [], nvts = []} = entity;
+  const {certRefs = [], nvtRefs = []} = entity;
   let {products} = entity;
   console.log(products);
   products = products.slice().sort();
@@ -109,7 +110,7 @@ const Details = ({entity, links = true}) => {
     <Layout flex="column">
       <CveDetails entity={entity} />
 
-      {certs.length > 0 && (
+      {certRefs.length > 0 && (
         <DetailsBlock title={_('CERT Advisories referencing this CVE')}>
           <Table>
             <TableHeader>
@@ -119,13 +120,13 @@ const Details = ({entity, links = true}) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {certs.map(cert => (
+              {certRefs.map(cert => (
                 <TableRow key={cert.name}>
                   <TableData>
                     <span>
                       <CertLink
                         id={cert.name}
-                        type={cert.cert_type}
+                        type={cert.type}
                         textOnly={!links}
                       />
                     </span>
@@ -152,10 +153,10 @@ const Details = ({entity, links = true}) => {
         </DetailsBlock>
       )}
 
-      {nvts.length > 0 && (
+      {nvtRefs.length > 0 && (
         <DetailsBlock title={_('NVTs addressing this CVE')}>
           <Layout flex="column">
-            {nvts.map(nvt => (
+            {nvtRefs.map(nvt => (
               <span key={nvt.id}>
                 <DetailsLink type="nvt" id={nvt.id}>
                   {nvt.name}
@@ -204,7 +205,7 @@ const Page = () => {
   // Page methods
   const {id} = useParams();
   const [, renewSessionTimeout] = useUserSessionTimeout();
-  const [, handleDownload] = useDownload();
+  const [downloadRef, handleDownload] = useDownload();
   const {showError} = useDialogNotification();
 
   // Load cve related entities
@@ -297,6 +298,7 @@ const Page = () => {
                     </TabPanels>
                   </Tabs>
                 </Layout>
+                <Download ref={downloadRef} />
               </React.Fragment>
             );
           }}

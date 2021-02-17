@@ -64,6 +64,7 @@ export const GET_CVE = gql`
         integrity
         availability
         baseScore
+        vector
       }
       cvssV3Vector {
         attackVector
@@ -75,6 +76,16 @@ export const GET_CVE = gql`
         integrity
         availability
         baseScore
+        vector
+      }
+      certRefs {
+        type
+        name
+        title
+      }
+      nvtRefs {
+        id
+        name
       }
       description
       products
@@ -108,6 +119,8 @@ export const GET_CVES = gql`
             }
           }
           updateTime
+          cvssVector
+          score
           cvssV2Vector {
             accessVector
             accessComplexity
@@ -116,6 +129,7 @@ export const GET_CVES = gql`
             integrity
             availability
             baseScore
+            vector
           }
           cvssV3Vector {
             attackVector
@@ -127,6 +141,16 @@ export const GET_CVES = gql`
             integrity
             availability
             baseScore
+            vector
+          }
+          certRefs {
+            type
+            name
+            title
+          }
+          nvtRefs {
+            id
+            name
           }
           description
           products
