@@ -24,7 +24,6 @@ import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
-import Policy from 'gmp/models/policy';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -286,31 +285,40 @@ const audit6 = Audit.fromObject({
   usageType: 'audit',
 });
 
-const audit7 = Audit.fromElement({
-  _id: '12345',
-  owner: {name: 'admin'},
+const audit7 = Audit.fromObject({
+  id: '12345',
+  owner: 'admin',
   name: 'foo',
   comment: 'bar',
-  creation_time: '2019-07-16T06:31:29Z',
-  modification_time: '2019-07-16T06:44:55Z',
+  creationTime: '2019-07-16T06:31:29Z',
+  modificationTime: '2019-07-16T06:44:55Z',
   status: AUDIT_STATUS.done,
   alterable: false,
-  last_report: lastReport,
-  report_count: {__text: '1'},
-  result_count: '1',
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: '5678', name: 'target1'},
-  alert: {_id: '91011', name: 'alert1'},
-  scanner: {_id: '1516', name: 'scanner1', type: '2'},
-  config: policy,
-  schedule: {
-    _id: '121314',
-    name: 'schedule1',
-    permissions: {permission: [{name: 'everything'}]},
+  reports: {
+    lastReport,
+    counts: {
+      total: 1,
+      finished: 1,
+    },
   },
-  schedule_periods: '1',
-  preferences: preferences,
-  usage_type: 'audit',
+  results: {
+    counts: {
+      current: 1,
+    },
+  },
+  permissions: [{name: 'everything'}],
+  target: {id: '5678', name: 'target1'},
+  alert: {id: '91011', name: 'alert1'},
+  scanner: {id: '1516', name: 'scanner1', type: '2'},
+  policy,
+  schedule: {
+    id: '121314',
+    name: 'schedule1',
+    permissions: [{name: 'everything'}],
+  },
+  schedulePeriods: 1,
+  preferences,
+  usageType: 'audit',
 });
 
 const caps = new Capabilities(['everything']);
@@ -470,13 +478,14 @@ describe('Audit Detailspage tests', () => {
       },
       noPermissions,
     );
+    const [renewQueryMock] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock],
+      queryMocks: [mock, permissionMock, renewQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
