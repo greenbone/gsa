@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -27,9 +27,8 @@ import FormGroup from 'web/components/form/formgroup';
 import Layout from 'web/components/layout/layout';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
-import useFormValidation, {
-  syncVariables,
-} from 'web/components/form/useFormValidation';
+import useFormValidation from 'web/components/form/useFormValidation';
+import useFormValues from 'web/components/form/useFormValues';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
@@ -43,6 +42,8 @@ const STATUS_ITEMS = STATUS.map(status => ({
   label: TICKET_STATUS_TRANSLATIONS[status],
 }));
 
+const fieldsToValidate = ['openNote', 'closedNote', 'fixedNote'];
+
 const EditTicketDialog = ({
   closedNote = '',
   fixedNote = '',
@@ -55,101 +56,87 @@ const EditTicketDialog = ({
   onClose,
   onSave,
 }) => {
-  const validationSchema = {
-    // variables needing validation
-    openNote,
+  const [error, setError] = useState();
+  const [formValues, handleValueChange] = useFormValues({
+    ticketId,
     closedNote,
     fixedNote,
-  };
-
-  const deps = {
-    // variables not needing validation but needed as dependencies
+    openNote,
     status,
-  };
-
-  const {
-    dependencies,
+    userId,
+  });
+  const {errors, hasError, validate} = useFormValidation(
+    validationRules,
     formValues,
-    shouldWarn,
-    validityStatus,
-    handleValueChange,
-    handleDependencyChange,
-    handleSubmit,
-  } = useFormValidation(validationSchema, validationRules, onSave, deps);
+    {
+      onValidationSuccess: onSave,
+      onValidationError: setError,
+      fieldsToValidate,
+    },
+  );
 
   return (
     <SaveDialog
+      error={error}
       title={title}
       onClose={onClose}
-      onSave={vals => handleSubmit(vals)}
-      values={{
-        ticketId,
-      }}
-      defaultValues={{
-        closedNote,
-        fixedNote,
-        openNote,
-        status,
-        userId,
-      }}
+      onErrorClose={() => setError()}
+      onSave={validate}
+      values={formValues}
     >
-      {({values, onValueChange}) => {
-        syncVariables(values, formValues, dependencies);
-
-        return (
-          <Layout flex="column">
-            <FormGroup title={_('Status')}>
-              <Select
-                name="status"
-                items={STATUS_ITEMS}
-                value={values.status}
-                onChange={handleDependencyChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Assigned User')}>
-              <Select
-                name="userId"
-                items={renderSelectItems(users)}
-                value={values.userId}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Note for Open')}>
-              <TextArea
-                hasError={shouldWarn && !validityStatus.openNote.isValid}
-                errorContent={validityStatus.openNote.error}
-                name="openNote"
-                grow="1"
-                rows="5"
-                value={values.openNote}
-                onChange={handleValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Note for Fixed')}>
-              <TextArea
-                hasError={shouldWarn && !validityStatus.fixedNote.isValid}
-                errorContent={validityStatus.fixedNote.error}
-                name="fixedNote"
-                grow="1"
-                rows="5"
-                value={values.fixedNote}
-                onChange={handleValueChange}
-              />
-            </FormGroup>
-            <FormGroup title={_('Note for Closed')}>
-              <TextArea
-                hasError={shouldWarn && !validityStatus.closedNote.isValid}
-                errorContent={validityStatus.closedNote.error}
-                name="closedNote"
-                grow="1"
-                rows="5"
-                value={values.closedNote}
-                onChange={handleValueChange}
-              />
-            </FormGroup>
-          </Layout>
-        );
-      }}
+      {({values}) => (
+        <Layout flex="column">
+          <FormGroup title={_('Status')}>
+            <Select
+              name="status"
+              items={STATUS_ITEMS}
+              value={values.status}
+              onChange={handleValueChange}
+            />
+          </FormGroup>
+          <FormGroup title={_('Assigned User')}>
+            <Select
+              name="userId"
+              items={renderSelectItems(users)}
+              value={values.userId}
+              onChange={handleValueChange}
+            />
+          </FormGroup>
+          <FormGroup title={_('Note for Open')}>
+            <TextArea
+              hasError={hasError && !!errors.openNote}
+              errorContent={errors.openNote}
+              name="openNote"
+              grow="1"
+              rows="5"
+              value={values.openNote}
+              onChange={handleValueChange}
+            />
+          </FormGroup>
+          <FormGroup title={_('Note for Fixed')}>
+            <TextArea
+              hasError={hasError && !!errors.fixedNote}
+              errorContent={errors.fixedNote}
+              name="fixedNote"
+              grow="1"
+              rows="5"
+              value={values.fixedNote}
+              onChange={handleValueChange}
+            />
+          </FormGroup>
+          <FormGroup title={_('Note for Closed')}>
+            <TextArea
+              hasError={hasError && !!errors.closedNote}
+              errorContent={errors.closedNote}
+              name="closedNote"
+              grow="1"
+              rows="5"
+              value={values.closedNote}
+              onChange={handleValueChange}
+            />
+          </FormGroup>
+        </Layout>
+      )}
     </SaveDialog>
   );
 };

@@ -63,7 +63,7 @@ export const GET_POLICY = gql`
       }
       preferences {
         nvt {
-          oid
+          id
           name
         }
         hrName

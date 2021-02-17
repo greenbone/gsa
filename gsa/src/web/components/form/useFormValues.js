@@ -1,4 +1,4 @@
-/* Copyright (C) 2020-2021 Greenbone Networks GmbH
+/* Copyright (C) 2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,15 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {_l} from 'gmp/locale/lang';
+import {useCallback, useState} from 'react';
 
-const VALID_ROWSPERPAGE_ERROR_MESSAGE = _l(
-  '"Rows per page" requires a value of 1 or greater.',
-);
+const useFormValues = (initialValues = {}) => {
+  const [values, setValues] = useState(initialValues);
 
-export const userSettingsRules = {
-  rowsPerPage: value =>
-    value > 0 ? undefined : VALID_ROWSPERPAGE_ERROR_MESSAGE,
+  const handleValueChange = useCallback((value, name) => {
+    // avoid re-render if value hasn't changed
+    setValues(oldValues =>
+      oldValues[name] === value ? oldValues : {...oldValues, [name]: value},
+    );
+  }, []);
+
+  return [values, handleValueChange];
 };
 
-// vim: set ts=2 sw=2 tw=80:
+export default useFormValues;
