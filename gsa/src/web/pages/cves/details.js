@@ -53,7 +53,7 @@ const CVSS_PROPS = {
 };
 
 const CveDetails = ({entity}) => {
-  const {description, refs = [], cvssVector, vector} = entity;
+  const {description, severity, refs = [], cvssVector, vector} = entity;
 
   return (
     <Layout flex="column" grow="1">
@@ -69,7 +69,7 @@ const CveDetails = ({entity}) => {
             <TableRow>
               <TableData>{_('Base Score')}</TableData>
               <TableData>
-                <SeverityBar severity={entity.score / 10} />
+                <SeverityBar severity={severity} />
               </TableData>
             </TableRow>
             {hasValue(cvssVector) && (

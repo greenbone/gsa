@@ -33,7 +33,7 @@ setLocale('en');
 
 describe('Scan Config Trend tests', () => {
   test('should render', () => {
-    render(
+    const {element} = render(
       <Trend
         titleDynamic="Dynamic"
         titleStatic="Static"

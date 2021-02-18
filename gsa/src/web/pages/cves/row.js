@@ -64,7 +64,7 @@ const Row = ({
         </Link>
       </TableData>
       <TableData>
-        <SeverityBar severity={entity.score / 10} />
+        <SeverityBar severity={entity.severity} />
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>

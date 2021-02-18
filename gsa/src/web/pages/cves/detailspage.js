@@ -20,7 +20,6 @@ import {useParams} from 'react-router-dom';
 
 import {useExportCvesByIds, useGetCve} from 'web/graphql/cves';
 
-import useExportEntity from 'web/entity/useExportEntity';
 import {hasValue} from 'gmp/utils/identity';
 
 import _ from 'gmp/locale';
@@ -38,15 +37,12 @@ import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
 
 import useDialogNotification from 'web/components/notification/useDialogNotification';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import useReload from 'web/components/loading/useReload';
 
 import useDownload from 'web/components/form/useDownload';
 import withEntityContainer from 'web/entity/withEntityContainer';
 import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 import Download from 'web/components/form/download';
-
-// /////////////////////////////////////////////////////////////////
 
 import CertLink from 'web/components/link/certlink';
 import DetailsLink from 'web/components/link/detailslink';
@@ -65,12 +61,15 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+
 import DetailsBlock from 'web/entity/block';
-import EntityPage from 'web/entity/page';
 import EntityComponent from 'web/entity/component';
 import {InfoLayout} from 'web/entity/info';
+import EntityPage from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
+import useExportEntity from 'web/entity/useExportEntity';
 
 import {selector, loadEntity} from 'web/store/entities/cves';
 

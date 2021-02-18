@@ -55,11 +55,10 @@ window.URL.createObjectURL = jest.fn();
 
 setLocale('en');
 
-const cve = Cve.fromObject(cveEntity);
+const cveObject = Cve.fromObject(cveEntity);
 
 const caps = new Capabilities(['everything']);
 
-const entityType = 'cve';
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
@@ -80,11 +79,11 @@ beforeEach(() => {
 describe('CVE Detailspage tests', () => {
   test('should render full Detailspage', async () => {
     const getCve = jest.fn().mockResolvedValue({
-      data: cve,
+      data: cveObject,
     });
 
     const gmp = {
-      [entityType]: {
+      cve: {
         get: getCve,
       },
       permissions: {
@@ -109,8 +108,6 @@ describe('CVE Detailspage tests', () => {
 
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
-
-    // store.dispatch(entityLoadingActions.success('CVE-314', entity_v2));
 
     const {baseElement, getAllByTestId} = render(<CvePage id="CVE-314" />);
 
@@ -173,7 +170,7 @@ describe('CVE Detailspage tests', () => {
 
   test('should render user tags tab', async () => {
     const getCve = jest.fn().mockResolvedValue({
-      data: cve,
+      data: cveObject,
     });
 
     const getTags = jest.fn().mockResolvedValue({
@@ -185,7 +182,7 @@ describe('CVE Detailspage tests', () => {
     });
 
     const gmp = {
-      [entityType]: {
+      cve: {
         get: getCve,
       },
       permissions: {
@@ -230,12 +227,12 @@ describe('CVE Detailspage tests', () => {
   test('should call commands', async () => {
     const getCve = jest.fn().mockReturnValue(
       Promise.resolve({
-        data: cve,
+        data: cveObject,
       }),
     );
 
     const gmp = {
-      [entityType]: {
+      cve: {
         get: getCve,
       },
       settings: {manualUrl, reloadInterval},
@@ -289,10 +286,11 @@ describe('CVEs ToolBarIcons tests', () => {
     });
 
     const {element, getAllByTestId} = render(
-      <ToolBarIcons entity={cve} onCveDownloadClick={handleCveDownload} />,
+      <ToolBarIcons
+        entity={cveObject}
+        onCveDownloadClick={handleCveDownload}
+      />,
     );
-
-    expect(element).toMatchSnapshot();
 
     const links = element.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
@@ -317,7 +315,10 @@ describe('CVEs ToolBarIcons tests', () => {
     });
 
     const {getAllByTestId} = render(
-      <ToolBarIcons entity={cve} onCveDownloadClick={handleCveDownload} />,
+      <ToolBarIcons
+        entity={cveObject}
+        onCveDownloadClick={handleCveDownload}
+      />,
     );
 
     const icons = getAllByTestId('svg-icon');
@@ -326,7 +327,7 @@ describe('CVEs ToolBarIcons tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'CVE List');
 
     fireEvent.click(icons[2]);
-    expect(handleCveDownload).toHaveBeenCalledWith(cve);
+    expect(handleCveDownload).toHaveBeenCalledWith(cveObject);
     expect(icons[2]).toHaveAttribute('title', 'Export CVE');
   });
 });

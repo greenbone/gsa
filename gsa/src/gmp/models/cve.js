@@ -42,6 +42,8 @@ class Cve extends Info {
       ret.vector = null;
     }
 
+    ret.severity = parseSeverity(ret.score / 10);
+
     return ret;
   }
 
@@ -88,6 +90,7 @@ class Cve extends Info {
     }
 
     ret.cvssVector = ret.cvss_vector;
+
     ret.products = isEmpty(ret.products) ? [] : ret.products.split(' ');
 
     if (isDefined(ret.raw_data) && isDefined(ret.raw_data.entry)) {
