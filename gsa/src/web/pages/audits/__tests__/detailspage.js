@@ -603,7 +603,7 @@ describe('Audit ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    const {element} = render(
       <ToolBarIcons
         entity={audit}
         onAuditCloneClick={handleAuditCloneClick}
