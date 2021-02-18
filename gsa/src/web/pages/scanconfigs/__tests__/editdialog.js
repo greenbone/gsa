@@ -143,7 +143,7 @@ describe('EditScanConfigDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true});
 
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -191,7 +191,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -246,7 +246,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -299,7 +299,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = jest.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}

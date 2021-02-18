@@ -83,9 +83,21 @@ export const cveEntity = deepFreeze({
       name: 'yiggel',
     },
   ],
+  refs: [
+    {
+      source: 'TEST',
+      link: 'foo.bar',
+      reference: 'foo bar',
+    },
+    {
+      source: 'TEST2',
+      link: 'bar.baz',
+      reference: 'bar baz',
+    },
+  ],
   description:
     'An information disclosure issue was addressed with improved state management. This issue is fixed in macOS Catalina 10.15.6, watchOS 6.2.8. A malicious application may disclose restricted memory.',
-  products: ['cpe:/o:apple:mac_os_x:10.15.5 cpe:/o:apple:watchos:6.2.8'],
+  products: ['cpe:/o:ab:c cpe:/o:a:bc'],
 });
 
 const mockCves = {
@@ -117,7 +129,7 @@ export const createGetCvesQueryMock = (variables = {}) =>
   createGenericQueryMock(GET_CVES, {cves: mockCves}, variables);
 
 const exportCvesByIds = {
-  exportScanConfigsByIds: {
+  exportCvesByIds: {
     exportedEntities:
       '<get_info_list_response status="200" status_text="OK" />',
   },
@@ -127,7 +139,7 @@ export const createExportCvesByIdsQueryMock = (cveIds = ['CVE-314']) =>
   createGenericQueryMock(EXPORT_CVES_BY_IDS, exportCvesByIds, {ids: cveIds});
 
 const exportCvesByFilter = {
-  exportScanConfigsByFilter: {
+  exportCvesByFilter: {
     exportedEntities:
       '<get_info_list_response status="200" status_text="OK" />',
   },

@@ -18,13 +18,7 @@
  */
 import {useCallback} from 'react';
 
-import {
-  gql,
-  useApolloClient,
-  useLazyQuery,
-  useMutation,
-  useQuery,
-} from '@apollo/client';
+import {gql, useLazyQuery, useMutation, useQuery} from '@apollo/client';
 import Cve from 'gmp/models/cve';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -286,23 +280,4 @@ export const useExportCvesByIds = options => {
   );
 
   return exportCvesByIds;
-};
-
-export const useLoadCvePromise = () => {
-  const client = useApolloClient();
-
-  const loadCve = configId =>
-    client
-      .query({
-        query: GET_CVE,
-        variables: {id: configId},
-        fetchPolicy: 'no-cache', // do not cache, since this is used when a change is saved
-      })
-      .then(response => {
-        const cve = Cve.fromObject(response?.data?.cve);
-
-        return cve;
-      });
-
-  return loadCve;
 };

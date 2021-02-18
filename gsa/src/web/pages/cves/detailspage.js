@@ -78,7 +78,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import CveDetails from './details';
 
-const ToolBarIcons = ({entity, onCveDownloadClick}) => (
+export const ToolBarIcons = ({entity, onCveDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
@@ -104,7 +104,6 @@ ToolBarIcons.propTypes = {
 const Details = ({entity, links = true}) => {
   const {certRefs = [], nvtRefs = []} = entity;
   let {products} = entity;
-  console.log(entity);
   products = products.slice().sort();
   return (
     <Layout flex="column">

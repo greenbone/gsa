@@ -229,7 +229,7 @@ describe('ScanConfigsPage tests', () => {
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
-    const {baseElement} = render(<ScanConfigsPage />);
+    render(<ScanConfigsPage />);
 
     await wait();
 
