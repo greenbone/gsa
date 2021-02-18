@@ -390,9 +390,9 @@ describe('CVSS v2 parser tests', () => {
         accessVector,
         accessComplexity,
         authentication,
-        confidentialityImpact,
-        availabilityImpact,
-        integrityImpact,
+        confidentiality,
+        availability,
+        integrity,
         cvssScore,
       } = parseCvssV2BaseFromVector(element.vector);
       expect(cvssScore).toEqual(element.value);
@@ -400,9 +400,9 @@ describe('CVSS v2 parser tests', () => {
         accessVector,
         accessComplexity,
         authentication,
-        confidentialityImpact,
-        availabilityImpact,
-        integrityImpact,
+        confidentiality,
+        availability,
+        integrity,
       });
       expect(cvssV2[0]).toEqual(element.vector);
       expect(cvssV2[1]).toEqual(element.value);
@@ -1684,9 +1684,9 @@ describe('CVSS v3 parser tests', () => {
         privilegesRequired,
         userInteraction,
         scope,
-        confidentialityImpact,
-        availabilityImpact,
-        integrityImpact,
+        confidentiality,
+        availability,
+        integrity,
         cvssScore,
       } = parseCvssV3BaseFromVector(element.vector);
       expect(cvssScore).toEqual(element.value);
@@ -1696,9 +1696,9 @@ describe('CVSS v3 parser tests', () => {
         privilegesRequired,
         userInteraction,
         scope,
-        confidentialityImpact,
-        availabilityImpact,
-        integrityImpact,
+        confidentiality,
+        availability,
+        integrity,
       });
       expect(cvssV3[0]).toEqual(element.vector);
       expect(cvssV3[1]).toEqual(element.value);
