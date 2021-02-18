@@ -116,7 +116,6 @@ class Audit extends Model {
     const {reports} = object;
 
     copy.alterable = parseYesNo(object.alterable);
-    copy.resultCount = parseInt(object.resultCount); // this doesn't exist in selene yet. Need to add.
     const allReports = ['lastReport', 'currentReport'];
 
     if (hasValue(reports)) {
@@ -135,15 +134,7 @@ class Audit extends Model {
       delete copy.target;
     }
 
-    // slave isn't really an entity type but it has an id
-    if (isDefined(object.slave)) {
-      const data = object.slave;
-      if (isDefined(data) && !isEmpty(data._id)) {
-        copy.slave = parseModelFromElement(data, 'slave');
-      } else {
-        delete copy.slave;
-      }
-    }
+    // There are no slaves
 
     if (hasValue(object.policy)) {
       copy.policy = Policy.fromObject(object.policy);
@@ -160,13 +151,13 @@ class Audit extends Model {
     }
 
     if (hasValue(object.scanner)) {
-      copy.scanner = Scanner.parseObject(object.scanner);
+      copy.scanner = Scanner.fromObject(object.scanner);
     } else {
       delete copy.scanner;
     }
 
     if (hasValue(object.schedule)) {
-      copy.schedule = Schedule.parseObject(object.schedule);
+      copy.schedule = Schedule.fromObject(object.schedule);
     } else {
       delete copy.schedule;
     }

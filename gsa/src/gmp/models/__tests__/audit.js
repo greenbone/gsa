@@ -23,10 +23,10 @@ import Audit, {
   HOSTS_ORDERING_SEQUENTIAL,
   AUDIT_STATUS,
 } from 'gmp/models/audit';
-import Policy from '../policy';
-import Scanner from '../scanner';
-import Schedule from '../schedule';
-import {testModel} from '../testing';
+import Policy from 'gmp/models/policy';
+import Scanner from 'gmp/models/scanner';
+import Schedule from 'gmp/models/schedule';
+import {testModel} from 'gmp/models/testing';
 
 describe.only('Audit model parseObject tests', () => {
   testModel(Audit, 'audit', {testIsActive: false});
