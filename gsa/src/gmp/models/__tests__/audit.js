@@ -16,15 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import Model from 'gmp/model';
 import Audit, {
   HOSTS_ORDERING_RANDOM,
   HOSTS_ORDERING_REVERSE,
   HOSTS_ORDERING_SEQUENTIAL,
   AUDIT_STATUS,
 } from 'gmp/models/audit';
+import Policy from '../policy';
+import Scanner from '../scanner';
+import Schedule from '../schedule';
 import {testModel} from '../testing';
 
-describe('Audit model parseObject tests', () => {
+describe.only('Audit model parseObject tests', () => {
   testModel(Audit, 'audit', {testIsActive: false});
 
   test('should parse undefined hosts_ordering', () => {
@@ -75,7 +79,7 @@ describe('Audit model parseObject tests', () => {
         },
         {
           name: 'auto_delete_data',
-          value: 0,
+          value: '0',
         },
         {
           name: 'max_hosts',
@@ -112,7 +116,7 @@ describe('Audit model parseObject tests', () => {
         },
         {
           name: 'auto_delete_data',
-          value: 3,
+          value: '3',
         },
       ],
     });
@@ -124,11 +128,157 @@ describe('Audit model parseObject tests', () => {
     expect(audit1.maxHosts).toEqual(20);
     expect(audit1.maxChecks).toEqual(4);
     expect(audit1.sourceIface).toEqual('eth0');
-    // expect(audit1.preferences).toEqual({foo: {value: 'bar', name: 'lorem'}});
     expect(audit2.inAssets).toEqual(0);
     expect(audit2.applyOverrides).toEqual(0);
     expect(audit2.autoDelete).toEqual('no');
     expect(audit2.autoDeleteData).toEqual(3);
+  });
+
+  test('should parse audit progress', () => {
+    const obj = {progress: 13};
+    const obj2 = {};
+    const obj3 = {progress: -1};
+    const obj4 = {progress: null};
+
+    const audit = Audit.fromObject(obj);
+    const audit2 = Audit.fromObject(obj2);
+    const audit3 = Audit.fromObject(obj3);
+    const audit4 = Audit.fromObject(obj4);
+
+    expect(audit.progress).toEqual(13);
+    expect(audit2.progress).toEqual(0);
+    expect(audit3.progress).toEqual(-1);
+    expect(audit4.progress).toEqual(0);
+  });
+
+  test('should parse reports', () => {
+    const obj = {
+      reports: {
+        lastReport: {
+          id: '1234',
+          complianceCount: {
+            yes: 3,
+            no: 2,
+            incomplete: 4,
+          },
+        },
+        currentReport: {
+          id: '5678',
+        },
+        counts: {
+          total: 2,
+          finished: 1,
+        },
+      },
+    };
+
+    const audit = Audit.fromObject(obj);
+    const {reports} = audit;
+
+    const {lastReport, currentReport, counts} = reports;
+
+    expect(lastReport.id).toEqual('1234');
+    expect(lastReport.complianceCount).toEqual({
+      yes: 3,
+      no: 2,
+      incomplete: 4,
+    });
+    expect(lastReport.entityType).toEqual('report');
+
+    expect(currentReport.id).toEqual('5678');
+    expect(currentReport.entityType).toEqual('report');
+    expect(counts).toEqual({total: 2, finished: 1});
+  });
+  test('should parse policy', () => {
+    const obj = {
+      id: 't1',
+      policy: {
+        id: 'p1',
+      },
+    };
+
+    const audit = Audit.fromObject(obj);
+
+    expect(audit.id).toEqual('t1');
+
+    expect(audit.policy).toBeInstanceOf(Policy);
+    expect(audit.policy.id).toEqual('p1');
+    expect(audit.policy.entityType).toEqual('policy');
+  });
+  test('should parse target', () => {
+    const obj = {
+      id: 't1',
+      target: {
+        id: 't1',
+      },
+    };
+
+    const audit = Audit.fromObject(obj);
+
+    expect(audit.id).toEqual('t1');
+
+    expect(audit.target).toBeInstanceOf(Model);
+    expect(audit.target.id).toEqual('t1');
+    expect(audit.target.entityType).toEqual('target');
+  });
+
+  test('should parse alerts', () => {
+    const obj = {
+      id: 't1',
+      alerts: [
+        {
+          id: 'a1',
+        },
+        {
+          id: 'a2',
+        },
+      ],
+    };
+
+    const audit = Audit.fromObject(obj);
+
+    expect(audit.id).toEqual('t1');
+
+    expect(audit.alerts[0]).toBeInstanceOf(Model);
+    expect(audit.alerts[0].id).toEqual('a1');
+    expect(audit.alerts[0].entityType).toEqual('alert');
+    expect(audit.alerts[1]).toBeInstanceOf(Model);
+    expect(audit.alerts[1].entityType).toEqual('alert');
+    expect(audit.alerts[1].id).toEqual('a2');
+  });
+
+  test('should parse scanner', () => {
+    const obj = {
+      id: 't1',
+      scanner: {
+        id: 's1',
+      },
+    };
+
+    const audit = Audit.fromObject(obj);
+
+    expect(audit.id).toEqual('t1');
+
+    expect(audit.scanner).toBeInstanceOf(Scanner);
+    expect(audit.scanner.id).toEqual('s1');
+    expect(audit.scanner.entityType).toEqual('scanner');
+  });
+
+  test('should parse schedule', () => {
+    const obj = {
+      id: 't1',
+      schedule: {
+        id: 's1',
+      },
+    };
+
+    const audit = Audit.fromObject(obj);
+
+    expect(audit.id).toEqual('t1');
+
+    expect(audit.schedule).toBeInstanceOf(Schedule);
+    expect(audit.schedule.id).toEqual('s1');
+    expect(audit.schedule.entityType).toEqual('schedule');
   });
 });
 
