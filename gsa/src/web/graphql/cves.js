@@ -25,7 +25,7 @@ import {
   useMutation,
   useQuery,
 } from '@apollo/client';
-import Cve from 'gmp/models/scanconfig';
+import Cve from 'gmp/models/cve';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -86,6 +86,11 @@ export const GET_CVE = gql`
       nvtRefs {
         id
         name
+      }
+      refs {
+        link
+        reference
+        source
       }
       description
       products
@@ -151,6 +156,11 @@ export const GET_CVES = gql`
           nvtRefs {
             id
             name
+          }
+          refs {
+            link
+            reference
+            source
           }
           description
           products

@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isArray, isDefined} from 'gmp/utils/identity';
+import {isArray, hasValue, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
@@ -30,6 +30,20 @@ import Info from './info';
 
 class Cve extends Info {
   static entityType = 'cve';
+
+  static parseObject(object) {
+    const ret = super.parseObject(object);
+
+    if (hasValue(ret.cvssV3Vector)) {
+      ret.vector = ret.cvssV3Vector;
+    } else if (hasValue(ret.cvssV2Vector)) {
+      ret.vector = ret.cvssV2Vector;
+    } else {
+      ret.vector = null;
+    }
+
+    return ret;
+  }
 
   static parseElement(element) {
     const ret = super.parseElement(element, 'cve');
@@ -68,39 +82,9 @@ class Cve extends Info {
       ret.cvss_vector = '';
     }
     if (ret.cvss_vector.includes('CVSS:3')) {
-      const {
-        attackVector,
-        attackComplexity,
-        privilegesRequired,
-        userInteraction,
-        scope,
-        confidentialityImpact,
-        integrityImpact,
-        availabilityImpact,
-      } = parseCvssV3BaseFromVector(ret.cvss_vector);
-      ret.attackVector = attackVector;
-      ret.attackComplexity = attackComplexity;
-      ret.privilegesRequired = privilegesRequired;
-      ret.userInteraction = userInteraction;
-      ret.scope = scope;
-      ret.confidentiality = confidentialityImpact;
-      ret.integrity = integrityImpact;
-      ret.availability = availabilityImpact;
+      ret.vector = parseCvssV3BaseFromVector(ret.cvss_vector);
     } else {
-      const {
-        accessVector,
-        accessComplexity,
-        authentication,
-        confidentialityImpact,
-        integrityImpact,
-        availabilityImpact,
-      } = parseCvssV2BaseFromVector(ret.cvss_vector);
-      ret.accessVector = accessVector;
-      ret.accessComplexity = accessComplexity;
-      ret.authentication = authentication;
-      ret.confidentiality = confidentialityImpact;
-      ret.integrity = integrityImpact;
-      ret.availability = availabilityImpact;
+      ret.vector = parseCvssV2BaseFromVector(ret.cvss_vector);
     }
 
     ret.cvssVector = ret.cvss_vector;

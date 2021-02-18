@@ -53,17 +53,7 @@ const CVSS_PROPS = {
 };
 
 const CveDetails = ({entity}) => {
-  const {description, references = [], cvssVector} = entity;
-  let vector = {};
-  if (hasValue(entity.cvssV3Vector)) {
-    vector = entity.cvssV3Vector;
-    // eslint-disable-next-line
-    console.log(vector);
-  } else if (hasValue(entity.cvssV3Vector)) {
-    vector = entity.cvssV3Vector;
-  } else {
-    vector = entity;
-  }
+  const {description, refs = [], cvssVector, vector} = entity;
 
   return (
     <Layout flex="column" grow="1">
@@ -104,16 +94,16 @@ const CveDetails = ({entity}) => {
         </InfoTable>
       </DetailsBlock>
 
-      {references.length > 0 && (
+      {refs.length > 0 && (
         <DetailsBlock title={_('References')}>
           <InfoTable>
             <TableBody>
-              {references.map(ref => (
-                <TableRow key={ref.name}>
+              {refs.map(ref => (
+                <TableRow key={ref.reference}>
                   <TableData>{ref.source}</TableData>
                   <TableData>
                     <span>
-                      <ExternalLink to={ref.href}>{ref.name}</ExternalLink>
+                      <ExternalLink to={ref.link}>{ref.reference}</ExternalLink>
                     </span>
                   </TableData>
                 </TableRow>

@@ -104,7 +104,7 @@ ToolBarIcons.propTypes = {
 const Details = ({entity, links = true}) => {
   const {certRefs = [], nvtRefs = []} = entity;
   let {products} = entity;
-  console.log(products);
+  console.log(entity);
   products = products.slice().sort();
   return (
     <Layout flex="column">
