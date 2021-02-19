@@ -29,6 +29,24 @@ export const GET_CPE = gql`
     cpe(id: $id) {
       id
       name
+      comment
+      writable
+      owner
+      inUse
+      creationTime
+      modificationTime
+      permissions {
+        name
+      }
+      userTags {
+        count
+        tags {
+          id
+          name
+          value
+          comment
+        }
+      }
       updateTime
       title
       nvdId
@@ -50,6 +68,24 @@ export const GET_CPES = gql`
         node {
           id
           name
+          comment
+          writable
+          owner
+          inUse
+          creationTime
+          modificationTime
+          permissions {
+            name
+          }
+          userTags {
+            count
+            tags {
+              id
+              name
+              value
+              comment
+            }
+          }
           updateTime
           title
           nvdId

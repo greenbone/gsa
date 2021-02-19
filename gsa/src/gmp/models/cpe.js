@@ -30,7 +30,7 @@ class Cpe extends Info {
   static parseObject(object) {
     const ret = super.parseObject(object);
 
-    ret.severity = parseScoreToSeverity(ret.score / 10);
+    ret.severity = parseScoreToSeverity(ret.score);
     delete ret.score;
 
     return ret;
@@ -39,7 +39,7 @@ class Cpe extends Info {
   static parseElement(element) {
     const ret = super.parseElement(element, 'cpe');
 
-    ret.severity = parseScoreToSeverity(ret.score / 10);
+    ret.severity = parseScoreToSeverity(ret.score);
     delete ret.score;
 
     ret.cveRefCount = ret.cve_refs;

@@ -15,7 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useParams} from 'react-router-dom';
+
+import {useExportCpesByIds, useGetCpe} from 'web/graphql/cpes';
+
+import {hasValue} from 'gmp/utils/identity';
 
 import _ from 'gmp/locale';
 import DateTime from 'web/components/date/datetime';
@@ -31,6 +36,13 @@ import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
+
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import useReload from 'web/components/loading/useReload';
+
+import useDownload from 'web/components/form/useDownload';
+import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
+import Download from 'web/components/form/download';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -50,6 +62,8 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+
 import DetailsBlock from 'web/entity/block';
 import EntityPage from 'web/entity/page';
 import EntityComponent from 'web/entity/component';
@@ -57,6 +71,7 @@ import {InfoLayout} from 'web/entity/info';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
+import useExportEntity from 'web/entity/useExportEntity';
 
 import {selector, loadEntity} from 'web/store/entities/cpes';
 
@@ -64,7 +79,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import CpeDetails from './details';
 
-const ToolBarIcons = ({entity, onCpeDownloadClick}) => (
+export const ToolBarIcons = ({entity, onCpeDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
@@ -87,34 +102,8 @@ ToolBarIcons.propTypes = {
   onCpeDownloadClick: PropTypes.func.isRequired,
 };
 
-const EntityInfo = ({entity}) => {
-  const {id, modificationTime, creationTime, updateTime} = entity;
-  return (
-    <InfoLayout>
-      <div>{_('ID:')}</div>
-      <div>{id}</div>
-      <div>{_('Modified:')}</div>
-      <div>
-        <DateTime date={modificationTime} />
-      </div>
-      <div>{_('Created:')}</div>
-      <div>
-        <DateTime date={creationTime} />
-      </div>
-      <div>{_('Last updated:')}</div>
-      <div>
-        <DateTime date={updateTime} />
-      </div>
-    </InfoLayout>
-  );
-};
-
-EntityInfo.propTypes = {
-  entity: PropTypes.model.isRequired,
-};
-
 const Details = ({entity, links = true}) => {
-  const {cveRefs, cveRefCount} = entity;
+  const {cveRefs = [], cveRefCount} = entity;
   return (
     <Layout flex="column">
       <CpeDetails entity={entity} />
@@ -159,74 +148,142 @@ Details.propTypes = {
   links: PropTypes.bool,
 };
 
-const CpePage = ({
-  entity,
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <EntityComponent
-    name="cpe"
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-  >
-    {({download}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<CpeLogoIcon size="large" />}
-        title={_('CPE')}
-        infoComponent={EntityInfo}
-        toolBarIcons={ToolBarIcons}
-        onCpeDownloadClick={download}
-        onInteraction={onInteraction}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('CPE: {{title}}', {title: entity.title})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={entity.userTags}>
-                      {_('User Tags')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const EntityInfo = ({entity}) => {
+  const {id, modificationTime, creationTime, updateTime} = entity;
+  return (
+    <InfoLayout>
+      <div>{_('ID:')}</div>
+      <div>{id}</div>
+      <div>{_('Modified:')}</div>
+      <div>
+        <DateTime date={modificationTime} />
+      </div>
+      <div>{_('Created:')}</div>
+      <div>
+        <DateTime date={creationTime} />
+      </div>
+      <div>{_('Last updated:')}</div>
+      <div>
+        <DateTime date={updateTime} />
+      </div>
+    </InfoLayout>
+  );
+};
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <EntityTags
-                        entity={entity}
-                        onChanged={onChanged}
-                        onError={onError}
-                        onInteraction={onInteraction}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </EntityComponent>
-);
+EntityInfo.propTypes = {
+  entity: PropTypes.model.isRequired,
+};
 
-CpePage.propTypes = {
+const Page = () => {
+  // Page methods
+  const {id} = useParams();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+  const [downloadRef, handleDownload] = useDownload();
+  const {showError} = useDialogNotification();
+
+  // Load cpe related entities
+  const {cpe, refetch: refetchCpe, loading, error: entityError} = useGetCpe(
+    decodeURIComponent(id),
+  );
+
+  // Cpe related mutations
+  const exportEntity = useExportEntity();
+  const exportCpe = useExportCpesByIds();
+
+  // Cpe methods
+  const handleDownloadCpe = exportedCpe => {
+    exportEntity({
+      entity: exportedCpe,
+      exportFunc: exportCpe,
+      resourceType: 'cpes',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  // Timeout and reload
+  const timeoutFunc = useEntityReloadInterval(cpe);
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetchCpe,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if cpe is available and no timer is running yet
+    if (hasValue(cpe) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [cpe, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
+
+  return (
+    <EntityComponent
+      name="cpe"
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onInteraction={renewSessionTimeout}
+    >
+      {({download}) => (
+        <EntityPage
+          entity={cpe}
+          entityError={entityError}
+          entityType={'cpe'}
+          isLoading={loading}
+          sectionIcon={<CpeLogoIcon size="large" />}
+          title={_('CPE')}
+          infoComponent={EntityInfo}
+          toolBarIcons={ToolBarIcons}
+          onCpeDownloadClick={handleDownloadCpe}
+          onInteraction={renewSessionTimeout}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('CPE: {{title}}', {title: cpe.title})} />
+                <Layout grow="1" flex="column">
+                  <TabLayout grow="1" align={['start', 'end']}>
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={cpe.userTags}>
+                        {_('User Tags')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={cpe} />
+                      </TabPanel>
+                      <TabPanel>
+                        <EntityTags
+                          entity={cpe}
+                          onChanged={() => refetchCpe()}
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+                <Download ref={downloadRef} />
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </EntityComponent>
+  );
+};
+
+Page.propTypes = {
   entity: PropTypes.model,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
@@ -237,6 +294,6 @@ CpePage.propTypes = {
 export default withEntityContainer('cpe', {
   load: loadEntity,
   entitySelector: selector,
-})(CpePage);
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:
