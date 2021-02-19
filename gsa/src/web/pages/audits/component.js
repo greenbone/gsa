@@ -21,6 +21,8 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
+import logger from 'gmp/log';
+
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 
@@ -74,6 +76,8 @@ import {UNSET_VALUE, generateFilename} from 'web/utils/render';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
 import useGmp from 'web/utils/useGmp';
 import useCapabilities from 'web/utils/useCapabilities';
+
+const log = logger.getLogger('web.pages.audits.component');
 
 const REPORT_FORMATS_FILTER = Filter.fromString(
   'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
@@ -481,6 +485,58 @@ const AuditComponent = ({
       }),
     );
   };
+
+  useEffect(() => {
+    // display first loading error in the dialog
+    if (policyError) {
+      dispatchState(
+        updateState({
+          error: _('Error while loading scan configs.'),
+        }),
+      );
+    } else if (scannerError) {
+      dispatchState(
+        updateState({
+          error: _('Error while loading scanners.'),
+        }),
+      );
+    } else if (scheduleError) {
+      dispatchState(
+        updateState({
+          error: _('Error while loading schedules.'),
+        }),
+      );
+    } else if (targetError) {
+      dispatchState(
+        updateState({
+          error: _('Error while loading targets.'),
+        }),
+      );
+    } else if (alertError) {
+      dispatchState(
+        updateState({
+          error: _('Error while loading alerts.'),
+        }),
+      );
+    }
+
+    // log error all objects to be able to inspect them the console
+    if (policyError) {
+      log.error({policyError});
+    }
+    if (scannerError) {
+      log.error({scannerError});
+    }
+    if (scheduleError) {
+      log.error({scheduleError});
+    }
+    if (targetError) {
+      log.error({targetError});
+    }
+    if (alertError) {
+      log.error({alertError});
+    }
+  }, [policyError, scannerError, scheduleError, targetError, alertError]);
 
   const {
     alertIds,
