@@ -30,6 +30,8 @@ import Layout from 'web/components/layout/layout';
 import ProductImage from 'web/components/img/product';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+import GreenbonePowerLogo from 'web/components/img/powered';
+import Divider from 'web/components/layout/divider';
 
 const Paper = styled(Layout)`
   background: ${Theme.white};
@@ -116,93 +118,98 @@ class LoginForm extends React.Component {
 
     return (
       <Paper>
-        <Layout align={'center'}>
-          <ProductImage />
-        </Layout>
-        <Layout flex={'column'}>
-          {showProtocolInsecure && (
-            <StyledPanel data-testid="protocol-insecure">
-              <Error>{_('Warning: Connection unencrypted')}</Error>
-              <p>
-                {_(
-                  'The connection to this GSA is not encrypted, allowing ' +
-                    'anyone listening to the traffic to steal your credentials.',
-                )}
-              </p>
-              <p>
-                {_(
-                  'Please configure a TLS certificate for the HTTPS service ' +
-                    'or ask your administrator to do so as soon as possible.',
-                )}
-              </p>
-            </StyledPanel>
-          )}
-        </Layout>
+        <Divider flex="column" margin="10px" grow="1">
+          <Layout align={'center'}>
+            <ProductImage />
+          </Layout>
+          <Layout flex={'column'}>
+            {showProtocolInsecure && (
+              <StyledPanel data-testid="protocol-insecure">
+                <Error>{_('Warning: Connection unencrypted')}</Error>
+                <p>
+                  {_(
+                    'The connection to this GSA is not encrypted, allowing ' +
+                      'anyone listening to the traffic to steal your credentials.',
+                  )}
+                </p>
+                <p>
+                  {_(
+                    'Please configure a TLS certificate for the HTTPS service ' +
+                      'or ask your administrator to do so as soon as possible.',
+                  )}
+                </p>
+              </StyledPanel>
+            )}
+          </Layout>
 
-        <Layout>
-          {isIE11 && (
-            <Panel data-testid="IE11">
-              <Error>{_('Warning: You are using IE11')}</Error>
-              <p>
-                {_(
-                  'You are using Internet Explorer 11. This browser is not supported anymore. Please use an up-to-date alternative or contact your system administrator.',
-                )}
-              </p>
-            </Panel>
-          )}
-        </Layout>
+          <Layout>
+            {isIE11 && (
+              <Panel data-testid="IE11">
+                <Error>{_('Warning: You are using IE11')}</Error>
+                <p>
+                  {_(
+                    'You are using Internet Explorer 11. This browser is not supported anymore. Please use an up-to-date alternative or contact your system administrator.',
+                  )}
+                </p>
+              </Panel>
+            )}
+          </Layout>
 
-        <>
-          {showLogin && !isIE11 && (
-            <StyledLayout flex={'column'}>
-              <Input
-                margin={'normal'}
-                type={'text'}
-                autoComplete="username"
-                name="username"
-                grow="1"
-                label={_('Username')}
-                value={username}
-                autoFocus="autofocus"
-                tabIndex="1"
-                onChange={e =>
-                  this.handleValueChange(e.target.value, e.target.name)
-                }
-              />
-              <Input
-                margin={'normal'}
-                type={'password'}
-                autoComplete="current-password"
-                name="password"
-                grow="1"
-                label={_('Password')}
-                value={password}
-                onKeyDown={this.handleKeyDown}
-                onChange={e =>
-                  this.handleValueChange(e.target.value, e.target.name)
-                }
-              />
+          <>
+            {showLogin && !isIE11 && (
+              <StyledLayout flex={'column'}>
+                <Input
+                  margin={'normal'}
+                  type={'text'}
+                  autoComplete="username"
+                  name="username"
+                  grow="1"
+                  label={_('Username')}
+                  value={username}
+                  autoFocus="autofocus"
+                  tabIndex="1"
+                  onChange={e =>
+                    this.handleValueChange(e.target.value, e.target.name)
+                  }
+                />
+                <Input
+                  margin={'normal'}
+                  type={'password'}
+                  autoComplete="current-password"
+                  name="password"
+                  grow="1"
+                  label={_('Password')}
+                  value={password}
+                  onKeyDown={this.handleKeyDown}
+                  onChange={e =>
+                    this.handleValueChange(e.target.value, e.target.name)
+                  }
+                />
+                <StyledButton
+                  data-testid="login-button"
+                  onClick={this.handleSubmit}
+                >
+                  {_('Login')}
+                </StyledButton>
+              </StyledLayout>
+            )}
+            {isDefined(error) && <Error data-testid="error">{error}</Error>}
+          </>
+
+          {showGuestLogin && (
+            <div data-testid="guest-login">
               <StyledButton
-                data-testid="login-button"
-                onClick={this.handleSubmit}
+                data-testid="guest-login-button"
+                onClick={onGuestLoginClick}
               >
-                {_('Login')}
+                {_('Login as Guest')}
               </StyledButton>
-            </StyledLayout>
+            </div>
           )}
-          {isDefined(error) && <Error data-testid="error">{error}</Error>}
-        </>
-
-        {showGuestLogin && (
-          <div data-testid="guest-login">
-            <StyledButton
-              data-testid="guest-login-button"
-              onClick={onGuestLoginClick}
-            >
-              {_('Login as Guest')}
-            </StyledButton>
-          </div>
-        )}
+          <Layout align={'center'}>
+            <GreenbonePowerLogo />
+          </Layout>
+        </Divider>
       </Paper>
     );
   }
