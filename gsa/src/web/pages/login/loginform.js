@@ -31,7 +31,7 @@ import ProductImage from 'web/components/img/product';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-const Paper = styled.div`
+const Paper = styled(Layout)`
   background: ${Theme.white};
   box-shadow: 0px 14px 22px ${Theme.mediumGray};
   padding: 4rem;
