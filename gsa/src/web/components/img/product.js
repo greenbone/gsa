@@ -31,7 +31,7 @@ import Img from './img';
 
 const Image = styled(Img)`
   display: flex;
-  height: 95px;
+  height: 180px;
 `;
 
 const ProductImage = ({gmp, ...props}) => (
@@ -50,6 +50,6 @@ ProductImage.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default withGmp(ProductImage);
+export default ProductImage;
 
 // vim: set ts=2 sw=2 tw=80:
