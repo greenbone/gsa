@@ -69,8 +69,8 @@ const StyledPanel = styled(Panel)`
 `;
 
 class LoginForm extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(...args) {
+    super(...args);
 
     this.state = {
       username: '',
