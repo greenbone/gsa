@@ -70,6 +70,11 @@ const StyledPanel = styled(Panel)`
   margin-top: 20px;
 `;
 
+const H1 = styled.h1`
+  display: flex;
+  flex-grow: 1;
+`;
+
 class LoginForm extends React.Component {
   constructor(...args) {
     super(...args);
@@ -158,6 +163,7 @@ class LoginForm extends React.Component {
           <>
             {showLogin && !isIE11 && (
               <StyledLayout flex={'column'}>
+                <H1>{_('Sign in to your account')}</H1>
                 <Input
                   margin={'normal'}
                   type={'text'}
@@ -189,7 +195,7 @@ class LoginForm extends React.Component {
                   data-testid="login-button"
                   onClick={this.handleSubmit}
                 >
-                  {_('Login')}
+                  {_('Sign In')}
                 </StyledButton>
               </StyledLayout>
             )}
@@ -202,7 +208,7 @@ class LoginForm extends React.Component {
                 data-testid="guest-login-button"
                 onClick={onGuestLoginClick}
               >
-                {_('Login as Guest')}
+                {_('Sign In as Guest')}
               </StyledButton>
             </div>
           )}
