@@ -35,7 +35,7 @@ const Paper = styled.div`
   background: ${Theme.white};
   box-shadow: 0px 14px 22px ${Theme.mediumGray};
   padding: 4rem;
-  max-width: 30rem;
+  width: 30rem;
 `;
 
 const Panel = styled.div`
