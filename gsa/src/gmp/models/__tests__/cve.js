@@ -76,17 +76,15 @@ describe('CVE model tests', () => {
       {
         name: 'foo',
         id: '42.1337',
-        oid: '42.1337',
       },
       {
         name: 'bar',
         id: '1337.42',
-        oid: '1337.42',
       },
     ];
     const cve = Cve.fromElement(elem);
 
-    expect(cve.nvts).toEqual(res);
+    expect(cve.nvtRefs).toEqual(res);
   });
 
   test('should parse CERT-Bund Advs', () => {
@@ -110,25 +108,25 @@ describe('CVE model tests', () => {
     };
     const res = [
       {
-        cert_type: 'foo',
+        type: 'foo',
         name: 'bar',
         title: 'lorem',
       },
       {
-        cert_type: 'ipsum',
+        type: 'ipsum',
         name: 'dolor',
         title: 'sit',
       },
     ];
     const cve = Cve.fromElement(elem);
 
-    expect(cve.certs).toEqual(res);
+    expect(cve.certRefs).toEqual(res);
   });
 
   test('should return empty array if no certs are given', () => {
     const cve = Cve.fromElement({});
 
-    expect(cve.certs).toEqual([]);
+    expect(cve.certRefs).toEqual([]);
   });
 
   test('should parse CVSS metrics', () => {
@@ -140,13 +138,13 @@ describe('CVE model tests', () => {
     };
     const cve = Cve.fromElement(elem);
 
-    expect(cve.cvssBaseVector).toEqual('AV:N/AC:L/Au:N/C:C/I:C/A:C');
-    expect(cve.cvssAccessComplexity).toEqual('LOW');
-    expect(cve.cvssAccessVector).toEqual('NETWORK');
-    expect(cve.cvssAuthentication).toEqual('NONE');
-    expect(cve.cvssAvailabilityImpact).toEqual('COMPLETE');
-    expect(cve.cvssConfidentialityImpact).toEqual('COMPLETE');
-    expect(cve.cvssIntegrityImpact).toEqual('COMPLETE');
+    expect(cve.cvssVector).toEqual('AV:N/AC:L/Au:N/C:C/I:C/A:C');
+    expect(cve.vector.accessComplexity).toEqual('LOW');
+    expect(cve.vector.accessVector).toEqual('NETWORK');
+    expect(cve.vector.authentication).toEqual('NONE');
+    expect(cve.vector.availability).toEqual('COMPLETE');
+    expect(cve.vector.confidentiality).toEqual('COMPLETE');
+    expect(cve.vector.integrity).toEqual('COMPLETE');
   });
 
   test('should parse vulnerable products', () => {
