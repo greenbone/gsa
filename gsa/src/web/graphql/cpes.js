@@ -32,12 +32,12 @@ export const GET_CPE = gql`
       updateTime
       title
       nvdId
-      maxSeverity
       cveRefCount
       cveRefs {
         id
         severity
       }
+      score
       status
     }
   }
@@ -53,12 +53,12 @@ export const GET_CPES = gql`
           updateTime
           title
           nvdId
-          maxSeverity
           cveRefCount
           cveRefs {
             id
             severity
           }
+          score
           status
         }
       }

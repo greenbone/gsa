@@ -21,6 +21,9 @@ import {isEmpty} from 'gmp/utils/string';
 
 import date, {duration} from 'gmp/models/date';
 
+export const parseScoreToSeverity = value =>
+  isEmpty(value) ? undefined : parseFloat(value / 10);
+
 export const parseSeverity = value =>
   isEmpty(value) ? undefined : parseFloat(value);
 
