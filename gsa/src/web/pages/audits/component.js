@@ -41,6 +41,7 @@ import Download from 'web/components/form/download';
 
 import EntityComponent from 'web/entity/component';
 
+import {useLazyGetAlerts} from 'web/graphql/alerts';
 import {
   useCreateAudit,
   useModifyAudit,
@@ -48,36 +49,15 @@ import {
   useStartAudit,
   useStopAudit,
 } from 'web/graphql/audits';
+import {useLazyGetPolicies} from 'web/graphql/policies';
+import {useLazyGetScanners} from 'web/graphql/scanners';
+import {useLazyGetSchedules} from 'web/graphql/schedules';
+import {useLazyGetTargets} from 'web/graphql/targets';
 
 import AlertComponent from 'web/pages/alerts/component';
 import AuditDialog from 'web/pages/audits/dialog';
 import ScheduleComponent from 'web/pages/schedules/component';
 import TargetComponent from 'web/pages/targets/component';
-
-import {
-  loadEntities as loadAlertsAction,
-  selector as alertSelector,
-} from 'web/store/entities/alerts';
-
-import {
-  loadEntities as loadPoliciesAction,
-  selector as policiesSelector,
-} from 'web/store/entities/policies';
-
-import {
-  loadEntities as loadScannersAction,
-  selector as scannerSelector,
-} from 'web/store/entities/scanners';
-
-import {
-  loadEntities as loadSchedulesAction,
-  selector as scheduleSelector,
-} from 'web/store/entities/schedules';
-
-import {
-  loadEntities as loadTargetsAction,
-  selector as targetSelector,
-} from 'web/store/entities/targets';
 
 import {
   loadAllEntities as loadReportFormatsAction,
@@ -129,27 +109,54 @@ const AuditComponent = ({
     auditDialogVisible: false,
   });
 
-  // Loaders
-  const loadAlerts = useCallback(
-    () => dispatch(loadAlertsAction(gmp)(ALL_FILTER)),
-    [gmp, dispatch],
-  );
-  const loadPolicies = useCallback(
-    () => dispatch(loadPoliciesAction(gmp)(ALL_FILTER)),
-    [gmp, dispatch],
-  );
-  const loadScanners = useCallback(
-    () => dispatch(loadScannersAction(gmp)(ALL_FILTER)),
-    [gmp, dispatch],
-  );
-  const loadSchedules = useCallback(
-    () => dispatch(loadSchedulesAction(gmp)(ALL_FILTER)),
-    [gmp, dispatch],
-  );
-  const loadTargets = useCallback(
-    () => dispatch(loadTargetsAction(gmp)(ALL_FILTER)),
-    [gmp, dispatch],
-  );
+  // GraphQL Loaders
+  const [
+    loadAlerts,
+    {
+      alerts,
+      loading: isLoadingAlerts,
+      refetch: refetchAlerts,
+      error: alertError,
+    },
+  ] = useLazyGetAlerts({
+    filterString: ALL_FILTER.toFilterString(),
+  });
+
+  const [
+    loadPolicies,
+    {policies, loading: isLoadingPolicies, error: policyError},
+  ] = useLazyGetPolicies({
+    filterString: ALL_FILTER.toFilterString(),
+  });
+
+  const [
+    loadScanners,
+    {scanners: scannerList, loading: isLoadingScanners, error: scannerError},
+  ] = useLazyGetScanners({
+    filterString: ALL_FILTER.toFilterString(),
+  });
+  const [
+    loadSchedules,
+    {
+      schedules,
+      loading: isLoadingSchedules,
+      error: scheduleError,
+      refetch: refetchSchedules,
+    },
+  ] = useLazyGetSchedules({
+    filterString: ALL_FILTER.toFilterString(),
+  });
+  const [
+    loadTargets,
+    {
+      targets,
+      loading: isLoadingTargets,
+      refetch: refetchTargets,
+      error: targetError,
+    },
+  ] = useLazyGetTargets({
+    filterString: ALL_FILTER.toFilterString(),
+  });
   const loadUserSettingsDefaults = useCallback(
     () => dispatch(loadUserSettingDefaultsAction(gmp)()),
     [gmp, dispatch],
@@ -160,18 +167,11 @@ const AuditComponent = ({
   );
 
   // Selectors
-  const alertSel = useSelector(alertSelector);
   const userDefaults = useSelector(getUserSettingsDefaults);
-  const policiesSel = useSelector(policiesSelector);
-  const scannersSel = useSelector(scannerSelector);
-  const scheduleSel = useSelector(scheduleSelector);
-  const targetSel = useSelector(targetSelector);
   const userDefaultsSelector = useSelector(getUserSettingsDefaults);
   const reportFormatsSel = useSelector(reportFormatsSelector);
-  const scannerList = scannersSel.getEntities(ALL_FILTER);
   const username = useSelector(getUsername);
 
-  const alerts = alertSel.getEntities(ALL_FILTER);
   const defaultAlertId = userDefaults.getValueByName('defaultalert');
 
   let defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID;
@@ -185,7 +185,6 @@ const AuditComponent = ({
 
   const defaultScheduleId = userDefaults.getValueByName('defaultschedule');
   const defaultTargetId = userDefaults.getValueByName('defaulttarget');
-  const isLoadingScanners = scannersSel.isLoadingAllEntities(ALL_FILTER);
   const reportExportFileName = userDefaultsSelector.getValueByName(
     'reportexportfilename',
   );
@@ -198,7 +197,6 @@ const AuditComponent = ({
     reportFormats = reportFormatsFromStore;
   }
 
-  const policies = policiesSel.getEntities(ALL_FILTER);
   const scanners = isDefined(scannerList)
     ? scannerList.filter(
         scanner =>
@@ -206,8 +204,6 @@ const AuditComponent = ({
           scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
       )
     : undefined;
-  const schedules = scheduleSel.getEntities(ALL_FILTER);
-  const targets = targetSel.getEntities(ALL_FILTER);
 
   // GraphQL Queries and Mutations
   const [modifyAudit] = useModifyAudit();
@@ -248,24 +244,18 @@ const AuditComponent = ({
     return resumeAudit(audit.id).then(onResumed, onResumeError);
   };
 
-  const handleAlertCreated = alertId => {
-    loadAlerts();
-
-    dispatchState(
-      updateState({
-        alertIds: [alertId, ...state.alertIds],
-      }),
-    );
+  const handleAlertCreated = () => {
+    refetchAlerts();
   };
 
   const handleScheduleCreated = scheduleId => {
-    loadSchedules();
+    refetchSchedules();
 
     dispatchState(updateState({scheduleId}));
   };
 
   const handleTargetCreated = targetId => {
-    loadTargets();
+    refetchTargets();
 
     dispatchState(updateState({targetId}));
   };
@@ -575,7 +565,11 @@ const AuditComponent = ({
                             hostsOrdering={hostsOrdering}
                             id={id}
                             in_assets={in_assets}
+                            isLoadingAlerts={isLoadingAlerts}
+                            isLoadingPolicies={isLoadingPolicies}
                             isLoadingScanners={isLoadingScanners}
+                            isLoadingSchedules={isLoadingSchedules}
+                            isLoadingTargets={isLoadingTargets}
                             maxChecks={maxChecks}
                             maxHosts={maxHosts}
                             name={name}
