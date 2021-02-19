@@ -1516,7 +1516,7 @@
   "This is an Alterable Task. Reports may not relate to current Scan Config or Target!": "這個是可變作業。報告可能會與目前的掃描組態或目標無關！",
   "This setting is not alterable once task has been run at least once.": "這個設定在作業執行一次後即無法再更改。",
   "This setting is not alterable once the audit has been run at least once.": "這個設定在審計執行一次後即無法再更改。",
-  "This web application uses cookies to store session information. The cookies are not stored on the server side hard disk and not submitted anywhere. They are lost when the session is closed or expired. The cookies are stored temporarily in your browser as well where you can examine the content.": "這個 Web 應用程式採用 Cookie 儲存 Session 資訊，Cookie 不會儲存在伺服器端的硬碟上，也不在送交到任何地方。當 Session 關閉或過期時它們就會丟棄。這些 Cookie 會暫時儲存在您的瀏覽器中，您可以在那裡檢查內容。",
+  "This web application uses cookies to store session information. The cookies are not stored on the server side hard disk and not submitted anywhere. They are lost when the session is closed or expired. The cookies are stored temporarily in your browser as well where you can examine the content.": "這個 Web 應用程式採用 Cookie 儲存 Session 資訊，Cookie 不會儲存在伺服器端的硬碟上，也不再送交到任何地方。當 Session 關閉或過期時它們就會丟棄。這些 Cookie 會暫時儲存在您的瀏覽器中，您可以在那裡檢查內容。",
   "This wizard can help you by creating a new scan task and automatically starting it.": "這個引導程序將協助您建立一個新的掃描作業後自動啟動",
   "This wizard will modify an existing task for you. The difference to the Edit Task dialog is that you can enter values for associated objects directly here. The objects will then be created for you automatically and assigned to the selected task.": "這個引導程序將協助您修改一個現有的作業。與「編輯作業」功能不同之處在於，您可以直接在這裡輸入要改變的資料，它會將修改後的結果搭配作業內容自動建立新的排程。",
   "Thursday": "週四",
