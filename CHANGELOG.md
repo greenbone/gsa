@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Implement the usage of graphql for cpes [#2739](https://github.com/greenbone/gsa/pull/2739)
+- Implement the usage of graphql for cves [#2734](https://github.com/greenbone/gsa/pull/2734)
 - Implement the usage of graphql for notes [#2721](https://github.com/greenbone/gsa/pull/2721)
 - Refactor schedule dialog to function component [#2714](https://github.com/greenbone/gsa/pull/2714)
 - Implement host listpage queries and mutations [#2713](https://github.com/greenbone/gsa/pull/2713)
