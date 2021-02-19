@@ -24,8 +24,7 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import withGmp from 'web/utils/withGmp';
-import PropTypes from 'web/utils/proptypes';
+import useGmp from 'web/utils/useGmp';
 
 import Img from './img';
 
@@ -34,20 +33,19 @@ const Image = styled(Img)`
   height: 180px;
 `;
 
-const ProductImage = ({gmp, ...props}) => (
-  <Image
-    alt={_('Greenbone Security Assistant')}
-    {...props}
-    src={
-      isDefined(gmp.settings) && isDefined(gmp.settings.vendorLabel)
-        ? gmp.settings.vendorLabel
-        : 'login-label.png'
-    }
-  />
-);
-
-ProductImage.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
+const ProductImage = props => {
+  const {settings} = useGmp();
+  return (
+    <Image
+      alt={_('Greenbone Security Assistant')}
+      {...props}
+      src={
+        isDefined(settings) && isDefined(settings.vendorLabel)
+          ? settings.vendorLabel
+          : 'login-label.png'
+      }
+    />
+  );
 };
 
 export default ProductImage;
