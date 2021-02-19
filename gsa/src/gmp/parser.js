@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined, isString, isNumber, isArray} from 'gmp/utils/identity';
+import {
+  isDefined,
+  isString,
+  isNumber,
+  isArray,
+  hasValue,
+} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import date, {duration} from 'gmp/models/date';
@@ -25,7 +31,7 @@ export const parseSeverity = value =>
   isEmpty(value) ? undefined : parseFloat(value);
 
 export const parseProgressElement = value => {
-  if (!isDefined(value)) {
+  if (!hasValue(value)) {
     return 0;
   }
 
