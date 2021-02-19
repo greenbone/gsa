@@ -114,12 +114,12 @@ EntityInfo.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
-  const {cves, cve_refs} = entity;
+  const {cveRefs, cveRefCount} = entity;
   return (
     <Layout flex="column">
       <CpeDetails entity={entity} />
       <DetailsBlock title={_('Reported Vulnerabilities')}>
-        {cves.length > 0 ? (
+        {cveRefs.length > 0 ? (
           <Table>
             <TableHeader>
               <TableRow>
@@ -128,7 +128,7 @@ const Details = ({entity, links = true}) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {cves.map(cve => (
+              {cveRefs.map(cve => (
                 <TableRow key={cve.id}>
                   <TableData>
                     <span>
@@ -144,7 +144,7 @@ const Details = ({entity, links = true}) => {
               ))}
             </TableBody>
           </Table>
-        ) : cve_refs === 0 ? (
+        ) : cveRefCount === 0 ? (
           _('None')
         ) : (
           <Loading />
