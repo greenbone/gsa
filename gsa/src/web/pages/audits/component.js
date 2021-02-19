@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useCallback, useEffect, useReducer} from 'react';
+import React, {useEffect, useReducer} from 'react';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
@@ -55,19 +55,13 @@ import {useLazyGetPolicies} from 'web/graphql/policies';
 import {useLazyGetScanners} from 'web/graphql/scanners';
 import {useLazyGetSchedules} from 'web/graphql/schedules';
 import {useLazyGetTargets} from 'web/graphql/targets';
+import {useLazyGetReportFormats} from 'web/graphql/reportformats';
+import {useLazyGetSettings} from 'web/graphql/settings';
 
 import AlertComponent from 'web/pages/alerts/component';
 import AuditDialog from 'web/pages/audits/dialog';
 import ScheduleComponent from 'web/pages/schedules/component';
 import TargetComponent from 'web/pages/targets/component';
-
-import {
-  loadAllEntities as loadReportFormatsAction,
-  selector as reportFormatsSelector,
-} from 'web/store/entities/reportformats';
-
-import {loadUserSettingDefaults as loadUserSettingDefaultsAction} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 
 import {getUsername} from 'web/store/usersettings/selectors';
 
@@ -82,6 +76,12 @@ const log = logger.getLogger('web.pages.audits.component');
 const REPORT_FORMATS_FILTER = Filter.fromString(
   'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
 );
+
+const getValueByName = (settings = []) => name => {
+  const setting = settings.find(obj => obj.name === name);
+
+  return setting?.value;
+};
 
 const AuditComponent = ({
   children,
@@ -103,7 +103,6 @@ const AuditComponent = ({
   onSaved,
   onSaveError,
 }) => {
-  const dispatch = useDispatch();
   const gmp = useGmp();
   const capabilities = useCapabilities();
   const [downloadRef, handleDownload] = useDownload();
@@ -161,45 +160,34 @@ const AuditComponent = ({
   ] = useLazyGetTargets({
     filterString: ALL_FILTER.toFilterString(),
   });
-  const loadUserSettingsDefaults = useCallback(
-    () => dispatch(loadUserSettingDefaultsAction(gmp)()),
-    [gmp, dispatch],
-  );
-  const loadReportFormats = useCallback(
-    () => dispatch(loadReportFormatsAction(gmp)(REPORT_FORMATS_FILTER)),
-    [gmp, dispatch],
-  );
+
+  const [
+    loadUserSettingsDefaults,
+    {settings: userDefaults},
+  ] = useLazyGetSettings();
+  const [loadReportFormats, {reportFormats = []}] = useLazyGetReportFormats({
+    filterString: REPORT_FORMATS_FILTER.toFilterString(),
+  });
 
   // Selectors
-  const userDefaults = useSelector(getUserSettingsDefaults);
-  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
-  const reportFormatsSel = useSelector(reportFormatsSelector);
   const username = useSelector(getUsername);
 
-  const defaultAlertId = userDefaults.getValueByName('defaultalert');
+  const defaultAlertId = getValueByName(userDefaults)('Default Alert');
 
   let defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID;
-  const defaultScannerIdFromStore = userDefaults.getValueByName(
-    'defaultopenvasscanner',
+  const defaultScannerIdFromStore = getValueByName(userDefaults)(
+    'Default OpenVAS Scanner',
   );
 
   if (isDefined(defaultScannerIdFromStore)) {
     defaultScannerId = defaultScannerIdFromStore;
   }
 
-  const defaultScheduleId = userDefaults.getValueByName('defaultschedule');
-  const defaultTargetId = userDefaults.getValueByName('defaulttarget');
-  const reportExportFileName = userDefaultsSelector.getValueByName(
+  const defaultScheduleId = getValueByName(userDefaults)('Default Schedule');
+  const defaultTargetId = getValueByName(userDefaults)('Default Target');
+  const reportExportFileName = getValueByName(userDefaults)(
     'reportexportfilename',
   );
-  let reportFormats = [];
-  const reportFormatsFromStore = reportFormatsSel.getAllEntities(
-    REPORT_FORMATS_FILTER,
-  );
-
-  if (isDefined(reportFormatsFromStore)) {
-    reportFormats = reportFormatsFromStore;
-  }
 
   const scanners = isDefined(scannerList)
     ? scannerList.filter(
