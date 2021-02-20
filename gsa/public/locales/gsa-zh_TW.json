@@ -1510,7 +1510,7 @@
   "There was an error (422) when trying to add one or more hosts to this process. This might occur if the name of the process has invalid characters. Please make sure you are only using a-z, A-Z and 0-9.": "嘗試在此流程中加入一或多個主機時發生錯誤 (422)。如果該流程名稱具有無效字元，則可能會發生這種情況。請確保您只使用 a-z、A-Z 和 0-9。",
   "Third Party": "第三方",
   "This CPE does not appear in the CPE dictionary but is referenced by one or more CVE.": "這個 CPE 沒有出現在 CPE 目錄中，但被一或多個 CVE 所參考引用。",
-  "This dialog will open a new window for {{- to}} if you click on \"follow link\". Following this link is on your own responsibility. Greenbone does not endorse the content you will see there.": "如果您按下「追蹤連結」，這個對話框將會以新視窗開啟 {{- to}。開啟此追蹤連結的後果請您自行承擔，Greenbone 不會承擔您在該處的任何內容責任。",
+  "This dialog will open a new window for {{- to}} if you click on \"follow link\". Following this link is on your own responsibility. Greenbone does not endorse the content you will see there.": "如果您按下「追蹤連結」，這個對話框將會以新視窗開啟 {{- to}}。開啟此追蹤連結的後果請您自行承擔，Greenbone 不會承擔您在該處的任何內容責任。",
   "This form received invalid values. Please check the inputs and submit again.": "表單收到無效值。請檢查輸入內容後再次送出。",
   "This is an Alterable Audit. Reports may not relate to current Policy or Target!": "這個是可變審計。報告可能會與目前的政策或目標無關！",
   "This is an Alterable Task. Reports may not relate to current Scan Config or Target!": "這個是可變作業。報告可能會與目前的掃描組態或目標無關！",
