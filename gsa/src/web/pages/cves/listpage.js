@@ -15,20 +15,41 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 
 import _ from 'gmp/locale';
 
 import Filter, {CVES_FILTER_FILTER} from 'gmp/models/filter';
+import {hasValue} from 'gmp/utils/identity';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
 import CveIcon from 'web/components/icon/cveicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import PageTitle from 'web/components/layout/pagetitle';
+import useDownload from 'web/components/form/useDownload';
 
 import EntitiesPage from 'web/entities/page';
+import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
+import usePagination from 'web/entities/usePagination';
+
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+
+import DialogNotification from 'web/components/notification/dialognotification';
+import Download from 'web/components/form/download';
+import useReload from 'web/components/loading/useReload';
+
+import {
+  BulkTagComponent,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
+import {
+  useExportCvesByFilter,
+  useExportCvesByIds,
+  useLazyGetCves,
+} from 'web/graphql/cves';
 
 import {
   loadEntities,
@@ -36,6 +57,13 @@ import {
 } from 'web/store/entities/cves';
 
 import PropTypes from 'web/utils/proptypes';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import usePageFilter from 'web/utils/usePageFilter';
+import usePrevious from 'web/utils/usePrevious';
+import useChangeFilter from 'web/utils/useChangeFilter';
+import useSelection from 'web/utils/useSelection';
+import useFilterSortBy from 'web/utils/useFilterSortby';
+import useGmpSettings from 'web/utils/useGmpSettings';
 
 import CveFilterDialog from './filterdialog';
 import CvesTable from './table';
@@ -46,50 +74,202 @@ export const ToolBarIcons = () => (
   <ManualIcon page="managing-secinfo" anchor="cve" title={_('Help: CVEs')} />
 );
 
-const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
-  <React.Fragment>
-    <PageTitle title={_('CVEs')} />
-    <EntitiesPage
-      {...props}
-      createFilterType="info"
-      dashboard={() => (
-        <CvesDashboard
-          filter={filter}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-        />
-      )}
-      dashboardControls={() => (
-        <DashboardControls
-          dashboardId={CVES_DASHBOARD_ID}
-          onInteraction={onInteraction}
-        />
-      )}
-      filter={filter}
-      filterEditDialog={CveFilterDialog}
-      filtersFilter={CVES_FILTER_FILTER}
-      sectionIcon={<CveIcon size="large" />}
-      table={CvesTable}
-      title={_('CVEs')}
-      toolBarIcons={ToolBarIcons}
-      onFilterChanged={onFilterChanged}
-      onInteraction={onInteraction}
-    />
-  </React.Fragment>
-);
+const CvesPage = () => {
+  // Page methods and hooks
+  const gmpSettings = useGmpSettings();
+  const [downloadRef, handleDownload] = useDownload();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
 
-Page.propTypes = {
-  filter: PropTypes.filter,
-  onFilterChanged: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
+  // Powerfilter
+  const [filter, isLoadingFilter] = usePageFilter('cve');
+  const prevFilter = usePrevious(filter);
+  const simpleFilter = filter.withoutView();
+  const {
+    change: changeFilter,
+    remove: removeFilter,
+    reset: resetFilter,
+  } = useChangeFilter('cve');
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+  const {
+    selectionType,
+    selected = [],
+    changeSelectionType,
+    select,
+    deselect,
+  } = useSelection();
+  const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
+    filter,
+    changeFilter,
+  );
+  const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
+
+  // Cve list state variables and methods
+  const [
+    getCves,
+    {counts, cves, error, loading: isLoading, refetch, called, pageInfo},
+  ] = useLazyGetCves();
+
+  const exportCvesByFilter = useExportCvesByFilter();
+  const exportCvesByIds = useExportCvesByIds();
+  const bulkExportCves = useBulkExportEntities();
+
+  //TODO timeoutFunc?
+  const timeoutFunc = useEntitiesReloadInterval(cves);
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetch,
+    timeoutFunc,
+  );
+
+  // Pagination methods
+  const [getFirst, getLast, getNext, getPrevious] = usePagination({
+    simpleFilter,
+    filter,
+    pageInfo,
+    refetch,
+  });
+
+  // Cve methods
+
+  // Bulk action methods
+  const openTagsDialog = () => {
+    renewSessionTimeout();
+    setTagsDialogVisible(true);
+  };
+
+  const closeTagsDialog = () => {
+    renewSessionTimeout();
+    setTagsDialogVisible(false);
+  };
+
+  const handleBulkExportCves = () => {
+    return bulkExportCves({
+      entities: cves,
+      selected,
+      filter,
+      resourceType: 'cves',
+      selectionType,
+      exportByFilterFunc: exportCvesByFilter,
+      exportByIdsFunc: exportCvesByIds,
+      onDownload: handleDownload,
+      onError: showError,
+    });
+  };
+
+  // Side effects
+  useEffect(() => {
+    // load cves initially after the filter is resolved
+    console.log(filter);
+    if (!isLoadingFilter && hasValue(filter) && !called) {
+      getCves({
+        filterString: filter.toFilterString(),
+        first: filter.get('rows'),
+      });
+    }
+  }, [isLoadingFilter, filter, getCves, called]);
+
+  useEffect(() => {
+    // reload if filter has changed
+    if (hasValue(refetch) && !filter.equals(prevFilter)) {
+      refetch({
+        filterString: filter.toFilterString(),
+        first: undefined,
+        last: undefined,
+      });
+    }
+  }, [filter, prevFilter, simpleFilter, refetch]);
+
+  useEffect(() => {
+    // start reloading if cves are available and no timer is running yet
+    console.log('foo');
+    if (hasValue(cves) && !hasRunningTimer) {
+      console.log(cves);
+      startReload();
+    }
+  }, [cves, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => stopReload, [stopReload]);
+
+  return (
+    <React.Fragment>
+      <PageTitle title={_('CVEs')} />
+      <EntitiesPage
+        dashboard={() => (
+          <CvesDashboard
+            filter={filter}
+            onError={showError}
+            onFilterChanged={changeFilter}
+            onInteraction={renewSessionTimeout}
+          />
+        )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={CVES_DASHBOARD_ID}
+            onInteraction={renewSessionTimeout}
+          />
+        )}
+        entitiesCounts={counts}
+        entitiesError={error}
+        entitiesSelected={selected}
+        filter={filter}
+        filterEditDialog={CveFilterDialog}
+        filtersFilter={CVES_FILTER_FILTER}
+        isLoading={isLoading}
+        isUpdating={isLoading}
+        sectionIcon={<CveIcon size="large" />}
+        selectionType={selectionType}
+        sortBy={sortBy}
+        sortDir={sortDir}
+        table={CvesTable}
+        title={_('CVEs')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={refetch}
+        onDownloadBulk={handleBulkExportCves}
+        onDownloaded={handleDownload}
+        onEntitySelected={select}
+        onEntityDeselected={deselect}
+        onError={showError}
+        onFilterChanged={changeFilter}
+        onFilterCreated={changeFilter}
+        onFilterReset={resetFilter}
+        onFilterRemoved={removeFilter}
+        onInteraction={renewSessionTimeout}
+        onSortChange={handleSortChange}
+        onFirstClick={getFirst}
+        onLastClick={getLast}
+        onNextClick={getNext}
+        onPreviousClick={getPrevious}
+        onSelectionTypeChange={changeSelectionType}
+        onTagsBulk={openTagsDialog}
+      />
+      <DialogNotification
+        {...notificationDialogState}
+        onCloseClick={closeNotificationDialog}
+      />
+      <Download ref={downloadRef} />
+      {tagsDialogVisible && (
+        <BulkTagComponent
+          entities={cves}
+          selected={selected}
+          filter={filter}
+          selectionType={selectionType}
+          entitiesCounts={counts}
+          onClose={closeTagsDialog}
+        />
+      )}
+    </React.Fragment>
+  );
 };
 
 const fallbackFilter = Filter.fromString('sort-reverse=name');
 
 export default withEntitiesContainer('cve', {
   entitiesSelector,
-  fallbackFilter,
   loadEntities,
-})(Page);
+})(CvesPage);
 
 // vim: set ts=2 sw=2 tw=80:
