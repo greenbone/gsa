@@ -27,6 +27,7 @@ import Cve from 'gmp/models/cve';
 import {
   cveEntity,
   createExportCvesByIdsQueryMock,
+  createExportCvesByFilterQueryMock,
   createGetCvesQueryMock,
 } from 'web/graphql/__mocks__/cves';
 
@@ -51,16 +52,6 @@ setLocale('en');
 window.URL.createObjectURL = jest.fn();
 
 const cveObject = Cve.fromObject(cveEntity);
-
-const cve = Cve.fromElement({
-  _id: 'CVE-2020-9992',
-  name: 'CVE-2020-9992',
-  cvss_vector: 'AV:N/AC:M/Au:N/C:C/I:C/A:C',
-  creation_time: '2020-10-22T19:15:00Z',
-  score: '93',
-  description: 'foo bar baz',
-  usage_type: 'cve',
-});
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -183,7 +174,7 @@ describe('CvesPage tests', () => {
     await waitFor(() => baseElement.querySelectorAll('table'));
 
     const display = screen.getAllByTestId('grid-item');
-    let icons = screen.getAllByTestId('svg-icon');
+    const icons = screen.getAllByTestId('svg-icon');
     const inputs = baseElement.querySelectorAll('input');
     const selects = screen.getAllByTestId('select-selected-value');
 
@@ -232,22 +223,12 @@ describe('CvesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       cves: {
         get: getCves,
-        deleteByFilter,
-        exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getSeverityAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
@@ -259,18 +240,30 @@ describe('CvesPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+
+    const [mock, resultFunc] = createGetCvesQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [
+      exportByIdsMock,
+      exportByIdsResult,
+    ] = createExportCvesByIdsQueryMock(['CVE-314']);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportByIdsMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cve', defaultSettingfilter),
@@ -293,6 +286,8 @@ describe('CvesPage tests', () => {
 
     await wait();
 
+    expect(resultFunc).toHaveBeenCalled();
+
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents');
 
@@ -301,26 +296,16 @@ describe('CvesPage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportByIdsResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected cves', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       cves: {
         get: getCves,
-        delete: deleteByIds,
-        export: exportByIds,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getSeverityAggregates: getAggregates,
@@ -332,18 +317,30 @@ describe('CvesPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+
+    const [mock, resultFunc] = createGetCvesQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [
+      exportByIdsMock,
+      exportByIdsResult,
+    ] = createExportCvesByIdsQueryMock(['CVE-314']);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportByIdsMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cve', defaultSettingfilter),
@@ -362,9 +359,11 @@ describe('CvesPage tests', () => {
       entitiesLoadingActions.success([cveObject], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<CvesPage />);
+    const {baseElement} = render(<CvesPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -375,7 +374,7 @@ describe('CvesPage tests', () => {
     const selected = screen.getAllByTestId('select-selected-value');
     expect(selected[1]).toHaveTextContent('Apply to selection');
 
-    const inputs = element.querySelectorAll('input');
+    const inputs = baseElement.querySelectorAll('input');
 
     // select a cve
     fireEvent.click(inputs[1]);
@@ -389,26 +388,16 @@ describe('CvesPage tests', () => {
 
     await wait();
 
-    expect(exportByIds).toHaveBeenCalled();
+    expect(exportByIdsResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered cves', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       cves: {
         get: getCves,
-        deleteByFilter,
-        exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getSeverityAggregates: getAggregates,
@@ -420,18 +409,32 @@ describe('CvesPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+
+    const [mock, resultFunc] = createGetCvesQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [
+      exportByFilterMock,
+      exportByFilterResult,
+    ] = createExportCvesByFilterQueryMock('foo=bar rows=-1 first=1');
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportByFilterMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cve', defaultSettingfilter),
@@ -444,8 +447,7 @@ describe('CvesPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+
     store.dispatch(
       entitiesLoadingActions.success([cveObject], filter, loadedFilter, counts),
     );
@@ -453,6 +455,8 @@ describe('CvesPage tests', () => {
     render(<CvesPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -473,7 +477,7 @@ describe('CvesPage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportByFilterResult).toHaveBeenCalled();
   });
 });
 
