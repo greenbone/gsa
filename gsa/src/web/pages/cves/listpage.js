@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -56,14 +56,12 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/cves';
 
-import PropTypes from 'web/utils/proptypes';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import usePageFilter from 'web/utils/usePageFilter';
 import usePrevious from 'web/utils/usePrevious';
 import useChangeFilter from 'web/utils/useChangeFilter';
 import useSelection from 'web/utils/useSelection';
 import useFilterSortBy from 'web/utils/useFilterSortby';
-import useGmpSettings from 'web/utils/useGmpSettings';
 
 import CveFilterDialog from './filterdialog';
 import CvesTable from './table';
@@ -76,7 +74,6 @@ export const ToolBarIcons = () => (
 
 const CvesPage = () => {
   // Page methods and hooks
-  const gmpSettings = useGmpSettings();
   const [downloadRef, handleDownload] = useDownload();
   const [, renewSessionTimeout] = useUserSessionTimeout();
 
@@ -117,7 +114,6 @@ const CvesPage = () => {
   const exportCvesByIds = useExportCvesByIds();
   const bulkExportCves = useBulkExportEntities();
 
-  //TODO timeoutFunc?
   const timeoutFunc = useEntitiesReloadInterval(cves);
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
@@ -133,7 +129,7 @@ const CvesPage = () => {
     refetch,
   });
 
-  // Cve methods
+  // No Cve methods ?
 
   // Bulk action methods
   const openTagsDialog = () => {
@@ -163,7 +159,6 @@ const CvesPage = () => {
   // Side effects
   useEffect(() => {
     // load cves initially after the filter is resolved
-    console.log(filter);
     if (!isLoadingFilter && hasValue(filter) && !called) {
       getCves({
         filterString: filter.toFilterString(),
@@ -185,9 +180,7 @@ const CvesPage = () => {
 
   useEffect(() => {
     // start reloading if cves are available and no timer is running yet
-    console.log('foo');
     if (hasValue(cves) && !hasRunningTimer) {
-      console.log(cves);
       startReload();
     }
   }, [cves, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -212,6 +205,7 @@ const CvesPage = () => {
             onInteraction={renewSessionTimeout}
           />
         )}
+        entities={cves}
         entitiesCounts={counts}
         entitiesError={error}
         entitiesSelected={selected}
@@ -269,6 +263,7 @@ const fallbackFilter = Filter.fromString('sort-reverse=name');
 
 export default withEntitiesContainer('cve', {
   entitiesSelector,
+  fallbackFilter,
   loadEntities,
 })(CvesPage);
 

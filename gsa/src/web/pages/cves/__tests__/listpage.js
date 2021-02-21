@@ -24,19 +24,33 @@ import {setLocale} from 'gmp/locale/lang';
 import Filter from 'gmp/models/filter';
 import Cve from 'gmp/models/cve';
 
+import {
+  cveEntity,
+  createExportCvesByIdsQueryMock,
+  createGetCvesQueryMock,
+} from 'web/graphql/__mocks__/cves';
+
 import {entitiesLoadingActions} from 'web/store/entities/cves';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+import {
+  rendererWith,
+  waitFor,
+  fireEvent,
+  screen,
+  wait,
+} from 'web/utils/testing';
 
 import CvesPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
+
+const cveObject = Cve.fromObject(cveEntity);
 
 const cve = Cve.fromElement({
   _id: 'CVE-2020-9992',
@@ -95,7 +109,7 @@ beforeEach(() => {
   );
 
   getCves = jest.fn().mockResolvedValue({
-    data: [cve],
+    data: [cveObject],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
@@ -124,18 +138,24 @@ describe('CvesPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {currentSettings, getSetting},
     };
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+    const [mock, resultFunc] = createGetCvesQueryMock({
+      filterString,
+      first: 2,
+    });
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cve', defaultSettingfilter),
@@ -151,19 +171,24 @@ describe('CvesPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesLoadingActions.success([cve], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([cveObject], filter, loadedFilter, counts),
     );
 
     const {baseElement} = render(<CvesPage />);
 
     await wait();
 
+    expect(resultFunc).toHaveBeenCalled();
+
+    await waitFor(() => baseElement.querySelectorAll('table'));
+
     const display = screen.getAllByTestId('grid-item');
+    let icons = screen.getAllByTestId('svg-icon');
     const inputs = baseElement.querySelectorAll('input');
     const selects = screen.getAllByTestId('select-selected-value');
 
     // Toolbar Icons
-    expect(screen.getAllByTitle('Help: CVEs')[0]).toBeInTheDocument();
+    expect(icons[0]).toHaveAttribute('title', 'Help: CVEs');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
@@ -197,11 +222,13 @@ describe('CvesPage tests', () => {
 
     const row = baseElement.querySelectorAll('tr');
 
-    expect(row[1]).toHaveTextContent('CVE-2020-9992');
+    expect(row[1]).toHaveTextContent('CVE-314');
     expect(row[1]).toHaveTextContent('foo bar baz');
-    expect(row[1]).toHaveTextContent('Thu, Oct 22, 2020 9:15 PM CESTA');
-    expect(row[1]).toHaveTextContent('AV:N/AC:M/Au:N/C:C/I:C/A:C');
-    expect(row[1]).toHaveTextContent('9.3 (High)');
+    expect(row[1]).toHaveTextContent('Mon, Aug 17, 2020 2:18 PM CEST');
+    expect(row[1]).toHaveTextContent(
+      'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N',
+    );
+    expect(row[1]).toHaveTextContent('5.5 (Medium)');
   });
 
   test('should allow to bulk action on page contents', async () => {
@@ -259,7 +286,7 @@ describe('CvesPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesLoadingActions.success([cve], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([cveObject], filter, loadedFilter, counts),
     );
 
     render(<CvesPage />);
@@ -332,7 +359,7 @@ describe('CvesPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesLoadingActions.success([cve], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([cveObject], filter, loadedFilter, counts),
     );
 
     const {element} = render(<CvesPage />);
@@ -420,7 +447,7 @@ describe('CvesPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesLoadingActions.success([cve], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([cveObject], filter, loadedFilter, counts),
     );
 
     render(<CvesPage />);
