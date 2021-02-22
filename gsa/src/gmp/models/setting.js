@@ -17,6 +17,12 @@
  */
 import {isEmpty} from 'gmp/utils/string';
 
+export const getSettingValueByName = (settings = []) => (name = '') => {
+  const setting = settings.find(obj => obj.name === name);
+
+  return setting?.value;
+};
+
 class Setting {
   constructor({id, comment, name, value} = {}) {
     this.id = id;

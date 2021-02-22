@@ -25,6 +25,7 @@ import logger from 'gmp/log';
 
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
+import {getSettingValueByName} from 'gmp/models/setting';
 
 import {YES_VALUE} from 'gmp/parser';
 
@@ -76,12 +77,6 @@ const log = logger.getLogger('web.pages.audits.component');
 const REPORT_FORMATS_FILTER = Filter.fromString(
   'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
 );
-
-const getValueByName = (settings = []) => name => {
-  const setting = settings.find(obj => obj.name === name);
-
-  return setting?.value;
-};
 
 const AuditComponent = ({
   children,
@@ -172,10 +167,10 @@ const AuditComponent = ({
   // Selectors
   const username = useSelector(getUsername);
 
-  const defaultAlertId = getValueByName(userDefaults)('Default Alert');
+  const defaultAlertId = getSettingValueByName(userDefaults)('Default Alert');
 
   let defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID;
-  const defaultScannerIdFromStore = getValueByName(userDefaults)(
+  const defaultScannerIdFromStore = getSettingValueByName(userDefaults)(
     'Default OpenVAS Scanner',
   );
 
@@ -183,9 +178,11 @@ const AuditComponent = ({
     defaultScannerId = defaultScannerIdFromStore;
   }
 
-  const defaultScheduleId = getValueByName(userDefaults)('Default Schedule');
-  const defaultTargetId = getValueByName(userDefaults)('Default Target');
-  const reportExportFileName = getValueByName(userDefaults)(
+  const defaultScheduleId = getSettingValueByName(userDefaults)(
+    'Default Schedule',
+  );
+  const defaultTargetId = getSettingValueByName(userDefaults)('Default Target');
+  const reportExportFileName = getSettingValueByName(userDefaults)(
     'Report Export File Name',
   );
 
