@@ -22,12 +22,18 @@ import React from 'react';
 
 import {rendererWith, screen, wait, fireEvent} from 'web/utils/testing';
 
-import {useIsAuthenticated, useLazyIsAuthenticated, useLogin} from '../auth';
+import {
+  useGetUsername,
+  useIsAuthenticated,
+  useLazyIsAuthenticated,
+  useLogin,
+} from '../auth';
 import {
   createIsAuthenticatedQueryMock,
   createIsAuthenticatedQueryErrorMock,
   createLoginQueryMock,
   createLoginQueryErrorMock,
+  createGetUsernameQueryMock,
 } from '../__mocks__/auth';
 
 const TestUseIsAuthenticated = () => {
@@ -39,6 +45,19 @@ const TestUseIsAuthenticated = () => {
     <div>
       {error && <span data-testid="error">{error.message}</span>}
       <div data-testid="is-authenticated">{isAuthenticated ? 'yes' : 'no'}</div>
+    </div>
+  );
+};
+
+const TestUserGetUsername = () => {
+  const {username, loading, error} = useGetUsername();
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      {error && <span data-testid="error">{error.message}</span>}
+      <div data-testid="username">{username}</div>
     </div>
   );
 };
@@ -230,5 +249,22 @@ describe('useLogin tests', () => {
     expect(screen.queryByTestId('error')).toHaveTextContent(
       'An error has occurred.',
     );
+  });
+});
+
+describe('useGetUsername tests', () => {
+  test('should load username', async () => {
+    const [mock, resultFunc] = createGetUsernameQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<TestUserGetUsername />);
+
+    expect(screen.getByTestId('loading')).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('username')).toHaveTextContent('dmitri');
   });
 });
