@@ -186,7 +186,7 @@ const AuditComponent = ({
   const defaultScheduleId = getValueByName(userDefaults)('Default Schedule');
   const defaultTargetId = getValueByName(userDefaults)('Default Target');
   const reportExportFileName = getValueByName(userDefaults)(
-    'reportexportfilename',
+    'Report Export File Name',
   );
 
   const scanners = isDefined(scannerList)
