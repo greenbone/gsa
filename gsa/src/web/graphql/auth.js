@@ -28,9 +28,7 @@ export const GET_CURRENT_USER_USERNAME = gql`
 `;
 
 export const useGetUsername = () => {
-  const {data, ...other} = useQuery(GET_CURRENT_USER_USERNAME, {
-    fetchPolicy: 'no-cache', // never cache the query!
-  });
+  const {data, ...other} = useQuery(GET_CURRENT_USER_USERNAME);
   const username = data?.currentUser?.username;
   return {username, ...other};
 };
