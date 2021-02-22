@@ -16,12 +16,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {useCallback} from 'react';
 
 import {gql, useLazyQuery, useQuery} from '@apollo/client';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import ReportFormat from 'gmp/models/reportformat';
 import {isDefined} from 'gmp/utils/identity';
-import {useCallback} from 'react';
 
 export const GET_REPORT_FORMATS = gql`
   query ReportFormat(

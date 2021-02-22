@@ -38,7 +38,7 @@ describe('getSettingValueByName tests', () => {
 
     expect(getSettingValueByName([setting])('cat')).toBeUndefined();
   });
-  test('should crash on bad input', () => {
+  test('should not crash on bad input', () => {
     const setting = Setting.fromObject({
       id: 'foo',
       comment: 'bar',
