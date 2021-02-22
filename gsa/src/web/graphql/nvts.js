@@ -18,13 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {
-  gql,
-  useApolloClient,
-  useLazyQuery,
-  useMutation,
-  useQuery,
-} from '@apollo/client';
+import {gql, useLazyQuery, useMutation, useQuery} from '@apollo/client';
 
 import Nvt from 'gmp/models/nvt';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -32,14 +26,29 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import {isDefined} from 'gmp/utils/identity';
 
 export const GET_NVT = gql`
-  query Nvt($id: UUID!) {
+  query Nvt($id: String!) {
     nvt(id: $id) {
       id
       name
+      comment
+      writable
+      owner
+      inUse
       creationTime
       modificationTime
+      permissions {
+        name
+      }
+      userTags {
+        count
+        tags {
+          id
+          name
+          value
+          comment
+        }
+      }
       category
-      tags
       family
       cvssBase
       qod {
@@ -53,7 +62,7 @@ export const GET_NVT = gql`
           origin
           score
           type
-          value
+          vector
         }
       }
       refs {
@@ -63,8 +72,32 @@ export const GET_NVT = gql`
           type
         }
       }
-      tags
+      tags {
+        cvssBaseVector
+        summary
+        insight
+        impact
+        affected
+        vuldetect
+      }
       preferenceCount
+      preferences {
+        timeout
+        defaultTimeout
+        preferenceList {
+          nvt {
+            id
+            name
+          }
+          hrName
+          name
+          id
+          type
+          value
+          default
+          alt
+        }
+      }
       timeout
       defaultTimeout
       solution {
@@ -98,7 +131,6 @@ export const GET_NVTS = gql`
           creationTime
           modificationTime
           category
-          tags
           family
           cvssBase
           qod {
@@ -112,7 +144,7 @@ export const GET_NVTS = gql`
               origin
               score
               type
-              value
+              vector
             }
           }
           refs {
@@ -122,8 +154,32 @@ export const GET_NVTS = gql`
               type
             }
           }
-          tags
+          tags {
+            cvssBaseVector
+            summary
+            insight
+            impact
+            affected
+            vuldetect
+          }
           preferenceCount
+          preferences {
+            timeout
+            defaultTimeout
+            preferenceList {
+              nvt {
+                id
+                name
+              }
+              hrName
+              name
+              id
+              type
+              value
+              default
+              alt
+            }
+          }
           timeout
           defaultTimeout
           solution {
@@ -152,7 +208,7 @@ export const GET_NVTS = gql`
 `;
 
 export const EXPORT_NVTS_BY_IDS = gql`
-  mutation exportNvtsByIds($ids: [UUID]!) {
+  mutation exportNvtsByIds($ids: [String]!) {
     exportNvtsByIds(ids: $ids) {
       exportedEntities
     }
@@ -249,6 +305,6 @@ export const useGetNvt = (id, options) => {
     ...options,
     variables: {id},
   });
-  const nvt = isDefined(data?.nvt) ? nvt.fromObject(data.nvt) : undefined;
+  const nvt = isDefined(data?.nvt) ? Nvt.fromObject(data.nvt) : undefined;
   return {nvt, ...other};
 };

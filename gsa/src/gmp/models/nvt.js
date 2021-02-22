@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined, isArray, isString} from 'gmp/utils/identity';
+import {isDefined, hasValue, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
@@ -113,13 +113,22 @@ const getOtherRefs = refs => {
 class Nvt extends Info {
   static entityType = 'nvt';
 
+  static parseObject(object) {
+    const ret = super.parseObject(object);
+
+    ret.severity = hasValue(ret.severities)
+      ? parseSeverity(ret.severities.score / 10)
+      : undefined;
+
+    return ret;
+  }
+
   static parseElement(element) {
     const ret = super.parseElement(element, 'nvt');
 
     ret.nvtType = ret._type;
 
-    ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
-    ret.id = ret.oid;
+    ret.id = isEmpty(ret._oid) ? undefined : ret._oid;
     ret.tags = parseTags(ret.tags);
 
     const refs = getRefs(ret);
@@ -151,6 +160,7 @@ class Nvt extends Info {
       const {severity} = ret.severities;
       ret.severity = parseSeverity(severity.score / 10);
       ret.severityOrigin = parseText(severity.origin);
+      ret.cvssBaseVector = ret.cvss_base_vector;
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
     }

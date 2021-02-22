@@ -60,17 +60,8 @@ import EntityPage from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 
-import {
-  selector as notesSelector,
-  loadEntities as loadNotes,
-} from 'web/store/entities/notes';
-
-import {selector as nvtsSelector, loadEntity} from 'web/store/entities/nvts';
-
-import {
-  selector as overridesSelector,
-  loadEntities as loadOverrides,
-} from 'web/store/entities/overrides';
+import {useLazyGetNotes} from 'web/graphql/notes';
+import {useLazyGetOverrides} from 'web/graphql/overrides';
 
 import {useGetPermissions} from 'web/graphql/permissions';
 
@@ -91,7 +82,6 @@ import {useGetNvt, useExportNvtsByIds} from 'web/graphql/nvts';
 import NvtComponent from './component';
 import NvtDetails from './details';
 import Preferences from './preferences';
-import {useLazyGetNotes} from 'web/graphql/notes';
 
 export const ToolBarIcons = ({
   entity,
@@ -158,7 +148,7 @@ ToolBarIcons.propTypes = {
   onOverrideCreateClick: PropTypes.func.isRequired,
 };
 
-ToolBarIcons = withCapabilities(ToolBarIcons);
+// ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const Details = ({entity, notes = [], overrides = []}) => {
   overrides = overrides.filter(override => override.isActive());
@@ -201,7 +191,7 @@ const open_dialog = (nvt, func) => {
   func({
     fixed: true,
     nvt,
-    oid: nvt.oid,
+    id: nvt.id,
   });
 };
 
@@ -225,16 +215,14 @@ const Page = () => {
   const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
-  const {
-    notes,
-    refetch: refetchNotes,
-    loading: loadingNotes,
-    error: notesError,
-  } = useLazyGetNotes();
 
-  const preferences = hasValue(nvt) ? nvt.preferences : [];
-  const userTags = hasValue(nvt) ? nvt.userTags : undefined;
-  const numPreferences = preferences.length;
+  const [loadNotes, {notes}] = useLazyGetNotes({
+    filterString: 'task_id:' + id,
+  });
+
+  const [loadOverrides, {overrides}] = useLazyGetOverrides({
+    filterString: 'task_id:' + id,
+  });
 
   // NVT related mutations
   const exportEntity = useExportEntity();
@@ -284,9 +272,9 @@ const Page = () => {
           sectionIcon={<NvtIcon size="large" />}
           onChanged={refetchAll}
           onInteraction={renewSessionTimeout}
-          onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
+          onNoteCreateClick={notecreate}
           onNvtDownloadClick={handleDownloadNvt}
-          onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
+          onOverrideCreateClick={overridecreate}
         >
           {({activeTab = 0, onActivateTab}) => {
             return (
@@ -300,7 +288,7 @@ const Page = () => {
                       onActivateTab={onActivateTab}
                     >
                       <Tab>{_('Information')}</Tab>
-                      <EntitiesTab count={nvt.numPreferences}>
+                      <EntitiesTab count={nvt.preferenceCount}>
                         {_('Preferences')}
                       </EntitiesTab>
                       <EntitiesTab entities={nvt.userTags}>
@@ -315,7 +303,7 @@ const Page = () => {
                         <Details
                           notes={notes}
                           overrides={overrides}
-                          entity={entity}
+                          entity={nvt}
                         />
                       </TabPanel>
                       <TabPanel>
@@ -326,7 +314,7 @@ const Page = () => {
                       </TabPanel>
                       <TabPanel>
                         <EntityTags
-                          entity={entity}
+                          entity={nvt}
                           onChanged={() => refetchAll()}
                           onError={showError}
                           onInteraction={renewSessionTimeout}

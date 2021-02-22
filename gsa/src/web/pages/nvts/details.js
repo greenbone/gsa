@@ -64,20 +64,19 @@ const NvtDetails = ({entity, links = true}) => {
               </TableData>
             </TableRow>
 
-            {isDefined(tags.cvss_base_vector) &&
-              tags.cvss_base_vector !== TAG_NA && (
-                <TableRow>
-                  <TableData>{_('CVSS Base Vector')}</TableData>
-                  <TableData>
-                    <Link
-                      to="cvsscalculator"
-                      query={{cvssVector: tags.cvss_base_vector}}
-                    >
-                      {tags.cvss_base_vector}
-                    </Link>
-                  </TableData>
-                </TableRow>
-              )}
+            {isDefined(tags.cvssBaseVector) && tags.cvssBaseVector !== TAG_NA && (
+              <TableRow>
+                <TableData>{_('CVSS Base Vector')}</TableData>
+                <TableData>
+                  <Link
+                    to="cvsscalculator"
+                    query={{cvssVector: tags.cvssBaseVector}}
+                  >
+                    {tags.cvssBaseVector}
+                  </Link>
+                </TableData>
+              </TableRow>
+            )}
             <TableRow>
               <TableData>{_('CVSS Origin')}</TableData>
               <TableData>
