@@ -20,59 +20,21 @@ import {_} from 'gmp/locale/lang';
 import {shouldBeNonEmpty} from 'web/components/form/useFormValidation';
 
 export const editTicketRules = {
-  openNote: function (value, dependencies) {
-    let isValid;
-    let error;
-    if (dependencies.status === 'Open') {
-      isValid = shouldBeNonEmpty(value);
-      error = isValid
-        ? ''
-        : _('When changing status to "open", a "Note for Open" is required.');
-    } else {
-      isValid = true;
-      error = '';
-    }
-
-    return {isValid, error};
-  },
-  closedNote: function (value, dependencies) {
-    let isValid;
-    let error;
-    if (dependencies.status === 'Closed') {
-      isValid = shouldBeNonEmpty(value);
-      error = isValid
-        ? ''
-        : _(
-            'When changing status to "closed", a "Note for Closed" is required.',
-          );
-    } else {
-      isValid = true;
-      error = '';
-    }
-
-    return {isValid, error};
-  },
-  fixedNote: function (value, dependencies) {
-    let isValid;
-    let error;
-    if (dependencies.status === 'Fixed') {
-      isValid = shouldBeNonEmpty(value);
-      error = isValid
-        ? ''
-        : _('When changing status to "fixed", a "Note for Fixed" is required.');
-    } else {
-      isValid = true;
-      error = '';
-    }
-
-    return {isValid, error};
-  },
+  openNote: (value, dependencies) =>
+    dependencies.status === 'Open' && !shouldBeNonEmpty(value)
+      ? _('When changing status to "open", a "Note for Open" is required.')
+      : undefined,
+  closedNote: (value, dependencies) =>
+    dependencies.status === 'Closed' && !shouldBeNonEmpty(value)
+      ? _('When changing status to "closed", a "Note for Closed" is required.')
+      : undefined,
+  fixedNote: (value, dependencies) =>
+    dependencies.status === 'Fixed' && !shouldBeNonEmpty(value)
+      ? _('When changing status to "fixed", a "Note for Fixed" is required.')
+      : undefined,
 };
 
 export const createTicketRules = {
-  note: value => {
-    const isValid = shouldBeNonEmpty(value);
-    const error = isValid ? '' : _('Ticket note is required.');
-    return {isValid, error};
-  },
+  note: value =>
+    shouldBeNonEmpty(value) ? undefined : _('Ticket note is required.'),
 };

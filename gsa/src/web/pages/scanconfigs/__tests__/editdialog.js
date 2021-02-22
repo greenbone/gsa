@@ -83,7 +83,7 @@ const nvtPreferences = [
     name: 'preference1',
     value: '3',
     nvt: {
-      oid: '1.2.1',
+      id: '1.2.1',
       name: 'preference0',
     },
   },
@@ -91,7 +91,7 @@ const nvtPreferences = [
     name: 'preference2',
     value: '4',
     nvt: {
-      oid: '1.2.2',
+      id: '1.2.2',
       name: 'preference1',
     },
   },
@@ -99,7 +99,7 @@ const nvtPreferences = [
     name: 'preference',
     value: '5',
     nvt: {
-      oid: '1.2.3',
+      id: '1.2.3',
       name: 'preference2',
       value: 'foo',
     },

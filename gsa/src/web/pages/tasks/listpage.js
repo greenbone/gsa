@@ -50,6 +50,7 @@ import {
   useBulkExportEntities,
   useBulkDeleteEntities,
 } from 'web/entities/bulkactions';
+import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
 import usePagination from 'web/entities/usePagination';
 
 import {
@@ -65,7 +66,6 @@ import {
 import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
 import useChangeFilter from 'web/utils/useChangeFilter';
-import useGmpSettings from 'web/utils/useGmpSettings';
 import useFilterSortBy from 'web/utils/useFilterSortby';
 import usePageFilter from 'web/utils/usePageFilter';
 import useSelection from 'web/utils/useSelection';
@@ -132,7 +132,6 @@ ToolBarIcons.propTypes = {
 
 const TasksListPage = () => {
   // Page methods and hooks
-  const gmpSettings = useGmpSettings();
   const [downloadRef, handleDownload] = useDownload();
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('task');
@@ -177,19 +176,7 @@ const TasksListPage = () => {
   const bulkDeleteTasks = useBulkDeleteEntities();
   const [cloneTask] = useCloneTask();
 
-  const timeoutFunc = useCallback(
-    ({isVisible}) => {
-      if (!isVisible) {
-        return gmpSettings.reloadIntervalInactive;
-      }
-      if (hasValue(tasks) && tasks.some(task => task.isActive())) {
-        return gmpSettings.reloadIntervalActive;
-      }
-      return gmpSettings.reloadInterval;
-    },
-    [tasks, gmpSettings],
-  );
-
+  const timeoutFunc = useEntitiesReloadInterval(tasks);
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,
     timeoutFunc,

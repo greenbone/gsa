@@ -18,23 +18,38 @@
 import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import {setLocale} from 'gmp/locale/lang';
 
-import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {
+  createCloneNoteQueryMock,
+  createDeleteNoteQueryMock,
+  createExportNotesByIdsQueryMock,
+  createGetNoteQueryMock,
+  detailsNote,
+  noPermNote,
+  inUseNote,
+} from 'web/graphql/__mocks__/notes';
 
-import {entityLoadingActions} from 'web/store/entities/notes';
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
+
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: '456',
+  }),
+}));
 
 setLocale('en');
 
@@ -48,89 +63,14 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const note = Note.fromElement({
-  _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-  active: 1,
-  creation_time: '2020-12-23T14:14:11Z',
-  hosts: '127.0.0.1',
-  in_use: 0,
-  modification_time: '2021-01-04T11:54:12Z',
-  nvt: {
-    _oid: '123',
-    name: 'foo nvt',
-    type: 'nvt',
-  },
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'Everything'}},
-  port: '666',
-  task: {
-    name: 'task x',
-    _id: '42',
-  },
-  text: 'note text',
-  writable: 1,
-});
-
-const noteInUse = Note.fromElement({
-  _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-  active: 1,
-  creation_time: '2020-12-23T14:14:11Z',
-  hosts: '127.0.0.1',
-  in_use: 1,
-  modification_time: '2021-01-04T11:54:12Z',
-  nvt: {
-    _oid: '123',
-    name: 'foo nvt',
-    type: 'nvt',
-  },
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'Everything'}},
-  port: '666',
-  text: 'note text',
-  writable: 1,
-});
-
-const noPermNote = Note.fromElement({
-  _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-  active: 1,
-  creation_time: '2020-12-23T14:14:11Z',
-  hosts: '127.0.0.1',
-  in_use: 0,
-  modification_time: '2021-01-04T11:54:12Z',
-  nvt: {
-    _oid: '123',
-    name: 'foo nvt',
-    type: 'nvt',
-  },
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'get_notes'}},
-  port: '666',
-  task: {
-    name: 'task x',
-    _id: '42',
-  },
-  text: 'note text',
-  writable: 1,
-});
+const parsedNote = Note.fromObject(detailsNote);
+const parsedNoPermNote = Note.fromObject(noPermNote);
+const parsedInUseNote = Note.fromObject(inUseNote);
 
 let currentSettings;
-let getEntities;
-let getNote;
 let renewSession;
 
 beforeEach(() => {
-  getNote = jest.fn().mockResolvedValue({
-    data: note,
-  });
-
-  getEntities = jest.fn().mockResolvedValue({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
-
   currentSettings = jest.fn().mockResolvedValue({
     foo: 'bar',
   });
@@ -141,42 +81,37 @@ beforeEach(() => {
 });
 
 describe('Note detailspage tests', () => {
-  test('should render full detailspage', () => {
+  test('should render full detailspage', async () => {
     const gmp = {
-      note: {
-        get: getNote,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
       },
     };
 
+    const [mock, resultFunc] = createGetNoteQueryMock();
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=456 first=1 rows=-1',
+    });
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(
-      entityLoadingActions.success(
-        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-        note,
-      ),
-    );
+    const {baseElement} = render(<Detailspage id="456" />);
 
-    const {baseElement, element} = render(
-      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
-    );
+    await wait();
 
-    expect(element).toHaveTextContent('note text');
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+
+    expect(baseElement).toHaveTextContent('note text');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -189,56 +124,52 @@ describe('Note detailspage tests', () => {
     expect(screen.getAllByTitle('Note List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/notes');
 
-    expect(element).toHaveTextContent(
-      'ID:6d00d22f-551b-4fbe-8215-d8615eff73ea',
+    expect(baseElement).toHaveTextContent('456');
+    expect(baseElement).toHaveTextContent(
+      'Created:Wed, Dec 23, 2020 3:14 PM CET',
     );
-    expect(element).toHaveTextContent('Created:Wed, Dec 23, 2020 3:14 PM CET');
-    expect(element).toHaveTextContent('Modified:Mon, Jan 4, 2021 12:54 PM CET');
-    expect(element).toHaveTextContent('Owner:admin');
+    expect(baseElement).toHaveTextContent(
+      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+    );
+    expect(baseElement).toHaveTextContent('Owner:admin');
 
     const tabs = screen.getAllByTestId('entities-tab-title');
     expect(tabs[0]).toHaveTextContent('User Tags');
     expect(tabs[1]).toHaveTextContent('Permissions');
 
-    expect(element).toHaveTextContent('NVT Name');
-    expect(element).toHaveTextContent('foo nvt');
+    expect(baseElement).toHaveTextContent('NVT Name');
+    expect(baseElement).toHaveTextContent('foo nvt');
 
-    expect(element).toHaveTextContent('NVT OID');
-    expect(element).toHaveTextContent('123');
+    expect(baseElement).toHaveTextContent('NVT OID');
+    expect(baseElement).toHaveTextContent('123');
 
-    expect(element).toHaveTextContent('Active');
-    expect(element).toHaveTextContent('Yes');
+    expect(baseElement).toHaveTextContent('Active');
+    expect(baseElement).toHaveTextContent('Yes');
 
-    expect(element).toHaveTextContent('Application');
+    expect(baseElement).toHaveTextContent('Application');
 
-    expect(element).toHaveTextContent('Hosts');
-    expect(element).toHaveTextContent('127.0.0.1');
+    expect(baseElement).toHaveTextContent('Hosts');
+    expect(baseElement).toHaveTextContent('127.0.0.1');
 
-    expect(element).toHaveTextContent('Port');
-    expect(element).toHaveTextContent('666');
+    expect(baseElement).toHaveTextContent('Port');
+    expect(baseElement).toHaveTextContent('666');
 
-    expect(element).toHaveTextContent('Severity');
-    expect(element).toHaveTextContent('Any');
+    expect(baseElement).toHaveTextContent('Severity');
+    expect(baseElement).toHaveTextContent('> 0.0');
 
-    expect(element).toHaveTextContent('Task');
-    expect(element).toHaveTextContent('task x');
+    expect(baseElement).toHaveTextContent('Task');
+    expect(baseElement).toHaveTextContent('task x');
 
-    expect(element).toHaveTextContent('Result');
-    expect(element).toHaveTextContent('Any');
+    expect(baseElement).toHaveTextContent('Result');
+    expect(baseElement).toHaveTextContent('result name');
 
-    expect(element).toHaveTextContent('Appearance');
+    expect(baseElement).toHaveTextContent('Appearance');
 
-    expect(element).toHaveTextContent('note text');
+    expect(baseElement).toHaveTextContent('note text');
   });
 
-  test('should render user tags tab', () => {
+  test('should render user tags tab', async () => {
     const gmp = {
-      note: {
-        get: getNote,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -246,43 +177,46 @@ describe('Note detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetNoteQueryMock('456', detailsNote);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=456 first=1 rows=-1',
+    });
+
+    const [
+      renewSessionMock,
+      renewSessionResult,
+    ] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock, renewSessionMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(
-      entityLoadingActions.success(
-        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-        note,
-      ),
-    );
+    const {baseElement} = render(<Detailspage id="456" />);
 
-    const {baseElement} = render(
-      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
-    );
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[0]).toHaveTextContent('User Tags');
     fireEvent.click(tabs[0]);
 
-    expect(baseElement).toHaveTextContent('No user tags available');
+    await wait();
+    expect(renewSessionResult).toHaveBeenCalled();
+
+    expect(baseElement).toHaveTextContent('note:unnamed');
   });
 
-  test('should render permissions tab', () => {
+  test('should render permissions tab', async () => {
     const gmp = {
-      note: {
-        get: getNote,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -290,58 +224,48 @@ describe('Note detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetNoteQueryMock('456', detailsNote);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
+      {
+        filterString: 'resource_uuid=456 first=1 rows=-1',
+      },
+      {permissions: null},
+    );
+    const [
+      renewSessionMock,
+      renewSessionResult,
+    ] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock, renewSessionMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(
-      entityLoadingActions.success(
-        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-        note,
-      ),
-    );
+    const {baseElement} = render(<Detailspage id="456" />);
 
-    const {baseElement} = render(
-      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
-    );
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[1]).toHaveTextContent('Permissions');
     fireEvent.click(tabs[1]);
 
+    await wait();
+
+    expect(renewSessionResult).toHaveBeenCalled();
     expect(baseElement).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
-    const clone = jest.fn().mockResolvedValue({
-      data: {id: 'foo'},
-    });
-
-    const deleteFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
-      note: {
-        get: getNote,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -349,28 +273,37 @@ describe('Note detailspage tests', () => {
       },
     };
     const [renewQueryMock] = createRenewSessionQueryMock();
+    const [mock, resultFunc] = createGetNoteQueryMock('456', detailsNote);
+    const [cloneMock, cloneResult] = createCloneNoteQueryMock();
+    const [deleteMock, deleteResult] = createDeleteNoteQueryMock();
+    const [exportMock, exportResult] = createExportNotesByIdsQueryMock(['456']);
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=456 first=1 rows=-1',
+    });
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewQueryMock],
+      queryMocks: [
+        renewQueryMock,
+        mock,
+        cloneMock,
+        deleteMock,
+        exportMock,
+        permissionMock,
+      ],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(
-      entityLoadingActions.success(
-        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-        note,
-      ),
-    );
-
-    render(<Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />);
+    render(<Detailspage id="456" />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const cloneIcon = screen.getAllByTitle('Clone Note');
     expect(cloneIcon[0]).toBeInTheDocument();
@@ -379,7 +312,7 @@ describe('Note detailspage tests', () => {
 
     await wait();
 
-    expect(clone).toHaveBeenCalledWith(note);
+    expect(cloneResult).toHaveBeenCalled();
 
     const exportIcon = screen.getAllByTitle('Export Note as XML');
     expect(exportIcon[0]).toBeInTheDocument();
@@ -388,7 +321,7 @@ describe('Note detailspage tests', () => {
 
     await wait();
 
-    expect(exportFunc).toHaveBeenCalledWith(note);
+    expect(exportResult).toHaveBeenCalled();
 
     const deleteIcon = screen.getAllByTitle('Move Note to trashcan');
     expect(deleteIcon[0]).toBeInTheDocument();
@@ -397,7 +330,7 @@ describe('Note detailspage tests', () => {
 
     await wait();
 
-    expect(deleteFunc).toHaveBeenCalledWith({id: note.id});
+    expect(deleteResult).toHaveBeenCalled();
   });
 });
 
@@ -419,7 +352,7 @@ describe('Note ToolBarIcons tests', () => {
 
     const {element} = render(
       <ToolBarIcons
-        entity={note}
+        entity={parsedNote}
         onNoteCloneClick={handleNoteCloneClick}
         onNoteDeleteClick={handleNoteDeleteClick}
         onNoteDownloadClick={handleNoteDownloadClick}
@@ -454,10 +387,9 @@ describe('Note ToolBarIcons tests', () => {
       capabilities: caps,
       router: true,
     });
-
     render(
       <ToolBarIcons
-        entity={note}
+        entity={parsedNote}
         onNoteCloneClick={handleNoteCloneClick}
         onNoteDeleteClick={handleNoteDeleteClick}
         onNoteDownloadClick={handleNoteDownloadClick}
@@ -473,19 +405,19 @@ describe('Note ToolBarIcons tests', () => {
 
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
-    expect(handleNoteCloneClick).toHaveBeenCalledWith(note);
+    expect(handleNoteCloneClick).toHaveBeenCalledWith(parsedNote);
 
     expect(editIcon[0]).toBeInTheDocument();
     fireEvent.click(editIcon[0]);
-    expect(handleNoteEditClick).toHaveBeenCalledWith(note);
+    expect(handleNoteEditClick).toHaveBeenCalledWith(parsedNote);
 
     expect(deleteIcon[0]).toBeInTheDocument();
     fireEvent.click(deleteIcon[0]);
-    expect(handleNoteDeleteClick).toHaveBeenCalledWith(note);
+    expect(handleNoteDeleteClick).toHaveBeenCalledWith(parsedNote);
 
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
-    expect(handleNoteDownloadClick).toHaveBeenCalledWith(note);
+    expect(handleNoteDownloadClick).toHaveBeenCalledWith(parsedNote);
   });
 
   test('should not call click handlers without permission', () => {
@@ -505,7 +437,7 @@ describe('Note ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={noPermNote}
+        entity={parsedNoPermNote}
         onNoteCloneClick={handleNoteCloneClick}
         onNoteDeleteClick={handleNoteDeleteClick}
         onNoteDownloadClick={handleNoteDownloadClick}
@@ -524,7 +456,7 @@ describe('Note ToolBarIcons tests', () => {
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
 
-    expect(handleNoteCloneClick).toHaveBeenCalledWith(noPermNote);
+    expect(handleNoteCloneClick).toHaveBeenCalledWith(parsedNoPermNote);
 
     expect(editIcon[0]).toBeInTheDocument();
     fireEvent.click(editIcon[0]);
@@ -539,7 +471,7 @@ describe('Note ToolBarIcons tests', () => {
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
 
-    expect(handleNoteDownloadClick).toHaveBeenCalledWith(noPermNote);
+    expect(handleNoteDownloadClick).toHaveBeenCalledWith(parsedNoPermNote);
   });
 
   test('should call correct click handlers for note in use', () => {
@@ -559,7 +491,7 @@ describe('Note ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={noteInUse}
+        entity={parsedInUseNote}
         onNoteCloneClick={handleNoteCloneClick}
         onNoteDeleteClick={handleNoteDeleteClick}
         onNoteDownloadClick={handleNoteDownloadClick}
@@ -567,6 +499,7 @@ describe('Note ToolBarIcons tests', () => {
         onNoteCreateClick={handleNoteCreateClick}
       />,
     );
+
     const cloneIcon = screen.getAllByTitle('Clone Note');
     const editIcon = screen.getAllByTitle('Edit Note');
     const deleteIcon = screen.getAllByTitle('Note is still in use');
@@ -575,7 +508,7 @@ describe('Note ToolBarIcons tests', () => {
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
 
-    expect(handleNoteCloneClick).toHaveBeenCalledWith(noteInUse);
+    expect(handleNoteCloneClick).toHaveBeenCalledWith(parsedInUseNote);
 
     expect(editIcon[0]).toBeInTheDocument();
     fireEvent.click(editIcon[0]);
@@ -589,6 +522,6 @@ describe('Note ToolBarIcons tests', () => {
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
 
-    expect(handleNoteDownloadClick).toHaveBeenCalledWith(noteInUse);
+    expect(handleNoteDownloadClick).toHaveBeenCalledWith(parsedInUseNote);
   });
 });

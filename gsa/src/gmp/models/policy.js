@@ -104,7 +104,7 @@ class Policy extends Model {
         } else {
           const nvt = {...pref.nvt};
           pref.nvt = nvt;
-          pref.nvt.oid = preference.nvt._oid;
+          pref.nvt.id = preference.nvt._oid;
           delete pref.nvt._oid;
 
           nvt_preferences.push(pref);
@@ -233,7 +233,7 @@ class Policy extends Model {
         if (hasValue(pref.nvt.name)) {
           const nvt = {...pref.nvt};
           pref.nvt = nvt;
-          pref.nvt.oid = preference.nvt.oid;
+          pref.nvt.id = preference.nvt.id;
 
           nvtPreferences.push(pref);
         } else {

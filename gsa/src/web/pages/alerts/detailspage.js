@@ -57,7 +57,6 @@ import EntityPage from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 import useExportEntity from 'web/entity/useExportEntity';
 import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
@@ -76,6 +75,7 @@ import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import AlertComponent from './component';
 import AlertDetails from './details';
+import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
 
 export const ToolBarIcons = ({
   entity,
@@ -172,7 +172,7 @@ const Page = () => {
   };
 
   // Timeout and reload
-  const timeoutFunc = useEntityReloadInterval(alert);
+  const timeoutFunc = useDefaultReloadInterval();
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchAlert,

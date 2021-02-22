@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Implement the usage of graphql for notes [#2721](https://github.com/greenbone/gsa/pull/2721)
+- Refactor schedule dialog to function component [#2714](https://github.com/greenbone/gsa/pull/2714)
+- Implement host listpage queries and mutations [#2713](https://github.com/greenbone/gsa/pull/2713)
+- Implement host detailspage queries and mutations [#2702](https://github.com/greenbone/gsa/pull/2702)
 - Implement audit component mutations [#2699](https://github.com/greenbone/gsa/pull/2699)
 - Implement policy component mutations [#2684](https://github.com/greenbone/gsa/pull/2684)
 - Refactor host component into function [#2693](https://github.com/greenbone/gsa/pull/2693)
@@ -45,8 +49,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Fixed
+- Fixed ScanConfigs and Policies page after changes in [Hyperion](https://github.com/greenbone/hyperion/pull/15) [#2733](https://github.com/greenbone/gsa/pull/2733)
+- Fixed reload interval for pages using useEntityReloadInterval and useEntitiesReloadInterval hooks [#2716](https://github.com/greenbone/gsa/pull/2716)
 
 ### Removed
+- Removed unused task.js [#2714](https://github.com/greenbone/gsa/pull/2714)
 - Removed unused task wizard commands for runQuickTask, runQuickFirstScan and runModifyTask [#2514](https://github.com/greenbone/gsa/pull/2514) [#2523](https://github.com/greenbone/gsa/pull/2523)
 - Removed Edge <= 18 support [#2408](https://github.com/greenbone/gsa/pull/2408)
 - Removed Internet Explorer 11 support [#2399](https://github.com/greenbone/gsa/pull/2399)
@@ -63,6 +70,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
+- Refactored useFormValidation hook [#2704](https://github.com/greenbone/gsa/pull/2704)
 - Updated copyright and footer layout [#2687](https://github.com/greenbone/gsa/pull/2687)
 - New login page layout [#2683](https://github.com/greenbone/gsa/pull/2683)
 - CVE Tables Page can now be used with the updated xml-format and CVSSv3(.1). [#2583](https://github.com/greenbone/gsa/pull/2583)

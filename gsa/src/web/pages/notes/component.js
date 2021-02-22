@@ -16,14 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useReducer} from 'react';
 
 import _ from 'gmp/locale';
+
+import {ALL_FILTER} from 'gmp/models/filter';
 
 import {
   ACTIVE_NO_VALUE,
   ACTIVE_YES_ALWAYS_VALUE,
   ACTIVE_YES_UNTIL_VALUE,
+  DEFAULT_OID_VALUE,
   TASK_SELECTED,
   TASK_ANY,
   RESULT_UUID,
@@ -32,29 +35,41 @@ import {
   ANY,
 } from 'gmp/models/override';
 
+import {parseInt} from 'gmp/parser';
+
 import {hasId} from 'gmp/utils/id';
 import {isDefined, isArray} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
 
+import {useCreateNote, useModifyNote} from 'web/graphql/notes';
+import {useLazyGetTasks} from 'web/graphql/tasks';
+
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import reducer, {updateState} from 'web/utils/stateReducer';
 
 import NoteDialog from './dialog';
 
-class NoteComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const NoteComponent = ({
+  children,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+}) => {
+  const [state, dispatch] = useReducer(reducer, {dialogVisible: false});
+  const [createNote] = useCreateNote();
+  const [modifyNote] = useModifyNote();
 
-    this.state = {dialogVisible: false};
-
-    this.handleCloseNoteDialog = this.handleCloseNoteDialog.bind(this);
-    this.openNoteDialog = this.openNoteDialog.bind(this);
-    this.openCreateNoteDialog = this.openCreateNoteDialog.bind(this);
-  }
-
-  openNoteDialog(note, initial) {
+  const openNoteDialog = (note, initial) => {
     if (isDefined(note)) {
       let active = ACTIVE_NO_VALUE;
       if (note.isActive()) {
@@ -67,177 +82,203 @@ class NoteComponent extends React.Component {
 
       const {hosts, nvt, task, result, port} = note;
 
-      this.setState({
-        dialogVisible: true,
-        id: note.id,
-        active,
-        hosts: isDefined(hosts) && hosts.length > 0 ? MANUAL : ANY,
-        hosts_manual: isArray(hosts) ? hosts.join(', ') : undefined,
-        port: isDefined(port) ? MANUAL : ANY,
-        port_manual: port,
-        oid: isDefined(nvt) ? nvt.oid : undefined,
-        note,
-        nvt_name: isDefined(nvt) ? nvt.name : undefined,
-        task_id: hasId(task) ? TASK_SELECTED : TASK_ANY,
-        task_uuid: hasId(task) ? task.id : undefined,
-        result_id: hasId(result) ? RESULT_UUID : RESULT_ANY,
-        result_uuid: hasId(result) ? result.id : undefined,
-        severity: note.severity,
-        text: note.text,
-        title: _('Edit Note {{name}}', {name: shorten(note.text, 20)}),
-      });
+      dispatch(
+        updateState({
+          dialogVisible: true,
+          id: note.id,
+          active,
+          hosts: isDefined(hosts) && hosts.length > 0 ? MANUAL : ANY,
+          hosts_manual: isArray(hosts) ? hosts.join(',') : undefined,
+          port: isDefined(port) ? MANUAL : ANY,
+          port_manual: port,
+          oid: isDefined(nvt) ? nvt.oid : undefined,
+          note,
+          nvt_name: isDefined(nvt) ? nvt.name : undefined,
+          task_id: hasId(task) ? TASK_SELECTED : TASK_ANY,
+          task_uuid: hasId(task) ? task.id : undefined,
+          result_id: hasId(result) ? RESULT_UUID : RESULT_ANY,
+          result_uuid: hasId(result) ? result.id : undefined,
+          severity: note.severity,
+          text: note.text,
+          title: _('Edit Note {{name}}', {name: shorten(note.text, 20)}),
+        }),
+      );
     } else {
-      this.setState({
-        dialogVisible: true,
-        active: undefined,
-        hosts: undefined,
-        hosts_manual: undefined,
-        id: undefined,
-        note: undefined,
-        nvt_name: undefined,
-        oid: undefined,
-        port: undefined,
-        port_manual: undefined,
-        result_id: undefined,
-        result_uuid: undefined,
-        severity: undefined,
-        task_id: undefined,
-        task_name: undefined,
-        task_uuid: undefined,
-        text: undefined,
-        title: undefined,
-        ...initial,
-      });
+      dispatch(
+        updateState({
+          dialogVisible: true,
+          active: undefined,
+          hosts: undefined,
+          hosts_manual: undefined,
+          id: undefined,
+          note: undefined,
+          nvt_name: undefined,
+          oid: undefined,
+          port: undefined,
+          port_manual: undefined,
+          result_id: undefined,
+          result_uuid: undefined,
+          severity: undefined,
+          task_id: undefined,
+          task_name: undefined,
+          task_uuid: undefined,
+          text: undefined,
+          title: undefined,
+          ...initial,
+        }),
+      );
     }
 
-    this.handleInteraction();
+    handleInteraction();
+    loadTasks();
+  };
 
-    this.loadTasks();
-  }
+  const closeNoteDialog = () => {
+    dispatch(updateState({dialogVisible: false}));
+  };
 
-  closeNoteDialog() {
-    this.setState({dialogVisible: false});
-  }
+  const handleCloseNoteDialog = () => {
+    closeNoteDialog();
+    handleInteraction();
+  };
 
-  handleCloseNoteDialog() {
-    this.setState({dialogVisible: false});
-    this.handleInteraction();
-  }
+  const openCreateNoteDialog = (initial = {}) => {
+    openNoteDialog(undefined, initial);
+  };
 
-  openCreateNoteDialog(initial = {}) {
-    this.openNoteDialog(undefined, initial);
-  }
+  const [loadTasks, {tasks}] = useLazyGetTasks({
+    filterString: ALL_FILTER.toFilterString(),
+  });
 
-  loadTasks() {
-    const {gmp} = this.props;
+  const handleSaveNote = data => {
+    handleInteraction();
 
-    gmp.tasks.getAll().then(response => {
-      this.setState({tasks: response.data});
-    });
-  }
+    const {
+      severity,
+      active,
+      days,
+      hosts_manual,
+      id,
+      port_manual,
+      result_uuid,
+      task_uuid,
+      text,
+    } = data;
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
+    let daysActive;
+    if (active === ACTIVE_YES_UNTIL_VALUE) {
+      daysActive = days;
+    } else {
+      daysActive = parseInt(active);
+    }
+
+    const modifyData = {
+      id,
+      severity,
+      daysActive,
+      hosts: hosts_manual.split(','),
+      port: port_manual,
+      taskId: task_uuid,
+      resultId: result_uuid,
+      text,
+    };
+
+    if (isDefined(id)) {
+      return modifyNote(modifyData)
+        .then(onSaved, onSaveError)
+        .then(() => closeNoteDialog());
+    }
+
+    const createData = {
+      ...modifyData,
+      nvtOid: isDefined(data?.oid) ? data.oid : DEFAULT_OID_VALUE,
+      id: undefined,
+    };
+
+    return createNote(createData)
+      .then(onCreated, onCreateError)
+      .then(() => closeNoteDialog());
+  };
+
+  const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  }
+  };
 
-  render() {
-    const {
-      children,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
+  const {
+    dialogVisible,
+    active,
+    hosts,
+    hosts_manual,
+    id,
+    oid,
+    note,
+    nvt_name,
+    port,
+    result_id,
+    result_uuid,
+    severity,
+    task_id,
+    task_uuid,
+    text,
+    title,
+    ...initial
+  } = state;
 
-    const {
-      dialogVisible,
-      active,
-      hosts,
-      hosts_manual,
-      id,
-      oid,
-      note,
-      nvt_name,
-      port,
-      result_id,
-      result_uuid,
-      severity,
-      task_id,
-      task_uuid,
-      tasks,
-      text,
-      title,
-      ...initial
-    } = this.state;
-
-    return (
-      <EntityComponent
-        name="note"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
-        onCloneError={onCloneError}
-        onDeleted={onDeleted}
-        onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
-        onDownloadError={onDownloadError}
-        onInteraction={onInteraction}
-        onSaved={onSaved}
-        onSaveError={onSaveError}
-      >
-        {({save, ...other}) => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: this.openCreateNoteDialog,
-              edit: this.openNoteDialog,
-            })}
-            {dialogVisible && (
-              <NoteDialog
-                active={active}
-                hosts={hosts}
-                hosts_manual={hosts_manual}
-                id={id}
-                oid={oid}
-                note={note}
-                nvt_name={nvt_name}
-                port={port}
-                result_id={result_id}
-                result_uuid={result_uuid}
-                severity={severity}
-                task_id={task_id}
-                task_uuid={task_uuid}
-                tasks={tasks}
-                text={text}
-                title={title}
-                onClose={this.handleCloseNoteDialog}
-                onSave={d => {
-                  this.handleInteraction();
-                  return save(d).then(() => this.closeNoteDialog());
-                }}
-                {...initial}
-              />
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
-    );
-  }
-}
+  return (
+    <EntityComponent
+      name="note"
+      onCreated={onCreated}
+      onCreateError={onCreateError}
+      onCloned={onCloned}
+      onCloneError={onCloneError}
+      onDeleted={onDeleted}
+      onDeleteError={onDeleteError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onDownloadError}
+      onInteraction={onInteraction}
+      onSaved={onSaved}
+      onSaveError={onSaveError}
+    >
+      {({save, ...other}) => (
+        <React.Fragment>
+          {children({
+            ...other,
+            create: openCreateNoteDialog,
+            edit: openNoteDialog,
+          })}
+          {dialogVisible && (
+            <NoteDialog
+              active={active}
+              hosts={hosts}
+              hosts_manual={hosts_manual}
+              id={id}
+              oid={oid}
+              note={note}
+              nvt_name={nvt_name}
+              port={port}
+              result_id={result_id}
+              result_uuid={result_uuid}
+              severity={severity}
+              task_id={task_id}
+              task_uuid={task_uuid}
+              tasks={tasks}
+              text={text}
+              title={title}
+              onClose={handleCloseNoteDialog}
+              onSave={handleSaveNote}
+              {...initial}
+            />
+          )}
+        </React.Fragment>
+      )}
+    </EntityComponent>
+  );
+};
 
 NoteComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -251,6 +292,6 @@ NoteComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default withGmp(NoteComponent);
+export default NoteComponent;
 
 // vim: set ts=2 sw=2 tw=80:

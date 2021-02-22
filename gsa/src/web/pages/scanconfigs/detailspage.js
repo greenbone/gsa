@@ -72,7 +72,6 @@ import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
-import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
@@ -82,6 +81,7 @@ import useExportEntity from 'web/entity/useExportEntity';
 
 import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
+import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import {goto_entity_details} from 'web/utils/graphql';
 
@@ -269,10 +269,10 @@ export const NvtPreferences = ({entity}) => {
           </TableHeader>
           <TableBody>
             {preferences.nvt.map(pref => (
-              <TableRow key={pref.nvt.oid + pref.nvt.name + pref.name}>
+              <TableRow key={pref.nvt.id + pref.nvt.name + pref.name}>
                 <TableData>
                   <span>
-                    <DetailsLink id={pref.nvt.oid} type="nvt">
+                    <DetailsLink id={pref.nvt.id} type="nvt">
                       {pref.nvt.name}
                     </DetailsLink>
                   </span>
@@ -361,7 +361,7 @@ const Page = () => {
   };
 
   // Timeout and reload
-  const timeoutFunc = useEntityReloadInterval(scanConfig);
+  const timeoutFunc = useDefaultReloadInterval();
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetchScanConfig,

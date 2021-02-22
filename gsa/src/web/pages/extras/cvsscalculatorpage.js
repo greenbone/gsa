@@ -68,10 +68,10 @@ const CvssV2Calculator = props => {
   const [state, setState] = useState({
     accessVector: 'LOCAL',
     accessComplexity: 'LOW',
-    confidentialityImpact: 'NONE',
+    confidentiality: 'NONE',
     authentication: 'NONE',
-    integrityImpact: 'NONE',
-    availabilityImpact: 'NONE',
+    integrity: 'NONE',
+    availability: 'NONE',
     cvssVector: 'AV:L/AC:L/Au:N/C:N/I:N/A:N',
     userVector: 'AV:L/AC:L/Au:N/C:N/I:N/A:N',
     cvssScore: 0,
@@ -103,19 +103,19 @@ const CvssV2Calculator = props => {
     const {
       accessVector,
       accessComplexity,
-      confidentialityImpact,
+      confidentiality,
       authentication,
-      integrityImpact,
-      availabilityImpact,
+      integrity,
+      availability,
     } = state;
 
     const [cvssVector, cvssScore] = parseCvssV2BaseVector({
       accessComplexity,
       accessVector,
       authentication,
-      availabilityImpact,
-      confidentialityImpact,
-      integrityImpact,
+      availability,
+      confidentiality,
+      integrity,
       ...newVector,
     });
 
@@ -147,9 +147,9 @@ const CvssV2Calculator = props => {
       accessVector,
       accessComplexity,
       authentication,
-      confidentialityImpact,
-      integrityImpact,
-      availabilityImpact,
+      confidentiality,
+      integrity,
+      availability,
       cvssScore,
     } = parseCvssV2BaseFromVector(userVector);
 
@@ -157,9 +157,9 @@ const CvssV2Calculator = props => {
       isDefined(accessVector) &&
       isDefined(accessComplexity) &&
       isDefined(authentication) &&
-      isDefined(confidentialityImpact) &&
-      isDefined(integrityImpact) &&
-      isDefined(availabilityImpact) &&
+      isDefined(confidentiality) &&
+      isDefined(integrity) &&
+      isDefined(availability) &&
       isDefined(cvssScore)
     ) {
       /* only override cvss values and vector if user vector has valid input */
@@ -168,9 +168,9 @@ const CvssV2Calculator = props => {
         accessVector,
         accessComplexity,
         authentication,
-        confidentialityImpact,
-        integrityImpact,
-        availabilityImpact,
+        confidentiality,
+        integrity,
+        availability,
         cvssVector: userVector,
         cvssScore,
       }));
@@ -188,9 +188,9 @@ const CvssV2Calculator = props => {
     accessVector,
     accessComplexity,
     authentication,
-    confidentialityImpact,
-    availabilityImpact,
-    integrityImpact,
+    confidentiality,
+    availability,
+    integrity,
     userVector,
     cvssScore,
     cvssVector,
@@ -285,8 +285,8 @@ const CvssV2Calculator = props => {
               label: _('Complete'),
             },
           ]}
-          name="confidentialityImpact"
-          value={confidentialityImpact}
+          name="confidentiality"
+          value={confidentiality}
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -306,8 +306,8 @@ const CvssV2Calculator = props => {
               label: _('Complete'),
             },
           ]}
-          name="integrityImpact"
-          value={integrityImpact}
+          name="integrity"
+          value={integrity}
           menuPosition="adjust"
           onChange={handleMetricsChange}
         />
@@ -328,8 +328,8 @@ const CvssV2Calculator = props => {
               label: _('Complete'),
             },
           ]}
-          name="availabilityImpact"
-          value={availabilityImpact}
+          name="availability"
+          value={availability}
           menuPosition="adjust"
           onChange={handleMetricsChange}
         />
@@ -369,8 +369,8 @@ const CvssV3Calculator = props => {
     userInteraction: 'NONE',
     scope: 'UNCHANGED',
     authentication: 'NONE',
-    integrityImpact: 'NONE',
-    availabilityImpact: 'NONE',
+    integrity: 'NONE',
+    availability: 'NONE',
     cvssVector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
     userVector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
     cvssScore: 0,
@@ -405,9 +405,9 @@ const CvssV3Calculator = props => {
       privilegesRequired,
       userInteraction,
       scope,
-      confidentialityImpact,
-      integrityImpact,
-      availabilityImpact,
+      confidentiality,
+      integrity,
+      availability,
     } = state;
 
     const [cvssVector, cvssScore] = parseCvssV3BaseVector({
@@ -416,9 +416,9 @@ const CvssV3Calculator = props => {
       privilegesRequired,
       userInteraction,
       scope,
-      confidentialityImpact,
-      integrityImpact,
-      availabilityImpact,
+      confidentiality,
+      integrity,
+      availability,
       ...newVector,
     });
 
@@ -452,9 +452,9 @@ const CvssV3Calculator = props => {
       privilegesRequired,
       userInteraction,
       scope,
-      confidentialityImpact,
-      integrityImpact,
-      availabilityImpact,
+      confidentiality,
+      integrity,
+      availability,
       cvssScore,
     } = parseCvssV3BaseFromVector(userVector);
 
@@ -464,9 +464,9 @@ const CvssV3Calculator = props => {
       isDefined(privilegesRequired) &&
       isDefined(userInteraction) &&
       isDefined(scope) &&
-      isDefined(confidentialityImpact) &&
-      isDefined(integrityImpact) &&
-      isDefined(availabilityImpact) &&
+      isDefined(confidentiality) &&
+      isDefined(integrity) &&
+      isDefined(availability) &&
       isDefined(cvssScore)
     ) {
       /* only override cvss values and vector if user vector has valid input */
@@ -478,9 +478,9 @@ const CvssV3Calculator = props => {
         privilegesRequired,
         userInteraction,
         scope,
-        confidentialityImpact,
-        integrityImpact,
-        availabilityImpact,
+        confidentiality,
+        integrity,
+        availability,
         cvssVector: userVector,
         cvssScore,
       }));
@@ -500,12 +500,12 @@ const CvssV3Calculator = props => {
     privilegesRequired,
     userInteraction,
     scope,
-    availabilityImpact,
-    confidentialityImpact,
+    availability,
+    confidentiality,
     userVector,
     cvssScore,
     cvssVector,
-    integrityImpact,
+    integrity,
   } = state;
 
   return (
@@ -633,8 +633,8 @@ const CvssV3Calculator = props => {
               label: _('High'),
             },
           ]}
-          name="confidentialityImpact"
-          value={confidentialityImpact}
+          name="confidentiality"
+          value={confidentiality}
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -654,8 +654,8 @@ const CvssV3Calculator = props => {
               label: _('High'),
             },
           ]}
-          name="integrityImpact"
-          value={integrityImpact}
+          name="integrity"
+          value={integrity}
           menuPosition="adjust"
           onChange={handleMetricsChange}
         />
@@ -676,8 +676,8 @@ const CvssV3Calculator = props => {
               label: _('High'),
             },
           ]}
-          name="availabilityImpact"
-          value={availabilityImpact}
+          name="availability"
+          value={availability}
           menuPosition="adjust"
           onChange={handleMetricsChange}
         />
