@@ -145,20 +145,8 @@ const currentReport = deepFreeze({
   scanStart: '2019-08-30T13:23:34Z',
 });
 
-const weekly = `
-BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager
- 20.8+alpha~git-b4610ada-master//EN
-BEGIN:VEVENT
-DTSTART:20200615T080000Z
-DURATION:PT0S
-RRULE:FREQ=WEEKLY
-UID:c5694e2e-daea-419b-b524-bb363b4ca37b
-DTSTAMP:20200615T072702Z
-END:VEVENT
-END:VCALENDAR
-`;
+const once =
+  'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1//EN\nBEGIN:VEVENT\nDTSTART:20210211T160000Z\nDURATION:PT1H\nUID:b7362b9f-1ca0-44a2-b41f-ba7e6580043c\nDTSTAMP:20210211T154330Z\nEND:VEVENT\nEND:VCALENDAR\n';
 
 // Schedule
 export const auditSchedule = deepFreeze({
@@ -166,7 +154,7 @@ export const auditSchedule = deepFreeze({
   name: 'schedule 1',
   timezone: 'UTC',
   duration: 0,
-  icalendar: weekly,
+  icalendar: once,
   permissions: null,
   userTags: null,
   owner: null,
