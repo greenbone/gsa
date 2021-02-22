@@ -17,7 +17,7 @@
  */
 import {isEmpty} from 'gmp/utils/string';
 
-export const getSettingValueByName = (settings = []) => (name = '') => {
+export const getSettingValueByName = (settings = []) => name => {
   const setting = settings.find(obj => obj.name === name);
 
   return setting?.value;
