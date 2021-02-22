@@ -19,6 +19,20 @@ import {useCallback} from 'react';
 
 import {gql, useQuery, useLazyQuery, useMutation} from '@apollo/client';
 
+export const GET_CURRENT_USER_USERNAME = gql`
+  query {
+    currentUser {
+      username
+    }
+  }
+`;
+
+export const useGetUsername = () => {
+  const {data, ...other} = useQuery(GET_CURRENT_USER_USERNAME);
+  const username = data?.currentUser?.username;
+  return {username, ...other};
+};
+
 export const GET_CURRENT_USER_IS_AUTHENTICATED = gql`
   query {
     currentUser {

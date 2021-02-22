@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Implement audit component queries [#2738](https://github.com/greenbone/gsa/pull/2738)
 - Implement the usage of graphql for notes [#2721](https://github.com/greenbone/gsa/pull/2721)
 - Refactor schedule dialog to function component [#2714](https://github.com/greenbone/gsa/pull/2714)
 - Implement host listpage queries and mutations [#2713](https://github.com/greenbone/gsa/pull/2713)
