@@ -17,13 +17,11 @@
  */
 import React, {useEffect, useReducer} from 'react';
 
-import {useSelector} from 'react-redux';
-
 import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import Filter, {ALL_FILTER} from 'gmp/models/filter';
+import {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
 import {getSettingValueByName} from 'gmp/models/setting';
 
@@ -52,6 +50,7 @@ import {
   useStartAudit,
   useStopAudit,
 } from 'web/graphql/audits';
+import {useGetUsername} from 'web/graphql/auth';
 import {useLazyGetPolicies} from 'web/graphql/policies';
 import {useLazyGetScanners} from 'web/graphql/scanners';
 import {useLazyGetSchedules} from 'web/graphql/schedules';
@@ -64,8 +63,6 @@ import AuditDialog from 'web/pages/audits/dialog';
 import ScheduleComponent from 'web/pages/schedules/component';
 import TargetComponent from 'web/pages/targets/component';
 
-import {getUsername} from 'web/store/usersettings/selectors';
-
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE, generateFilename} from 'web/utils/render';
 import stateReducer, {updateState} from 'web/utils/stateReducer';
@@ -74,9 +71,8 @@ import useCapabilities from 'web/utils/useCapabilities';
 
 const log = logger.getLogger('web.pages.audits.component');
 
-const REPORT_FORMATS_FILTER = Filter.fromString(
-  'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
-);
+const REPORT_FORMATS_FILTER =
+  'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1';
 
 const AuditComponent = ({
   children,
@@ -108,6 +104,7 @@ const AuditComponent = ({
   });
 
   // GraphQL Loaders
+  const {username} = useGetUsername();
   const [
     loadAlerts,
     {
@@ -133,6 +130,15 @@ const AuditComponent = ({
   ] = useLazyGetScanners({
     filterString: ALL_FILTER.toFilterString(),
   });
+
+  const scanners = isDefined(scannerList)
+    ? scannerList.filter(
+        scanner =>
+          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
+          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
+      )
+    : undefined;
+
   const [
     loadSchedules,
     {
@@ -161,12 +167,10 @@ const AuditComponent = ({
     {settings: userDefaults},
   ] = useLazyGetSettings();
   const [loadReportFormats, {reportFormats = []}] = useLazyGetReportFormats({
-    filterString: REPORT_FORMATS_FILTER.toFilterString(),
+    filterString: REPORT_FORMATS_FILTER,
   });
 
-  // Selectors
-  const username = useSelector(getUsername);
-
+  // Default user settings
   const defaultAlertId = getSettingValueByName(userDefaults)('Default Alert');
 
   let defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID;
@@ -186,21 +190,14 @@ const AuditComponent = ({
     'Report Export File Name',
   );
 
-  const scanners = isDefined(scannerList)
-    ? scannerList.filter(
-        scanner =>
-          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
-          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
-      )
-    : undefined;
-
-  // GraphQL Queries and Mutations
+  // GraphQL Mutations
   const [modifyAudit] = useModifyAudit();
   const [createAudit] = useCreateAudit();
   const [startAudit] = useStartAudit();
   const [stopAudit] = useStopAudit();
   const [resumeAudit] = useResumeAudit();
 
+  // Component methods
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
