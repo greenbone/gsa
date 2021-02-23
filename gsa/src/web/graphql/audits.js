@@ -440,3 +440,69 @@ export const useExportAuditsByIds = options => {
 
   return exportAuditsByIds;
 };
+
+export const EXPORT_AUDITS_BY_FILTER = gql`
+  mutation exportAuditsByFilter($filterString: String) {
+    exportAuditsByFilter(filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportAuditsByFilter = options => {
+  const [queryExportAuditsByFilter] = useMutation(
+    EXPORT_AUDITS_BY_FILTER,
+    options,
+  );
+  const exportAuditsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportAuditsByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportAuditsByFilter, options],
+  );
+
+  return exportAuditsByFilter;
+};
+
+export const useDeleteAuditsByIds = options => {
+  const [queryDeleteAuditsByIds, data] = useMutation(
+    DELETE_AUDITS_BY_IDS,
+    options,
+  );
+  const deleteAuditsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteAuditsByIds({...options, variables: {ids}}),
+    [queryDeleteAuditsByIds],
+  );
+  return [deleteAuditsByIds, data];
+};
+
+export const DELETE_AUDITS_BY_FILTER = gql`
+  mutation deleteAuditsByFilter($filterString: String!) {
+    deleteAuditsByFilter(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
+export const useDeleteAuditsByFilter = options => {
+  const [queryDeleteAuditsByFilter, data] = useMutation(
+    DELETE_AUDITS_BY_FILTER,
+    options,
+  );
+  const deleteAuditsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filterString, options) =>
+      queryDeleteAuditsByFilter({
+        ...options,
+        variables: {filterString},
+      }),
+    [queryDeleteAuditsByFilter],
+  );
+  return [deleteAuditsByFilter, data];
+};
