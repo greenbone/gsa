@@ -39,7 +39,7 @@ import TableRow from 'web/components/table/row.js';
 import {Col} from 'web/entity/page';
 
 const CpeDetails = ({entity, links = true}) => {
-  const {title, nvd_id, deprecated_by, updateTime, status, severity} = entity;
+  const {title, nvdId, deprecatedBy, updateTime, status, severity} = entity;
   return (
     <Layout flex="column" grow="1">
       {!isDefined(title) && (
@@ -63,18 +63,18 @@ const CpeDetails = ({entity, links = true}) => {
               <TableData>{title}</TableData>
             </TableRow>
           )}
-          {isDefined(nvd_id) && (
+          {isDefined(nvdId) && (
             <TableRow>
               <TableData>{_('NVD ID')}</TableData>
-              <TableData>{nvd_id}</TableData>
+              <TableData>{nvdId}</TableData>
             </TableRow>
           )}
-          {isDefined(deprecated_by) && (
+          {isDefined(deprecatedBy) && (
             <TableRow>
               <TableData>{_('Deprecated By')}</TableData>
               <TableData>
-                <DetailsLink id={deprecated_by} type="cpe" textOnly={!links}>
-                  {deprecated_by}
+                <DetailsLink id={deprecatedBy} type="cpe" textOnly={!links}>
+                  {deprecatedBy}
                 </DetailsLink>
               </TableData>
             </TableRow>
