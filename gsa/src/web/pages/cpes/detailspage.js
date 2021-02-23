@@ -70,10 +70,7 @@ import EntityComponent from 'web/entity/component';
 import {InfoLayout} from 'web/entity/info';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import withEntityContainer from 'web/entity/withEntityContainer';
 import useExportEntity from 'web/entity/useExportEntity';
-
-import {selector, loadEntity} from 'web/store/entities/cpes';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -103,12 +100,12 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
-  const {cveRefs = [], cveRefCount} = entity;
+  const {cveRefs, cveRefCount} = entity;
   return (
     <Layout flex="column">
       <CpeDetails entity={entity} />
       <DetailsBlock title={_('Reported Vulnerabilities')}>
-        {cveRefs.length > 0 ? (
+        {cveRefCount > 0 ? (
           <Table>
             <TableHeader>
               <TableRow>
@@ -283,17 +280,6 @@ const Page = () => {
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-export default withEntityContainer('cpe', {
-  load: loadEntity,
-  entitySelector: selector,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:

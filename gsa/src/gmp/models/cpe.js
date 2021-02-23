@@ -45,6 +45,11 @@ class Cpe extends Info {
     ret.cveRefCount = ret.cve_refs;
     delete ret.cve_refs;
 
+    if (isDefined(ret.nvd_id)) {
+      ret.nvdId = ret.nvd_id;
+      delete ret.nvd_id;
+    }
+
     if (isDefined(ret.cves) && isDefined(ret.cves.cve)) {
       ret.cveRefs = map(ret.cves.cve, cve => ({
         id: cve.entry._id,

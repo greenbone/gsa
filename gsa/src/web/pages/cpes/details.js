@@ -37,7 +37,7 @@ import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 
 const CpeDetails = ({entity}) => {
-  const {title, nvd_id, deprecated_by, updateTime, status, severity} = entity;
+  const {title, nvdId, deprecatedBy, updateTime, status, severity} = entity;
   return (
     <Layout flex="column" grow="1">
       {!isDefined(title) && (
@@ -61,16 +61,16 @@ const CpeDetails = ({entity}) => {
               <TableData>{title}</TableData>
             </TableRow>
           )}
-          {isDefined(nvd_id) && (
+          {isDefined(nvdId) && (
             <TableRow>
               <TableData>{_('NVD ID')}</TableData>
-              <TableData>{nvd_id}</TableData>
+              <TableData>{nvdId}</TableData>
             </TableRow>
           )}
-          {isDefined(deprecated_by) && (
+          {isDefined(deprecatedBy) && (
             <TableRow>
               <TableData>{_('Deprecated By')}</TableData>
-              <TableData>{deprecated_by}</TableData>
+              <TableData>{deprecatedBy}</TableData>
             </TableRow>
           )}
           {isDefined(updateTime) && (
