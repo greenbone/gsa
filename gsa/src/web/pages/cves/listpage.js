@@ -43,18 +43,12 @@ import {
   BulkTagComponent,
   useBulkExportEntities,
 } from 'web/entities/bulkactions';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import {
   useExportCvesByFilter,
   useExportCvesByIds,
   useLazyGetCves,
 } from 'web/graphql/cves';
-
-import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/cves';
 
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import usePageFilter from 'web/utils/usePageFilter';
@@ -78,7 +72,8 @@ const CvesPage = () => {
   const [, renewSessionTimeout] = useUserSessionTimeout();
 
   // Powerfilter
-  const [filter, isLoadingFilter] = usePageFilter('cve');
+  const fallbackFilter = Filter.fromString('sort-reverse=name');
+  const [filter, isLoadingFilter] = usePageFilter('cve', {fallbackFilter});
   const prevFilter = usePrevious(filter);
   const simpleFilter = filter.withoutView();
   const {
@@ -259,12 +254,6 @@ const CvesPage = () => {
   );
 };
 
-const fallbackFilter = Filter.fromString('sort-reverse=name');
-
-export default withEntitiesContainer('cve', {
-  entitiesSelector,
-  fallbackFilter,
-  loadEntities,
-})(CvesPage);
+export default CvesPage;
 
 // vim: set ts=2 sw=2 tw=80:
