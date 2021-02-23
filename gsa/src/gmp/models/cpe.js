@@ -63,6 +63,10 @@ class Cpe extends Info {
       delete ret.status;
     }
 
+    if (isDefined(ret.nvd_id)) {
+      ret.nvdId = ret.nvd_id;
+    }
+
     if (isDefined(ret.update_time)) {
       ret.updateTime = parseDate(ret.update_time);
       delete ret.update_time;
@@ -71,7 +75,7 @@ class Cpe extends Info {
     if (isDefined(ret.raw_data) && isDefined(ret.raw_data['cpe-item'])) {
       const cpeItem = ret.raw_data['cpe-item'];
       if (isDefined(cpeItem._deprecated_by)) {
-        ret.deprecated_by = cpeItem._deprecated_by;
+        ret.deprecatedBy = cpeItem._deprecated_by;
       }
     }
     return ret;

@@ -47,8 +47,12 @@ const CpeDetails = ({entity}) => {
   const {title, nvdId, deprecatedBy, updateTime, status, severity} = entity;
 =======
 const CpeDetails = ({entity, links = true}) => {
+<<<<<<< HEAD
   const {title, nvd_id, deprecated_by, updateTime, status, severity} = entity;
 >>>>>>> f94aea6c88... Parse deprecated_by from CPE XML, so it's gonna be displayed (again?)
+=======
+  const {title, nvdId, deprecatedBy, updateTime, status, severity} = entity;
+>>>>>>> 759774d8f3... Added suggestions
   return (
     <Layout flex="column" grow="1">
       {!isDefined(title) && (
@@ -85,8 +89,8 @@ const CpeDetails = ({entity, links = true}) => {
               <TableData>{deprecatedBy}</TableData>
 =======
               <TableData>
-                <DetailsLink id={deprecated_by} type="cpe" textOnly={!links}>
-                  {deprecated_by}
+                <DetailsLink id={deprecatedBy} type="cpe" textOnly={!links}>
+                  {deprecatedBy}
                 </DetailsLink>
               </TableData>
 >>>>>>> f94aea6c88... Parse deprecated_by from CPE XML, so it's gonna be displayed (again?)
