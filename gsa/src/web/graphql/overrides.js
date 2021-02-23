@@ -119,6 +119,7 @@ export const GET_OVERRIDE = gql`
       }
       port
       severity
+      newSeverity
       task {
         id
         name
