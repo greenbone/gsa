@@ -17,7 +17,9 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useMutation} from '@apollo/client';
+import {gql, useMutation, useQuery} from '@apollo/client';
+import {isDefined} from 'gmp/utils/identity';
+import Audit from 'gmp/models/audit';
 
 export const CREATE_AUDIT = gql`
   mutation createAudit($input: CreateAuditInput!) {
@@ -87,6 +89,105 @@ export const RESUME_AUDIT = gql`
   }
 `;
 
+export const GET_AUDIT = gql`
+  query Audit($id: UUID!) {
+    audit(id: $id) {
+      name
+      id
+      creationTime
+      modificationTime
+      averageDuration
+      permissions {
+        name
+      }
+      reports {
+        lastReport {
+          id
+          severity
+          timestamp
+          scanStart
+          scanEnd
+          complianceCount {
+            yes
+            no
+            incomplete
+          }
+        }
+        currentReport {
+          id
+          scanStart
+          timestamp
+        }
+        counts {
+          total
+          finished
+        }
+      }
+      results {
+        counts {
+          current
+        }
+      }
+      status
+      progress
+      target {
+        name
+        id
+      }
+      trend
+      alterable
+      comment
+      owner
+      preferences {
+        name
+        value
+        description
+      }
+      schedule {
+        name
+        id
+        icalendar
+        timezone
+        duration
+      }
+      alerts {
+        name
+        id
+      }
+      policy {
+        id
+        name
+        trash
+        type
+      }
+      scanner {
+        id
+        name
+        type
+      }
+      schedulePeriods
+      hostsOrdering
+      observers {
+        users
+        roles {
+          name
+        }
+        groups {
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const useGetAudit = (id, options) => {
+  const {data, ...other} = useQuery(GET_AUDIT, {...options, variables: {id}});
+  const audit = isDefined(data?.audit)
+    ? Audit.fromObject(data.audit)
+    : undefined;
+  return {audit, ...other};
+};
+
 export const useStartAudit = options => {
   const [queryStartAudit, {data, ...other}] = useMutation(START_AUDIT, options);
   const startAudit = useCallback(
@@ -119,4 +220,70 @@ export const useResumeAudit = options => {
     [queryResumeAudit],
   );
   return [resumeAudit, data];
+};
+
+export const CLONE_AUDIT = gql`
+  mutation cloneAudit($id: UUID!) {
+    cloneAudit(id: $id) {
+      id
+    }
+  }
+`;
+
+export const useCloneAudit = options => {
+  const [queryCloneAudit, {data, ...other}] = useMutation(CLONE_AUDIT, options);
+  const cloneAudit = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryCloneAudit({...options, variables: {id}}).then(
+        result => result.data.cloneAudit.id,
+      ),
+    [queryCloneAudit],
+  );
+  const policyId = data?.cloneAudit?.id;
+  return [cloneAudit, {...other, id: policyId}];
+};
+
+export const DELETE_AUDITS_BY_IDS = gql`
+  mutation deleteAuditsByIds($ids: [UUID]!) {
+    deleteAuditsByIds(ids: $ids) {
+      ok
+    }
+  }
+`;
+
+export const useDeleteAudit = options => {
+  const [queryDeleteAudit, data] = useMutation(DELETE_AUDITS_BY_IDS, options);
+  const deleteAudit = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryDeleteAudit({...options, variables: {ids: [id]}}),
+    [queryDeleteAudit],
+  );
+  return [deleteAudit, data];
+};
+
+export const EXPORT_AUDITS_BY_IDS = gql`
+  mutation exportAuditsByIds($ids: [UUID]!) {
+    exportAuditsByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportAuditsByIds = options => {
+  const [queryExportAuditsByIds] = useMutation(EXPORT_AUDITS_BY_IDS, options);
+
+  const exportAuditsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    auditIds =>
+      queryExportAuditsByIds({
+        ...options,
+        variables: {
+          ids: auditIds,
+        },
+      }),
+    [queryExportAuditsByIds, options],
+  );
+
+  return exportAuditsByIds;
 };

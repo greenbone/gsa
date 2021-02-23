@@ -17,8 +17,22 @@
  */
 
 import date from 'gmp/models/date';
+import {createGenericQueryMock} from 'web/utils/testing';
 
-import {GET_CURRENT_USER_IS_AUTHENTICATED, LOGIN} from '../auth';
+import {
+  GET_CURRENT_USER_IS_AUTHENTICATED,
+  GET_CURRENT_USER_USERNAME,
+  LOGIN,
+} from '../auth';
+
+const getUsernameResult = {
+  currentUser: {
+    username: 'dmitri',
+  },
+};
+
+export const createGetUsernameQueryMock = () =>
+  createGenericQueryMock(GET_CURRENT_USER_USERNAME, getUsernameResult);
 
 export const createIsAuthenticatedQueryMock = (isAuthenticated = true) => {
   const queryResult = {
