@@ -44,7 +44,7 @@ import EntityComponent from 'web/entity/component';
 import {
   useCreatePolicy,
   useImportPolicy,
-  useLazyGetPolicy,
+  useLoadPolicyPromise,
 } from 'web/graphql/policies';
 
 import AlertComponent from 'web/pages/alerts/component';
@@ -119,7 +119,7 @@ const PolicyComponent = ({
   });
 
   const [createPolicy] = useCreatePolicy();
-  const [getPolicy] = useLazyGetPolicy();
+  const [getPolicy] = useLoadPolicyPromise();
   const [importPolicy] = useImportPolicy();
 
   // Redux loaders

@@ -41,9 +41,10 @@ import {
   useExportPoliciesByFilter,
   useExportPoliciesByIds,
   useGetPolicy,
-  useLazyGetPolicy,
+  useLoadPolicyPromise,
   useImportPolicy,
   useLazyGetPolicies,
+  useLazyGetPolicy,
 } from '../policies';
 
 const GetPolicyComponent = ({id}) => {
@@ -283,8 +284,8 @@ describe('useLazyGetPolicies tests', () => {
   });
 });
 
-const GetLazyPolicyComponent = () => {
-  const [getPolicy] = useLazyGetPolicy();
+const LoadPolicyPromiseComponent = () => {
+  const [getPolicy] = useLoadPolicyPromise();
   const [policy, setPolicy] = useState();
 
   const handleLoadPolicy = policyId => {
@@ -305,11 +306,11 @@ const GetLazyPolicyComponent = () => {
   );
 };
 
-describe('useLazyGetPolicy tests', () => {
+describe('useLoadPolicyPromise tests', () => {
   test('should query policy after user interaction', async () => {
     const [mock, resultFunc] = createGetPolicyQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
-    render(<GetLazyPolicyComponent />);
+    render(<LoadPolicyPromiseComponent />);
 
     await wait();
 
@@ -420,5 +421,54 @@ describe('Import Policy tests', () => {
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Policy imported with id 456.',
     );
+  });
+});
+
+const GetLazyPolicyComponent = () => {
+  const [getPolicy, {policy, loading}] = useLazyGetPolicy();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getPolicy('234')} />
+      {isDefined(policy) ? (
+        <div key={policy.id} data-testid="policy">
+          {policy.id}
+        </div>
+      ) : (
+        <div data-testid="no-policy" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetPolicy tests', () => {
+  test('should query policy after user interaction', async () => {
+    const [mock, resultFunc] = createGetPolicyQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazyPolicyComponent />);
+
+    let policyElement = screen.queryAllByTestId('policy');
+    expect(policyElement).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-policy')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    policyElement = screen.getByTestId('policy');
+
+    expect(policyElement).toHaveTextContent('234');
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 });

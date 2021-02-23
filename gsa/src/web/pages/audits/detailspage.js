@@ -16,14 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useHistory, useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import Badge from 'web/components/badge/badge';
+
+import Download from 'web/components/form/download';
+import useDownload from 'web/components/form/useDownload';
 
 import AlterableIcon from 'web/components/icon/alterableicon';
 import ExportIcon from 'web/components/icon/exporticon';
@@ -41,11 +45,10 @@ import PageTitle from 'web/components/layout/pagetitle';
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
 
-import {
-  NO_RELOAD,
-  USE_DEFAULT_RELOAD_INTERVAL,
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-} from 'web/components/loading/reload';
+import useReload from 'web/components/loading/useReload';
+
+import DialogNotification from 'web/components/notification/dialognotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -62,45 +65,36 @@ import TableRow from 'web/components/table/row';
 import EntityPage, {Col} from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
-import withEntityContainer, {
-  permissionsResourceFilter,
-} from 'web/entity/withEntityContainer';
+import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
+import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
+import useExportEntity from 'web/entity/useExportEntity';
 
+import {
+  useCloneAudit,
+  useDeleteAudit,
+  useExportAuditsByIds,
+  useGetAudit,
+} from 'web/graphql/audits';
+import {useGetPermissions} from 'web/graphql/permissions';
+
+import {TaskPermissions as AuditPermissions} from 'web/pages/tasks/detailspage';
 import ResumeIcon from 'web/pages/tasks/icons/resumeicon';
 import ScheduleIcon from 'web/pages/tasks/icons/scheduleicon';
 import StartIcon from 'web/pages/tasks/icons/starticon';
 import StopIcon from 'web/pages/tasks/icons/stopicon';
+import AuditStatus from 'web/pages/tasks/status';
 
-import {
-  selector as permissionsSelector,
-  loadEntities as loadPermissions,
-} from 'web/store/entities/permissions';
-import {
-  selector as auditSelector,
-  loadEntity as loadAudit,
-} from 'web/store/entities/audits';
-
+import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import AuditDetails from './details';
-import AuditStatus from 'web/pages/tasks/status';
 import AuditComponent from './component';
-
-import {TaskPermissions as AuditPermissions} from 'web/pages/tasks/detailspage';
-
-const reloadInterval = ({entity}) => {
-  if (!hasValue(entity) || entity.isContainer()) {
-    return NO_RELOAD;
-  }
-  return entity.isActive()
-    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : USE_DEFAULT_RELOAD_INTERVAL;
-};
 
 export const ToolBarIcons = ({
   entity,
@@ -113,6 +107,9 @@ export const ToolBarIcons = ({
   onAuditStopClick,
   onAuditResumeClick,
 }) => {
+  const reportsCounts = entity.reports.counts;
+  const currentResults = entity.results?.counts?.current;
+  const {lastReport, currentReport} = entity.reports;
   return (
     <Divider margin="10px">
       <IconDivider align={['start', 'start']}>
@@ -136,19 +133,19 @@ export const ToolBarIcons = ({
         <CloneIcon
           displayName={_('Audit')}
           entity={entity}
-          name="task"
+          name="audit"
           onClick={onAuditCloneClick}
         />
         <EditIcon
           displayName={_('Audit')}
           entity={entity}
-          name="task"
+          name="audit"
           onClick={onAuditEditClick}
         />
         <TrashIcon
           displayName={_('Audit')}
           entity={entity}
-          name="task"
+          name="audit"
           onClick={onAuditDeleteClick}
         />
         <ExportIcon
@@ -159,10 +156,10 @@ export const ToolBarIcons = ({
       </IconDivider>
 
       <IconDivider>
-        {isDefined(entity.schedule) && (
+        {hasValue(entity.schedule) && (
           <ScheduleIcon
             schedule={entity.schedule}
-            schedulePeriods={entity.schedule_periods}
+            schedulePeriods={entity.schedulePeriods}
             links={links}
           />
         )}
@@ -189,26 +186,26 @@ export const ToolBarIcons = ({
 
       <Divider margin="10px">
         <IconDivider>
-          {isDefined(entity.current_report) && (
+          {hasValue(currentReport) && (
             <DetailsLink
               type="report"
-              id={entity.current_report.id}
+              id={currentReport.id}
               title={_('Current Report for Audit {{- name}} from {{- date}}', {
                 name: entity.name,
-                date: shortDate(entity.current_report.scan_start),
+                date: shortDate(currentReport.scanStart),
               })}
             >
               <ReportIcon />
             </DetailsLink>
           )}
 
-          {!isDefined(entity.current_report) && isDefined(entity.last_report) && (
+          {!hasValue(currentReport) && hasValue(lastReport) && (
             <DetailsLink
               type="report"
-              id={entity.last_report.id}
+              id={lastReport.id}
               title={_('Last Report for Audit {{- name}} from {{- date}}', {
                 name: entity.name,
-                date: shortDate(entity.last_report.scan_start),
+                date: shortDate(lastReport.scanStart),
               })}
             >
               <ReportIcon />
@@ -220,7 +217,7 @@ export const ToolBarIcons = ({
             filter={'task_id=' + entity.id}
             title={_('Total Reports for Audit {{- name}}', entity)}
           >
-            <Badge content={entity.report_count.total}>
+            <Badge content={reportsCounts.total}>
               <ReportIcon />
             </Badge>
           </Link>
@@ -231,7 +228,7 @@ export const ToolBarIcons = ({
           filter={'task_id=' + entity.id}
           title={_('Results for Audit {{- name}}', entity)}
         >
-          <Badge content={entity.result_count}>
+          <Badge content={currentResults}>
             <ResultIcon />
           </Badge>
         </Link>
@@ -294,125 +291,163 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  entity,
-  permissions = [],
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <AuditComponent
-    onCloned={goto_details('audit', props)}
-    onCloneError={onError}
-    onContainerSaved={onChanged}
-    onDeleted={goto_list('audits', props)}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-    onResumed={onChanged}
-    onResumeError={onError}
-    onSaved={onChanged}
-    onStarted={onChanged}
-    onStartError={onError}
-    onStopped={onChanged}
-    onStopError={onError}
-  >
-    {({clone, delete: deleteFunc, download, edit, start, stop, resume}) => (
-      <EntityPage
-        {...props}
-        entity={entity}
-        sectionIcon={<AuditIcon size="large" />}
-        title={_('Audit')}
-        toolBarIcons={ToolBarIcons}
-        onChanged={onChanged}
-        onError={onError}
-        onInteraction={onInteraction}
-        onAuditCloneClick={clone}
-        onAuditDeleteClick={deleteFunc}
-        onAuditDownloadClick={download}
-        onAuditEditClick={edit}
-        onAuditResumeClick={resume}
-        onAuditStartClick={start}
-        onAuditStopClick={stop}
-      >
-        {({activeTab = 0, onActivateTab}) => {
-          return (
-            <React.Fragment>
-              <PageTitle title={_('Audit: {{name}}', {name: entity.name})} />
-              <Layout grow="1" flex="column">
-                <TabLayout grow="1" align={['start', 'end']}>
-                  <TabList
-                    active={activeTab}
-                    align={['start', 'stretch']}
-                    onActivateTab={onActivateTab}
-                  >
-                    <Tab>{_('Information')}</Tab>
-                    <EntitiesTab entities={permissions}>
-                      {_('Permissions')}
-                    </EntitiesTab>
-                  </TabList>
-                </TabLayout>
+const Page = () => {
+  // Page methods
+  const {id} = useParams();
+  const history = useHistory();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+  const [downloadRef, handleDownload] = useDownload();
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
 
-                <Tabs active={activeTab}>
-                  <TabPanels>
-                    <TabPanel>
-                      <Details entity={entity} />
-                    </TabPanel>
-                    <TabPanel>
-                      <AuditPermissions
-                        entity={entity}
-                        permissions={permissions}
-                        onChanged={onChanged}
-                        onDownloaded={onDownloaded}
-                        onInteraction={onInteraction}
-                        onError={onError}
-                      />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Layout>
-            </React.Fragment>
-          );
-        }}
-      </EntityPage>
-    )}
-  </AuditComponent>
-);
+  // Load audit related entities
+  const {
+    audit,
+    refetch: refetchAudit,
+    loading,
+    error: entityError,
+  } = useGetAudit(id);
+  const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
+    filterString: permissionsResourceFilter(id).toFilterString(),
+  });
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
+  // Audit related mutations
+  const exportEntity = useExportEntity();
 
-const mapStateToProps = (rootState, {id}) => {
-  const permSel = permissionsSelector(rootState);
-  return {
-    permissions: permSel.getEntities(permissionsResourceFilter(id)),
+  const [cloneAudit] = useCloneAudit();
+  const [deleteAudit] = useDeleteAudit();
+  const exportAudit = useExportAuditsByIds();
+
+  // Audit methods
+  const handleCloneAudit = clonedAudit => {
+    return cloneAudit(clonedAudit.id)
+      .then(auditId => goto_entity_details('audit', {history})(auditId))
+      .catch(showError);
   };
+
+  const handleDeleteAudit = deletedAudit => {
+    return deleteAudit(deletedAudit.id)
+      .then(goto_list('audits', {history}))
+      .catch(showError);
+  };
+
+  const handleDownloadAudit = exportedAudit => {
+    exportEntity({
+      entity: exportedAudit,
+      exportFunc: exportAudit,
+      resourceType: 'audits',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  // Timeout and reload
+  const timeoutFunc = useEntityReloadInterval(audit);
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetchAudit,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if audit is available and no timer is running yet
+    if (hasValue(audit) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [audit, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
+  return (
+    <AuditComponent
+      onCloned={goto_details('audit', {history})}
+      onCloneError={showError}
+      onDeleted={goto_list('audits', {history})}
+      onDeleteError={showError}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onInteraction={renewSessionTimeout}
+      onResumed={() => refetchAudit()}
+      onResumeError={showError}
+      onSaved={() => refetchAudit()}
+      onStarted={() => refetchAudit()}
+      onStartError={showError}
+      onStopped={() => refetchAudit()}
+      onStopError={showError}
+    >
+      {({edit, start, stop, resume}) => (
+        <EntityPage
+          entity={audit}
+          entityError={entityError}
+          entityType={'audit'}
+          isLoading={loading}
+          sectionIcon={<AuditIcon size="large" />}
+          title={_('Audit')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={() => refetchAudit()}
+          onError={showError}
+          onInteraction={renewSessionTimeout}
+          onAuditCloneClick={handleCloneAudit}
+          onAuditDeleteClick={handleDeleteAudit}
+          onAuditDownloadClick={handleDownloadAudit}
+          onAuditEditClick={edit}
+          onAuditResumeClick={resume}
+          onAuditStartClick={start}
+          onAuditStopClick={stop}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <React.Fragment>
+                <PageTitle title={_('Audit: {{name}}', {name: audit.name})} />
+                <Layout grow="1" flex="column">
+                  <TabLayout grow="1" align={['start', 'end']}>
+                    <TabList
+                      active={activeTab}
+                      align={['start', 'stretch']}
+                      onActivateTab={onActivateTab}
+                    >
+                      <Tab>{_('Information')}</Tab>
+                      <EntitiesTab entities={permissions}>
+                        {_('Permissions')}
+                      </EntitiesTab>
+                    </TabList>
+                  </TabLayout>
+
+                  <Tabs active={activeTab}>
+                    <TabPanels>
+                      <TabPanel>
+                        <Details entity={audit} />
+                      </TabPanel>
+                      <TabPanel>
+                        <AuditPermissions
+                          entity={audit}
+                          permissions={permissions}
+                          onChanged={() => refetchPermissions()}
+                          onDownloaded={handleDownload}
+                          onInteraction={renewSessionTimeout}
+                          onError={showError}
+                        />
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
+                </Layout>
+                <DialogNotification
+                  {...notificationDialogState}
+                  onCloseClick={closeNotificationDialog}
+                />
+                <Download ref={downloadRef} />
+              </React.Fragment>
+            );
+          }}
+        </EntityPage>
+      )}
+    </AuditComponent>
+  );
 };
 
-const load = gmp => {
-  const loadAuditFunc = loadAudit(gmp);
-  const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch =>
-    Promise.all([
-      dispatch(loadAuditFunc(id)),
-      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-    ]);
-};
-
-export default withEntityContainer('audit', {
-  load,
-  entitySelector: auditSelector,
-  mapStateToProps,
-  reloadInterval,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:

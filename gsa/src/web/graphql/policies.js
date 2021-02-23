@@ -337,7 +337,7 @@ export const useCreatePolicy = options => {
   return [createPolicy, {...other, id: policyId}];
 };
 
-export const useLazyGetPolicy = () => {
+export const useLoadPolicyPromise = () => {
   const client = useApolloClient();
   let policy;
   const getPolicy = policyId =>
@@ -356,6 +356,23 @@ export const useLazyGetPolicy = () => {
       });
 
   return [getPolicy, policy];
+};
+
+export const useLazyGetPolicy = (id, options) => {
+  const [queryPolicy, {data, ...other}] = useLazyQuery(GET_POLICY, {
+    ...options,
+    variables: {id},
+  });
+  const policy = isDefined(data?.policy)
+    ? Policy.fromObject(data.policy)
+    : undefined;
+
+  const loadPolicy = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) => queryPolicy({...options, variables: {id}}),
+    [queryPolicy],
+  );
+  return [loadPolicy, {policy, ...other}];
 };
 
 export const useImportPolicy = options => {
