@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isModelElement} from 'gmp/utils/identity';
+import {isModelElement, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 import {
   parseCsv,
   parseSeverity,
@@ -49,6 +49,34 @@ export const SEVERITY_FALSE_POSITIVE = -1;
 
 class Override extends Model {
   static entityType = 'override';
+
+  static parseObject(object) {
+    const ret = super.parseObject(object);
+
+    if (hasValue(object.task)) {
+      ret.task = parseModelFromObject(object.task, 'task');
+    } else {
+      ret.task = null;
+    }
+
+    if (hasValue(object.result)) {
+      ret.result = parseModelFromObject(object.result, 'result');
+    } else {
+      ret.result = null;
+    }
+
+    if (hasValue(object.nvt)) {
+      ret.nvt = Nvt.fromObject(object.nvt);
+      ret.name = object.nvt.name;
+    }
+
+    ret.endTime = hasValue(object.endTime) ? object.endTime : undefined;
+    ret.severity = hasValue(object.severity) ? object.severity : undefined;
+    ret.newSeverity = hasValue(object.newSeverity)
+      ? object.newSeverity
+      : undefined;
+    return ret;
+  }
 
   static parseElement(element) {
     let ret = super.parseElement(element);

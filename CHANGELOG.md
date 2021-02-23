@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Implement override mutations and refactor component to function [#2750](https://github.com/greenbone/gsa/pull/2750)
 - Implement audit detailspage queries and mutations [#2728](https://github.com/greenbone/gsa/pull/2728)
 - Implement audit component queries [#2738](https://github.com/greenbone/gsa/pull/2738)
 - Implement audit detailspage queries and mutations [#2728](https://github.com/greenbone/gsa/pull/2728)
