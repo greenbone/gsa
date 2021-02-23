@@ -51,6 +51,12 @@ class Cpe extends Info {
       delete ret.update_time;
     }
 
+    if (isDefined(ret.raw_data) && isDefined(ret.raw_data['cpe-item'])) {
+      const cpeItem = ret.raw_data['cpe-item'];
+      if (isDefined(cpeItem._deprecated_by)) {
+        ret.deprecated_by = cpeItem._deprecated_by;
+      }
+    }
     return ret;
   }
 }
