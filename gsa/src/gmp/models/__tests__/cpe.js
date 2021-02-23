@@ -100,4 +100,18 @@ describe('CPE model tests', () => {
     expect(cpe.update_time).toBeUndefined();
     expect(isDate(cpe.updateTime)).toBe(true);
   });
+
+  test('should parse deprecated_by', () => {
+    const cpe = Cpe.fromElement({
+      raw_data: {'cpe-item': {_deprecated_by: 'foo:/bar'}},
+    });
+
+    expect(cpe.deprecated_by).toEqual('foo:/bar');
+  });
+
+  test('should not parse deprecated_by', () => {
+    const cpe = Cpe.fromElement({raw_data: {'cpe-item': {}}});
+
+    expect(cpe.deprecated_by).toBeUndefined();
+  });
 });
