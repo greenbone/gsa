@@ -25,7 +25,13 @@ import SeverityBar from 'web/components/bar/severitybar';
 
 import DateTime from 'web/components/date/datetime';
 
+<<<<<<< HEAD
 import Layout from 'web/components/layout/layout';
+=======
+import DetailsLink from 'web/components/link/detailslink';
+
+import Layout from 'web/components/layout/layout.js';
+>>>>>>> f94aea6c88... Parse deprecated_by from CPE XML, so it's gonna be displayed (again?)
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
@@ -34,10 +40,15 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
+<<<<<<< HEAD
 import PropTypes from 'web/utils/proptypes';
 
 const CpeDetails = ({entity}) => {
   const {title, nvdId, deprecatedBy, updateTime, status, severity} = entity;
+=======
+const CpeDetails = ({entity, links = true}) => {
+  const {title, nvd_id, deprecated_by, updateTime, status, severity} = entity;
+>>>>>>> f94aea6c88... Parse deprecated_by from CPE XML, so it's gonna be displayed (again?)
   return (
     <Layout flex="column" grow="1">
       {!isDefined(title) && (
@@ -70,7 +81,15 @@ const CpeDetails = ({entity}) => {
           {isDefined(deprecatedBy) && (
             <TableRow>
               <TableData>{_('Deprecated By')}</TableData>
+<<<<<<< HEAD
               <TableData>{deprecatedBy}</TableData>
+=======
+              <TableData>
+                <DetailsLink id={deprecated_by} type="cpe" textOnly={!links}>
+                  {deprecated_by}
+                </DetailsLink>
+              </TableData>
+>>>>>>> f94aea6c88... Parse deprecated_by from CPE XML, so it's gonna be displayed (again?)
             </TableRow>
           )}
           {isDefined(updateTime) && (
@@ -103,6 +122,7 @@ const CpeDetails = ({entity}) => {
 
 CpeDetails.propTypes = {
   entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
 };
 
 export default CpeDetails;
