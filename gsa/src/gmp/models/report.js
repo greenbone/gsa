@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import {parseSeverity, parseDate} from 'gmp/parser';
 
@@ -82,14 +82,14 @@ class Report extends Model {
       timestamp,
     } = object;
 
-    if (isDefined(report)) {
+    if (hasValue(report)) {
       copy.report = ReportReport.fromElement(report);
     }
 
     copy.reportFormat = parseModelFromElement(report_format, 'reportformat');
     copy.task = Task.fromObject(task);
 
-    if (isDefined(severity)) {
+    if (hasValue(severity)) {
       copy.severity = parseSeverity(severity);
     }
 
@@ -97,7 +97,7 @@ class Report extends Model {
 
     copy.timestamp = parseDate(timestamp);
 
-    if (isDefined(scanEnd)) {
+    if (hasValue(scanEnd)) {
       copy.scanEnd = parseDate(scanEnd);
     }
 

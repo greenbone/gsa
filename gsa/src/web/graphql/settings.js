@@ -16,13 +16,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import {useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
 
-import {gql, useQuery} from '@apollo/client';
+import {gql, useLazyQuery, useQuery} from '@apollo/client';
 
 import Setting from 'gmp/models/setting';
 
-import {hasValue} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 export const GET_SETTING = gql`
   query UserSetting($id: UUID!) {
@@ -44,7 +44,7 @@ export const useGetSetting = (id, options) => {
 };
 
 export const GET_SETTINGS = gql`
-  query UserSettings($filterString: FilterString) {
+  query UserSettings($filterString: String) {
     userSettings(filterString: $filterString) {
       id
       name
@@ -64,4 +64,20 @@ export const useGetSettings = options => {
     [data],
   );
   return {settings, ...other};
+};
+
+export const useLazyGetSettings = (variables, options) => {
+  const [querySettings, {data, ...other}] = useLazyQuery(GET_SETTINGS, {
+    ...options,
+    variables,
+  });
+  const settings = isDefined(data?.userSettings)
+    ? data.userSettings.map(setting => Setting.fromObject(setting))
+    : undefined;
+  const getSettings = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => querySettings({...options, variables}),
+    [querySettings],
+  );
+  return [getSettings, {settings, ...other}];
 };

@@ -18,8 +18,10 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
-import {rendererWith, screen, wait} from 'web/utils/testing';
-import {useGetReportFormats} from '../reportformats';
+import {isDefined} from 'gmp/utils/identity';
+
+import {fireEvent, rendererWith, screen, wait} from 'web/utils/testing';
+import {useGetReportFormats, useLazyGetReportFormats} from '../reportformats';
 import {createGetReportFormatsQueryMock} from '../__mocks__/reportformats';
 
 const GetReportFormatsComponent = () => {
@@ -69,6 +71,84 @@ describe('useGetReportFormats tests', () => {
     expect(screen.getByTestId('total')).toHaveTextContent(2);
     expect(screen.getByTestId('filtered')).toHaveTextContent(2);
     expect(screen.getByTestId('offset')).toHaveTextContent(1);
+    expect(screen.getByTestId('limit')).toHaveTextContent(10);
+    expect(screen.getByTestId('length')).toHaveTextContent(2);
+  });
+});
+
+const GetLazyReportFormatsComponent = () => {
+  const [
+    getReportFormats,
+    {counts, loading, reportFormats},
+  ] = useLazyGetReportFormats();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getReportFormats()} />
+      {isDefined(counts) ? (
+        <div data-testid="counts">
+          <span data-testid="total">{counts.all}</span>
+          <span data-testid="filtered">{counts.filtered}</span>
+          <span data-testid="first">{counts.first}</span>
+          <span data-testid="limit">{counts.rows}</span>
+          <span data-testid="length">{counts.length}</span>
+        </div>
+      ) : (
+        <div data-testid="no-counts" />
+      )}
+      {isDefined(reportFormats) ? (
+        reportFormats.map(reportFormat => {
+          return (
+            <div key={reportFormat.id} data-testid="reportFormat">
+              {reportFormat.id}
+            </div>
+          );
+        })
+      ) : (
+        <div data-testid="no-reportFormats" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetReportFormats tests', () => {
+  test('should query reportFormats after user interaction', async () => {
+    const [mock, resultFunc] = createGetReportFormatsQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazyReportFormatsComponent />);
+
+    let reportFormatElements = screen.queryAllByTestId('reportFormat');
+    expect(reportFormatElements).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-reportFormats')).toBeInTheDocument();
+    expect(screen.queryByTestId('no-counts')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    reportFormatElements = screen.getAllByTestId('reportFormat');
+    expect(reportFormatElements).toHaveLength(2);
+
+    expect(reportFormatElements[0]).toHaveTextContent('665');
+    expect(reportFormatElements[1]).toHaveTextContent('789');
+
+    expect(screen.queryByTestId('no-reportFormats')).not.toBeInTheDocument();
+
+    await wait();
+
+    expect(screen.getByTestId('total')).toHaveTextContent(2);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(2);
+    expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
     expect(screen.getByTestId('length')).toHaveTextContent(2);
   });

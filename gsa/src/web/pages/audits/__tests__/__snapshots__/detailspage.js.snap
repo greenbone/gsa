@@ -654,157 +654,17 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   }
 }
 
-<div
-  class="c0"
->
+<body>
   <div
-    class="c1 toolbar"
-  >
+    id="portals"
+  />
+  <div>
     <div
-      class="c2"
+      class="c0"
     >
       <div
-        class="c3"
-        margin="10px"
+        class="c1 toolbar"
       >
-        <div
-          class="c2"
-        >
-          <div
-            class="c4"
-            margin="5px"
-          >
-            <a
-              href="test/en/compliance-and-special-scans.html#configuring-and-managing-audits"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <span
-                class="c5"
-                data-testid="svg-icon"
-                title="Help: Audits"
-              >
-                <svg
-                  title="Help: Audits"
-                >
-                  help.svg
-                </svg>
-              </span>
-            </a>
-            <a
-              class="c6"
-              href="/audits"
-            >
-              <span
-                class="c5"
-                data-testid="svg-icon"
-                title="Audit List"
-              >
-                <svg
-                  title="Audit List"
-                >
-                  list.svg
-                </svg>
-              </span>
-            </a>
-            <span
-              class="c5"
-              data-testid="svg-icon"
-              title="This is an Alterable Audit. Reports may not relate to current Policy or Target!"
-            >
-              <svg
-                title="This is an Alterable Audit. Reports may not relate to current Policy or Target!"
-              >
-                alterable.svg
-              </svg>
-            </span>
-          </div>
-        </div>
-        <div
-          class="c2"
-        >
-          <div
-            class="c7"
-            margin="5px"
-          >
-            <span
-              class="c8 c5"
-              data-testid="svg-icon"
-              title="Clone Audit"
-            >
-              <svg
-                title="Clone Audit"
-              >
-                clone.svg
-              </svg>
-            </span>
-            <span
-              class="c8 c5"
-              data-testid="svg-icon"
-              title="Edit Audit"
-            >
-              <svg
-                title="Edit Audit"
-              >
-                edit.svg
-              </svg>
-            </span>
-            <span
-              class="c8 c5"
-              data-testid="svg-icon"
-              title="Move Audit to trashcan"
-            >
-              <svg
-                title="Move Audit to trashcan"
-              >
-                trashcan.svg
-              </svg>
-            </span>
-            <span
-              class="c8 c5"
-              data-testid="svg-icon"
-              title="Export Audit as XML"
-            >
-              <svg
-                title="Export Audit as XML"
-              >
-                export.svg
-              </svg>
-            </span>
-          </div>
-        </div>
-        <div
-          class="c2"
-        >
-          <div
-            class="c7"
-            margin="5px"
-          >
-            <span
-              class="c8 c5"
-              data-testid="svg-icon"
-              title="Start"
-            >
-              <svg
-                title="Start"
-              >
-                start.svg
-              </svg>
-            </span>
-            <span
-              alt="Resume"
-              class="c9 c5"
-              data-testid="svg-icon"
-              title="Audit is not stopped"
-            >
-              <svg
-                title="Audit is not stopped"
-              >
-                resume.svg
-              </svg>
-            </span>
-          </div>
-        </div>
         <div
           class="c2"
         >
@@ -816,28 +676,204 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               class="c2"
             >
               <div
+                class="c4"
+                margin="5px"
+              >
+                <a
+                  href="test/en/compliance-and-special-scans.html#configuring-and-managing-audits"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <span
+                    class="c5"
+                    data-testid="svg-icon"
+                    title="Help: Audits"
+                  >
+                    <svg
+                      title="Help: Audits"
+                    >
+                      help.svg
+                    </svg>
+                  </span>
+                </a>
+                <a
+                  class="c6"
+                  href="/audits"
+                >
+                  <span
+                    class="c5"
+                    data-testid="svg-icon"
+                    title="Audit List"
+                  >
+                    <svg
+                      title="Audit List"
+                    >
+                      list.svg
+                    </svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+            <div
+              class="c2"
+            >
+              <div
+                class="c7"
+                margin="5px"
+              >
+                <span
+                  class="c8 c5"
+                  data-testid="svg-icon"
+                  title="Clone Audit"
+                >
+                  <svg
+                    title="Clone Audit"
+                  >
+                    clone.svg
+                  </svg>
+                </span>
+                <span
+                  class="c8 c5"
+                  data-testid="svg-icon"
+                  title="Edit Audit"
+                >
+                  <svg
+                    title="Edit Audit"
+                  >
+                    edit.svg
+                  </svg>
+                </span>
+                <span
+                  class="c8 c5"
+                  data-testid="svg-icon"
+                  title="Move Audit to trashcan"
+                >
+                  <svg
+                    title="Move Audit to trashcan"
+                  >
+                    trashcan.svg
+                  </svg>
+                </span>
+                <span
+                  class="c8 c5"
+                  data-testid="svg-icon"
+                  title="Export Audit as XML"
+                >
+                  <svg
+                    title="Export Audit as XML"
+                  >
+                    export.svg
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div
+              class="c2"
+            >
+              <div
                 class="c7"
                 margin="5px"
               >
                 <a
                   class="c6"
                   data-testid="details-link"
-                  href="/report/1234"
-                  title="Last Report for Audit foo from 07/30/2019"
+                  href="/schedule/foo"
+                  title="View Details of Schedule schedule 1 (Next due: over)"
                 >
                   <span
+                    alt="Schedule Details"
                     class="c5"
                     data-testid="svg-icon"
                   >
                     <svg>
-                      report.svg
+                      schedule.svg
                     </svg>
                   </span>
                 </a>
+                <span
+                  class="c8 c5"
+                  data-testid="svg-icon"
+                  title="Start"
+                >
+                  <svg
+                    title="Start"
+                  >
+                    start.svg
+                  </svg>
+                </span>
+                <span
+                  alt="Resume"
+                  class="c9 c5"
+                  data-testid="svg-icon"
+                  title="Audit is scheduled"
+                >
+                  <svg
+                    title="Audit is scheduled"
+                  >
+                    resume.svg
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <div
+              class="c2"
+            >
+              <div
+                class="c3"
+                margin="10px"
+              >
+                <div
+                  class="c2"
+                >
+                  <div
+                    class="c7"
+                    margin="5px"
+                  >
+                    <a
+                      class="c6"
+                      data-testid="details-link"
+                      href="/report/5678"
+                      title="Current Report for Audit foo from 08/30/2019"
+                    >
+                      <span
+                        class="c5"
+                        data-testid="svg-icon"
+                      >
+                        <svg>
+                          report.svg
+                        </svg>
+                      </span>
+                    </a>
+                    <a
+                      class="c6"
+                      href="/reports?filter=task_id%3D657"
+                      title="Total Reports for Audit foo"
+                    >
+                      <div
+                        class="c10"
+                      >
+                        <span
+                          class="c5"
+                          data-testid="svg-icon"
+                        >
+                          <svg>
+                            report.svg
+                          </svg>
+                        </span>
+                        <span
+                          class="c11"
+                          data-testid="badge-icon"
+                        >
+                          1
+                        </span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
                 <a
                   class="c6"
-                  href="/reports?filter=task_id%3D12345"
-                  title="Total Reports for Audit foo"
+                  href="/results?filter=task_id%3D657"
+                  title="Results for Audit foo"
                 >
                   <div
                     class="c10"
@@ -847,302 +883,121 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                       data-testid="svg-icon"
                     >
                       <svg>
-                        report.svg
+                        result.svg
                       </svg>
                     </span>
                     <span
                       class="c11"
                       data-testid="badge-icon"
                     >
-                      1
+                      20
                     </span>
                   </div>
                 </a>
               </div>
             </div>
-            <a
-              class="c6"
-              href="/results?filter=task_id%3D12345"
-              title="Results for Audit foo"
-            >
-              <div
-                class="c10"
-              >
-                <span
-                  class="c5"
-                  data-testid="svg-icon"
-                >
-                  <svg>
-                    result.svg
-                  </svg>
-                </span>
-                <span
-                  class="c11"
-                  data-testid="badge-icon"
-                >
-                  1
-                </span>
-              </div>
-            </a>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <section
-    class="entity-section"
-  >
-    <div
-      class="c12 section-header"
-    >
-      <h2
-        class="c13 c14"
+      <section
+        class="entity-section"
       >
         <div
-          class="c15"
+          class="c12 section-header"
         >
-          <span
-            class="c16"
-            data-testid="svg-icon"
-          >
-            <svg>
-              audit.svg
-            </svg>
-          </span>
-        </div>
-        <div
-          class="c17"
-        >
-          Audit: foo
-        </div>
-      </h2>
-      <div
-        class="c18"
-      >
-        <div
-          class="c19"
-        >
-          <div
-            class="c20"
-          >
-            <div>
-              ID:
-            </div>
-            <div>
-              12345
-            </div>
-            <div>
-              Created:
-            </div>
-            <div>
-              Tue, Jul 16, 2019 8:31 AM CEST
-            </div>
-            <div>
-              Modified:
-            </div>
-            <div>
-              Tue, Jul 16, 2019 8:44 AM CEST
-            </div>
-            <div>
-              Owner:
-            </div>
-            <span>
-              admin
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="c21"
-    >
-      <div
-        class="c22"
-      >
-        <div
-          class="c23"
-        >
-          <div
-            class="c24"
-            data-testid="tab"
-          >
-            Information
-          </div>
-          <div
-            class="c25"
-            data-testid="tab"
+          <h2
+            class="c13 c14"
           >
             <div
-              class="c26"
+              class="c15"
             >
               <span
-                data-testid="entities-tab-title"
+                class="c16"
+                data-testid="svg-icon"
               >
-                Permissions
+                <svg>
+                  audit.svg
+                </svg>
               </span>
-              <span
-                class="c27"
+            </div>
+            <div
+              class="c17"
+            >
+              Audit: foo
+            </div>
+          </h2>
+          <div
+            class="c18"
+          >
+            <div
+              class="c19"
+            >
+              <div
+                class="c20"
               >
-                (
-                <i>
-                  0
-                </i>
-                )
-              </span>
+                <div>
+                  ID:
+                </div>
+                <div>
+                  657
+                </div>
+                <div>
+                  Created:
+                </div>
+                <div>
+                  Tue, Jul 30, 2019 3:00 PM CEST
+                </div>
+                <div>
+                  Modified:
+                </div>
+                <div>
+                  Fri, Aug 30, 2019 3:23 PM CEST
+                </div>
+                <div>
+                  Owner:
+                </div>
+                <span>
+                  admin
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div
-        class="c28"
-      >
-        <table
-          class="c29 c30"
-        >
-          <colgroup>
-            <col
-              class="c31"
-              width="10%"
-            />
-            <col
-              class="c32"
-              width="90%"
-            />
-          </colgroup>
-          <tbody
-            class=""
-          >
-            <tr>
-              <td>
-                <div
-                  class="c28"
-                >
-                  Name
-                </div>
-              </td>
-              <td>
-                <div
-                  class="c28"
-                >
-                  foo
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div
-                  class="c28"
-                >
-                  Comment
-                </div>
-              </td>
-              <td>
-                <div
-                  class="c28"
-                >
-                  bar
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div
-                  class="c28"
-                >
-                  Alterable
-                </div>
-              </td>
-              <td>
-                <div
-                  class="c28"
-                >
-                  Yes
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div
-                  class="c28"
-                >
-                  Status
-                </div>
-              </td>
-              <td>
-                <div
-                  class="c28"
-                >
-                  <a
-                    class="c6 c33"
-                    data-testid="details-link"
-                    href="/report/1234"
-                  >
-                    <div
-                      class="c34"
-                      data-testid="progressbar-box"
-                      title="Done"
-                    >
-                      <div
-                        class="c35"
-                        data-testid="progress"
-                      />
-                      <div
-                        class="c36"
-                      >
-                        <span
-                          class="c37"
-                        >
-                          Done
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
         <div
           class="c21"
         >
           <div
-            class="c28"
+            class="c22"
           >
-            <h2>
-              Target
-            </h2>
-            <div>
-              <a
-                class="c6"
-                data-testid="details-link"
-                href="/target/5678"
-              >
-                target1
-              </a>
-            </div>
-          </div>
-          <div
-            class="c28"
-          >
-            <h2>
-              Alerts
-            </h2>
-            <div>
+            <div
+              class="c23"
+            >
               <div
-                class="c2"
+                class="c24"
+                data-testid="tab"
+              >
+                Information
+              </div>
+              <div
+                class="c25"
+                data-testid="tab"
               >
                 <div
-                  class="c7 c38"
-                  margin="5px"
+                  class="c26"
                 >
-                  <span>
-                    <a
-                      class="c6"
-                      data-testid="details-link"
-                      href="/alert/91011"
-                    >
-                      alert1
-                    </a>
+                  <span
+                    data-testid="entities-tab-title"
+                  >
+                    Permissions
+                  </span>
+                  <span
+                    class="c27"
+                  >
+                    (
+                    <i>
+                      0
+                    </i>
+                    )
                   </span>
                 </div>
               </div>
@@ -1151,177 +1006,512 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
           <div
             class="c28"
           >
-            <h2>
-              Scanner
-            </h2>
-            <div>
-              <table
-                class="c39 c30"
+            <table
+              class="c29 c30"
+            >
+              <colgroup>
+                <col
+                  class="c31"
+                  width="10%"
+                />
+                <col
+                  class="c32"
+                  width="90%"
+                />
+              </colgroup>
+              <tbody
+                class=""
               >
-                <colgroup>
-                  <col
-                    class="c31"
-                    width="10%"
-                  />
-                  <col
-                    class="c32"
-                    width="90%"
-                  />
-                </colgroup>
-                <tbody
-                  class=""
-                >
-                  <tr>
-                    <td>
-                      <div
-                        class="c28"
+                <tr>
+                  <td>
+                    <div
+                      class="c28"
+                    >
+                      Name
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="c28"
+                    >
+                      foo
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div
+                      class="c28"
+                    >
+                      Comment
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="c28"
+                    >
+                      bar
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div
+                      class="c28"
+                    >
+                      Alterable
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="c28"
+                    >
+                      No
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div
+                      class="c28"
+                    >
+                      Status
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      class="c28"
+                    >
+                      <span
+                        class="c6 c33"
+                        data-testid="details-link"
                       >
-                        Name
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        class="c28"
-                      >
-                        <span>
-                          <a
-                            class="c6"
-                            data-testid="details-link"
-                            href="/scanner/1516"
+                        <div
+                          class="c34"
+                          data-testid="progressbar-box"
+                          title="Done"
+                        >
+                          <div
+                            class="c35"
+                            data-testid="progress"
+                          />
+                          <div
+                            class="c36"
                           >
-                            scanner1
-                          </a>
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div
-                        class="c28"
-                      >
-                        Type
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        class="c28"
-                      >
-                        OpenVAS Scanner
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div
-            class="c28"
-          >
-            <h2>
-              Assets
-            </h2>
-            <div>
-              <table
-                class="c39 c30"
+                            <span
+                              class="c37"
+                            >
+                              Done
+                            </span>
+                          </div>
+                        </div>
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div
+              class="c21"
+            >
+              <div
+                class="c28"
               >
-                <colgroup>
-                  <col
-                    class="c31"
-                    width="10%"
-                  />
-                  <col
-                    class="c32"
-                    width="90%"
-                  />
-                </colgroup>
-                <tbody
-                  class=""
-                >
-                  <tr>
-                    <td>
-                      <div
-                        class="c28"
-                      >
-                        Add to Assets
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        class="c28"
-                      >
-                        Yes
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div
-            class="c28"
-          >
-            <h2>
-              Scan
-            </h2>
-            <div>
-              <table
-                class="c39 c30"
+                <h2>
+                  Target
+                </h2>
+                <div>
+                  <a
+                    class="c6"
+                    data-testid="details-link"
+                    href="/target/159"
+                  >
+                    target 1
+                  </a>
+                </div>
+              </div>
+              <div
+                class="c28"
               >
-                <colgroup>
-                  <col
-                    class="c31"
-                    width="10%"
-                  />
-                  <col
-                    class="c32"
-                    width="90%"
-                  />
-                </colgroup>
-                <tbody
-                  class=""
-                >
-                  <tr>
-                    <td>
-                      <div
-                        class="c28"
-                      >
-                        Duration of last Scan
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        class="c28"
-                      >
-                        2 minutes
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div
-                        class="c28"
-                      >
-                        Auto delete Reports
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        class="c28"
-                      >
-                        Do not automatically delete reports
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                <h2>
+                  Alerts
+                </h2>
+                <div>
+                  <div
+                    class="c2"
+                  >
+                    <div
+                      class="c7 c38"
+                      margin="5px"
+                    >
+                      <span>
+                        <a
+                          class="c6"
+                          data-testid="details-link"
+                          href="/alert/151617"
+                        >
+                          alert 1
+                        </a>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="c28"
+              >
+                <h2>
+                  Scanner
+                </h2>
+                <div>
+                  <table
+                    class="c39 c30"
+                  >
+                    <colgroup>
+                      <col
+                        class="c31"
+                        width="10%"
+                      />
+                      <col
+                        class="c32"
+                        width="90%"
+                      />
+                    </colgroup>
+                    <tbody
+                      class=""
+                    >
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Name
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            <span>
+                              <a
+                                class="c6"
+                                data-testid="details-link"
+                                href="/scanner/212223"
+                              >
+                                scanner 1
+                              </a>
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Type
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            OpenVAS Scanner
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Policy
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            <span>
+                              <a
+                                class="c6"
+                                data-testid="details-link"
+                                href="/policy/234"
+                              >
+                                unnamed policy
+                              </a>
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Order for target hosts
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            sequential
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Network Source Interface
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Maximum concurrently executed NVTs per host
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            4
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Maximum concurrently scanned hosts
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            20
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div
+                class="c28"
+              >
+                <h2>
+                  Assets
+                </h2>
+                <div>
+                  <table
+                    class="c39 c30"
+                  >
+                    <colgroup>
+                      <col
+                        class="c31"
+                        width="10%"
+                      />
+                      <col
+                        class="c32"
+                        width="90%"
+                      />
+                    </colgroup>
+                    <tbody
+                      class=""
+                    >
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Add to Assets
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Yes
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div
+                class="c28"
+              >
+                <h2>
+                  Schedule
+                </h2>
+                <div>
+                  <table
+                    class="c39 c30"
+                  >
+                    <colgroup>
+                      <col
+                        class="c31"
+                        width="10%"
+                      />
+                      <col
+                        class="c32"
+                        width="90%"
+                      />
+                    </colgroup>
+                    <tbody
+                      class=""
+                    >
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Name
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            <span>
+                              <a
+                                class="c6"
+                                data-testid="details-link"
+                                href="/schedule/foo"
+                              >
+                                schedule 1
+                              </a>
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Next
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div
+                class="c28"
+              >
+                <h2>
+                  Scan
+                </h2>
+                <div>
+                  <table
+                    class="c39 c30"
+                  >
+                    <colgroup>
+                      <col
+                        class="c31"
+                        width="10%"
+                      />
+                      <col
+                        class="c32"
+                        width="90%"
+                      />
+                    </colgroup>
+                    <tbody
+                      class=""
+                    >
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Duration of last Scan
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            2 minutes
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Average Scan duration
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            a few seconds
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Auto delete Reports
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            class="c28"
+                          >
+                            Do not automatically delete reports
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <a
+          aria-hidden="true"
+          style="display: none;"
+        >
+          Download
+        </a>
+      </section>
     </div>
-  </section>
-</div>
+    <a
+      aria-hidden="true"
+      style="display: none;"
+    >
+      Download
+    </a>
+  </div>
+</body>
 `;
 
 exports[`Audit ToolBarIcons tests should render 1`] = `

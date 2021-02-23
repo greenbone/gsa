@@ -16,8 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {useCallback} from 'react';
 
-import {gql, useQuery} from '@apollo/client';
+import {gql, useLazyQuery, useQuery} from '@apollo/client';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import ReportFormat from 'gmp/models/reportformat';
 import {isDefined} from 'gmp/utils/identity';
@@ -110,4 +111,38 @@ export const useGetReportFormats = (variables, options) => {
     : undefined;
   const pageInfo = data?.reportFormats?.pageInfo;
   return {...other, counts, reportFormats, pageInfo};
+};
+
+export const useLazyGetReportFormats = (variables, options) => {
+  const [queryReportFormats, {data, ...other}] = useLazyQuery(
+    GET_REPORT_FORMATS,
+    {
+      ...options,
+      variables,
+    },
+  );
+  const reportFormats = isDefined(data?.reportFormats)
+    ? data.reportFormats.edges.map(entity =>
+        ReportFormat.fromObject(entity.node),
+      )
+    : undefined;
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.reportFormats?.counts || {};
+  const counts = isDefined(data?.reportFormats?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const getReportFormats = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => queryReportFormats({...options, variables}),
+    [queryReportFormats],
+  );
+  const pageInfo = data?.reportFormats?.pageInfo;
+  return [getReportFormats, {...other, counts, reportFormats, pageInfo}];
 };
