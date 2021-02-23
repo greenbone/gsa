@@ -29,6 +29,7 @@ import {
   DELETE_AUDITS_BY_IDS,
   EXPORT_AUDITS_BY_IDS,
   GET_AUDIT,
+  GET_AUDITS,
   MODIFY_AUDIT,
   RESUME_AUDIT,
   START_AUDIT,
@@ -370,6 +371,31 @@ export const unscheduledAudit = deepFreeze({
   hostsOrdering: 'sequential',
   observers,
 });
+
+const mockAudits = {
+  edges: [
+    {
+      node: detailsMockAudit,
+    },
+  ],
+  counts: {
+    total: 1,
+    filtered: 1,
+    offset: 0,
+    limit: 10,
+    length: 1,
+  },
+  pageInfo: {
+    hasNextPage: false,
+    hasPreviousPage: false,
+    startCursor: 'audit:0',
+    endCursor: 'audit:1',
+    lastPageCursor: 'audit:3',
+  },
+};
+
+export const createGetAuditsQueryMock = (variables = {}) =>
+  createGenericQueryMock(GET_AUDITS, {audits: mockAudits}, variables);
 
 export const createAuditInput = {
   name: 'a1',

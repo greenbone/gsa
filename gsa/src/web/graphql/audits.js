@@ -17,7 +17,10 @@
  */
 import {useCallback} from 'react';
 
-import {gql, useMutation, useQuery} from '@apollo/client';
+import {gql, useLazyQuery, useMutation, useQuery} from '@apollo/client';
+
+import CollectionCounts from 'gmp/collection/collectioncounts';
+
 import {isDefined} from 'gmp/utils/identity';
 import Audit from 'gmp/models/audit';
 
@@ -179,6 +182,156 @@ export const GET_AUDIT = gql`
     }
   }
 `;
+
+export const GET_AUDITS = gql`
+  query Audits(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    audits(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
+      edges {
+        node {
+          name
+          id
+          creationTime
+          modificationTime
+          averageDuration
+          permissions {
+            name
+          }
+          reports {
+            lastReport {
+              id
+              severity
+              timestamp
+              scanStart
+              scanEnd
+              complianceCount {
+                yes
+                no
+                incomplete
+              }
+            }
+            currentReport {
+              id
+              scanStart
+              timestamp
+            }
+            counts {
+              total
+              finished
+            }
+          }
+          results {
+            counts {
+              current
+            }
+          }
+          status
+          progress
+          target {
+            name
+            id
+          }
+          trend
+          alterable
+          comment
+          owner
+          preferences {
+            name
+            value
+            description
+          }
+          schedule {
+            name
+            id
+            icalendar
+            timezone
+            duration
+          }
+          alerts {
+            name
+            id
+          }
+          policy {
+            id
+            name
+            trash
+            type
+          }
+          scanner {
+            id
+            name
+            type
+          }
+          schedulePeriods
+          hostsOrdering
+          observers {
+            users
+            roles {
+              name
+            }
+            groups {
+              name
+            }
+          }
+        }
+      }
+      counts {
+        total
+        filtered
+        offset
+        limit
+        length
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+        lastPageCursor
+      }
+    }
+  }
+`;
+
+export const useLazyGetAudits = (variables, options) => {
+  const [queryAudits, {data, ...other}] = useLazyQuery(GET_AUDITS, {
+    ...options,
+    variables,
+  });
+  const audits = isDefined(data?.audits)
+    ? data.audits.edges.map(entity => Audit.fromObject(entity.node))
+    : undefined;
+
+  const {total, filtered, offset = -1, limit, length} =
+    data?.audits?.counts || {};
+  const counts = isDefined(data?.audits?.counts)
+    ? new CollectionCounts({
+        all: total,
+        filtered: filtered,
+        first: offset + 1,
+        length: length,
+        rows: limit,
+      })
+    : undefined;
+  const getAudits = useCallback(
+    // eslint-disable-next-line no-shadow
+    (variables, options) => queryAudits({...options, variables}),
+    [queryAudits],
+  );
+  const pageInfo = data?.audits?.pageInfo;
+  return [getAudits, {...other, counts, audits, pageInfo}];
+};
 
 export const useGetAudit = (id, options) => {
   const {data, ...other} = useQuery(GET_AUDIT, {...options, variables: {id}});

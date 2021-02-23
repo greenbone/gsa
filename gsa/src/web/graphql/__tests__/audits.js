@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable react/prop-types */
+import {isDefined} from 'gmp/utils/identity';
+
 import {fireEvent, rendererWith, screen, wait} from 'web/utils/testing';
 
 import {
@@ -30,6 +32,7 @@ import {
   createCloneAuditQueryMock,
   createDeleteAuditQueryMock,
   createExportAuditsByIdsQueryMock,
+  createGetAuditsQueryMock,
 } from '../__mocks__/audits';
 import {
   useCloneAudit,
@@ -37,11 +40,84 @@ import {
   useDeleteAudit,
   useExportAuditsByIds,
   useGetAudit,
+  useLazyGetAudits,
   useModifyAudit,
   useResumeAudit,
   useStartAudit,
   useStopAudit,
 } from '../audits';
+
+const GetLazyAuditsComponent = () => {
+  const [getAudits, {counts, loading, audits}] = useLazyGetAudits();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getAudits()} />
+      {isDefined(counts) ? (
+        <div data-testid="counts">
+          <span data-testid="total">{counts.all}</span>
+          <span data-testid="filtered">{counts.filtered}</span>
+          <span data-testid="first">{counts.first}</span>
+          <span data-testid="limit">{counts.rows}</span>
+          <span data-testid="length">{counts.length}</span>
+        </div>
+      ) : (
+        <div data-testid="no-counts" />
+      )}
+      {isDefined(audits) ? (
+        audits.map(audit => {
+          return (
+            <div key={audit.id} data-testid="audit">
+              {audit.id}
+            </div>
+          );
+        })
+      ) : (
+        <div data-testid="no-audits" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetAudits tests', () => {
+  test('should query audits after user interaction', async () => {
+    const [mock, resultFunc] = createGetAuditsQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazyAuditsComponent />);
+
+    let auditElements = screen.queryAllByTestId('audit');
+    expect(auditElements).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-audits')).toBeInTheDocument();
+    expect(screen.queryByTestId('no-counts')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    auditElements = screen.getAllByTestId('audit');
+    expect(auditElements).toHaveLength(1);
+
+    expect(auditElements[0]).toHaveTextContent('657');
+
+    expect(screen.queryByTestId('no-audits')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('total')).toHaveTextContent(1);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(1);
+    expect(screen.getByTestId('first')).toHaveTextContent(1);
+    expect(screen.getByTestId('limit')).toHaveTextContent(10);
+    expect(screen.getByTestId('length')).toHaveTextContent(1);
+  });
+});
 
 const StartAuditComponent = ({auditId}) => {
   const [startAudit, {reportId}] = useStartAudit();
