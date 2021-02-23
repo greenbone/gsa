@@ -364,17 +364,17 @@ const AuditComponent = ({
           auditDialogVisible: true,
           alertIds: map(audit.alerts, alert => alert.id),
           alterable: audit.alterable,
-          applyOverrides: audit.apply_overrides,
-          auto_delete: audit.auto_delete,
-          auto_delete_data: audit.auto_delete_data,
+          applyOverrides: audit.applyOverrides,
+          autoDelete: audit.autoDelete,
+          autoDeleteData: audit.autoDeleteData,
           comment: audit.comment,
           policyId: hasId(audit.config) ? audit.config.id : undefined,
-          hostsOrdering: audit.hosts_ordering,
+          hostsOrdering: audit.hostsOrdering,
           id: audit.id,
-          in_assets: audit.in_assets,
-          maxChecks: audit.max_checks,
-          maxHosts: audit.max_hosts,
-          minQod: audit.min_qod,
+          inAssets: audit.inAssets,
+          maxChecks: audit.maxChecks,
+          maxHosts: audit.maxHosts,
+          minQod: audit.minQod,
           name: audit.name,
           scannerId: hasId(audit.scanner) ? audit.scanner.id : undefined,
           scheduleId,
@@ -396,13 +396,13 @@ const AuditComponent = ({
           alertIds,
           alterable: undefined,
           applyOverrides: undefined,
-          auto_delete: undefined,
-          auto_delete_data: undefined,
+          autoDelete: undefined,
+          autoDeleteData: undefined,
           comment: undefined,
           policyId: undefined,
           hostsOrdering: undefined,
           id: undefined,
-          in_assets: undefined,
+          inAssets: undefined,
           maxChecks: undefined,
           maxHosts: undefined,
           minQod: undefined,
@@ -523,13 +523,13 @@ const AuditComponent = ({
   const {
     alertIds,
     alterable,
-    auto_delete,
-    auto_delete_data,
+    autoDelete,
+    autoDeleteData,
     policyId,
     comment,
     hostsOrdering,
     id,
-    in_assets,
+    inAssets,
     maxChecks,
     maxHosts,
     name,
@@ -596,13 +596,13 @@ const AuditComponent = ({
                             alerts={alerts}
                             alertIds={alertIds}
                             alterable={alterable}
-                            auto_delete={auto_delete}
-                            auto_delete_data={auto_delete_data}
+                            auto_delete={autoDelete}
+                            auto_delete_data={autoDeleteData}
                             comment={comment}
                             policyId={policyId}
                             hostsOrdering={hostsOrdering}
                             id={id}
-                            in_assets={in_assets}
+                            in_assets={inAssets}
                             isLoadingAlerts={isLoadingAlerts}
                             isLoadingPolicies={isLoadingPolicies}
                             isLoadingScanners={isLoadingScanners}
