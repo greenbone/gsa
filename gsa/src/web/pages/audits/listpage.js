@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
-import {RESET_FILTER, TASKS_FILTER_FILTER} from 'gmp/models/filter';
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {hasValue} from 'gmp/utils/identity';
 
@@ -33,26 +33,29 @@ import ManualIcon from 'web/components/icon/manualicon';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
-import {
-  USE_DEFAULT_RELOAD_INTERVAL_ACTIVE,
-  USE_DEFAULT_RELOAD_INTERVAL,
-} from 'web/components/loading/reload';
 import useReload from 'web/components/loading/useReload';
 
 import DialogNotification from 'web/components/notification/dialognotification';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
 
+import {
+  BulkTagComponent,
+  useBulkDeleteEntities,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions';
 import EntitiesPage from 'web/entities/page';
 import usePagination from 'web/entities/usePagination';
 import useEntitiesReloadInterval from 'web/entities/useEntitiesReloadInterval';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
-import {useLazyGetAudits} from 'web/graphql/audits';
 
 import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/audits';
+  useCloneAudit,
+  useDeleteAudit,
+  useDeleteAuditsByFilter,
+  useDeleteAuditsByIds,
+  useExportAuditsByFilter,
+  useExportAuditsByIds,
+  useLazyGetAudits,
+} from 'web/graphql/audits';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -115,11 +118,23 @@ const Page = () => {
     changeFilter,
   );
 
+  const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
+
   // Audit list state variables and methods
   const [
     getAudits,
     {counts, audits, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetAudits();
+
+  const exportAuditsByFilter = useExportAuditsByFilter();
+  const exportAuditsByIds = useExportAuditsByIds();
+  const bulkExportAudits = useBulkExportEntities();
+
+  const [deleteAudit] = useDeleteAudit();
+  const [deleteAuditsByIds] = useDeleteAuditsByIds();
+  const [deleteAuditsByFilter] = useDeleteAuditsByFilter();
+  const bulkDeleteAudits = useBulkDeleteEntities();
+  const [cloneAudit] = useCloneAudit();
 
   const timeoutFunc = useEntitiesReloadInterval(audits);
   const [startReload, stopReload, hasRunningTimer] = useReload(
@@ -134,6 +149,54 @@ const Page = () => {
     pageInfo,
     refetch,
   });
+
+  // Audit methods
+  const handleCloneAudit = useCallback(
+    audit => cloneAudit(audit.id).then(refetch, showError),
+    [cloneAudit, refetch, showError],
+  );
+  const handleDeleteAudit = useCallback(
+    audit => deleteAudit(audit.id).then(refetch, showError),
+    [deleteAudit, refetch, showError],
+  );
+
+  // Bulk action methods
+  const openTagsDialog = () => {
+    renewSession();
+    setTagsDialogVisible(true);
+  };
+
+  const closeTagsDialog = () => {
+    renewSession();
+    setTagsDialogVisible(false);
+  };
+
+  const handleBulkDeleteAudits = () => {
+    return bulkDeleteAudits({
+      selectionType,
+      filter,
+      selected,
+      entities: audits,
+      deleteByIdsFunc: deleteAuditsByIds,
+      deleteByFilterFunc: deleteAuditsByFilter,
+      onDeleted: refetch,
+      onError: showError,
+    });
+  };
+
+  const handleBulkExportAudits = () => {
+    return bulkExportAudits({
+      entities: audits,
+      selected,
+      filter,
+      resourceType: 'audits',
+      selectionType,
+      exportByFilterFunc: exportAuditsByFilter,
+      exportByIdsFunc: exportAuditsByIds,
+      onDownload: handleDownload,
+      onError: showError,
+    });
+  };
 
   // Side effects
   useEffect(() => {
@@ -186,9 +249,7 @@ const Page = () => {
       onStopError={showError}
     >
       {({
-        clone,
         create,
-        delete: deleteFunc,
         download,
         edit,
         start,
@@ -216,6 +277,8 @@ const Page = () => {
             table={Table}
             title={_('Audits')}
             toolBarIcons={ToolBarIcons}
+            onDeleteBulk={handleBulkDeleteAudits}
+            onDownloadBulk={handleBulkExportAudits}
             onEntitySelected={select}
             onEntityDeselected={deselect}
             onError={showError}
@@ -225,9 +288,9 @@ const Page = () => {
             onFilterRemoved={removeFilter}
             onInteraction={renewSession}
             onReportDownloadClick={reportDownload}
-            onAuditCloneClick={clone}
+            onAuditCloneClick={handleCloneAudit}
             onAuditCreateClick={create}
-            onAuditDeleteClick={deleteFunc}
+            onAuditDeleteClick={handleDeleteAudit}
             onAuditDownloadClick={download}
             onAuditEditClick={edit}
             onAuditResumeClick={resume}
@@ -239,28 +302,29 @@ const Page = () => {
             onPreviousClick={getPrevious}
             onSelectionTypeChange={changeSelectionType}
             onSortChange={handleSortChange}
+            onTagsBulk={openTagsDialog}
           />
           <DialogNotification
             {...notificationDialogState}
             onCloseClick={closeNotificationDialog}
           />
           <Download ref={downloadRef} />
+          {tagsDialogVisible && (
+            <BulkTagComponent
+              entities={audits}
+              selected={selected}
+              filter={filter}
+              selectionType={selectionType}
+              entitiesCounts={counts}
+              onClose={closeTagsDialog}
+            />
+          )}
         </React.Fragment>
       )}
     </AuditComponent>
   );
 };
 
-const reloadInterval = ({entities = []}) =>
-  entities.some(task => task.isActive())
-    ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
-    : USE_DEFAULT_RELOAD_INTERVAL;
-
-export default withEntitiesContainer('audit', {
-  entitiesSelector,
-  loadEntities,
-  defaultFilter: RESET_FILTER,
-  reloadInterval,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:
