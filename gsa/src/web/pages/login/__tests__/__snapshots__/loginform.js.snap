@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LoginForm tests should render full LoginForm 1`] = `
-.c1 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -15,7 +15,7 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   justify-content: center;
 }
 
-.c3 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -33,7 +33,7 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   align-items: stretch;
 }
 
-.c6 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -56,17 +56,92 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  height: 95px;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  margin-top: -10px;
+}
+
+.c2 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c2 > * {
+  margin-top: 10px;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 180px;
 }
 
 .c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   background: #fff;
   box-shadow: 0px 14px 22px #787878;
   padding: 4rem;
-  max-width: 30rem;
+  width: 30rem;
 }
 
-.c7 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -89,14 +164,14 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   justify-content: space-evenly;
 }
 
-.c5 {
+.c7 {
   color: #d83636;
   font-weight: bold;
   text-align: center;
   margin: 10px;
 }
 
-.c9 {
+.c12 {
   box-sizing: border-box;
   color: white;
   background-color: text:white;
@@ -115,16 +190,16 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   width: 100%;
 }
 
-.c9:hover {
+.c12:hover {
   cursor: pointer;
   background-color: #212121;
 }
 
-.c9 + .c8 {
+.c12 + .c11 {
   margin-left: 1.25rem;
 }
 
-.c4 {
+.c6 {
   margin: 5px auto;
   padding-bottom: 10px;
   font-size: 9pt;
@@ -132,6 +207,17 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
   padding: 10px;
   margin-bottom: 10px;
   margin-top: 20px;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
 }
 
 <body>
@@ -145,119 +231,147 @@ exports[`LoginForm tests should render full LoginForm 1`] = `
       <div
         class="c1"
       >
-        <img
-          alt="Greenbone Security Assistant"
-          class="c2"
-          src="/img/login-label.png"
-        />
-      </div>
-      <div
-        class="c3"
-      >
         <div
-          class="c4"
-          data-testid="protocol-insecure"
+          class="c2"
+          margin="10px"
         >
-          <p
+          <div
+            class="c3"
+          >
+            <img
+              alt="Greenbone Security Assistant"
+              class="c4"
+              src="/img/login-label.png"
+            />
+          </div>
+          <div
             class="c5"
           >
-            Warning: Connection unencrypted
-          </p>
-          <p>
-            The connection to this GSA is not encrypted, allowing anyone listening to the traffic to steal your credentials.
-          </p>
-          <p>
-            Please configure a TLS certificate for the HTTPS service or ask your administrator to do so as soon as possible.
-          </p>
-        </div>
-      </div>
-      <div
-        class="c6"
-      />
-      <div
-        class="c7"
-      >
-        <div
-          class="MuiFormControl-root sc-jSgupP cSAYIk"
-        >
-          <div
-            class="MuiFormControl-root MuiTextField-root sc-gKsewC kYJFYx MuiFormControl-marginNormal"
-            grow="1"
-            tabindex="1"
-          >
-            <label
-              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink Mui-focused Mui-focused"
-              data-shrink="true"
-              style="font-family: 'DroidSans', Arial, sans-serif;"
-            >
-              Username
-            </label>
             <div
-              class="MuiInputBase-root MuiInput-root MuiInput-underline Mui-focused Mui-focused MuiInputBase-formControl MuiInput-formControl"
-              style="font-family: 'DroidSans', Arial, sans-serif;"
+              class="c6"
+              data-testid="protocol-insecure"
             >
-              <input
-                aria-invalid="false"
-                autocomplete="username"
-                class="MuiInputBase-input MuiInput-input"
-                name="username"
-                type="text"
-                value=""
-              />
+              <p
+                class="c7"
+              >
+                Warning: Connection unencrypted
+              </p>
+              <p>
+                The connection to this GSA is not encrypted, allowing anyone listening to the traffic to steal your credentials.
+              </p>
+              <p>
+                Please configure a TLS certificate for the HTTPS service or ask your administrator to do so as soon as possible.
+              </p>
             </div>
           </div>
-        </div>
-        <div
-          class="MuiFormControl-root sc-jSgupP cSAYIk"
-        >
           <div
-            class="MuiFormControl-root MuiTextField-root sc-gKsewC kYJFYx MuiFormControl-marginNormal"
-            grow="1"
+            class="c8"
+          />
+          <div
+            class="c9"
           >
-            <label
-              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated"
-              data-shrink="false"
-              style="font-family: 'DroidSans', Arial, sans-serif;"
+            <h1
+              class="c10"
             >
-              Password
-            </label>
+              Sign in to your account
+            </h1>
             <div
-              class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
-              style="font-family: 'DroidSans', Arial, sans-serif;"
+              class="MuiFormControl-root sc-jSgupP cSAYIk"
             >
-              <input
-                aria-invalid="false"
-                autocomplete="current-password"
-                class="MuiInputBase-input MuiInput-input"
-                name="password"
-                type="password"
-                value=""
-              />
+              <div
+                class="MuiFormControl-root MuiTextField-root sc-gKsewC kYJFYx MuiFormControl-marginNormal"
+                grow="1"
+                tabindex="1"
+              >
+                <label
+                  class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink Mui-focused Mui-focused"
+                  data-shrink="true"
+                  style="font-family: 'DroidSans', Arial, sans-serif;"
+                >
+                  Username
+                </label>
+                <div
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline Mui-focused Mui-focused MuiInputBase-formControl MuiInput-formControl"
+                  style="font-family: 'DroidSans', Arial, sans-serif;"
+                >
+                  <input
+                    aria-invalid="false"
+                    autocomplete="username"
+                    class="MuiInputBase-input MuiInput-input"
+                    name="username"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
             </div>
+            <div
+              class="MuiFormControl-root sc-jSgupP cSAYIk"
+            >
+              <div
+                class="MuiFormControl-root MuiTextField-root sc-gKsewC kYJFYx MuiFormControl-marginNormal"
+                grow="1"
+              >
+                <label
+                  class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated"
+                  data-shrink="false"
+                  style="font-family: 'DroidSans', Arial, sans-serif;"
+                >
+                  Password
+                </label>
+                <div
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                  style="font-family: 'DroidSans', Arial, sans-serif;"
+                >
+                  <input
+                    aria-invalid="false"
+                    autocomplete="current-password"
+                    class="MuiInputBase-input MuiInput-input"
+                    name="password"
+                    type="password"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <button
+              class="sc-dIUggk c11 c12"
+              data-testid="login-button"
+            >
+              Sign In
+            </button>
+          </div>
+          <p
+            class="c7"
+            data-testid="error"
+          >
+            An Error Occurred
+          </p>
+          <div
+            data-testid="guest-login"
+          >
+            <button
+              class="sc-dIUggk c11 c12"
+              data-testid="guest-login-button"
+            >
+              Sign In as Guest
+            </button>
+          </div>
+          <div
+            class="c3"
+          >
+            <a
+              href="https://www.greenbone.net"
+              rel="noopener"
+              target="_blank"
+            >
+              <img
+                alt="Powered By Greenbone Networks"
+                src="greenbone-power.svg"
+              />
+            </a>
           </div>
         </div>
-        <button
-          class="sc-dIUggk c8 c9"
-          data-testid="login-button"
-        >
-          Login
-        </button>
-      </div>
-      <p
-        class="c5"
-        data-testid="error"
-      >
-        An Error Occurred
-      </p>
-      <div
-        data-testid="guest-login"
-      >
-        <button
-          class="sc-dIUggk c8 c9"
-          data-testid="guest-login-button"
-        >
-          Login as Guest
-        </button>
       </div>
     </div>
   </div>
