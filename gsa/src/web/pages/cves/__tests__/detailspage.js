@@ -129,9 +129,8 @@ describe('CVE Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Export CVE');
 
-    expect(baseElement).toHaveTextContent('CVE: foo');
+    expect(baseElement).toHaveTextContent('CVE: CVE-314');
 
-    expect(baseElement).toHaveTextContent('CVE-314');
     expect(baseElement).toHaveTextContent(
       'Published:Mon, Aug 17, 2020 12:18 PM UTC',
     );

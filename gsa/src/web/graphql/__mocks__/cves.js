@@ -27,7 +27,7 @@ import {
 
 export const cveEntity = deepFreeze({
   id: 'CVE-314',
-  name: 'foo',
+  name: 'CVE-314',
   comment: 'Funny Bug',
   owner: null,
   writable: false,
@@ -95,8 +95,7 @@ export const cveEntity = deepFreeze({
       reference: 'bar baz',
     },
   ],
-  description:
-    'An information disclosure issue was addressed with improved state management. This issue is fixed in macOS Catalina 10.15.6, watchOS 6.2.8. A malicious application may disclose restricted memory.',
+  description: 'foo bar baz',
   products: ['cpe:/o:ab:c cpe:/o:a:bc'],
 });
 
