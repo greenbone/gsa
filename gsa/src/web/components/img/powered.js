@@ -20,11 +20,11 @@ import React from 'react';
 
 import Logo from 'web/components/icon/svg/greenbone-power.svg';
 
-const GreenbonePowerLogo = props => (
+const PoweredByGreenbone = props => (
   // eslint-disable-next-line react/jsx-no-target-blank
   <a href="https://www.greenbone.net" target="_blank" rel="noopener">
     <img alt="Powered By Greenbone Networks" {...props} src={Logo} />
   </a>
 );
 
-export default GreenbonePowerLogo;
+export default PoweredByGreenbone;

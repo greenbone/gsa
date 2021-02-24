@@ -30,7 +30,7 @@ import Layout from 'web/components/layout/layout';
 import ProductImage from 'web/components/img/product';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-import GreenbonePowerLogo from 'web/components/img/powered';
+import PoweredByGreenbone from 'web/components/img/powered';
 import Divider from 'web/components/layout/divider';
 import useFormValues from 'web/components/form/useFormValues';
 
@@ -187,7 +187,7 @@ const LoginForm = ({
           </div>
         )}
         <Layout align={'center'}>
-          <GreenbonePowerLogo />
+          <PoweredByGreenbone />
         </Layout>
       </Divider>
     </Paper>
