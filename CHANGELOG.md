@@ -11,7 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Implement cves listpage queries and mutations [#2742](https://github.com/greenbone/gsa/pull/2742)
 - Implement override mutations and refactor component to function [#2750](https://github.com/greenbone/gsa/pull/2750)
-- Implement audit detailspage queries and mutations [#2728](https://github.com/greenbone/gsa/pull/2728)
+- Implement the usage of graphql for cpes [#2739](https://github.com/greenbone/gsa/pull/2739)
+- Implement the usage of graphql for cves [#2734](https://github.com/greenbone/gsa/pull/2734)
 - Implement audit component queries [#2738](https://github.com/greenbone/gsa/pull/2738)
 - Implement audit detailspage queries and mutations [#2728](https://github.com/greenbone/gsa/pull/2728)
 - Implement the usage of graphql for notes [#2721](https://github.com/greenbone/gsa/pull/2721)
