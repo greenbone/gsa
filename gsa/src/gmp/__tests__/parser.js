@@ -29,6 +29,7 @@ import {
   parseProgressElement,
   parseProperties,
   parseQod,
+  parseScoreToSeverity,
   parseSeverity,
   parseXmlEncodedString,
   parseText,
@@ -61,6 +62,7 @@ describe('parseInt tests', () => {
   });
 
   test('should parse int numbers', () => {
+    expect(parseInt(0)).toBe(0);
     expect(parseInt(5)).toBe(5);
     expect(parseInt(-5)).toBe(-5);
   });
@@ -98,23 +100,42 @@ describe('parseSeverity tests', () => {
     expect(parseSeverity('1.1')).toEqual(1.1);
     expect(parseSeverity('5.4')).toEqual(5.4);
   });
+});
+
+describe('parseScoreToSeverity tests', () => {
+  test('should parse int number strings', () => {
+    expect(parseScoreToSeverity('0')).toEqual(0);
+    expect(parseScoreToSeverity('11')).toEqual(1.1);
+    expect(parseScoreToSeverity('54')).toEqual(5.4);
+  });
+
+  test('should parse float number strings', () => {
+    expect(parseScoreToSeverity('0.0')).toEqual(0);
+    expect(parseScoreToSeverity('1.5')).toBeUndefined();
+    expect(parseScoreToSeverity('5.4')).toBeUndefined();
+  });
 
   test('should pass through numbers', () => {
-    expect(parseSeverity(0)).toEqual(0);
-    expect(parseSeverity(1)).toEqual(1);
-    expect(parseSeverity(5)).toEqual(5);
-    expect(parseSeverity(1.1)).toEqual(1.1);
-    expect(parseSeverity(5.4)).toEqual(5.4);
+    expect(parseScoreToSeverity(0)).toEqual(0);
+    expect(parseScoreToSeverity(10)).toEqual(1.0);
+    expect(parseScoreToSeverity(50)).toEqual(5.0);
+    expect(parseScoreToSeverity(1)).toEqual(0.1);
+  });
+
+  test('should not parse float numbers', () => {
+    expect(parseScoreToSeverity(0.0)).toEqual(0);
+    expect(parseScoreToSeverity(1.5)).toBeUndefined();
+    expect(parseScoreToSeverity(5.4)).toBeUndefined();
   });
 
   test('should parse strings as undefined', () => {
-    expect(parseSeverity('abc')).toBeUndefined();
-    expect(parseSeverity('5a')).toBeUndefined();
+    expect(parseScoreToSeverity('abc')).toBeUndefined();
+    expect(parseScoreToSeverity('5a')).toBeUndefined();
   });
 
   test('should parse empty string as undefined', () => {
-    expect(parseSeverity('')).toBeUndefined();
-    expect(parseSeverity(' ')).toBeUndefined();
+    expect(parseScoreToSeverity('')).toBeUndefined();
+    expect(parseScoreToSeverity(' ')).toBeUndefined();
   });
 });
 
