@@ -32,32 +32,33 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent, wait} from 'web/utils/testing';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
+import {createGetAuditsQueryMock} from 'web/graphql/__mocks__/audits';
 
 setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
 
 const lastReport = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-07-10T12:51:27Z',
-    compliance_count: {yes: 4, no: 3, incomplete: 1},
-  },
+  id: '1234',
+  timestamp: '2019-07-10T12:51:27Z',
+  complianceCount: {yes: 4, no: 3, incomplete: 1},
 };
 
-const audit = Audit.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
+const audit = Audit.fromObject({
+  id: '1234',
+  owner: 'admin',
   name: 'foo',
   comment: 'bar',
   status: AUDIT_STATUS.done,
-  alterable: '0',
-  last_report: lastReport,
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: 'id1', name: 'target1'},
+  alterable: false,
+  reports: {
+    lastReport,
+  },
+  permissions: [{name: 'everything'}],
+  target: {id: 'id1', name: 'target1'},
 });
 
 const caps = new Capabilities(['everything']);
@@ -116,24 +117,24 @@ beforeEach(() => {
 describe('AuditPage tests', () => {
   test('should render full AuditPage', async () => {
     const gmp = {
-      audits: {
-        get: getAudits,
-      },
       filters: {
         get: getFilters,
-      },
-      reportformats: {
-        get: getReportFormats,
       },
       settings: {manualUrl, reloadInterval},
       user: {currentSettings, getSetting},
     };
+
+    const [mock, resultFunc] = createGetAuditsQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -145,22 +146,11 @@ describe('AuditPage tests', () => {
       defaultFilterLoadingActions.success('audit', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
-    );
-
     const {baseElement} = render(<AuditPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     expect(baseElement).toMatchSnapshot();
   });
