@@ -33,11 +33,17 @@ import {
   createDeleteAuditQueryMock,
   createExportAuditsByIdsQueryMock,
   createGetAuditsQueryMock,
+  createDeleteAuditsByIdsQueryMock,
+  createDeleteAuditsByFilterQueryMock,
+  createExportAuditsByFilterQueryMock,
 } from '../__mocks__/audits';
 import {
   useCloneAudit,
   useCreateAudit,
   useDeleteAudit,
+  useDeleteAuditsByFilter,
+  useDeleteAuditsByIds,
+  useExportAuditsByFilter,
   useExportAuditsByIds,
   useGetAudit,
   useLazyGetAudits,
@@ -356,6 +362,81 @@ describe('useExportAuditsByIds tests', () => {
 
     render(<ExportAuditsByIdsComponent />);
     const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteAuditsByIdsComponent = () => {
+  const [deleteAuditsByIds] = useDeleteAuditsByIds();
+  return (
+    <button
+      data-testid="bulk-delete"
+      onClick={() => deleteAuditsByIds(['foo', 'bar'])}
+    />
+  );
+};
+
+describe('useDeleteAuditsByIds tests', () => {
+  test('should delete a list of audits after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteAuditsByIdsQueryMock(['foo', 'bar']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteAuditsByIdsComponent />);
+    const button = screen.getByTestId('bulk-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteAuditsByFilterComponent = () => {
+  const [deleteAuditsByFilter] = useDeleteAuditsByFilter();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deleteAuditsByFilter('foo')}
+    />
+  );
+};
+
+describe('useDeleteAuditsByFilter tests', () => {
+  test('should delete a list of audits by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteAuditsByFilterQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteAuditsByFilterComponent />);
+    const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportAuditsByFilterComponent = () => {
+  const exportAuditsByFilter = useExportAuditsByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportAuditsByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportAuditsByFilter tests', () => {
+  test('should export a list of audits by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportAuditsByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportAuditsByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
     fireEvent.click(button);
 
     await wait();
