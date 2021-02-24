@@ -26,7 +26,9 @@ import {
 import {
   CLONE_AUDIT,
   CREATE_AUDIT,
+  DELETE_AUDITS_BY_FILTER,
   DELETE_AUDITS_BY_IDS,
+  EXPORT_AUDITS_BY_FILTER,
   EXPORT_AUDITS_BY_IDS,
   GET_AUDIT,
   GET_AUDITS,
@@ -493,3 +495,36 @@ export const createGetAuditQueryMock = (
   auditId = '657',
   audit = detailsMockAudit,
 ) => createGenericQueryMock(GET_AUDIT, {audit}, {id: auditId});
+
+const bulkDeleteByIdsResult = {
+  deleteAuditsByIds: {
+    ok: true,
+  },
+};
+
+export const createDeleteAuditsByIdsQueryMock = (auditIds = ['657']) =>
+  createGenericQueryMock(DELETE_AUDITS_BY_IDS, bulkDeleteByIdsResult, {
+    ids: auditIds,
+  });
+
+const bulkDeleteByFilterResult = {
+  deleteAuditsByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeleteAuditsByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(DELETE_AUDITS_BY_FILTER, bulkDeleteByFilterResult, {
+    filterString,
+  });
+
+const exportAuditsByFilterResult = {
+  exportAuditsByFilter: {
+    exportedEntities: '<get_tasks_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportAuditsByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(EXPORT_AUDITS_BY_FILTER, exportAuditsByFilterResult, {
+    filterString,
+  });
