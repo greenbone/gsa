@@ -25,7 +25,9 @@ import SeverityBar from 'web/components/bar/severitybar';
 
 import DateTime from 'web/components/date/datetime';
 
-import Layout from 'web/components/layout/layout';
+import DetailsLink from 'web/components/link/detailslink';
+
+import Layout from 'web/components/layout/layout.js';
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
@@ -36,8 +38,9 @@ import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
 
-const CpeDetails = ({entity}) => {
+const CpeDetails = ({entity, links = true}) => {
   const {title, nvdId, deprecatedBy, updateTime, status, severity} = entity;
+
   return (
     <Layout flex="column" grow="1">
       {!isDefined(title) && (
@@ -70,7 +73,11 @@ const CpeDetails = ({entity}) => {
           {isDefined(deprecatedBy) && (
             <TableRow>
               <TableData>{_('Deprecated By')}</TableData>
-              <TableData>{deprecatedBy}</TableData>
+              <TableData>
+                <DetailsLink id={deprecatedBy} type="cpe" textOnly={!links}>
+                  {deprecatedBy}
+                </DetailsLink>
+              </TableData>
             </TableRow>
           )}
           {isDefined(updateTime) && (
@@ -103,6 +110,7 @@ const CpeDetails = ({entity}) => {
 
 CpeDetails.propTypes = {
   entity: PropTypes.model.isRequired,
+  links: PropTypes.bool,
 };
 
 export default CpeDetails;
