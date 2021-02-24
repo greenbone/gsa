@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2021 Greenbone Networks GmbH
+/* Copyright (C) 2017-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -18,36 +18,13 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
+import Logo from 'web/components/icon/svg/greenbone-power.svg';
 
-import _ from 'gmp/locale';
+const PoweredByGreenbone = props => (
+  // eslint-disable-next-line react/jsx-no-target-blank
+  <a href="https://www.greenbone.net" target="_blank" rel="noopener">
+    <img alt="Powered By Greenbone Networks" {...props} src={Logo} />
+  </a>
+);
 
-import {isDefined} from 'gmp/utils/identity';
-
-import useGmp from 'web/utils/useGmp';
-
-import Img from './img';
-
-const Image = styled(Img)`
-  display: flex;
-  height: 180px;
-`;
-
-const ProductImage = props => {
-  const {settings} = useGmp();
-  return (
-    <Image
-      alt={_('Greenbone Security Assistant')}
-      {...props}
-      src={
-        isDefined(settings) && isDefined(settings.vendorLabel)
-          ? settings.vendorLabel
-          : 'login-label.png'
-      }
-    />
-  );
-};
-
-export default ProductImage;
-
-// vim: set ts=2 sw=2 tw=80:
+export default PoweredByGreenbone;
