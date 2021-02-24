@@ -113,6 +113,54 @@ describe('AuditPage tests', () => {
     expect(resultFunc).toHaveBeenCalled();
 
     expect(baseElement).toMatchSnapshot();
+
+    const inputs = baseElement.querySelectorAll('input');
+    const selects = screen.getAllByTestId('select-selected-value');
+
+    // Toolbar Icons
+    expect(screen.getAllByTitle('Help: Audits')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('New Audit')[0]).toBeInTheDocument();
+
+    // Powerfilter
+    expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
+    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Reset to Default Filter')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
+    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
+    expect(selects[0]).toHaveTextContent('--');
+
+    // Table
+    const header = baseElement.querySelectorAll('th');
+
+    expect(header[0]).toHaveTextContent('Name');
+    expect(header[1]).toHaveTextContent('Status');
+    expect(header[2]).toHaveTextContent('Report');
+    expect(header[3]).toHaveTextContent('Compliance Status');
+    expect(header[4]).toHaveTextContent('Actions');
+
+    const row = baseElement.querySelectorAll('tr');
+
+    expect(row[1]).toHaveTextContent('foo');
+    expect(row[1]).toHaveTextContent('(bar)');
+
+    expect(
+      screen.getAllByTitle(
+        'View Details of Schedule schedule 1 (Next due: over)',
+      )[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Audit is scheduled')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Move Audit to trashcan')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Edit Audit')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Clone Audit')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Export Audit')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Report download not available')[0],
+    ).toBeInTheDocument();
   });
 
   test('should allow to bulk action on page contents', async () => {
