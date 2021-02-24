@@ -196,7 +196,7 @@ describe('useGetCve tests', () => {
     expect(screen.getByTestId('cve')).toBeInTheDocument();
 
     expect(screen.getByTestId('id')).toHaveTextContent('CVE-314');
-    expect(screen.getByTestId('name')).toHaveTextContent('foo');
+    expect(screen.getByTestId('name')).toHaveTextContent('CVE-314');
   });
 });
 

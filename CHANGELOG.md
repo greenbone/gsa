@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Implement cves listpage queries and mutations [#2742](https://github.com/greenbone/gsa/pull/2742)
 - Implement override mutations and refactor component to function [#2750](https://github.com/greenbone/gsa/pull/2750)
 - Implement the usage of graphql for cpes [#2739](https://github.com/greenbone/gsa/pull/2739)
 - Implement the usage of graphql for cves [#2734](https://github.com/greenbone/gsa/pull/2734)
