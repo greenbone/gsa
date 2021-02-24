@@ -25,11 +25,33 @@ import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import Row from '../row';
 
 setLocale('en');
+
+let handleAuditClone;
+let handleAuditDelete;
+let handleAuditDownload;
+let handleAuditEdit;
+let handleAuditResume;
+let handleAuditStart;
+let handleAuditStop;
+let handleReportDownload;
+let handleToggleDetailsClick;
+
+beforeEach(() => {
+  handleAuditClone = jest.fn();
+  handleAuditDelete = jest.fn();
+  handleAuditDownload = jest.fn();
+  handleAuditEdit = jest.fn();
+  handleAuditResume = jest.fn();
+  handleAuditStart = jest.fn();
+  handleAuditStop = jest.fn();
+  handleReportDownload = jest.fn();
+  handleToggleDetailsClick = jest.fn();
+});
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -66,16 +88,6 @@ describe('Audit Row tests', () => {
       target: {id: '5678', name: 'target'},
       usageType: 'audit',
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -130,18 +142,21 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveTextContent('50%');
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Start');
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
-    expect(icons[6]).toHaveAttribute(
-      'title',
-      'Download Greenbone Compliance Report',
-    );
+    expect(screen.getAllByTitle('Start')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Audit is not stopped')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Move Audit to trashcan')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Audit is not stopped')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Move Audit to trashcan')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Edit Audit')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Clone Audit')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Export Audit')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Download Greenbone Compliance Report')[0],
+    ).toBeInTheDocument();
   });
 
   test('should render icons', () => {
@@ -168,16 +183,6 @@ describe('Audit Row tests', () => {
         groups: [{name: 'ipsum'}, {name: 'dolor'}],
       },
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -206,13 +211,14 @@ describe('Audit Row tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
+    expect(screen.getAllByTitle('Audit is alterable')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Audit is configured to run on sensor scanner')[0],
+    ).toBeInTheDocument();
+    // expect(screen.getAllByTitle('Audit made visible for:\nUsers anon, nymous\nRoles lorem\nGroups ipsum, dolor')[0]).toBeInTheDocument();
 
-    expect(icons[0]).toHaveAttribute('title', 'Audit is alterable');
-    expect(icons[1]).toHaveAttribute(
-      'title',
-      'Audit is configured to run on sensor scanner',
-    );
+    const icons = getAllByTestId('svg-icon'); // somehow screen.getAllByTitle does not work for the observer icon title...
+
     expect(icons[2]).toHaveAttribute(
       'title',
       'Audit made visible for:\nUsers anon, nymous\nRoles lorem\nGroups ipsum, dolor',
@@ -231,16 +237,6 @@ describe('Audit Row tests', () => {
       target: {id: 'id', name: 'target'},
       usageType: 'audit',
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -285,35 +281,42 @@ describe('Audit Row tests', () => {
     // because there is no compliance status bar yet
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getAllByTitle('Start');
+    expect(startIcon[0]).toBeInTheDocument();
+    fireEvent.click(startIcon[0]);
     expect(handleAuditStart).toHaveBeenCalledWith(audit);
-    expect(icons[0]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getAllByTitle('Audit is not stopped');
+    expect(resumeIcon[0]).toBeInTheDocument();
+    fireEvent.click(resumeIcon[0]);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getAllByTitle('Move Audit to trashcan');
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
     expect(handleAuditDelete).toHaveBeenCalledWith(audit);
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getAllByTitle('Edit Audit');
+    expect(editIcon[0]).toBeInTheDocument();
+    fireEvent.click(editIcon[0]);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getAllByTitle('Clone Audit');
+    expect(cloneIcon[0]).toBeInTheDocument();
+    fireEvent.click(cloneIcon[0]);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getAllByTitle('Export Audit');
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const reportDownloadIcon = screen.getAllByTitle(
+      'Report download not available',
+    );
+    expect(reportDownloadIcon[0]).toBeInTheDocument();
+    fireEvent.click(reportDownloadIcon[0]);
     expect(handleReportDownload).not.toHaveBeenCalled();
-    expect(icons[6]).toHaveAttribute('title', 'Report download not available');
   });
 
   test('should call click handlers for running audit', () => {
@@ -332,16 +335,6 @@ describe('Audit Row tests', () => {
       target: {id: 'id', name: 'target'},
       usageType: 'audit',
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -395,35 +388,42 @@ describe('Audit Row tests', () => {
     // because there is no compliance status bar yet
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const stopIcon = screen.getAllByTitle('Stop');
+    expect(stopIcon[0]).toBeInTheDocument();
+    fireEvent.click(stopIcon[0]);
     expect(handleAuditStart).not.toHaveBeenCalled();
-    expect(icons[0]).toHaveAttribute('title', 'Stop');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getAllByTitle('Audit is not stopped');
+    expect(resumeIcon[0]).toBeInTheDocument();
+    fireEvent.click(resumeIcon[0]);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getAllByTitle('Audit is still in use');
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
     expect(handleAuditDelete).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Audit is still in use');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getAllByTitle('Edit Audit');
+    expect(editIcon[0]).toBeInTheDocument();
+    fireEvent.click(editIcon[0]);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getAllByTitle('Clone Audit');
+    expect(cloneIcon[0]).toBeInTheDocument();
+    fireEvent.click(cloneIcon[0]);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getAllByTitle('Export Audit');
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
+    const reportDownloadIcon = screen.getAllByTitle(
+      'Report download not available',
+    );
+    expect(reportDownloadIcon[0]).toBeInTheDocument();
+    fireEvent.click(reportDownloadIcon[0]);
     expect(handleReportDownload).not.toHaveBeenCalled();
-    expect(icons[6]).toHaveAttribute('title', 'Report download not available');
   });
 
   test('should call click handlers for stopped audit', () => {
@@ -442,16 +442,6 @@ describe('Audit Row tests', () => {
       target: {id: 'id', name: 'target'},
       usageType: 'audit',
     });
-
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -505,38 +495,42 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveTextContent('50%');
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getAllByTitle('Start');
+    expect(startIcon[0]).toBeInTheDocument();
+    fireEvent.click(startIcon[0]);
     expect(handleAuditStart).toHaveBeenCalledWith(audit);
-    expect(icons[0]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[1]);
-    expect(handleAuditResume).toHaveBeenCalledWith(audit);
-    expect(icons[1]).toHaveAttribute('title', 'Resume');
+    const resumeIcon = screen.getAllByTitle('Resume');
+    expect(resumeIcon[0]).toBeInTheDocument();
+    fireEvent.click(resumeIcon[0]);
+    expect(handleAuditResume).toHaveBeenCalled();
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getAllByTitle('Move Audit to trashcan');
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
     expect(handleAuditDelete).toHaveBeenCalledWith(audit);
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getAllByTitle('Edit Audit');
+    expect(editIcon[0]).toBeInTheDocument();
+    fireEvent.click(editIcon[0]);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getAllByTitle('Clone Audit');
+    expect(cloneIcon[0]).toBeInTheDocument();
+    fireEvent.click(cloneIcon[0]);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getAllByTitle('Export Audit');
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
-    expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute(
-      'title',
+    const reportDownloadIcon = screen.getAllByTitle(
       'Download Greenbone Compliance Report',
     );
+    expect(reportDownloadIcon[0]).toBeInTheDocument();
+    fireEvent.click(reportDownloadIcon[0]);
+    expect(handleReportDownload).toHaveBeenCalledWith(audit);
   });
 
   test('should call click handlers for finished audit', () => {
@@ -555,16 +549,6 @@ describe('Audit Row tests', () => {
       usageType: 'audit',
     });
 
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: caps,
@@ -617,38 +601,42 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveTextContent('50%');
 
     // Actions
-    const icons = getAllByTestId('svg-icon');
-
-    fireEvent.click(icons[0]);
+    const startIcon = screen.getAllByTitle('Start');
+    expect(startIcon[0]).toBeInTheDocument();
+    fireEvent.click(startIcon[0]);
     expect(handleAuditStart).toHaveBeenCalledWith(audit);
-    expect(icons[0]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[1]);
+    const resumeIcon = screen.getAllByTitle('Audit is not stopped');
+    expect(resumeIcon[0]).toBeInTheDocument();
+    fireEvent.click(resumeIcon[0]);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[2]);
+    const deleteIcon = screen.getAllByTitle('Move Audit to trashcan');
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
     expect(handleAuditDelete).toHaveBeenCalledWith(audit);
-    expect(icons[2]).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    fireEvent.click(icons[3]);
+    const editIcon = screen.getAllByTitle('Edit Audit');
+    expect(editIcon[0]).toBeInTheDocument();
+    fireEvent.click(editIcon[0]);
     expect(handleAuditEdit).toHaveBeenCalledWith(audit);
-    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
 
-    fireEvent.click(icons[4]);
+    const cloneIcon = screen.getAllByTitle('Clone Audit');
+    expect(cloneIcon[0]).toBeInTheDocument();
+    fireEvent.click(cloneIcon[0]);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[4]).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[5]);
+    const exportIcon = screen.getAllByTitle('Export Audit');
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[6]);
-    expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute(
-      'title',
+    const reportDownloadIcon = screen.getAllByTitle(
       'Download Greenbone Compliance Report',
     );
+    expect(reportDownloadIcon[0]).toBeInTheDocument();
+    fireEvent.click(reportDownloadIcon[0]);
+    expect(handleReportDownload).toHaveBeenCalledWith(audit);
   });
 
   test('should not call click handlers for audit without permission', () => {
@@ -667,16 +655,6 @@ describe('Audit Row tests', () => {
       usageType: 'audit',
     });
 
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: caps,
@@ -709,8 +687,7 @@ describe('Audit Row tests', () => {
     fireEvent.click(spans[0]);
     expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
-    const icons = getAllByTestId('svg-icon');
-    expect(icons[0]).toHaveAttribute('title', 'Audit owned by user');
+    expect(screen.getAllByTitle('Audit owned by user')[0]).toBeInTheDocument();
 
     // Status
     const bars = getAllByTestId('progressbar-box');
@@ -732,45 +709,44 @@ describe('Audit Row tests', () => {
     expect(bars[1]).toHaveTextContent('50%');
 
     // Actions
-    fireEvent.click(icons[1]);
+    const startIcon = screen.getAllByTitle('Permission to start audit denied');
+    expect(startIcon[0]).toBeInTheDocument();
+    fireEvent.click(startIcon[0]);
     expect(handleAuditStart).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute(
-      'title',
-      'Permission to start audit denied',
-    );
 
-    fireEvent.click(icons[2]);
+    const resumeIcon = screen.getAllByTitle('Audit is not stopped');
+    expect(resumeIcon[0]).toBeInTheDocument();
+    fireEvent.click(resumeIcon[0]);
     expect(handleAuditResume).not.toHaveBeenCalled();
-    expect(icons[2]).toHaveAttribute('title', 'Audit is not stopped');
 
-    fireEvent.click(icons[3]);
-    expect(handleAuditDelete).not.toHaveBeenCalled();
-    expect(icons[3]).toHaveAttribute(
-      'title',
+    const deleteIcon = screen.getAllByTitle(
       'Permission to move Audit to trashcan denied',
     );
+    expect(deleteIcon[0]).toBeInTheDocument();
+    fireEvent.click(deleteIcon[0]);
+    expect(handleAuditDelete).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getAllByTitle('Permission to edit Audit denied');
+    expect(editIcon[0]).toBeInTheDocument();
+    fireEvent.click(editIcon[0]);
     expect(handleAuditEdit).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute(
-      'title',
-      'Permission to edit Audit denied',
-    );
 
-    fireEvent.click(icons[5]);
+    const cloneIcon = screen.getAllByTitle('Clone Audit');
+    expect(cloneIcon[0]).toBeInTheDocument();
+    fireEvent.click(cloneIcon[0]);
     expect(handleAuditClone).toHaveBeenCalledWith(audit);
-    expect(icons[5]).toHaveAttribute('title', 'Clone Audit');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getAllByTitle('Export Audit');
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
     expect(handleAuditDownload).toHaveBeenCalledWith(audit);
-    expect(icons[6]).toHaveAttribute('title', 'Export Audit');
 
-    fireEvent.click(icons[7]);
-    expect(handleReportDownload).toHaveBeenCalledWith(audit);
-    expect(icons[7]).toHaveAttribute(
-      'title',
+    const reportDownloadIcon = screen.getAllByTitle(
       'Download Greenbone Compliance Report',
     );
+    expect(reportDownloadIcon[0]).toBeInTheDocument();
+    fireEvent.click(reportDownloadIcon[0]);
+    expect(handleReportDownload).toHaveBeenCalledWith(audit);
   });
 
   console.warn = consoleError;
