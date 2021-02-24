@@ -148,6 +148,7 @@ describe('CPE Detailspage tests', () => {
 
     // test page content
     expect(baseElement).toHaveTextContent('StatusFINAL');
+    expect(baseElement).toHaveTextContent('Deprecated Bycpe:/a:foo:bar');
 
     // severity bar(s)
     const progressBars = getAllByTestId('progressbar-box');
