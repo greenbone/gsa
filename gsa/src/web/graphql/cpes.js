@@ -55,6 +55,7 @@ export const GET_CPE = gql`
         id
         severity
       }
+      deprecatedBy
       score
       status
     }
@@ -94,6 +95,7 @@ export const GET_CPES = gql`
             id
             severity
           }
+          deprecatedBy
           score
           status
         }
