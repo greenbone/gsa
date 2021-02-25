@@ -39,6 +39,7 @@ const Paper = styled(Layout)`
   box-shadow: 0px 14px 22px ${Theme.mediumGray};
   padding: 4rem;
   width: 30rem;
+  z-index: ${Theme.Layers.higher};
 `;
 
 const Panel = styled.div`
