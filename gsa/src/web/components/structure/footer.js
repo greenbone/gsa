@@ -25,7 +25,7 @@ import Theme from 'web/utils/theme';
 const Link = styled.a`
   color: ${Theme.mediumGray};
   &:link {
-    color: ${Theme.green};
+    color: ${Theme.mediumGray};
   }
 `;
 
