@@ -63,8 +63,20 @@ export const GET_CPE = gql`
 `;
 
 export const GET_CPES = gql`
-  query Cpes($filterString: FilterString) {
-    cpes(filterString: $filterString) {
+  query Cpes(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    cpes(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
       edges {
         node {
           id
