@@ -65,13 +65,14 @@ import usePageFilter from 'web/utils/usePageFilter';
 import usePrevious from 'web/utils/usePrevious';
 import useSelection from 'web/utils/useSelection';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import withCapabilities from 'web/utils/withCapabilities';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import AuditComponent from './component';
 import Table from './table';
 
-export const ToolBarIcons = withCapabilities(
-  ({capabilities, onAuditCreateClick}) => (
+export const ToolBarIcons = ({onAuditCreateClick}) => {
+  const capabilities = useCapabilities();
+  return (
     <IconDivider>
       <ManualIcon
         page="compliance-and-special-scans"
@@ -82,8 +83,8 @@ export const ToolBarIcons = withCapabilities(
         <NewIcon title={_('New Audit')} onClick={onAuditCreateClick} />
       )}
     </IconDivider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
   onAuditCreateClick: PropTypes.func.isRequired,
