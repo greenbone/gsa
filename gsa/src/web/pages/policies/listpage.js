@@ -19,7 +19,7 @@ import React, {useCallback, useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
-import {RESET_FILTER, SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
+import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {hasValue} from 'gmp/utils/identity';
 
@@ -42,12 +42,7 @@ import {
   useBulkExportEntities,
 } from 'web/entities/bulkactions';
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
-import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/policies';
+import usePagination from 'web/entities/usePagination';
 
 import useExportEntity from 'web/entity/useExportEntity';
 
@@ -129,7 +124,7 @@ const PoliciesPage = props => {
   // Policy list state variables and methods
   const [
     getPolicies,
-    {counts, policies, error, loading: isLoading, refetch, called}, // like scan configs, pagination doesn't work with usePagination
+    {counts, policies, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetPolicies();
 
   const exportEntity = useExportEntity();
@@ -153,6 +148,13 @@ const PoliciesPage = props => {
     refetch,
     timeoutFunc,
   );
+
+  const [getFirst, getLast, getNext, getPrevious] = usePagination({
+    simpleFilter,
+    filter,
+    pageInfo,
+    refetch,
+  });
 
   // Policy methods
   const handleDownloadPolicy = exportedPolicy => {
@@ -274,6 +276,10 @@ const PoliciesPage = props => {
             onFilterCreated={changeFilter}
             onFilterReset={resetFilter}
             onFilterRemoved={removeFilter}
+            onFirstClick={getFirst}
+            onLastClick={getLast}
+            onNextClick={getNext}
+            onPreviousClick={getPrevious}
             onInteraction={renewSessionTimeout}
             onPolicyImportClick={importFunc}
             onPolicyCloneClick={handleClonePolicy}
@@ -295,10 +301,6 @@ const PoliciesPage = props => {
   );
 };
 
-export default withEntitiesContainer('policy', {
-  entitiesSelector,
-  loadEntities,
-  defaultFilter: RESET_FILTER,
-})(PoliciesPage);
+export default PoliciesPage;
 
 // vim: set ts=2 sw=2 tw=80:
