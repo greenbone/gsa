@@ -93,8 +93,20 @@ export const GET_CVE = gql`
 `;
 
 export const GET_CVES = gql`
-  query Cves($filterString: FilterString) {
-    cves(filterString: $filterString) {
+  query Cves(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    cves(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
       edges {
         node {
           id
