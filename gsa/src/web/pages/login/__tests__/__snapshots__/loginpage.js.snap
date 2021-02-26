@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LoginPage tests should render Loginpage 1`] = `
-.c4 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -15,7 +15,7 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   justify-content: center;
 }
 
-.c6 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -33,7 +33,7 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   align-items: stretch;
 }
 
-.c9 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -51,7 +51,7 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   align-items: center;
 }
 
-.c3 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -74,18 +74,18 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   margin-top: -10px;
 }
 
-.c3 > * {
+.c5 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c3 > * {
+.c5 > * {
   margin-top: 10px;
 }
 
-.c2 {
+.c4 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -111,15 +111,15 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   display: inline-flex;
 }
 
-.c15 {
+.c17 {
   color: #787878;
 }
 
-.c15:link {
-  color: #66c430;
+.c17:link {
+  color: #787878;
 }
 
-.c14 {
+.c16 {
   position: fixed;
   bottom: 0;
   right: 0;
@@ -133,7 +133,7 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   z-index: 500;
 }
 
-.c5 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -141,7 +141,7 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   height: 180px;
 }
 
-.c1 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -159,11 +159,13 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   align-items: center;
   background: #fff;
   box-shadow: 0px 14px 22px #787878;
+  border-radius: 3px;
   padding: 4rem;
   width: 30rem;
+  z-index: 1;
 }
 
-.c10 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -186,14 +188,14 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   justify-content: space-evenly;
 }
 
-.c8 {
+.c10 {
   color: #d83636;
   font-weight: bold;
   text-align: center;
   margin: 10px;
 }
 
-.c13 {
+.c15 {
   box-sizing: border-box;
   color: white;
   background-color: text:white;
@@ -212,16 +214,16 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   width: 100%;
 }
 
-.c13:hover {
+.c15:hover {
   cursor: pointer;
   background-color: #212121;
 }
 
-.c13 + .c12 {
+.c15 + .c14 {
   margin-left: 1.25rem;
 }
 
-.c7 {
+.c9 {
   margin: 5px auto;
   padding-bottom: 10px;
   font-size: 9pt;
@@ -231,7 +233,7 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   margin-top: 20px;
 }
 
-.c11 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -258,7 +260,7 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  background: #c8d3d9;
+  background: radial-gradient( 51.84% 102.52% at 58.54% 44.97%, #baed81 0%, #66c430 67.26% );
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
@@ -273,6 +275,18 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   height: 100vh;
 }
 
+.c1 {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+.c2 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
 <body>
   <div
     id="portals"
@@ -281,34 +295,44 @@ exports[`LoginPage tests should render Loginpage 1`] = `
     <div
       class="c0"
     >
-      <div
+      <img
+        alt=""
         class="c1"
+        src="/img/login-top.svg"
+      />
+      <img
+        alt=""
+        class="c2"
+        src="/img/login-bottom.svg"
+      />
+      <div
+        class="c3"
       >
         <div
-          class="c2"
+          class="c4"
         >
           <div
-            class="c3"
+            class="c5"
             margin="10px"
           >
             <div
-              class="c4"
+              class="c6"
             >
               <img
                 alt="Greenbone Security Assistant"
-                class="c5"
+                class="c7"
                 src="/img/login-label.png"
               />
             </div>
             <div
-              class="c6"
+              class="c8"
             >
               <div
-                class="c7"
+                class="c9"
                 data-testid="protocol-insecure"
               >
                 <p
-                  class="c8"
+                  class="c10"
                 >
                   Warning: Connection unencrypted
                 </p>
@@ -321,13 +345,13 @@ exports[`LoginPage tests should render Loginpage 1`] = `
               </div>
             </div>
             <div
-              class="c9"
+              class="c11"
             />
             <div
-              class="c10"
+              class="c12"
             >
               <h1
-                class="c11"
+                class="c13"
               >
                 Sign in to your account
               </h1>
@@ -391,14 +415,14 @@ exports[`LoginPage tests should render Loginpage 1`] = `
                 </div>
               </div>
               <button
-                class="sc-dIUggk c12 c13"
+                class="sc-dIUggk c14 c15"
                 data-testid="login-button"
               >
                 Sign In
               </button>
             </div>
             <div
-              class="c4"
+              class="c6"
             >
               <a
                 href="https://www.greenbone.net"
@@ -415,11 +439,11 @@ exports[`LoginPage tests should render Loginpage 1`] = `
         </div>
       </div>
       <footer
-        class="c14"
+        class="c16"
       >
         Greenbone Security Assistant (GSA) Copyright (C) 2009-2021 by Greenbone Networks GmbH, 
         <a
-          class="c15"
+          class="c17"
           href="http://www.greenbone.net"
           rel="noopener noreferrer"
           target="_blank"
