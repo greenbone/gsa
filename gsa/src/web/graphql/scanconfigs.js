@@ -97,8 +97,20 @@ export const GET_SCAN_CONFIG = gql`
 `;
 
 export const GET_SCAN_CONFIGS = gql`
-  query ScanConfigs($filterString: FilterString) {
-    scanConfigs(filterString: $filterString) {
+  query ScanConfigs(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    scanConfigs(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
       edges {
         node {
           id

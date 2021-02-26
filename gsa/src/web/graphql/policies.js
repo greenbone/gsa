@@ -89,8 +89,20 @@ export const GET_POLICY = gql`
 `;
 
 export const GET_POLICIES = gql`
-  query Policies($filterString: FilterString) {
-    policies(filterString: $filterString) {
+  query Policies(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    policies(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
       edges {
         node {
           id

@@ -1838,12 +1838,6 @@ exports[`ScanConfigsPage tests should call commands for bulk actions 1`] = `
     >
       Download
     </a>
-    <a
-      aria-hidden="true"
-      style="display: none;"
-    >
-      Download
-    </a>
   </div>
 </body>
 `;
@@ -3556,12 +3550,6 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
         </div>
       </section>
     </div>
-    <a
-      aria-hidden="true"
-      style="display: none;"
-    >
-      Download
-    </a>
     <a
       aria-hidden="true"
       style="display: none;"

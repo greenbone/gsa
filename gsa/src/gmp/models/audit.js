@@ -126,6 +126,8 @@ class Audit extends Model {
           copy.reports[name] = Report.fromObject(report);
         }
       });
+    } else {
+      copy.reports = {};
     }
 
     if (hasValue(object.target)) {

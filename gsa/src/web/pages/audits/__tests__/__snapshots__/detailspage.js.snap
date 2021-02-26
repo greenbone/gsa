@@ -1082,9 +1082,10 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                     <div
                       class="c28"
                     >
-                      <span
+                      <a
                         class="c6 c33"
                         data-testid="details-link"
+                        href="/report/5678"
                       >
                         <div
                           class="c34"
@@ -1105,7 +1106,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                             </span>
                           </div>
                         </div>
-                      </span>
+                      </a>
                     </div>
                   </td>
                 </tr>
