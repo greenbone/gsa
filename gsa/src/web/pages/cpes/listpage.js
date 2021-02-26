@@ -67,13 +67,14 @@ export const ToolBarIcons = props => (
   <ManualIcon page="managing-secinfo" anchor="cpe" title={_('Help: CPEs')} />
 );
 
+const fallbackFilter = Filter.fromString('sort-reverse=modified');
+
 const CpesPage = () => {
   // Page methods and hooks
   const [downloadRef, handleDownload] = useDownload();
   const [, renewSessionTimeout] = useUserSessionTimeout();
 
   // Powerfilter
-  const fallbackFilter = Filter.fromString('sort-reverse=modified');
   const [filter, isLoadingFilter] = usePageFilter('cpe', {fallbackFilter});
   const prevFilter = usePrevious(filter);
   const simpleFilter = filter.withoutView();
