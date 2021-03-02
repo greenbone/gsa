@@ -73,6 +73,7 @@ const CredentialsDialog = ({
   community = '',
   credential,
   credential_login = '',
+  error,
   name = _('Unnamed'),
   passphrase = '',
   password = '',
@@ -103,13 +104,15 @@ const CredentialsDialog = ({
   };
 
   useEffect(() => {
-    const {credential_type, autogenerate, error} = props;
+    const {credential_type, autogenerate} = props;
     setCredentialTypeAndAutoGenerate(credential_type, autogenerate);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
     if (isDefined(error)) {
       dispatchState(updateState({error}));
     }
-  }, [props]);
+  }, [error]);
 
   const handleCredentialTypeChange = (credential_type, autogenerate) => {
     setCredentialTypeAndAutoGenerate(credential_type, autogenerate);
@@ -136,13 +139,14 @@ const CredentialsDialog = ({
     dispatchState(updateState({error: undefined}));
   };
 
+  // eslint-disable-next-line no-shadow
   const handleError = error => {
     dispatchState(updateState({error: error.message}));
   };
 
   let {credential_type} = state;
 
-  const {autogenerate, public_key, error} = state;
+  const {autogenerate, public_key, error: stateError} = state;
 
   const typeOptions = map(types, type => ({
     label: getCredentialTypeName(type),
@@ -187,7 +191,7 @@ const CredentialsDialog = ({
     <SaveDialog
       title={title}
       defaultValues={data}
-      error={error}
+      error={stateError}
       values={values}
       onErrorClose={handleErrorClose}
       onError={handleError}
