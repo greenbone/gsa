@@ -37,8 +37,10 @@ import useFormValues from 'web/components/form/useFormValues';
 const Paper = styled(Layout)`
   background: ${Theme.white};
   box-shadow: 0px 14px 22px ${Theme.mediumGray};
+  border-radius: 3px;
   padding: 4rem;
   width: 30rem;
+  z-index: ${Theme.Layers.higher};
 `;
 
 const Panel = styled.div`

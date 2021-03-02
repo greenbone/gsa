@@ -6,7 +6,7 @@ exports[`Footer tests should render footer with copyright 1`] = `
 }
 
 .c1:link {
-  color: #66c430;
+  color: #787878;
 }
 
 .c0 {
