@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable react/prop-types */
+import {isDefined} from 'gmp/utils/identity';
+
 import {fireEvent, rendererWith, screen, wait} from 'web/utils/testing';
 
 import {
@@ -26,14 +28,102 @@ import {
   createStartAuditQueryMock,
   createStopAuditQueryMock,
   createResumeAuditQueryMock,
+  createGetAuditQueryMock,
+  createCloneAuditQueryMock,
+  createDeleteAuditQueryMock,
+  createExportAuditsByIdsQueryMock,
+  createGetAuditsQueryMock,
+  createDeleteAuditsByIdsQueryMock,
+  createDeleteAuditsByFilterQueryMock,
+  createExportAuditsByFilterQueryMock,
 } from '../__mocks__/audits';
 import {
+  useCloneAudit,
   useCreateAudit,
+  useDeleteAudit,
+  useDeleteAuditsByFilter,
+  useDeleteAuditsByIds,
+  useExportAuditsByFilter,
+  useExportAuditsByIds,
+  useGetAudit,
+  useLazyGetAudits,
   useModifyAudit,
   useResumeAudit,
   useStartAudit,
   useStopAudit,
 } from '../audits';
+
+const GetLazyAuditsComponent = () => {
+  const [getAudits, {counts, loading, audits}] = useLazyGetAudits();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getAudits()} />
+      {isDefined(counts) ? (
+        <div data-testid="counts">
+          <span data-testid="total">{counts.all}</span>
+          <span data-testid="filtered">{counts.filtered}</span>
+          <span data-testid="first">{counts.first}</span>
+          <span data-testid="limit">{counts.rows}</span>
+          <span data-testid="length">{counts.length}</span>
+        </div>
+      ) : (
+        <div data-testid="no-counts" />
+      )}
+      {isDefined(audits) ? (
+        audits.map(audit => {
+          return (
+            <div key={audit.id} data-testid="audit">
+              {audit.id}
+            </div>
+          );
+        })
+      ) : (
+        <div data-testid="no-audits" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetAudits tests', () => {
+  test('should query audits after user interaction', async () => {
+    const [mock, resultFunc] = createGetAuditsQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazyAuditsComponent />);
+
+    let auditElements = screen.queryAllByTestId('audit');
+    expect(auditElements).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-audits')).toBeInTheDocument();
+    expect(screen.queryByTestId('no-counts')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    auditElements = screen.getAllByTestId('audit');
+    expect(auditElements).toHaveLength(1);
+
+    expect(auditElements[0]).toHaveTextContent('657');
+
+    expect(screen.queryByTestId('no-audits')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('total')).toHaveTextContent(1);
+    expect(screen.getByTestId('filtered')).toHaveTextContent(1);
+    expect(screen.getByTestId('first')).toHaveTextContent(1);
+    expect(screen.getByTestId('limit')).toHaveTextContent(10);
+    expect(screen.getByTestId('length')).toHaveTextContent(1);
+  });
+});
 
 const StartAuditComponent = ({auditId}) => {
   const [startAudit, {reportId}] = useStartAudit();
@@ -156,6 +246,197 @@ describe('useCreateAudit tests', () => {
     render(<CreateAuditComponent data={createAuditInput} />);
 
     const button = screen.getByTestId('create');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const GetAuditComponent = ({id}) => {
+  const {loading, audit, error} = useGetAudit(id);
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      {error && <div data-testid="error">{error.message}</div>}
+      {audit && (
+        <div data-testid="audit">
+          <span data-testid="id">{audit.id}</span>
+          <span data-testid="name">{audit.name}</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+describe('useGetAudit tests', () => {
+  test('should load audit', async () => {
+    const [queryMock, resultFunc] = createGetAuditQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<GetAuditComponent id="657" />);
+
+    expect(screen.queryByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('audit')).toBeInTheDocument();
+
+    expect(screen.getByTestId('id')).toHaveTextContent('657');
+    expect(screen.getByTestId('name')).toHaveTextContent('foo');
+  });
+});
+
+const CloneAuditComponent = () => {
+  const [cloneAudit, {id: auditId}] = useCloneAudit();
+  return (
+    <div>
+      {auditId && <span data-testid="cloned-audit">{auditId}</span>}
+      <button data-testid="clone" onClick={() => cloneAudit('657')} />
+    </div>
+  );
+};
+
+describe('useCloneAudit tests', () => {
+  test('should clone a audit after user interaction', async () => {
+    const [mock, resultFunc] = createCloneAuditQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CloneAuditComponent />);
+
+    const button = screen.getByTestId('clone');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('cloned-audit')).toHaveTextContent('567');
+  });
+});
+
+const DeleteAuditComponent = () => {
+  const [deleteAudit] = useDeleteAudit();
+  return <button data-testid="delete" onClick={() => deleteAudit('657')} />;
+};
+
+describe('useDeleteAudit tests', () => {
+  test('should delete an audit after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteAuditQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteAuditComponent />);
+
+    const button = screen.getByTestId('delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportAuditsByIdsComponent = () => {
+  const exportAuditsByIds = useExportAuditsByIds();
+  return (
+    <button
+      data-testid="bulk-export"
+      onClick={() => exportAuditsByIds(['657'])}
+    />
+  );
+};
+
+describe('useExportAuditsByIds tests', () => {
+  test('should export a list of audits after user interaction', async () => {
+    const [mock, resultFunc] = createExportAuditsByIdsQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportAuditsByIdsComponent />);
+    const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteAuditsByIdsComponent = () => {
+  const [deleteAuditsByIds] = useDeleteAuditsByIds();
+  return (
+    <button
+      data-testid="bulk-delete"
+      onClick={() => deleteAuditsByIds(['foo', 'bar'])}
+    />
+  );
+};
+
+describe('useDeleteAuditsByIds tests', () => {
+  test('should delete a list of audits after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteAuditsByIdsQueryMock(['foo', 'bar']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteAuditsByIdsComponent />);
+    const button = screen.getByTestId('bulk-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const DeleteAuditsByFilterComponent = () => {
+  const [deleteAuditsByFilter] = useDeleteAuditsByFilter();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deleteAuditsByFilter('foo')}
+    />
+  );
+};
+
+describe('useDeleteAuditsByFilter tests', () => {
+  test('should delete a list of audits by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteAuditsByFilterQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteAuditsByFilterComponent />);
+    const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportAuditsByFilterComponent = () => {
+  const exportAuditsByFilter = useExportAuditsByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportAuditsByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportAuditsByFilter tests', () => {
+  test('should export a list of audits by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportAuditsByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportAuditsByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
     fireEvent.click(button);
 
     await wait();

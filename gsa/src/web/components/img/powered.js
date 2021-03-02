@@ -15,31 +15,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {_l} from 'gmp/locale/lang';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
+import React from 'react';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Name'),
-  },
-  {
-    name: 'cvssVector',
-    displayName: _l('CVSS Base Vector'),
-  },
-  {
-    name: 'published',
-    displayName: _l('Published'),
-  },
-  {
-    name: 'severity',
-    displayName: _l('Severity'),
-  },
-];
+import Logo from 'web/components/icon/svg/greenbone-power.svg';
 
-export default createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
+const PoweredByGreenbone = props => (
+  // eslint-disable-next-line react/jsx-no-target-blank
+  <a href="https://www.greenbone.net" target="_blank" rel="noopener">
+    <img alt="Powered By Greenbone Networks" {...props} src={Logo} />
+  </a>
+);
 
-// vim: set ts=2 sw=2 tw=80:
+export default PoweredByGreenbone;

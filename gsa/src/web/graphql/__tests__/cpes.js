@@ -22,28 +22,28 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 import {
-  useLazyGetCves,
-  useLazyGetCve,
-  useGetCve,
-  useExportCvesByIds,
-  useExportCvesByFilter,
-} from '../cves';
+  useLazyGetCpes,
+  useLazyGetCpe,
+  useGetCpe,
+  useExportCpesByIds,
+  useExportCpesByFilter,
+} from '../cpes';
 import {
-  createGetCvesQueryMock,
-  createGetCveQueryMock,
-  createExportCvesByIdsQueryMock,
-  createExportCvesByFilterQueryMock,
-} from '../__mocks__/cves';
+  createGetCpesQueryMock,
+  createGetCpeQueryMock,
+  createExportCpesByIdsQueryMock,
+  createExportCpesByFilterQueryMock,
+} from '../__mocks__/cpes';
 
-const GetLazyCvesComponent = () => {
-  const [getCves, {counts, loading, cves}] = useLazyGetCves();
+const GetLazyCpesComponent = () => {
+  const [getCpes, {counts, loading, cpes}] = useLazyGetCpes();
 
   if (loading) {
     return <span data-testid="loading">Loading</span>;
   }
   return (
     <div>
-      <button data-testid="load" onClick={() => getCves()} />
+      <button data-testid="load" onClick={() => getCpes()} />
       {isDefined(counts) ? (
         <div data-testid="counts">
           <span data-testid="total">{counts.all}</span>
@@ -55,31 +55,31 @@ const GetLazyCvesComponent = () => {
       ) : (
         <div data-testid="no-counts" />
       )}
-      {isDefined(cves) ? (
-        cves.map(cve => {
+      {isDefined(cpes) ? (
+        cpes.map(cpe => {
           return (
-            <div key={cve.id} data-testid="cve">
-              {cve.id}
+            <div key={cpe.id} data-testid="cpe">
+              {cpe.id}
             </div>
           );
         })
       ) : (
-        <div data-testid="no-cves" />
+        <div data-testid="no-cpes" />
       )}
     </div>
   );
 };
 
-describe('useLazyGetCves tests', () => {
-  test('should query cves after user interaction', async () => {
-    const [mock, resultFunc] = createGetCvesQueryMock();
+describe('useLazyGetCpes tests', () => {
+  test('should query cpes after user interaction', async () => {
+    const [mock, resultFunc] = createGetCpesQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
-    render(<GetLazyCvesComponent />);
+    render(<GetLazyCpesComponent />);
 
-    let cveElements = screen.queryAllByTestId('cve');
-    expect(cveElements).toHaveLength(0);
+    let cpeElements = screen.queryAllByTestId('cpe');
+    expect(cpeElements).toHaveLength(0);
 
-    expect(screen.queryByTestId('no-cves')).toBeInTheDocument();
+    expect(screen.queryByTestId('no-cpes')).toBeInTheDocument();
     expect(screen.queryByTestId('no-counts')).toBeInTheDocument();
 
     const button = screen.getByTestId('load');
@@ -92,12 +92,12 @@ describe('useLazyGetCves tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    cveElements = screen.queryAllByTestId('cve');
-    expect(cveElements).toHaveLength(1);
+    cpeElements = screen.queryAllByTestId('cpe');
+    expect(cpeElements).toHaveLength(1);
 
-    expect(cveElements[0]).toHaveTextContent('CVE-314');
+    expect(cpeElements[0]).toHaveTextContent('cpe:/a:foo');
 
-    expect(screen.queryByTestId('no-cves')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('no-cpes')).not.toBeInTheDocument();
 
     await wait();
 
@@ -109,36 +109,36 @@ describe('useLazyGetCves tests', () => {
   });
 });
 
-const GetLazyCveComponent = () => {
-  const [getCve, {cve, loading}] = useLazyGetCve();
+const GetLazyCpeComponent = () => {
+  const [getCpe, {cpe, loading}] = useLazyGetCpe();
 
   if (loading) {
     return <span data-testid="loading">Loading</span>;
   }
   return (
     <div>
-      <button data-testid="load" onClick={() => getCve('CVE-314')} />
-      {isDefined(cve) ? (
-        <div key={cve.id} data-testid="cve">
-          {cve.id}
+      <button data-testid="load" onClick={() => getCpe('cpe:/a:foo')} />
+      {isDefined(cpe) ? (
+        <div key={cpe.id} data-testid="cpe">
+          {cpe.id}
         </div>
       ) : (
-        <div data-testid="no-cve" />
+        <div data-testid="no-cpe" />
       )}
     </div>
   );
 };
 
-describe('useLazyGetCve tests', () => {
-  test('should query cve after user interaction', async () => {
-    const [mock, resultFunc] = createGetCveQueryMock();
+describe('useLazyGetCpe tests', () => {
+  test('should query cpe after user interaction', async () => {
+    const [mock, resultFunc] = createGetCpeQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
-    render(<GetLazyCveComponent />);
+    render(<GetLazyCpeComponent />);
 
-    let cveElement = screen.queryAllByTestId('cve');
-    expect(cveElement).toHaveLength(0);
+    let cpeElement = screen.queryAllByTestId('cpe');
+    expect(cpeElement).toHaveLength(0);
 
-    expect(screen.queryByTestId('no-cve')).toBeInTheDocument();
+    expect(screen.queryByTestId('no-cpe')).toBeInTheDocument();
 
     const button = screen.getByTestId('load');
     fireEvent.click(button);
@@ -150,39 +150,39 @@ describe('useLazyGetCve tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    cveElement = screen.getByTestId('cve');
+    cpeElement = screen.getByTestId('cpe');
 
-    expect(cveElement).toHaveTextContent('CVE-314');
+    expect(cpeElement).toHaveTextContent('cpe:/a:foo');
 
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 });
 
-const GetCveComponent = ({id}) => {
-  const {loading, cve, error} = useGetCve(id);
+const GetCpeComponent = ({id}) => {
+  const {loading, cpe, error} = useGetCpe(id);
   if (loading) {
     return <span data-testid="loading">Loading</span>;
   }
   return (
     <div>
       {error && <div data-testid="error">{error.message}</div>}
-      {cve && (
-        <div data-testid="cve">
-          <span data-testid="id">{cve.id}</span>
-          <span data-testid="name">{cve.name}</span>
+      {cpe && (
+        <div data-testid="cpe">
+          <span data-testid="id">{cpe.id}</span>
+          <span data-testid="name">{cpe.name}</span>
         </div>
       )}
     </div>
   );
 };
 
-describe('useGetCve tests', () => {
-  test('should load cve', async () => {
-    const [queryMock, resultFunc] = createGetCveQueryMock();
+describe('useGetCpe tests', () => {
+  test('should load cpe', async () => {
+    const [queryMock, resultFunc] = createGetCpeQueryMock();
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
-    render(<GetCveComponent id="CVE-314" />);
+    render(<GetCpeComponent id="cpe:/a:foo" />);
 
     expect(screen.queryByTestId('loading')).toBeInTheDocument();
 
@@ -193,29 +193,29 @@ describe('useGetCve tests', () => {
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
     expect(screen.queryByTestId('error')).not.toBeInTheDocument();
 
-    expect(screen.getByTestId('cve')).toBeInTheDocument();
+    expect(screen.getByTestId('cpe')).toBeInTheDocument();
 
-    expect(screen.getByTestId('id')).toHaveTextContent('CVE-314');
-    expect(screen.getByTestId('name')).toHaveTextContent('CVE-314');
+    expect(screen.getByTestId('id')).toHaveTextContent('cpe:/a:foo');
+    expect(screen.getByTestId('name')).toHaveTextContent('foo');
   });
 });
 
-const ExportCvesByIdsComponent = () => {
-  const exportCvesByIds = useExportCvesByIds();
+const ExportCpesByIdsComponent = () => {
+  const exportCpesByIds = useExportCpesByIds();
   return (
     <button
       data-testid="bulk-export"
-      onClick={() => exportCvesByIds(['CVE-314'])}
+      onClick={() => exportCpesByIds(['cpe:/a:foo'])}
     />
   );
 };
 
-describe('useExportCvesByIds tests', () => {
-  test('should export a list of cves after user interaction', async () => {
-    const [mock, resultFunc] = createExportCvesByIdsQueryMock(['CVE-314']);
+describe('useExportCpesByIds tests', () => {
+  test('should export a list of cpes after user interaction', async () => {
+    const [mock, resultFunc] = createExportCpesByIdsQueryMock(['cpe:/a:foo']);
     const {render} = rendererWith({queryMocks: [mock]});
 
-    render(<ExportCvesByIdsComponent />);
+    render(<ExportCpesByIdsComponent />);
     const button = screen.getByTestId('bulk-export');
     fireEvent.click(button);
 
@@ -225,22 +225,22 @@ describe('useExportCvesByIds tests', () => {
   });
 });
 
-const ExportCvesByFilterComponent = () => {
-  const exportCvesByFilter = useExportCvesByFilter();
+const ExportCpesByFilterComponent = () => {
+  const exportCpesByFilter = useExportCpesByFilter();
   return (
     <button
       data-testid="filter-export"
-      onClick={() => exportCvesByFilter('foo')}
+      onClick={() => exportCpesByFilter('foo')}
     />
   );
 };
 
-describe('useExportCvesByFilter tests', () => {
+describe('useExportCpesByFilter tests', () => {
   test('should export a list of tasks by filter string after user interaction', async () => {
-    const [mock, resultFunc] = createExportCvesByFilterQueryMock();
+    const [mock, resultFunc] = createExportCpesByFilterQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
-    render(<ExportCvesByFilterComponent />);
+    render(<ExportCpesByFilterComponent />);
     const button = screen.getByTestId('filter-export');
     fireEvent.click(button);
 

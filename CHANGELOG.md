@@ -9,6 +9,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Implement cpes listpage queries and mutations [#2757](https://github.com/greenbone/gsa/pull/2757)
+- Implement audit listpage queries and mutations [#2752](https://github.com/greenbone/gsa/pull/2752)
+- Implement cves listpage queries and mutations [#2742](https://github.com/greenbone/gsa/pull/2742)
+- Implement override mutations and refactor component to function [#2750](https://github.com/greenbone/gsa/pull/2750)
+- Implement the usage of graphql for cpes [#2739](https://github.com/greenbone/gsa/pull/2739)
+- Implement the usage of graphql for cves [#2734](https://github.com/greenbone/gsa/pull/2734)
+- Implement audit component queries [#2738](https://github.com/greenbone/gsa/pull/2738)
+- Implement audit detailspage queries and mutations [#2728](https://github.com/greenbone/gsa/pull/2728)
 - Implement the usage of graphql for notes [#2721](https://github.com/greenbone/gsa/pull/2721)
 - Refactor schedule dialog to function component [#2714](https://github.com/greenbone/gsa/pull/2714)
 - Implement host listpage queries and mutations [#2713](https://github.com/greenbone/gsa/pull/2713)
@@ -72,11 +80,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Refactored useFormValidation hook [#2704](https://github.com/greenbone/gsa/pull/2704)
 - Updated copyright and footer layout [#2687](https://github.com/greenbone/gsa/pull/2687)
-- New login page layout [#2683](https://github.com/greenbone/gsa/pull/2683)
+- New login page layout
+  [#2683](https://github.com/greenbone/gsa/pull/2683),
+  [#2736](https://github.com/greenbone/gsa/pull/2736),
+  [#2756](https://github.com/greenbone/gsa/pull/2756)
 - CVE Tables Page can now be used with the updated xml-format and CVSSv3(.1). [#2583](https://github.com/greenbone/gsa/pull/2583)
 - The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Fixed
+- Added the deprecatedBy field to CPEs [#2751](https://github.com/greenbone/gsa/pull/2751)
 - Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
 
 ### Removed

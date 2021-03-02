@@ -67,7 +67,7 @@ describe('CPE model tests', () => {
     };
     const cpe = Cpe.fromElement(elem);
 
-    expect(cpe.cves).toEqual([
+    expect(cpe.cveRefs).toEqual([
       {
         id: '1337',
         severity: 9.0,
@@ -82,7 +82,7 @@ describe('CPE model tests', () => {
   test('should return empty array if no cves are defined', () => {
     const cpe = Cpe.fromElement({});
 
-    expect(cpe.cves).toEqual([]);
+    expect(cpe.cveRefs).toEqual([]);
   });
 
   test('should return undefined if status is empty', () => {
@@ -99,5 +99,19 @@ describe('CPE model tests', () => {
     expect(cpe.updateTime).toBeDefined();
     expect(cpe.update_time).toBeUndefined();
     expect(isDate(cpe.updateTime)).toBe(true);
+  });
+
+  test('should parse deprecatedBy', () => {
+    const cpe = Cpe.fromElement({
+      raw_data: {'cpe-item': {_deprecated_by: 'foo:/bar'}},
+    });
+
+    expect(cpe.deprecatedBy).toEqual('foo:/bar');
+  });
+
+  test('should not parse deprecatedBy', () => {
+    const cpe = Cpe.fromElement({raw_data: {'cpe-item': {}}});
+
+    expect(cpe.deprecatedBy).toBeUndefined();
   });
 });

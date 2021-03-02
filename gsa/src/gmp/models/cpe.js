@@ -22,28 +22,49 @@ import {map} from 'gmp/utils/array';
 
 import Info from './info';
 
-import {parseSeverity, parseDate} from 'gmp/parser';
+import {parseScoreToSeverity, parseSeverity, parseDate} from 'gmp/parser';
 
 class Cpe extends Info {
   static entityType = 'cpe';
 
+  static parseObject(object) {
+    const ret = super.parseObject(object);
+
+    ret.severity = parseScoreToSeverity(ret.score);
+    delete ret.score;
+
+    return ret;
+  }
+
   static parseElement(element) {
     const ret = super.parseElement(element, 'cpe');
 
-    ret.severity = parseSeverity(ret.score / 10);
+    ret.severity = parseScoreToSeverity(ret.score);
     delete ret.score;
 
+    ret.cveRefCount = ret.cve_refs;
+    delete ret.cve_refs;
+
+    if (isDefined(ret.nvd_id)) {
+      ret.nvdId = ret.nvd_id;
+      delete ret.nvd_id;
+    }
+
     if (isDefined(ret.cves) && isDefined(ret.cves.cve)) {
-      ret.cves = map(ret.cves.cve, cve => ({
+      ret.cveRefs = map(ret.cves.cve, cve => ({
         id: cve.entry._id,
         severity: parseSeverity(cve.entry.cvss.base_metrics.score),
       }));
     } else {
-      ret.cves = [];
+      ret.cveRefs = [];
     }
 
     if (isEmpty(ret.status)) {
       delete ret.status;
+    }
+
+    if (isDefined(ret.nvd_id)) {
+      ret.nvdId = ret.nvd_id;
     }
 
     if (isDefined(ret.update_time)) {
@@ -51,6 +72,12 @@ class Cpe extends Info {
       delete ret.update_time;
     }
 
+    if (isDefined(ret.raw_data) && isDefined(ret.raw_data['cpe-item'])) {
+      const cpeItem = ret.raw_data['cpe-item'];
+      if (isDefined(cpeItem._deprecated_by)) {
+        ret.deprecatedBy = cpeItem._deprecated_by;
+      }
+    }
     return ret;
   }
 }

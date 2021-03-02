@@ -19,15 +19,15 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import {hasValue} from 'gmp/utils/identity';
+
 import {TASK_STATUS} from 'gmp/models/task';
 
-import {hasValue} from 'gmp/utils/identity';
+import PropTypes from 'web/utils/proptypes';
 
 import DetailsLink from 'web/components/link/detailslink';
 
 import StatusBar from 'web/components/bar/statusbar';
-
-import PropTypes from 'web/utils/proptypes';
 
 const StyledDetailsLink = styled(DetailsLink)`
   &:hover {
@@ -36,19 +36,9 @@ const StyledDetailsLink = styled(DetailsLink)`
 `;
 
 const TaskStatus = ({task, links = true}) => {
+  const {reports = {}} = task;
+  const {currentReport, lastReport} = reports;
   let reportId;
-
-  let currentReport;
-  let lastReport;
-  // audits are not yet in the new format
-  if (task.entityType === 'task') {
-    currentReport = task?.reports?.currentReport;
-    lastReport = task?.reports?.lastReport;
-  } else {
-    currentReport = task?.current_report;
-    lastReport = task?.last_report;
-  }
-
   if (hasValue(currentReport)) {
     reportId = currentReport.id;
   } else if (hasValue(lastReport)) {

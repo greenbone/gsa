@@ -21,9 +21,11 @@
 
 import React from 'react';
 
-import {rendererWith, wait, screen} from 'web/utils/testing';
+import {isDefined} from 'gmp/utils/identity';
 
-import {useGetSetting, useGetSettings} from '../settings';
+import {rendererWith, wait, screen, fireEvent} from 'web/utils/testing';
+
+import {useGetSetting, useGetSettings, useLazyGetSettings} from '../settings';
 import {
   createGetSettingQueryMock,
   createGetSettingsQueryMock,
@@ -144,5 +146,60 @@ describe('useGetSettings tests', () => {
     expect(screen.queryByTestId('error')).toHaveTextContent(
       'An error occurred.',
     );
+  });
+});
+
+const GetLazySettingsComponent = () => {
+  const [getSettings, {settings, loading}] = useLazyGetSettings();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getSettings()} />
+      {isDefined(settings) ? (
+        settings.map(setting => {
+          return (
+            <div key={setting.id} data-testid="setting">
+              {setting.id}
+            </div>
+          );
+        })
+      ) : (
+        <div data-testid="no-settings" />
+      )}
+    </div>
+  );
+};
+
+describe('useLazyGetSettings tests', () => {
+  test('should query settings after user interaction', async () => {
+    const [mock, resultFunc] = createGetSettingsQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+    render(<GetLazySettingsComponent />);
+
+    let settingElements = screen.queryAllByTestId('setting');
+    expect(settingElements).toHaveLength(0);
+
+    expect(screen.queryByTestId('no-settings')).toBeInTheDocument();
+
+    const button = screen.getByTestId('load');
+    fireEvent.click(button);
+
+    const loading = await screen.findByTestId('loading');
+    expect(loading).toHaveTextContent('Loading');
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    settingElements = screen.getAllByTestId('setting');
+    expect(settingElements).toHaveLength(2);
+
+    expect(settingElements[0]).toHaveTextContent('1');
+    expect(settingElements[1]).toHaveTextContent('2');
+
+    expect(screen.queryByTestId('no-settings')).not.toBeInTheDocument();
   });
 });
