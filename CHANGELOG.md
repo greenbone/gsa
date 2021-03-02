@@ -4,6 +4,73 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [21.10] - unreleased
+
+### Added
+
+### Changed
+- Implement cpes listpage queries and mutations [#2757](https://github.com/greenbone/gsa/pull/2757)
+- Implement audit listpage queries and mutations [#2752](https://github.com/greenbone/gsa/pull/2752)
+- Implement cves listpage queries and mutations [#2742](https://github.com/greenbone/gsa/pull/2742)
+- Implement override mutations and refactor component to function [#2750](https://github.com/greenbone/gsa/pull/2750)
+- Implement the usage of graphql for cpes [#2739](https://github.com/greenbone/gsa/pull/2739)
+- Implement the usage of graphql for cves [#2734](https://github.com/greenbone/gsa/pull/2734)
+- Implement audit component queries [#2738](https://github.com/greenbone/gsa/pull/2738)
+- Implement audit detailspage queries and mutations [#2728](https://github.com/greenbone/gsa/pull/2728)
+- Implement the usage of graphql for notes [#2721](https://github.com/greenbone/gsa/pull/2721)
+- Refactor schedule dialog to function component [#2714](https://github.com/greenbone/gsa/pull/2714)
+- Implement host listpage queries and mutations [#2713](https://github.com/greenbone/gsa/pull/2713)
+- Implement host detailspage queries and mutations [#2702](https://github.com/greenbone/gsa/pull/2702)
+- Implement audit component mutations [#2699](https://github.com/greenbone/gsa/pull/2699)
+- Implement policy component mutations [#2684](https://github.com/greenbone/gsa/pull/2684)
+- Refactor host component into function [#2693](https://github.com/greenbone/gsa/pull/2693)
+- Refactor Audit Component into Function [#2695](https://github.com/greenbone/gsa/pull/2695)
+- Implement policy listpage queries and mutations [#2679](https://github.com/greenbone/gsa/pull/2679)
+- Implement policy detailspage queries and mutations [#2668](https://github.com/greenbone/gsa/pull/2668)
+- Implement schedule detailspage queries and mutations [#2659](https://github.com/greenbone/gsa/pull/2659)
+- Implement graphql queries and mutations on scanconfig listpage [#2621](https://github.com/greenbone/gsa/pull/2621)
+- Implement loadScanConfigPromise for scan config component [#2612](https://github.com/greenbone/gsa/pull/2612)
+- Implement scan config detailspage queries and mutations [#2610](https://github.com/greenbone/gsa/pull/2610)
+- Implement create_scan_config, import_scan_config via graphql [#2604](https://github.com/greenbone/gsa/pull/2604)
+- Don't send scanner and config values in task dialog if task status is not new [#2598](https://github.com/greenbone/gsa/pull/2598)
+- Refactor task detailspage to not use withEntityContainer [#2596](https://github.com/greenbone/gsa/pull/2596)
+- Refactor alert detailspage to not use withEntityContainer [#2587](https://github.com/greenbone/gsa/pull/2587)
+- Implement get_report_formats and get_permissions via graphQL on alert detailspage [#2585](https://github.com/greenbone/gsa/pull/2585)
+- Implement get_alert via graphql and preliminary refactor of alert detailspage [#2571](https://github.com/greenbone/gsa/pull/2571)
+- Implement bulk actions for alerts via graphQL [#2569](https://github.com/greenbone/gsa/pull/2569)
+- Implement clone, delete and test alert via graphql [#2567](https://github.com/greenbone/gsa/pull/2567)
+- Implement get_alerts on alerts listpage via graphql and parseObject for alert model [#2552](https://github.com/greenbone/gsa/pull/2552)
+- Implement modify alert via graphql [#2549](https://github.com/greenbone/gsa/pull/2549)
+- Implement advanced task wizard via graphql [#2523](https://github.com/greenbone/gsa/pull/2523)
+- Implement modify task wizard via graphql [#2514](https://github.com/greenbone/gsa/pull/2514)
+- Implement task wizard via graphql [#2509](https://github.com/greenbone/gsa/pull/2509)
+- Implement create credential for alert and target dialog via graphql [#2486](https://github.com/greenbone/gsa/pull/2486)
+- Added getNotes query [#2485](https://github.com/greenbone/gsa/pull/2485)
+- Implement create and modify port list by graphql [#2484](https://github.com/greenbone/gsa/pull/2484)
+- Load port lists into target component with graphql [#2481](https://github.com/greenbone/gsa/pull/2481)
+- Create and modify schedule from graphql [#2477](https://github.com/greenbone/gsa/pull/2477)
+- Support more enum types for create alert [#2462](https://github.com/greenbone/gsa/pull/2462)
+- Load credentials in task component and target component via graphql [#2453](https://github.com/greenbone/gsa/pull/2453)
+- Added getSchedule and getSchedules via graphQL [#2450](https://github.com/greenbone/gsa/pull/2450)
+- Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425)
+- Added getOverrides query [#2405](https://github.com/greenbone/gsa/pull/2405)
+- Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
+
+### Fixed
+- Fixed ScanConfigs and Policies page after changes in [Hyperion](https://github.com/greenbone/hyperion/pull/15) [#2733](https://github.com/greenbone/gsa/pull/2733)
+- Fixed reload interval for pages using useEntityReloadInterval and useEntitiesReloadInterval hooks [#2716](https://github.com/greenbone/gsa/pull/2716)
+
+### Removed
+- Removed unused task.js [#2714](https://github.com/greenbone/gsa/pull/2714)
+- Removed unused task wizard commands for runQuickTask, runQuickFirstScan and runModifyTask [#2514](https://github.com/greenbone/gsa/pull/2514) [#2523](https://github.com/greenbone/gsa/pull/2523)
+- Removed Edge <= 18 support [#2408](https://github.com/greenbone/gsa/pull/2408)
+- Removed Internet Explorer 11 support [#2399](https://github.com/greenbone/gsa/pull/2399)
+- Removed parsing and testing of textExcerpt [#2316](https://github.com/greenbone/gsa/pull/2316)
+- Removed extra parsing of comment and summary in Model [#2309](https://github.com/greenbone/gsa/pull/2309)
+
+[21.04]: https://github.com/greenbone/gsa/compare/gsa-21.04...master
+
+
 ## [21.04] - unreleased
 
 ### Added

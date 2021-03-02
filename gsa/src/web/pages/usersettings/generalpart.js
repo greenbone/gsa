@@ -32,9 +32,7 @@ import TimeZoneSelect from 'web/components/form/timezoneselect';
 import Divider from 'web/components/layout/divider';
 
 import Languages from 'web/utils/languages';
-
 import PropTypes from 'web/utils/proptypes';
-
 import Theme from 'web/utils/theme';
 
 const renderLanguageItems = () =>

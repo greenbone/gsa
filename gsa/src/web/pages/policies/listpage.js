@@ -15,17 +15,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
-import {RESET_FILTER, SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
+import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
+import {hasValue} from 'gmp/utils/identity';
 
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import Download from 'web/components/form/download';
+import useDownload from 'web/components/form/useDownload';
 
 import PolicyIcon from 'web/components/icon/policyicon';
 import UploadIcon from 'web/components/icon/uploadicon';
@@ -35,10 +34,38 @@ import ManualIcon from 'web/components/icon/manualicon';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
+import DialogNotification from 'web/components/notification/dialognotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+
 import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/policies';
+  useBulkDeleteEntities,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions';
+import EntitiesPage from 'web/entities/page';
+import usePagination from 'web/entities/usePagination';
+
+import useExportEntity from 'web/entity/useExportEntity';
+
+import {
+  useClonePolicy,
+  useDeletePolicy,
+  useExportPoliciesByIds,
+  useLazyGetPolicies,
+  useExportPoliciesByFilter,
+  useDeletePoliciesByIds,
+  useDeletePoliciesByFilter,
+} from 'web/graphql/policies';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
+import useFilterSortBy from 'web/utils/useFilterSortby';
+import usePageFilter from 'web/utils/usePageFilter';
+import useChangeFilter from 'web/utils/useChangeFilter';
+import usePrevious from 'web/utils/usePrevious';
+import useReload from 'web/components/loading/useReload';
+import useSelection from 'web/utils/useSelection';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import PoliciesComponent from './component';
 import Table from './table';
@@ -66,69 +93,214 @@ ToolBarIcons.propTypes = {
   onPolicyImportClick: PropTypes.func.isRequired,
 };
 
-const PoliciesPage = ({
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => (
-  <PoliciesComponent
-    onCloned={onChanged}
-    onCloneError={onError}
-    onCreated={onChanged}
-    onDeleted={onChanged}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onImported={onChanged}
-    onInteraction={onInteraction}
-    onSaved={onChanged}
-  >
-    {({
-      clone,
-      create,
-      createAudit,
-      delete: deleteFunc,
-      download,
-      edit,
-      import: importFunc,
-    }) => (
-      <React.Fragment>
-        <PageTitle title={_('Policies')} />
-        <EntitiesPage
-          {...props}
-          filtersFilter={SCANCONFIGS_FILTER_FILTER}
-          sectionIcon={<PolicyIcon size="large" />}
-          table={Table}
-          title={_('Policies')}
-          toolBarIcons={ToolBarIcons}
-          onError={onError}
-          onInteraction={onInteraction}
-          onPolicyImportClick={importFunc}
-          onPolicyCloneClick={clone}
-          onPolicyCreateClick={create}
-          onCreateAuditClick={createAudit}
-          onPolicyDeleteClick={deleteFunc}
-          onPolicyDownloadClick={download}
-          onPolicyEditClick={edit}
-        />
-      </React.Fragment>
-    )}
-  </PoliciesComponent>
-);
+const PoliciesPage = props => {
+  const [downloadRef, handleDownload] = useDownload();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+  const [filter, isLoadingFilter] = usePageFilter('policy');
+  const prevFilter = usePrevious(filter);
+  const simpleFilter = filter.withoutView();
+  const {
+    change: changeFilter,
+    remove: removeFilter,
+    reset: resetFilter,
+  } = useChangeFilter('policy');
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+  const {
+    selectionType,
+    selected = [],
+    changeSelectionType,
+    select,
+    deselect,
+  } = useSelection();
+  const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
+    filter,
+    changeFilter,
+  );
 
-PoliciesPage.propTypes = {
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
+  // Policy list state variables and methods
+  const [
+    getPolicies,
+    {counts, policies, error, loading: isLoading, refetch, called, pageInfo},
+  ] = useLazyGetPolicies();
+
+  const exportEntity = useExportEntity();
+
+  const [clonePolicy] = useClonePolicy();
+  const [deletePolicy] = useDeletePolicy();
+  const exportPolicy = useExportPoliciesByIds();
+
+  const exportPoliciesByFilter = useExportPoliciesByFilter();
+  const bulkExportPolicies = useBulkExportEntities();
+
+  const [deletePoliciesByIds] = useDeletePoliciesByIds();
+  const exportPoliciesByIds = useExportPoliciesByIds();
+  const [deletePoliciesByFilter] = useDeletePoliciesByFilter();
+
+  const bulkDeletePolicies = useBulkDeleteEntities();
+
+  const timeoutFunc = useDefaultReloadInterval();
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetch,
+    timeoutFunc,
+  );
+
+  const [getFirst, getLast, getNext, getPrevious] = usePagination({
+    simpleFilter,
+    filter,
+    pageInfo,
+    refetch,
+  });
+
+  // Policy methods
+  const handleDownloadPolicy = exportedPolicy => {
+    exportEntity({
+      entity: exportedPolicy,
+      exportFunc: exportPolicy,
+      resourceType: 'policies',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  const handleClonePolicy = useCallback(
+    policy => clonePolicy(policy.id).then(refetch, showError),
+    [clonePolicy, refetch, showError],
+  );
+  const handleDeletePolicy = useCallback(
+    policy => deletePolicy(policy.id).then(refetch, showError),
+    [deletePolicy, refetch, showError],
+  );
+
+  // Bulk action methods
+  const handleBulkDeletePolicies = () => {
+    return bulkDeletePolicies({
+      selectionType,
+      filter,
+      selected,
+      entities: policies,
+      deleteByIdsFunc: deletePoliciesByIds,
+      deleteByFilterFunc: deletePoliciesByFilter,
+      onDeleted: refetch,
+      onError: showError,
+    });
+  };
+
+  const handleBulkExportPolicies = () => {
+    return bulkExportPolicies({
+      entities: policies,
+      selected,
+      filter,
+      resourceType: 'policies',
+      selectionType,
+      exportByFilterFunc: exportPoliciesByFilter,
+      exportByIdsFunc: exportPoliciesByIds,
+      onDownload: handleDownload,
+      onError: showError,
+    });
+  };
+
+  // Side effects
+  useEffect(() => {
+    // load policies initially after the filter is resolved
+    if (!isLoadingFilter && hasValue(filter) && !called) {
+      getPolicies({
+        filterString: filter.toFilterString(),
+        first: filter.get('rows'),
+      });
+    }
+  }, [isLoadingFilter, filter, getPolicies, called]);
+  useEffect(() => {
+    // reload if filter has changed
+    if (hasValue(refetch) && !filter.equals(prevFilter)) {
+      refetch({
+        filterString: filter.toFilterString(),
+        first: undefined,
+        last: undefined,
+      });
+    }
+  }, [filter, prevFilter, simpleFilter, refetch]);
+
+  useEffect(() => {
+    // start reloading if policies are available and no timer is running yet
+    if (hasValue(policies) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [policies, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => stopReload, [stopReload]);
+  return (
+    <PoliciesComponent
+      onCloned={refetch}
+      onCloneError={showError}
+      onCreated={refetch}
+      onDeleted={refetch}
+      onDeleteError={showError}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onImported={refetch}
+      onInteraction={renewSessionTimeout}
+      onSaved={refetch}
+    >
+      {({create, createAudit, edit, import: importFunc}) => (
+        <React.Fragment>
+          <PageTitle title={_('Policies')} />
+          <EntitiesPage
+            {...props}
+            entities={policies}
+            entitiesCounts={counts}
+            entitiesError={error}
+            entitiesSelected={selected}
+            filter={filter}
+            filtersFilter={SCANCONFIGS_FILTER_FILTER}
+            isLoading={isLoading}
+            isUpdating={isLoading}
+            sectionIcon={<PolicyIcon size="large" />}
+            selectionType={selectionType}
+            sortBy={sortBy}
+            sortDir={sortDir}
+            table={Table}
+            title={_('Policies')}
+            toolBarIcons={ToolBarIcons}
+            onCreateAuditClick={createAudit}
+            onDeleteBulk={handleBulkDeletePolicies}
+            onDownloadBulk={handleBulkExportPolicies}
+            onEntitySelected={select}
+            onEntityDeselected={deselect}
+            onError={showError}
+            onFilterChanged={changeFilter}
+            onFilterCreated={changeFilter}
+            onFilterReset={resetFilter}
+            onFilterRemoved={removeFilter}
+            onFirstClick={getFirst}
+            onLastClick={getLast}
+            onNextClick={getNext}
+            onPreviousClick={getPrevious}
+            onInteraction={renewSessionTimeout}
+            onPolicyImportClick={importFunc}
+            onPolicyCloneClick={handleClonePolicy}
+            onPolicyCreateClick={create}
+            onPolicyDeleteClick={handleDeletePolicy}
+            onPolicyDownloadClick={handleDownloadPolicy}
+            onPolicyEditClick={edit}
+            onSelectionTypeChange={changeSelectionType}
+            onSortChange={handleSortChange}
+          />
+          <DialogNotification
+            {...notificationDialogState}
+            onCloseClick={closeNotificationDialog}
+          />
+          <Download ref={downloadRef} />
+        </React.Fragment>
+      )}
+    </PoliciesComponent>
+  );
 };
 
-export default withEntitiesContainer('policy', {
-  entitiesSelector,
-  loadEntities,
-  defaultFilter: RESET_FILTER,
-})(PoliciesPage);
+export default PoliciesPage;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -23,6 +23,10 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
 
+import {getMockProcessMap} from 'web/components/processmap/__mocks__/mockprocessmap';
+
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {getBusinessProcessMapsAction} from 'web/store/businessprocessmaps/actions';
 import {entitiesLoadingActions} from 'web/store/entities/hosts';
 import {entitiesLoadingActions as resultsLoadingActions} from 'web/store/entities/results';
@@ -33,8 +37,6 @@ import {
   hostsFilter,
   resultsFilter,
 } from 'web/components/processmap/processmaploader';
-
-import {getMockProcessMap} from 'web/components/processmap/__mocks__/mockprocessmap';
 
 import ProcessMapsPage from '../processmapspage';
 
@@ -58,43 +60,55 @@ const hosts = [
   {ip: '109.876.54.123', id: '9101', severity: 10},
 ];
 
-const getAllHosts = jest.fn().mockResolvedValue({
-  data: hosts,
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getHosts = jest.fn().mockResolvedValue({
-  data: hosts,
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
 const results = [
   {id: '123', severity: 4, nvt: {name: 'bar', oid: '1337'}},
   {id: '456', severity: 8, nvt: {name: 'lorem', oid: '7353'}},
 ];
 
-const getResults = jest.fn().mockResolvedValue({
-  data: results,
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
+const renewDate = '2019-10-10T12:00:00Z';
+const [queryMock, resultFunc] = createRenewSessionQueryMock(renewDate);
 
-const getTag = jest.fn().mockResolvedValue({
-  data: '',
-});
+let getAllHosts;
+let getBusinessProcessMaps;
+let getHosts;
+let getResults;
+let getTag;
+let renewSession;
 
-const renewSession = jest.fn().mockResolvedValue({data: {}});
+beforeEach(() => {
+  getAllHosts = jest.fn().mockResolvedValue({
+    data: hosts,
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 
-const getBusinessProcessMaps = jest.fn().mockResolvedValue({
-  foo: 'bar',
+  getHosts = jest.fn().mockResolvedValue({
+    data: hosts,
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  getResults = jest.fn().mockResolvedValue({
+    data: results,
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  getTag = jest.fn().mockResolvedValue({
+    data: '',
+  });
+
+  renewSession = jest.fn().mockResolvedValue({data: renewDate});
+
+  getBusinessProcessMaps = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
 describe('ProcessMapsPage tests', () => {
@@ -116,6 +130,7 @@ describe('ProcessMapsPage tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getByTestId, getAllByTestId} = render(<ProcessMapsPage />);
@@ -198,6 +213,7 @@ describe('ProcessMapsPage tests', () => {
     const {render, store} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getByTestId, getAllByTestId} = render(<ProcessMapsPage />);
@@ -275,6 +291,9 @@ describe('ProcessMapsPage tests', () => {
     expect(element).not.toHaveTextContent(
       'No hosts associated with this process.',
     );
+
+    expect(gmp.user.renewSession).toHaveBeenCalled();
+    expect(resultFunc).toHaveBeenCalled();
   });
 
   test('should render ProcessMapsPage with hosts', () => {
@@ -301,6 +320,7 @@ describe('ProcessMapsPage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(<ProcessMapsPage />);
@@ -413,6 +433,7 @@ describe('ProcessMapsPage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(<ProcessMapsPage />);
@@ -550,6 +571,7 @@ describe('ProcessMapsPage tests', () => {
     const {render, store} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {getByTestId, getAllByTestId} = render(<ProcessMapsPage />);
@@ -605,6 +627,7 @@ describe('ProcessMapsPage tests', () => {
       gmp,
       router: true,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {getAllByTestId} = render(<ProcessMapsPage />);

@@ -26,7 +26,275 @@ import {SCANCONFIG_TREND_DYNAMIC} from '../scanconfig';
 
 testModel(Policy, 'policy');
 
-describe('Policy model tests', () => {
+describe('Policy model parseObject tests', () => {
+  test('should parse policyType', () => {
+    const obj = {
+      type: 0,
+    };
+    const policy = Policy.fromObject(obj);
+
+    expect(policy.policyType).toEqual(0);
+  });
+
+  test('should parse families', () => {
+    const obj = {
+      families: [
+        {
+          name: 'foo',
+          nvtCount: 42,
+          maxNvtCount: 42,
+          growing: true,
+        },
+      ],
+    };
+
+    const res = [
+      {
+        name: 'foo',
+        trend: SCANCONFIG_TREND_DYNAMIC,
+        nvts: {
+          count: 42,
+          max: 42,
+        },
+      },
+    ];
+    const policy = Policy.fromObject(obj);
+
+    expect(policy.familyList).toEqual(res);
+  });
+
+  test('should parse special nvt counts', () => {
+    const obj = {
+      families: [
+        {
+          name: 'foo',
+          nvtCount: -1,
+          maxNvtCount: null,
+          growing: true,
+        },
+      ],
+    };
+    const policy = Policy.fromObject(obj);
+
+    expect(policy.familyList[0].nvts.count).toBeUndefined();
+    expect(policy.familyList[0].nvts.max).toBeUndefined();
+  });
+
+  test('should parse to families', () => {
+    const obj = {
+      families: [
+        {
+          name: 'foo',
+          nvtCount: 42,
+          maxNvtCount: 42,
+          growing: true,
+        },
+      ],
+    };
+    const res = {
+      name: 'foo',
+      trend: SCANCONFIG_TREND_DYNAMIC,
+      nvts: {
+        count: 42,
+        max: 42,
+      },
+    };
+    const policy = Policy.fromObject(obj);
+
+    expect(policy.families.foo).toEqual(res);
+  });
+
+  test('should return empty familyList array if no families are given', () => {
+    const policy = Policy.fromObject({});
+
+    expect(policy.familyList).toEqual([]);
+  });
+
+  test('should return empty familyList array if null families are given', () => {
+    const policy = Policy.fromObject({families: null});
+
+    expect(policy.familyList).toEqual([]);
+  });
+
+  test('should parse familyCount', () => {
+    const obj = {
+      familyCount: 42,
+    };
+    const policy = Policy.fromObject(obj);
+
+    expect(policy.families.count).toEqual(42);
+    expect(policy.familyCount).toBeUndefined();
+  });
+
+  test('should parse nvtCount', () => {
+    const obj = {
+      nvtCount: 42,
+      knownNvtCount: 21,
+      maxNvtCount: 1337,
+    };
+    const res = {
+      count: 42,
+      known: 21,
+      max: 1337,
+    };
+    const policy = Policy.fromObject(obj);
+
+    expect(policy.nvts).toEqual(res);
+    expect(policy.nvtCount).toBeUndefined();
+    expect(policy.knownNvtCount).toBeUndefined();
+    expect(policy.maxNvtCount).toBeUndefined();
+  });
+
+  test('should return empty object if no nvtCounts are given', () => {
+    const policy = Policy.fromObject({});
+
+    expect(policy.nvts).toEqual({});
+  });
+
+  test('should return empty object if null nvtCounts are given', () => {
+    const policy = Policy.fromObject({nvtCount: null});
+
+    expect(policy.nvts).toEqual({});
+  });
+
+  test('should parse preferences', () => {
+    const obj = {
+      preferences: [
+        {
+          alt: ['postgres', 'regress'],
+          default: 'postgres',
+          hrName: 'Postgres Username:',
+          id: 1,
+          name: 'Postgres Username:',
+          type: 'entry',
+          value: 'regress',
+          nvt: {
+            id: 'oid',
+            name: 'PostgreSQL Detection',
+          },
+        },
+        {
+          alt: ['a', 'b'],
+          default: 'c',
+          hrName: 'foo',
+          id: 2,
+          name: 'foo',
+          type: 'bar',
+          value: 'lorem',
+          nvt: {
+            id: null,
+            name: null,
+          },
+        },
+      ],
+    };
+    const nvtPreferences = [
+      {
+        alt: ['postgres', 'regress'],
+        default: 'postgres',
+        hrName: 'Postgres Username:',
+        id: 1,
+        name: 'Postgres Username:',
+        type: 'entry',
+        value: 'regress',
+        nvt: {
+          id: 'oid',
+          name: 'PostgreSQL Detection',
+        },
+      },
+    ];
+    const scannerPreferences = [
+      {
+        alt: ['a', 'b'],
+        default: 'c',
+        hrName: 'foo',
+        id: 2,
+        name: 'foo',
+        type: 'bar',
+        value: 'lorem',
+      },
+    ];
+
+    const policy = Policy.fromObject(obj);
+
+    expect(policy.preferences.scanner).toEqual(scannerPreferences);
+    expect(policy.preferences.nvt).toEqual(nvtPreferences);
+  });
+
+  test('should return empty arrays if no preferences are given', () => {
+    const policy = Policy.fromObject({});
+
+    expect(policy.preferences.scanner).toEqual([]);
+    expect(policy.preferences.nvt).toEqual([]);
+  });
+
+  test('should return empty arrays if null preferences are given', () => {
+    const policy = Policy.fromObject({preferences: null});
+
+    expect(policy.preferences.scanner).toEqual([]);
+    expect(policy.preferences.nvt).toEqual([]);
+  });
+
+  test('should parse type', () => {
+    const policy = Policy.fromObject({type: 21});
+
+    expect(policy.policyType).toEqual(21);
+  });
+
+  test('should parse audits', () => {
+    const obj = {
+      tasks: [
+        {
+          id: '123',
+          name: 'foo',
+        },
+      ],
+    };
+    const policy = Policy.fromObject(obj);
+
+    expect(policy.audits[0]).toBeInstanceOf(Model);
+    expect(policy.audits[0].id).toEqual('123');
+    expect(policy.audits[0].entityType).toEqual('audit');
+  });
+
+  test('should return empty array if no audits are given', () => {
+    const policy = Policy.fromObject({});
+
+    expect(policy.audits).toEqual([]);
+  });
+
+  test('should return empty array if null audits are given', () => {
+    const policy = Policy.fromObject({tasks: null});
+
+    expect(policy.audits).toEqual([]);
+  });
+
+  test('should parse trend', () => {
+    const obj = {
+      familyGrowing: true,
+      nvtGrowing: false,
+    };
+
+    const obj2 = {
+      familyGrowing: null,
+      nvtGrowing: null,
+    };
+
+    const policy = Policy.fromObject(obj);
+    const policy2 = Policy.fromObject(obj2);
+
+    expect(policy.families.trend).toEqual(1);
+    expect(policy.nvts.trend).toEqual(0);
+
+    expect(policy2.families).toEqual({count: 0});
+    expect(policy2.nvts).toEqual({});
+  });
+
+  // predefined is already boolean
+  // has no scanner attribute
+});
+
+describe('Policy model parseElement tests', () => {
   test('should parse families', () => {
     const elem = {
       families: {
@@ -177,7 +445,7 @@ describe('Policy model tests', () => {
         name: 'lorem',
         nvt: {
           name: 'foo',
-          oid: '456def',
+          id: '456def',
         },
         value: 'ipsum',
       },

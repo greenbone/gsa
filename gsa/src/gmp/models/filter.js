@@ -16,12 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
-import {forEach, map} from 'gmp/utils/array';
-
 import Model, {parseModelFromElement} from 'gmp/model';
 
 import {setProperties} from 'gmp/parser';
+
+import {isDefined, isString, isArray, hasValue} from 'gmp/utils/identity';
+import {forEach, map} from 'gmp/utils/array';
 
 import convert from './filter/convert';
 import FilterTerm, {AND} from './filter/filterterm';
@@ -625,6 +625,20 @@ class Filter extends Model {
     filter.delete('first');
     filter.delete('rows');
     filter.delete(filter.getSortOrder());
+
+    return filter;
+  }
+
+  /**
+   * Returns a new filter without first and rows terms
+   *
+   * @return {Filter} Copy of this filter but without first and rows terms.
+   */
+  withoutView() {
+    const filter = this.copy();
+
+    filter.delete('first');
+    filter.delete('rows');
 
     return filter;
   }

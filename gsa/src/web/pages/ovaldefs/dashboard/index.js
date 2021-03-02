@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import Dashboard from '../../../components/dashboard/dashboard';
+import Dashboard from 'web/components/dashboard/dashboard';
 
 import {OvaldefClassDisplay, OvaldefClassTableDisplay} from './classdisplay';
 import {

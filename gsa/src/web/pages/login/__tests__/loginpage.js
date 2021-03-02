@@ -19,9 +19,13 @@ import React from 'react';
 
 import Logger from 'gmp/log';
 
-import {rendererWith, fireEvent, screen} from 'web/utils/testing';
+import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import LoginPage from '../loginpage';
+import {
+  createLoginQueryMock,
+  createLoginQueryErrorMock,
+} from 'web/graphql/__mocks__/auth';
 
 Logger.setDefaultLevel('silent');
 
@@ -33,10 +37,13 @@ describe('LoginPage tests', () => {
 
     const {render} = rendererWith({gmp, router: true, store: true});
 
-    render(<LoginPage />);
+    const {baseElement} = render(<LoginPage />);
+
+    expect(baseElement).toMatchSnapshot();
   });
 
-  test('should allow to login with username and password', () => {
+  test('should allow to login with username and password', async () => {
+    const [loginMock, resultFunc] = createLoginQueryMock();
     const login = jest.fn().mockResolvedValue({
       locale: 'locale',
       username: 'username',
@@ -47,15 +54,22 @@ describe('LoginPage tests', () => {
     const clearToken = jest.fn();
     const setLocale = jest.fn();
     const setTimezone = jest.fn();
+
     const gmp = {
       setTimezone,
       setLocale,
-      login,
+      login: {login},
       isLoggedIn,
       clearToken,
       settings: {},
     };
-    const {render} = rendererWith({gmp, router: true, store: true});
+
+    const {render} = rendererWith({
+      gmp,
+      router: true,
+      store: true,
+      queryMocks: [loginMock],
+    });
 
     const {getByName, getByTestId} = render(<LoginPage />);
 
@@ -68,7 +82,9 @@ describe('LoginPage tests', () => {
     const button = getByTestId('login-button');
     fireEvent.click(button);
 
-    expect(login).toBeCalledWith('foo', 'bar');
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 
   test('should not display guest login by default', () => {
@@ -87,7 +103,8 @@ describe('LoginPage tests', () => {
     expect(queryByTestId('guest-login-button')).not.toBeInTheDocument();
   });
 
-  test('should allow to login as guest', () => {
+  test('should allow to login as guest', async () => {
+    const [loginMock, resultFunc] = createLoginQueryMock();
     const login = jest.fn().mockResolvedValue({
       locale: 'locale',
       username: 'username',
@@ -101,22 +118,31 @@ describe('LoginPage tests', () => {
     const gmp = {
       setTimezone,
       setLocale,
-      login,
+      login: {login},
       isLoggedIn,
       clearToken,
       settings: {guestUsername: 'foo', guestPassword: 'bar'},
     };
-    const {render} = rendererWith({gmp, router: true, store: true});
+    const {render} = rendererWith({
+      gmp,
+      router: true,
+      store: true,
+      queryMocks: [loginMock],
+    });
 
-    const {getByTestId} = render(<LoginPage />);
+    render(<LoginPage />);
 
-    const button = getByTestId('guest-login-button');
+    const button = screen.getByTestId('guest-login-button');
     fireEvent.click(button);
 
-    expect(login).toBeCalledWith('foo', 'bar');
+    await wait();
+
+    expect(login).toHaveBeenCalledWith('foo', 'bar');
+    expect(resultFunc).toHaveBeenCalled();
   });
 
-  test('should display error message', async () => {
+  test('should display graphql error message', async () => {
+    const [queryMock] = createLoginQueryErrorMock();
     const login = jest.fn().mockRejectedValue({message: 'Just a test'});
     const isLoggedIn = jest.fn().mockReturnValue(false);
     const clearToken = jest.fn();
@@ -128,11 +154,18 @@ describe('LoginPage tests', () => {
       login,
       isLoggedIn,
       clearToken,
-      settings: {},
+      settings: {
+        enableHyperionOnly: true,
+      },
     };
-    const {render} = rendererWith({gmp, router: true, store: true});
+    const {render} = rendererWith({
+      gmp,
+      router: true,
+      store: true,
+      queryMocks: [queryMock],
+    });
 
-    const {getByName, getByTestId} = render(<LoginPage />);
+    const {getByName} = render(<LoginPage />);
 
     const usernameField = getByName('username');
     const passwordField = getByName('password');
@@ -140,12 +173,63 @@ describe('LoginPage tests', () => {
     fireEvent.change(usernameField, {target: {value: 'foo'}});
     fireEvent.change(passwordField, {target: {value: 'bar'}});
 
-    const button = getByTestId('login-button');
+    const button = screen.getByTestId('login-button');
     fireEvent.click(button);
-    expect(login).toBeCalledWith('foo', 'bar');
 
-    const error = await screen.findByTestId('error');
-    expect(error).toHaveTextContent('Just a test');
+    await wait();
+
+    expect(screen.getByTestId('error')).toHaveTextContent(
+      'An error has occurred.',
+    );
+  });
+
+  test('should display network error message', async () => {
+    const error = {
+      message: 'Response not successful: Received status code 500',
+      result: {
+        errors: [{message: 'Foo'}, {message: 'Bar'}],
+      },
+    };
+    const [queryMock] = createLoginQueryErrorMock({error});
+
+    const login = jest.fn().mockRejectedValue({message: 'Just a test'});
+    const isLoggedIn = jest.fn().mockReturnValue(false);
+    const clearToken = jest.fn();
+    const setLocale = jest.fn();
+    const setTimezone = jest.fn();
+    const gmp = {
+      setTimezone,
+      setLocale,
+      login,
+      isLoggedIn,
+      clearToken,
+      settings: {
+        enableHyperionOnly: true,
+      },
+    };
+    const {render} = rendererWith({
+      gmp,
+      router: true,
+      store: true,
+      queryMocks: [queryMock],
+    });
+
+    const {getByName} = render(<LoginPage />);
+
+    const usernameField = getByName('username');
+    const passwordField = getByName('password');
+
+    fireEvent.change(usernameField, {target: {value: 'foo'}});
+    fireEvent.change(passwordField, {target: {value: 'bar'}});
+
+    const button = screen.getByTestId('login-button');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(screen.getByTestId('error')).toHaveTextContent(
+      'Response not successful: Received status code 500: Foo. Bar.',
+    );
   });
 
   test('should redirect to main page if already logged in', () => {

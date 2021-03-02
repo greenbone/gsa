@@ -15,13 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import {parseSeverity, parseDate} from 'gmp/parser';
 
 import Model, {parseModelFromElement} from 'gmp/model';
 
 import ReportReport from './report/report';
+import Task from './task';
 
 // FIXME the report xml structure is really ugly
 
@@ -58,10 +59,46 @@ class Report extends Model {
     copy.content_type = content_type;
 
     copy.scan_start = parseDate(scan_start);
+
     copy.timestamp = parseDate(timestamp);
 
     if (isDefined(scan_end)) {
       copy.scan_end = parseDate(scan_end);
+    }
+
+    return copy;
+  }
+
+  static parseObject(object) {
+    const copy = super.parseObject(object);
+
+    const {
+      report,
+      report_format,
+      severity,
+      task,
+      scanStart,
+      scanEnd,
+      timestamp,
+    } = object;
+
+    if (hasValue(report)) {
+      copy.report = ReportReport.fromElement(report);
+    }
+
+    copy.reportFormat = parseModelFromElement(report_format, 'reportformat');
+    copy.task = Task.fromObject(task);
+
+    if (hasValue(severity)) {
+      copy.severity = parseSeverity(severity);
+    }
+
+    copy.scanStart = parseDate(scanStart);
+
+    copy.timestamp = parseDate(timestamp);
+
+    if (hasValue(scanEnd)) {
+      copy.scanEnd = parseDate(scanEnd);
     }
 
     return copy;

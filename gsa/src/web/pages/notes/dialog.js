@@ -45,6 +45,13 @@ import SaveDialog from 'web/components/dialog/savedialog';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import FormGroup from 'web/components/form/formgroup';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+
 import PropTypes from 'web/utils/proptypes';
 import {
   renderNvtName,
@@ -55,13 +62,6 @@ import {
   LOG_VALUE,
   translatedResultSeverityRiskFactor,
 } from 'web/utils/severity';
-
-import FormGroup from 'web/components/form/formgroup';
-import TextArea from 'web/components/form/textarea';
-import TextField from 'web/components/form/textfield';
-import Radio from 'web/components/form/radio';
-import Select from 'web/components/form/select';
-import Spinner from 'web/components/form/spinner';
 
 const NoteDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,

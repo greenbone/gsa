@@ -21,8 +21,6 @@ import {_, _l} from 'gmp/locale/lang';
 
 import {shorten} from 'gmp/utils/string';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import Divider from 'web/components/layout/divider';
@@ -36,6 +34,8 @@ import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
 import {createEntitiesTable} from 'web/entities/table';
+
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
   <TableHeader>

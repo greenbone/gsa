@@ -15,15 +15,47 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {useCallback} from 'react';
+
 import {useSelector, useDispatch} from 'react-redux';
+
+import {gql, useMutation} from '@apollo/client';
+
+import date from 'gmp/models/date';
 
 import {getSessionTimeout} from 'web/store/usersettings/selectors';
 import {setSessionTimeout} from 'web/store/usersettings/actions';
 
+import useGmp from './useGmp';
+
+export const RENEW_SESSION = gql`
+  mutation renewSession {
+    renewSession {
+      currentUser {
+        sessionTimeout
+      }
+    }
+  }
+`;
+
 const useUserSessionTimeout = () => {
   const dispatch = useDispatch();
+  const gmp = useGmp();
+  const [renewSession] = useMutation(RENEW_SESSION);
+  const {enableHyperionOnly = false} = gmp.settings;
   return [
     useSelector(getSessionTimeout),
+    useCallback(() => {
+      if (!enableHyperionOnly) {
+        gmp.user.renewSession();
+      }
+
+      renewSession().then(({data}) =>
+        dispatch(
+          setSessionTimeout(date(data.renewSession.currentUser.sessionTimeout)),
+        ),
+      );
+    }, [renewSession, dispatch, enableHyperionOnly, gmp.user]),
     timeout => dispatch(setSessionTimeout(timeout)),
   ];
 };

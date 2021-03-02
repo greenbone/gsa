@@ -24,10 +24,6 @@ import _ from 'gmp/locale';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-
 import Toolbar from 'web/components/bar/toolbar';
 
 import ErrorMessage from 'web/components/error/errormessage';
@@ -42,6 +38,10 @@ import Section from 'web/components/section/section';
 
 import {loadAllEntities, selector} from 'web/store/entities/filters';
 
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+
 const exclude_props = [
   'children',
   'dashboard',
@@ -55,17 +55,6 @@ const exclude_props = [
   'title',
   'toolBarIcons',
 ];
-
-const renderSectionTitle = (counts, title) => {
-  if (!isDefined(counts)) {
-    return title;
-  }
-
-  return _('{{title}} {{filtered}} of {{all}}', {
-    title,
-    ...counts,
-  });
-};
 
 class EntitiesPage extends React.Component {
   constructor(...args) {
@@ -87,9 +76,16 @@ class EntitiesPage extends React.Component {
   }
 
   getSectionTitle() {
-    const {entitiesCounts, title} = this.props;
+    const {entities, entitiesCounts, title, isLoading} = this.props;
 
-    return renderSectionTitle(entitiesCounts, title);
+    if (!isDefined(entitiesCounts) || (isLoading && !isDefined(entities))) {
+      return title;
+    }
+
+    return _('{{title}} {{filtered}} of {{all}}', {
+      title,
+      ...entitiesCounts,
+    });
   }
 
   handleFilterEditClick() {
@@ -134,6 +130,7 @@ class EntitiesPage extends React.Component {
     return (
       <SectionComponent
         title={this.getSectionTitle()}
+        data-testid="entities-section"
         className="entities-section"
         img={sectionIcon}
         extra={extra}
@@ -169,6 +166,7 @@ class EntitiesPage extends React.Component {
     return (
       <TableComponent
         {...other}
+        data-testid="entities-table"
         filter={filter}
         entities={entities}
         entitiesCounts={entitiesCounts}
@@ -338,10 +336,7 @@ const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:

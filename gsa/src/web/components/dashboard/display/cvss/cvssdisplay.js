@@ -19,17 +19,17 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-import {NA_VALUE} from 'web/utils/severity';
+import {isDefined} from 'gmp/utils/identity';
 
 import BarChart from 'web/components/chart/bar';
 
-import DataDisplay from '../datadisplay';
+import DataDisplay from 'web/components/dashboard/display/datadisplay';
+
+import PropTypes from 'web/utils/proptypes';
+import {NA_VALUE} from 'web/utils/severity';
 
 import transformCvssData from './cvsstransform';
 

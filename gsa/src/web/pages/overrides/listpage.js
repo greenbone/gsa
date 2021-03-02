@@ -21,12 +21,6 @@ import _ from 'gmp/locale';
 
 import {OVERRIDES_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
@@ -36,10 +30,16 @@ import OverrideIcon from 'web/components/icon/overrideicon';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/overrides';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import FilterDialog from './filterdialog';
 import OverridesTable from './table';
@@ -47,7 +47,7 @@ import OverrideComponent from './component';
 
 import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({capabilities, onOverrideCreateClick}) => (
     <IconDivider>
       <ManualIcon

@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import registerCommand from 'gmp/command';
+
 import {isDefined, isArray} from 'gmp/utils/identity';
 
 import HttpCommand from './http';
-
-import registerCommand from 'gmp/command';
 
 class PerformanceCommand extends HttpCommand {
   constructor(http) {

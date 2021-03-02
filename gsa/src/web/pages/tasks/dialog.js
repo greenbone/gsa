@@ -20,10 +20,6 @@ import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
-import {forEach, first} from 'gmp/utils/array';
-import {isDefined, isArray} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
@@ -49,9 +45,9 @@ import {
   filterEmptyScanConfig,
 } from 'gmp/models/scanconfig';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
+import {forEach, first} from 'gmp/utils/array';
+import {isDefined, isArray} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -68,6 +64,10 @@ import NewIcon from 'web/components/icon/newicon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
+import useCapabilities from 'web/utils/useCapabilities';
+
 import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 import AutoDeleteReportsGroup from './autodeletereportsgroup';
 
@@ -80,7 +80,7 @@ const sort_scan_configs = (scan_configs = []) => {
   scan_configs = scan_configs.filter(filterEmptyScanConfig);
 
   forEach(scan_configs, config => {
-    const type = config.scan_config_type;
+    const type = config.scanConfigType;
     if (!isArray(sorted_scan_configs[type])) {
       sorted_scan_configs[type] = [];
     }
@@ -136,9 +136,9 @@ const TaskDialog = ({
   apply_overrides = YES_VALUE,
   auto_delete = AUTO_DELETE_NO,
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  capabilities,
   comment = '',
   config_id,
+  error,
   hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
   in_assets = YES_VALUE,
   isLoadingAlerts = false,
@@ -156,7 +156,7 @@ const TaskDialog = ({
   scanners = [
     {
       id: OPENVAS_DEFAULT_SCANNER_ID,
-      scanner_type: OPENVAS_SCANNER_TYPE,
+      scannerType: OPENVAS_SCANNER_TYPE,
     },
   ],
   schedule_id = UNSET_VALUE,
@@ -170,6 +170,7 @@ const TaskDialog = ({
   title = _('New Task'),
   onAlertsChange,
   onClose,
+  onErrorClose,
   onNewAlertClick,
   onNewScheduleClick,
   onNewTargetClick,
@@ -185,6 +186,8 @@ const TaskDialog = ({
 
   const [configType, setConfigType] = useState('openvas');
   const [prevConfigType, setPrevConfigType] = useState('openvas');
+
+  const capabilities = useCapabilities();
 
   // eslint-disable-next-line no-shadow
   const handleScannerChange = (value, name) => {
@@ -292,8 +295,10 @@ const TaskDialog = ({
 
   return (
     <SaveDialog
+      error={error}
       title={title}
       onClose={onClose}
+      onErrorClose={onErrorClose}
       onSave={onSave}
       defaultValues={uncontrolledData}
       values={controlledData}
@@ -617,9 +622,9 @@ TaskDialog.propTypes = {
   apply_overrides: PropTypes.yesno,
   auto_delete: PropTypes.oneOf(['keep', 'no']),
   auto_delete_data: PropTypes.number,
-  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   config_id: PropTypes.idOrZero,
+  error: PropTypes.string,
   hosts_ordering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
   in_assets: PropTypes.yesno,
   isLoadingAlerts: PropTypes.bool,
@@ -647,6 +652,7 @@ TaskDialog.propTypes = {
   title: PropTypes.string,
   onAlertsChange: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
+  onErrorClose: PropTypes.func,
   onNewAlertClick: PropTypes.func.isRequired,
   onNewScheduleClick: PropTypes.func.isRequired,
   onNewTargetClick: PropTypes.func.isRequired,
@@ -657,6 +663,6 @@ TaskDialog.propTypes = {
   onTargetChange: PropTypes.func.isRequired,
 };
 
-export default withCapabilities(TaskDialog);
+export default TaskDialog;
 
 // vim: set ts=2 sw=2 tw=80:

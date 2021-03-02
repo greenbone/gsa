@@ -16699,7 +16699,6 @@ login (http_connection_t *con, params_t *params,
   if ((password == NULL)
       && (params_original_value (params, "password") == NULL))
     password = "";
-
   if (login && password)
     {
       ret = authenticate_gmp (login, password, &role, &timezone,

@@ -18,41 +18,50 @@
 
 import React from 'react';
 
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {fireEvent, rendererWith, waitFor, wait} from 'web/utils/testing';
 
 import CvssCalculator from 'web/pages/extras/cvsscalculatorpage';
 
-const calculateScoreFromVector = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: 7.5,
-  }),
-);
-
-const gmp = {
-  cvsscalculator: {
-    calculateScoreFromVector,
-  },
-  settings: {
-    manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
-  },
-  user: {
-    renewSession: jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: 'foo',
-      }),
-    ),
-  },
-};
-
 const location = {
   query: {cvssVector: 'AV:N/AC:L/Au:N/C:P/I:P/A:P'},
 };
+
+const renewDate = '2019-10-10T12:00:00Z';
+
+let gmp;
+let queryMock;
+
+beforeEach(() => {
+  [queryMock] = createRenewSessionQueryMock(renewDate);
+
+  const renewSession = jest.fn().mockResolvedValue({data: renewDate});
+  const calculateScoreFromVector = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: 7.5,
+    }),
+  );
+
+  gmp = {
+    cvsscalculator: {
+      calculateScoreFromVector,
+    },
+    settings: {
+      manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
+    },
+    user: {
+      renewSession,
+    },
+  };
+});
 
 describe('CvssCalculator page tests', () => {
   test('Should render with default values', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(<CvssCalculator />);
@@ -90,6 +99,7 @@ describe('CvssCalculator page tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(
@@ -129,6 +139,7 @@ describe('CvssCalculator page tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(
@@ -179,6 +190,7 @@ describe('CvssCalculator page tests', () => {
     const {render} = rendererWith({
       gmp,
       store: true,
+      queryMocks: [queryMock],
     });
 
     const {element, getAllByTestId} = render(

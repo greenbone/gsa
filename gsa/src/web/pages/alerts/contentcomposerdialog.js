@@ -25,8 +25,6 @@ import _ from 'gmp/locale';
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
 import ComposerContent, {
   COMPOSER_CONTENT_DEFAULTS,
@@ -39,6 +37,9 @@ import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
 const StyledDiv = styled.div`
   text-align: end;

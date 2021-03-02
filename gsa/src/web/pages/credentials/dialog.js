@@ -20,11 +20,6 @@ import React from 'react';
 
 import {_} from 'gmp/locale/lang';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
-import {isDefined} from 'gmp/utils/identity';
-import {first, map} from 'gmp/utils/array';
-
 import {
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
@@ -43,11 +38,10 @@ import {
   getCredentialTypeName,
 } from 'gmp/models/credential';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
+import {isDefined} from 'gmp/utils/identity';
+import {first, map} from 'gmp/utils/array';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -59,6 +53,12 @@ import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
+
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const PGP_PUBLIC_KEY_LINE = '-----BEGIN PGP PUBLIC KEY BLOCK-----';
 
@@ -83,6 +83,7 @@ class CredentialsDialog extends React.Component {
         error: error,
       };
     }
+    return null;
   }
 
   componentDidMount() {
@@ -487,6 +488,7 @@ CredentialsDialog.propTypes = {
   credential: PropTypes.model,
   credential_login: PropTypes.string,
   credential_type: pwtypes,
+  error: PropTypes.error,
   name: PropTypes.string,
   passphrase: PropTypes.string,
   password: PropTypes.string,

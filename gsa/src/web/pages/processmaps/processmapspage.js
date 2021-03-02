@@ -31,6 +31,7 @@ import ProcessMapLoader from 'web/components/processmap/processmaploader';
 import Section from 'web/components/section/section';
 
 import Theme from 'web/utils/theme';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import withGmp from 'web/utils/withGmp';
 
 const ToolBarIcons = () => (
@@ -67,6 +68,8 @@ const PageWrapper = styled(Layout)`
 `;
 
 const ProcessMapsPage = () => {
+  const [, renewSession] = useUserSessionTimeout();
+
   return (
     <React.Fragment>
       <PageTitle title={_('Business Process Map')} />
@@ -78,7 +81,9 @@ const ProcessMapsPage = () => {
         />
         <StyledLayout grow="1">
           <ProcessMapLoader>
-            {({...loaderProps}) => <ProcessMap {...loaderProps} />}
+            {({...loaderProps}) => (
+              <ProcessMap onInteraction={renewSession} {...loaderProps} />
+            )}
           </ProcessMapLoader>
         </StyledLayout>
       </PageWrapper>

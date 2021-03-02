@@ -18,9 +18,9 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import {get_img_url} from '../../utils/urls.js';
+import {get_img_url} from 'web/utils/urls';
 
 const Img = ({alt = '', src, ...other}) => {
   const img_path = get_img_url(src);

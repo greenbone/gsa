@@ -22,12 +22,12 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Checkbox from 'web/components/form/checkbox';
 import TextField from 'web/components/form/textfield';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
 
 const StyledLayout = styled(Layout)`
   margin-top: 15px;

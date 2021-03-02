@@ -40,7 +40,6 @@ import {selector as hostSelector} from 'web/store/entities/hosts';
 import {selector as resultSelector} from 'web/store/entities/results';
 
 import {saveBusinessProcessMap} from 'web/store/businessprocessmaps/actions';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
@@ -797,7 +796,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
   return {
     saveUpdatedMaps: updatedMaps =>
       dispatch(saveBusinessProcessMap(gmp)(updatedMaps)),
-    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
   };
 };
 

@@ -41,13 +41,13 @@ import {isDefined} from 'gmp/utils/identity';
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import {setRef} from 'web/utils/render';
 import {
   getSeverityLevelsOld as getSeverityLevels,
   FALSE_POSITIVE_VALUE,
   HIGH_VALUE,
 } from 'web/utils/severity';
-import {setRef} from 'web/utils/render';
+import Theme from 'web/utils/theme';
 
 import Group from './group';
 

@@ -15,59 +15,53 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {useCallback, useEffect} from 'react';
 
 import logger from 'gmp/log';
 
 import PropTypes from 'web/utils/proptypes';
+import usePrevious from 'web/utils/usePrevious';
 
 const log = logger.getLogger('web.entity.container');
 
-class EntityContainer extends React.Component {
-  constructor(...args) {
-    super(...args);
+const EntityContainer = ({
+  children,
+  id,
+  reload,
+  onDownload,
+  showError,
+  showSuccessMessage,
+  ...other
+}) => {
+  const prevId = usePrevious(id);
 
-    this.reload = this.reload.bind(this);
+  const handleError = useCallback(
+    error => {
+      log.error(error);
+      showError(error);
+    },
+    [showError],
+  );
 
-    this.handleChanged = this.handleChanged.bind(this);
-    this.handleError = this.handleError.bind(this);
-  }
+  const handleReload = useCallback(() => {
+    reload(id);
+  }, [reload, id]);
 
-  componentDidUpdate(prevProps) {
-    const {id} = this.props;
-    if (id !== prevProps.id) {
-      this.reload();
+  useEffect(() => {
+    if (id !== prevId) {
+      reload(id);
     }
-  }
+  }, [id, prevId, reload]);
 
-  reload() {
-    const {id} = this.props;
-
-    this.props.reload(id);
-  }
-
-  handleChanged() {
-    this.reload();
-  }
-
-  handleError(error) {
-    const {showError} = this.props;
-    log.error(error);
-    showError(error);
-  }
-
-  render() {
-    const {children, onDownload, showSuccessMessage} = this.props;
-    return children({
-      ...this.props,
-      onChanged: this.handleChanged,
-      onSuccess: this.handleChanged,
-      onError: this.handleError,
-      onDownloaded: onDownload,
-      showSuccess: showSuccessMessage,
-    });
-  }
-}
+  return children({
+    ...other,
+    onChanged: handleReload,
+    onSuccess: handleReload,
+    onError: handleError,
+    onDownloaded: onDownload,
+    showSuccess: showSuccessMessage,
+  });
+};
 
 EntityContainer.propTypes = {
   children: PropTypes.func.isRequired,

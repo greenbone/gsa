@@ -21,10 +21,10 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import Layout from 'web/components/layout/layout';
+
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-import Layout from 'web/components/layout/layout';
 
 import DialogCloseButton from './closebutton';
 

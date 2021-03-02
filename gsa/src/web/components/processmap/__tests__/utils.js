@@ -17,29 +17,37 @@
  */
 import {createTag, editTag, deleteTag} from '../utils';
 
-const create = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
-const deleteFunc = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
-const save = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
-const gmp = {
-  tag: {
-    create,
-    delete: deleteFunc,
-    save,
-  },
-};
 const process = {
   name: 'lorem',
   tagId: 31,
 };
+
+let create;
+let deleteFunc;
+let gmp;
+let save;
+
+beforeEach(() => {
+  create = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  deleteFunc = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  save = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  gmp = {
+    tag: {
+      create,
+      delete: deleteFunc,
+      save,
+    },
+  };
+});
 
 describe('processmap utils tests', () => {
   test('should call create command', () => {

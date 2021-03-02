@@ -25,12 +25,12 @@ import {selectSaveId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
+import EntityComponent from 'web/entity/component';
+
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 import withCapabilities from 'web/utils/withCapabilities';
-
-import EntityComponent from '../../entity/component';
 
 import PermissionDialog from './dialog';
 
@@ -290,9 +290,6 @@ PermissionsComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(PermissionsComponent);
+export default compose(withGmp, withCapabilities)(PermissionsComponent);
 
 // vim: set ts=2 sw=2 tw=80:

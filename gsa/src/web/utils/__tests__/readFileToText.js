@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2021 Greenbone Networks GmbH
+/* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,37 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import readFileToText from '../readFileToText';
 
-import PropTypes from 'web/utils/proptypes';
+describe('readFileToText tests', () => {
+  test('Should read dummy file', async () => {
+    const blob = new Blob(['Hello world!'], {type: 'text/plain'});
+    const file = new Response(blob);
 
-import withGmp from 'web/utils/withGmp';
-
-class Task extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {task: {}};
-  }
-
-  componentDidMount() {
-    this.props.gmp.task.get(this.props.params).then(task => {
-      this.setState({task: task});
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <h2>Task: {this.state.task.name}</h2>
-      </div>
-    );
-  }
-}
-
-Task.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default withGmp(Task);
-
-// vim: set ts=2 sw=2 tw=80:
+    expect(await readFileToText(file)).toEqual('Hello world!');
+  });
+  test('Should not crash on undefined', async () => {
+    expect(await readFileToText()).toBeUndefined();
+  });
+});

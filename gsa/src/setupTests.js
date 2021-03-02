@@ -21,7 +21,7 @@ import {initLocale} from 'gmp/locale/lang';
 class FakeBackend {
   read(language, namespace, callback) {
     if (language.startsWith('en') || language.startsWith('de')) {
-      // change language by calling the callback functioon
+      // change language by calling the callback function
       return callback();
     }
     // change language and pass error message

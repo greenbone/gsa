@@ -23,16 +23,11 @@ import {format as d3format} from 'd3-format';
 
 import {_, _l} from 'gmp/locale/lang';
 
+import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
+
 import {parseFloat, parseSeverity} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import {TASKS_FILTER_FILTER} from 'gmp/models/filter';
-
-import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
-import {severityFormat} from 'web/utils/render';
-import {resultSeverityRiskFactor, _NA} from 'web/utils/severity';
 
 import BubbleChart from 'web/components/chart/bubble';
 
@@ -42,6 +37,11 @@ import withFilterSelection from 'web/components/dashboard/display/withFilterSele
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
+
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
+import {severityFormat} from 'web/utils/render';
+import {resultSeverityRiskFactor, _NA} from 'web/utils/severity';
 
 import {TasksHighResultsLoader} from './loaders';
 

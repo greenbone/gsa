@@ -21,8 +21,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
 import DeleteIcon from 'web/components/icon/deleteicon';
 
 import Table from 'web/components/table/stripedtable';
@@ -31,6 +29,8 @@ import TableData from 'web/components/table/data';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
+
+import PropTypes from 'web/utils/proptypes';
 
 const PortRangesTable = ({actions = true, portRanges, onDeleteClick}) => {
   if (!isDefined(portRanges) || portRanges.length === 0) {

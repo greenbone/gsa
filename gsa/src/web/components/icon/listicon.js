@@ -18,9 +18,9 @@
 
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Link from 'web/components/link/link';
+
+import PropTypes from 'web/utils/proptypes';
 
 import ListSvgIcon from './listsvgicon';
 

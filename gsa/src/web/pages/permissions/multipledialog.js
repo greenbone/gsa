@@ -24,10 +24,6 @@ import _ from 'gmp/locale';
 
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import {renderSelectItems} from 'web/utils/render';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
@@ -36,6 +32,10 @@ import Select from 'web/components/form/select';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import {renderSelectItems} from 'web/utils/render';
 
 export const CURRENT_RESOURCE_ONLY = '0';
 export const INCLUDE_RELATED_RESOURCES = '1';

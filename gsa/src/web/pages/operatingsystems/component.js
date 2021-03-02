@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import EntityComponent from '../../entity/component.js';
+import EntityComponent from 'web/entity/component';
 
 const OsComponent = props => (
   <EntityComponent {...props} name="operatingsystem" />

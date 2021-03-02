@@ -17,149 +17,80 @@
  */
 import React from 'react';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import Task, {TASK_STATUS} from 'gmp/models/task';
-import Schedule from 'gmp/models/schedule';
-import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+import {setLocale} from 'gmp/locale/lang';
 
-import {entityLoadingActions as scanconfigActions} from 'web/store/entities/scanconfigs';
-import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
+import {createGetScanConfigQueryMock} from 'web/graphql/__mocks__/scanconfigs';
+import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 
-import {rendererWith} from 'web/utils/testing';
+import {setTimezone} from 'web/store/usersettings/actions';
+
+import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+
+import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import Details from '../details';
 
 setLocale('en');
 
-const config = ScanConfig.fromElement({
-  _id: '314',
-  name: 'foo',
-  comment: 'bar',
-  scanner: {name: 'scanner1', type: '0'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
-  tasks: {
-    task: [{id: '12345', name: 'foo'}, {id: '678910', name: 'task2'}],
-  },
-});
-
-const lastReport = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-07-30T13:23:30Z',
-    scan_start: '2019-07-30T13:23:34Z',
-    scan_end: '2019-07-30T13:25:43Z',
-  },
-};
-
-const preferences = {
-  preference: [
-    {
-      name: 'Add results to Asset Management',
-      scanner_name: 'in_assets',
-      value: 'yes',
-    },
-    {
-      name: 'Apply Overrides when adding Assets',
-      scanner_name: 'assets_apply_overrides',
-      value: 'yes',
-    },
-    {
-      name: 'Min QOD when adding Assets',
-      scanner_name: 'assets_min_qod',
-      value: '70',
-    },
-    {
-      name: 'Auto Delete Reports',
-      scanner_name: 'auto_delete',
-      value: 'no',
-    },
-    {
-      name: 'Auto Delete Reports Data',
-      scanner_name: 'auto_delete_data',
-      value: '5',
-    },
-  ],
-};
-
-const schedule = Schedule.fromElement({_id: '121314', name: 'schedule1'});
-
-const getConfig = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: config,
-  }),
-);
-
-const getSchedule = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: schedule,
-  }),
-);
-
-const gmp = {
-  scanconfig: {
-    get: getConfig,
-  },
-  schedule: {
-    get: getSchedule,
-  },
-};
-
 describe('Task Details tests', () => {
-  test('should render full task details', () => {
-    const task = Task.fromElement({
-      _id: '12345',
-      owner: {name: 'username'},
-      name: 'foo',
-      comment: 'bar',
-      status: TASK_STATUS.done,
-      alterable: '0',
-      last_report: lastReport,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: '5678', name: 'target1'},
-      alert: {_id: '91011', name: 'alert1'},
-      scanner: {_id: '1516', name: 'scanner1', type: '2'},
-      preferences: preferences,
-      schedule: schedule,
-      config: config,
-    });
+  test('should render full task details', async () => {
+    const {detailsMockTask: task} = getMockTasks();
+
     const caps = new Capabilities(['everything']);
+    const [scheduleMock, resultFunc] = createGetScheduleQueryMock('foo');
+    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       router: true,
       store: true,
-      gmp,
+      queryMocks: [scheduleMock, scanConfigMock],
     });
 
-    store.dispatch(scanconfigActions.success('314', config));
-    store.dispatch(scheduleActions.success('121314', schedule));
+    store.dispatch(setTimezone('CET'));
 
     const {element, getAllByTestId} = render(<Details entity={task} />);
 
-    expect(element).toMatchSnapshot();
+    await wait();
+    expect(resultFunc).toHaveBeenCalled();
+    expect(scanConfigResult).toHaveBeenCalled();
 
-    const headings = element.querySelectorAll('h2');
+    const headings = screen.getAllByRole('heading');
     const detailslinks = getAllByTestId('details-link');
 
     expect(headings[0]).toHaveTextContent('Target');
-    expect(detailslinks[0]).toHaveAttribute('href', '/target/5678');
-    expect(element).toHaveTextContent('target1');
+    expect(detailslinks[0]).toHaveAttribute('href', '/target/159');
+    expect(element).toHaveTextContent('target 1');
 
     expect(headings[1]).toHaveTextContent('Alerts');
-    expect(detailslinks[1]).toHaveAttribute('href', '/alert/91011');
-    expect(element).toHaveTextContent('alert1');
+    expect(detailslinks[1]).toHaveAttribute('href', '/alert/151617');
+    expect(element).toHaveTextContent('alert 1');
 
     expect(headings[2]).toHaveTextContent('Scanner');
-    expect(detailslinks[2]).toHaveAttribute('href', '/scanner/1516');
-    expect(element).toHaveTextContent('scanner1');
+    expect(detailslinks[2]).toHaveAttribute('href', '/scanner/212223');
+    expect(element).toHaveTextContent('scanner 1');
     expect(element).toHaveTextContent('OpenVAS Scanner');
+    expect(element).toHaveTextContent('Scan Config');
+    expect(detailslinks[3]).toHaveAttribute('href', '/scanconfig/314');
+    expect(element).toHaveTextContent('Order for target hostssequential');
+    expect(element).toHaveTextContent('Network Source Interface');
+    expect(element).toHaveTextContent(
+      'Maximum concurrently executed NVTs per host4',
+    );
+    expect(element).toHaveTextContent('Maximum concurrently scanned hosts20');
 
     expect(headings[3]).toHaveTextContent('Assets');
+    expect(element).toHaveTextContent('Add to AssetsYes');
+    expect(element).toHaveTextContent('Apply OverridesYes');
+    expect(element).toHaveTextContent('Min QoD70 %');
 
-    expect(headings[4]).toHaveTextContent('Scan');
+    expect(headings[4]).toHaveTextContent('Schedule');
+    expect(detailslinks[4]).toHaveAttribute('href', '/schedule/foo');
+    expect(element).toHaveTextContent('schedule 1');
+
+    expect(headings[5]).toHaveTextContent('Scan');
     expect(element).toHaveTextContent('2 minutes');
     expect(element).toHaveTextContent('Do not automatically delete reports');
   });

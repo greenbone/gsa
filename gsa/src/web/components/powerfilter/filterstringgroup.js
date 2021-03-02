@@ -22,10 +22,10 @@ import _ from 'gmp/locale';
 
 import {isString} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
 
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
+import PropTypes from 'web/utils/proptypes';
 
 const FilterStringGroup = ({filter, onChange, name = 'filter'}) => {
   const filterstring = isString(filter)

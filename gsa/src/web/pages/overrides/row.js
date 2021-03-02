@@ -24,10 +24,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {severityValue} from 'gmp/utils/number';
 
-import CloneIcon from 'web/entity/icon/cloneicon';
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import ExportIcon from 'web/components/icon/exporticon';
@@ -39,6 +35,10 @@ import TableData from 'web/components/table/data';
 
 import {RowDetailsToggle} from 'web/entities/row';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
+
+import CloneIcon from 'web/entity/icon/cloneicon';
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
 import PropTypes from 'web/utils/proptypes';
 import {

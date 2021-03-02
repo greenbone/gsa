@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import Filter from 'gmp/models/filter.js';
+import Filter from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 

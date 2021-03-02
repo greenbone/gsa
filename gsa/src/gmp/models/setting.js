@@ -17,19 +17,34 @@
  */
 import {isEmpty} from 'gmp/utils/string';
 
+export const getSettingValueByName = (settings = []) => name => {
+  const setting = settings.find(obj => obj.name === name);
+
+  return setting?.value;
+};
+
 class Setting {
-  constructor(element) {
-    this.id = element._id;
-    this.comment = element.comment === '(null)' ? undefined : element.comment;
-    this.name = element.name;
-    this.value =
-      !isEmpty(element.value) && element.value !== '0'
-        ? element.value
-        : undefined;
+  constructor({id, comment, name, value} = {}) {
+    this.id = id;
+    this.comment = comment;
+    this.name = name;
+    this.value = value;
   }
 
   static fromElement(element) {
-    return new Setting(element);
+    return Setting.fromObject({
+      id: element._id,
+      comment: element.comment === '(null)' ? undefined : element.comment,
+      name: element.name,
+      value:
+        !isEmpty(element.value) && element.value !== '0'
+          ? element.value
+          : undefined,
+    });
+  }
+
+  static fromObject(object) {
+    return new Setting(object);
   }
 }
 

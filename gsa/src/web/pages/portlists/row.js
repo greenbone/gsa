@@ -20,7 +20,12 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
+import ExportIcon from 'web/components/icon/exporticon';
+
+import IconDivider from 'web/components/layout/icondivider';
+
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
 import EntityNameTableData from 'web/entities/entitynametabledata';
 import withEntitiesActions from 'web/entities/withEntitiesActions';
@@ -29,12 +34,7 @@ import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import ExportIcon from 'web/components/icon/exporticon';
-
-import IconDivider from 'web/components/layout/icondivider';
-
-import TableData from 'web/components/table/data';
-import TableRow from 'web/components/table/row';
+import PropTypes from 'web/utils/proptypes';
 
 const IconActions = ({
   entity,

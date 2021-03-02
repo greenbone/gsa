@@ -231,6 +231,20 @@ describe('Capabilities tests', () => {
     }
     expect(i).toEqual(4);
   });
+
+  test('should support mapping', () => {
+    const mapFunc = jest.fn((entry, i) => i);
+    const capList = ['get_tasks', 'create_task', 'delete_task', 'modify_task'];
+    const caps = new Capabilities(capList);
+
+    expect(caps.length).toEqual(4);
+
+    const mappedCaps = caps.map(mapFunc);
+
+    expect(caps.length).toEqual(4);
+    expect(mapFunc).toHaveBeenCalledTimes(4);
+    expect(mappedCaps).toEqual([0, 1, 2, 3]);
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

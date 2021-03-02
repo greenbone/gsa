@@ -32,55 +32,43 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
 
-const config = ScanConfig.fromElement({
-  _id: '12345',
+const config = ScanConfig.fromObject({
+  id: '12345',
   name: 'foo',
   comment: 'bar',
-  owner: {name: 'admin'},
+  owner: 'admin',
   type: OPENVAS_SCAN_CONFIG_TYPE,
-  permissions: {permission: [{name: 'everything'}]},
-  family_count: {
-    __text: 2,
-    growing: SCANCONFIG_TREND_STATIC,
-  },
-  nvt_count: {
-    __text: 4,
-    growing: SCANCONFIG_TREND_DYNAMIC,
-  },
+  permissions: [{name: 'everything'}],
+  familyCount: 2,
+  familyGrowing: SCANCONFIG_TREND_STATIC,
+  nvtCount: 4,
+  nvtGrowing: SCANCONFIG_TREND_DYNAMIC,
 });
 
-const config2 = ScanConfig.fromElement({
-  _id: '123456',
+const config2 = ScanConfig.fromObject({
+  id: '123456',
   name: 'lorem',
   comment: 'ipsum',
-  owner: {name: 'admin'},
+  owner: 'admin',
   type: OPENVAS_SCAN_CONFIG_TYPE,
-  permissions: {permission: [{name: 'everything'}]},
-  family_count: {
-    __text: 3,
-    growing: SCANCONFIG_TREND_STATIC,
-  },
-  nvt_count: {
-    __text: 5,
-    growing: SCANCONFIG_TREND_DYNAMIC,
-  },
+  permissions: [{name: 'everything'}],
+  familyCount: 3,
+  familyGrowing: SCANCONFIG_TREND_STATIC,
+  nvtCount: 5,
+  nvtGrowing: SCANCONFIG_TREND_DYNAMIC,
 });
 
-const config3 = ScanConfig.fromElement({
-  _id: '1234567',
+const config3 = ScanConfig.fromObject({
+  id: '1234567',
   name: 'hello',
   comment: 'world',
-  owner: {name: 'admin'},
+  owner: 'admin',
   type: OPENVAS_SCAN_CONFIG_TYPE,
-  permissions: {permission: [{name: 'everything'}]},
-  family_count: {
-    __text: 1,
-    growing: SCANCONFIG_TREND_STATIC,
-  },
-  nvt_count: {
-    __text: 1,
-    growing: SCANCONFIG_TREND_DYNAMIC,
-  },
+  permissions: [{name: 'everything'}],
+  familyCount: 1,
+  familyGrowing: SCANCONFIG_TREND_STATIC,
+  nvtCount: 1,
+  nvtGrowing: SCANCONFIG_TREND_DYNAMIC,
 });
 
 const counts = new CollectionCounts({

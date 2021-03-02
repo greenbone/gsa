@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -28,13 +27,25 @@ import ScanConfig, {
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
 
+import {
+  createDeleteScanConfigsByIdsQueryMock,
+  createExportScanConfigsByIdsQueryMock,
+  createGetScanConfigsQueryMock,
+} from 'web/graphql/__mocks__/scanconfigs';
+
 import {setUsername} from 'web/store/usersettings/actions';
 
 import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {
+  rendererWith,
+  waitFor,
+  fireEvent,
+  wait,
+  screen,
+} from 'web/utils/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
 
@@ -72,30 +83,37 @@ const config = ScanConfig.fromElement({
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
-const reloadInterval = 1;
+const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
+let currentSettings;
+let getConfigs;
+let getFilters;
+let getSetting;
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
-    data: [],
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
+
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
+
+  getConfigs = jest.fn().mockResolvedValue({
+    data: [config],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
+  });
 
-const getConfigs = jest.fn().mockResolvedValue({
-  data: [config],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+  getSetting = jest.fn().mockResolvedValue({filter: null});
 });
-
-const getSetting = jest.fn().mockResolvedValue({filter: null});
 
 describe('ScanConfigsPage tests', () => {
   test('should render full ScanConfigsPage', async () => {
@@ -106,16 +124,21 @@ describe('ScanConfigsPage tests', () => {
       filters: {
         get: getFilters,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {currentSettings, getSetting: getSetting},
     };
+
+    const [mock, resultFunc] = createGetScanConfigsQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setUsername('admin'));
@@ -141,41 +164,48 @@ describe('ScanConfigsPage tests', () => {
 
     const {baseElement} = render(<ScanConfigsPage />);
 
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
     await waitFor(() => baseElement.querySelectorAll('table'));
 
     expect(baseElement).toMatchSnapshot();
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const renewSession = jest.fn().mockResolvedValue({data: {}});
-
     const gmp = {
       scanconfigs: {
         get: getConfigs,
-        deleteByFilter,
-        exportByFilter,
       },
       filters: {
         get: getFilters,
       },
-      reloadInterval,
-      settings: {manualUrl},
-      user: {currentSettings, getSetting, renewSession},
+      settings: {manualUrl, reloadInterval},
+      user: {currentSettings, getSetting},
     };
+
+    const [mock, resultFunc] = createGetScanConfigsQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
+    const [
+      exportByIdsMock,
+      exportByIdsResult,
+    ] = createExportScanConfigsByIdsQueryMock(['314']);
+
+    const [
+      deleteByIdsMock,
+      deleteByIdsResult,
+    ] = createDeleteScanConfigsByIdsQueryMock(['314']);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportByIdsMock, deleteByIdsMock],
     });
 
     store.dispatch(setUsername('admin'));
@@ -199,24 +229,26 @@ describe('ScanConfigsPage tests', () => {
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<ScanConfigsPage />);
+    const {baseElement} = render(<ScanConfigsPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    const icons = getAllByTestId('svg-icon');
+    expect(resultFunc).toHaveBeenCalled();
 
-    await act(async () => {
-      expect(icons[21]).toHaveAttribute(
-        'title',
-        'Move page contents to trashcan',
-      );
-      fireEvent.click(icons[21]);
-      expect(deleteByFilter).toHaveBeenCalled();
+    const icons = screen.getAllByTestId('svg-icon');
 
-      expect(icons[22]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[22]);
-      expect(exportByFilter).toHaveBeenCalled();
-    });
+    expect(baseElement).toMatchSnapshot();
+
+    expect(icons[21]).toHaveAttribute(
+      'title',
+      'Move page contents to trashcan',
+    );
+    fireEvent.click(icons[21]);
+    expect(deleteByIdsResult).toHaveBeenCalled();
+
+    expect(icons[22]).toHaveAttribute('title', 'Export page contents');
+    fireEvent.click(icons[22]);
+    expect(exportByIdsResult).toHaveBeenCalled();
   });
 });
 

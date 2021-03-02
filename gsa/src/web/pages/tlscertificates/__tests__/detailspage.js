@@ -63,19 +63,24 @@ const tlsCertificate = TlsCertificate.fromElement({
 
 const caps = new Capabilities(['everything']);
 
-const reloadInterval = 1;
+const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getEntities;
 
-const getEntities = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  getEntities = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 });
 
 describe('TLS Certificate Detailspage tests', () => {
@@ -91,8 +96,7 @@ describe('TLS Certificate Detailspage tests', () => {
       permissions: {
         get: getEntities,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
       },

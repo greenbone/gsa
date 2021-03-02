@@ -18,7 +18,7 @@
 
 import styled from 'styled-components';
 
-import SimpleTable from './simpletable.js';
+import SimpleTable from './simpletable';
 
 const Table = styled(SimpleTable)`
   & td {

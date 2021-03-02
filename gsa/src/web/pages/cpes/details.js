@@ -21,9 +21,7 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes.js';
-
-import SeverityBar from 'web/components/bar/severitybar.js';
+import SeverityBar from 'web/components/bar/severitybar';
 
 import DateTime from 'web/components/date/datetime';
 
@@ -31,15 +29,18 @@ import DetailsLink from 'web/components/link/detailslink';
 
 import Layout from 'web/components/layout/layout.js';
 
-import InfoTable from 'web/components/table/infotable.js';
-import TableBody from 'web/components/table/body.js';
-import TableData from 'web/components/table/data.js';
-import TableRow from 'web/components/table/row.js';
+import InfoTable from 'web/components/table/infotable';
+import TableBody from 'web/components/table/body';
+import TableData from 'web/components/table/data';
+import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
+import PropTypes from 'web/utils/proptypes';
+
 const CpeDetails = ({entity, links = true}) => {
   const {title, nvdId, deprecatedBy, updateTime, status, severity} = entity;
+
   return (
     <Layout flex="column" grow="1">
       {!isDefined(title) && (

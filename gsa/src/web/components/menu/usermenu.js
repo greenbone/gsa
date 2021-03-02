@@ -20,6 +20,7 @@ import React from 'react';
 import {useHistory} from 'react-router-dom';
 
 import styled, {keyframes} from 'styled-components';
+import {gql, useMutation} from '@apollo/client';
 
 import _ from 'gmp/locale';
 import {dateTimeWithTimeZone} from 'gmp/locale/date';
@@ -128,23 +129,43 @@ const StyledLink = styled(Link)`
   }
 `;
 
+export const LOGOUT = gql`
+  mutation {
+    logout {
+      ok
+    }
+  }
+`;
+
 const UserMenuContainer = () => {
-  const [sessionTimeout, setSessionTimeout] = useUserSessionTimeout();
+  const [sessionTimeout, renewSession] = useUserSessionTimeout();
   const [userTimezone] = useUserTimezone();
   const [userName] = useUserName();
   const gmp = useGmp();
   const history = useHistory();
+  const [logout] = useMutation(LOGOUT);
 
   const handleLogout = event => {
     event.preventDefault();
 
-    gmp.doLogout().then(() => {
-      history.push('/login?type=logout');
-    });
+    if (gmp.settings.enableHyperionOnly) {
+      logout()
+        .then(() => gmp.logout())
+        .then(() => {
+          history.push('/login?type=logout');
+        });
+    } else {
+      gmp
+        .doLogout()
+        .then(logout)
+        .then(() => {
+          history.push('/login?type=logout');
+        });
+    }
   };
 
   const handleRenewSessionTimeout = () => {
-    gmp.user.renewSession().then(response => setSessionTimeout(response.data));
+    renewSession();
   };
 
   return (

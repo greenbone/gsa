@@ -20,7 +20,7 @@ import React from 'react';
 import {isDefined} from 'gmp/utils/identity';
 import Logger from 'gmp/log';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 const log = Logger.getLogger('web.components.provider.subscription');
 
@@ -57,7 +57,10 @@ class SubscriptionProvider extends React.Component {
 
     return () => {
       const subscribers = this.getSubscribers(name); // eslint-disable-line no-shadow
-      this.setSubscribers(name, subscribers.filter(item => item !== func));
+      this.setSubscribers(
+        name,
+        subscribers.filter(item => item !== func),
+      );
     };
   }
 

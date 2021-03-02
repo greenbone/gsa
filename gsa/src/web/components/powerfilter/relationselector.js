@@ -22,7 +22,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import Select from 'web/components/form/select';
-import PropTypes from 'web/utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 const RelationSelector = ({relation, onChange}) => (
   <Select

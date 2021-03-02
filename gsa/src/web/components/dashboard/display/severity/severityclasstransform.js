@@ -41,9 +41,7 @@ import {severityValue} from 'gmp/utils/number';
 
 export const severityClassDataRow = row => [row.label, row.value];
 
-const transformSeverityData = (
-  data = {},
-) => {
+const transformSeverityData = (data = {}) => {
   const {groups = []} = data;
 
   const sum = totalCount(groups);

@@ -23,10 +23,10 @@ import {isDefined} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
+import SaveDialog from 'web/components/dialog/savedialog';
+
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-
-import SaveDialog from '../dialog/savedialog';
 
 class FilterDialog extends React.Component {
   constructor(...args) {

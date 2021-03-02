@@ -34,6 +34,8 @@ import {Router} from 'react-router-dom';
 
 import {Provider} from 'react-redux';
 
+import {MockedProvider} from '@apollo/client/testing';
+
 import {createMemoryHistory} from 'history';
 
 import EverythingCapabilities from 'gmp/capabilities/everything';
@@ -110,7 +112,7 @@ const withProvider = (name, key = name) => Component => ({
     children
   );
 
-const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
+const TestingGmpProvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
 const TestingCapabilitiesProvider = withProvider(
@@ -119,7 +121,7 @@ const TestingCapabilitiesProvider = withProvider(
 )(CapabilitiesContext.Provider);
 
 export const rendererWith = (
-  {capabilities, gmp, store, router} = {
+  {capabilities, gmp, store, router, queryMocks} = {
     store: true,
     router: true,
   },
@@ -139,18 +141,79 @@ export const rendererWith = (
   return {
     render: ui =>
       render(
-        <TestingGmpPropvider gmp={gmp}>
+        <TestingGmpProvider gmp={gmp}>
           <TestingCapabilitiesProvider capabilities={capabilities}>
             <TestingStoreProvider store={store}>
-              <TestingRouter history={history}>{ui}</TestingRouter>
+              <MockedProvider mocks={queryMocks} addTypename={false}>
+                <TestingRouter history={history}>{ui}</TestingRouter>
+              </MockedProvider>
             </TestingStoreProvider>
           </TestingCapabilitiesProvider>
-        </TestingGmpPropvider>,
+        </TestingGmpProvider>,
       ),
     gmp,
     store,
     history,
   };
+};
+
+export const deepFreeze = object => {
+  // Retrieve the property names defined on object
+  const propNames = Object.getOwnPropertyNames(object);
+
+  // Freeze properties before freezing self
+  for (const name of propNames) {
+    const value = object[name];
+
+    if (value && typeof value === 'object') {
+      deepFreeze(value);
+    }
+  }
+
+  return Object.freeze(object);
+};
+
+export const createGenericQueryMock = (query, result, variables, errors) => {
+  let resultFunc;
+
+  if (hasValue(errors)) {
+    resultFunc = jest.fn().mockReturnValue({
+      data: result,
+      errors,
+    });
+  } else {
+    resultFunc = jest.fn().mockReturnValue({
+      data: result,
+    });
+  }
+
+  let queryRequest;
+
+  if (hasValue(variables)) {
+    queryRequest = {
+      query,
+      variables,
+    };
+  } else {
+    queryRequest = {
+      query,
+    };
+  }
+
+  const queryMock = {
+    request: queryRequest,
+    newData: resultFunc,
+  };
+  return [queryMock, resultFunc];
+};
+
+export const createGenericMutationResult = queryName => {
+  const mutationResult = {};
+  mutationResult[queryName] = {
+    ok: true,
+  };
+
+  return mutationResult;
 };
 
 // vim: set ts=2 sw=2 tw=80:

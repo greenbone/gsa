@@ -20,9 +20,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import {WeekDays} from 'gmp/models/event';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import Divider from 'web/components/layout/divider';
 

@@ -19,22 +19,22 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Divider from '../components/layout/divider.js';
-import IconDivider from '../components/layout/icondivider.js';
-import Layout from '../components/layout/layout.js';
+import Select from 'web/components/form/select';
 
-import PropTypes from '../utils/proptypes.js';
-import SelectionType from '../utils/selectiontype.js';
+import DeleteIcon from 'web/components/icon/deleteicon';
+import ExportIcon from 'web/components/icon/exporticon';
+import TagsIcon from 'web/components/icon/tagsicon';
+import TrashIcon from 'web/components/icon/trashicon';
 
-import DeleteIcon from '../components/icon/deleteicon.js';
-import ExportIcon from '../components/icon/exporticon.js';
-import TagsIcon from '../components/icon/tagsicon.js';
-import TrashIcon from '../components/icon/trashicon.js';
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
 
-import Select from '../components/form/select.js';
+import TableFooter from 'web/components/table/footer';
+import TableRow from 'web/components/table/row';
 
-import TableFooter from '../components/table/footer.js';
-import TableRow from '../components/table/row.js';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
 
 export const EntitiesFooter = ({
   actions = true,
@@ -68,7 +68,7 @@ export const EntitiesFooter = ({
     },
   ];
   return (
-    <TableFooter>
+    <TableFooter data-testid="entities-footer">
       <TableRow>
         <td colSpan={span}>
           {actions ? (

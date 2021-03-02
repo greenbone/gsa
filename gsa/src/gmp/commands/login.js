@@ -19,6 +19,8 @@ import _ from 'gmp/locale';
 
 import HttpCommand from './http';
 
+import registerCommand from '../command';
+
 import Login from 'gmp/models/login';
 
 class LoginCommand extends HttpCommand {
@@ -67,6 +69,6 @@ class LoginCommand extends HttpCommand {
   }
 }
 
-export default LoginCommand;
+registerCommand('login', LoginCommand);
 
 // vim: set ts=2 sw=2 tw=80:

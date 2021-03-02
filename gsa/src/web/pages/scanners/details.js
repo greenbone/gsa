@@ -19,9 +19,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
-
-import {isDefined} from 'gmp/utils/identity';
+import DateTime from 'web/components/date/datetime';
 
 import {
   scannerTypeName,
@@ -32,10 +30,7 @@ import {
   PARAM_TYPE_BOOLEAN,
 } from 'gmp/models/scanner';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderYesNo} from 'web/utils/render';
-
-import DetailsBlock from 'web/entity/block';
+import {isDefined} from 'gmp/utils/identity';
 
 import Layout from 'web/components/layout/layout';
 
@@ -49,7 +44,11 @@ import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
+import DetailsBlock from 'web/entity/block';
 import {Col} from 'web/entity/page';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
 
 const CertInfo = ({info}) => {
   const {activationTime, expirationTime, issuer, md5_fingerprint} = info;
@@ -62,12 +61,16 @@ const CertInfo = ({info}) => {
       <TableBody>
         <TableRow>
           <TableData>{_('Activation')}</TableData>
-          <TableData>{dateTimeWithTimeZone(activationTime)}</TableData>
+          <TableData>
+            <DateTime date={activationTime} />
+          </TableData>
         </TableRow>
 
         <TableRow>
           <TableData>{_('Expiration')}</TableData>
-          <TableData>{dateTimeWithTimeZone(expirationTime)}</TableData>
+          <TableData>
+            <DateTime date={expirationTime} />
+          </TableData>
         </TableRow>
 
         <TableRow>

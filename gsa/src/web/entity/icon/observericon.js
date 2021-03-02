@@ -19,15 +19,21 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
+import {hyperionEntityTypes} from 'gmp/utils/entitytype';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import ViewOtherIcon from 'web/components/icon/viewothericon';
 
+import PropTypes from 'web/utils/proptypes';
+
 const ObserverIcon = ({entity, userName, displayName = _('Entity')}) => {
-  const owner = isDefined(entity.owner) ? entity.owner.name : undefined;
+  let owner;
+  if (hyperionEntityTypes.includes(entity.entityType)) {
+    owner = hasValue(entity.owner) ? entity.owner : undefined;
+  } else {
+    owner = isDefined(entity.owner) ? entity.owner.name : undefined;
+  }
 
   if (owner === userName) {
     return null;

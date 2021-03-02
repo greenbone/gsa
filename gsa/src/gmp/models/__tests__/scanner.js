@@ -37,10 +37,29 @@ import {YES_VALUE} from 'gmp/parser';
 testModel(Scanner, 'scanner');
 
 describe('Scanner model tests', () => {
+  test('should parse id', () => {
+    const scanner = Scanner.fromElement({uuid: 'foo'});
+
+    expect(scanner.id).toEqual('foo');
+
+    // Hyperion
+    const scanner2 = Scanner.fromObject({id: 'foo'});
+
+    expect(scanner2.id).toEqual('foo');
+  });
   test('should parse type', () => {
     const scanner = Scanner.fromElement({type: '42'});
+    const scanner2 = Scanner.fromElement({type: 'OSP_SCANNER_TYPE'});
+    const scanner3 = Scanner.fromElement({type: 9});
 
     expect(scanner.scannerType).toEqual(42);
+    expect(scanner2.scannerType).toEqual(OSP_SCANNER_TYPE);
+    expect(scanner3.scannerType).toEqual(9);
+
+    // Hyperion
+    const scanner4 = Scanner.fromObject({type: 'OSP_SCANNER_TYPE'});
+
+    expect(scanner4.scannerType).toEqual(OSP_SCANNER_TYPE);
   });
 
   test('should parse credential', () => {
@@ -61,6 +80,20 @@ describe('Scanner model tests', () => {
     expect(scanner.credential.id).toEqual('123abc');
     expect(scanner.credential.entityType).toEqual('credential');
     expect(scanner2.credential).toBeUndefined();
+
+    // Hyperion
+    const object = {
+      credential: {
+        _id: null,
+      },
+    };
+    const scanner3 = Scanner.fromObject(elem);
+    const scanner4 = Scanner.fromObject(object);
+
+    expect(scanner3.credential).toBeInstanceOf(Credential);
+    expect(scanner3.credential.id).toEqual('123abc');
+    expect(scanner3.credential.entityType).toEqual('credential');
+    expect(scanner4.credential).toBeUndefined();
   });
 
   test('should parse ca_pub', () => {
@@ -73,6 +106,25 @@ describe('Scanner model tests', () => {
     expect(scanner.caPub).toBeUndefined();
     expect(scanner2.caPub).toEqual({certificate: {}});
     expect(scanner.ca_pub).toBeUndefined();
+
+    // Hyperion
+    const object = {
+      caPub: {
+        certificate: 'cert',
+        info: {
+          activationTime: '2018-10-10T23:00:00.000+0000',
+          expirationTime: '2018-10-10T23:59:00.000+0000',
+        },
+      },
+    };
+
+    const scanner3 = Scanner.fromObject({});
+    const scanner4 = Scanner.fromObject(object);
+
+    expect(scanner3.caPub).toBeUndefined();
+    expect(scanner4.caPub.certificate).toEqual('cert');
+    expect(isDate(scanner4.caPub.info.activationTime)).toEqual(true);
+    expect(isDate(scanner4.caPub.info.expirationTime)).toEqual(true);
   });
 
   test('should parse ca_pub_info', () => {
@@ -101,12 +153,24 @@ describe('Scanner model tests', () => {
     expect(scanner.tasks[0]).toBeInstanceOf(Model);
     expect(scanner.tasks[0].entityType).toEqual('task');
     expect(scanner.tasks[0].id).toEqual('123');
+
+    // Hyperion
+    const scanner2 = Scanner.fromObject(elem);
+
+    expect(scanner2.tasks[0]).toBeInstanceOf(Model);
+    expect(scanner2.tasks[0].entityType).toEqual('task');
+    expect(scanner2.tasks[0].id).toEqual('123');
   });
 
   test('should return empty array if no tasks are given', () => {
     const scanner = Scanner.fromElement({});
 
     expect(scanner.tasks).toEqual([]);
+
+    // Hyperion
+    const scanner2 = Scanner.fromObject({});
+
+    expect(scanner2.tasks).toEqual([]);
   });
 
   test('should parse configs', () => {
@@ -120,12 +184,24 @@ describe('Scanner model tests', () => {
     expect(scanner.configs[0]).toBeInstanceOf(Model);
     expect(scanner.configs[0].entityType).toEqual('scanconfig');
     expect(scanner.configs[0].id).toEqual('123');
+
+    // Hyperion
+    const scanner2 = Scanner.fromObject(elem);
+
+    expect(scanner2.configs[0]).toBeInstanceOf(Model);
+    expect(scanner2.configs[0].entityType).toEqual('scanconfig');
+    expect(scanner2.configs[0].id).toEqual('123');
   });
 
   test('should return empty array if no configs are given', () => {
     const scanner = Scanner.fromElement({});
 
     expect(scanner.configs).toEqual([]);
+
+    // Hyperion
+    const scanner2 = Scanner.fromObject({});
+
+    expect(scanner2.configs).toEqual([]);
   });
 
   test('should parse info', () => {
@@ -185,15 +261,32 @@ describe('Scanner model tests', () => {
   });
 
   test('isClonable() should return correct true/false', () => {
+    // Hyperion
+
+    const object1 = {type: 'CVE_SCANNER_TYPE'};
+    const object2 = {type: 'OPENVAS_SCANNER_TYPE'};
+    const object3 = {type: 'OSP_SCANNER_TYPE'};
+    const object4 = {type: 'GREENBONE_SENSOR_SCANNER_TYPE'};
+
+    let scanner1 = Scanner.fromObject(object1);
+    let scanner2 = Scanner.fromObject(object2);
+    let scanner3 = Scanner.fromObject(object3);
+    let scanner4 = Scanner.fromObject(object4);
+
+    expect(scanner1.isClonable()).toEqual(false);
+    expect(scanner2.isClonable()).toEqual(false);
+    expect(scanner3.isClonable()).toEqual(true);
+    expect(scanner4.isClonable()).toEqual(true);
+
     const elem1 = {type: CVE_SCANNER_TYPE};
     const elem2 = {type: OPENVAS_SCANNER_TYPE};
     const elem3 = {type: OSP_SCANNER_TYPE};
     const elem4 = {type: GREENBONE_SENSOR_SCANNER_TYPE};
 
-    const scanner1 = Scanner.fromElement(elem1);
-    const scanner2 = Scanner.fromElement(elem2);
-    const scanner3 = Scanner.fromElement(elem3);
-    const scanner4 = Scanner.fromElement(elem4);
+    scanner1 = Scanner.fromElement(elem1);
+    scanner2 = Scanner.fromElement(elem2);
+    scanner3 = Scanner.fromElement(elem3);
+    scanner4 = Scanner.fromElement(elem4);
 
     expect(scanner1.isClonable()).toEqual(false);
     expect(scanner2.isClonable()).toEqual(false);
@@ -207,21 +300,47 @@ describe('Scanner model tests', () => {
     const elem3 = {type: OSP_SCANNER_TYPE};
     const elem4 = {type: GREENBONE_SENSOR_SCANNER_TYPE};
 
-    const scanner1 = Scanner.fromElement(elem1);
-    const scanner2 = Scanner.fromElement(elem2);
-    const scanner3 = Scanner.fromElement(elem3);
-    const scanner4 = Scanner.fromElement(elem4);
+    let scanner1 = Scanner.fromElement(elem1);
+    let scanner2 = Scanner.fromElement(elem2);
+    let scanner3 = Scanner.fromElement(elem3);
+    let scanner4 = Scanner.fromElement(elem4);
 
-    expect(scanner1.isClonable()).toEqual(false);
-    expect(scanner2.isClonable()).toEqual(false);
-    expect(scanner3.isClonable()).toEqual(true);
-    expect(scanner4.isClonable()).toEqual(true);
+    expect(scanner1.isWritable()).toEqual(false);
+    expect(scanner2.isWritable()).toEqual(false);
+    expect(scanner3.isWritable()).toEqual(true);
+    expect(scanner4.isWritable()).toEqual(true);
+
+    // Hyperion
+
+    const object1 = {type: 'CVE_SCANNER_TYPE'};
+    const object2 = {type: 'OPENVAS_SCANNER_TYPE'};
+    const object3 = {type: 'OSP_SCANNER_TYPE'};
+    const object4 = {type: 'GREENBONE_SENSOR_SCANNER_TYPE'};
+
+    scanner1 = Scanner.fromObject(object1);
+    scanner2 = Scanner.fromObject(object2);
+    scanner3 = Scanner.fromObject(object3);
+    scanner4 = Scanner.fromObject(object4);
+
+    expect(scanner1.isWritable()).toEqual(false);
+    expect(scanner2.isWritable()).toEqual(false);
+    expect(scanner3.isWritable()).toEqual(true);
+    expect(scanner4.isWritable()).toEqual(true);
   });
 
   test('hasUnixSocket() should return correct true/false', () => {
-    const scanner1 = Scanner.fromElement({host: '/foo'});
-    const scanner2 = Scanner.fromElement({host: 'bar'});
-    const scanner3 = Scanner.fromElement({host: {}});
+    let scanner1 = Scanner.fromElement({host: '/foo'});
+    let scanner2 = Scanner.fromElement({host: 'bar'});
+    let scanner3 = Scanner.fromElement({host: {}});
+
+    expect(scanner1.hasUnixSocket()).toEqual(true);
+    expect(scanner2.hasUnixSocket()).toEqual(false);
+    expect(scanner3.hasUnixSocket()).toEqual(false);
+
+    // Hyperion
+    scanner1 = Scanner.fromObject({host: '/foo'});
+    scanner2 = Scanner.fromObject({host: 'bar'});
+    scanner3 = Scanner.fromObject({host: {}});
 
     expect(scanner1.hasUnixSocket()).toEqual(true);
     expect(scanner2.hasUnixSocket()).toEqual(false);

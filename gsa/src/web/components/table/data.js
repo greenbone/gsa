@@ -20,12 +20,24 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import Layout from 'web/components/layout/layout';
+
 import PropTypes from 'web/utils/proptypes';
 
-import Layout from '../layout/layout';
-
-const TableData = ({children, className, colSpan, rowSpan, ...other}) => (
-  <td className={className} colSpan={colSpan} rowSpan={rowSpan}>
+const TableData = ({
+  children,
+  className,
+  colSpan,
+  rowSpan,
+  'data-testid': dataTestId,
+  ...other
+}) => (
+  <td
+    className={className}
+    colSpan={colSpan}
+    rowSpan={rowSpan}
+    data-testid={dataTestId}
+  >
     <Layout flex="column" {...other}>
       {children}
     </Layout>
@@ -35,6 +47,7 @@ const TableData = ({children, className, colSpan, rowSpan, ...other}) => (
 TableData.propTypes = {
   className: PropTypes.string,
   colSpan: PropTypes.numberOrNumberString,
+  'data-testid': PropTypes.string,
   rowSpan: PropTypes.numberOrNumberString,
 };
 

@@ -17,7 +17,7 @@
  */
 import {_} from 'gmp/locale/lang';
 
-import {isDefined, isString} from 'gmp/utils/identity';
+import {hasValue, isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
@@ -26,6 +26,7 @@ import {parseInt, parseYesNo, parseDate} from 'gmp/parser';
 import Model, {parseModelFromElement} from 'gmp/model';
 
 import Credential from './credential';
+import Task from './task';
 
 export const OSP_SCANNER_TYPE = 1;
 export const OPENVAS_SCANNER_TYPE = 2;
@@ -43,6 +44,19 @@ export const openVasScannersFilter = config =>
   config.scannerType === OPENVAS_SCANNER_TYPE;
 export const ospScannersFilter = config =>
   config.scannerType === OSP_SCANNER_TYPE;
+
+export function scannerTypeInt(scannerType) {
+  if (scannerType === 'OSP_SCANNER_TYPE') {
+    return OSP_SCANNER_TYPE;
+  } else if (scannerType === 'OPENVAS_SCANNER_TYPE') {
+    return OPENVAS_SCANNER_TYPE;
+  } else if (scannerType === 'CVE_SCANNER_TYPE') {
+    return CVE_SCANNER_TYPE;
+  } else if (scannerType === 'GREENBONE_SENSOR_SCANNER_TYPE') {
+    return GREENBONE_SENSOR_SCANNER_TYPE;
+  }
+  return _('Unknown type ({{type}})', {type: scannerType});
+}
 
 export function scannerTypeName(scannerType) {
   scannerType = parseInt(scannerType);
@@ -74,10 +88,62 @@ const parse_scanner_info = (info = {}) => {
 class Scanner extends Model {
   static entityType = 'scanner';
 
+  static parseObject(object) {
+    const copy = super.parseObject(object);
+
+    copy.scannerType = scannerTypeInt(object.type);
+
+    copy.credential =
+      hasValue(copy.credential) && hasValue(copy.credential._id)
+        ? Credential.fromElement(copy.credential)
+        : undefined;
+
+    if (hasValue(copy.caPub) && hasValue(copy.caPub.certificate)) {
+      if (hasValue(copy.caPub.info)) {
+        copy.caPub.info.activationTime = parseDate(
+          copy.caPub.info.activationTime,
+        );
+        copy.caPub.info.expirationTime = parseDate(
+          copy.caPub.info.expirationTime,
+        );
+      }
+    } else {
+      delete copy.caPub;
+    }
+
+    if (hasValue(copy.tasks)) {
+      copy.tasks = map(copy.tasks.task, task => Task.fromObject(task));
+    } else {
+      copy.tasks = [];
+    }
+
+    if (hasValue(copy.configs)) {
+      copy.configs = map(copy.configs.config, config =>
+        parseModelFromElement(config, 'scanconfig'),
+      );
+    } else {
+      copy.configs = [];
+    }
+
+    // ToDo: parse copy.info
+
+    return copy;
+  }
+
   static parseElement(element) {
     const ret = super.parseElement(element);
 
-    ret.scannerType = parseInt(element.type);
+    if (hasValue(element.uuid) && !hasValue(element.id)) {
+      ret.id = element.uuid;
+    }
+
+    // scanner.type can be one of three formats:
+    // integer 2 (for scanners), '2' (audits) and 'OPENVAS_SCANNER_TYPE' (hyperion)
+    if (isString(element.type) && element.type.length > 2) {
+      ret.scannerType = scannerTypeInt(element.type); // 'OPENVAS_SCANNER_TYPE' -> 2
+    } else {
+      ret.scannerType = parseInt(element.type); // '2' and 2 maps to 2.
+    }
 
     ret.credential =
       isDefined(ret.credential) && !isEmpty(ret.credential._id)

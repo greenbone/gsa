@@ -19,10 +19,10 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import ProgressBar from 'web/components/bar/progressbar';
+
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-import ProgressBar from 'web/components/bar/progressbar';
 
 const ComplianceStatusBar = ({complianceStatus}) => {
   let text;

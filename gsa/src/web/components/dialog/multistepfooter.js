@@ -22,14 +22,15 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import {DialogFooterLayout} from 'web/components/dialog/footer';
 
-import Button from './button';
 import LoadingButton from 'web/components/form/loadingbutton';
 
 import Divider from 'web/components/layout/divider';
+
+import PropTypes from 'web/utils/proptypes';
+
+import Button from './button';
 
 const StyledLayout = styled(DialogFooterLayout)`
   justify-content: space-between;

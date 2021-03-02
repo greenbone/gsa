@@ -524,6 +524,7 @@ ProcessPanel.propTypes = {
   gmp: PropTypes.gmp.isRequired,
   hostList: PropTypes.array,
   isLoadingHosts: PropTypes.bool,
+  prevElement: PropTypes.object,
   resultList: PropTypes.array,
   onAddHosts: PropTypes.func.isRequired,
   onDeleteHost: PropTypes.func.isRequired,

@@ -21,8 +21,6 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import TextField from 'web/components/form/textfield';
@@ -32,6 +30,8 @@ import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
 
 export const WizardContent = styled.div`
   margin: 0 20px;

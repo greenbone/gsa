@@ -17,16 +17,19 @@
  */
 
 import React, {useCallback} from 'react';
-import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/proptypes';
 
 import styled from 'styled-components';
 
-import Theme from 'web/utils/theme';
+import {isDefined} from 'gmp/utils/identity';
 
 import withLayout from 'web/components/layout/withLayout';
 
+import PropTypes from 'web/utils/proptypes';
+
+import Theme from 'web/utils/theme';
+
 import {DISABLED_OPACITY} from './field';
+
 import {Marker} from './useFormValidation';
 
 const StyledTextArea = styled.textarea`

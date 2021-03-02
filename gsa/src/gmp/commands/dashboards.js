@@ -62,7 +62,7 @@ const settingsV1toDashboardSettings = ({data: rows} = {}, name) => ({
   name,
 });
 
-const convertLoadedSettings = (settings = {}, name) => {
+export const convertLoadedSettings = (settings = {}, name) => {
   if (settings.version === 1) {
     return settingsV1toDashboardSettings(settings, name);
   }

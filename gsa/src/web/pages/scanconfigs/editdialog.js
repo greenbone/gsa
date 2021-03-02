@@ -30,9 +30,6 @@ import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 import DialogInlineNotification from 'web/components/dialog/dialoginlinenotification';
 
@@ -42,6 +39,10 @@ import Select from 'web/components/form/select';
 import Loading from 'web/components/loading/loading';
 
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import stateReducer from 'web/utils/stateReducer';
 
 import NvtFamilies from './nvtfamilies';
 import NvtPreferences, {NvtPreferencePropType} from './nvtpreferences';
@@ -85,12 +86,8 @@ const createScannerPreferenceValues = (preferences = []) => {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setValue':
-      const {newState} = action;
-      return {
-        ...state,
-        ...newState,
-      };
+    case 'setState':
+      return stateReducer(state, action);
     case 'setAll':
       const {formValues} = action;
       return formValues;

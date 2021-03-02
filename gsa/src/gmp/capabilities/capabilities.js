@@ -79,6 +79,18 @@ class Capabilities {
     return this._capabilities[Symbol.iterator]();
   }
 
+  map(func) {
+    const result = [];
+
+    let index = 0;
+    this._capabilities.forEach((entry, set) => {
+      result.push(func(entry, index, set));
+      index += 1;
+    });
+
+    return result;
+  }
+
   areDefined() {
     return this._has_caps;
   }

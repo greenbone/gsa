@@ -16,11 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-
-import _ from 'gmp/locale';
+import React, {useEffect} from 'react';
+import {useHistory, useParams} from 'react-router-dom';
 
 import styled from 'styled-components';
+
+import _ from 'gmp/locale';
+import {hasValue} from 'gmp/utils/identity';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -50,46 +52,54 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
+import useDownload from 'web/components/form/useDownload';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import useReload from 'web/components/loading/useReload';
+import DialogNotification from 'web/components/notification/dialognotification';
+import Download from 'web/components/form/download';
+
+import {
+  useCloneScanConfig,
+  useDeleteScanConfig,
+  useExportScanConfigsByIds,
+  useGetScanConfig,
+} from 'web/graphql/scanconfigs';
+import {useGetPermissions} from 'web/graphql/permissions';
 
 import EntityPage from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import withEntityContainer, {
-  permissionsResourceFilter,
-} from 'web/entity/withEntityContainer';
+import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-
-import {selector, loadEntity} from 'web/store/entities/scanconfigs';
-
-import {
-  selector as permissionsSelector,
-  loadEntities as loadPermissions,
-} from 'web/store/entities/permissions';
+import useExportEntity from 'web/entity/useExportEntity';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
+import useCapabilities from 'web/utils/useCapabilities';
+import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import {goto_entity_details} from 'web/utils/graphql';
 
 import ScanConfigDetails from './details';
 import ScanConfigComponent from './component';
 import Trend from './trend';
 
-export const ToolBarIcons = withCapabilities(
-  ({
-    capabilities,
-    entity,
-    onScanConfigCloneClick,
-    onScanConfigCreateClick,
-    onScanConfigDeleteClick,
-    onScanConfigDownloadClick,
-    onScanConfigEditClick,
-    onScanConfigImportClick,
-  }) => (
+export const ToolBarIcons = ({
+  entity,
+  onScanConfigCloneClick,
+  onScanConfigCreateClick,
+  onScanConfigDeleteClick,
+  onScanConfigDownloadClick,
+  onScanConfigEditClick,
+  onScanConfigImportClick,
+}) => {
+  const capabilities = useCapabilities();
+  return (
     <Divider margin="10px">
       <IconDivider>
         <ManualIcon
@@ -121,8 +131,8 @@ export const ToolBarIcons = withCapabilities(
         )}
       </IconDivider>
     </Divider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
   entity: PropTypes.model.isRequired,
@@ -135,10 +145,10 @@ ToolBarIcons.propTypes = {
 };
 
 export const NvtFamilies = ({entity}) => {
-  const {family_list = [], families} = entity;
+  const {familyList = [], families} = entity;
   return (
     <Layout>
-      {family_list.length > 0 && (
+      {familyList.length > 0 && (
         <StripedTable>
           <TableHeader>
             <TableRow>
@@ -163,7 +173,7 @@ export const NvtFamilies = ({entity}) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {family_list.map(family => (
+            {familyList.map(family => (
               <TableRow key={family.name}>
                 <TableData>
                   <span>
@@ -259,10 +269,10 @@ export const NvtPreferences = ({entity}) => {
           </TableHeader>
           <TableBody>
             {preferences.nvt.map(pref => (
-              <TableRow key={pref.nvt.oid + pref.nvt.name + pref.name}>
+              <TableRow key={pref.nvt.id + pref.nvt.name + pref.name}>
                 <TableData>
                   <span>
-                    <DetailsLink id={pref.nvt.oid} type="nvt">
+                    <DetailsLink id={pref.nvt.id} type="nvt">
                       {pref.nvt.name}
                     </DetailsLink>
                   </span>
@@ -295,58 +305,115 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  entity,
-  permissions = [],
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => {
+const Page = () => {
+  // Page methods
+  const {id} = useParams();
+  const history = useHistory();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+  const [downloadRef, handleDownload] = useDownload();
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+
+  // Load scanConfig related entities
+  const {
+    scanConfig,
+    refetch: refetchScanConfig,
+    loading,
+    error: entityError,
+  } = useGetScanConfig(id, {fetchPolicy: 'no-cache'}); // if we allow caching, all scanner preferences will be parsed as auto_enable_dependencies
+  const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
+    filterString: permissionsResourceFilter(id).toFilterString(),
+  });
+
+  // ScanConfig related mutations
+  const exportEntity = useExportEntity();
+
+  const [cloneScanConfig] = useCloneScanConfig();
+  const [deleteScanConfig] = useDeleteScanConfig();
+  const exportScanConfig = useExportScanConfigsByIds();
+
+  // ScanConfig methods
+  const handleCloneScanConfig = clonedScanConfig => {
+    return cloneScanConfig(clonedScanConfig.id)
+      .then(scanConfigId =>
+        goto_entity_details('scanconfig', {history})(scanConfigId),
+      )
+      .catch(showError);
+  };
+
+  const handleDeleteScanConfig = deletedScanConfig => {
+    return deleteScanConfig(deletedScanConfig.id)
+      .then(goto_list('scanconfigs', {history}))
+      .catch(showError);
+  };
+
+  const handleDownloadScanConfig = exportedScanConfig => {
+    exportEntity({
+      entity: exportedScanConfig,
+      exportFunc: exportScanConfig,
+      resourceType: 'scanConfigs',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  // Timeout and reload
+  const timeoutFunc = useDefaultReloadInterval();
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetchScanConfig,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if scanConfig is available and no timer is running yet
+    if (hasValue(scanConfig) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [scanConfig, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
   return (
     <ScanConfigComponent
-      onCloned={goto_details('scanconfig', props)}
-      onCloneError={onError}
-      onCreated={goto_details('scanconfig', props)}
-      onDeleted={goto_list('scanconfigs', props)}
-      onDeleteError={onError}
-      onDownloaded={onDownloaded}
-      onDownloadError={onError}
-      onImported={goto_details('scanconfig', props)}
-      onInteraction={onInteraction}
-      onSaved={onChanged}
+      onCloned={goto_entity_details('scanconfig', {history})}
+      onCloneError={showError}
+      onCreated={goto_entity_details('scanconfig', {history})} // replace with goto_entity_details later
+      onDeleted={goto_list('scanconfigs', {history})}
+      onDeleteError={showError}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onImported={goto_details('scanconfig', {history})}
+      onInteraction={renewSessionTimeout}
+      onSaved={() => refetchScanConfig()}
     >
-      {({
-        clone,
-        create,
-        delete: delete_func,
-        download,
-        edit,
-        import: import_func,
-        save,
-      }) => (
+      {({create, edit, import: import_func, save}) => (
         <EntityPage
-          {...props}
-          entity={entity}
+          entity={scanConfig}
+          entityError={entityError}
+          entityType={'scanconfig'}
+          isLoading={loading}
           sectionIcon={<ScanConfigIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Scan Config')}
-          onInteraction={onInteraction}
-          onScanConfigCloneClick={clone}
+          onInteraction={renewSessionTimeout}
+          onScanConfigCloneClick={handleCloneScanConfig}
           onScanConfigCreateClick={create}
-          onScanConfigDeleteClick={delete_func}
-          onScanConfigDownloadClick={download}
+          onScanConfigDeleteClick={handleDeleteScanConfig}
+          onScanConfigDownloadClick={handleDownloadScanConfig}
           onScanConfigEditClick={edit}
           onScanConfigSaveClick={save}
           onScanConfigImportClick={import_func}
         >
           {({activeTab = 0, onActivateTab}) => {
-            const {preferences} = entity;
+            const {preferences} = scanConfig;
             return (
               <React.Fragment>
                 <PageTitle
-                  title={_('Scan Config: {{name}}', {name: entity.name})}
+                  title={_('Scan Config: {{name}}', {name: scanConfig.name})}
                 />
                 <Layout grow="1" flex="column">
                   <TabLayout grow="1" align={['start', 'end']}>
@@ -359,13 +426,13 @@ const Page = ({
                       <EntitiesTab entities={preferences.scanner}>
                         {_('Scanner Preferences')}
                       </EntitiesTab>
-                      <EntitiesTab entities={entity.family_list}>
+                      <EntitiesTab entities={scanConfig.familyList}>
                         {_('NVT Families')}
                       </EntitiesTab>
                       <EntitiesTab entities={preferences.nvt}>
                         {_('NVT Preferences')}
                       </EntitiesTab>
-                      <EntitiesTab entities={entity.userTags}>
+                      <EntitiesTab entities={scanConfig.userTags}>
                         {_('User Tags')}
                       </EntitiesTab>
                       <EntitiesTab entities={permissions}>
@@ -377,38 +444,43 @@ const Page = ({
                   <Tabs active={activeTab}>
                     <TabPanels>
                       <TabPanel>
-                        <Details entity={entity} />
+                        <Details entity={scanConfig} />
                       </TabPanel>
                       <TabPanel>
-                        <ScannerPreferences entity={entity} />
+                        <ScannerPreferences entity={scanConfig} />
                       </TabPanel>
                       <TabPanel>
-                        <NvtFamilies entity={entity} />
+                        <NvtFamilies entity={scanConfig} />
                       </TabPanel>
                       <TabPanel>
-                        <NvtPreferences entity={entity} />
+                        <NvtPreferences entity={scanConfig} />
                       </TabPanel>
                       <TabPanel>
                         <EntityTags
-                          entity={entity}
-                          onChanged={onChanged}
-                          onError={onError}
-                          onInteraction={onInteraction}
+                          entity={scanConfig}
+                          onChanged={() => refetchScanConfig()}
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                       <TabPanel>
                         <EntityPermissions
-                          entity={entity}
+                          entity={scanConfig}
                           permissions={permissions}
-                          onChanged={onChanged}
-                          onDownloaded={onDownloaded}
-                          onError={onError}
-                          onInteraction={onInteraction}
+                          onChanged={() => refetchPermissions()}
+                          onDownloaded={handleDownload}
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>
+                <DialogNotification
+                  {...notificationDialogState}
+                  onCloseClick={closeNotificationDialog}
+                />
+                <Download ref={downloadRef} />
               </React.Fragment>
             );
           }}
@@ -418,36 +490,6 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-const load = gmp => {
-  const loadEntityFunc = loadEntity(gmp);
-  const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch =>
-    Promise.all([
-      dispatch(loadEntityFunc(id)),
-      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-    ]);
-};
-
-const mapStateToProps = (rootState, {id}) => {
-  const permissionsSel = permissionsSelector(rootState);
-  return {
-    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
-  };
-};
-
-export default withEntityContainer('scanconfig', {
-  entitySelector: selector,
-  load,
-  mapStateToProps,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:

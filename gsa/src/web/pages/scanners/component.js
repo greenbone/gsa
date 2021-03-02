@@ -15,365 +15,344 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
-
-import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
-import {hasId} from 'gmp/utils/id';
-
 import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-import {getUsername} from 'web/store/usersettings/selectors';
+import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import {generateFilename} from 'web/utils/render';
-import withGmp from 'web/utils/withGmp';
+import {hasId} from 'gmp/utils/id';
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
 
 import CredentialsDialog from 'web/pages/credentials/dialog';
 
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+
+import PropTypes from 'web/utils/proptypes';
+import {generateFilename} from 'web/utils/render';
+import useGmp from 'web/utils/useGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useUserName from 'web/utils/useUserName';
+
 import ScannerDialog from './dialog';
 
-class ScannerComponent extends React.Component {
-  constructor(...args) {
-    super(...args);
+const ScannerComponent = ({
+  children,
+  onCertificateDownloaded,
+  onCloned,
+  onCloneError,
+  onCreated,
+  onCreateError,
+  onCredentialDownloaded,
+  onCredentialDownloadError,
+  onDeleted,
+  onDeleteError,
+  onDownloaded,
+  onDownloadError,
+  onInteraction,
+  onSaved,
+  onSaveError,
+  onVerified,
+  onVerifyError,
+}) => {
+  const gmp = useGmp();
+  const reduxDispatch = useDispatch();
+  const userName = useUserName();
+  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
+  const [, renewSessionTimeout] = useUserSessionTimeout();
 
-    this.state = {
-      credentialDialogVisible: false,
-      scannerDialogVisible: false,
-    };
+  const [credentials, setCredentials] = useState([]);
+  const [credentialId, setCredentialId] = useState();
+  const [credentialTypes, setCredentialTypes] = useState();
 
-    this.handleCloseCredentialsDialog = this.handleCloseCredentialsDialog.bind(
-      this,
-    );
-    this.handleCloseScannerDialog = this.handleCloseScannerDialog.bind(this);
-    this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
-    this.openScannerDialog = this.openScannerDialog.bind(this);
-    this.handleCreateCredential = this.handleCreateCredential.bind(this);
-    this.handleCredentialChange = this.handleCredentialChange.bind(this);
-    this.handleDownloadCertificate = this.handleDownloadCertificate.bind(this);
-    this.handleDownloadCredential = this.handleDownloadCredential.bind(this);
-    this.handleScannerTypeChange = this.handleScannerTypeChange.bind(this);
-    this.handleVerifyScanner = this.handleVerifyScanner.bind(this);
-  }
+  const [scannerDialogState, setScannerDialogState] = useState({});
+  const [credentialDialogVisible, setCredentialDialogVisible] = useState(false);
 
-  openScannerDialog(scanner) {
-    const {gmp} = this.props;
+  const detailsExportFileName = userDefaultsSelector.getValueByName(
+    'detailsexportfilename',
+  );
 
-    this.handleInteraction();
+  // eslint-disable-next-line no-shadow
+  const openCredentialsDialog = useCallback(() => {
+    setCredentialTypes([CLIENT_CERTIFICATE_CREDENTIAL_TYPE]);
+    setCredentialDialogVisible(true);
+  }, []);
 
-    const credPromise = gmp.credentials.getAll().then(response => {
-      return response.data;
-    });
-    if (isDefined(scanner)) {
-      Promise.all([credPromise, gmp.scanner.get(scanner)]).then(
-        ([credentials, response]) => {
-          scanner = response.data;
+  const handleCloseCredentialsDialog = useCallback(() => {
+    setCredentialDialogVisible(false);
+    renewSessionTimeout();
+  }, [renewSessionTimeout]);
 
-          const title = _('Edit Scanner {{name}}', {
-            name: shorten(scanner.name),
-          });
-          this.setState({
-            ca_pub: isDefined(scanner.ca_pub)
-              ? scanner.ca_pub.certificate
-              : undefined,
-            comment: scanner.comment,
-            credentials,
-            credential_id: hasId(scanner.credential)
-              ? scanner.credential.id
-              : undefined,
-            host: scanner.host,
-            id: scanner.id,
-            name: scanner.name,
-            port: scanner.port,
-            scannerDialogVisible: true,
-            scanner,
-            title,
-            type: scanner.scannerType,
-            which_cert: isDefined(scanner.ca_pub) ? 'existing' : 'default',
-          });
-        },
-      );
-    } else {
-      credPromise.then(credentials =>
-        this.setState({
-          ca_pub: undefined,
-          comment: undefined,
-          credential_id: undefined,
-          credentials,
-          host: undefined,
-          id: undefined,
-          name: undefined,
-          port: undefined,
-          scanner: undefined,
-          scannerDialogVisible: true,
-          title: undefined,
-          type: OSP_SCANNER_TYPE,
-          which_cert: undefined,
-        }),
-      );
-    }
-  }
-
-  closeScannerDialog() {
-    this.setState({scannerDialogVisible: false});
-  }
-
-  handleCloseScannerDialog() {
-    this.closeScannerDialog();
-    this.handleInteraction();
-  }
-
-  openCredentialsDialog() {
-    this.handleInteraction();
-
-    this.setState({
-      base: CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
-      credentialDialogVisible: true,
-      credentialTypes: [CLIENT_CERTIFICATE_CREDENTIAL_TYPE],
-    });
-  }
-
-  closeCredentialsDialog() {
-    this.setState({credentialDialogVisible: false});
-  }
-
-  handleCloseCredentialsDialog() {
-    this.closeCredentialsDialog();
-    this.handleInteraction();
-  }
-
-  handleVerifyFailure(response) {
-    const {onVerifyError} = this.props;
-    const message =
-      isDefined(response.root) &&
-      isDefined(response.root.action_result) &&
-      isDefined(response.root.action_result.message)
-        ? response.root.action_result.message
-        : _('Unknown Error');
-
-    if (isDefined(onVerifyError)) {
-      onVerifyError(new Error(message));
-    }
-  }
-
-  handleVerifyScanner(scanner) {
-    const {gmp, onVerified} = this.props;
-
-    this.handleInteraction();
-
-    return gmp.scanner
-      .verify(scanner)
-      .then(onVerified, response => this.handleVerifyFailure(response));
-  }
-
-  handleCreateCredential(data) {
-    const {gmp} = this.props;
-    let credential;
-
-    this.handleInteraction();
-
-    return gmp.credential
-      .create(data)
-      .then(response => {
-        credential = response.data;
-      })
-      .then(() => gmp.credentials.getAll())
-      .then(response => {
-        this.setState({
-          credentials: response.data,
-          credential_id: credential.id,
-        });
-        this.closeCredentialsDialog();
+  const handleDownloadCertificate = useCallback(
+    // eslint-disable-next-line no-shadow
+    scanner => {
+      const {
+        creationTime,
+        entityType,
+        id,
+        modificationTime,
+        name,
+        ca_pub,
+      } = scanner;
+      const filename = generateFilename({
+        creationTime: creationTime,
+        extension: 'pem',
+        fileNameFormat: detailsExportFileName,
+        id: id,
+        modificationTime,
+        resourceName: name,
+        resourceType: entityType,
+        username: userName,
       });
-  }
 
-  handleCredentialChange(credential_id) {
-    this.setState({credential_id});
-  }
+      renewSessionTimeout();
 
-  handleDownloadCertificate(scanner) {
-    const {
-      detailsExportFileName,
-      username,
+      return onCertificateDownloaded({filename, data: ca_pub.certificate});
+    },
+    [
       onCertificateDownloaded,
-    } = this.props;
-    const {
-      creationTime,
-      entityType,
-      id,
-      modificationTime,
-      name,
-      ca_pub,
-    } = scanner;
-    const filename = generateFilename({
-      creationTime: creationTime,
-      extension: 'pem',
-      fileNameFormat: detailsExportFileName,
-      id: id,
-      modificationTime,
-      resourceName: name,
-      resourceType: entityType,
-      username,
-    });
-    return onCertificateDownloaded({filename, data: ca_pub.certificate});
-  }
-
-  handleDownloadCredential(scanner) {
-    const {
+      userName,
       detailsExportFileName,
-      username,
-      onCredentialDownloaded,
+      renewSessionTimeout,
+    ],
+  );
+
+  const handleDownloadCredential = useCallback(
+    // eslint-disable-next-line no-shadow
+    scanner => {
+      const {credential} = scanner;
+      const {creationTime, entityType, id, modificationTime, name} = credential;
+
+      renewSessionTimeout();
+
+      return gmp.credential
+        .download(credential, 'pem')
+        .then(response => {
+          const filename = generateFilename({
+            creationTime: creationTime,
+            extension: 'pem',
+            fileNameFormat: detailsExportFileName,
+            id: id,
+            modificationTime,
+            resourceName: name,
+            resourceType: entityType,
+            username: userName,
+          });
+          return {filename, data: response.data};
+        })
+        .then(onCredentialDownloaded, onCredentialDownloadError);
+    },
+    [
+      gmp.credential,
+      userName,
+      detailsExportFileName,
+      renewSessionTimeout,
       onCredentialDownloadError,
-      gmp,
-    } = this.props;
-    const {credential} = scanner;
-    const {creationTime, entityType, id, modificationTime, name} = credential;
+      onCredentialDownloaded,
+    ],
+  );
 
-    this.handleInteraction();
+  const handleCreateCredential = useCallback(
+    data => {
+      let credential;
 
-    return gmp.credential
-      .download(credential, 'pem')
-      .then(response => {
-        const filename = generateFilename({
-          creationTime: creationTime,
-          extension: 'pem',
-          fileNameFormat: detailsExportFileName,
-          id: id,
-          modificationTime,
-          resourceName: name,
-          resourceType: entityType,
-          username,
+      return gmp.credential
+        .create(data)
+        .then(response => {
+          credential = response.data;
+        })
+        .then(() => gmp.credentials.getAll())
+        .then(response => {
+          setCredentials(response.data);
+          setCredentialId(credential.id);
+
+          handleCloseCredentialsDialog();
         });
-        return {filename, data: response.data};
-      })
-      .then(onCredentialDownloaded, onCredentialDownloadError);
-  }
+    },
+    [handleCloseCredentialsDialog, gmp],
+  );
 
-  handleScannerTypeChange(value, name) {
-    this.setState({[name]: value});
-  }
+  const handleCredentialChange = useCallback(credential_id => {
+    setCredentialId(credential_id);
+  }, []);
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  }
+  const handleVerifyFailure = useCallback(
+    response => {
+      const message =
+        isDefined(response.root) &&
+        isDefined(response.root.action_result) &&
+        isDefined(response.root.action_result.message)
+          ? response.root.action_result.message
+          : _('Unknown Error');
 
-  render() {
-    const {
-      children,
-      onCloned,
-      onCloneError,
-      onCreated,
-      onCreateError,
-      onDeleted,
-      onDeleteError,
-      onDownloaded,
-      onDownloadError,
-      onInteraction,
-      onSaved,
-      onSaveError,
-    } = this.props;
+      if (isDefined(onVerifyError)) {
+        onVerifyError(new Error(message));
+      }
+    },
+    [onVerifyError],
+  );
 
-    const {
-      ca_pub,
-      comment,
-      credential_id,
-      credentialDialogVisible,
-      credentials,
-      credentialTypes,
-      host,
-      id,
-      name,
-      port,
-      scannerDialogVisible,
-      scanner,
-      title,
-      type,
-      which_cert,
-    } = this.state;
+  const handleVerifyScanner = useCallback(
+    // eslint-disable-next-line no-shadow
+    scanner => {
+      renewSessionTimeout();
 
-    return (
-      <EntityComponent
-        name="scanner"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
-        onCloneError={onCloneError}
-        onDeleted={onDeleted}
-        onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
-        onDownloadError={onDownloadError}
-        onInteraction={onInteraction}
-        onSaved={onSaved}
-        onSaveError={onSaveError}
-      >
-        {({save, ...other}) => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: this.openScannerDialog,
-              edit: this.openScannerDialog,
-              verify: this.handleVerifyScanner,
-              downloadcertificate: this.handleDownloadCertificate,
-              downloadcredential: this.handleDownloadCredential,
-            })}
-            {scannerDialogVisible && (
-              <ScannerDialog
-                ca_pub={ca_pub}
-                comment={comment}
-                credentials={credentials}
-                credential_id={credential_id}
-                host={host}
-                id={id}
-                name={name}
-                port={port}
-                scanner={scanner}
-                title={title}
-                type={type}
-                which_cert={which_cert}
-                onClose={this.handleCloseScannerDialog}
-                onCredentialChange={this.handleCredentialChange}
-                onNewCredentialClick={this.openCredentialsDialog}
-                onSave={d => {
-                  this.handleInteraction();
-                  return save(d).then(() => this.closeScannerDialog());
-                }}
-                onScannerTypeChange={this.handleScannerTypeChange}
-              />
-            )}
-            {credentialDialogVisible && (
-              <CredentialsDialog
-                types={credentialTypes}
-                onClose={this.handleCloseCredentialsDialog}
-                onSave={this.handleCreateCredential}
-              />
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
-    );
-  }
-}
+      return gmp.scanner
+        .verify(scanner)
+        .then(onVerified, response => handleVerifyFailure(response));
+    },
+    [renewSessionTimeout, handleVerifyFailure, onVerified, gmp.scanner],
+  );
+
+  const handleCloseScannerDialog = useCallback(() => {
+    setScannerDialogState(state => ({...state, visible: false}));
+    renewSessionTimeout();
+  }, [renewSessionTimeout]);
+
+  const openScannerDialog = useCallback(
+    // eslint-disable-next-line no-shadow
+    scanner => {
+      renewSessionTimeout();
+
+      const credPromise = gmp.credentials.getAll().then(response => {
+        return response.data;
+      });
+
+      if (isDefined(scanner)) {
+        Promise.all([credPromise, gmp.scanner.get(scanner)]).then(
+          ([loadedCredentials, response]) => {
+            scanner = response.data;
+
+            setScannerDialogState(state => ({
+              ...state,
+              caPub: isDefined(scanner.ca_pub)
+                ? scanner.ca_pub.certificate
+                : undefined,
+              comment: scanner.comment,
+              scanner,
+              host: scanner.host,
+              id: scanner.id,
+              name: scanner.name,
+              port: scanner.port,
+              type: scanner.scannerType,
+              title: _('Edit Scanner {{name}}', {
+                name: shorten(scanner.name),
+              }),
+              whichCert: isDefined(scanner.ca_pub) ? 'existing' : 'default',
+              visible: true,
+            }));
+
+            setCredentials(loadedCredentials);
+            setCredentialId(
+              hasId(scanner.credential) ? scanner.credential.id : undefined,
+            );
+          },
+        );
+      } else {
+        credPromise.then(loadedCredentials => {
+          setCredentials(loadedCredentials);
+          setCredentialId(undefined);
+
+          setScannerDialogState(state => ({
+            ...state,
+            caPub: undefined,
+            comment: undefined,
+            scanner: undefined,
+            host: undefined,
+            id: undefined,
+            name: undefined,
+            port: undefined,
+            type: OSP_SCANNER_TYPE,
+            title: undefined, // use default title from dialog
+            whichCert: undefined,
+            visible: true,
+          }));
+        });
+      }
+    },
+    [gmp.credentials, gmp.scanner, renewSessionTimeout],
+  );
+
+  const handleScannerTypeChange = useCallback(
+    (newScannerType, newCredentialId) => {
+      setCredentialId(newCredentialId);
+      setScannerDialogState(state => ({...state, type: newScannerType}));
+    },
+    [],
+  );
+
+  useEffect(() => {
+    reduxDispatch(loadUserSettingDefaults(gmp)());
+  }, [reduxDispatch, gmp]);
+  return (
+    <EntityComponent
+      name="scanner"
+      onCreated={onCreated}
+      onCreateError={onCreateError}
+      onCloned={onCloned}
+      onCloneError={onCloneError}
+      onDeleted={onDeleted}
+      onDeleteError={onDeleteError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onDownloadError}
+      onInteraction={onInteraction}
+      onSaved={onSaved}
+      onSaveError={onSaveError}
+    >
+      {({save, ...other}) => (
+        <React.Fragment>
+          {children({
+            ...other,
+            create: openScannerDialog,
+            edit: openScannerDialog,
+            verify: handleVerifyScanner,
+            downloadcertificate: handleDownloadCertificate,
+            downloadcredential: handleDownloadCredential,
+          })}
+          {scannerDialogState.visible && (
+            <ScannerDialog
+              ca_pub={scannerDialogState.caPub}
+              comment={scannerDialogState.comment}
+              credentials={credentials}
+              credential_id={credentialId}
+              host={scannerDialogState.host}
+              id={scannerDialogState.id}
+              name={scannerDialogState.name}
+              port={scannerDialogState.port}
+              scanner={scannerDialogState.scanner}
+              title={scannerDialogState.title}
+              type={scannerDialogState.type}
+              which_cert={scannerDialogState.whichCert}
+              onClose={handleCloseScannerDialog}
+              onCredentialChange={handleCredentialChange}
+              onNewCredentialClick={openCredentialsDialog}
+              onSave={d => save(d).then(handleCloseScannerDialog)}
+              onScannerTypeChange={handleScannerTypeChange}
+            />
+          )}
+          {credentialDialogVisible && (
+            <CredentialsDialog
+              types={credentialTypes}
+              onClose={handleCloseCredentialsDialog}
+              onSave={handleCreateCredential}
+            />
+          )}
+        </React.Fragment>
+      )}
+    </EntityComponent>
+  );
+};
 
 ScannerComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  detailsExportFileName: PropTypes.object,
-  gmp: PropTypes.gmp.isRequired,
-  username: PropTypes.string,
   onCertificateDownloadError: PropTypes.func,
   onCertificateDownloaded: PropTypes.func,
   onCloneError: PropTypes.func,
@@ -393,26 +372,6 @@ ScannerComponent.propTypes = {
   onVerifyError: PropTypes.func,
 };
 
-const mapStateToProps = rootState => {
-  const userDefaultsSelector = getUserSettingsDefaults(rootState);
-  const username = getUsername(rootState);
-  const detailsExportFileName = userDefaultsSelector.getValueByName(
-    'detailsexportfilename',
-  );
-  return {
-    detailsExportFileName,
-    username,
-  };
-};
-
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-});
-
-export default compose(
-  withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
-)(ScannerComponent);
+export default ScannerComponent;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -26,8 +26,6 @@ import {
   ACCESS_DENY_ALL,
 } from 'gmp/models/user';
 
-import PropTypes from 'web/utils/proptypes';
-
 import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
@@ -39,6 +37,8 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
+
+import PropTypes from 'web/utils/proptypes';
 
 export const convert_auth_method = auth_method => {
   if (auth_method === AUTH_METHOD_LDAP) {

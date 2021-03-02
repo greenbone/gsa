@@ -21,8 +21,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import DateTime from 'web/components/date/datetime';
@@ -48,8 +46,10 @@ import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
-import NvtPreference from '../nvts/nvtpreference';
-import Preformatted from '../nvts/preformatted';
+import NvtPreference from 'web/pages/nvts/nvtpreference';
+import Preformatted from 'web/pages/nvts/preformatted';
+
+import PropTypes from 'web/utils/proptypes';
 
 const createPrefValues = (preferences = []) => {
   const preferenceValues = {};

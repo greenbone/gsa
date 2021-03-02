@@ -21,12 +21,12 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
 import DialogTitle from 'web/components/dialog/title';
 import DialogTwoButtonFooter from 'web/components/dialog/twobuttonfooter';
+
+import PropTypes from 'web/utils/proptypes';
 
 const Content = styled.div`
   padding: 5px 15px;

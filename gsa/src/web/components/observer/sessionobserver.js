@@ -15,102 +15,104 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect, useRef, useCallback} from 'react';
 
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import Logger from 'gmp/log';
 
 import moment from 'gmp/models/date';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
+
+import {useLazyIsAuthenticated} from 'web/graphql/auth';
 
 import {getSessionTimeout} from 'web/store/usersettings/selectors';
 
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 
 const log = Logger.getLogger('web.observer.sessionobserver');
 
 const DELAY = 15 * 1000; // 15 seconds in milliseconds
 
-class Ping extends React.Component {
-  constructor(...args) {
-    super(...args);
+// allow to set timeout functions for testing purposes
+let setTimeoutFunc = global.setTimeout;
+let clearTimeoutFunc = global.clearTimeout;
 
-    this.handlePing = this.handlePing.bind(this);
-  }
+export const setTimeoutFuncForTesting = timeoutFunc =>
+  (setTimeoutFunc = timeoutFunc);
 
-  componentDidMount() {
-    this.startTimer();
-  }
+export const setClearTimeoutFuncForTesting = timeoutFunc =>
+  (clearTimeoutFunc = timeoutFunc);
 
-  componentWillUnmount() {
-    this.clearTimer();
-  }
+const SessionTimeout = ({sessionTimeout}) => {
+  const timerRef = useRef();
+  const gmp = useGmp();
 
-  clearTimer() {
-    if (isDefined(this.timer)) {
-      log.debug('clearing ping timer', this.timer);
+  const [getIsAuthenticated, {isAuthenticated}] = useLazyIsAuthenticated();
 
-      global.clearTimeout(this.timer);
+  const handleTimer = useCallback(() => {
+    log.debug(
+      'session timer',
+      timerRef.current,
+      'has fired. Checking authentication status.',
+    );
 
-      this.timer = undefined;
-    }
-  }
+    timerRef.current = undefined;
 
-  startTimer() {
-    const {sessionTimeout} = this.props;
+    getIsAuthenticated();
+  }, [getIsAuthenticated]);
 
+  const startTimer = useCallback(() => {
     const timeout = sessionTimeout.diff(moment()) + DELAY;
 
     if (timeout > 0) {
-      this.timer = global.setTimeout(this.handlePing, timeout);
+      timerRef.current = setTimeoutFunc(handleTimer, timeout);
 
       log.debug(
-        'started ping timer',
-        this.timer,
+        'started session timer',
+        timerRef.current,
         'timeout',
         timeout,
         'milliseconds',
       );
     }
-  }
+  }, [sessionTimeout, handleTimer]);
 
-  handlePing() {
-    const {gmp} = this.props;
+  useEffect(() => {
+    // will be called on mount and if sessionTimeout changes
+    startTimer();
+    return () => {
+      // remove timer if the component is unmounted or sessionTimeout has changed
+      if (hasValue(timerRef.current)) {
+        log.debug('clearing session timer', timerRef.current);
 
-    this.timer = undefined;
+        clearTimeoutFunc(timerRef.current);
+      }
+    };
+  }, [sessionTimeout, startTimer]);
 
-    gmp.user.ping();
-  }
+  useEffect(() => {
+    if (hasValue(isAuthenticated) && !isAuthenticated) {
+      log.debug('Session has ended.');
 
-  render() {
-    return null;
-  }
-}
+      gmp.logout();
+    }
+  }, [isAuthenticated, gmp]);
 
-Ping.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  sessionTimeout: PropTypes.date.isRequired,
+  return null;
 };
 
-Ping = withGmp(Ping);
+const SessionObserver = () => {
+  const sessionTimeout = useSelector(getSessionTimeout);
 
-const SessionObserver = ({sessionTimeout}) => {
   if (!isDefined(sessionTimeout)) {
     return null;
   }
 
-  return <Ping key={sessionTimeout.unix()} sessionTimeout={sessionTimeout} />;
+  return <SessionTimeout sessionTimeout={sessionTimeout} />;
 };
 
-SessionObserver.propTypes = {
-  sessionTimeout: PropTypes.date,
-};
-
-export default connect(rootState => ({
-  sessionTimeout: getSessionTimeout(rootState),
-}))(SessionObserver);
+export default SessionObserver;
 
 // vim: set ts=2 sw=2 tw=80:

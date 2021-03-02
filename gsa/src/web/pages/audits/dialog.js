@@ -20,11 +20,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   HOSTS_ORDERING_SEQUENTIAL,
@@ -38,9 +33,10 @@ import {
   OPENVAS_DEFAULT_SCANNER_ID,
 } from 'gmp/models/scanner';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -59,6 +55,10 @@ import Layout from 'web/components/layout/layout';
 
 import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
 const getScanner = (scanners, scanner_id) => {
   if (!isDefined(scanners)) {

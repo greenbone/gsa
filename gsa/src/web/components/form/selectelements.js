@@ -22,10 +22,10 @@ import styled from 'styled-components';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
+import Portal from 'web/components/portal/portal';
+
 import Theme from 'web/utils/theme';
 import PropTypes from 'web/utils/proptypes';
-
-import Portal from 'web/components/portal/portal';
 
 export const Box = styled.div`
   border: 1px solid ${Theme.inputBorderGray};

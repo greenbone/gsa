@@ -106,9 +106,6 @@ import UserSettingsPage from './pages/usersettings/usersettingspage';
 import UsersPage from './pages/users/listpage';
 import VulnerabilitiesPage from './pages/vulns/listpage';
 
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-
 import Authorized from './authorized';
 
 // create an own history for location.query support
@@ -237,10 +234,6 @@ const Routes = () => (
   </Router>
 );
 
-Routes.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-};
-
-export default withGmp(Routes);
+export default Routes;
 
 // vim: set ts=2 sw=2 tw=80:

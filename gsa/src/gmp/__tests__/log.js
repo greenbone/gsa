@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {RootLogger, DEFAULT_LOG_LEVEL, LogLevels} from '../log.js';
+import {RootLogger, DEFAULT_LOG_LEVEL, LogLevels} from '../log';
 import {isFunction} from 'util';
 
 let origConsole;

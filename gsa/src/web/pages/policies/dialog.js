@@ -20,14 +20,14 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
 
 const CreatePolicyDialog = ({
   comment = '',

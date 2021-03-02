@@ -45,14 +45,19 @@ const hosts = [
   {name: '109.876.54.321', id: '5678', severity: undefined},
 ];
 
-const renewSession = jest.fn().mockResolvedValue({data: {}});
+let getAllHosts;
+let renewSession;
 
-const getAllHosts = jest.fn().mockResolvedValue({
-  data: hosts,
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+beforeEach(() => {
+  renewSession = jest.fn().mockResolvedValue({data: {}});
+
+  getAllHosts = jest.fn().mockResolvedValue({
+    data: hosts,
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
 });
 
 describe('ProcessMap tests', () => {

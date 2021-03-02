@@ -23,12 +23,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {TAG_NA} from 'gmp/models/nvt';
 
-import PropTypes from 'web/utils/proptypes';
-
-import {na, getTranslatableSeverityOrigin} from 'web/utils/render';
-
-import DetailsBlock from 'web/entity/block';
-
 import Severitybar from 'web/components/bar/severitybar';
 
 import Layout from 'web/components/layout/layout';
@@ -39,6 +33,12 @@ import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
+
+import DetailsBlock from 'web/entity/block';
+
+import PropTypes from 'web/utils/proptypes';
+
+import {na, getTranslatableSeverityOrigin} from 'web/utils/render';
 
 import References from './references';
 import Solution from './solution';

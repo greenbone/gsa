@@ -20,15 +20,12 @@ import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 import {longDate} from 'gmp/locale/date';
 
-import {parseInt, parseFloat, parseDate} from 'gmp/parser';
-
-import {isDefined} from 'gmp/utils/identity';
-
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter, {REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import {parseInt, parseFloat, parseDate} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import LineChart from 'web/components/chart/line';
 
@@ -37,6 +34,9 @@ import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard/registry';
+
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 import {ReportsHighResultsLoader} from './loaders';
 

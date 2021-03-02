@@ -19,12 +19,12 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from '../../utils/proptypes.js';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
 
-import withPrefix from '../../utils/withPrefix.js';
+import PropTypes from 'web/utils/proptypes';
 
-import FormGroup from '../../components/form/formgroup.js';
-import TextField from '../../components/form/textfield.js';
+import withPrefix from 'web/utils/withPrefix';
 
 const HttpMethodPart = ({prefix, URL, onChange}) => {
   return (

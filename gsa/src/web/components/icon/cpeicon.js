@@ -19,11 +19,11 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
+import Img from 'web/components/img/img';
 
 import Cpe from 'web/utils/cpe';
 
-import Img from 'web/components/img/img';
+import PropTypes from 'web/utils/proptypes';
 
 const CpeIcon = ({name, ...props}) => {
   const cpe = Cpe.find(name);

@@ -19,16 +19,15 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
 import {getEntityType, typeName} from 'gmp/utils/entitytype';
-
-import PropTypes from 'web/utils/proptypes';
+import {isDefined} from 'gmp/utils/identity';
 
 import CloneIcon from 'web/components/icon/cloneicon';
-import withCapabilities from 'web/utils/withCapabilities';
+
+import PropTypes from 'web/utils/proptypes';
+import useCapabilities from 'web/utils/useCapabilities';
 
 const EntityCloneIcon = ({
-  capabilities,
   displayName,
   entity,
   mayClone = true,
@@ -37,6 +36,8 @@ const EntityCloneIcon = ({
   onClick,
   ...props
 }) => {
+  const capabilities = useCapabilities();
+
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
@@ -71,7 +72,6 @@ const EntityCloneIcon = ({
 };
 
 EntityCloneIcon.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   mayClone: PropTypes.bool,
@@ -80,6 +80,6 @@ EntityCloneIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default withCapabilities(EntityCloneIcon);
+export default EntityCloneIcon;
 
 // vim: set ts=2 sw=2 tw=80:

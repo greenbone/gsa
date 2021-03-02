@@ -28,7 +28,7 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 testModel(ReportFormat, 'reportformat', {testIsActive: false});
 
-describe('ReportFormat model tests', () => {
+describe('ReportFormat model parseElement tests', () => {
   test('should parse trust', () => {
     const elem = {
       trust: {
@@ -89,6 +89,49 @@ describe('ReportFormat model tests', () => {
     const reportFormat = ReportFormat.fromElement({});
 
     expect(reportFormat.alerts).toEqual([]);
+  });
+
+  describe('ReportFormat model parseObject tests', () => {
+    test('should parse trust', () => {
+      const obj = {
+        trust: 'foo',
+        trustTime: '2018-10-10T13:30:00+01:00',
+      };
+      const obj2 = {
+        trust: 'bar',
+      };
+      const reportFormat = ReportFormat.fromObject(obj);
+      const reportFormat2 = ReportFormat.fromObject(obj2);
+
+      expect(reportFormat.trust.value).toEqual('foo');
+      expect(isDate(reportFormat.trust.time)).toEqual(true);
+      expect(reportFormat2.trust.value).toEqual('bar');
+      expect(reportFormat2.trust.time).toBeUndefined();
+    });
+
+    test('should return empty object if no trust is given', () => {
+      const reportFormat = ReportFormat.fromObject({});
+
+      expect(reportFormat.trust).toEqual({});
+    });
+
+    test('should parse active as yes/no correctly', () => {
+      const reportFormat = ReportFormat.fromObject({active: false});
+      const reportFormat2 = ReportFormat.fromObject({active: true});
+
+      expect(reportFormat.active).toEqual(NO_VALUE);
+      expect(reportFormat2.active).toEqual(YES_VALUE);
+    });
+
+    test('should parse predefined as boolean correctly', () => {
+      const reportFormat = ReportFormat.fromObject({predefined: false});
+      const reportFormat2 = ReportFormat.fromObject({predefined: true});
+
+      expect(reportFormat.predefined).toEqual(false);
+      expect(reportFormat2.predefined).toEqual(true);
+    });
+
+    // Hyperion report formats have no alert field
   });
 
   describe('params tests', () => {
@@ -225,13 +268,20 @@ describe('ReportFormat model tests', () => {
     });
   });
 
+  // hyperion report formats have no params attribute
+
   describe('ReportFormat model method tests', () => {
     test('isActive() returns correct true/false', () => {
       const reportFormat = ReportFormat.fromElement({active: '0'});
       const reportFormat2 = ReportFormat.fromElement({active: '1'});
 
+      const reportFormat3 = ReportFormat.fromObject({active: false});
+      const reportFormat4 = ReportFormat.fromObject({active: true});
+
       expect(reportFormat.isActive()).toBe(false);
       expect(reportFormat2.isActive()).toBe(true);
+      expect(reportFormat3.isActive()).toBe(false);
+      expect(reportFormat4.isActive()).toBe(true);
     });
 
     test('isTrusted() returns correct true/false', () => {
@@ -245,11 +295,24 @@ describe('ReportFormat model tests', () => {
           __text: 'yes',
         },
       };
+
+      const obj = {
+        trust: 'no',
+      };
+
+      const obj2 = {
+        trust: 'yes',
+      };
+
       const reportFormat = ReportFormat.fromElement(elem);
       const reportFormat2 = ReportFormat.fromElement(elem2);
+      const reportFormat3 = ReportFormat.fromObject(obj);
+      const reportFormat4 = ReportFormat.fromObject(obj2);
 
       expect(reportFormat.isTrusted()).toBe(false);
       expect(reportFormat2.isTrusted()).toBe(true);
+      expect(reportFormat3.isTrusted()).toBe(false);
+      expect(reportFormat4.isTrusted()).toBe(true);
     });
   });
 });

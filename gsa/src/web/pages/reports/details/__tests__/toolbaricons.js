@@ -39,18 +39,24 @@ const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+let currentSettings;
+let getReportComposerDefaults;
+let gmp;
 
-const getReportComposerDefaults = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+beforeEach(() => {
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 
-const gmp = {
-  settings: {manualUrl},
-  user: {currentSettings, getReportComposerDefaults},
-};
+  getReportComposerDefaults = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  gmp = {
+    settings: {manualUrl},
+    user: {currentSettings, getReportComposerDefaults},
+  };
+});
 
 describe('Report Details ToolBarIcons tests', () => {
   test('should render ToolBarIcons', () => {

@@ -28,10 +28,6 @@ import {parseFloat, parseSeverity} from 'gmp/parser';
 
 import {OS_FILTER_FILTER} from 'gmp/models/filter';
 
-import {resultSeverityRiskFactor} from 'web/utils/severity';
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-
 import BarChart from 'web/components/chart/bar';
 
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
@@ -40,6 +36,10 @@ import withFilterSelection from 'web/components/dashboard/display/withFilterSele
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {registerDisplay} from 'web/components/dashboard/registry';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
+
+import {resultSeverityRiskFactor} from 'web/utils/severity';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
 
 import {OsVulnScoreLoader} from './loaders';
 

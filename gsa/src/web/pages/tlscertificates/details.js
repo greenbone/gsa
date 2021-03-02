@@ -40,9 +40,9 @@ import {
 } from 'web/store/entities/tlscertificates';
 
 import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
+import withGmp from 'web/utils/withGmp';
 
 const TlsCertificateDetails = ({entity, links = true}) => {
   return (
@@ -111,10 +111,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(TlsCertificateDetails);
 
 // vim: set ts=2 sw=2 tw=80:

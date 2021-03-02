@@ -19,8 +19,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -31,6 +29,8 @@ import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
+
+import PropTypes from 'web/utils/proptypes';
 
 const PortListDetails = ({entity, ...props}) => {
   const {

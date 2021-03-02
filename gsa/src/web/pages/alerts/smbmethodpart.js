@@ -24,19 +24,19 @@ import {
   smb_credential_filter,
 } from 'gmp/models/credential';
 
+import Select from 'web/components/form/select';
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
+
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+
+import NewIcon from 'web/components/icon/newicon';
 
 import PropTypes from 'web/utils/proptypes';
 
 import {renderSelectItems} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
-
-import Select from 'web/components/form/select';
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
-
-import NewIcon from 'web/components/icon/newicon';
 
 const SmbMethodPart = ({
   prefix,

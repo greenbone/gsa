@@ -22,6 +22,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
+
 import Theme from 'web/utils/theme';
 
 import Actions from '../actions';
@@ -39,13 +40,15 @@ describe('Audit Actions tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const audit = Audit.fromElement({
+    const audit = Audit.fromObject({
       status: AUDIT_STATUS.new,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      alterable: false,
+      reports: {
+        lastReport: {id: 'id'},
+      },
+      permissions: [{name: 'everything'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -78,13 +81,15 @@ describe('Audit Actions tests', () => {
   });
 
   test('should call click handlers', () => {
-    const audit = Audit.fromElement({
+    const audit = Audit.fromObject({
       status: AUDIT_STATUS.done,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      alterable: false,
+      reports: {
+        lastReport: {id: 'id'},
+      },
+      permissions: [{name: 'everything'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -97,6 +102,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}
@@ -148,13 +154,15 @@ describe('Audit Actions tests', () => {
   });
 
   test('should not call click handlers without permissions', () => {
-    const audit = Audit.fromElement({
+    const audit = Audit.fromObject({
       status: AUDIT_STATUS.done,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'get_task'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      alterable: false,
+      reports: {
+        lastReport: {id: 'id'},
+      },
+      permissions: [{name: 'get_task'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -167,6 +175,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}
@@ -230,13 +239,15 @@ describe('Audit Actions tests', () => {
   });
 
   test('should not call click handlers for stopped audit without permissions', () => {
-    const audit = Audit.fromElement({
+    const audit = Audit.fromObject({
       status: AUDIT_STATUS.stopped,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'get_task'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      alterable: false,
+      reports: {
+        lastReport: {id: 'id'},
+      },
+      permissions: [{name: 'get_task'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -315,13 +326,15 @@ describe('Audit Actions tests', () => {
   });
 
   test('should not call click handlers for running audit without permissions', () => {
-    const audit = Audit.fromElement({
+    const audit = Audit.fromObject({
       status: AUDIT_STATUS.running,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'get_task'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      alterable: false,
+      reports: {
+        lastReport: {id: 'id'},
+      },
+      permissions: [{name: 'get_task'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -397,13 +410,13 @@ describe('Audit Actions tests', () => {
   });
 
   test('should call click handlers for running audit', () => {
-    const audit = Audit.fromElement({
+    const audit = Audit.fromObject({
       status: AUDIT_STATUS.running,
-      alterable: '0',
-      in_use: true,
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      alterable: false,
+      inUse: true,
+      permissions: [{name: 'everything'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -416,6 +429,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}
@@ -465,13 +479,15 @@ describe('Audit Actions tests', () => {
   });
 
   test('should call click handlers for stopped audit', () => {
-    const audit = Audit.fromElement({
+    const audit = Audit.fromObject({
       status: AUDIT_STATUS.stopped,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      alterable: false,
+      reports: {
+        lastReport: {id: 'id'},
+      },
+      permissions: [{name: 'everything'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -484,6 +500,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}
@@ -535,13 +552,15 @@ describe('Audit Actions tests', () => {
   });
 
   test('should disable report download if grc format is not defined', () => {
-    const audit = Audit.fromElement({
+    const audit = Audit.fromObject({
       status: AUDIT_STATUS.stopped,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      usage_type: 'audit',
+      alterable: false,
+      reports: {
+        lastReport: {id: 'id'},
+      },
+      permissions: [{name: 'everything'}],
+      target: {id: 'id', name: 'target'},
+      usageType: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -554,6 +573,7 @@ describe('Audit Actions tests', () => {
     const handleReportDownload = jest.fn();
 
     const {render} = rendererWith({capabilities: true});
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}
@@ -581,18 +601,20 @@ describe('Audit Actions tests', () => {
   });
 
   test('should render schedule icon if task is scheduled', () => {
-    const audit = Audit.fromElement({
+    const audit = Audit.fromObject({
       status: AUDIT_STATUS.stopped,
-      alterable: '0',
-      last_report: {report: {_id: 'id'}},
-      permissions: {permission: [{name: 'everything'}]},
-      target: {_id: 'id', name: 'target'},
-      schedule: {
-        _id: 'schedule1',
-        name: 'schedule1',
-        permissions: {permission: [{name: 'everything'}]},
+      alterable: false,
+      reports: {
+        lastReport: {id: 'id'},
       },
-      usage_type: 'audit',
+      permissions: [{name: 'everything'}],
+      target: {id: 'id', name: 'target'},
+      schedule: {
+        id: 'schedule1',
+        name: 'schedule1',
+        permissions: [{name: 'everything'}],
+      },
+      usageType: 'audit',
     });
 
     const handleAuditClone = jest.fn();
@@ -609,6 +631,7 @@ describe('Audit Actions tests', () => {
       store: true,
       router: true,
     });
+
     const {getAllByTestId} = render(
       <Actions
         entity={audit}

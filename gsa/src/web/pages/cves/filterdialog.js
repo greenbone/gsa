@@ -17,7 +17,7 @@
  */
 import {_l} from 'gmp/locale/lang';
 
-import {createFilterDialog} from '../../components/powerfilter/dialog.js';
+import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
 const SORT_FIELDS = [
   {
@@ -25,28 +25,8 @@ const SORT_FIELDS = [
     displayName: _l('Name'),
   },
   {
-    name: 'vector',
-    displayName: _l('Vector'),
-  },
-  {
-    name: 'complexity',
-    displayName: _l('Complexity'),
-  },
-  {
-    name: 'authentication',
-    displayName: _l('Authentication'),
-  },
-  {
-    name: 'confidentiality_impact',
-    displayName: _l('Confidentiality Impact'),
-  },
-  {
-    name: 'integrity_impact',
-    displayName: _l('Integrity Impact'),
-  },
-  {
-    name: 'availability_impact',
-    displayName: _l('Availability Impact'),
+    name: 'cvssVector',
+    displayName: _l('CVSS Base Vector'),
   },
   {
     name: 'published',

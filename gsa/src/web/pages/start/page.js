@@ -15,7 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+/* eslint-disable no-shadow */
+
+import React, {useState, useEffect, useCallback} from 'react';
 
 import {v4 as uuid} from 'uuid';
 
@@ -23,25 +25,21 @@ import memoize from 'memoize-one';
 
 import styled from 'styled-components';
 
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-
 import {
   loadSettings,
-  saveSettings,
+  saveSettings as saveSettingsToStore,
   setDashboardSettingDefaults,
 } from 'web/store/dashboard/settings/actions';
-import getDashboardSettings, {
+import {
+  default as getDashboardSettingsFromStore,
   DashboardSetting,
 } from 'web/store/dashboard/settings/selectors';
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import {
   addDisplayToSettings,
@@ -55,6 +53,7 @@ import EditIcon from 'web/components/icon/editicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
+import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
@@ -72,11 +71,13 @@ import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
+import useGmp from 'web/utils/useGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+
 import Dashboard from './dashboard';
 import ConfirmRemoveDialog from './confirmremovedialog';
 import NewDashboardDialog, {DEFAULT_DISPLAYS} from './newdashboarddialog';
 import EditDashboardDialog from './editdashboarddialog';
-import Divider from 'web/components/layout/divider';
 
 const DASHBOARD_ID = 'd97eca9f-0386-4e5d-88f2-0ed7f60c0646';
 const OVERVIEW_DASHBOARD_ID = '84fbe9f5-8ad4-43f0-9712-850182abb003';
@@ -116,79 +117,72 @@ const ToolBarIcons = () => (
   />
 );
 
-class StartPage extends React.Component {
-  constructor(...args) {
-    super(...args);
+const StartPage = () => {
+  const gmp = useGmp();
+  const dispatch = useDispatch();
 
-    this.state = {
-      activeTab: DEFAULT_TAB,
-      showConfirmRemoveDialog: false,
-      showNewDashboardDialog: false,
-    };
+  const [, renewSession] = useUserSessionTimeout();
 
-    this.handleActivateTab = this.handleActivateTab.bind(this);
+  const [activeTab, setActiveTab] = useState(DEFAULT_TAB);
+  const [showConfirmRemoveDialog, setShowConfirmRemoveDialog] = useState(false);
+  const [showNewDashboardDialog, setShowNewDashboardDialog] = useState(false);
+  const [removeDashboardId, setRemoveDashboardId] = useState();
+  const [editDashboardId, setEditDashboardId] = useState();
+  const [showEditDashboardDialog, setShowEditDashboardDialog] = useState();
+  const [settings, setSettings] = useState({});
 
-    this.handleOpenConfirmRemoveDashboardDialog = this.handleOpenConfirmRemoveDashboardDialog.bind(
-      this,
-    );
-    this.handleCloseConfirmRemoveDashboardDialog = this.handleCloseConfirmRemoveDashboardDialog.bind(
-      this,
-    );
+  const loadDashboardSettings = useCallback(
+    (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
+    [gmp, dispatch],
+  );
 
-    this.handleRemoveDashboard = this.handleRemoveDashboard.bind(this);
+  const saveDashboardSettings = useCallback(
+    (id, settings) => dispatch(saveSettingsToStore(gmp)(id, settings)),
+    [gmp, dispatch],
+  );
 
-    this.handleLoadDashboardSettings = this.handleLoadDashboardSettings.bind(
-      this,
-    );
-    this.handleSaveDashboardSettings = this.handleSaveDashboardSettings.bind(
-      this,
-    );
+  // eslint-disable-next-line no-unused-vars
+  const setDefaultSettings = useCallback(
+    // doesn't seem to be used
+    (id, settings) => dispatch(setDashboardSettingDefaults(id, settings)),
+    [dispatch],
+  );
 
-    this.handleResetDashboard = this.handleResetDashboard.bind(this);
-    this.handleAddNewDisplay = this.handleAddNewDisplay.bind(this);
+  const settingsSelector = useSelector(getDashboardSettingsFromStore);
 
-    this.handleOpenNewDashboardDialog = this.handleOpenNewDashboardDialog.bind(
-      this,
-    );
-    this.handleCloseNewDashboardDialog = this.handleCloseNewDashboardDialog.bind(
-      this,
-    );
+  const loadedSettings = settingsSelector.getById(DASHBOARD_ID);
+  const isLoading = settingsSelector.getIsLoading(DASHBOARD_ID);
 
-    this.handleAddNewDashboard = this.handleAddNewDashboard.bind(this);
+  // eslint-disable-next-line no-unused-vars
+  const error = settingsSelector.getError(DASHBOARD_ID); // doesn't seem to be used
 
-    this.handleResetDashboards = this.handleResetDashboards.bind(this);
-    this.handleSetDefaultSettings = this.handleSetDefaultSettings.bind(this);
-
-    this.handleCloseEditDashboardDialog = this.handleCloseEditDashboardDialog.bind(
-      this,
-    );
-    this.handleSaveEditDashboard = this.handleSaveEditDashboard.bind(this);
-
-    this.getDashboardSelector = memoize(
-      settings => new DashboardSetting(settings),
-    );
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     const DEFAULTS = getDefaults();
-    this.props.loadSettings(DASHBOARD_ID, DEFAULTS);
-  }
+    loadDashboardSettings(DASHBOARD_ID, DEFAULTS);
+  }, [loadDashboardSettings]);
 
-  saveSettings(newSettings) {
-    this.props.saveSettings(DASHBOARD_ID, {
-      ...this.props.settings,
+  useEffect(() => {
+    setSettings(isDefined(loadedSettings) ? loadedSettings : {});
+  }, [loadedSettings]);
+
+  const getDashboardSelector = memoize(
+    settings => new DashboardSetting(settings),
+  );
+
+  const saveSettings = newSettings => {
+    saveDashboardSettings(DASHBOARD_ID, {
+      ...settings,
       ...newSettings,
     });
-  }
+  };
 
-  handleRemoveDashboard(dashboardId) {
-    const dashboards = this.getDashboards();
+  const handleRemoveDashboard = dashboardId => {
+    const dashboards = getDashboards();
 
     if (dashboards.length <= 1) {
       return;
     }
 
-    const {settings = {}} = this.props;
     const {byId = {}, defaults = {}} = settings;
 
     const byIdCopy = {...byId};
@@ -196,75 +190,69 @@ class StartPage extends React.Component {
     const defaultsCopy = {...defaults};
     delete defaultsCopy[dashboardId];
 
-    this.setState({
-      showConfirmRemoveDialog: false,
-      activeTab: DEFAULT_TAB,
-    });
+    setShowConfirmRemoveDialog(false);
+    setActiveTab(DEFAULT_TAB);
 
-    this.saveSettings({
+    saveSettings({
       byId: byIdCopy,
       dashboards: dashboards.filter(id => id !== dashboardId),
       defaults: defaultsCopy,
     });
-  }
+  };
 
-  handleOpenConfirmRemoveDashboardDialog(id) {
-    this.setState({
-      showConfirmRemoveDialog: true,
-      removeDashboardId: id,
-    });
-  }
+  const handleOpenConfirmRemoveDashboardDialog = id => {
+    setShowConfirmRemoveDialog(true);
+    setRemoveDashboardId(id);
+  };
 
-  handleCloseConfirmRemoveDashboardDialog() {
-    this.setState({showConfirmRemoveDialog: false});
-  }
+  const handleCloseConfirmRemoveDashboardDialog = () => {
+    setShowConfirmRemoveDialog(false);
+  };
 
-  closeNewDashboardDialog() {
-    this.setState({showNewDashboardDialog: false});
-  }
+  const closeNewDashboardDialog = () => {
+    setShowNewDashboardDialog(false);
+  };
 
-  handleOpenNewDashboardDialog() {
-    this.setState({showNewDashboardDialog: true});
-  }
+  const handleOpenNewDashboardDialog = () => {
+    setShowNewDashboardDialog(true);
+  };
 
-  handleCloseNewDashboardDialog() {
-    this.closeNewDashboardDialog();
-  }
+  const handleCloseNewDashboardDialog = () => {
+    closeNewDashboardDialog();
+  };
 
-  handleOpenEditDashboardDialog(id) {
-    this.setState({
-      editDashboardId: id,
-      showEditDashboardDialog: true,
-    });
-  }
+  const handleOpenEditDashboardDialog = id => {
+    setEditDashboardId(id);
+    setShowEditDashboardDialog(true);
+  };
 
-  handleCloseEditDashboardDialog() {
-    this.setState({showEditDashboardDialog: false});
-  }
+  const handleCloseEditDashboardDialog = () => {
+    setShowEditDashboardDialog(false);
+  };
 
-  handleActivateTab(tab) {
-    this.setState({activeTab: tab});
-  }
+  const handleActivateTab = tab => {
+    setActiveTab(tab);
+  };
 
-  handleSaveDashboardSettings(dashboardId, settings) {
-    this.updateDashboardSettings(dashboardId, settings);
-  }
+  const handleSaveDashboardSettings = (dashboardId, settings) => {
+    updateDashboardSettings(dashboardId, settings);
+  };
 
-  handleLoadDashboardSettings() {
+  const handleLoadDashboardSettings = () => {
     // do nothing
     // all defaults and settings are already provided
-  }
+  };
 
-  handleSetDefaultSettings(dashboardId, defaultSettings) {
-    this.updateDashboardDefaults(dashboardId, defaultSettings);
-  }
+  const handleSetDefaultSettings = (dashboardId, defaultSettings) => {
+    updateDashboardDefaults(dashboardId, defaultSettings);
+  };
 
-  handleResetDashboard(dashboardId) {
-    const settings = this.getDashboardDefaults(dashboardId);
-    this.updateDashboardSettings(dashboardId, settings);
-  }
+  const handleResetDashboard = dashboardId => {
+    const settings = getDashboardDefaults(dashboardId);
+    updateDashboardSettings(dashboardId, settings);
+  };
 
-  handleAddNewDisplay(oldSettings, dashboardId, displayId) {
+  const handleAddNewDisplay = (oldSettings, dashboardId, displayId) => {
     if (!isDefined(displayId) || !isDefined(dashboardId)) {
       return;
     }
@@ -274,13 +262,15 @@ class StartPage extends React.Component {
     }
 
     const newSettings = addDisplayToSettings(oldSettings, displayId);
-    this.updateDashboardSettings(dashboardId, newSettings);
-  }
+    updateDashboardSettings(dashboardId, newSettings);
+  };
 
-  handleAddNewDashboard({title, defaultDisplays = DEFAULT_DISPLAYS}) {
-    const {settings = {}} = this.props;
+  const handleAddNewDashboard = ({
+    title,
+    defaultDisplays = DEFAULT_DISPLAYS,
+  }) => {
     const {byId = {}} = settings;
-    const dashboards = this.getDashboards();
+    const dashboards = getDashboards();
 
     const id = uuid();
 
@@ -297,20 +287,21 @@ class StartPage extends React.Component {
       },
     };
 
-    this.saveSettings(newSettings);
+    saveSettings(newSettings);
 
-    this.closeNewDashboardDialog();
+    closeNewDashboardDialog();
 
     // change to new dashboard tab
-    this.setState({activeTab: dashboards.length});
-  }
+    setActiveTab(dashboards.length);
+  };
 
-  handleSaveEditDashboard({dashboardId, dashboardTitle}) {
-    this.updateDashboardSettings(dashboardId, {title: dashboardTitle});
-    this.setState({showEditDashboardDialog: false});
-  }
+  const handleSaveEditDashboard = ({dashboardId, dashboardTitle}) => {
+    updateDashboardSettings(dashboardId, {title: dashboardTitle});
+    setShowEditDashboardDialog(false);
+  };
 
-  handleResetDashboards() {
+  // eslint-disable-next-line no-unused-vars
+  const handleResetDashboards = () => {
     // reset all dashboards
     // currently not assigned to a handler
     // const {byId, defaults} = this.props;
@@ -325,13 +316,13 @@ class StartPage extends React.Component {
     //     },
     //   },
     // });
-  }
+  };
 
-  updateDashboardSettings(dashboardId, newSettings) {
-    const {byId = {}} = this.props.settings;
-    const oldSettings = this.getDashboardSettings(dashboardId);
+  const updateDashboardSettings = (dashboardId, newSettings) => {
+    const {byId = {}} = settings;
+    const oldSettings = getDashboardSettings(dashboardId);
 
-    this.saveSettings({
+    saveSettings({
       byId: {
         ...byId,
         [dashboardId]: {
@@ -340,227 +331,166 @@ class StartPage extends React.Component {
         },
       },
     });
-  }
+  };
 
-  updateDashboardDefaults(dashboardId, newDefaults) {
-    const {defaults = {}} = this.props.settings;
-    this.saveSettings({
+  const updateDashboardDefaults = (dashboardId, newDefaults) => {
+    const {defaults = {}} = settings;
+    saveSettings({
       defaults: {
         ...defaults,
         [dashboardId]: newDefaults,
       },
     });
-  }
+  };
 
-  getDashboards() {
-    const {settings = {}} = this.props;
+  const getDashboards = () => {
     const {dashboards = [], byId = {}} = settings;
     return dashboards.filter(id => isDefined(byId[id]));
-  }
+  };
 
-  getDashboardSettings(dashboardId) {
-    const {settings = {}} = this.props;
-    const selector = this.getDashboardSelector(settings);
+  const getDashboardSettings = dashboardId => {
+    const selector = getDashboardSelector(settings);
     return selector.getById(dashboardId);
-  }
+  };
 
-  getDashboardDefaults(dashboardId) {
-    const {settings = {}} = this.props;
-    const selector = this.getDashboardSelector(settings);
+  const getDashboardDefaults = dashboardId => {
+    const selector = getDashboardSelector(settings);
     return selector.getDefaultsById(dashboardId);
-  }
+  };
 
-  getDashboardTitle(dashboardId) {
-    const dashboardSettings = this.getDashboardSettings(dashboardId);
+  const getDashboardTitle = dashboardId => {
+    const dashboardSettings = getDashboardSettings(dashboardId);
     return dashboardSettings.title;
-  }
+  };
 
-  getDashboardDisplayIds(dashboardId) {
-    const dashboardSettings = this.getDashboardSettings(dashboardId);
+  const getDashboardDisplayIds = dashboardId => {
+    const dashboardSettings = getDashboardSettings(dashboardId);
     const {rows = []} = dashboardSettings;
     return rows.map(row => {
       const {items = []} = row;
       return items.map(item => item.displayId);
     });
-  }
-
-  render() {
-    const {isLoading} = this.props;
-    const {
-      activeTab,
-      editDashboardId,
-      removeDashboardId,
-      showEditDashboardDialog,
-      showNewDashboardDialog,
-      showConfirmRemoveDialog,
-    } = this.state;
-
-    const dashboards = this.getDashboards();
-
-    const canAdd = dashboards.length < MAX_DASHBOARDS;
-    return (
-      <React.Fragment>
-        <PageTitle title={_('Dashboards')} />
-        <ToolBarIcons />
-        <Section title={_('Dashboards')} img={<DashboardIcon size="large" />}>
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <React.Fragment>
-              <TabLayout grow="1" align={['start', 'end']}>
-                <TabList
-                  active={activeTab}
-                  align={['start', 'stretch']}
-                  onActivateTab={this.handleActivateTab}
-                >
-                  {dashboards.map(id => {
-                    const title = this.getDashboardTitle(id);
-                    return (
-                      <StyledTab key={id}>
-                        <Divider margin="13px">
-                          <span>{title}</span>
-                          {dashboards.length > 1 && (
-                            <IconDivider margin="3px">
-                              <EditIcon
-                                size="tiny"
-                                title={_('Edit Dashboard Title')}
-                                onClick={() =>
-                                  this.handleOpenEditDashboardDialog(id)
-                                } // eslint-disable-line max-len
-                              />
-                              <DeleteIcon
-                                size="tiny"
-                                title={_('Remove Dashboard')}
-                                onClick={() =>
-                                  this.handleOpenConfirmRemoveDashboardDialog(
-                                    id,
-                                  )
-                                } // eslint-disable-line max-len
-                              />
-                            </IconDivider>
-                          )}
-                        </Divider>
-                      </StyledTab>
-                    );
-                  })}
-
-                  <Layout align={['center', 'center']} grow>
-                    <StyledNewIcon
-                      title={
-                        canAdd
-                          ? _('Add new Dashboard')
-                          : _('Dashboards limit reached')
-                      }
-                      active={canAdd}
-                      onClick={
-                        canAdd ? this.handleOpenNewDashboardDialog : undefined
-                      }
-                    />
-                  </Layout>
-                </TabList>
-              </TabLayout>
-
-              <Tabs active={activeTab}>
-                <TabPanels>
-                  {dashboards.map(id => {
-                    const settings = this.getDashboardSettings(id);
-                    return (
-                      <TabPanel key={id}>
-                        <SubscriptionProvider>
-                          {({notify}) => (
-                            <Dashboard
-                              settings={settings}
-                              id={id}
-                              loadSettings={this.handleLoadDashboardSettings}
-                              notify={notify}
-                              saveSettings={this.handleSaveDashboardSettings}
-                              setDefaultSettings={this.handleSetDefaultSettings}
-                              onInteraction={this.props.renewSessionTimeout}
-                              onNewDisplay={this.handleAddNewDisplay}
-                              onResetDashboard={this.handleResetDashboard}
-                            />
-                          )}
-                        </SubscriptionProvider>
-                      </TabPanel>
-                    );
-                  })}
-                </TabPanels>
-              </Tabs>
-            </React.Fragment>
-          )}
-        </Section>
-        {showConfirmRemoveDialog && (
-          <ConfirmRemoveDialog
-            dashboardId={removeDashboardId}
-            dashboardTitle={this.getDashboardTitle(removeDashboardId)}
-            onDeny={this.handleCloseConfirmRemoveDashboardDialog}
-            onConfirm={this.handleRemoveDashboard}
-          />
-        )}
-        {showNewDashboardDialog && (
-          <NewDashboardDialog
-            additionalDisplayChoices={dashboards.map(id => ({
-              label: this.getDashboardTitle(id),
-              key: id,
-              value: this.getDashboardDisplayIds(id),
-            }))}
-            onClose={this.handleCloseNewDashboardDialog}
-            onSave={this.handleAddNewDashboard}
-          />
-        )}
-        {showEditDashboardDialog && (
-          <EditDashboardDialog
-            dashboardId={editDashboardId}
-            dashboardTitle={this.getDashboardTitle(editDashboardId)}
-            onClose={this.handleCloseEditDashboardDialog}
-            onSave={this.handleSaveEditDashboard}
-          />
-        )}
-      </React.Fragment>
-    );
-  }
-}
-
-StartPage.propTypes = {
-  error: PropTypes.toString,
-  isLoading: PropTypes.bool,
-  loadSettings: PropTypes.func.isRequired,
-  renewSessionTimeout: PropTypes.func.isRequired,
-  saveSettings: PropTypes.func.isRequired,
-  settings: PropTypes.shape({
-    byId: PropTypes.object.isRequired,
-    dashboards: PropTypes.arrayOf(PropTypes.string).isRequired,
-    defaults: PropTypes.object.isRequired,
-  }),
-};
-
-const mapStateToProps = rootState => {
-  const settingsSelector = getDashboardSettings(rootState);
-  const settings = settingsSelector.getById(DASHBOARD_ID);
-  const isLoading = settingsSelector.getIsLoading(DASHBOARD_ID);
-  const error = settingsSelector.getError(DASHBOARD_ID);
-
-  return {
-    error,
-    isLoading,
-    settings,
   };
+
+  const dashboards = getDashboards();
+
+  const canAdd = dashboards.length < MAX_DASHBOARDS;
+  return (
+    <React.Fragment>
+      <PageTitle title={_('Dashboards')} />
+      <ToolBarIcons />
+      <Section title={_('Dashboards')} img={<DashboardIcon size="large" />}>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <React.Fragment>
+            <TabLayout grow="1" align={['start', 'end']}>
+              <TabList
+                active={activeTab}
+                align={['start', 'stretch']}
+                onActivateTab={handleActivateTab}
+              >
+                {dashboards.map(id => {
+                  const title = getDashboardTitle(id);
+                  return (
+                    <StyledTab key={id}>
+                      <Divider margin="13px">
+                        <span>{title}</span>
+                        {dashboards.length > 1 && (
+                          <IconDivider margin="3px">
+                            <EditIcon
+                              size="tiny"
+                              title={_('Edit Dashboard Title')}
+                              onClick={() => handleOpenEditDashboardDialog(id)} // eslint-disable-line max-len
+                            />
+                            <DeleteIcon
+                              size="tiny"
+                              title={_('Remove Dashboard')}
+                              onClick={() =>
+                                handleOpenConfirmRemoveDashboardDialog(id)
+                              } // eslint-disable-line max-len
+                            />
+                          </IconDivider>
+                        )}
+                      </Divider>
+                    </StyledTab>
+                  );
+                })}
+
+                <Layout align={['center', 'center']} grow>
+                  <StyledNewIcon
+                    title={
+                      canAdd
+                        ? _('Add new Dashboard')
+                        : _('Dashboards limit reached')
+                    }
+                    active={canAdd}
+                    onClick={canAdd ? handleOpenNewDashboardDialog : undefined}
+                  />
+                </Layout>
+              </TabList>
+            </TabLayout>
+
+            <Tabs active={activeTab}>
+              <TabPanels>
+                {dashboards.map(id => {
+                  const settings = getDashboardSettings(id);
+                  return (
+                    <TabPanel key={id}>
+                      <SubscriptionProvider>
+                        {({notify}) => (
+                          <Dashboard
+                            settings={settings}
+                            id={id}
+                            loadSettings={handleLoadDashboardSettings}
+                            notify={notify}
+                            saveSettings={handleSaveDashboardSettings}
+                            setDefaultSettings={handleSetDefaultSettings}
+                            onInteraction={renewSession}
+                            onNewDisplay={handleAddNewDisplay}
+                            onResetDashboard={handleResetDashboard}
+                          />
+                        )}
+                      </SubscriptionProvider>
+                    </TabPanel>
+                  );
+                })}
+              </TabPanels>
+            </Tabs>
+          </React.Fragment>
+        )}
+      </Section>
+      {showConfirmRemoveDialog && (
+        <ConfirmRemoveDialog
+          dashboardId={removeDashboardId}
+          dashboardTitle={getDashboardTitle(removeDashboardId)}
+          onDeny={handleCloseConfirmRemoveDashboardDialog}
+          onConfirm={handleRemoveDashboard}
+        />
+      )}
+      {showNewDashboardDialog && (
+        <NewDashboardDialog
+          additionalDisplayChoices={dashboards.map(id => ({
+            label: getDashboardTitle(id),
+            key: id,
+            value: getDashboardDisplayIds(id),
+          }))}
+          onClose={handleCloseNewDashboardDialog}
+          onSave={handleAddNewDashboard}
+        />
+      )}
+      {showEditDashboardDialog && (
+        <EditDashboardDialog
+          dashboardId={editDashboardId}
+          dashboardTitle={getDashboardTitle(editDashboardId)}
+          onClose={handleCloseEditDashboardDialog}
+          onSave={handleSaveEditDashboard}
+        />
+      )}
+    </React.Fragment>
+  );
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
-  saveSettings: (id, settings) => dispatch(saveSettings(gmp)(id, settings)),
-  renewSessionTimeout: () => dispatch(renewSessionTimeout(gmp)()),
-  setDefaultSettings: (id, settings) =>
-    dispatch(setDashboardSettingDefaults(id, settings)),
-});
-
-export default compose(
-  withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
-)(StartPage);
+export default StartPage;
 
 // vim: set ts=2 sw=2 tw=80:

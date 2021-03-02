@@ -24,7 +24,7 @@ import _ from 'gmp/locale';
 
 import {getTranslatableTaskStatus, TASK_STATUS} from 'gmp/models/task';
 
-import PropTypes from 'web/utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
 import ProgressBar, {adjustProgress} from './progressbar';
 

@@ -22,7 +22,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 /**
  * (from https://nvd.nist.gov/site-media/js/nvdApp/cvssV2/cvssV2.service.js)
- * Handles percision and rounding of numbers to one decimal place
+ * Handles precision and rounding of numbers to one decimal place
  * @param value
  * @returns {number}
  */
@@ -52,17 +52,17 @@ export const parseCvssV2BaseVector = ({
   accessVector,
   accessComplexity,
   authentication,
-  confidentialityImpact,
-  availabilityImpact,
-  integrityImpact,
+  confidentiality,
+  availability,
+  integrity,
 } = {}) => {
   if (
     !isDefined(accessVector) &&
     !isDefined(accessComplexity) &&
     !isDefined(authentication) &&
-    !isDefined(confidentialityImpact) &&
-    !isDefined(integrityImpact) &&
-    !isDefined(availabilityImpact)
+    !isDefined(confidentiality) &&
+    !isDefined(integrity) &&
+    !isDefined(availability)
   ) {
     return [undefined, undefined];
   }
@@ -132,7 +132,7 @@ export const parseCvssV2BaseVector = ({
   }
 
   vector += '/C:';
-  switch (confidentialityImpact) {
+  switch (confidentiality) {
     case 'NONE':
       vector += 'N';
       c = 0.0;
@@ -151,7 +151,7 @@ export const parseCvssV2BaseVector = ({
   }
 
   vector += '/I:';
-  switch (integrityImpact) {
+  switch (integrity) {
     case 'NONE':
       vector += 'N';
       i = 0.0;
@@ -170,7 +170,7 @@ export const parseCvssV2BaseVector = ({
   }
 
   vector += '/A:';
-  switch (availabilityImpact) {
+  switch (availability) {
     case 'NONE':
       vector += 'N';
       a = 0.0;
@@ -213,11 +213,11 @@ export const parseCvssV2BaseFromVector = vector => {
   let au;
   let authentication;
   let c;
-  let confidentialityImpact;
+  let confidentiality;
   let i;
-  let integrityImpact;
+  let integrity;
   let a;
-  let availabilityImpact;
+  let availability;
 
   const values = vector.split('/');
 
@@ -266,37 +266,37 @@ export const parseCvssV2BaseFromVector = vector => {
         break;
       case 'c':
         if (value === 'c') {
-          confidentialityImpact = 'COMPLETE';
+          confidentiality = 'COMPLETE';
           c = 0.66;
         } else if (value === 'p') {
-          confidentialityImpact = 'PARTIAL';
+          confidentiality = 'PARTIAL';
           c = 0.275;
         } else if (value === 'n') {
-          confidentialityImpact = 'NONE';
+          confidentiality = 'NONE';
           c = 0.0;
         }
         break;
       case 'i':
         if (value === 'c') {
-          integrityImpact = 'COMPLETE';
+          integrity = 'COMPLETE';
           i = 0.66;
         } else if (value === 'p') {
-          integrityImpact = 'PARTIAL';
+          integrity = 'PARTIAL';
           i = 0.275;
         } else if (value === 'n') {
-          integrityImpact = 'NONE';
+          integrity = 'NONE';
           i = 0.0;
         }
         break;
       case 'a':
         if (value === 'c') {
-          availabilityImpact = 'COMPLETE';
+          availability = 'COMPLETE';
           a = 0.66;
         } else if (value === 'p') {
-          availabilityImpact = 'PARTIAL';
+          availability = 'PARTIAL';
           a = 0.275;
         } else if (value === 'n') {
-          availabilityImpact = 'NONE';
+          availability = 'NONE';
           a = 0.0;
         }
         break;
@@ -311,9 +311,9 @@ export const parseCvssV2BaseFromVector = vector => {
     accessVector: accessVector,
     accessComplexity: accessComplexity,
     authentication: authentication,
-    confidentialityImpact: confidentialityImpact,
-    integrityImpact: integrityImpact,
-    availabilityImpact: availabilityImpact,
+    confidentiality: confidentiality,
+    integrity: integrity,
+    availability: availability,
     cvssScore: base,
   };
 };
@@ -327,9 +327,9 @@ export const parseCvssV2BaseFromVector = vector => {
  * @param privilegesRequired        PR Metric Value
  * @param userInteraction           UI Metric Value
  * @param scope                     S Metric Value
- * @param confidentialityImpact     C Metric Value
- * @param integrityImpact           I Metric Value
- * @param availabilityImpact        A Metric Value
+ * @param confidentiality     C Metric Value
+ * @param integrity           I Metric Value
+ * @param availability        A Metric Value
  */
 export const parseCvssV3BaseVector = ({
   attackVector,
@@ -337,9 +337,9 @@ export const parseCvssV3BaseVector = ({
   privilegesRequired,
   userInteraction,
   scope,
-  confidentialityImpact,
-  integrityImpact,
-  availabilityImpact,
+  confidentiality,
+  integrity,
+  availability,
 } = {}) => {
   if (
     !isDefined(attackVector) &&
@@ -347,9 +347,9 @@ export const parseCvssV3BaseVector = ({
     !isDefined(privilegesRequired) &&
     !isDefined(userInteraction) &&
     !isDefined(scope) &&
-    !isDefined(confidentialityImpact) &&
-    !isDefined(integrityImpact) &&
-    !isDefined(availabilityImpact)
+    !isDefined(confidentiality) &&
+    !isDefined(integrity) &&
+    !isDefined(availability)
   ) {
     return [undefined, undefined];
   }
@@ -452,7 +452,7 @@ export const parseCvssV3BaseVector = ({
   }
 
   vector += '/C:';
-  switch (confidentialityImpact) {
+  switch (confidentiality) {
     case 'HIGH':
       vector += 'H';
       c = 0.56;
@@ -471,7 +471,7 @@ export const parseCvssV3BaseVector = ({
   }
 
   vector += '/I:';
-  switch (integrityImpact) {
+  switch (integrity) {
     case 'HIGH':
       vector += 'H';
       i = 0.56;
@@ -490,7 +490,7 @@ export const parseCvssV3BaseVector = ({
   }
 
   vector += '/A:';
-  switch (availabilityImpact) {
+  switch (availability) {
     case 'HIGH':
       vector += 'H';
       a = 0.56;
@@ -539,11 +539,11 @@ export const parseCvssV3BaseFromVector = vector => {
   let s;
   let scope;
   let c;
-  let confidentialityImpact;
+  let confidentiality;
   let i;
-  let integrityImpact;
+  let integrity;
   let a;
-  let availabilityImpact;
+  let availability;
 
   const values = vector.split('/');
 
@@ -610,37 +610,37 @@ export const parseCvssV3BaseFromVector = vector => {
         break;
       case 'c':
         if (value === 'h') {
-          confidentialityImpact = 'HIGH';
+          confidentiality = 'HIGH';
           c = 0.56;
         } else if (value === 'l') {
-          confidentialityImpact = 'LOW';
+          confidentiality = 'LOW';
           c = 0.22;
         } else if (value === 'n') {
-          confidentialityImpact = 'NONE';
+          confidentiality = 'NONE';
           c = 0.0;
         }
         break;
       case 'i':
         if (value === 'h') {
-          integrityImpact = 'HIGH';
+          integrity = 'HIGH';
           i = 0.56;
         } else if (value === 'l') {
-          integrityImpact = 'LOW';
+          integrity = 'LOW';
           i = 0.22;
         } else if (value === 'n') {
-          integrityImpact = 'NONE';
+          integrity = 'NONE';
           i = 0.0;
         }
         break;
       case 'a':
         if (value === 'h') {
-          availabilityImpact = 'HIGH';
+          availability = 'HIGH';
           a = 0.56;
         } else if (value === 'l') {
-          availabilityImpact = 'LOW';
+          availability = 'LOW';
           a = 0.22;
         } else if (value === 'n') {
-          availabilityImpact = 'NONE';
+          availability = 'NONE';
           a = 0.0;
         }
         break;
@@ -660,9 +660,9 @@ export const parseCvssV3BaseFromVector = vector => {
     privilegesRequired,
     userInteraction,
     scope,
-    confidentialityImpact,
-    integrityImpact,
-    availabilityImpact,
+    confidentiality,
+    integrity,
+    availability,
     cvssScore: base,
   };
 };

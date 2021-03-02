@@ -18,9 +18,9 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Table from './table.js';
+import Table from './table';
 
 const SimpleTable = ({size = 'auto', ...props}) => (
   <Table {...props} size={size} />

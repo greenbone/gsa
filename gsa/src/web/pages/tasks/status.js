@@ -19,7 +19,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import {TASK_STATUS} from 'gmp/models/task';
 
@@ -36,18 +36,20 @@ const StyledDetailsLink = styled(DetailsLink)`
 `;
 
 const TaskStatus = ({task, links = true}) => {
-  let report_id;
-  if (isDefined(task.current_report)) {
-    report_id = task.current_report.id;
-  } else if (isDefined(task.last_report)) {
-    report_id = task.last_report.id;
+  const {reports = {}} = task;
+  const {currentReport, lastReport} = reports;
+  let reportId;
+  if (hasValue(currentReport)) {
+    reportId = currentReport.id;
+  } else if (hasValue(lastReport)) {
+    reportId = lastReport.id;
   } else {
-    report_id = '';
+    reportId = '';
     links = false;
   }
 
   return (
-    <StyledDetailsLink type="report" id={report_id} textOnly={!links}>
+    <StyledDetailsLink type="report" id={reportId} textOnly={!links}>
       <StatusBar
         status={task.isContainer() ? TASK_STATUS.container : task.status}
         progress={task.progress}

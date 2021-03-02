@@ -25,8 +25,6 @@ import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import PropTypes from 'web/utils/proptypes';
-
 import WordCloudChart from 'web/components/chart/wordcloud';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
@@ -34,6 +32,8 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import {randomColor} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
+
+import PropTypes from 'web/utils/proptypes';
 
 import {ResultsWordCountLoader} from './loaders';
 

@@ -19,13 +19,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
 import ScrollableContent from 'web/components/dialog/scrollablecontent';
 import DialogTitle from 'web/components/dialog/title';
 import DialogTwoButtonFooter from 'web/components/dialog/twobuttonfooter';
+
+import PropTypes from 'web/utils/proptypes';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
 

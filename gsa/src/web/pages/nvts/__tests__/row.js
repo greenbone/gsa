@@ -24,7 +24,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
 import NVT from 'gmp/models/nvt';
-import Filter from 'gmp/models/filter.js';
+import Filter from 'gmp/models/filter';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 

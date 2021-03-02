@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -24,103 +23,104 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
-import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {entitiesLoadingActions} from 'web/store/entities/tasks';
-import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {loadingActions as loadUserSettingsActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
-import TaskPage, {ToolBarIcons} from '../listpage';
+import {
+  createGetTasksQueryMock,
+  createExportTasksByFilterQueryMock,
+  createDeleteTasksByFilterQueryMock,
+  createDeleteTasksByIdsQueryMock,
+  createExportTasksByIdsQueryMock,
+} from 'web/graphql/__mocks__/tasks';
+import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+
+import TasksListPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
 
-const lastReport = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-08-10T12:51:27Z',
-    severity: '5.0',
-  },
-};
-
-const task = Task.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
-  name: 'foo',
-  comment: 'bar',
-  status: TASK_STATUS.done,
-  alterable: '0',
-  last_report: lastReport,
-  report_count: {__text: '1'},
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: 'id1', name: 'target1'},
-});
-
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
-const reloadInterval = 1;
+const reloadInterval = null;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
+// create mock tasks
+const {listMockTask: task} = getMockTasks(); // mock task
 
-const getFilters = jest.fn().mockReturnValue(
-  Promise.resolve({
+let currentSettings;
+let getAggregates;
+let getDashboardSetting;
+let getFilters;
+let getReportFormats;
+let getTasks;
+let getUserSetting;
+let renewSession;
+
+beforeEach(() => {
+  // mock gmp commands
+  getTasks = jest.fn().mockResolvedValue({
+    data: [task],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  getAggregates = jest.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  }),
-);
+  });
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
+  getFilters = jest.fn().mockReturnValue(
+    Promise.resolve({
+      data: [],
+      meta: {
+        filter: Filter.fromString(),
+        counts: new CollectionCounts(),
+      },
+    }),
+  );
+
+  getReportFormats = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  getDashboardSetting = jest.fn().mockResolvedValue({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
+  currentSettings = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
+
+  getUserSetting = jest.fn().mockResolvedValue({
+    filter: null,
+  });
+
+  renewSession = jest.fn().mockResolvedValue({
+    foo: 'bar',
+  });
 });
 
-const getUserSetting = jest.fn().mockResolvedValue({
-  filter: null,
-});
-
-const getAggregates = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getTasks = jest.fn().mockResolvedValue({
-  data: [task],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const getReportFormats = jest.fn().mockResolvedValue({
-  data: [],
-  meta: {
-    filter: Filter.fromString(),
-    counts: new CollectionCounts(),
-  },
-});
-
-const renewSession = jest.fn().mockResolvedValue({
-  foo: 'bar',
-});
-
-describe('TaskPage tests', () => {
+describe('TasksListPage tests', () => {
   test('should render full TaskPage', async () => {
     const gmp = {
       tasks: {
@@ -138,50 +138,42 @@ describe('TaskPage tests', () => {
       dashboard: {
         getSetting: getDashboardSetting,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {currentSettings, getSetting: getUserSetting},
     };
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingFilter = Filter.fromString('foo=bar rows=2');
+    const [mock, resultFunc] = createGetTasksQueryMock({
+      filterString,
+      first: 2,
+    });
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
-    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('task', defaultSettingfilter),
+      loadUserSettingsActions.success({rowsperpage: {value: '2'}}),
+    );
+    store.dispatch(
+      defaultFilterLoadingActions.success('task', defaultSettingFilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([task], filter, loadedFilter, counts),
-    );
+    const {baseElement} = render(<TasksListPage />);
 
-    const {baseElement, getAllByTestId} = render(<TaskPage />);
+    await wait();
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
-
-    const display = getAllByTestId('grid-item');
-    const icons = getAllByTestId('svg-icon');
+    const display = screen.getAllByTestId('grid-item');
+    let icons = screen.getAllByTestId('svg-icon');
     const inputs = baseElement.querySelectorAll('input');
-    const header = baseElement.querySelectorAll('th');
-    const row = baseElement.querySelectorAll('tr');
-    const selects = getAllByTestId('select-selected-value');
+    const selects = screen.getAllByTestId('select-selected-value');
 
     // Toolbar Icons
     expect(icons[0]).toHaveAttribute('title', 'Help: Tasks');
@@ -207,6 +199,10 @@ describe('TaskPage tests', () => {
     );
     expect(display[2]).toHaveTextContent('Tasks by Status (Total: 0)');
 
+    expect(resultFunc).toHaveBeenCalled();
+
+    const header = baseElement.querySelectorAll('th');
+
     // Table
     expect(header[0]).toHaveTextContent('Name');
     expect(header[1]).toHaveTextContent('Status');
@@ -216,37 +212,38 @@ describe('TaskPage tests', () => {
     expect(header[5]).toHaveTextContent('Trend');
     expect(header[6]).toHaveTextContent('Actions');
 
+    const row = baseElement.querySelectorAll('tr');
+
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('(bar)');
     expect(row[1]).toHaveTextContent('Done');
-    expect(row[1]).toHaveTextContent('Sat, Aug 10, 2019 2:51 PM CEST');
+    expect(row[1]).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
     expect(row[1]).toHaveTextContent('5.0 (Medium)');
 
-    expect(icons[24]).toHaveAttribute('title', 'Start');
-    expect(icons[25]).toHaveAttribute('title', 'Task is not stopped');
-    expect(icons[26]).toHaveAttribute('title', 'Move Task to trashcan');
-    expect(icons[27]).toHaveAttribute('title', 'Edit Task');
-    expect(icons[28]).toHaveAttribute('title', 'Clone Task');
-    expect(icons[29]).toHaveAttribute('title', 'Export Task');
+    icons = screen.getAllByTestId('svg-icon');
+
+    expect(icons[24]).toHaveAttribute(
+      'title',
+      'Task made visible for:\nUsers john, jane\nRoles admin role, user role\nGroups group 1, group 2',
+    );
+
+    expect(icons[25]).toHaveAttribute('title', 'Severity increased');
+
+    expect(icons[26]).toHaveAttribute('title', 'Start');
+    expect(icons[27]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[28]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[29]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[30]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[31]).toHaveAttribute('title', 'Export Task');
   });
 
-  test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
+  test('should allow to bulk action on page contents', async () => {
     const gmp = {
       tasks: {
         get: getTasks,
         getSeverityAggregates: getAggregates,
         getHighResultsAggregates: getAggregates,
         getStatusAggregates: getAggregates,
-        deleteByFilter,
-        exportByFilter,
       },
       filters: {
         get: getFilters,
@@ -257,58 +254,250 @@ describe('TaskPage tests', () => {
       dashboard: {
         getSetting: getDashboardSetting,
       },
-      reloadInterval,
-      settings: {manualUrl},
+      settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getUserSetting},
     };
+
+    const filterString = 'foo=bar rows=2';
+    const [mock, resultFunc] = createGetTasksQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportTasksByIdsQueryMock([
+      '12345',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteTasksByIdsQueryMock([
+      '12345',
+    ]);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
-    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(
-      defaultFilterLoadingActions.success('task', defaultSettingfilter),
+      loadUserSettingsActions.success({rowsperpage: {value: '2'}}),
+    );
+    store.dispatch(
+      defaultFilterLoadingActions.success('task', defaultSettingFilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([task], filter, loadedFilter, counts),
+    render(<TasksListPage />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    const icons = screen.getAllByTestId('svg-icon');
+
+    expect(icons[34]).toHaveAttribute('title', 'Export page contents');
+    fireEvent.click(icons[34]);
+
+    await wait();
+    expect(exportResult).toHaveBeenCalled();
+
+    expect(icons[33]).toHaveAttribute(
+      'title',
+      'Move page contents to trashcan',
     );
 
-    const {baseElement, getAllByTestId} = render(<TaskPage />);
+    fireEvent.click(icons[33]);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    const icons = getAllByTestId('svg-icon');
+    expect(deleteResult).toHaveBeenCalled();
+  });
 
-    await act(async () => {
-      expect(icons[31]).toHaveAttribute(
-        'title',
-        'Move page contents to trashcan',
-      );
-      fireEvent.click(icons[31]);
-      expect(deleteByFilter).toHaveBeenCalled();
+  test('should allow to bulk action on selected tasks', async () => {
+    const gmp = {
+      tasks: {
+        get: getTasks,
+        getSeverityAggregates: getAggregates,
+        getHighResultsAggregates: getAggregates,
+        getStatusAggregates: getAggregates,
+      },
+      filters: {
+        get: getFilters,
+      },
+      reportformats: {
+        get: getReportFormats,
+      },
+      dashboard: {
+        getSetting: getDashboardSetting,
+      },
+      settings: {manualUrl, reloadInterval},
+      user: {renewSession, currentSettings, getSetting: getUserSetting},
+    };
 
-      expect(icons[32]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[32]);
-      expect(exportByFilter).toHaveBeenCalled();
+    const filterString = 'foo=bar rows=2';
+    const [mock, resultFunc] = createGetTasksQueryMock({
+      filterString,
+      first: 2,
     });
+
+    const [exportMock, exportResult] = createExportTasksByIdsQueryMock([
+      '12345',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteTasksByIdsQueryMock([
+      '12345',
+    ]);
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+      queryMocks: [mock, exportMock, deleteMock],
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingFilter = Filter.fromString('foo=bar');
+    store.dispatch(
+      loadUserSettingsActions.success({rowsperpage: {value: '2'}}),
+    );
+    store.dispatch(
+      defaultFilterLoadingActions.success('task', defaultSettingFilter),
+    );
+
+    const {element} = render(<TasksListPage />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    const selectFields = screen.getAllByTestId('select-open-button');
+
+    fireEvent.click(selectFields[1]);
+    const selectItems = screen.getAllByTestId('select-item');
+
+    fireEvent.click(selectItems[1]);
+
+    const selected = screen.getAllByTestId('select-selected-value');
+
+    expect(selected[1]).toHaveTextContent('Apply to selection');
+
+    const inputs = element.querySelectorAll('input');
+
+    // check task to be exported
+    fireEvent.click(inputs[1]);
+    await wait();
+
+    const icons = screen.getAllByTestId('svg-icon');
+
+    expect(icons[28]).toHaveAttribute('title', 'Export selection');
+    fireEvent.click(icons[28]);
+
+    await wait();
+
+    expect(exportResult).toHaveBeenCalled();
+
+    expect(icons[27]).toHaveAttribute('title', 'Move selection to trashcan');
+
+    fireEvent.click(icons[27]);
+
+    await wait();
+
+    expect(deleteResult).toHaveBeenCalled();
+  });
+
+  test('should allow to bulk action on filtered tasks', async () => {
+    const gmp = {
+      tasks: {
+        get: getTasks,
+        getSeverityAggregates: getAggregates,
+        getHighResultsAggregates: getAggregates,
+        getStatusAggregates: getAggregates,
+      },
+      filters: {
+        get: getFilters,
+      },
+      reportformats: {
+        get: getReportFormats,
+      },
+      dashboard: {
+        getSetting: getDashboardSetting,
+      },
+      settings: {manualUrl, reloadInterval},
+      user: {renewSession, currentSettings, getSetting: getUserSetting},
+    };
+
+    const filterString = 'foo=bar rows=2';
+    const [mock, resultFunc] = createGetTasksQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportTasksByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+    const [deleteMock, deleteResult] = createDeleteTasksByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+      queryMocks: [mock, exportMock, deleteMock],
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingFilter = Filter.fromString('foo=bar');
+    store.dispatch(
+      loadUserSettingsActions.success({rowsperpage: {value: '2'}}),
+    );
+    store.dispatch(
+      defaultFilterLoadingActions.success('task', defaultSettingFilter),
+    );
+
+    render(<TasksListPage />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    const selectFields = screen.getAllByTestId('select-open-button');
+
+    fireEvent.click(selectFields[1]);
+    const selectItems = screen.getAllByTestId('select-item');
+
+    fireEvent.click(selectItems[2]);
+
+    await wait();
+
+    const selected = screen.getAllByTestId('select-selected-value');
+
+    expect(selected[1]).toHaveTextContent('Apply to all filtered');
+
+    const icons = screen.getAllByTestId('svg-icon');
+
+    expect(icons[34]).toHaveAttribute('title', 'Export all filtered');
+    fireEvent.click(icons[34]);
+
+    await wait();
+
+    expect(exportResult).toHaveBeenCalled();
+
+    expect(icons[33]).toHaveAttribute('title', 'Move all filtered to trashcan');
+
+    fireEvent.click(icons[33]);
+
+    await wait();
+
+    expect(deleteResult).toHaveBeenCalled();
   });
 });
 
@@ -417,6 +606,7 @@ describe('TaskPage ToolBarIcons test', () => {
       capabilities: wrongCaps,
       router: true,
     });
+
     const {queryAllByTestId} = render(
       <ToolBarIcons
         onAdvancedTaskWizardClick={handleAdvancedTaskWizardClick}

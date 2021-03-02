@@ -21,10 +21,10 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import EntityComponent from 'web/entity/component';
+
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-
-import EntityComponent from 'web/entity/component';
 
 import GroupDialog from './dialog';
 

@@ -21,7 +21,7 @@ import _ from 'gmp/locale';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout.js';
+import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
 
 import ExportIcon from 'web/components/icon/exporticon';

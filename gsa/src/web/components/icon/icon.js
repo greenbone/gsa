@@ -24,11 +24,11 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import withIconSize from 'web/components/icon/withIconSize';
+
 import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
-
-import withIconSize from 'web/components/icon/withIconSize';
 
 import {get_img_url} from 'web/utils/urls';
 

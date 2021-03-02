@@ -17,6 +17,7 @@
  */
 import {isDefined} from './utils/identity';
 
+export const DEFAULT_GRAPHQL_API_LOCATION = 'selene/graphql/';
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
 export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
 export const DEFAULT_RELOAD_INTERVAL_INACTIVE = 60 * 1000; // one minute
@@ -62,6 +63,7 @@ class GmpSettings {
       enableStoreDebugLog,
       guestUsername,
       guestPassword,
+      graphqlApiLocation = DEFAULT_GRAPHQL_API_LOCATION,
       loglevel,
       manualUrl = DEFAULT_MANUAL_URL,
       manualLanguageMapping,
@@ -79,6 +81,9 @@ class GmpSettings {
     let {
       apiProtocol = protocol,
       apiServer = server,
+      graphqlApiProtocol,
+      graphqlApiServer,
+      enableHyperionOnly = false, // default to false if not found in config
       logLevel = loglevel,
     } = options;
 
@@ -112,6 +117,13 @@ class GmpSettings {
       apiServer = global.location.host;
     }
 
+    if (!isDefined(graphqlApiProtocol)) {
+      graphqlApiProtocol = apiProtocol;
+    }
+    if (!isDefined(graphqlApiServer)) {
+      graphqlApiServer = apiServer;
+    }
+
     this.logLevel = logLevel;
     this.reloadInterval = reloadInterval;
     this.reloadIntervalActive = reloadIntervalActive;
@@ -125,6 +137,10 @@ class GmpSettings {
     setAndFreeze(this, 'enableGreenboneSensor', enableGreenboneSensor);
     setAndFreeze(this, 'guestUsername', guestUsername);
     setAndFreeze(this, 'guestPassword', guestPassword);
+    setAndFreeze(this, 'graphqlApiLocation', graphqlApiLocation);
+    setAndFreeze(this, 'graphqlApiProtocol', graphqlApiProtocol);
+    setAndFreeze(this, 'graphqlApiServer', graphqlApiServer);
+    setAndFreeze(this, 'enableHyperionOnly', enableHyperionOnly);
     setAndFreeze(this, 'manualUrl', manualUrl);
     setAndFreeze(this, 'manualLanguageMapping', manualLanguageMapping);
     setAndFreeze(this, 'protocolDocUrl', protocolDocUrl);

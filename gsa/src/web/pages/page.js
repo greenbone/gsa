@@ -18,25 +18,18 @@
 
 import React from 'react';
 
-import {withRouter} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import Capabilities from 'gmp/capabilities/capabilities';
-
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-import compose from 'web/utils/compose';
 
 import MenuBar from 'web/components/bar/menubar';
 
 import ErrorBoundary from 'web/components/error/errorboundary';
+import ErrorPanel from 'web/components/error/errorpanel';
 
 import Layout from 'web/components/layout/layout';
 
@@ -46,73 +39,51 @@ import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 import Main from 'web/components/structure/main';
 
-const log = logger.getLogger('web.page');
+import {useGetCapabilities} from 'web/graphql/capabilities';
 
 const StyledLayout = styled(Layout)`
   height: 100%;
 `;
 
-class Page extends React.Component {
-  constructor(...args) {
-    super(...args);
+const Page = ({children}) => {
+  const location = useLocation();
 
-    this.state = {};
-  }
+  const {capabilities, error} = useGetCapabilities();
 
-  componentDidMount() {
-    const {gmp} = this.props;
-
-    gmp.user
-      .currentCapabilities()
-      .then(response => {
-        const capabilities = response.data;
-        log.debug('User capabilities', capabilities);
-        this.setState({capabilities});
-      })
-      .catch(rejection => {
-        log.error('An error occurred during fetching capabilities', rejection);
-        // use empty capabilities
-        this.setState({capabilities: new Capabilities()});
-      });
-  }
-
-  render() {
-    const {children, location} = this.props;
-    const {capabilities} = this.state;
-
-    if (!isDefined(capabilities)) {
-      // only show content after caps have been loaded
-      // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
-      return null;
-    }
-
+  if (isDefined(error)) {
     return (
-      <CapabilitiesContext.Provider value={capabilities}>
-        <StyledLayout flex="column" align={['start', 'stretch']}>
-          <MenuBar />
-          <Header />
-          <Main>
-            <ErrorBoundary
-              key={location.pathname}
-              message={_('An error occurred on this page.')}
-            >
-              {children}
-            </ErrorBoundary>
-          </Main>
-          <Footer />
-        </StyledLayout>
-      </CapabilitiesContext.Provider>
+      <ErrorPanel
+        error={error}
+        message={_('An error occurred while loading the users capabilities.')}
+      />
     );
   }
-}
 
-Page.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
+  if (!isDefined(capabilities)) {
+    // only show content after caps have been loaded
+    // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
+    return null;
+  }
+
+  return (
+    <CapabilitiesContext.Provider value={capabilities}>
+      <StyledLayout flex="column" align={['start', 'stretch']}>
+        <MenuBar />
+        <Header />
+        <Main>
+          <ErrorBoundary
+            key={location.pathname}
+            message={_('An error occurred on this page.')}
+          >
+            {children}
+          </ErrorBoundary>
+        </Main>
+        <Footer />
+      </StyledLayout>
+    </CapabilitiesContext.Provider>
+  );
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-)(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -54,14 +54,6 @@ describe('Note model tests', () => {
     expect(override2.active).toEqual(YES_VALUE);
   });
 
-  test('should parse text_excerpt as yes/no correctly', () => {
-    const override1 = Override.fromElement({text_excerpt: '0'});
-    const override2 = Override.fromElement({text_excerpt: '1'});
-
-    expect(override1.textExcerpt).toEqual(NO_VALUE);
-    expect(override2.textExcerpt).toEqual(YES_VALUE);
-  });
-
   test('should parse hosts or return empty array', () => {
     const elem = {
       hosts: '123.456.789.42, 987.654.321.1',
@@ -71,14 +63,6 @@ describe('Note model tests', () => {
 
     expect(override1.hosts).toEqual(['123.456.789.42', '987.654.321.1']);
     expect(override2.hosts).toEqual([]);
-  });
-
-  test('isExcerpt() should return correct true/false', () => {
-    const override1 = Override.fromElement({text_excerpt: '1'});
-    const override2 = Override.fromElement({text_excerpt: '0'});
-
-    expect(override1.isExcerpt()).toEqual(true);
-    expect(override2.isExcerpt()).toEqual(false);
   });
 
   test('should return task if it is a model element', () => {

@@ -18,9 +18,8 @@
 
 import React from 'react';
 
-import PropTypes from '../../utils/proptypes.js';
-
-import Layout from '../layout/layout.js';
+import Layout from 'web/components/layout/layout';
+import PropTypes from 'web/utils/proptypes';
 
 const TabList = ({active = 0, children, onActivateTab, ...props}) => {
   children = React.Children.map(children, (child, index) => {

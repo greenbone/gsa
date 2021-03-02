@@ -17,14 +17,14 @@
  */
 import logger from 'gmp/log';
 
-import {isDefined, isString} from 'gmp/utils/identity';
-import {map, forEach} from 'gmp/utils/array';
-
 import {parseCollectionList} from 'gmp/collection/parser';
+
+import DefaultTransform from 'gmp/http/transform/default';
 
 import Filter, {ALL_FILTER} from 'gmp/models/filter';
 
-import DefaultTransform from 'gmp/http/transform/default';
+import {isDefined, isString} from 'gmp/utils/identity';
+import {map, forEach} from 'gmp/utils/array';
 
 import GmpCommand, {BULK_SELECT_BY_IDS, BULK_SELECT_BY_FILTER} from './gmp';
 

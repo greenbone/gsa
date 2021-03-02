@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined} from '../../utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import {setProperties, parseSeverity} from '../../parser';
+import {setProperties, parseSeverity} from 'gmp/parser';
 
 import Nvt from '../nvt';
 

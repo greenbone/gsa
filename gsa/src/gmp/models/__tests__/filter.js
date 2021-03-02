@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isArray} from '../../utils/identity';
+import {isArray} from 'gmp/utils/identity';
 
 import Filter, {UNKNOWN_FILTER_ID} from '../filter';
 import FilterTerm from '../filter/filterterm';
@@ -1088,6 +1088,41 @@ describe('Filter simple', () => {
     expect(filter.id).toEqual('foo');
 
     const simple = filter.simple();
+    expect(simple.id).toBeUndefined();
+  });
+});
+
+describe('Filter withoutView', () => {
+  test('should return copy if first, rows and sort not set', () => {
+    const filter = Filter.fromString('foo=bar');
+    const simple = filter.withoutView();
+
+    expect(filter).not.toBe(simple);
+    expect(filter.equals(simple)).toBe(true);
+  });
+
+  test('should remove first and rows term', () => {
+    const filter = Filter.fromString('first=1 rows=10 sort=foo foo=bar');
+
+    expect(filter.has('first')).toEqual(true);
+    expect(filter.has('rows')).toEqual(true);
+    expect(filter.has('sort')).toEqual(true);
+
+    const simple = filter.withoutView();
+
+    expect(filter).not.toBe(simple);
+    expect(simple.has('first')).toEqual(false);
+    expect(simple.has('rows')).toEqual(false);
+    expect(simple.has('sort')).toEqual(true);
+  });
+
+  test('should reset filter id', () => {
+    const filter = Filter.fromString('first=1 rows=10 foo=bar');
+    filter.id = 'foo';
+
+    expect(filter.id).toEqual('foo');
+
+    const simple = filter.withoutView();
     expect(simple.id).toBeUndefined();
   });
 });

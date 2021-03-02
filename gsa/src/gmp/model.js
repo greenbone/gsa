@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
@@ -28,13 +28,20 @@ import {
   setProperties,
   NO_VALUE,
   YES_VALUE,
-} from './parser.js';
+} from './parser';
 
-import Capabilities from './capabilities/capabilities.js';
+import Capabilities from './capabilities/capabilities';
 
 export const parseModelFromElement = (element, entityType) => {
   const m = new Model(entityType);
   const props = Model.parseElement(element);
+  m.setProperties(props);
+  return m;
+};
+
+export const parseModelFromObject = (object, entityType) => {
+  const m = new Model(entityType);
+  const props = Model.parseObject(object);
   m.setProperties(props);
   return m;
 };
@@ -65,7 +72,6 @@ class Model {
 
   static parseElement(element = {}) {
     const copy = parseDefaultProperties(element);
-
     if (isDefined(element.end_time)) {
       if (element.end_time.length > 0) {
         copy.endTime = parseDate(element.end_time);
@@ -91,9 +97,9 @@ class Model {
       copy.userTags = [];
     }
 
-    const yes_no_props = ['writable', 'orphan', 'active', 'trash'];
+    const yesNoProps = ['writable', 'orphan', 'active', 'trash'];
 
-    for (const name of yes_no_props) {
+    for (const name of yesNoProps) {
       const prop = element[name];
       if (isDefined(prop)) {
         copy[name] = parseYesNo(prop);
@@ -120,6 +126,62 @@ class Model {
     if (isEmpty(element.comment)) {
       delete copy.comment;
     }
+    return copy;
+  }
+
+  static fromObject(object = {}) {
+    const f = new this();
+    f.setProperties(this.parseObject(object));
+    return f;
+  }
+
+  static parseObject(object = {}) {
+    const copy = parseDefaultProperties(object);
+    // use hasValue instead of isDefined for all things graphql related, since no value is null in Django.
+
+    if (hasValue(object.end_time)) {
+      if (object.end_time.length > 0) {
+        copy.endTime = parseDate(object.end_time);
+      }
+      delete copy.end_time;
+    }
+
+    if (hasValue(object.permissions)) {
+      // these are the permissions the current user has on the entity
+      const caps = map(object.permissions, perm => perm.name);
+      copy.userCapabilities = new Capabilities(caps);
+      delete copy.permissions;
+    } else {
+      copy.userCapabilities = new Capabilities();
+    }
+
+    if (hasValue(object.userTags)) {
+      copy.userTags = object.userTags.tags.map(tag =>
+        parseModelFromObject(tag, 'tag'),
+      );
+    } else {
+      copy.userTags = [];
+    }
+
+    const yesNoProps = ['writable', 'orphan', 'active', 'trash'];
+
+    for (const name of yesNoProps) {
+      const prop = object[name];
+      if (hasValue(prop)) {
+        copy[name] = parseYesNo(prop);
+      }
+    }
+
+    if (hasValue(object.in_use)) {
+      copy.inUse = parseBoolean(object.in_use);
+      delete copy.in_use;
+    }
+
+    if (!hasValue(object.owner)) {
+      delete copy.owner;
+    }
+
+    copy.summary = parseText(object.summary);
 
     return copy;
   }

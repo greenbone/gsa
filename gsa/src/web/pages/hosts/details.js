@@ -18,9 +18,9 @@
 
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
 
 import Identifiers from './identifiers';
 

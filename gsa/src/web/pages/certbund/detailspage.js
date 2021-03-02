@@ -22,10 +22,18 @@ import _ from 'gmp/locale';
 
 import DateTime from 'web/components/date/datetime';
 
+import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ListIcon from 'web/components/icon/listicon';
+
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
+
+import DetailsLink from 'web/components/link/detailslink';
+import ExternalLink from 'web/components/link/externallink';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -33,9 +41,6 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
-
-import DetailsLink from 'web/components/link/detailslink';
-import ExternalLink from 'web/components/link/externallink';
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
@@ -52,11 +57,6 @@ import EntityTags from 'web/entity/tags';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
 import {selector, loadEntity} from 'web/store/entities/certbund';
-
-import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
-import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
-import ListIcon from 'web/components/icon/listicon';
 
 import PropTypes from 'web/utils/proptypes';
 

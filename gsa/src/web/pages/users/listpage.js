@@ -26,16 +26,6 @@ import {USERS_FILTER_FILTER, ALL_FILTER} from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
-
-import SelectionType from 'web/utils/selectiontype';
-
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import UserIcon from 'web/components/icon/usericon';
@@ -45,10 +35,19 @@ import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/users';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import SelectionType from 'web/utils/selectiontype';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
 
 import ConfirmDeleteDialog from './confirmdeletedialog';
 import UserComponent from './component';

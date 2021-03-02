@@ -21,11 +21,8 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderYesNo} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
-
 import Layout from 'web/components/layout/layout';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -37,7 +34,9 @@ import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
 import {Col} from 'web/entity/page';
 
-import HorizontalSep from 'web/components/layout/horizontalsep';
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
 const MAX_HOSTS_LISTINGS = 70;
 

@@ -16,10 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../../utils/identity';
-import {isEmpty} from '../../utils/string';
+import {parseInt} from 'gmp/parser';
 
-import {parseInt} from '../../parser';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 const convertBooleanInt = (keyword, value, relation) => ({
   keyword,

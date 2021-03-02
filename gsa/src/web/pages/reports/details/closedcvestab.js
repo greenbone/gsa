@@ -18,10 +18,10 @@
 
 import React from 'react';
 
+import PropTypes from 'web/utils/proptypes';
+
 import ClosedCvesTable from './closedcvestable';
 import ReportEntitiesContainer from './reportentitiescontainer';
-
-import PropTypes from 'web/utils/proptypes';
 
 import {
   makeCompareIp,

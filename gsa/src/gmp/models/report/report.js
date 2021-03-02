@@ -15,14 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined} from '../../utils/identity';
-import {isEmpty} from '../../utils/string';
 
-import {parseSeverity, parseDate} from '../../parser';
+import {parseFilter} from 'gmp/collection/parser';
 
-import {parseFilter} from '../../collection/parser';
+import Model from 'gmp/model';
 
-import Model from '../../model';
+import {parseSeverity, parseDate} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import ReportTask from './task';
 

@@ -21,9 +21,6 @@ import _ from 'gmp/locale';
 
 import Filter, {OVALDEFS_FILTER_FILTER} from 'gmp/models/filter';
 
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
@@ -34,6 +31,9 @@ import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/ovaldefs';
+
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import PropTypes from 'web/utils/proptypes';
 

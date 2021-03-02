@@ -19,11 +19,10 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
 import {apiType, getEntityType, typeName} from 'gmp/utils/entitytype';
+import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
-
 import VerifyIcon from 'web/components/icon/verifyicon';
 import withCapabilities from 'web/utils/withCapabilities';
 

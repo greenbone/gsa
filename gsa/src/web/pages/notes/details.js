@@ -19,13 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import PropTypes from 'web/utils/proptypes';
-import {
-  translatedResultSeverityRiskFactor,
-  LOG_VALUE,
-} from 'web/utils/severity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
@@ -41,6 +35,12 @@ import DetailsBlock from 'web/entity/block';
 import NoteBox from 'web/entity/note';
 
 import {Col} from 'web/entity/page';
+
+import PropTypes from 'web/utils/proptypes';
+import {
+  translatedResultSeverityRiskFactor,
+  LOG_VALUE,
+} from 'web/utils/severity';
 
 const NoteDetails = ({entity}) => {
   const {hosts, port, result, severity, task} = entity;
@@ -89,7 +89,7 @@ const NoteDetails = ({entity}) => {
               <TableData>
                 {entity.isOrphan() ? (
                   <b>{_('Orphan')}</b>
-                ) : isDefined(task) ? (
+                ) : hasValue(task?.id) ? (
                   <span>
                     <EntityLink entity={task} />
                   </span>
@@ -104,7 +104,7 @@ const NoteDetails = ({entity}) => {
               <TableData>
                 {entity.isOrphan() ? (
                   <b>{_('Orphan')}</b>
-                ) : isDefined(result) ? (
+                ) : hasValue(result?.id) ? (
                   <span>
                     <EntityLink entity={result} />
                   </span>

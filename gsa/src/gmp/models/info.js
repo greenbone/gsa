@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from 'gmp/utils/identity';
+import Model from 'gmp/model';
 
-import Model from 'gmp/model.js';
+import {isDefined} from 'gmp/utils/identity';
 
 class Info extends Model {
   static entityType = 'info';

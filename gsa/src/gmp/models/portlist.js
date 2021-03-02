@@ -22,6 +22,8 @@ import Model, {parseModelFromElement} from 'gmp/model';
 
 import {parseInt, parseBoolean} from 'gmp/parser';
 
+export const ALL_IANA_ASSIGNED_TCP = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5';
+
 class PortRange extends Model {
   static entityType = 'portrange';
 

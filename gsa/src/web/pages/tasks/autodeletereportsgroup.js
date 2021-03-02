@@ -21,13 +21,13 @@ import _ from 'gmp/locale';
 
 import {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
 
-import PropTypes from '../../utils/proptypes.js';
+import FormGroup from 'web/components/form/formgroup';
+import Radio from 'web/components/form/radio';
+import Spinner from 'web/components/form/spinner';
 
-import FormGroup from '../../components/form/formgroup.js';
-import Radio from '../../components/form/radio.js';
-import Spinner from '../../components/form/spinner.js';
+import Divider from 'web/components/layout/divider';
 
-import Divider from '../../components/layout/divider.js';
+import PropTypes from 'web/utils/proptypes';
 
 const AutoDeleteReportsGroup = ({
   autoDelete = AUTO_DELETE_NO,

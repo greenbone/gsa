@@ -19,8 +19,6 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import PropTypes from 'web/utils/proptypes';
-
 import SeverityBar from 'web/components/bar/severitybar';
 
 import TableData from 'web/components/table/data';
@@ -29,6 +27,8 @@ import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
 import {createEntitiesTable} from 'web/entities/table';
+
+import PropTypes from 'web/utils/proptypes';
 
 const Header = ({currentSortBy, currentSortDir, sort = true, onSortChange}) => (
   <TableHeader>

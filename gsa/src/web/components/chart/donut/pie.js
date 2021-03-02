@@ -21,11 +21,11 @@ import {pie as d3pie} from 'd3-shape';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-
 import arc from 'web/components/chart/utils/arc';
 
 import Group from 'web/components/chart/group';
+
+import PropTypes from 'web/utils/proptypes';
 
 const sortArcsByStartAngle = (a, b) => (a.startAngle > b.startAngle ? -1 : 1);
 

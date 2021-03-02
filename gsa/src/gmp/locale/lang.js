@@ -25,7 +25,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {setLocale as setDateLocale} from './date';
 import Detector from './detector';
-import {getLanguageCodes} from './languages';
+import {getLanguageCodes, BROWSER_LANGUAGE} from './languages';
 import {split} from 'gmp/utils/string';
 
 const log = logger.getLogger('gmp.locale.lang');
@@ -105,6 +105,8 @@ export const getLocale = () => currentLocale;
  *                      to start automatic detection.
  */
 export const setLocale = lang => {
+  lang = lang === BROWSER_LANGUAGE ? undefined : lang;
+
   if (isDefined(lang)) {
     const code = lang.includes('-') ? split(lang, '-', 1)[0] : lang;
 

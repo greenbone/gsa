@@ -19,9 +19,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import PropTypes from 'web/utils/proptypes';
-
 import {FoldState} from 'web/components/folding/folding';
+
+import PropTypes from 'web/utils/proptypes';
 
 import UnfoldIcon from './unfoldicon';
 import FoldIcon from './foldicon';

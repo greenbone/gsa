@@ -22,9 +22,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-import {permissionDescription} from 'web/utils/render';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
@@ -45,6 +42,9 @@ import TableData from 'web/components/table/data';
 import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
+
+import PropTypes from 'web/utils/proptypes';
+import {permissionDescription} from 'web/utils/render';
 
 const Dialog = ({
   allGroups = [],

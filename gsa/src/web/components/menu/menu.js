@@ -22,12 +22,12 @@ import styled, {keyframes} from 'styled-components';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes.js';
-import Theme from 'web/utils/theme.js';
-
-import Link from 'web/components/link/link.js';
+import Link from 'web/components/link/link';
 
 import MenuSection from 'web/components/menu/menusection';
+
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 const StyledMenu = styled.li`
   flex-grow: 1;

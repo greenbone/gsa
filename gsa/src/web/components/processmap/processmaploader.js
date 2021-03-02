@@ -26,8 +26,10 @@ import Filter from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Loading from 'web/components/loading/loading';
 import ConfirmationDialog from 'web/components/dialog/confirmationdialog';
+import Loading from 'web/components/loading/loading';
+
+import {loadBusinessProcessMaps} from 'web/store/businessprocessmaps/actions';
 
 import {
   loadEntities as loadHosts,
@@ -39,8 +41,6 @@ import {loadEntities as loadResults} from 'web/store/entities/results';
 import PropTypes from 'web/utils/proptypes';
 
 import useGmp from 'web/utils/useGmp';
-
-import {loadBusinessProcessMaps} from 'web/store/businessprocessmaps/actions';
 
 import useColorize from './usecolorize';
 

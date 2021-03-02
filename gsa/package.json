@@ -1,6 +1,6 @@
 {
   "name": "gsa",
-  "version": "21.04.0",
+  "version": "21.10.0",
   "description": "Greenbone Security Assistant",
   "keywords": [
     "openvas",
@@ -23,6 +23,7 @@
     "extends": "react-app"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.7",
     "@greenbone/ui-components": "2021.1.2",
     "@babel/core": "^7.13.8",
     "@vx/axis": "^0.0.183",
@@ -31,7 +32,8 @@
     "babel-loader": "8.1.0",
     "d3-cloud": "^1.2.5",
     "d3-color": "^2.0.0",
-    "d3-force": "^2.0.0",
+    "d3-force": "^2.1.1",
+    "core-js": "^3.7.0",
     "d3-format": "^2.0.0",
     "d3-hierarchy": "^2.0.0",
     "d3-interpolate": "^2.0.1",
@@ -41,6 +43,7 @@
     "fast-deep-equal": "^3.1.3",
     "fast-xml-parser": "^3.18.0",
     "glamor": "^2.20.40",
+    "graphql": "^14.7.0",
     "history": "^4.10.1",
     "hoist-non-react-statics": "^3.3.2",
     "i18next": "^19.9.1",
@@ -52,7 +55,7 @@
     "prop-types": "^15.6.2",
     "qhistory": "^1.1.0",
     "qs": "^6.9.6",
-    "react": "^16.14.0",
+    "react": "^17.0.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-datepicker": "^1.8.0",
     "react-dom": "^16.13.1",
@@ -79,6 +82,7 @@
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "devDependencies": {
+    "@apollo/react-testing": "^3.1.3",
     "@babel/cli": "^7.13.0",
     "@storybook/react": "^6.1.20",
     "@testing-library/jest-dom": "^5.11.9",
@@ -100,8 +104,7 @@
       "!src/gmp/index.js",
       "!src/setupTests.js",
       "!src/web/utils/testing.js"
-    ],
-    "resetMocks": false
+    ]
   },
   "browserslist": [
     ">0.5%",

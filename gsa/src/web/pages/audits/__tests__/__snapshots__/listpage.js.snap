@@ -966,7 +966,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 
 .c54 {
   height: 13px;
-  width: 50%;
+  width: 33%;
   background: #70c000;
 }
 
@@ -1176,7 +1176,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       name="userFilterString"
                       size="53"
                       type="text"
-                      value=""
+                      value="foo=bar"
                     />
                     <div
                       class="c15"
@@ -1298,6 +1298,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
       </div>
       <section
         class="entities-section"
+        data-testid="entities-section"
       >
         <div
           class="c23 section-header"
@@ -1320,7 +1321,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
             <div
               class="c28"
             >
-              Audits 0 of 0
+              Audits 1 of 1
             </div>
           </h2>
           <div
@@ -1332,6 +1333,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
         >
           <div
             class="c29 entities-table"
+            data-testid="entities-table"
           >
             <div
               class="c30"
@@ -1384,7 +1386,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 <span
                   class="c34"
                 >
-                  0 - 0 of 0
+                  1 - 1 of 1
                 </span>
                 <div
                   class="c2"
@@ -1498,7 +1500,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       >
                         <span
                           class="c46"
-                          name="1234"
+                          name="657"
                         >
                           foo
                         </span>
@@ -1508,7 +1510,25 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                           <div
                             class="c3"
                             margin="5px"
-                          />
+                          >
+                            <span
+                              class="c4"
+                              data-testid="svg-icon"
+                              title="Audit made visible for:
+Users john, jane
+Roles admin role, user role
+Groups group 1, group 2"
+                            >
+                              <svg
+                                title="Audit made visible for:
+Users john, jane
+Roles admin role, user role
+Groups group 1, group 2"
+                              >
+                                provide_view.svg
+                              </svg>
+                            </span>
+                          </div>
                         </div>
                       </div>
                       <div
@@ -1527,7 +1547,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       <a
                         class="c47 c48"
                         data-testid="details-link"
-                        href="/report/1234"
+                        href="/report/5678"
                       >
                         <div
                           class="c49"
@@ -1561,7 +1581,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                           data-testid="details-link"
                           href="/report/1234"
                         >
-                          Wed, Jul 10, 2019 2:51 PM CEST
+                          Tue, Jul 30, 2019 3:23 PM CEST
                         </a>
                       </span>
                     </div>
@@ -1573,7 +1593,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       <div
                         class="c53"
                         data-testid="progressbar-box"
-                        title="50%"
+                        title="33%"
                       >
                         <div
                           class="c54"
@@ -1582,12 +1602,14 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                         <div
                           class="c51"
                         >
-                          50%
+                          33%
                         </div>
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td
+                    data-testid="entities-table"
+                  >
                     <div
                       class="c0"
                     >
@@ -1598,25 +1620,30 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                           class="c56"
                           margin="5px"
                         >
-                          <span
-                            class="c5 c4"
-                            data-testid="svg-icon"
-                            title="Start"
+                          <a
+                            class="c47"
+                            data-testid="details-link"
+                            href="/schedule/foo"
+                            title="View Details of Schedule schedule 1 (Next due: over)"
                           >
-                            <svg
-                              title="Start"
+                            <span
+                              alt="Schedule Details"
+                              class="c4"
+                              data-testid="svg-icon"
                             >
-                              start.svg
-                            </svg>
-                          </span>
+                              <svg>
+                                schedule.svg
+                              </svg>
+                            </span>
+                          </a>
                           <span
                             alt="Resume"
                             class="c33 c4"
                             data-testid="svg-icon"
-                            title="Audit is not stopped"
+                            title="Audit is scheduled"
                           >
                             <svg
-                              title="Audit is not stopped"
+                              title="Audit is scheduled"
                             >
                               resume.svg
                             </svg>
@@ -1682,7 +1709,9 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   </td>
                 </tr>
               </tbody>
-              <tfoot>
+              <tfoot
+                data-testid="entities-footer"
+              >
                 <tr>
                   <td
                     colspan="5"
@@ -1786,7 +1815,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               <div
                 class="c59"
               >
-                (Applied filter: )
+                (Applied filter: foo=bar rows=2)
               </div>
               <div
                 class="c32"
@@ -1825,7 +1854,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 <span
                   class="c34"
                 >
-                  0 - 0 of 0
+                  1 - 1 of 1
                 </span>
                 <div
                   class="c2"

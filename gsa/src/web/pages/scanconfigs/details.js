@@ -23,8 +23,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {OSP_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import PropTypes from 'web/utils/proptypes';
-
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
@@ -37,8 +35,10 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
+import PropTypes from 'web/utils/proptypes';
+
 const ScanConfigDetails = ({entity}) => {
-  const {comment, scan_config_type, scanner, tasks = []} = entity;
+  const {comment, scanConfigType, scanner, tasks = []} = entity;
   return (
     <Layout flex="column" grow>
       <InfoTable>
@@ -53,7 +53,7 @@ const ScanConfigDetails = ({entity}) => {
               <TableData>{comment}</TableData>
             </TableRow>
           )}
-          {scan_config_type === OSP_SCAN_CONFIG_TYPE && isDefined(scanner) && (
+          {scanConfigType === OSP_SCAN_CONFIG_TYPE && isDefined(scanner) && (
             <TableRow>
               <TableData>{_('Scanner')}</TableData>
               <TableData>

@@ -28,28 +28,28 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
 
-const policy = Policy.fromElement({
-  _id: '12345',
+const policy = Policy.fromObject({
+  id: '12345',
   name: 'foo',
   comment: 'bar',
-  owner: {name: 'admin'},
-  permissions: {permission: [{name: 'everything'}]},
+  owner: 'admin',
+  permissions: [{name: 'everything'}],
 });
 
-const policy2 = Policy.fromElement({
-  _id: '123456',
+const policy2 = Policy.fromObject({
+  id: '123456',
   name: 'lorem',
   comment: 'ipsum',
-  owner: {name: 'admin'},
-  permissions: {permission: [{name: 'everything'}]},
+  owner: 'admin',
+  permissions: [{name: 'everything'}],
 });
 
-const policy3 = Policy.fromElement({
-  _id: '1234567',
+const policy3 = Policy.fromObject({
+  id: '1234567',
   name: 'hello',
   comment: 'world',
-  owner: {name: 'admin'},
-  permissions: {permission: [{name: 'everything'}]},
+  owner: 'admin',
+  permissions: [{name: 'everything'}],
 });
 
 const counts = new CollectionCounts({
