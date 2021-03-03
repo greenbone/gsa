@@ -19,89 +19,83 @@
 import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
 
 import {
-  GET_SCHEDULES,
-  GET_SCHEDULE,
-  CREATE_SCHEDULE,
-  MODIFY_SCHEDULE,
-  EXPORT_SCHEDULES_BY_IDS,
-  EXPORT_SCHEDULES_BY_FILTER,
-  DELETE_SCHEDULES_BY_IDS,
-  DELETE_SCHEDULES_BY_FILTER,
-  CLONE_SCHEDULE,
-} from '../schedules';
+  GET_NVTS,
+  GET_NVT,
+  EXPORT_NVTS_BY_IDS,
+  EXPORT_NVTS_BY_FILTER,
+} from '../nvts';
 
-export const mockSchedule = deepFreeze({
-  id: 'foo',
-  name: 'schedule 1',
-  icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1~git-5f8b6cf-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nUID:foo\nDTSTAMP:20210111T134141Z\nEND:VEVENT\nEND:VCALENDAR',
-  timezone: 'UTC',
+export const nvtEntity = deepFreeze({
+  id: '12345',
+  name: '12345',
+  comment: '',
+  writable: 0,
+  owner: null,
+  inUse: 0,
+  creationTime: '2019-06-24T11:55:30Z',
+  modificationTime: '2019-06-24T10:12:27Z',
+  updateTime: '2020-10-30T11:44:00.000+0000',
+  permissions: null,
   userTags: null,
-  permissions: [{name: 'Everything'}],
-  owner: 'admin',
-  comment: 'hello world',
-  writable: true,
-  inUse: false,
-  creationTime: '2020-12-23T14:14:11+00:00',
-  modificationTime: '2021-01-04T11:54:12+00:00',
-});
-
-export const inUseSchedule = deepFreeze({
-  id: 'foo',
-  name: 'schedule 1',
-  icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1~git-5f8b6cf-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nUID:foo\nDTSTAMP:20210111T134141Z\nEND:VEVENT\nEND:VCALENDAR',
-  timezone: 'UTC',
-  userTags: {
-    count: 1,
-    tags: [
+  category: 3,
+  family: 'bar',
+  cvssBase: 4.9,
+  qod: {
+    value: 80,
+    type: 'remote_banner',
+  },
+  severities: {
+    score: 49,
+    severitiesList: [
       {
-        id: '123',
-        name: 'schedule:unnamed',
-        value: null,
-        comment: null,
+        date: '2020-10-30T11:44:00.000+0000',
+        origin: null,
+        score: 49,
+        type: '',
+        vector: '',
       },
     ],
   },
-  permissions: [{name: 'Everything'}],
-  owner: 'admin',
-  comment: 'hello world',
-  writable: true,
-  inUse: true,
-  creationTime: '2020-12-23T14:14:11+00:00',
-  modificationTime: '2021-01-04T11:54:12+00:00',
-});
-
-export const noPermSchedule = deepFreeze({
-  id: 'foo',
-  name: 'schedule 1',
-  icalendar:
-    'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Greenbone.net//NONSGML Greenbone Security Manager \n 21.4.0~dev1~git-5f8b6cf-master//EN\nBEGIN:VEVENT\nDTSTART:20210104T115400Z\nDURATION:PT0S\nUID:foo\nDTSTAMP:20210111T134141Z\nEND:VEVENT\nEND:VCALENDAR',
-  timezone: 'UTC',
-  userTags: {
-    count: 1,
-    tags: [
-      {
-        id: '123',
-        name: 'schedule:unnamed',
-        value: null,
-        comment: null,
-      },
+  refs: {
+    warning: null,
+    refList: [
+      {type: 'cve', id: 'CVE-2020-1234'},
+      {type: 'cve', id: 'CVE-2020-5678'},
     ],
   },
-  permissions: [{name: 'get_schedules'}],
-  owner: 'admin',
-  comment: 'hello world',
-  writable: true,
-  inUse: false,
-  creationTime: '2020-12-23T14:14:11+00:00',
-  modificationTime: '2021-01-04T11:54:12+00:00',
+  tags: {
+    cvssBaseVector: 'AV:N/AC:M/Au:S/C:P/I:N/A:P',
+    summary: 'This is a description',
+    solutionType: 'VendorFix',
+    insight: 'Foo',
+    impact: 'Bar',
+    vuldetect: 'Baz',
+    affected: 'foo',
+  },
+  preferencesCount: -1,
+  preferences: {
+    nvt: null,
+    hrName: 'meh',
+    name: 'meh',
+    id: 1,
+    type: 'ratio',
+    alt: ['moo'],
+    default: 'miau',
+    value: 'miau',
+  },
+  timeout: null,
+  defaultTimeout: null,
+  solution: {
+    type: 'VendorFix',
+    description: 'This is a description',
+    method: null,
+  },
 });
 
-const mockSchedules = {
+const mockNvts = {
   edges: [
     {
-      node: mockSchedule,
+      node: nvtEntity,
     },
   ],
   counts: {
@@ -120,148 +114,30 @@ const mockSchedules = {
   },
 };
 
-export const createGetSchedulesQueryMock = (variables = {}) => {
-  const queryResult = {
-    data: {
-      schedules: mockSchedules,
-    },
-  };
+export const createGetNvtQueryMock = (id = '12345', result = nvtEntity) =>
+  createGenericQueryMock(GET_NVT, {nvt: result}, {id});
 
-  const resultFunc = jest.fn().mockReturnValue(queryResult);
+export const createGetNvtsQueryMock = (variables = {}) =>
+  createGenericQueryMock(GET_NVTS, {nvts: mockNvts}, variables);
 
-  const queryMock = {
-    request: {
-      query: GET_SCHEDULES,
-      variables,
-    },
-    newData: resultFunc,
-  };
-  return [queryMock, resultFunc];
-};
-
-export const createGetScheduleQueryMock = (
-  scheduleId = 'foo',
-  schedule = mockSchedule,
-) => createGenericQueryMock(GET_SCHEDULE, {schedule}, {id: scheduleId});
-
-export const createScheduleInput = {
-  id: '12345',
-  name: 'schedule 1',
-  icalendar: `BEGIN:VCALENDAR
-  VERSION:2.0
-  PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
-  BEGIN:VEVENT
-  UID:foo
-  DTSTAMP:20190715T124352Z
-  DTSTART:20190716T040000
-  END:VEVENT
-  END:VCALENDAR
-  `,
-  comment: 'foobar',
-};
-
-const createScheduleResult = {
-  createSchedule: {
-    id: '12345',
-    status: 200,
-  },
-};
-
-export const createCreateScheduleQueryMock = () =>
-  createGenericQueryMock(CREATE_SCHEDULE, createScheduleResult, {
-    input: createScheduleInput,
-  });
-
-export const modifyScheduleInput = {
-  id: '12345',
-  name: 'loremipsum',
-  comment: 'silence',
-};
-
-const modifyScheduleResult = {
-  modifySchedule: {
-    ok: true,
-  },
-};
-
-export const createModifyScheduleQueryMock = () =>
-  createGenericQueryMock(MODIFY_SCHEDULE, modifyScheduleResult, {
-    input: modifyScheduleInput,
-  });
-
-const exportSchedulesByIdsResult = {
-  exportSchedulesByIds: {
+const exportNvtsByIds = {
+  exportNvtsByIds: {
     exportedEntities:
-      '<get_schedules_response status="200" status_text="OK" />',
+      '<get_info_list_response status="200" status_text="OK" />',
   },
 };
 
-export const createExportSchedulesByIdsQueryMock = (ids = ['foo']) =>
-  createGenericQueryMock(EXPORT_SCHEDULES_BY_IDS, exportSchedulesByIdsResult, {
-    ids,
-  });
+export const createExportNvtsByIdsQueryMock = (nvtIds = ['12345']) =>
+  createGenericQueryMock(EXPORT_NVTS_BY_IDS, exportNvtsByIds, {ids: nvtIds});
 
-const exportSchedulesByFilterResult = {
-  exportSchedulesByFilter: {
+const exportNvtsByFilter = {
+  exportNvtsByFilter: {
     exportedEntities:
-      '<get_schedules_response status="200" status_text="OK" />',
+      '<get_info_list_response status="200" status_text="OK" />',
   },
 };
 
-export const createExportSchedulesByFilterQueryMock = (
-  filterString = 'foo',
-) => {
-  return createGenericQueryMock(
-    EXPORT_SCHEDULES_BY_FILTER,
-    exportSchedulesByFilterResult,
-    {filterString},
-  );
-};
-
-const bulkDeleteByIdsResult = {
-  deleteSchedulesByIds: {
-    ok: true,
-  },
-};
-
-export const createDeleteSchedulesByIdsQueryMock = (scheduleIds = ['foo']) =>
-  createGenericQueryMock(DELETE_SCHEDULES_BY_IDS, bulkDeleteByIdsResult, {
-    ids: scheduleIds,
-  });
-
-const bulkDeleteByFilterResult = {
-  deleteSchedulesByFilter: {
-    ok: true,
-  },
-};
-
-export const createDeleteSchedulesByFilterQueryMock = (filterString = 'foo') =>
-  createGenericQueryMock(DELETE_SCHEDULES_BY_FILTER, bulkDeleteByFilterResult, {
+export const createExportNvtsByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(EXPORT_NVTS_BY_FILTER, exportNvtsByFilter, {
     filterString,
   });
-
-const deleteScheduleResult = {
-  deleteScheduleByIds: {
-    ok: true,
-    status: 200,
-  },
-};
-
-export const createDeleteScheduleQueryMock = (scheduleId = 'foo') =>
-  createGenericQueryMock(DELETE_SCHEDULES_BY_IDS, deleteScheduleResult, {
-    ids: [scheduleId],
-  });
-
-export const createCloneScheduleQueryMock = (
-  scheduleId = 'foo',
-  newScheduleId = 'bar',
-) =>
-  createGenericQueryMock(
-    CLONE_SCHEDULE,
-    {
-      cloneSchedule: {
-        id: newScheduleId,
-      },
-    },
-    {id: scheduleId},
-  );

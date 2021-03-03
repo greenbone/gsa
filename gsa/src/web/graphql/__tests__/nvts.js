@@ -18,52 +18,37 @@
  */
 /* eslint-disable react/prop-types */
 
-import React, {useState} from 'react';
+import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import Button from 'web/components/form/button';
 
 import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
 
 import {
-  createScheduleInput,
-  modifyScheduleInput,
-  createGetSchedulesQueryMock,
-  createGetScheduleQueryMock,
-  createCreateScheduleQueryMock,
-  createModifyScheduleQueryMock,
-  createDeleteSchedulesByIdsQueryMock,
-  createDeleteSchedulesByFilterQueryMock,
-  createExportSchedulesByIdsQueryMock,
-  createExportSchedulesByFilterQueryMock,
-  createCloneScheduleQueryMock,
-  createDeleteScheduleQueryMock,
-  mockSchedule,
-} from '../__mocks__/schedules';
+  createGetNvtsQueryMock,
+  createGetNvtQueryMock,
+  createExportNvtsByIdsQueryMock,
+  createExportNvtsByFilterQueryMock,
+  mockNvt,
+} from '../__mocks__/nvts';
 
 import {
-  useLazyGetSchedules,
-  useLazyGetSchedule,
-  useCreateSchedule,
-  useModifySchedule,
-  useDeleteSchedulesByIds,
-  useDeleteSchedulesByFilter,
-  useExportSchedulesByFilter,
-  useExportSchedulesByIds,
-  useCloneSchedule,
-  useGetSchedule,
-} from '../schedules';
+  useLazyGetNvts,
+  useLazyGetNvt,
+  useExportNvtsByFilter,
+  useExportNvtsByIds,
+  useGetNvt,
+} from '../nvts';
 
-const GetLazySchedulesComponent = () => {
-  const [getSchedules, {counts, loading, schedules}] = useLazyGetSchedules();
+const GetLazyNvtsComponent = () => {
+  const [getNvts, {counts, loading, nvts}] = useLazyGetNvts();
 
   if (loading) {
     return <span data-testid="loading">Loading</span>;
   }
   return (
     <div>
-      <button data-testid="load" onClick={() => getSchedules()} />
+      <button data-testid="load" onClick={() => getNvts()} />
       {isDefined(counts) ? (
         <div data-testid="counts">
           <span data-testid="total">{counts.all}</span>
@@ -75,51 +60,51 @@ const GetLazySchedulesComponent = () => {
       ) : (
         <div data-testid="no-counts" />
       )}
-      {isDefined(schedules) ? (
-        schedules.map(schedule => {
+      {isDefined(nvts) ? (
+        nvts.map(nvt => {
           return (
-            <div key={schedule.id} data-testid="schedule">
-              {schedule.id}
+            <div key={nvt.id} data-testid="nvt">
+              {nvt.id}
             </div>
           );
         })
       ) : (
-        <div data-testid="no-schedules" />
+        <div data-testid="no-nvts" />
       )}
     </div>
   );
 };
 
-const GetLazyScheduleComponent = () => {
-  const [getSchedule, {schedule, loading}] = useLazyGetSchedule('foo');
+const GetLazyNvtComponent = () => {
+  const [getNvt, {nvt, loading}] = useLazyGetNvt('12345');
 
   if (loading) {
     return <span data-testid="loading">Loading</span>;
   }
   return (
     <div>
-      <button data-testid="load" onClick={() => getSchedule()} />
-      {isDefined(schedule) ? (
-        <div key={schedule.id} data-testid="schedule">
-          {schedule.id}
+      <button data-testid="load" onClick={() => getNvt()} />
+      {isDefined(nvt) ? (
+        <div key={nvt.id} data-testid="nvt">
+          {nvt.id}
         </div>
       ) : (
-        <div data-testid="no-schedule" />
+        <div data-testid="no-nvt" />
       )}
     </div>
   );
 };
 
-describe('useLazyGetSchedules tests', () => {
-  test('should query schedules after user interaction', async () => {
-    const [mock, resultFunc] = createGetSchedulesQueryMock();
+describe('useLazyGetNvts tests', () => {
+  test('should query nvts after user interaction', async () => {
+    const [mock, resultFunc] = createGetNvtsQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
-    render(<GetLazySchedulesComponent />);
+    render(<GetLazyNvtsComponent />);
 
-    let scheduleElements = screen.queryAllByTestId('schedule');
-    expect(scheduleElements).toHaveLength(0);
+    let nvtElements = screen.queryAllByTestId('nvt');
+    expect(nvtElements).toHaveLength(0);
 
-    expect(screen.queryByTestId('no-schedules')).toBeInTheDocument();
+    expect(screen.queryByTestId('no-nvts')).toBeInTheDocument();
     expect(screen.queryByTestId('no-counts')).toBeInTheDocument();
 
     const button = screen.getByTestId('load');
@@ -132,12 +117,12 @@ describe('useLazyGetSchedules tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    scheduleElements = screen.getAllByTestId('schedule');
-    expect(scheduleElements).toHaveLength(1);
+    nvtElements = screen.getAllByTestId('nvt');
+    expect(nvtElements).toHaveLength(1);
 
-    expect(scheduleElements[0]).toHaveTextContent('foo');
+    expect(nvtElements[0]).toHaveTextContent('12345');
 
-    expect(screen.queryByTestId('no-schedules')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('no-nvts')).not.toBeInTheDocument();
 
     expect(screen.getByTestId('total')).toHaveTextContent(1);
     expect(screen.getByTestId('filtered')).toHaveTextContent(1);
@@ -147,16 +132,16 @@ describe('useLazyGetSchedules tests', () => {
   });
 });
 
-describe('useLazyGetSchedule tests', () => {
-  test('should query schedule after user interaction', async () => {
-    const [mock, resultFunc] = createGetScheduleQueryMock('foo', mockSchedule);
+describe('useLazyGetNvt tests', () => {
+  test('should query nvt after user interaction', async () => {
+    const [mock, resultFunc] = createGetNvtQueryMock('12345', mockNvt);
     const {render} = rendererWith({queryMocks: [mock]});
-    render(<GetLazyScheduleComponent />);
+    render(<GetLazyNvtComponent />);
 
-    let scheduleElement = screen.queryAllByTestId('schedule');
-    expect(scheduleElement).toHaveLength(0);
+    let nvtElement = screen.queryAllByTestId('nvt');
+    expect(nvtElement).toHaveLength(0);
 
-    expect(screen.queryByTestId('no-schedule')).toBeInTheDocument();
+    expect(screen.queryByTestId('no-nvt')).toBeInTheDocument();
 
     const button = screen.getByTestId('load');
     fireEvent.click(button);
@@ -168,162 +153,30 @@ describe('useLazyGetSchedule tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    scheduleElement = screen.getByTestId('schedule');
+    nvtElement = screen.getByTestId('nvt');
 
-    expect(scheduleElement).toHaveTextContent('foo');
+    expect(nvtElement).toHaveTextContent('12345');
 
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 });
 
-const CreateModifyScheduleComponent = () => {
-  const [notification, setNotification] = useState('');
-
-  const [createSchedule] = useCreateSchedule();
-  const [modifySchedule] = useModifySchedule();
-
-  const handleCreateResult = id => {
-    setNotification(`Schedule created with id ${id}.`);
-  };
-
-  const handleModifyResult = resp => {
-    const {data} = resp;
-    setNotification(`Schedule modified with ok=${data.modifySchedule.ok}.`);
-  };
-
-  return (
-    <div>
-      <Button
-        title={'Create schedule'}
-        onClick={() =>
-          createSchedule(createScheduleInput).then(handleCreateResult)
-        }
-      />
-      <Button
-        title={'Modify schedule'}
-        onClick={() =>
-          modifySchedule(modifyScheduleInput).then(handleModifyResult)
-        }
-      />
-      <h3 data-testid="notification">{notification}</h3>
-    </div>
-  );
-};
-
-describe('Schedule mutation tests', () => {
-  test('should create a schedule', async () => {
-    const [
-      createScheduleMock,
-      createScheduleResult,
-    ] = createCreateScheduleQueryMock();
-    const {render} = rendererWith({queryMocks: [createScheduleMock]});
-
-    const {element} = render(<CreateModifyScheduleComponent />);
-
-    const buttons = element.querySelectorAll('button');
-
-    fireEvent.click(buttons[0]);
-
-    await wait();
-
-    expect(createScheduleResult).toHaveBeenCalled();
-    expect(screen.getByTestId('notification')).toHaveTextContent(
-      'Schedule created with id 12345.',
-    );
-  });
-
-  test('should modify a schedule', async () => {
-    const [
-      modifyScheduleMock,
-      modifyScheduleResult,
-    ] = createModifyScheduleQueryMock();
-
-    const {render} = rendererWith({queryMocks: [modifyScheduleMock]});
-
-    const {element} = render(<CreateModifyScheduleComponent />);
-
-    const buttons = element.querySelectorAll('button');
-
-    fireEvent.click(buttons[1]);
-
-    await wait();
-
-    expect(modifyScheduleResult).toHaveBeenCalled();
-    expect(screen.getByTestId('notification')).toHaveTextContent(
-      'Schedule modified with ok=true.',
-    );
-  });
-});
-
-const DeleteSchedulesByIdsComponent = () => {
-  const [deleteSchedulesByIds] = useDeleteSchedulesByIds();
-  return (
-    <button
-      data-testid="bulk-delete"
-      onClick={() => deleteSchedulesByIds(['foo', 'bar'])}
-    />
-  );
-};
-
-describe('useDeleteSchedulesByIds tests', () => {
-  test('should delete a list of schedules after user interaction', async () => {
-    const [mock, resultFunc] = createDeleteSchedulesByIdsQueryMock([
-      'foo',
-      'bar',
-    ]);
-    const {render} = rendererWith({queryMocks: [mock]});
-
-    render(<DeleteSchedulesByIdsComponent />);
-    const button = screen.getByTestId('bulk-delete');
-    fireEvent.click(button);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-  });
-});
-
-const DeleteSchedulesByFilterComponent = () => {
-  const [deleteSchedulesByFilter] = useDeleteSchedulesByFilter();
-  return (
-    <button
-      data-testid="filter-delete"
-      onClick={() => deleteSchedulesByFilter('foo')}
-    />
-  );
-};
-
-describe('useDeleteSchedulesByFilter tests', () => {
-  test('should delete a list of schedules by filter string after user interaction', async () => {
-    const [mock, resultFunc] = createDeleteSchedulesByFilterQueryMock('foo');
-    const {render} = rendererWith({queryMocks: [mock]});
-
-    render(<DeleteSchedulesByFilterComponent />);
-    const button = screen.getByTestId('filter-delete');
-    fireEvent.click(button);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-  });
-});
-
-const ExportSchedulesByIdsComponent = () => {
-  const exportSchedulesByIds = useExportSchedulesByIds();
+const ExportNvtsByIdsComponent = () => {
+  const exportNvtsByIds = useExportNvtsByIds();
   return (
     <button
       data-testid="bulk-export"
-      onClick={() => exportSchedulesByIds(['foo'])}
+      onClick={() => exportNvtsByIds(['12345'])}
     />
   );
 };
 
-describe('useExportSchedulesByIds tests', () => {
-  test('should export a list of schedules after user interaction', async () => {
-    const [mock, resultFunc] = createExportSchedulesByIdsQueryMock(['foo']);
+describe('useExportNvtsByIds tests', () => {
+  test('should export a list of nvts after user interaction', async () => {
+    const [mock, resultFunc] = createExportNvtsByIdsQueryMock(['12345']);
     const {render} = rendererWith({queryMocks: [mock]});
 
-    render(<ExportSchedulesByIdsComponent />);
+    render(<ExportNvtsByIdsComponent />);
     const button = screen.getByTestId('bulk-export');
     fireEvent.click(button);
 
@@ -333,22 +186,22 @@ describe('useExportSchedulesByIds tests', () => {
   });
 });
 
-const ExportSchedulesByFilterComponent = () => {
-  const exportSchedulesByFilter = useExportSchedulesByFilter();
+const ExportNvtsByFilterComponent = () => {
+  const exportNvtsByFilter = useExportNvtsByFilter();
   return (
     <button
       data-testid="filter-export"
-      onClick={() => exportSchedulesByFilter('foo')}
+      onClick={() => exportNvtsByFilter('12345')}
     />
   );
 };
 
-describe('useExportSchedulesByFilter tests', () => {
-  test('should export a list of schedules by filter string after user interaction', async () => {
-    const [mock, resultFunc] = createExportSchedulesByFilterQueryMock();
+describe('useExportNvtsByFilter tests', () => {
+  test('should export a list of nvts by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportNvtsByFilterQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
-    render(<ExportSchedulesByFilterComponent />);
+    render(<ExportNvtsByFilterComponent />);
     const button = screen.getByTestId('filter-export');
     fireEvent.click(button);
 
@@ -358,82 +211,31 @@ describe('useExportSchedulesByFilter tests', () => {
   });
 });
 
-const CloneScheduleComponent = () => {
-  const [cloneSchedule, {id: scheduleId}] = useCloneSchedule();
-  return (
-    <div>
-      {scheduleId && <span data-testid="cloned-schedule">{scheduleId}</span>}
-      <button data-testid="clone" onClick={() => cloneSchedule('foo')} />
-    </div>
-  );
-};
-
-describe('useCloneSchedule tests', () => {
-  test('should clone a schedule after user interaction', async () => {
-    const [mock, resultFunc] = createCloneScheduleQueryMock('foo', 'foo2');
-    const {render} = rendererWith({queryMocks: [mock]});
-
-    render(<CloneScheduleComponent />);
-
-    const button = screen.getByTestId('clone');
-    fireEvent.click(button);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-
-    expect(screen.getByTestId('cloned-schedule')).toHaveTextContent('foo2');
-  });
-});
-
-const DeleteScheduleComponent = () => {
-  const [deleteSchedule] = useDeleteSchedulesByIds();
-  return (
-    <button data-testid="delete" onClick={() => deleteSchedule(['foo'])} />
-  );
-};
-
-describe('useDeleteSchedule tests', () => {
-  test('should delete an schedule after user interaction', async () => {
-    const [mock, resultFunc] = createDeleteScheduleQueryMock('foo');
-    const {render} = rendererWith({queryMocks: [mock]});
-
-    render(<DeleteScheduleComponent />);
-
-    const button = screen.getByTestId('delete');
-    fireEvent.click(button);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-  });
-});
-
-const GetScheduleComponent = ({id}) => {
-  const {loading, schedule, error} = useGetSchedule(id);
+const GetNvtComponent = ({id}) => {
+  const {loading, nvt, error} = useGetNvt(id);
   if (loading) {
     return <span data-testid="loading">Loading</span>;
   }
   return (
     <div>
       {error && <div data-testid="error">{error.message}</div>}
-      {schedule && (
-        <div data-testid="schedule">
-          <span data-testid="id">{schedule.id}</span>
-          <span data-testid="name">{schedule.name}</span>
+      {nvt && (
+        <div data-testid="nvt">
+          <span data-testid="id">{nvt.id}</span>
+          <span data-testid="name">{nvt.name}</span>
         </div>
       )}
     </div>
   );
 };
 
-describe('useGetSchedule tests', () => {
-  test('should load schedule', async () => {
-    const [queryMock, resultFunc] = createGetScheduleQueryMock();
+describe('useGetNvt tests', () => {
+  test('should load nvt', async () => {
+    const [queryMock, resultFunc] = createGetNvtQueryMock();
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 
-    render(<GetScheduleComponent id="foo" />);
+    render(<GetNvtComponent id="12345" />);
 
     expect(screen.queryByTestId('loading')).toBeInTheDocument();
 
@@ -444,9 +246,9 @@ describe('useGetSchedule tests', () => {
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
     expect(screen.queryByTestId('error')).not.toBeInTheDocument();
 
-    expect(screen.getByTestId('schedule')).toBeInTheDocument();
+    expect(screen.getByTestId('nvt')).toBeInTheDocument();
 
-    expect(screen.getByTestId('id')).toHaveTextContent('foo');
-    expect(screen.getByTestId('name')).toHaveTextContent('schedule 1');
+    expect(screen.getByTestId('id')).toHaveTextContent('12345');
+    expect(screen.getByTestId('name')).toHaveTextContent('12345');
   });
 });

@@ -177,7 +177,6 @@ class Nvt extends Info {
     }
     delete ret.cvss_base;
 
-    ret.preferenceCount = ret.preferences.length;
     if (isDefined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
         const pref = {...preference};
@@ -189,6 +188,7 @@ class Nvt extends Info {
     } else {
       ret.preferences = [];
     }
+    ret.preferenceCount = ret.preferences.length;
 
     if (isDefined(ret.qod)) {
       if (isEmpty(ret.qod.value)) {

@@ -36,6 +36,7 @@ export const GET_NVT = gql`
       inUse
       creationTime
       modificationTime
+      updateTime
       permissions {
         name
       }
@@ -75,10 +76,11 @@ export const GET_NVT = gql`
       tags {
         cvssBaseVector
         summary
+        solutionType
         insight
         impact
-        affected
         vuldetect
+        affected
       }
       preferenceCount
       preferences {
@@ -124,8 +126,25 @@ export const GET_NVTS = gql`
         node {
           id
           name
+          comment
+          writable
+          owner
+          inUse
           creationTime
           modificationTime
+          updateTime
+          permissions {
+            name
+          }
+          userTags {
+            count
+            tags {
+              id
+              name
+              value
+              comment
+            }
+          }
           category
           family
           cvssBase
@@ -153,10 +172,11 @@ export const GET_NVTS = gql`
           tags {
             cvssBaseVector
             summary
+            solutionType
             insight
             impact
-            affected
             vuldetect
+            affected
           }
           preferenceCount
           preferences {
