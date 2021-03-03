@@ -133,7 +133,7 @@ const ScannerDialog = ({
   host = 'localhost',
   id,
   name = _('Unnamed'),
-  port = '9391',
+  port = '22',
   title = _('New Scanner'),
   type = OSP_SCANNER_TYPE,
   which_cert,
