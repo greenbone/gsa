@@ -116,6 +116,7 @@ const CredentialsDialog = ({
     }
   }, [error]);
 
+  // eslint-disable-next-line no-shadow
   const handleCredentialTypeChange = (credential_type, autogenerate) => {
     setCredentialTypeAndAutoGenerate(credential_type, autogenerate);
   };
@@ -492,6 +493,6 @@ CredentialsDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default CredentialsDialog; // capabilities don't see to be used in this dialog
+export default CredentialsDialog; // capabilities don't seem to be used in this dialog
 
 // vim: set ts=2 sw=2 tw=80:
