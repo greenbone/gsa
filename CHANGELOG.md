@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Refactor credential dialog into function component [#2772](https://github.com/greenbone/gsa/pull/2772)
 - Implement cpes listpage queries and mutations [#2757](https://github.com/greenbone/gsa/pull/2757)
 - Implement audit listpage queries and mutations [#2752](https://github.com/greenbone/gsa/pull/2752)
 - Implement cves listpage queries and mutations [#2742](https://github.com/greenbone/gsa/pull/2742)
