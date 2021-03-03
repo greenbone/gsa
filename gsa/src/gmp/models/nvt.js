@@ -20,7 +20,12 @@ import {isDefined, hasValue, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
-import {parseFloat, parseSeverity, parseText} from 'gmp/parser';
+import {
+  parseFloat,
+  parseSeverity,
+  parseScoreToSeverity,
+  parseText,
+} from 'gmp/parser';
 
 import Info from './info';
 
@@ -117,8 +122,14 @@ class Nvt extends Info {
     const ret = super.parseObject(object);
 
     ret.severity = hasValue(ret.severities)
-      ? parseSeverity(ret.severities.score / 10)
+      ? parseScoreToSeverity(ret.severities.score)
       : undefined;
+
+    if (ret.preferenceCount < 0) {
+      // actually preferenceCount in the XML is -1 in get_info
+      // right now.
+      ret.preferenceCount = ret.preferences.length;
+    }
 
     return ret;
   }
@@ -166,9 +177,12 @@ class Nvt extends Info {
     }
     delete ret.cvss_base;
 
+    ret.preferenceCount = ret.preferences.length;
     if (isDefined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
         const pref = {...preference};
+        pref.hrName = pref.hr_name;
+        delete pref.hr_name;
         delete pref.nvt;
         return pref;
       });

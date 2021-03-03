@@ -82,21 +82,17 @@ export const GET_NVT = gql`
       }
       preferenceCount
       preferences {
-        timeout
-        defaultTimeout
-        preferenceList {
-          nvt {
-            id
-            name
-          }
-          hrName
-          name
+        nvt {
           id
-          type
-          value
-          default
-          alt
+          name
         }
+        hrName
+        name
+        id
+        type
+        value
+        default
+        alt
       }
       timeout
       defaultTimeout
@@ -164,21 +160,17 @@ export const GET_NVTS = gql`
           }
           preferenceCount
           preferences {
-            timeout
-            defaultTimeout
-            preferenceList {
-              nvt {
-                id
-                name
-              }
-              hrName
-              name
+            nvt {
               id
-              type
-              value
-              default
-              alt
+              name
             }
+            hrName
+            name
+            id
+            type
+            value
+            default
+            alt
           }
           timeout
           defaultTimeout
