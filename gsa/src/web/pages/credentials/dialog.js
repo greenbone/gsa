@@ -65,6 +65,7 @@ const PGP_PUBLIC_KEY_LINE = '-----BEGIN PGP PUBLIC KEY BLOCK-----';
 const CredentialsDialog = ({
   allow_insecure = NO_VALUE,
   auth_algorithm = SNMP_AUTH_ALGORITHM_SHA1,
+  autogenerate,
   change_community = NO_VALUE,
   change_passphrase = NO_VALUE,
   change_password = NO_VALUE,
@@ -73,6 +74,7 @@ const CredentialsDialog = ({
   community = '',
   credential,
   credential_login = '',
+  credential_type,
   error,
   name = _('Unnamed'),
   passphrase = '',
@@ -84,13 +86,12 @@ const CredentialsDialog = ({
   onClose,
   onErrorClose,
   onSave,
-  ...props
 }) => {
   const [state, dispatchState] = useReducer(stateReducer, {});
 
   const setCredentialTypeAndAutoGenerate = (
-    credential_type,
-    autogenerate = NO_VALUE,
+    credential_type, // eslint-disable-line no-shadow
+    autogenerate = NO_VALUE, // eslint-disable-line no-shadow
   ) => {
     if (
       credential_type !== USERNAME_PASSWORD_CREDENTIAL_TYPE &&
@@ -104,13 +105,14 @@ const CredentialsDialog = ({
   };
 
   useEffect(() => {
-    const {credential_type, autogenerate} = props;
     setCredentialTypeAndAutoGenerate(credential_type, autogenerate);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [credential_type, autogenerate]);
 
   useEffect(() => {
     if (isDefined(error)) {
       dispatchState(updateState({error}));
+    } else {
+      dispatchState(updateState({error: null}));
     }
   }, [error]);
 
@@ -144,9 +146,13 @@ const CredentialsDialog = ({
     dispatchState(updateState({error: error.message}));
   };
 
-  let {credential_type} = state;
+  let {credential_type: credentialTypeFromState} = state;
 
-  const {autogenerate, public_key, error: stateError} = state;
+  const {
+    autogenerate: autoGenerateFromState,
+    public_key,
+    error: stateError,
+  } = state;
 
   const typeOptions = map(types, type => ({
     label: getCredentialTypeName(type),
@@ -155,11 +161,11 @@ const CredentialsDialog = ({
 
   const is_edit = isDefined(credential);
 
-  if (!isDefined(credential_type)) {
+  if (!isDefined(credentialTypeFromState)) {
     if (types.includes(USERNAME_PASSWORD_CREDENTIAL_TYPE)) {
-      credential_type = USERNAME_PASSWORD_CREDENTIAL_TYPE;
+      credentialTypeFromState = USERNAME_PASSWORD_CREDENTIAL_TYPE;
     } else {
-      credential_type = first(types);
+      credentialTypeFromState = first(types);
     }
   }
 
@@ -182,8 +188,8 @@ const CredentialsDialog = ({
   };
 
   const values = {
-    autogenerate,
-    credential_type,
+    autogenerate: autoGenerateFromState,
+    credential_type: credentialTypeFromState,
     public_key,
   };
 
@@ -486,6 +492,6 @@ CredentialsDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default CredentialsDialog;
+export default CredentialsDialog; // capabilities don't see to be used in this dialog
 
 // vim: set ts=2 sw=2 tw=80:
