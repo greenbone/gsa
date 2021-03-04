@@ -79,7 +79,7 @@ import CredentialDetails from './details';
 import CredentialComponent from './component';
 import CredentialDownloadIcon from './downloadicon';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   onCredentialCloneClick,
   onCredentialCreateClick,
