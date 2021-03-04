@@ -149,6 +149,7 @@ export const hyperionEntityTypes = [
   'alert',
   'host',
   'note',
+  'override',
   'policy',
   'permission',
   'scanconfig',
