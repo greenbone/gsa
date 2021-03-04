@@ -1,44 +1,39 @@
 /* Copyright (C) 2020-2021 Greenbone Networks GmbH
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable react/prop-types */
-
 import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
-
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+import {
+  useLazyGetNvts,
+  useLazyGetNvt,
+  useGetNvt,
+  useExportNvtsByIds,
+  useExportNvtsByFilter,
+} from '../nvts';
 import {
   createGetNvtsQueryMock,
   createGetNvtQueryMock,
   createExportNvtsByIdsQueryMock,
   createExportNvtsByFilterQueryMock,
-  mockNvt,
 } from '../__mocks__/nvts';
-
-import {
-  useLazyGetNvts,
-  useLazyGetNvt,
-  useExportNvtsByFilter,
-  useExportNvtsByIds,
-  useGetNvt,
-} from '../nvts';
 
 const GetLazyNvtsComponent = () => {
   const [getNvts, {counts, loading, nvts}] = useLazyGetNvts();
@@ -75,26 +70,6 @@ const GetLazyNvtsComponent = () => {
   );
 };
 
-const GetLazyNvtComponent = () => {
-  const [getNvt, {nvt, loading}] = useLazyGetNvt('12345');
-
-  if (loading) {
-    return <span data-testid="loading">Loading</span>;
-  }
-  return (
-    <div>
-      <button data-testid="load" onClick={() => getNvt()} />
-      {isDefined(nvt) ? (
-        <div key={nvt.id} data-testid="nvt">
-          {nvt.id}
-        </div>
-      ) : (
-        <div data-testid="no-nvt" />
-      )}
-    </div>
-  );
-};
-
 describe('useLazyGetNvts tests', () => {
   test('should query nvts after user interaction', async () => {
     const [mock, resultFunc] = createGetNvtsQueryMock();
@@ -117,12 +92,14 @@ describe('useLazyGetNvts tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    nvtElements = screen.getAllByTestId('nvt');
+    nvtElements = screen.queryAllByTestId('nvt');
     expect(nvtElements).toHaveLength(1);
 
     expect(nvtElements[0]).toHaveTextContent('12345');
 
     expect(screen.queryByTestId('no-nvts')).not.toBeInTheDocument();
+
+    await wait();
 
     expect(screen.getByTestId('total')).toHaveTextContent(1);
     expect(screen.getByTestId('filtered')).toHaveTextContent(1);
@@ -132,9 +109,29 @@ describe('useLazyGetNvts tests', () => {
   });
 });
 
+const GetLazyNvtComponent = () => {
+  const [getNvt, {nvt, loading}] = useLazyGetNvt();
+
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      <button data-testid="load" onClick={() => getNvt('12345')} />
+      {isDefined(nvt) ? (
+        <div key={nvt.id} data-testid="nvt">
+          {nvt.id}
+        </div>
+      ) : (
+        <div data-testid="no-nvt" />
+      )}
+    </div>
+  );
+};
+
 describe('useLazyGetNvt tests', () => {
   test('should query nvt after user interaction', async () => {
-    const [mock, resultFunc] = createGetNvtQueryMock('12345', mockNvt);
+    const [mock, resultFunc] = createGetNvtQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
     render(<GetLazyNvtComponent />);
 
@@ -158,56 +155,6 @@ describe('useLazyGetNvt tests', () => {
     expect(nvtElement).toHaveTextContent('12345');
 
     expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
-  });
-});
-
-const ExportNvtsByIdsComponent = () => {
-  const exportNvtsByIds = useExportNvtsByIds();
-  return (
-    <button
-      data-testid="bulk-export"
-      onClick={() => exportNvtsByIds(['12345'])}
-    />
-  );
-};
-
-describe('useExportNvtsByIds tests', () => {
-  test('should export a list of nvts after user interaction', async () => {
-    const [mock, resultFunc] = createExportNvtsByIdsQueryMock(['12345']);
-    const {render} = rendererWith({queryMocks: [mock]});
-
-    render(<ExportNvtsByIdsComponent />);
-    const button = screen.getByTestId('bulk-export');
-    fireEvent.click(button);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-  });
-});
-
-const ExportNvtsByFilterComponent = () => {
-  const exportNvtsByFilter = useExportNvtsByFilter();
-  return (
-    <button
-      data-testid="filter-export"
-      onClick={() => exportNvtsByFilter('12345')}
-    />
-  );
-};
-
-describe('useExportNvtsByFilter tests', () => {
-  test('should export a list of nvts by filter string after user interaction', async () => {
-    const [mock, resultFunc] = createExportNvtsByFilterQueryMock();
-    const {render} = rendererWith({queryMocks: [mock]});
-
-    render(<ExportNvtsByFilterComponent />);
-    const button = screen.getByTestId('filter-export');
-    fireEvent.click(button);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
   });
 });
 
@@ -249,6 +196,56 @@ describe('useGetNvt tests', () => {
     expect(screen.getByTestId('nvt')).toBeInTheDocument();
 
     expect(screen.getByTestId('id')).toHaveTextContent('12345');
-    expect(screen.getByTestId('name')).toHaveTextContent('12345');
+    expect(screen.getByTestId('name')).toHaveTextContent('foo');
+  });
+});
+
+const ExportNvtsByIdsComponent = () => {
+  const exportNvtsByIds = useExportNvtsByIds();
+  return (
+    <button
+      data-testid="bulk-export"
+      onClick={() => exportNvtsByIds(['12345'])}
+    />
+  );
+};
+
+describe('useExportNvtsByIds tests', () => {
+  test('should export a list of nvts after user interaction', async () => {
+    const [mock, resultFunc] = createExportNvtsByIdsQueryMock(['12345']);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportNvtsByIdsComponent />);
+    const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportNvtsByFilterComponent = () => {
+  const exportNvtsByFilter = useExportNvtsByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportNvtsByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportNvtsByFilter tests', () => {
+  test('should export a list of tasks by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportNvtsByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportNvtsByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 });
