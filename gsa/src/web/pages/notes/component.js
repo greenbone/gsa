@@ -91,7 +91,7 @@ const NoteComponent = ({
           hostsManual: isArray(hosts) ? hosts.join(',') : undefined,
           port: isDefined(port) ? MANUAL : ANY,
           portManual: port,
-          nvtId: isDefined(nvt) ? nvt.nvtId : undefined,
+          nvtId: isDefined(nvt) ? nvt.id : undefined,
           note,
           nvtName: isDefined(nvt) ? nvt.name : undefined,
           taskId: hasId(task) ? TASK_SELECTED : TASK_ANY,

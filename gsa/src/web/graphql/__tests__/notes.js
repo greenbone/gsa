@@ -231,7 +231,7 @@ describe('useLazyGetNotes tests', () => {
 
 describe('Note mutation tests', () => {
   test('should create a note', async () => {
-    const [createNoteMock, createNoteNote] = createCreateNoteQueryMock();
+    const [createNoteMock, createNoteResult] = createCreateNoteQueryMock();
     const {render} = rendererWith({queryMocks: [createNoteMock]});
 
     const {element} = render(<CreateModifyNoteComponent />);
@@ -242,14 +242,14 @@ describe('Note mutation tests', () => {
 
     await wait();
 
-    expect(createNoteNote).toHaveBeenCalled();
+    expect(createNoteResult).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Note created with id 6d00d22f-551b-4fbe-8215-d8615eff73ea.',
     );
   });
 
   test('should modify a note', async () => {
-    const [modifyNoteMock, modifyNoteNote] = createModifyNoteQueryMock();
+    const [modifyNoteMock, modifyNoteResult] = createModifyNoteQueryMock();
 
     const {render} = rendererWith({queryMocks: [modifyNoteMock]});
 
@@ -261,7 +261,7 @@ describe('Note mutation tests', () => {
 
     await wait();
 
-    expect(modifyNoteNote).toHaveBeenCalled();
+    expect(modifyNoteResult).toHaveBeenCalled();
     expect(screen.getByTestId('notification')).toHaveTextContent(
       'Note modified with ok=true.',
     );
