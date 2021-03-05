@@ -54,6 +54,7 @@ export const cpeEntity = deepFreeze({
       severity: 1.8,
     },
   ],
+  deprecatedBy: 'cpe:/a:foo:bar',
   score: 98,
   status: 'FINAL',
 });

@@ -22,7 +22,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 /**
  * (from https://nvd.nist.gov/site-media/js/nvdApp/cvssV2/cvssV2.service.js)
- * Handles percision and rounding of numbers to one decimal place
+ * Handles precision and rounding of numbers to one decimal place
  * @param value
  * @returns {number}
  */

@@ -35,6 +35,8 @@ import moment from 'gmp/models/date';
 import {isDefined, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
+import Img from 'web/components/img/img';
+
 import Layout from 'web/components/layout/layout';
 
 import {useLogin} from 'web/graphql/auth';
@@ -58,11 +60,27 @@ import LoginForm from './loginform';
 const log = logger.getLogger('web.login');
 
 const StyledLayout = styled(Layout)`
-  background: ${Theme.lightGray};
+  background: radial-gradient(
+    51.84% 102.52% at 58.54% 44.97%,
+    #baed81 0%,
+    ${Theme.green} 67.26%
+  );
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
+`;
+
+const BackgroundTopImage = styled(Img)`
+  position: fixed;
+  top: 0;
+  right: 0;
+`;
+
+const BackgroundBottomImage = styled(Img)`
+  position: fixed;
+  bottom: 0;
+  left: 0;
 `;
 
 const isIE11 = () =>
@@ -208,6 +226,8 @@ const LoginPage = () => {
 
   return (
     <StyledLayout>
+      <BackgroundTopImage src="login-top.svg" />
+      <BackgroundBottomImage src="login-bottom.svg" />
       <LoginForm
         error={message}
         showGuestLogin={showGuestLogin}
