@@ -25,8 +25,6 @@ import {setLocale} from 'gmp/locale/lang';
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
 
-import {entitiesLoadingActions} from 'web/store/entities/credentials';
-
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
@@ -132,24 +130,6 @@ describe('CredentialPage tests', () => {
       defaultFilterLoadingActions.success('credential', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success(
-        [credential],
-        filter,
-        loadedFilter,
-        counts,
-      ),
-    );
-
     const {baseElement} = render(<CredentialPage />);
 
     await wait();
@@ -238,24 +218,6 @@ describe('CredentialPage tests', () => {
       defaultFilterLoadingActions.success('credential', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success(
-        [credential],
-        filter,
-        loadedFilter,
-        counts,
-      ),
-    );
-
     render(<CredentialPage />);
 
     await wait();
@@ -319,24 +281,6 @@ describe('CredentialPage tests', () => {
       defaultFilterLoadingActions.success('credential', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success(
-        [credential],
-        filter,
-        loadedFilter,
-        counts,
-      ),
-    );
-
     const {element} = render(<CredentialPage />);
 
     await wait();
@@ -344,8 +288,12 @@ describe('CredentialPage tests', () => {
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
 
+    await wait();
+
     const selectItems = screen.getAllByTestId('select-item');
     fireEvent.click(selectItems[1]);
+
+    await wait();
 
     const selected = screen.getAllByTestId('select-selected-value');
     expect(selected[1]).toHaveTextContent('Apply to selection');
@@ -415,30 +363,14 @@ describe('CredentialPage tests', () => {
       defaultFilterLoadingActions.success('credential', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success(
-        [credential],
-        filter,
-        loadedFilter,
-        counts,
-      ),
-    );
-
     render(<CredentialPage />);
 
     await wait();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
+
+    await wait();
 
     const selectItems = screen.getAllByTestId('select-item');
     fireEvent.click(selectItems[2]);
