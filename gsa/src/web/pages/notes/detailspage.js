@@ -64,7 +64,7 @@ import {
 } from 'web/graphql/notes';
 import {useGetPermissions} from 'web/graphql/permissions';
 
-import {goto_details, goto_list} from 'web/entity/component';
+import {goto_list} from 'web/entity/component';
 import EntityPage, {Col} from 'web/entity/page';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';

@@ -76,7 +76,7 @@ const NoteDialog = ({
   port = ANY,
   portManual = '',
   resultId = RESULT_ANY,
-  result_name,
+  resultName,
   resultUuid,
   severity,
   taskId = TASK_ANY,
@@ -103,7 +103,7 @@ const NoteDialog = ({
     portManual,
     resultId,
     resultUuid,
-    result_name,
+    resultName,
     taskId,
     taskUuid,
     taskName,
@@ -357,7 +357,7 @@ const NoteDialog = ({
                   title={
                     state.fixed
                       ? _('Only selected result ({{- name}})', {
-                          name: state.result_name,
+                          name: state.resultName,
                         })
                       : _('UUID')
                   }
@@ -407,12 +407,12 @@ NoteDialog.propTypes = {
   hostsManual: PropTypes.string,
   id: PropTypes.string,
   note: PropTypes.model,
-  nvtName: PropTypes.string,
   nvtId: PropTypes.string,
+  nvtName: PropTypes.string,
   port: PropTypes.string,
   portManual: PropTypes.string,
   resultId: PropTypes.id,
-  result_name: PropTypes.string,
+  resultName: PropTypes.string,
   resultUuid: PropTypes.id,
   severity: PropTypes.number,
   taskId: PropTypes.id,
