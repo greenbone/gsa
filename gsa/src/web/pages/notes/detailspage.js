@@ -183,6 +183,7 @@ Details.propTypes = {
 };
 
 const Page = () => {
+  // Page methods
   const {id} = useParams();
   const history = useHistory();
   const [, renewSessionTimeout] = useUserSessionTimeout();
@@ -193,17 +194,21 @@ const Page = () => {
     showError,
   } = useDialogNotification();
 
+  // Load note related entities
   const {note, refetch: refetchNote, loading, error: entityError} = useGetNote(
     id,
   );
   const {permissions, refetch: refetchPermissions} = useGetPermissions({
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
+
+  // note related mutations
   const exportEntity = useExportEntity();
   const [cloneNote] = useCloneNote();
   const [deleteNote] = useDeleteNotesByIds();
   const exportNote = useExportNotesByIds();
 
+  // note methods
   const handleCloneNote = clonedNote => {
     return cloneNote(clonedNote.id)
       .then(noteId => goto_entity_details('note', {history})(noteId))
@@ -245,9 +250,9 @@ const Page = () => {
   useEffect(() => stopReload, [stopReload]);
   return (
     <NoteComponent
-      onCloned={goto_details('note', {history})}
+      onCloned={goto_entity_details('note', {history})}
       onCloneError={showError}
-      onCreated={goto_details('note', {history})}
+      onCreated={goto_entity_details('note', {history})}
       onDeleted={goto_list('notes', {history})}
       onDeleteError={showError}
       onDownloaded={handleDownload}
