@@ -173,7 +173,9 @@ export const useCreateNote = options => {
   const createNote = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreateNote({...options, variables: {input: inputObject}}),
+      queryCreateNote({...options, variables: {input: inputObject}}).then(
+        result => result?.data?.createNote?.id,
+      ),
     [queryCreateNote],
   );
   const noteId = data?.createNote?.id;
