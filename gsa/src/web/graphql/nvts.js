@@ -56,27 +56,22 @@ export const GET_NVT = gql`
         value
         type
       }
+      score
       severities {
+        date
+        origin
         score
-        severitiesList {
-          date
-          origin
-          score
-          type
-          vector
-        }
+        type
+        vector
       }
+      refWarning
       refs {
-        warning
-        refList {
-          id
-          type
-        }
+        id
+        type
       }
       tags {
         cvssBaseVector
         summary
-        solutionType
         insight
         impact
         vuldetect
@@ -152,27 +147,22 @@ export const GET_NVTS = gql`
             value
             type
           }
+          score
           severities {
+            date
+            origin
             score
-            severitiesList {
-              date
-              origin
-              score
-              type
-              vector
-            }
+            type
+            vector
           }
+          warning
           refs {
-            warning
-            refList {
-              id
-              type
-            }
+            id
+            type
           }
           tags {
             cvssBaseVector
             summary
-            solutionType
             insight
             impact
             vuldetect
@@ -257,30 +247,17 @@ export const useExportNvtsByIds = options => {
 
   const exportNvtsByIds = useCallback(
     // eslint-disable-next-line no-shadow
-    scanConfigIds =>
+    nvtIds =>
       queryExportNvtsByIds({
         ...options,
         variables: {
-          ids: scanConfigIds,
+          ids: nvtIds,
         },
       }),
     [queryExportNvtsByIds, options],
   );
 
   return exportNvtsByIds;
-};
-
-export const useLazyGetNvt = id => {
-  const [queryNvt, {data, ...other}] = useLazyQuery(GET_NVT, {
-    variables: {
-      id,
-    },
-  });
-
-  const nvt = isDefined(data?.nvt) ? Nvt.fromObject(data.nvt) : undefined;
-
-  const getNvt = useCallback(uuid => queryNvt({id: uuid}), [queryNvt]);
-  return [getNvt, {...other, nvt}];
 };
 
 export const useLazyGetNvts = (variables, options) => {

@@ -121,8 +121,8 @@ class Nvt extends Info {
   static parseObject(object) {
     const ret = super.parseObject(object);
 
-    ret.severity = hasValue(ret.severities)
-      ? parseScoreToSeverity(ret.severities.score)
+    ret.severity = hasValue(ret.score)
+      ? parseScoreToSeverity(ret.score)
       : undefined;
 
     if (ret.preferenceCount < 0) {
