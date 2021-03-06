@@ -19,14 +19,11 @@ import React, {useEffect} from 'react';
 import {useHistory, useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import Filter from 'gmp/models/filter';
 
-import {
-  permissionsResourceFilter,
-  withEntityContainer,
-} from 'web/entity/withEntityContainer';
+import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
@@ -66,7 +63,6 @@ import {useLazyGetOverrides} from 'web/graphql/overrides';
 import {useGetPermissions} from 'web/graphql/permissions';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 import useDownload from 'web/components/form/useDownload';
 import useDialogNotification from 'web/components/notification/useDialogNotification';
@@ -217,11 +213,11 @@ const Page = () => {
   });
 
   const [loadNotes, {notes}] = useLazyGetNotes({
-    filterString: 'task_id:' + id,
+    filterString: 'nvt_id:' + id,
   });
 
   const [loadOverrides, {overrides}] = useLazyGetOverrides({
-    filterString: 'task_id:' + id,
+    filterString: 'nvt_id:' + id,
   });
 
   // NVT related mutations
@@ -257,6 +253,14 @@ const Page = () => {
   // stop reload on unmount
   useEffect(() => stopReload, [stopReload]);
 
+  // Other side effects
+
+  // Load notes and overrides
+  useEffect(() => {
+    loadNotes();
+    loadOverrides();
+  }, [id]);
+
   return (
     <NvtComponent
       onChanged={refetchAll}
@@ -267,9 +271,12 @@ const Page = () => {
       {({notecreate, overridecreate, download}) => (
         <EntityPage
           entity={nvt}
-          toolBarIcons={ToolBarIcons}
-          title={_('NVT')}
+          isLoading={loading}
+          notes={notes}
+          overrides={overrides}
           sectionIcon={<NvtIcon size="large" />}
+          title={_('NVT')}
+          toolBarIcons={ToolBarIcons}
           onChanged={refetchAll}
           onInteraction={renewSessionTimeout}
           onNoteCreateClick={notecreate}
