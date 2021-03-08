@@ -23,7 +23,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 import {
   useLazyGetNvts,
-  useLazyGetNvt,
   useGetNvt,
   useExportNvtsByIds,
   useExportNvtsByFilter,
@@ -64,7 +63,7 @@ const GetLazyNvtsComponent = () => {
           );
         })
       ) : (
-        <div data-testid="no-nvts" />
+        <div data-testid="no-nvt" />
       )}
     </div>
   );
@@ -74,13 +73,16 @@ describe('useLazyGetNvts tests', () => {
   test('should query nvts after user interaction', async () => {
     const [mock, resultFunc] = createGetNvtsQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
+
     render(<GetLazyNvtsComponent />);
 
     let nvtElements = screen.queryAllByTestId('nvt');
     expect(nvtElements).toHaveLength(0);
 
-    expect(screen.queryByTestId('no-nvts')).toBeInTheDocument();
-    expect(screen.queryByTestId('no-counts')).toBeInTheDocument();
+    let noNvts = screen.queryByTestId('no-nvt');
+    expect(noNvts).toBeInTheDocument();
+    const noCounts = screen.queryByTestId('no-counts');
+    expect(noCounts).toBeInTheDocument();
 
     const button = screen.getByTestId('load');
     fireEvent.click(button);
@@ -97,64 +99,14 @@ describe('useLazyGetNvts tests', () => {
 
     expect(nvtElements[0]).toHaveTextContent('12345');
 
-    expect(screen.queryByTestId('no-nvts')).not.toBeInTheDocument();
-
-    await wait();
+    noNvts = screen.queryByTestId('no-nvt');
+    expect(noNvts).not.toBeInTheDocument();
 
     expect(screen.getByTestId('total')).toHaveTextContent(1);
     expect(screen.getByTestId('filtered')).toHaveTextContent(1);
     expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
     expect(screen.getByTestId('length')).toHaveTextContent(1);
-  });
-});
-
-const GetLazyNvtComponent = () => {
-  const [getNvt, {nvt, loading}] = useLazyGetNvt();
-
-  if (loading) {
-    return <span data-testid="loading">Loading</span>;
-  }
-  return (
-    <div>
-      <button data-testid="load" onClick={() => getNvt('12345')} />
-      {isDefined(nvt) ? (
-        <div key={nvt.id} data-testid="nvt">
-          {nvt.id}
-        </div>
-      ) : (
-        <div data-testid="no-nvt" />
-      )}
-    </div>
-  );
-};
-
-describe('useLazyGetNvt tests', () => {
-  test('should query nvt after user interaction', async () => {
-    const [mock, resultFunc] = createGetNvtQueryMock();
-    const {render} = rendererWith({queryMocks: [mock]});
-    render(<GetLazyNvtComponent />);
-
-    let nvtElement = screen.queryAllByTestId('nvt');
-    expect(nvtElement).toHaveLength(0);
-
-    expect(screen.queryByTestId('no-nvt')).toBeInTheDocument();
-
-    const button = screen.getByTestId('load');
-    fireEvent.click(button);
-
-    const loading = await screen.findByTestId('loading');
-    expect(loading).toHaveTextContent('Loading');
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-
-    nvtElement = screen.getByTestId('nvt');
-
-    expect(nvtElement).toHaveTextContent('12345');
-
-    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
   });
 });
 
@@ -196,7 +148,7 @@ describe('useGetNvt tests', () => {
     expect(screen.getByTestId('nvt')).toBeInTheDocument();
 
     expect(screen.getByTestId('id')).toHaveTextContent('12345');
-    expect(screen.getByTestId('name')).toHaveTextContent('foo');
+    expect(screen.getByTestId('name')).toHaveTextContent('12345');
   });
 });
 
@@ -236,7 +188,7 @@ const ExportNvtsByFilterComponent = () => {
 };
 
 describe('useExportNvtsByFilter tests', () => {
-  test('should export a list of tasks by filter string after user interaction', async () => {
+  test('should export a list of nvts by filter string after user interaction', async () => {
     const [mock, resultFunc] = createExportNvtsByFilterQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 

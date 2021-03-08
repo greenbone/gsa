@@ -20,10 +20,19 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
+import {
+  createExportNvtsByIdsQueryMock,
+  createGetNvtQueryMock,
+  nvtEntity,
+} from 'web/graphql/__mocks__/nvts';
+
+import {createGetNotesQueryMock} from 'web/graphql/__mocks__/notes';
+import {createGetOverridesQueryMock} from 'web/graphql/__mocks__/overrides';
+
 import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
-import NVT from 'gmp/models/nvt';
+import Nvt from 'gmp/models/nvt';
 import Note from 'gmp/models/note';
 import Override from 'gmp/models/override';
 
@@ -32,11 +41,20 @@ import {isDefined} from 'gmp/utils/identity';
 import {entityLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
+import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
 setLocale('en');
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: '12345',
+  }),
+}));
 
 if (!isDefined(window.URL)) {
   window.URL = {};
@@ -48,46 +66,7 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const nvt = NVT.fromElement({
-  _id: '12345',
-  owner: {
-    name: '',
-  },
-  name: '12345',
-  comment: '',
-  creation_time: '2019-06-24T11:55:30Z',
-  modification_time: '2019-06-24T10:12:27Z',
-  timezone: 'UTC',
-  writable: 0,
-  in_use: 0,
-  permissions: '',
-  update_time: '2020-10-30T11:44:00.000+0000',
-  nvt: {
-    _oid: '12345',
-    name: 'foo',
-    creation_time: '2019-06-24T11:55:30Z',
-    modification_time: '2019-06-24T10:12:27Z',
-    family: 'bar',
-    cvss_base: 4.9,
-    qod: {
-      value: 80,
-      type: 'remote_banner',
-    },
-    tags:
-      'cvss_base_vector=AV:N/AC:M/Au:S/C:P/I:N/A:P|summary=This is a description|solution_type=VendorFix|insight=Foo|impact=Bar|vuldetect=Baz|affected=foo',
-    solution: {
-      _type: 'VendorFix',
-      __text: 'This is a description',
-    },
-    timeout: '',
-    refs: {
-      ref: [
-        {_type: 'cve', _id: 'CVE-2020-1234'},
-        {_type: 'cve', _id: 'CVE-2020-5678'},
-      ],
-    },
-  },
-});
+const nvtObject = Nvt.fromObject(nvtEntity);
 
 const note1 = Note.fromElement({
   _id: '5221d57f-3e62-4114-8e19-135a79b6b102',
@@ -218,7 +197,7 @@ let renewSession;
 
 beforeEach(() => {
   getNvt = jest.fn().mockResolvedValue({
-    data: nvt,
+    data: nvtObject,
   });
 
   getNotes = jest.fn().mockResolvedValue({
@@ -257,40 +236,46 @@ beforeEach(() => {
 describe('Nvt Detailspage tests', () => {
   test('should render full Detailspage', async () => {
     const gmp = {
-      nvt: {
-        get: getNvt,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
       },
-      notes: {
-        get: getNotes,
-      },
-      overrides: {
-        get: getOverrides,
-      },
     };
+
+    const [mock, resultFunc] = createGetNvtQueryMock();
+    const [notesMock, notesResultFunc] = createGetNotesQueryMock({
+      filterString: 'nvt_id:12345',
+    });
+    const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
+      filterString: 'nvt_id:12345',
+    });
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, notesMock, overridesMock, renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', nvt));
+    //store.dispatch(entityLoadingActions.success('12345', nvtObject));
 
     const {baseElement, element} = render(<Detailspage id="12345" />);
+
     await wait();
 
-    expect(element).toHaveTextContent('NVT: foo');
+    expect(resultFunc).toHaveBeenCalled();
+    expect(notesResultFunc).toHaveBeenCalled();
+    expect(overridesResultFunc).toHaveBeenCalled();
+
+    expect(baseElement).toHaveTextContent('NVT: 12345');
 
     const links = baseElement.querySelectorAll('a');
-
+    // test icon bar
     expect(screen.getAllByTitle('Help: NVTs')[0]).toBeInTheDocument();
     expect(links[0]).toHaveAttribute(
       'href',
@@ -299,46 +284,46 @@ describe('Nvt Detailspage tests', () => {
 
     expect(screen.getAllByTitle('NVT List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/nvts');
-
-    expect(element).toHaveTextContent('ID:12345');
-    expect(element).toHaveTextContent('Mon, Jun 24, 2019 11:55 AM UTC');
-    expect(element).toHaveTextContent('Mon, Jun 24, 2019 10:12 AM UTC');
-    expect(element).toHaveTextContent('Owner:(Global Object)');
-
+    // test title bar
+    expect(baseElement).toHaveTextContent('ID:12345');
+    expect(baseElement).toHaveTextContent('Mon, Jun 24, 2019 11:55 AM UTC');
+    expect(baseElement).toHaveTextContent('Mon, Jun 24, 2019 10:12 AM UTC');
+    expect(baseElement).toHaveTextContent('Owner:(Global Object)');
+    // test page content
     const tabs = screen.getAllByTestId('entities-tab-title');
     expect(tabs[0]).toHaveTextContent('Preferences');
     expect(tabs[1]).toHaveTextContent('User Tags');
 
-    expect(element).toHaveTextContent('Summary');
-    expect(element).toHaveTextContent('This is a description');
+    expect(baseElement).toHaveTextContent('Summary');
+    expect(baseElement).toHaveTextContent('This is a description');
 
-    expect(element).toHaveTextContent('Scoring');
-    expect(element).toHaveTextContent('CVSS Base');
-    expect(element).toHaveTextContent('4.9 (Medium)');
-    expect(element).toHaveTextContent('CVSS Base Vector');
-    expect(element).toHaveTextContent('AV:N/AC:M/Au:S/C:P/I:N/A:P');
-    expect(element).toHaveTextContent('CVSS Origin');
-    expect(element).toHaveTextContent('N/A');
+    expect(baseElement).toHaveTextContent('Scoring');
+    expect(baseElement).toHaveTextContent('CVSS Base');
+    expect(baseElement).toHaveTextContent('4.9 (Medium)');
+    expect(baseElement).toHaveTextContent('CVSS Base Vector');
+    expect(baseElement).toHaveTextContent('AV:N/AC:M/Au:S/C:P/I:N/A:P');
+    expect(baseElement).toHaveTextContent('CVSS Origin');
+    expect(baseElement).toHaveTextContent('N/A');
 
-    expect(element).toHaveTextContent('Insight');
-    expect(element).toHaveTextContent('Foo');
+    expect(baseElement).toHaveTextContent('Insight');
+    expect(baseElement).toHaveTextContent('Foo');
 
-    expect(element).toHaveTextContent('Detection Method');
-    expect(element).toHaveTextContent('Baz');
+    expect(baseElement).toHaveTextContent('Detection Method');
+    expect(baseElement).toHaveTextContent('Baz');
 
-    expect(element).toHaveTextContent('Affected Software/OS');
-    expect(element).toHaveTextContent('foo');
+    expect(baseElement).toHaveTextContent('Affected Software/OS');
+    expect(baseElement).toHaveTextContent('foo');
 
-    expect(element).toHaveTextContent('Impact');
-    expect(element).toHaveTextContent('Bar');
+    expect(baseElement).toHaveTextContent('Impact');
+    expect(baseElement).toHaveTextContent('Bar');
 
-    expect(element).toHaveTextContent('Solution');
+    expect(baseElement).toHaveTextContent('Solution');
 
-    expect(element).toHaveTextContent('Family');
-    expect(element).toHaveTextContent('bar');
+    expect(baseElement).toHaveTextContent('Family');
+    expect(baseElement).toHaveTextContent('bar');
 
-    expect(element).toHaveTextContent('References');
-    expect(element).toHaveTextContent('CVECVE-2020-1234');
+    expect(baseElement).toHaveTextContent('References');
+    expect(baseElement).toHaveTextContent('CVECVE-2020-1234');
 
     expect(element).toHaveTextContent('Overrides');
     expect(element).toHaveTextContent('Override from Any to False Positive');
@@ -363,7 +348,7 @@ describe('Nvt Detailspage tests', () => {
     expect(element).toHaveTextContent('Thu, Jan 14, 2021 6:35 AM UTC');
   });
 
-  test('should render preferences tab', () => {
+  test('should render preferences tab', async () => {
     const gmp = {
       nvt: {
         get: getNvt,
@@ -381,19 +366,28 @@ describe('Nvt Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetNvtQueryMock();
+
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', nvt));
+    store.dispatch(entityLoadingActions.success('12345', nvtObject));
 
     const {baseElement} = render(<Detailspage id="12345" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -406,7 +400,7 @@ describe('Nvt Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('default');
   });
 
-  test('should render user tags tab', () => {
+  test('should render user tags tab', async () => {
     const gmp = {
       nvt: {
         get: getNvt,
@@ -424,19 +418,28 @@ describe('Nvt Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetNvtQueryMock();
+
+    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', nvt));
+    store.dispatch(entityLoadingActions.success('12345', nvtObject));
 
     const {baseElement} = render(<Detailspage id="12345" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -447,7 +450,7 @@ describe('Nvt Detailspage tests', () => {
   });
 });
 
-describe('Nvt ToolBarIcons tests', () => {
+describe('Nvt ToolBarIcons tests', async () => {
   test('should render', () => {
     const handleNvtDownloadClick = jest.fn();
     const handleOnNoteCreateClick = jest.fn();
@@ -463,7 +466,7 @@ describe('Nvt ToolBarIcons tests', () => {
 
     const {element} = render(
       <ToolBarIcons
-        entity={nvt}
+        entity={nvtObject}
         onNoteCreateClick={handleOnNoteCreateClick}
         onNvtDownloadClick={handleNvtDownloadClick}
         onOverrideCreateClick={handleOnOverrideCreateClick}
@@ -495,7 +498,7 @@ describe('Nvt ToolBarIcons tests', () => {
     ).toBeInTheDocument();
   });
 
-  test('should call click handlers', () => {
+  test('should call click handlers', async () => {
     const handleNvtDownloadClick = jest.fn();
     const handleOnNoteCreateClick = jest.fn();
     const handleOnOverrideCreateClick = jest.fn();
@@ -510,7 +513,7 @@ describe('Nvt ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={nvt}
+        entity={nvtObject}
         onNoteCreateClick={handleOnNoteCreateClick}
         onNvtDownloadClick={handleNvtDownloadClick}
         onOverrideCreateClick={handleOnOverrideCreateClick}
@@ -523,14 +526,14 @@ describe('Nvt ToolBarIcons tests', () => {
 
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
-    expect(handleNvtDownloadClick).toHaveBeenCalledWith(nvt);
+    expect(handleNvtDownloadClick).toHaveBeenCalledWith(nvtObject);
 
     expect(addNewNoteIcon[0]).toBeInTheDocument();
     fireEvent.click(addNewNoteIcon[0]);
-    expect(handleOnNoteCreateClick).toHaveBeenCalledWith(nvt);
+    expect(handleOnNoteCreateClick).toHaveBeenCalled();
 
     expect(addNewOverrideIcon[0]).toBeInTheDocument();
     fireEvent.click(addNewOverrideIcon[0]);
-    expect(handleOnOverrideCreateClick).toHaveBeenCalledWith(nvt);
+    expect(handleOnOverrideCreateClick).toHaveBeenCalledWith(nvtObject);
   });
 });

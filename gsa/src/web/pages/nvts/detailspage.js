@@ -107,14 +107,14 @@ export const ToolBarIcons = ({
         {capabilities.mayCreate('note') && (
           <NewNoteIcon
             title={_('Add new Note')}
-            value={entity}
+            entity={entity}
             onClick={onNoteCreateClick}
           />
         )}
         {capabilities.mayCreate('override') && (
           <NewOverrideIcon
             title={_('Add new Override')}
-            value={entity}
+            entity={entity}
             onClick={onOverrideCreateClick}
           />
         )}
@@ -252,8 +252,6 @@ const Page = () => {
 
   // stop reload on unmount
   useEffect(() => stopReload, [stopReload]);
-
-  // Other side effects
 
   // Load notes and overrides
   useEffect(() => {

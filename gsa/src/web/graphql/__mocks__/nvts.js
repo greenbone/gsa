@@ -44,25 +44,21 @@ export const nvtEntity = deepFreeze({
     value: 80,
     type: 'remote_banner',
   },
-  severities: {
-    score: 49,
-    severitiesList: [
-      {
-        date: '2020-09-29T12:16:50+00:00',
-        origin: null,
-        score: 49,
-        type: 'cve',
-        vector: 'AV:N/AC:M/Au:S/C:P/I:N/A:P',
-      },
-    ],
-  },
-  refs: {
-    warning: null,
-    refList: [
-      {type: 'cve', id: 'CVE-2020-1234'},
-      {type: 'cve', id: 'CVE-2020-5678'},
-    ],
-  },
+  score: 49,
+  severities: [
+    {
+      date: '2020-09-29T12:16:50+00:00',
+      origin: null,
+      score: 49,
+      type: 'cve',
+      vector: 'AV:N/AC:M/Au:S/C:P/I:N/A:P',
+    },
+  ],
+  refWarning: null,
+  refs: [
+    {type: 'cve', id: 'CVE-2020-1234'},
+    {type: 'cve', id: 'CVE-2020-5678'},
+  ],
   tags: {
     cvssBaseVector: 'AV:N/AC:M/Au:S/C:P/I:N/A:P',
     summary: 'This is a description',

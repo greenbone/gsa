@@ -60,16 +60,16 @@ export const getRefs = element => {
 };
 
 export const hasRefType = refType => (ref = {}) =>
-  isString(ref._type) && ref._type.toLowerCase() === refType;
+  isString(ref.type) && ref.type.toLowerCase() === refType;
 
 export const getFilteredRefIds = (refs = [], type) => {
   const filteredRefs = refs.filter(hasRefType(type));
-  return filteredRefs.map(ref => ref._id);
+  return filteredRefs.map(ref => ref.id);
 };
 
-const getFilteredUrlRefs = refs => {
+const getFilteredUrlRefs = (refs = []) => {
   return refs.filter(hasRefType('url')).map(ref => {
-    let id = ref._id;
+    let id = ref.id;
     if (
       !id.startsWith('http://') &&
       !id.startsWith('https://') &&
@@ -85,16 +85,16 @@ const getFilteredUrlRefs = refs => {
   });
 };
 
-const getFilteredRefs = (refs, type) =>
+const getFilteredRefs = (refs = [], type) =>
   refs.filter(hasRefType(type)).map(ref => ({
-    id: ref._id,
+    id: ref.id,
     type,
   }));
 
-const getOtherRefs = refs => {
+const getOtherRefs = (refs = []) => {
   const filteredRefs = refs.filter(ref => {
-    const referenceType = isString(ref._type)
-      ? ref._type.toLowerCase()
+    const referenceType = isString(ref.type)
+      ? ref.type.toLowerCase()
       : undefined;
     return (
       referenceType !== 'url' &&
@@ -108,7 +108,7 @@ const getOtherRefs = refs => {
   });
   const returnRefs = filteredRefs.map(ref => {
     return {
-      ref: ref._id,
+      ref: ref.id,
       type: isString(ref._type) ? ref._type.toLowerCase() : 'other',
     };
   });
@@ -130,6 +130,23 @@ class Nvt extends Info {
       // right now.
       ret.preferenceCount = ret.preferences.length;
     }
+
+    ret.cves = getFilteredRefIds(ret.refs, 'cve').concat(
+      getFilteredRefIds(ret.refs, 'cve_id'),
+    );
+    ret.bids = getFilteredRefIds(ret.refs, 'bid').concat(
+      getFilteredRefIds(ret.refs, 'bugtraq_id'),
+    );
+
+    ret.certs = getFilteredRefs(ret.refs, 'dfn-cert').concat(
+      getFilteredRefs(ret.refs, 'cert-bund'),
+    );
+
+    ret.xrefs = getFilteredUrlRefs(ret.refs, 'url').concat(
+      getOtherRefs(ret.refs),
+    );
+
+    delete ret.refs;
 
     return ret;
   }
