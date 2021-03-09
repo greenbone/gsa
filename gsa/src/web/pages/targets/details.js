@@ -55,7 +55,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
     snmp_credential,
     ssh_credential,
     tasks,
-    allow_simultaneous_ips,
+    allowSimultaneousIPs,
   } = entity;
 
   const hostsListing = hosts
@@ -104,7 +104,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
             <TableRow>
               <TableData>{_('Allow scan of simultaneous IPs')}</TableData>
-              <TableData>{renderYesNo(allow_simultaneous_ips)}</TableData>
+              <TableData>{renderYesNo(allowSimultaneousIPs)}</TableData>
             </TableRow>
 
             <TableRow>

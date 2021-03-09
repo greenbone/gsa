@@ -91,8 +91,8 @@ describe('Target model tests', () => {
     const target = Target.fromElement({allow_simultaneous_ips: '1'});
     const target2 = Target.fromElement({allow_simultaneous_ips: '0'});
 
-    expect(target.allow_simultaneous_ips).toEqual(1);
-    expect(target2.allow_simultaneous_ips).toEqual(0);
+    expect(target.allowSimultaneousIPs).toEqual(1);
+    expect(target2.allowSimultaneousIPs).toEqual(0);
   });
 
   test('should parse reverse_lookup_only', () => {

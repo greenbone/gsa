@@ -101,7 +101,7 @@ class TargetComponent extends React.Component {
       this.setState({
         targetDialogVisible: true,
         id: entity.id,
-        allow_simultaneous_ips: entity.allow_simultaneous_ips,
+        allowSimultaneousIPs: entity.allowSimultaneousIPs,
         alive_tests: entity.alive_tests,
         comment: entity.comment,
         esxi_credential_id: id_or__(entity.esxi_credential),
@@ -139,7 +139,7 @@ class TargetComponent extends React.Component {
 
       this.setState({
         targetDialogVisible: true,
-        allow_simultaneous_ips: YES_VALUE,
+        allowSimultaneousIPs: YES_VALUE,
         alive_tests: undefined,
         comment: undefined,
         esxi_credential_id: undefined,
@@ -321,7 +321,7 @@ class TargetComponent extends React.Component {
       port_list_id,
       port_lists,
       port_lists_title,
-      allow_simultaneous_ips,
+      allowSimultaneousIPs,
       reverse_lookup_only,
       reverse_lookup_unify,
       smb_credential_id,
@@ -357,7 +357,7 @@ class TargetComponent extends React.Component {
             {targetDialogVisible && (
               <TargetDialog
                 alive_tests={alive_tests}
-                allow_simultaneous_ips={allow_simultaneous_ips}
+                allowSimultaneousIPs={allowSimultaneousIPs}
                 comment={comment}
                 credential={credential}
                 credentials={credentials}

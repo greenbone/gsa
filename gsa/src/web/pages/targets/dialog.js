@@ -109,7 +109,7 @@ const NEW_SNMP = {
 
 const TargetDialog = ({
   alive_tests = ALIVE_TESTS_DEFAULT,
-  allow_simultaneous_ips = YES_VALUE,
+  allowSimultaneousIPs = YES_VALUE,
   capabilities,
   comment = '',
   credentials = [],
@@ -161,7 +161,7 @@ const TargetDialog = ({
     reverse_lookup_unify,
     target_source,
     target_exclude_source,
-    allow_simultaneous_ips,
+    allowSimultaneousIPs,
   };
 
   const controlledValues = {
@@ -300,8 +300,8 @@ const TargetDialog = ({
               flex="column"
             >
               <YesNoRadio
-                name="allow_simultaneous_ips"
-                value={state.allow_simultaneous_ips}
+                name="allowSimultaneousIPs"
+                value={state.allowSimultaneousIPs}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -467,7 +467,7 @@ const TargetDialog = ({
 
 TargetDialog.propTypes = {
   alive_tests: PropTypes.oneOf([ALIVE_TESTS_DEFAULT, ...ALIVE_TESTS]),
-  allow_simultaneous_ips: PropTypes.bool,
+  allowSimultaneousIPs: PropTypes.bool,
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   credentials: PropTypes.array,
