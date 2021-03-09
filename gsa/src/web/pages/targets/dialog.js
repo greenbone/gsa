@@ -19,7 +19,7 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import {NO_VALUE} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -109,7 +109,7 @@ const NEW_SNMP = {
 
 const TargetDialog = ({
   alive_tests = ALIVE_TESTS_DEFAULT,
-  allow_simultaneous_ips = NO_VALUE,
+  allow_simultaneous_ips = YES_VALUE,
   capabilities,
   comment = '',
   credentials = [],
@@ -296,7 +296,7 @@ const TargetDialog = ({
             </FormGroup>
 
             <FormGroup
-              title={_('Allow scan of multiple IPs simultaneously')}
+              title={_('Allow scan of simultaneous IPs')}
               flex="column"
             >
               <YesNoRadio
