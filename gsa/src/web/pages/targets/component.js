@@ -20,18 +20,20 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {YES_VALUE} from 'gmp/parser';
+
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import withGmp from '../../utils/withGmp';
-import {UNSET_VALUE} from '../../utils/render.js';
+import EntityComponent from 'web/entity/component.js';
 
-import EntityComponent from '../../entity/component.js';
+import CredentialsDialog from 'web/pages/credentials/dialog.js';
 
-import CredentialsDialog from '../credentials/dialog.js';
+import PortListDialog from 'web/pages/portlists/dialog.js';
 
-import PortListDialog from '../portlists/dialog.js';
+import PropTypes from 'web/utils/proptypes.js';
+import withGmp from 'web/utils/withGmp';
+import {UNSET_VALUE} from 'web/utils/render.js';
 
 import TargetDialog from './dialog.js';
 
@@ -137,7 +139,7 @@ class TargetComponent extends React.Component {
 
       this.setState({
         targetDialogVisible: true,
-        allow_simultaneous_ips: 1,
+        allow_simultaneous_ips: YES_VALUE,
         alive_tests: undefined,
         comment: undefined,
         esxi_credential_id: undefined,
