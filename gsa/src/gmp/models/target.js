@@ -67,6 +67,8 @@ class Target extends Model {
       );
     }
 
+    ret.allow_simultaneous_ips = parseYesNo(element.allow_simultaneous_ips);
+
     return ret;
   }
 }
