@@ -5287,6 +5287,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *target_exclude_source;
   const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
   const char *alive_tests, *hosts_filter, *file, *exclude_file;
+  const char *allow_simultaneous_ips;
   gchar *ssh_credentials_element, *smb_credentials_element;
   gchar *esxi_credentials_element, *snmp_credentials_element;
   gchar *asset_hosts_element;
@@ -5312,6 +5313,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   hosts_filter = params_value (params, "hosts_filter");
   file = params_value (params, "file");
   exclude_file = params_value (params, "exclude_file");
+  allow_simultaneous_ips = params_value_bool (params, "allow_simultaneous_ips");
 
   CHECK_VARIABLE_INVALID (name, "Create Target");
   CHECK_VARIABLE_INVALID (target_source, "Create Target")
@@ -5343,6 +5345,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (target_esxi_credential, "Create Target");
   CHECK_VARIABLE_INVALID (target_snmp_credential, "Create Target");
   CHECK_VARIABLE_INVALID (alive_tests, "Create Target");
+  CHECK_VARIABLE_INVALID (allow_simultaneous_ips, "Create Target");
 
   if (comment != NULL)
     comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
@@ -5393,7 +5396,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
                      "<reverse_lookup_only>%s</reverse_lookup_only>"
                      "<reverse_lookup_unify>%s</reverse_lookup_unify>"
                      "<port_list id=\"%s\"/>"
-                     "<alive_tests>%s</alive_tests>",
+                     "<alive_tests>%s</alive_tests>"
+                     "<allow_simultaneous_ips>%s</allow_simultaneous_ips>",
                      name, strcmp (target_source, "file") == 0 ? file : hosts,
                      target_exclude_source
                        ? (strcmp (target_exclude_source, "file") == 0
@@ -5402,7 +5406,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
                        : "",
                      reverse_lookup_only ? reverse_lookup_only : "0",
                      reverse_lookup_unify ? reverse_lookup_unify : "0",
-                     port_list_id, alive_tests);
+                     port_list_id, alive_tests,
+                     allow_simultaneous_ips ? allow_simultaneous_ips : "1");
 
   command = g_strdup_printf ("<create_target>"
                              "%s%s%s%s%s%s%s"
@@ -6188,6 +6193,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *target_source, *target_exclude_source;
   const char *target_id, *port_list_id, *reverse_lookup_only;
   const char *reverse_lookup_unify, *alive_tests, *in_use;
+  const char *allow_simultaneous_ips;
   GString *command;
 
   alive_tests = params_value (params, "alive_tests");
@@ -6278,6 +6284,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   target_smb_credential = params_value (params, "smb_credential_id");
   target_esxi_credential = params_value (params, "esxi_credential_id");
   target_snmp_credential = params_value (params, "snmp_credential_id");
+  allow_simultaneous_ips = params_value_bool (params, "allow_simultaneous_ips");
 
   CHECK_VARIABLE_INVALID (target_source, "Save Target");
   CHECK_VARIABLE_INVALID (target_exclude_source, "Save Target");
@@ -6286,6 +6293,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (target_smb_credential, "Save Target");
   CHECK_VARIABLE_INVALID (target_esxi_credential, "Save Target");
   CHECK_VARIABLE_INVALID (target_snmp_credential, "Save Target");
+  CHECK_VARIABLE_INVALID (allow_simultaneous_ips, "Save Target");
 
   if (strcmp (target_ssh_credential, "--")
       && strcmp (target_ssh_credential, "0"))
@@ -6344,7 +6352,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
       "<reverse_lookup_only>%s</reverse_lookup_only>"
       "<reverse_lookup_unify>%s</reverse_lookup_unify>"
       "<port_list id=\"%s\"/>"
-      "<alive_tests>%s</alive_tests>",
+      "<alive_tests>%s</alive_tests>"
+      "<allow_simultaneous_ips>%s</allow_simultaneous_ips>",
       target_id, name,
       str_equal (target_source, "file") ? params_value (params, "file") : hosts,
       str_equal (target_exclude_source, "file")
@@ -6352,7 +6361,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
         : exclude_hosts,
       reverse_lookup_only ? reverse_lookup_only : "0",
       reverse_lookup_unify ? reverse_lookup_unify : "0", port_list_id,
-      alive_tests);
+      alive_tests,
+      allow_simultaneous_ips ? allow_simultaneous_ips : "1");
 
     g_string_append_printf (command,
                             "%s%s%s%s%s"
