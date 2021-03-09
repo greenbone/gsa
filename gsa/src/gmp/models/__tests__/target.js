@@ -87,6 +87,14 @@ describe('Target model tests', () => {
     expect(target.max_hosts).toEqual(42);
   });
 
+  test('should parse allow_simultaneous_ips', () => {
+    const target = Target.fromElement({allow_simultaneous_ips: '1'});
+    const target2 = Target.fromElement({allow_simultaneous_ips: '0'});
+
+    expect(target.allow_simultaneous_ips).toEqual(1);
+    expect(target2.allow_simultaneous_ips).toEqual(0);
+  });
+
   test('should parse reverse_lookup_only', () => {
     const target = Target.fromElement({reverse_lookup_only: '0'});
 
