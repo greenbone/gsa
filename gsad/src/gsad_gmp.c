@@ -5287,6 +5287,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *target_exclude_source;
   const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
   const char *alive_tests, *hosts_filter, *file, *exclude_file;
+  const char *allow_simultaneous_ips;
   gchar *ssh_credentials_element, *smb_credentials_element;
   gchar *esxi_credentials_element, *snmp_credentials_element;
   gchar *asset_hosts_element;
@@ -6192,6 +6193,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *target_source, *target_exclude_source;
   const char *target_id, *port_list_id, *reverse_lookup_only;
   const char *reverse_lookup_unify, *alive_tests, *in_use;
+  const char *allow_simultaneous_ips;
   GString *command;
 
   alive_tests = params_value (params, "alive_tests");
