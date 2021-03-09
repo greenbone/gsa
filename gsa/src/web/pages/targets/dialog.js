@@ -109,6 +109,7 @@ const NEW_SNMP = {
 
 const TargetDialog = ({
   alive_tests = ALIVE_TESTS_DEFAULT,
+  allow_simultaneous_ips = NO_VALUE,
   capabilities,
   comment = '',
   credentials = [],
@@ -160,6 +161,7 @@ const TargetDialog = ({
     reverse_lookup_unify,
     target_source,
     target_exclude_source,
+    allow_simultaneous_ips,
   };
 
   const controlledValues = {
@@ -291,6 +293,17 @@ const TargetDialog = ({
                   />
                 </Divider>
               </Divider>
+            </FormGroup>
+
+            <FormGroup
+              title={_('Allow scan of multiple IPs simultaneously')}
+              flex="column"
+            >
+              <YesNoRadio
+                name="allow_simultaneous_ips"
+                value={state.allow_simultaneous_ips}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             {capabilities.mayOp('get_port_lists') && (
@@ -454,6 +467,7 @@ const TargetDialog = ({
 
 TargetDialog.propTypes = {
   alive_tests: PropTypes.oneOf([ALIVE_TESTS_DEFAULT, ...ALIVE_TESTS]),
+  allow_simultaneous_ips: PropTypes.bool,
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   credentials: PropTypes.array,
