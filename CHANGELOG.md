@@ -7,10 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+- Add option to allow to scan simultaneous IPs to targets [#2779](https://github.com/greenbone/gsa/pull/2779)
 - Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
+- Move error message and adjust design on login page [#2780](https://github.com/greenbone/gsa/pull/2780)
 - Refactored useFormValidation hook [#2704](https://github.com/greenbone/gsa/pull/2704)
 - Updated copyright and footer layout [#2687](https://github.com/greenbone/gsa/pull/2687)
 - New login page layout
