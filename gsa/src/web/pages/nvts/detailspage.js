@@ -183,11 +183,11 @@ Details.propTypes = {
   overrides: PropTypes.array,
 };
 
-const open_dialog = (nvt, func) => {
-  func({
+const openDialog = (nvt, createFunction) => {
+  console.log(nvt);
+  createFunction({
     fixed: true,
-    nvt,
-    id: nvt.id,
+    oid: nvt.id,
   });
 };
 
@@ -277,7 +277,7 @@ const Page = () => {
           toolBarIcons={ToolBarIcons}
           onChanged={refetchAll}
           onInteraction={renewSessionTimeout}
-          onNoteCreateClick={notecreate}
+          onNoteCreateClick={nvt => openDialog(nvt, notecreate)}
           onNvtDownloadClick={handleDownloadNvt}
           onOverrideCreateClick={overridecreate}
         >
