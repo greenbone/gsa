@@ -146,29 +146,17 @@ class ScanConfig extends Model {
         : SCANCONFIG_TREND_STATIC;
     }
 
-    const nvtPreferences = [];
-    const scannerPreferences = [];
+    if (!hasValue(ret.nvtPreferences)) {
+      ret.nvtPreferences = [];
+    }
 
-    if (hasValue(object.preferences)) {
-      forEach(object.preferences, preference => {
-        const pref = {...preference};
-        if (hasValue(pref.nvt.name)) {
-          const nvt = {...pref.nvt};
-          pref.nvt = nvt;
-          pref.nvt.id = preference.nvt.id;
-
-          nvtPreferences.push(pref);
-        } else {
-          delete pref.nvt;
-
-          scannerPreferences.push(pref);
-        }
-      });
+    if (!hasValue(ret.scannerPreferences)) {
+      ret.scannerPreferences = [];
     }
 
     ret.preferences = {
-      scanner: scannerPreferences,
-      nvt: nvtPreferences,
+      scanner: ret.scannerPreferences,
+      nvt: ret.nvtPreferences,
     };
 
     if (hasValue(object.tasks)) {

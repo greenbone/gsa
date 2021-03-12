@@ -69,7 +69,7 @@ export const GET_SCAN_CONFIG = gql`
         maxNvtCount
         growing
       }
-      preferences {
+      nvtPreferences {
         nvt {
           id
           name
@@ -80,7 +80,16 @@ export const GET_SCAN_CONFIG = gql`
         type
         value
         default
-        alt
+        alternativeValues
+      }
+      scannerPreferences {
+        hrName
+        name
+        id
+        type
+        value
+        default
+        alternativeValues
       }
       tasks {
         name
@@ -149,7 +158,7 @@ export const GET_SCAN_CONFIGS = gql`
             maxNvtCount
             growing
           }
-          preferences {
+          nvtPreferences {
             nvt {
               id
               name
@@ -160,7 +169,16 @@ export const GET_SCAN_CONFIGS = gql`
             type
             value
             default
-            alt
+            alternativeValues
+          }
+          scannerPreferences {
+            hrName
+            name
+            id
+            type
+            value
+            default
+            alternativeValues
           }
           tasks {
             name

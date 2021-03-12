@@ -61,7 +61,7 @@ export const GET_POLICY = gql`
         maxNvtCount
         growing
       }
-      preferences {
+      nvtPreferences {
         nvt {
           id
           name
@@ -72,7 +72,16 @@ export const GET_POLICY = gql`
         type
         value
         default
-        alt
+        alternativeValues
+      }
+      scannerPreferences {
+        hrName
+        name
+        id
+        type
+        value
+        default
+        alternativeValues
       }
       nvtSelectors {
         name
@@ -80,7 +89,7 @@ export const GET_POLICY = gql`
         type
         familyOrNvt
       }
-      tasks {
+      audits {
         name
         id
       }
