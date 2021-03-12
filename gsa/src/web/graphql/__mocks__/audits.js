@@ -85,9 +85,10 @@ export const auditPolicy = deepFreeze({
   knownNvtCount: null,
   predefined: null,
   families: null,
-  preferences: null,
+  nvtPreferences: null,
+  scannerPreferences: null,
   nvtSelectors: null,
-  tasks: null,
+  audits: null,
 });
 
 export const auditDetailsPolicy = deepFreeze({
@@ -111,9 +112,10 @@ export const auditDetailsPolicy = deepFreeze({
   knownNvtCount: null,
   predefined: null,
   families: null,
-  preferences: null,
+  nvtPreferences: null,
+  scannerPreferences: null,
   nvtSelectors: null,
-  tasks: [
+  audits: [
     {id: '12345', name: 'foo'},
     {id: '678910', name: 'audit2'},
   ],

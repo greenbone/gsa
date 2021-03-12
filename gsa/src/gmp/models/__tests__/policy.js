@@ -159,7 +159,7 @@ describe('Policy model parseObject tests', () => {
 
   test('should parse preferences', () => {
     const obj = {
-      preferences: [
+      nvtPreferences: [
         {
           alt: ['postgres', 'regress'],
           default: 'postgres',
@@ -173,6 +173,8 @@ describe('Policy model parseObject tests', () => {
             name: 'PostgreSQL Detection',
           },
         },
+      ],
+      scannerPreferences: [
         {
           alt: ['a', 'b'],
           default: 'c',
@@ -181,10 +183,6 @@ describe('Policy model parseObject tests', () => {
           name: 'foo',
           type: 'bar',
           value: 'lorem',
-          nvt: {
-            id: null,
-            name: null,
-          },
         },
       ],
     };
@@ -243,7 +241,7 @@ describe('Policy model parseObject tests', () => {
 
   test('should parse audits', () => {
     const obj = {
-      tasks: [
+      audits: [
         {
           id: '123',
           name: 'foo',
