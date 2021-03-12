@@ -169,8 +169,6 @@ describe('Credential Detailspage tests', () => {
 
     const {baseElement, element} = render(<Detailspage id="6575" />);
 
-    expect(element).toMatchSnapshot();
-
     const links = baseElement.querySelectorAll('a');
 
     expect(screen.getAllByTitle('Help: Credentials')[0]).toBeInTheDocument();
