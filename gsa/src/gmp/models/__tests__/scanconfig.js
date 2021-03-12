@@ -232,7 +232,10 @@ describe('ScanConfig model parseObject tests', () => {
   });
 
   test('should return empty arrays if null preferences are given', () => {
-    const scanConfig = ScanConfig.fromObject({preferences: null});
+    const scanConfig = ScanConfig.fromObject({
+      nvtPreferences: null,
+      scannerPreferences: null,
+    });
 
     expect(scanConfig.preferences.scanner).toEqual([]);
     expect(scanConfig.preferences.nvt).toEqual([]);

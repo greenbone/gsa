@@ -227,7 +227,10 @@ describe('Policy model parseObject tests', () => {
   });
 
   test('should return empty arrays if null preferences are given', () => {
-    const policy = Policy.fromObject({preferences: null});
+    const policy = Policy.fromObject({
+      nvtPreferences: null,
+      scannerPreferences: null,
+    });
 
     expect(policy.preferences.scanner).toEqual([]);
     expect(policy.preferences.nvt).toEqual([]);
