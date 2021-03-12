@@ -74,7 +74,7 @@ import withComponentDefaults from 'web/utils/withComponentDefaults';
 import TargetDetails from './details';
 import TargetComponent from './component';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   onTargetCloneClick,
   onTargetCreateClick,
