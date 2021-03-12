@@ -43,18 +43,20 @@ import TargetsFilterDialog from './filterdialog';
 import TargetsTable from './table';
 import TargetComponent from './component';
 
-const ToolBarIcons = withCapabilities(({capabilities, onTargetCreateClick}) => (
-  <IconDivider>
-    <ManualIcon
-      page="scanning"
-      anchor="managing-targets"
-      title={_('Help: Targets')}
-    />
-    {capabilities.mayCreate('target') && (
-      <NewIcon title={_('New Target')} onClick={onTargetCreateClick} />
-    )}
-  </IconDivider>
-));
+export const ToolBarIcons = withCapabilities(
+  ({capabilities, onTargetCreateClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="scanning"
+        anchor="managing-targets"
+        title={_('Help: Targets')}
+      />
+      {capabilities.mayCreate('target') && (
+        <NewIcon title={_('New Target')} onClick={onTargetCreateClick} />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onTargetCreateClick: PropTypes.func.isRequired,
