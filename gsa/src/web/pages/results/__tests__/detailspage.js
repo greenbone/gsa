@@ -66,7 +66,15 @@ export const result = Result.fromElement({
     name: 'nvt1',
     tags:
       'cvss_base_vector=AV:N/AC:M/Au:N/C:P/I:N/A:N|summary=This is a mock result|insight=This is just a test|affected=Affects test cases only|impact=No real impact|solution=Keep writing tests|vuldetect=This is the detection method|solution_type=Mitigation',
-    refs: {ref: [{_type: 'cve', _id: 'CVE-2019-1234'}]},
+    refs: {
+      ref: [
+        {_type: 'cve', _id: 'CVE-2019-1234'},
+        {_type: 'bid', _id: '75750'},
+        {_type: 'cert-bund', _id: 'CB-K12/3456'},
+        {_type: 'dfn-cert', _id: 'DFN-CERT-2019-1234'},
+        {_type: 'url', _id: 'www.foo.bar'},
+      ],
+    },
     solution: {
       _type: 'Mitigation',
       __text: 'Keep writing tests',
@@ -200,7 +208,7 @@ describe('Result Detailspage tests', () => {
     );
     expect(baseElement).toHaveTextContent('Version used: 2019-02-14T07:33:50Z');
 
-    expect(heading[6]).toHaveTextContent('Affected Software');
+    expect(heading[6]).toHaveTextContent('Affected Software/OS');
     expect(baseElement).toHaveTextContent('Affects test cases only');
 
     expect(heading[7]).toHaveTextContent('Impact');
@@ -216,6 +224,15 @@ describe('Result Detailspage tests', () => {
     expect(
       screen.getByTitle('View Details of CVE-2019-1234'),
     ).toHaveTextContent('CVE-2019-1234');
+    expect(baseElement).toHaveTextContent('BID75750');
+    expect(
+      screen.getByTitle('View details of DFN-CERT Advisory DFN-CERT-2019-1234'),
+    ).toHaveTextContent('DFN-CERT-2019-1234');
+
+    expect(
+      screen.getByTitle('View details of CERT-Bund Advisory CB-K12&#x2F;3456'),
+    ).toHaveTextContent('CB-K12/3456');
+    expect(baseElement).toHaveTextContent('Otherhttp://www.foo.bar');
   });
 
   test('should render user tags tab', () => {
