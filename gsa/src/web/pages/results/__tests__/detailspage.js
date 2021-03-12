@@ -90,6 +90,28 @@ export const result = Result.fromElement({
     ticket: [{id: '265'}],
   },
   scan_nvt_version: '2019-02-14T07:33:50Z',
+  notes: {
+    note: [
+      {
+        _id: '358',
+        text: 'TestNote',
+        modification_time: '2021-03-11T13:00:32Z',
+        active: 1,
+      },
+    ],
+  },
+  overrides: {
+    override: [
+      {
+        _id: '979',
+        text: 'TestOverride',
+        modification_time: '2021-03-12T13:00:32Z',
+        severity: 5.0,
+        new_severity: 6.0,
+        active: 1,
+      },
+    ],
+  },
 });
 
 // mock gmp commands
@@ -188,6 +210,9 @@ describe('Result Detailspage tests', () => {
     expect(heading[1]).toHaveTextContent('Vulnerability');
     expect(baseElement).toHaveTextContent('Namefoo');
     expect(baseElement).toHaveTextContent('Severity5.0 (Medium)');
+    expect(
+      screen.getAllByTitle('There are overrides for this result')[0],
+    ).toBeInTheDocument();
     expect(baseElement).toHaveTextContent('QoD80 %');
     expect(baseElement).toHaveTextContent('Host109.876.54.321');
     expect(baseElement).toHaveTextContent('Location80/tcp');
@@ -233,6 +258,18 @@ describe('Result Detailspage tests', () => {
       screen.getByTitle('View details of CERT-Bund Advisory CB-K12&#x2F;3456'),
     ).toHaveTextContent('CB-K12/3456');
     expect(baseElement).toHaveTextContent('Otherhttp://www.foo.bar');
+
+    expect(screen.getAllByTitle('Override Details')[0]).toBeInTheDocument();
+    expect(baseElement).toHaveTextContent('TestOverride');
+    expect(baseElement).toHaveTextContent(
+      'ModifiedFri, Mar 12, 2021 2:00 PM CET',
+    );
+
+    expect(screen.getAllByTitle('Note Details')[0]).toBeInTheDocument();
+    expect(baseElement).toHaveTextContent('TestNote');
+    expect(baseElement).toHaveTextContent(
+      'ModifiedThu, Mar 11, 2021 2:00 PM CET',
+    );
   });
 
   test('should render user tags tab', () => {
