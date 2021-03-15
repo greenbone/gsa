@@ -93,25 +93,24 @@ const CreateModifyNoteComponent = () => {
   const [createNote] = useCreateNote();
   const [modifyNote] = useModifyNote();
 
-  const handleCreateResult = resp => {
-    const {data} = resp;
-    setNotification('Note created with id ' + data.createNote.id + '.');
+  const handleCreateNote = id => {
+    setNotification(`Note created with id ${id}.`);
   };
 
-  const handleModifyResult = resp => {
+  const handleModifyNote = resp => {
     const {data} = resp;
-    setNotification('Note modified with ok=' + data.modifyNote.ok + '.');
+    setNotification(`Note modified with ok=${data.modifyNote.ok}.`);
   };
 
   return (
     <div>
       <Button
         title={'Create Note'}
-        onClick={() => createNote(createNoteInput).then(handleCreateResult)}
+        onClick={() => createNote(createNoteInput).then(handleCreateNote)}
       />
       <Button
         title={'Modify Note'}
-        onClick={() => modifyNote(modifyNoteInput).then(handleModifyResult)}
+        onClick={() => modifyNote(modifyNoteInput).then(handleModifyNote)}
       />
       <h3 data-testid="notification">{notification}</h3>
     </div>

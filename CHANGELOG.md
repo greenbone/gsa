@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Refactor credential dialog into function component [#2772](https://github.com/greenbone/gsa/pull/2772)
 - Implement cpes listpage queries and mutations [#2757](https://github.com/greenbone/gsa/pull/2757)
 - Implement audit listpage queries and mutations [#2752](https://github.com/greenbone/gsa/pull/2752)
 - Implement cves listpage queries and mutations [#2742](https://github.com/greenbone/gsa/pull/2742)
@@ -57,6 +58,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
 
 ### Fixed
+- Fixed redirection of createNote on Note detailspage [#2777](https://github.com/greenbone/gsa/pull/2777)
 - Fixed ScanConfigs and Policies page after changes in [Hyperion](https://github.com/greenbone/hyperion/pull/15) [#2733](https://github.com/greenbone/gsa/pull/2733)
 - Fixed reload interval for pages using useEntityReloadInterval and useEntitiesReloadInterval hooks [#2716](https://github.com/greenbone/gsa/pull/2716)
 

@@ -65,7 +65,7 @@ const NoteComponent = ({
   onSaved,
   onSaveError,
 }) => {
-  const [state, dispatch] = useReducer(reducer, {dialogVisible: false});
+  const [state, dispatchState] = useReducer(reducer, {dialogVisible: false});
   const [createNote] = useCreateNote();
   const [modifyNote] = useModifyNote();
 
@@ -82,46 +82,46 @@ const NoteComponent = ({
 
       const {hosts, nvt, task, result, port} = note;
 
-      dispatch(
+      dispatchState(
         updateState({
           dialogVisible: true,
           id: note.id,
           active,
           hosts: isDefined(hosts) && hosts.length > 0 ? MANUAL : ANY,
-          hosts_manual: isArray(hosts) ? hosts.join(',') : undefined,
+          hostsManual: isArray(hosts) ? hosts.join(',') : undefined,
           port: isDefined(port) ? MANUAL : ANY,
-          port_manual: port,
-          oid: isDefined(nvt) ? nvt.oid : undefined,
+          portManual: port,
+          nvtId: isDefined(nvt) ? nvt.id : undefined,
           note,
-          nvt_name: isDefined(nvt) ? nvt.name : undefined,
-          task_id: hasId(task) ? TASK_SELECTED : TASK_ANY,
-          task_uuid: hasId(task) ? task.id : undefined,
-          result_id: hasId(result) ? RESULT_UUID : RESULT_ANY,
-          result_uuid: hasId(result) ? result.id : undefined,
+          nvtName: isDefined(nvt) ? nvt.name : undefined,
+          taskId: hasId(task) ? TASK_SELECTED : TASK_ANY,
+          taskUuid: hasId(task) ? task.id : undefined,
+          resultId: hasId(result) ? RESULT_UUID : RESULT_ANY,
+          resultUuid: hasId(result) ? result.id : undefined,
           severity: note.severity,
           text: note.text,
           title: _('Edit Note {{name}}', {name: shorten(note.text, 20)}),
         }),
       );
     } else {
-      dispatch(
+      dispatchState(
         updateState({
           dialogVisible: true,
           active: undefined,
           hosts: undefined,
-          hosts_manual: undefined,
+          hostsManual: undefined,
           id: undefined,
           note: undefined,
-          nvt_name: undefined,
-          oid: undefined,
+          nvtName: undefined,
+          nvtId: undefined,
           port: undefined,
-          port_manual: undefined,
-          result_id: undefined,
-          result_uuid: undefined,
+          portManual: undefined,
+          resultId: undefined,
+          resultUuid: undefined,
           severity: undefined,
-          task_id: undefined,
-          task_name: undefined,
-          task_uuid: undefined,
+          taskId: undefined,
+          taskName: undefined,
+          taskUuid: undefined,
           text: undefined,
           title: undefined,
           ...initial,
@@ -134,7 +134,7 @@ const NoteComponent = ({
   };
 
   const closeNoteDialog = () => {
-    dispatch(updateState({dialogVisible: false}));
+    dispatchState(updateState({dialogVisible: false}));
   };
 
   const handleCloseNoteDialog = () => {
@@ -154,14 +154,14 @@ const NoteComponent = ({
     handleInteraction();
 
     const {
-      severity,
       active,
       days,
-      hosts_manual,
+      hostsManual,
       id,
-      port_manual,
-      result_uuid,
-      task_uuid,
+      portManual,
+      severity,
+      resultUuid,
+      taskUuid,
       text,
     } = data;
 
@@ -176,10 +176,10 @@ const NoteComponent = ({
       id,
       severity,
       daysActive,
-      hosts: hosts_manual.split(','),
-      port: port_manual,
-      taskId: task_uuid,
-      resultId: result_uuid,
+      hosts: hostsManual.split(','),
+      port: portManual,
+      taskId: taskUuid,
+      resultId: resultUuid,
       text,
     };
 
@@ -191,7 +191,7 @@ const NoteComponent = ({
 
     const createData = {
       ...modifyData,
-      nvtOid: isDefined(data?.oid) ? data.oid : DEFAULT_OID_VALUE,
+      nvtOid: isDefined(data?.nvtId) ? data.nvtId : DEFAULT_OID_VALUE,
       id: undefined,
     };
 
@@ -210,17 +210,17 @@ const NoteComponent = ({
     dialogVisible,
     active,
     hosts,
-    hosts_manual,
+    hostsManual,
     id,
-    oid,
+    nvtId,
     note,
-    nvt_name,
+    nvtName,
     port,
-    result_id,
-    result_uuid,
+    resultId,
+    resultUuid,
     severity,
-    task_id,
-    task_uuid,
+    taskId,
+    taskUuid,
     text,
     title,
     ...initial
@@ -252,17 +252,17 @@ const NoteComponent = ({
             <NoteDialog
               active={active}
               hosts={hosts}
-              hosts_manual={hosts_manual}
+              hostsManual={hostsManual}
               id={id}
-              oid={oid}
+              nvtId={nvtId}
               note={note}
-              nvt_name={nvt_name}
+              nvtName={nvtName}
               port={port}
-              result_id={result_id}
-              result_uuid={result_uuid}
+              resultId={resultId}
+              resultUuid={resultUuid}
               severity={severity}
-              task_id={task_id}
-              task_uuid={task_uuid}
+              taskId={taskId}
+              taskUuid={taskUuid}
               tasks={tasks}
               text={text}
               title={title}
