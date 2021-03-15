@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use <predefined> to disable feed object editing and filter creation on feed status page [#2398](https://github.com/greenbone/gsa/pull/2398)
 
 ### Fixed
+- Fix default port value for scanner dialog [#2773](https://github.com/greenbone/gsa/pull/2773)
 - Stop growing of toolbars which only have the help icon [#2641](https://github.com/greenbone/gsa/pull/2641)
 - Fixed initial value of dropdown for including related resources for permissions [#2632](https://github.com/greenbone/gsa/pull/2632)
 - Fixed compiling gsad with libmicrohttp 0.9.71 and later [#2625](https://github.com/greenbone/gsa/pull/2625)

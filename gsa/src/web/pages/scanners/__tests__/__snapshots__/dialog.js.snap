@@ -899,7 +899,7 @@ exports[`ScannerDialog component tests should render 1`] = `
                         class="c12 c13"
                         name="port"
                         type="text"
-                        value="9391"
+                        value="22"
                       />
                       <div
                         class="c14"
