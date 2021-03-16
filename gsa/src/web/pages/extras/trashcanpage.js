@@ -372,7 +372,11 @@ class Trashcan extends React.Component {
       <React.Fragment>
         <PageTitle title={_('Trashcan')} />
         <Layout flex="column">
-          <ToolBarIcons />
+          <span>
+            {' '}
+            {/* span prevents Toolbar from growing */}
+            <ToolBarIcons />
+          </span>
           {error && (
             <ErrorDialog
               text={error.message}
@@ -560,10 +564,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    undefined,
-    mapDispatchToProps,
-  ),
+  connect(undefined, mapDispatchToProps),
 )(Trashcan);
 
 // vim: set ts=2 sw=2 tw=80:
