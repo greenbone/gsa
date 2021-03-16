@@ -104,7 +104,6 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('alert');
   const prevFilter = usePrevious(filter);
-  const simpleFilter = filter.withoutView();
   const {
     change: changeFilter,
     remove: removeFilter,
@@ -157,7 +156,6 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
 
   // Pagination methods
   const [getFirst, getLast, getNext, getPrevious] = usePagination({
-    simpleFilter,
     filter,
     pageInfo,
     refetch,
@@ -234,7 +232,7 @@ const AlertsPage = ({onChanged, onDownloaded, onError, ...props}) => {
         last: undefined,
       });
     }
-  }, [filter, prevFilter, simpleFilter, refetch]);
+  }, [filter, prevFilter, refetch]);
 
   useEffect(() => {
     // start reloading if alerts are available and no timer is running yet

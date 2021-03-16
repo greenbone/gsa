@@ -96,7 +96,6 @@ const Page = () => {
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('audit');
   const prevFilter = usePrevious(filter);
-  const simpleFilter = filter.withoutView();
   const {
     change: changeFilter,
     remove: removeFilter,
@@ -145,7 +144,6 @@ const Page = () => {
 
   // Pagination methods
   const [getFirst, getLast, getNext, getPrevious] = usePagination({
-    simpleFilter,
     filter,
     pageInfo,
     refetch,
@@ -219,7 +217,7 @@ const Page = () => {
         last: undefined,
       });
     }
-  }, [filter, prevFilter, simpleFilter, refetch]);
+  }, [filter, prevFilter, refetch]);
 
   useEffect(() => {
     // start reloading if audits are available and no timer is running yet
