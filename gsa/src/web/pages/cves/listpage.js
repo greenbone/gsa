@@ -75,7 +75,6 @@ const CvesPage = () => {
   const fallbackFilter = Filter.fromString('sort-reverse=name');
   const [filter, isLoadingFilter] = usePageFilter('cve', {fallbackFilter});
   const prevFilter = usePrevious(filter);
-  const simpleFilter = filter.withoutView();
   const {
     change: changeFilter,
     remove: removeFilter,
@@ -118,7 +117,6 @@ const CvesPage = () => {
 
   // Pagination methods
   const [getFirst, getLast, getNext, getPrevious] = usePagination({
-    simpleFilter,
     filter,
     pageInfo,
     refetch,
@@ -171,7 +169,7 @@ const CvesPage = () => {
         last: undefined,
       });
     }
-  }, [filter, prevFilter, simpleFilter, refetch]);
+  }, [filter, prevFilter, refetch]);
 
   useEffect(() => {
     // start reloading if cves are available and no timer is running yet

@@ -136,7 +136,6 @@ const TasksListPage = () => {
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('task');
   const prevFilter = usePrevious(filter);
-  const simpleFilter = filter.withoutView();
   const {
     change: changeFilter,
     remove: removeFilter,
@@ -184,7 +183,6 @@ const TasksListPage = () => {
 
   // Pagination methods
   const [getFirst, getLast, getNext, getPrevious] = usePagination({
-    simpleFilter,
     filter,
     pageInfo,
     refetch,
@@ -258,7 +256,7 @@ const TasksListPage = () => {
         last: undefined,
       });
     }
-  }, [filter, prevFilter, simpleFilter, refetch]);
+  }, [filter, prevFilter, refetch]);
 
   useEffect(() => {
     // start reloading if tasks are available and no timer is running yet
