@@ -401,7 +401,11 @@ class StartPage extends React.Component {
     return (
       <React.Fragment>
         <PageTitle title={_('Dashboards')} />
-        <ToolBarIcons />
+        <span>
+          {' '}
+          {/* span prevents Toolbar from growing */}
+          <ToolBarIcons />
+        </span>
         <Section title={_('Dashboards')} img={<DashboardIcon size="large" />}>
           {isLoading ? (
             <Loading />
@@ -557,10 +561,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(StartPage);
 
 // vim: set ts=2 sw=2 tw=80:

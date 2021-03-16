@@ -37,7 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...gsa-21.04
 
-## [20.8.1] - unreleased
+## [20.8.1] - 2021-02-02
 
 ### Added
 - Added icon to host detailspage to link to TLS certificates [#2624](https://github.com/greenbone/gsa/pull/2624)
@@ -59,6 +59,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use <predefined> to disable feed object editing and filter creation on feed status page [#2398](https://github.com/greenbone/gsa/pull/2398)
 
 ### Fixed
+- Fix default port value for scanner dialog [#2773](https://github.com/greenbone/gsa/pull/2773)
+- Stop growing of toolbars which only have the help icon [#2641](https://github.com/greenbone/gsa/pull/2641)
 - Fixed initial value of dropdown for including related resources for permissions [#2632](https://github.com/greenbone/gsa/pull/2632)
 - Fixed compiling gsad with libmicrohttp 0.9.71 and later [#2625](https://github.com/greenbone/gsa/pull/2625)
 - Fixed display of alert condition "Severity changed" [#2623](https://github.com/greenbone/gsa/pull/2623)
@@ -73,7 +75,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove secinfo filter from user settings dialog and elsewhere [#2495](https://github.com/greenbone/gsa/pull/2495)
 - Removed export/download for report formats [#2427](https://github.com/greenbone/gsa/pull/2427)
 
-[20.8.1]: https://github.com/greenbone/gsa/compare/v20.8.0...gsa-20.08
+[20.8.1]: https://github.com/greenbone/gsa/compare/v20.8.0...v20.8.1
 
 ## [20.8.0] - 2020-08-11
 

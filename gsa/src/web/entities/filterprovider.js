@@ -127,7 +127,7 @@ const FilterProvider = ({
   }
 
   if (!returnedFilter.has('rows') && isDefined(rowsPerPage)) {
-    returnedFilter.set('rows', rowsPerPage);
+    returnedFilter = returnedFilter.copy().set('rows', rowsPerPage);
   }
 
   const showChildren =

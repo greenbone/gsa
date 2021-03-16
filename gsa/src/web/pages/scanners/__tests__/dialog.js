@@ -127,7 +127,7 @@ describe('ScannerDialog component tests', () => {
     expect(inputs[2]).toHaveAttribute('value', 'localhost');
 
     expect(inputs[3]).toHaveAttribute('name', 'port');
-    expect(inputs[3]).toHaveAttribute('value', '9391');
+    expect(inputs[3]).toHaveAttribute('value', '22');
 
     const selectedValues = getAllByTestId('select-selected-value');
 
@@ -221,7 +221,7 @@ describe('ScannerDialog component tests', () => {
       credential_id: '5678',
       type: 1,
       id: '1234',
-      port: '9391',
+      port: '22',
       which_cert: undefined,
     });
   });
@@ -275,7 +275,7 @@ describe('ScannerDialog component tests', () => {
       credential_id: '5678',
       type: 1,
       id: '1234',
-      port: '9391',
+      port: '22',
       which_cert: undefined,
     });
   });
