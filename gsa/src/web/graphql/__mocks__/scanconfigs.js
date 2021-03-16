@@ -58,9 +58,9 @@ export const nonWritableConfig = deepFreeze({
   ],
   permissions: [{name: 'Everything'}],
   predefined: true,
-  preferences: [
+  nvtPreferences: [
     {
-      alt: ['postgres', 'regress'],
+      alternativeValues: ['postgres', 'regress'],
       default: 'postgres',
       hrName: 'Postgres Username:',
       id: 1,
@@ -71,6 +71,17 @@ export const nonWritableConfig = deepFreeze({
         id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
+    },
+  ],
+  scannerPreferences: [
+    {
+      alternativeValues: ['foo', 'bar'],
+      default: '1',
+      hrName: 'scanner_pref',
+      id: null,
+      name: 'scanner_pref',
+      type: null,
+      value: '1',
     },
   ],
   tasks: [
@@ -111,19 +122,30 @@ export const inUseConfig = deepFreeze({
   ],
   permissions: [{name: 'Everything'}],
   predefined: false,
-  preferences: [
+  nvtPreferences: [
     {
-      alt: null,
+      alternativeValues: ['postgres', 'regress'],
       default: 'postgres',
       hrName: 'Postgres Username:',
       id: 1,
       name: 'Postgres Username:',
       type: 'entry',
-      value: 'postgres',
+      value: 'regress',
       nvt: {
         id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
+    },
+  ],
+  scannerPreferences: [
+    {
+      alternativeValues: ['foo', 'bar'],
+      default: '1',
+      hrName: 'scanner_pref',
+      id: null,
+      name: 'scanner_pref',
+      type: null,
+      value: '1',
     },
   ],
   tasks: [
@@ -164,19 +186,30 @@ export const editableConfig = deepFreeze({
   ],
   permissions: [{name: 'Everything'}],
   predefined: false,
-  preferences: [
+  nvtPreferences: [
     {
-      alt: null,
+      alternativeValues: ['postgres', 'regress'],
       default: 'postgres',
       hrName: 'Postgres Username:',
       id: 1,
       name: 'Postgres Username:',
       type: 'entry',
-      value: 'postgres',
+      value: 'regress',
       nvt: {
         id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
+    },
+  ],
+  scannerPreferences: [
+    {
+      alternativeValues: ['foo', 'bar'],
+      default: '1',
+      hrName: 'scanner_pref',
+      id: null,
+      name: 'scanner_pref',
+      type: null,
+      value: '1',
     },
   ],
   tasks: [
@@ -217,19 +250,30 @@ export const noPermConfig = deepFreeze({
   ],
   permissions: null,
   predefined: false,
-  preferences: [
+  nvtPreferences: [
     {
-      alt: null,
+      alternativeValues: ['postgres', 'regress'],
       default: 'postgres',
       hrName: 'Postgres Username:',
       id: 1,
       name: 'Postgres Username:',
       type: 'entry',
-      value: 'postgres',
+      value: 'regress',
       nvt: {
         id: '1.3.6.1.4.1.25623.1.0.100151',
         name: 'PostgreSQL Detection',
       },
+    },
+  ],
+  scannerPreferences: [
+    {
+      alternativeValues: ['foo', 'bar'],
+      default: '1',
+      hrName: 'scanner_pref',
+      id: null,
+      name: 'scanner_pref',
+      type: null,
+      value: '1',
     },
   ],
   tasks: [
