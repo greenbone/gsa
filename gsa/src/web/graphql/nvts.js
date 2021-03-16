@@ -64,8 +64,20 @@ export const GET_NVT = gql`
         type
         vector
       }
-      refWarning
-      refs {
+      referenceWarning
+      cveReferences {
+        id
+        type
+      }
+      bidReferences {
+        id
+        type
+      }
+      certReferences {
+        id
+        type
+      }
+      otherReferences {
         id
         type
       }
@@ -74,22 +86,18 @@ export const GET_NVT = gql`
         summary
         insight
         impact
-        vuldetect
+        detectionMethod
         affected
       }
       preferenceCount
       preferences {
-        nvt {
-          id
-          name
-        }
         hrName
         name
         id
         type
         value
         default
-        alt
+        alternativeValues
       }
       timeout
       defaultTimeout
@@ -155,8 +163,20 @@ export const GET_NVTS = gql`
             type
             vector
           }
-          warning
-          refs {
+          referenceWarning
+          cveReferences {
+            id
+            type
+          }
+          bidReferences {
+            id
+            type
+          }
+          certReferences {
+            id
+            type
+          }
+          otherReferences {
             id
             type
           }
@@ -165,22 +185,18 @@ export const GET_NVTS = gql`
             summary
             insight
             impact
-            vuldetect
+            detectionMethod
             affected
           }
           preferenceCount
           preferences {
-            nvt {
-              id
-              name
-            }
             hrName
             name
             id
             type
             value
             default
-            alt
+            alternativeValues
           }
           timeout
           defaultTimeout

@@ -60,8 +60,6 @@ import EntityTags from 'web/entity/tags';
 import {useLazyGetNotes} from 'web/graphql/notes';
 import {useLazyGetOverrides} from 'web/graphql/overrides';
 
-import {useGetPermissions} from 'web/graphql/permissions';
-
 import PropTypes from 'web/utils/proptypes';
 
 import useDownload from 'web/components/form/useDownload';
@@ -149,7 +147,6 @@ ToolBarIcons.propTypes = {
 const Details = ({entity, notes = [], overrides = []}) => {
   overrides = overrides.filter(override => override.isActive());
   notes = notes.filter(note => note.isActive());
-
   return (
     <Layout flex="column">
       <NvtDetails entity={entity} />
@@ -183,11 +180,11 @@ Details.propTypes = {
   overrides: PropTypes.array,
 };
 
-const openDialog = (nvt, createFunction) => {
-  console.log(nvt);
+const openDialog = (id, createFunction) => {
+  console.log(id);
   createFunction({
     fixed: true,
-    oid: nvt.id,
+    oid: id,
   });
 };
 
@@ -207,10 +204,6 @@ const Page = () => {
 
   // Load nvt related entities
   const {nvt, refetch: refetchAll, loading, error: entityError} = useGetNvt(id);
-
-  const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
-    filterString: permissionsResourceFilter(id).toFilterString(),
-  });
 
   const [loadNotes, {notes}] = useLazyGetNotes({
     filterString: 'nvt_id:' + id,
@@ -277,7 +270,7 @@ const Page = () => {
           toolBarIcons={ToolBarIcons}
           onChanged={refetchAll}
           onInteraction={renewSessionTimeout}
-          onNoteCreateClick={nvt => openDialog(nvt, notecreate)}
+          onNoteCreateClick={notecreate}
           onNvtDownloadClick={handleDownloadNvt}
           onOverrideCreateClick={overridecreate}
         >

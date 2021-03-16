@@ -85,7 +85,7 @@ const Row = ({
       </TableData>
       <TableData>
         <Divider wrap>
-          {entity.cves.map(id => (
+          {entity.cveReferences.map(id => (
             <CveLink key={id} id={id} textOnly={!links} />
           ))}
         </Divider>

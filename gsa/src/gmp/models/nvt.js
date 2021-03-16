@@ -60,16 +60,16 @@ export const getRefs = element => {
 };
 
 export const hasRefType = refType => (ref = {}) =>
-  isString(ref.type) && ref.type.toLowerCase() === refType;
+  isString(ref._type) && ref._type.toLowerCase() === refType;
 
 export const getFilteredRefIds = (refs = [], type) => {
   const filteredRefs = refs.filter(hasRefType(type));
-  return filteredRefs.map(ref => ref.id);
+  return filteredRefs.map(ref => ref._id);
 };
 
 const getFilteredUrlRefs = (refs = []) => {
   return refs.filter(hasRefType('url')).map(ref => {
-    let id = ref.id;
+    let id = ref._id;
     if (
       !id.startsWith('http://') &&
       !id.startsWith('https://') &&
@@ -87,14 +87,14 @@ const getFilteredUrlRefs = (refs = []) => {
 
 const getFilteredRefs = (refs = [], type) =>
   refs.filter(hasRefType(type)).map(ref => ({
-    id: ref.id,
+    id: ref._id,
     type,
   }));
 
 const getOtherRefs = (refs = []) => {
   const filteredRefs = refs.filter(ref => {
-    const referenceType = isString(ref.type)
-      ? ref.type.toLowerCase()
+    const referenceType = isString(ref._type)
+      ? ref._type.toLowerCase()
       : undefined;
     return (
       referenceType !== 'url' &&
@@ -108,7 +108,7 @@ const getOtherRefs = (refs = []) => {
   });
   const returnRefs = filteredRefs.map(ref => {
     return {
-      ref: ref.id,
+      ref: ref._id,
       type: isString(ref._type) ? ref._type.toLowerCase() : 'other',
     };
   });
@@ -131,23 +131,6 @@ class Nvt extends Info {
       ret.preferenceCount = ret.preferences.length;
     }
 
-    ret.cves = getFilteredRefIds(ret.refs, 'cve').concat(
-      getFilteredRefIds(ret.refs, 'cve_id'),
-    );
-    ret.bids = getFilteredRefIds(ret.refs, 'bid').concat(
-      getFilteredRefIds(ret.refs, 'bugtraq_id'),
-    );
-
-    ret.certs = getFilteredRefs(ret.refs, 'dfn-cert').concat(
-      getFilteredRefs(ret.refs, 'cert-bund'),
-    );
-
-    ret.xrefs = getFilteredUrlRefs(ret.refs, 'url').concat(
-      getOtherRefs(ret.refs),
-    );
-
-    delete ret.refs;
-
     return ret;
   }
 
@@ -158,17 +141,20 @@ class Nvt extends Info {
 
     ret.id = isEmpty(ret._oid) ? undefined : ret._oid;
     ret.tags = parseTags(ret.tags);
+    if (isDefined(ret.tags.vuldetect)) {
+      ret.tags.detectionMethod = ret.tags.vuldetect;
+    }
 
     const refs = getRefs(ret);
 
-    ret.cves = getFilteredRefIds(refs, 'cve').concat(
+    ret.cveReferences = getFilteredRefIds(refs, 'cve').concat(
       getFilteredRefIds(refs, 'cve_id'),
     );
-    ret.bids = getFilteredRefIds(refs, 'bid').concat(
+    ret.bidReferences = getFilteredRefIds(refs, 'bid').concat(
       getFilteredRefIds(refs, 'bugtraq_id'),
     );
 
-    ret.certs = getFilteredRefs(refs, 'dfn-cert').concat(
+    ret.certReferences = getFilteredRefs(refs, 'dfn-cert').concat(
       getFilteredRefs(refs, 'cert-bund'),
     );
 
@@ -180,7 +166,9 @@ class Nvt extends Info {
       };
     }
 
-    ret.xrefs = getFilteredUrlRefs(refs, 'url').concat(getOtherRefs(refs));
+    ret.otherReferences = getFilteredUrlRefs(refs, 'url').concat(
+      getOtherRefs(refs),
+    );
 
     delete ret.refs;
 
