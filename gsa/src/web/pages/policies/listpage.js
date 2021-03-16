@@ -98,7 +98,6 @@ const PoliciesPage = props => {
   const [, renewSessionTimeout] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('policy');
   const prevFilter = usePrevious(filter);
-  const simpleFilter = filter.withoutView();
   const {
     change: changeFilter,
     remove: removeFilter,
@@ -150,7 +149,6 @@ const PoliciesPage = props => {
   );
 
   const [getFirst, getLast, getNext, getPrevious] = usePagination({
-    simpleFilter,
     filter,
     pageInfo,
     refetch,
@@ -223,7 +221,7 @@ const PoliciesPage = props => {
         last: undefined,
       });
     }
-  }, [filter, prevFilter, simpleFilter, refetch]);
+  }, [filter, prevFilter, refetch]);
 
   useEffect(() => {
     // start reloading if policies are available and no timer is running yet

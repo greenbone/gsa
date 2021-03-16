@@ -110,7 +110,6 @@ const ScanConfigsPage = props => {
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('scanconfig');
   const prevFilter = usePrevious(filter);
-  const simpleFilter = filter.withoutView();
   const {
     change: changeFilter,
     remove: removeFilter,
@@ -141,7 +140,6 @@ const ScanConfigsPage = props => {
   ] = useLazyGetScanConfigs();
 
   const [getFirst, getLast, getNext, getPrevious] = usePagination({
-    simpleFilter,
     filter,
     pageInfo,
     refetch,
@@ -243,7 +241,7 @@ const ScanConfigsPage = props => {
         last: undefined,
       });
     }
-  }, [filter, prevFilter, simpleFilter, refetch]);
+  }, [filter, prevFilter, refetch]);
 
   useEffect(() => {
     // start reloading if scanConfigs are available and no timer is running yet

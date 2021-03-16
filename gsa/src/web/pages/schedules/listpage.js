@@ -100,7 +100,6 @@ const SchedulesPage = () => {
   const [, renewSessionTimeout] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('schedule');
   const prevFilter = usePrevious(filter);
-  const simpleFilter = filter.withoutView();
   const {
     change: changeFilter,
     remove: removeFilter,
@@ -154,7 +153,6 @@ const SchedulesPage = () => {
 
   // Pagination methods
   const [getFirst, getLast, getNext, getPrevious] = usePagination({
-    simpleFilter,
     filter,
     pageInfo,
     refetch,
@@ -237,7 +235,7 @@ const SchedulesPage = () => {
         last: undefined,
       });
     }
-  }, [filter, prevFilter, simpleFilter, refetch]);
+  }, [filter, prevFilter, refetch]);
 
   useEffect(() => {
     // start reloading if schedules are available and no timer is running yet
