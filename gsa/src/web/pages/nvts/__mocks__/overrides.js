@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
+import {deepFreeze} from 'web/utils/testing';
 
 import {GET_OVERRIDES} from 'web/graphql/overrides';
 

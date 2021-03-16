@@ -16,14 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React, {useEffect} from 'react';
-import {useHistory, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 import {hasValue} from 'gmp/utils/identity';
-
-import Filter from 'gmp/models/filter';
-
-import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
@@ -69,7 +65,7 @@ import DialogNotification from 'web/components/notification/dialognotification';
 import Download from 'web/components/form/download';
 
 import useCapabilities from 'web/utils/useCapabilities';
-import useGmpSettings from 'web/utils/useGmpSettings';
+// import useGmpSettings from 'web/utils/useGmpSettings';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import {useGetNvt, useExportNvtsByIds} from 'web/graphql/nvts';
 
@@ -180,19 +176,19 @@ Details.propTypes = {
   overrides: PropTypes.array,
 };
 
-const openDialog = (id, createFunction) => {
-  console.log(id);
-  createFunction({
-    fixed: true,
-    oid: id,
-  });
-};
+// const openDialog = (id, createFunction) => {
+//   console.log(id);
+//   createFunction({
+//     fixed: true,
+//     oid: id,
+//   });
+// };
 
 const Page = () => {
   // Page methods
   const {id} = useParams();
-  const gmpSettings = useGmpSettings();
-  const history = useHistory();
+  // const gmpSettings = useGmpSettings();
+  // const history = useHistory();
   const [, renewSessionTimeout] = useUserSessionTimeout();
 
   const [downloadRef, handleDownload] = useDownload();
@@ -250,7 +246,7 @@ const Page = () => {
   useEffect(() => {
     loadNotes();
     loadOverrides();
-  }, [id]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <NvtComponent
@@ -262,6 +258,8 @@ const Page = () => {
       {({notecreate, overridecreate, download}) => (
         <EntityPage
           entity={nvt}
+          entityError={entityError}
+          entityType={'nvt'}
           isLoading={loading}
           notes={notes}
           overrides={overrides}
@@ -269,6 +267,7 @@ const Page = () => {
           title={_('NVT')}
           toolBarIcons={ToolBarIcons}
           onChanged={refetchAll}
+          onError={showError}
           onInteraction={renewSessionTimeout}
           onNoteCreateClick={notecreate}
           onNvtDownloadClick={handleDownloadNvt}

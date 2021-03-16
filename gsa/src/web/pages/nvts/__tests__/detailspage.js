@@ -18,27 +18,18 @@
 import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import {
-  createExportNvtsByIdsQueryMock,
-  createGetNvtQueryMock,
-  nvtEntity,
-} from 'web/graphql/__mocks__/nvts';
+import {createGetNvtQueryMock, nvtEntity} from 'web/graphql/__mocks__/nvts';
 
 import {createGetNotesQueryMock} from 'web/graphql/__mocks__/notes';
 import {createGetOverridesQueryMock} from '../__mocks__/overrides';
 
 import {setLocale} from 'gmp/locale/lang';
 
-import Filter from 'gmp/models/filter';
 import Nvt from 'gmp/models/nvt';
-import Note from 'gmp/models/note';
-import Override from 'gmp/models/override';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {entityLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
@@ -68,42 +59,10 @@ const manualUrl = 'test/';
 
 const nvtObject = Nvt.fromObject(nvtEntity);
 
-let getNvt;
-let getNotes;
-let getOverrides;
-let getEntities;
 let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getNvt = jest.fn().mockResolvedValue({
-    data: nvtObject,
-  });
-
-  // getNotes = jest.fn().mockResolvedValue({
-  //   data: [note1],
-  //   meta: {
-  //     filter: Filter.fromString(),
-  //     counts: new CollectionCounts(),
-  //   },
-  // });
-
-  // getOverrides = jest.fn().mockResolvedValue({
-  //   data: [override1, override2],
-  //   meta: {
-  //     filter: Filter.fromString(),
-  //     counts: new CollectionCounts(),
-  //   },
-  // });
-
-  getEntities = jest.fn().mockResolvedValue({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
-
   currentSettings = jest.fn().mockResolvedValue({
     foo: 'bar',
   });
@@ -142,7 +101,7 @@ describe('Nvt Detailspage tests', () => {
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
 
     await wait();
 
@@ -238,15 +197,14 @@ describe('Nvt Detailspage tests', () => {
     const [mock, resultFunc] = createGetNvtQueryMock();
     const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
-      store: true,
       queryMocks: [mock, renewSessionQueryMock],
     });
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
 
     await wait();
 
@@ -275,15 +233,14 @@ describe('Nvt Detailspage tests', () => {
     const [mock, resultFunc] = createGetNvtQueryMock();
     const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
-    const {render, store} = rendererWith({
+    const {render} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
-      store: true,
       queryMocks: [mock, renewSessionQueryMock],
     });
 
-    const {baseElement, element} = render(<Detailspage id="12345" />);
+    const {baseElement} = render(<Detailspage id="12345" />);
 
     await wait();
 
