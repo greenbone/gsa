@@ -47,6 +47,8 @@ export const GET_NOTES = gql`
         node {
           hosts
           id
+          endTime
+          modificationTime
           nvt {
             name
           }
