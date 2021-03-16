@@ -148,13 +148,19 @@ export const inUseNote = deepFreeze({
 
 const listNote = deepFreeze({
   id: '123',
+  active: true,
+  endTime: '2021-04-13T11:35:20Z',
   hosts: ['127.0.0.1', '127.0.0.2'],
+  modificationTime: '2021-01-14T06:22:57Z',
   nvt: {
+    id: '12345',
     name: 'foo nvt',
   },
   permissions: [{name: 'Everything'}],
   port: '666/tcp',
+  severity: 0.0,
   task: {
+    id: '334',
     name: 'task x',
   },
   text: 'note text',

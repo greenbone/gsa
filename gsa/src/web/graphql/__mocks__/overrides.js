@@ -151,13 +151,21 @@ export const inUseOverride = deepFreeze({
 
 const listOverride = deepFreeze({
   id: '123',
+  active: true,
+  endTime: '2023-03-13T11:35:20Z',
   hosts: ['127.0.0.1', '127.0.0.2'],
+  modificationTime: '2021-01-14T06:23:57Z',
+  newSeverity: 5.0,
   nvt: {
+    id: '12345',
     name: 'foo nvt',
   },
+  result: null,
   permissions: [{name: 'Everything'}],
   port: '666/tcp',
+  severity: 1.0,
   task: {
+    id: '12345',
     name: 'task x',
   },
   text: 'override text',

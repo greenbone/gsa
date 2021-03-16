@@ -103,9 +103,9 @@ const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
   const {nvt} = result;
-  const {oid, tags, solution} = nvt;
+  const {id: nvtId, tags, solution} = nvt;
 
-  const is_oval = isDefined(oid) && oid.startsWith('oval:');
+  const is_oval = isDefined(nvtId) && nvtId.startsWith('oval:');
   const has_detection =
     isDefined(result.detection) && isDefined(result.detection.result);
 
@@ -277,7 +277,7 @@ const ResultDetails = ({className, links = true, entity}) => {
 
       <DetailsBlock title={_('Detection Method')}>
         <Layout flex="column">
-          <Layout>{tags.vuldetect}</Layout>
+          <Layout>{tags.detectionMethod}</Layout>
           <InfoTable>
             <colgroup>
               <Col width="10%" />
@@ -290,24 +290,24 @@ const ResultDetails = ({className, links = true, entity}) => {
                   {is_oval && (
                     <DetailsLink
                       type="ovaldef"
-                      id={oid}
+                      id={nvtId}
                       title={_('View Details of OVAL Definition {{oid}}', {
-                        oid,
+                        nvtId,
                       })}
                       textOnly={!links}
                     >
-                      {oid}
+                      {nvtId}
                     </DetailsLink>
                   )}
-                  {isDefined(oid) && oid.startsWith(DEFAULT_OID_VALUE) && (
+                  {isDefined(nvtId) && nvtId.startsWith(DEFAULT_OID_VALUE) && (
                     <span>
-                      <DetailsLink type="nvt" id={oid} textOnly={!links}>
-                        {renderNvtName(oid, nvt.name)}
-                        {' OID: ' + oid}
+                      <DetailsLink type="nvt" id={nvtId} textOnly={!links}>
+                        {renderNvtName(nvtId, nvt.name)}
+                        {' OID: ' + nvtId}
                       </DetailsLink>
                     </span>
                   )}
-                  {!isDefined(oid) &&
+                  {!isDefined(nvtId) &&
                     _('No details available for this method.')}
                 </TableData>
               </TableRow>
