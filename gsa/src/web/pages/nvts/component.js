@@ -18,6 +18,7 @@
 
 import React from 'react';
 // import {ALL_FILTER} from 'gmp/models/filter';
+// import {useDispatch} from 'react-redux';
 
 import EntityComponent from 'web/entity/component';
 // import {useLazyGetNotes} from 'web/graphql/notes';
@@ -35,6 +36,9 @@ const NvtComponent = ({
   onDownloadError,
   onInteraction,
 }) => {
+  // GMP and Redux
+  // const dispatch = useDispatch();
+
   // GraphQL Loaders and Data
   // const [
   //   loadNotes,

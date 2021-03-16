@@ -17,53 +17,49 @@
  */
 import {deepFreeze} from 'web/utils/testing';
 
-import {GET_OVERRIDES} from 'web/graphql/overrides';
+import {GET_NOTES} from 'web/graphql/notes';
 
-const nvtOverride = deepFreeze({
-  id: '456',
+const nvtNote = deepFreeze({
   active: true,
-  endTime: '2021-04-13T11:35:20Z',
+  endTime: '2021-03-13T11:35:20Z',
   hosts: ['127.0.0.1', '127.0.0.2'],
-  modificationTime: '2021-01-14T06:22:57Z',
-  newSeverity: 10.0,
+  id: '456',
+  modificationTime: '2021-01-14T06:20:57Z',
   nvt: {
     id: '12345',
     name: 'foo',
   },
-  result: null,
   permissions: [{name: 'Everything'}],
   port: '666/tcp',
   severity: 0.0,
   task: null,
-  text: 'test_override_1',
+  text: 'test_note_1',
 });
 
-const nvtOverride2 = deepFreeze({
-  id: '456',
+const nvtNote2 = deepFreeze({
   active: true,
-  endTime: '2023-03-13T11:35:20Z',
+  endTime: '2022-03-13T11:35:20Z',
   hosts: ['127.0.0.1', '127.0.0.2'],
-  modificationTime: '2021-01-14T06:23:57Z',
-  newSeverity: 5.0,
+  id: '123',
+  modificationTime: '2022-01-14T06:20:57Z',
   nvt: {
     id: '12345',
-    name: 'foo',
+    name: 'foo nvt',
   },
-  result: null,
   permissions: [{name: 'Everything'}],
   port: '666/tcp',
-  severity: 1.0,
+  severity: 0.0,
   task: null,
-  text: 'test_override_2',
+  text: 'test_note_2',
 });
 
-const mockNvtOverrides = {
+const mockNvtNotes = {
   edges: [
     {
-      node: nvtOverride,
+      node: nvtNote,
     },
     {
-      node: nvtOverride2,
+      node: nvtNote2,
     },
   ],
   counts: {
@@ -76,16 +72,16 @@ const mockNvtOverrides = {
   pageInfo: {
     hasNextPage: false,
     hasPreviousPage: false,
-    startCursor: 'override:0',
-    endCursor: 'override:1',
-    lastPageCursor: 'override:2',
+    startCursor: 'note:0',
+    endCursor: 'note:1',
+    lastPageCursor: 'note:2',
   },
 };
 
-export const createGetOverridesQueryMock = (variables = {}) => {
+export const createGetNotesQueryMock = (variables = {}) => {
   const queryResult = {
     data: {
-      overrides: mockNvtOverrides,
+      notes: mockNvtNotes,
     },
   };
 
@@ -93,7 +89,7 @@ export const createGetOverridesQueryMock = (variables = {}) => {
 
   const queryMock = {
     request: {
-      query: GET_OVERRIDES,
+      query: GET_NOTES,
       variables,
     },
     newData: resultFunc,

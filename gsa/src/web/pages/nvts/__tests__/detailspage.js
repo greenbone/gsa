@@ -21,7 +21,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import {createGetNvtQueryMock, nvtEntity} from 'web/graphql/__mocks__/nvts';
 
-import {createGetNotesQueryMock} from 'web/graphql/__mocks__/notes';
+import {createGetNotesQueryMock} from '../__mocks__/notes';
 import {createGetOverridesQueryMock} from '../__mocks__/overrides';
 
 import {setLocale} from 'gmp/locale/lang';
@@ -78,6 +78,7 @@ describe('Nvt Detailspage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
+        renewSession,
       },
     };
 
@@ -162,27 +163,41 @@ describe('Nvt Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('References');
     expect(baseElement).toHaveTextContent('CVECVE-2020-1234');
 
-    // expect(baseElement).toHaveTextContent('Overrides');
-    // expect(baseElement).toHaveTextContent('Override from Any to N/A');
-    // expect(baseElement).toHaveTextContent('test_override_1');
-    // expect(baseElement).toHaveTextContent('Active until');
-    // expect(baseElement).toHaveTextContent('Sat, Mar 13, 2021 10:35 AM UTC');
-    // expect(baseElement).toHaveTextContent('Modified');
-    // expect(baseElement).toHaveTextContent('Thu, Jan 14, 2021 6:20 AM UTC');
+    expect(baseElement).toHaveTextContent('Override from Log to 10: High');
+    expect(baseElement).toHaveTextContent('test_override_1');
+    expect(baseElement).toHaveTextContent('Active until');
+    expect(baseElement).toHaveTextContent('Tue, Apr 13, 2021 11:35 AM UTC');
+    expect(baseElement).toHaveTextContent('Modified');
+    expect(baseElement).toHaveTextContent('Thu, Jan 14, 2021 6:22 AM UTC');
 
-    // expect(baseElement).toHaveTextContent('test_override_2');
-    // expect(baseElement).toHaveTextContent('Active until');
-    // expect(baseElement).toHaveTextContent('Sat, Feb 13, 2021 11:35 AM UTC');
-    // expect(baseElement).toHaveTextContent('Modified');
-    // expect(baseElement).toHaveTextContent('Fri, Feb 14, 2020 6:35 AM UTC');
+    expect(baseElement).toHaveTextContent(
+      'Override from Severity > 0.0 to 5: Medium',
+    );
+    expect(baseElement).toHaveTextContent('test_override_2');
+    expect(baseElement).toHaveTextContent(
+      'Active untilMon, Mar 13, 2023 11:35 AM UTC',
+    );
+    expect(baseElement).toHaveTextContent(
+      'ModifiedThu, Jan 14, 2021 6:23 AM UTC',
+    );
 
-    // expect(baseElement).toHaveTextContent('Notes');
-    // expect(baseElement).toHaveTextContent('Note');
-    // expect(baseElement).toHaveTextContent('test_note');
-    // expect(baseElement).toHaveTextContent('Active until');
-    // expect(baseElement).toHaveTextContent('Sat, Feb 13, 2021 6:35 AM UTC');
-    // expect(baseElement).toHaveTextContent('Modified');
-    // expect(baseElement).toHaveTextContent('Thu, Jan 14, 2021 6:35 AM UTC');
+    expect(baseElement).toHaveTextContent('Notes');
+    expect(baseElement).toHaveTextContent('Note');
+    expect(baseElement).toHaveTextContent('test_note_1');
+    expect(baseElement).toHaveTextContent(
+      'Active untilSat, Mar 13, 2021 11:35 AM UTC',
+    );
+    expect(baseElement).toHaveTextContent(
+      'ModifiedThu, Jan 14, 2021 6:20 AM UTC',
+    );
+    expect(baseElement).toHaveTextContent('Note');
+    expect(baseElement).toHaveTextContent('test_note_2');
+    expect(baseElement).toHaveTextContent(
+      'Active untilSun, Mar 13, 2022 11:35 AM UTC',
+    );
+    expect(baseElement).toHaveTextContent(
+      'ModifiedFri, Jan 14, 2022 6:20 AM UTC',
+    );
   });
 
   test('should render preferences tab', async () => {
@@ -195,20 +210,32 @@ describe('Nvt Detailspage tests', () => {
     };
 
     const [mock, resultFunc] = createGetNvtQueryMock();
+    const [notesMock, notesResultFunc] = createGetNotesQueryMock({
+      filterString: 'nvt_id:12345',
+    });
+    const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
+      filterString: 'nvt_id:12345',
+    });
     const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
-      queryMocks: [mock, renewSessionQueryMock],
+      store: true,
+      queryMocks: [mock, notesMock, overridesMock, renewSessionQueryMock],
     });
+
+    store.dispatch(setTimezone('UTC'));
+    store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(<Detailspage id="12345" />);
 
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(notesResultFunc).toHaveBeenCalled();
+    expect(overridesResultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
@@ -231,20 +258,32 @@ describe('Nvt Detailspage tests', () => {
     };
 
     const [mock, resultFunc] = createGetNvtQueryMock();
+    const [notesMock, notesResultFunc] = createGetNotesQueryMock({
+      filterString: 'nvt_id:12345',
+    });
+    const [overridesMock, overridesResultFunc] = createGetOverridesQueryMock({
+      filterString: 'nvt_id:12345',
+    });
     const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
-      queryMocks: [mock, renewSessionQueryMock],
+      store: true,
+      queryMocks: [mock, notesMock, overridesMock, renewSessionQueryMock],
     });
+
+    store.dispatch(setTimezone('UTC'));
+    store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(<Detailspage id="12345" />);
 
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
+    expect(notesResultFunc).toHaveBeenCalled();
+    expect(overridesResultFunc).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 

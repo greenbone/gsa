@@ -45,21 +45,25 @@ export const GET_NOTES = gql`
     ) {
       edges {
         node {
+          active
+          endTime
           hosts
           id
-          endTime
           modificationTime
           nvt {
+            id
             name
           }
-          port
-          task {
-            name
-          }
-          text
           permissions {
             name
           }
+          port
+          severity
+          task {
+            id
+            name
+          }
+          text
         }
       }
       counts {

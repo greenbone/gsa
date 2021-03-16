@@ -45,12 +45,10 @@ export const GET_OVERRIDES = gql`
     ) {
       edges {
         node {
-          id
           active
-          creationTime
           endTime
           hosts
-          inUse
+          id
           modificationTime
           nvt {
             id
@@ -64,7 +62,6 @@ export const GET_OVERRIDES = gql`
             name
           }
           text
-          writable
         }
       }
       counts {
