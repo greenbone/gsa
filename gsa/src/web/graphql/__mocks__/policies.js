@@ -53,9 +53,9 @@ export const policy1 = deepFreeze({
     {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
     {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
   ],
-  preferences: [
+  nvtPreferences: [
     {
-      alt: ['postgres', 'regress'],
+      alternativeValues: ['postgres', 'regress'],
       default: 'postgres',
       hrName: 'Postgres Username:',
       id: 1,
@@ -67,18 +67,16 @@ export const policy1 = deepFreeze({
         name: 'PostgreSQL Detection',
       },
     },
+  ],
+  scannerPreferences: [
     {
-      alt: null,
+      alternativeValues: null,
       default: 'brilliant',
       hrName: 'human readable',
       id: null,
       name: 'brightness of alpha centauri',
       type: null,
       value: 'dull',
-      nvt: {
-        id: '',
-        name: null,
-      },
     },
   ],
   nvtSelectors: [
@@ -89,7 +87,7 @@ export const policy1 = deepFreeze({
       familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
     },
   ],
-  tasks: [
+  audits: [
     {
       name: 'foo',
       id: '457',
@@ -121,9 +119,9 @@ export const policy2 = deepFreeze({
     {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
     {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
   ],
-  preferences: [
+  nvtPreferences: [
     {
-      alt: ['postgres', 'regress'],
+      alternativeValues: ['postgres', 'regress'],
       default: 'postgres',
       hrName: 'Postgres Username:',
       id: 1,
@@ -136,6 +134,17 @@ export const policy2 = deepFreeze({
       },
     },
   ],
+  scannerPreferences: [
+    {
+      alternativeValues: null,
+      default: 'brilliant',
+      hrName: 'human readable',
+      id: null,
+      name: 'brightness of alpha centauri',
+      type: null,
+      value: 'dull',
+    },
+  ],
   nvtSelectors: [
     {
       name: '436',
@@ -144,7 +153,7 @@ export const policy2 = deepFreeze({
       familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
     },
   ],
-  tasks: [
+  audits: [
     {
       name: 'foo',
       id: '457',
@@ -176,9 +185,9 @@ export const policy3 = deepFreeze({
     {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
     {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
   ],
-  preferences: [
+  nvtPreferences: [
     {
-      alt: ['postgres', 'regress'],
+      alternativeValues: ['postgres', 'regress'],
       default: 'postgres',
       hrName: 'Postgres Username:',
       id: 1,
@@ -191,6 +200,17 @@ export const policy3 = deepFreeze({
       },
     },
   ],
+  scannerPreferences: [
+    {
+      alternativeValues: null,
+      default: 'brilliant',
+      hrName: 'human readable',
+      id: null,
+      name: 'brightness of alpha centauri',
+      type: null,
+      value: 'dull',
+    },
+  ],
   nvtSelectors: [
     {
       name: '436',
@@ -199,7 +219,7 @@ export const policy3 = deepFreeze({
       familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
     },
   ],
-  tasks: [
+  audits: [
     {
       name: 'foo',
       id: '457',
@@ -231,9 +251,9 @@ export const policy4 = deepFreeze({
     {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
     {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
   ],
-  preferences: [
+  nvtPreferences: [
     {
-      alt: ['postgres', 'regress'],
+      alternativeValues: ['postgres', 'regress'],
       default: 'postgres',
       hrName: 'Postgres Username:',
       id: 1,
@@ -246,6 +266,17 @@ export const policy4 = deepFreeze({
       },
     },
   ],
+  scannerPreferences: [
+    {
+      alternativeValues: null,
+      default: 'brilliant',
+      hrName: 'human readable',
+      id: null,
+      name: 'brightness of alpha centauri',
+      type: null,
+      value: 'dull',
+    },
+  ],
   nvtSelectors: [
     {
       name: '436',
@@ -254,7 +285,7 @@ export const policy4 = deepFreeze({
       familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
     },
   ],
-  tasks: [
+  audits: [
     {
       name: 'foo',
       id: '457',
