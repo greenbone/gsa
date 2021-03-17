@@ -81,97 +81,96 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
+import TicketComponent from '../tickets/component';
 import NoteComponent from '../notes/component';
 
 import OverrideComponent from '../overrides/component';
-
-import TicketComponent from '../tickets/component';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import ResultDetails from './details';
 
-let ToolBarIcons = ({
-  capabilities,
+export const ToolBarIcons = ({
   entity,
   onNoteCreateClick,
   onOverrideCreateClick,
   onResultDownloadClick,
   onTicketCreateClick,
-}) => (
-  <Divider margin="10px">
-    <IconDivider>
-      <ManualIcon
-        page="reports"
-        anchor="displaying-all-existing-results"
-        title={_('Help: Results')}
-      />
-      <ListIcon title={_('Results List')} page="results" />
-      <ExportIcon
-        value={entity}
-        title={_('Export Result as XML')}
-        onClick={onResultDownloadClick}
-      />
-    </IconDivider>
-    <IconDivider>
-      {capabilities.mayCreate('note') && (
-        <NewNoteIcon
-          title={_('Add new Note')}
-          value={entity}
-          onClick={onNoteCreateClick}
+}) => {
+  const capabilities = useCapabilities();
+
+  return (
+    <Divider margin="10px">
+      <IconDivider>
+        <ManualIcon
+          page="reports"
+          anchor="displaying-all-existing-results"
+          title={_('Help: Results')}
         />
-      )}
-      {capabilities.mayCreate('override') && (
-        <NewOverrideIcon
-          title={_('Add new Override')}
+        <ListIcon title={_('Results List')} page="results" />
+        <ExportIcon
           value={entity}
-          onClick={onOverrideCreateClick}
+          title={_('Export Result as XML')}
+          onClick={onResultDownloadClick}
         />
-      )}
-      {capabilities.mayCreate('ticket') && (
-        <NewTicketIcon
-          title={_('Create new Ticket')}
-          value={entity}
-          onClick={onTicketCreateClick}
-        />
-      )}
-    </IconDivider>
-    <IconDivider>
-      {capabilities.mayAccess('tasks') && isDefined(entity.task) && (
-        <DetailsLink type="task" id={entity.task.id}>
-          <TaskIcon title={_('Corresponding Task ({{name}})', entity.task)} />
-        </DetailsLink>
-      )}
-      {capabilities.mayAccess('reports') && isDefined(entity.report) && (
-        <DetailsLink type="report" id={entity.report.id}>
-          <ReportIcon title={_('Corresponding Report')} />
-        </DetailsLink>
-      )}
-      {capabilities.mayAccess('tickets') && entity.tickets.length > 0 && (
-        <Link
-          to="tickets"
-          filter={'result_id=' + entity.id}
-          title={_('Corresponding Tickets')}
-        >
-          <Badge content={entity.tickets.length}>
-            <TicketIcon />
-          </Badge>
-        </Link>
-      )}
-    </IconDivider>
-  </Divider>
-);
+      </IconDivider>
+      <IconDivider>
+        {capabilities.mayCreate('note') && (
+          <NewNoteIcon
+            title={_('Add new Note')}
+            value={entity}
+            onClick={onNoteCreateClick}
+          />
+        )}
+        {capabilities.mayCreate('override') && (
+          <NewOverrideIcon
+            title={_('Add new Override')}
+            value={entity}
+            onClick={onOverrideCreateClick}
+          />
+        )}
+        {capabilities.mayCreate('ticket') && (
+          <NewTicketIcon
+            title={_('Create new Ticket')}
+            value={entity}
+            onClick={onTicketCreateClick}
+          />
+        )}
+      </IconDivider>
+      <IconDivider>
+        {capabilities.mayAccess('tasks') && isDefined(entity.task) && (
+          <DetailsLink type="task" id={entity.task.id}>
+            <TaskIcon title={_('Corresponding Task ({{name}})', entity.task)} />
+          </DetailsLink>
+        )}
+        {capabilities.mayAccess('reports') && isDefined(entity.report) && (
+          <DetailsLink type="report" id={entity.report.id}>
+            <ReportIcon title={_('Corresponding Report')} />
+          </DetailsLink>
+        )}
+        {capabilities.mayAccess('tickets') && entity.tickets.length > 0 && (
+          <Link
+            to="tickets"
+            filter={'result_id=' + entity.id}
+            title={_('Corresponding Tickets')}
+          >
+            <Badge content={entity.tickets.length}>
+              <TicketIcon />
+            </Badge>
+          </Link>
+        )}
+      </IconDivider>
+    </Divider>
+  );
+};
 
 ToolBarIcons.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   onNoteCreateClick: PropTypes.func.isRequired,
   onOverrideCreateClick: PropTypes.func.isRequired,
   onResultDownloadClick: PropTypes.func.isRequired,
   onTicketCreateClick: PropTypes.func.isRequired,
 };
-
-ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const active_filter = entity => entity.isActive();
 
