@@ -65,7 +65,6 @@ import DialogNotification from 'web/components/notification/dialognotification';
 import Download from 'web/components/form/download';
 
 import useCapabilities from 'web/utils/useCapabilities';
-// import useGmpSettings from 'web/utils/useGmpSettings';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import {useGetNvt, useExportNvtsByIds} from 'web/graphql/nvts';
 
@@ -176,19 +175,16 @@ Details.propTypes = {
   overrides: PropTypes.array,
 };
 
-// const openDialog = (id, createFunction) => {
-//   console.log(id);
-//   createFunction({
-//     fixed: true,
-//     oid: id,
-//   });
-// };
+const openDialog = (id, createFunction) => {
+  createFunction({
+    fixed: true,
+    oid: id,
+  });
+};
 
 const Page = () => {
   // Page methods
   const {id} = useParams();
-  // const gmpSettings = useGmpSettings();
-  // const history = useHistory();
   const [, renewSessionTimeout] = useUserSessionTimeout();
 
   const [downloadRef, handleDownload] = useDownload();
@@ -255,7 +251,7 @@ const Page = () => {
       onDownloadError={showError}
       onInteraction={renewSessionTimeout}
     >
-      {({notecreate, overridecreate, download}) => (
+      {({notecreate, overridecreate}) => (
         <EntityPage
           entity={nvt}
           entityError={entityError}
@@ -269,9 +265,9 @@ const Page = () => {
           onChanged={refetchAll}
           onError={showError}
           onInteraction={renewSessionTimeout}
-          onNoteCreateClick={notecreate}
+          onNoteCreateClick={nvtId => openDialog(nvtId, notecreate)}
           onNvtDownloadClick={handleDownloadNvt}
-          onOverrideCreateClick={overridecreate}
+          onOverrideCreateClick={nvtId => openDialog(nvtId, overridecreate)}
         >
           {({activeTab = 0, onActivateTab}) => {
             return (

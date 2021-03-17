@@ -17,17 +17,13 @@
  */
 
 import React from 'react';
-// import {ALL_FILTER} from 'gmp/models/filter';
-// import {useDispatch} from 'react-redux';
+import {ALL_FILTER} from 'gmp/models/filter';
 
 import EntityComponent from 'web/entity/component';
-// import {useLazyGetNotes} from 'web/graphql/notes';
-// import {useLazyGetOverride} from 'web/graphql/override';
+import {useLazyGetNotes} from 'web/graphql/notes';
 import OverrideComponent from 'web/pages/overrides/component';
 import NoteComponent from 'web/pages/notes/component';
 import PropTypes from 'web/utils/proptypes';
-
-// const TAGS_FILTER = ALL_FILTER.copy().set('resource_type', 'nvt');
 
 const NvtComponent = ({
   children,
@@ -36,50 +32,19 @@ const NvtComponent = ({
   onDownloadError,
   onInteraction,
 }) => {
-  // GMP and Redux
-  // const dispatch = useDispatch();
-
   // GraphQL Loaders and Data
-  // const [
-  //   loadNotes,
-  //   {notes, loading: isLoadingNotes, refetch: refetchNotes, error: noteError},
-  // ] = useLazyGetNotes({
-  //   filterString: ALL_FILTER.toFilterString(),
-  // });
+  const [{refetch: refetchNotes}] = useLazyGetNotes({
+    filterString: ALL_FILTER.toFilterString(),
+  });
 
-  // const [
-  //   loadOverrides,
-  //   {
-  //     overrides,
-  //     loading: isLoadingOverrides,
-  //     error: overrideError,
-  //     refetch: refetchOverrides,
-  //   },
-  // ] = useLazyGetOverrides({
-  //   filterString: ALL_FILTER.toFilterString(),
-  // });
-
-  // const handleNoteCreated = () => {
-  //   refetchNotes();
-  // };
-
-  // const handleOverrideCreated = overrideId => {
-  //   refetchOverrides();
-  //   dispatchState(updateState({overrideId}));
-  // };
+  const handleNoteCreated = () => {
+    refetchNotes();
+  };
 
   return (
-    <NoteComponent
-      // onCreated={handleNoteCreated}
-      onCreated={onInteraction}
-      onInteraction={onInteraction}
-    >
+    <NoteComponent onCreated={handleNoteCreated} onInteraction={onInteraction}>
       {({create: notecreate}) => (
-        <OverrideComponent
-          // onCreated={handleOverrideCreated}
-          onCreated={onInteraction}
-          onInteraction={onInteraction}
-        >
+        <OverrideComponent onCreated={onCreated} onInteraction={onInteraction}>
           {({create: overridecreate}) => (
             <EntityComponent
               name="nvt"
