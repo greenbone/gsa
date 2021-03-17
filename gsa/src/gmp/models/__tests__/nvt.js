@@ -32,7 +32,10 @@ describe('nvt Model tests', () => {
     const nvt3 = Nvt.fromElement({nvt: {_oid: '1.2.3'}});
 
     expect(nvt1.id).toEqual('42.1337');
+    expect(nvt1.oid).toEqual('42.1337');
     expect(nvt2.id).toBeUndefined();
+    expect(nvt2.oid).toBeUndefined();
+    expect(nvt3.oid).toEqual('1.2.3');
     expect(nvt3.id).toEqual('1.2.3');
   });
 
@@ -115,31 +118,27 @@ describe('nvt Model tests', () => {
     const nvt2 = Nvt.fromElement({});
     const nvt3 = Nvt.fromElement({nvt: elem});
 
-    expect(nvt1.cveReferences).toEqual(['cveId', 'cve_idId']);
-    expect(nvt2.cveReferences).toEqual([]);
-    expect(nvt1.bidReferences).toEqual(['bidId', 'bugtraq_idId']);
-    expect(nvt2.bidReferences).toEqual([]);
-    expect(nvt1.certReferences).toEqual([
+    expect(nvt1.cves).toEqual(['cveId', 'cve_idId']);
+    expect(nvt2.cves).toEqual([]);
+    expect(nvt1.bids).toEqual(['bidId', 'bugtraq_idId']);
+    expect(nvt2.bids).toEqual([]);
+    expect(nvt1.certs).toEqual([
       {id: 'dfn-certId', type: 'dfn-cert'},
       {id: 'DFN-certId', type: 'dfn-cert'},
       {id: 'cert-bundId', type: 'cert-bund'},
     ]);
-    expect(nvt2.certReferences).toEqual([]);
-    expect(nvt1.otherReferences).toEqual([
-      {ref: 'customId', type: 'custom-type'},
-    ]);
-    expect(nvt2.otherReferences).toEqual([]);
+    expect(nvt2.certs).toEqual([]);
+    expect(nvt1.xrefs).toEqual([{ref: 'customId', type: 'custom-type'}]);
+    expect(nvt2.xrefs).toEqual([]);
 
-    expect(nvt3.cveReferences).toEqual(['cveId', 'cve_idId']);
-    expect(nvt3.bidReferences).toEqual(['bidId', 'bugtraq_idId']);
-    expect(nvt3.certReferences).toEqual([
+    expect(nvt3.cves).toEqual(['cveId', 'cve_idId']);
+    expect(nvt3.bids).toEqual(['bidId', 'bugtraq_idId']);
+    expect(nvt3.certs).toEqual([
       {id: 'dfn-certId', type: 'dfn-cert'},
       {id: 'DFN-certId', type: 'dfn-cert'},
       {id: 'cert-bundId', type: 'cert-bund'},
     ]);
-    expect(nvt3.otherReferences).toEqual([
-      {ref: 'customId', type: 'custom-type'},
-    ]);
+    expect(nvt3.xrefs).toEqual([{ref: 'customId', type: 'custom-type'}]);
   });
 
   test('should parse severity from cvss_base', () => {
@@ -221,7 +220,7 @@ describe('nvt Model tests', () => {
     expect(nvt3.preferences).toEqual(res);
   });
 
-  test('should parse otherReferences with correct protocol', () => {
+  test('should parse xrefs with correct protocol', () => {
     const nvt1 = Nvt.fromElement({refs: {ref: [{_id: '42'}]}});
     const nvt2 = Nvt.fromElement({refs: {ref: [{_type: 'URL', _id: '42'}]}});
     const nvt3 = Nvt.fromElement({
@@ -243,14 +242,15 @@ describe('nvt Model tests', () => {
       },
     });
 
-    expect(nvt1.otherReferences).toEqual([{ref: '42', type: 'other'}]);
-    expect(nvt2.otherReferences).toEqual([{ref: 'http://42', type: 'url'}]);
-    expect(nvt3.otherReferences).toEqual([{ref: 'http://42', type: 'url'}]);
-    expect(nvt4.otherReferences).toEqual([{ref: 'https://42', type: 'url'}]);
-    expect(nvt5.otherReferences).toEqual([{ref: 'ftp://42', type: 'url'}]);
-    expect(nvt6.otherReferences).toEqual([{ref: 'ftps://42', type: 'url'}]);
-    expect(nvt7.otherReferences).toEqual([{ref: 'ftps://42', type: 'other'}]);
-    expect(nvt8.otherReferences).toEqual([{ref: 'https://42', type: 'url'}]);
+    expect(nvt1.xrefs).toEqual([{ref: '42', type: 'other'}]);
+    expect(nvt2.xrefs).toEqual([{ref: 'http://42', type: 'url'}]);
+    expect(nvt3.xrefs).toEqual([{ref: 'http://42', type: 'url'}]);
+    expect(nvt4.xrefs).toEqual([{ref: 'https://42', type: 'url'}]);
+    expect(nvt5.xrefs).toEqual([{ref: 'ftp://42', type: 'url'}]);
+    expect(nvt6.xrefs).toEqual([{ref: 'ftps://42', type: 'url'}]);
+    expect(nvt7.xrefs).toEqual([{ref: 'ftps://42', type: 'other'}]);
+    expect(nvt7.xref).toBeUndefined();
+    expect(nvt8.xrefs).toEqual([{ref: 'https://42', type: 'url'}]);
   });
 
   test('should parse qod', () => {

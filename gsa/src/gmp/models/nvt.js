@@ -139,22 +139,20 @@ class Nvt extends Info {
 
     ret.nvtType = ret._type;
 
-    ret.id = isEmpty(ret._oid) ? undefined : ret._oid;
+    ret.oid = isEmpty(ret._oid) ? undefined : ret._oid;
+    ret.id = ret.oid;
     ret.tags = parseTags(ret.tags);
-    if (isDefined(ret.tags.vuldetect)) {
-      ret.tags.detectionMethod = ret.tags.vuldetect;
-    }
 
     const refs = getRefs(ret);
 
-    ret.cveReferences = getFilteredRefIds(refs, 'cve').concat(
+    ret.cves = getFilteredRefIds(refs, 'cve').concat(
       getFilteredRefIds(refs, 'cve_id'),
     );
-    ret.bidReferences = getFilteredRefIds(refs, 'bid').concat(
+    ret.bids = getFilteredRefIds(refs, 'bid').concat(
       getFilteredRefIds(refs, 'bugtraq_id'),
     );
 
-    ret.certReferences = getFilteredRefs(refs, 'dfn-cert').concat(
+    ret.certs = getFilteredRefs(refs, 'dfn-cert').concat(
       getFilteredRefs(refs, 'cert-bund'),
     );
 
@@ -166,9 +164,7 @@ class Nvt extends Info {
       };
     }
 
-    ret.otherReferences = getFilteredUrlRefs(refs, 'url').concat(
-      getOtherRefs(refs),
-    );
+    ret.xrefs = getFilteredUrlRefs(refs, 'url').concat(getOtherRefs(refs));
 
     delete ret.refs;
 
@@ -176,7 +172,6 @@ class Nvt extends Info {
       const {severity} = ret.severities;
       ret.severity = parseSeverity(severity.score / 10);
       ret.severityOrigin = parseText(severity.origin);
-      ret.cvssBaseVector = ret.cvss_base_vector;
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
     }
@@ -185,15 +180,12 @@ class Nvt extends Info {
     if (isDefined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
         const pref = {...preference};
-        pref.hrName = pref.hr_name;
-        delete pref.hr_name;
         delete pref.nvt;
         return pref;
       });
     } else {
       ret.preferences = [];
     }
-    ret.preferenceCount = ret.preferences.length;
 
     if (isDefined(ret.qod)) {
       if (isEmpty(ret.qod.value)) {
