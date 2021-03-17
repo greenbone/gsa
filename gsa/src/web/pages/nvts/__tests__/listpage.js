@@ -37,13 +37,7 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-import {
-  rendererWith,
-  waitFor,
-  fireEvent,
-  screen,
-  wait,
-} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import NvtsPage, {ToolBarIcons} from '../listpage';
 
@@ -60,7 +54,6 @@ let currentSettings;
 let getAggregates;
 let getDashboardSetting;
 let getFilters;
-let getNvts;
 let getSetting;
 let renewSession;
 
@@ -161,6 +154,8 @@ describe('NvtsPage tests', () => {
     const {baseElement} = render(<NvtsPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const display = screen.getAllByTestId('grid-item');
     const inputs = baseElement.querySelectorAll('input');
@@ -290,14 +285,6 @@ describe('NvtsPage tests', () => {
   });
 
   test('should allow to bulk action on selected nvts', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
