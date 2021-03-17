@@ -68,11 +68,11 @@ class Nvt extends React.Component {
       pref_count = '';
     }
 
-    const {name, oid, severity, timeout, defaultTimeout} = nvt;
+    const {name, id: nvtId, severity, timeout, defaultTimeout} = nvt;
     return (
       <TableRow>
         <TableData>{name}</TableData>
-        <TableData>{oid}</TableData>
+        <TableData>{nvtId}</TableData>
         <TableData>
           <SeverityBar severity={severity} />
         </TableData>
@@ -86,7 +86,7 @@ class Nvt extends React.Component {
           <div>
             <Checkbox
               checked={selected === YES_VALUE}
-              name={oid}
+              name={nvtId}
               checkedValue={YES_VALUE}
               unCheckedValue={NO_VALUE}
               onChange={onSelectedChange}
@@ -96,7 +96,7 @@ class Nvt extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={_('Select and edit NVT details')}
-            value={nvt.oid}
+            value={nvt.id}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>
@@ -114,7 +114,7 @@ Nvt.propTypes = {
 
 const sortFunctions = {
   name: makeCompareString('name'),
-  oid: makeCompareString('oid'),
+  id: makeCompareString('id'),
   severity: makeCompareSeverity(),
   timeout: makeCompareString('timeout'),
 };
@@ -122,10 +122,10 @@ const sortFunctions = {
 const sortNvts = (nvts = [], sortBy, sortReverse, selected = {}) => {
   if (sortBy === 'selected') {
     return [...nvts].sort((a, b) => {
-      if (selected[a.oid] && !selected[b.oid]) {
+      if (selected[a.id] && !selected[b.id]) {
         return sortReverse ? 1 : -1;
       }
-      if (selected[b.oid] && !selected[a.oid]) {
+      if (selected[b.id] && !selected[a.id]) {
         return sortReverse ? -1 : 1;
       }
 
@@ -231,7 +231,7 @@ const EditScanConfigFamilyDialog = ({
                     <TableHead
                       currentSortBy={sortBy}
                       currentSortDir={sortDir}
-                      sortBy="oid"
+                      sortBy="id"
                       onSortChange={handleSortChange}
                       title={_('OID')}
                     />
@@ -263,12 +263,12 @@ const EditScanConfigFamilyDialog = ({
                 </TableHeader>
                 <TableBody>
                   {sortedNvts.map(nvt => {
-                    const {oid} = nvt;
+                    const {id: nvtId} = nvt;
                     return (
                       <Nvt
-                        key={oid}
+                        key={nvtId}
                         nvt={nvt}
-                        selected={selectedNvts[oid]}
+                        selected={selectedNvts[nvtId]}
                         onSelectedChange={handleSelectedChange}
                         onEditNvtDetailsClick={onEditNvtDetailsClick}
                       />

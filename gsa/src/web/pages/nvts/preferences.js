@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
@@ -43,12 +43,12 @@ const Preferences = ({preferences = [], defaultTimeout}) => {
         <TableRow>
           <TableData>{_('Timeout')}</TableData>
           <TableData>
-            {isDefined(defaultTimeout) ? defaultTimeout : _('default')}
+            {hasValue(defaultTimeout) ? defaultTimeout : _('default')}
           </TableData>
         </TableRow>
         {preferences.map(pref => (
           <TableRow key={pref.name}>
-            <TableData>{pref.hr_name}</TableData>
+            <TableData>{pref.hrName}</TableData>
             <TableData>{pref.default}</TableData>
           </TableRow>
         ))}

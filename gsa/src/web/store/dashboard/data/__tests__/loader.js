@@ -46,7 +46,10 @@ describe('loadFunc tests', () => {
       filter,
     };
 
-    return loadFunc(func, id)(props)(dispatch, getState).then(() => {
+    return loadFunc(
+      func,
+      id,
+    )(props)(dispatch, getState).then(() => {
       expect(getState).toHaveBeenCalled();
       expect(func).toHaveBeenCalledWith(props);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
@@ -85,7 +88,10 @@ describe('loadFunc tests', () => {
       filter,
     };
 
-    return loadFunc(func, id)(props)(dispatch, getState).then(() => {
+    return loadFunc(
+      func,
+      id,
+    )(props)(dispatch, getState).then(() => {
       expect(getState).toHaveBeenCalled();
       expect(func).not.toHaveBeenCalled();
       expect(dispatch).not.toHaveBeenCalled();
@@ -103,7 +109,10 @@ describe('loadFunc tests', () => {
       filter,
     };
 
-    return loadFunc(func, id)(props)(dispatch, getState).then(() => {
+    return loadFunc(
+      func,
+      id,
+    )(props)(dispatch, getState).then(() => {
       expect(getState).toHaveBeenCalled();
       expect(func).toHaveBeenCalledWith(props);
       expect(dispatch).toHaveBeenNthCalledWith(1, {

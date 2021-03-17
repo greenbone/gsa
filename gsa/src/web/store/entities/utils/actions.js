@@ -153,12 +153,10 @@ export const createLoadEntity = ({
 
   dispatch(actions.request(id));
 
-  return gmp[entityType]
-    .get({id})
-    .then(
-      response => dispatch(actions.success(id, response.data)),
-      error => dispatch(actions.error(id, error)),
-    );
+  return gmp[entityType].get({id}).then(
+    response => dispatch(actions.success(id, response.data)),
+    error => dispatch(actions.error(id, error)),
+  );
 };
 
 export const createDeleteEntity = ({entityType}) => gmp => id => dispatch =>

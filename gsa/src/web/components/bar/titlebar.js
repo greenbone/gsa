@@ -111,9 +111,6 @@ const mapStateToProps = rootState => ({
   loggedIn: isLoggedIn(rootState),
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps),
-)(Titlebar);
+export default compose(withGmp, connect(mapStateToProps))(Titlebar);
 
 // vim: set ts=2 sw=2 tw=80:

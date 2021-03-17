@@ -116,10 +116,7 @@ const withEntityContainer = (
     withRouter,
     withDialogNotification,
     withDownload,
-    connect(
-      mapStateToProps,
-      mapDispatchToProps,
-    ),
+    connect(mapStateToProps, mapDispatchToProps),
   )(EntityContainerWrapper);
 };
 

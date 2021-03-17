@@ -45,7 +45,23 @@ export const GET_OVERRIDES = gql`
     ) {
       edges {
         node {
+          active
+          endTime
+          hosts
           id
+          modificationTime
+          nvt {
+            id
+            name
+          }
+          port
+          severity
+          newSeverity
+          task {
+            id
+            name
+          }
+          text
         }
       }
       counts {
