@@ -122,7 +122,7 @@ describe('Nvt Detailspage tests', () => {
 
     expect(screen.getAllByTitle('NVT List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/nvts');
-    // test title bar
+    // test entity info
     expect(baseElement).toHaveTextContent('ID:12345');
     expect(baseElement).toHaveTextContent('Mon, Jun 24, 2019 11:55 AM UTC');
     expect(baseElement).toHaveTextContent('Mon, Jun 24, 2019 10:12 AM UTC');
