@@ -81,19 +81,12 @@ import {getUsername} from 'web/store/usersettings/selectors';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
-<<<<<<< HEAD
-import withCapabilities from 'web/utils/withCapabilities';
 
+import TicketComponent from '../tickets/component';
 import NoteComponent from '../notes/component';
 
 import OverrideComponent from '../overrides/component';
-
-import TicketComponent from '../tickets/component';
-=======
 import useCapabilities from 'web/utils/useCapabilities';
-import useGmp from 'web/utils/useGmp';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
->>>>>>> 593f6e2a3b... add export and useCapabilities for results toobar icons
 
 import ResultDetails from './details';
 

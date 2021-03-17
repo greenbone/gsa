@@ -28,8 +28,6 @@ import Result from 'gmp/models/result';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
-
 import {entityLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -201,8 +199,8 @@ describe('Result Detailspage tests', () => {
     expect(element).toHaveTextContent('Owner:admin');
 
     // Tabs
-    const tabs = screen.getAllByTestId('entities-tab-title');
-    expect(tabs[0]).toHaveTextContent('User Tags');
+    const spans = baseElement.querySelectorAll('span');
+    expect(spans[12]).toHaveTextContent('User Tags');
 
     // Details
     const heading = baseElement.querySelectorAll('h2');
@@ -261,15 +259,11 @@ describe('Result Detailspage tests', () => {
 
     expect(screen.getAllByTitle('Override Details')[0]).toBeInTheDocument();
     expect(baseElement).toHaveTextContent('TestOverride');
-    expect(baseElement).toHaveTextContent(
-      'ModifiedFri, Mar 12, 2021 2:00 PM CET',
-    );
+    expect(baseElement).toHaveTextContent('ModifiedFri, Mar 12, 2021 1:00 PM');
 
     expect(screen.getAllByTitle('Note Details')[0]).toBeInTheDocument();
     expect(baseElement).toHaveTextContent('TestNote');
-    expect(baseElement).toHaveTextContent(
-      'ModifiedThu, Mar 11, 2021 2:00 PM CET',
-    );
+    expect(baseElement).toHaveTextContent('ModifiedThu, Mar 11, 2021 1:00 PM');
   });
 
   test('should render user tags tab', () => {
@@ -284,14 +278,11 @@ describe('Result Detailspage tests', () => {
       user: {currentSettings, renewSession},
     };
 
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-
     const {render, store} = rendererWith({
       capabilities: true,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -301,10 +292,8 @@ describe('Result Detailspage tests', () => {
 
     const {baseElement} = render(<Detailspage id="12345" />);
 
-    const tabs = screen.getAllByTestId('entities-tab-title');
-
-    expect(tabs[0]).toHaveTextContent('User Tags');
-    fireEvent.click(tabs[0]);
+    const spans = baseElement.querySelectorAll('span');
+    fireEvent.click(spans[12]);
 
     expect(baseElement).toHaveTextContent('No user tags available');
   });
@@ -337,14 +326,11 @@ describe('Result Detailspage tests', () => {
       user: {currentSettings, renewSession},
     };
 
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-
     const {render, store} = rendererWith({
       capabilities: true,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
