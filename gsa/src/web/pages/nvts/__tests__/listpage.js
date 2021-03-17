@@ -26,11 +26,24 @@ import NVT from 'gmp/models/nvt';
 
 import {entitiesLoadingActions} from 'web/store/entities/nvts';
 
+import {
+  nvtEntity,
+  createExportNvtsByIdsQueryMock,
+  createExportNvtsByFilterQueryMock,
+  createGetNvtsQueryMock,
+} from 'web/graphql/__mocks__/nvts';
+
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+import {
+  rendererWith,
+  waitFor,
+  fireEvent,
+  screen,
+  wait,
+} from 'web/utils/testing';
 
 import NvtsPage, {ToolBarIcons} from '../listpage';
 
@@ -38,26 +51,7 @@ setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
 
-const nvt = NVT.fromElement({
-  _oid: '1.3.6.1.4.1.25623.1.0',
-  name: 'foo',
-  creation_time: '2019-06-24T11:55:30Z',
-  modification_time: '2019-06-24T10:12:27Z',
-  family: 'bar',
-  cvss_base: 5,
-  qod: {value: 80},
-  tags: 'This is a description|solution_type=VendorFix',
-  solution: {
-    _type: 'VendorFix',
-    __text: 'This is a description',
-  },
-  refs: {
-    ref: [
-      {_type: 'cve', _id: 'CVE-2020-1234'},
-      {_type: 'cve', _id: 'CVE-2020-5678'},
-    ],
-  },
-});
+const nvtObject = NVT.fromObject(nvtEntity);
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -105,14 +99,6 @@ beforeEach(() => {
     }),
   );
 
-  getNvts = jest.fn().mockResolvedValue({
-    data: [nvt],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
-
   renewSession = jest.fn().mockResolvedValue({
     foo: 'bar',
   });
@@ -125,7 +111,6 @@ describe('NvtsPage tests', () => {
         getSetting: getDashboardSetting,
       },
       nvts: {
-        get: getNvts,
         getFamilyAggregates: getAggregates,
         getSeverityAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
@@ -137,17 +122,24 @@ describe('NvtsPage tests', () => {
       user: {currentSettings, getSetting},
     };
 
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+    const [mock, resultFunc] = createGetNvtsQueryMock({
+      filterString,
+      first: 2,
+    });
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('nvt', defaultSettingfilter),
@@ -163,7 +155,7 @@ describe('NvtsPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesLoadingActions.success([nvt], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([nvtObject], filter, loadedFilter, counts),
     );
 
     const {baseElement} = render(<NvtsPage />);
@@ -212,7 +204,7 @@ describe('NvtsPage tests', () => {
 
     const row = baseElement.querySelectorAll('tr');
 
-    expect(row[1]).toHaveTextContent('foo');
+    expect(row[1]).toHaveTextContent('12345');
     expect(row[1]).toHaveTextContent('bar');
     expect(row[1]).toHaveTextContent('Mon, Jun 24, 2019 1:55 PM CEST');
     expect(row[1]).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
@@ -223,27 +215,14 @@ describe('NvtsPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       nvts: {
-        get: getNvts,
-        deleteByFilter,
-        exportByFilter,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
         getFamilyAggregates: getAggregates,
         getSeverityAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
+        getCreatedAggregates: getAggregates,
       },
       filters: {
         get: getFilters,
@@ -251,18 +230,30 @@ describe('NvtsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+
+    const [mock, resultFunc] = createGetNvtsQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [
+      exportByIdsMock,
+      exportByIdsResult,
+    ] = createExportNvtsByIdsQueryMock(['12345']);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportByIdsMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('nvt', defaultSettingfilter),
@@ -278,12 +269,14 @@ describe('NvtsPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesLoadingActions.success([nvt], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([nvtObject], filter, loadedFilter, counts),
     );
 
     render(<NvtsPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents');
@@ -293,7 +286,7 @@ describe('NvtsPage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportByIdsResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected nvts', async () => {
@@ -310,14 +303,9 @@ describe('NvtsPage tests', () => {
         getSetting: getDashboardSetting,
       },
       nvts: {
-        get: getNvts,
-        delete: deleteByIds,
-        export: exportByIds,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
         getFamilyAggregates: getAggregates,
         getSeverityAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
+        getCreatedAggregates: getAggregates,
       },
       filters: {
         get: getFilters,
@@ -326,17 +314,30 @@ describe('NvtsPage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+
+    const [mock, resultFunc] = createGetNvtsQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [
+      exportByIdsMock,
+      exportByIdsResult,
+    ] = createExportNvtsByIdsQueryMock(['12345']);
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportByIdsMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('nvt', defaultSettingfilter),
@@ -352,12 +353,14 @@ describe('NvtsPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesLoadingActions.success([nvt], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([nvtObject], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<NvtsPage />);
+    const {baseElement} = render(<NvtsPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -368,7 +371,7 @@ describe('NvtsPage tests', () => {
     const selected = screen.getAllByTestId('select-selected-value');
     expect(selected[1]).toHaveTextContent('Apply to selection');
 
-    const inputs = element.querySelectorAll('input');
+    const inputs = baseElement.querySelectorAll('input');
 
     // select a nvt
     fireEvent.click(inputs[1]);
@@ -382,31 +385,18 @@ describe('NvtsPage tests', () => {
 
     await wait();
 
-    expect(exportByIds).toHaveBeenCalled();
+    expect(exportByIdsResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered nvts', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       nvts: {
-        get: getNvts,
-        deleteByFilter,
-        exportByFilter,
-        getActiveDaysAggregates: getAggregates,
-        getCreatedAggregates: getAggregates,
         getFamilyAggregates: getAggregates,
         getSeverityAggregates: getAggregates,
-        getWordCountsAggregates: getAggregates,
+        getCreatedAggregates: getAggregates,
       },
       filters: {
         get: getFilters,
@@ -414,18 +404,32 @@ describe('NvtsPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+
+    const [mock, resultFunc] = createGetNvtsQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [
+      exportByFilterMock,
+      exportByFilterResult,
+    ] = createExportNvtsByFilterQueryMock('foo=bar rows=-1 first=1');
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportByFilterMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('nvt', defaultSettingfilter),
@@ -438,15 +442,16 @@ describe('NvtsPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+
     store.dispatch(
-      entitiesLoadingActions.success([nvt], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([nvtObject], filter, loadedFilter, counts),
     );
 
     render(<NvtsPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -467,7 +472,7 @@ describe('NvtsPage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportByFilterResult).toHaveBeenCalled();
   });
 });
 
