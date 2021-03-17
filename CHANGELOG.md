@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Implement nvt detailspage queries and mutations [#2774](https://github.com/greenbone/gsa/pull/2774)
 - Applied Backend changed to scanconfigs and policies [#2783](https://github.com/greenbone/gsa/pull/2783)
 - Refactor credential dialog into function component [#2772](https://github.com/greenbone/gsa/pull/2772)
 - Implement cpes listpage queries and mutations [#2757](https://github.com/greenbone/gsa/pull/2757)
