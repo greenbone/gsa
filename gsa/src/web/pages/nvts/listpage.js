@@ -82,7 +82,6 @@ const NvtsPage = () => {
   // Powerfilter
   const [filter, isLoadingFilter] = usePageFilter('nvt', {fallbackFilter});
   const prevFilter = usePrevious(filter);
-  const simpleFilter = filter.withoutView();
   const {
     change: changeFilter,
     remove: removeFilter,
