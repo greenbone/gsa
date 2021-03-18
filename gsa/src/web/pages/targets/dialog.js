@@ -293,8 +293,6 @@ const TargetDialog = ({
               </Divider>
             </FormGroup>
 
-<<<<<<< HEAD
-=======
             <FormGroup
               title={_('Allow simultaneous scanning via multiple IPs')}
               flex="column"
@@ -306,7 +304,6 @@ const TargetDialog = ({
               />
             </FormGroup>
 
->>>>>>> ced9e4efed... Improve wording of label for allowSimultaneousIPs
             {capabilities.mayOp('get_port_lists') && (
               <FormGroup title={_('Port List')}>
                 <Divider>
