@@ -175,10 +175,14 @@ class Nvt extends Info {
 =======
       ret.severity = parseSeverity(severity?.score / 10);
       ret.severityOrigin = parseText(severity?.origin);
+<<<<<<< HEAD
       ret.severityDate = isDefined(severity?.date)
         ? parseDate(severity.date)
         : undefined;
 >>>>>>> 139e9a456 (Add Severity Date to NVTs Details)
+=======
+      ret.severityDate = parseDate(severity.date);
+>>>>>>> 120620318 (Add Changelog entry)
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
     }
