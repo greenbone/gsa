@@ -199,6 +199,7 @@ describe('nvt Model tests', () => {
     expect(nvt3.severity).toEqual(1.0);
     expect(nvt3.severityOrigin).toEqual('');
     expect(nvt3.severityDate).toBeUndefined();
+<<<<<<< HEAD
   });
 
   test('should fall back to cvss_base when <severity> is missing from <severities>', () => {
@@ -211,6 +212,8 @@ describe('nvt Model tests', () => {
     expect(nvt.severityOrigin).toBeUndefined();
     expect(nvt.severityDate).toBeUndefined();
     expect(nvt.cvss_base).toBeUndefined();
+=======
+>>>>>>> 139e9a456 (Add Severity Date to NVTs Details)
   });
 
   test('should parse preferences', () => {

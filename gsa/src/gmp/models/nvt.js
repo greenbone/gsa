@@ -20,6 +20,7 @@ import {isDefined, hasValue, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
+<<<<<<< HEAD
 import {
   parseDate,
   parseFloat,
@@ -27,6 +28,9 @@ import {
   parseScoreToSeverity,
   parseText,
 } from 'gmp/parser';
+=======
+import {parseDate, parseFloat, parseSeverity, parseText} from 'gmp/parser';
+>>>>>>> 139e9a456 (Add Severity Date to NVTs Details)
 
 import Info from './info';
 
@@ -164,9 +168,17 @@ class Nvt extends Info {
 
     if (isDefined(ret?.severities?.severity)) {
       const {severity} = ret.severities;
+<<<<<<< HEAD
       ret.severity = parseSeverity(severity.score);
       ret.severityOrigin = parseText(severity.origin);
       ret.severityDate = parseDate(severity.date);
+=======
+      ret.severity = parseSeverity(severity?.score / 10);
+      ret.severityOrigin = parseText(severity?.origin);
+      ret.severityDate = isDefined(severity?.date)
+        ? parseDate(severity.date)
+        : undefined;
+>>>>>>> 139e9a456 (Add Severity Date to NVTs Details)
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
     }

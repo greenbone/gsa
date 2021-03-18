@@ -18,6 +18,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -94,6 +95,7 @@ const NvtDetails = ({entity, links = true}) => {
             </TableRow>
             <TableRow>
               <TableData>{_('CVSS Date')}</TableData>
+<<<<<<< HEAD
               <TableData>
                 {isDefined(severityDate) ? (
                   <DateTime date={severityDate} />
@@ -101,6 +103,9 @@ const NvtDetails = ({entity, links = true}) => {
                   _('N/A')
                 )}
               </TableData>
+=======
+              <TableData>{dateTimeWithTimeZone(severityDate)}</TableData>
+>>>>>>> 139e9a456 (Add Severity Date to NVTs Details)
             </TableRow>
           </TableBody>
         </InfoTable>
