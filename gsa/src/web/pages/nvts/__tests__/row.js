@@ -23,7 +23,9 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
+import {nvtEntity} from 'web/graphql/__mocks__/nvts';
 import NVT from 'gmp/models/nvt';
+
 import Filter from 'gmp/models/filter';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -37,26 +39,7 @@ setLocale('en');
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
 
-const entity = NVT.fromElement({
-  _oid: '1.3.6.1.4.1.25623.1.0',
-  name: 'foo',
-  creation_time: '2019-06-24T11:55:30Z',
-  modification_time: '2019-06-24T10:12:27Z',
-  family: 'bar',
-  cvss_base: 5,
-  qod: {value: 80},
-  tags: 'This is a description|solution_type=VendorFix',
-  solution: {
-    _type: 'VendorFix',
-    __text: 'This is a description',
-  },
-  refs: {
-    ref: [
-      {_type: 'cve', _id: 'CVE-2020-1234'},
-      {_type: 'cve', _id: 'CVE-2020-5678'},
-    ],
-  },
-});
+const entity = NVT.fromObject(nvtEntity);
 
 describe('NVT row tests', () => {
   // deactivate console.error for tests
@@ -90,7 +73,7 @@ describe('NVT row tests', () => {
     const links = baseElement.querySelectorAll('a');
     const icons = baseElement.querySelectorAll('svg');
 
-    expect(baseElement).toHaveTextContent('foo');
+    expect(baseElement).toHaveTextContent('12345');
 
     expect(links[0]).toHaveAttribute('href', '/nvts?filter=family%3D%22bar%22');
     expect(links[0]).toHaveTextContent('bar');
@@ -107,7 +90,7 @@ describe('NVT row tests', () => {
     expect(icons[0]).toHaveTextContent('st_vendorfix.svg');
 
     expect(bars[0]).toHaveAttribute('title', 'Medium');
-    expect(bars[0]).toHaveTextContent('5.0 (Medium)');
+    expect(bars[0]).toHaveTextContent('4.9 (Medium)');
 
     expect(baseElement).toHaveTextContent('80 %');
   });
@@ -135,10 +118,7 @@ describe('NVT row tests', () => {
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[1]);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(
-      undefined,
-      '1.3.6.1.4.1.25623.1.0',
-    );
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '12345');
 
     const links = baseElement.querySelectorAll('a');
     fireEvent.click(links[0]);
