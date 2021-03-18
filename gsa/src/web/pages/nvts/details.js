@@ -18,7 +18,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -36,6 +35,7 @@ import Layout from 'web/components/layout/layout';
 
 import Link from 'web/components/link/link';
 
+import DateTime from 'web/components/date/datetime';
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
@@ -95,7 +95,13 @@ const NvtDetails = ({entity, links = true}) => {
             </TableRow>
             <TableRow>
               <TableData>{_('CVSS Date')}</TableData>
-              <TableData>{dateTimeWithTimeZone(severityDate)}</TableData>
+              <TableData>
+                {isDefined(severityDate) ? (
+                  <DateTime date={severityDate} />
+                ) : (
+                  _('N/A')
+                )}
+              </TableData>
             </TableRow>
           </TableBody>
         </InfoTable>
