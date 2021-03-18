@@ -20,7 +20,7 @@ import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
-import {parseFloat, parseSeverity, parseText} from 'gmp/parser';
+import {parseDate, parseFloat, parseSeverity, parseText} from 'gmp/parser';
 
 import Info from './info';
 
@@ -149,8 +149,11 @@ class Nvt extends Info {
 
     if (isDefined(ret.severities)) {
       const {severity} = ret.severities;
-      ret.severity = parseSeverity(severity.score / 10);
-      ret.severityOrigin = parseText(severity.origin);
+      ret.severity = parseSeverity(severity?.score / 10);
+      ret.severityOrigin = parseText(severity?.origin);
+      ret.severityDate = isDefined(severity?.date)
+        ? parseDate(severity.date)
+        : undefined;
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
     }

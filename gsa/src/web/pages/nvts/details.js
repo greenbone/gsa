@@ -18,6 +18,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -45,7 +46,15 @@ import Solution from './solution';
 import Pre from './preformatted';
 
 const NvtDetails = ({entity, links = true}) => {
-  const {tags = {}, severity, qod, family, solution, severityOrigin} = entity;
+  const {
+    tags = {},
+    severity,
+    qod,
+    family,
+    solution,
+    severityOrigin,
+    severityDate,
+  } = entity;
   return (
     <Layout flex="column" grow="1">
       {isDefined(tags.summary) && (
@@ -83,6 +92,10 @@ const NvtDetails = ({entity, links = true}) => {
               <TableData>
                 {na(getTranslatableSeverityOrigin(severityOrigin))}
               </TableData>
+            </TableRow>
+            <TableRow>
+              <TableData>{_('CVSS Date')}</TableData>
+              <TableData>{dateTimeWithTimeZone(severityDate)}</TableData>
             </TableRow>
           </TableBody>
         </InfoTable>
