@@ -151,9 +151,7 @@ class Nvt extends Info {
       const {severity} = ret.severities;
       ret.severity = parseSeverity(severity?.score / 10);
       ret.severityOrigin = parseText(severity?.origin);
-      ret.severityDate = isDefined(severity?.date)
-        ? parseDate(severity.date)
-        : undefined;
+      ret.severityDate = parseDate(severity.date);
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
     }
