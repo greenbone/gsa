@@ -18,9 +18,12 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import SeverityBar from 'web/components/bar/severitybar';
+
+import DateTime from 'web/components/date/datetime';
 
 import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import ExportIcon from 'web/components/icon/exporticon';
@@ -94,11 +97,21 @@ const EntityInfo = ({entity}) => {
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Modified:')}</div>
-      <div>{dateTimeWithTimeZone(modificationTime)}</div>
+      <div>
+        {isDefined(modificationTime) ? (
+          <DateTime date={modificationTime} />
+        ) : (
+          _('N/A')
+        )}
+      </div>
       <div>{_('Created:')}</div>
-      <div>{dateTimeWithTimeZone(creationTime)}</div>
+      <div>
+        {isDefined(creationTime) ? <DateTime date={creationTime} /> : _('N/A')}
+      </div>
       <div>{_('Last updated:')}</div>
-      <div>{dateTimeWithTimeZone(updateTime)}</div>
+      <div>
+        {isDefined(updateTime) ? <DateTime date={updateTime} /> : _('N/A')}
+      </div>
     </InfoLayout>
   );
 };
