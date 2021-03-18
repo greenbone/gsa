@@ -130,7 +130,6 @@ const NvtsPage = () => {
     refetch,
   });
 
-  // No Nvt methods ?
 
   // Bulk action methods
   const openTagsDialog = () => {
