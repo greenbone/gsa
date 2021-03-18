@@ -129,7 +129,6 @@ const NvtsPage = () => {
     refetch,
   });
 
-
   // Bulk action methods
   const openTagsDialog = () => {
     renewSessionTimeout();
@@ -175,7 +174,7 @@ const NvtsPage = () => {
         last: undefined,
       });
     }
-  }, [filter, prevFilter, simpleFilter, refetch]);
+  }, [filter, prevFilter, refetch]);
 
   useEffect(() => {
     // start reloading if nvts are available and no timer is running yet
