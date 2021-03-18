@@ -296,7 +296,7 @@ const TargetDialog = ({
             </FormGroup>
 
             <FormGroup
-              title={_('Allow scan of simultaneous IPs')}
+              title={_('Allow simultaneous scanning via multiple IPs')}
               flex="column"
             >
               <YesNoRadio
