@@ -124,7 +124,6 @@ const NvtsPage = () => {
 
   // Pagination methods
   const [getFirst, getLast, getNext, getPrevious] = usePagination({
-    simpleFilter,
     filter,
     pageInfo,
     refetch,
