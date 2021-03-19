@@ -35,6 +35,7 @@ import Layout from 'web/components/layout/layout';
 
 import Link from 'web/components/link/link';
 
+import DateTime from 'web/components/date/datetime';
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
@@ -45,7 +46,15 @@ import Solution from './solution';
 import Pre from './preformatted';
 
 const NvtDetails = ({entity, links = true}) => {
-  const {tags = {}, severity, qod, family, solution, severityOrigin} = entity;
+  const {
+    tags = {},
+    severity,
+    qod,
+    family,
+    solution,
+    severityOrigin,
+    severityDate,
+  } = entity;
   return (
     <Layout flex="column" grow="1">
       {isDefined(tags.summary) && (
@@ -82,6 +91,16 @@ const NvtDetails = ({entity, links = true}) => {
               <TableData>{_('CVSS Origin')}</TableData>
               <TableData>
                 {na(getTranslatableSeverityOrigin(severityOrigin))}
+              </TableData>
+            </TableRow>
+            <TableRow>
+              <TableData>{_('CVSS Date')}</TableData>
+              <TableData>
+                {isDefined(severityDate) ? (
+                  <DateTime date={severityDate} />
+                ) : (
+                  _('N/A')
+                )}
               </TableData>
             </TableRow>
           </TableBody>

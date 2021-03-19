@@ -19,7 +19,6 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -41,6 +40,7 @@ import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
 
+import DateTime from 'web/components/date/datetime';
 import InfoTable from 'web/components/table/infotable';
 import SimpleTable from 'web/components/table/simpletable';
 import TableBody from 'web/components/table/body';
@@ -62,12 +62,24 @@ const CertInfo = ({info}) => {
       <TableBody>
         <TableRow>
           <TableData>{_('Activation')}</TableData>
-          <TableData>{dateTimeWithTimeZone(activationTime)}</TableData>
+          <TableData>
+            {isDefined(activationTime) ? (
+              <DateTime date={activationTime} />
+            ) : (
+              _('N/A')
+            )}
+          </TableData>
         </TableRow>
 
         <TableRow>
           <TableData>{_('Expiration')}</TableData>
-          <TableData>{dateTimeWithTimeZone(expirationTime)}</TableData>
+          <TableData>
+            {isDefined(expirationTime) ? (
+              <DateTime date={expirationTime} />
+            ) : (
+              _('N/A')
+            )}
+          </TableData>
         </TableRow>
 
         <TableRow>

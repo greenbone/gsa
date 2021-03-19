@@ -21,6 +21,7 @@
 import Nvt, {getRefs, hasRefType, getFilteredRefIds} from 'gmp/models/nvt';
 import Info from 'gmp/models/info';
 import {testModelFromElement, testModelMethods} from 'gmp/models/testing';
+import date from 'gmp/models/date';
 
 describe('nvt Model tests', () => {
   testModelFromElement(Nvt, 'nvt');
@@ -160,6 +161,7 @@ describe('nvt Model tests', () => {
         severity: {
           score: 94,
           origin: 'Vendor',
+          date: '2021-03-10T06:40:13Z',
         },
       },
       cvss_base: '6.6',
@@ -169,6 +171,7 @@ describe('nvt Model tests', () => {
         severity: {
           score: 74,
           origin: 'Greenbone',
+          date: '2020-03-10T06:40:13Z',
         },
       },
       cvss_base: '',
@@ -184,13 +187,16 @@ describe('nvt Model tests', () => {
 
     expect(nvt1.severity).toEqual(9.4);
     expect(nvt1.severityOrigin).toEqual('Vendor');
+    expect(nvt1.severityDate).toEqual(date('2021-03-10T06:40:13Z'));
     expect(nvt1.cvss_base).toBeUndefined();
     expect(nvt2.severity).toEqual(7.4);
     expect(nvt2.cvss_base).toBeUndefined();
     expect(nvt2.severityOrigin).toEqual('Greenbone');
+    expect(nvt2.severityDate).toEqual(date('2020-03-10T06:40:13Z'));
     expect(nvt3.cvss_base).toBeUndefined();
     expect(nvt3.severity).toEqual(1.0);
     expect(nvt3.severityOrigin).toEqual('');
+    expect(nvt3.severityDate).toBeUndefined();
   });
 
   test('should parse preferences', () => {
