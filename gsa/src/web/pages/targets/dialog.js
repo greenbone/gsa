@@ -19,7 +19,7 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import {NO_VALUE} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -109,6 +109,7 @@ const NEW_SNMP = {
 
 const TargetDialog = ({
   alive_tests = ALIVE_TESTS_DEFAULT,
+  allowSimultaneousIPs = YES_VALUE,
   capabilities,
   comment = '',
   credentials = [],
@@ -160,6 +161,7 @@ const TargetDialog = ({
     reverse_lookup_unify,
     target_source,
     target_exclude_source,
+    allowSimultaneousIPs,
   };
 
   const controlledValues = {
@@ -291,6 +293,17 @@ const TargetDialog = ({
                   />
                 </Divider>
               </Divider>
+            </FormGroup>
+
+            <FormGroup
+              title={_('Allow simultaneous scanning via multiple IPs')}
+              flex="column"
+            >
+              <YesNoRadio
+                name="allowSimultaneousIPs"
+                value={state.allowSimultaneousIPs}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             {capabilities.mayOp('get_port_lists') && (
@@ -454,6 +467,7 @@ const TargetDialog = ({
 
 TargetDialog.propTypes = {
   alive_tests: PropTypes.oneOf([ALIVE_TESTS_DEFAULT, ...ALIVE_TESTS]),
+  allowSimultaneousIPs: PropTypes.bool,
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   credentials: PropTypes.array,

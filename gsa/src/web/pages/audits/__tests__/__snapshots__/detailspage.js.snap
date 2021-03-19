@@ -1412,7 +1412,9 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                         <td>
                           <div
                             class="c28"
-                          />
+                          >
+                            N/A
+                          </div>
                         </td>
                       </tr>
                     </tbody>

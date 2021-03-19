@@ -227,7 +227,6 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   margin: 5px auto;
   padding-bottom: 10px;
   font-size: 9pt;
-  border: 1px solid #c8d3d9;
   padding: 10px;
   margin-bottom: 10px;
   margin-top: 20px;

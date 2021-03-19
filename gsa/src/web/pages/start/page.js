@@ -378,7 +378,11 @@ const StartPage = () => {
   return (
     <React.Fragment>
       <PageTitle title={_('Dashboards')} />
-      <ToolBarIcons />
+      <span>
+        {' '}
+        {/* span prevents Toolbar from growing */}
+        <ToolBarIcons />
+      </span>
       <Section title={_('Dashboards')} img={<DashboardIcon size="large" />}>
         {isLoading ? (
           <Loading />

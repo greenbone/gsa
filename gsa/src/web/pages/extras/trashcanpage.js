@@ -353,7 +353,11 @@ const Trashcan = () => {
     <React.Fragment>
       <PageTitle title={_('Trashcan')} />
       <Layout flex="column">
-        <ToolBarIcons />
+        <span>
+          {' '}
+          {/* span prevents Toolbar from growing */}
+          <ToolBarIcons />
+        </span>
         {error && (
           <ErrorDialog
             text={error.message}
