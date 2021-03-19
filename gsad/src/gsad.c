@@ -3045,36 +3045,6 @@ main (int argc, char **argv)
   if (http_only)
     no_redirect = TRUE;
 
-  if (unix_socket_path)
-    {
-      /* Fork for the unix socket server. */
-      g_debug ("Forking for unix socket...\n");
-      pid_t pid = fork ();
-      switch (pid)
-        {
-        case 0:
-          /* Child. */
-#if __linux
-          if (prctl (PR_SET_PDEATHSIG, SIGKILL))
-            g_warning ("%s: Failed to change parent death signal;"
-                       " unix socket process will remain if parent is killed:"
-                       " %s\n",
-                       __func__, strerror (errno));
-#endif
-          break;
-        case -1:
-          /* Parent when error. */
-          g_warning ("%s: Failed to fork for unix socket!\n", __func__);
-          exit (EXIT_FAILURE);
-          break;
-        default:
-          /* Parent. */
-          unix_pid = pid;
-          no_redirect = TRUE;
-          break;
-        }
-    }
-
   if (!no_redirect)
     {
       /* Fork for the redirect server. */
