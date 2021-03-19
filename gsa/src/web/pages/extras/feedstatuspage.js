@@ -105,7 +105,11 @@ const FeedStatus = ({feeds}) => {
     <React.Fragment>
       <PageTitle title={_('Feed Status')} />
       <Layout flex="column">
-        <ToolBarIcons />
+        <span>
+          {' '}
+          {/* span prevents Toolbar from growing */}
+          <ToolBarIcons />
+        </span>
         <Section img={<FeedIcon size="large" />} title={_('Feed Status')} />
         <Table>
           <TableBody>

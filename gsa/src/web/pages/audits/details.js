@@ -20,7 +20,7 @@ import React, {useEffect} from 'react';
 import _ from 'gmp/locale';
 import DateTime from 'web/components/date/datetime';
 
-import {hasValue} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
@@ -231,7 +231,11 @@ const AuditDetails = ({entity, links = true}) => {
                 <TableRow>
                   <TableData>{_('Next')}</TableData>
                   <TableData>
-                    <DateTime date={schedule.event.nextDate} />
+                    {isDefined(schedule.event.nextDate) ? (
+                      <DateTime date={schedule.event.nextDate} />
+                    ) : (
+                      _('N/A')
+                    )}
                   </TableData>
                 </TableRow>
               )}

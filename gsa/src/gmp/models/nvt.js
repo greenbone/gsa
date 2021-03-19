@@ -21,6 +21,7 @@ import {isEmpty, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
 import {
+  parseDate,
   parseFloat,
   parseSeverity,
   parseScoreToSeverity,
@@ -170,8 +171,9 @@ class Nvt extends Info {
 
     if (isDefined(ret.severities)) {
       const {severity} = ret.severities;
-      ret.severity = parseSeverity(severity.score / 10);
-      ret.severityOrigin = parseText(severity.origin);
+      ret.severity = parseSeverity(severity?.score / 10);
+      ret.severityOrigin = parseText(severity?.origin);
+      ret.severityDate = parseDate(severity.date);
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
     }

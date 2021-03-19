@@ -79,10 +79,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+- Added CVSS date to NVT details [#2802](https://github.com/greenbone/gsa/pull/2802)
+- Add option to allow to scan simultaneous IPs to targets [#2779](https://github.com/greenbone/gsa/pull/2779)
 - Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
+- Move error message and adjust design on login page [#2780](https://github.com/greenbone/gsa/pull/2780)
 - Refactored useFormValidation hook [#2704](https://github.com/greenbone/gsa/pull/2704)
 - Updated copyright and footer layout [#2687](https://github.com/greenbone/gsa/pull/2687)
 - New login page layout
@@ -93,6 +96,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Fixed
+- Fixed setting comments of business process nodes [#2781](https://github.com/greenbone/gsa/pull/2781)
 - Added the deprecatedBy field to CPEs [#2751](https://github.com/greenbone/gsa/pull/2751)
 - Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
 
@@ -106,7 +110,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...gsa-21.04
 
-## [20.8.1] - unreleased
+## [20.8.1] - 2021-02-02
 
 ### Added
 - Added icon to host detailspage to link to TLS certificates [#2624](https://github.com/greenbone/gsa/pull/2624)
@@ -128,6 +132,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use <predefined> to disable feed object editing and filter creation on feed status page [#2398](https://github.com/greenbone/gsa/pull/2398)
 
 ### Fixed
+- Fix default port value for scanner dialog [#2773](https://github.com/greenbone/gsa/pull/2773)
+- Stop growing of toolbars which only have the help icon [#2641](https://github.com/greenbone/gsa/pull/2641)
 - Fixed initial value of dropdown for including related resources for permissions [#2632](https://github.com/greenbone/gsa/pull/2632)
 - Fixed compiling gsad with libmicrohttp 0.9.71 and later [#2625](https://github.com/greenbone/gsa/pull/2625)
 - Fixed display of alert condition "Severity changed" [#2623](https://github.com/greenbone/gsa/pull/2623)
@@ -142,7 +148,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Remove secinfo filter from user settings dialog and elsewhere [#2495](https://github.com/greenbone/gsa/pull/2495)
 - Removed export/download for report formats [#2427](https://github.com/greenbone/gsa/pull/2427)
 
-[20.8.1]: https://github.com/greenbone/gsa/compare/v20.8.0...gsa-20.08
+[20.8.1]: https://github.com/greenbone/gsa/compare/v20.8.0...v20.8.1
 
 ## [20.8.0] - 2020-08-11
 
