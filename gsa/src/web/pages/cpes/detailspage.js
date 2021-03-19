@@ -20,12 +20,13 @@ import {useParams} from 'react-router-dom';
 
 import {useExportCpesByIds, useGetCpe} from 'web/graphql/cpes';
 
-import {hasValue} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import _ from 'gmp/locale';
-import DateTime from 'web/components/date/datetime';
 
 import SeverityBar from 'web/components/bar/severitybar';
+
+import DateTime from 'web/components/date/datetime';
 
 import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import ExportIcon from 'web/components/icon/exporticon';
@@ -153,15 +154,19 @@ const EntityInfo = ({entity}) => {
       <div>{id}</div>
       <div>{_('Modified:')}</div>
       <div>
-        <DateTime date={modificationTime} />
+        {isDefined(modificationTime) ? (
+          <DateTime date={modificationTime} />
+        ) : (
+          _('N/A')
+        )}
       </div>
       <div>{_('Created:')}</div>
       <div>
-        <DateTime date={creationTime} />
+        {isDefined(creationTime) ? <DateTime date={creationTime} /> : _('N/A')}
       </div>
       <div>{_('Last updated:')}</div>
       <div>
-        <DateTime date={updateTime} />
+        {isDefined(updateTime) ? <DateTime date={updateTime} /> : _('N/A')}
       </div>
     </InfoLayout>
   );

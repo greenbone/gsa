@@ -28,6 +28,8 @@ import {
 } from 'gmp/models/credential';
 import {ALL_FILTER} from 'gmp/models/filter';
 
+import {YES_VALUE} from 'gmp/parser';
+
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -36,11 +38,6 @@ import EntityComponent from 'web/entity/component';
 import CredentialsDialog from 'web/pages/credentials/dialog';
 
 import PortListDialog from 'web/pages/portlists/dialog';
-
-import PropTypes from 'web/utils/proptypes';
-import {UNSET_VALUE} from 'web/utils/render';
-
-import TargetDialog from './dialog';
 
 import {
   useCreateCredential,
@@ -51,7 +48,11 @@ import {useLazyGetPortLists, useCreatePortList} from 'web/graphql/portlists';
 
 import {useCreateTarget, useModifyTarget} from 'web/graphql/targets';
 
-import readFileToText from 'web/utils/readFileToText.js';
+import PropTypes from 'web/utils/proptypes';
+import readFileToText from 'web/utils/readFileToText';
+import {UNSET_VALUE} from 'web/utils/render';
+
+import TargetDialog from './dialog';
 
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
@@ -123,6 +124,7 @@ const TargetComponent = props => {
       setTargetDialogState(prevState => ({
         ...prevState,
         id: entity.id,
+        allowSimultaneousIPs: entity.allowSimultaneousIPs,
         alive_tests: entity.alive_tests,
         comment: entity.comment,
         esxi_credential_id: id_or__(entity.esxi_credential),
@@ -164,6 +166,7 @@ const TargetComponent = props => {
         ...prevState,
         id: undefined,
         alive_tests: undefined,
+        allowSimultaneousIPs: YES_VALUE,
         comment: undefined,
         esxi_credential_id: undefined,
         exclude_hosts: undefined,
@@ -340,6 +343,7 @@ const TargetComponent = props => {
 
   const handleSaveTarget = ({
     alive_tests,
+    allowSimultaneousIPs,
     comment,
     esxi_credential_id,
     exclude_hosts,
@@ -381,6 +385,7 @@ const TargetComponent = props => {
             mutationData = {
               id,
               aliveTest: alive_tests,
+              allowSimultaneousIPs,
               comment,
               esxiCredentialId: esxi_credential_id,
               hosts: target_source === 'file' ? fileText : hosts,
@@ -413,6 +418,7 @@ const TargetComponent = props => {
 
         const mutationData = {
           aliveTest: alive_tests,
+          allowSimultaneousIPs,
           comment,
           esxiCredentialId: esxi_credential_id,
           name,
@@ -452,6 +458,7 @@ const TargetComponent = props => {
 
   const {
     alive_tests,
+    allowSimultaneousIPs,
     comment,
     esxi_credential_id,
     exclude_hosts,
@@ -500,6 +507,7 @@ const TargetComponent = props => {
           {targetDialogVisible && (
             <TargetDialog
               alive_tests={alive_tests}
+              allowSimultaneousIPs={allowSimultaneousIPs}
               comment={comment}
               // credential={credential} // this is undefined?
               credentials={credentials}

@@ -18,7 +18,6 @@
 import React, {useEffect} from 'react';
 
 import _ from 'gmp/locale';
-import DateTime from 'web/components/date/datetime';
 
 import {duration} from 'gmp/models/date';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
@@ -26,7 +25,9 @@ import {scannerTypeName} from 'gmp/models/scanner';
 
 import {YES_VALUE} from 'gmp/parser';
 
-import {hasValue} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
+
+import DateTime from 'web/components/date/datetime';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
@@ -257,7 +258,11 @@ const TaskDetails = ({entity, links = true}) => {
                 <TableRow>
                   <TableData>{_('Next')}</TableData>
                   <TableData>
-                    <DateTime date={schedule.event.nextDate} />
+                    {isDefined(schedule.event.nextDate) ? (
+                      <DateTime date={schedule.event.nextDate} />
+                    ) : (
+                      _('N/A')
+                    )}
                   </TableData>
                 </TableRow>
               )}

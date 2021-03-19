@@ -113,7 +113,7 @@ describe('StartPage tests', () => {
     expect(icons[0]).toHaveAttribute('title', 'Help: Dashboards');
 
     // Tabs
-    expect(spans[2]).toHaveTextContent('Overview');
+    expect(spans[3]).toHaveTextContent('Overview');
     expect(icons[2]).toHaveAttribute('title', 'Add new Dashboard');
 
     // Dashboard Controls

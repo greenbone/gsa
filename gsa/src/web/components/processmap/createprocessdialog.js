@@ -91,7 +91,7 @@ const CreateProcessDialog = ({
           <FormGroup title={_('Comment')}>
             <TextField
               name="comment"
-              value={comment}
+              value={values.comment}
               grow="1"
               onChange={handleValueChange}
             />

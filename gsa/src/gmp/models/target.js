@@ -71,6 +71,8 @@ class Target extends Model {
       );
     }
 
+    ret.allowSimultaneousIPs = parseYesNo(element.allow_simultaneous_ips);
+
     return ret;
   }
 }

@@ -26,13 +26,15 @@ import _ from 'gmp/locale';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import Layout from 'web/components/layout/layout';
+import ErrorContainer from 'web/components/error/errorcontainer';
+import useFormValues from 'web/components/form/useFormValues';
 import ProductImage from 'web/components/img/product';
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
 import PoweredByGreenbone from 'web/components/img/powered';
 import Divider from 'web/components/layout/divider';
-import useFormValues from 'web/components/form/useFormValues';
+import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 const Paper = styled(Layout)`
   background: ${Theme.white};
@@ -47,7 +49,6 @@ const Panel = styled.div`
   margin: 5px auto;
   padding-bottom: 10px;
   font-size: 9pt;
-  border: 1px solid ${Theme.lightGray};
   padding: 10px;
   margin-bottom: 10px;
 `;
@@ -62,6 +63,12 @@ const Error = styled.p`
   font-weight: bold;
   text-align: center;
   margin: 10px;
+`;
+
+const StyledErrorContainer = styled(ErrorContainer)`
+  margin: 0 0 0 0;
+  font-size: 15px;
+  border-radius: 4px;
 `;
 
 const StyledButton = styled(Button)`
@@ -144,6 +151,12 @@ const LoginForm = ({
         </Layout>
 
         <>
+          {isDefined(error) && (
+            <StyledErrorContainer data-testid="error">
+              {error}
+            </StyledErrorContainer>
+          )}
+
           {showLogin && !isIE11 && (
             <StyledLayout flex={'column'}>
               <H1>{_('Sign in to your account')}</H1>
@@ -175,7 +188,6 @@ const LoginForm = ({
               </StyledButton>
             </StyledLayout>
           )}
-          {isDefined(error) && <Error data-testid="error">{error}</Error>}
         </>
 
         {showGuestLogin && (
