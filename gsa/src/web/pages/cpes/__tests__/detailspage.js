@@ -282,30 +282,4 @@ describe('CPEs ToolBarIcons tests', () => {
     expect(links[1]).toHaveAttribute('href', '/cpes');
     expect(icons[1]).toHaveAttribute('title', 'CPE List');
   });
-
-  test('should call click handlers', () => {
-    const handleCpeDownload = jest.fn();
-
-    const {render} = rendererWith({
-      gmp: {settings: {manualUrl}},
-      capabilities: caps,
-      router: true,
-    });
-
-    const {getAllByTestId} = render(
-      <ToolBarIcons
-        entity={cpeObject}
-        onCpeDownloadClick={handleCpeDownload}
-      />,
-    );
-
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: CPEs');
-    expect(icons[1]).toHaveAttribute('title', 'CPE List');
-
-    fireEvent.click(icons[2]);
-    expect(handleCpeDownload).toHaveBeenCalledWith(cpeObject);
-    expect(icons[2]).toHaveAttribute('title', 'Export CPE');
-  });
 });
