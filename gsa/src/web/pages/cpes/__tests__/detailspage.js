@@ -25,15 +25,12 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Cpe from 'gmp/models/cpe';
 
-import Filter from 'gmp/models/filter';
-import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import {
   createExportCpesByIdsQueryMock,
   createGetCpeQueryMock,
   cpeEntity,
 } from 'web/graphql/__mocks__/cpes';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
@@ -112,6 +109,8 @@ describe('CPE Detailspage tests', () => {
     const links = screen.getAllByRole('link');
     const detailslinks = screen.getAllByTestId('details-link');
     const headings = baseElement.querySelectorAll('h2');
+    const progressBars = screen.getAllByTestId('progressbar-box');
+    const tabs = screen.getAllByTestId('entities-tab-title');
 
     // test icon bar
     expect(icons[0]).toHaveAttribute('title', 'Help: CPEs');
@@ -125,7 +124,7 @@ describe('CPE Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Export CPE');
 
-    // test title bar
+    // test entity info bar
     expect(headings[0]).toHaveTextContent('CPE: foo');
     expect(baseElement).toHaveTextContent('cpe:/a:foo');
     expect(baseElement).toHaveTextContent(
@@ -139,7 +138,6 @@ describe('CPE Detailspage tests', () => {
     );
 
     // test tabs
-    const tabs = screen.getAllByTestId('entities-tab-title');
     expect(tabs[0]).toHaveTextContent('User Tags');
 
     // test page content
@@ -148,7 +146,6 @@ describe('CPE Detailspage tests', () => {
     expect(detailslinks[0]).toHaveTextContent('cpe:/a:foo:bar');
 
     // severity bar(s)
-    const progressBars = screen.getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'High');
     expect(progressBars[0]).toHaveTextContent('9.8 (High)');
     expect(progressBars[1]).toHaveAttribute('title', 'Medium');
