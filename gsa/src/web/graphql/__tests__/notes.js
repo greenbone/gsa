@@ -364,7 +364,8 @@ describe('useDeleteNote tests', () => {
 
 describe('useGetNote tests', () => {
   test('should load note', async () => {
-    const [queryMock, resultFunc] = createGetNoteQueryMock();
+    const id = '456';
+    const [queryMock, resultFunc] = createGetNoteQueryMock(id);
 
     const {render} = rendererWith({queryMocks: [queryMock]});
 

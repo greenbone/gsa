@@ -23,8 +23,8 @@ import React from 'react';
 import {_} from 'gmp/locale/lang';
 import {dateFormat} from 'gmp/locale/date';
 
-import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
-import {isEmpty, shorten, split} from 'gmp/utils/string';
+import {hasValue, isDefined, isFunction, isObject} from 'gmp/utils/identity';
+import {shorten, split} from 'gmp/utils/string';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
 export const UNSET_VALUE = null;
@@ -84,7 +84,7 @@ export const renderChildren = children =>
   );
 
 export const na = value => {
-  return isEmpty(value) ? _('N/A') : value;
+  return hasValue(value) ? value : _('N/A');
 };
 
 export const renderYesNo = value => {
