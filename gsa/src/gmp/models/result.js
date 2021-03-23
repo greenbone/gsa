@@ -17,10 +17,10 @@
  */
 
 import {forEach, map} from 'gmp/utils/array';
-import {isDefined, isString} from 'gmp/utils/identity';
+import {hasValue, isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 import {parseSeverity, parseQod} from 'gmp/parser';
 
 import Nvt from './nvt';
@@ -48,6 +48,64 @@ export class Delta {
 
 class Result extends Model {
   static entityType = 'result';
+
+  static parseObject(object) {
+    const copy = super.parseObject(object);
+
+    const {
+      detectionResult,
+      name,
+      notes,
+      nvt = {},
+      overrides,
+      report,
+      task,
+      tickets,
+    } = object;
+
+    copy.nvt = Nvt.fromObject(nvt);
+
+    copy.vulnerability = hasValue(name) ? name : nvt?.id;
+
+    if (hasValue(report)) {
+      copy.report = parseModelFromObject(report, 'report');
+    }
+
+    if (hasValue(task)) {
+      copy.report = parseModelFromObject(task, 'task');
+    }
+
+    if (hasValue(detectionResult)) {
+      const details = {};
+
+      if (hasValue(detectionResult.details)) {
+        forEach(detectionResult.details.detail, detail => {
+          details[detail.name] = detail.value;
+        });
+      }
+
+      copy.detectionResult = {
+        id: detectionResult.id,
+        details: details,
+      };
+    }
+
+    copy.notes = hasValue(notes)
+      ? map(notes, note => Note.fromObject(note))
+      : [];
+    copy.overrides = hasValue(overrides)
+      ? map(overrides, override => Override.fromObject(override))
+      : [];
+
+    // parse tickets as models only. we don't have other data then the id here
+    copy.tickets = hasValue(tickets)
+      ? map(tickets, ticket => parseModelFromObject(ticket, 'ticket'))
+      : [];
+
+    // ToDo: Delta
+
+    return copy;
+  }
 
   static parseElement(element) {
     const copy = super.parseElement(element);
