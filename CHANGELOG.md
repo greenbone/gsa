@@ -8,7 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Added CVSS date to NVT details [#2802](https://github.com/greenbone/gsa/pull/2802)
-- Add option to allow to scan simultaneous IPs to targets [#2779](https://github.com/greenbone/gsa/pull/2779)
+- Add option to allow to scan simultaneous IPs to targets
+  [#2779](https://github.com/greenbone/gsa/pull/2779),
+  [#2813](https://github.com/greenbone/gsa/pull/2813)
 - Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
