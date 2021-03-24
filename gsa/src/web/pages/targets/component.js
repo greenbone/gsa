@@ -17,7 +17,7 @@
  */
 /* eslint-disable no-shadow */
 
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -51,6 +51,7 @@ import {useCreateTarget, useModifyTarget} from 'web/graphql/targets';
 import PropTypes from 'web/utils/proptypes';
 import readFileToText from 'web/utils/readFileToText';
 import {UNSET_VALUE} from 'web/utils/render';
+import reducer, {updateState} from 'web/utils/stateReducer';
 
 import TargetDialog from './dialog';
 
@@ -60,7 +61,18 @@ const id_or__ = value => {
   return isDefined(value) ? value.id : UNSET_VALUE;
 };
 
+const initialState = {
+  credentialsDialogVisible: false,
+  portListDialogVisible: false,
+  targetDialogVisible: false,
+  credentialsDialogState: {},
+  portListsTitle: undefined,
+  idField: undefined,
+};
+
 const TargetComponent = props => {
+  const [state, dispatchState] = useReducer(reducer, initialState);
+
   const [createTarget] = useCreateTarget();
   const [modifyTarget] = useModifyTarget();
   const [createPortList] = useCreatePortList();
@@ -80,37 +92,25 @@ const TargetComponent = props => {
     filterString: ALL_FILTER.toFilterString(),
   });
 
-  const [credentialsDialogVisible, setCredentialsDialogVisible] = useState(
-    false,
-  );
-  const [portListDialogVisible, setPortListDialogVisible] = useState(false);
-  const [targetDialogVisible, setTargetDialogVisible] = useState(false);
-
-  const [targetDialogState, setTargetDialogState] = useState({
-    initial: {},
-  });
-
-  // eslint-disable-next-line no-unused-vars
-  const [idField, setIdField] = useState();
-
-  const [credentialsDialogState, setCredentialsDialogState] = useState({});
-
-  const [portListsTitle, setPortListsTitle] = useState();
-
   const openCredentialsDialog = ({id_field, types, title}) => {
-    setIdField(id_field);
-
-    setCredentialsDialogVisible(true);
-    setCredentialsDialogState({
-      credentialTypes: types,
-      credentialsTitle: title,
-    });
+    dispatchState(
+      updateState({
+        idField: id_field,
+        credentialsDialogVisible: true,
+        credentialTypes: types,
+        credentialsTitle: title,
+      }),
+    );
 
     handleInteraction();
   };
 
   const closeCredentialsDialog = () => {
-    setCredentialsDialogVisible(false);
+    dispatchState(
+      updateState({
+        credentialsDialogVisible: false,
+      }),
+    );
   };
 
   const handleCloseCredentialsDialog = () => {
@@ -120,67 +120,71 @@ const TargetComponent = props => {
 
   const openTargetDialog = (entity, initial = {}) => {
     if (isDefined(entity)) {
-      setTargetDialogVisible(true);
-      setTargetDialogState(prevState => ({
-        ...prevState,
-        id: entity.id,
-        allowSimultaneousIPs: entity.allowSimultaneousIPs,
-        alive_tests: entity.alive_tests,
-        comment: entity.comment,
-        esxi_credential_id: id_or__(entity.esxi_credential),
-        exclude_hosts: isDefined(entity.exclude_hosts)
-          ? entity.exclude_hosts.join(', ')
-          : '',
-        hosts: entity.hosts.join(', '),
-        in_use: entity.isInUse(),
-        name: entity.name,
-        port: isDefined(entity.ssh_credential)
-          ? entity.ssh_credential.port
-          : '22',
-        reverse_lookup_only: entity.reverse_lookup_only,
-        reverse_lookup_unify: entity.reverse_lookup_unify,
-        target_source: 'manual',
-        target_exclude_source: 'manual',
-        targetTitle: _('Edit Target {{name}}', entity),
-      }));
+      dispatchState(
+        updateState({
+          targetDialogVisible: true,
+          id: entity.id,
+          allowSimultaneousIPs: entity.allowSimultaneousIPs,
+          alive_tests: entity.alive_tests,
+          comment: entity.comment,
+          esxi_credential_id: id_or__(entity.esxi_credential),
+          exclude_hosts: isDefined(entity.exclude_hosts)
+            ? entity.exclude_hosts.join(', ')
+            : '',
+          hosts: entity.hosts.join(', '),
+          in_use: entity.isInUse(),
+          name: entity.name,
+          port: isDefined(entity.ssh_credential)
+            ? entity.ssh_credential.port
+            : '22',
+          reverse_lookup_only: entity.reverse_lookup_only,
+          reverse_lookup_unify: entity.reverse_lookup_unify,
+          target_source: 'manual',
+          target_exclude_source: 'manual',
+          targetTitle: _('Edit Target {{name}}', entity),
+        }),
+      );
 
       // set credential and port list ids after credentials and port lists have been loaded
       loadAll().then(() => {
-        setTargetDialogState(prevState => ({
-          ...prevState,
-          smb_credential_id: id_or__(entity.smb_credential),
-          ssh_credential_id: id_or__(entity.ssh_credential),
-          port_list_id: id_or__(entity.port_list),
-        }));
+        dispatchState(
+          updateState({
+            smb_credential_id: id_or__(entity.smb_credential),
+            ssh_credential_id: id_or__(entity.ssh_credential),
+            port_list_id: id_or__(entity.port_list),
+          }),
+        );
       });
     } else {
       loadAll().then(() => {
-        setTargetDialogState(prevState => ({
-          ...prevState,
-          port_list_id: DEFAULT_PORT_LIST_ID,
-        }));
+        dispatchState(
+          updateState({
+            port_list_id: DEFAULT_PORT_LIST_ID,
+          }),
+        );
       });
-      setTargetDialogVisible(true);
 
-      setTargetDialogState(prevState => ({
-        ...prevState,
-        id: undefined,
-        alive_tests: undefined,
-        allowSimultaneousIPs: YES_VALUE,
-        comment: undefined,
-        esxi_credential_id: undefined,
-        exclude_hosts: undefined,
-        hosts: undefined,
-        in_use: undefined,
-        name: undefined,
-        port: undefined,
-        reverse_lookup_only: undefined,
-        reverse_lookup_unify: undefined,
-        target_source: undefined,
-        target_exclude_source: undefined,
-        targetTitle: _('New Target'),
-        ...initial,
-      }));
+      dispatchState(
+        updateState({
+          targetDialogVisible: true,
+          id: undefined,
+          alive_tests: undefined,
+          allowSimultaneousIPs: YES_VALUE,
+          comment: undefined,
+          esxi_credential_id: undefined,
+          exclude_hosts: undefined,
+          hosts: undefined,
+          in_use: undefined,
+          name: undefined,
+          port: undefined,
+          reverse_lookup_only: undefined,
+          reverse_lookup_unify: undefined,
+          target_source: undefined,
+          target_exclude_source: undefined,
+          targetTitle: _('New Target'),
+          ...initial,
+        }),
+      );
     }
 
     handleInteraction();
@@ -191,7 +195,11 @@ const TargetComponent = props => {
   };
 
   const closeTargetDialog = () => {
-    setTargetDialogVisible(false);
+    dispatchState(
+      updateState({
+        targetDialogVisible: false,
+      }),
+    );
   };
 
   const handleCloseTargetDialog = () => {
@@ -204,13 +212,21 @@ const TargetComponent = props => {
   };
 
   const openPortListDialog = () => {
-    setPortListDialogVisible(true);
-    setPortListsTitle(_('New Port List'));
+    dispatchState(
+      updateState({
+        portListDialogVisible: true,
+        portListsTitle: _('New Port List'),
+      }),
+    );
     handleInteraction();
   };
 
   const closePortListDialog = () => {
-    setPortListDialogVisible(false);
+    dispatchState(
+      updateState({
+        portListDialogVisible: false,
+      }),
+    );
   };
 
   const handleClosePortListDialog = () => {
@@ -269,46 +285,52 @@ const TargetComponent = props => {
         return refetchPortLists();
       })
       .then(() => {
-        setTargetDialogState(prevState => ({
-          ...prevState,
-          port_list_id,
-        }));
+        dispatchState(
+          updateState({
+            port_list_id,
+          }),
+        );
       });
   };
 
   const handlePortListChange = port_list_id => {
-    setTargetDialogState(prevState => ({
-      ...prevState,
-      port_list_id,
-    }));
+    dispatchState(
+      updateState({
+        port_list_id,
+      }),
+    );
   };
 
   const handleEsxiCredentialChange = esxi_credential_id => {
-    setTargetDialogState(prevState => ({
-      ...prevState,
-      esxi_credential_id,
-    }));
+    dispatchState(
+      updateState({
+        esxi_credential_id,
+      }),
+    );
   };
 
   const handleSshCredentialChange = ssh_credential_id => {
-    setTargetDialogState(prevState => ({
-      ...prevState,
-      ssh_credential_id,
-    }));
+    dispatchState(
+      updateState({
+        ssh_credential_id,
+      }),
+    );
   };
 
   const handleSnmpCredentialChange = snmp_credential_id => {
-    setTargetDialogState(prevState => ({
-      ...prevState,
-      snmp_credential_id,
-    }));
+    dispatchState(
+      updateState({
+        snmp_credential_id,
+      }),
+    );
   };
 
   const handleSmbCredentialChange = smb_credential_id => {
-    setTargetDialogState(prevState => ({
-      ...prevState,
-      smb_credential_id,
-    }));
+    dispatchState(
+      updateState({
+        smb_credential_id,
+      }),
+    );
   };
 
   const handleInteraction = () => {
@@ -478,9 +500,13 @@ const TargetComponent = props => {
     target_source,
     target_exclude_source,
     targetTitle,
-  } = targetDialogState;
-
-  const {credentialsTitle, credentialTypes} = credentialsDialogState;
+    credentialsTitle,
+    credentialTypes,
+    targetDialogVisible,
+    credentialsDialogVisible,
+    portListDialogVisible,
+    portListsTitle,
+  } = state;
 
   return (
     <EntityComponent
