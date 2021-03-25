@@ -318,6 +318,75 @@ describe('nvt Model tests', () => {
     expect(nvt.solution.description).toEqual('Some description');
     expect(nvt.solution.lorem).toBeUndefined();
   });
+
+  test('should set correct solution information for log NVTs', () => {
+    const nvt1 = Nvt.fromElement({
+      solution: {
+        _type: 'foo',
+      },
+      severities: {
+        severity: {
+          score: 0,
+        },
+      },
+    });
+    const res1 = {
+      type: 'foo',
+      description: undefined,
+      method: undefined,
+    };
+    const nvt2 = Nvt.fromElement({
+      solution: {
+        __text: 'bar',
+      },
+      severities: {
+        severity: {
+          score: 0,
+        },
+      },
+    });
+    const res2 = {
+      type: undefined,
+      description: 'bar',
+      method: undefined,
+    };
+    const nvt3 = Nvt.fromElement({
+      solution: {
+        _method: 'baz',
+      },
+      severities: {
+        severity: {
+          score: 0,
+        },
+      },
+    });
+    const res3 = {
+      type: undefined,
+      description: undefined,
+      method: 'baz',
+    };
+    const nvt4 = Nvt.fromElement({
+      solution: {
+        _type: '',
+        __text: 'foo',
+      },
+      severities: {
+        severity: {
+          score: 0,
+        },
+      },
+    });
+    const res4 = {
+      type: undefined,
+      description: 'foo',
+      method: undefined,
+    };
+
+    expect(nvt1.solution).toEqual(res1);
+    expect(nvt2.solution).toEqual(res2);
+    expect(nvt3.solution).toEqual(res3);
+    expect(nvt4.solution).toEqual(res4);
+  });
 });
 
 describe('getRefs tests', () => {
