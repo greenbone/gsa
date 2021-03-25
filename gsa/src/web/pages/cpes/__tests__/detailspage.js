@@ -25,33 +25,18 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Cpe from 'gmp/models/cpe';
 
-import Filter from 'gmp/models/filter';
-import CollectionCounts from 'gmp/collection/collectioncounts';
-
 import {
   createExportCpesByIdsQueryMock,
   createGetCpeQueryMock,
   cpeEntity,
 } from 'web/graphql/__mocks__/cpes';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
-import {rendererWith, wait, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import CpePage, {ToolBarIcons} from '../detailspage';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: 'cpe:/a:foo',
-  }),
-}));
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = jest.fn();
 
 setLocale('en');
 
@@ -63,10 +48,21 @@ const reloadInterval = -1;
 const manualUrl = 'test/';
 
 let currentSettings;
-let getPermissions;
 let renewSession;
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: 'cpe:/a:foo',
+  }),
+}));
+
 beforeEach(() => {
+  if (!isDefined(window.URL)) {
+    window.URL = {};
+  }
+  window.URL.createObjectURL = jest.fn();
+
   currentSettings = jest.fn().mockResolvedValue({
     foo: 'bar',
   });
@@ -78,24 +74,18 @@ beforeEach(() => {
 
 describe('CPE Detailspage tests', () => {
   test('should render full Detailspage', async () => {
-    const getCpe = jest.fn().mockResolvedValue({
-      data: cpeObject,
-    });
-
     const gmp = {
-      cpe: {
-        get: getCpe,
+      settings: {
+        manualUrl,
+        reloadInterval,
       },
-      permissions: {
-        get: getPermissions,
-      },
-      settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
       },
     };
 
-    const [mock, resultFunc] = createGetCpeQueryMock();
+    const id = 'cpe:/a:foo';
+    const [mock, resultFunc] = createGetCpeQueryMock(id);
     const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
@@ -107,19 +97,22 @@ describe('CPE Detailspage tests', () => {
     });
 
     store.dispatch(setTimezone('UTC'));
-    store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(<CpePage id="cpe:/a:foo" />);
+    const {baseElement} = render(<CpePage id="cpe:/a:foo" />);
 
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
 
-    const links = baseElement.querySelectorAll('a');
+    // get different types of dom elements
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
+    const detailslinks = screen.getAllByTestId('details-link');
+    const headings = baseElement.querySelectorAll('h2');
+    const progressBars = screen.getAllByTestId('progressbar-box');
+    const tabs = screen.getAllByTestId('entities-tab-title');
 
     // test icon bar
-    const icons = getAllByTestId('svg-icon');
-
     expect(icons[0]).toHaveAttribute('title', 'Help: CPEs');
     expect(links[0]).toHaveAttribute(
       'href',
@@ -131,9 +124,8 @@ describe('CPE Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Export CPE');
 
-    // test title bar
-    expect(baseElement).toHaveTextContent('CPE: foo');
-
+    // test entity info bar
+    expect(headings[0]).toHaveTextContent('CPE: foo');
     expect(baseElement).toHaveTextContent('cpe:/a:foo');
     expect(baseElement).toHaveTextContent(
       'Modified:Tue, Sep 29, 2020 12:16 PM UTC',
@@ -141,17 +133,19 @@ describe('CPE Detailspage tests', () => {
     expect(baseElement).toHaveTextContent(
       'Created:Mon, Aug 17, 2020 12:18 PM UTC',
     );
-
     expect(baseElement).toHaveTextContent(
       'Last updated:Tue, Sep 29, 2020 12:16 PM UTC',
     );
 
+    // test tabs
+    expect(tabs[0]).toHaveTextContent('User Tags');
+
     // test page content
     expect(baseElement).toHaveTextContent('StatusFINAL');
-    expect(baseElement).toHaveTextContent('Deprecated Bycpe:/a:foo:bar');
+    expect(baseElement).toHaveTextContent('Deprecated By');
+    expect(detailslinks[0]).toHaveTextContent('cpe:/a:foo:bar');
 
     // severity bar(s)
-    const progressBars = getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'High');
     expect(progressBars[0]).toHaveTextContent('9.8 (High)');
     expect(progressBars[1]).toHaveAttribute('title', 'Medium');
@@ -162,35 +156,14 @@ describe('CPE Detailspage tests', () => {
     expect(progressBars[3]).toHaveTextContent('1.8 (Low)');
 
     // details
-    expect(baseElement).toHaveTextContent('Reported Vulnerabilities');
-    expect(baseElement).toHaveTextContent('CVE-2020-1234');
-    expect(baseElement).toHaveTextContent('CVE-2020-5678');
-    expect(baseElement).toHaveTextContent('CVE-2019-5678');
+    expect(headings[1]).toHaveTextContent('Reported Vulnerabilities');
+    expect(detailslinks[1]).toHaveTextContent('CVE-2020-1234');
+    expect(detailslinks[2]).toHaveTextContent('CVE-2020-5678');
+    expect(detailslinks[3]).toHaveTextContent('CVE-2019-5678');
   });
 
   test('should render user tags tab', async () => {
-    const getCpe = jest.fn().mockResolvedValue({
-      data: cpeObject,
-    });
-
-    const getTags = jest.fn().mockResolvedValue({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    });
-
     const gmp = {
-      cpe: {
-        get: getCpe,
-      },
-      permissions: {
-        get: getPermissions,
-      },
-      tags: {
-        get: getTags,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -198,9 +171,13 @@ describe('CPE Detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetCpeQueryMock();
+    const id = 'cpe:/a:foo';
+    const [mock, resultFunc] = createGetCpeQueryMock(id);
 
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
+    const [
+      renewSessionQueryMock,
+      renewSessionQueryResult,
+    ] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -218,23 +195,20 @@ describe('CPE Detailspage tests', () => {
 
     expect(resultFunc).toHaveBeenCalled();
 
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[4]);
+    const tabs = screen.getAllByTestId('entities-tab-title');
+
+    expect(tabs[0]).toHaveTextContent('User Tags');
+    fireEvent.click(tabs[0]);
+
+    await wait();
+
+    expect(renewSessionQueryResult).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('No user tags available');
   });
 
   test('should call commands', async () => {
-    const getCpe = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: cpeObject,
-      }),
-    );
-
     const gmp = {
-      cpe: {
-        get: getCpe,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -242,7 +216,8 @@ describe('CPE Detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetCpeQueryMock('cpe:/a:foo', cpeEntity);
+    const id = 'cpe:/a:foo';
+    const [mock, resultFunc] = createGetCpeQueryMock(id);
     const [
       exportQueryMock,
       exportQueryResult,
@@ -259,12 +234,12 @@ describe('CPE Detailspage tests', () => {
 
     store.dispatch(setTimezone('CET'));
 
-    const {getAllByTestId} = render(<CpePage id="cpe:/a:foo" />);
+    render(<CpePage id="cpe:/a:foo" />);
 
     await wait();
 
     expect(resultFunc).toHaveBeenCalled();
-    const icons = getAllByTestId('svg-icon');
+    const icons = screen.getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: CPEs');
     expect(icons[1]).toHaveAttribute('title', 'CPE List');
@@ -285,15 +260,15 @@ describe('CPEs ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={cpeObject}
         onCpeDownloadClick={handleCpeDownload}
       />,
     );
 
-    const links = element.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: CPEs');
     expect(links[0]).toHaveAttribute(
@@ -303,31 +278,5 @@ describe('CPEs ToolBarIcons tests', () => {
 
     expect(links[1]).toHaveAttribute('href', '/cpes');
     expect(icons[1]).toHaveAttribute('title', 'CPE List');
-  });
-
-  test('should call click handlers', () => {
-    const handleCpeDownload = jest.fn();
-
-    const {render} = rendererWith({
-      gmp: {settings: {manualUrl}},
-      capabilities: caps,
-      router: true,
-    });
-
-    const {getAllByTestId} = render(
-      <ToolBarIcons
-        entity={cpeObject}
-        onCpeDownloadClick={handleCpeDownload}
-      />,
-    );
-
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: CPEs');
-    expect(icons[1]).toHaveAttribute('title', 'CPE List');
-
-    fireEvent.click(icons[2]);
-    expect(handleCpeDownload).toHaveBeenCalledWith(cpeObject);
-    expect(icons[2]).toHaveAttribute('title', 'Export CPE');
   });
 });
