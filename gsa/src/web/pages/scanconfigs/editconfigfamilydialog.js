@@ -68,7 +68,7 @@ class Nvt extends React.Component {
       pref_count = '';
     }
 
-    const {name, id: nvtId, severity, timeout, defaultTimeout} = nvt;
+    const {name, oid: nvtId, severity, timeout, defaultTimeout} = nvt; // change oid to id once hyperion is fully implemented
     return (
       <TableRow>
         <TableData>{name}</TableData>
@@ -114,7 +114,7 @@ Nvt.propTypes = {
 
 const sortFunctions = {
   name: makeCompareString('name'),
-  id: makeCompareString('id'),
+  oid: makeCompareString('oid'),
   severity: makeCompareSeverity(),
   timeout: makeCompareString('timeout'),
 };
@@ -122,10 +122,10 @@ const sortFunctions = {
 const sortNvts = (nvts = [], sortBy, sortReverse, selected = {}) => {
   if (sortBy === 'selected') {
     return [...nvts].sort((a, b) => {
-      if (selected[a.id] && !selected[b.id]) {
+      if (selected[a.oid] && !selected[b.oid]) {
         return sortReverse ? 1 : -1;
       }
-      if (selected[b.id] && !selected[a.id]) {
+      if (selected[b.oid] && !selected[a.oid]) {
         return sortReverse ? -1 : 1;
       }
 
@@ -231,7 +231,7 @@ const EditScanConfigFamilyDialog = ({
                     <TableHead
                       currentSortBy={sortBy}
                       currentSortDir={sortDir}
-                      sortBy="id"
+                      sortBy="oid"
                       onSortChange={handleSortChange}
                       title={_('OID')}
                     />
@@ -263,7 +263,7 @@ const EditScanConfigFamilyDialog = ({
                 </TableHeader>
                 <TableBody>
                   {sortedNvts.map(nvt => {
-                    const {id: nvtId} = nvt;
+                    const {oid: nvtId} = nvt; // change oid to id once hyperion is fully implemented
                     return (
                       <Nvt
                         key={nvtId}
