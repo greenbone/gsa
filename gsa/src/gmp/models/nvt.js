@@ -157,14 +157,6 @@ class Nvt extends Info {
       getFilteredRefs(refs, 'cert-bund'),
     );
 
-    if (isDefined(ret.solution)) {
-      ret.solution = {
-        type: ret.solution._type,
-        description: ret.solution.__text,
-        method: ret.solution._method,
-      };
-    }
-
     ret.xrefs = getFilteredUrlRefs(refs, 'url').concat(getOtherRefs(refs));
 
     delete ret.refs;
@@ -178,6 +170,25 @@ class Nvt extends Info {
       ret.severity = parseSeverity(ret.cvss_base);
     }
     delete ret.cvss_base;
+
+    if (isDefined(ret.solution)) {
+      const solutionType = ret.solution._type;
+      const solutionText = ret.solution.__text;
+      const solutionMethod = ret.solution._method;
+      if (ret.severity === 0) {
+        ret.solution = {
+          type: solutionType === '' ? undefined : solutionType,
+          description: solutionText === '' ? undefined : solutionText,
+          method: solutionMethod === '' ? undefined : solutionMethod,
+        };
+      } else {
+        ret.solution = {
+          type: solutionType,
+          description: solutionText,
+          method: solutionMethod,
+        };
+      }
+    }
 
     if (isDefined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
