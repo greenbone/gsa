@@ -5313,7 +5313,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   hosts_filter = params_value (params, "hosts_filter");
   file = params_value (params, "file");
   exclude_file = params_value (params, "exclude_file");
-  allow_simultaneous_ips = params_value_bool (params, "allow_simultaneous_ips");
+  allow_simultaneous_ips = params_value (params, "allow_simultaneous_ips");
 
   CHECK_VARIABLE_INVALID (name, "Create Target");
   CHECK_VARIABLE_INVALID (target_source, "Create Target")
@@ -6284,7 +6284,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   target_smb_credential = params_value (params, "smb_credential_id");
   target_esxi_credential = params_value (params, "esxi_credential_id");
   target_snmp_credential = params_value (params, "snmp_credential_id");
-  allow_simultaneous_ips = params_value_bool (params, "allow_simultaneous_ips");
+  allow_simultaneous_ips = params_value (params, "allow_simultaneous_ips");
 
   CHECK_VARIABLE_INVALID (target_source, "Save Target");
   CHECK_VARIABLE_INVALID (target_exclude_source, "Save Target");
