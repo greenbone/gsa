@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Refactor target component to use useReducer [#2812](https://github.com/greenbone/gsa/pull/2812)
 - Implement nvt listpage queries and mutations [#2798](https://github.com/greenbone/gsa/pull/2798)
 - Implement nvt detailspage queries and mutations [#2774](https://github.com/greenbone/gsa/pull/2774)
 - Applied Backend changed to scanconfigs and policies [#2783](https://github.com/greenbone/gsa/pull/2783)
@@ -79,8 +80,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+- Allow to set unix socket permissions for gsad [#2816](https://github.com/greenbone/gsa/pull/2816)
 - Added CVSS date to NVT details [#2802](https://github.com/greenbone/gsa/pull/2802)
-- Add option to allow to scan simultaneous IPs to targets [#2779](https://github.com/greenbone/gsa/pull/2779)
+- Add option to allow to scan simultaneous IPs to targets
+  [#2779](https://github.com/greenbone/gsa/pull/2779),
+  [#2813](https://github.com/greenbone/gsa/pull/2813)
 - Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 

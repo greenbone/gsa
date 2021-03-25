@@ -141,9 +141,15 @@ describe('Task Detailspage tests', () => {
 
     expect(baseElement).toHaveTextContent('Task: foo');
 
-    const links = screen.getAllByRole('link');
+    // get different types of dom elements
+    const detailslinks = screen.getAllByTestId('details-link');
+    const headings = baseElement.querySelectorAll('h2');
     const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
+    const progressBars = screen.getAllByTestId('progressbar-box');
+    const tabs = screen.getAllByTestId('entities-tab-title');
 
+    // test icon bar
     expect(icons[0]).toHaveAttribute('title', 'Help: Tasks');
     expect(links[0]).toHaveAttribute(
       'href',
@@ -153,22 +159,21 @@ describe('Task Detailspage tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'Task List');
     expect(links[1]).toHaveAttribute('href', '/tasks');
 
+    // test entity info bar
+    expect(headings[0]).toHaveTextContent('Task: foo');
     expect(baseElement).toHaveTextContent('12345');
     expect(baseElement).toHaveTextContent('Tue, Jul 30, 2019 3:00 PM CEST');
     expect(baseElement).toHaveTextContent('Fri, Aug 30, 2019 3:23 PM CEST');
     expect(baseElement).toHaveTextContent('admin');
 
-    const tabs = screen.getAllByTestId('entities-tab-title');
+    // test tabs
     expect(tabs[0]).toHaveTextContent('User Tags');
     expect(tabs[1]).toHaveTextContent('Permissions');
 
-    const headings = baseElement.querySelectorAll('h2');
-    const detailslinks = screen.getAllByTestId('details-link');
-
+    // details
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('bar');
 
-    const progressBars = screen.getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Stopped');
     expect(progressBars[0]).toHaveTextContent('Stopped');
     expect(detailslinks[2]).toHaveAttribute('href', '/report/5678');
@@ -239,7 +244,10 @@ describe('Task Detailspage tests', () => {
       filterString: 'resource_uuid=12345 first=1 rows=-1',
     });
 
-    const [renewQueryMock, renewQueryResult] = createRenewSessionQueryMock();
+    const [
+      renewSessionQueryMock,
+      renewSessionQueryResult,
+    ] = createRenewSessionQueryMock();
     const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
     const {render, store} = rendererWith({
@@ -253,7 +261,7 @@ describe('Task Detailspage tests', () => {
         overridesMock,
         scheduleMock,
         permissionMock,
-        renewQueryMock,
+        renewSessionQueryMock,
         scanConfigMock,
       ],
     });
@@ -280,7 +288,7 @@ describe('Task Detailspage tests', () => {
 
     await wait();
 
-    expect(renewQueryResult).toHaveBeenCalled();
+    expect(renewSessionQueryResult).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('No user tags available');
   });
@@ -315,7 +323,10 @@ describe('Task Detailspage tests', () => {
       },
       noPermissions,
     );
-    const [renewQueryMock, renewQueryResult] = createRenewSessionQueryMock();
+    const [
+      renewSessionQueryMock,
+      renewSessionQueryResult,
+    ] = createRenewSessionQueryMock();
     const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
 
     const {render, store} = rendererWith({
@@ -325,7 +336,7 @@ describe('Task Detailspage tests', () => {
       store: true,
       queryMocks: [
         mock,
-        renewQueryMock,
+        renewSessionQueryMock,
         notesMock,
         overridesMock,
         scheduleMock,
@@ -353,7 +364,7 @@ describe('Task Detailspage tests', () => {
 
     await wait();
     expect(permissionResult).toHaveBeenCalled();
-    expect(renewQueryResult).toHaveBeenCalled();
+    expect(renewSessionQueryResult).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('No permissions available');
   });
@@ -462,7 +473,7 @@ describe('Task ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {element, getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={finishedTask}
         notes={[{_id: '2021'}, {_id: '2223'}]}
@@ -480,10 +491,8 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
-
-    const icons = getAllByTestId('svg-icon');
-    const links = element.querySelectorAll('a');
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: Tasks');
     expect(links[0]).toHaveAttribute(
@@ -519,7 +528,7 @@ describe('Task ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={newTask}
         onReportImportClick={handleReportImport}
@@ -535,9 +544,9 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-    const badgeIcons = getAllByTestId('badge-icon');
-    const links = baseElement.querySelectorAll('a');
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
 
     fireEvent.click(divs[9]);
@@ -616,7 +625,7 @@ describe('Task ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={runningTask}
         onReportImportClick={handleReportImport}
@@ -632,9 +641,9 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-    const badgeIcons = getAllByTestId('badge-icon');
-    const links = baseElement.querySelectorAll('a');
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
 
     fireEvent.click(divs[9]);
@@ -720,7 +729,7 @@ describe('Task ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={stoppedTask}
         onReportImportClick={handleReportImport}
@@ -736,9 +745,9 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-    const badgeIcons = getAllByTestId('badge-icon');
-    const links = baseElement.querySelectorAll('a');
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
 
     fireEvent.click(divs[9]);
@@ -823,7 +832,7 @@ describe('Task ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={finishedTask}
         notes={[{_id: '2021'}, {_id: '2223'}]}
@@ -841,9 +850,9 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-    const badgeIcons = getAllByTestId('badge-icon');
-    const links = baseElement.querySelectorAll('a');
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
 
     fireEvent.click(divs[9]);
@@ -928,7 +937,7 @@ describe('Task ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={observedTask}
         onReportImportClick={handleReportImport}
@@ -944,9 +953,9 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-    const badgeIcons = getAllByTestId('badge-icon');
-    const links = baseElement.querySelectorAll('a');
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
 
     fireEvent.click(divs[9]);
@@ -1038,7 +1047,7 @@ describe('Task ToolBarIcons tests', () => {
       store: true,
     });
 
-    const {getAllByTestId} = render(
+    render(
       <ToolBarIcons
         entity={scheduledTask}
         onReportImportClick={handleReportImport}
@@ -1054,8 +1063,8 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-    const detailsLinks = getAllByTestId('details-link');
+    const icons = screen.getAllByTestId('svg-icon');
+    const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveAttribute('href', '/schedule/foo');
     expect(detailsLinks[0]).toHaveAttribute(
@@ -1096,7 +1105,7 @@ describe('Task ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <ToolBarIcons
         entity={containerTask}
         onReportImportClick={handleReportImport}
@@ -1112,9 +1121,9 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = getAllByTestId('svg-icon');
-    const badgeIcons = getAllByTestId('badge-icon');
-    const links = baseElement.querySelectorAll('a');
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
+    const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
 
     fireEvent.click(divs[9]);

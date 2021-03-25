@@ -2522,6 +2522,9 @@ mhd_logger (void *arg, const char *fmt, va_list ap)
 
 static struct MHD_Daemon *
 start_unix_http_daemon (const char *unix_socket_path,
+                        const char *unix_socket_owner,
+                        const char *unix_socket_group,
+                        const char *unix_socket_mode,
 #if MHD_VERSION < 0x00097002
                         int handler (void *, struct MHD_Connection *,
                                      const char *, const char *, const char *,
@@ -2538,6 +2541,7 @@ start_unix_http_daemon (const char *unix_socket_path,
   struct sockaddr_un addr;
   struct stat ustat;
   mode_t oldmask = 0;
+  mode_t omode = 0;
 
   int unix_socket = socket (AF_UNIX, SOCK_STREAM, 0);
 
@@ -2569,6 +2573,55 @@ start_unix_http_daemon (const char *unix_socket_path,
     }
   if (oldmask)
     umask (oldmask);
+
+  if (unix_socket_owner)
+    {
+      struct passwd *passwd;
+
+      passwd = getpwnam (unix_socket_owner);
+      if (passwd == NULL)
+        {
+          g_warning ("%s: User %s not found.", __FUNCTION__, unix_socket_owner);
+          return NULL;
+        }
+      if (chown (unix_socket_path, passwd->pw_uid, -1) == -1)
+        {
+          g_warning ("%s: chown: %s", __FUNCTION__, strerror (errno));
+          return NULL;
+        }
+    }
+
+  if (unix_socket_group)
+    {
+      struct group *group;
+
+      group = getgrnam (unix_socket_group);
+      if (group == NULL)
+        {
+          g_warning ("%s: Group %s not found.", __FUNCTION__, unix_socket_group);
+          return NULL;
+        }
+      if (chown (unix_socket_path, -1, group->gr_gid) == -1)
+        {
+          g_warning ("%s: chown: %s", __FUNCTION__, strerror (errno));
+          return NULL;
+        }
+    }
+
+  if (!unix_socket_mode)
+    unix_socket_mode = "660";
+  omode = strtol (unix_socket_mode, 0, 8);
+  if (omode <= 0 || omode > 4095)
+    {
+      g_warning ("%s: Erroneous --unix-socket--mode value", __FUNCTION__);
+      return NULL;
+    }
+  if (chmod (unix_socket_path, omode) == -1)
+    {
+      g_warning ("%s: chmod: %s", __FUNCTION__, strerror (errno));
+      return NULL;
+    }
+
   if (listen (unix_socket, 128) == -1)
     {
       g_warning ("%s: Error on listen(): %s", __func__, strerror (errno));
@@ -2768,6 +2821,9 @@ main (int argc, char **argv)
   static gchar *ssl_certificate_filename = GVM_SERVER_CERTIFICATE;
   static gchar *dh_params_filename = NULL;
   static gchar *unix_socket_path = NULL;
+  static gchar *unix_socket_owner = NULL;
+  static gchar *unix_socket_group = NULL;
+  static gchar *unix_socket_mode = NULL;
   static gchar *gnutls_priorities = "NORMAL";
   static int debug_tls = 0;
   static gchar *http_frame_opts = DEFAULT_GSAD_X_FRAME_OPTIONS;
@@ -2853,6 +2909,12 @@ main (int argc, char **argv)
      "<number>"},
     {"unix-socket", '\0', 0, G_OPTION_ARG_FILENAME, &unix_socket_path,
      "Path to unix socket to listen on", "<file>"},
+    {"unix-socket-owner", '\0', 0, G_OPTION_ARG_STRING, &unix_socket_owner,
+     "Owner of the unix socket", "<string>"},
+    {"unix-socket-group", '\0', 0, G_OPTION_ARG_STRING, &unix_socket_group,
+     "Group of the unix socket", "<string>"},
+    {"unix-socket-mode", '\0', 0, G_OPTION_ARG_STRING, &unix_socket_mode,
+     "File mode of the unix socket", "<string>"},
     {"munix-socket", '\0', 0, G_OPTION_ARG_FILENAME,
      &gsad_manager_unix_socket_path, "Path to Manager unix socket", "<file>"},
     {"http-cors", 0, 0, G_OPTION_ARG_STRING, &http_cors,
@@ -3136,7 +3198,9 @@ main (int argc, char **argv)
                 gsad_manager_port);
 
       gsad_daemon =
-        start_unix_http_daemon (unix_socket_path, handle_request, handlers);
+        start_unix_http_daemon (unix_socket_path, unix_socket_owner,
+                                unix_socket_group, unix_socket_mode,
+                                handle_request, handlers);
 
       if (gsad_daemon == NULL)
         {
