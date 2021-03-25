@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {generateFilename, renderSelectItems} from '../render';
+import {generateFilename, na, renderSelectItems} from '../render';
 
 describe('render_select_items test', () => {
   test('should convert entities list', () => {
@@ -75,6 +75,24 @@ describe('render_select_items test', () => {
     expect(items[0]).toEqual({label: '?', value: '3'});
     expect(items[1]).toEqual({label: 'A Task', value: '1'});
     expect(items[2]).toEqual({label: 'B Task', value: '2'});
+  });
+});
+
+describe('na() test', () => {
+  test('should render N/A', () => {
+    expect(na(null)).toEqual('N/A');
+  });
+
+  test('should render N/A', () => {
+    expect(na(undefined)).toEqual('N/A');
+  });
+
+  test('should not render N/A', () => {
+    expect(na('')).toEqual('');
+  });
+
+  test('should not render N/A', () => {
+    expect(na('bello')).toEqual('bello');
   });
 });
 

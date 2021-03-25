@@ -328,6 +328,6 @@ export const createExportNotesByFilterQueryMock = (filterString = 'foo') => {
   );
 };
 
-export const createGetNoteQueryMock = (noteId = '456', note = detailsNote) => {
-  return createGenericQueryMock(GET_NOTE, {note: detailsNote}, {id: noteId});
+export const createGetNoteQueryMock = (id, note = detailsNote) => {
+  return createGenericQueryMock(GET_NOTE, {note: detailsNote}, {id});
 };

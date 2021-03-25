@@ -38,7 +38,7 @@ import {
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
@@ -89,10 +89,12 @@ describe('Note detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetNoteQueryMock();
+    const id = '456';
+    const [mock, resultFunc] = createGetNoteQueryMock(id);
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
       filterString: 'resource_uuid=456 first=1 rows=-1',
     });
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
@@ -102,7 +104,6 @@ describe('Note detailspage tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
     const {baseElement} = render(<Detailspage id="456" />);
 
@@ -113,17 +114,25 @@ describe('Note detailspage tests', () => {
 
     expect(baseElement).toHaveTextContent('note text');
 
-    const links = baseElement.querySelectorAll('a');
+    // get different types of dom elements
+    const detailslinks = screen.getAllByTestId('details-link');
+    const headings = baseElement.querySelectorAll('h2');
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
+    const tabs = screen.getAllByTestId('entities-tab-title');
 
-    expect(screen.getAllByTitle('Help: Notes')[0]).toBeInTheDocument();
+    // test icon bar
+    expect(icons[0]).toHaveAttribute('title', 'Help: Notes');
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/reports.html#managing-notes',
     );
 
-    expect(screen.getAllByTitle('Note List')[0]).toBeInTheDocument();
+    expect(icons[1]).toHaveAttribute('title', 'Note List');
     expect(links[1]).toHaveAttribute('href', '/notes');
 
+    // test entity info bar
+    expect(headings[0]).toHaveTextContent('Note: foo');
     expect(baseElement).toHaveTextContent('456');
     expect(baseElement).toHaveTextContent(
       'Created:Wed, Dec 23, 2020 3:14 PM CET',
@@ -133,20 +142,22 @@ describe('Note detailspage tests', () => {
     );
     expect(baseElement).toHaveTextContent('Owner:admin');
 
-    const tabs = screen.getAllByTestId('entities-tab-title');
+    // test tabs
     expect(tabs[0]).toHaveTextContent('User Tags');
     expect(tabs[1]).toHaveTextContent('Permissions');
 
+    // test page content
     expect(baseElement).toHaveTextContent('NVT Name');
     expect(baseElement).toHaveTextContent('foo nvt');
 
     expect(baseElement).toHaveTextContent('NVT OID');
-    expect(baseElement).toHaveTextContent('123');
+    expect(detailslinks[0]).toHaveAttribute('href', '/nvt/123');
 
     expect(baseElement).toHaveTextContent('Active');
     expect(baseElement).toHaveTextContent('Yes');
 
-    expect(baseElement).toHaveTextContent('Application');
+    // details
+    expect(headings[1]).toHaveTextContent('Application');
 
     expect(baseElement).toHaveTextContent('Hosts');
     expect(baseElement).toHaveTextContent('127.0.0.1');
@@ -163,7 +174,7 @@ describe('Note detailspage tests', () => {
     expect(baseElement).toHaveTextContent('Result');
     expect(baseElement).toHaveTextContent('result name');
 
-    expect(baseElement).toHaveTextContent('Appearance');
+    expect(headings[2]).toHaveTextContent('Appearance');
 
     expect(baseElement).toHaveTextContent('note text');
   });
@@ -177,14 +188,15 @@ describe('Note detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetNoteQueryMock('456', detailsNote);
+    const id = '456';
+    const [mock, resultFunc] = createGetNoteQueryMock(id);
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
       filterString: 'resource_uuid=456 first=1 rows=-1',
     });
 
     const [
-      renewSessionMock,
-      renewSessionResult,
+      renewSessionQueryMock,
+      renewSessionQueryResult,
     ] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
@@ -192,7 +204,7 @@ describe('Note detailspage tests', () => {
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock, renewSessionMock],
+      queryMocks: [mock, permissionMock, renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -210,7 +222,8 @@ describe('Note detailspage tests', () => {
     fireEvent.click(tabs[0]);
 
     await wait();
-    expect(renewSessionResult).toHaveBeenCalled();
+
+    expect(renewSessionQueryResult).toHaveBeenCalled();
 
     expect(baseElement).toHaveTextContent('note:unnamed');
   });
@@ -224,7 +237,8 @@ describe('Note detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetNoteQueryMock('456', detailsNote);
+    const id = '456';
+    const [mock, resultFunc] = createGetNoteQueryMock(id);
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
       {
         filterString: 'resource_uuid=456 first=1 rows=-1',
@@ -232,8 +246,8 @@ describe('Note detailspage tests', () => {
       {permissions: null},
     );
     const [
-      renewSessionMock,
-      renewSessionResult,
+      renewSessionQueryMock,
+      renewSessionQueryResult,
     ] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
@@ -241,7 +255,7 @@ describe('Note detailspage tests', () => {
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock, renewSessionMock],
+      queryMocks: [mock, permissionMock, renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -260,7 +274,8 @@ describe('Note detailspage tests', () => {
 
     await wait();
 
-    expect(renewSessionResult).toHaveBeenCalled();
+    expect(renewSessionQueryResult).toHaveBeenCalled();
+
     expect(baseElement).toHaveTextContent('No permissions available');
   });
 
@@ -272,8 +287,10 @@ describe('Note detailspage tests', () => {
         renewSession,
       },
     };
+
+    const id = '456';
     const [renewQueryMock] = createRenewSessionQueryMock();
-    const [mock, resultFunc] = createGetNoteQueryMock('456', detailsNote);
+    const [mock, resultFunc] = createGetNoteQueryMock(id);
     const [cloneMock, cloneResult] = createCloneNoteQueryMock();
     const [deleteMock, deleteResult] = createDeleteNoteQueryMock();
     const [exportMock, exportResult] = createExportNotesByIdsQueryMock(['456']);
@@ -350,7 +367,7 @@ describe('Note ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {element} = render(
+    render(
       <ToolBarIcons
         entity={parsedNote}
         onNoteCloneClick={handleNoteCloneClick}
@@ -361,16 +378,24 @@ describe('Note ToolBarIcons tests', () => {
       />,
     );
 
-    const links = element.querySelectorAll('a');
+    const icons = screen.getAllByTestId('svg-icon');
+    const links = screen.getAllByRole('link');
 
+    // test icon bar
+    expect(icons[0]).toHaveAttribute('title', 'Help: Notes');
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/reports.html#managing-notes',
     );
-    expect(screen.getAllByTitle('Help: Notes')[0]).toBeInTheDocument();
 
+    expect(icons[1]).toHaveAttribute('title', 'Note List');
     expect(links[1]).toHaveAttribute('href', '/notes');
-    expect(screen.getAllByTitle('Note List')[0]).toBeInTheDocument();
+
+    expect(icons[2]).toHaveAttribute('title', 'Create new Note');
+    expect(icons[3]).toHaveAttribute('title', 'Clone Note');
+    expect(icons[4]).toHaveAttribute('title', 'Edit Note');
+    expect(icons[5]).toHaveAttribute('title', 'Move Note to trashcan');
+    expect(icons[6]).toHaveAttribute('title', 'Export Note as XML');
   });
 
   test('should call click handlers', () => {
