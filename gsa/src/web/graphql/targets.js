@@ -18,7 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {gql, useLazyQuery, useMutation} from '@apollo/client';
+import {gql, useLazyQuery, useMutation, useQuery} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -64,6 +64,73 @@ export const GET_TARGETS = gql`
     }
   }
 `;
+
+export const GET_TARGET = gql`
+  query Target($id: UUID!) {
+    target(id: $id) {
+      id
+      name
+      owner
+      comment
+      writable
+      inUse
+      creationTime
+      modificationTime
+      permissions {
+        name
+      }
+      hosts
+      excludeHosts
+      maxHosts
+      portList {
+        name
+        id
+      }
+      sshCredential {
+        name
+        id
+        port
+      }
+      smbCredential {
+        name
+        id
+      }
+      esxiCredential {
+        name
+        id
+      }
+      snmpCredential {
+        name
+        id
+      }
+      aliveTests
+      allowSimultaneousIPs
+      reverseLookupOnly
+      reverseLookupUnify
+      portRange
+      userTags {
+        count
+        tags {
+          name
+          id
+          value
+          comment
+        }
+      }
+    }
+  }
+`;
+
+export const useGetTarget = (id, options) => {
+  const {data, ...other} = useQuery(GET_TARGET, {
+    ...options,
+    variables: {id},
+  });
+  const target = isDefined(data?.target)
+    ? Target.fromObject(data.target)
+    : undefined;
+  return {target, ...other};
+};
 
 export const useLazyGetTargets = (variables, options) => {
   const [queryTargets, {data, ...other}] = useLazyQuery(GET_TARGETS, {

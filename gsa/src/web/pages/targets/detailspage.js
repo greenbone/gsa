@@ -15,21 +15,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useHistory, useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 
 import {TARGET_CREDENTIAL_NAMES} from 'gmp/models/target';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
-import Divider from 'web/components/layout/divider';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
+import Download from 'web/components/form/download';
+import useDownload from 'web/components/form/useDownload';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ManualIcon from 'web/components/icon/manualicon';
 import ListIcon from 'web/components/icon/listicon';
+
+import Divider from 'web/components/layout/divider';
+import IconDivider from 'web/components/layout/icondivider';
+import Layout from 'web/components/layout/layout';
+import PageTitle from 'web/components/layout/pagetitle';
+
+import DialogNotification from 'web/components/notification/dialognotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -48,9 +56,7 @@ import EntityPermissions from 'web/entity/permissions';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import withEntityContainer, {
-  permissionsResourceFilter,
-} from 'web/entity/withEntityContainer';
+import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
@@ -58,17 +64,14 @@ import EditIcon from 'web/entity/icon/editicon';
 import TargetIcon from 'web/components/icon/targeticon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import PageTitle from 'web/components/layout/pagetitle';
-
-import {selector, loadEntity} from 'web/store/entities/targets';
-
-import {
-  selector as permissionsSelector,
-  loadEntities as loadPermissions,
-} from 'web/store/entities/permissions';
+import {useGetPermissions} from 'web/graphql/permissions';
+import {useGetTarget} from 'web/graphql/targets';
 
 import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
+import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
+import useReload from 'web/components/loading/useReload';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 import withComponentDefaults from 'web/utils/withComponentDefaults';
 
 import TargetDetails from './details';
@@ -140,35 +143,69 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({
-  entity,
-  permissions = [],
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => {
+const Page = () => {
+  // Page methods
+  const {id} = useParams();
+  const history = useHistory();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+  const [downloadRef, handleDownload] = useDownload();
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+
+  // Load target related entities
+  const {
+    target,
+    refetch: refetchTarget,
+    loading,
+    error: entityError,
+  } = useGetTarget(id);
+  const {permissions, refetch: refetchPermissions} = useGetPermissions({
+    filterString: permissionsResourceFilter(id).toFilterString(),
+  });
+
+  // Timeout and reload
+  const timeoutFunc = useDefaultReloadInterval();
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetchTarget,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if schedule is available and no timer is running yet
+    if (hasValue(target) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [target, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
+
   return (
     <TargetComponent
-      onCloned={goto_details('target', props)}
-      onCloneError={onError}
-      onCreated={goto_entity_details('target', props)}
-      onDeleted={goto_list('targets', props)}
-      onDeleteError={onError}
-      onDownloaded={onDownloaded}
-      onDownloadError={onError}
-      onInteraction={onInteraction}
-      onSaved={onChanged}
+      onCloned={goto_details('target', {history})}
+      onCloneError={showError}
+      onCreated={goto_entity_details('target', {history})}
+      onDeleted={goto_list('targets', {history})}
+      onDeleteError={showError}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onInteraction={renewSessionTimeout}
+      onSaved={() => refetchTarget()}
     >
       {({clone, create, delete: delete_func, download, edit, save}) => (
         <EntityPage
-          {...props}
-          entity={entity}
+          entity={target}
+          entityError={entityError}
+          entityType={'target'}
+          isLoading={loading}
           sectionIcon={<TargetIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Target')}
-          onInteraction={onInteraction}
+          onInteraction={renewSessionTimeout}
           onTargetCloneClick={clone}
           onTargetCreateClick={create}
           onTargetDeleteClick={delete_func}
@@ -179,7 +216,7 @@ const Page = ({
           {({activeTab = 0, onActivateTab}) => {
             return (
               <React.Fragment>
-                <PageTitle title={_('Target: {{name}}', {name: entity.name})} />
+                <PageTitle title={_('Target: {{name}}', {name: target.name})} />
                 <Layout grow="1" flex="column">
                   <TabLayout grow="1" align={['start', 'end']}>
                     <TabList
@@ -188,7 +225,7 @@ const Page = ({
                       onActivateTab={onActivateTab}
                     >
                       <Tab>{_('Information')}</Tab>
-                      <EntitiesTab entities={entity.userTags}>
+                      <EntitiesTab entities={target.userTags}>
                         {_('User Tags')}
                       </EntitiesTab>
                       <EntitiesTab entities={permissions}>
@@ -200,29 +237,34 @@ const Page = ({
                   <Tabs active={activeTab}>
                     <TabPanels>
                       <TabPanel>
-                        <TargetDetails entity={entity} />
+                        <TargetDetails entity={target} />
                       </TabPanel>
                       <TabPanel>
                         <EntityTags
-                          entity={entity}
-                          onChanged={onChanged}
-                          onError={onError}
-                          onInteraction={onInteraction}
+                          entity={target}
+                          onChanged={() => refetchTarget()}
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                       <TabPanel>
                         <TargetPermissions
-                          entity={entity}
+                          entity={target}
                           permissions={permissions}
-                          onChanged={onChanged}
-                          onDownloaded={onDownloaded}
-                          onError={onError}
-                          onInteraction={onInteraction}
+                          onChanged={() => refetchPermissions()}
+                          onDownloaded={handleDownload}
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>
+                <DialogNotification
+                  {...notificationDialogState}
+                  onCloseClick={closeNotificationDialog}
+                />
+                <Download ref={downloadRef} />
               </React.Fragment>
             );
           }}
@@ -230,15 +272,6 @@ const Page = ({
       )}
     </TargetComponent>
   );
-};
-
-Page.propTypes = {
-  entity: PropTypes.model,
-  permissions: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
 };
 
 const TargetPermissions = withComponentDefaults({
@@ -256,27 +289,6 @@ const TargetPermissions = withComponentDefaults({
   ],
 })(EntityPermissions);
 
-const load = gmp => {
-  const loadEntityFunc = loadEntity(gmp);
-  const loadPermissionsFunc = loadPermissions(gmp);
-  return id => dispatch =>
-    Promise.all([
-      dispatch(loadEntityFunc(id)),
-      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
-    ]);
-};
-
-const mapStateToProps = (rootState, {id}) => {
-  const permissionsSel = permissionsSelector(rootState);
-  return {
-    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
-  };
-};
-
-export default withEntityContainer('target', {
-  entitySelector: selector,
-  load,
-  mapStateToProps,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:
