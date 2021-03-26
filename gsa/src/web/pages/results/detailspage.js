@@ -363,22 +363,20 @@ const Page = ({onDownloaded}) => {
     const {nvt = {}, task = {}, host = {}} = resultEntity;
     createfunc({
       fixed: true,
-      oid: nvt.oid,
-      nvt_name: nvt.name,
-      task_id: TASK_SELECTED,
-      task_name: task.name,
-      result_id: RESULT_ANY,
-      task_uuid: task.id,
-      result_uuid: resultEntity.id,
-      result_name: resultEntity.name,
+      nvtId: nvt.id,
+      nvtName: nvt.name,
+      taskId: TASK_SELECTED,
+      taskName: task.name,
+      resultId: RESULT_ANY,
+      taskUuid: task.id,
+      resultUuid: resultEntity.id,
+      resultName: resultEntity.name,
       severity:
-        resultEntity.original_severity > 0
-          ? 0.1
-          : resultEntity.original_severity,
+        resultEntity.originalSeverity > 0 ? 0.1 : resultEntity.originalSeverity,
       hosts: MANUAL,
-      hosts_manual: host.name,
+      hostsManual: host.name,
       port: MANUAL,
-      port_manual: resultEntity.port,
+      portManual: resultEntity.port,
     });
   };
 
