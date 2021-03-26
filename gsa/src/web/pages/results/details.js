@@ -22,7 +22,7 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import {TAG_NA} from 'gmp/models/nvt';
@@ -105,12 +105,11 @@ const ResultDetails = ({className, links = true, entity}) => {
   const {nvt} = result;
   const {id: nvtId, tags, solution} = nvt;
 
-  const is_oval = isDefined(nvtId) && nvtId.startsWith('oval:');
-  const has_detection =
-    isDefined(result.detection) && isDefined(result.detection.result);
+  const is_oval = hasValue(nvtId) && nvtId.startsWith('oval:');
+  const hasDetection = hasValue(result.detectionResult);
 
-  const detection_details = has_detection
-    ? result.detection.result.details
+  const detectionDetails = hasDetection
+    ? result.detectionResult.details
     : undefined;
 
   const result2 = isDefined(result.delta) ? result.delta.result : undefined;
@@ -211,7 +210,7 @@ const ResultDetails = ({className, links = true, entity}) => {
         </DetailsBlock>
       )}
 
-      {has_detection && (
+      {hasDetection && (
         <DetailsBlock title={_('Product Detection Result')}>
           <InfoTable>
             <TableBody>
@@ -221,10 +220,10 @@ const ResultDetails = ({className, links = true, entity}) => {
                   <span>
                     <DetailsLink
                       type="cpe"
-                      id={detection_details.product}
+                      id={detectionDetails.product}
                       textOnly={!links}
                     >
-                      {detection_details.product}
+                      {detectionDetails.product}
                     </DetailsLink>
                   </span>
                 </TableData>
@@ -234,17 +233,17 @@ const ResultDetails = ({className, links = true, entity}) => {
                 <TableData>
                   <span>
                     <DetailsLink
-                      id={detection_details.source_oid}
+                      id={detectionDetails.source_oid}
                       type={
-                        detection_details.source_oid.startsWith('CVE-')
+                        detectionDetails.source_oid.startsWith('CVE-')
                           ? 'cve'
                           : 'nvt'
                       }
                       textOnly={!links}
                     >
-                      {detection_details.source_name +
+                      {detectionDetails.source_name +
                         ' (OID: ' +
-                        detection_details.source_oid +
+                        detectionDetails.source_oid +
                         ')'}
                     </DetailsLink>
                   </span>
@@ -256,7 +255,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                   <span>
                     <DetailsLink
                       type="result"
-                      id={result.detection.result.id}
+                      id={result.detectionResult.id}
                       textOnly={!links}
                     >
                       {_('View details of product detection')}
@@ -299,7 +298,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                       {nvtId}
                     </DetailsLink>
                   )}
-                  {isDefined(nvtId) && nvtId.startsWith(DEFAULT_OID_VALUE) && (
+                  {hasValue(nvtId) && nvtId.startsWith(DEFAULT_OID_VALUE) && (
                     <span>
                       <DetailsLink type="nvt" id={nvtId} textOnly={!links}>
                         {renderNvtName(nvtId, nvt.name)}
@@ -307,14 +306,14 @@ const ResultDetails = ({className, links = true, entity}) => {
                       </DetailsLink>
                     </span>
                   )}
-                  {!isDefined(nvtId) &&
+                  {!hasValue(nvtId) &&
                     _('No details available for this method.')}
                 </TableData>
               </TableRow>
-              {!isEmpty(result.scan_nvt_version) && (
+              {!isEmpty(result.scanNvtVersion) && (
                 <TableRow>
                   <TableData>{_('Version used: ')}</TableData>
-                  <TableData>{result.scan_nvt_version}</TableData>
+                  <TableData>{result.scanNvtVersion}</TableData>
                 </TableRow>
               )}
             </TableBody>

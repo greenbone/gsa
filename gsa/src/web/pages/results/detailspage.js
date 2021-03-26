@@ -151,8 +151,8 @@ export const ToolBarIcons = ({
             <TaskIcon title={_('Corresponding Task ({{name}})', entity.task)} />
           </DetailsLink>
         )}
-        {capabilities.mayAccess('reports') && isDefined(entity.report) && (
-          <DetailsLink type="report" id={entity.report.id}>
+        {capabilities.mayAccess('reports') && isDefined(entity.reportId) && (
+          <DetailsLink type="report" id={entity.reportId}>
             <ReportIcon title={_('Corresponding Report')} />
           </DetailsLink>
         )}
@@ -289,7 +289,7 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({onDownloaded, ...props}) => {
+const Page = ({onDownloaded}) => {
   // Page methods
   const {id} = useParams();
   const history = useHistory();

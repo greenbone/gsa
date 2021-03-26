@@ -58,7 +58,7 @@ const References = ({nvt, links = true}) => {
                 {cveReferences.map(cve => (
                   <span key={cve.id}>
                     <CveLink
-                      title={_('View Details of {{cve_id}}', cve.id)}
+                      title={_('View Details of {{id}}', {id: cve.id})}
                       id={cve.id}
                       textOnly={!links}
                     />
