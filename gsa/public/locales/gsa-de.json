@@ -584,7 +584,7 @@
   "Error While Adding Host(s)": "Fehler beim Hinzufügen von Host(s)",
   "Error while loading Report {{reportId}}": "Fehler beim Laden des Berichts {{reportId}}",
   "Error while loading Results for Report {{reportId}}": "Fehler beim Laden von Ergebnissen des Berichts {{reportId}}",
-  "Error while loading alerts.": "Fehler beim Laden der Benachrichtigung",
+  "Error while loading alerts.": "Fehler beim Laden der Benachrichtigungen",
   "Error while loading credentials.": "Fehler beim Laden der Anmeldedaten",
   "Error while loading scan configs.": "Fehler beim Laden der Scan-Konfigurationen",
   "Error while loading scanners.": "Fehler beim Laden der Scanner",
