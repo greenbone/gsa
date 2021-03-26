@@ -120,7 +120,7 @@
   "An error occurred on this page": "Es ist ein Fehler auf dieser Seite aufgetreten",
   "An error occurred on this page.": "Es ist ein Fehler auf dieser Seite aufgetreten.",
   "An error occurred while converting gmp response to js for url {{- url}}": "Beim Konvertieren einer GMP-Anwort nach JavaScript für die URL {{- url}} ist ein Fehler aufgetreten.",
-  "An error occurred while loading the users capabilities.": "Beim Laden der User Ressourcen ist ein Fehler aufgetreten",
+  "An error occurred while loading the users capabilities.": "Beim Laden der Benutzerberechtigungen ist ein Fehler aufgetreten",
   "Analyst": "Analyst",
   "Any": "Beliebig",
   "Appearance": "Aussehen",
