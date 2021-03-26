@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+/* eslint-disable react/prop-types */
 
 import React, {useState} from 'react';
 
@@ -31,9 +32,13 @@ import {
   useModifyTarget,
   CREATE_TARGET,
   MODIFY_TARGET,
+  useGetTarget,
 } from '../targets';
 
-import {createGetTargetsQueryMock} from '../__mocks__/targets';
+import {
+  createGetTargetQueryMock,
+  createGetTargetsQueryMock,
+} from '../__mocks__/targets';
 
 const createTargetInput = {
   name: 'foo',
@@ -222,5 +227,47 @@ describe('useLazyGetTargets tests', () => {
     expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
     expect(screen.getByTestId('length')).toHaveTextContent(2);
+  });
+});
+
+const GetTargetComponent = ({id}) => {
+  const {loading, target, error} = useGetTarget(id);
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      {error && <div data-testid="error">{error.message}</div>}
+      {target && (
+        <div data-testid="target">
+          <span data-testid="id">{target.id}</span>
+          <span data-testid="name">{target.name}</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+describe('useGetTarget tests', () => {
+  test('should load target', async () => {
+    const [queryMock, resultFunc] = createGetTargetQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<GetTargetComponent id="159" />);
+
+    expect(screen.queryByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('target')).toBeInTheDocument();
+
+    expect(screen.getByTestId('id')).toHaveTextContent('159');
+    expect(screen.getByTestId('name')).toHaveTextContent('target 1');
   });
 });
