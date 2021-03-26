@@ -153,19 +153,11 @@ class Nvt extends Info {
       const solutionType = ret.solution._type;
       const solutionText = ret.solution.__text;
       const solutionMethod = ret.solution._method;
-      if (ret.severity === 0) {
-        ret.solution = {
-          type: solutionType === '' ? undefined : solutionType,
-          description: solutionText === '' ? undefined : solutionText,
-          method: solutionMethod === '' ? undefined : solutionMethod,
-        };
-      } else {
-        ret.solution = {
-          type: solutionType,
-          description: solutionText,
-          method: solutionMethod,
-        };
-      }
+      ret.solution = {
+        type: isEmpty(solutionType) ? undefined : solutionType,
+        description:  isEmpty(solutionText) ? undefined : solutionText,
+        method: isEmpty(solutionMethod) ? undefined : solutionMethod,
+      };
     }
 
     if (isDefined(ret.preferences)) {
