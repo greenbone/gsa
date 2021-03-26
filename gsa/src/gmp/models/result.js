@@ -54,32 +54,35 @@ class Result extends Model {
 
     const {
       detectionResult,
+      host = {},
       name,
       notes,
       nvt = {},
       overrides,
-      report,
+      originalSeverity,
+      qod = {},
+      severity,
       task,
       tickets,
     } = object;
 
+    copy.host = {
+      name: host.ip,
+      id: isDefined(host.id) && !isEmpty(host.id) ? host.id : undefined,
+      hostname: isDefined(host.hostname) ? host.hostname : '',
+    };
+
     copy.nvt = Nvt.fromObject(nvt);
 
-    copy.vulnerability = hasValue(name) ? name : nvt?.id;
-
-    if (hasValue(report)) {
-      copy.report = parseModelFromObject(report, 'report');
-    }
-
     if (hasValue(task)) {
-      copy.report = parseModelFromObject(task, 'task');
+      copy.task = parseModelFromObject(task, 'task');
     }
 
     if (hasValue(detectionResult)) {
       const details = {};
 
       if (hasValue(detectionResult.details)) {
-        forEach(detectionResult.details.detail, detail => {
+        forEach(detectionResult.details, detail => {
           details[detail.name] = detail.value;
         });
       }
@@ -101,6 +104,18 @@ class Result extends Model {
     copy.tickets = hasValue(tickets)
       ? map(tickets, ticket => parseModelFromObject(ticket, 'ticket'))
       : [];
+
+    copy.qod = parseQod(qod);
+
+    if (isDefined(severity)) {
+      copy.severity = parseSeverity(severity);
+    }
+
+    if (isDefined(originalSeverity)) {
+      copy.originalSeverity = parseSeverity(originalSeverity);
+    }
+
+    copy.vulnerability = hasValue(name) ? name : nvt?.id;
 
     // ToDo: Delta
 

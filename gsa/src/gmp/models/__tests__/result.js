@@ -25,7 +25,162 @@ import {testModel} from 'gmp/models/testing';
 
 testModel(Result, 'result');
 
-describe('Result model tests', () => {
+describe('Result model parseObject tests', () => {
+  test('should parse host object', () => {
+    const obj = {
+      host: {
+        ip: '123.456.789.10',
+        id: '123',
+        hostname: 'foo',
+      },
+    };
+    const obj2 = {
+      host: {
+        ip: '123.456.789.10',
+      },
+    };
+    const result = Result.fromObject(obj);
+    const result2 = Result.fromObject(obj2);
+    const res = {
+      name: '123.456.789.10',
+      id: '123',
+      hostname: 'foo',
+    };
+    const res2 = {
+      name: '123.456.789.10',
+      hostname: '',
+    };
+    expect(result.host).toEqual(res);
+    expect(result2.host).toEqual(res2);
+  });
+
+  test('should remove empty host id', () => {
+    const host = {
+      id: '',
+      ip: 'foo',
+      hostname: 'bar',
+    };
+    const result = Result.fromObject({host});
+
+    expect(result.host).toEqual({
+      name: 'foo',
+      hostname: 'bar',
+    });
+  });
+
+  test('should parse NVTs', () => {
+    const obj = {
+      nvt: {
+        id: 'bar',
+      },
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.nvt).toBeInstanceOf(Nvt);
+    expect(result.nvt.id).toEqual('bar');
+  });
+
+  test('should parse severity', () => {
+    const result = Result.fromObject({severity: '4.2'});
+    const result2 = Result.fromObject({});
+
+    expect(result.severity).toEqual(4.2);
+    expect(result2.severity).toBeUndefined();
+  });
+
+  test('should parse name/id to vulnerability', () => {
+    const obj = {
+      nvt: {
+        id: '42',
+      },
+    };
+    const result = Result.fromObject({name: 'foo'});
+    const result2 = Result.fromObject(obj);
+
+    expect(result.vulnerability).toEqual('foo');
+    expect(result2.vulnerability).toEqual('42');
+  });
+
+  test('should parse task', () => {
+    const result = Result.fromObject({task: {name: 'foo'}});
+
+    expect(result.task).toBeInstanceOf(Model);
+    expect(result.task.entityType).toEqual('task');
+  });
+
+  test('should parse detection', () => {
+    const obj = {
+      detectionResult: {
+        id: '1337',
+        details: [
+          {
+            name: 'foo',
+            value: 'bar',
+          },
+          {
+            name: 'lorem',
+            value: 'ipsum',
+          },
+        ],
+      },
+    };
+    const res = {
+      id: '1337',
+      details: {
+        foo: 'bar',
+        lorem: 'ipsum',
+      },
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.detectionResult).toEqual(res);
+  });
+
+  test('should parse original severity', () => {
+    const result = Result.fromObject({originalSeverity: '4.2'});
+
+    expect(result.originalSeverity).toEqual(4.2);
+  });
+
+  test('should parse QoD', () => {
+    const obj = {
+      qod: {
+        type: 'foo',
+        value: '42.5',
+      },
+    };
+    const res = {
+      type: 'foo',
+      value: 42.5,
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.qod).toEqual(res);
+  });
+
+  test('should parse notes', () => {
+    const obj = {
+      notes: [{id: 'foo'}, {id: 'bar'}],
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.notes[0]).toBeInstanceOf(Note);
+    expect(result.notes[0].entityType).toEqual('note');
+    expect(result.notes[1]).toBeInstanceOf(Note);
+    expect(result.notes[1].entityType).toEqual('note');
+  });
+
+  test('should return empty array if no notes are given', () => {
+    const result = Result.fromObject({});
+
+    expect(result.notes).toEqual([]);
+  });
+
+  // ToDo: Overrides
+  // ToDo: delta result
+});
+
+describe('Result model parseElement tests', () => {
   test('should parse host object', () => {
     const elem = {
       host: {
