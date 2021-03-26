@@ -27,7 +27,17 @@ import Target from 'gmp/models/target';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {
+  createGetTargetQueryMock,
+  mockTarget,
+  inUseTarget,
+  noPermTarget,
+  createCloneTargetQueryMock,
+  createDeleteTargetsByIdsQueryMock,
+  createExportTargetsByIdsQueryMock,
+} from 'web/graphql/__mocks__/targets';
 
 import {entityLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -35,6 +45,13 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    id: '159',
+  }),
+}));
 
 setLocale('en');
 
@@ -48,24 +65,10 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-let getTarget;
-let getEntities;
 let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getTarget = jest.fn().mockResolvedValue({
-    data: target,
-  });
-
-  getEntities = jest.fn().mockResolvedValue({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
-
   currentSettings = jest.fn().mockResolvedValue({
     foo: 'bar',
   });
@@ -75,111 +78,46 @@ beforeEach(() => {
   });
 });
 
-const target = Target.fromElement({
-  _id: '46264',
-  name: 'target 1',
-  creation_time: '2020-12-23T14:14:11Z',
-  modification_time: '2021-01-04T11:54:12Z',
-  in_use: 0,
-  permissions: {permission: {name: 'Everything'}},
-  owner: {name: 'admin'},
-  writable: 1,
-  port_list: {
-    _id: '32323',
-    name: 'All IANA assigned TCP',
-    trash: 0,
-  },
-  hosts: '127.0.0.1, 123.456.574.64',
-  exclude_hosts: '192.168.0.1',
-  max_hosts: 2,
-  reverse_lookup_only: 1,
-  reverse_lookup_unify: 0,
-  tasks: {task: {_id: '465', name: 'foo'}},
-  alive_tests: 'Scan Config Default',
-  allow_simultaneous_ips: 1,
-  port_range: '1-5',
-});
+const target = Target.fromObject(mockTarget);
 
-const targetInUse = Target.fromElement({
-  _id: '46264',
-  name: 'target 1',
-  creation_time: '2020-12-23T14:14:11Z',
-  modification_time: '2021-01-04T11:54:12Z',
-  in_use: 1,
-  permissions: {permission: {name: 'Everything'}},
-  owner: {name: 'admin'},
-  writable: 1,
-  port_list: {
-    _id: '32323',
-    name: 'All IANA assigned TCP',
-    trash: 0,
-  },
-  hosts: '127.0.0.1, 123.456.574.64',
-  exclude_hosts: '192.168.0.1',
-  max_hosts: 2,
-  reverse_lookup_only: 1,
-  reverse_lookup_unify: 0,
-  tasks: {task: {_id: '465', name: 'foo'}},
-  alive_tests: 'Scan Config Default',
-  allow_simultaneous_ips: 1,
-  port_range: '1-5',
-});
+const targetInUse = Target.fromObject(inUseTarget);
 
-const noPermTarget = Target.fromElement({
-  _id: '46264',
-  name: 'target 1',
-  creation_time: '2020-12-23T14:14:11Z',
-  modification_time: '2021-01-04T11:54:12Z',
-  in_use: 0,
-  permissions: {permission: {name: 'get_targets'}},
-  owner: {name: 'admin'},
-  writable: 1,
-  port_list: {
-    _id: '32323',
-    name: 'All IANA assigned TCP',
-    trash: 0,
-  },
-  hosts: '127.0.0.1, 123.456.574.64',
-  exclude_hosts: '192.168.0.1',
-  max_hosts: 2,
-  reverse_lookup_only: 1,
-  reverse_lookup_unify: 0,
-  tasks: {task: {_id: '465', name: 'foo'}},
-  alive_tests: 'Scan Config Default',
-  allow_simultaneous_ips: 1,
-  port_range: '1-5',
-});
+const targetNoPerm = Target.fromObject(noPermTarget);
 
 describe('Target Detailspage tests', () => {
-  test('should render full Detailspage', () => {
+  test('should render full Detailspage', async () => {
     const gmp = {
-      target: {
-        get: getTarget,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
       },
     };
 
+    const [mock, resultFunc] = createGetTargetQueryMock();
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=159 first=1 rows=-1',
+    });
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('46264', target));
+    store.dispatch(entityLoadingActions.success('159', target));
 
-    const {baseElement, element} = render(<Detailspage id="46264" />);
+    const {baseElement} = render(<Detailspage id="159" />);
 
-    expect(element).toHaveTextContent('Target: target 1');
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
+
+    expect(baseElement).toHaveTextContent('Target: target 1');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -192,51 +130,54 @@ describe('Target Detailspage tests', () => {
     expect(screen.getAllByTitle('Target List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/targets');
 
-    expect(element).toHaveTextContent('ID:46264');
-    expect(element).toHaveTextContent('Created:Wed, Dec 23, 2020 3:14 PM CET');
-    expect(element).toHaveTextContent('Modified:Mon, Jan 4, 2021 12:54 PM CET');
-    expect(element).toHaveTextContent('Owner:admin');
+    expect(baseElement).toHaveTextContent('ID:159');
+    expect(baseElement).toHaveTextContent(
+      'Created:Wed, Dec 23, 2020 3:14 PM CET',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
+    );
+    expect(baseElement).toHaveTextContent('Owner:admin');
 
     const tabs = screen.getAllByTestId('entities-tab-title');
     expect(tabs[0]).toHaveTextContent('User Tags');
     expect(tabs[1]).toHaveTextContent('Permissions');
 
-    expect(element).toHaveTextContent('Included');
-    expect(element).toHaveTextContent('127.0.0.1');
-    expect(element).toHaveTextContent('123.456.574.64');
+    expect(baseElement).toHaveTextContent('Included');
+    expect(baseElement).toHaveTextContent('123.234.345.456 127.0.0.1');
 
-    expect(element).toHaveTextContent('Excluded');
-    expect(element).toHaveTextContent('192.168.0.1');
+    expect(baseElement).toHaveTextContent('Excluded');
+    expect(baseElement).toHaveTextContent('192.168.0.1');
 
-    expect(element).toHaveTextContent('Maximum Number of Hosts');
-    expect(element).toHaveTextContent('2');
+    expect(baseElement).toHaveTextContent('Maximum Number of Hosts');
+    expect(baseElement).toHaveTextContent('2');
 
-    expect(element).toHaveTextContent('Reverse Lookup Only');
-    expect(element).toHaveTextContent('Yes');
+    expect(baseElement).toHaveTextContent('Reverse Lookup Only');
+    expect(baseElement).toHaveTextContent('Yes');
 
-    expect(element).toHaveTextContent('Reverse Lookup Unify');
-    expect(element).toHaveTextContent('No');
+    expect(baseElement).toHaveTextContent('Reverse Lookup Unify');
+    expect(baseElement).toHaveTextContent('No');
 
-    expect(element).toHaveTextContent('Alive Test');
-    expect(element).toHaveTextContent('Scan Config Default');
+    expect(baseElement).toHaveTextContent('Alive Test');
+    expect(baseElement).toHaveTextContent('Schroedingers host');
 
-    expect(element).toHaveTextContent('Port List');
-    expect(links[2]).toHaveAttribute('href', '/portlist/32323');
-    expect(element).toHaveTextContent('All IANA assigned TCP');
+    expect(baseElement).toHaveTextContent('Port List');
+    expect(links[2]).toHaveAttribute('href', '/portlist/pl1');
+    expect(baseElement).toHaveTextContent('list');
 
-    expect(element).toHaveTextContent('Tasks using this Target (1)');
-    expect(links[3]).toHaveAttribute('href', '/task/465');
-    expect(element).toHaveTextContent('foo');
+    expect(baseElement).toHaveTextContent('Credentials');
+    expect(baseElement).toHaveTextContent('SSH');
+    expect(links[3]).toHaveAttribute('href', '/credential/ssh1');
+    expect(baseElement).toHaveTextContent('ssh');
+    expect(baseElement).toHaveTextContent('on Port 22');
+
+    expect(baseElement).toHaveTextContent('Tasks using this Target (1)');
+    expect(baseElement).toHaveTextContent('task 1');
+    expect(links[4]).toHaveAttribute('href', '/task/t1');
   });
 
-  test('should render user tags tab', () => {
+  test('should render user tags tab', async () => {
     const gmp = {
-      target: {
-        get: getTarget,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -244,36 +185,47 @@ describe('Target Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetTargetQueryMock();
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=159 first=1 rows=-1',
+    });
+    const [
+      renewSessionMock,
+      renewSessionResult,
+    ] = createRenewSessionQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock, renewSessionMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('12345', target));
+    const {baseElement} = render(<Detailspage id="159" />);
 
-    const {baseElement} = render(<Detailspage id="12345" />);
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[0]).toHaveTextContent('User Tags');
     fireEvent.click(tabs[0]);
 
-    expect(baseElement).toHaveTextContent('No user tags available');
+    await wait();
+
+    expect(renewSessionResult).toHaveBeenCalled();
+
+    const links = baseElement.querySelectorAll('a');
+    expect(baseElement).toHaveTextContent('target:unnamed');
+    expect(links[3]).toHaveAttribute('href', '/tag/345');
   });
 
-  test('should render permissions tab', () => {
+  test('should render permissions tab', async () => {
     const gmp = {
-      target: {
-        get: getTarget,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -281,51 +233,48 @@ describe('Target Detailspage tests', () => {
       },
     };
 
+    const [mock, resultFunc] = createGetTargetQueryMock();
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
+      {
+        filterString: 'resource_uuid=159 first=1 rows=-1',
+      },
+      {permissions: null},
+    );
+    const [
+      renewSessionMock,
+      renewSessionResult,
+    ] = createRenewSessionQueryMock();
+
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
+      queryMocks: [mock, permissionMock, renewSessionMock],
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('46264', target));
+    const {baseElement} = render(<Detailspage id="159" />);
 
-    const {baseElement} = render(<Detailspage id="46264" />);
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const tabs = screen.getAllByTestId('entities-tab-title');
 
     expect(tabs[1]).toHaveTextContent('Permissions');
     fireEvent.click(tabs[1]);
 
+    await wait();
+
+    expect(renewSessionResult).toHaveBeenCalled();
     expect(baseElement).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
-    const clone = jest.fn().mockResolvedValue({
-      data: {id: 'foo'},
-    });
-
-    const deleteFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportFunc = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
-      target: {
-        get: getTarget,
-        clone,
-        delete: deleteFunc,
-        export: exportFunc,
-      },
-      permissions: {
-        get: getEntities,
-      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -333,23 +282,39 @@ describe('Target Detailspage tests', () => {
       },
     };
     const [renewQueryMock] = createRenewSessionQueryMock();
+    const [mock, resultFunc] = createGetTargetQueryMock();
+    const [cloneMock, cloneResult] = createCloneTargetQueryMock();
+    const [deleteMock, deleteResult] = createDeleteTargetsByIdsQueryMock();
+    const [exportMock, exportResult] = createExportTargetsByIdsQueryMock();
+    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
+      filterString: 'resource_uuid=159 first=1 rows=-1',
+    });
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [renewQueryMock],
+      queryMocks: [
+        renewQueryMock,
+        mock,
+        cloneMock,
+        deleteMock,
+        exportMock,
+        permissionMock,
+      ],
     });
-
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('46264', target));
+    store.dispatch(entityLoadingActions.success('159', target));
 
-    render(<Detailspage id="46264" />);
+    render(<Detailspage id="159" />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+    expect(permissionResult).toHaveBeenCalled();
 
     const cloneIcon = screen.getAllByTitle('Clone Target');
     expect(cloneIcon[0]).toBeInTheDocument();
@@ -357,15 +322,7 @@ describe('Target Detailspage tests', () => {
 
     await wait();
 
-    expect(clone).toHaveBeenCalledWith(target);
-
-    const exportIcon = screen.getAllByTitle('Export Target as XML');
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
-    expect(exportFunc).toHaveBeenCalledWith(target);
+    expect(cloneResult).toHaveBeenCalled();
 
     const deleteIcon = screen.getAllByTitle('Move Target to trashcan');
     expect(deleteIcon[0]).toBeInTheDocument();
@@ -373,7 +330,15 @@ describe('Target Detailspage tests', () => {
 
     await wait();
 
-    expect(deleteFunc).toHaveBeenCalledWith({id: target.id});
+    expect(deleteResult).toHaveBeenCalled();
+
+    const exportIcon = screen.getAllByTitle('Export Target as XML');
+    expect(exportIcon[0]).toBeInTheDocument();
+    fireEvent.click(exportIcon[0]);
+
+    await wait();
+
+    expect(exportResult).toHaveBeenCalled();
   });
 });
 
@@ -481,7 +446,7 @@ describe('Target ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={noPermTarget}
+        entity={targetNoPerm}
         onTargetCloneClick={handleTargetCloneClick}
         onTargetDeleteClick={handleTargetDeleteClick}
         onTargetDownloadClick={handleTargetDownloadClick}
@@ -500,7 +465,7 @@ describe('Target ToolBarIcons tests', () => {
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
 
-    expect(handleTargetCloneClick).toHaveBeenCalledWith(noPermTarget);
+    expect(handleTargetCloneClick).toHaveBeenCalledWith(targetNoPerm);
 
     expect(editIcon[0]).toBeInTheDocument();
     fireEvent.click(editIcon[0]);
@@ -515,7 +480,7 @@ describe('Target ToolBarIcons tests', () => {
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
 
-    expect(handleTargetDownloadClick).toHaveBeenCalledWith(noPermTarget);
+    expect(handleTargetDownloadClick).toHaveBeenCalledWith(targetNoPerm);
   });
 
   test('should (not) call click handlers for target in use', () => {
