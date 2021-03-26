@@ -18,11 +18,9 @@
 import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import {setLocale} from 'gmp/locale/lang';
 
-import Filter from 'gmp/models/filter';
 import Target from 'gmp/models/target';
 
 import {isDefined} from 'gmp/utils/identity';

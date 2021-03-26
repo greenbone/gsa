@@ -33,9 +33,15 @@ import {
   CREATE_TARGET,
   MODIFY_TARGET,
   useGetTarget,
+  useCloneTarget,
+  useExportTargetsByIds,
+  useDeleteTargetsByIds,
 } from '../targets';
 
 import {
+  createCloneTargetQueryMock,
+  createDeleteTargetsByIdsQueryMock,
+  createExportTargetsByIdsQueryMock,
   createGetTargetQueryMock,
   createGetTargetsQueryMock,
 } from '../__mocks__/targets';
@@ -269,5 +275,86 @@ describe('useGetTarget tests', () => {
 
     expect(screen.getByTestId('id')).toHaveTextContent('159');
     expect(screen.getByTestId('name')).toHaveTextContent('target 1');
+  });
+});
+
+const DeleteTargetsByIdsComponent = () => {
+  const [deleteTargetsByIds] = useDeleteTargetsByIds();
+  return (
+    <button
+      data-testid="bulk-delete"
+      onClick={() => deleteTargetsByIds(['foo', 'bar'])}
+    />
+  );
+};
+
+describe('useDeleteTargetsByIds tests', () => {
+  test('should delete a list of targets after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteTargetsByIdsQueryMock([
+      'foo',
+      'bar',
+    ]);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteTargetsByIdsComponent />);
+    const button = screen.getByTestId('bulk-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportTargetsByIdsComponent = () => {
+  const exportTargetsByIds = useExportTargetsByIds();
+  return (
+    <button
+      data-testid="bulk-export"
+      onClick={() => exportTargetsByIds(['159'])}
+    />
+  );
+};
+
+describe('useExportTargetsByIds tests', () => {
+  test('should export a list of targets after user interaction', async () => {
+    const [mock, resultFunc] = createExportTargetsByIdsQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportTargetsByIdsComponent />);
+    const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const CloneTargetComponent = () => {
+  const [cloneTarget, {id: targetId}] = useCloneTarget();
+  return (
+    <div>
+      {targetId && <span data-testid="cloned-target">{targetId}</span>}
+      <button data-testid="clone" onClick={() => cloneTarget('159')} />
+    </div>
+  );
+};
+
+describe('useCloneTarget tests', () => {
+  test('should clone a target after user interaction', async () => {
+    const [mock, resultFunc] = createCloneTargetQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CloneTargetComponent />);
+
+    const button = screen.getByTestId('clone');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('cloned-target')).toHaveTextContent('bar');
   });
 });
