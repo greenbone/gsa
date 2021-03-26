@@ -125,20 +125,20 @@ const TargetComponent = props => {
           targetDialogVisible: true,
           id: entity.id,
           allowSimultaneousIPs: entity.allowSimultaneousIPs,
-          alive_tests: entity.alive_tests,
+          alive_tests: entity.aliveTests,
           comment: entity.comment,
-          esxi_credential_id: id_or__(entity.esxi_credential),
-          exclude_hosts: isDefined(entity.exclude_hosts)
-            ? entity.exclude_hosts.join(', ')
+          esxi_credential_id: id_or__(entity.esxiCredential),
+          exclude_hosts: isDefined(entity.excludeHosts)
+            ? entity.excludeHosts.join(', ')
             : '',
           hosts: entity.hosts.join(', '),
           in_use: entity.isInUse(),
           name: entity.name,
-          port: isDefined(entity.ssh_credential)
-            ? entity.ssh_credential.port
+          port: isDefined(entity.sshCredential)
+            ? entity.sshCredential.port
             : '22',
-          reverse_lookup_only: entity.reverse_lookup_only,
-          reverse_lookup_unify: entity.reverse_lookup_unify,
+          reverse_lookup_only: entity.reverseLookupOnly,
+          reverse_lookup_unify: entity.reverseLookupUnify,
           target_source: 'manual',
           target_exclude_source: 'manual',
           targetTitle: _('Edit Target {{name}}', entity),
@@ -149,9 +149,9 @@ const TargetComponent = props => {
       loadAll().then(() => {
         dispatchState(
           updateState({
-            smb_credential_id: id_or__(entity.smb_credential),
-            ssh_credential_id: id_or__(entity.ssh_credential),
-            port_list_id: id_or__(entity.port_list),
+            smb_credential_id: id_or__(entity.smbCredential),
+            ssh_credential_id: id_or__(entity.sshCredential),
+            port_list_id: id_or__(entity.portList),
           }),
         );
       });
