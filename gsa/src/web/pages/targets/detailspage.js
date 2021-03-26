@@ -63,9 +63,15 @@ import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TargetIcon from 'web/components/icon/targeticon';
 import TrashIcon from 'web/entity/icon/trashicon';
+import useExportEntity from 'web/entity/useExportEntity';
 
 import {useGetPermissions} from 'web/graphql/permissions';
-import {useGetTarget} from 'web/graphql/targets';
+import {
+  useCloneTarget,
+  useDeleteTargetsByIds,
+  useExportTargetsByIds,
+  useGetTarget,
+} from 'web/graphql/targets';
 
 import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
@@ -166,6 +172,36 @@ const Page = () => {
     filterString: permissionsResourceFilter(id).toFilterString(),
   });
 
+  // Target related mutations
+  const exportEntity = useExportEntity();
+
+  const [cloneTarget] = useCloneTarget();
+  const [deleteTarget] = useDeleteTargetsByIds();
+  const exportTarget = useExportTargetsByIds();
+
+  // Target methods
+  const handleCloneTarget = clonedTarget => {
+    return cloneTarget(clonedTarget.id)
+      .then(targetId => goto_entity_details('target', {history})(targetId))
+      .catch(showError);
+  };
+
+  const handleDeleteTarget = deletedTarget => {
+    return deleteTarget([deletedTarget.id])
+      .then(goto_list('targets', {history}))
+      .catch(showError);
+  };
+
+  const handleDownloadTarget = exportedTarget => {
+    exportEntity({
+      entity: exportedTarget,
+      exportFunc: exportTarget,
+      resourceType: 'targets',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
   // Timeout and reload
   const timeoutFunc = useDefaultReloadInterval();
 
@@ -175,7 +211,7 @@ const Page = () => {
   );
 
   useEffect(() => {
-    // start reloading if schedule is available and no timer is running yet
+    // start reloading if target is available and no timer is running yet
     if (hasValue(target) && !hasRunningTimer) {
       startReload();
     }
@@ -196,7 +232,7 @@ const Page = () => {
       onInteraction={renewSessionTimeout}
       onSaved={() => refetchTarget()}
     >
-      {({clone, create, delete: delete_func, download, edit, save}) => (
+      {({create, edit, save}) => (
         <EntityPage
           entity={target}
           entityError={entityError}
@@ -206,10 +242,10 @@ const Page = () => {
           toolBarIcons={ToolBarIcons}
           title={_('Target')}
           onInteraction={renewSessionTimeout}
-          onTargetCloneClick={clone}
+          onTargetCloneClick={handleCloneTarget}
           onTargetCreateClick={create}
-          onTargetDeleteClick={delete_func}
-          onTargetDownloadClick={download}
+          onTargetDeleteClick={handleDeleteTarget}
+          onTargetDownloadClick={handleDownloadTarget}
           onTargetEditClick={edit}
           onTargetSaveClick={save}
         >

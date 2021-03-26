@@ -208,3 +208,75 @@ export const useModifyTarget = options => {
   );
   return [modifyTarget, data];
 };
+
+export const CLONE_TARGET = gql`
+  mutation cloneTarget($id: UUID!) {
+    cloneTarget(id: $id) {
+      id
+    }
+  }
+`;
+
+export const useCloneTarget = options => {
+  const [queryCloneTarget, {data, ...other}] = useMutation(
+    CLONE_TARGET,
+    options,
+  );
+  const cloneTarget = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryCloneTarget({...options, variables: {id}}).then(
+        result => result.data.cloneTarget.id,
+      ),
+    [queryCloneTarget],
+  );
+  const targetId = data?.cloneTarget?.id;
+  return [cloneTarget, {...other, id: targetId}];
+};
+
+export const DELETE_TARGETS_BY_IDS = gql`
+  mutation deleteTargetsByIds($ids: [UUID]!) {
+    deleteTargetsByIds(ids: $ids) {
+      ok
+    }
+  }
+`;
+
+export const useDeleteTargetsByIds = options => {
+  const [queryDeleteTargetsByIds, data] = useMutation(
+    DELETE_TARGETS_BY_IDS,
+    options,
+  );
+  const deleteTargetsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteTargetsByIds({...options, variables: {ids}}),
+    [queryDeleteTargetsByIds],
+  );
+  return [deleteTargetsByIds, data];
+};
+
+export const EXPORT_TARGETS_BY_IDS = gql`
+  mutation exportTargetsByIds($ids: [UUID]!) {
+    exportTargetsByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportTargetsByIds = options => {
+  const [queryExportTargetsByIds] = useMutation(EXPORT_TARGETS_BY_IDS, options);
+
+  const exportTargetsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    targetIds =>
+      queryExportTargetsByIds({
+        ...options,
+        variables: {
+          ids: targetIds,
+        },
+      }),
+    [queryExportTargetsByIds, options],
+  );
+
+  return exportTargetsByIds;
+};
