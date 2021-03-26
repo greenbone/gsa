@@ -49,11 +49,28 @@ export const GET_RESULT = gql`
       port
       nvt {
         id
+        name
         score
         severities {
           type
           score
           vector
+        }
+        cveReferences {
+          id
+          type
+        }
+        bidReferences {
+          id
+          type
+        }
+        certReferences {
+          id
+          type
+        }
+        otherReferences {
+          id
+          type
         }
         tags {
           cvssBaseVector

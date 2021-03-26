@@ -60,6 +60,7 @@ export const mockResult = deepFreeze({
   port: '80/tcp',
   nvt: {
     id: '1.3.6.1.4.1.25623.1.12345',
+    name: 'nvt1',
     score: 50,
     severities: {
       type: null,
@@ -68,17 +69,27 @@ export const mockResult = deepFreeze({
     },
     tags: {
       cvssBaseVector: 'AV:N/AC:M/Au:S/C:P/I:N/A:P',
-      summary: 'This is a description',
+      summary: 'This is a mock result',
       solutionType: 'VendorFix',
-      insight: 'Foo',
-      impact: 'Bar',
-      detectionMethod: 'Baz',
-      affected: 'foo',
+      insight: 'This is just a test',
+      impact: 'No real impact',
+      detectionMethod: 'This is the detection method',
+      affected: 'Affects test cases only',
     },
+    cveReferences: [{type: 'cve', id: 'CVE-2019-1234'}],
+    certReferences: [
+      {type: 'cert-bund', id: 'CB-K12/3456'},
+      {type: 'dfn-cert', id: 'DFN-CERT-2019-1234'},
+    ],
+    bidReferences: [
+      {type: 'bid', id: '75750'},
+      {type: 'bugtraq_id', id: '75751'},
+    ],
+    otherReferences: [{type: 'url', id: 'https://www.foo.bar'}],
     solution: {
       type: 'VendorFix',
       method: null,
-      description: 'This is a description',
+      description: 'Keep writing tests',
     },
   },
   description: 'This is a description',
