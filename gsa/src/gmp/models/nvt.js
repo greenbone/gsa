@@ -39,7 +39,7 @@ const parseTags = tags => {
     const splitted = tags.split('|');
     for (const t of splitted) {
       const [key, value] = split(t, '=', 1);
-      const newValue = value === '' ? undefined : value;
+      const newValue = isEmpty(value) ? undefined : value;
       newTags[key] = newValue;
     }
   }
