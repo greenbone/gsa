@@ -108,6 +108,10 @@ export const GET_TARGET = gql`
       reverseLookupOnly
       reverseLookupUnify
       portRange
+      tasks {
+        name
+        id
+      }
       userTags {
         count
         tags {

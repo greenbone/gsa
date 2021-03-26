@@ -53,6 +53,12 @@ const mockTarget = deepFreeze({
     name: null,
     id: null,
   },
+  tasks: [
+    {
+      name: 'task 1',
+      id: 't1',
+    },
+  ],
   aliveTests: 'Schroedingers host',
   allowSimultaneousIPs: true,
   reverseLookupOnly: true,
@@ -109,6 +115,12 @@ const inUseTarget = deepFreeze({
   reverseLookupOnly: true,
   reverseLookupUnify: false,
   portRange: '1-5',
+  tasks: [
+    {
+      name: 'task 1',
+      id: 't1',
+    },
+  ],
   userTags: {
     count: 1,
     tags: [
