@@ -62,7 +62,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import CertBundAdvDetails from './details';
 
-const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => (
+export const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
