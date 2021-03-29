@@ -45,6 +45,40 @@ export const GET_TARGETS = gql`
         node {
           name
           id
+          hosts
+          maxHosts
+          owner
+          writable
+          inUse
+          permissions {
+            name
+          }
+          portList {
+            name
+            id
+          }
+          sshCredential {
+            name
+            id
+            port
+          }
+          smbCredential {
+            name
+            id
+          }
+          esxiCredential {
+            name
+            id
+          }
+          snmpCredential {
+            name
+            id
+          }
+          aliveTests
+          excludeHosts
+          allowSimultaneousIPs
+          reverseLookupOnly
+          reverseLookupUnify
         }
       }
       counts {
