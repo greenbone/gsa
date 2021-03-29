@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
@@ -30,6 +30,13 @@ export const TARGET_CREDENTIAL_NAMES = [
   'snmp_credential',
   'ssh_credential',
   'esxi_credential',
+];
+
+export const HYPERION_TARGET_CREDENTIAL_NAMES = [
+  'smbCredential',
+  'snmpCredential',
+  'sshCredential',
+  'esxiCredential',
 ];
 
 class Target extends Model {
@@ -72,6 +79,38 @@ class Target extends Model {
     }
 
     ret.allowSimultaneousIPs = parseYesNo(element.allow_simultaneous_ips);
+
+    return ret;
+  }
+
+  static parseObject(object) {
+    const ret = super.parseObject(object);
+
+    if (hasValue(object.portList) && hasValue(object.portList.id)) {
+      ret.portList = PortList.fromObject(ret.portList);
+    } else {
+      delete ret.portList;
+    }
+
+    for (const name of HYPERION_TARGET_CREDENTIAL_NAMES) {
+      const cred = ret[name];
+      if (hasValue(cred) && hasValue(cred.id)) {
+        ret[name] = parseModelFromObject(cred, 'credential');
+      } else {
+        delete ret[name];
+      }
+    }
+
+    ret.reverseLookupOnly = parseYesNo(object.reverseLookupOnly);
+    ret.reverseLookupUnify = parseYesNo(object.reverseLookupUnify);
+
+    if (hasValue(object.tasks)) {
+      ret.tasks = map(object.tasks, task =>
+        parseModelFromElement(task, 'task'),
+      );
+    }
+
+    ret.allowSimultaneousIPs = parseYesNo(object.allowSimultaneousIPs);
 
     return ret;
   }

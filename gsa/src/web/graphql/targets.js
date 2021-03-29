@@ -18,7 +18,7 @@
 
 import {useCallback} from 'react';
 
-import {gql, useLazyQuery, useMutation} from '@apollo/client';
+import {gql, useLazyQuery, useMutation, useQuery} from '@apollo/client';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -64,6 +64,77 @@ export const GET_TARGETS = gql`
     }
   }
 `;
+
+export const GET_TARGET = gql`
+  query Target($id: UUID!) {
+    target(id: $id) {
+      id
+      name
+      owner
+      comment
+      writable
+      inUse
+      creationTime
+      modificationTime
+      permissions {
+        name
+      }
+      hosts
+      excludeHosts
+      maxHosts
+      portList {
+        name
+        id
+      }
+      sshCredential {
+        name
+        id
+        port
+      }
+      smbCredential {
+        name
+        id
+      }
+      esxiCredential {
+        name
+        id
+      }
+      snmpCredential {
+        name
+        id
+      }
+      aliveTests
+      allowSimultaneousIPs
+      reverseLookupOnly
+      reverseLookupUnify
+      portRange
+      tasks {
+        name
+        id
+      }
+      userTags {
+        count
+        tags {
+          name
+          id
+          value
+          comment
+        }
+      }
+    }
+  }
+`;
+
+export const useGetTarget = (id, options) => {
+  const {data, ...other} = useQuery(GET_TARGET, {
+    ...options,
+    variables: {id},
+  });
+  const target = isDefined(data?.target)
+    ? Target.fromObject(data.target)
+    : undefined;
+  return {target, ...other};
+};
 
 export const useLazyGetTargets = (variables, options) => {
   const [queryTargets, {data, ...other}] = useLazyQuery(GET_TARGETS, {
@@ -136,4 +207,76 @@ export const useModifyTarget = options => {
     [queryModifyTarget],
   );
   return [modifyTarget, data];
+};
+
+export const CLONE_TARGET = gql`
+  mutation cloneTarget($id: UUID!) {
+    cloneTarget(id: $id) {
+      id
+    }
+  }
+`;
+
+export const useCloneTarget = options => {
+  const [queryCloneTarget, {data, ...other}] = useMutation(
+    CLONE_TARGET,
+    options,
+  );
+  const cloneTarget = useCallback(
+    // eslint-disable-next-line no-shadow
+    (id, options) =>
+      queryCloneTarget({...options, variables: {id}}).then(
+        result => result.data.cloneTarget.id,
+      ),
+    [queryCloneTarget],
+  );
+  const targetId = data?.cloneTarget?.id;
+  return [cloneTarget, {...other, id: targetId}];
+};
+
+export const DELETE_TARGETS_BY_IDS = gql`
+  mutation deleteTargetsByIds($ids: [UUID]!) {
+    deleteTargetsByIds(ids: $ids) {
+      ok
+    }
+  }
+`;
+
+export const useDeleteTargetsByIds = options => {
+  const [queryDeleteTargetsByIds, data] = useMutation(
+    DELETE_TARGETS_BY_IDS,
+    options,
+  );
+  const deleteTargetsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    (ids, options) => queryDeleteTargetsByIds({...options, variables: {ids}}),
+    [queryDeleteTargetsByIds],
+  );
+  return [deleteTargetsByIds, data];
+};
+
+export const EXPORT_TARGETS_BY_IDS = gql`
+  mutation exportTargetsByIds($ids: [UUID]!) {
+    exportTargetsByIds(ids: $ids) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useExportTargetsByIds = options => {
+  const [queryExportTargetsByIds] = useMutation(EXPORT_TARGETS_BY_IDS, options);
+
+  const exportTargetsByIds = useCallback(
+    // eslint-disable-next-line no-shadow
+    targetIds =>
+      queryExportTargetsByIds({
+        ...options,
+        variables: {
+          ids: targetIds,
+        },
+      }),
+    [queryExportTargetsByIds, options],
+  );
+
+  return exportTargetsByIds;
 };
