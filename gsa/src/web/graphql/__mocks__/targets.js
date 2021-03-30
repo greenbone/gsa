@@ -19,7 +19,9 @@ import {createGenericQueryMock, deepFreeze} from 'web/utils/testing';
 
 import {
   CLONE_TARGET,
+  DELETE_TARGETS_BY_FILTER,
   DELETE_TARGETS_BY_IDS,
+  EXPORT_TARGETS_BY_FILTER,
   EXPORT_TARGETS_BY_IDS,
   GET_TARGET,
   GET_TARGETS,
@@ -196,6 +198,7 @@ export const listTarget2 = deepFreeze({
   sshCredential: {
     name: null,
     id: null,
+    port: null,
   },
   smbCredential: {
     name: 'smb',
@@ -357,3 +360,28 @@ export const createCloneTargetQueryMock = (
     },
     {id: targetId},
   );
+
+const bulkDeleteByFilterResult = {
+  deleteTargetsByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeleteTargetsByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(DELETE_TARGETS_BY_FILTER, bulkDeleteByFilterResult, {
+    filterString,
+  });
+
+const exportTargetsByFilterResult = {
+  exportTargetsByFilter: {
+    exportedEntities: '<get_targets_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportTargetsByFilterQueryMock = (filterString = 'foo') => {
+  return createGenericQueryMock(
+    EXPORT_TARGETS_BY_FILTER,
+    exportTargetsByFilterResult,
+    {filterString},
+  );
+};
