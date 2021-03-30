@@ -20,7 +20,7 @@ pull_request_rules:
   - name: port 21.04 patches to master branch
     conditions:
       - base=gsa-21.04
-      - label=backport-to-master
+      - label=port-to-master
     actions:
       backport:
         branches:
