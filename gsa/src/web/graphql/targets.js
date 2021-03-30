@@ -314,3 +314,56 @@ export const useExportTargetsByIds = options => {
 
   return exportTargetsByIds;
 };
+
+export const DELETE_TARGETS_BY_FILTER = gql`
+  mutation deleteTargetsByFilter($filterString: String!) {
+    deleteTargetsByFilter(filterString: $filterString) {
+      ok
+    }
+  }
+`;
+
+export const EXPORT_TARGETS_BY_FILTER = gql`
+  mutation exportTargetsByFilter($filterString: String) {
+    exportTargetsByFilter(filterString: $filterString) {
+      exportedEntities
+    }
+  }
+`;
+
+export const useDeleteTargetsByFilter = options => {
+  const [queryDeleteTargetsByFilter, data] = useMutation(
+    DELETE_TARGETS_BY_FILTER,
+    options,
+  );
+  const deleteTargetsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    (filterString, options) =>
+      queryDeleteTargetsByFilter({
+        ...options,
+        variables: {filterString},
+      }),
+    [queryDeleteTargetsByFilter],
+  );
+  return [deleteTargetsByFilter, data];
+};
+
+export const useExportTargetsByFilter = options => {
+  const [queryExportTargetsByFilter] = useMutation(
+    EXPORT_TARGETS_BY_FILTER,
+    options,
+  );
+  const exportTargetsByFilter = useCallback(
+    // eslint-disable-next-line no-shadow
+    filterString =>
+      queryExportTargetsByFilter({
+        ...options,
+        variables: {
+          filterString,
+        },
+      }),
+    [queryExportTargetsByFilter, options],
+  );
+
+  return exportTargetsByFilter;
+};

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -38,10 +38,23 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 
 import useReload from 'web/components/loading/useReload';
 
+import {
+  BulkTagComponent,
+  useBulkDeleteEntities,
+  useBulkExportEntities,
+} from 'web/entities/bulkactions';
 import EntitiesPage from 'web/entities/page';
+import useExportEntity from 'web/entity/useExportEntity';
 import usePagination from 'web/entities/usePagination';
 
-import {useLazyGetTargets} from 'web/graphql/targets';
+import {
+  useCloneTarget,
+  useDeleteTargetsByFilter,
+  useDeleteTargetsByIds,
+  useExportTargetsByFilter,
+  useExportTargetsByIds,
+  useLazyGetTargets,
+} from 'web/graphql/targets';
 
 import PropTypes from 'web/utils/proptypes';
 import useChangeFilter from 'web/utils/useChangeFilter';
@@ -103,13 +116,29 @@ const TargetsPage = () => {
     changeFilter,
   );
 
+  const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
+
   // Target list state variables and methods
   const [
     getTargets,
     {counts, targets, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetTargets();
 
+  const exportEntity = useExportEntity();
+
+  const [cloneTarget] = useCloneTarget();
+  const exportTarget = useExportTargetsByIds();
+
   const timeoutFunc = useDefaultReloadInterval();
+
+  const exportTargetsByFilter = useExportTargetsByFilter();
+  const exportTargetsByIds = useExportTargetsByIds();
+  const bulkExportTargets = useBulkExportEntities();
+
+  const [deleteTargetsByIds] = useDeleteTargetsByIds();
+  const [deleteTargetsByFilter] = useDeleteTargetsByFilter();
+
+  const bulkDeleteTargets = useBulkDeleteEntities();
 
   const [startReload, stopReload, hasRunningTimer] = useReload(
     refetch,
@@ -122,6 +151,64 @@ const TargetsPage = () => {
     pageInfo,
     refetch,
   });
+
+  // Target methods
+  const handleDownloadTarget = exportedTarget => {
+    exportEntity({
+      entity: exportedTarget,
+      exportFunc: exportTarget,
+      resourceType: 'targets',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  const handleCloneTarget = useCallback(
+    target => cloneTarget(target.id).then(refetch, showError),
+    [cloneTarget, refetch, showError],
+  );
+  const handleDeleteTarget = useCallback(
+    target => deleteTargetsByIds(target.id).then(refetch, showError),
+    [deleteTargetsByIds, refetch, showError],
+  );
+
+  // Bulk action methods
+  const openTagsDialog = () => {
+    renewSessionTimeout();
+    setTagsDialogVisible(true);
+  };
+
+  const closeTagsDialog = () => {
+    renewSessionTimeout();
+    setTagsDialogVisible(false);
+  };
+
+  const handleBulkDeleteTargets = () => {
+    return bulkDeleteTargets({
+      selectionType,
+      filter,
+      selected,
+      entities: targets,
+      deleteByIdsFunc: deleteTargetsByIds,
+      deleteByFilterFunc: deleteTargetsByFilter,
+      onDeleted: refetch,
+      onError: showError,
+    });
+  };
+
+  const handleBulkExportTargets = () => {
+    return bulkExportTargets({
+      entities: targets,
+      selected,
+      filter,
+      resourceType: 'targets',
+      selectionType,
+      exportByFilterFunc: exportTargetsByFilter,
+      exportByIdsFunc: exportTargetsByIds,
+      onDownload: handleDownload,
+      onError: showError,
+    });
+  };
 
   // Side effects
   useEffect(() => {
@@ -185,6 +272,8 @@ const TargetsPage = () => {
             title={_('Targets')}
             toolBarIcons={ToolBarIcons}
             onChanged={refetch}
+            onDeleteBulk={handleBulkDeleteTargets}
+            onDownloadBulk={handleBulkExportTargets}
             onDownloaded={handleDownload}
             onEntitySelected={select}
             onEntityDeselected={deselect}
@@ -194,10 +283,10 @@ const TargetsPage = () => {
             onFilterReset={resetFilter}
             onFilterRemoved={removeFilter}
             onInteraction={renewSessionTimeout}
-            onTargetCloneClick={clone}
+            onTargetCloneClick={handleCloneTarget}
             onTargetCreateClick={create}
-            onTargetDeleteClick={delete_func}
-            onTargetDownloadClick={download}
+            onTargetDeleteClick={handleDeleteTarget}
+            onTargetDownloadClick={handleDownloadTarget}
             onTargetEditClick={edit}
             onTargetSaveClick={save}
             onSortChange={handleSortChange}
@@ -206,12 +295,23 @@ const TargetsPage = () => {
             onNextClick={getNext}
             onPreviousClick={getPrevious}
             onSelectionTypeChange={changeSelectionType}
+            onTagsBulk={openTagsDialog}
           />
           <DialogNotification
             {...notificationDialogState}
             onCloseClick={closeNotificationDialog}
           />
           <Download ref={downloadRef} />
+          {tagsDialogVisible && (
+            <BulkTagComponent
+              entities={targets}
+              selected={selected}
+              filter={filter}
+              selectionType={selectionType}
+              entitiesCounts={counts}
+              onClose={closeTagsDialog}
+            />
+          )}
         </React.Fragment>
       )}
     </TargetComponent>
