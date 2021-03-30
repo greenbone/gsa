@@ -68,8 +68,8 @@ class Result extends Model {
 
     copy.host = {
       name: host.ip,
-      id: isDefined(host.id) && !isEmpty(host.id) ? host.id : undefined,
-      hostname: isDefined(host.hostname) ? host.hostname : '',
+      id: hasValue(host.id) && !isEmpty(host.id) ? host.id : undefined,
+      hostname: hasValue(host.hostname) ? host.hostname : '',
     };
 
     copy.nvt = Nvt.fromObject(nvt);
@@ -107,11 +107,11 @@ class Result extends Model {
 
     copy.qod = parseQod(qod);
 
-    if (isDefined(severity)) {
+    if (hasValue(severity)) {
       copy.severity = parseSeverity(severity);
     }
 
-    if (isDefined(originalSeverity)) {
+    if (hasValue(originalSeverity)) {
       copy.originalSeverity = parseSeverity(originalSeverity);
     }
 
