@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Implement result detailspage queries [#2823](https://github.com/greenbone/gsa/pull/2823)
+- Adjust isEmpty to return true for null [#2831](https://github.com/greenbone/gsa/pull/2831)
 - Implement target detailspage queries and mutations [#2822](https://github.com/greenbone/gsa/pull/2822)
 - Refactor target component to use useReducer [#2812](https://github.com/greenbone/gsa/pull/2812)
 - Implement nvt listpage queries and mutations [#2798](https://github.com/greenbone/gsa/pull/2798)
