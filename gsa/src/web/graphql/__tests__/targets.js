@@ -36,11 +36,15 @@ import {
   useCloneTarget,
   useExportTargetsByIds,
   useDeleteTargetsByIds,
+  useDeleteTargetsByFilter,
+  useExportTargetsByFilter,
 } from '../targets';
 
 import {
   createCloneTargetQueryMock,
+  createDeleteTargetsByFilterQueryMock,
   createDeleteTargetsByIdsQueryMock,
+  createExportTargetsByFilterQueryMock,
   createExportTargetsByIdsQueryMock,
   createGetTargetQueryMock,
   createGetTargetsQueryMock,
@@ -356,5 +360,55 @@ describe('useCloneTarget tests', () => {
     expect(resultFunc).toHaveBeenCalled();
 
     expect(screen.getByTestId('cloned-target')).toHaveTextContent('bar');
+  });
+});
+
+const DeleteTargetsByFilterComponent = () => {
+  const [deleteTargetsByFilter] = useDeleteTargetsByFilter();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deleteTargetsByFilter('foo')}
+    />
+  );
+};
+
+describe('useDeleteTargetsByFilter tests', () => {
+  test('should delete a list of targets by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteTargetsByFilterQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteTargetsByFilterComponent />);
+    const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportTargetsByFilterComponent = () => {
+  const exportTargetsByFilter = useExportTargetsByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportTargetsByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportTargetsByFilter tests', () => {
+  test('should export a list of targets by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportTargetsByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportTargetsByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 });

@@ -17,9 +17,9 @@
  */
 import React from 'react';
 
-import Task from 'gmp/models/task';
 import Audit from 'gmp/models/audit';
-import Target from 'gmp/models/target';
+import Credential from 'gmp/models/credential';
+import Task from 'gmp/models/task';
 
 import {render} from 'web/utils/testing';
 
@@ -51,9 +51,11 @@ describe('Entity ObserverIcon component tests', () => {
   });
 
   test('should not render non-task if the owner is the current user', () => {
-    const target = Target.fromElement({owner: {name: 'foo'}});
+    const credential = Credential.fromElement({owner: {name: 'foo'}});
 
-    const {element} = render(<ObserverIcon entity={target} userName={'foo'} />);
+    const {element} = render(
+      <ObserverIcon entity={credential} userName={'foo'} />,
+    );
 
     expect(element).toEqual(null);
   });

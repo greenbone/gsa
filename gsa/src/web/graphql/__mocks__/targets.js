@@ -19,7 +19,9 @@ import {createGenericQueryMock, deepFreeze} from 'web/utils/testing';
 
 import {
   CLONE_TARGET,
+  DELETE_TARGETS_BY_FILTER,
   DELETE_TARGETS_BY_IDS,
+  EXPORT_TARGETS_BY_FILTER,
   EXPORT_TARGETS_BY_IDS,
   GET_TARGET,
   GET_TARGETS,
@@ -140,13 +142,89 @@ export const inUseTarget = deepFreeze({
   },
 });
 
+export const listTarget = deepFreeze({
+  id: '159',
+  name: 'target 1',
+  owner: 'admin',
+  comment: 'detailspage',
+  writable: true,
+  inUse: false,
+  permissions: [{name: 'Everything'}],
+  hosts: ['123.234.345.456', ' 127.0.0.1'],
+  excludeHosts: ['192.168.0.1'],
+  maxHosts: 2,
+  portList: {
+    name: 'list',
+    id: 'pl1',
+  },
+  sshCredential: {
+    name: 'ssh',
+    id: 'ssh1',
+    port: 22,
+  },
+  smbCredential: {
+    name: null,
+    id: null,
+  },
+  esxiCredential: {
+    name: null,
+    id: null,
+  },
+  snmpCredential: {
+    name: null,
+    id: null,
+  },
+  aliveTests: 'Schroedingers host',
+  allowSimultaneousIPs: true,
+  reverseLookupOnly: true,
+  reverseLookupUnify: false,
+});
+
+export const listTarget2 = deepFreeze({
+  id: '343',
+  name: 'target 2',
+  owner: 'admin',
+  comment: 'detailspage',
+  writable: true,
+  inUse: false,
+  permissions: [{name: 'Everything'}],
+  hosts: ['127.0.0.1'],
+  excludeHosts: ['123.234.345.456', '192.168.0.1'],
+  maxHosts: 1,
+  portList: {
+    name: 'list',
+    id: 'pl2',
+  },
+  sshCredential: {
+    name: null,
+    id: null,
+    port: null,
+  },
+  smbCredential: {
+    name: 'smb',
+    id: 'smb2',
+  },
+  esxiCredential: {
+    name: null,
+    id: null,
+  },
+  snmpCredential: {
+    name: null,
+    id: null,
+  },
+  aliveTests: 'Schroedingers host',
+  allowSimultaneousIPs: true,
+  reverseLookupOnly: true,
+  reverseLookupUnify: false,
+});
+
 const mockTargets = {
   edges: [
     {
-      node: mockTarget,
+      node: listTarget,
     },
     {
-      node: inUseTarget,
+      node: listTarget2,
     },
   ],
   counts: {
@@ -282,3 +360,28 @@ export const createCloneTargetQueryMock = (
     },
     {id: targetId},
   );
+
+const bulkDeleteByFilterResult = {
+  deleteTargetsByFilter: {
+    ok: true,
+  },
+};
+
+export const createDeleteTargetsByFilterQueryMock = (filterString = 'foo') =>
+  createGenericQueryMock(DELETE_TARGETS_BY_FILTER, bulkDeleteByFilterResult, {
+    filterString,
+  });
+
+const exportTargetsByFilterResult = {
+  exportTargetsByFilter: {
+    exportedEntities: '<get_targets_response status="200" status_text="OK" />',
+  },
+};
+
+export const createExportTargetsByFilterQueryMock = (filterString = 'foo') => {
+  return createGenericQueryMock(
+    EXPORT_TARGETS_BY_FILTER,
+    exportTargetsByFilterResult,
+    {filterString},
+  );
+};
