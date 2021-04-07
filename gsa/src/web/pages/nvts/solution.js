@@ -39,11 +39,13 @@ const Solution = ({solutionDescription, solutionType}) => {
 
   return (
     <DetailsBlock title={_('Solution')}>
-      <IconDivider>
-        <b>{_('Solution Type: ')}</b>
-        <SolutionTypeIcon displayTitleText type={solutionType} />
-      </IconDivider>
-      <Pre>{solutionDescription}</Pre>
+      {isDefined(solutionType) && (
+        <IconDivider>
+          <b>{_('Solution Type: ')}</b>
+          <SolutionTypeIcon displayTitleText type={solutionType} />
+        </IconDivider>
+      )}
+      {isDefined(solutionDescription) && <Pre>{solutionDescription}</Pre>}
     </DetailsBlock>
   );
 };
