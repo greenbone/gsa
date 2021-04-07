@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
+- Show StartIcon for scheduled tasks [#2840](https://github.com/greenbone/gsa/pull/2840)
 - Remove solution from log NVTs [#2792](https://github.com/greenbone/gsa/pull/2792)
 - Move error message and adjust design on login page [#2780](https://github.com/greenbone/gsa/pull/2780)
 - Refactored useFormValidation hook [#2704](https://github.com/greenbone/gsa/pull/2704)
