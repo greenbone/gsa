@@ -97,6 +97,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Don't show empty sections in result details [#2791](https://github.com/greenbone/gsa/pull/2791)
 - Move error message and adjust design on login page [#2780](https://github.com/greenbone/gsa/pull/2780)
 - Refactored useFormValidation hook [#2704](https://github.com/greenbone/gsa/pull/2704)
 - Updated copyright and footer layout [#2687](https://github.com/greenbone/gsa/pull/2687)
