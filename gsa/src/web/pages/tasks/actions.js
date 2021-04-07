@@ -50,6 +50,7 @@ const Actions = ({
   onTaskResumeClick,
   onTaskStartClick,
   onTaskStopClick,
+<<<<<<< HEAD
 }) => {
   return (
     <IconDivider align={['center', 'center']} grow>
@@ -76,6 +77,32 @@ const Actions = ({
     </IconDivider>
   );
 };
+=======
+}) => (
+  <IconDivider align={['center', 'center']} grow>
+    {isDefined(entity.schedule) && (
+      <ScheduleIcon schedule={entity.schedule} links={links} />
+    )}
+    <StartIcon task={entity} onClick={onTaskStartClick} />
+
+    <ImportReportIcon task={entity} onClick={onReportImportClick} />
+
+    <StopIcon task={entity} onClick={onTaskStopClick} />
+
+    <ResumeIcon task={entity} onClick={onTaskResumeClick} />
+
+    <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
+    <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
+    <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
+    <ExportIcon
+      value={entity}
+      title={_('Export Task')}
+      onClick={onTaskDownloadClick}
+    />
+  </IconDivider>
+);
+
+>>>>>>> ade4a80441... Show StartIcon even when task is scheduled
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
