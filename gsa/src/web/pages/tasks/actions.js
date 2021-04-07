@@ -52,11 +52,10 @@ const Actions = ({
   onTaskStopClick,
 }) => (
   <IconDivider align={['center', 'center']} grow>
-    {isDefined(entity.schedule) ? (
+    {isDefined(entity.schedule) && (
       <ScheduleIcon schedule={entity.schedule} links={links} />
-    ) : (
-      <StartIcon task={entity} onClick={onTaskStartClick} />
     )}
+    <StartIcon task={entity} onClick={onTaskStartClick} />
 
     <ImportReportIcon task={entity} onClick={onReportImportClick} />
 

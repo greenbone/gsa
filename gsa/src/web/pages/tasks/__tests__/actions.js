@@ -518,9 +518,10 @@ describe('Task Actions tests', () => {
       'View Details of Schedule schedule1 (Next due: over)',
     );
 
-    fireEvent.click(icons[1]);
+    fireEvent.click(icons[2]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[1]).toHaveAttribute('title', 'Task is scheduled');
+    expect(icons[1]).toHaveAttribute('title', 'Start');
+    expect(icons[2]).toHaveAttribute('title', 'Task is scheduled');
   });
 
   test('should call click handlers for container task', () => {
