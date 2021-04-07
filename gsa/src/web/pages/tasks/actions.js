@@ -50,32 +50,30 @@ const Actions = ({
   onTaskResumeClick,
   onTaskStartClick,
   onTaskStopClick,
-}) => {
-  return (
-    <IconDivider align={['center', 'center']} grow>
-      {isDefined(entity.schedule) ? (
-        <ScheduleIcon schedule={entity.schedule} links={links} />
-      ) : (
-        <StartIcon task={entity} onClick={onTaskStartClick} />
-      )}
+}) => (
+  <IconDivider align={['center', 'center']} grow>
+    {isDefined(entity.schedule) && (
+      <ScheduleIcon schedule={entity.schedule} links={links} />
+    )}
+    <StartIcon task={entity} onClick={onTaskStartClick} />
 
-      <ImportReportIcon task={entity} onClick={onReportImportClick} />
+    <ImportReportIcon task={entity} onClick={onReportImportClick} />
 
-      <StopIcon task={entity} onClick={onTaskStopClick} />
+    <StopIcon task={entity} onClick={onTaskStopClick} />
 
-      <ResumeIcon task={entity} onClick={onTaskResumeClick} />
+    <ResumeIcon task={entity} onClick={onTaskResumeClick} />
 
-      <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
-      <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
-      <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
-      <ExportIcon
-        value={entity}
-        title={_('Export Task')}
-        onClick={onTaskDownloadClick}
-      />
-    </IconDivider>
-  );
-};
+    <TrashIcon entity={entity} name="task" onClick={onTaskDeleteClick} />
+    <EditIcon entity={entity} name="task" onClick={onTaskEditClick} />
+    <CloneIcon entity={entity} name="task" onClick={onTaskCloneClick} />
+    <ExportIcon
+      value={entity}
+      title={_('Export Task')}
+      onClick={onTaskDownloadClick}
+    />
+  </IconDivider>
+);
+
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
