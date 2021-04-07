@@ -66,6 +66,7 @@ describe('nvt Model tests', () => {
     const nvt1 = Nvt.fromElement({tags: 'bv=/A:P|st=vf'});
     const nvt2 = Nvt.fromElement({});
     const nvt3 = Nvt.fromElement({nvt: {tags: 'bv=/A:P|st=vf'}});
+    const nvt4 = Nvt.fromElement({nvt: {tags: 'bv='}});
     const res = {
       bv: '/A:P',
       st: 'vf',
@@ -74,6 +75,7 @@ describe('nvt Model tests', () => {
     expect(nvt1.tags).toEqual(res);
     expect(nvt2.tags).toEqual({});
     expect(nvt3.tags).toEqual(res);
+    expect(nvt4.tags.bv).toBeUndefined();
   });
 
   test('should parse refs', () => {
