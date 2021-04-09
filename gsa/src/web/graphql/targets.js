@@ -46,7 +46,7 @@ export const GET_TARGETS = gql`
           name
           id
           hosts
-          maxHosts
+          hostCount
           owner
           writable
           inUse
@@ -115,7 +115,7 @@ export const GET_TARGET = gql`
       }
       hosts
       excludeHosts
-      maxHosts
+      hostCount
       portList {
         name
         id
@@ -141,7 +141,6 @@ export const GET_TARGET = gql`
       allowSimultaneousIPs
       reverseLookupOnly
       reverseLookupUnify
-      portRange
       tasks {
         name
         id

@@ -39,7 +39,7 @@ export const mockTarget = deepFreeze({
   permissions: [{name: 'Everything'}],
   hosts: ['123.234.345.456', ' 127.0.0.1'],
   excludeHosts: ['192.168.0.1'],
-  maxHosts: 2,
+  hostCount: 2,
   portList: {
     name: 'list',
     id: 'pl1',
@@ -71,7 +71,6 @@ export const mockTarget = deepFreeze({
   allowSimultaneousIPs: true,
   reverseLookupOnly: true,
   reverseLookupUnify: false,
-  portRange: '1-5',
   userTags: {
     count: 1,
     tags: [
@@ -97,7 +96,7 @@ export const inUseTarget = deepFreeze({
   permissions: [{name: 'Everything'}],
   hosts: ['127.0.0.1'],
   excludeHosts: ['123.234.345.456', '192.168.0.1'],
-  maxHosts: 1,
+  hostCount: 1,
   portList: {
     name: 'list',
     id: 'pl2',
@@ -122,7 +121,6 @@ export const inUseTarget = deepFreeze({
   allowSimultaneousIPs: false,
   reverseLookupOnly: true,
   reverseLookupUnify: false,
-  portRange: '1-5',
   tasks: [
     {
       name: 'task 1',
@@ -152,7 +150,7 @@ export const listTarget = deepFreeze({
   permissions: [{name: 'Everything'}],
   hosts: ['123.234.345.456', ' 127.0.0.1'],
   excludeHosts: ['192.168.0.1'],
-  maxHosts: 2,
+  hostCount: 2,
   portList: {
     name: 'list',
     id: 'pl1',
@@ -190,7 +188,7 @@ export const listTarget2 = deepFreeze({
   permissions: [{name: 'Everything'}],
   hosts: ['127.0.0.1'],
   excludeHosts: ['123.234.345.456', '192.168.0.1'],
-  maxHosts: 1,
+  hostCount: 1,
   portList: {
     name: 'list',
     id: 'pl2',
@@ -255,7 +253,7 @@ export const noPermTarget = deepFreeze({
   permissions: [{name: 'get_targets'}],
   hosts: ['123.234.345.456', ' 127.0.0.1'],
   excludeHosts: ['192.168.0.1'],
-  maxHosts: 2,
+  hostCount: 2,
   portList: {
     name: 'list',
     id: 'pl1',
@@ -287,7 +285,6 @@ export const noPermTarget = deepFreeze({
   allowSimultaneousIPs: true,
   reverseLookupOnly: true,
   reverseLookupUnify: false,
-  portRange: '1-5',
   userTags: {
     count: 1,
     tags: [
