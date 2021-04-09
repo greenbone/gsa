@@ -556,12 +556,12 @@ init_validator ()
   gvm_validator_add (validator, "max", "^(-?[0-9]+|)$");
   gvm_validator_add (validator, "max_results", "^[0-9]+$");
   gvm_validator_add (validator, "format", "^[-[:alnum:]]+$");
-  gvm_validator_add (validator, "host", "^[[:alnum:]:\\.]+$");
-  gvm_validator_add (validator, "hostport", "^[-[:alnum:]\\. :]+$");
-  gvm_validator_add (validator, "hostpath", "^[-[:alnum:]\\. :/]+$");
-  gvm_validator_add (validator, "hosts", "^[-[:alnum:],: \\./]+$");
+  gvm_validator_add (validator, "host", "^[-_[:alnum:]:\\.]+$");
+  gvm_validator_add (validator, "hostport", "^[-_[:alnum:]\\. :]+$");
+  gvm_validator_add (validator, "hostpath", "^[-_[:alnum:]\\. :/]+$");
+  gvm_validator_add (validator, "hosts", "^[-_[:alnum:],: \\./]+$");
   gvm_validator_add (validator, "hosts_allow", "^(0|1)$");
-  gvm_validator_add (validator, "hosts_opt", "^[-[:alnum:],: \\./]*$");
+  gvm_validator_add (validator, "hosts_opt", "^[-_[:alnum:],: \\./]*$");
   gvm_validator_add (validator, "hosts_ordering",
                      "^(sequential|random|reverse)$");
   gvm_validator_add (validator, "hour", "^([01]?[0-9]|2[0-3])$");
