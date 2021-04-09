@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Adjust target queries to reflect changes in Hyperion [#2845](https://github.com/greenbone/gsa/pull/2845)
 - Implement targets listpage queries and mutations [#2830](https://github.com/greenbone/gsa/pull/2830)
 - Implement result detailspage queries [#2823](https://github.com/greenbone/gsa/pull/2823)
 - Adjust isEmpty to return true for null [#2831](https://github.com/greenbone/gsa/pull/2831)
