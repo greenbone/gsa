@@ -61,27 +61,34 @@ const DEFAULT_PORT_LISTS = [
   },
 ];
 
-const ALIVE_TESTS_DEFAULT = 'Scan Config Default';
+const ALIVE_TESTS_DEFAULT = 'SCAN_CONFIG_DEFAULT';
 
-const ALIVE_TESTS = [
-  'ICMP Ping',
-  'TCP-ACK Service Ping',
-  'TCP-SYN Service Ping',
-  'ARP Ping',
-  'ICMP & TCP-ACK Service Ping',
-  'ICMP & ARP Ping',
-  'TCP-ACK Service & ARP Ping',
-  'ICMP, TCP-ACK Service & ARP Ping',
-  'Consider Alive',
-];
-
-const ALIVE_TESTS_ITEMS = [
+const ALIVE_TEST_ITEMS = [
   {
     value: ALIVE_TESTS_DEFAULT,
-    label: _l(ALIVE_TESTS_DEFAULT),
+    label: _l('Scan Config Default'),
   },
-  ...ALIVE_TESTS.map(value => ({value, label: value})),
+  {value: 'ICMP_PING', label: _l('ICMP Ping')},
+  {value: 'TCP_ACK_SERVICE_PING', label: _l('TCP-ACK Service Ping')},
+  {value: 'TCP_SYN_SERVICE_PING', label: _l('TCP-SYN Service Ping')},
+  {value: 'ARP_PING', label: _l('ARP Ping')},
+  {
+    value: 'ICMP_AND_TCP_ACK_SERVICE_PING',
+    label: _l('ICMP & TCP-ACK Service Ping'),
+  },
+  {value: 'ICMP_AND_ARP_PING', label: _l('ICMP & ARP Ping')},
+  {
+    value: 'TCP_ACK_SERVICE_AND_ARP_PING',
+    label: _l('TCP-ACK Service & ARP Ping'),
+  },
+  {
+    value: 'ICMP_TCP_ACK_SERVICE_AND_ARP_PING',
+    label: _l('ICMP, TCP-ACK Service & ARP Ping'),
+  },
+  {value: 'CONSIDER_ALIVE', label: _l('Consider Alive')},
 ];
+
+const ALIVE_TESTS = ALIVE_TEST_ITEMS.map(alive_test => alive_test.value);
 
 const NEW_SSH = {
   id_field: 'ssh_credential_id',
@@ -108,7 +115,7 @@ const NEW_SNMP = {
 };
 
 const TargetDialog = ({
-  alive_tests = ALIVE_TESTS_DEFAULT,
+  aliveTest = ALIVE_TESTS_DEFAULT,
   allowSimultaneousIPs = YES_VALUE,
   capabilities,
   comment = '',
@@ -149,7 +156,7 @@ const TargetDialog = ({
 
   const uncontrolledValues = {
     ...initial,
-    alive_tests,
+    aliveTest,
     comment,
     name,
     port,
@@ -330,9 +337,9 @@ const TargetDialog = ({
 
             <FormGroup title={_('Alive Test')}>
               <Select
-                name="alive_tests"
-                items={ALIVE_TESTS_ITEMS}
-                value={state.alive_tests}
+                name="aliveTest"
+                items={ALIVE_TEST_ITEMS}
+                value={state.aliveTest}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -466,7 +473,7 @@ const TargetDialog = ({
 };
 
 TargetDialog.propTypes = {
-  alive_tests: PropTypes.oneOf([ALIVE_TESTS_DEFAULT, ...ALIVE_TESTS]),
+  aliveTest: PropTypes.oneOf(ALIVE_TESTS),
   allowSimultaneousIPs: PropTypes.bool,
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
