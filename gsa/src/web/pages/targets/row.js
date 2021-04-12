@@ -126,7 +126,7 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
-    <TableData>{entity.maxHosts}</TableData>
+    <TableData>{entity.hostCount}</TableData>
     <TableData>
       <span>
         <DetailsLink type="portlist" id={entity.portList.id} textOnly={!links}>

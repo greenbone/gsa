@@ -46,7 +46,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
     esxiCredential,
     excludeHosts,
     hosts,
-    maxHosts,
+    hostCount,
     portList,
     reverseLookupOnly,
     reverseLookupUnify,
@@ -98,7 +98,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
             <TableRow>
               <TableData>{_('Maximum Number of Hosts')}</TableData>
-              <TableData>{maxHosts}</TableData>
+              <TableData>{hostCount}</TableData>
             </TableRow>
 
             <TableRow>
