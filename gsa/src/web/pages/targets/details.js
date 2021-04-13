@@ -19,6 +19,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {getTranslatableAliveTest} from 'gmp/models/target';
+
 import {hasValue} from 'gmp/utils/identity';
 
 import Layout from 'web/components/layout/layout';
@@ -42,7 +44,7 @@ const MAX_HOSTS_LISTINGS = 70;
 
 const TargetDetails = ({capabilities, entity, links = true}) => {
   const {
-    aliveTests,
+    aliveTest,
     esxiCredential,
     excludeHosts,
     hosts,
@@ -118,7 +120,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
             <TableRow>
               <TableData>{_('Alive Test')}</TableData>
-              <TableData>{aliveTests}</TableData>
+              <TableData>{getTranslatableAliveTest(aliveTest)}</TableData>
             </TableRow>
 
             <TableRow>

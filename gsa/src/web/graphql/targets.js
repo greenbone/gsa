@@ -74,7 +74,7 @@ export const GET_TARGETS = gql`
             name
             id
           }
-          aliveTests
+          aliveTest
           excludeHosts
           allowSimultaneousIPs
           reverseLookupOnly
@@ -137,7 +137,7 @@ export const GET_TARGET = gql`
         name
         id
       }
-      aliveTests
+      aliveTest
       allowSimultaneousIPs
       reverseLookupOnly
       reverseLookupUnify

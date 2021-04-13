@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {_l} from 'gmp/locale/lang';
+
 import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 
 import {hasValue, isDefined} from 'gmp/utils/identity';
@@ -38,6 +40,21 @@ export const HYPERION_TARGET_CREDENTIAL_NAMES = [
   'sshCredential',
   'esxiCredential',
 ];
+
+export const ALIVE_TESTS = {
+  SCAN_CONFIG_DEFAULT: _l('Scan Config Default'),
+  ICMP_PING: _l('ICMP Ping'),
+  TCP_ACK_SERVICE_PING: _l('TCP-ACK Service Ping'),
+  TCP_SYN_SERVICE_PING: _l('TCP-SYN Service Ping'),
+  ARP_PING: _l('ARP Ping'),
+  ICMP_AND_TCP_ACK_SERVICE_PING: _l('ICMP & TCP-ACK Service Ping'),
+  ICMP_AND_ARP_PING: _l('ICMP & ARP Ping'),
+  TCP_ACK_SERVICE_AND_ARP_PING: _l('TCP-ACK Service & ARP Ping'),
+  ICMP_TCP_ACK_SERVICE_AND_ARP_PING: _l('ICMP, TCP-ACK Service & ARP Ping'),
+  CONSIDER_ALIVE: _l('Consider Alive'),
+};
+
+export const getTranslatableAliveTest = key => `${ALIVE_TESTS[key]}`;
 
 class Target extends Model {
   static entityType = 'target';
