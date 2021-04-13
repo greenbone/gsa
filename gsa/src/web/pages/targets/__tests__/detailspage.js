@@ -157,7 +157,7 @@ describe('Target Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('No');
 
     expect(baseElement).toHaveTextContent('Alive Test');
-    expect(baseElement).toHaveTextContent('Schroedingers host');
+    expect(baseElement).toHaveTextContent('ICMP Ping');
 
     expect(baseElement).toHaveTextContent('Port List');
     expect(links[2]).toHaveAttribute('href', '/portlist/pl1');
