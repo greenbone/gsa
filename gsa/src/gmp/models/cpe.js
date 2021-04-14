@@ -38,9 +38,13 @@ class Cpe extends Info {
 
   static parseElement(element) {
     const ret = super.parseElement(element, 'cpe');
+<<<<<<< HEAD
 
     ret.severity = parseScoreToSeverity(ret.score);
     delete ret.score;
+=======
+    ret.severity = parseSeverity(ret.severity);
+>>>>>>> a99f6e0a3e... Revert the changes from severity to score. Now we use float severity again.
 
     ret.cveRefCount = ret.cve_refs;
     delete ret.cve_refs;
