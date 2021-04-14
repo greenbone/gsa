@@ -97,7 +97,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
+<<<<<<< HEAD
 
+=======
+- Revert the changes from integer `score` to a float `severity` [#2854](https://github.com/greenbone/gsa/pull/2854)
+>>>>>>> 13ab2ee111... Add CHANGELOG entry
 - Show StartIcon for scheduled tasks [#2840](https://github.com/greenbone/gsa/pull/2840)
 - Remove solution from log NVTs [#2792](https://github.com/greenbone/gsa/pull/2792)
 - Don't show empty sections in result details [#2791](https://github.com/greenbone/gsa/pull/2791)
@@ -110,6 +114,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#2756](https://github.com/greenbone/gsa/pull/2756)
 - CVE Tables Page can now be used with the updated xml-format and CVSSv3(.1). [#2583](https://github.com/greenbone/gsa/pull/2583)
 - The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
+
 
 ### Fixed
 
