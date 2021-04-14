@@ -53,7 +53,7 @@ const entity_v2 = Cve.fromElement({
   permissions: '',
   update_time: '2020-10-30T11:44:00.000+0000',
   cve: {
-    score: 55,
+    severity: 5.5,
     cvss_vector: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N',
     description:
       'An information disclosure issue was addressed with improved state management. This issue is fixed in macOS Catalina 10.15.6, watchOS 6.2.8. A malicious application may disclose restricted memory.',

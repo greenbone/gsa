@@ -74,8 +74,7 @@ class Ovaldef extends Info {
   static parseElement(element) {
     const ret = super.parseElement(element, 'ovaldef');
 
-    ret.severity = parseSeverity(ret.score / 10);
-    delete ret.score;
+    ret.severity = parseSeverity(ret.severity);
 
     const {raw_data} = ret;
 
