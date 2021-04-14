@@ -49,6 +49,7 @@ export const GET_TARGETS = gql`
           hostCount
           owner
           writable
+          comment
           inUse
           permissions {
             name

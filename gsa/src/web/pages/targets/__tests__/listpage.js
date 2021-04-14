@@ -149,6 +149,7 @@ describe('TargetPage tests', () => {
 
     expect(row[1]).toHaveTextContent('target 1');
     expect(row[1]).toHaveTextContent('123.234.345.456, 127.0.0.12');
+    expect(row[1]).toHaveTextContent('(detailspage)');
     expect(row[1]).toHaveTextContent('2');
     expect(row[1]).toHaveTextContent('list');
 
