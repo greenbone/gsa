@@ -473,7 +473,7 @@ describe('useGetOverride tests', () => {
     expect(screen.getByTestId('owner')).toHaveTextContent('admin');
     expect(screen.getByTestId('resultId')).toHaveTextContent('1337');
     expect(screen.getByTestId('resultName')).toHaveTextContent('result name');
-    expect(screen.getByTestId('port')).toHaveTextContent('666/tcp');
+    expect(screen.getByTestId('port')).toHaveTextContent('66/tcp');
     expect(screen.getByTestId('severity')).toHaveTextContent('5.0');
     expect(screen.getByTestId('taskId')).toHaveTextContent('42');
     expect(screen.getByTestId('taskName')).toHaveTextContent('task x');
