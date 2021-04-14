@@ -39,7 +39,7 @@ const entity = Cve.fromElement({
   name: 'CVE-2020-9992',
   cvss_vector: 'AV:N/AC:M/Au:N/C:C/I:C/A:C',
   creationTime: '2020-10-22T19:15:00Z',
-  score: '93',
+  severity: '9.3',
   description: 'foo bar baz',
   usage_type: 'cve',
 });
@@ -127,7 +127,7 @@ const entity_v3 = Cve.fromElement({
   name: 'CVE-2020-9992',
   cvss_vector: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:H',
   creationTime: '2020-10-22T19:15:00Z',
-  score: '71',
+  severity: '7.1',
   description: 'foo bar baz',
   usage_type: 'cve',
 });

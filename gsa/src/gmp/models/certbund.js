@@ -28,8 +28,7 @@ class CertBundAdv extends Info {
   static parseElement(element) {
     const ret = super.parseElement(element, 'cert_bund_adv');
 
-    ret.severity = parseSeverity(ret.score / 10);
-    delete ret.score;
+    ret.severity = parseSeverity(ret.severity);
 
     ret.categories = [];
     ret.description = [];

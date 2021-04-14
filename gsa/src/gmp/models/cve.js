@@ -38,9 +38,7 @@ class Cve extends Info {
       ret.updateTime = parseDate(ret.update_time);
       delete ret.update_time;
     }
-    // divide by ten because we now use integer 0-100 in cves
-    ret.severity = parseSeverity(ret.score / 10);
-    delete ret.cvss;
+    ret.severity = parseSeverity(ret.severity);
 
     if (isDefined(ret.nvts)) {
       ret.nvts = map(ret.nvts.nvt, nvt => {

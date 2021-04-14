@@ -161,27 +161,27 @@ describe('nvt Model tests', () => {
     const nvt1 = Nvt.fromElement({
       severities: {
         severity: {
-          score: 94,
+          score: 9.4,
           origin: 'Vendor',
           date: '2021-03-10T06:40:13Z',
         },
       },
-      cvss_base: '6.6',
+      score: '6.6',
     });
     const nvt2 = Nvt.fromElement({
       severities: {
         severity: {
-          score: 74,
+          score: 7.4,
           origin: 'Greenbone',
           date: '2020-03-10T06:40:13Z',
         },
       },
-      cvss_base: '',
+      score: '',
     });
     const nvt3 = Nvt.fromElement({
       severities: {
         severity: {
-          score: 10,
+          score: 1.0,
           origin: '',
         },
       },
