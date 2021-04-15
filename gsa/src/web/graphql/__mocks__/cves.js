@@ -38,7 +38,7 @@ export const cveEntity = deepFreeze({
   userTags: null,
   updateTime: '2020-09-29T12:16:50+00:00',
   cvssVector: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N',
-  score: 55,
+  score: 5.5,
   cvssV2Vector: {
     integrity: 'NONE',
     accessComplexity: 'MEDIUM',
