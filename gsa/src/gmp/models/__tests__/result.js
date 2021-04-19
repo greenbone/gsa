@@ -70,14 +70,15 @@ describe('Result model parseObject tests', () => {
 
   test('should parse NVTs', () => {
     const obj = {
-      nvt: {
+      type: 'NVT',
+      information: {
         id: 'bar',
       },
     };
     const result = Result.fromObject(obj);
 
-    expect(result.nvt).toBeInstanceOf(Nvt);
-    expect(result.nvt.id).toEqual('bar');
+    expect(result.information).toBeInstanceOf(Nvt);
+    expect(result.information.id).toEqual('bar');
   });
 
   test('should parse severity', () => {
@@ -90,7 +91,7 @@ describe('Result model parseObject tests', () => {
 
   test('should parse name/id to vulnerability', () => {
     const obj = {
-      nvt: {
+      information: {
         id: '42',
       },
     };
@@ -110,7 +111,7 @@ describe('Result model parseObject tests', () => {
 
   test('should parse detection', () => {
     const obj = {
-      detectionResult: {
+      originResult: {
         id: '1337',
         details: [
           {
@@ -133,7 +134,7 @@ describe('Result model parseObject tests', () => {
     };
     const result = Result.fromObject(obj);
 
-    expect(result.detectionResult).toEqual(res);
+    expect(result.originResult).toEqual(res);
   });
 
   test('should parse original severity', () => {
