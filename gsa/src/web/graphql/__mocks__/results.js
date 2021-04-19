@@ -26,7 +26,8 @@ export const mockResult = deepFreeze({
   owner: 'admin',
   creationTime: '2019-06-02T12:00:00Z',
   modificationTime: '2019-06-03T11:00:00Z',
-  detectionResult: {
+  type: 'NVT',
+  originResult: {
     id: '12345',
     details: [
       {
@@ -47,7 +48,9 @@ export const mockResult = deepFreeze({
       },
     ],
   },
-  reportId: '314',
+  report: {
+    id: '314',
+  },
   task: {
     id: '159',
     name: 'task 1',
@@ -57,8 +60,8 @@ export const mockResult = deepFreeze({
     ip: '109.876.54.321',
     hostname: 'lorem',
   },
-  port: '80/tcp',
-  nvt: {
+  location: '80/tcp',
+  information: {
     id: '1.3.6.1.4.1.25623.1.12345',
     name: 'nvt1',
     score: 50,
@@ -94,11 +97,8 @@ export const mockResult = deepFreeze({
   },
   description: 'This is a description',
   originalSeverity: 5.0,
-  originalThreat: 'Medium',
   qod: {value: 80, type: 'registry'},
-  scanNvtVersion: '2019-02-14T07:33:50Z',
   severity: 5.0,
-  threat: 'Medium',
   notes: [
     {
       id: '358',
@@ -109,6 +109,7 @@ export const mockResult = deepFreeze({
     },
   ],
   tickets: [{id: '979'}],
+  overrides: null,
   userTags: null,
 });
 
