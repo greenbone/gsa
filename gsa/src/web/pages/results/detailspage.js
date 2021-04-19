@@ -24,7 +24,7 @@ import _ from 'gmp/locale';
 
 import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import Badge from 'web/components/badge/badge';
 
@@ -146,13 +146,13 @@ export const ToolBarIcons = ({
         )}
       </IconDivider>
       <IconDivider>
-        {capabilities.mayAccess('tasks') && isDefined(entity.task) && (
+        {capabilities.mayAccess('tasks') && hasValue(entity.task) && (
           <DetailsLink type="task" id={entity.task.id}>
             <TaskIcon title={_('Corresponding Task ({{name}})', entity.task)} />
           </DetailsLink>
         )}
-        {capabilities.mayAccess('reports') && isDefined(entity.reportId) && (
-          <DetailsLink type="report" id={entity.reportId}>
+        {capabilities.mayAccess('reports') && hasValue(entity?.report?.id) && (
+          <DetailsLink type="report" id={entity.report.id}>
             <ReportIcon title={_('Corresponding Report')} />
           </DetailsLink>
         )}
@@ -225,7 +225,7 @@ const Details = ({entity, ...props}) => {
                   <TableData>{_('Host')}</TableData>
                   <TableData>
                     <span>
-                      {isDefined(host.id) ? (
+                      {hasValue(host.id) ? (
                         <DetailsLink type="host" id={host.id}>
                           {host.name}
                         </DetailsLink>
@@ -237,7 +237,7 @@ const Details = ({entity, ...props}) => {
                 </TableRow>
                 <TableRow>
                   <TableData>{_('Location')}</TableData>
-                  <TableData>{entity.port}</TableData>
+                  <TableData>{entity.location}</TableData>
                 </TableRow>
               </TableBody>
             </InfoTable>
@@ -248,7 +248,7 @@ const Details = ({entity, ...props}) => {
           <DetailsBlock title={_('Tags')}>
             <Divider>
               {userTags.map(tag => {
-                const valueString = isDefined(tag.value) ? '' : '=' + tag.value;
+                const valueString = hasValue(tag.value) ? '' : '=' + tag.value;
                 return (
                   <DetailsLink key={tag.id} id={tag.id} type="tag">
                     {tag.name + valueString}

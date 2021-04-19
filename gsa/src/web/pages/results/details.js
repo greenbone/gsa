@@ -146,6 +146,8 @@ const ResultDetails = ({className, links = true, entity}) => {
     result2Link = undefined;
   }
 
+  console.log(tags);
+
   return (
     <Layout flex="column" grow="1" className={className}>
       {hasValue(tags?.summary) && (
