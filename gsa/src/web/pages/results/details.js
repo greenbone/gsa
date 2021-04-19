@@ -102,8 +102,8 @@ DerivedDiff.propTypes = {
 const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
-  const {nvt} = result;
-  const {id: nvtId, tags, solution} = nvt;
+  const {information} = result;
+  const {id: nvtId, tags, solution} = information;
 
   const is_oval = hasValue(nvtId) && nvtId.startsWith('oval:');
   const hasDetection = hasValue(result.detectionResult);
@@ -148,10 +148,11 @@ const ResultDetails = ({className, links = true, entity}) => {
 
   return (
     <Layout flex="column" grow="1" className={className}>
-      <DetailsBlock title={_('Summary')}>
-        <P>{tags.summary}</P>
-      </DetailsBlock>
-
+      {hasValue(tags?.summary) && (
+        <DetailsBlock title={_('Summary')}>
+          <P>{tags.summary}</P>
+        </DetailsBlock>
+      )}
       {result.hasDelta() ? (
         <DetailsBlock title={_('Detection Results')}>
           <div>
@@ -268,15 +269,16 @@ const ResultDetails = ({className, links = true, entity}) => {
         </DetailsBlock>
       )}
 
-      {isDefined(tags.insight) && tags.insight !== TAG_NA && (
+      {hasValue(tags?.insight) && tags.insight !== TAG_NA && (
         <DetailsBlock title={_('Insight')}>
           <P>{tags.insight}</P>
         </DetailsBlock>
       )}
-
       <DetailsBlock title={_('Detection Method')}>
         <Layout flex="column">
-          <Layout>{tags.detectionMethod}</Layout>
+          {hasValue(tags?.detectionMethod) && (
+            <Layout>{tags.detectionMethod}</Layout>
+          )}
           <InfoTable>
             <colgroup>
               <Col width="10%" />
@@ -301,7 +303,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                   {hasValue(nvtId) && nvtId.startsWith(DEFAULT_OID_VALUE) && (
                     <span>
                       <DetailsLink type="nvt" id={nvtId} textOnly={!links}>
-                        {renderNvtName(nvtId, nvt.name)}
+                        {renderNvtName(nvtId, information.name)}
                         {' OID: ' + nvtId}
                       </DetailsLink>
                     </span>
@@ -321,13 +323,13 @@ const ResultDetails = ({className, links = true, entity}) => {
         </Layout>
       </DetailsBlock>
 
-      {isDefined(tags.affected) && tags.affected !== TAG_NA && (
+      {hasValue(tags?.affected) && tags.affected !== TAG_NA && (
         <DetailsBlock title={_('Affected Software/OS')}>
           <P>{tags.affected}</P>
         </DetailsBlock>
       )}
 
-      {isDefined(tags.impact) && tags.impact !== TAG_NA && (
+      {hasValue(tags?.impact) && tags.impact !== TAG_NA && (
         <DetailsBlock title={_('Impact')}>
           <P>{tags.impact}</P>
         </DetailsBlock>
@@ -338,7 +340,7 @@ const ResultDetails = ({className, links = true, entity}) => {
         solutionType={solution?.type}
       />
 
-      <References links={links} nvt={nvt} />
+      <References links={links} nvt={information} />
     </Layout>
   );
 };

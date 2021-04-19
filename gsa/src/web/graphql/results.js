@@ -29,6 +29,14 @@ export const GET_RESULT = gql`
       creationTime
       modificationTime
       type
+      overrides {
+        id
+        active
+        severity
+        newSeverity
+        text
+        endTime
+      }
       originResult {
         id
         details {

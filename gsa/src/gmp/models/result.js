@@ -28,6 +28,7 @@ import Nvt from './nvt';
 import Note from './note';
 
 import Override from './override';
+import Cpe from './cpe';
 
 export class Delta {
   static TYPE_NEW = 'new';
@@ -53,17 +54,18 @@ class Result extends Model {
     const copy = super.parseObject(object);
 
     const {
-      detectionResult,
+      originResult,
       host = {},
       name,
       notes,
-      nvt = {},
+      information = {},
       overrides,
       originalSeverity,
       qod = {},
       severity,
       task,
       tickets,
+      type,
     } = object;
 
     copy.host = {
@@ -72,23 +74,28 @@ class Result extends Model {
       hostname: hasValue(host.hostname) ? host.hostname : '',
     };
 
-    copy.nvt = Nvt.fromObject(nvt);
+    if (type === 'NVT') {
+      copy.information = Nvt.fromObject(information);
+    } else {
+      copy.information = Cpe.fromObject(information);
+      copy.name = information.id;
+    }
 
     if (hasValue(task)) {
       copy.task = parseModelFromObject(task, 'task');
     }
 
-    if (hasValue(detectionResult)) {
+    if (hasValue(originResult)) {
       const details = {};
 
-      if (hasValue(detectionResult.details)) {
-        forEach(detectionResult.details, detail => {
+      if (hasValue(originResult.details)) {
+        forEach(originResult.details, detail => {
           details[detail.name] = detail.value;
         });
       }
 
-      copy.detectionResult = {
-        id: detectionResult.id,
+      copy.originResult = {
+        id: originResult.id,
         details: details,
       };
     }
@@ -115,7 +122,7 @@ class Result extends Model {
       copy.originalSeverity = parseSeverity(originalSeverity);
     }
 
-    copy.vulnerability = hasValue(name) ? name : nvt?.id;
+    copy.vulnerability = hasValue(name) ? name : information?.id;
 
     // ToDo: Delta
 
