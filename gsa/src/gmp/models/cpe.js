@@ -22,7 +22,7 @@ import {map} from 'gmp/utils/array';
 
 import Info from './info';
 
-import {parseScoreToSeverity, parseSeverity, parseDate} from 'gmp/parser';
+import {parseSeverity, parseScoreToSeverity, parseDate} from 'gmp/parser';
 
 class Cpe extends Info {
   static entityType = 'cpe';
@@ -38,9 +38,7 @@ class Cpe extends Info {
 
   static parseElement(element) {
     const ret = super.parseElement(element, 'cpe');
-
-    ret.severity = parseScoreToSeverity(ret.score);
-    delete ret.score;
+    ret.severity = parseSeverity(ret.severity);
 
     ret.cveRefCount = ret.cve_refs;
     delete ret.cve_refs;
