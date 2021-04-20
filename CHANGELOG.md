@@ -127,7 +127,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
 
-[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...gsa-21.04
+[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.04.0
 
 ## [20.8.1] - 2021-02-02
 
