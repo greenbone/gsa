@@ -55,7 +55,100 @@ window.URL.createObjectURL = jest.fn();
 
 setLocale('en');
 
-const cveObject = Cve.fromObject(cveEntity);
+const entity_v2 = Cve.fromElement({
+  _id: 'CVE-2020-9997',
+  owner: {
+    name: '',
+  },
+  name: 'CVE-2020-9997',
+  comment: '',
+  creation_time: '2020-10-22T19:15:00Z',
+  modification_time: '2020-10-26T20:27:00Z',
+  writable: 0,
+  in_use: 0,
+  permissions: '',
+  update_time: '2020-10-30T11:44:00.000+0000',
+  cve: {
+    severity: 5.5,
+    cvss_vector: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N',
+    description:
+      'An information disclosure issue was addressed with improved state management. This issue is fixed in macOS Catalina 10.15.6, watchOS 6.2.8. A malicious application may disclose restricted memory.',
+    products: 'cpe:/o:apple:mac_os_x:10.15.5 cpe:/o:apple:watchos:6.2.8',
+    nvts: '',
+    cert: {
+      cert_ref: {
+        _type: 'CERT-Bund',
+        name: 'CB-K20/0730',
+        title: 'Apple macOS: Mehrere Schwachstellen',
+      },
+    },
+    raw_data: {
+      entry: {
+        _id: 'CVE-2020-9997',
+        'vulnerable-software-list': {
+          product: [
+            'cpe:/o:apple:mac_os_x:10.15.5',
+            'cpe:/o:apple:watchos:6.2.8',
+          ],
+        },
+        'cve-id': 'CVE-2020-9997',
+        'published-datetime': '2020-10-22T19:15:00+00:00',
+        'last-modified-datetime': '2020-10-26T20:27:00+00:00',
+        cvss: {
+          base_metrics: {
+            'integrity-impact': 'NONE',
+            'access-complexity': 'MEDIUM',
+            'availability-impact': 'NONE',
+            'vector-string': 'AV:N/AC:M/Au:N/C:P/I:N/A:N',
+            'confidentiality-impact': 'PARTIAL',
+            'access-vector': 'NETWORK',
+            authentication: 'NONE',
+            score: 4.3,
+            source: 'http://nvd.nist.gov',
+            'generated-on-datetime': '2020-10-26T20:27:00+00:00',
+          },
+        },
+        cvss3: {
+          base_metrics: {
+            'availability-impact': 'NONE',
+            'attack-complexity': 'LOW',
+            'vector-string': 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N',
+            'integrity-impact': 'NONE',
+            'user-interaction': 'REQUIRED',
+            'base-score': 5.5,
+            'attack-vector': 'LOCAL',
+            'privileges-required': 'NONE',
+            scope: 'UNCHANGED',
+            'confidentiality-impact': 'HIGH',
+            'base-severity': 'MEDIUM',
+          },
+          'generated-on-datetime': '2020-10-26T20:27:00+00:00',
+        },
+        cwe: {
+          _id: 'NVD-CWE-noinfo',
+        },
+        references: [
+          {
+            source: 'MISC',
+            reference: {
+              __text: 'https://support.apple.com/kb/HT211289',
+              _href: 'https://support.apple.com/kb/HT211289',
+            },
+          },
+          {
+            source: 'MISC',
+            reference: {
+              __text: 'https://support.apple.com/kb/HT211291',
+              _href: 'https://support.apple.com/kb/HT211291',
+            },
+          },
+        ],
+        summary:
+          'An information disclosure issue was addressed with improved state management. This issue is fixed in macOS Catalina 10.15.6, watchOS 6.2.8. A malicious application may disclose restricted memory.',
+      },
+    },
+  },
+});
 
 const caps = new Capabilities(['everything']);
 
@@ -79,7 +172,7 @@ beforeEach(() => {
 describe('CVE Detailspage tests', () => {
   test('should render full Detailspage', async () => {
     const getCve = jest.fn().mockResolvedValue({
-      data: cveObject,
+      data: entity_v2,
     });
 
     const gmp = {
@@ -169,7 +262,7 @@ describe('CVE Detailspage tests', () => {
 
   test('should render user tags tab', async () => {
     const getCve = jest.fn().mockResolvedValue({
-      data: cveObject,
+      data: entity_v2,
     });
 
     const getTags = jest.fn().mockResolvedValue({
@@ -226,7 +319,7 @@ describe('CVE Detailspage tests', () => {
   test('should call commands', async () => {
     const getCve = jest.fn().mockReturnValue(
       Promise.resolve({
-        data: cveObject,
+        data: entity_v2,
       }),
     );
 
@@ -286,7 +379,7 @@ describe('CVEs ToolBarIcons tests', () => {
 
     const {element, getAllByTestId} = render(
       <ToolBarIcons
-        entity={cveObject}
+        entity={entity_v2}
         onCveDownloadClick={handleCveDownload}
       />,
     );
@@ -315,7 +408,7 @@ describe('CVEs ToolBarIcons tests', () => {
 
     const {getAllByTestId} = render(
       <ToolBarIcons
-        entity={cveObject}
+        entity={entity_v2}
         onCveDownloadClick={handleCveDownload}
       />,
     );
@@ -326,7 +419,7 @@ describe('CVEs ToolBarIcons tests', () => {
     expect(icons[1]).toHaveAttribute('title', 'CVE List');
 
     fireEvent.click(icons[2]);
-    expect(handleCveDownload).toHaveBeenCalledWith(cveObject);
+    expect(handleCveDownload).toHaveBeenCalledWith(entity_v2);
     expect(icons[2]).toHaveAttribute('title', 'Export CVE');
   });
 });

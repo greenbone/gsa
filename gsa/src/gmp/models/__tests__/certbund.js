@@ -35,12 +35,11 @@ describe('CertBundAdv model tests', () => {
 
   test('should parse severity', () => {
     const elem = {
-      score: '85',
+      severity: '8.5',
     };
     const certBundAdv = CertBundAdv.fromElement(elem);
 
     expect(certBundAdv.severity).toEqual(8.5);
-    expect(certBundAdv.score).toBeUndefined();
   });
 
   test('should return empty categories array if no advisory is given', () => {

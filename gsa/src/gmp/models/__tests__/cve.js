@@ -47,7 +47,7 @@ describe('CVE model tests', () => {
 
   test('should parse severity', () => {
     const elem = {
-      score: '85',
+      severity: '8.5',
     };
     const cve = Cve.fromElement(elem);
 
@@ -132,7 +132,7 @@ describe('CVE model tests', () => {
   test('should parse CVSS metrics', () => {
     const elem = {
       cve: {
-        score: '100',
+        severity: '10.0',
         cvss_vector: 'AV:N/AC:L/Au:N/C:C/I:C/A:C',
       },
     };

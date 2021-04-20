@@ -97,7 +97,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
-
+- Revert the changes from integer `score` to a float `severity` [#2854](https://github.com/greenbone/gsa/pull/2854)
 - Show StartIcon for scheduled tasks [#2840](https://github.com/greenbone/gsa/pull/2840)
 - Remove solution from log NVTs [#2792](https://github.com/greenbone/gsa/pull/2792)
 - Don't show empty sections in result details [#2791](https://github.com/greenbone/gsa/pull/2791)
@@ -126,7 +126,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
 
-[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...gsa-21.04
+[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.04.0
 
 ## [20.8.1] - 2021-02-02
 

@@ -164,8 +164,8 @@ class Nvt extends Info {
 
     if (isDefined(ret.severities)) {
       const {severity} = ret.severities;
-      ret.severity = parseSeverity(severity?.score / 10);
-      ret.severityOrigin = parseText(severity?.origin);
+      ret.severity = parseSeverity(severity.score);
+      ret.severityOrigin = parseText(severity.origin);
       ret.severityDate = parseDate(severity.date);
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
@@ -178,7 +178,7 @@ class Nvt extends Info {
       const solutionMethod = ret.solution._method;
       ret.solution = {
         type: isEmpty(solutionType) ? undefined : solutionType,
-        description:  isEmpty(solutionText) ? undefined : solutionText,
+        description: isEmpty(solutionText) ? undefined : solutionText,
         method: isEmpty(solutionMethod) ? undefined : solutionMethod,
       };
     }
