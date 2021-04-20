@@ -39,7 +39,7 @@ class Cve extends Info {
     } else if (hasValue(ret.cvssV2Vector)) {
       ret.vector = ret.cvssV2Vector;
     } else {
-      ret.vector = '';
+      ret.vector = undefined;
     }
 
     ret.severity = parseSeverity(ret.score);
