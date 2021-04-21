@@ -28,7 +28,7 @@ import Nvt from './nvt';
 import Note from './note';
 
 import Override from './override';
-import Cpe from './cpe';
+import Cve from './cve';
 
 export class Delta {
   static TYPE_NEW = 'new';
@@ -77,7 +77,7 @@ class Result extends Model {
     if (type === 'NVT') {
       copy.information = Nvt.fromObject(information);
     } else {
-      copy.information = Cpe.fromObject(information);
+      copy.information = Cve.fromObject(information);
       copy.name = information.id;
     }
 

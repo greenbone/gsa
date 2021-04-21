@@ -102,12 +102,10 @@ DerivedDiff.propTypes = {
 const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
-  console.log(result);
-
   const {information} = result;
-  const {id: nvtId, tags, solution} = information;
+  const {id: infoId, tags, solution} = information;
 
-  const is_oval = hasValue(nvtId) && nvtId.startsWith('oval:');
+  const is_oval = hasValue(infoId) && infoId.startsWith('oval:');
   const hasDetection = hasValue(result.originResult);
 
   const detectionDetails = hasDetection
@@ -293,24 +291,24 @@ const ResultDetails = ({className, links = true, entity}) => {
                   {is_oval && (
                     <DetailsLink
                       type="ovaldef"
-                      id={nvtId}
+                      id={infoId}
                       title={_('View Details of OVAL Definition {{oid}}', {
-                        nvtId,
+                        infoId,
                       })}
                       textOnly={!links}
                     >
-                      {nvtId}
+                      {infoId}
                     </DetailsLink>
                   )}
-                  {hasValue(nvtId) && nvtId.startsWith(DEFAULT_OID_VALUE) && (
+                  {hasValue(infoId) && infoId.startsWith(DEFAULT_OID_VALUE) && (
                     <span>
-                      <DetailsLink type="nvt" id={nvtId} textOnly={!links}>
-                        {renderNvtName(nvtId, information.name)}
-                        {' OID: ' + nvtId}
+                      <DetailsLink type="nvt" id={infoId} textOnly={!links}>
+                        {renderNvtName(infoId, information.name)}
+                        {' OID: ' + infoId}
                       </DetailsLink>
                     </span>
                   )}
-                  {!hasValue(nvtId) &&
+                  {!hasValue(infoId) &&
                     _('No details available for this method.')}
                 </TableData>
               </TableRow>

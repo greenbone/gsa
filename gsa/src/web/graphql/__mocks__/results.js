@@ -34,6 +34,7 @@ export const mockResult = deepFreeze({
       newSeverity: 4.3,
       text: 'hello world',
       endTime: null,
+      modificationTime: '2021-04-11T11:30:46+00:00',
     },
   ],
   originResult: {

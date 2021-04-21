@@ -170,10 +170,9 @@ describe('Result Detailspage tests', () => {
     expect(heading[1]).toHaveTextContent('Vulnerability');
     expect(baseElement).toHaveTextContent('Namefoo');
     expect(baseElement).toHaveTextContent('Severity5.0 (Medium)');
-    // Skip until overrides are implemented for getResult
-    // expect(
-    //   screen.getAllByTitle('There are overrides for this result')[0],
-    // ).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('There are overrides for this result')[0],
+    ).toBeInTheDocument();
     expect(baseElement).toHaveTextContent('QoD80 %');
     expect(baseElement).toHaveTextContent('Host109.876.54.321');
     expect(baseElement).toHaveTextContent('Location80/tcp');
@@ -201,7 +200,9 @@ describe('Result Detailspage tests', () => {
     expect(baseElement).toHaveTextContent(
       'Details: nvt1 OID: 1.3.6.1.4.1.25623.1.12345',
     );
-    expect(baseElement).toHaveTextContent('Version used: 2019-02-14T07:33:50Z');
+
+    // version is currently always null
+    // expect(baseElement).toHaveTextContent('Version used: 2019-02-14T07:33:50Z');
 
     expect(heading[7]).toHaveTextContent('Affected Software/OS');
     expect(baseElement).toHaveTextContent('Affects test cases only');
@@ -228,12 +229,11 @@ describe('Result Detailspage tests', () => {
       screen.getByTitle('View details of CERT-Bund Advisory CB-K12&#x2F;3456'),
     ).toHaveTextContent('CB-K12/3456');
     expect(baseElement).toHaveTextContent('Otherhttps://www.foo.bar');
-    // Skip until overrides are implemented for getResult
-    // expect(screen.getAllByTitle('Override Details')[0]).toBeInTheDocument();
-    // expect(baseElement).toHaveTextContent('TestOverride');
-    // expect(baseElement).toHaveTextContent(
-    //   'ModifiedFri, Mar 12, 2021 2:00 PM CET',
-    // );
+    expect(screen.getAllByTitle('Override Details')[0]).toBeInTheDocument();
+    expect(baseElement).toHaveTextContent('hello world');
+    expect(baseElement).toHaveTextContent(
+      'ModifiedSun, Apr 11, 2021 1:30 PM CEST',
+    );
 
     expect(screen.getAllByTitle('Note Details')[0]).toBeInTheDocument();
     expect(baseElement).toHaveTextContent('Very important note');

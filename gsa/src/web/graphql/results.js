@@ -31,6 +31,7 @@ export const GET_RESULT = gql`
       type
       overrides {
         id
+        modificationTime
         active
         severity
         newSeverity
