@@ -102,14 +102,16 @@ DerivedDiff.propTypes = {
 const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
+  console.log(result);
+
   const {information} = result;
   const {id: nvtId, tags, solution} = information;
 
   const is_oval = hasValue(nvtId) && nvtId.startsWith('oval:');
-  const hasDetection = hasValue(result.detectionResult);
+  const hasDetection = hasValue(result.originResult);
 
   const detectionDetails = hasDetection
-    ? result.detectionResult.details
+    ? result.originResult.details
     : undefined;
 
   const result2 = isDefined(result.delta) ? result.delta.result : undefined;
@@ -145,8 +147,6 @@ const ResultDetails = ({className, links = true, entity}) => {
     result1Link = result.id;
     result2Link = undefined;
   }
-
-  console.log(tags);
 
   return (
     <Layout flex="column" grow="1" className={className}>
@@ -258,7 +258,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                   <span>
                     <DetailsLink
                       type="result"
-                      id={result.detectionResult.id}
+                      id={result.originResult.id}
                       textOnly={!links}
                     >
                       {_('View details of product detection')}
