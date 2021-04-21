@@ -103,7 +103,9 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
             </TableRow>
 
             <TableRow>
-              <TableData>{_('Allow scan of simultaneous IPs')}</TableData>
+              <TableData>
+                {_('Allow simultaneous scanning via multiple IPs')}
+              </TableData>
               <TableData>{renderYesNo(allowSimultaneousIPs)}</TableData>
             </TableRow>
 
