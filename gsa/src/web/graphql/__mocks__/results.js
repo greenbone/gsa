@@ -71,6 +71,8 @@ export const mockResult = deepFreeze({
   },
   location: '80/tcp',
   information: {
+    // if you use UnionType you MUST declare __typename or MockedProvider will make this information object empty
+    __typename: 'ResultNVT',
     id: '1.3.6.1.4.1.25623.1.12345',
     name: 'nvt1',
     version: null,
