@@ -22,11 +22,20 @@ import {GET_RESULT} from '../results';
 export const mockResult = deepFreeze({
   id: '12345',
   name: 'foo',
-  comment: null,
   owner: 'admin',
   creationTime: '2019-06-02T12:00:00Z',
   modificationTime: '2019-06-03T11:00:00Z',
   type: 'NVT',
+  overrides: [
+    {
+      id: '6f1249cd-6c48-43e5-bf4f-2a11cb28fbbd',
+      active: true,
+      severity: 6.4,
+      newSeverity: 4.3,
+      text: 'hello world',
+      endTime: null,
+    },
+  ],
   originResult: {
     id: '12345',
     details: [
@@ -64,41 +73,43 @@ export const mockResult = deepFreeze({
   information: {
     id: '1.3.6.1.4.1.25623.1.12345',
     name: 'nvt1',
+    version: null,
     score: 50,
-    severities: {
-      type: null,
-      score: 50,
-      vector: 'AV:N/AC:M/Au:N/C:P/I:N/A:N',
-    },
+    severities: [
+      {
+        type: 'cvss_base_v2',
+        score: 50,
+        vector: 'AV:N/AC:M/Au:N/C:P/I:N/A:N',
+      },
+    ],
+    cveReferences: [{type: 'cve', id: 'CVE-2019-1234'}],
+    bidReferences: [
+      {type: 'bid', id: '75750'},
+      {type: 'bugtraq_id', id: '75751'},
+    ],
+    certReferences: [
+      {type: 'cert-bund', id: 'CB-K12/3456'},
+      {type: 'dfn-cert', id: 'DFN-CERT-2019-1234'},
+    ],
+    otherReferences: [{type: 'url', id: 'https://www.foo.bar'}],
     tags: {
       cvssBaseVector: 'AV:N/AC:M/Au:S/C:P/I:N/A:P',
       summary: 'This is a mock result',
-      solutionType: 'VendorFix',
       insight: 'This is just a test',
       impact: 'No real impact',
       detectionMethod: 'This is the detection method',
       affected: 'Affects test cases only',
     },
-    cveReferences: [{type: 'cve', id: 'CVE-2019-1234'}],
-    certReferences: [
-      {type: 'cert-bund', id: 'CB-K12/3456'},
-      {type: 'dfn-cert', id: 'DFN-CERT-2019-1234'},
-    ],
-    bidReferences: [
-      {type: 'bid', id: '75750'},
-      {type: 'bugtraq_id', id: '75751'},
-    ],
-    otherReferences: [{type: 'url', id: 'https://www.foo.bar'}],
     solution: {
       type: 'VendorFix',
       method: null,
       description: 'Keep writing tests',
     },
   },
-  description: 'This is a description',
   originalSeverity: 5.0,
-  qod: {value: 80, type: 'registry'},
   severity: 5.0,
+  qod: {value: 80, type: 'registry'},
+  description: 'This is a description',
   notes: [
     {
       id: '358',
@@ -109,7 +120,6 @@ export const mockResult = deepFreeze({
     },
   ],
   tickets: [{id: '979'}],
-  overrides: null,
   userTags: null,
 });
 
