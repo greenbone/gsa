@@ -200,8 +200,7 @@ describe('Result Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('This is the detection method');
     expect(baseElement).toHaveTextContent('Details: ');
 
-    // version is currently always null
-    // expect(baseElement).toHaveTextContent('Version used: 2019-02-14T07:33:50Z');
+    expect(baseElement).toHaveTextContent('Version used: $Revision: 733 $');
 
     expect(heading[7]).toHaveTextContent('Affected Software/OS');
     expect(baseElement).toHaveTextContent('Affects test cases only');

@@ -76,7 +76,7 @@ export const mockResult = deepFreeze({
     __typename: 'ResultNVT',
     id: '1.3.6.1.4.1.25623.1.12345',
     name: 'nvt1',
-    version: null,
+    version: '$Revision: 733 $',
     score: 50,
     severities: [
       {

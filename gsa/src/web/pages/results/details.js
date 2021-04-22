@@ -312,10 +312,10 @@ const ResultDetails = ({className, links = true, entity}) => {
                     _('No details available for this method.')}
                 </TableData>
               </TableRow>
-              {!isEmpty(result.scanNvtVersion) && (
+              {!isEmpty(information.version) && (
                 <TableRow>
                   <TableData>{_('Version used: ')}</TableData>
-                  <TableData>{result.scanNvtVersion}</TableData>
+                  <TableData>{information.version}</TableData>
                 </TableRow>
               )}
             </TableBody>
