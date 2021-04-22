@@ -77,6 +77,7 @@ class Result extends Model {
     if (type === 'NVT') {
       copy.information = Nvt.fromObject(information);
     } else {
+      // assuming result can only be NVT or CVE
       copy.information = Cve.fromObject(information);
       copy.name = information.id;
     }

@@ -17,6 +17,7 @@
  */
 
 import Model from 'gmp/model';
+import Cve from 'gmp/models/cve';
 import Note from 'gmp/models/note';
 import Nvt from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
@@ -81,6 +82,20 @@ describe('Result model parseObject tests', () => {
     expect(result.information.id).toEqual('bar');
   });
 
+  test('should parse CVEs', () => {
+    const obj = {
+      type: 'CVE',
+      information: {
+        id: 'CVE-123',
+        severity: 3.1,
+      },
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.information).toBeInstanceOf(Cve);
+    expect(result.information.id).toEqual('CVE-123');
+  });
+
   test('should parse severity', () => {
     const result = Result.fromObject({severity: '4.2'});
     const result2 = Result.fromObject({});
@@ -109,7 +124,7 @@ describe('Result model parseObject tests', () => {
     expect(result.task.entityType).toEqual('task');
   });
 
-  test('should parse detection', () => {
+  test('should parse origin result', () => {
     const obj = {
       originResult: {
         id: '1337',
@@ -177,7 +192,24 @@ describe('Result model parseObject tests', () => {
     expect(result.notes).toEqual([]);
   });
 
-  // ToDo: Overrides
+  test('should parse overrides', () => {
+    const obj = {
+      overrides: [{id: 'over'}, {id: 'ride'}],
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.overrides[0]).toBeInstanceOf(Override);
+    expect(result.overrides[0].entityType).toEqual('override');
+    expect(result.overrides[1]).toBeInstanceOf(Override);
+    expect(result.overrides[1].entityType).toEqual('override');
+  });
+
+  test('should return empty array if no overrides are given', () => {
+    const result = Result.fromObject({});
+
+    expect(result.overrides).toEqual([]);
+  });
+
   // ToDo: delta result
 });
 
