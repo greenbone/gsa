@@ -160,6 +160,7 @@ const ScannerDialog = ({
 
   if (gmp.settings.enableGreenboneSensor) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     type = hasValue(type) ? type : GREENBONE_SENSOR_SCANNER_TYPE;
     SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE, OSP_SCANNER_TYPE];
   } else {
@@ -170,6 +171,12 @@ const ScannerDialog = ({
   } else {
     type = OSP_SCANNER_TYPE;
 >>>>>>> 569560a9a8... Pre-select greenbone sensor als default scanner type
+=======
+    type = hasValue(type) ? type : GREENBONE_SENSOR_SCANNER_TYPE;
+    SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE, OSP_SCANNER_TYPE];
+  } else {
+    type = hasValue(type) ? type : OSP_SCANNER_TYPE;
+>>>>>>> 42310dc550... Set default scanner type only if it is not set yet
     SCANNER_TYPES = [OSP_SCANNER_TYPE];
   }
 
