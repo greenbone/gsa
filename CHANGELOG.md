@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+<<<<<<< HEAD
 ## [21.10] - Unreleased
 
 ### Added
@@ -33,6 +34,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 
 [21.04.1]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
+=======
+## [Unrelased]
+
+### Added
+### Changed
+- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
+
+### Fixed
+### Removed
+
+[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
+>>>>>>> ac5fb4c53d... Add changelog entry
 
 ## [21.04] - 2021-04-16
 
