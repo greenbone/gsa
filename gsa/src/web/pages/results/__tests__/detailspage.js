@@ -31,6 +31,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {
   createGetResultQueryMock,
   mockResult,
+  mockResultCVE,
 } from 'web/graphql/__mocks__/results';
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
@@ -92,7 +93,7 @@ beforeEach(() => {
 });
 
 describe('Result Detailspage tests', () => {
-  test('should render full Detailspage', async () => {
+  test('should render full Detailspage for NVT result', async () => {
     const gmp = {
       result: {
         get: getResult,
@@ -197,9 +198,7 @@ describe('Result Detailspage tests', () => {
 
     expect(heading[6]).toHaveTextContent('Detection Method');
     expect(baseElement).toHaveTextContent('This is the detection method');
-    expect(baseElement).toHaveTextContent(
-      'Details: nvt1 OID: 1.3.6.1.4.1.25623.1.12345',
-    );
+    expect(baseElement).toHaveTextContent('Details: ');
 
     // version is currently always null
     // expect(baseElement).toHaveTextContent('Version used: 2019-02-14T07:33:50Z');
@@ -240,6 +239,102 @@ describe('Result Detailspage tests', () => {
     expect(baseElement).toHaveTextContent(
       'ModifiedMon, Jun 3, 2019 1:05 PM CEST',
     );
+  });
+
+  test('should render full Detailspage for CVE result', async () => {
+    const resultCVE = Result.fromObject(mockResultCVE);
+    const gmp = {
+      result: {
+        get: getResult,
+      },
+      permissions: {
+        get: getPermissions,
+      },
+      settings: {manualUrl, reloadInterval},
+      user: {currentSettings, renewSession},
+    };
+
+    const [mock, resultFunc] = createGetResultQueryMock('12345', mockResultCVE);
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+      queryMocks: [mock],
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(entityLoadingActions.success('12345', resultCVE));
+
+    const {baseElement} = render(<Detailspage id="12345" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    // Toolbar Icons
+    const links = baseElement.querySelectorAll('a');
+
+    expect(screen.getAllByTitle('Help: Results')[0]).toBeInTheDocument();
+    expect(links[0]).toHaveAttribute(
+      'href',
+      'test/en/reports.html#displaying-all-existing-results',
+    );
+
+    expect(screen.getAllByTitle('Results List')[0]).toBeInTheDocument();
+    expect(links[1]).toHaveAttribute('href', '/results');
+
+    expect(screen.getAllByTitle('Export Result as XML')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Add new Note')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Add new Override')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Create new Ticket')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Corresponding Task (task 1)')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Corresponding Report')[0]).toBeInTheDocument();
+
+    // Header
+    expect(baseElement).toHaveTextContent('Result: CVE-2020-14870');
+    expect(baseElement).toHaveTextContent('ID:12345');
+    expect(baseElement).toHaveTextContent(
+      'Created:Sun, Jun 2, 2019 2:00 PM CEST',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+    );
+    expect(baseElement).toHaveTextContent('Owner:admin');
+
+    // Tabs
+    const tabs = screen.getAllByTestId('entities-tab-title');
+    expect(tabs[0]).toHaveTextContent('User Tags');
+
+    // Details
+    const heading = baseElement.querySelectorAll('h2');
+
+    expect(heading[1]).toHaveTextContent('Vulnerability');
+    expect(baseElement).toHaveTextContent('NameCVE-2020-14870');
+    expect(baseElement).toHaveTextContent('Severity6.8 (Medium)');
+    expect(baseElement).toHaveTextContent('QoD75 %');
+    expect(baseElement).toHaveTextContent('Host109.876.54.321');
+    expect(baseElement).toHaveTextContent('Location80/tcp');
+
+    expect(heading[2]).toHaveTextContent('Detection Result');
+    expect(baseElement).toHaveTextContent('This is a description');
+
+    expect(heading[3]).toHaveTextContent('Product Detection Result');
+    expect(baseElement).toHaveTextContent('Productcpe:/a:python:python:2.7.16');
+    expect(baseElement).toHaveTextContent(
+      'MethodCVE-2019-13404 (OID: CVE-2019-13404)',
+    );
+    expect(baseElement).toHaveTextContent(
+      'LogView details of product detection',
+    );
+
+    expect(heading[4]).toHaveTextContent('Detection Method');
+    expect(baseElement).toHaveTextContent('Details: ');
   });
 
   test('should render user tags tab', async () => {

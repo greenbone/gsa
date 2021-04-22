@@ -126,6 +126,63 @@ export const mockResult = deepFreeze({
   userTags: null,
 });
 
+export const mockResultCVE = deepFreeze({
+  id: '12345',
+  name: 'foo',
+  owner: 'admin',
+  creationTime: '2019-06-02T12:00:00Z',
+  modificationTime: '2019-06-03T11:00:00Z',
+  type: 'CVE',
+  overrides: null,
+  originResult: {
+    id: '12345',
+    details: [
+      {
+        name: 'product',
+        value: 'cpe:/a:python:python:2.7.16',
+      },
+      {
+        name: 'location',
+        value: '/usr/bin/python, /usr/bin/python2.7',
+      },
+      {
+        name: 'source_oid',
+        value: 'CVE-2019-13404',
+      },
+      {
+        name: 'source_name',
+        value: 'CVE-2019-13404',
+      },
+    ],
+  },
+  report: {
+    id: '314',
+  },
+  task: {
+    id: '159',
+    name: 'task 1',
+  },
+  host: {
+    id: '265',
+    ip: '109.876.54.321',
+    hostname: 'lorem',
+  },
+  location: '80/tcp',
+  information: {
+    // if you use UnionType you MUST declare __typename or MockedProvider will make this information object empty
+    __typename: 'ResultCVE',
+    id: 'CVE-2020-14870',
+    severity: 4.9,
+  },
+  originalSeverity: 6.8,
+  severity: 6.8,
+  qod: {value: 75, type: null},
+  description: 'This is a description',
+  notes: null,
+  tickets: null,
+  userTags: null,
+});
+
 export const createGetResultQueryMock = (
   resultId = '12345',
   result = mockResult,
