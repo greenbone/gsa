@@ -24,7 +24,7 @@ import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
 import {filter, map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
 import {parseInt} from 'gmp/parser';
@@ -159,10 +159,10 @@ const ScannerDialog = ({
   const {gmp} = props;
 
   if (gmp.settings.enableGreenboneSensor) {
-    type = GREENBONE_SENSOR_SCANNER_TYPE;
+    type = hasValue(type) ? type : GREENBONE_SENSOR_SCANNER_TYPE;
     SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE, OSP_SCANNER_TYPE];
   } else {
-    type = OSP_SCANNER_TYPE;
+    type = hasValue(type) ? type : OSP_SCANNER_TYPE;
     SCANNER_TYPES = [OSP_SCANNER_TYPE];
   }
 
