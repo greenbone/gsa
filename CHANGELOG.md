@@ -43,6 +43,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ### Fixed
+- Fixed result CVE parsing for result listpage and CVE reports [#2869](https://github.com/greenbone/gsa/pull/2869)
 - Fixed setting comments of business process nodes [#2781](https://github.com/greenbone/gsa/pull/2781)
 - Added the deprecatedBy field to CPEs [#2751](https://github.com/greenbone/gsa/pull/2751)
 - Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
