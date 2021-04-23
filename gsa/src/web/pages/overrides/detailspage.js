@@ -252,7 +252,7 @@ const Page = () => {
     <OverrideComponent
       onCloned={goto_details('override', {history})}
       onCloneError={showError}
-      onCreated={goto_details('override', {history})}
+      onCreated={goto_entity_details('override', {history})}
       onDeleted={goto_list('overrides', {history})}
       onDeleteError={showError}
       onDownloaded={handleDownload}
