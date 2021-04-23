@@ -183,7 +183,9 @@ export const useCreateOverride = options => {
   const createOverride = useCallback(
     // eslint-disable-next-line no-shadow
     (inputObject, options) =>
-      queryCreateOverride({...options, variables: {input: inputObject}}),
+      queryCreateOverride({...options, variables: {input: inputObject}}).then(
+        override => override?.data?.createOverride?.id,
+      ),
     [queryCreateOverride],
   );
   const overrideId = data?.createOverride?.id;
