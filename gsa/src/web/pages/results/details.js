@@ -103,7 +103,7 @@ const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
   const {information} = result;
-  const {oid: infoId, tags = {}, solution} = information;
+  const {id: infoId, tags = {}, solution} = information;
 
   const is_oval = isDefined(infoId) && infoId.startsWith('oval:');
   const has_detection =

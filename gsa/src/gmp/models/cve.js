@@ -35,7 +35,7 @@ class Cve extends Info {
     const ret = {};
 
     ret.name = element.name;
-    ret.oid = element.name;
+    ret.id = element.name;
 
     return ret;
   }

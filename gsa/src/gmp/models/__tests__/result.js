@@ -90,19 +90,20 @@ describe('Result model tests', () => {
     const result = Result.fromElement(elem);
 
     expect(result.information).toBeInstanceOf(Nvt);
-    expect(result.information.oid).toEqual('bar');
+    expect(result.information.id).toEqual('bar');
   });
 
   test('should parse CVEs', () => {
     const elem = {
       nvt: {
         name: 'CVE-1234',
+        type: 'cve',
       },
     };
 
     const result = Result.fromElement(elem);
 
-    expect(result.information.oid).toEqual('CVE-1234');
+    expect(result.information.id).toEqual('CVE-1234');
     expect(result.information.name).toEqual('CVE-1234');
   });
 

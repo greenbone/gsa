@@ -59,7 +59,7 @@ const Row = ({
   ...props
 }) => {
   const {host} = entity;
-  let shownName = isDefined(entity.name) ? entity.name : entity.information.oid;
+  let shownName = isDefined(entity.name) ? entity.name : entity.information.id;
   if (!isDefined(shownName)) {
     shownName = entity.id;
   }

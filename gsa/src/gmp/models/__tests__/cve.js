@@ -289,6 +289,6 @@ describe('CVE model tests', () => {
     const cve = Cve.fromResultElement(elem);
 
     expect(cve.name).toBe('CVE-1234');
-    expect(cve.oid).toBe('CVE-1234');
+    expect(cve.id).toBe('CVE-1234');
   });
 });
