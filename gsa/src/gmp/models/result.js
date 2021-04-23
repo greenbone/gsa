@@ -59,7 +59,7 @@ class Result extends Model {
       host = {},
       name,
       notes,
-      nvt = {},
+      nvt: information = {},
       original_severity,
       overrides,
       report,
@@ -87,11 +87,13 @@ class Result extends Model {
       };
     }
 
-    if (nvt.type === 'nvt') {
-      copy.nvt = Nvt.fromElement(nvt);
+    if (information.type === 'nvt') {
+      copy.information = Nvt.fromElement(information);
     } else {
-      copy.nvt = Cve.fromResultElement(nvt);
+      copy.information = Cve.fromResultElement(information);
     }
+
+    delete copy.nvt;
 
     if (isDefined(description)) {
       copy.description = description;
@@ -101,7 +103,7 @@ class Result extends Model {
       copy.severity = parseSeverity(severity);
     }
 
-    copy.vulnerability = isDefined(name) ? name : nvt._oid;
+    copy.vulnerability = isDefined(name) ? name : information._oid;
 
     if (isDefined(report)) {
       copy.report = parseModelFromElement(report, 'report');
