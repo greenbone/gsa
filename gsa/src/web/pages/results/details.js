@@ -103,7 +103,7 @@ const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
   const {nvt} = result;
-  const {oid, tags, solution} = nvt;
+  const {oid, tags = {}, solution} = nvt;
 
   const is_oval = isDefined(oid) && oid.startsWith('oval:');
   const has_detection =
@@ -149,9 +149,11 @@ const ResultDetails = ({className, links = true, entity}) => {
 
   return (
     <Layout flex="column" grow="1" className={className}>
-      <DetailsBlock title={_('Summary')}>
-        <P>{tags.summary}</P>
-      </DetailsBlock>
+      {isDefined(tags.summary) && (
+        <DetailsBlock title={_('Summary')}>
+          <P>{tags.summary}</P>
+        </DetailsBlock>
+      )}
 
       {result.hasDelta() ? (
         <DetailsBlock title={_('Detection Results')}>

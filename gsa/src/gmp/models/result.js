@@ -86,7 +86,13 @@ class Result extends Model {
       };
     }
 
-    copy.nvt = Nvt.fromElement(nvt);
+    if (nvt.type === 'nvt') {
+      copy.nvt = Nvt.fromElement(nvt);
+    } else {
+      copy.nvt = {};
+      copy.nvt.name = nvt.name;
+      copy.nvt.oid = nvt.name;
+    }
 
     if (isDefined(description)) {
       copy.description = description;
