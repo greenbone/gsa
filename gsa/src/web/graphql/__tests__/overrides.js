@@ -93,9 +93,8 @@ const CreateModifyOverrideComponent = () => {
   const [createOverride] = useCreateOverride();
   const [modifyOverride] = useModifyOverride();
 
-  const handleCreateResult = resp => {
-    const {data} = resp;
-    setNotification('Override created with id ' + data.createOverride.id + '.');
+  const handleCreateResult = id => {
+    setNotification(`Override created with id ${id}.`);
   };
 
   const handleModifyResult = resp => {
@@ -295,7 +294,7 @@ describe('useLazyGetOverrides tests', () => {
 });
 
 describe('Override mutation tests', () => {
-  test('should create a override', async () => {
+  test('should create an override', async () => {
     const [
       createOverrideMock,
       createOverrideResult,
@@ -316,7 +315,7 @@ describe('Override mutation tests', () => {
     );
   });
 
-  test('should modify a override', async () => {
+  test('should modify an override', async () => {
     const [
       modifyOverrideMock,
       modifyOverrideResult,
