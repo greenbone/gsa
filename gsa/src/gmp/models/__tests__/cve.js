@@ -280,4 +280,17 @@ describe('CVE model tests', () => {
 
     expect(cve.references).toEqual([]);
   });
+
+  test('should parse result cve', () => {
+    const elem = {
+      cvss_base: 6.4,
+      name: 'CVE-1234',
+    };
+
+    const cve = Cve.fromResultElement(elem);
+
+    expect(cve.name).toBe('CVE-1234');
+    expect(cve.oid).toBe('CVE-1234');
+    expect(cve.severity).toBe(6.4);
+  });
 });

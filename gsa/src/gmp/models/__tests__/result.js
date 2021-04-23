@@ -84,12 +84,28 @@ describe('Result model tests', () => {
     const elem = {
       nvt: {
         _oid: 'bar',
+        type: 'nvt',
       },
     };
     const result = Result.fromElement(elem);
 
-    expect(result.nvt).toBeInstanceOf(Nvt);
-    expect(result.nvt.oid).toEqual('bar');
+    expect(result.information).toBeInstanceOf(Nvt);
+    expect(result.information.oid).toEqual('bar');
+  });
+
+  test('should parse CVEs', () => {
+    const elem = {
+      nvt: {
+        cvss_base: 4.9,
+        name: 'CVE-1234',
+        _oid: 'CVE-1234',
+      },
+    };
+
+    const result = Result.fromElement(elem);
+
+    expect(result.information.oid).toEqual('CVE-1234');
+    expect(result.information.severity).toEqual(4.9);
   });
 
   test('should parse severity', () => {
