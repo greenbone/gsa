@@ -35,7 +35,6 @@ class Cve extends Info {
     const ret = {};
 
     ret.name = element.name;
-    ret.severity = element.cvss_base;
     ret.oid = element.name;
 
     return ret;

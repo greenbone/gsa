@@ -283,7 +283,6 @@ describe('CVE model tests', () => {
 
   test('should parse result cve', () => {
     const elem = {
-      cvss_base: 6.4,
       name: 'CVE-1234',
     };
 
@@ -291,6 +290,5 @@ describe('CVE model tests', () => {
 
     expect(cve.name).toBe('CVE-1234');
     expect(cve.oid).toBe('CVE-1234');
-    expect(cve.severity).toBe(6.4);
   });
 });

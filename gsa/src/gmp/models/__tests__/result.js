@@ -96,16 +96,14 @@ describe('Result model tests', () => {
   test('should parse CVEs', () => {
     const elem = {
       nvt: {
-        cvss_base: 4.9,
         name: 'CVE-1234',
-        _oid: 'CVE-1234',
       },
     };
 
     const result = Result.fromElement(elem);
 
     expect(result.information.oid).toEqual('CVE-1234');
-    expect(result.information.severity).toEqual(4.9);
+    expect(result.information.name).toEqual('CVE-1234');
   });
 
   test('should parse severity', () => {
