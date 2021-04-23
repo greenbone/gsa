@@ -31,6 +31,16 @@ import Info from './info';
 class Cve extends Info {
   static entityType = 'cve';
 
+  static fromResultElement(element) {
+    const ret = {};
+
+    ret.name = element.name;
+    ret.severity = element.cvss_base;
+    ret.oid = element.name;
+
+    return ret;
+  }
+
   static parseElement(element) {
     const ret = super.parseElement(element, 'cve');
 
