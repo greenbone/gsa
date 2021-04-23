@@ -37,8 +37,8 @@ import {
   TASK_SELECTED,
 } from 'gmp/models/override';
 
-import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
+import {isDefined, hasValue} from 'gmp/utils/identity';
+import {isEmpty, shorten} from 'gmp/utils/string';
 import {hasId} from 'gmp/utils/id';
 
 import EntityComponent from 'web/entity/component';
@@ -195,8 +195,12 @@ const OverrideComponent = ({
       days,
       hosts_manual,
       id,
+      newSeverity,
+      new_severity_from_list,
       port_manual,
+      result_id,
       result_uuid,
+      task_id,
       task_uuid,
       text,
     } = data;
@@ -210,12 +214,19 @@ const OverrideComponent = ({
 
     const modifyData = {
       id,
-      severity,
+      severity: severity === '' ? undefined : severity,
       daysActive,
       hosts: hosts_manual.split(','),
+      newSeverity: hasValue(newSeverity) ? newSeverity : new_severity_from_list,
       port: port_manual,
-      taskId: task_uuid,
-      resultId: result_uuid,
+      resultId:
+        result_id === RESULT_UUID && !isEmpty(result_uuid)
+          ? result_uuid
+          : undefined,
+      taskId:
+        task_id === TASK_SELECTED && !isEmpty(task_uuid)
+          ? task_uuid
+          : undefined,
       text,
     };
 
