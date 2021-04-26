@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
@@ -88,7 +88,7 @@ const OverrideDetails = ({entity}) => {
               <TableData>
                 {entity.isOrphan() ? (
                   <b>{_('Orphan')}</b>
-                ) : isDefined(task) ? (
+                ) : hasValue(task?.id) ? (
                   <span>
                     <EntityLink entity={task} />
                   </span>
@@ -103,7 +103,7 @@ const OverrideDetails = ({entity}) => {
               <TableData>
                 {entity.isOrphan() ? (
                   <b>{_('Orphan')}</b>
-                ) : isDefined(result) ? (
+                ) : hasValue(result?.id) ? (
                   <span>
                     <EntityLink entity={result} />
                   </span>

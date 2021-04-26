@@ -48,7 +48,7 @@ export const detailsOverride = deepFreeze({
     name: 'result name',
   },
   permissions: [{name: 'Everything'}],
-  port: '666/tcp',
+  port: '66/tcp',
   severity: '5.0',
   task: {
     id: '42',
@@ -87,7 +87,7 @@ export const noPermOverride = deepFreeze({
     name: 'result name',
   },
   permissions: [{name: 'get_overrides'}],
-  port: '666/tcp',
+  port: '66/tcp',
   severity: '5.0',
   newSeverity: '9.0',
   task: {
@@ -127,7 +127,7 @@ export const inUseOverride = deepFreeze({
     name: 'result name',
   },
   permissions: [{name: 'Everything'}],
-  port: '666/tcp',
+  port: '66/tcp',
   severity: '5.0',
   newSeverity: '9.0',
   task: {
@@ -162,7 +162,7 @@ const listOverride = deepFreeze({
   },
   result: null,
   permissions: [{name: 'Everything'}],
-  port: '666/tcp',
+  port: '66/tcp',
   severity: 1.0,
   task: {
     id: '12345',
@@ -226,7 +226,7 @@ export const createOverrideInput = {
   },
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},
-  port: '666/tcp',
+  port: '66/tcp',
   text: 'override text',
   writable: true,
 };
