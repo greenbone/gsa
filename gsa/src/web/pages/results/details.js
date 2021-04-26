@@ -102,10 +102,10 @@ DerivedDiff.propTypes = {
 const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
-  const {nvt} = result;
-  const {oid, tags, solution} = nvt;
+  const {information} = result;
+  const {id: infoId, tags = {}, solution} = information;
 
-  const is_oval = isDefined(oid) && oid.startsWith('oval:');
+  const is_oval = isDefined(infoId) && infoId.startsWith('oval:');
   const has_detection =
     isDefined(result.detection) && isDefined(result.detection.result);
 
@@ -149,9 +149,11 @@ const ResultDetails = ({className, links = true, entity}) => {
 
   return (
     <Layout flex="column" grow="1" className={className}>
-      <DetailsBlock title={_('Summary')}>
-        <P>{tags.summary}</P>
-      </DetailsBlock>
+      {isDefined(tags.summary) && (
+        <DetailsBlock title={_('Summary')}>
+          <P>{tags.summary}</P>
+        </DetailsBlock>
+      )}
 
       {result.hasDelta() ? (
         <DetailsBlock title={_('Detection Results')}>
@@ -290,24 +292,24 @@ const ResultDetails = ({className, links = true, entity}) => {
                   {is_oval && (
                     <DetailsLink
                       type="ovaldef"
-                      id={oid}
+                      id={infoId}
                       title={_('View Details of OVAL Definition {{oid}}', {
-                        oid,
+                        infoId,
                       })}
                       textOnly={!links}
                     >
-                      {oid}
+                      {infoId}
                     </DetailsLink>
                   )}
-                  {isDefined(oid) && oid.startsWith(DEFAULT_OID_VALUE) && (
+                  {isDefined(infoId) && infoId.startsWith(DEFAULT_OID_VALUE) && (
                     <span>
-                      <DetailsLink type="nvt" id={oid} textOnly={!links}>
-                        {renderNvtName(oid, nvt.name)}
-                        {' OID: ' + oid}
+                      <DetailsLink type="nvt" id={infoId} textOnly={!links}>
+                        {renderNvtName(infoId, information.name)}
+                        {' OID: ' + infoId}
                       </DetailsLink>
                     </span>
                   )}
-                  {!isDefined(oid) &&
+                  {!isDefined(infoId) &&
                     _('No details available for this method.')}
                 </TableData>
               </TableRow>
@@ -339,7 +341,7 @@ const ResultDetails = ({className, links = true, entity}) => {
         solutionType={solution?.type}
       />
 
-      <References links={links} nvt={nvt} />
+      <References links={links} nvt={information} />
     </Layout>
   );
 };
