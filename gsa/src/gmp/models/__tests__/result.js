@@ -17,6 +17,7 @@
  */
 
 import Model from 'gmp/model';
+import Cve from 'gmp/models/cve';
 import Note from 'gmp/models/note';
 import Nvt from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
@@ -70,14 +71,29 @@ describe('Result model parseObject tests', () => {
 
   test('should parse NVTs', () => {
     const obj = {
-      nvt: {
+      type: 'NVT',
+      information: {
         id: 'bar',
       },
     };
     const result = Result.fromObject(obj);
 
-    expect(result.nvt).toBeInstanceOf(Nvt);
-    expect(result.nvt.id).toEqual('bar');
+    expect(result.information).toBeInstanceOf(Nvt);
+    expect(result.information.id).toEqual('bar');
+  });
+
+  test('should parse CVEs', () => {
+    const obj = {
+      type: 'CVE',
+      information: {
+        id: 'CVE-123',
+        severity: 3.1,
+      },
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.information).toBeInstanceOf(Cve);
+    expect(result.information.id).toEqual('CVE-123');
   });
 
   test('should parse severity', () => {
@@ -90,7 +106,7 @@ describe('Result model parseObject tests', () => {
 
   test('should parse name/id to vulnerability', () => {
     const obj = {
-      nvt: {
+      information: {
         id: '42',
       },
     };
@@ -108,9 +124,9 @@ describe('Result model parseObject tests', () => {
     expect(result.task.entityType).toEqual('task');
   });
 
-  test('should parse detection', () => {
+  test('should parse origin result', () => {
     const obj = {
-      detectionResult: {
+      originResult: {
         id: '1337',
         details: [
           {
@@ -133,7 +149,7 @@ describe('Result model parseObject tests', () => {
     };
     const result = Result.fromObject(obj);
 
-    expect(result.detectionResult).toEqual(res);
+    expect(result.originResult).toEqual(res);
   });
 
   test('should parse original severity', () => {
@@ -176,7 +192,24 @@ describe('Result model parseObject tests', () => {
     expect(result.notes).toEqual([]);
   });
 
-  // ToDo: Overrides
+  test('should parse overrides', () => {
+    const obj = {
+      overrides: [{id: 'over'}, {id: 'ride'}],
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.overrides[0]).toBeInstanceOf(Override);
+    expect(result.overrides[0].entityType).toEqual('override');
+    expect(result.overrides[1]).toBeInstanceOf(Override);
+    expect(result.overrides[1].entityType).toEqual('override');
+  });
+
+  test('should return empty array if no overrides are given', () => {
+    const result = Result.fromObject({});
+
+    expect(result.overrides).toEqual([]);
+  });
+
   // ToDo: delta result
 });
 
