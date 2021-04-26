@@ -4,6 +4,64 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+<<<<<<< HEAD
+=======
+## [Unrelased]
+
+### Added
+### Changed
+- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
+
+### Fixed
+### Removed
+
+[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
+
+## [21.04] - 2021-04-16
+
+### Added
+- Allow to set unix socket permissions for gsad [#2816](https://github.com/greenbone/gsa/pull/2816)
+- Added CVSS date to NVT details [#2802](https://github.com/greenbone/gsa/pull/2802)
+- Add option to allow to scan simultaneous IPs to targets
+  [#2779](https://github.com/greenbone/gsa/pull/2779),
+  [#2813](https://github.com/greenbone/gsa/pull/2813)
+- Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
+- Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
+
+### Changed
+- Sort host, os and vulns listpage by descending severity [#2880](https://github.com/greenbone/gsa/pull/2880)
+- Revert the changes from integer `score` to a float `severity` [#2854](https://github.com/greenbone/gsa/pull/2854)
+- Show StartIcon for scheduled tasks [#2840](https://github.com/greenbone/gsa/pull/2840)
+- Remove solution from log NVTs [#2792](https://github.com/greenbone/gsa/pull/2792)
+- Don't show empty sections in result details [#2791](https://github.com/greenbone/gsa/pull/2791)
+- Move error message and adjust design on login page [#2780](https://github.com/greenbone/gsa/pull/2780)
+- Refactored useFormValidation hook [#2704](https://github.com/greenbone/gsa/pull/2704)
+- Updated copyright and footer layout [#2687](https://github.com/greenbone/gsa/pull/2687)
+- New login page layout
+  [#2683](https://github.com/greenbone/gsa/pull/2683),
+  [#2736](https://github.com/greenbone/gsa/pull/2736),
+  [#2756](https://github.com/greenbone/gsa/pull/2756)
+- CVE Tables Page can now be used with the updated xml-format and CVSSv3(.1). [#2583](https://github.com/greenbone/gsa/pull/2583)
+- The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
+
+
+### Fixed
+- Fixed result CVE parsing for result listpage and CVE reports [#2869](https://github.com/greenbone/gsa/pull/2869)
+- Fixed setting comments of business process nodes [#2781](https://github.com/greenbone/gsa/pull/2781)
+- Added the deprecatedBy field to CPEs [#2751](https://github.com/greenbone/gsa/pull/2751)
+- Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
+
+### Removed
+- Removed Edge <= 18 support [#2691](https://github.com/greenbone/gsa/pull/2691)
+- Removed Internet Explorer 11 support [#2689](https://github.com/greenbone/gsa/pull/2689)
+- Removed support for uncontrolled form fields [#2520](https://github.com/greenbone/gsa/pull/2520)
+- Drop gmp scanner type from GSA [#2498](https://github.com/greenbone/gsa/pull/2498)
+- Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
+- Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
+
+[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.04.0
+
+>>>>>>> 221b2b7994... Update CHANGELOG.md
 ## [20.8.1] - 2021-02-02
 
 ### Added
