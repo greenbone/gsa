@@ -102,14 +102,14 @@ DerivedDiff.propTypes = {
 const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
-  const {nvt} = result;
-  const {id: nvtId, tags, solution} = nvt;
+  const {information} = result;
+  const {id: infoId, tags, solution} = information;
 
-  const is_oval = hasValue(nvtId) && nvtId.startsWith('oval:');
-  const hasDetection = hasValue(result.detectionResult);
+  const isoval = hasValue(infoId) && infoId.startsWith('oval:');
+  const hasDetection = hasValue(result.originResult);
 
   const detectionDetails = hasDetection
-    ? result.detectionResult.details
+    ? result.originResult.details
     : undefined;
 
   const result2 = isDefined(result.delta) ? result.delta.result : undefined;
@@ -148,10 +148,11 @@ const ResultDetails = ({className, links = true, entity}) => {
 
   return (
     <Layout flex="column" grow="1" className={className}>
-      <DetailsBlock title={_('Summary')}>
-        <P>{tags.summary}</P>
-      </DetailsBlock>
-
+      {hasValue(tags?.summary) && (
+        <DetailsBlock title={_('Summary')}>
+          <P>{tags.summary}</P>
+        </DetailsBlock>
+      )}
       {result.hasDelta() ? (
         <DetailsBlock title={_('Detection Results')}>
           <div>
@@ -255,7 +256,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                   <span>
                     <DetailsLink
                       type="result"
-                      id={result.detectionResult.id}
+                      id={result.originResult.id}
                       textOnly={!links}
                     >
                       {_('View details of product detection')}
@@ -268,15 +269,16 @@ const ResultDetails = ({className, links = true, entity}) => {
         </DetailsBlock>
       )}
 
-      {isDefined(tags.insight) && tags.insight !== TAG_NA && (
+      {hasValue(tags?.insight) && tags.insight !== TAG_NA && (
         <DetailsBlock title={_('Insight')}>
           <P>{tags.insight}</P>
         </DetailsBlock>
       )}
-
       <DetailsBlock title={_('Detection Method')}>
         <Layout flex="column">
-          <Layout>{tags.detectionMethod}</Layout>
+          {hasValue(tags?.detectionMethod) && (
+            <Layout>{tags.detectionMethod}</Layout>
+          )}
           <InfoTable>
             <colgroup>
               <Col width="10%" />
@@ -286,34 +288,34 @@ const ResultDetails = ({className, links = true, entity}) => {
               <TableRow>
                 <TableData>{_('Details: ')}</TableData>
                 <TableData>
-                  {is_oval && (
+                  {isoval && (
                     <DetailsLink
                       type="ovaldef"
-                      id={nvtId}
+                      id={infoId}
                       title={_('View Details of OVAL Definition {{oid}}', {
-                        nvtId,
+                        infoId,
                       })}
                       textOnly={!links}
                     >
-                      {nvtId}
+                      {infoId}
                     </DetailsLink>
                   )}
-                  {hasValue(nvtId) && nvtId.startsWith(DEFAULT_OID_VALUE) && (
+                  {hasValue(infoId) && infoId.startsWith(DEFAULT_OID_VALUE) && (
                     <span>
-                      <DetailsLink type="nvt" id={nvtId} textOnly={!links}>
-                        {renderNvtName(nvtId, nvt.name)}
-                        {' OID: ' + nvtId}
+                      <DetailsLink type="nvt" id={infoId} textOnly={!links}>
+                        {renderNvtName(infoId, information.name)}
+                        {' OID: ' + infoId}
                       </DetailsLink>
                     </span>
                   )}
-                  {!hasValue(nvtId) &&
+                  {!hasValue(infoId) &&
                     _('No details available for this method.')}
                 </TableData>
               </TableRow>
-              {!isEmpty(result.scanNvtVersion) && (
+              {!isEmpty(information.version) && (
                 <TableRow>
                   <TableData>{_('Version used: ')}</TableData>
-                  <TableData>{result.scanNvtVersion}</TableData>
+                  <TableData>{information.version}</TableData>
                 </TableRow>
               )}
             </TableBody>
@@ -321,13 +323,13 @@ const ResultDetails = ({className, links = true, entity}) => {
         </Layout>
       </DetailsBlock>
 
-      {isDefined(tags.affected) && tags.affected !== TAG_NA && (
+      {hasValue(tags?.affected) && tags.affected !== TAG_NA && (
         <DetailsBlock title={_('Affected Software/OS')}>
           <P>{tags.affected}</P>
         </DetailsBlock>
       )}
 
-      {isDefined(tags.impact) && tags.impact !== TAG_NA && (
+      {hasValue(tags?.impact) && tags.impact !== TAG_NA && (
         <DetailsBlock title={_('Impact')}>
           <P>{tags.impact}</P>
         </DetailsBlock>
@@ -338,7 +340,7 @@ const ResultDetails = ({className, links = true, entity}) => {
         solutionType={solution?.type}
       />
 
-      <References links={links} nvt={nvt} />
+      <References links={links} nvt={information} />
     </Layout>
   );
 };

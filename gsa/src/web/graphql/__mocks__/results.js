@@ -22,11 +22,22 @@ import {GET_RESULT} from '../results';
 export const mockResult = deepFreeze({
   id: '12345',
   name: 'foo',
-  comment: null,
   owner: 'admin',
   creationTime: '2019-06-02T12:00:00Z',
   modificationTime: '2019-06-03T11:00:00Z',
-  detectionResult: {
+  type: 'NVT',
+  overrides: [
+    {
+      id: '6f1249cd-6c48-43e5-bf4f-2a11cb28fbbd',
+      active: true,
+      severity: 6.4,
+      newSeverity: 4.3,
+      text: 'hello world',
+      endTime: null,
+      modificationTime: '2021-04-11T11:30:46+00:00',
+    },
+  ],
+  originResult: {
     id: '12345',
     details: [
       {
@@ -47,7 +58,9 @@ export const mockResult = deepFreeze({
       },
     ],
   },
-  reportId: '314',
+  report: {
+    id: '314',
+  },
   task: {
     id: '159',
     name: 'task 1',
@@ -57,48 +70,49 @@ export const mockResult = deepFreeze({
     ip: '109.876.54.321',
     hostname: 'lorem',
   },
-  port: '80/tcp',
-  nvt: {
+  location: '80/tcp',
+  information: {
+    // if you use UnionType you MUST declare __typename or MockedProvider will make this information object empty
+    __typename: 'ResultNVT',
     id: '1.3.6.1.4.1.25623.1.12345',
     name: 'nvt1',
+    version: '$Revision: 733 $',
     score: 50,
-    severities: {
-      type: null,
-      score: 50,
-      vector: 'AV:N/AC:M/Au:N/C:P/I:N/A:N',
-    },
+    severities: [
+      {
+        type: 'cvss_base_v2',
+        score: 50,
+        vector: 'AV:N/AC:M/Au:N/C:P/I:N/A:N',
+      },
+    ],
+    cveReferences: [{type: 'cve', id: 'CVE-2019-1234'}],
+    bidReferences: [
+      {type: 'bid', id: '75750'},
+      {type: 'bugtraq_id', id: '75751'},
+    ],
+    certReferences: [
+      {type: 'cert-bund', id: 'CB-K12/3456'},
+      {type: 'dfn-cert', id: 'DFN-CERT-2019-1234'},
+    ],
+    otherReferences: [{type: 'url', id: 'https://www.foo.bar'}],
     tags: {
       cvssBaseVector: 'AV:N/AC:M/Au:S/C:P/I:N/A:P',
       summary: 'This is a mock result',
-      solutionType: 'VendorFix',
       insight: 'This is just a test',
       impact: 'No real impact',
       detectionMethod: 'This is the detection method',
       affected: 'Affects test cases only',
     },
-    cveReferences: [{type: 'cve', id: 'CVE-2019-1234'}],
-    certReferences: [
-      {type: 'cert-bund', id: 'CB-K12/3456'},
-      {type: 'dfn-cert', id: 'DFN-CERT-2019-1234'},
-    ],
-    bidReferences: [
-      {type: 'bid', id: '75750'},
-      {type: 'bugtraq_id', id: '75751'},
-    ],
-    otherReferences: [{type: 'url', id: 'https://www.foo.bar'}],
     solution: {
       type: 'VendorFix',
       method: null,
       description: 'Keep writing tests',
     },
   },
-  description: 'This is a description',
   originalSeverity: 5.0,
-  originalThreat: 'Medium',
-  qod: {value: 80, type: 'registry'},
-  scanNvtVersion: '2019-02-14T07:33:50Z',
   severity: 5.0,
-  threat: 'Medium',
+  qod: {value: 80, type: 'registry'},
+  description: 'This is a description',
   notes: [
     {
       id: '358',
@@ -109,6 +123,63 @@ export const mockResult = deepFreeze({
     },
   ],
   tickets: [{id: '979'}],
+  userTags: null,
+});
+
+export const mockResultCVE = deepFreeze({
+  id: '12345',
+  name: 'foo',
+  owner: 'admin',
+  creationTime: '2019-06-02T12:00:00Z',
+  modificationTime: '2019-06-03T11:00:00Z',
+  type: 'CVE',
+  overrides: null,
+  originResult: {
+    id: '12345',
+    details: [
+      {
+        name: 'product',
+        value: 'cpe:/a:python:python:2.7.16',
+      },
+      {
+        name: 'location',
+        value: '/usr/bin/python, /usr/bin/python2.7',
+      },
+      {
+        name: 'source_oid',
+        value: 'CVE-2019-13404',
+      },
+      {
+        name: 'source_name',
+        value: 'CVE-2019-13404',
+      },
+    ],
+  },
+  report: {
+    id: '314',
+  },
+  task: {
+    id: '159',
+    name: 'task 1',
+  },
+  host: {
+    id: '265',
+    ip: '109.876.54.321',
+    hostname: 'lorem',
+  },
+  location: '80/tcp',
+  information: {
+    // if you use UnionType you MUST declare __typename or MockedProvider will make this information object empty
+    __typename: 'ResultCVE',
+    id: 'CVE-2020-14870',
+    severity: 4.9,
+  },
+  originalSeverity: 6.8,
+  severity: 6.8,
+  qod: {value: 75, type: null},
+  description: 'This is a description',
+  notes: null,
+  tickets: null,
   userTags: null,
 });
 
