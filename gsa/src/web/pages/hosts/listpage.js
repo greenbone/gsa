@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
@@ -146,7 +146,12 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const FALLBACK_HOSTS_LIST_FILTER = Filter.fromString(
+  'sort-reverse=severity first=1',
+);
+
 export default withEntitiesContainer('host', {
+  fallbackFilter: FALLBACK_HOSTS_LIST_FILTER,
   entitiesSelector,
   loadEntities,
 })(Page);
