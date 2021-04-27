@@ -224,6 +224,7 @@ let UserSettingsDialog = ({
           <Section title={_('Severity Settings')} foldable>
             <FormGroupSizer>
               <SeverityPart
+                dynamicSeverity={values.dynamicSeverity}
                 defaultSeverity={values.defaultSeverity}
                 severityClass={values.severityClass}
                 onChange={handleValueChange}
