@@ -31,6 +31,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {
   createGetResultQueryMock,
   mockResult,
+  mockResultCVE,
 } from 'web/graphql/__mocks__/results';
 import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
 
@@ -92,7 +93,7 @@ beforeEach(() => {
 });
 
 describe('Result Detailspage tests', () => {
-  test('should render full Detailspage', async () => {
+  test('should render full Detailspage for NVT result', async () => {
     const gmp = {
       result: {
         get: getResult,
@@ -170,10 +171,9 @@ describe('Result Detailspage tests', () => {
     expect(heading[1]).toHaveTextContent('Vulnerability');
     expect(baseElement).toHaveTextContent('Namefoo');
     expect(baseElement).toHaveTextContent('Severity5.0 (Medium)');
-    // Skip until overrides are implemented for getResult
-    // expect(
-    //   screen.getAllByTitle('There are overrides for this result')[0],
-    // ).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('There are overrides for this result')[0],
+    ).toBeInTheDocument();
     expect(baseElement).toHaveTextContent('QoD80 %');
     expect(baseElement).toHaveTextContent('Host109.876.54.321');
     expect(baseElement).toHaveTextContent('Location80/tcp');
@@ -198,10 +198,9 @@ describe('Result Detailspage tests', () => {
 
     expect(heading[6]).toHaveTextContent('Detection Method');
     expect(baseElement).toHaveTextContent('This is the detection method');
-    expect(baseElement).toHaveTextContent(
-      'Details: nvt1 OID: 1.3.6.1.4.1.25623.1.12345',
-    );
-    expect(baseElement).toHaveTextContent('Version used: 2019-02-14T07:33:50Z');
+    expect(baseElement).toHaveTextContent('Details: ');
+
+    expect(baseElement).toHaveTextContent('Version used: $Revision: 733 $');
 
     expect(heading[7]).toHaveTextContent('Affected Software/OS');
     expect(baseElement).toHaveTextContent('Affects test cases only');
@@ -228,18 +227,113 @@ describe('Result Detailspage tests', () => {
       screen.getByTitle('View details of CERT-Bund Advisory CB-K12&#x2F;3456'),
     ).toHaveTextContent('CB-K12/3456');
     expect(baseElement).toHaveTextContent('Otherhttps://www.foo.bar');
-    // Skip until overrides are implemented for getResult
-    // expect(screen.getAllByTitle('Override Details')[0]).toBeInTheDocument();
-    // expect(baseElement).toHaveTextContent('TestOverride');
-    // expect(baseElement).toHaveTextContent(
-    //   'ModifiedFri, Mar 12, 2021 2:00 PM CET',
-    // );
+    expect(screen.getAllByTitle('Override Details')[0]).toBeInTheDocument();
+    expect(baseElement).toHaveTextContent('hello world');
+    expect(baseElement).toHaveTextContent(
+      'ModifiedSun, Apr 11, 2021 1:30 PM CEST',
+    );
 
     expect(screen.getAllByTitle('Note Details')[0]).toBeInTheDocument();
     expect(baseElement).toHaveTextContent('Very important note');
     expect(baseElement).toHaveTextContent(
       'ModifiedMon, Jun 3, 2019 1:05 PM CEST',
     );
+  });
+
+  test('should render full Detailspage for CVE result', async () => {
+    const resultCVE = Result.fromObject(mockResultCVE);
+    const gmp = {
+      result: {
+        get: getResult,
+      },
+      permissions: {
+        get: getPermissions,
+      },
+      settings: {manualUrl, reloadInterval},
+      user: {currentSettings, renewSession},
+    };
+
+    const [mock, resultFunc] = createGetResultQueryMock('12345', mockResultCVE);
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      router: true,
+      store: true,
+      queryMocks: [mock],
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    store.dispatch(entityLoadingActions.success('12345', resultCVE));
+
+    const {baseElement} = render(<Detailspage id="12345" />);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    // Toolbar Icons
+    const links = baseElement.querySelectorAll('a');
+
+    expect(screen.getAllByTitle('Help: Results')[0]).toBeInTheDocument();
+    expect(links[0]).toHaveAttribute(
+      'href',
+      'test/en/reports.html#displaying-all-existing-results',
+    );
+
+    expect(screen.getAllByTitle('Results List')[0]).toBeInTheDocument();
+    expect(links[1]).toHaveAttribute('href', '/results');
+
+    expect(screen.getAllByTitle('Export Result as XML')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Add new Note')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Add new Override')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Create new Ticket')[0]).toBeInTheDocument();
+    expect(
+      screen.getAllByTitle('Corresponding Task (task 1)')[0],
+    ).toBeInTheDocument();
+    expect(screen.getAllByTitle('Corresponding Report')[0]).toBeInTheDocument();
+
+    // Header
+    expect(baseElement).toHaveTextContent('Result: CVE-2020-14870');
+    expect(baseElement).toHaveTextContent('ID:12345');
+    expect(baseElement).toHaveTextContent(
+      'Created:Sun, Jun 2, 2019 2:00 PM CEST',
+    );
+    expect(baseElement).toHaveTextContent(
+      'Modified:Mon, Jun 3, 2019 1:00 PM CEST',
+    );
+    expect(baseElement).toHaveTextContent('Owner:admin');
+
+    // Tabs
+    const tabs = screen.getAllByTestId('entities-tab-title');
+    expect(tabs[0]).toHaveTextContent('User Tags');
+
+    // Details
+    const heading = baseElement.querySelectorAll('h2');
+
+    expect(heading[1]).toHaveTextContent('Vulnerability');
+    expect(baseElement).toHaveTextContent('NameCVE-2020-14870');
+    expect(baseElement).toHaveTextContent('Severity6.8 (Medium)');
+    expect(baseElement).toHaveTextContent('QoD75 %');
+    expect(baseElement).toHaveTextContent('Host109.876.54.321');
+    expect(baseElement).toHaveTextContent('Location80/tcp');
+
+    expect(heading[2]).toHaveTextContent('Detection Result');
+    expect(baseElement).toHaveTextContent('This is a description');
+
+    expect(heading[3]).toHaveTextContent('Product Detection Result');
+    expect(baseElement).toHaveTextContent('Productcpe:/a:python:python:2.7.16');
+    expect(baseElement).toHaveTextContent(
+      'MethodCVE-2019-13404 (OID: CVE-2019-13404)',
+    );
+    expect(baseElement).toHaveTextContent(
+      'LogView details of product detection',
+    );
+
+    expect(heading[4]).toHaveTextContent('Detection Method');
+    expect(baseElement).toHaveTextContent('Details: ');
   });
 
   test('should render user tags tab', async () => {

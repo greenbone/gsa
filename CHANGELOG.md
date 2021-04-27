@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Adjust GSA for result object changes in hyperion [#2866](https://github.com/greenbone/gsa/pull/2866)
 - Adjust target queries to reflect changes in Hyperion [#2845](https://github.com/greenbone/gsa/pull/2845)
 - Implement targets listpage queries and mutations [#2830](https://github.com/greenbone/gsa/pull/2830)
 - Implement result detailspage queries [#2823](https://github.com/greenbone/gsa/pull/2823)
@@ -32,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Implement target detailspage queries and mutations [#2822](https://github.com/greenbone/gsa/pull/2822)
 - Refactor target component to use useReducer [#2812](https://github.com/greenbone/gsa/pull/2812)
 - Implement nvt listpage queries and mutations [#2798](https://github.com/greenbone/gsa/pull/2798)
+- Use graphql on override detailspage [#2776](https://github.com/greenbone/gsa/pull/2776)
 - Implement nvt detailspage queries and mutations [#2774](https://github.com/greenbone/gsa/pull/2774)
 - Applied Backend changed to scanconfigs and policies [#2783](https://github.com/greenbone/gsa/pull/2783)
 - Refactor credential dialog into function component [#2772](https://github.com/greenbone/gsa/pull/2772)

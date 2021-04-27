@@ -25,18 +25,29 @@ export const GET_RESULT = gql`
     result(id: $id) {
       id
       name
-      comment
       owner
       creationTime
       modificationTime
-      detectionResult {
+      type
+      overrides {
+        id
+        modificationTime
+        active
+        severity
+        newSeverity
+        text
+        endTime
+      }
+      originResult {
         id
         details {
           name
           value
         }
       }
-      reportId
+      report {
+        id
+      }
       task {
         id
         name
@@ -46,50 +57,54 @@ export const GET_RESULT = gql`
         id
         hostname
       }
-      port
-      nvt {
-        id
-        name
-        score
-        severities {
-          type
+      location
+      information {
+        ... on ResultCVE {
+          id
+          severity
+        }
+        ... on ResultNVT {
+          id
+          name
+          version
           score
-          vector
-        }
-        cveReferences {
-          id
-          type
-        }
-        bidReferences {
-          id
-          type
-        }
-        certReferences {
-          id
-          type
-        }
-        otherReferences {
-          id
-          type
-        }
-        tags {
-          cvssBaseVector
-          summary
-          insight
-          impact
-          detectionMethod
-          affected
-        }
-        solution {
-          type
-          method
-          description
+          severities {
+            type
+            score
+            vector
+          }
+          cveReferences {
+            id
+            type
+          }
+          bidReferences {
+            id
+            type
+          }
+          certReferences {
+            id
+            type
+          }
+          otherReferences {
+            id
+            type
+          }
+          tags {
+            cvssBaseVector
+            summary
+            insight
+            impact
+            detectionMethod
+            affected
+          }
+          solution {
+            type
+            method
+            description
+          }
         }
       }
-      scanNvtVersion
-      originalThreat
       originalSeverity
-      threat
       severity
       qod {
         value
