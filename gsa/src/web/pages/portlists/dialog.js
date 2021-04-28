@@ -58,7 +58,7 @@ const PortListsDialog = ({
   onTmpDeletePortRange,
   onSave,
 }) => {
-  const is_edit = isDefined(portList);
+  const isEdit = isDefined(portList);
 
   const newrangeicon = (
     <div>
@@ -109,7 +109,7 @@ const PortListsDialog = ({
               />
             </FormGroup>
 
-            {!is_edit && (
+            {!isEdit && (
               <FormGroup title={_('Port Ranges')} flex="column">
                 <Divider flex="column">
                   <Divider>
@@ -146,7 +146,7 @@ const PortListsDialog = ({
                 </Divider>
               </FormGroup>
             )}
-            {is_edit && (
+            {isEdit && (
               <Section title={_('Port Ranges')} extra={newrangeicon}>
                 {isDefined(portList) && (
                   <PortRangesTable
