@@ -22,7 +22,7 @@ import _ from 'gmp/locale';
 import {parseInt} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
+import {isEmpty, shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
 
@@ -219,10 +219,24 @@ const PortListComponent = ({
             comment,
           }).then(onSaved, onSaveError);
         }
+
+        let portRangeString;
+        let portRanges = [];
+
+        if (from_file) {
+          portRangeString = text;
+        } else {
+          portRangeString = port_range;
+        }
+
+        if (!isEmpty(portRangeString)) {
+          portRanges = portRangeString.split(',');
+        }
+
         return createPortList({
           name,
           comment,
-          portRange: from_file ? text : port_range,
+          portRanges,
         }).then(onCreated, onCreateError);
       })
       .then(() => closePortListDialog());
