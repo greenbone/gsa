@@ -203,10 +203,10 @@ const PortListComponent = ({
       ),
     ];
 
-    const {id, from_file, file, name, comment, port_range} = data;
+    const {id, fromFile, file, name, comment, portRange} = data;
     return Promise.all(promises)
       .then(() => {
-        if (from_file) {
+        if (fromFile) {
           return readFileToText(file);
         }
         return Promise.resolve();
@@ -223,10 +223,10 @@ const PortListComponent = ({
         let portRangeString;
         let portRanges = [];
 
-        if (from_file) {
+        if (fromFile) {
           portRangeString = text;
         } else {
-          portRangeString = port_range;
+          portRangeString = portRange;
         }
 
         if (!isEmpty(portRangeString)) {
@@ -371,9 +371,9 @@ const PortListComponent = ({
               comment={comment}
               id={id}
               name={name}
-              port_list={portList}
+              portList={portList}
               title={title}
-              port_ranges={portRanges}
+              portRanges={portRanges}
               onClose={handleClosePortListDialog}
               onNewPortRangeClick={openNewPortRangeDialog}
               onSave={handleSavePortList}

@@ -46,24 +46,24 @@ const NOT_FROM_FILE = NO_VALUE;
 
 const PortListsDialog = ({
   comment = '',
-  from_file = NO_VALUE,
+  fromFile = NO_VALUE,
   id,
   name = _('Unnamed'),
-  port_list,
-  port_range = 'T:1-5,7,9,U:1-3,5,7,9',
-  port_ranges = [],
+  portList,
+  portRange = 'T:1-5,7,9,U:1-3,5,7,9',
+  portRanges = [],
   title = _('New Port List'),
   onClose,
   onNewPortRangeClick,
   onTmpDeletePortRange,
   onSave,
 }) => {
-  const is_edit = isDefined(port_list);
+  const is_edit = isDefined(portList);
 
   const newrangeicon = (
     <div>
       <NewIcon
-        value={port_list}
+        value={portList}
         title={_('Add Port Range')}
         onClick={onNewPortRangeClick}
       />
@@ -73,9 +73,9 @@ const PortListsDialog = ({
   const data = {
     id,
     comment,
-    from_file,
+    fromFile,
     name,
-    port_range,
+    portRange,
   };
 
   return (
@@ -84,7 +84,7 @@ const PortListsDialog = ({
       onClose={onClose}
       onSave={onSave}
       defaultValues={data}
-      values={{port_ranges}}
+      values={{portRanges}}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -115,16 +115,16 @@ const PortListsDialog = ({
                   <Divider>
                     <Radio
                       title={_('Manual')}
-                      name="from_file"
+                      name="fromFile"
                       value={NOT_FROM_FILE}
                       onChange={onValueChange}
-                      checked={parseYesNo(state.from_file) !== FROM_FILE}
+                      checked={parseYesNo(state.fromFile) !== FROM_FILE}
                     />
                     <TextField
                       grow="1"
-                      name="port_range"
-                      value={state.port_range}
-                      disabled={parseYesNo(state.from_file) === FROM_FILE}
+                      name="portRange"
+                      value={state.portRange}
+                      disabled={parseYesNo(state.fromFile) === FROM_FILE}
                       onChange={onValueChange}
                       size="30"
                     />
@@ -132,14 +132,14 @@ const PortListsDialog = ({
                   <Divider>
                     <Radio
                       title={_('From file')}
-                      name="from_file"
+                      name="fromFile"
                       value={FROM_FILE}
                       onChange={onValueChange}
-                      checked={parseYesNo(state.from_file) === FROM_FILE}
+                      checked={parseYesNo(state.fromFile) === FROM_FILE}
                     />
                     <FileField
                       name="file"
-                      disabled={parseYesNo(state.from_file) !== FROM_FILE}
+                      disabled={parseYesNo(state.fromFile) !== FROM_FILE}
                       onChange={onValueChange}
                     />
                   </Divider>
@@ -148,9 +148,9 @@ const PortListsDialog = ({
             )}
             {is_edit && (
               <Section title={_('Port Ranges')} extra={newrangeicon}>
-                {isDefined(port_list) && (
+                {isDefined(portList) && (
                   <PortRangesTable
-                    portRanges={state.port_ranges}
+                    portRanges={state.portRanges}
                     onDeleteClick={onTmpDeletePortRange}
                   />
                 )}
@@ -165,12 +165,12 @@ const PortListsDialog = ({
 
 PortListsDialog.propTypes = {
   comment: PropTypes.string,
-  from_file: PropTypes.yesno,
+  fromFile: PropTypes.yesno,
   id: PropTypes.string,
   name: PropTypes.string,
-  port_list: PropTypes.model,
-  port_range: PropTypes.string,
-  port_ranges: PropTypes.array,
+  portList: PropTypes.model,
+  portRange: PropTypes.string,
+  portRanges: PropTypes.array,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onDeletePortRangeClick: PropTypes.func,
