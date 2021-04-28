@@ -244,15 +244,15 @@ const PortListComponent = ({
 
   const handleTmpAddPortRange = values => {
     const {portRanges} = state;
-    let {port_range_end, port_range_start, port_type} = values;
+    let {portRangeEnd, portRangeStart, portType} = values;
 
-    port_range_end = parseInt(port_range_end);
-    port_range_start = parseInt(port_range_start);
+    portRangeEnd = parseInt(portRangeEnd);
+    portRangeStart = parseInt(portRangeStart);
 
     handleInteraction();
 
     // reject port ranges with missing values
-    if (!port_range_start || !port_range_end) {
+    if (!portRangeStart || !portRangeEnd) {
       return Promise.reject(
         new Error(
           _('The port range needs numerical values for start and end!'),
@@ -261,7 +261,7 @@ const PortListComponent = ({
     }
 
     // reject port ranges with start value lower than end value
-    if (port_range_start > port_range_end) {
+    if (portRangeStart > portRangeEnd) {
       return Promise.reject(
         new Error(_('The end of the port range can not be below its start!')),
       );
@@ -273,14 +273,14 @@ const PortListComponent = ({
       const start = parseInt(range.start);
       const end = parseInt(range.end);
       if (
-        range.protocol_type === port_type &&
-        (port_range_start === start ||
-          port_range_start === end ||
-          (port_range_start > start && port_range_start < end) ||
-          port_range_end === start ||
-          port_range_end === end ||
-          (port_range_end > start && port_range_end < end) ||
-          (port_range_start < start && port_range_end > end))
+        range.protocol_type === portType &&
+        (portRangeStart === start ||
+          portRangeStart === end ||
+          (portRangeStart > start && portRangeStart < end) ||
+          portRangeEnd === start ||
+          portRangeEnd === end ||
+          (portRangeEnd > start && portRangeEnd < end) ||
+          (portRangeStart < start && portRangeEnd > end))
       ) {
         return Promise.reject(
           new Error(_('New port range overlaps with an existing one!')),
@@ -289,11 +289,11 @@ const PortListComponent = ({
     }
 
     const newRange = {
-      end: values.port_range_end,
+      end: values.portRangeEnd,
       entityType: 'portrange',
       id: values.id,
-      protocol_type: values.port_type,
-      start: values.port_range_start,
+      protocol_type: values.portType,
+      start: values.portRangeStart,
       isTmp: true,
     };
     // was this.created_port_ranges.push() therefore cannot be set directly
