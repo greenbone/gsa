@@ -54,7 +54,15 @@ export const GET_OVERRIDES = gql`
             id
             name
           }
+          owner
+          permissions {
+            name
+          }
           port
+          result {
+            id
+            name
+          }
           severity
           newSeverity
           task {
