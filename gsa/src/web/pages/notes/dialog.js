@@ -36,6 +36,7 @@ import {
   ACTIVE_YES_FOR_NEXT_VALUE,
   ACTIVE_NO_VALUE,
   RESULT_ANY,
+  RESULT_UUID,
 } from 'gmp/models/override';
 
 import DateTime from 'web/components/date/datetime';
@@ -347,8 +348,13 @@ const NoteDialog = ({
               <Radio
                 name="resultId"
                 title={_('Any')}
+<<<<<<< HEAD
                 checked={state.resultId === ''}
                 value=""
+=======
+                checked={state.result_id === RESULT_ANY}
+                value={RESULT_ANY}
+>>>>>>> 5ab684b5cc... Fix setting result UUID in notes dialog
                 onChange={onValueChange}
               />
               <Divider>
@@ -361,16 +367,26 @@ const NoteDialog = ({
                         })
                       : _('UUID')
                   }
+<<<<<<< HEAD
                   checked={state.resultId === '0'}
                   value="0"
+=======
+                  checked={state.result_id === RESULT_UUID}
+                  value={RESULT_UUID}
+>>>>>>> 5ab684b5cc... Fix setting result UUID in notes dialog
                   onChange={onValueChange}
                 />
                 {!fixed && (
                   <TextField
                     name="resultUuid"
                     size="34"
+<<<<<<< HEAD
                     disabled={state.resultId !== '0'}
                     value={state.resultId}
+=======
+                    disabled={state.result_id !== RESULT_UUID}
+                    value={state.result_uuid}
+>>>>>>> 5ab684b5cc... Fix setting result UUID in notes dialog
                     onChange={onValueChange}
                   />
                 )}
