@@ -91,6 +91,7 @@ class Result extends Model {
       copy.information = Nvt.fromElement(information);
     } else {
       copy.information = Cve.fromResultElement(information);
+      copy.name = isDefined(copy.name) ? copy.name : information.name;
     }
 
     delete copy.nvt;
