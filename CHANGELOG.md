@@ -71,6 +71,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
 - Fixed redirection of createNote on Note detailspage [#2777](https://github.com/greenbone/gsa/pull/2777)
 - Fixed ScanConfigs and Policies page after changes in [Hyperion](https://github.com/greenbone/hyperion/pull/15) [#2733](https://github.com/greenbone/gsa/pull/2733)
 - Fixed reload interval for pages using useEntityReloadInterval and useEntitiesReloadInterval hooks [#2716](https://github.com/greenbone/gsa/pull/2716)
