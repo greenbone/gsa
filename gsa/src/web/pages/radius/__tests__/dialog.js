@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-
+import userEvent from '@testing-library/user-event';
 import {render, fireEvent} from 'web/utils/testing';
 
 import Dialog from '../dialog';
@@ -91,7 +91,7 @@ describe('RADIUS dialog component tests', () => {
       <Dialog
         enable={true}
         radiushost="foo"
-        radiuskey="bar"
+        radiuskey="x"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -101,18 +101,18 @@ describe('RADIUS dialog component tests', () => {
     fireEvent.click(checkBox);
 
     const radiusHostTextField = getByTestId('radiushost-textfield');
-    fireEvent.change(radiusHostTextField, {target: {value: 'lorem'}});
+    userEvent.type(radiusHostTextField, 'lorem');
 
     const radiusKeyTextField = getByTestId('radiuskey-textfield');
-    fireEvent.change(radiusKeyTextField, {target: {value: 'ipsum'}});
+    userEvent.type(radiusKeyTextField, '{backspace}bar');
 
     const saveButton = getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      radiushost: 'lorem',
+      radiushost: 'foolorem',
       enable: false,
-      radiuskey: 'ipsum',
+      radiuskey: 'bar',
     });
   });
 });
