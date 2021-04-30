@@ -81,6 +81,10 @@ class ReportEntitiesContainer extends React.Component {
     return null;
   }
 
+  shouldComponentUpdate(nextProps) {
+    return nextProps.entities.length > 0; // Do not revert to empty table
+  }
+
   getRows() {
     const {filter, counts} = this.props;
     return getRows(filter, counts);
