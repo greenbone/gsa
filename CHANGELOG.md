@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
 
 ### Fixed
+- Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
+
 ### Removed
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
