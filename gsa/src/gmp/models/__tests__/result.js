@@ -105,6 +105,7 @@ describe('Result model tests', () => {
 
     expect(result.information.id).toEqual('CVE-1234');
     expect(result.information.name).toEqual('CVE-1234');
+    expect(result.name).toEqual('CVE-1234');
   });
 
   test('should parse severity', () => {
