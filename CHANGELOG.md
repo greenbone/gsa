@@ -102,11 +102,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04.1] - Unreleased
 
 ### Added
+- Added @testing-library/user-event as a dev-dependency [#2891](https://github.com/greenbone/gsa/pull/2891)
+
 ### Changed
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
 
 ### Fixed
+<<<<<<< HEAD
 - Fixed missing name for CVE results on result detailspage [#2892](https://github.com/greenbone/gsa/pull/2892)
+=======
+- Fix setting secret key in RADIUS dialog [#2891](https://github.com/greenbone/gsa/pull/2891)
+>>>>>>> a4b7561c6d... Update Changelog
 - Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
 
 ### Removed
