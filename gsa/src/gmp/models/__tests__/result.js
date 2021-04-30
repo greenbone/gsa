@@ -17,6 +17,7 @@
  */
 
 import Model from 'gmp/model';
+import Cve from 'gmp/models/cve';
 import Note from 'gmp/models/note';
 import Nvt from 'gmp/models/nvt';
 import Override from 'gmp/models/override';
@@ -25,7 +26,194 @@ import {testModel} from 'gmp/models/testing';
 
 testModel(Result, 'result');
 
-describe('Result model tests', () => {
+describe('Result model parseObject tests', () => {
+  test('should parse host object', () => {
+    const obj = {
+      host: {
+        ip: '123.456.789.10',
+        id: '123',
+        hostname: 'foo',
+      },
+    };
+    const obj2 = {
+      host: {
+        ip: '123.456.789.10',
+      },
+    };
+    const result = Result.fromObject(obj);
+    const result2 = Result.fromObject(obj2);
+    const res = {
+      name: '123.456.789.10',
+      id: '123',
+      hostname: 'foo',
+    };
+    const res2 = {
+      name: '123.456.789.10',
+      hostname: '',
+    };
+    expect(result.host).toEqual(res);
+    expect(result2.host).toEqual(res2);
+  });
+
+  test('should remove empty host id', () => {
+    const host = {
+      id: '',
+      ip: 'foo',
+      hostname: 'bar',
+    };
+    const result = Result.fromObject({host});
+
+    expect(result.host).toEqual({
+      name: 'foo',
+      hostname: 'bar',
+    });
+  });
+
+  test('should parse NVTs', () => {
+    const obj = {
+      type: 'NVT',
+      information: {
+        id: 'bar',
+      },
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.information).toBeInstanceOf(Nvt);
+    expect(result.information.id).toEqual('bar');
+  });
+
+  test('should parse CVEs', () => {
+    const obj = {
+      type: 'CVE',
+      information: {
+        id: 'CVE-123',
+        severity: 3.1,
+      },
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.information).toBeInstanceOf(Cve);
+    expect(result.information.id).toEqual('CVE-123');
+  });
+
+  test('should parse severity', () => {
+    const result = Result.fromObject({severity: '4.2'});
+    const result2 = Result.fromObject({});
+
+    expect(result.severity).toEqual(4.2);
+    expect(result2.severity).toBeUndefined();
+  });
+
+  test('should parse name/id to vulnerability', () => {
+    const obj = {
+      information: {
+        id: '42',
+      },
+    };
+    const result = Result.fromObject({name: 'foo'});
+    const result2 = Result.fromObject(obj);
+
+    expect(result.vulnerability).toEqual('foo');
+    expect(result2.vulnerability).toEqual('42');
+  });
+
+  test('should parse task', () => {
+    const result = Result.fromObject({task: {name: 'foo'}});
+
+    expect(result.task).toBeInstanceOf(Model);
+    expect(result.task.entityType).toEqual('task');
+  });
+
+  test('should parse origin result', () => {
+    const obj = {
+      originResult: {
+        id: '1337',
+        details: [
+          {
+            name: 'foo',
+            value: 'bar',
+          },
+          {
+            name: 'lorem',
+            value: 'ipsum',
+          },
+        ],
+      },
+    };
+    const res = {
+      id: '1337',
+      details: {
+        foo: 'bar',
+        lorem: 'ipsum',
+      },
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.originResult).toEqual(res);
+  });
+
+  test('should parse original severity', () => {
+    const result = Result.fromObject({originalSeverity: '4.2'});
+
+    expect(result.originalSeverity).toEqual(4.2);
+  });
+
+  test('should parse QoD', () => {
+    const obj = {
+      qod: {
+        type: 'foo',
+        value: '42.5',
+      },
+    };
+    const res = {
+      type: 'foo',
+      value: 42.5,
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.qod).toEqual(res);
+  });
+
+  test('should parse notes', () => {
+    const obj = {
+      notes: [{id: 'foo'}, {id: 'bar'}],
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.notes[0]).toBeInstanceOf(Note);
+    expect(result.notes[0].entityType).toEqual('note');
+    expect(result.notes[1]).toBeInstanceOf(Note);
+    expect(result.notes[1].entityType).toEqual('note');
+  });
+
+  test('should return empty array if no notes are given', () => {
+    const result = Result.fromObject({});
+
+    expect(result.notes).toEqual([]);
+  });
+
+  test('should parse overrides', () => {
+    const obj = {
+      overrides: [{id: 'over'}, {id: 'ride'}],
+    };
+    const result = Result.fromObject(obj);
+
+    expect(result.overrides[0]).toBeInstanceOf(Override);
+    expect(result.overrides[0].entityType).toEqual('override');
+    expect(result.overrides[1]).toBeInstanceOf(Override);
+    expect(result.overrides[1].entityType).toEqual('override');
+  });
+
+  test('should return empty array if no overrides are given', () => {
+    const result = Result.fromObject({});
+
+    expect(result.overrides).toEqual([]);
+  });
+
+  // ToDo: delta result
+});
+
+describe('Result model parseElement tests', () => {
   test('should parse host object', () => {
     const elem = {
       host: {

@@ -19,7 +19,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {getTranslatableAliveTest} from 'gmp/models/target';
+
+import {hasValue} from 'gmp/utils/identity';
 
 import Layout from 'web/components/layout/layout';
 import HorizontalSep from 'web/components/layout/horizontalsep';
@@ -42,17 +44,17 @@ const MAX_HOSTS_LISTINGS = 70;
 
 const TargetDetails = ({capabilities, entity, links = true}) => {
   const {
-    alive_tests,
-    esxi_credential,
-    exclude_hosts,
+    aliveTest,
+    esxiCredential,
+    excludeHosts,
     hosts,
-    max_hosts,
-    port_list,
-    reverse_lookup_only,
-    reverse_lookup_unify,
-    smb_credential,
-    snmp_credential,
-    ssh_credential,
+    hostCount,
+    portList,
+    reverseLookupOnly,
+    reverseLookupUnify,
+    smbCredential,
+    snmpCredential,
+    sshCredential,
     tasks,
     allowSimultaneousIPs,
   } = entity;
@@ -61,7 +63,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
     .slice(0, MAX_HOSTS_LISTINGS)
     .map(host => <span key={host}>{host}</span>);
 
-  const excludeHostsListing = exclude_hosts
+  const excludeHostsListing = excludeHosts
     .slice(0, MAX_HOSTS_LISTINGS)
     .map(host => <span key={host}>{host}</span>);
 
@@ -84,13 +86,13 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
               </TableData>
             </TableRow>
 
-            {exclude_hosts.length > 0 && (
+            {excludeHosts.length > 0 && (
               <TableRow>
                 <TableDataAlignTop>{_('Excluded')}</TableDataAlignTop>
                 <TableData>
                   <HorizontalSep separator="," wrap spacing="0">
                     {excludeHostsListing}
-                    {exclude_hosts.length > MAX_HOSTS_LISTINGS && '[...]'}
+                    {excludeHosts.length > MAX_HOSTS_LISTINGS && '[...]'}
                   </HorizontalSep>
                 </TableData>
               </TableRow>
@@ -98,7 +100,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
             <TableRow>
               <TableData>{_('Maximum Number of Hosts')}</TableData>
-              <TableData>{max_hosts}</TableData>
+              <TableData>{hostCount}</TableData>
             </TableRow>
 
             <TableRow>
@@ -108,25 +110,25 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
             <TableRow>
               <TableData>{_('Reverse Lookup Only')}</TableData>
-              <TableData>{renderYesNo(reverse_lookup_only)}</TableData>
+              <TableData>{renderYesNo(reverseLookupOnly)}</TableData>
             </TableRow>
 
             <TableRow>
               <TableData>{_('Reverse Lookup Unify')}</TableData>
-              <TableData>{renderYesNo(reverse_lookup_unify)}</TableData>
+              <TableData>{renderYesNo(reverseLookupUnify)}</TableData>
             </TableRow>
 
             <TableRow>
               <TableData>{_('Alive Test')}</TableData>
-              <TableData>{alive_tests}</TableData>
+              <TableData>{getTranslatableAliveTest(aliveTest)}</TableData>
             </TableRow>
 
             <TableRow>
               <TableData>{_('Port List')}</TableData>
               <TableData>
                 <span>
-                  <DetailsLink id={port_list.id} type="portlist">
-                    {port_list.name}
+                  <DetailsLink id={portList.id} type="portlist">
+                    {portList.name}
                   </DetailsLink>
                 </span>
               </TableData>
@@ -135,61 +137,61 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
         </InfoTable>
       </DetailsBlock>
 
-      {capabilities.mayAccess('credentials') &&
-        (isDefined(ssh_credential) ||
-          isDefined(snmp_credential) ||
-          isDefined(smb_credential) ||
-          isDefined(esxi_credential)) && (
+      {capabilities.mayAccess('credentials') && // querying for a nonexistent credential will always lead to the credential being defined, BUT the name and id being null
+        (hasValue(sshCredential?.id) ||
+          hasValue(snmpCredential?.id) ||
+          hasValue(smbCredential?.id) ||
+          hasValue(esxiCredential?.id)) && (
           <DetailsBlock title={_('Credentials')}>
             <InfoTable>
               <TableBody>
-                {isDefined(ssh_credential) && (
+                {hasValue(sshCredential?.id) && (
                   <TableRow>
                     <TableData>{_('SSH')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={ssh_credential.id} type="credential">
-                          {ssh_credential.name}
+                        <DetailsLink id={sshCredential.id} type="credential">
+                          {sshCredential.name}
                         </DetailsLink>
                       </span>
-                      {_(' on Port {{port}}', {port: ssh_credential.port})}
+                      {_(' on Port {{port}}', {port: sshCredential.port})}
                     </TableData>
                   </TableRow>
                 )}
 
-                {isDefined(smb_credential) && (
+                {hasValue(smbCredential?.id) && (
                   <TableRow>
                     <TableData>{_('SMB')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={smb_credential.id} type="credential">
-                          {smb_credential.name}
+                        <DetailsLink id={smbCredential.id} type="credential">
+                          {smbCredential.name}
                         </DetailsLink>
                       </span>
                     </TableData>
                   </TableRow>
                 )}
 
-                {isDefined(esxi_credential) && (
+                {hasValue(esxiCredential?.id) && (
                   <TableRow>
                     <TableData>{_('ESXi')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={esxi_credential.id} type="credential">
-                          {esxi_credential.name}
+                        <DetailsLink id={esxiCredential.id} type="credential">
+                          {esxiCredential.name}
                         </DetailsLink>
                       </span>
                     </TableData>
                   </TableRow>
                 )}
 
-                {isDefined(snmp_credential) && (
+                {hasValue(snmpCredential?.id) && (
                   <TableRow>
                     <TableData>{_('SNMP')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={snmp_credential.id} type="credential">
-                          {snmp_credential.name}
+                        <DetailsLink id={snmpCredential.id} type="credential">
+                          {snmpCredential.name}
                         </DetailsLink>
                       </span>
                     </TableData>
@@ -199,7 +201,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
             </InfoTable>
           </DetailsBlock>
         )}
-      {isDefined(tasks) && tasks.length > 0 && (
+      {hasValue(tasks) && tasks.length > 0 && (
         <DetailsBlock
           title={_('Tasks using this Target ({{count}})', {
             count: tasks.length,

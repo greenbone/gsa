@@ -24,7 +24,78 @@ import {testModel} from 'gmp/models/testing';
 
 testModel(Target, 'target');
 
-describe('Target model tests', () => {
+describe('Target model parseObject tests', () => {
+  test('should parse portList', () => {
+    const obj1 = {
+      portList: {
+        id: '123',
+      },
+    };
+    const obj2 = {
+      portList: {
+        id: null,
+      },
+    };
+    const target1 = Target.fromObject(obj1);
+    const target2 = Target.fromObject(obj2);
+    const target3 = Target.fromObject({});
+
+    expect(target1.portList).toBeInstanceOf(PortList);
+    expect(target1.portList.entityType).toEqual('portlist');
+    expect(target1.portList.id).toEqual('123');
+    expect(target2.portList).toBeUndefined();
+    expect(target3.portList).toBeUndefined();
+  });
+
+  test('should parse credentials', () => {
+    const target1 = Target.fromObject({smbCredential: {id: '123'}});
+    const target2 = Target.fromObject({smbCredential: {id: null}});
+    const target3 = Target.fromObject({});
+
+    expect(target1.smbCredential).toBeInstanceOf(Model);
+    expect(target1.smbCredential.entityType).toEqual('credential');
+    expect(target1.smbCredential.id).toEqual('123');
+    expect(target2.smbCredential).toBeUndefined();
+    expect(target3.smbCredential).toBeUndefined();
+  });
+
+  test('should parse allowSimultaneousIPs', () => {
+    const target = Target.fromObject({allowSimultaneousIPs: true});
+    const target2 = Target.fromObject({allowSimultaneousIPs: false});
+
+    expect(target.allowSimultaneousIPs).toEqual(1);
+    expect(target2.allowSimultaneousIPs).toEqual(0);
+  });
+
+  test('should parse reverseLookupOnly', () => {
+    const target = Target.fromObject({reverseLookupOnly: false});
+
+    expect(target.reverseLookupOnly).toEqual(0);
+  });
+
+  test('should parse reverse_lookup_unify', () => {
+    const target = Target.fromObject({reverseLookupUnify: true});
+
+    expect(target.reverseLookupUnify).toEqual(1);
+  });
+
+  test('should parse tasks', () => {
+    const obj = {
+      tasks: [
+        {
+          id: '123',
+        },
+      ],
+    };
+    const target = Target.fromObject(obj);
+
+    expect(target.tasks[0]).toBeInstanceOf(Model);
+    expect(target.tasks[0].entityType).toEqual('task');
+    expect(target.tasks[0].id).toEqual('123');
+  });
+});
+
+describe('Target model parseElement tests', () => {
   test('should parse port_list', () => {
     const elem1 = {
       port_list: {

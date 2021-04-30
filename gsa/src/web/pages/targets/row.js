@@ -126,19 +126,19 @@ const Row = ({
       onToggleDetailsClick={onToggleDetailsClick}
     />
     <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
-    <TableData>{entity.max_hosts}</TableData>
+    <TableData>{entity.hostCount}</TableData>
     <TableData>
       <span>
-        <DetailsLink type="portlist" id={entity.port_list.id} textOnly={!links}>
-          {entity.port_list.name}
+        <DetailsLink type="portlist" id={entity.portList.id} textOnly={!links}>
+          {entity.portList.name}
         </DetailsLink>
       </span>
     </TableData>
     <TableData flex="column" align="center">
-      <Cred cred={entity.ssh_credential} title={'SSH'} links={links} />
-      <Cred cred={entity.smb_credential} title={'SMB'} links={links} />
-      <Cred cred={entity.esxi_credential} title={'ESXi'} links={links} />
-      <Cred cred={entity.snmp_credential} title={'SNMP'} links={links} />
+      <Cred cred={entity.sshCredential} title={'SSH'} links={links} />
+      <Cred cred={entity.smbCredential} title={'SMB'} links={links} />
+      <Cred cred={entity.esxiCredential} title={'ESXi'} links={links} />
+      <Cred cred={entity.snmpCredential} title={'SNMP'} links={links} />
     </TableData>
     <ActionsComponent {...props} entity={entity} />
   </TableRow>

@@ -39,7 +39,8 @@ const parseTags = tags => {
     const splitted = tags.split('|');
     for (const t of splitted) {
       const [key, value] = split(t, '=', 1);
-      newTags[key] = value;
+      const newValue = isEmpty(value) ? undefined : value;
+      newTags[key] = newValue;
     }
   }
 
@@ -157,27 +158,30 @@ class Nvt extends Info {
       getFilteredRefs(refs, 'cert-bund'),
     );
 
-    if (isDefined(ret.solution)) {
-      ret.solution = {
-        type: ret.solution._type,
-        description: ret.solution.__text,
-        method: ret.solution._method,
-      };
-    }
-
     ret.xrefs = getFilteredUrlRefs(refs, 'url').concat(getOtherRefs(refs));
 
     delete ret.refs;
 
     if (isDefined(ret.severities)) {
       const {severity} = ret.severities;
-      ret.severity = parseSeverity(severity?.score / 10);
-      ret.severityOrigin = parseText(severity?.origin);
+      ret.severity = parseSeverity(severity.score);
+      ret.severityOrigin = parseText(severity.origin);
       ret.severityDate = parseDate(severity.date);
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
     }
     delete ret.cvss_base;
+
+    if (isDefined(ret.solution)) {
+      const solutionType = ret.solution._type;
+      const solutionText = ret.solution.__text;
+      const solutionMethod = ret.solution._method;
+      ret.solution = {
+        type: isEmpty(solutionType) ? undefined : solutionType,
+        description: isEmpty(solutionText) ? undefined : solutionText,
+        method: isEmpty(solutionMethod) ? undefined : solutionMethod,
+      };
+    }
 
     if (isDefined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {

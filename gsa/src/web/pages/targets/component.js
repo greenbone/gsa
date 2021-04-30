@@ -28,7 +28,7 @@ import {
 } from 'gmp/models/credential';
 import {ALL_FILTER} from 'gmp/models/filter';
 
-import {YES_VALUE} from 'gmp/parser';
+import {parseCsv, YES_VALUE} from 'gmp/parser';
 
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -125,20 +125,20 @@ const TargetComponent = props => {
           targetDialogVisible: true,
           id: entity.id,
           allowSimultaneousIPs: entity.allowSimultaneousIPs,
-          alive_tests: entity.alive_tests,
+          aliveTest: entity.aliveTest,
           comment: entity.comment,
-          esxi_credential_id: id_or__(entity.esxi_credential),
-          exclude_hosts: isDefined(entity.exclude_hosts)
-            ? entity.exclude_hosts.join(', ')
+          esxi_credential_id: id_or__(entity.esxiCredential),
+          exclude_hosts: isDefined(entity.excludeHosts)
+            ? entity.excludeHosts.join(', ')
             : '',
           hosts: entity.hosts.join(', '),
           in_use: entity.isInUse(),
           name: entity.name,
-          port: isDefined(entity.ssh_credential)
-            ? entity.ssh_credential.port
+          port: isDefined(entity.sshCredential)
+            ? entity.sshCredential.port
             : '22',
-          reverse_lookup_only: entity.reverse_lookup_only,
-          reverse_lookup_unify: entity.reverse_lookup_unify,
+          reverse_lookup_only: entity.reverseLookupOnly,
+          reverse_lookup_unify: entity.reverseLookupUnify,
           target_source: 'manual',
           target_exclude_source: 'manual',
           targetTitle: _('Edit Target {{name}}', entity),
@@ -149,9 +149,9 @@ const TargetComponent = props => {
       loadAll().then(() => {
         dispatchState(
           updateState({
-            smb_credential_id: id_or__(entity.smb_credential),
-            ssh_credential_id: id_or__(entity.ssh_credential),
-            port_list_id: id_or__(entity.port_list),
+            smb_credential_id: id_or__(entity.smbCredential),
+            ssh_credential_id: id_or__(entity.sshCredential),
+            port_list_id: id_or__(entity.portList),
           }),
         );
       });
@@ -168,7 +168,7 @@ const TargetComponent = props => {
         updateState({
           targetDialogVisible: true,
           id: undefined,
-          alive_tests: undefined,
+          aliveTest: undefined,
           allowSimultaneousIPs: YES_VALUE,
           comment: undefined,
           esxi_credential_id: undefined,
@@ -364,7 +364,7 @@ const TargetComponent = props => {
   };
 
   const handleSaveTarget = ({
-    alive_tests,
+    aliveTest,
     allowSimultaneousIPs,
     comment,
     esxi_credential_id,
@@ -400,21 +400,22 @@ const TargetComponent = props => {
             mutationData = {
               name,
               comment,
-              aliveTest: alive_tests.toLowerCase(),
+              aliveTest,
               id,
             };
           } else {
             mutationData = {
               id,
-              aliveTest: alive_tests,
+              aliveTest,
               allowSimultaneousIPs,
               comment,
               esxiCredentialId: esxi_credential_id,
-              hosts: target_source === 'file' ? fileText : hosts,
-              excludeHosts:
+              hosts: parseCsv(target_source === 'file' ? fileText : hosts),
+              excludeHosts: parseCsv(
                 target_exclude_source === 'file'
                   ? excludeFileText
                   : exclude_hosts,
+              ),
               name,
               sshCredentialPort: parseInt(port),
               portListId: port_list_id,
@@ -439,7 +440,7 @@ const TargetComponent = props => {
         const [fileText, excludeFileText] = text;
 
         const mutationData = {
-          aliveTest: alive_tests,
+          aliveTest,
           allowSimultaneousIPs,
           comment,
           esxiCredentialId: esxi_credential_id,
@@ -479,7 +480,7 @@ const TargetComponent = props => {
   } = props;
 
   const {
-    alive_tests,
+    aliveTest,
     allowSimultaneousIPs,
     comment,
     esxi_credential_id,
@@ -532,7 +533,7 @@ const TargetComponent = props => {
           })}
           {targetDialogVisible && (
             <TargetDialog
-              alive_tests={alive_tests}
+              aliveTest={aliveTest}
               allowSimultaneousIPs={allowSimultaneousIPs}
               comment={comment}
               // credential={credential} // this is undefined?

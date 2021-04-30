@@ -21,6 +21,7 @@ import React from 'react';
 import {_, _l} from 'gmp/locale/lang';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -72,7 +73,7 @@ const CveDetails = ({entity}) => {
                 <SeverityBar severity={severity} />
               </TableData>
             </TableRow>
-            {hasValue(cvssVector) && (
+            {!isEmpty(cvssVector) && (
               <TableRow>
                 <TableData>{_('Base Vector')}</TableData>
                 <TableData>

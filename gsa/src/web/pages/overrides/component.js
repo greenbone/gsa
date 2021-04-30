@@ -37,8 +37,8 @@ import {
   TASK_SELECTED,
 } from 'gmp/models/override';
 
-import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
+import {isDefined, hasValue} from 'gmp/utils/identity';
+import {isEmpty, shorten} from 'gmp/utils/string';
 import {hasId} from 'gmp/utils/id';
 
 import EntityComponent from 'web/entity/component';
@@ -101,14 +101,14 @@ const OverrideComponent = ({
         }
       }
 
-      let custom_severity = NO_VALUE;
-      let new_severity_from_list;
+      let customSeverity = NO_VALUE;
+      let newSeverityFromList;
       let newSeverity;
 
       if (SEVERITIES_LIST.includes(override.newSeverity)) {
-        new_severity_from_list = override.newSeverity;
+        newSeverityFromList = override.newSeverity;
       } else {
-        custom_severity = YES_VALUE;
+        customSeverity = YES_VALUE;
         newSeverity = override.newSeverity;
       }
 
@@ -119,22 +119,22 @@ const OverrideComponent = ({
           dialogVisible: true,
           id: override.id,
           active,
-          custom_severity,
+          customSeverity,
           hosts: hosts.length > 0 ? MANUAL : ANY,
-          hosts_manual: hosts.join(', '),
+          hostsManual: hosts.join(', '),
           newSeverity,
-          new_severity_from_list,
-          nvt_name: isDefined(nvt) ? nvt.name : undefined,
+          newSeverityFromList,
+          nvtName: isDefined(nvt) ? nvt.name : undefined,
           oid: isDefined(nvt) ? nvt.oid : undefined,
           override,
           port: isDefined(override.port) ? MANUAL : ANY,
-          port_manual: override.port,
-          result_id: hasId(result) ? RESULT_UUID : RESULT_ANY,
-          result_name: hasId(result) ? result.name : undefined,
-          result_uuid: hasId(result) ? result.id : undefined,
+          portManual: override.port,
+          resultId: hasId(result) ? RESULT_UUID : RESULT_ANY,
+          resultName: hasId(result) ? result.name : undefined,
+          resultUuid: hasId(result) ? result.id : undefined,
           severity: override.severity,
-          task_id: hasId(task) ? TASK_SELECTED : TASK_ANY,
-          task_uuid: hasId(task) ? task.id : undefined,
+          taskId: hasId(task) ? TASK_SELECTED : TASK_ANY,
+          taskUuid: hasId(task) ? task.id : undefined,
           text: override.text,
           title: _('Edit Override {{- name}}', {
             name: shorten(override.text, 20),
@@ -146,22 +146,22 @@ const OverrideComponent = ({
         updateState({
           dialogVisible: true,
           active: undefined,
-          custom_severity: undefined,
+          customSeverity: undefined,
           hosts: undefined,
-          hosts_manual: undefined,
+          hostsManual: undefined,
           id: undefined,
           newSeverity: undefined,
-          nvt_name: undefined,
+          nvtName: undefined,
           oid: undefined,
           override: undefined,
           port: undefined,
-          port_manual: undefined,
-          result_id: undefined,
-          result_name: undefined,
-          result_uuid: undefined,
+          portManual: undefined,
+          resultId: undefined,
+          resultName: undefined,
+          resultUuid: undefined,
           severity: undefined,
-          task_id: undefined,
-          task_uuid: undefined,
+          taskId: undefined,
+          taskUuid: undefined,
           text: undefined,
           title: undefined,
           ...initial,
@@ -193,11 +193,15 @@ const OverrideComponent = ({
       severity,
       active,
       days,
-      hosts_manual,
+      hostsManual,
       id,
-      port_manual,
-      result_uuid,
-      task_uuid,
+      newSeverity,
+      newSeverityFromList,
+      portManual,
+      resultId,
+      resultUuid,
+      taskId,
+      taskUuid,
       text,
     } = data;
 
@@ -210,12 +214,17 @@ const OverrideComponent = ({
 
     const modifyData = {
       id,
-      severity,
+      severity: severity === '' ? undefined : severity,
       daysActive,
-      hosts: hosts_manual.split(','),
-      port: port_manual,
-      taskId: task_uuid,
-      resultId: result_uuid,
+      hosts: hostsManual.split(','),
+      newSeverity: hasValue(newSeverity) ? newSeverity : newSeverityFromList,
+      port: portManual,
+      resultId:
+        resultId === RESULT_UUID && !isEmpty(resultUuid)
+          ? resultUuid
+          : undefined,
+      taskId:
+        taskId === TASK_SELECTED && !isEmpty(taskUuid) ? taskUuid : undefined,
       text,
     };
 
@@ -245,23 +254,23 @@ const OverrideComponent = ({
   const {
     dialogVisible,
     active,
-    custom_severity,
+    customSeverity,
     hosts,
-    hosts_manual,
+    hostsManual,
     id,
     newSeverity,
-    new_severity_from_list,
-    nvt_name,
+    newSeverityFromList,
+    nvtName,
     oid,
     override,
     port,
-    port_manual,
-    result_id,
-    result_name,
-    result_uuid,
+    portManual,
+    resultId,
+    resultName,
+    resultUuid,
     severity,
-    task_id,
-    task_uuid,
+    taskId,
+    taskUuid,
     text,
     title,
     ...initial
@@ -292,23 +301,23 @@ const OverrideComponent = ({
           {dialogVisible && (
             <OverrideDialog
               active={active}
-              custom_severity={custom_severity}
+              customSeverity={customSeverity}
               hosts={hosts}
-              hosts_manual={hosts_manual}
+              hostsManual={hostsManual}
               id={id}
               newSeverity={newSeverity}
-              new_severity_from_list={new_severity_from_list}
-              nvt_name={nvt_name}
+              newSeverityFromList={newSeverityFromList}
+              nvtName={nvtName}
               oid={oid}
               override={override}
               port={port}
-              port_manual={port_manual}
-              result_id={result_id}
-              result_name={result_name}
-              result_uuid={result_uuid}
+              portManual={portManual}
+              resultId={resultId}
+              resultName={resultName}
+              resultUuid={resultUuid}
               severity={severity}
-              task_id={task_id}
-              task_uuid={task_uuid}
+              taskId={taskId}
+              taskUuid={taskUuid}
               tasks={tasks}
               text={text}
               title={title}
@@ -325,7 +334,6 @@ const OverrideComponent = ({
 
 OverrideComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,

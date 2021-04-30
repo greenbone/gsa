@@ -15,7 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useHistory, useParams} from 'react-router-dom';
 
 import {useSelector} from 'react-redux';
 
@@ -23,7 +24,7 @@ import _ from 'gmp/locale';
 
 import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import Badge from 'web/components/badge/badge';
 
@@ -50,6 +51,11 @@ import DetailsLink from 'web/components/link/detailslink';
 import InnerLink from 'web/components/link/innerlink';
 import Link from 'web/components/link/link';
 
+import useReload from 'web/components/loading/useReload';
+
+import DialogNotification from 'web/components/notification/dialognotification';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
@@ -69,12 +75,13 @@ import Note from 'web/entity/note';
 import Override from 'web/entity/override';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
+import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 import withEntityContainer from 'web/entity/withEntityContainer';
 
+import {useGetResult} from 'web/graphql/results';
+
 import NoteComponent from 'web/pages/notes/component';
-
 import OverrideComponent from 'web/pages/overrides/component';
-
 import TicketComponent from 'web/pages/tickets/component';
 
 import {loadEntity, selector} from 'web/store/entities/results';
@@ -139,12 +146,12 @@ export const ToolBarIcons = ({
         )}
       </IconDivider>
       <IconDivider>
-        {capabilities.mayAccess('tasks') && isDefined(entity.task) && (
+        {capabilities.mayAccess('tasks') && hasValue(entity.task) && (
           <DetailsLink type="task" id={entity.task.id}>
             <TaskIcon title={_('Corresponding Task ({{name}})', entity.task)} />
           </DetailsLink>
         )}
-        {capabilities.mayAccess('reports') && isDefined(entity.report) && (
+        {capabilities.mayAccess('reports') && hasValue(entity?.report?.id) && (
           <DetailsLink type="report" id={entity.report.id}>
             <ReportIcon title={_('Corresponding Report')} />
           </DetailsLink>
@@ -218,7 +225,7 @@ const Details = ({entity, ...props}) => {
                   <TableData>{_('Host')}</TableData>
                   <TableData>
                     <span>
-                      {isDefined(host.id) ? (
+                      {hasValue(host.id) ? (
                         <DetailsLink type="host" id={host.id}>
                           {host.name}
                         </DetailsLink>
@@ -230,7 +237,7 @@ const Details = ({entity, ...props}) => {
                 </TableRow>
                 <TableRow>
                   <TableData>{_('Location')}</TableData>
-                  <TableData>{entity.port}</TableData>
+                  <TableData>{entity.location}</TableData>
                 </TableRow>
               </TableBody>
             </InfoTable>
@@ -241,7 +248,7 @@ const Details = ({entity, ...props}) => {
           <DetailsBlock title={_('Tags')}>
             <Divider>
               {userTags.map(tag => {
-                const valueString = isDefined(tag.value) ? '' : '=' + tag.value;
+                const valueString = hasValue(tag.value) ? '' : '=' + tag.value;
                 return (
                   <DetailsLink key={tag.id} id={tag.id} type="tag">
                     {tag.name + valueString}
@@ -282,9 +289,18 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({entity, onChanged, onDownloaded, onError, ...props}) => {
+const Page = ({onDownloaded}) => {
+  // Page methods
+  const {id} = useParams();
+  const history = useHistory();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
   const gmp = useGmp();
-  const [, renewSession] = useUserSessionTimeout();
 
   const userDefaultsSelector = useSelector(getUserSettingsDefaults);
   const username = useSelector(getUsername);
@@ -293,15 +309,46 @@ const Page = ({entity, onChanged, onDownloaded, onError, ...props}) => {
     'detailsexportfilename',
   );
 
-  const handleDownload = result => {
+  // Load result related entities
+  const {
+    result,
+    refetch: refetchResult,
+    loading,
+    error: entityError,
+  } = useGetResult(id);
+
+  // Timeout and reload
+  const timeoutFunc = useEntityReloadInterval(result);
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetchResult,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if result is available and no timer is running yet
+    if (hasValue(result) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [result, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
+
+  const handleResultDownload = exportedResult => {
     return gmp.result
-      .export(result)
+      .export(exportedResult)
       .then(response => {
-        const {creationTime, entityType, id, modificationTime, name} = result;
+        const {
+          creationTime,
+          entityType,
+          modificationTime,
+          name,
+        } = exportedResult;
         const filename = generateFilename({
           creationTime: creationTime,
           fileNameFormat: detailsExportFileName,
-          id: id,
+          id: exportedResult.id,
           modificationTime,
           resourceName: name,
           resourceType: entityType,
@@ -309,84 +356,101 @@ const Page = ({entity, onChanged, onDownloaded, onError, ...props}) => {
         });
         return {filename, data: response.data};
       })
-      .then(onDownloaded, onError);
+      .then(onDownloaded, showError);
   };
 
-  const openDialog = (result = {}, createfunc) => {
-    const {nvt = {}, task = {}, host = {}} = result;
+  const openDialog = (resultEntity = {}, createfunc) => {
+    const {nvt = {}, task = {}, host = {}} = resultEntity;
     createfunc({
       fixed: true,
-      oid: nvt.oid,
-      nvt_name: nvt.name,
-      task_id: TASK_SELECTED,
-      task_name: task.name,
-      result_id: RESULT_ANY,
-      task_uuid: task.id,
-      result_uuid: result.id,
-      result_name: result.name,
-      severity: result.original_severity > 0 ? 0.1 : result.original_severity,
+      nvtId: nvt.id,
+      nvtName: nvt.name,
+      taskId: TASK_SELECTED,
+      taskName: task.name,
+      resultId: RESULT_ANY,
+      taskUuid: task.id,
+      resultUuid: resultEntity.id,
+      resultName: resultEntity.name,
+      severity:
+        resultEntity.originalSeverity > 0 ? 0.1 : resultEntity.originalSeverity,
       hosts: MANUAL,
-      hosts_manual: host.name,
+      hostsManual: host.name,
       port: MANUAL,
-      port_manual: result.port,
+      portManual: resultEntity.port,
     });
   };
 
   return (
-    <NoteComponent onCreated={onChanged} onInteraction={renewSession}>
+    <NoteComponent
+      onCreated={refetchResult}
+      onInteraction={renewSessionTimeout}
+    >
       {({create: createnote}) => (
-        <OverrideComponent onCreated={onChanged} onInteraction={renewSession}>
+        <OverrideComponent
+          onCreated={refetchResult}
+          onInteraction={renewSessionTimeout}
+        >
           {({create: createoverride}) => (
             <TicketComponent
-              onCreated={goto_details('ticket', props)}
-              onInteraction={renewSession}
+              onCreated={goto_details('ticket', {history})}
+              onInteraction={renewSessionTimeout}
             >
               {({createFromResult: createticket}) => (
                 <EntityPage
-                  {...props}
-                  entity={entity}
+                  entity={result}
+                  entityError={entityError}
+                  entityType={'result'}
+                  isLoading={loading}
                   sectionIcon={<ResultIcon size="large" />}
                   title={_('Result')}
                   toolBarIcons={ToolBarIcons}
-                  onInteraction={renewSession}
-                  onNoteCreateClick={result => openDialog(result, createnote)}
-                  onOverrideCreateClick={result =>
-                    openDialog(result, createoverride)
+                  onInteraction={renewSessionTimeout}
+                  onNoteCreateClick={dialogResult =>
+                    openDialog(dialogResult, createnote)
                   }
-                  onResultDownloadClick={handleDownload}
+                  onOverrideCreateClick={dialogResult =>
+                    openDialog(dialogResult, createoverride)
+                  }
+                  onResultDownloadClick={handleResultDownload}
                   onTicketCreateClick={createticket}
                 >
                   {({activeTab = 0, onActivateTab}) => (
-                    <Layout grow="1" flex="column">
-                      <TabLayout grow="1" align={['start', 'end']}>
-                        <TabList
-                          active={activeTab}
-                          align={['start', 'stretch']}
-                          onActivateTab={onActivateTab}
-                        >
-                          <Tab>{_('Information')}</Tab>
-                          <EntitiesTab entities={entity.userTags}>
-                            {_('User Tags')}
-                          </EntitiesTab>
-                        </TabList>
-                      </TabLayout>
+                    <React.Fragment>
+                      <Layout grow="1" flex="column">
+                        <TabLayout grow="1" align={['start', 'end']}>
+                          <TabList
+                            active={activeTab}
+                            align={['start', 'stretch']}
+                            onActivateTab={onActivateTab}
+                          >
+                            <Tab>{_('Information')}</Tab>
+                            <EntitiesTab entities={result.userTags}>
+                              {_('User Tags')}
+                            </EntitiesTab>
+                          </TabList>
+                        </TabLayout>
 
-                      <Tabs active={activeTab}>
-                        <TabPanels>
-                          <TabPanel>
-                            <Details entity={entity} />
-                          </TabPanel>
-                          <TabPanel>
-                            <EntityTags
-                              entity={entity}
-                              onChanged={onChanged}
-                              onError={onError}
-                              onInteraction={renewSession}
-                            />
-                          </TabPanel>
-                        </TabPanels>
-                      </Tabs>
-                    </Layout>
+                        <Tabs active={activeTab}>
+                          <TabPanels>
+                            <TabPanel>
+                              <Details entity={result} />
+                            </TabPanel>
+                            <TabPanel>
+                              <EntityTags
+                                entity={result}
+                                onChanged={() => refetchResult()}
+                                onError={showError}
+                                onInteraction={renewSessionTimeout}
+                              />
+                            </TabPanel>
+                          </TabPanels>
+                        </Tabs>
+                      </Layout>
+                      <DialogNotification
+                        {...notificationDialogState}
+                        onCloseClick={closeNotificationDialog}
+                      />
+                    </React.Fragment>
                   )}
                 </EntityPage>
               )}

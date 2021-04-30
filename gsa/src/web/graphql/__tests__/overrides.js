@@ -93,9 +93,8 @@ const CreateModifyOverrideComponent = () => {
   const [createOverride] = useCreateOverride();
   const [modifyOverride] = useModifyOverride();
 
-  const handleCreateResult = resp => {
-    const {data} = resp;
-    setNotification('Override created with id ' + data.createOverride.id + '.');
+  const handleCreateResult = id => {
+    setNotification(`Override created with id ${id}.`);
   };
 
   const handleModifyResult = resp => {
@@ -295,7 +294,7 @@ describe('useLazyGetOverrides tests', () => {
 });
 
 describe('Override mutation tests', () => {
-  test('should create a override', async () => {
+  test('should create an override', async () => {
     const [
       createOverrideMock,
       createOverrideResult,
@@ -316,7 +315,7 @@ describe('Override mutation tests', () => {
     );
   });
 
-  test('should modify a override', async () => {
+  test('should modify an override', async () => {
     const [
       modifyOverrideMock,
       modifyOverrideResult,
@@ -473,7 +472,7 @@ describe('useGetOverride tests', () => {
     expect(screen.getByTestId('owner')).toHaveTextContent('admin');
     expect(screen.getByTestId('resultId')).toHaveTextContent('1337');
     expect(screen.getByTestId('resultName')).toHaveTextContent('result name');
-    expect(screen.getByTestId('port')).toHaveTextContent('666/tcp');
+    expect(screen.getByTestId('port')).toHaveTextContent('66/tcp');
     expect(screen.getByTestId('severity')).toHaveTextContent('5.0');
     expect(screen.getByTestId('taskId')).toHaveTextContent('42');
     expect(screen.getByTestId('taskName')).toHaveTextContent('task x');

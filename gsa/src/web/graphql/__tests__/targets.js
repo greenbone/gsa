@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+/* eslint-disable react/prop-types */
 
 import React, {useState} from 'react';
 
@@ -31,9 +32,23 @@ import {
   useModifyTarget,
   CREATE_TARGET,
   MODIFY_TARGET,
+  useGetTarget,
+  useCloneTarget,
+  useExportTargetsByIds,
+  useDeleteTargetsByIds,
+  useDeleteTargetsByFilter,
+  useExportTargetsByFilter,
 } from '../targets';
 
-import {createGetTargetsQueryMock} from '../__mocks__/targets';
+import {
+  createCloneTargetQueryMock,
+  createDeleteTargetsByFilterQueryMock,
+  createDeleteTargetsByIdsQueryMock,
+  createExportTargetsByFilterQueryMock,
+  createExportTargetsByIdsQueryMock,
+  createGetTargetQueryMock,
+  createGetTargetsQueryMock,
+} from '../__mocks__/targets';
 
 const createTargetInput = {
   name: 'foo',
@@ -222,5 +237,178 @@ describe('useLazyGetTargets tests', () => {
     expect(screen.getByTestId('first')).toHaveTextContent(1);
     expect(screen.getByTestId('limit')).toHaveTextContent(10);
     expect(screen.getByTestId('length')).toHaveTextContent(2);
+  });
+});
+
+const GetTargetComponent = ({id}) => {
+  const {loading, target, error} = useGetTarget(id);
+  if (loading) {
+    return <span data-testid="loading">Loading</span>;
+  }
+  return (
+    <div>
+      {error && <div data-testid="error">{error.message}</div>}
+      {target && (
+        <div data-testid="target">
+          <span data-testid="id">{target.id}</span>
+          <span data-testid="name">{target.name}</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+describe('useGetTarget tests', () => {
+  test('should load target', async () => {
+    const [queryMock, resultFunc] = createGetTargetQueryMock();
+
+    const {render} = rendererWith({queryMocks: [queryMock]});
+
+    render(<GetTargetComponent id="159" />);
+
+    expect(screen.queryByTestId('loading')).toBeInTheDocument();
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('target')).toBeInTheDocument();
+
+    expect(screen.getByTestId('id')).toHaveTextContent('159');
+    expect(screen.getByTestId('name')).toHaveTextContent('target 1');
+  });
+});
+
+const DeleteTargetsByIdsComponent = () => {
+  const [deleteTargetsByIds] = useDeleteTargetsByIds();
+  return (
+    <button
+      data-testid="bulk-delete"
+      onClick={() => deleteTargetsByIds(['foo', 'bar'])}
+    />
+  );
+};
+
+describe('useDeleteTargetsByIds tests', () => {
+  test('should delete a list of targets after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteTargetsByIdsQueryMock([
+      'foo',
+      'bar',
+    ]);
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteTargetsByIdsComponent />);
+    const button = screen.getByTestId('bulk-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportTargetsByIdsComponent = () => {
+  const exportTargetsByIds = useExportTargetsByIds();
+  return (
+    <button
+      data-testid="bulk-export"
+      onClick={() => exportTargetsByIds(['159'])}
+    />
+  );
+};
+
+describe('useExportTargetsByIds tests', () => {
+  test('should export a list of targets after user interaction', async () => {
+    const [mock, resultFunc] = createExportTargetsByIdsQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportTargetsByIdsComponent />);
+    const button = screen.getByTestId('bulk-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const CloneTargetComponent = () => {
+  const [cloneTarget, {id: targetId}] = useCloneTarget();
+  return (
+    <div>
+      {targetId && <span data-testid="cloned-target">{targetId}</span>}
+      <button data-testid="clone" onClick={() => cloneTarget('159')} />
+    </div>
+  );
+};
+
+describe('useCloneTarget tests', () => {
+  test('should clone a target after user interaction', async () => {
+    const [mock, resultFunc] = createCloneTargetQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<CloneTargetComponent />);
+
+    const button = screen.getByTestId('clone');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    expect(screen.getByTestId('cloned-target')).toHaveTextContent('bar');
+  });
+});
+
+const DeleteTargetsByFilterComponent = () => {
+  const [deleteTargetsByFilter] = useDeleteTargetsByFilter();
+  return (
+    <button
+      data-testid="filter-delete"
+      onClick={() => deleteTargetsByFilter('foo')}
+    />
+  );
+};
+
+describe('useDeleteTargetsByFilter tests', () => {
+  test('should delete a list of targets by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createDeleteTargetsByFilterQueryMock('foo');
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<DeleteTargetsByFilterComponent />);
+    const button = screen.getByTestId('filter-delete');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+  });
+});
+
+const ExportTargetsByFilterComponent = () => {
+  const exportTargetsByFilter = useExportTargetsByFilter();
+  return (
+    <button
+      data-testid="filter-export"
+      onClick={() => exportTargetsByFilter('foo')}
+    />
+  );
+};
+
+describe('useExportTargetsByFilter tests', () => {
+  test('should export a list of targets by filter string after user interaction', async () => {
+    const [mock, resultFunc] = createExportTargetsByFilterQueryMock();
+    const {render} = rendererWith({queryMocks: [mock]});
+
+    render(<ExportTargetsByFilterComponent />);
+    const button = screen.getByTestId('filter-export');
+    fireEvent.click(button);
+
+    await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
   });
 });

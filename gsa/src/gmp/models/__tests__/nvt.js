@@ -66,6 +66,7 @@ describe('nvt Model tests', () => {
     const nvt1 = Nvt.fromElement({tags: 'bv=/A:P|st=vf'});
     const nvt2 = Nvt.fromElement({});
     const nvt3 = Nvt.fromElement({nvt: {tags: 'bv=/A:P|st=vf'}});
+    const nvt4 = Nvt.fromElement({nvt: {tags: 'bv='}});
     const res = {
       bv: '/A:P',
       st: 'vf',
@@ -74,6 +75,7 @@ describe('nvt Model tests', () => {
     expect(nvt1.tags).toEqual(res);
     expect(nvt2.tags).toEqual({});
     expect(nvt3.tags).toEqual(res);
+    expect(nvt4.tags.bv).toBeUndefined();
   });
 
   test('should parse refs', () => {
@@ -159,27 +161,27 @@ describe('nvt Model tests', () => {
     const nvt1 = Nvt.fromElement({
       severities: {
         severity: {
-          score: 94,
+          score: 9.4,
           origin: 'Vendor',
           date: '2021-03-10T06:40:13Z',
         },
       },
-      cvss_base: '6.6',
+      score: '6.6',
     });
     const nvt2 = Nvt.fromElement({
       severities: {
         severity: {
-          score: 74,
+          score: 7.4,
           origin: 'Greenbone',
           date: '2020-03-10T06:40:13Z',
         },
       },
-      cvss_base: '',
+      score: '',
     });
     const nvt3 = Nvt.fromElement({
       severities: {
         severity: {
-          score: 10,
+          score: 1.0,
           origin: '',
         },
       },
@@ -317,6 +319,75 @@ describe('nvt Model tests', () => {
     expect(nvt.solution.method).toEqual('bar');
     expect(nvt.solution.description).toEqual('Some description');
     expect(nvt.solution.lorem).toBeUndefined();
+  });
+
+  test('should set correct solution information for log NVTs', () => {
+    const nvt1 = Nvt.fromElement({
+      solution: {
+        _type: 'foo',
+      },
+      severities: {
+        severity: {
+          score: 0,
+        },
+      },
+    });
+    const res1 = {
+      type: 'foo',
+      description: undefined,
+      method: undefined,
+    };
+    const nvt2 = Nvt.fromElement({
+      solution: {
+        __text: 'bar',
+      },
+      severities: {
+        severity: {
+          score: 0,
+        },
+      },
+    });
+    const res2 = {
+      type: undefined,
+      description: 'bar',
+      method: undefined,
+    };
+    const nvt3 = Nvt.fromElement({
+      solution: {
+        _method: 'baz',
+      },
+      severities: {
+        severity: {
+          score: 0,
+        },
+      },
+    });
+    const res3 = {
+      type: undefined,
+      description: undefined,
+      method: 'baz',
+    };
+    const nvt4 = Nvt.fromElement({
+      solution: {
+        _type: '',
+        __text: 'foo',
+      },
+      severities: {
+        severity: {
+          score: 0,
+        },
+      },
+    });
+    const res4 = {
+      type: undefined,
+      description: 'foo',
+      method: undefined,
+    };
+
+    expect(nvt1.solution).toEqual(res1);
+    expect(nvt2.solution).toEqual(res2);
+    expect(nvt3.solution).toEqual(res3);
+    expect(nvt4.solution).toEqual(res4);
   });
 });
 

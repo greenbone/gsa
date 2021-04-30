@@ -39,10 +39,14 @@ class Cve extends Info {
     } else if (hasValue(ret.cvssV2Vector)) {
       ret.vector = ret.cvssV2Vector;
     } else {
-      ret.vector = null;
+      ret.vector = undefined;
     }
 
-    ret.severity = parseSeverity(ret.score / 10);
+    ret.severity = parseSeverity(ret.score);
+
+    if (!hasValue(ret.refs)) {
+      ret.refs = [];
+    }
 
     return ret;
   }
@@ -54,9 +58,7 @@ class Cve extends Info {
       ret.updateTime = parseDate(ret.update_time);
       delete ret.update_time;
     }
-    // divide by ten because we now use integer 0-100 in cves
-    ret.severity = parseSeverity(ret.score / 10);
-    delete ret.cvss;
+    ret.severity = parseSeverity(ret.severity);
 
     if (isDefined(ret.nvts)) {
       ret.nvtRefs = map(ret.nvts.nvt, nvt => {
