@@ -34,12 +34,12 @@ export const TARGET_CREDENTIAL_NAMES = [
   'esxi_credential',
 ];
 
-export const HYPERION_TARGET_CREDENTIAL_NAMES = [
-  'smbCredential',
-  'snmpCredential',
-  'sshCredential',
-  'esxiCredential',
-];
+export const HYPERION_TARGET_CREDENTIAL_NAMES = {
+  smbCredential: 'smb',
+  snmpCredential: 'snmp',
+  sshCredential: 'ssh',
+  esxiCredential: 'esxi',
+};
 
 export const ALIVE_TESTS = {
   SCAN_CONFIG_DEFAULT: _l('Scan Config Default'),
@@ -109,13 +109,17 @@ class Target extends Model {
       delete ret.portList;
     }
 
-    for (const name of HYPERION_TARGET_CREDENTIAL_NAMES) {
-      const cred = ret[name];
-      if (hasValue(cred) && hasValue(cred.id)) {
-        ret[name] = parseModelFromObject(cred, 'credential');
-      } else {
-        delete ret[name];
+    if (hasValue(ret.credentials)) {
+      for (const key of Object.keys(HYPERION_TARGET_CREDENTIAL_NAMES)) {
+        const cred = ret.credentials[HYPERION_TARGET_CREDENTIAL_NAMES[key]];
+        if (hasValue(cred) && hasValue(cred.id)) {
+          ret[key] = parseModelFromObject(cred, 'credential');
+        } else {
+          delete ret[key];
+        }
       }
+    } else {
+      delete ret.credentials;
     }
 
     ret.reverseLookupOnly = parseYesNo(object.reverseLookupOnly);

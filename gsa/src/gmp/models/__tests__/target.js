@@ -48,8 +48,8 @@ describe('Target model parseObject tests', () => {
   });
 
   test('should parse credentials', () => {
-    const target1 = Target.fromObject({smbCredential: {id: '123'}});
-    const target2 = Target.fromObject({smbCredential: {id: null}});
+    const target1 = Target.fromObject({credentials: {smb: {id: '123'}}});
+    const target2 = Target.fromObject({credentials: {smb: {id: null}}});
     const target3 = Target.fromObject({});
 
     expect(target1.smbCredential).toBeInstanceOf(Model);
