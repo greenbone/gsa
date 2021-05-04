@@ -120,22 +120,22 @@ const TargetDialog = ({
   capabilities,
   comment = '',
   credentials = [],
-  esxi_credential_id = UNSET_VALUE,
-  exclude_hosts = '',
+  esxiCredentialId = UNSET_VALUE,
+  excludeHosts = '',
   hosts = '',
-  hosts_count,
-  in_use = false,
+  hostsCount,
+  inUse = false,
   name = _('Unnamed'),
   port = DEFAULT_PORT,
-  port_list_id = DEFAULT_PORT_LIST_ID,
-  port_lists = DEFAULT_PORT_LISTS,
-  reverse_lookup_only = NO_VALUE,
-  reverse_lookup_unify = NO_VALUE,
-  smb_credential_id = UNSET_VALUE,
-  snmp_credential_id = UNSET_VALUE,
-  ssh_credential_id = UNSET_VALUE,
-  target_source = 'manual',
-  target_exclude_source = 'manual',
+  portListId = DEFAULT_PORT_LIST_ID,
+  portLists = DEFAULT_PORT_LISTS,
+  reverseLookupOnly = NO_VALUE,
+  reverseLookupUnify = NO_VALUE,
+  smbCredentialId = UNSET_VALUE,
+  snmpCredentialId = UNSET_VALUE,
+  sshCredentialId = UNSET_VALUE,
+  targetSource = 'manual',
+  targetExcludeSource = 'manual',
   title = _('New Target'),
   onClose,
   onNewCredentialsClick,
@@ -148,11 +148,11 @@ const TargetDialog = ({
   onSnmpCredentialChange,
   ...initial
 }) => {
-  const ssh_credentials = credentials.filter(ssh_credential_filter);
-  const up_credentials = credentials.filter(
+  const sshCredentials = credentials.filter(ssh_credential_filter);
+  const upCredentials = credentials.filter(
     value => value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
   );
-  const snmp_credentials = credentials.filter(snmp_credential_filter);
+  const snmpCredentials = credentials.filter(snmp_credential_filter);
 
   const uncontrolledValues = {
     ...initial,
@@ -160,23 +160,23 @@ const TargetDialog = ({
     comment,
     name,
     port,
-    exclude_hosts,
+    excludeHosts,
     hosts,
-    hosts_count,
-    in_use,
-    reverse_lookup_only,
-    reverse_lookup_unify,
-    target_source,
-    target_exclude_source,
+    hostsCount,
+    inUse,
+    reverseLookupOnly,
+    reverseLookupUnify,
+    targetSource,
+    targetExcludeSource,
     allowSimultaneousIPs,
   };
 
   const controlledValues = {
-    port_list_id,
-    esxi_credential_id,
-    smb_credential_id,
-    snmp_credential_id,
-    ssh_credential_id,
+    portListId,
+    esxiCredentialId,
+    smbCredentialId,
+    snmpCredentialId,
+    sshCredentialId,
   };
 
   return (
@@ -214,15 +214,15 @@ const TargetDialog = ({
                 <Divider>
                   <Radio
                     title={_('Manual')}
-                    name="target_source"
-                    disabled={in_use}
-                    checked={state.target_source === 'manual'}
+                    name="targetSource"
+                    disabled={inUse}
+                    checked={state.targetSource === 'manual'}
                     value="manual"
                     onChange={onValueChange}
                   />
                   <TextField
                     grow="1"
-                    disabled={in_use || state.target_source !== 'manual'}
+                    disabled={inUse || state.targetSource !== 'manual'}
                     name="hosts"
                     value={state.hosts}
                     onChange={onValueChange}
@@ -232,29 +232,29 @@ const TargetDialog = ({
                 <Divider>
                   <Radio
                     title={_('From file')}
-                    name="target_source"
-                    disabled={in_use}
-                    checked={state.target_source === 'file'}
+                    name="targetSource"
+                    disabled={inUse}
+                    checked={state.targetSource === 'file'}
                     value="file"
                     onChange={onValueChange}
                   />
                   <FileField
                     name="file"
-                    disabled={in_use || state.target_source !== 'file'}
+                    disabled={inUse || state.targetSource !== 'file'}
                     onChange={onValueChange}
                   />
                 </Divider>
               </Divider>
 
-              {state.hosts_count && (
+              {state.hostsCount && (
                 <Layout>
                   <Radio
                     title={_('From host assets ({{count}} hosts)', {
-                      count: state.hosts_count,
+                      count: state.hostsCount,
                     })}
-                    name="target_source"
-                    disabled={in_use}
-                    checked={state.target_source === 'asset_hosts'}
+                    name="targetSource"
+                    disabled={inUse}
+                    checked={state.targetSource === 'asset_hosts'}
                     value="asset_hosts"
                     onChange={onValueChange}
                   />
@@ -267,19 +267,17 @@ const TargetDialog = ({
                 <Divider>
                   <Radio
                     title={_('Manual')}
-                    name="target_exclude_source"
-                    disabled={in_use}
-                    checked={state.target_exclude_source === 'manual'}
+                    name="targetExcludeSource"
+                    disabled={inUse}
+                    checked={state.targetExcludeSource === 'manual'}
                     value="manual"
                     onChange={onValueChange}
                   />
                   <TextField
                     grow="1"
-                    disabled={
-                      in_use || state.target_exclude_source !== 'manual'
-                    }
-                    name="exclude_hosts"
-                    value={state.exclude_hosts}
+                    disabled={inUse || state.targetExcludeSource !== 'manual'}
+                    name="excludeHosts"
+                    value={state.excludeHosts}
                     onChange={onValueChange}
                   />
                 </Divider>
@@ -287,15 +285,15 @@ const TargetDialog = ({
                 <Divider>
                   <Radio
                     title={_('From file')}
-                    name="target_exclude_source"
-                    disabled={in_use}
-                    checked={state.target_exclude_source === 'file'}
+                    name="targetExcludeSource"
+                    disabled={inUse}
+                    checked={state.targetExcludeSource === 'file'}
                     value="file"
                     onChange={onValueChange}
                   />
                   <FileField
-                    name="exclude_file"
-                    disabled={in_use || state.target_exclude_source !== 'file'}
+                    name="excludeFile"
+                    disabled={inUse || state.targetExcludeSource !== 'file'}
                     onChange={onValueChange}
                   />
                 </Divider>
@@ -317,13 +315,13 @@ const TargetDialog = ({
               <FormGroup title={_('Port List')}>
                 <Divider>
                   <Select
-                    name="port_list_id"
-                    disabled={in_use}
-                    items={renderSelectItems(port_lists)}
-                    value={state.port_list_id}
+                    name="portListId"
+                    disabled={inUse}
+                    items={renderSelectItems(portLists)}
+                    value={state.portListId}
                     onChange={onPortListChange}
                   />
-                  {!in_use && (
+                  {!inUse && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new port list')}
@@ -352,21 +350,21 @@ const TargetDialog = ({
               <FormGroup title={_('SSH')}>
                 <Divider>
                   <Select
-                    name="ssh_credential_id"
-                    disabled={in_use}
-                    items={renderSelectItems(ssh_credentials, UNSET_VALUE)}
-                    value={state.ssh_credential_id}
+                    name="sshCredentialId"
+                    disabled={inUse}
+                    items={renderSelectItems(sshCredentials, UNSET_VALUE)}
+                    value={state.sshCredentialId}
                     onChange={onSshCredentialChange}
                   />
                   <Layout>{_('on port')}</Layout>
                   <TextField
                     size="6"
                     name="port"
-                    disabled={in_use}
+                    disabled={inUse}
                     value={state.port}
                     onChange={onValueChange}
                   />
-                  {!in_use && (
+                  {!inUse && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
@@ -383,13 +381,13 @@ const TargetDialog = ({
               <FormGroup title={_('SMB')}>
                 <Divider>
                   <Select
-                    name="smb_credential_id"
-                    disabled={in_use}
-                    items={renderSelectItems(up_credentials, UNSET_VALUE)}
-                    value={state.smb_credential_id}
+                    name="smbCredentialId"
+                    disabled={inUse}
+                    items={renderSelectItems(upCredentials, UNSET_VALUE)}
+                    value={state.smbCredentialId}
                     onChange={onSmbCredentialChange}
                   />
-                  {!in_use && (
+                  {!inUse && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
@@ -406,13 +404,13 @@ const TargetDialog = ({
               <FormGroup title={_('ESXi')}>
                 <Divider>
                   <Select
-                    disabled={in_use}
-                    name="esxi_credential_id"
-                    items={renderSelectItems(up_credentials, UNSET_VALUE)}
-                    value={state.esxi_credential_id}
+                    disabled={inUse}
+                    name="esxiCredentialId"
+                    items={renderSelectItems(upCredentials, UNSET_VALUE)}
+                    value={state.esxiCredentialId}
                     onChange={onEsxiCredentialChange}
                   />
-                  {!in_use && (
+                  {!inUse && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
@@ -429,13 +427,13 @@ const TargetDialog = ({
               <FormGroup title={_('SNMP')}>
                 <Divider>
                   <Select
-                    disabled={in_use}
-                    name="snmp_credential_id"
-                    items={renderSelectItems(snmp_credentials, UNSET_VALUE)}
-                    value={state.snmp_credential_id}
+                    disabled={inUse}
+                    name="snmpCredentialId"
+                    items={renderSelectItems(snmpCredentials, UNSET_VALUE)}
+                    value={state.snmpCredentialId}
                     onChange={onSnmpCredentialChange}
                   />
-                  {!in_use && (
+                  {!inUse && (
                     <Layout>
                       <NewIcon
                         title={_('Create a new credential')}
@@ -450,18 +448,18 @@ const TargetDialog = ({
 
             <FormGroup title={_('Reverse Lookup Only')}>
               <YesNoRadio
-                name="reverse_lookup_only"
-                disabled={in_use}
-                value={state.reverse_lookup_only}
+                name="reverseLookupOnly"
+                disabled={inUse}
+                value={state.reverseLookupOnly}
                 onChange={onValueChange}
               />
             </FormGroup>
 
             <FormGroup title={_('Reverse Lookup Unify')}>
               <YesNoRadio
-                name="reverse_lookup_unify"
-                disabled={in_use}
-                value={state.reverse_lookup_unify}
+                name="reverseLookupUnify"
+                disabled={inUse}
+                value={state.reverseLookupUnify}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -478,22 +476,22 @@ TargetDialog.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   credentials: PropTypes.array,
-  esxi_credential_id: PropTypes.idOrZero,
-  exclude_hosts: PropTypes.string,
+  esxiCredentialId: PropTypes.idOrZero,
+  excludeHosts: PropTypes.string,
   hosts: PropTypes.string,
-  hosts_count: PropTypes.number,
-  in_use: PropTypes.bool,
+  hostsCount: PropTypes.number,
+  inUse: PropTypes.bool,
   name: PropTypes.string,
   port: PropTypes.numberOrNumberString,
-  port_list_id: PropTypes.idOrZero,
-  port_lists: PropTypes.array,
-  reverse_lookup_only: PropTypes.yesno,
-  reverse_lookup_unify: PropTypes.yesno,
-  smb_credential_id: PropTypes.idOrZero,
-  snmp_credential_id: PropTypes.idOrZero,
-  ssh_credential_id: PropTypes.idOrZero,
-  target_exclude_source: PropTypes.oneOf(['manual', 'file']),
-  target_source: PropTypes.oneOf(['manual', 'file', 'asset_hosts']),
+  portListId: PropTypes.idOrZero,
+  portLists: PropTypes.array,
+  reverseLookupOnly: PropTypes.yesno,
+  reverseLookupUnify: PropTypes.yesno,
+  smbCredentialId: PropTypes.idOrZero,
+  snmpCredentialId: PropTypes.idOrZero,
+  sshCredentialId: PropTypes.idOrZero,
+  targetExcludeSource: PropTypes.oneOf(['manual', 'file']),
+  targetSource: PropTypes.oneOf(['manual', 'file', 'asset_hosts']),
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onEsxiCredentialChange: PropTypes.func.isRequired,

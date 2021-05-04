@@ -54,7 +54,6 @@ import {UNSET_VALUE} from 'web/utils/render';
 import reducer, {updateState} from 'web/utils/stateReducer';
 
 import TargetDialog from './dialog';
-import {noSubselectionAllowedMessage} from 'graphql/validation/rules/ScalarLeafs';
 
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
@@ -128,20 +127,20 @@ const TargetComponent = props => {
           allowSimultaneousIPs: entity.allowSimultaneousIPs,
           aliveTest: entity.aliveTest,
           comment: entity.comment,
-          esxi_credential_id: id_or__(entity.esxiCredential),
-          exclude_hosts: isDefined(entity.excludeHosts)
+          esxiCredentialId: id_or__(entity.esxiCredential),
+          excludeHosts: isDefined(entity.excludeHosts)
             ? entity.excludeHosts.join(', ')
             : '',
           hosts: entity.hosts.join(', '),
-          in_use: entity.isInUse(),
+          inUse: entity.isInUse(),
           name: entity.name,
           port: isDefined(entity.sshCredential)
             ? entity.sshCredential.port
             : '22',
-          reverse_lookup_only: entity.reverseLookupOnly,
-          reverse_lookup_unify: entity.reverseLookupUnify,
-          target_source: 'manual',
-          target_exclude_source: 'manual',
+          reverseLookupOnly: entity.reverseLookupOnly,
+          reverseLookupUnify: entity.reverseLookupUnify,
+          targetSource: 'manual',
+          targetExcludeSource: 'manual',
           targetTitle: _('Edit Target {{name}}', entity),
         }),
       );
@@ -150,10 +149,10 @@ const TargetComponent = props => {
       loadAll().then(() => {
         dispatchState(
           updateState({
-            smb_credential_id: id_or__(entity.smbCredential),
-            ssh_credential_id: id_or__(entity.sshCredential),
-            snmp_credential_id: id_or__(entity.snmpCredential),
-            port_list_id: id_or__(entity.portList),
+            smbCredentialId: id_or__(entity.smbCredential),
+            sshCredentialId: id_or__(entity.sshCredential),
+            snmpCredentialId: id_or__(entity.snmpCredential),
+            portListId: id_or__(entity.portList),
           }),
         );
       });
@@ -161,7 +160,7 @@ const TargetComponent = props => {
       loadAll().then(() => {
         dispatchState(
           updateState({
-            port_list_id: DEFAULT_PORT_LIST_ID,
+            portListId: DEFAULT_PORT_LIST_ID,
           }),
         );
       });
@@ -173,16 +172,16 @@ const TargetComponent = props => {
           aliveTest: undefined,
           allowSimultaneousIPs: YES_VALUE,
           comment: undefined,
-          esxi_credential_id: undefined,
-          exclude_hosts: undefined,
+          esxiCredentialId: undefined,
+          excludeHosts: undefined,
           hosts: undefined,
-          in_use: undefined,
+          inUse: undefined,
           name: undefined,
           port: undefined,
-          reverse_lookup_only: undefined,
-          reverse_lookup_unify: undefined,
-          target_source: undefined,
-          target_exclude_source: undefined,
+          reverseLookupOnly: undefined,
+          reverseLookupUnify: undefined,
+          targetSource: undefined,
+          targetExcludeSource: undefined,
           targetTitle: _('New Target'),
           ...initial,
         }),
@@ -269,7 +268,7 @@ const TargetComponent = props => {
     file,
     port_range,
   }) => {
-    let port_list_id;
+    let portListId;
 
     handleInteraction();
 
@@ -282,55 +281,55 @@ const TargetComponent = props => {
         });
       })
       .then(createdId => {
-        port_list_id = createdId;
+        portListId = createdId;
         closePortListDialog();
         return refetchPortLists();
       })
       .then(() => {
         dispatchState(
           updateState({
-            port_list_id,
+            portListId,
           }),
         );
       });
   };
 
-  const handlePortListChange = port_list_id => {
+  const handlePortListChange = portListId => {
     dispatchState(
       updateState({
-        port_list_id,
+        portListId,
       }),
     );
   };
 
-  const handleEsxiCredentialChange = esxi_credential_id => {
+  const handleEsxiCredentialChange = esxiCredentialId => {
     dispatchState(
       updateState({
-        esxi_credential_id,
+        esxiCredentialId,
       }),
     );
   };
 
-  const handleSshCredentialChange = ssh_credential_id => {
+  const handleSshCredentialChange = sshCredentialId => {
     dispatchState(
       updateState({
-        ssh_credential_id,
+        sshCredentialId,
       }),
     );
   };
 
-  const handleSnmpCredentialChange = snmp_credential_id => {
+  const handleSnmpCredentialChange = snmpCredentialId => {
     dispatchState(
       updateState({
-        snmp_credential_id,
+        snmpCredentialId,
       }),
     );
   };
 
-  const handleSmbCredentialChange = smb_credential_id => {
+  const handleSmbCredentialChange = smbCredentialId => {
     dispatchState(
       updateState({
-        smb_credential_id,
+        smbCredentialId,
       }),
     );
   };
@@ -342,7 +341,7 @@ const TargetComponent = props => {
     }
   };
 
-  const setHostFileText = (file, exclude_file) => {
+  const setHostFileText = (file, excludeFile) => {
     let fileText;
     let excludeFileText;
 
@@ -354,8 +353,8 @@ const TargetComponent = props => {
       fileText = Promise.resolve();
     }
 
-    if (isDefined(exclude_file)) {
-      excludeFileText = exclude_file.text().then(text => {
+    if (isDefined(excludeFile)) {
+      excludeFileText = excludeFile.text().then(text => {
         return text;
       });
     } else {
@@ -369,36 +368,36 @@ const TargetComponent = props => {
     aliveTest,
     allowSimultaneousIPs,
     comment,
-    esxi_credential_id,
-    exclude_hosts,
-    exclude_file,
+    esxiCredentialId,
+    excludeHosts,
+    excludeFile,
     file,
     hosts,
-    hosts_filter,
+    hostsFilter,
     id,
-    in_use,
+    inUse,
     name,
     port,
-    port_list_id,
-    reverse_lookup_only,
-    reverse_lookup_unify,
-    smb_credential_id,
-    snmp_credential_id,
-    ssh_credential_id,
-    target_exclude_source,
-    target_source,
+    portListId,
+    reverseLookupOnly,
+    reverseLookupUnify,
+    smbCredentialId,
+    snmpCredentialId,
+    sshCredentialId,
+    targetExcludeSource,
+    targetSource,
   }) => {
     handleInteraction();
 
     if (isDefined(id)) {
       const {onSaved, onSaveError} = props;
 
-      return setHostFileText(file, exclude_file)
+      return setHostFileText(file, excludeFile)
         .then(text => {
           const [fileText, excludeFileText] = text;
 
           let mutationData;
-          if (in_use) {
+          if (inUse) {
             mutationData = {
               name,
               comment,
@@ -411,23 +410,22 @@ const TargetComponent = props => {
               aliveTest,
               allowSimultaneousIPs,
               comment,
-              hosts: parseCsv(target_source === 'file' ? fileText : hosts),
-              excludeHosts: parseCsv(
-                target_exclude_source === 'file'
-                  ? excludeFileText
-                  : exclude_hosts,
-              ),
+              hosts: targetSource === 'file' ? parseCsv(fileText) : hosts,
+              excludeHosts:
+                targetExcludeSource === 'file'
+                  ? parseCsv(excludeFileText)
+                  : excludeHosts,
               name,
-              portListId: port_list_id,
-              reverseLookupOnly: reverse_lookup_only,
-              reverseLookupUnify: reverse_lookup_unify,
+              portListId,
+              reverseLookupOnly,
+              reverseLookupUnify,
               credentials: {
-                ssh: ssh_credential_id
-                  ? {id: ssh_credential_id, port: parseInt(port)}
+                ssh: sshCredentialId
+                  ? {id: sshCredentialId, port: parseInt(port)}
                   : null,
-                smb: smb_credential_id ? {id: smb_credential_id} : null,
-                snmp: snmp_credential_id ? {id: snmp_credential_id} : null,
-                esxi: esxi_credential_id ? {id: esxi_credential_id} : null,
+                smb: smbCredentialId ? {id: smbCredentialId} : null,
+                snmp: snmpCredentialId ? {id: snmpCredentialId} : null,
+                esxi: esxiCredentialId ? {id: esxiCredentialId} : null,
               },
             };
           }
@@ -440,7 +438,7 @@ const TargetComponent = props => {
 
     const {onCreated, onCreateError} = props;
 
-    return setHostFileText(file, exclude_file)
+    return setHostFileText(file, excludeFile)
       .then(text => {
         const [fileText, excludeFileText] = text;
 
@@ -449,21 +447,23 @@ const TargetComponent = props => {
           allowSimultaneousIPs,
           comment,
           name,
-          hosts: target_source === 'file' ? fileText : hosts,
+          hosts: targetSource === 'file' ? parseCsv(fileText) : hosts,
           excludeHosts:
-            target_exclude_source === 'file' ? excludeFileText : exclude_hosts,
-          portListId: port_list_id,
-          reverseLookupOnly: reverse_lookup_only,
-          reverseLookupUnify: reverse_lookup_unify,
+            targetExcludeSource === 'file'
+              ? parseCsv(excludeFileText)
+              : excludeHosts,
+          portListId,
+          reverseLookupOnly,
+          reverseLookupUnify,
           credentials: {
-            ssh: ssh_credential_id
-              ? {id: ssh_credential_id, port: parseInt(port)}
+            ssh: sshCredentialId
+              ? {id: sshCredentialId, port: parseInt(port)}
               : null,
-            smb: smb_credential_id ? {id: smb_credential_id} : null,
-            snmp: snmp_credential_id ? {id: snmp_credential_id} : null,
-            esxi: esxi_credential_id ? {id: esxi_credential_id} : null,
+            smb: smbCredentialId ? {id: smbCredentialId} : null,
+            snmp: snmpCredentialId ? {id: snmpCredentialId} : null,
+            esxi: esxiCredentialId ? {id: esxiCredentialId} : null,
           },
-          hostsFilter: hosts_filter,
+          hostsFilter,
         };
 
         return createTarget(mutationData);
@@ -491,23 +491,23 @@ const TargetComponent = props => {
     aliveTest,
     allowSimultaneousIPs,
     comment,
-    esxi_credential_id,
-    exclude_hosts,
+    esxiCredentialId,
+    excludeHosts,
     hosts,
-    hosts_count,
-    hosts_filter,
+    hostsCount,
+    hostsFilter,
     id,
-    in_use,
+    inUse,
     name,
     port,
-    port_list_id,
-    reverse_lookup_only,
-    reverse_lookup_unify,
-    smb_credential_id,
-    ssh_credential_id,
-    snmp_credential_id,
-    target_source,
-    target_exclude_source,
+    portListId,
+    reverseLookupOnly,
+    reverseLookupUnify,
+    smbCredentialId,
+    sshCredentialId,
+    snmpCredentialId,
+    targetSource,
+    targetExcludeSource,
     targetTitle,
     credentialsTitle,
     credentialTypes,
@@ -546,24 +546,24 @@ const TargetComponent = props => {
               comment={comment}
               // credential={credential} // this is undefined?
               credentials={credentials}
-              esxi_credential_id={esxi_credential_id}
-              exclude_hosts={exclude_hosts}
+              esxiCredentialId={esxiCredentialId}
+              excludeHosts={excludeHosts}
               hosts={hosts}
-              hosts_count={hosts_count}
-              hosts_filter={hosts_filter}
+              hostsCount={hostsCount}
+              hostsFilter={hostsFilter}
               id={id}
-              in_use={in_use}
+              inUse={inUse}
               name={name}
               port={port}
-              port_lists={portLists}
-              port_list_id={port_list_id}
-              reverse_lookup_only={reverse_lookup_only}
-              reverse_lookup_unify={reverse_lookup_unify}
-              smb_credential_id={smb_credential_id}
-              snmp_credential_id={snmp_credential_id}
-              ssh_credential_id={ssh_credential_id}
-              target_source={target_source}
-              target_exclude_source={target_exclude_source}
+              portLists={portLists}
+              portListId={portListId}
+              reverseLookupOnly={reverseLookupOnly}
+              reverseLookupUnify={reverseLookupUnify}
+              smbCredentialId={smbCredentialId}
+              snmpCredentialId={snmpCredentialId}
+              sshCredentialId={sshCredentialId}
+              targetSource={targetSource}
+              targetExcludeSource={targetExcludeSource}
               title={targetTitle}
               onClose={handleCloseTargetDialog}
               onNewCredentialsClick={openCredentialsDialog}
