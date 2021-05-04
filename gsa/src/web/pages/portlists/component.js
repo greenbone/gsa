@@ -22,7 +22,7 @@ import _ from 'gmp/locale';
 import {parseInt} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
-import {shorten} from 'gmp/utils/string';
+import {isEmpty, shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
 
@@ -203,10 +203,10 @@ const PortListComponent = ({
       ),
     ];
 
-    const {id, from_file, file, name, comment, port_range} = data;
+    const {id, fromFile, file, name, comment, portRange} = data;
     return Promise.all(promises)
       .then(() => {
-        if (from_file) {
+        if (fromFile) {
           return readFileToText(file);
         }
         return Promise.resolve();
@@ -219,10 +219,24 @@ const PortListComponent = ({
             comment,
           }).then(onSaved, onSaveError);
         }
+
+        let portRangeString;
+        let portRanges = [];
+
+        if (fromFile) {
+          portRangeString = text;
+        } else {
+          portRangeString = portRange;
+        }
+
+        if (!isEmpty(portRangeString)) {
+          portRanges = portRangeString.split(',');
+        }
+
         return createPortList({
           name,
           comment,
-          portRange: from_file ? text : port_range,
+          portRanges,
         }).then(onCreated, onCreateError);
       })
       .then(() => closePortListDialog());
@@ -230,15 +244,15 @@ const PortListComponent = ({
 
   const handleTmpAddPortRange = values => {
     const {portRanges} = state;
-    let {port_range_end, port_range_start, port_type} = values;
+    let {portRangeEnd, portRangeStart, portType} = values;
 
-    port_range_end = parseInt(port_range_end);
-    port_range_start = parseInt(port_range_start);
+    portRangeEnd = parseInt(portRangeEnd);
+    portRangeStart = parseInt(portRangeStart);
 
     handleInteraction();
 
     // reject port ranges with missing values
-    if (!port_range_start || !port_range_end) {
+    if (!portRangeStart || !portRangeEnd) {
       return Promise.reject(
         new Error(
           _('The port range needs numerical values for start and end!'),
@@ -247,7 +261,7 @@ const PortListComponent = ({
     }
 
     // reject port ranges with start value lower than end value
-    if (port_range_start > port_range_end) {
+    if (portRangeStart > portRangeEnd) {
       return Promise.reject(
         new Error(_('The end of the port range can not be below its start!')),
       );
@@ -259,14 +273,14 @@ const PortListComponent = ({
       const start = parseInt(range.start);
       const end = parseInt(range.end);
       if (
-        range.protocol_type === port_type &&
-        (port_range_start === start ||
-          port_range_start === end ||
-          (port_range_start > start && port_range_start < end) ||
-          port_range_end === start ||
-          port_range_end === end ||
-          (port_range_end > start && port_range_end < end) ||
-          (port_range_start < start && port_range_end > end))
+        range.protocol_type === portType &&
+        (portRangeStart === start ||
+          portRangeStart === end ||
+          (portRangeStart > start && portRangeStart < end) ||
+          portRangeEnd === start ||
+          portRangeEnd === end ||
+          (portRangeEnd > start && portRangeEnd < end) ||
+          (portRangeStart < start && portRangeEnd > end))
       ) {
         return Promise.reject(
           new Error(_('New port range overlaps with an existing one!')),
@@ -275,11 +289,11 @@ const PortListComponent = ({
     }
 
     const newRange = {
-      end: values.port_range_end,
+      end: values.portRangeEnd,
       entityType: 'portrange',
       id: values.id,
-      protocol_type: values.port_type,
-      start: values.port_range_start,
+      protocol_type: values.portType,
+      start: values.portRangeStart,
       isTmp: true,
     };
     // was this.created_port_ranges.push() therefore cannot be set directly
@@ -357,9 +371,9 @@ const PortListComponent = ({
               comment={comment}
               id={id}
               name={name}
-              port_list={portList}
+              portList={portList}
               title={title}
-              port_ranges={portRanges}
+              portRanges={portRanges}
               onClose={handleClosePortListDialog}
               onNewPortRangeClick={openNewPortRangeDialog}
               onSave={handleSavePortList}
