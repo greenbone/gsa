@@ -57,7 +57,7 @@ export const createGetPortListsQueryMock = (filterString = 'foo') =>
 
 export const createPortListInput = {
   name: 'manyports',
-  portRange: 'T:1337,31415',
+  portRanges: ['T:1337', '31415'],
   comment: '92653',
 };
 
@@ -74,7 +74,7 @@ export const createCreatePortListQueryMock = () =>
 
 export const modifyPortListInput = {
   id: '58989',
-  portRange: 'T:161,803,3988,7498',
+  name: 'foo',
   comment: '948482',
 };
 

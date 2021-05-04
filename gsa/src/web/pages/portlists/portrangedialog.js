@@ -35,16 +35,16 @@ const convertPort = value => (value === '' ? value : parseInt(value));
 
 const PortRangeDialog = ({
   id,
-  port_type = 'tcp',
+  portType = 'tcp',
   title = _('New Port Range'),
   onClose,
   onSave,
 }) => {
   const data = {
     id,
-    port_range_start: '',
-    port_range_end: '',
-    port_type,
+    portRangeStart: '',
+    portRangeEnd: '',
+    portType,
   };
 
   return (
@@ -59,8 +59,8 @@ const PortRangeDialog = ({
           <Layout flex="column">
             <FormGroup title={_('Start')}>
               <TextField
-                name="port_range_start"
-                value={state.port_range_start}
+                name="portRangeStart"
+                value={state.portRangeStart}
                 grow="1"
                 size="30"
                 convert={convertPort}
@@ -70,8 +70,8 @@ const PortRangeDialog = ({
 
             <FormGroup title={_('End')}>
               <TextField
-                name="port_range_end"
-                value={state.port_range_end}
+                name="portRangeEnd"
+                value={state.portRangeEnd}
                 grow="1"
                 size="30"
                 convert={convertPort}
@@ -82,17 +82,17 @@ const PortRangeDialog = ({
             <FormGroup title={_('Protocol')}>
               <Radio
                 title={_('TCP')}
-                name="port_type"
+                name="portType"
                 value="tcp"
                 onChange={onValueChange}
-                checked={state.port_type === 'tcp'}
+                checked={state.portType === 'tcp'}
               />
               <Radio
                 title={_('UDP')}
-                name="port_type"
+                name="portType"
                 value="udp"
                 onChange={onValueChange}
-                checked={state.port_type === 'udp'}
+                checked={state.portType === 'udp'}
               />
             </FormGroup>
           </Layout>
@@ -104,8 +104,8 @@ const PortRangeDialog = ({
 
 PortRangeDialog.propTypes = {
   id: PropTypes.id.isRequired,
-  port_list: PropTypes.model,
-  port_type: PropTypes.string,
+  portList: PropTypes.model,
+  portType: PropTypes.string,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
