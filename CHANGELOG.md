@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unrelased]
+## [21.10] - Unreleased
+
+### Added
+### Changed
+### Fixed
+### Removed
+
+[21.10]: https://github.com/greenbone/gsa/compare/gsa-21.04...gsa-21.10
+
+## [21.04.1] - Unreleased
 
 ### Added
 ### Changed
@@ -16,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 
-[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
+[21.04.1]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
 
 ## [21.04] - 2021-04-16
 
