@@ -99,7 +99,7 @@ ToolBarIcons.propTypes = {
 const Page = () => {
   const [downloadRef, handleDownload] = useDownload();
   const [, renewSessionTimeout] = useUserSessionTimeout();
-  const [filter, isLoadingFilter] = usePageFilter('overide');
+  const [filter, isLoadingFilter] = usePageFilter('override');
   const prevFilter = usePrevious(filter);
   const {
     change: changeFilter,
