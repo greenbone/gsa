@@ -110,6 +110,7 @@ class Target extends Model {
     }
 
     if (hasValue(ret.credentials)) {
+      // in some instances we do not query for target credentials
       for (const key of Object.keys(HYPERION_TARGET_CREDENTIAL_NAMES)) {
         const cred = ret.credentials[HYPERION_TARGET_CREDENTIAL_NAMES[key]];
         if (hasValue(cred) && hasValue(cred.id)) {
