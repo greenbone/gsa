@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [21.10] - unreleased
+## [Hyperion] - unreleased
 
 ### Added
 
@@ -86,7 +86,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed parsing and testing of textExcerpt [#2316](https://github.com/greenbone/gsa/pull/2316)
 - Removed extra parsing of comment and summary in Model [#2309](https://github.com/greenbone/gsa/pull/2309)
 
-[21.04]: https://github.com/greenbone/gsa/compare/gsa-21.04...master
+[Hyperion]: https://github.com/greenbone/gsa/compare/gsa-21.10...master
 
 ## [21.04] - unreleased
 
