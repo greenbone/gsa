@@ -54,6 +54,7 @@ import {UNSET_VALUE} from 'web/utils/render';
 import reducer, {updateState} from 'web/utils/stateReducer';
 
 import TargetDialog from './dialog';
+import {noSubselectionAllowedMessage} from 'graphql/validation/rules/ScalarLeafs';
 
 const DEFAULT_PORT_LIST_ID = '33d0cd82-57c6-11e1-8ed1-406186ea4fc5'; // All IANA assigned TCP 2012-02-10
 
@@ -151,6 +152,7 @@ const TargetComponent = props => {
           updateState({
             smb_credential_id: id_or__(entity.smbCredential),
             ssh_credential_id: id_or__(entity.sshCredential),
+            snmp_credential_id: id_or__(entity.snmpCredential),
             port_list_id: id_or__(entity.portList),
           }),
         );
@@ -409,7 +411,6 @@ const TargetComponent = props => {
               aliveTest,
               allowSimultaneousIPs,
               comment,
-              esxiCredentialId: esxi_credential_id,
               hosts: parseCsv(target_source === 'file' ? fileText : hosts),
               excludeHosts: parseCsv(
                 target_exclude_source === 'file'
@@ -417,13 +418,17 @@ const TargetComponent = props => {
                   : exclude_hosts,
               ),
               name,
-              sshCredentialPort: parseInt(port),
               portListId: port_list_id,
               reverseLookupOnly: reverse_lookup_only,
               reverseLookupUnify: reverse_lookup_unify,
-              smbCredentialId: smb_credential_id,
-              snmpCredentialId: snmp_credential_id,
-              sshCredentialId: ssh_credential_id,
+              credentials: {
+                ssh: ssh_credential_id
+                  ? {id: ssh_credential_id, port: parseInt(port)}
+                  : null,
+                smb: smb_credential_id ? {id: smb_credential_id} : null,
+                snmp: snmp_credential_id ? {id: snmp_credential_id} : null,
+                esxi: esxi_credential_id ? {id: esxi_credential_id} : null,
+              },
             };
           }
 
@@ -443,18 +448,21 @@ const TargetComponent = props => {
           aliveTest,
           allowSimultaneousIPs,
           comment,
-          esxiCredentialId: esxi_credential_id,
           name,
           hosts: target_source === 'file' ? fileText : hosts,
           excludeHosts:
             target_exclude_source === 'file' ? excludeFileText : exclude_hosts,
-          sshCredentialPort: parseInt(port),
           portListId: port_list_id,
           reverseLookupOnly: reverse_lookup_only,
           reverseLookupUnify: reverse_lookup_unify,
-          smbCredentialId: smb_credential_id,
-          snmpCredentialId: snmp_credential_id,
-          sshCredentialId: ssh_credential_id,
+          credentials: {
+            ssh: ssh_credential_id
+              ? {id: ssh_credential_id, port: parseInt(port)}
+              : null,
+            smb: smb_credential_id ? {id: smb_credential_id} : null,
+            snmp: snmp_credential_id ? {id: snmp_credential_id} : null,
+            esxi: esxi_credential_id ? {id: esxi_credential_id} : null,
+          },
           hostsFilter: hosts_filter,
         };
 
