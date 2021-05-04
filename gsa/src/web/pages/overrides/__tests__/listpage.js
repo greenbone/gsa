@@ -25,7 +25,13 @@ import {setLocale} from 'gmp/locale/lang';
 import Filter from 'gmp/models/filter';
 import Override from 'gmp/models/override';
 
-import {entitiesLoadingActions} from 'web/store/entities/overrides';
+import {
+  createDeleteOverridesByFilterQueryMock,
+  createDeleteOverridesByIdsQueryMock,
+  createExportOverridesByFilterQueryMock,
+  createExportOverridesByIdsQueryMock,
+  createGetOverridesQueryMock,
+} from 'web/graphql/__mocks__/overrides';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
@@ -39,25 +45,30 @@ setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
 
-const override = Override.fromElement({
-  _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-  active: 1,
-  creation_time: '2020-12-23T14:14:11Z',
-  hosts: '127.0.0.1',
-  in_use: 0,
-  modification_time: '2021-01-04T11:54:12Z',
-  new_severity: '-1', // false positive
+const override = Override.fromObject({
+  active: true,
+  id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+  endTime: '2023-03-13T11:35:20Z',
+  hosts: ['127.0.0.1'],
+  modificationTime: '2021-01-04T11:54:12Z',
   nvt: {
-    _oid: '123',
+    id: '123',
     name: 'foo nvt',
-    type: 'nvt',
   },
-  owner: {name: 'admin'},
-  permissions: {permission: {name: 'Everything'}},
+  owner: 'admin',
+  permissions: [{name: 'Everything'}],
   port: '666',
+  result: {
+    id: '789',
+    name: 'foo result',
+  },
   severity: '0.1',
+  newSeverity: '-1', // false positive
+  task: {
+    id: '456',
+    name: 'foo task',
+  },
   text: 'override text',
-  writable: 1,
 });
 
 const caps = new Capabilities(['everything']);
@@ -141,38 +152,33 @@ describe('OverridesPage tests', () => {
       user: {currentSettings, getSetting},
     };
 
+    const [mock, resultFunc] = createGetOverridesQueryMock({
+      filterString: 'rows=2',
+      first: 1,
+    });
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingfilter = Filter.fromString('rows=2');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('override', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([override], filter, loadedFilter, counts),
-    );
-
     const {baseElement} = render(<OverridesPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const display = screen.getAllByTestId('grid-item');
     const inputs = baseElement.querySelectorAll('input');
@@ -234,22 +240,12 @@ describe('OverridesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       overrides: {
         get: getOverrides,
-        deleteByFilter,
-        exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
@@ -261,11 +257,24 @@ describe('OverridesPage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const [mock, resultFunc] = createGetOverridesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportOverridesByIdsQueryMock([
+      '123',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteOverridesByIdsQueryMock([
+      '123',
+    ]);
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -277,22 +286,11 @@ describe('OverridesPage tests', () => {
       defaultFilterLoadingActions.success('override', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([override], filter, loadedFilter, counts),
-    );
-
     render(<OverridesPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents');
@@ -302,7 +300,7 @@ describe('OverridesPage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getAllByTitle('Move page contents to trashcan');
@@ -312,26 +310,16 @@ describe('OverridesPage tests', () => {
 
     await wait();
 
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected overrides', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       overrides: {
         get: getOverrides,
-        delete: deleteByIds,
-        export: exportByIds,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
@@ -343,11 +331,24 @@ describe('OverridesPage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const [mock, resultFunc] = createGetOverridesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportOverridesByIdsQueryMock([
+      '123',
+    ]);
+    const [deleteMock, deleteResult] = createDeleteOverridesByIdsQueryMock([
+      '123',
+    ]);
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -359,22 +360,11 @@ describe('OverridesPage tests', () => {
       defaultFilterLoadingActions.success('override', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([override], filter, loadedFilter, counts),
-    );
-
     const {element} = render(<OverridesPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -399,7 +389,7 @@ describe('OverridesPage tests', () => {
 
     await wait();
 
-    expect(exportByIds).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // move selected override to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan');
@@ -409,26 +399,16 @@ describe('OverridesPage tests', () => {
 
     await wait();
 
-    expect(deleteByIds).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered overrides', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       overrides: {
         get: getOverrides,
-        deleteByFilter,
-        exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
@@ -440,11 +420,24 @@ describe('OverridesPage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
+    const [mock, resultFunc] = createGetOverridesQueryMock({
+      filterString: 'foo=bar rows=2',
+      first: 2,
+    });
+
+    const [exportMock, exportResult] = createExportOverridesByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+    const [deleteMock, deleteResult] = createDeleteOverridesByFilterQueryMock(
+      'foo=bar rows=-1 first=1',
+    );
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -456,22 +449,11 @@ describe('OverridesPage tests', () => {
       defaultFilterLoadingActions.success('override', defaultSettingfilter),
     );
 
-    const counts = new CollectionCounts({
-      first: 1,
-      all: 1,
-      filtered: 1,
-      length: 1,
-      rows: 10,
-    });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
-    store.dispatch(
-      entitiesLoadingActions.success([override], filter, loadedFilter, counts),
-    );
-
     render(<OverridesPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -492,7 +474,7 @@ describe('OverridesPage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportResult).toHaveBeenCalled();
 
     // move all filtered overrides to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan');
@@ -502,7 +484,7 @@ describe('OverridesPage tests', () => {
 
     await wait();
 
-    expect(deleteByFilter).toHaveBeenCalled();
+    expect(deleteResult).toHaveBeenCalled();
   });
 });
 
