@@ -91,6 +91,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - unreleased
 
 ### Added
+### Changed
+- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
+
+### Fixed
+- Fixed missing name for CVE results on result detailspage [#2892](https://github.com/greenbone/gsa/pull/2892)
+- Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
+
+### Removed
+
+[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
+
+## [21.04] - 2021-04-16
+
+### Added
 - Don't show word cloud as default in result dashboard [#2883](https://github.com/greenbone/gsa/pull/2883)
 - Allow to set unix socket permissions for gsad [#2816](https://github.com/greenbone/gsa/pull/2816)
 - Added CVSS date to NVT details [#2802](https://github.com/greenbone/gsa/pull/2802)
@@ -101,6 +115,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
+- Don't show word cloud as default in result dashboard [#2883](https://github.com/greenbone/gsa/pull/2883)
+- Sort host, os and vulns listpage by descending severity [#2880](https://github.com/greenbone/gsa/pull/2880)
 - Revert the changes from integer `score` to a float `severity` [#2854](https://github.com/greenbone/gsa/pull/2854)
 - Show StartIcon for scheduled tasks [#2840](https://github.com/greenbone/gsa/pull/2840)
 - Remove solution from log NVTs [#2792](https://github.com/greenbone/gsa/pull/2792)
