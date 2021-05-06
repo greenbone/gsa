@@ -265,7 +265,6 @@ class PolicyComponent extends React.Component {
       name: undefined,
       scheduleId: defaultScheduleId,
       schedulePeriods: undefined,
-      sourceIface: undefined,
       targetId: defaultTargetId,
       title: _('New Audit'),
     });
@@ -297,7 +296,6 @@ class PolicyComponent extends React.Component {
     scannerType = OPENVAS_SCANNER_TYPE,
     scheduleId,
     schedulePeriods,
-    sourceIface,
     targetId,
   }) {
     const {gmp} = this.props;
@@ -332,7 +330,6 @@ class PolicyComponent extends React.Component {
         scannerId,
         scheduleId,
         schedulePeriods,
-        sourceIface,
         tagId,
         targetId,
       })
@@ -659,7 +656,6 @@ class PolicyComponent extends React.Component {
       scanners,
       scheduleId,
       schedulePeriods,
-      sourceIface,
       targetId,
       title,
     } = this.state;
@@ -727,7 +723,6 @@ class PolicyComponent extends React.Component {
                               scheduleId={scheduleId}
                               schedulePeriods={schedulePeriods}
                               schedules={schedules}
-                              sourceIface={sourceIface}
                               targetId={targetId}
                               targets={targets}
                               title={title}

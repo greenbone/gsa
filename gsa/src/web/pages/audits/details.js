@@ -81,14 +81,12 @@ class AuditDetails extends React.Component {
       hosts_ordering,
       in_assets,
       last_report,
-      preferences,
       scanner,
       schedule_periods,
       target,
       max_checks,
       max_hosts,
     } = entity;
-    const {iface = {}} = preferences;
 
     let dur;
     const hasDuration =
@@ -174,13 +172,6 @@ class AuditDetails extends React.Component {
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
                       <TableData>{hosts_ordering}</TableData>
-                    </TableRow>
-                  )}
-                {isDefined(policy) &&
-                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE && (
-                    <TableRow>
-                      <TableData>{_('Network Source Interface')}</TableData>
-                      <TableData>{iface.value}</TableData>
                     </TableRow>
                   )}
                 {isDefined(policy) &&
