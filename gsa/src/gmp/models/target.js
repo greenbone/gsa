@@ -34,12 +34,7 @@ export const TARGET_CREDENTIAL_NAMES = [
   'esxi_credential',
 ];
 
-export const HYPERION_TARGET_CREDENTIAL_NAMES = {
-  smbCredential: 'smb',
-  snmpCredential: 'snmp',
-  sshCredential: 'ssh',
-  esxiCredential: 'esxi',
-};
+export const HYPERION_TARGET_CREDENTIAL_NAMES = ['smb', 'snmp', 'ssh', 'esxi'];
 
 export const ALIVE_TESTS = {
   SCAN_CONFIG_DEFAULT: _l('Scan Config Default'),
@@ -109,14 +104,13 @@ class Target extends Model {
       delete ret.portList;
     }
 
-    if (hasValue(ret.credentials)) {
+    if (hasValue(object.credentials)) {
+      ret.credentials = {};
       // in some instances we do not query for target credentials
-      for (const key of Object.keys(HYPERION_TARGET_CREDENTIAL_NAMES)) {
-        const cred = ret.credentials[HYPERION_TARGET_CREDENTIAL_NAMES[key]];
+      for (const name of HYPERION_TARGET_CREDENTIAL_NAMES) {
+        const cred = object.credentials[name];
         if (hasValue(cred) && hasValue(cred.id)) {
-          ret[key] = parseModelFromObject(cred, 'credential');
-        } else {
-          delete ret[key];
+          ret.credentials[name] = parseModelFromObject(cred, 'credential');
         }
       }
     } else {
