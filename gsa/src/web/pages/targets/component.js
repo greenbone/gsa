@@ -120,6 +120,7 @@ const TargetComponent = props => {
 
   const openTargetDialog = (entity, initial = {}) => {
     if (isDefined(entity)) {
+      const {credentials} = entity;
       dispatchState(
         updateState({
           targetDialogVisible: true,
@@ -127,16 +128,14 @@ const TargetComponent = props => {
           allowSimultaneousIPs: entity.allowSimultaneousIPs,
           aliveTest: entity.aliveTest,
           comment: entity.comment,
-          esxiCredentialId: id_or__(entity.esxiCredential),
+          esxiCredentialId: id_or__(credentials?.esxi),
           excludeHosts: isDefined(entity.excludeHosts)
             ? entity.excludeHosts.join(', ')
             : '',
           hosts: entity.hosts.join(', '),
           inUse: entity.isInUse(),
           name: entity.name,
-          port: isDefined(entity.sshCredential)
-            ? entity.sshCredential.port
-            : '22',
+          port: isDefined(credentials?.ssh) ? credentials.ssh.port : '22',
           reverseLookupOnly: entity.reverseLookupOnly,
           reverseLookupUnify: entity.reverseLookupUnify,
           targetSource: 'manual',
@@ -149,9 +148,9 @@ const TargetComponent = props => {
       loadAll().then(() => {
         dispatchState(
           updateState({
-            smbCredentialId: id_or__(entity.smbCredential),
-            sshCredentialId: id_or__(entity.sshCredential),
-            snmpCredentialId: id_or__(entity.snmpCredential),
+            smbCredentialId: id_or__(credentials?.smb),
+            sshCredentialId: id_or__(credentials?.ssh),
+            snmpCredentialId: id_or__(credentials?.snmp),
             portListId: id_or__(entity.portList),
           }),
         );
@@ -173,6 +172,9 @@ const TargetComponent = props => {
           allowSimultaneousIPs: YES_VALUE,
           comment: undefined,
           esxiCredentialId: undefined,
+          smbCredentialId: undefined,
+          sshCredentialId: undefined,
+          snmpCredentialId: undefined,
           excludeHosts: undefined,
           hosts: undefined,
           inUse: undefined,
