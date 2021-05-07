@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Adjust target credentials to reflect changes in Hyperion [#2898](https://github.com/greenbone/gsa/pull/2898)
+- Use graphql on override listpage [#2887](https://github.com/greenbone/gsa/pull/2887)
 - Adjust port list mutations to reflect changes in Hyperion [#2886](https://github.com/greenbone/gsa/pull/2886)
 - Adjust GSA for result object changes in hyperion [#2866](https://github.com/greenbone/gsa/pull/2866)
 - Adjust target queries to reflect changes in Hyperion [#2845](https://github.com/greenbone/gsa/pull/2845)
@@ -89,7 +90,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [Hyperion]: https://github.com/greenbone/gsa/compare/gsa-21.10...master
 
-## [21.04] - unreleased
+## [21.10] - Unreleased
+
+### Added
+### Changed
+### Fixed
+### Removed
+
+[21.10]: https://github.com/greenbone/gsa/compare/gsa-21.04...gsa-21.10
+
+## [21.04.1] - Unreleased
+
+### Added
+### Changed
+- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
+
+### Fixed
+- Fixed missing name for CVE results on result detailspage [#2892](https://github.com/greenbone/gsa/pull/2892)
+- Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
+
+### Removed
+
+[21.04.1]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
+
+## [21.04] - 2021-04-16
 
 ### Added
 - Don't show word cloud as default in result dashboard [#2883](https://github.com/greenbone/gsa/pull/2883)
@@ -102,6 +126,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
+- Don't show word cloud as default in result dashboard [#2883](https://github.com/greenbone/gsa/pull/2883)
+- Sort host, os and vulns listpage by descending severity [#2880](https://github.com/greenbone/gsa/pull/2880)
 - Revert the changes from integer `score` to a float `severity` [#2854](https://github.com/greenbone/gsa/pull/2854)
 - Show StartIcon for scheduled tasks [#2840](https://github.com/greenbone/gsa/pull/2840)
 - Remove solution from log NVTs [#2792](https://github.com/greenbone/gsa/pull/2792)

@@ -231,7 +231,9 @@ const OverrideDialog = ({
                       title={_('yes, until')}
                       onChange={onValueChange}
                     />
-                    <DateTime date={override.endTime} />
+                    <span>
+                      <DateTime date={override.endTime} />
+                    </span>
                   </Divider>
                 </Layout>
               )}
