@@ -20,6 +20,7 @@ import React, {useReducer} from 'react';
 
 import _ from 'gmp/locale';
 
+import moment from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
@@ -27,6 +28,7 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 import {
   ACTIVE_NO_VALUE,
   ACTIVE_YES_ALWAYS_VALUE,
+  ACTIVE_YES_FOR_NEXT_VALUE,
   ACTIVE_YES_UNTIL_VALUE,
   ANY,
   DEFAULT_OID_VALUE,
@@ -125,7 +127,7 @@ const OverrideComponent = ({
           newSeverity,
           newSeverityFromList,
           nvtName: isDefined(nvt) ? nvt.name : undefined,
-          oid: isDefined(nvt) ? nvt.oid : undefined,
+          oid: isDefined(nvt) ? nvt.id : undefined,
           override,
           port: isDefined(override.port) ? MANUAL : ANY,
           portManual: override.port,
@@ -197,6 +199,7 @@ const OverrideComponent = ({
       id,
       newSeverity,
       newSeverityFromList,
+      override,
       portManual,
       resultId,
       resultUuid,
@@ -207,7 +210,11 @@ const OverrideComponent = ({
 
     let daysActive;
     if (active === ACTIVE_YES_UNTIL_VALUE) {
-      daysActive = days;
+      // calculate days from now until endTime date. Needs +1, because otherwise
+      // each edit to the override reduces the days left by 1 each
+      daysActive = override.endTime?.diff(moment(), 'days') + 1;
+    } else if (active === ACTIVE_YES_FOR_NEXT_VALUE) {
+      daysActive = parseInt(days);
     } else {
       daysActive = parseInt(active);
     }
