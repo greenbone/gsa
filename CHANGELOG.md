@@ -7,12 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unrelased]
 
 ### Added
+- Added @testing-library/user-event as a dev-dependency [#2891](https://github.com/greenbone/gsa/pull/2891)
+
 ### Changed
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
 
 ### Fixed
 - Fixed missing name for CVE results on result detailspage [#2892](https://github.com/greenbone/gsa/pull/2892)
-- Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
+- Fixed setting secret key in RADIUS dialog [#2891](https://github.com/greenbone/gsa/pull/2891)
+- Fixed setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
 
 ### Removed
 
@@ -23,7 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Allow to set unix socket permissions for gsad [#2816](https://github.com/greenbone/gsa/pull/2816)
 - Added CVSS date to NVT details [#2802](https://github.com/greenbone/gsa/pull/2802)
-- Add option to allow to scan simultaneous IPs to targets
+- Added option to allow to scan simultaneous IPs to targets
   [#2779](https://github.com/greenbone/gsa/pull/2779),
   [#2813](https://github.com/greenbone/gsa/pull/2813)
 - Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
@@ -48,7 +51,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ### Fixed
-- Fix dynamic severity checkbox not being checked upon clicking [#2882](https://github.com/greenbone/gsa/pull/2882)
+- Fixed dynamic severity checkbox not being checked upon clicking [#2882](https://github.com/greenbone/gsa/pull/2882)
 - Fixed result CVE parsing for result listpage and CVE reports [#2869](https://github.com/greenbone/gsa/pull/2869)
 - Fixed setting comments of business process nodes [#2781](https://github.com/greenbone/gsa/pull/2781)
 - Added the deprecatedBy field to CPEs [#2751](https://github.com/greenbone/gsa/pull/2751)
