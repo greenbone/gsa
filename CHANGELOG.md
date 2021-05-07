@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Adjust target credentials to reflect changes in Hyperion [#2898](https://github.com/greenbone/gsa/pull/2898)
 - Use graphql on override listpage [#2887](https://github.com/greenbone/gsa/pull/2887)
 - Adjust port list mutations to reflect changes in Hyperion [#2886](https://github.com/greenbone/gsa/pull/2886)
 - Adjust GSA for result object changes in hyperion [#2866](https://github.com/greenbone/gsa/pull/2866)

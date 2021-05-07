@@ -45,19 +45,18 @@ const MAX_HOSTS_LISTINGS = 70;
 const TargetDetails = ({capabilities, entity, links = true}) => {
   const {
     aliveTest,
-    esxiCredential,
+    credentials,
     excludeHosts,
     hosts,
     hostCount,
     portList,
     reverseLookupOnly,
     reverseLookupUnify,
-    smbCredential,
-    snmpCredential,
-    sshCredential,
     tasks,
     allowSimultaneousIPs,
   } = entity;
+
+  const {ssh, esxi, snmp, smb} = credentials;
 
   const hostsListing = hosts
     .slice(0, MAX_HOSTS_LISTINGS)
@@ -140,60 +139,60 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
       </DetailsBlock>
 
       {capabilities.mayAccess('credentials') && // querying for a nonexistent credential will always lead to the credential being defined, BUT the name and id being null
-        (hasValue(sshCredential?.id) ||
-          hasValue(snmpCredential?.id) ||
-          hasValue(smbCredential?.id) ||
-          hasValue(esxiCredential?.id)) && (
+        (hasValue(ssh?.id) ||
+          hasValue(smb?.id) ||
+          hasValue(snmp?.id) ||
+          hasValue(esxi?.id)) && (
           <DetailsBlock title={_('Credentials')}>
             <InfoTable>
               <TableBody>
-                {hasValue(sshCredential?.id) && (
+                {hasValue(ssh?.id) && (
                   <TableRow>
                     <TableData>{_('SSH')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={sshCredential.id} type="credential">
-                          {sshCredential.name}
+                        <DetailsLink id={ssh.id} type="credential">
+                          {ssh.name}
                         </DetailsLink>
                       </span>
-                      {_(' on Port {{port}}', {port: sshCredential.port})}
+                      {_(' on Port {{port}}', {port: ssh.port})}
                     </TableData>
                   </TableRow>
                 )}
 
-                {hasValue(smbCredential?.id) && (
+                {hasValue(smb?.id) && (
                   <TableRow>
                     <TableData>{_('SMB')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={smbCredential.id} type="credential">
-                          {smbCredential.name}
+                        <DetailsLink id={smb.id} type="credential">
+                          {smb.name}
                         </DetailsLink>
                       </span>
                     </TableData>
                   </TableRow>
                 )}
 
-                {hasValue(esxiCredential?.id) && (
+                {hasValue(esxi?.id) && (
                   <TableRow>
                     <TableData>{_('ESXi')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={esxiCredential.id} type="credential">
-                          {esxiCredential.name}
+                        <DetailsLink id={esxi.id} type="credential">
+                          {esxi.name}
                         </DetailsLink>
                       </span>
                     </TableData>
                   </TableRow>
                 )}
 
-                {hasValue(snmpCredential?.id) && (
+                {hasValue(snmp?.id) && (
                   <TableRow>
                     <TableData>{_('SNMP')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={snmpCredential.id} type="credential">
-                          {snmpCredential.name}
+                        <DetailsLink id={snmp.id} type="credential">
+                          {snmp.name}
                         </DetailsLink>
                       </span>
                     </TableData>
