@@ -162,7 +162,6 @@ const TaskDialog = ({
   schedule_id = UNSET_VALUE,
   schedule_periods = NO_VALUE,
   schedules = [],
-  source_iface = '',
   tags = [],
   target_id,
   targets,
@@ -275,7 +274,6 @@ const TaskDialog = ({
     scanner_type,
     scanner_id,
     schedule_periods,
-    source_iface,
     tag_id,
     tags,
     task,
@@ -504,13 +502,6 @@ const TaskDialog = ({
                     />
                   </div>
                 </FormGroup>
-                <FormGroup titleSize="4" title={_('Network Source Interface')}>
-                  <TextField
-                    name="source_iface"
-                    value={state.source_iface}
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
                 <FormGroup titleSize="4" title={_('Order for target hosts')}>
                   <Select
                     name="hosts_ordering"
@@ -638,7 +629,6 @@ TaskDialog.propTypes = {
   schedule_id: PropTypes.idOrZero,
   schedule_periods: PropTypes.yesno,
   schedules: PropTypes.array,
-  source_iface: PropTypes.string,
   tag_id: PropTypes.id,
   tags: PropTypes.array,
   target_id: PropTypes.idOrZero,

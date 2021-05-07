@@ -332,7 +332,6 @@ class AuditComponent extends React.Component {
         scannerId: hasId(audit.scanner) ? audit.scanner.id : undefined,
         scheduleId,
         schedulePeriods,
-        sourceIface: audit.source_iface,
         targetId: hasId(audit.target) ? audit.target.id : undefined,
         audit,
         title: _('Edit Audit {{name}}', audit),

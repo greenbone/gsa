@@ -247,9 +247,6 @@ class Task extends Model {
           case 'max_checks':
             copy[pref.scanner_name] = parseInt(pref.value);
             break;
-          case 'source_iface':
-            copy.source_iface = pref.value;
-            break;
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
             break;

@@ -313,10 +313,6 @@ describe('Task Model parse tests', () => {
             value: '4',
           },
           {
-            scanner_name: 'source_iface',
-            value: 'eth0',
-          },
-          {
             scanner_name: 'foo',
             value: 'bar',
             name: 'lorem',
@@ -354,7 +350,6 @@ describe('Task Model parse tests', () => {
     expect(task1.auto_delete).toEqual('keep');
     expect(task1.max_hosts).toEqual(20);
     expect(task1.max_checks).toEqual(4);
-    expect(task1.source_iface).toEqual('eth0');
     expect(task1.preferences).toEqual({foo: {value: 'bar', name: 'lorem'}});
     expect(task2.in_assets).toEqual(0);
     expect(task2.apply_overrides).toEqual(0);

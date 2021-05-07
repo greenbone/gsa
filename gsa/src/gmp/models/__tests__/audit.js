@@ -87,10 +87,6 @@ describe('Audit model tests', () => {
             value: '4',
           },
           {
-            scanner_name: 'source_iface',
-            value: 'eth0',
-          },
-          {
             scanner_name: 'foo',
             value: 'bar',
             name: 'lorem',
@@ -128,7 +124,6 @@ describe('Audit model tests', () => {
     expect(audit1.auto_delete).toEqual('keep');
     expect(audit1.max_hosts).toEqual(20);
     expect(audit1.max_checks).toEqual(4);
-    expect(audit1.source_iface).toEqual('eth0');
     expect(audit1.preferences).toEqual({foo: {value: 'bar', name: 'lorem'}});
     expect(audit2.in_assets).toEqual(0);
     expect(audit2.apply_overrides).toEqual(0);

@@ -2092,7 +2092,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *name, *comment, *config_id, *target_id, *scanner_type;
   const char *scanner_id, *schedule_id, *schedule_periods;
   const char *max_checks, *max_hosts;
-  const char *in_assets, *hosts_ordering, *alterable, *source_iface;
+  const char *in_assets, *hosts_ordering, *alterable;
   const char *add_tag, *tag_id, *auto_delete, *auto_delete_data;
   const char *apply_overrides, *min_qod, *usage_type;
   gchar *name_escaped, *comment_escaped;
@@ -2116,7 +2116,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   scanner_type = params_value (params, "scanner_type");
   schedule_id = params_value (params, "schedule_id");
   schedule_periods = params_value (params, "schedule_periods");
-  source_iface = params_value (params, "source_iface");
   tag_id = params_value (params, "tag_id");
   target_id = params_value (params, "target_id");
   usage_type = params_value (params, "usage_type");
@@ -2126,7 +2125,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       hosts_ordering = "";
       max_checks = "";
-      source_iface = "";
       max_hosts = "";
     }
   else if (!strcmp (scanner_type, "3"))
@@ -2134,7 +2132,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       config_id = "";
       hosts_ordering = "";
       max_checks = "";
-      source_iface = "";
       max_hosts = "";
     }
 
@@ -2180,7 +2177,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     }
 
   CHECK_VARIABLE_INVALID (max_checks, "Create Task");
-  CHECK_VARIABLE_INVALID (source_iface, "Create Task");
   CHECK_VARIABLE_INVALID (auto_delete, "Create Task");
   CHECK_VARIABLE_INVALID (auto_delete_data, "Create Task");
   CHECK_VARIABLE_INVALID (max_hosts, "Create Task");
@@ -2252,10 +2248,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     "<value>%s</value>"
     "</preference>"
     "<preference>"
-    "<scanner_name>source_iface</scanner_name>"
-    "<value>%s</value>"
-    "</preference>"
-    "<preference>"
     "<scanner_name>auto_delete</scanner_name>"
     "<value>%s</value>"
     "</preference>"
@@ -2270,7 +2262,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     config_id, schedule_periods, schedule_element, alert_element->str,
     target_id, scanner_id, hosts_ordering, name_escaped, comment_escaped,
     max_checks, max_hosts, strcmp (in_assets, "0") ? "yes" : "no",
-    strcmp (apply_overrides, "0") ? "yes" : "no", min_qod, source_iface,
+    strcmp (apply_overrides, "0") ? "yes" : "no", min_qod,
     auto_delete, auto_delete_data, alterable ? strcmp (alterable, "0") : 0,
     usage_type);
 
@@ -2439,7 +2431,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   gchar *html, *response, *format;
   const char *comment, *name, *schedule_id, *in_assets;
   const char *scanner_id, *task_id, *max_checks, *max_hosts;
-  const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
+  const char *config_id, *target_id, *hosts_ordering, *alterable;
   const char *scanner_type, *schedule_periods, *auto_delete, *auto_delete_data;
   const char *apply_overrides, *min_qod;
   int ret;
@@ -2463,7 +2455,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   scanner_type = params_value (params, "scanner_type");
   schedule_id = params_value (params, "schedule_id");
   schedule_periods = params_value (params, "schedule_periods");
-  source_iface = params_value (params, "source_iface");
   target_id = params_value (params, "target_id");
   task_id = params_value (params, "task_id");
 
@@ -2474,7 +2465,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
         {
           hosts_ordering = "";
           max_checks = "";
-          source_iface = "";
           max_hosts = "";
         }
       else if (!strcmp (scanner_type, "3"))
@@ -2482,7 +2472,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
           config_id = "0";
           hosts_ordering = "";
           max_checks = "";
-          source_iface = "";
           max_hosts = "";
         }
     }
@@ -2502,7 +2491,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (scanner_id, "Save Task");
   CHECK_VARIABLE_INVALID (task_id, "Save Task");
   CHECK_VARIABLE_INVALID (max_checks, "Save Task");
-  CHECK_VARIABLE_INVALID (source_iface, "Save Task");
   CHECK_VARIABLE_INVALID (auto_delete, "Save Task");
   CHECK_VARIABLE_INVALID (auto_delete_data, "Save Task");
   CHECK_VARIABLE_INVALID (max_hosts, "Save Task");
@@ -2582,10 +2570,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     "<value>%%s</value>"
     "</preference>"
     "<preference>"
-    "<scanner_name>source_iface</scanner_name>"
-    "<value>%%s</value>"
-    "</preference>"
-    "<preference>"
     "<scanner_name>auto_delete</scanner_name>"
     "<value>%%s</value>"
     "</preference>"
@@ -2605,7 +2589,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
               schedule_periods, scanner_id, max_checks, max_hosts,
               strcmp (in_assets, "0") ? "yes" : "no",
               strcmp (apply_overrides, "0") ? "yes" : "no", min_qod,
-              source_iface, auto_delete, auto_delete_data);
+              auto_delete, auto_delete_data);
   g_free (format);
 
   g_string_free (alert_element, TRUE);

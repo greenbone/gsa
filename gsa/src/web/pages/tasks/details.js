@@ -95,14 +95,12 @@ class TaskDetails extends React.Component {
       in_assets,
       last_report,
       min_qod,
-      preferences,
       scanner,
       schedule_periods,
       target,
       max_checks,
       max_hosts,
     } = entity;
-    const {iface = {}} = preferences;
 
     let dur;
     const has_duration =
@@ -188,13 +186,6 @@ class TaskDetails extends React.Component {
                     <TableRow>
                       <TableData>{_('Order for target hosts')}</TableData>
                       <TableData>{hosts_ordering}</TableData>
-                    </TableRow>
-                  )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
-                    <TableRow>
-                      <TableData>{_('Network Source Interface')}</TableData>
-                      <TableData>{iface.value}</TableData>
                     </TableRow>
                   )}
                 {isDefined(scanConfig) &&
