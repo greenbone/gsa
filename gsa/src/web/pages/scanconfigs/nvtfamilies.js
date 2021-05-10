@@ -89,14 +89,18 @@ const NvtFamily = ({
             name={familyName}
             checked={isToSelectWhole || trend === SCANCONFIG_TREND_DYNAMIC}
             convert={parseTrend}
+            disabled={isToSelectWhole}
             value={SCANCONFIG_TREND_DYNAMIC}
             onChange={onTrendChange}
           />
-          <Trend trend={SCANCONFIG_TREND_DYNAMIC} />
+          <Trend active={!isToSelectWhole} trend={SCANCONFIG_TREND_DYNAMIC} />
           <Radio
             flex
             name={familyName}
-            checked={!isToSelectWhole && trend === SCANCONFIG_TREND_STATIC}
+            checked={
+              (!isToSelectWhole && trend === SCANCONFIG_TREND_STATIC) ||
+              (isToSelectWhole && select === NO_VALUE)
+            }
             disabled={isToSelectWhole}
             convert={parseTrend}
             value={SCANCONFIG_TREND_STATIC}
@@ -155,8 +159,11 @@ const NvtFamilies = ({
     onValueChange(trend, 'trend');
   };
   const onSelectChange = (value, name) => {
+    const isToSelectWhole = WHOLE_SELECTION_FAMILIES.includes(name);
     select[name] = value;
-
+    if (isToSelectWhole) {
+      onTrendChange(value, name);
+    }
     onValueChange(select, 'select');
   };
   return (
