@@ -87,7 +87,7 @@ export const GET_TASK = gql`
         lastReport {
           id
           severity
-          timestamp
+          creationTime
           scanStart
           scanEnd
         }
@@ -116,9 +116,12 @@ export const GET_TASK = gql`
       comment
       owner
       preferences {
-        name
-        value
-        description
+        autoDeleteReports
+        createAssets
+        createAssetsApplyOverrides
+        createAssetsMinQod
+        maxConcurrentNvts
+        maxConcurrentHosts
       }
       schedule {
         name
@@ -143,7 +146,6 @@ export const GET_TASK = gql`
         type
       }
       schedulePeriods
-      hostsOrdering
       userTags {
         count
         tags {
@@ -196,7 +198,8 @@ export const GET_TASKS = gql`
             lastReport {
               id
               severity
-              timestamp
+              creationTime
+              scanStart
             }
             counts {
               total
@@ -214,9 +217,12 @@ export const GET_TASKS = gql`
           comment
           owner
           preferences {
-            name
-            value
-            description
+            autoDeleteReports
+            createAssets
+            createAssetsApplyOverrides
+            createAssetsMinQod
+            maxConcurrentNvts
+            maxConcurrentHosts
           }
           schedule {
             name
@@ -239,7 +245,6 @@ export const GET_TASKS = gql`
             name
             type
           }
-          hostsOrdering
           observers {
             users
             roles {
