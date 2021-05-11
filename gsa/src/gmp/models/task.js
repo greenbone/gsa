@@ -85,10 +85,28 @@ const TASK_STATUS_TRANSLATIONS = {
   Done: _l('Done'),
   Queued: _l('Queued'),
 };
+const HYPERION_TASK_STATUS_TRANSLATIONS = {
+  RUNNING: _l('Running'),
+  STOP_REQUESTED: _l('Stop Requested'),
+  DELETE_REQUESTED: _l('Delete Requested'),
+  ULTIMATE_DELETE_REQUESTED: _l('Ultimate Delete Requested'),
+  RESUME_REQUESTED: _l('Resume Requested'),
+  REQUESTED: _l('Requested'),
+  STOPPED: _l('Stopped'),
+  NEW: _l('New'),
+  INTERRUPTED: _l('Interrupted'),
+  CONTAINER: _l('Container'),
+  UPLOADING: _l('Uploading'),
+  DONE: _l('Done'),
+  QUEUED: _l('Queued'),
+};
 /* eslint-disable quote-props */
 
 export const getTranslatableTaskStatus = status =>
   `${TASK_STATUS_TRANSLATIONS[status]}`;
+
+export const getTranslatableHyperionTaskStatus = status =>
+  `${HYPERION_TASK_STATUS_TRANSLATIONS[status]}`;
 
 export const isActive = status =>
   status === TASK_STATUS.running ||
@@ -202,66 +220,8 @@ class Task extends Model {
 
     copy.progress = parseProgressElement(object.progress);
 
-    const prefs = {};
-
-    if (copy.preferences && isArray(object.preferences)) {
-      for (const pref of object.preferences) {
-        switch (pref.name) {
-          case 'in_assets':
-            copy.inAssets = parseYes(pref.value);
-            break;
-          case 'assets_apply_overrides':
-            copy.applyOverrides = parseYes(pref.value);
-            break;
-          case 'assets_min_qod':
-            copy.minQod = parseInt(pref.value);
-            break;
-          case 'auto_delete':
-            copy.autoDelete =
-              pref.value === AUTO_DELETE_KEEP
-                ? AUTO_DELETE_KEEP
-                : AUTO_DELETE_NO;
-            break;
-          case 'auto_delete_data':
-            copy.autoDeleteData =
-              pref.value === '0'
-                ? AUTO_DELETE_KEEP_DEFAULT_VALUE
-                : parseInt(pref.value);
-            break;
-          case 'max_hosts':
-            copy.maxHosts = parseInt(pref.value);
-            delete copy.max_hosts;
-            break;
-          case 'max_checks':
-            copy.maxChecks = parseInt(pref.value);
-            delete copy.max_checks;
-            break;
-          case 'source_iface':
-            copy.sourceIface = pref.value; // is this defined in selene?
-            delete copy.source_iface;
-            break;
-          default:
-            prefs[pref.name] = {value: pref.value, name: pref.name};
-            break;
-        }
-      }
-    }
-
-    copy.preferences = prefs;
-
     if (isDefined(object.average_duration)) {
       copy.averageDuration = parseDuration(object.average_duration);
-    }
-
-    if (hasValue(object.hostsOrdering)) {
-      copy.hostsOrdering = object.hostsOrdering.toLowerCase();
-    }
-    if (
-      copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
-      copy.hostsOrdering !== HOSTS_ORDERING_REVERSE &&
-      copy.hostsOrdering !== HOSTS_ORDERING_SEQUENTIAL
-    ) {
-      delete copy.hostsOrdering;
     }
 
     if (hasValue(object.userTags)) {
@@ -270,6 +230,12 @@ class Task extends Model {
       });
     } else {
       copy.userTags = [];
+    }
+
+    if (hasValue(object.status)) {
+      copy.status = getTranslatableHyperionTaskStatus(object.status);
+    } else {
+      delete copy.status;
     }
 
     return copy;

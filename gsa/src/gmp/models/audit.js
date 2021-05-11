@@ -49,6 +49,7 @@ import {
   DEFAULT_MIN_QOD,
   TASK_STATUS as AUDIT_STATUS,
   getTranslatableTaskStatus as getTranslatableAuditStatus,
+  getTranslatableHyperionTaskStatus as getTranslatableHyperionAuditStatus,
   isActive,
 } from './task';
 import Policy from './policy';
@@ -170,66 +171,14 @@ class Audit extends Model {
       copy.progress = 0;
     }
 
-    const prefs = {};
-
-    if (copy.preferences && isArray(object.preferences)) {
-      for (const pref of object.preferences) {
-        switch (pref.name) {
-          case 'in_assets':
-            copy.inAssets = parseYes(pref.value);
-            break;
-          case 'assets_apply_overrides':
-            copy.applyOverrides = parseYes(pref.value);
-            break;
-          case 'assets_min_qod':
-            copy.minQod = parseInt(pref.value);
-            break;
-          case 'auto_delete':
-            copy.autoDelete =
-              pref.value === AUTO_DELETE_KEEP
-                ? AUTO_DELETE_KEEP
-                : AUTO_DELETE_NO;
-            break;
-          case 'auto_delete_data':
-            copy.autoDeleteData =
-              pref.value === '0'
-                ? AUTO_DELETE_KEEP_DEFAULT_VALUE
-                : parseInt(pref.value);
-            break;
-          case 'max_hosts':
-            copy.maxHosts = parseInt(pref.value);
-            delete copy.max_hosts;
-            break;
-          case 'max_checks':
-            copy.maxChecks = parseInt(pref.value);
-            delete copy.max_checks;
-            break;
-          case 'source_iface':
-            copy.sourceIface = pref.value; // is this defined in selene?
-            delete copy.source_iface;
-            break;
-          default:
-            prefs[pref.name] = {value: pref.value, name: pref.name};
-            break;
-        }
-      }
-    }
-
-    copy.preferences = prefs;
-
     if (hasValue(object.averageDuration)) {
       copy.averageDuration = parseDuration(object.averageDuration);
     }
 
-    if (hasValue(object.hostsOrdering)) {
-      copy.hostsOrdering = object.hostsOrdering.toLowerCase();
-    }
-    if (
-      copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
-      copy.hostsOrdering !== HOSTS_ORDERING_REVERSE &&
-      copy.hostsOrdering !== HOSTS_ORDERING_SEQUENTIAL
-    ) {
-      delete copy.hostsOrdering;
+    if (hasValue(object.status)) {
+      copy.status = getTranslatableHyperionAuditStatus(object.status);
+    } else {
+      delete copy.status;
     }
 
     return copy;
