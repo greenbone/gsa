@@ -22,8 +22,6 @@ import _ from 'gmp/locale';
 import {duration} from 'gmp/models/date';
 import {scannerTypeName} from 'gmp/models/scanner';
 
-import {YES_VALUE} from 'gmp/parser';
-
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import DateTime from 'web/components/date/datetime';
@@ -204,14 +202,14 @@ const TaskDetails = ({entity, links = true}) => {
               <TableData>{renderYesNo(createAssets)}</TableData>
             </TableRow>
 
-            {createAssets === YES_VALUE && (
+            {createAssets === true && ( // true value later!
               <TableRow>
                 <TableData>{_('Apply Overrides')}</TableData>
                 <TableData>{renderYesNo(createAssetsApplyOverrides)}</TableData>
               </TableRow>
             )}
 
-            {createAssets === YES_VALUE && (
+            {createAssets === true && (
               <TableRow>
                 <TableData>{_('Min QoD')}</TableData>
                 <TableData>{createAssetsMinQod + ' %'}</TableData>

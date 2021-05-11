@@ -69,6 +69,22 @@ export const TASK_STATUS = {
   done: 'Done',
 };
 
+export const HYPERION_TASK_STATUS = {
+  queued: 'QUEUED',
+  running: 'RUNNING',
+  stoprequested: 'STOP_REQUESTED',
+  deleterequested: 'DELETE_REQUESTED',
+  ultimatedeleterequested: 'ULTIMATE_DELETE_REQUESTED',
+  resumerequested: 'RESUME_REQUESTED',
+  requested: 'REQUESTED',
+  stopped: 'STOPPED',
+  new: 'NEW',
+  interrupted: 'INTERRUPTED',
+  container: 'CONTAINER',
+  uploading: 'UPLOADING',
+  done: 'DONE',
+};
+
 /* eslint-disable quote-props */
 const TASK_STATUS_TRANSLATIONS = {
   Running: _l('Running'),

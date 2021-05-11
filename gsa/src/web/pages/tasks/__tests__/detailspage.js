@@ -44,6 +44,8 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
+import {taskScanConfig} from './details';
+
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
 setLocale('en');
@@ -109,7 +111,10 @@ describe('Task Detailspage tests', () => {
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
       filterString: 'resource_uuid=12345 first=1 rows=-1',
     });
-    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
+    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock(
+      '314',
+      taskScanConfig,
+    );
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -191,8 +196,6 @@ describe('Task Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('scanner 1');
     expect(baseElement).toHaveTextContent('OpenVAS Scanner');
     expect(detailslinks[6]).toHaveAttribute('href', '/scanconfig/314');
-    expect(baseElement).toHaveTextContent('Order for target hostssequential');
-    expect(baseElement).toHaveTextContent('Network Source Interface');
     expect(baseElement).toHaveTextContent(
       'Maximum concurrently executed NVTs per host4',
     );
@@ -212,7 +215,7 @@ describe('Task Detailspage tests', () => {
     expect(headings[6]).toHaveTextContent('Scan');
     expect(baseElement).toHaveTextContent('2 minutes');
     expect(baseElement).toHaveTextContent(
-      'Do not automatically delete reports',
+      'Automatically delete oldest reports but always keep newest 5 reports',
     );
   });
 

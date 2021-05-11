@@ -28,41 +28,41 @@ setLocale('en');
 
 describe('Task Trend tests', () => {
   test('should render', () => {
-    const {element} = render(<Trend name="up" />);
+    const {element} = render(<Trend name="UP" />);
 
     expect(element).toMatchSnapshot();
   });
 
   test('should render trend up icon', () => {
-    const {element} = render(<Trend name="up" />);
+    const {element} = render(<Trend name="UP" />);
 
     expect(element).toHaveAttribute('title', 'Severity increased');
     expect(element).toHaveTextContent('trend_up.svg');
   });
 
   test('should render trend down icon', () => {
-    const {element} = render(<Trend name="down" />);
+    const {element} = render(<Trend name="DOWN" />);
 
     expect(element).toHaveAttribute('title', 'Severity decreased');
     expect(element).toHaveTextContent('trend_down.svg');
   });
 
   test('should render trend less icon', () => {
-    const {element} = render(<Trend name="less" />);
+    const {element} = render(<Trend name="LESS" />);
 
     expect(element).toHaveAttribute('title', 'Vulnerability count decreased');
     expect(element).toHaveTextContent('trend_less.svg');
   });
 
   test('should render trend more icon', () => {
-    const {element} = render(<Trend name="more" />);
+    const {element} = render(<Trend name="MORE" />);
 
     expect(element).toHaveAttribute('title', 'Vulnerability count increased');
     expect(element).toHaveTextContent('trend_more.svg');
   });
 
   test('should render trend no change icon', () => {
-    const {element} = render(<Trend name="same" />);
+    const {element} = render(<Trend name="SAME" />);
 
     expect(element).toHaveAttribute('title', 'Vulnerabilities did not change');
     expect(element).toHaveTextContent('trend_nochange.svg');

@@ -17,8 +17,7 @@
  */
 import {setLocale} from 'gmp/locale/lang';
 
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
-import Task, {TASK_STATUS} from 'gmp/models/task';
+import Task from 'gmp/models/task';
 
 import {deepFreeze} from 'web/utils/testing';
 
@@ -57,10 +56,8 @@ const greenboneSensor = deepFreeze({
 const scanConfig = deepFreeze({
   id: '314',
   name: 'foo',
-  comment: 'bar',
   trash: false,
-  scanner: scanner,
-  type: OPENVAS_SCAN_CONFIG_TYPE,
+  type: 'OPENVAS',
 });
 
 // Schedule
@@ -76,14 +73,14 @@ const alert = deepFreeze({id: '151617', name: 'alert 1'});
 const lastReport = deepFreeze({
   id: '1234',
   severity: '5.0',
-  timestamp: '2019-07-30T13:23:30Z',
+  creationTime: '2019-07-30T13:23:30Z',
   scanStart: '2019-07-30T13:23:34Z',
   scanEnd: '2019-07-30T13:25:43Z',
 });
 
 const currentReport = deepFreeze({
   id: '5678',
-  timestamp: '2019-08-30T13:23:30Z',
+  creationTime: '2019-08-30T13:23:30Z',
   scanStart: '2019-08-30T13:23:34Z',
 });
 
@@ -118,43 +115,14 @@ const observers = deepFreeze({
 });
 
 // Preferences
-const preferences = deepFreeze([
-  {
-    description: 'Add results to Asset Management',
-    name: 'in_assets',
-    value: 'yes',
-  },
-  {
-    description: 'Apply Overrides when adding Assets',
-    name: 'assets_apply_overrides',
-    value: 'yes',
-  },
-  {
-    description: 'Min QOD when adding Assets',
-    name: 'assets_min_qod',
-    value: '70',
-  },
-  {
-    description: 'Auto Delete Reports',
-    name: 'auto_delete',
-    value: 'no',
-  },
-  {
-    description: 'Auto Delete Reports Data',
-    name: 'auto_delete_data',
-    value: '5',
-  },
-  {
-    description: 'Maximum concurrently executed NVTs per host',
-    name: 'max_checks',
-    value: '4',
-  },
-  {
-    description: 'Maximum concurrently scanned hosts',
-    name: 'max_hosts',
-    value: '20',
-  },
-]);
+const preferences = deepFreeze({
+  createAssets: true,
+  createAssetsApplyOverrides: true,
+  createAssetsMinQod: 70,
+  autoDeleteReports: null,
+  maxConcurrentNvts: 4,
+  maxConcurrentHosts: 20,
+});
 
 // Tasks
 const task = deepFreeze({
@@ -165,7 +133,7 @@ const task = deepFreeze({
   alterable: 1,
   creationTime: '2019-07-30T13:00:00Z',
   modificationTime: '2019-08-30T13:23:30Z',
-  status: TASK_STATUS.stopped,
+  status: 'STOPPED',
   reports: {
     lastReport,
     currentReport,
@@ -181,7 +149,6 @@ const task = deepFreeze({
   scanner: greenboneSensor,
   scanConfig: scanConfig,
   preferences: preferences,
-  hostsOrdering: 'sequential',
   observers: observers,
 });
 
@@ -191,7 +158,7 @@ const newTask = deepFreeze({
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
-  status: TASK_STATUS.new,
+  status: 'NEW',
   reports: {
     counts: {
       total: 0,
@@ -212,7 +179,7 @@ const finishedTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  status: TASK_STATUS.done,
+  status: 'DONE',
   reports: {
     lastReport,
     counts: {
@@ -236,7 +203,7 @@ const runningTask = deepFreeze({
   owner: 'admin',
   alterable: 0,
   inUse: true,
-  status: TASK_STATUS.running,
+  status: 'RUNNING',
   reports: {
     lastReport,
     currentReport,
@@ -260,7 +227,7 @@ const stoppedTask = deepFreeze({
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
-  status: TASK_STATUS.stopped,
+  status: 'STOPPED',
   reports: {
     lastReport,
     currentReport,
@@ -284,7 +251,7 @@ const observedTask = deepFreeze({
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
-  status: TASK_STATUS.done,
+  status: 'DONE',
   reports: {
     lastReport,
     counts: {
@@ -307,7 +274,7 @@ const containerTask = deepFreeze({
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
-  status: TASK_STATUS.done,
+  status: 'DONE',
   reports: {
     lastReport,
     counts: {
@@ -334,9 +301,9 @@ const listMockTask = deepFreeze({
       finished: 1,
     },
   },
-  status: TASK_STATUS.done,
+  status: 'DONE',
   target,
-  trend: 'up',
+  trend: 'UP',
   alterable: 0,
   comment: 'bar',
   owner: 'admin',
@@ -345,7 +312,6 @@ const listMockTask = deepFreeze({
   alerts: [],
   scanConfig,
   scanner,
-  hostsOrdering: null,
   observers,
 });
 
@@ -363,7 +329,7 @@ const detailsMockTask = deepFreeze({
       finished: 1,
     },
   },
-  status: TASK_STATUS.stopped,
+  status: 'STOPPED',
   target,
   alterable: 0,
   trend: null,
@@ -375,7 +341,6 @@ const detailsMockTask = deepFreeze({
   scanConfig,
   scanner,
   schedulePeriods: null,
-  hostsOrdering: 'sequential',
   userTags: null,
   observers,
 });
