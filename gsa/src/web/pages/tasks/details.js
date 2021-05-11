@@ -20,7 +20,6 @@ import React, {useEffect} from 'react';
 import _ from 'gmp/locale';
 
 import {duration} from 'gmp/models/date';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
 import {YES_VALUE} from 'gmp/parser';

@@ -32,19 +32,19 @@ const Trend = ({name}) => {
   let title;
   let IconComponent;
 
-  if (name === 'up') {
+  if (name === 'UP') {
     title = _('Severity increased');
     IconComponent = TrendUpIcon;
-  } else if (name === 'down') {
+  } else if (name === 'DOWN') {
     title = _('Severity decreased');
     IconComponent = TrendDownIcon;
-  } else if (name === 'more') {
+  } else if (name === 'MORE') {
     title = _('Vulnerability count increased');
     IconComponent = TrendMoreIcon;
-  } else if (name === 'less') {
+  } else if (name === 'LESS') {
     title = _('Vulnerability count decreased');
     IconComponent = TrendLessIcon;
-  } else if (name === 'same') {
+  } else if (name === 'SAME') {
     title = _('Vulnerabilities did not change');
     IconComponent = TrendNoChangeIcon;
   } else {

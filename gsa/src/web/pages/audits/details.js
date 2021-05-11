@@ -23,7 +23,6 @@ import DateTime from 'web/components/date/datetime';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import {duration} from 'gmp/models/date';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
@@ -76,8 +75,6 @@ const AuditDetails = ({entity, links = true}) => {
   const {
     autoDeleteReports,
     createAssets,
-    createAssetsApplyOverrides,
-    createAssetsMinQod,
     maxConcurrentHosts,
     maxConcurrentNvts,
   } = preferences;
