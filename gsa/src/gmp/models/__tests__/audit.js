@@ -31,107 +31,35 @@ import {testModel} from 'gmp/models/testing';
 describe.only('Audit model parseObject tests', () => {
   testModel(Audit, 'audit', {testIsActive: false});
 
-  test('should parse undefined hosts_ordering', () => {
-    const obj = {hostsOrdering: null};
-    const audit = Audit.fromObject(obj);
-    expect(audit.hostsOrdering).toBeUndefined();
-  });
-
-  test('should parse unknown hosts_ordering as undefined', () => {
-    const obj = {hostsOrdering: 'FOO'};
-    const audit = Audit.fromObject(obj);
-    expect(audit.hostsOrdering).toBeUndefined();
-  });
-
-  test('should parse known hosts_ordering', () => {
-    let obj = {hostsOrdering: 'RANDOM'};
-    let audit = Audit.fromObject(obj);
-    expect(audit.hostsOrdering).toEqual(HOSTS_ORDERING_RANDOM);
-
-    obj = {hostsOrdering: 'REVERSE'};
-    audit = Audit.fromObject(obj);
-    expect(audit.hostsOrdering).toEqual(HOSTS_ORDERING_REVERSE);
-
-    obj = {hostsOrdering: 'SEQUENTIAL'};
-    audit = Audit.fromObject(obj);
-    expect(audit.hostsOrdering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
-  });
-
   test('should parse preferences', () => {
     const audit1 = Audit.fromObject({
       id: 'a1',
-      preferences: [
-        {
-          name: 'in_assets',
-          value: 'yes',
-        },
-        {
-          name: 'assets_apply_overrides',
-          value: 'yes',
-        },
-        {
-          name: 'assets_min_qod',
-          value: '70',
-        },
-        {
-          name: 'auto_delete',
-          value: 'keep',
-        },
-        {
-          name: 'auto_delete_data',
-          value: '0',
-        },
-        {
-          name: 'max_hosts',
-          value: '20',
-        },
-        {
-          name: 'max_checks',
-          value: '4',
-        },
-        {
-          name: 'source_iface',
-          value: 'eth0',
-        },
-        {
-          name: 'foo',
-          value: 'bar',
-        },
-      ],
+      preferences: {
+        createAssets: true,
+        createAssetsApplyOverrides: true,
+        createAssetsMinQod: 70,
+        autoDeleteReports: 0,
+        maxConcurrentHosts: 20,
+        maxConcurrentNvts: 4,
+      },
     });
     const audit2 = Audit.fromObject({
       id: 'a1',
-      preferences: [
-        {
-          name: 'in_assets',
-          value: 'no',
-        },
-        {
-          name: 'assets_apply_overrides',
-          value: 'no',
-        },
-        {
-          name: 'auto_delete',
-          value: 'no',
-        },
-        {
-          name: 'auto_delete_data',
-          value: '3',
-        },
-      ],
+      preferences: {
+        createAssets: false,
+        createAssetsApplyOverrides: false,
+        autoDeleteReports: 3,
+      },
     });
 
-    expect(audit1.inAssets).toEqual(1);
-    expect(audit1.applyOverrides).toEqual(1);
-    expect(audit1.minQod).toEqual(70);
-    expect(audit1.autoDelete).toEqual('keep');
-    expect(audit1.maxHosts).toEqual(20);
-    expect(audit1.maxChecks).toEqual(4);
-    expect(audit1.sourceIface).toEqual('eth0');
-    expect(audit2.inAssets).toEqual(0);
-    expect(audit2.applyOverrides).toEqual(0);
-    expect(audit2.autoDelete).toEqual('no');
-    expect(audit2.autoDeleteData).toEqual(3);
+    expect(audit1.preferences.createAssets).toEqual(true);
+    expect(audit1.preferences.createAssetsApplyOverrides).toEqual(true);
+    expect(audit1.preferences.createAssetsMinQod).toEqual(70);
+    expect(audit1.preferences.maxConcurrentHosts).toEqual(20);
+    expect(audit1.preferences.maxConcurrentNvts).toEqual(4);
+    expect(audit2.preferences.createAssets).toEqual(false);
+    expect(audit2.preferences.createAssetsApplyOverrides).toEqual(false);
+    expect(audit2.preferences.autoDeleteReports).toEqual(3);
   });
 
   test('should parse audit progress', () => {

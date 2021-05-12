@@ -16,7 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {
   createGenericQueryMock,
   createGenericMutationResult,

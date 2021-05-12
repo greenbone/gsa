@@ -157,26 +157,22 @@ const AuditDetails = ({entity, links = true}) => {
                   </TableData>
                 </TableRow>
               )}
-              {hasValue(policy) &&
-                policy.policyType === 'OPENVAS' &&
-                hasValue(maxConcurrentNvts) && (
-                  <TableRow>
-                    <TableData>
-                      {_('Maximum concurrently executed NVTs per host')}
-                    </TableData>
-                    <TableData>{maxConcurrentNvts}</TableData>
-                  </TableRow>
-                )}
-              {hasValue(policy) &&
-                policy.policyType === 'OPENVAS' &&
-                hasValue(maxConcurrentHosts) && (
-                  <TableRow>
-                    <TableData>
-                      {_('Maximum concurrently scanned hosts')}
-                    </TableData>
-                    <TableData>{maxConcurrentHosts}</TableData>
-                  </TableRow>
-                )}
+              {hasValue(maxConcurrentNvts) && ( // policies do not have types anymore
+                <TableRow>
+                  <TableData>
+                    {_('Maximum concurrently executed NVTs per host')}
+                  </TableData>
+                  <TableData>{maxConcurrentNvts}</TableData>
+                </TableRow>
+              )}
+              {hasValue(maxConcurrentHosts) && (
+                <TableRow>
+                  <TableData>
+                    {_('Maximum concurrently scanned hosts')}
+                  </TableData>
+                  <TableData>{maxConcurrentHosts}</TableData>
+                </TableRow>
+              )}
             </TableBody>
           </DetailsTable>
         </DetailsBlock>

@@ -22,7 +22,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
-import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
+import Audit from 'gmp/models/audit';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -36,19 +36,19 @@ const caps = new Capabilities(['everything']);
 
 const lastReport = {
   id: '1234',
-  timestamp: '2019-08-10T12:51:27Z',
+  creationTime: '2019-08-10T12:51:27Z',
   complianceCount: {yes: 4, no: 3, incomplete: 1},
 };
 
 const lastReport2 = {
   id: '1234',
-  timestamp: '2019-07-10T12:51:27Z',
+  creationTime: '2019-07-10T12:51:27Z',
   complianceCount: {yes: 4, no: 3, incomplete: 1},
 };
 
 const currentReport = {
   id: '5678',
-  timestamp: '2019-07-10T12:51:27Z',
+  creationTime: '2019-07-10T12:51:27Z',
 };
 
 const audit = Audit.fromObject({
@@ -56,7 +56,7 @@ const audit = Audit.fromObject({
   owner: 'admin',
   name: 'foo',
   comment: 'bar',
-  status: AUDIT_STATUS.done,
+  status: 'DONE',
   alterable: false,
   reports: {
     lastReport,
@@ -70,7 +70,7 @@ const audit2 = Audit.fromObject({
   owner: 'user',
   name: 'lorem',
   comment: 'ipsum',
-  status: AUDIT_STATUS.new,
+  status: 'NEW',
   alterable: false,
   permissions: [{name: 'everything'}],
   target: {id: 'id2', name: 'target2'},
@@ -81,7 +81,7 @@ const audit3 = Audit.fromObject({
   owner: 'user',
   name: 'hello',
   comment: 'world',
-  status: AUDIT_STATUS.running,
+  status: 'RUNNING',
   alterable: false,
   reports: {
     currentReport,

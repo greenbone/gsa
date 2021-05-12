@@ -23,7 +23,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
-import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
+import Audit from 'gmp/models/audit';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -113,7 +113,7 @@ const audit = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: AUDIT_STATUS.done,
+  status: 'DONE',
   alterable: true,
   reports: {
     lastReport,
@@ -143,7 +143,7 @@ const audit2 = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: AUDIT_STATUS.done,
+  status: 'DONE',
   alterable: false,
   reports: {
     lastReport,
@@ -173,7 +173,7 @@ const audit3 = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: AUDIT_STATUS.new,
+  status: 'NEW',
   alterable: false,
   reports: {
     counts: {
@@ -202,7 +202,7 @@ const audit4 = Audit.fromObject({
   inUse: true,
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: AUDIT_STATUS.running,
+  status: 'RUNNING',
   alterable: false,
   reports: {
     currentReport,
@@ -231,7 +231,7 @@ const audit5 = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: AUDIT_STATUS.stopped,
+  status: 'STOPPED',
   alterable: false,
   reports: {
     currentReport,
@@ -262,7 +262,7 @@ const audit6 = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: AUDIT_STATUS.done,
+  status: 'DONE',
   alterable: false,
   reports: {
     lastReport,
@@ -292,7 +292,7 @@ const audit7 = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: AUDIT_STATUS.done,
+  status: 'DONE',
   alterable: false,
   reports: {
     lastReport,
@@ -433,9 +433,6 @@ describe('Audit Detailspage tests', () => {
 
     expect(detailslinks[6]).toHaveAttribute('href', '/policy/234');
     expect(baseElement).toHaveTextContent('unnamed policy');
-    expect(baseElement).toHaveTextContent('Order for target hosts');
-    expect(baseElement).toHaveTextContent('sequential');
-    expect(baseElement).toHaveTextContent('Network Source Interface');
     expect(baseElement).toHaveTextContent(
       'Maximum concurrently executed NVTs per host',
     );
@@ -454,7 +451,7 @@ describe('Audit Detailspage tests', () => {
     expect(headings[6]).toHaveTextContent('Scan');
     expect(baseElement).toHaveTextContent('2 minutes');
     expect(baseElement).toHaveTextContent(
-      'Do not automatically delete reports',
+      'Automatically delete oldest reports but always keep newest 5 reports',
     );
   });
 

@@ -58,13 +58,13 @@ const caps = new Capabilities(['everything']);
 
 const lastReport = {
   id: '1234',
-  timestamp: '2019-07-10T12:51:27Z',
+  creationTime: '2019-07-10T12:51:27Z',
   complianceCount: {yes: 4, no: 3, incomplete: 1},
 };
 
 const currentReport = {
   id: '5678',
-  timestamp: '2019-07-10T12:51:27Z',
+  creationTime: '2019-07-10T12:51:27Z',
 };
 
 describe('Audit Row tests', () => {
@@ -79,7 +79,7 @@ describe('Audit Row tests', () => {
       owner: 'username',
       name: 'foo',
       comment: 'bar',
-      status: AUDIT_STATUS.done,
+      status: 'DONE',
       alterable: false,
       reports: {
         lastReport,
@@ -165,7 +165,7 @@ describe('Audit Row tests', () => {
       owner: 'username',
       name: 'foo',
       comment: 'bar',
-      status: AUDIT_STATUS.new,
+      status: 'NEW',
       alterable: true,
       reports: {
         lastReport,
@@ -231,7 +231,7 @@ describe('Audit Row tests', () => {
       owner: 'username',
       name: 'foo',
       comment: 'bar',
-      status: AUDIT_STATUS.new,
+      status: 'NEW',
       alterable: false,
       permissions: [{name: 'everything'}],
       target: {id: 'id', name: 'target'},
@@ -326,7 +326,7 @@ describe('Audit Row tests', () => {
       name: 'foo',
       comment: 'bar',
       inUse: true,
-      status: AUDIT_STATUS.running,
+      status: 'RUNNING',
       alterable: false,
       reports: {
         currentReport,
@@ -432,7 +432,7 @@ describe('Audit Row tests', () => {
       owner: 'username',
       name: 'foo',
       comment: 'bar',
-      status: AUDIT_STATUS.stopped,
+      status: 'STOPPED',
       alterable: false,
       reports: {
         currentReport,
@@ -539,7 +539,7 @@ describe('Audit Row tests', () => {
       owner: 'username',
       name: 'foo',
       comment: 'bar',
-      status: AUDIT_STATUS.done,
+      status: 'DONE',
       alterable: false,
       reports: {
         lastReport,
@@ -645,7 +645,7 @@ describe('Audit Row tests', () => {
       owner: 'user',
       name: 'foo',
       comment: 'bar',
-      status: AUDIT_STATUS.done,
+      status: 'DONE',
       alterable: false,
       reports: {
         lastReport,
