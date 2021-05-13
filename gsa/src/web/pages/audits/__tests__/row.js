@@ -21,7 +21,7 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
-import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
+import Audit, {AUDIT_STATUS, HYPERION_AUDIT_STATUS} from 'gmp/models/audit';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -79,7 +79,7 @@ describe('Audit Row tests', () => {
       owner: 'username',
       name: 'foo',
       comment: 'bar',
-      status: 'DONE',
+      status: HYPERION_AUDIT_STATUS.done,
       alterable: false,
       reports: {
         lastReport,
@@ -165,7 +165,7 @@ describe('Audit Row tests', () => {
       owner: 'username',
       name: 'foo',
       comment: 'bar',
-      status: 'NEW',
+      status: HYPERION_AUDIT_STATUS.new,
       alterable: true,
       reports: {
         lastReport,
@@ -231,7 +231,7 @@ describe('Audit Row tests', () => {
       owner: 'username',
       name: 'foo',
       comment: 'bar',
-      status: 'NEW',
+      status: HYPERION_AUDIT_STATUS.new,
       alterable: false,
       permissions: [{name: 'everything'}],
       target: {id: 'id', name: 'target'},
@@ -326,7 +326,7 @@ describe('Audit Row tests', () => {
       name: 'foo',
       comment: 'bar',
       inUse: true,
-      status: 'RUNNING',
+      status: HYPERION_AUDIT_STATUS.running,
       alterable: false,
       reports: {
         currentReport,
@@ -432,7 +432,7 @@ describe('Audit Row tests', () => {
       owner: 'username',
       name: 'foo',
       comment: 'bar',
-      status: 'STOPPED',
+      status: HYPERION_AUDIT_STATUS.stopped,
       alterable: false,
       reports: {
         currentReport,
@@ -539,7 +539,7 @@ describe('Audit Row tests', () => {
       owner: 'username',
       name: 'foo',
       comment: 'bar',
-      status: 'DONE',
+      status: HYPERION_AUDIT_STATUS.done,
       alterable: false,
       reports: {
         lastReport,
@@ -645,7 +645,7 @@ describe('Audit Row tests', () => {
       owner: 'user',
       name: 'foo',
       comment: 'bar',
-      status: 'DONE',
+      status: HYPERION_AUDIT_STATUS.done,
       alterable: false,
       reports: {
         lastReport,

@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {HYPERION_TASK_STATUS, TASK_TREND} from 'gmp/models/task';
+
 import {
   CLONE_TASK,
   CREATE_CONTAINER_TASK,
@@ -145,9 +147,9 @@ const listMockTask = deepFreeze({
     },
   },
   progress: 100,
-  status: 'DONE',
+  status: HYPERION_TASK_STATUS.done,
   target,
-  trend: 'UP',
+  trend: TASK_TREND.up,
   alterable: 0,
   comment: 'bar',
   owner: 'admin',
@@ -196,7 +198,7 @@ const detailsMockTask = deepFreeze({
     },
   },
   progress: 100,
-  status: 'STOPPED',
+  status: HYPERION_TASK_STATUS.stopped,
   target,
   alterable: 0,
   trend: null,

@@ -17,7 +17,7 @@
  */
 import {setLocale} from 'gmp/locale/lang';
 
-import Task from 'gmp/models/task';
+import Task, {HYPERION_TASK_STATUS, TASK_TREND} from 'gmp/models/task';
 
 import {deepFreeze} from 'web/utils/testing';
 
@@ -58,6 +58,73 @@ const scanConfig = deepFreeze({
   name: 'foo',
   trash: false,
   type: 'OPENVAS',
+});
+
+export const detailsScanConfig = deepFreeze({
+  id: '314',
+  name: 'Half empty and slow',
+  creationTime: null,
+  comment: "Most NVT's",
+  families: [
+    {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
+    {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
+  ],
+  familyCount: 1,
+  familyGrowing: true,
+  nvtGrowing: false,
+  owner: 'admin',
+  inUse: false,
+  knownNvtCount: 99998,
+  maxNvtCount: 99999,
+  modificationTime: '2020-09-29T12:16:50+00:00',
+  nvtCount: 99998,
+  nvtSelectors: [
+    {
+      name: '436',
+      include: true,
+      type: 2,
+      familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
+    },
+  ],
+  permissions: [{name: 'Everything'}],
+  predefined: true,
+  nvtPreferences: [
+    {
+      alternativeValues: ['postgres', 'regress'],
+      default: 'postgres',
+      hrName: 'Postgres Username:',
+      id: 1,
+      name: 'Postgres Username:',
+      type: 'entry',
+      value: 'regress',
+      nvt: {
+        id: '1.3.6.1.4.1.25623.1.0.100151',
+        name: 'PostgreSQL Detection',
+      },
+    },
+  ],
+  scannerPreferences: [
+    {
+      alternativeValues: ['foo', 'bar'],
+      default: '1',
+      hrName: 'scanner_pref',
+      id: null,
+      name: 'scanner_pref',
+      type: null,
+      value: '1',
+    },
+  ],
+  tasks: [
+    {
+      name: 'foo',
+      id: '457',
+    },
+  ],
+  trash: false,
+  type: 'OPENVAS',
+  usageType: 'scan',
+  userTags: null,
+  writable: false,
 });
 
 // Schedule
@@ -133,7 +200,7 @@ const task = deepFreeze({
   alterable: 1,
   creationTime: '2019-07-30T13:00:00Z',
   modificationTime: '2019-08-30T13:23:30Z',
-  status: 'STOPPED',
+  status: HYPERION_TASK_STATUS.stopped,
   reports: {
     lastReport,
     currentReport,
@@ -158,7 +225,7 @@ const newTask = deepFreeze({
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
-  status: 'NEW',
+  status: HYPERION_TASK_STATUS.new,
   reports: {
     counts: {
       total: 0,
@@ -179,7 +246,7 @@ const finishedTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  status: 'DONE',
+  status: HYPERION_TASK_STATUS.done,
   reports: {
     lastReport,
     counts: {
@@ -203,7 +270,7 @@ const runningTask = deepFreeze({
   owner: 'admin',
   alterable: 0,
   inUse: true,
-  status: 'RUNNING',
+  status: HYPERION_TASK_STATUS.running,
   reports: {
     lastReport,
     currentReport,
@@ -227,7 +294,7 @@ const stoppedTask = deepFreeze({
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
-  status: 'STOPPED',
+  status: HYPERION_TASK_STATUS.stopped,
   reports: {
     lastReport,
     currentReport,
@@ -251,7 +318,7 @@ const observedTask = deepFreeze({
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
-  status: 'DONE',
+  status: HYPERION_TASK_STATUS.done,
   reports: {
     lastReport,
     counts: {
@@ -274,7 +341,7 @@ const containerTask = deepFreeze({
   comment: 'bar',
   owner: 'admin',
   alterable: 0,
-  status: 'DONE',
+  status: HYPERION_TASK_STATUS.done,
   reports: {
     lastReport,
     counts: {
@@ -301,9 +368,9 @@ const listMockTask = deepFreeze({
       finished: 1,
     },
   },
-  status: 'DONE',
+  status: HYPERION_TASK_STATUS.done,
   target,
-  trend: 'UP',
+  trend: TASK_TREND.up,
   alterable: 0,
   comment: 'bar',
   owner: 'admin',
@@ -329,7 +396,7 @@ const detailsMockTask = deepFreeze({
       finished: 1,
     },
   },
-  status: 'STOPPED',
+  status: HYPERION_TASK_STATUS.stopped,
   target,
   alterable: 0,
   trend: null,

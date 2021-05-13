@@ -19,6 +19,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
+import {TASK_TREND} from 'gmp/models/task';
 
 import TrendUpIcon from 'web/components/icon/trendupicon';
 import TrendDownIcon from 'web/components/icon/trenddownicon';
@@ -32,19 +33,19 @@ const Trend = ({name}) => {
   let title;
   let IconComponent;
 
-  if (name === 'UP') {
+  if (name === TASK_TREND.up) {
     title = _('Severity increased');
     IconComponent = TrendUpIcon;
-  } else if (name === 'DOWN') {
+  } else if (name === TASK_TREND.down) {
     title = _('Severity decreased');
     IconComponent = TrendDownIcon;
-  } else if (name === 'MORE') {
+  } else if (name === TASK_TREND.more) {
     title = _('Vulnerability count increased');
     IconComponent = TrendMoreIcon;
-  } else if (name === 'LESS') {
+  } else if (name === TASK_TREND.less) {
     title = _('Vulnerability count decreased');
     IconComponent = TrendLessIcon;
-  } else if (name === 'SAME') {
+  } else if (name === TASK_TREND.same) {
     title = _('Vulnerabilities did not change');
     IconComponent = TrendNoChangeIcon;
   } else {

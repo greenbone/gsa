@@ -26,80 +26,16 @@ import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 
 import {setTimezone} from 'web/store/usersettings/actions';
 
-import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+import {
+  detailsScanConfig,
+  getMockTasks,
+} from 'web/pages/tasks/__mocks__/mocktasks';
 
-import {deepFreeze, rendererWith, screen, wait} from 'web/utils/testing';
+import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import Details from '../details';
 
 setLocale('en');
-
-export const taskScanConfig = deepFreeze({
-  id: '314',
-  name: 'Half empty and slow',
-  creationTime: null,
-  comment: "Most NVT's",
-  families: [
-    {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
-    {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
-  ],
-  familyCount: 1,
-  familyGrowing: true,
-  nvtGrowing: false,
-  owner: 'admin',
-  inUse: false,
-  knownNvtCount: 99998,
-  maxNvtCount: 99999,
-  modificationTime: '2020-09-29T12:16:50+00:00',
-  nvtCount: 99998,
-  nvtSelectors: [
-    {
-      name: '436',
-      include: true,
-      type: 2,
-      familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
-    },
-  ],
-  permissions: [{name: 'Everything'}],
-  predefined: true,
-  nvtPreferences: [
-    {
-      alternativeValues: ['postgres', 'regress'],
-      default: 'postgres',
-      hrName: 'Postgres Username:',
-      id: 1,
-      name: 'Postgres Username:',
-      type: 'entry',
-      value: 'regress',
-      nvt: {
-        id: '1.3.6.1.4.1.25623.1.0.100151',
-        name: 'PostgreSQL Detection',
-      },
-    },
-  ],
-  scannerPreferences: [
-    {
-      alternativeValues: ['foo', 'bar'],
-      default: '1',
-      hrName: 'scanner_pref',
-      id: null,
-      name: 'scanner_pref',
-      type: null,
-      value: '1',
-    },
-  ],
-  tasks: [
-    {
-      name: 'foo',
-      id: '457',
-    },
-  ],
-  trash: false,
-  type: 'OPENVAS',
-  usageType: 'scan',
-  userTags: null,
-  writable: false,
-});
 
 describe('Task Details tests', () => {
   test('should render full task details', async () => {
@@ -109,7 +45,7 @@ describe('Task Details tests', () => {
     const [scheduleMock, resultFunc] = createGetScheduleQueryMock('foo');
     const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock(
       '314',
-      taskScanConfig,
+      detailsScanConfig,
     );
 
     const {render, store} = rendererWith({

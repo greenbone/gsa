@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {HYPERION_AUDIT_STATUS} from 'gmp/models/audit';
+
 import {
   createGenericQueryMock,
   createGenericMutationResult,
@@ -237,7 +239,7 @@ export const auditDetailsAudit = deepFreeze({
     },
   },
   results: null,
-  status: 'DONE',
+  status: HYPERION_AUDIT_STATUS.done,
   progress: null,
   target: auditDetailsTarget,
   trend: null,
@@ -273,7 +275,7 @@ export const detailsMockAudit = deepFreeze({
       current: 20,
     },
   },
-  status: 'DONE',
+  status: HYPERION_AUDIT_STATUS.done,
   progress: 100,
   target,
   trend: null,
@@ -309,7 +311,7 @@ export const unscheduledAudit = deepFreeze({
       current: 20,
     },
   },
-  status: 'STOPPED',
+  status: HYPERION_AUDIT_STATUS.stopped,
   progress: 100,
   target,
   trend: null,

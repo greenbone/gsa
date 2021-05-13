@@ -23,7 +23,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
-import Audit from 'gmp/models/audit';
+import Audit, {HYPERION_AUDIT_STATUS} from 'gmp/models/audit';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -113,7 +113,7 @@ const audit = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: 'DONE',
+  status: HYPERION_AUDIT_STATUS.done,
   alterable: true,
   reports: {
     lastReport,
@@ -143,7 +143,7 @@ const audit2 = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: 'DONE',
+  status: HYPERION_AUDIT_STATUS.done,
   alterable: false,
   reports: {
     lastReport,
@@ -173,7 +173,7 @@ const audit3 = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: 'NEW',
+  status: HYPERION_AUDIT_STATUS.new,
   alterable: false,
   reports: {
     counts: {
@@ -202,7 +202,7 @@ const audit4 = Audit.fromObject({
   inUse: true,
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: 'RUNNING',
+  status: HYPERION_AUDIT_STATUS.running,
   alterable: false,
   reports: {
     currentReport,
@@ -231,7 +231,7 @@ const audit5 = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: 'STOPPED',
+  status: HYPERION_AUDIT_STATUS.stopped,
   alterable: false,
   reports: {
     currentReport,
@@ -262,7 +262,7 @@ const audit6 = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: 'DONE',
+  status: HYPERION_AUDIT_STATUS.done,
   alterable: false,
   reports: {
     lastReport,
@@ -292,7 +292,7 @@ const audit7 = Audit.fromObject({
   comment: 'bar',
   creationTime: '2019-07-16T06:31:29Z',
   modificationTime: '2019-07-16T06:44:55Z',
-  status: 'DONE',
+  status: HYPERION_AUDIT_STATUS.done,
   alterable: false,
   reports: {
     lastReport,

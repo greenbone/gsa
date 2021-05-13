@@ -47,6 +47,7 @@ import {
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
+  HYPERION_TASK_STATUS as HYPERION_AUDIT_STATUS,
   TASK_STATUS as AUDIT_STATUS,
   getTranslatableTaskStatus as getTranslatableAuditStatus,
   getTranslatableHyperionTaskStatus as getTranslatableHyperionAuditStatus,
@@ -65,6 +66,7 @@ export {
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
   AUDIT_STATUS,
+  HYPERION_AUDIT_STATUS,
   getTranslatableAuditStatus,
   isActive,
 };

@@ -22,7 +22,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
-import Audit from 'gmp/models/audit';
+import Audit, {HYPERION_AUDIT_STATUS} from 'gmp/models/audit';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -56,7 +56,7 @@ const audit = Audit.fromObject({
   owner: 'admin',
   name: 'foo',
   comment: 'bar',
-  status: 'DONE',
+  status: HYPERION_AUDIT_STATUS.done,
   alterable: false,
   reports: {
     lastReport,
@@ -70,7 +70,7 @@ const audit2 = Audit.fromObject({
   owner: 'user',
   name: 'lorem',
   comment: 'ipsum',
-  status: 'NEW',
+  status: HYPERION_AUDIT_STATUS.new,
   alterable: false,
   permissions: [{name: 'everything'}],
   target: {id: 'id2', name: 'target2'},
@@ -81,7 +81,7 @@ const audit3 = Audit.fromObject({
   owner: 'user',
   name: 'hello',
   comment: 'world',
-  status: 'RUNNING',
+  status: HYPERION_AUDIT_STATUS.running,
   alterable: false,
   reports: {
     currentReport,

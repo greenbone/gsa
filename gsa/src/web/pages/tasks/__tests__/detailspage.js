@@ -38,13 +38,14 @@ import {
   createDeleteTaskQueryMock,
 } from 'web/graphql/__mocks__/tasks';
 
-import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+import {
+  detailsScanConfig,
+  getMockTasks,
+} from 'web/pages/tasks/__mocks__/mocktasks';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
-
-import {taskScanConfig} from './details';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -113,7 +114,7 @@ describe('Task Detailspage tests', () => {
     });
     const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock(
       '314',
-      taskScanConfig,
+      detailsScanConfig,
     );
 
     const {render, store} = rendererWith({

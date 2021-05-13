@@ -53,6 +53,14 @@ export const DEFAULT_MAX_CHECKS = 4;
 export const DEFAULT_MAX_HOSTS = 20;
 export const DEFAULT_MIN_QOD = 70;
 
+export const TASK_TREND = {
+  up: 'UP',
+  down: 'DOWN',
+  more: 'MORE',
+  less: 'LESS',
+  same: 'SAME',
+};
+
 export const TASK_STATUS = {
   queued: 'Queued',
   running: 'Running',
