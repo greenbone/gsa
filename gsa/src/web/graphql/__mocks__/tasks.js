@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {HYPERION_TASK_STATUS, TASK_TREND} from 'gmp/models/task';
 
 import {
@@ -56,7 +57,7 @@ const scanConfig = deepFreeze({
   id: '314',
   name: 'foo',
   trash: false,
-  type: 'OPENVAS',
+  type: SCAN_CONFIG_TYPE.openvas,
 });
 
 // Reports

@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import {setLocale} from 'gmp/locale/lang';
+import {SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import Task, {HYPERION_TASK_STATUS, TASK_TREND} from 'gmp/models/task';
 
@@ -57,7 +58,7 @@ const scanConfig = deepFreeze({
   id: '314',
   name: 'foo',
   trash: false,
-  type: 'OPENVAS',
+  type: SCAN_CONFIG_TYPE.openvas,
 });
 
 export const detailsScanConfig = deepFreeze({
@@ -121,7 +122,7 @@ export const detailsScanConfig = deepFreeze({
     },
   ],
   trash: false,
-  type: 'OPENVAS',
+  type: SCAN_CONFIG_TYPE.openvas,
   usageType: 'scan',
   userTags: null,
   writable: false,

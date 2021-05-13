@@ -20,6 +20,7 @@ import React, {useEffect} from 'react';
 import _ from 'gmp/locale';
 
 import {duration} from 'gmp/models/date';
+import {SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
 import {hasValue, isDefined} from 'gmp/utils/identity';
@@ -170,7 +171,7 @@ const TaskDetails = ({entity, links = true}) => {
                 </TableRow>
               )}
               {hasValue(scanConfig) &&
-                scanConfig.scanConfigType === 'OPENVAS' &&
+                scanConfig.scanConfigType === SCAN_CONFIG_TYPE.openvas &&
                 hasValue(maxConcurrentNvts) && (
                   <TableRow>
                     <TableData>
@@ -180,7 +181,7 @@ const TaskDetails = ({entity, links = true}) => {
                   </TableRow>
                 )}
               {hasValue(scanConfig) &&
-                scanConfig.scanConfigType === 'OPENVAS' &&
+                scanConfig.scanConfigType === SCAN_CONFIG_TYPE.openvas &&
                 hasValue(maxConcurrentHosts) && (
                   <TableRow>
                     <TableData>
@@ -202,7 +203,7 @@ const TaskDetails = ({entity, links = true}) => {
               <TableData>{renderYesNo(createAssets)}</TableData>
             </TableRow>
 
-            {createAssets === true && ( // true value later!
+            {createAssets === true && (
               <TableRow>
                 <TableData>{_('Apply Overrides')}</TableData>
                 <TableData>{renderYesNo(createAssetsApplyOverrides)}</TableData>
