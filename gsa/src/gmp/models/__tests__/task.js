@@ -18,7 +18,7 @@
 
 import Model from 'gmp/model';
 
-import Task, {HYPERION_TASK_STATUS} from 'gmp/models/task';
+import Task, {HYPERION_TASK_STATUS, TASK_STATUS} from 'gmp/models/task';
 
 import Report from '../report';
 import Scanner from '../scanner';
@@ -26,9 +26,7 @@ import Schedule from '../schedule';
 
 import {testModel} from '../testing';
 
-describe('Task Model parse tests', () => {
-  testModel(Task, 'task', {testIsActive: false});
-
+describe('Task model parseObject tests', () => {
   test('should parse lastReport', () => {
     const object = {
       id: 't1',
@@ -255,9 +253,132 @@ describe('Task Model parse tests', () => {
     expect(task2.preferences.createAssetsApplyOverrides).toEqual(false);
     expect(task2.preferences.autoDeleteReports).toEqual(3);
   });
+
+  test('should parse all observers types', () => {
+    const task = Task.fromObject({
+      observers: {
+        users: ['anon', 'nymous'],
+        roles: [{name: 'lorem'}],
+        groups: [{name: 'ipsum'}, {name: 'dolor'}],
+      },
+    });
+
+    const {observers} = task;
+
+    expect(observers.users).toEqual(['anon', 'nymous']);
+    expect(observers.roles).toEqual([{name: 'lorem'}]);
+    expect(observers.groups).toEqual([{name: 'ipsum'}, {name: 'dolor'}]);
+  });
+
+  test('should parse userTags (graphQL)', () => {
+    const task = Task.fromObject({
+      userTags: {
+        count: 2,
+        tags: [
+          {name: 'foo', id: 'bar', value: 'lorem', comment: 'ipsum'},
+          {name: 'foo1', id: 'bar1', value: 'lorem1', comment: 'ipsum1'},
+        ],
+      },
+    });
+
+    const tags = task.userTags;
+    expect(tags.length).toBe(2);
+
+    expect(tags[0].name).toEqual('foo');
+    expect(tags[0].id).toEqual('bar');
+    expect(tags[0].value).toEqual('lorem');
+    expect(tags[0].comment).toEqual('ipsum');
+
+    expect(tags[1].name).toEqual('foo1');
+    expect(tags[1].id).toEqual('bar1');
+    expect(tags[1].value).toEqual('lorem1');
+    expect(tags[1].comment).toEqual('ipsum1');
+  });
 });
 
-describe(`Task Model methods tests`, () => {
+describe('Task model parseElement tests', () => {
+  testModel(Task, 'task', {testIsActive: false});
+  // no more hosts_ordering
+  test('should parse preferences', () => {
+    const task1 = Task.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'in_assets',
+            value: 'yes',
+          },
+          {
+            scanner_name: 'assets_apply_overrides',
+            value: 'yes',
+          },
+          {
+            scanner_name: 'assets_min_qod',
+            value: '70',
+          },
+          {
+            scanner_name: 'auto_delete',
+            value: 'keep',
+          },
+          {
+            scanner_name: 'auto_delete_data',
+            value: 0,
+          },
+          {
+            scanner_name: 'max_hosts',
+            value: '20',
+          },
+          {
+            scanner_name: 'max_checks',
+            value: '4',
+          },
+          {
+            scanner_name: 'foo',
+            value: 'bar',
+            name: 'lorem',
+          },
+        ],
+      },
+    });
+    const task2 = Task.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'in_assets',
+            value: 'no',
+          },
+          {
+            scanner_name: 'assets_apply_overrides',
+            value: 'no',
+          },
+          {
+            scanner_name: 'auto_delete',
+            value: 'no',
+          },
+          {
+            scanner_name: 'auto_delete_data',
+            value: 3,
+          },
+        ],
+      },
+    });
+
+    expect(task1.inAssets).toEqual(1);
+    expect(task1.applyOverrides).toEqual(1);
+    expect(task1.minQod).toEqual(70);
+    expect(task1.autoDelete).toEqual('keep');
+    expect(task1.maxHosts).toEqual(20);
+    expect(task1.maxChecks).toEqual(4);
+    expect(task1.preferences).toEqual({foo: {value: 'bar', name: 'lorem'}});
+    expect(task2.inAssets).toEqual(0);
+    expect(task2.applyOverrides).toEqual(0);
+    expect(task2.autoDelete).toEqual('no');
+    expect(task2.autoDeleteData).toEqual(3);
+  });
+});
+
+describe(`Task Model methods parseObject tests`, () => {
   test('should be a container if targetid is not set', () => {
     const task1 = Task.fromObject({});
     const task2 = Task.fromObject({target: {id: 'foo'}});
@@ -386,45 +507,124 @@ describe(`Task Model methods tests`, () => {
     task = Task.fromObject({status: HYPERION_TASK_STATUS.done, alterable: '1'});
     expect(task.isChangeable()).toEqual(true);
   });
+});
 
-  test('should parse all observers types', () => {
-    const task = Task.fromObject({
-      observers: {
-        users: ['anon', 'nymous'],
-        roles: [{name: 'lorem'}],
-        groups: [{name: 'ipsum'}, {name: 'dolor'}],
-      },
-    });
+describe(`Task Model methods parseElement tests`, () => {
+  test('should use status for isActive', () => {
+    const statusList = {
+      [TASK_STATUS.running]: true,
+      [TASK_STATUS.stoprequested]: true,
+      [TASK_STATUS.deleterequested]: true,
+      [TASK_STATUS.ultimatedeleterequested]: true,
+      [TASK_STATUS.resumerequested]: true,
+      [TASK_STATUS.requested]: true,
+      [TASK_STATUS.stopped]: false,
+      [TASK_STATUS.new]: false,
+      [TASK_STATUS.interrupted]: false,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+    };
 
-    const {observers} = task;
-
-    expect(observers.users).toEqual(['anon', 'nymous']);
-    expect(observers.roles).toEqual([{name: 'lorem'}]);
-    expect(observers.groups).toEqual([{name: 'ipsum'}, {name: 'dolor'}]);
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isActive()).toEqual(exp);
+    }
   });
 
-  test('should parse userTags (graphQL)', () => {
-    const task = Task.fromObject({
-      userTags: {
-        count: 2,
-        tags: [
-          {name: 'foo', id: 'bar', value: 'lorem', comment: 'ipsum'},
-          {name: 'foo1', id: 'bar1', value: 'lorem1', comment: 'ipsum1'},
-        ],
-      },
-    });
+  test('should use status for isRunning', () => {
+    const statusList = {
+      [TASK_STATUS.running]: true,
+      [TASK_STATUS.stoprequested]: false,
+      [TASK_STATUS.deleterequested]: false,
+      [TASK_STATUS.ultimatedeleterequested]: false,
+      [TASK_STATUS.resumerequested]: false,
+      [TASK_STATUS.requested]: false,
+      [TASK_STATUS.stopped]: false,
+      [TASK_STATUS.new]: false,
+      [TASK_STATUS.interrupted]: false,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+    };
 
-    const tags = task.userTags;
-    expect(tags.length).toBe(2);
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isRunning()).toEqual(exp);
+    }
+  });
 
-    expect(tags[0].name).toEqual('foo');
-    expect(tags[0].id).toEqual('bar');
-    expect(tags[0].value).toEqual('lorem');
-    expect(tags[0].comment).toEqual('ipsum');
+  test('should use status for isStopped', () => {
+    const statusList = {
+      [TASK_STATUS.running]: false,
+      [TASK_STATUS.stoprequested]: false,
+      [TASK_STATUS.deleterequested]: false,
+      [TASK_STATUS.ultimatedeleterequested]: false,
+      [TASK_STATUS.resumerequested]: false,
+      [TASK_STATUS.requested]: false,
+      [TASK_STATUS.stopped]: true,
+      [TASK_STATUS.new]: false,
+      [TASK_STATUS.interrupted]: false,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+    };
 
-    expect(tags[1].name).toEqual('foo1');
-    expect(tags[1].id).toEqual('bar1');
-    expect(tags[1].value).toEqual('lorem1');
-    expect(tags[1].comment).toEqual('ipsum1');
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isStopped()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isInterrupted', () => {
+    const statusList = {
+      [TASK_STATUS.running]: false,
+      [TASK_STATUS.stoprequested]: false,
+      [TASK_STATUS.deleterequested]: false,
+      [TASK_STATUS.ultimatedeleterequested]: false,
+      [TASK_STATUS.resumerequested]: false,
+      [TASK_STATUS.requested]: false,
+      [TASK_STATUS.stopped]: false,
+      [TASK_STATUS.new]: false,
+      [TASK_STATUS.interrupted]: true,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isInterrupted()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isNew', () => {
+    const statusList = {
+      [TASK_STATUS.running]: false,
+      [TASK_STATUS.stoprequested]: false,
+      [TASK_STATUS.deleterequested]: false,
+      [TASK_STATUS.ultimatedeleterequested]: false,
+      [TASK_STATUS.resumerequested]: false,
+      [TASK_STATUS.requested]: false,
+      [TASK_STATUS.stopped]: false,
+      [TASK_STATUS.new]: true,
+      [TASK_STATUS.interrupted]: false,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isNew()).toEqual(exp);
+    }
+  });
+
+  test('should be changeable if alterable or new', () => {
+    let task = Task.fromElement({status: TASK_STATUS.new, alterable: '0'});
+    expect(task.isChangeable()).toEqual(true);
+
+    task = Task.fromElement({status: TASK_STATUS.done, alterable: '1'});
+    expect(task.isChangeable()).toEqual(true);
   });
 });

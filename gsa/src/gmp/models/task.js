@@ -367,10 +367,7 @@ class Task extends Model {
             break;
           case 'max_checks':
             copy.maxChecks = parseInt(pref.value);
-            break;
-          case 'source_iface':
-            copy.sourceIface = pref.value;
-            break;
+            break; // no more source_iface
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
             break;
@@ -381,13 +378,7 @@ class Task extends Model {
     copy.preferences = prefs;
 
     // no average duration in trash
-    if (
-      copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
-      copy.hostsOrdering !== HOSTS_ORDERING_REVERSE &&
-      copy.hostsOrdering !== HOSTS_ORDERING_SEQUENTIAL
-    ) {
-      delete copy.hosts_ordering;
-    }
+    // no more hosts_ordering!
 
     copy.usageType = element.usage_type;
 

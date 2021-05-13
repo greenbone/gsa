@@ -296,10 +296,7 @@ class Audit extends Model {
           case 'max_hosts':
           case 'max_checks':
             copy[pref.scanner_name] = parseInt(pref.value);
-            break;
-          case 'source_iface':
-            copy.source_iface = pref.value;
-            break;
+            break; // no more source_iface
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
             break;
@@ -313,13 +310,7 @@ class Audit extends Model {
       copy.average_duration = parseDuration(element.average_duration);
     }
 
-    if (
-      copy.hosts_ordering !== HOSTS_ORDERING_RANDOM &&
-      copy.hosts_ordering !== HOSTS_ORDERING_REVERSE &&
-      copy.hosts_ordering !== HOSTS_ORDERING_SEQUENTIAL
-    ) {
-      delete copy.hosts_ordering;
-    }
+    // no more hosts_ordering
 
     return copy;
   }
