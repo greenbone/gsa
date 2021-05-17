@@ -28,6 +28,7 @@ import Spinner from 'web/components/form/spinner';
 import Divider from 'web/components/layout/divider';
 
 import PropTypes from 'web/utils/proptypes';
+import {toBoolean} from './dialog';
 
 const AutoDeleteReportsGroup = ({
   autoDelete = AUTO_DELETE_NO,
@@ -38,17 +39,19 @@ const AutoDeleteReportsGroup = ({
     <Radio
       title={_('Do not automatically delete reports')}
       name="auto_delete"
-      value={AUTO_DELETE_NO}
+      value={false}
       onChange={onChange}
-      checked={autoDelete !== AUTO_DELETE_KEEP}
+      checked={autoDelete === false}
+      convert={toBoolean}
     />
     <Divider>
       <Radio
         name="auto_delete"
-        value="keep"
+        value={true}
         onChange={onChange}
         title={_('Automatically delete oldest reports but always keep newest')}
-        checked={autoDelete === AUTO_DELETE_KEEP}
+        checked={autoDelete === true}
+        convert={toBoolean}
       />
       <Spinner
         type="int"
@@ -56,7 +59,7 @@ const AutoDeleteReportsGroup = ({
         max="1200"
         name="auto_delete_data"
         value={autoDeleteData}
-        disabled={autoDelete !== AUTO_DELETE_KEEP}
+        disabled={autoDelete === false}
         onChange={onChange}
       />
       <span>{_('reports')}</span>

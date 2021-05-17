@@ -24,8 +24,6 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  HOSTS_ORDERING_SEQUENTIAL,
-  AUTO_DELETE_NO,
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
@@ -40,9 +38,8 @@ import {
 
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
-  OPENVAS_SCAN_CONFIG_TYPE,
-  OSP_SCAN_CONFIG_TYPE,
   filterEmptyScanConfig,
+  SCAN_CONFIG_TYPE,
 } from 'gmp/models/scanconfig';
 
 import {forEach, first} from 'gmp/utils/array';
@@ -75,8 +72,8 @@ export const toBoolean = value => value === 'true';
 
 const sort_scan_configs = (scan_configs = []) => {
   const sorted_scan_configs = {
-    [OPENVAS_SCAN_CONFIG_TYPE]: [],
-    [OSP_SCAN_CONFIG_TYPE]: [],
+    [SCAN_CONFIG_TYPE.openvas]: [],
+    [SCAN_CONFIG_TYPE.osp]: [],
   };
 
   scan_configs = scan_configs.filter(filterEmptyScanConfig);
@@ -131,18 +128,17 @@ ScannerSelect.propTypes = {
 };
 
 const TaskDialog = ({
-  add_tag = NO_VALUE,
+  add_tag = false,
   alert_ids = [],
   alerts = [],
-  alterable = NO_VALUE,
-  apply_overrides = YES_VALUE,
-  auto_delete = AUTO_DELETE_NO,
+  alterable = false,
+  apply_overrides = true,
+  auto_delete = false,
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   comment = '',
   config_id,
   error,
-  hosts_ordering = HOSTS_ORDERING_SEQUENTIAL,
-  in_assets = YES_VALUE,
+  in_assets = true,
   isLoadingAlerts = false,
   isLoadingConfigs = false,
   isLoadingScanners = false,
@@ -164,7 +160,6 @@ const TaskDialog = ({
   schedule_id = UNSET_VALUE,
   schedule_periods = NO_VALUE,
   schedules = [],
-  source_iface = '',
   tags = [],
   target_id,
   targets,
@@ -220,13 +215,13 @@ const TaskDialog = ({
       ) {
         onScanConfigChange(
           selectSaveId(
-            sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
+            sorted_scan_configs[SCAN_CONFIG_TYPE.openvas],
             FULL_AND_FAST_SCAN_CONFIG_ID,
           ),
         );
       } else if (scanner_type === OSP_SCANNER_TYPE) {
         onScanConfigChange(
-          selectSaveId(sorted_scan_configs[OSP_SCAN_CONFIG_TYPE], UNSET_VALUE),
+          selectSaveId(sorted_scan_configs[SCAN_CONFIG_TYPE.osp], UNSET_VALUE),
         );
       } else {
         onScanConfigChange(UNSET_VALUE);
@@ -244,11 +239,11 @@ const TaskDialog = ({
   const sorted_scan_configs = sort_scan_configs(scan_configs);
 
   const osp_scan_config_items = renderSelectItems(
-    sorted_scan_configs[OSP_SCAN_CONFIG_TYPE],
+    sorted_scan_configs[SCAN_CONFIG_TYPE.osp],
   );
 
   const openvas_scan_config_items = renderSelectItems(
-    sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
+    sorted_scan_configs[SCAN_CONFIG_TYPE.openvas],
   );
 
   const alert_items = renderSelectItems(alerts);
@@ -271,7 +266,6 @@ const TaskDialog = ({
     auto_delete_data,
     comment,
     config_id,
-    hosts_ordering,
     in_assets,
     max_checks,
     max_hosts,
@@ -280,7 +274,6 @@ const TaskDialog = ({
     scanner_type,
     scanner_id,
     schedule_periods,
-    source_iface,
     tag_id,
     tags,
     task,
@@ -307,11 +300,11 @@ const TaskDialog = ({
     >
       {({values: state, onValueChange}) => {
         const osp_config_id = selectSaveId(
-          sorted_scan_configs[OSP_SCAN_CONFIG_TYPE],
+          sorted_scan_configs[SCAN_CONFIG_TYPE.osp],
           state.config_id,
         );
         const openvas_config_id = selectSaveId(
-          sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE],
+          sorted_scan_configs[SCAN_CONFIG_TYPE.openvas],
           state.config_id,
         );
 
@@ -433,8 +426,11 @@ const TaskDialog = ({
             <FormGroup title={_('Apply Overrides')}>
               <YesNoRadio
                 name="apply_overrides"
-                disabled={state.in_assets !== YES_VALUE}
+                disabled={!state.in_assets}
                 value={state.apply_overrides}
+                yesValue={true}
+                noValue={false}
+                convert={toBoolean}
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -443,7 +439,7 @@ const TaskDialog = ({
               <Spinner
                 name="min_qod"
                 size="4"
-                disabled={state.in_assets !== YES_VALUE}
+                disabled={!state.in_assets}
                 type="int"
                 min="0"
                 max="100"
@@ -510,34 +506,6 @@ const TaskDialog = ({
                       }}
                     />
                   </div>
-                </FormGroup>
-                <FormGroup titleSize="4" title={_('Network Source Interface')}>
-                  <TextField
-                    name="source_iface"
-                    value={state.source_iface}
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
-                <FormGroup titleSize="4" title={_('Order for target hosts')}>
-                  <Select
-                    name="hosts_ordering"
-                    items={[
-                      {
-                        value: 'sequential',
-                        label: _('Sequential'),
-                      },
-                      {
-                        value: 'random',
-                        label: _('Random'),
-                      },
-                      {
-                        value: 'reverse',
-                        label: _('Reverse'),
-                      },
-                    ]}
-                    value={state.hosts_ordering}
-                    onChange={onValueChange}
-                  />
                 </FormGroup>
                 <FormGroup
                   titleSize="4"
@@ -627,7 +595,6 @@ TaskDialog.propTypes = {
   comment: PropTypes.string,
   config_id: PropTypes.idOrZero,
   error: PropTypes.string,
-  hosts_ordering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
   in_assets: PropTypes.yesno,
   isLoadingAlerts: PropTypes.bool,
   isLoadingConfigs: PropTypes.bool,
@@ -645,7 +612,6 @@ TaskDialog.propTypes = {
   schedule_id: PropTypes.idOrZero,
   schedule_periods: PropTypes.yesno,
   schedules: PropTypes.array,
-  source_iface: PropTypes.string,
   tag_id: PropTypes.id,
   tags: PropTypes.array,
   target_id: PropTypes.idOrZero,
