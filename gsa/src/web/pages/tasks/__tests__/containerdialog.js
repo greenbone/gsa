@@ -105,7 +105,7 @@ describe('ContainerDialog tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       comment: 'lorem',
-      in_assets: 0,
+      in_assets: false,
       id: 't1',
       name: 'ipsum',
     });

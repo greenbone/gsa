@@ -23,7 +23,6 @@ import AutoDeleteReportsGroup from '../autodeletereportsgroup';
 import {
   AUTO_DELETE_KEEP,
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  AUTO_DELETE_NO,
 } from 'gmp/models/task';
 
 describe('AutoDeleteReportsGroup tests', () => {
@@ -46,7 +45,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {queryAllByTestId} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_KEEP}
+        autoDelete={true}
         autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
@@ -56,7 +55,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     fireEvent.click(autoDeleteNoRadio);
 
-    expect(handleChange).toHaveBeenCalledWith(AUTO_DELETE_NO, 'auto_delete');
+    expect(handleChange).toHaveBeenCalledWith(false, 'auto_delete');
   });
 
   test('should allow to change auto delete keep', () => {
@@ -64,7 +63,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {queryAllByTestId} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_NO}
+        autoDelete={false}
         autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
@@ -74,7 +73,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     fireEvent.click(autoDeleteKeepRadio);
 
-    expect(handleChange).toHaveBeenCalledWith(AUTO_DELETE_KEEP, 'auto_delete');
+    expect(handleChange).toHaveBeenCalledWith(true, 'auto_delete');
   });
 
   test('should allow to change auto delete keep value', () => {
@@ -82,7 +81,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_KEEP}
+        autoDelete={true}
         autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
@@ -100,7 +99,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_KEEP}
+        autoDelete={true}
         autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
@@ -126,7 +125,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_NO}
+        autoDelete={false}
         autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
