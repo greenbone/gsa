@@ -62,8 +62,6 @@ import NvtsPage from './pages/nvts/listpage';
 import NvtDetailsPage from './pages/nvts/detailspage';
 import OperatingSystemsPage from './pages/operatingsystems/listpage';
 import OperatingSystemDetailsPage from './pages/operatingsystems/detailspage';
-import OvaldefsPage from './pages/ovaldefs/listpage';
-import OvaldefDetailsPage from './pages/ovaldefs/detailspage';
 import OverridesPage from './pages/overrides/listpage';
 import OverrideDetailsPage from './pages/overrides/detailspage';
 import PerformancePage from './pages/performance/performancepage';
@@ -151,7 +149,6 @@ const Routes = () => (
                 component={OperatingSystemsPage}
               />
               <Route path="/nvts" component={NvtsPage} />
-              <Route path="/ovaldefs" component={OvaldefsPage} />
               <Route path="/overrides" component={OverridesPage} />
               <Route path="/performance" component={PerformancePage} />
               <Route path="/permissions" component={PermissionsPage} />
@@ -192,7 +189,6 @@ const Routes = () => (
               <Route path="/note/:id" component={NoteDetailsPage} />
               <Route path="/nvt/:id" component={NvtDetailsPage} />
               <Route path="/portlist/:id" component={PortListDetailsPage} />
-              <Route path="/ovaldef/:id" component={OvaldefDetailsPage} />
               <Route
                 path="/operatingsystem/:id"
                 component={OperatingSystemDetailsPage}
