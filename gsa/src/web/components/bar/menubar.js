@@ -200,7 +200,6 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
               <MenuEntry title={_('NVTs')} to="nvts" />
               <MenuEntry title={_('CVEs')} to="cves" />
               <MenuEntry title={_('CPEs')} to="cpes" />
-              <MenuEntry title={_('OVAL Definitions')} to="ovaldefs" />
               <MenuEntry title={_('CERT-Bund Advisories')} to="certbunds" />
               <MenuEntry title={_('DFN-CERT Advisories')} to="dfncerts" />
             </Menu>
