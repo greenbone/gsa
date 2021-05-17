@@ -34,7 +34,7 @@ import {TASK_STATUS} from 'gmp/models/task';
 import {NO_VALUE} from 'gmp/parser';
 
 import {map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 import {selectSaveId, hasId} from 'gmp/utils/id';
 
 import EntityComponent from 'web/entity/component';
@@ -330,9 +330,13 @@ const TaskComponent = ({
         name: inputTask ? inputTask.name : _('Unnamed'),
         comment: inputTask ? inputTask.comment : '',
         id: inputTask ? inputTask.id : undefined,
-        inAssets: inputTask ? inputTask.inAssets : undefined,
-        autoDelete: inputTask ? inputTask.autoDelete : undefined,
-        autoDeleteData: inputTask ? inputTask.autoDeleteData : undefined,
+        inAssets: inputTask?.preferences?.createAssets,
+        autoDelete: hasValue(inputTask?.preferences?.autoDeleteReports)
+          ? inputTask.autoDelete
+          : undefined,
+        autoDeleteData: inputTask
+          ? inputTask.preferences?.autoDeleteReports
+          : undefined,
         title: inputTask
           ? _('Edit Container Task {{name}}', inputTask)
           : _('New Container Task'),
@@ -359,6 +363,9 @@ const TaskComponent = ({
         id: data.id,
         name: data.name,
         comment: data.comment,
+        preferences: {
+          createAssets: data.in_assets,
+        },
       })
         .then(onContainerSaved, onContainerSaveError)
         .then(() => closeContainerTaskDialog());
@@ -369,7 +376,6 @@ const TaskComponent = ({
   };
 
   const handleSaveTask = ({
-    add_tag,
     alert_ids,
     alterable,
     auto_delete,
@@ -377,7 +383,6 @@ const TaskComponent = ({
     apply_overrides,
     comment,
     config_id,
-    hosts_ordering,
     id,
     in_assets,
     min_qod,
@@ -385,11 +390,8 @@ const TaskComponent = ({
     max_hosts,
     name,
     scanner_id,
-    scanner_type,
     schedule_id,
     schedule_periods,
-    source_iface,
-    tag_id,
     target_id,
     task,
   }) => {
@@ -414,22 +416,20 @@ const TaskComponent = ({
       const mutationData = {
         alertIds: alert_ids,
         alterable,
-        applyOverrides: apply_overrides,
-        autoDelete: auto_delete,
-        autoDeleteData: auto_delete_data,
         comment,
-        configId: statusIsNew ? config_id : undefined,
-        hostsOrdering: hosts_ordering,
-        inAssets: in_assets,
-        maxChecks: max_checks,
-        maxHosts: max_hosts,
-        minQod: min_qod,
         name,
+        preferences: {
+          createAssets: in_assets,
+          createAssetsApplyOverrides: apply_overrides,
+          createAssetsMinQod: min_qod,
+          autoDeleteReports: auto_delete ? auto_delete_data : null,
+          maxConcurrentNvts: max_checks,
+          maxConcurrentHosts: max_hosts,
+        },
+        scanConfigId: statusIsNew ? config_id : undefined,
         scannerId: statusIsNew ? scanner_id : undefined,
-        scannerType: statusIsNew ? scanner_type : undefined,
         scheduleId: schedule_id,
         schedulePeriods: schedule_periods,
-        sourceIface: source_iface,
         targetId: target_id,
         id,
       };
@@ -441,22 +441,20 @@ const TaskComponent = ({
     const mutationData = {
       alertIds: alert_ids,
       alterable,
-      applyOverrides: apply_overrides,
-      autoDelete: auto_delete,
-      autoDeleteData: auto_delete_data,
       comment,
-      configId: config_id,
-      hostsOrdering: hosts_ordering,
-      inAssets: in_assets,
-      maxChecks: max_checks,
-      maxHosts: max_hosts,
-      minQod: min_qod,
       name,
+      preferences: {
+        createAssets: in_assets,
+        createAssetsApplyOverrides: apply_overrides,
+        createAssetsMinQod: min_qod,
+        autoDeleteReports: auto_delete ? auto_delete_data : null,
+        maxConcurrentNvts: max_checks,
+        maxConcurrentHosts: max_hosts,
+      },
+      scanConfigId: config_id,
       scannerId: scanner_id,
-      scannerType: scanner_type,
       scheduleId: schedule_id,
       schedulePeriods: schedule_periods,
-      sourceIface: source_iface,
       targetId: target_id,
     };
     return createTask(mutationData)
@@ -501,8 +499,7 @@ const TaskComponent = ({
         updateState({
           taskDialogVisible: true,
           error: undefined, // remove old errors
-          minQod: task.minQod,
-          sourceIface: task.sourceIface,
+          minQod: task.preferences?.createAssetsMinQod,
           schedulePeriods,
           scannerId: hasId(task.scanner) ? task.scanner.id : undefined,
           name: task.name,
@@ -510,16 +507,17 @@ const TaskComponent = ({
           target_id: hasId(task.target) ? task.target.id : undefined,
           alertIds: map(task.alerts, alert => alert.id),
           alterable: task.alterable,
-          applyOverrides: task.applyOverrides,
-          autoDelete: task.autoDelete,
-          autoDeleteData: task.autoDeleteData,
+          applyOverrides: task.preferences?.createAssetsApplyOverrides,
+          autoDelete: hasValue(task.preferences?.autoDeleteReports),
+          autoDeleteData: hasValue(task.preferences?.autoDeleteReports)
+            ? task.preferences.autoDeleteReports
+            : undefined,
           comment: task.comment,
           configId: hasId(task.config) ? task.config.id : undefined,
-          hostsOrdering: task.hostsOrdering,
           id: task.id,
-          inAssets: task.inAssets,
-          maxChecks: task.maxChecks,
-          maxHosts: task.maxHosts,
+          inAssets: task.preferences?.createAssets,
+          maxChecks: task.preferences?.maxConcurrentNvts,
+          maxHosts: task.preferences?.maxConcurrentHosts,
           title: _('Edit Task {{name}}', task),
           task,
         }),
@@ -546,7 +544,6 @@ const TaskComponent = ({
           autoDelete: undefined,
           autoDeleteData: undefined,
           comment: undefined,
-          hostsOrdering: undefined,
           id: undefined,
           maxChecks: undefined,
           maxHosts: undefined,
@@ -813,7 +810,6 @@ const TaskComponent = ({
     maxHosts,
     minQod,
     schedulePeriods,
-    sourceIface,
     autoDelete,
     autoDeleteData,
     comment,
@@ -822,7 +818,6 @@ const TaskComponent = ({
     task,
     title,
     name,
-    hostsOrdering,
     portListId,
     alertId,
     sshCredential,
@@ -900,7 +895,6 @@ const TaskComponent = ({
                             comment={comment}
                             config_id={configId}
                             error={error}
-                            hosts_ordering={hostsOrdering}
                             id={id}
                             in_assets={inAssets}
                             isLoadingAlerts={isLoadingAlerts}
@@ -919,7 +913,6 @@ const TaskComponent = ({
                             schedule_id={scheduleId}
                             schedule_periods={schedulePeriods}
                             schedules={schedules}
-                            source_iface={sourceIface}
                             tag_id={tagId}
                             tags={tags}
                             target_id={targetId}
