@@ -77,7 +77,7 @@ const RadiusDialog = ({
               data-testid="radiuskey-textfield"
               name="radiuskey"
               size="50"
-              value={radiuskey}
+              value={values.radiuskey}
               onChange={onValueChange}
             />
           </FormGroup>
