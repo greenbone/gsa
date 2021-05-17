@@ -38,7 +38,10 @@ import {
   createDeleteTaskQueryMock,
 } from 'web/graphql/__mocks__/tasks';
 
-import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+import {
+  detailsScanConfig,
+  getMockTasks,
+} from 'web/pages/tasks/__mocks__/mocktasks';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -109,7 +112,10 @@ describe('Task Detailspage tests', () => {
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
       filterString: 'resource_uuid=12345 first=1 rows=-1',
     });
-    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
+    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock(
+      '314',
+      detailsScanConfig,
+    );
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -191,8 +197,6 @@ describe('Task Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('scanner 1');
     expect(baseElement).toHaveTextContent('OpenVAS Scanner');
     expect(detailslinks[6]).toHaveAttribute('href', '/scanconfig/314');
-    expect(baseElement).toHaveTextContent('Order for target hostssequential');
-    expect(baseElement).toHaveTextContent('Network Source Interface');
     expect(baseElement).toHaveTextContent(
       'Maximum concurrently executed NVTs per host4',
     );
@@ -212,7 +216,7 @@ describe('Task Detailspage tests', () => {
     expect(headings[6]).toHaveTextContent('Scan');
     expect(baseElement).toHaveTextContent('2 minutes');
     expect(baseElement).toHaveTextContent(
-      'Do not automatically delete reports',
+      'Automatically delete oldest reports but always keep newest 5 reports',
     );
   });
 
