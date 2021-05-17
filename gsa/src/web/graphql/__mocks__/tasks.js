@@ -23,7 +23,6 @@ import {
   CLONE_TASK,
   CREATE_CONTAINER_TASK,
   CREATE_TASK,
-  DELETE_TASK,
   DELETE_TASKS_BY_IDS,
   GET_TASK,
   GET_TASKS,
@@ -36,7 +35,11 @@ import {
   EXPORT_TASKS_BY_IDS,
 } from 'web/graphql/tasks';
 
-import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
+import {
+  deepFreeze,
+  createGenericQueryMock,
+  createGenericMutationResult,
+} from 'web/utils/testing';
 
 const alert = deepFreeze({id: '151617', name: 'alert 1'});
 
@@ -276,30 +279,12 @@ export const createGetTaskQueryErrorMock = (
   return [queryMock];
 };
 
-export const createDeleteTaskQueryMock = taskId => {
-  const queryResult = {
-    data: {
-      deleteTask: {
-        ok: true,
-      },
-    },
-  };
+const deleteTaskResult = createGenericMutationResult('task');
 
-  const resultFunc = jest.fn().mockReturnValue(queryResult);
-
-  const variables = {
-    id: taskId,
-  };
-
-  const queryMock = {
-    request: {
-      query: DELETE_TASK,
-      variables,
-    },
-    newData: resultFunc,
-  };
-  return [queryMock, resultFunc];
-};
+export const createDeleteTaskQueryMock = (taskId = 'foo') =>
+  createGenericQueryMock(DELETE_TASKS_BY_IDS, deleteTaskResult, {
+    ids: [taskId],
+  });
 
 export const createDeleteTasksByIdsQueryMock = taskIds => {
   const queryResult = {
