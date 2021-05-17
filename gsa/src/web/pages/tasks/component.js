@@ -504,7 +504,7 @@ const TaskComponent = ({
           scannerId: hasId(task.scanner) ? task.scanner.id : undefined,
           name: task.name,
           scheduleId,
-          target_id: hasId(task.target) ? task.target.id : undefined,
+          targetId: hasId(task.target) ? task.target.id : undefined,
           alertIds: map(task.alerts, alert => alert.id),
           alterable: task.alterable,
           applyOverrides: task.preferences?.createAssetsApplyOverrides,
