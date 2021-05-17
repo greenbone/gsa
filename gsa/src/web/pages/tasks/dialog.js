@@ -71,6 +71,8 @@ import useCapabilities from 'web/utils/useCapabilities';
 import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 import AutoDeleteReportsGroup from './autodeletereportsgroup';
 
+export const toBoolean = value => value === 'true';
+
 const sort_scan_configs = (scan_configs = []) => {
   const sorted_scan_configs = {
     [OPENVAS_SCAN_CONFIG_TYPE]: [],
