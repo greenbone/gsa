@@ -82,14 +82,9 @@
     "@babel/cli": "^7.13.16",
     "@storybook/react": "^6.2.9",
     "@testing-library/jest-dom": "^5.12.0",
-<<<<<<< HEAD
     "@testing-library/react": "^11.2.7",
     "@types/jest": "^26.0.23",
-=======
-    "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^13.1.8",
-    "@types/jest": "^26.0.22",
->>>>>>> cf7b6caa1d... Add @testing-library/user-event as dependency
     "babel-plugin-i18next-extract": "^0.8.3",
     "eslint-config-prettier": "^8.3.0",
     "husky": "^2.7.0",
