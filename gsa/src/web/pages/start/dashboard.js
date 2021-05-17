@@ -25,6 +25,7 @@ import {canAddDisplay} from 'web/components/dashboard/utils';
 
 import Layout from 'web/components/layout/layout';
 
+<<<<<<< HEAD
 import {TASKS_DISPLAYS} from 'web/pages/tasks/dashboard';
 import {REPORTS_DISPLAYS} from 'web/pages/reports/dashboard';
 import {RESULTS_DISPLAYS} from 'web/pages/results/dashboard';
@@ -40,6 +41,22 @@ import {CVES_DISPLAYS} from 'web/pages/cves/dashboard';
 import {CPES_DISPLAYS} from 'web/pages/cpes/dashboard';
 import {DFNCERT_DISPLAYS} from 'web/pages/dfncert/dashboard';
 import {TICKETS_DISPLAYS} from 'web/pages/tickets/dashboard';
+=======
+import {TASKS_DISPLAYS} from '../tasks/dashboard';
+import {REPORTS_DISPLAYS} from '../reports/dashboard';
+import {RESULTS_DISPLAYS} from '../results/dashboard';
+import {NOTES_DISPLAYS} from '../notes/dashboard';
+import {OVERRIDES_DISPLAYS} from '../overrides/dashboard';
+import {VULNS_DISPLAYS} from '../vulns/dashboard';
+import {HOSTS_DISPLAYS} from '../hosts/dashboard';
+import {OS_DISPLAYS} from '../operatingsystems/dashboard';
+import {NVTS_DISPLAYS} from '../nvts/dashboard';
+import {CERTBUND_DISPLAYS} from '../certbund/dashboard';
+import {CVES_DISPLAYS} from '../cves/dashboard';
+import {CPES_DISPLAYS} from '../cpes/dashboard';
+import {DFNCERT_DISPLAYS} from '../dfncert/dashboard';
+import {TICKETS_DISPLAYS} from '../tickets/dashboard';
+>>>>>>> 9be30eefea... Remove OVAL Definitions Dashboard from Startpage
 
 import {DEFAULT_DISPLAYS} from './newdashboarddialog';
 
@@ -53,7 +70,6 @@ const ALL_DISPLAYS = [
   ...HOSTS_DISPLAYS,
   ...OS_DISPLAYS,
   ...NVTS_DISPLAYS,
-  ...OVALDEF_DISPLAYS,
   ...CERTBUND_DISPLAYS,
   ...CVES_DISPLAYS,
   ...CPES_DISPLAYS,
