@@ -331,7 +331,7 @@ class ScheduleDialog extends React.Component {
         // convert name to string explicitly to not run into:
         // `TypeError: e.replace is not a function`
         // when name is just numbers.
-        summary: name.toString(),
+        summary: `${name}`,
         startDate,
       },
       timezone,
