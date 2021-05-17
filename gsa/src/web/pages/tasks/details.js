@@ -20,10 +20,8 @@ import React, {useEffect} from 'react';
 import _ from 'gmp/locale';
 
 import {duration} from 'gmp/models/date';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+import {SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
-
-import {YES_VALUE} from 'gmp/parser';
 
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
@@ -76,20 +74,21 @@ const TaskDetails = ({entity, links = true}) => {
 
   const {
     alerts,
-    applyOverrides,
-    autoDelete,
-    autoDeleteData,
     averageDuration,
-    hostsOrdering,
-    inAssets,
     reports,
-    minQod,
     scanner,
     target,
-    maxChecks,
-    maxHosts,
-    sourceIface = '',
+    preferences = {},
   } = entity;
+
+  const {
+    autoDeleteReports,
+    createAssets,
+    createAssetsApplyOverrides,
+    createAssetsMinQod,
+    maxConcurrentHosts,
+    maxConcurrentNvts,
+  } = preferences;
 
   const {lastReport} = reports;
 
@@ -172,38 +171,23 @@ const TaskDetails = ({entity, links = true}) => {
                 </TableRow>
               )}
               {hasValue(scanConfig) &&
-                scanConfig.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
-                hasValue(hostsOrdering) && (
-                  <TableRow>
-                    <TableData>{_('Order for target hosts')}</TableData>
-                    <TableData>{hostsOrdering}</TableData>
-                  </TableRow>
-                )}
-              {hasValue(scanConfig) &&
-                scanConfig.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE && (
-                  <TableRow>
-                    <TableData>{_('Network Source Interface')}</TableData>
-                    <TableData>{sourceIface}</TableData>
-                  </TableRow>
-                )}
-              {hasValue(scanConfig) &&
-                scanConfig.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
-                hasValue(maxChecks) && (
+                scanConfig.scanConfigType === SCAN_CONFIG_TYPE.openvas &&
+                hasValue(maxConcurrentNvts) && (
                   <TableRow>
                     <TableData>
                       {_('Maximum concurrently executed NVTs per host')}
                     </TableData>
-                    <TableData>{maxChecks}</TableData>
+                    <TableData>{maxConcurrentNvts}</TableData>
                   </TableRow>
                 )}
               {hasValue(scanConfig) &&
-                scanConfig.scanConfigType === OPENVAS_SCAN_CONFIG_TYPE &&
-                hasValue(maxHosts) && (
+                scanConfig.scanConfigType === SCAN_CONFIG_TYPE.openvas &&
+                hasValue(maxConcurrentHosts) && (
                   <TableRow>
                     <TableData>
                       {_('Maximum concurrently scanned hosts')}
                     </TableData>
-                    <TableData>{maxHosts}</TableData>
+                    <TableData>{maxConcurrentHosts}</TableData>
                   </TableRow>
                 )}
             </TableBody>
@@ -216,20 +200,20 @@ const TaskDetails = ({entity, links = true}) => {
           <TableBody>
             <TableRow>
               <TableData>{_('Add to Assets')}</TableData>
-              <TableData>{renderYesNo(inAssets)}</TableData>
+              <TableData>{renderYesNo(createAssets)}</TableData>
             </TableRow>
 
-            {inAssets === YES_VALUE && (
+            {createAssets === true && (
               <TableRow>
                 <TableData>{_('Apply Overrides')}</TableData>
-                <TableData>{renderYesNo(applyOverrides)}</TableData>
+                <TableData>{renderYesNo(createAssetsApplyOverrides)}</TableData>
               </TableRow>
             )}
 
-            {inAssets === YES_VALUE && (
+            {createAssets === true && (
               <TableRow>
                 <TableData>{_('Min QoD')}</TableData>
-                <TableData>{minQod + ' %'}</TableData>
+                <TableData>{createAssetsMinQod + ' %'}</TableData>
               </TableRow>
             )}
           </TableBody>
@@ -287,11 +271,11 @@ const TaskDetails = ({entity, links = true}) => {
             <TableRow>
               <TableData>{_('Auto delete Reports')}</TableData>
               <TableData>
-                {autoDelete === 'keep'
+                {hasValue(autoDeleteReports)
                   ? _(
                       'Automatically delete oldest reports but always keep ' +
                         'newest {{nr}} reports',
-                      {nr: autoDeleteData},
+                      {nr: autoDeleteReports},
                     )
                   : _('Do not automatically delete reports')}
               </TableData>

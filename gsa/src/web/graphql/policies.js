@@ -45,7 +45,6 @@ export const GET_POLICY = gql`
       permissions {
         name
       }
-      type
       trash
       familyCount
       nvtGrowing

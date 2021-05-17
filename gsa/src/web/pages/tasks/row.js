@@ -61,7 +61,7 @@ export const renderReport = (report, links) => {
   return (
     <span>
       <DetailsLink type="report" id={report.id} textOnly={!links}>
-        <DateTime date={report.timestamp} />
+        <DateTime date={report.creationTime} />
       </DetailsLink>
     </span>
   );
