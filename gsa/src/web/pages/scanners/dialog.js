@@ -23,17 +23,14 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-<<<<<<< HEAD
 import {
   OSP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
-=======
 import {filter, map} from 'gmp/utils/array';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
->>>>>>> 42310dc550... Set default scanner type only if it is not set yet
 
 import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
