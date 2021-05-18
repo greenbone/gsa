@@ -21,11 +21,14 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import _ from 'gmp/locale';
 
+<<<<<<< HEAD
 import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
 import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {hasId} from 'gmp/utils/id';
+=======
+>>>>>>> 936e7fb213... Fix setting default scanner type to Greenbone Sensor
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
@@ -80,6 +83,7 @@ const ScannerComponent = ({
     'detailsexportfilename',
   );
 
+<<<<<<< HEAD
   // eslint-disable-next-line no-shadow
   const openCredentialsDialog = useCallback(() => {
     setCredentialTypes([CLIENT_CERTIFICATE_CREDENTIAL_TYPE]);
@@ -111,6 +115,159 @@ const ScannerComponent = ({
         resourceName: name,
         resourceType: entityType,
         username: userName,
+=======
+class ScannerComponent extends React.Component {
+  constructor(...args) {
+    super(...args);
+
+    this.state = {
+      credentialDialogVisible: false,
+      scannerDialogVisible: false,
+    };
+
+    this.handleCloseCredentialsDialog = this.handleCloseCredentialsDialog.bind(
+      this,
+    );
+    this.handleCloseScannerDialog = this.handleCloseScannerDialog.bind(this);
+    this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
+    this.openScannerDialog = this.openScannerDialog.bind(this);
+    this.handleCreateCredential = this.handleCreateCredential.bind(this);
+    this.handleCredentialChange = this.handleCredentialChange.bind(this);
+    this.handleDownloadCertificate = this.handleDownloadCertificate.bind(this);
+    this.handleDownloadCredential = this.handleDownloadCredential.bind(this);
+    this.handleScannerTypeChange = this.handleScannerTypeChange.bind(this);
+    this.handleVerifyScanner = this.handleVerifyScanner.bind(this);
+  }
+
+  openScannerDialog(scanner) {
+    const {gmp} = this.props;
+
+    this.handleInteraction();
+
+    const credPromise = gmp.credentials.getAll().then(response => {
+      return response.data;
+    });
+    if (isDefined(scanner)) {
+      Promise.all([credPromise, gmp.scanner.get(scanner)]).then(
+        ([credentials, response]) => {
+          scanner = response.data;
+
+          const title = _('Edit Scanner {{name}}', {
+            name: shorten(scanner.name),
+          });
+          this.setState({
+            ca_pub: isDefined(scanner.ca_pub)
+              ? scanner.ca_pub.certificate
+              : undefined,
+            comment: scanner.comment,
+            credentials,
+            credential_id: hasId(scanner.credential)
+              ? scanner.credential.id
+              : undefined,
+            host: scanner.host,
+            id: scanner.id,
+            name: scanner.name,
+            port: scanner.port,
+            scannerDialogVisible: true,
+            scanner,
+            title,
+            type: scanner.scannerType,
+            which_cert: isDefined(scanner.ca_pub) ? 'existing' : 'default',
+          });
+        },
+      );
+    } else {
+      credPromise.then(credentials =>
+        this.setState({
+          ca_pub: undefined,
+          comment: undefined,
+          credential_id: undefined,
+          credentials,
+          host: undefined,
+          id: undefined,
+          name: undefined,
+          port: undefined,
+          scanner: undefined,
+          scannerDialogVisible: true,
+          title: undefined,
+          type: undefined,
+          which_cert: undefined,
+        }),
+      );
+    }
+  }
+
+  closeScannerDialog() {
+    this.setState({scannerDialogVisible: false});
+  }
+
+  handleCloseScannerDialog() {
+    this.closeScannerDialog();
+    this.handleInteraction();
+  }
+
+  openCredentialsDialog() {
+    this.handleInteraction();
+
+    this.setState({
+      base: CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
+      credentialDialogVisible: true,
+      credentialTypes: [CLIENT_CERTIFICATE_CREDENTIAL_TYPE],
+    });
+  }
+
+  closeCredentialsDialog() {
+    this.setState({credentialDialogVisible: false});
+  }
+
+  handleCloseCredentialsDialog() {
+    this.closeCredentialsDialog();
+    this.handleInteraction();
+  }
+
+  handleVerifyFailure(response) {
+    const {onVerifyError} = this.props;
+    const message =
+      isDefined(response.root) &&
+      isDefined(response.root.action_result) &&
+      isDefined(response.root.action_result.message)
+        ? response.root.action_result.message
+        : _('Unknown Error');
+
+    if (isDefined(onVerifyError)) {
+      onVerifyError(new Error(message));
+    }
+  }
+
+  handleVerifyScanner(scanner) {
+    const {gmp, onVerified} = this.props;
+
+    this.handleInteraction();
+
+    return gmp.scanner
+      .verify(scanner)
+      .then(onVerified, response => this.handleVerifyFailure(response));
+  }
+
+  handleCreateCredential(data) {
+    const {gmp} = this.props;
+    let credential;
+
+    this.handleInteraction();
+
+    return gmp.credential
+      .create(data)
+      .then(response => {
+        credential = response.data;
+      })
+      .then(() => gmp.credentials.getAll())
+      .then(response => {
+        this.setState({
+          credentials: response.data,
+          credential_id: credential.id,
+        });
+        this.closeCredentialsDialog();
+>>>>>>> 936e7fb213... Fix setting default scanner type to Greenbone Sensor
       });
 
       renewSessionTimeout();
