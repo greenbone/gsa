@@ -25,7 +25,6 @@ import {normalizeType} from 'gmp/utils/entitytype';
 import {
   parseInt,
   parseProgressElement,
-  parseYesNo,
   parseYes,
   parseDuration,
   NO_VALUE,

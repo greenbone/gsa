@@ -95,10 +95,10 @@ const ContainerTaskDialog = ({
 };
 
 ContainerTaskDialog.propTypes = {
-  auto_delete: PropTypes.oneOf(['keep', 'no']),
+  auto_delete: PropTypes.bool,
   auto_delete_data: PropTypes.number,
   comment: PropTypes.string,
-  in_assets: PropTypes.yesno,
+  in_assets: PropTypes.bool,
   name: PropTypes.string,
   task: PropTypes.model,
   title: PropTypes.string,
