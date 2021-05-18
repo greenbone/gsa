@@ -36,10 +36,6 @@ import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
 import {parseInt} from 'gmp/parser';
 
-import {filter, map} from 'gmp/utils/array';
-import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FootNote from 'web/components/footnote/footnote';
