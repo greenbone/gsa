@@ -428,7 +428,7 @@ const AuditComponent = ({
 
     handleInteraction();
 
-    const {id} = audit.last_report;
+    const {id} = audit.reports.lastReport;
 
     return gmp.report
       .download(
