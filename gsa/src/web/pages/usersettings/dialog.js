@@ -113,7 +113,6 @@ let UserSettingsDialog = ({
   cpeFilter,
   cveFilter,
   nvtFilter,
-  ovalFilter,
   certBundFilter,
   dfnCertFilter,
   onClose,
@@ -173,7 +172,6 @@ let UserSettingsDialog = ({
     cpeFilter,
     cveFilter,
     nvtFilter,
-    ovalFilter,
     certBundFilter,
     dfnCertFilter,
   };
@@ -293,7 +291,6 @@ let UserSettingsDialog = ({
                   cpeFilter={values.cpeFilter}
                   cveFilter={values.cveFilter}
                   nvtFilter={values.nvtFilter}
-                  ovalFilter={values.ovalFilter}
                   certBundFilter={values.certBundFilter}
                   dfnCertFilter={values.dfnCertFilter}
                   filters={filters}
@@ -349,7 +346,6 @@ UserSettingsDialog.propTypes = {
   operatingSystemsFilter: PropTypes.string,
   ospScanConfigs: PropTypes.array,
   ospScanners: PropTypes.array,
-  ovalFilter: PropTypes.string,
   overridesFilter: PropTypes.string,
   permissionsFilter: PropTypes.string,
   portLists: PropTypes.array,
