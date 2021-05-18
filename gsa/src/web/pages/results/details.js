@@ -105,8 +105,13 @@ const ResultDetails = ({className, links = true, entity}) => {
   const {information} = result;
   const {id: infoId, tags, solution} = information;
 
+<<<<<<< HEAD
   const isoval = hasValue(infoId) && infoId.startsWith('oval:');
   const hasDetection = hasValue(result.originResult);
+=======
+  const has_detection =
+    isDefined(result.detection) && isDefined(result.detection.result);
+>>>>>>> 266351c2e (Remove remaining OVAL Definitions in GSA code)
 
   const detectionDetails = hasDetection
     ? result.originResult.details
@@ -288,6 +293,7 @@ const ResultDetails = ({className, links = true, entity}) => {
               <TableRow>
                 <TableData>{_('Details: ')}</TableData>
                 <TableData>
+<<<<<<< HEAD
                   {isoval && (
                     <DetailsLink
                       type="ovaldef"
@@ -301,6 +307,9 @@ const ResultDetails = ({className, links = true, entity}) => {
                     </DetailsLink>
                   )}
                   {hasValue(infoId) && infoId.startsWith(DEFAULT_OID_VALUE) && (
+=======
+                  {isDefined(infoId) && infoId.startsWith(DEFAULT_OID_VALUE) && (
+>>>>>>> 266351c2e (Remove remaining OVAL Definitions in GSA code)
                     <span>
                       <DetailsLink type="nvt" id={infoId} textOnly={!links}>
                         {renderNvtName(infoId, information.name)}

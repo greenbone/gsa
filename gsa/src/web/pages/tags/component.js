@@ -58,7 +58,6 @@ const TYPES = [
   'group',
   'note',
   'nvt',
-  'ovaldef',
   'override',
   'permission',
   'portlist',
@@ -126,15 +125,8 @@ const TagComponent = ({
 
     if (isDefined(tag)) {
       gmp.tag.get({id: tag.id}).then(response => {
-        const {
-          active,
-          comment,
-          id,
-          name,
-          resourceCount,
-          resourceType,
-          value,
-        } = response.data;
+        const {active, comment, id, name, resourceCount, resourceType, value} =
+          response.data;
         const filter = 'rows=' + SELECT_MAX_RESOURCES + ' tag_id="' + id;
         gmp[pluralizeType(resourceType)].get({filter}).then(resp => {
           const resources = resp.data;
@@ -334,6 +326,10 @@ TagComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
+<<<<<<< HEAD
 export default TagComponent;
+=======
+export default compose(withGmp, withCapabilities)(TagComponent);
+>>>>>>> 266351c2e (Remove remaining OVAL Definitions in GSA code)
 
 // vim: set ts=2 sw=2 tw=80:
