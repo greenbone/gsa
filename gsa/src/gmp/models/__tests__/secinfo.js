@@ -64,7 +64,6 @@ describe('SecInfo model function tests', () => {
     expect(secInfoTypeName('cve')).toEqual('CVE');
     expect(secInfoTypeName('cpe')).toEqual('CPE');
     expect(secInfoTypeName('nvt')).toEqual('NVT');
-    expect(secInfoTypeName('ovaldef')).toEqual('OVAL Definition');
     expect(secInfoTypeName('cert_bund_adv')).toEqual('CERT-Bund Advisory');
     expect(secInfoTypeName('dfn_cert_adv')).toEqual('DFN-CERT Advisory');
     expect(secInfoTypeName()).toEqual('N/A');
