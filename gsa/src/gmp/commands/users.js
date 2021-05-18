@@ -61,7 +61,6 @@ export const DEFAULT_FILTER_SETTINGS = {
   group: 'f722e5a4-88d8-475f-95b9-e4dcafbc075b',
   host: '37562dfe-1f7e-4cae-a7c0-fa95e6f194c5',
   operatingsystem: 'f608c3ec-ce73-4ff6-8e04-7532749783af',
-  ovaldef: 'adb6ffc8-e50e-4aab-9c31-13c741eb8a16',
   override: 'eaaaebf1-01ef-4c49-b7bb-955461c78e0a',
   note: '96abcd5a-9b6d-456c-80b8-c3221bfa499d',
   nvt: 'bef08b33-075c-4f8c-84f5-51f6137e40a3',
@@ -313,9 +312,8 @@ export class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('group')]: data.groupsFilter,
       [saveDefaultFilterSettingId('host')]: data.hostsFilter,
       [saveDefaultFilterSettingId('note')]: data.notesFilter,
-      [saveDefaultFilterSettingId(
-        'operatingsystem',
-      )]: data.operatingSystemsFilter,
+      [saveDefaultFilterSettingId('operatingsystem')]:
+        data.operatingSystemsFilter,
       [saveDefaultFilterSettingId('override')]: data.overridesFilter,
       [saveDefaultFilterSettingId('permission')]: data.permissionsFilter,
       [saveDefaultFilterSettingId('portlist')]: data.portListsFilter,
@@ -329,15 +327,13 @@ export class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('target')]: data.targetsFilter,
       [saveDefaultFilterSettingId('task')]: data.tasksFilter,
       [saveDefaultFilterSettingId('ticket')]: data.ticketsFilter,
-      [saveDefaultFilterSettingId(
-        'tlscertificate',
-      )]: data.tlsCertificatesFilter,
+      [saveDefaultFilterSettingId('tlscertificate')]:
+        data.tlsCertificatesFilter,
       [saveDefaultFilterSettingId('user')]: data.usersFilter,
       [saveDefaultFilterSettingId('vulnerability')]: data.vulnerabilitiesFilter,
       [saveDefaultFilterSettingId('cpe')]: data.cpeFilter,
       [saveDefaultFilterSettingId('cve')]: data.cveFilter,
       [saveDefaultFilterSettingId('nvt')]: data.nvtFilter,
-      [saveDefaultFilterSettingId('ovaldef')]: data.ovalFilter,
       [saveDefaultFilterSettingId('certbund')]: data.certBundFilter,
       [saveDefaultFilterSettingId('dfncert')]: data.dfnCertFilter,
       auto_cache_rebuild: data.autoCacheRebuild,
