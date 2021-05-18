@@ -21,8 +21,6 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
-
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {hasId} from 'gmp/utils/id';
@@ -119,7 +117,7 @@ class ScannerComponent extends React.Component {
           scanner: undefined,
           scannerDialogVisible: true,
           title: undefined,
-          type: OSP_SCANNER_TYPE,
+          type: undefined,
           which_cert: undefined,
         }),
       );
