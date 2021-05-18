@@ -4,9 +4,6 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-<<<<<<< HEAD
-## [21.10] - unreleased
-=======
 ## [Unrelased]
 
 ### Added
@@ -19,7 +16,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 [Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
 
 ## [21.04] - 2021-04-16
->>>>>>> ac5fb4c53d... Add changelog entry
 
 ### Added
 
