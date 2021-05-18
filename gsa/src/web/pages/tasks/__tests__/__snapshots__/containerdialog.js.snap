@@ -1207,6 +1207,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                                   margin="5px"
                                 >
                                   <input
+                                    checked=""
                                     class="c19 c20"
                                     data-testid="radio-input"
                                     name="in_assets"

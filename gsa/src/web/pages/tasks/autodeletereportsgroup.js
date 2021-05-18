@@ -19,8 +19,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
-
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import Spinner from 'web/components/form/spinner';
@@ -31,7 +29,7 @@ import PropTypes from 'web/utils/proptypes';
 import {toBoolean} from './dialog';
 
 const AutoDeleteReportsGroup = ({
-  autoDelete = AUTO_DELETE_NO,
+  autoDelete = false,
   autoDeleteData,
   onChange,
 }) => (
@@ -68,7 +66,7 @@ const AutoDeleteReportsGroup = ({
 );
 
 AutoDeleteReportsGroup.propTypes = {
-  autoDelete: PropTypes.oneOf([AUTO_DELETE_KEEP, AUTO_DELETE_NO]),
+  autoDelete: PropTypes.bool,
   autoDeleteData: PropTypes.number,
   onChange: PropTypes.func,
 };

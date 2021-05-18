@@ -20,10 +20,7 @@ import React from 'react';
 import {render, fireEvent} from 'web/utils/testing';
 
 import AutoDeleteReportsGroup from '../autodeletereportsgroup';
-import {
-  AUTO_DELETE_KEEP,
-  AUTO_DELETE_KEEP_DEFAULT_VALUE,
-} from 'gmp/models/task';
+import {AUTO_DELETE_KEEP_DEFAULT_VALUE} from 'gmp/models/task';
 
 describe('AutoDeleteReportsGroup tests', () => {
   test('should render dialog group', () => {
@@ -31,7 +28,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {element} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_KEEP}
+        autoDelete={true}
         autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,

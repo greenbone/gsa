@@ -19,8 +19,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {YES_VALUE} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -36,7 +34,7 @@ import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 
 const ContainerTaskDialog = ({
   comment = '',
-  in_assets = YES_VALUE,
+  in_assets = true,
   name = '',
   task,
   title = _('New Container Task'),

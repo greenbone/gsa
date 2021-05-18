@@ -314,6 +314,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
               margin="5px"
             >
               <input
+                checked=""
                 class="c6 c7"
                 data-testid="radio-input"
                 name="auto_delete"
