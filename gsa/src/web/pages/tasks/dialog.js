@@ -454,6 +454,9 @@ const TaskDialog = ({
                 <YesNoRadio
                   name="alterable"
                   disabled={task && !task.isNew()}
+                  yesValue={true}
+                  noValue={false}
+                  convert={toBoolean}
                   value={state.alterable}
                   onChange={onValueChange}
                 />

@@ -100,7 +100,7 @@ ScannerSelect.propTypes = {
 const AuditDialog = ({
   alertIds = [],
   alerts = [],
-  alterable = NO_VALUE,
+  alterable = false,
   auto_delete = false,
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   capabilities,
