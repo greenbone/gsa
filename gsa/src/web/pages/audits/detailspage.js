@@ -119,7 +119,7 @@ export const ToolBarIcons = ({
           title={_('Help: Audits')}
         />
         <ListIcon title={_('Audit List')} page="audits" />
-        {entity.isAlterable() && !entity.isNew() && (
+        {entity.alterable && !entity.isNew() && (
           <AlterableIcon
             title={_(
               'This is an Alterable Audit. Reports may not relate to ' +
@@ -270,7 +270,7 @@ const Details = ({entity, ...props}) => {
 
           <TableRow>
             <TableData>{_('Alterable')}</TableData>
-            <TableData>{renderYesNo(entity.isAlterable())}</TableData>
+            <TableData>{renderYesNo(entity.alterable)}</TableData>
           </TableRow>
 
           <TableRow>
