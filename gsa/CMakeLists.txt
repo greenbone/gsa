@@ -832,18 +832,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/loaders.js
      ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/vulnscoredisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/details.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/detailspage.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/filterdialog.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/listpage.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/row.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/table.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/classdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/createddisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/cvssdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/index.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/loaders.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/overrides/component.js
      ${GSA_SRC_DIR}/src/web/pages/overrides/details.js
      ${GSA_SRC_DIR}/src/web/pages/overrides/detailspage.js
