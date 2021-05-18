@@ -26,7 +26,6 @@ import {
   scannerTypeName,
   CVE_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
-  PARAM_TYPE_OVALDEF_FILE,
   PARAM_TYPE_SELECTION,
   PARAM_TYPE_BOOLEAN,
 } from 'gmp/models/scanner';
@@ -161,9 +160,7 @@ const OspScannerDetails = ({info}) => {
               {params.map(param => {
                 const {param_type} = param;
                 let {default: def} = param;
-                if (param_type === PARAM_TYPE_OVALDEF_FILE) {
-                  def = _('OVAL Definitions File List');
-                } else if (param_type === PARAM_TYPE_SELECTION) {
+                if (param_type === PARAM_TYPE_SELECTION) {
                   def = _('List');
                 } else if (param_type === PARAM_TYPE_BOOLEAN) {
                   def = renderYesNo(def);
