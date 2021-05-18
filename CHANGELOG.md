@@ -106,10 +106,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added @testing-library/user-event as a dev-dependency [#2891](https://github.com/greenbone/gsa/pull/2891)
 
 ### Changed
-- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
+- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867), [#2924](https://github.com/greenbone/gsa/pull/2924)
 
 ### Fixed
-- Fixed setting default scanner type to Greenbone Sensor [#2924](https://github.com/greenbone/gsa/pull/2924)
 - Fixed number-only names within schedules/dialog [#2914](https://github.com/greenbone/gsa/pull/2914)
 - Fixed changing Trend and Select for NVT-families and whole selection only [#2905](https://github.com/greenbone/gsa/pull/2905)
 - Fixed missing name for CVE results on result detailspage [#2892](https://github.com/greenbone/gsa/pull/2892)
