@@ -36,7 +36,6 @@ export const GREENBONE_SENSOR_SCANNER_TYPE = 5;
 export const OPENVAS_DEFAULT_SCANNER_ID =
   '08b69003-5fc2-4037-a479-93b440211c73';
 
-export const PARAM_TYPE_OVALDEF_FILE = 'osp_ovaldef_file';
 export const PARAM_TYPE_SELECTION = 'osp_selection';
 export const PARAM_TYPE_BOOLEAN = 'osp_boolean';
 
