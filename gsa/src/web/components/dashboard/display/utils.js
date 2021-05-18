@@ -141,31 +141,12 @@ export const qodTypeColorScale = scaleOrdinal()
     '#d62728', // Exploit
   ]);
 
-export const OVAL_CLASS_TYPES = {
-  compliance: _l('Compliance'),
-  inventory: _l('Inventory'),
-  miscellaneous: _l('Miscellaneous'),
-  patch: _l('Patch'),
-  vulnerability: _l('Vulnerability'),
-};
-
-export const ovalClassColorScale = scaleOrdinal()
-  .domain(Object.keys(OVAL_CLASS_TYPES))
-  .range([
-    '#a9c9ce', // compliance
-    '#024277', // inventory
-    '#2ca02c', // miscellaneous
-    '#8fbfa5', // patch
-    'orange', // vulnerability
-  ]);
-
 export const SEC_INFO_TYPES = {
   cert_bund_adv: _l('CERT-Bund Advisories'),
   cpe: _l('CPEs'),
   cve: _l('CVEs'),
   dfn_cert_adv: _l('DFN-CERT Advisories'),
   nvt: _l('NVTs'),
-  ovaldef: _l('OVAL Definitions'),
 };
 
 export const secInfoTypeColorScale = scaleOrdinal()
@@ -176,7 +157,6 @@ export const secInfoTypeColorScale = scaleOrdinal()
     '#a9c9ce', // CVEs
     '#98df8a', // DFN-CERT Advisories
     '#80c674', // Nvts
-    '#53984a', // OVAL Definitions
   ]);
 
 // vim: set ts=2 sw=2 tw=80:
