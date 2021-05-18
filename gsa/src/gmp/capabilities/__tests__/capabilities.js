@@ -172,8 +172,6 @@ describe('Capabilities tests', () => {
     expect(caps.mayAccess('dfncerts')).toEqual(true);
     expect(caps.mayAccess('nvt')).toEqual(true);
     expect(caps.mayAccess('nvts')).toEqual(true);
-    expect(caps.mayAccess('ovaldef')).toEqual(true);
-    expect(caps.mayAccess('ovaldefs')).toEqual(true);
     expect(caps.mayAccess('certbund')).toEqual(true);
     expect(caps.mayAccess('certbunds')).toEqual(true);
     expect(caps.mayAccess('secinfo')).toEqual(true);
@@ -183,7 +181,6 @@ describe('Capabilities tests', () => {
     expect(caps.mayClone('cpe')).toEqual(true);
     expect(caps.mayClone('dfncert')).toEqual(true);
     expect(caps.mayClone('nvt')).toEqual(true);
-    expect(caps.mayClone('ovaldef')).toEqual(true);
     expect(caps.mayClone('certbund')).toEqual(true);
     expect(caps.mayClone('secinfo')).toEqual(true);
 
@@ -191,7 +188,6 @@ describe('Capabilities tests', () => {
     expect(caps.mayCreate('cpe')).toEqual(true);
     expect(caps.mayCreate('dfncert')).toEqual(true);
     expect(caps.mayCreate('nvt')).toEqual(true);
-    expect(caps.mayCreate('ovaldef')).toEqual(true);
     expect(caps.mayCreate('certbund')).toEqual(true);
     expect(caps.mayCreate('secinfo')).toEqual(true);
 
@@ -199,7 +195,6 @@ describe('Capabilities tests', () => {
     expect(caps.mayDelete('cpe')).toEqual(true);
     expect(caps.mayDelete('dfncert')).toEqual(true);
     expect(caps.mayDelete('nvt')).toEqual(true);
-    expect(caps.mayDelete('ovaldef')).toEqual(true);
     expect(caps.mayDelete('certbund')).toEqual(true);
     expect(caps.mayDelete('secinfo')).toEqual(true);
 
@@ -207,7 +202,6 @@ describe('Capabilities tests', () => {
     expect(caps.mayEdit('cpe')).toEqual(true);
     expect(caps.mayEdit('dfncert')).toEqual(true);
     expect(caps.mayEdit('nvt')).toEqual(true);
-    expect(caps.mayEdit('ovaldef')).toEqual(true);
     expect(caps.mayEdit('certbund')).toEqual(true);
     expect(caps.mayEdit('secinfo')).toEqual(true);
 

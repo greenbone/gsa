@@ -98,7 +98,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/commands/notes.js
      ${GSA_SRC_DIR}/src/gmp/commands/nvt.js
      ${GSA_SRC_DIR}/src/gmp/commands/os.js
-     ${GSA_SRC_DIR}/src/gmp/commands/ovaldefs.js
      ${GSA_SRC_DIR}/src/gmp/commands/overrides.js
      ${GSA_SRC_DIR}/src/gmp/commands/permissions.js
      ${GSA_SRC_DIR}/src/gmp/commands/policies.js
@@ -158,7 +157,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/models/note.js
      ${GSA_SRC_DIR}/src/gmp/models/nvt.js
      ${GSA_SRC_DIR}/src/gmp/models/os.js
-     ${GSA_SRC_DIR}/src/gmp/models/ovaldef.js
      ${GSA_SRC_DIR}/src/gmp/models/override.js
      ${GSA_SRC_DIR}/src/gmp/models/permission.js
      ${GSA_SRC_DIR}/src/gmp/models/policy.js
