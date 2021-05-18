@@ -270,7 +270,7 @@ const ScannerComponent = ({
             id: undefined,
             name: undefined,
             port: undefined,
-            type: OSP_SCANNER_TYPE,
+            type: undefined,
             title: undefined, // use default title from dialog
             whichCert: undefined,
             visible: true,
