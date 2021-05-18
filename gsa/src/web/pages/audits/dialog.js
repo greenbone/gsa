@@ -22,8 +22,6 @@ import _ from 'gmp/locale';
 
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  HOSTS_ORDERING_SEQUENTIAL,
-  AUTO_DELETE_NO,
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
 } from 'gmp/models/audit';
@@ -55,6 +53,7 @@ import Layout from 'web/components/layout/layout';
 
 import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
+import {toBoolean} from 'web/pages/tasks/dialog';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -102,13 +101,12 @@ const AuditDialog = ({
   alertIds = [],
   alerts = [],
   alterable = NO_VALUE,
-  auto_delete = AUTO_DELETE_NO,
+  auto_delete = false,
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   capabilities,
   comment = '',
   fromPolicy = false,
-  hostsOrdering = HOSTS_ORDERING_SEQUENTIAL,
-  in_assets = YES_VALUE,
+  in_assets = true,
   isLoadingScanners = false,
   maxChecks = DEFAULT_MAX_CHECKS,
   maxHosts = DEFAULT_MAX_HOSTS,
@@ -125,7 +123,6 @@ const AuditDialog = ({
   scheduleId = UNSET_VALUE,
   schedulePeriods = NO_VALUE,
   schedules = [],
-  sourceIface = '',
   targetId,
   targets,
   audit,
@@ -163,14 +160,12 @@ const AuditDialog = ({
     auto_delete,
     auto_delete_data,
     comment,
-    hostsOrdering,
     in_assets,
     maxChecks,
     maxHosts,
     name,
     scannerId,
     scannerType,
-    sourceIface,
     audit,
   };
 
@@ -291,6 +286,9 @@ const AuditDialog = ({
                   name="alterable"
                   disabled={audit && !audit.isNew()}
                   value={state.alterable}
+                  yesValue={true}
+                  noValue={false}
+                  convert={toBoolean}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -324,38 +322,10 @@ const AuditDialog = ({
               <FormGroup titleSize="2" title={_('Policy')}>
                 <Select
                   name="policyId"
-                  disabled={!changeAudit || hasAudit || fromPolicy}
+                  disabled={!changeAudit || fromPolicy}
                   items={policyItems}
                   value={policyId}
                   onChange={onChange}
-                />
-              </FormGroup>
-              <FormGroup titleSize="4" title={_('Network Source Interface')}>
-                <TextField
-                  name="sourceIface"
-                  value={state.sourceIface}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-              <FormGroup titleSize="4" title={_('Order for target hosts')}>
-                <Select
-                  name="hostsOrdering"
-                  items={[
-                    {
-                      value: 'sequential',
-                      label: _('Sequential'),
-                    },
-                    {
-                      value: 'random',
-                      label: _('Random'),
-                    },
-                    {
-                      value: 'reverse',
-                      label: _('Reverse'),
-                    },
-                  ]}
-                  value={state.hostsOrdering}
-                  onChange={onValueChange}
                 />
               </FormGroup>
               <FormGroup
@@ -403,7 +373,6 @@ AuditDialog.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   fromPolicy: PropTypes.bool,
-  hostsOrdering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
   in_assets: PropTypes.yesno,
   isLoadingScanners: PropTypes.bool,
   maxChecks: PropTypes.number,
@@ -416,7 +385,6 @@ AuditDialog.propTypes = {
   scheduleId: PropTypes.idOrZero,
   schedulePeriods: PropTypes.yesno,
   schedules: PropTypes.array,
-  sourceIface: PropTypes.string,
   targetId: PropTypes.idOrZero,
   targets: PropTypes.array,
   title: PropTypes.string,
