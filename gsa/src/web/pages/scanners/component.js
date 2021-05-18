@@ -23,8 +23,6 @@ import _ from 'gmp/locale';
 
 import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
-import {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
-
 import {hasId} from 'gmp/utils/id';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
