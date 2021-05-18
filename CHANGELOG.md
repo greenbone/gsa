@@ -4,23 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unrelased]
-
-### Added
-### Changed
-- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
-
-### Fixed
-### Removed
-
-[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
-
-## [21.04] - 2021-04-16
+## [Hyperion] - unreleased
 
 ### Added
 
 ### Changed
-
+- Adjust tasks and audits to display correct information on listpage and detailspage [#2906](https://github.com/greenbone/gsa/pull/2906)
+- Adjust target credentials to reflect changes in Hyperion [#2898](https://github.com/greenbone/gsa/pull/2898)
+- Use graphql on override listpage [#2887](https://github.com/greenbone/gsa/pull/2887)
+- Adjust port list mutations to reflect changes in Hyperion [#2886](https://github.com/greenbone/gsa/pull/2886)
 - Adjust GSA for result object changes in hyperion [#2866](https://github.com/greenbone/gsa/pull/2866)
 - Adjust target queries to reflect changes in Hyperion [#2845](https://github.com/greenbone/gsa/pull/2845)
 - Implement targets listpage queries and mutations [#2830](https://github.com/greenbone/gsa/pull/2830)
@@ -82,6 +74,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
 - Fixed redirection of createNote on Note detailspage [#2777](https://github.com/greenbone/gsa/pull/2777)
 - Fixed ScanConfigs and Policies page after changes in [Hyperion](https://github.com/greenbone/hyperion/pull/15) [#2733](https://github.com/greenbone/gsa/pull/2733)
 - Fixed reload interval for pages using useEntityReloadInterval and useEntitiesReloadInterval hooks [#2716](https://github.com/greenbone/gsa/pull/2716)
@@ -95,12 +88,41 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed parsing and testing of textExcerpt [#2316](https://github.com/greenbone/gsa/pull/2316)
 - Removed extra parsing of comment and summary in Model [#2309](https://github.com/greenbone/gsa/pull/2309)
 
-[21.04]: https://github.com/greenbone/gsa/compare/gsa-21.04...master
+[Hyperion]: https://github.com/greenbone/gsa/compare/gsa-21.10...master
 
-## [21.04] - unreleased
+## [21.10] - Unreleased
 
 ### Added
+### Changed
+### Fixed
+### Removed
+- Remove OVAL Definitions [#2918](https://github.com/greenbone/gsa/pull/2918), [#2921](https://github.com/greenbone/gsa/pull/2921)
 
+[21.10]: https://github.com/greenbone/gsa/compare/gsa-21.04...gsa-21.10
+
+## [21.04.1] - Unreleased
+
+### Added
+- Added @testing-library/user-event as a dev-dependency [#2891](https://github.com/greenbone/gsa/pull/2891)
+
+### Changed
+- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
+
+### Fixed
+- Fixed number-only names within schedules/dialog [#2914](https://github.com/greenbone/gsa/pull/2914)
+- Fixed changing Trend and Select for NVT-families and whole selection only [#2905](https://github.com/greenbone/gsa/pull/2905)
+- Fixed missing name for CVE results on result detailspage [#2892](https://github.com/greenbone/gsa/pull/2892)
+- Fix setting secret key in RADIUS dialog [#2891](https://github.com/greenbone/gsa/pull/2891)
+- Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
+
+### Removed
+
+[21.04.1]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
+
+## [21.04] - 2021-04-16
+
+### Added
+- Don't show word cloud as default in result dashboard [#2883](https://github.com/greenbone/gsa/pull/2883)
 - Allow to set unix socket permissions for gsad [#2816](https://github.com/greenbone/gsa/pull/2816)
 - Added CVSS date to NVT details [#2802](https://github.com/greenbone/gsa/pull/2802)
 - Add option to allow to scan simultaneous IPs to targets
@@ -110,6 +132,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
+- Don't show word cloud as default in result dashboard [#2883](https://github.com/greenbone/gsa/pull/2883)
+- Sort host, os and vulns listpage by descending severity [#2880](https://github.com/greenbone/gsa/pull/2880)
 - Revert the changes from integer `score` to a float `severity` [#2854](https://github.com/greenbone/gsa/pull/2854)
 - Show StartIcon for scheduled tasks [#2840](https://github.com/greenbone/gsa/pull/2840)
 - Remove solution from log NVTs [#2792](https://github.com/greenbone/gsa/pull/2792)
@@ -126,7 +150,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ### Fixed
-
+- Fix dynamic severity checkbox not being checked upon clicking [#2882](https://github.com/greenbone/gsa/pull/2882)
+- Fixed result CVE parsing for result listpage and CVE reports [#2869](https://github.com/greenbone/gsa/pull/2869)
 - Fixed setting comments of business process nodes [#2781](https://github.com/greenbone/gsa/pull/2781)
 - Added the deprecatedBy field to CPEs [#2751](https://github.com/greenbone/gsa/pull/2751)
 - Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)

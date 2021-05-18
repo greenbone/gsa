@@ -44,22 +44,24 @@ export const mockTarget = deepFreeze({
     name: 'list',
     id: 'pl1',
   },
-  sshCredential: {
-    name: 'ssh',
-    id: 'ssh1',
-    port: 22,
-  },
-  smbCredential: {
-    name: null,
-    id: null,
-  },
-  esxiCredential: {
-    name: null,
-    id: null,
-  },
-  snmpCredential: {
-    name: null,
-    id: null,
+  credentials: {
+    ssh: {
+      name: 'ssh',
+      id: 'ssh1',
+      port: 22,
+    },
+    smb: {
+      name: null,
+      id: null,
+    },
+    esxi: {
+      name: null,
+      id: null,
+    },
+    snmp: {
+      name: null,
+      id: null,
+    },
   },
   tasks: [
     {
@@ -101,21 +103,24 @@ export const inUseTarget = deepFreeze({
     name: 'list',
     id: 'pl2',
   },
-  sshCredential: {
-    name: null,
-    id: null,
-  },
-  smbCredential: {
-    name: 'smb',
-    id: 'smb2',
-  },
-  esxiCredential: {
-    name: null,
-    id: null,
-  },
-  snmpCredential: {
-    name: null,
-    id: null,
+  credentials: {
+    ssh: {
+      name: null,
+      id: null,
+      port: null,
+    },
+    smb: {
+      name: 'smb',
+      id: 'smb2',
+    },
+    esxi: {
+      name: null,
+      id: null,
+    },
+    snmp: {
+      name: null,
+      id: null,
+    },
   },
   aliveTest: 'ICMP_PING',
   allowSimultaneousIPs: false,
@@ -155,22 +160,24 @@ export const listTarget = deepFreeze({
     name: 'list',
     id: 'pl1',
   },
-  sshCredential: {
-    name: 'ssh',
-    id: 'ssh1',
-    port: 22,
-  },
-  smbCredential: {
-    name: null,
-    id: null,
-  },
-  esxiCredential: {
-    name: null,
-    id: null,
-  },
-  snmpCredential: {
-    name: null,
-    id: null,
+  credentials: {
+    ssh: {
+      name: 'ssh',
+      id: 'ssh1',
+      port: 22,
+    },
+    smb: {
+      name: 'smb',
+      id: 'smb2',
+    },
+    esxi: {
+      name: null,
+      id: null,
+    },
+    snmp: {
+      name: null,
+      id: null,
+    },
   },
   aliveTest: 'ICMP_PING',
   allowSimultaneousIPs: true,
@@ -193,22 +200,24 @@ export const listTarget2 = deepFreeze({
     name: 'list',
     id: 'pl2',
   },
-  sshCredential: {
-    name: null,
-    id: null,
-    port: null,
-  },
-  smbCredential: {
-    name: 'smb',
-    id: 'smb2',
-  },
-  esxiCredential: {
-    name: null,
-    id: null,
-  },
-  snmpCredential: {
-    name: null,
-    id: null,
+  credentials: {
+    ssh: {
+      name: 'ssh',
+      id: 'ssh1',
+      port: 22,
+    },
+    smb: {
+      name: 'smb',
+      id: 'smb2',
+    },
+    esxi: {
+      name: null,
+      id: null,
+    },
+    snmp: {
+      name: null,
+      id: null,
+    },
   },
   aliveTest: 'ICMP_PING',
   allowSimultaneousIPs: true,
@@ -258,22 +267,24 @@ export const noPermTarget = deepFreeze({
     name: 'list',
     id: 'pl1',
   },
-  sshCredential: {
-    name: 'ssh',
-    id: 'ssh1',
-    port: 22,
-  },
-  smbCredential: {
-    name: null,
-    id: null,
-  },
-  esxiCredential: {
-    name: null,
-    id: null,
-  },
-  snmpCredential: {
-    name: null,
-    id: null,
+  credentials: {
+    ssh: {
+      name: 'ssh',
+      id: 'ssh1',
+      port: 22,
+    },
+    smb: {
+      name: 'smb',
+      id: 'smb2',
+    },
+    esxi: {
+      name: null,
+      id: null,
+    },
+    snmp: {
+      name: null,
+      id: null,
+    },
   },
   tasks: [
     {

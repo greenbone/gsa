@@ -106,8 +106,7 @@ export const GET_AUDIT = gql`
       reports {
         lastReport {
           id
-          severity
-          timestamp
+          creationTime
           scanStart
           scanEnd
           complianceCount {
@@ -119,7 +118,7 @@ export const GET_AUDIT = gql`
         currentReport {
           id
           scanStart
-          timestamp
+          creationTime
         }
         counts {
           total
@@ -142,9 +141,12 @@ export const GET_AUDIT = gql`
       comment
       owner
       preferences {
-        name
-        value
-        description
+        autoDeleteReports
+        createAssets
+        createAssetsApplyOverrides
+        createAssetsMinQod
+        maxConcurrentNvts
+        maxConcurrentHosts
       }
       schedule {
         name
@@ -161,7 +163,6 @@ export const GET_AUDIT = gql`
         id
         name
         trash
-        type
       }
       scanner {
         id
@@ -169,7 +170,6 @@ export const GET_AUDIT = gql`
         type
       }
       schedulePeriods
-      hostsOrdering
       observers {
         users
         roles {
@@ -211,8 +211,7 @@ export const GET_AUDITS = gql`
           reports {
             lastReport {
               id
-              severity
-              timestamp
+              creationTime
               scanStart
               scanEnd
               complianceCount {
@@ -224,7 +223,7 @@ export const GET_AUDITS = gql`
             currentReport {
               id
               scanStart
-              timestamp
+              creationTime
             }
             counts {
               total
@@ -247,9 +246,12 @@ export const GET_AUDITS = gql`
           comment
           owner
           preferences {
-            name
-            value
-            description
+            autoDeleteReports
+            createAssets
+            createAssetsApplyOverrides
+            createAssetsMinQod
+            maxConcurrentNvts
+            maxConcurrentHosts
           }
           schedule {
             name
@@ -266,7 +268,6 @@ export const GET_AUDITS = gql`
             id
             name
             trash
-            type
           }
           scanner {
             id
@@ -274,7 +275,6 @@ export const GET_AUDITS = gql`
             type
           }
           schedulePeriods
-          hostsOrdering
           observers {
             users
             roles {

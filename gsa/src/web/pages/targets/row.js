@@ -116,33 +116,40 @@ const Row = ({
   links = true,
   onToggleDetailsClick,
   ...props
-}) => (
-  <TableRow>
-    <EntityNameTableData
-      entity={entity}
-      link={links}
-      type="target"
-      displayName={_('Target')}
-      onToggleDetailsClick={onToggleDetailsClick}
-    />
-    <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
-    <TableData>{entity.hostCount}</TableData>
-    <TableData>
-      <span>
-        <DetailsLink type="portlist" id={entity.portList.id} textOnly={!links}>
-          {entity.portList.name}
-        </DetailsLink>
-      </span>
-    </TableData>
-    <TableData flex="column" align="center">
-      <Cred cred={entity.sshCredential} title={'SSH'} links={links} />
-      <Cred cred={entity.smbCredential} title={'SMB'} links={links} />
-      <Cred cred={entity.esxiCredential} title={'ESXi'} links={links} />
-      <Cred cred={entity.snmpCredential} title={'SNMP'} links={links} />
-    </TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+}) => {
+  const {credentials} = entity;
+  return (
+    <TableRow>
+      <EntityNameTableData
+        entity={entity}
+        link={links}
+        type="target"
+        displayName={_('Target')}
+        onToggleDetailsClick={onToggleDetailsClick}
+      />
+      <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
+      <TableData>{entity.hostCount}</TableData>
+      <TableData>
+        <span>
+          <DetailsLink
+            type="portlist"
+            id={entity.portList.id}
+            textOnly={!links}
+          >
+            {entity.portList.name}
+          </DetailsLink>
+        </span>
+      </TableData>
+      <TableData flex="column" align="center">
+        <Cred cred={credentials.ssh} title={'SSH'} links={links} />
+        <Cred cred={credentials.smb} title={'SMB'} links={links} />
+        <Cred cred={credentials.esxi} title={'ESXi'} links={links} />
+        <Cred cred={credentials.snmp} title={'SNMP'} links={links} />
+      </TableData>
+      <ActionsComponent {...props} entity={entity} />
+    </TableRow>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

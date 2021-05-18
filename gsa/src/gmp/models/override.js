@@ -18,6 +18,7 @@
 import {isModelElement, hasValue} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
+import moment from 'gmp/models/date';
 import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
 import {
   parseCsv,
@@ -70,7 +71,7 @@ class Override extends Model {
       ret.name = object.nvt.name;
     }
 
-    ret.endTime = hasValue(object.endTime) ? object.endTime : undefined;
+    ret.endTime = hasValue(object.endTime) ? moment(object.endTime) : undefined;
     ret.severity = hasValue(object.severity) ? object.severity : undefined;
     ret.newSeverity = hasValue(object.newSeverity)
       ? object.newSeverity

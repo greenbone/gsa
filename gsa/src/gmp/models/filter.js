@@ -805,13 +805,11 @@ export const HOSTS_FILTER_FILTER = Filter.fromString('type=host');
 export const NOTES_FILTER_FILTER = Filter.fromString('type=note');
 export const NVTS_FILTER_FILTER = Filter.fromString('type=info');
 export const OS_FILTER_FILTER = Filter.fromString('type=os');
-export const OVALDEFS_FILTER_FILTER = Filter.fromString('type=info');
 export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=override');
 export const PORTLISTS_FILTER_FILTER = Filter.fromString('type=port_list');
 export const PERMISSIONS_FILTER_FILTER = Filter.fromString('type=permission');
-export const REPORT_FORMATS_FILTER_FILTER = Filter.fromString(
-  'type=report_format',
-);
+export const REPORT_FORMATS_FILTER_FILTER =
+  Filter.fromString('type=report_format');
 export const REPORTS_FILTER_FILTER = Filter.fromString('type=report');
 export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
 export const ROLES_FILTER_FILTER = Filter.fromString('type=role');

@@ -26,7 +26,10 @@ import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
 
 import {setTimezone} from 'web/store/usersettings/actions';
 
-import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+import {
+  detailsScanConfig,
+  getMockTasks,
+} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import {rendererWith, screen, wait} from 'web/utils/testing';
 
@@ -40,7 +43,10 @@ describe('Task Details tests', () => {
 
     const caps = new Capabilities(['everything']);
     const [scheduleMock, resultFunc] = createGetScheduleQueryMock('foo');
-    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
+    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock(
+      '314',
+      detailsScanConfig,
+    );
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -74,8 +80,6 @@ describe('Task Details tests', () => {
     expect(element).toHaveTextContent('OpenVAS Scanner');
     expect(element).toHaveTextContent('Scan Config');
     expect(detailslinks[3]).toHaveAttribute('href', '/scanconfig/314');
-    expect(element).toHaveTextContent('Order for target hostssequential');
-    expect(element).toHaveTextContent('Network Source Interface');
     expect(element).toHaveTextContent(
       'Maximum concurrently executed NVTs per host4',
     );
