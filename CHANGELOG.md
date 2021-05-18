@@ -96,12 +96,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Fixed
 ### Removed
-<<<<<<< HEAD
-- Remove OVAL Definitions detailspage and listpage [#2918](https://github.com/greenbone/gsa/pull/2918)
-=======
 - Remove OVAL Definitions [#2918](https://github.com/greenbone/gsa/pull/2918), [#2921](https://github.com/greenbone/gsa/pull/2921)
-- Remove Network Source Interface from GSA for Tasks and Audits [#2902](https://github.com/greenbone/gsa/pull/2902)
->>>>>>> 6fc80328e6... Update Changelog
 
 [21.10]: https://github.com/greenbone/gsa/compare/gsa-21.04...gsa-21.10
 
