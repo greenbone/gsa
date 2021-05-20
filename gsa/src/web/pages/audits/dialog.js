@@ -31,8 +31,6 @@ import {
   OPENVAS_DEFAULT_SCANNER_ID,
 } from 'gmp/models/scanner';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
@@ -42,7 +40,6 @@ import MultiSelect from 'web/components/form/multiselect';
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
-import Checkbox from 'web/components/form/checkbox';
 import YesNoRadio from 'web/components/form/yesnoradio';
 import TextField from 'web/components/form/textfield';
 

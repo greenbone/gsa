@@ -20,8 +20,6 @@ import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
-
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
   DEFAULT_MAX_CHECKS,

@@ -27,7 +27,6 @@ import {
   parseProgressElement,
   parseYes,
   parseDuration,
-  NO_VALUE,
 } from 'gmp/parser';
 
 import Model, {parseModelFromElement} from 'gmp/model';

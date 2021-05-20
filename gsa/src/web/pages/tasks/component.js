@@ -29,7 +29,6 @@ import date from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
-import {TASK_STATUS} from 'gmp/models/task';
 
 import {NO_VALUE} from 'gmp/parser';
 
@@ -404,17 +403,6 @@ const TaskComponent = ({
 
     if (isDefined(id)) {
       // save edit part
-      if (isDefined(task) && !task.isChangeable()) {
-        // arguments need to be undefined if the task is not changeable
-
-        dispatchState(
-          updateState({
-            targetId: undefined,
-            scannerId: undefined,
-            configId: undefined,
-          }),
-        );
-      }
       // does not need statusIsNew anymore. If task is not changeable then these fields are disabled in the dialog, but still required in hyperion
       const mutationData = {
         alertIds: alertIds,

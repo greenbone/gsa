@@ -28,7 +28,6 @@ import {
   parseIntoArray,
   parseText,
   parseDuration,
-  NO_VALUE,
 } from 'gmp/parser';
 
 import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
