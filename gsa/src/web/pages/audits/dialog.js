@@ -101,15 +101,15 @@ const AuditDialog = ({
   alertIds = [],
   alerts = [],
   alterable = false,
-  auto_delete = false,
-  auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
+  autoDelete = false,
+  autoDeleteReports = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   capabilities,
   comment = '',
   fromPolicy = false,
-  in_assets = true,
+  createAssets = true,
   isLoadingScanners = false,
-  maxChecks = DEFAULT_MAX_CHECKS,
-  maxHosts = DEFAULT_MAX_HOSTS,
+  maxConcurrentNvts = DEFAULT_MAX_CHECKS,
+  maxConcurrentHosts = DEFAULT_MAX_HOSTS,
   name = _('Unnamed'),
   policies = [],
   policyId,
@@ -157,12 +157,12 @@ const AuditDialog = ({
   const uncontrolledData = {
     ...data,
     alterable,
-    auto_delete,
-    auto_delete_data,
+    autoDelete,
+    autoDeleteReports,
     comment,
-    in_assets,
-    maxChecks,
-    maxHosts,
+    createAssets,
+    maxConcurrentNvts,
+    maxConcurrentHosts,
     name,
     scannerId,
     scannerType,
@@ -276,7 +276,7 @@ const AuditDialog = ({
             )}
 
             <AddResultsToAssetsGroup
-              inAssets={state.in_assets}
+              createAssets={state.createAssets}
               onChange={onValueChange}
             />
 
@@ -295,8 +295,8 @@ const AuditDialog = ({
             )}
 
             <AutoDeleteReportsGroup
-              autoDelete={state.auto_delete}
-              autoDeleteData={state.auto_delete_data}
+              autoDelete={state.autoDelete}
+              autoDeleteReports={state.autoDeleteReports}
               onChange={onValueChange}
             />
 
@@ -333,11 +333,11 @@ const AuditDialog = ({
                 title={_('Maximum concurrently executed NVTs per host')}
               >
                 <Spinner
-                  name="maxChecks"
+                  name="maxConcurrentNvts"
                   size="10"
                   min="0"
                   maxLength="10"
-                  value={state.maxChecks}
+                  value={state.maxConcurrentNvts}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -346,12 +346,12 @@ const AuditDialog = ({
                 title={_('Maximum concurrently scanned hosts')}
               >
                 <Spinner
-                  name="maxHosts"
+                  name="maxConcurrentHosts"
                   type="int"
                   min="0"
                   size="10"
                   maxLength="10"
-                  value={state.maxHosts}
+                  value={state.maxConcurrentHosts}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -368,15 +368,15 @@ AuditDialog.propTypes = {
   alerts: PropTypes.array,
   alterable: PropTypes.bool,
   audit: PropTypes.model,
-  auto_delete: PropTypes.bool,
-  auto_delete_data: PropTypes.number,
+  autoDelete: PropTypes.bool,
+  autoDeleteReports: PropTypes.number,
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   fromPolicy: PropTypes.bool,
-  in_assets: PropTypes.bool,
+  createAssets: PropTypes.bool,
   isLoadingScanners: PropTypes.bool,
-  maxChecks: PropTypes.number,
-  maxHosts: PropTypes.number,
+  maxConcurrentNvts: PropTypes.number,
+  maxConcurrentHosts: PropTypes.number,
   name: PropTypes.string,
   policies: PropTypes.arrayOf(PropTypes.model),
   policyId: PropTypes.idOrZero,
