@@ -121,7 +121,6 @@ const AuditDialog = ({
     },
   ],
   scheduleId = UNSET_VALUE,
-  schedulePeriods = NO_VALUE,
   schedules = [],
   targetId,
   targets,
@@ -257,14 +256,6 @@ const AuditDialog = ({
                     items={scheduleItems}
                     onChange={onChange}
                   />
-                  <Checkbox
-                    name="schedulePeriods"
-                    checked={state.schedulePeriods === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    unCheckedValue={NO_VALUE}
-                    title={_('Once')}
-                    onChange={onValueChange}
-                  />
                   <Layout>
                     <NewIcon
                       title={_('Create a new schedule')}
@@ -383,7 +374,6 @@ AuditDialog.propTypes = {
   scannerId: PropTypes.idOrZero,
   scanners: PropTypes.array,
   scheduleId: PropTypes.idOrZero,
-  schedulePeriods: PropTypes.yesno,
   schedules: PropTypes.array,
   targetId: PropTypes.idOrZero,
   targets: PropTypes.array,

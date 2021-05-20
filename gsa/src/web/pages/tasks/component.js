@@ -415,9 +415,7 @@ const TaskComponent = ({
           }),
         );
       }
-
-      const statusIsNew = task.status === TASK_STATUS.new;
-
+      // does not need statusIsNew anymore. If task is not changeable then these fields are disabled in the dialog, but still required in hyperion
       const mutationData = {
         alertIds: alertIds,
         alterable,
@@ -431,10 +429,9 @@ const TaskComponent = ({
           maxConcurrentNvts: maxConcurrentNvts,
           maxConcurrentHosts: maxConcurrentHosts,
         },
-        scanConfigId: statusIsNew ? configId : undefined,
-        scannerId: statusIsNew ? scannerId : undefined,
+        scanConfigId: configId,
+        scannerId: scannerId,
         scheduleId: scheduleId,
-        schedulePeriods: schedulePeriods,
         targetId: targetId,
         id,
       };
@@ -459,7 +456,6 @@ const TaskComponent = ({
       scanConfigId: configId,
       scannerId: scannerId,
       scheduleId: scheduleId,
-      schedulePeriods: schedulePeriods,
       targetId: targetId,
     };
     return createTask(mutationData)

@@ -158,7 +158,6 @@ const TaskDialog = ({
     },
   ],
   scheduleId = UNSET_VALUE,
-  schedulePeriods = NO_VALUE,
   schedules = [],
   tags = [],
   targetId,
@@ -273,7 +272,6 @@ const TaskDialog = ({
     name,
     scannerType,
     scannerId,
-    schedulePeriods,
     tagId,
     tags,
     task,
@@ -399,14 +397,6 @@ const TaskDialog = ({
                     isLoading={isLoadingSchedules}
                     width="201px"
                     onChange={onScheduleChange}
-                  />
-                  <Checkbox
-                    name="schedulePeriods"
-                    checked={state.schedulePeriods === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    unCheckedValue={NO_VALUE}
-                    title={_('Once')}
-                    onChange={onValueChange}
                   />
                   <Layout>
                     <NewIcon
@@ -613,7 +603,6 @@ TaskDialog.propTypes = {
   scannerId: PropTypes.idOrZero,
   scanners: PropTypes.array,
   scheduleId: PropTypes.idOrZero,
-  schedulePeriods: PropTypes.yesno,
   schedules: PropTypes.array,
   tagId: PropTypes.id,
   tags: PropTypes.array,

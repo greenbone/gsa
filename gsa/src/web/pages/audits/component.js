@@ -272,12 +272,7 @@ const AuditComponent = ({
 
     if (isDefined(id)) {
       // save edit part
-      if (isDefined(audit) && !audit.isChangeable()) {
-        // arguments need to be undefined if the audit is not changeable
-        targetId = undefined;
-        scannerId = undefined;
-        policyId = undefined;
-      }
+      // does not need statusIsNew anymore. If audit is not changeable then these fields are disabled in the dialog, but still required in hyperion
       return modifyAudit({
         alertIds,
         alterable,
@@ -295,7 +290,6 @@ const AuditComponent = ({
         },
         scannerId,
         scheduleId,
-        schedulePeriods,
         targetId,
       })
         .then(onSaved, onSaveError)
@@ -318,7 +312,6 @@ const AuditComponent = ({
       },
       scannerId,
       scheduleId,
-      schedulePeriods,
       targetId,
     })
       .then(onCreated, onCreateError)
