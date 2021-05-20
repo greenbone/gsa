@@ -33,7 +33,7 @@ const YesNoRadio = ({
   disabled,
   value,
   name,
-  yesValue = YES_VALUE,
+  yesValue = YES_VALUE, // once everything is using hyperion and not gsad, we should probably change these default values to boolean and the default convert function to toBoolean
   noValue = NO_VALUE,
   onChange,
   ...other
