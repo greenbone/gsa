@@ -99,11 +99,7 @@ class Audit extends Model {
   }
 
   isChangeable() {
-    return this.isNew() || this.isAlterable();
-  }
-
-  isAlterable() {
-    return this.alterable !== NO_VALUE;
+    return this.isNew() || this.alterable;
   }
 
   isContainer() {
