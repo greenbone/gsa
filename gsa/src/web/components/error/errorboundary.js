@@ -18,6 +18,8 @@
 
 import React from 'react';
 
+import * as Sentry from '@sentry/react';
+
 import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
@@ -43,10 +45,15 @@ class ErrorBoundary extends React.Component {
     const {hasError, error, info} = this.state;
     const {message = _('An error occurred on this page.')} = this.props;
 
-    if (hasError) {
-      return <ErrorPanel error={error} info={info} message={message} />;
-    }
-    return this.props.children;
+    const FallbackComponent = (
+      <ErrorPanel error={error} info={info} message={message} />
+    );
+
+    return (
+      <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
+        {this.props.children}
+      </Sentry.ErrorBoundary>
+    );
   }
 }
 

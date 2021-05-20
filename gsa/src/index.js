@@ -19,7 +19,20 @@ import React from 'react';
 
 import ReactDOM from 'react-dom';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import App from './web/app.js';
+
+import * as Sentry from '@sentry/react';
+
+const {sentryDSN, sentryEnvironment} = global.config;
+
+Sentry.init({
+  attachStacktrace: true,
+  dsn: sentryDSN,
+  environment: sentryEnvironment,
+  enabled: isDefined(sentryDSN),
+});
 
 ReactDOM.render(<App />, document.getElementById('app'));
 
