@@ -1212,7 +1212,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                                     data-testid="radio-input"
                                     name="in_assets"
                                     type="radio"
-                                    value="1"
+                                    value="true"
                                   />
                                   <span
                                     class="c21"
@@ -1238,7 +1238,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                                     data-testid="radio-input"
                                     name="in_assets"
                                     type="radio"
-                                    value="0"
+                                    value="false"
                                   />
                                   <span
                                     class="c21"

@@ -118,7 +118,6 @@ class Audit extends Model {
     const copy = super.parseObject(object);
     const {reports} = object;
 
-    copy.alterable = parseYesNo(object.alterable);
     const allReports = ['lastReport', 'currentReport'];
 
     if (hasValue(reports)) {

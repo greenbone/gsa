@@ -19,8 +19,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
-
 import FormGroup from 'web/components/form/formgroup';
 import Radio from 'web/components/form/radio';
 import Spinner from 'web/components/form/spinner';
@@ -28,9 +26,10 @@ import Spinner from 'web/components/form/spinner';
 import Divider from 'web/components/layout/divider';
 
 import PropTypes from 'web/utils/proptypes';
+import {toBoolean} from './dialog';
 
 const AutoDeleteReportsGroup = ({
-  autoDelete = AUTO_DELETE_NO,
+  autoDelete = false,
   autoDeleteData,
   onChange,
 }) => (
@@ -38,17 +37,19 @@ const AutoDeleteReportsGroup = ({
     <Radio
       title={_('Do not automatically delete reports')}
       name="auto_delete"
-      value={AUTO_DELETE_NO}
+      value={false}
       onChange={onChange}
-      checked={autoDelete !== AUTO_DELETE_KEEP}
+      checked={autoDelete === false}
+      convert={toBoolean}
     />
     <Divider>
       <Radio
         name="auto_delete"
-        value="keep"
+        value={true}
         onChange={onChange}
         title={_('Automatically delete oldest reports but always keep newest')}
-        checked={autoDelete === AUTO_DELETE_KEEP}
+        checked={autoDelete === true}
+        convert={toBoolean}
       />
       <Spinner
         type="int"
@@ -56,7 +57,7 @@ const AutoDeleteReportsGroup = ({
         max="1200"
         name="auto_delete_data"
         value={autoDeleteData}
-        disabled={autoDelete !== AUTO_DELETE_KEEP}
+        disabled={autoDelete === false}
         onChange={onChange}
       />
       <span>{_('reports')}</span>
@@ -65,7 +66,7 @@ const AutoDeleteReportsGroup = ({
 );
 
 AutoDeleteReportsGroup.propTypes = {
-  autoDelete: PropTypes.oneOf([AUTO_DELETE_KEEP, AUTO_DELETE_NO]),
+  autoDelete: PropTypes.bool,
   autoDeleteData: PropTypes.number,
   onChange: PropTypes.func,
 };

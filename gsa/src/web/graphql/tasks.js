@@ -408,10 +408,10 @@ export const useCreateTask = options => {
 };
 
 export const useDeleteTask = options => {
-  const [queryDeleteTask, data] = useMutation(DELETE_TASK, options);
+  const [queryDeleteTask, data] = useMutation(DELETE_TASKS_BY_IDS, options);
   const deleteTask = useCallback(
     // eslint-disable-next-line no-shadow
-    (id, options) => queryDeleteTask({...options, variables: {id}}),
+    (id, options) => queryDeleteTask({...options, variables: {ids: [id]}}),
     [queryDeleteTask],
   );
   return [deleteTask, data];

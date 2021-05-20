@@ -23,17 +23,25 @@ import FormGroup from 'web/components/form/formgroup';
 import YesNoRadio from 'web/components/form/yesnoradio';
 
 import PropTypes from 'web/utils/proptypes';
+import {toBoolean} from './dialog';
 
 export const AddResultsToAssetsGroup = ({inAssets, onChange}) => {
   return (
     <FormGroup title={_('Add results to Assets')}>
-      <YesNoRadio name="in_assets" value={inAssets} onChange={onChange} />
+      <YesNoRadio
+        name="in_assets"
+        value={inAssets}
+        onChange={onChange}
+        yesValue={true}
+        noValue={false}
+        convert={toBoolean}
+      />
     </FormGroup>
   );
 };
 
 AddResultsToAssetsGroup.propTypes = {
-  inAssets: PropTypes.yesno,
+  inAssets: PropTypes.bool,
   onChange: PropTypes.func,
 };
 

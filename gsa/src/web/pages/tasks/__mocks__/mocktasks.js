@@ -198,7 +198,7 @@ const task = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 1,
+  alterable: true,
   creationTime: '2019-07-30T13:00:00Z',
   modificationTime: '2019-08-30T13:23:30Z',
   status: HYPERION_TASK_STATUS.stopped,
@@ -225,7 +225,7 @@ const newTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 0,
+  alterable: false,
   status: HYPERION_TASK_STATUS.new,
   reports: {
     counts: {
@@ -269,7 +269,7 @@ const runningTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 0,
+  alterable: false,
   inUse: true,
   status: HYPERION_TASK_STATUS.running,
   reports: {
@@ -294,7 +294,7 @@ const stoppedTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 0,
+  alterable: false,
   status: HYPERION_TASK_STATUS.stopped,
   reports: {
     lastReport,
@@ -318,7 +318,7 @@ const observedTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 0,
+  alterable: false,
   status: HYPERION_TASK_STATUS.done,
   reports: {
     lastReport,
@@ -341,7 +341,7 @@ const containerTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 0,
+  alterable: false,
   status: HYPERION_TASK_STATUS.done,
   reports: {
     lastReport,
@@ -372,7 +372,7 @@ const listMockTask = deepFreeze({
   status: HYPERION_TASK_STATUS.done,
   target,
   trend: TASK_TREND.up,
-  alterable: 0,
+  alterable: false,
   comment: 'bar',
   owner: 'admin',
   preferences,
@@ -399,7 +399,7 @@ const detailsMockTask = deepFreeze({
   },
   status: HYPERION_TASK_STATUS.stopped,
   target,
-  alterable: 0,
+  alterable: false,
   trend: null,
   comment: 'bar',
   owner: 'admin',

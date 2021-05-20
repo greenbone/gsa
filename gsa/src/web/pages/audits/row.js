@@ -105,7 +105,7 @@ const Row = ({
             {entity.name}
           </RowDetailsToggle>
           <IconDivider>
-            {entity.alterable === 1 && (
+            {entity.alterable && (
               <AlterableIcon size="small" title={_('Audit is alterable')} />
             )}
             {isDefined(scanner) &&
