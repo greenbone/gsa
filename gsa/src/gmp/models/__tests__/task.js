@@ -500,11 +500,14 @@ describe(`Task Model methods parseObject tests`, () => {
   test('should be changeable if alterable or new', () => {
     let task = Task.fromObject({
       status: HYPERION_TASK_STATUS.new,
-      alterable: '0',
+      alterable: false,
     });
     expect(task.isChangeable()).toEqual(true);
 
-    task = Task.fromObject({status: HYPERION_TASK_STATUS.done, alterable: '1'});
+    task = Task.fromObject({
+      status: HYPERION_TASK_STATUS.done,
+      alterable: true,
+    });
     expect(task.isChangeable()).toEqual(true);
   });
 });
@@ -620,11 +623,5 @@ describe(`Task Model methods parseElement tests`, () => {
     }
   });
 
-  test('should be changeable if alterable or new', () => {
-    let task = Task.fromElement({status: TASK_STATUS.new, alterable: '0'});
-    expect(task.isChangeable()).toEqual(true);
-
-    task = Task.fromElement({status: TASK_STATUS.done, alterable: '1'});
-    expect(task.isChangeable()).toEqual(true);
-  });
+  // isChangeable is only used with objects
 });
