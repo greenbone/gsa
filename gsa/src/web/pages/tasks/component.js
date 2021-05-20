@@ -51,6 +51,8 @@ import {useLazyGetSchedules} from 'web/graphql/schedules';
 
 import {useLazyGetTargets} from 'web/graphql/targets';
 
+import {RESOURCES_ACTION, useModifyTag} from 'web/graphql/tags';
+
 import {
   useModifyTask,
   useCreateContainerTask,
@@ -182,6 +184,7 @@ const TaskComponent = ({
   const [runQuickFirstScan] = useRunQuickFirstScan();
   const [runModifyTask] = useRunModifyTask();
   const [runQuickTask] = useRunQuickTask();
+  const [modifyTag] = useModifyTag();
 
   // GraphQL Loaders and Data
   const [
@@ -376,6 +379,7 @@ const TaskComponent = ({
   };
 
   const handleSaveTask = ({
+    addTag,
     alertIds,
     alterable,
     autoDelete,
@@ -392,6 +396,7 @@ const TaskComponent = ({
     scannerId,
     scheduleId,
     schedulePeriods,
+    tagId,
     targetId,
     task,
   }) => {
@@ -458,7 +463,16 @@ const TaskComponent = ({
       targetId: targetId,
     };
     return createTask(mutationData)
-      .then(result => onCreated(result), onCreateError)
+      .then(result => {
+        if (addTag) {
+          modifyTag({
+            id: tagId,
+            resourceAction: RESOURCES_ACTION.add,
+            resourceIds: [result],
+          });
+        }
+        onCreated(result);
+      }, onCreateError)
       .then(() => closeTaskDialog());
   };
 

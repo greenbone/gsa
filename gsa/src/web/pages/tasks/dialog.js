@@ -128,7 +128,7 @@ ScannerSelect.propTypes = {
 };
 
 const TaskDialog = ({
-  add_tag = false,
+  addTag = false,
   alertIds = [],
   alerts = [],
   alterable = false,
@@ -259,7 +259,7 @@ const TaskDialog = ({
 
   const uncontrolledData = {
     ...data,
-    add_tag,
+    addTag,
     alterable,
     createAssetsApplyOverrides,
     autoDelete,
@@ -562,14 +562,14 @@ const TaskDialog = ({
                     <Divider>
                       <Checkbox
                         title={_('Add:')}
-                        name="add_tag"
-                        checkedValue={YES_VALUE}
-                        unCheckedValue={NO_VALUE}
-                        checked={state.add_tag === YES_VALUE}
+                        name="addTag"
+                        checkedValue={true}
+                        unCheckedValue={false}
+                        checked={state.addTag}
                         onChange={onValueChange}
                       />
                       <Select
-                        disabled={state.add_tag !== YES_VALUE}
+                        disabled={!state.addTag}
                         name="tagId"
                         items={tagItems}
                         isLoading={isLoadingTags}
@@ -588,7 +588,7 @@ const TaskDialog = ({
 };
 
 TaskDialog.propTypes = {
-  add_tag: PropTypes.yesno,
+  addTag: PropTypes.yesno,
   alertIds: PropTypes.array,
   alerts: PropTypes.array,
   alterable: PropTypes.bool,
