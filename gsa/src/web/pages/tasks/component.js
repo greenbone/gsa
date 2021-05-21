@@ -403,7 +403,7 @@ const TaskComponent = ({
       // save edit part
       // does not need statusIsNew anymore. If task is not changeable then these fields are disabled in the dialog, but still required in hyperion
       const mutationData = {
-        alertIds: alertIds,
+        alertIds,
         alterable,
         comment,
         name,
@@ -427,13 +427,13 @@ const TaskComponent = ({
         .then(() => closeTaskDialog());
     }
     const mutationData = {
-      alertIds: alertIds,
+      alertIds,
       alterable,
       comment,
       name,
       preferences: {
         createAssets,
-        createAssetsApplyOverrides: createAssetsApplyOverrides,
+        createAssetsApplyOverrides,
         createAssetsMinQod,
         autoDeleteReports: autoDelete ? autoDeleteReports : null,
         maxConcurrentNvts,
