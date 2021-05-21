@@ -314,11 +314,11 @@ class Page extends React.Component {
   }
 
   openDialog(result = {}, createfunc) {
-    const {nvt = {}, task = {}, host = {}} = result;
+    const {information = {}, task = {}, host = {}} = result;
     createfunc({
       fixed: true,
-      oid: nvt.oid,
-      nvt_name: nvt.name,
+      oid: information.id,
+      nvt_name: information.name,
       task_id: TASK_SELECTED,
       task_name: task.name,
       result_id: RESULT_ANY,
