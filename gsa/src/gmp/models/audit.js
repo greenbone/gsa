@@ -28,7 +28,6 @@ import {
   parseIntoArray,
   parseText,
   parseDuration,
-  NO_VALUE,
 } from 'gmp/parser';
 
 import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
@@ -99,11 +98,7 @@ class Audit extends Model {
   }
 
   isChangeable() {
-    return this.isNew() || this.isAlterable();
-  }
-
-  isAlterable() {
-    return this.alterable !== NO_VALUE;
+    return this.isNew() || this.alterable;
   }
 
   isContainer() {

@@ -433,13 +433,13 @@ describe(`Audit Model methods parseObject tests`, () => {
   test('should be changeable if alterable or new', () => {
     let audit = Audit.fromObject({
       status: HYPERION_AUDIT_STATUS.new,
-      alterable: '0',
+      alterable: false,
     });
     expect(audit.isChangeable()).toEqual(true);
 
     audit = Audit.fromObject({
       status: HYPERION_AUDIT_STATUS.done,
-      alterable: '1',
+      alterable: true,
     });
     expect(audit.isChangeable()).toEqual(true);
   });
@@ -556,11 +556,5 @@ describe(`Audit Model methods parseElement tests`, () => {
     }
   });
 
-  test('should be changeable if alterable or new', () => {
-    let audit = Audit.fromElement({status: AUDIT_STATUS.new, alterable: '0'});
-    expect(audit.isChangeable()).toEqual(true);
-
-    audit = Audit.fromElement({status: AUDIT_STATUS.done, alterable: '1'});
-    expect(audit.isChangeable()).toEqual(true);
-  });
+  // isChangeable is only used with objects
 });

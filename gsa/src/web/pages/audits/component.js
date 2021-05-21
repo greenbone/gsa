@@ -249,14 +249,14 @@ const AuditComponent = ({
   const handleSaveAudit = ({
     alertIds,
     alterable,
-    auto_delete,
-    auto_delete_data,
+    autoDelete,
+    autoDeleteReports,
     comment,
     policyId,
     id,
-    in_assets,
-    maxChecks,
-    maxHosts,
+    createAssets,
+    maxConcurrentNvts,
+    maxConcurrentHosts,
     name,
     scannerId = OPENVAS_DEFAULT_SCANNER_ID,
     scannerType = OPENVAS_SCANNER_TYPE,
@@ -272,12 +272,7 @@ const AuditComponent = ({
 
     if (isDefined(id)) {
       // save edit part
-      if (isDefined(audit) && !audit.isChangeable()) {
-        // arguments need to be undefined if the audit is not changeable
-        targetId = undefined;
-        scannerId = undefined;
-        policyId = undefined;
-      }
+      // does not need statusIsNew anymore. If audit is not changeable then these fields are disabled in the dialog, but still required in hyperion
       return modifyAudit({
         alertIds,
         alterable,
@@ -286,16 +281,15 @@ const AuditComponent = ({
         id,
         name,
         preferences: {
-          createAssets: in_assets,
+          createAssets,
           createAssetsApplyOverrides: applyOverrides,
           createAssetsMinQod: minQod,
-          autoDeleteReports: auto_delete ? auto_delete_data : null,
-          maxConcurrentNvts: maxChecks,
-          maxConcurrentHosts: maxHosts,
+          autoDeleteReports: autoDelete ? autoDeleteReports : null,
+          maxConcurrentNvts,
+          maxConcurrentHosts,
         },
         scannerId,
         scheduleId,
-        schedulePeriods,
         targetId,
       })
         .then(onSaved, onSaveError)
@@ -309,16 +303,15 @@ const AuditComponent = ({
       policyId,
       name,
       preferences: {
-        createAssets: in_assets,
+        createAssets,
         createAssetsApplyOverrides: applyOverrides,
         createAssetsMinQod: minQod,
-        autoDeleteReports: auto_delete ? auto_delete_data : null,
-        maxConcurrentNvts: maxChecks,
-        maxConcurrentHosts: maxHosts,
+        autoDeleteReports: autoDelete ? autoDeleteReports : null,
+        maxConcurrentNvts,
+        maxConcurrentHosts,
       },
       scannerId,
       scheduleId,
-      schedulePeriods,
       targetId,
     })
       .then(onCreated, onCreateError)
@@ -360,15 +353,15 @@ const AuditComponent = ({
           alterable: audit.alterable,
           applyOverrides: audit.preferences?.createAssetsApplyOverrides,
           autoDelete: hasValue(audit.preferences?.autoDeleteReports),
-          autoDeleteData: hasValue(audit.preferences?.autoDeleteReports)
+          autoDeleteReports: hasValue(audit.preferences?.autoDeleteReports)
             ? audit.preferences.autoDeleteReports
             : undefined,
           comment: audit.comment,
           policyId: hasId(audit.config) ? audit.config.id : undefined,
           id: audit.id,
-          inAssets: audit.preferences?.createAssets,
-          maxChecks: audit.preferences?.maxConcurrentNvts,
-          maxHosts: audit.preferences?.maxConcurrentHosts,
+          createAssets: audit.preferences?.createAssets,
+          maxConcurrentNvts: audit.preferences?.maxConcurrentNvts,
+          maxConcurrentHosts: audit.preferences?.maxConcurrentHosts,
           minQod: audit.preferences?.createAssetsMinQod,
           name: audit.name,
           scannerId: hasId(audit.scanner) ? audit.scanner.id : undefined,
@@ -391,13 +384,13 @@ const AuditComponent = ({
           alterable: undefined,
           applyOverrides: undefined,
           autoDelete: undefined,
-          autoDeleteData: undefined,
+          autoDeleteReports: undefined,
           comment: undefined,
           policyId: undefined,
           id: undefined,
-          inAssets: undefined,
-          maxChecks: undefined,
-          maxHosts: undefined,
+          createAssets: undefined,
+          maxConcurrentNvts: undefined,
+          maxConcurrentHosts: undefined,
           minQod: undefined,
           name: undefined,
           scannerId: defaultScannerId,
@@ -516,13 +509,13 @@ const AuditComponent = ({
     alertIds,
     alterable,
     autoDelete,
-    autoDeleteData,
+    autoDeleteReports,
     policyId,
     comment,
     id,
-    inAssets,
-    maxChecks,
-    maxHosts,
+    createAssets,
+    maxConcurrentNvts,
+    maxConcurrentHosts,
     name,
     scannerId,
     scheduleId,
@@ -586,19 +579,19 @@ const AuditComponent = ({
                             alerts={alerts}
                             alertIds={alertIds}
                             alterable={alterable}
-                            auto_delete={autoDelete}
-                            auto_delete_data={autoDeleteData}
+                            autoDelete={autoDelete}
+                            autoDeleteReports={autoDeleteReports}
                             comment={comment}
                             policyId={policyId}
                             id={id}
-                            in_assets={inAssets}
+                            createAssets={createAssets}
                             isLoadingAlerts={isLoadingAlerts}
                             isLoadingPolicies={isLoadingPolicies}
                             isLoadingScanners={isLoadingScanners}
                             isLoadingSchedules={isLoadingSchedules}
                             isLoadingTargets={isLoadingTargets}
-                            maxChecks={maxChecks}
-                            maxHosts={maxHosts}
+                            maxConcurrentNvts={maxConcurrentNvts}
+                            maxConcurrentHosts={maxConcurrentHosts}
                             name={name}
                             policies={policies}
                             scannerId={scannerId}

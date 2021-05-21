@@ -29,7 +29,6 @@ import date from 'gmp/models/date';
 import {ALL_FILTER} from 'gmp/models/filter';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
-import {TASK_STATUS} from 'gmp/models/task';
 
 import {NO_VALUE} from 'gmp/parser';
 
@@ -50,6 +49,8 @@ import {useLazyGetScanConfigs} from 'web/graphql/scanconfigs';
 import {useLazyGetSchedules} from 'web/graphql/schedules';
 
 import {useLazyGetTargets} from 'web/graphql/targets';
+
+import {RESOURCES_ACTION, useModifyTag} from 'web/graphql/tags';
 
 import {
   useModifyTask,
@@ -182,6 +183,7 @@ const TaskComponent = ({
   const [runQuickFirstScan] = useRunQuickFirstScan();
   const [runModifyTask] = useRunModifyTask();
   const [runQuickTask] = useRunQuickTask();
+  const [modifyTag] = useModifyTag();
 
   // GraphQL Loaders and Data
   const [
@@ -330,11 +332,11 @@ const TaskComponent = ({
         name: inputTask ? inputTask.name : _('Unnamed'),
         comment: inputTask ? inputTask.comment : '',
         id: inputTask ? inputTask.id : undefined,
-        inAssets: inputTask?.preferences?.createAssets,
+        createAssets: inputTask?.preferences?.createAssets,
         autoDelete: hasValue(inputTask?.preferences?.autoDeleteReports)
           ? inputTask.autoDelete
           : undefined,
-        autoDeleteData: inputTask
+        autoDeleteReports: inputTask
           ? inputTask.preferences?.autoDeleteReports
           : undefined,
         title: inputTask
@@ -364,7 +366,7 @@ const TaskComponent = ({
         name: data.name,
         comment: data.comment,
         preferences: {
-          createAssets: data.in_assets,
+          createAssets: data.createAssets,
         },
       })
         .then(onContainerSaved, onContainerSaveError)
@@ -376,61 +378,47 @@ const TaskComponent = ({
   };
 
   const handleSaveTask = ({
-    alert_ids,
+    addTag,
+    alertIds,
     alterable,
-    auto_delete,
-    auto_delete_data,
-    apply_overrides,
+    autoDelete,
+    autoDeleteReports,
     comment,
-    config_id,
+    configId,
+    createAssets,
+    createAssetsApplyOverrides,
+    createAssetsMinQod,
     id,
-    in_assets,
-    min_qod,
-    max_checks,
-    max_hosts,
+    maxConcurrentNvts,
+    maxConcurrentHosts,
     name,
-    scanner_id,
-    schedule_id,
-    schedule_periods,
-    target_id,
-    task,
+    scannerId,
+    scheduleId,
+    tagId,
+    targetId,
   }) => {
     handleInteraction();
 
     if (isDefined(id)) {
       // save edit part
-      if (isDefined(task) && !task.isChangeable()) {
-        // arguments need to be undefined if the task is not changeable
-
-        dispatchState(
-          updateState({
-            targetId: undefined,
-            scannerId: undefined,
-            configId: undefined,
-          }),
-        );
-      }
-
-      const statusIsNew = task.status === TASK_STATUS.new;
-
+      // does not need statusIsNew anymore. If task is not changeable then these fields are disabled in the dialog, but still required in hyperion
       const mutationData = {
-        alertIds: alert_ids,
+        alertIds,
         alterable,
         comment,
         name,
         preferences: {
-          createAssets: in_assets,
-          createAssetsApplyOverrides: apply_overrides,
-          createAssetsMinQod: min_qod,
-          autoDeleteReports: auto_delete ? auto_delete_data : null,
-          maxConcurrentNvts: max_checks,
-          maxConcurrentHosts: max_hosts,
+          createAssets,
+          createAssetsApplyOverrides,
+          createAssetsMinQod,
+          autoDeleteReports: autoDelete ? autoDeleteReports : null,
+          maxConcurrentNvts,
+          maxConcurrentHosts,
         },
-        scanConfigId: statusIsNew ? config_id : undefined,
-        scannerId: statusIsNew ? scanner_id : undefined,
-        scheduleId: schedule_id,
-        schedulePeriods: schedule_periods,
-        targetId: target_id,
+        scanConfigId: configId,
+        scannerId,
+        scheduleId,
+        targetId,
         id,
       };
 
@@ -439,26 +427,34 @@ const TaskComponent = ({
         .then(() => closeTaskDialog());
     }
     const mutationData = {
-      alertIds: alert_ids,
+      alertIds,
       alterable,
       comment,
       name,
       preferences: {
-        createAssets: in_assets,
-        createAssetsApplyOverrides: apply_overrides,
-        createAssetsMinQod: min_qod,
-        autoDeleteReports: auto_delete ? auto_delete_data : null,
-        maxConcurrentNvts: max_checks,
-        maxConcurrentHosts: max_hosts,
+        createAssets,
+        createAssetsApplyOverrides,
+        createAssetsMinQod,
+        autoDeleteReports: autoDelete ? autoDeleteReports : null,
+        maxConcurrentNvts,
+        maxConcurrentHosts,
       },
-      scanConfigId: config_id,
-      scannerId: scanner_id,
-      scheduleId: schedule_id,
-      schedulePeriods: schedule_periods,
-      targetId: target_id,
+      scanConfigId: configId,
+      scannerId,
+      scheduleId,
+      targetId,
     };
     return createTask(mutationData)
-      .then(result => onCreated(result), onCreateError)
+      .then(result => {
+        if (addTag) {
+          modifyTag({
+            id: tagId,
+            resourceAction: RESOURCES_ACTION.add,
+            resourceIds: [result],
+          });
+        }
+        onCreated(result);
+      }, onCreateError)
       .then(() => closeTaskDialog());
   };
 
@@ -499,7 +495,7 @@ const TaskComponent = ({
         updateState({
           taskDialogVisible: true,
           error: undefined, // remove old errors
-          minQod: task.preferences?.createAssetsMinQod,
+          createAssetsMinQod: task.preferences?.createAssetsMinQod,
           schedulePeriods,
           scannerId: hasId(task.scanner) ? task.scanner.id : undefined,
           name: task.name,
@@ -507,17 +503,18 @@ const TaskComponent = ({
           targetId: hasId(task.target) ? task.target.id : undefined,
           alertIds: map(task.alerts, alert => alert.id),
           alterable: task.alterable,
-          applyOverrides: task.preferences?.createAssetsApplyOverrides,
+          createAssetsApplyOverrides:
+            task.preferences?.createAssetsApplyOverrides,
           autoDelete: hasValue(task.preferences?.autoDeleteReports),
-          autoDeleteData: hasValue(task.preferences?.autoDeleteReports)
+          autoDeleteReports: hasValue(task.preferences?.autoDeleteReports)
             ? task.preferences.autoDeleteReports
             : undefined,
           comment: task.comment,
           configId: hasId(task.config) ? task.config.id : undefined,
           id: task.id,
-          inAssets: task.preferences?.createAssets,
-          maxChecks: task.preferences?.maxConcurrentNvts,
-          maxHosts: task.preferences?.maxConcurrentHosts,
+          createAssets: task.preferences?.createAssets,
+          maxConcurrentNvts: task.preferences?.maxConcurrentNvts,
+          maxConcurrentHosts: task.preferences?.maxConcurrentHosts,
           title: _('Edit Task {{name}}', task),
           task,
         }),
@@ -540,14 +537,14 @@ const TaskComponent = ({
           scheduleId: defaultScheduleId,
           targetId: defaultTargetId,
           title: _('New Task'),
-          applyOverrides: undefined,
+          createAssetsApplyOverrides: undefined,
           autoDelete: undefined,
-          autoDeleteData: undefined,
+          autoDeleteReports: undefined,
           comment: undefined,
           id: undefined,
-          maxChecks: undefined,
-          maxHosts: undefined,
-          minQod: undefined,
+          maxConcurrentNvts: undefined,
+          maxConcurrentHosts: undefined,
+          createAssetsMinQod: undefined,
           name: undefined,
           schedulePeriods: undefined,
           sourceIface: undefined,
@@ -804,17 +801,17 @@ const TaskComponent = ({
     taskWizardVisible,
     reportImportDialogVisible,
     alterable,
-    applyOverrides,
+    createAssetsApplyOverrides,
     error,
-    maxChecks,
-    maxHosts,
-    minQod,
+    maxConcurrentNvts,
+    maxConcurrentHosts,
+    createAssetsMinQod,
     schedulePeriods,
     autoDelete,
-    autoDeleteData,
+    autoDeleteReports,
     comment,
     id,
-    inAssets,
+    createAssets,
     task,
     title,
     name,
@@ -887,35 +884,37 @@ const TaskComponent = ({
                         {({create: createschedule}) => (
                           <TaskDialog
                             alerts={alerts}
-                            alert_ids={alertIds}
+                            alertIds={alertIds}
                             alterable={alterable}
-                            apply_overrides={applyOverrides}
-                            auto_delete={autoDelete}
-                            auto_delete_data={autoDeleteData}
+                            createAssetsApplyOverrides={
+                              createAssetsApplyOverrides
+                            }
+                            autoDelete={autoDelete}
+                            autoDeleteReports={autoDeleteReports}
                             comment={comment}
-                            config_id={configId}
+                            configId={configId}
                             error={error}
                             id={id}
-                            in_assets={inAssets}
+                            createAssets={createAssets}
                             isLoadingAlerts={isLoadingAlerts}
                             isLoadingConfigs={isLoadingConfigs}
                             isLoadingScanners={isLoadingScanners}
                             isLoadingSchedules={isLoadingSchedules}
                             isLoadingTargets={isLoadingTargets}
                             isLoadingTags={isLoadingTags}
-                            max_checks={maxChecks}
-                            max_hosts={maxHosts}
-                            min_qod={minQod}
+                            maxConcurrentNvts={maxConcurrentNvts}
+                            maxConcurrentHosts={maxConcurrentHosts}
+                            createAssetsMinQod={createAssetsMinQod}
                             name={name}
-                            scan_configs={scanConfigs}
-                            scanner_id={scannerId}
+                            scanConfigs={scanConfigs}
+                            scannerId={scannerId}
                             scanners={scanners}
-                            schedule_id={scheduleId}
-                            schedule_periods={schedulePeriods}
+                            scheduleId={scheduleId}
+                            schedulePeriods={schedulePeriods}
                             schedules={schedules}
-                            tag_id={tagId}
+                            tagId={tagId}
                             tags={tags}
-                            target_id={targetId}
+                            targetId={targetId}
                             targets={targets}
                             task={task}
                             title={title}
@@ -948,9 +947,9 @@ const TaskComponent = ({
           name={name}
           comment={comment}
           id={id}
-          in_assets={inAssets}
-          auto_delete={autoDelete}
-          auto_delete_data={autoDeleteData}
+          createAssets={createAssets}
+          autoDelete={autoDelete}
+          autoDeleteReports={autoDeleteReports}
           title={title}
           onClose={handleCloseContainerTaskDialog}
           onSave={handleSaveContainerTask}
@@ -962,11 +961,11 @@ const TaskComponent = ({
           hosts={hosts}
           port_list_id={portListId}
           alert_id={alertId}
-          config_id={configId}
+          configId={configId}
           ssh_credential={sshCredential}
           smb_credential={smbCredential}
           esxi_credential={esxiCredential}
-          scanner_id={scannerId}
+          scannerId={scannerId}
           onClose={handleCloseTaskWizard}
           onSave={handleSaveTaskWizard}
           onNewClick={handleTaskWizardNewClick}

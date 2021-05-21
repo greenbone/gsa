@@ -30,13 +30,13 @@ import {toBoolean} from './dialog';
 
 const AutoDeleteReportsGroup = ({
   autoDelete = false,
-  autoDeleteData,
+  autoDeleteReports,
   onChange,
 }) => (
   <FormGroup title={_('Auto Delete Reports')} flex="column">
     <Radio
       title={_('Do not automatically delete reports')}
-      name="auto_delete"
+      name="autoDelete"
       value={false}
       onChange={onChange}
       checked={autoDelete === false}
@@ -44,7 +44,7 @@ const AutoDeleteReportsGroup = ({
     />
     <Divider>
       <Radio
-        name="auto_delete"
+        name="autoDelete"
         value={true}
         onChange={onChange}
         title={_('Automatically delete oldest reports but always keep newest')}
@@ -55,8 +55,8 @@ const AutoDeleteReportsGroup = ({
         type="int"
         min="2"
         max="1200"
-        name="auto_delete_data"
-        value={autoDeleteData}
+        name="autoDeleteReports"
+        value={autoDeleteReports}
         disabled={autoDelete === false}
         onChange={onChange}
       />
@@ -67,7 +67,7 @@ const AutoDeleteReportsGroup = ({
 
 AutoDeleteReportsGroup.propTypes = {
   autoDelete: PropTypes.bool,
-  autoDeleteData: PropTypes.number,
+  autoDeleteReports: PropTypes.number,
   onChange: PropTypes.func,
 };
 

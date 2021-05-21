@@ -27,7 +27,6 @@ import {
   parseProgressElement,
   parseYes,
   parseDuration,
-  NO_VALUE,
 } from 'gmp/parser';
 
 import Model, {parseModelFromElement} from 'gmp/model';
@@ -168,11 +167,7 @@ class Task extends Model {
   }
 
   isChangeable() {
-    return this.isNew() || this.isAlterable();
-  }
-
-  isAlterable() {
-    return this.alterable !== NO_VALUE;
+    return this.isNew() || this.alterable;
   }
 
   isContainer() {

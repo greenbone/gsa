@@ -169,7 +169,6 @@ export const GET_AUDIT = gql`
         name
         type
       }
-      schedulePeriods
       observers {
         users
         roles {
@@ -274,7 +273,6 @@ export const GET_AUDITS = gql`
             name
             type
           }
-          schedulePeriods
           observers {
             users
             roles {

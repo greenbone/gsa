@@ -145,7 +145,6 @@ export const GET_TASK = gql`
         name
         type
       }
-      schedulePeriods
       userTags {
         count
         tags {

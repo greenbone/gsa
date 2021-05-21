@@ -34,7 +34,7 @@ import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 
 const ContainerTaskDialog = ({
   comment = '',
-  in_assets = true,
+  createAssets = true,
   name = '',
   task,
   title = _('New Container Task'),
@@ -45,7 +45,7 @@ const ContainerTaskDialog = ({
 
   const data = {
     comment,
-    in_assets,
+    createAssets,
     name,
     id: isEdit ? task.id : undefined,
   };
@@ -81,7 +81,7 @@ const ContainerTaskDialog = ({
 
             {isEdit && (
               <AddResultsToAssetsGroup
-                inAssets={state.in_assets}
+                inAssets={state.createAssets}
                 onChange={onValueChange}
               />
             )}
@@ -93,10 +93,10 @@ const ContainerTaskDialog = ({
 };
 
 ContainerTaskDialog.propTypes = {
-  auto_delete: PropTypes.bool,
-  auto_delete_data: PropTypes.number,
+  autoDelete: PropTypes.bool,
+  autoDeleteReports: PropTypes.number,
   comment: PropTypes.string,
-  in_assets: PropTypes.bool,
+  createAssets: PropTypes.bool,
   name: PropTypes.string,
   task: PropTypes.model,
   title: PropTypes.string,
