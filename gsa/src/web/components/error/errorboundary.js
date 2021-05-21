@@ -22,6 +22,8 @@ import * as Sentry from '@sentry/react';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import PropTypes from 'web/utils/proptypes';
 
 import ErrorPanel from './errorpanel';
@@ -39,21 +41,25 @@ class ErrorBoundary extends React.Component {
       error,
       info,
     });
+
+    if (isDefined(error)) {
+      Sentry.withScope(scope => {
+        Object.keys(info).forEach(key => {
+          scope.setExtra(key, info[key]);
+        });
+        Sentry.captureException(error);
+      });
+    }
   }
 
   render() {
     const {hasError, error, info} = this.state;
     const {message = _('An error occurred on this page.')} = this.props;
 
-    const FallbackComponent = (
-      <ErrorPanel error={error} info={info} message={message} />
-    );
-
-    return (
-      <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
-        {this.props.children}
-      </Sentry.ErrorBoundary>
-    );
+    if (hasError) {
+      return <ErrorPanel error={error} info={info} message={message} />;
+    }
+    return this.props.children;
   }
 }
 
