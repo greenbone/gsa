@@ -46,7 +46,6 @@ describe('entities reducer tests', () => {
       note: initState,
       nvt: initState,
       operatingsystem: initState,
-      ovaldef: initState,
       override: initState,
       permission: initState,
       policy: initState,

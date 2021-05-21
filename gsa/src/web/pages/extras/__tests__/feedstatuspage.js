@@ -86,7 +86,7 @@ describe('Feed status page tests', () => {
     // Should render all icons
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons.length).toEqual(12);
+    expect(icons.length).toEqual(11);
 
     expect(icons[0]).toHaveTextContent('help.svg');
     expect(icons[0]).toHaveAttribute('title', 'Help: Feed Status');
@@ -95,18 +95,17 @@ describe('Feed status page tests', () => {
     expect(icons[2]).toHaveTextContent('nvt.svg');
     expect(icons[3]).toHaveTextContent('cve.svg');
     expect(icons[4]).toHaveTextContent('cpe.svg');
-    expect(icons[5]).toHaveTextContent('ovaldef.svg');
-    expect(icons[6]).toHaveTextContent('cert_bund_adv.svg');
-    expect(icons[7]).toHaveTextContent('dfn_cert_adv.svg');
-    expect(icons[8]).toHaveTextContent('policy.svg');
-    expect(icons[9]).toHaveTextContent('port_list.svg');
-    expect(icons[10]).toHaveTextContent('report_format.svg');
-    expect(icons[11]).toHaveTextContent('config.svg');
+    expect(icons[5]).toHaveTextContent('cert_bund_adv.svg');
+    expect(icons[6]).toHaveTextContent('dfn_cert_adv.svg');
+    expect(icons[7]).toHaveTextContent('policy.svg');
+    expect(icons[8]).toHaveTextContent('port_list.svg');
+    expect(icons[9]).toHaveTextContent('report_format.svg');
+    expect(icons[10]).toHaveTextContent('config.svg');
 
     // Should render all links
     const links = element.querySelectorAll('a');
 
-    expect(links.length).toEqual(11);
+    expect(links.length).toEqual(10);
 
     expect(links[0]).toHaveAttribute(
       'href',
@@ -115,19 +114,18 @@ describe('Feed status page tests', () => {
     expect(links[1]).toHaveAttribute('href', '/nvts');
     expect(links[2]).toHaveAttribute('href', '/cves');
     expect(links[3]).toHaveAttribute('href', '/cpes');
-    expect(links[4]).toHaveAttribute('href', '/ovaldefs');
-    expect(links[5]).toHaveAttribute('href', '/certbunds');
-    expect(links[6]).toHaveAttribute('href', '/dfncerts');
-    expect(links[7]).toHaveAttribute('href', '/policies?filter=predefined%3D1');
-    expect(links[8]).toHaveAttribute(
+    expect(links[4]).toHaveAttribute('href', '/certbunds');
+    expect(links[5]).toHaveAttribute('href', '/dfncerts');
+    expect(links[6]).toHaveAttribute('href', '/policies?filter=predefined%3D1');
+    expect(links[7]).toHaveAttribute(
       'href',
       '/portlists?filter=predefined%3D1',
     );
-    expect(links[9]).toHaveAttribute(
+    expect(links[8]).toHaveAttribute(
       'href',
       '/reportformats?filter=predefined%3D1',
     );
-    expect(links[10]).toHaveAttribute(
+    expect(links[9]).toHaveAttribute(
       'href',
       '/scanconfigs?filter=predefined%3D1',
     );

@@ -52,7 +52,6 @@ const TYPES = [
   'group',
   'note',
   'nvt',
-  'ovaldef',
   'override',
   'permission',
   'portlist',
@@ -129,15 +128,8 @@ class TagComponent extends React.Component {
 
     if (isDefined(tag)) {
       gmp.tag.get({id: tag.id}).then(response => {
-        const {
-          active,
-          comment,
-          id,
-          name,
-          resourceCount,
-          resourceType,
-          value,
-        } = response.data;
+        const {active, comment, id, name, resourceCount, resourceType, value} =
+          response.data;
         const filter = 'rows=' + SELECT_MAX_RESOURCES + ' tag_id="' + id;
         gmp[pluralizeType(resourceType)].get({filter}).then(resp => {
           const resources = resp.data;
@@ -330,9 +322,6 @@ TagComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default compose(
-  withGmp,
-  withCapabilities,
-)(TagComponent);
+export default compose(withGmp, withCapabilities)(TagComponent);
 
 // vim: set ts=2 sw=2 tw=80:

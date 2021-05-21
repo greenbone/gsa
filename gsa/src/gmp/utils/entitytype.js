@@ -82,7 +82,6 @@ const ENTITY_TYPES = {
   host: _l('Host'),
   info: _l('Info'),
   operatingsystem: _l('Operating System'),
-  ovaldef: _l('OVAL Definition'),
   override: _l('Override'),
   note: _l('Note'),
   nvt: _l('NVT'),

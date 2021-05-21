@@ -339,7 +339,6 @@ class UserSettings extends React.Component {
       cpeFilter,
       cveFilter,
       nvtFilter,
-      ovalFilter,
       certBundFilter,
       dfnCertFilter,
       autoCacheRebuild = {},
@@ -380,7 +379,6 @@ class UserSettings extends React.Component {
     cpeFilter = hasValue(cpeFilter) ? cpeFilter : {};
     cveFilter = hasValue(cveFilter) ? cveFilter : {};
     nvtFilter = hasValue(nvtFilter) ? nvtFilter : {};
-    ovalFilter = hasValue(ovalFilter) ? ovalFilter : {};
     certBundFilter = hasValue(certBundFilter) ? certBundFilter : {};
     dfnCertFilter = hasValue(dfnCertFilter) ? dfnCertFilter : {};
 
@@ -738,11 +736,6 @@ class UserSettings extends React.Component {
                             type="filter"
                           />
                           <SettingTableRow
-                            setting={ovalFilter}
-                            title={_('OVAL Definitions Filter')}
-                            type="filter"
-                          />
-                          <SettingTableRow
                             setting={certBundFilter}
                             title={_('CERT-Bund Advisories Filter')}
                             type="filter"
@@ -823,7 +816,6 @@ class UserSettings extends React.Component {
               cpeFilter={cpeFilter.id}
               cveFilter={cveFilter.id}
               nvtFilter={nvtFilter.id}
-              ovalFilter={ovalFilter.id}
               certBundFilter={certBundFilter.id}
               dfnCertFilter={dfnCertFilter.id}
               onClose={this.handleCloseDialog}
@@ -887,7 +879,6 @@ UserSettings.propTypes = {
   notesFilter: PropTypes.object,
   nvtFilter: PropTypes.object,
   operatingSystemsFilter: PropTypes.object,
-  ovalFilter: PropTypes.object,
   overridesFilter: PropTypes.object,
   permissionsFilter: PropTypes.object,
   portListsFilter: PropTypes.object,
@@ -930,9 +921,8 @@ const mapStateToProps = rootState => {
   const detailsExportFileName = userDefaultsSelector.getByName(
     'detailsexportfilename',
   );
-  const listExportFileName = userDefaultsSelector.getByName(
-    'listexportfilename',
-  );
+  const listExportFileName =
+    userDefaultsSelector.getByName('listexportfilename');
   const reportExportFileName = userDefaultsSelector.getByName(
     'reportexportfilename',
   );
@@ -949,9 +939,8 @@ const mapStateToProps = rootState => {
   const defaultOspScanConfigId = userDefaultsSelector.getValueByName(
     'defaultospscanconfig',
   );
-  const defaultOspScannerId = userDefaultsSelector.getValueByName(
-    'defaultospscanner',
-  );
+  const defaultOspScannerId =
+    userDefaultsSelector.getValueByName('defaultospscanner');
   const defaultOpenvasScanConfigId = userDefaultsSelector.getValueByName(
     'defaultopenvasscanconfig',
   );
@@ -959,9 +948,8 @@ const mapStateToProps = rootState => {
     'defaultopenvasscanner',
   );
 
-  const defaultPortListId = userDefaultsSelector.getValueByName(
-    'defaultportlist',
-  );
+  const defaultPortListId =
+    userDefaultsSelector.getValueByName('defaultportlist');
   const defaultReportFormatId = userDefaultsSelector.getValueByName(
     'defaultreportformat',
   );
@@ -974,9 +962,8 @@ const mapStateToProps = rootState => {
   const defaultSshCredentialId = userDefaultsSelector.getValueByName(
     'defaultsshcredential',
   );
-  const defaultScheduleId = userDefaultsSelector.getValueByName(
-    'defaultschedule',
-  );
+  const defaultScheduleId =
+    userDefaultsSelector.getValueByName('defaultschedule');
   const defaultTargetId = userDefaultsSelector.getValueByName('defaulttarget');
 
   const alertsSel = alertsSelector(rootState);
@@ -1016,16 +1003,14 @@ const mapStateToProps = rootState => {
   const groupsFilter = userDefaultFilterSelector.getFilter('group');
   const hostsFilter = userDefaultFilterSelector.getFilter('host');
   const notesFilter = userDefaultFilterSelector.getFilter('note');
-  const operatingSystemsFilter = userDefaultFilterSelector.getFilter(
-    'operatingsystem',
-  );
+  const operatingSystemsFilter =
+    userDefaultFilterSelector.getFilter('operatingsystem');
   const overridesFilter = userDefaultFilterSelector.getFilter('override');
   const permissionsFilter = userDefaultFilterSelector.getFilter('permission');
   const portListsFilter = userDefaultFilterSelector.getFilter('portlist');
   const reportsFilter = userDefaultFilterSelector.getFilter('report');
-  const reportFormatsFilter = userDefaultFilterSelector.getFilter(
-    'reportformat',
-  );
+  const reportFormatsFilter =
+    userDefaultFilterSelector.getFilter('reportformat');
   const resultsFilter = userDefaultFilterSelector.getFilter('result');
   const rolesFilter = userDefaultFilterSelector.getFilter('role');
   const scannersFilter = userDefaultFilterSelector.getFilter('scanner');
@@ -1034,19 +1019,16 @@ const mapStateToProps = rootState => {
   const targetsFilter = userDefaultFilterSelector.getFilter('target');
   const tasksFilter = userDefaultFilterSelector.getFilter('task');
   const ticketsFilter = userDefaultFilterSelector.getFilter('ticket');
-  const tlsCertificatesFilter = userDefaultFilterSelector.getFilter(
-    'tlscertificate',
-  );
+  const tlsCertificatesFilter =
+    userDefaultFilterSelector.getFilter('tlscertificate');
   const usersFilter = userDefaultFilterSelector.getFilter('user');
-  const vulnerabilitiesFilter = userDefaultFilterSelector.getFilter(
-    'vulnerability',
-  );
+  const vulnerabilitiesFilter =
+    userDefaultFilterSelector.getFilter('vulnerability');
   const cpeFilter = userDefaultFilterSelector.getFilter('cpe');
   const cveFilter = userDefaultFilterSelector.getFilter('cve');
   const certBundFilter = userDefaultFilterSelector.getFilter('certbund');
   const dfnCertFilter = userDefaultFilterSelector.getFilter('dfncert');
   const nvtFilter = userDefaultFilterSelector.getFilter('nvt');
-  const ovalFilter = userDefaultFilterSelector.getFilter('ovaldef');
 
   let scanconfigs = scanConfigsSel.getEntities(ALL_FILTER);
   if (isDefined(scanconfigs)) {
@@ -1115,7 +1097,6 @@ const mapStateToProps = rootState => {
     certBundFilter,
     dfnCertFilter,
     nvtFilter,
-    ovalFilter,
     autoCacheRebuild,
   };
 };
@@ -1155,7 +1136,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
       dispatch(loadUserSettingsDefaultFilter(gmp)('certbund')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('dfncert')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('nvt')),
-      dispatch(loadUserSettingsDefaultFilter(gmp)('ovaldef')),
     ]),
   loadPortLists: () => dispatch(loadPortLists(gmp)(ALL_FILTER)),
   loadReportFormats: () => dispatch(loadReportFormats(gmp)(ALL_FILTER)),
