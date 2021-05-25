@@ -326,10 +326,6 @@ TagComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-<<<<<<< HEAD
 export default TagComponent;
-=======
-export default compose(withGmp, withCapabilities)(TagComponent);
->>>>>>> 266351c2e (Remove remaining OVAL Definitions in GSA code)
 
 // vim: set ts=2 sw=2 tw=80:
