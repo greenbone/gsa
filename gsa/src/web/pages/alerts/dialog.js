@@ -110,8 +110,8 @@ export const DEFAULT_NOTICE_REPORT_FORMAT =
 export const DEFAULT_NOTICE_ATTACH_FORMAT =
   'a0b5bfb2-1f62-11e1-85db-406186ea4fc5';
 
-export const TASK_SUBJECT = "[GVM] Task '$n': $e";
-export const SECINFO_SUBJECT = '[GVM] $T $q $S since $d';
+export const TASK_SUBJECT = "[GSM] Task '$n': $e";
+export const SECINFO_SUBJECT = '[GSM] $T $q $S since $d';
 
 export const INCLUDE_MESSAGE_DEFAULT = `Task '$n': $e'
 
