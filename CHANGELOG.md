@@ -71,6 +71,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Create alerts in task dialog via graphql [#2425](https://github.com/greenbone/gsa/pull/2425)
 - Added getOverrides query [#2405](https://github.com/greenbone/gsa/pull/2405)
 - Added missing fields for getScanners query and parseObject() for scanner model [#2301](https://github.com/greenbone/gsa/pull/2301)
+- Changed wording in alerts dialog menu from GVM to GSM [#2943](https://github.com/greenbone/gsa/pull/2943)
 
 ### Fixed
 
