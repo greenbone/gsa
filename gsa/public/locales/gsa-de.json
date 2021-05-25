@@ -313,11 +313,7 @@
   "Comment": "Kommentar",
   "Community": "Community",
   "Complete": "Vollständig",
-<<<<<<< HEAD
   "Compliance": "Compliance",
-=======
-  "Complexity": "Komplexität",
->>>>>>> c90ae57cd (Remove OVAL Definitions strings from translations file)
   "Compliance Audits": "Compliance Audits",
   "Compliance Policies": "Compliance Richtlinien",
   "Compliance Status": "Compliance Status",
