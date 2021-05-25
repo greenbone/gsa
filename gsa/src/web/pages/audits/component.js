@@ -208,7 +208,6 @@ class AuditComponent extends React.Component {
     scannerType = OPENVAS_SCANNER_TYPE,
     scheduleId,
     schedulePeriods,
-    sourceIface,
     targetId,
     audit,
   }) {
@@ -252,7 +251,6 @@ class AuditComponent extends React.Component {
           scheduleId,
           schedulePeriods,
           targetId,
-          sourceIface,
         })
         .then(onSaved, onSaveError)
         .then(() => this.closeAuditDialog());
@@ -279,7 +277,6 @@ class AuditComponent extends React.Component {
         scannerId,
         scheduleId,
         schedulePeriods,
-        sourceIface,
         tagId,
         targetId: targetId,
       })
@@ -368,7 +365,6 @@ class AuditComponent extends React.Component {
         scanner_type: defaultScannerType,
         scheduleId: defaultScheduleId,
         schedulePeriods: undefined,
-        sourceIface: undefined,
         targetId: defaultTargetId,
         audit: undefined,
         title: _('New Audit'),
@@ -463,7 +459,6 @@ class AuditComponent extends React.Component {
       scannerId,
       scheduleId,
       schedulePeriods,
-      sourceIface,
       targetId,
       audit,
       auditDialogVisible,
@@ -534,7 +529,6 @@ class AuditComponent extends React.Component {
                               scheduleId={scheduleId}
                               schedulePeriods={schedulePeriods}
                               schedules={schedules}
-                              sourceIface={sourceIface}
                               targetId={targetId}
                               targets={targets}
                               audit={audit}
