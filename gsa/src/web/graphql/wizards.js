@@ -87,7 +87,7 @@ export const useRunModifyTask = () => {
       creationDate = date(),
     ) => {
       const [task] = tasks;
-      const {name, id: taskId, alerts} = task;
+      const {name, id: taskId, alerts, config, scanner, target} = task;
 
       const creationDateString = creationDate.toISOString();
 
@@ -150,6 +150,10 @@ export const useRunModifyTask = () => {
             id: taskId,
             scheduleId: hasValue(scheduleId) ? scheduleId : null,
             alertIds: hasValue(alertId) ? taskAlerts : null,
+            targetId: target.id,
+            scannerId: scanner.id,
+            scanConfigId: config.id,
+            name,
           };
 
           return modifyTask(modifyTaskInput);
