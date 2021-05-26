@@ -36,6 +36,7 @@ import {
 } from 'web/pages/alerts/dialog';
 
 import {hasValue} from 'gmp/utils/identity';
+import {HYPERION_ALIVE_TESTS} from 'gmp/models/target';
 
 export const useRunQuickFirstScan = () => {
   const [createTarget] = useCreateTarget();
@@ -51,6 +52,7 @@ export const useRunQuickFirstScan = () => {
         name: `Target for immediate scan of IP ${hosts} - ${creationDateString}`,
         hosts,
         portListId: ALL_IANA_ASSIGNED_TCP,
+        aliveTest: HYPERION_ALIVE_TESTS.SCAN_CONFIG_DEFAULT,
       };
 
       return createTarget(targetInputObject).then(targetId => {
