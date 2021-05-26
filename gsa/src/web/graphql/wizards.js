@@ -24,6 +24,7 @@ import Event from 'gmp/models/event';
 import {ALL_IANA_ASSIGNED_TCP} from 'gmp/models/portlist';
 import {FULL_AND_FAST_SCAN_CONFIG_ID} from 'gmp/models/scanconfig';
 import {OPENVAS_DEFAULT_SCANNER_ID} from 'gmp/models/scanner';
+import {HYPERION_ALIVE_TESTS} from 'gmp/models/target';
 
 import {useCreateAlert} from 'web/graphql/alerts';
 import {useCreateSchedule} from 'web/graphql/schedules';
@@ -36,7 +37,6 @@ import {
 } from 'web/pages/alerts/dialog';
 
 import {hasValue} from 'gmp/utils/identity';
-import {HYPERION_ALIVE_TESTS} from 'gmp/models/target';
 
 export const useRunQuickFirstScan = () => {
   const [createTarget] = useCreateTarget();

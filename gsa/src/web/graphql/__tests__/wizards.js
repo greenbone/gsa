@@ -173,6 +173,9 @@ const RunModifyTaskComponent = ({alertEmail, reschedule}) => {
             name: 'myFirstTask',
             id: '13579',
             alerts: [{id: '34567'}],
+            scanner: {id: '45643'},
+            target: {id: '13579'},
+            config: {id: '23457'},
           },
         ],
       },
@@ -205,10 +208,13 @@ describe('useRunModifyTask tests', () => {
       'myFirstTask',
       mockCreationDate,
     );
-    const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
-      '12345',
-      '23456',
-    );
+    const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock({
+      name: 'myFirstTask',
+      scheduleId: '12345',
+      alertId: '23456',
+      targetId: '13579',
+      configId: '23457',
+    });
 
     const {render} = rendererWith({
       queryMocks: [scheduleMock, alertMock, modifyTaskMock],
@@ -302,10 +308,12 @@ describe('useRunModifyTask tests', () => {
       'myFirstTask',
       mockCreationDate,
     );
-    const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
-      undefined,
-      '23456',
-    );
+    const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock({
+      name: 'myFirstTask',
+      alertId: '23456',
+      targetId: '13579',
+      configId: '23457',
+    });
 
     const {render} = rendererWith({
       queryMocks: [scheduleMock, alertMock, modifyTaskMock],
@@ -346,10 +354,12 @@ describe('useRunModifyTask tests', () => {
       'myFirstTask',
       mockCreationDate,
     );
-    const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock(
-      '12345',
-      undefined,
-    );
+    const [modifyTaskMock, modifyTaskResult] = createWizardModifyTaskQueryMock({
+      name: 'myFirstTask',
+      targetId: '13579',
+      configId: '23457',
+      scheduleId: '12345',
+    });
 
     const {render} = rendererWith({
       queryMocks: [scheduleMock, alertMock, modifyTaskMock],
