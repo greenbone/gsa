@@ -201,6 +201,18 @@ describe('nvt Model tests', () => {
     expect(nvt3.severityDate).toBeUndefined();
   });
 
+  test('should fall back to cvss_base when <severity> is missing from <severities>', () => {
+    const nvt = Nvt.fromElement({
+      cvss_base: '10.0',
+      severities: {},
+    });
+
+    expect(nvt.severity).toEqual(10.0);
+    expect(nvt.severityOrigin).toBeUndefined();
+    expect(nvt.severityDate).toBeUndefined();
+    expect(nvt.cvss_base).toBeUndefined();
+  });
+
   test('should parse preferences', () => {
     const elem = {
       preferences: {
