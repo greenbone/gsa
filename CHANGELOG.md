@@ -110,6 +110,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867), [#2924](https://github.com/greenbone/gsa/pull/2924)
 
 ### Fixed
+<<<<<<< HEAD
+=======
+- Fall back to cvss_base when severity subelement is missing from NVT severities [#2944](https://github.com/greenbone/gsa/pull/2944)
+- Fix loading NVT information in result details [#2934](https://github.com/greenbone/gsa/pull/2934)
+>>>>>>> 7c16bf538 (Update Changelog)
 - Fixed setting whether to include related resources for new permissions [#2931](https://github.com/greenbone/gsa/pull/2931)
 - Fixed number-only names within schedules/dialog [#2914](https://github.com/greenbone/gsa/pull/2914)
 - Fixed changing Trend and Select for NVT-families and whole selection only [#2905](https://github.com/greenbone/gsa/pull/2905)
