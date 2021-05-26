@@ -105,7 +105,6 @@ const ResultDetails = ({className, links = true, entity}) => {
   const {information} = result;
   const {id: infoId, tags, solution} = information;
 
-  const isoval = hasValue(infoId) && infoId.startsWith('oval:');
   const hasDetection = hasValue(result.originResult);
 
   const detectionDetails = hasDetection
@@ -288,18 +287,6 @@ const ResultDetails = ({className, links = true, entity}) => {
               <TableRow>
                 <TableData>{_('Details: ')}</TableData>
                 <TableData>
-                  {isoval && (
-                    <DetailsLink
-                      type="ovaldef"
-                      id={infoId}
-                      title={_('View Details of OVAL Definition {{oid}}', {
-                        infoId,
-                      })}
-                      textOnly={!links}
-                    >
-                      {infoId}
-                    </DetailsLink>
-                  )}
                   {hasValue(infoId) && infoId.startsWith(DEFAULT_OID_VALUE) && (
                     <span>
                       <DetailsLink type="nvt" id={infoId} textOnly={!links}>
