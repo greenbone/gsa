@@ -65,7 +65,7 @@ const createTargetResult = {
 export const createTaskInput = {
   input: {
     name: 'Immediate scan of IP 127.0.0.1, 192.168.0.1',
-    configId: FULL_AND_FAST_SCAN_CONFIG_ID,
+    scanConfigId: FULL_AND_FAST_SCAN_CONFIG_ID,
     targetId: '13579',
     scannerId: OPENVAS_DEFAULT_SCANNER_ID,
   },

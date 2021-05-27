@@ -58,7 +58,7 @@ export const useRunQuickFirstScan = () => {
       return createTarget(targetInputObject).then(targetId => {
         const taskInputObject = {
           name: `Immediate scan of IP ${hosts}`,
-          configId: FULL_AND_FAST_SCAN_CONFIG_ID,
+          scanConfigId: FULL_AND_FAST_SCAN_CONFIG_ID,
           targetId: hasValue(targetId) ? targetId : null,
           scannerId: OPENVAS_DEFAULT_SCANNER_ID,
         };
@@ -83,11 +83,11 @@ export const useRunModifyTask = () => {
 
   const runModifyTask = useCallback(
     (
-      {alertEmail, startDate, startTimezone, reschedule, tasks},
+      {alertEmail, startDate, startTimezone, reschedule, tasks, taskId},
       creationDate = date(),
     ) => {
-      const [task] = tasks;
-      const {name, id: taskId, alerts, config, scanner, target} = task;
+      const task = tasks.find(entity => entity.id === taskId);
+      const {name, alerts, config, scanner, target} = task;
 
       const creationDateString = creationDate.toISOString();
 

@@ -168,6 +168,7 @@ const RunModifyTaskComponent = ({alertEmail, reschedule}) => {
         startDate: mockScheduleDate,
         startTimezone: mockScheduleTimezone,
         reschedule,
+        taskId: '13579',
         tasks: [
           {
             name: 'myFirstTask',
