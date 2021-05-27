@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 ### Changed
+- Adjust task wizard for backend changes [#2945](https://github.com/greenbone/gsa/pull/2945)
 - Adjust tasks and audits to reflect schema changes in Hyperion[#2906](https://github.com/greenbone/gsa/pull/2906) [#2918](https://github.com/greenbone/gsa/pull/2918) [#2930](https://github.com/greenbone/gsa/pull/2930)
 - Adjust target credentials to reflect changes in Hyperion [#2898](https://github.com/greenbone/gsa/pull/2898)
 - Use graphql on override listpage [#2887](https://github.com/greenbone/gsa/pull/2887)
