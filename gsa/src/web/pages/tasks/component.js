@@ -115,35 +115,29 @@ class TaskComponent extends React.Component {
 
     this.handleReportImport = this.handleReportImport.bind(this);
     this.handleTaskResume = this.handleTaskResume.bind(this);
-    this.handleSaveAdvancedTaskWizard = this.handleSaveAdvancedTaskWizard.bind(
-      this,
-    );
+    this.handleSaveAdvancedTaskWizard =
+      this.handleSaveAdvancedTaskWizard.bind(this);
     this.handleSaveTask = this.handleSaveTask.bind(this);
     this.handleSaveContainerTask = this.handleSaveContainerTask.bind(this);
-    this.handleSaveModifyTaskWizard = this.handleSaveModifyTaskWizard.bind(
-      this,
-    );
+    this.handleSaveModifyTaskWizard =
+      this.handleSaveModifyTaskWizard.bind(this);
     this.handleSaveTaskWizard = this.handleSaveTaskWizard.bind(this);
     this.handleTaskStart = this.handleTaskStart.bind(this);
     this.handleTaskStop = this.handleTaskStop.bind(this);
     this.handleTaskWizardNewClick = this.handleTaskWizardNewClick.bind(this);
 
     this.openAdvancedTaskWizard = this.openAdvancedTaskWizard.bind(this);
-    this.handleCloseAdvancedTaskWizard = this.handleCloseAdvancedTaskWizard.bind(
-      this,
-    );
+    this.handleCloseAdvancedTaskWizard =
+      this.handleCloseAdvancedTaskWizard.bind(this);
     this.openContainerTaskDialog = this.openContainerTaskDialog.bind(this);
-    this.handleCloseContainerTaskDialog = this.handleCloseContainerTaskDialog.bind(
-      this,
-    );
+    this.handleCloseContainerTaskDialog =
+      this.handleCloseContainerTaskDialog.bind(this);
     this.openReportImportDialog = this.openReportImportDialog.bind(this);
-    this.handleCloseReportImportDialog = this.handleCloseReportImportDialog.bind(
-      this,
-    );
+    this.handleCloseReportImportDialog =
+      this.handleCloseReportImportDialog.bind(this);
     this.openModifyTaskWizard = this.openModifyTaskWizard.bind(this);
-    this.handleCloseModifyTaskWizard = this.handleCloseModifyTaskWizard.bind(
-      this,
-    );
+    this.handleCloseModifyTaskWizard =
+      this.handleCloseModifyTaskWizard.bind(this);
     this.openStandardTaskDialog = this.openStandardTaskDialog.bind(this);
     this.openTaskDialog = this.openTaskDialog.bind(this);
     this.handleCloseTaskDialog = this.handleCloseTaskDialog.bind(this);
@@ -304,7 +298,6 @@ class TaskComponent extends React.Component {
     scanner_type,
     schedule_id,
     schedule_periods,
-    source_iface,
     tag_id,
     target_id,
     task,
@@ -343,7 +336,6 @@ class TaskComponent extends React.Component {
           schedule_id,
           schedule_periods,
           target_id,
-          source_iface,
         })
         .then(onSaved, onSaveError)
         .then(() => this.closeTaskDialog());
@@ -370,7 +362,6 @@ class TaskComponent extends React.Component {
         scanner_id,
         schedule_id,
         schedule_periods,
-        source_iface,
         tag_id,
         target_id,
       })
@@ -423,7 +414,6 @@ class TaskComponent extends React.Component {
         scanner_id: hasId(task.scanner) ? task.scanner.id : undefined,
         schedule_id: isDefined(task.schedule) ? task.schedule.id : UNSET_VALUE,
         schedule_periods: task.schedule_periods,
-        source_iface: task.source_iface,
         target_id: hasId(task.target) ? task.target.id : undefined,
         task,
         title: _('Edit Task {{name}}', task),
@@ -458,7 +448,6 @@ class TaskComponent extends React.Component {
         scanner_id: defaultScannerId,
         schedule_id: defaultScheduleId,
         schedule_periods: undefined,
-        source_iface: undefined,
         target_id: defaultTargetId,
         task: undefined,
         title: _('New Task'),
@@ -567,11 +556,8 @@ class TaskComponent extends React.Component {
   }
 
   handleSaveAdvancedTaskWizard(data) {
-    const {
-      gmp,
-      onAdvancedTaskWizardSaved,
-      onAdvancedTaskWizardError,
-    } = this.props;
+    const {gmp, onAdvancedTaskWizardSaved, onAdvancedTaskWizardError} =
+      this.props;
 
     this.handleInteraction();
 
@@ -713,7 +699,6 @@ class TaskComponent extends React.Component {
       scanner_id,
       schedule_id,
       schedule_periods,
-      source_iface,
       ssh_credential,
       smb_credential,
       start_date,
@@ -805,7 +790,6 @@ class TaskComponent extends React.Component {
                               schedule_id={schedule_id}
                               schedule_periods={schedule_periods}
                               schedules={schedules}
-                              source_iface={source_iface}
                               tag_id={tag_id}
                               tags={tags}
                               target_id={target_id}
