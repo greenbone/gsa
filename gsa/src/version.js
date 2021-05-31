@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2021 Greenbone Networks GmbH
+/* Copyright (C) 2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -15,28 +15,5 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
 
-import ReactDOM from 'react-dom';
-
-import * as Sentry from '@sentry/react';
-
-import {GSA_VERSION} from 'version';
-
-import {isDefined} from 'gmp/utils/identity';
-
-import App from './web/app.js';
-
-const {sentryDSN, sentryEnvironment} = global.config;
-
-Sentry.init({
-  attachStacktrace: true,
-  dsn: sentryDSN,
-  environment: sentryEnvironment,
-  enabled: isDefined(sentryDSN),
-  release: GSA_VERSION,
-});
-
-ReactDOM.render(<App />, document.getElementById('app'));
-
-// vim: set ts=2 sw=2 tw=80:
+export const GSA_VERSION = process.env.REACT_APP_VERSION || '21.10';
