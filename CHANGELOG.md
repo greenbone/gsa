@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Hyperion] - unreleased
 
 ### Added
+- Add origin and date from NVT severities to parseObject() in NVT model [#2955](https://github.com/greenbone/gsa/pull/2955)
 
 ### Changed
 - Adjust tasks and audits to reflect schema changes in Hyperion[#2906](https://github.com/greenbone/gsa/pull/2906) [#2918](https://github.com/greenbone/gsa/pull/2918) [#2930](https://github.com/greenbone/gsa/pull/2930)
