@@ -54,9 +54,8 @@ class TargetComponent extends React.Component {
     };
 
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
-    this.handleCloseCredentialsDialog = this.handleCloseCredentialsDialog.bind(
-      this,
-    );
+    this.handleCloseCredentialsDialog =
+      this.handleCloseCredentialsDialog.bind(this);
     this.openPortListDialog = this.openPortListDialog.bind(this);
     this.handleClosePortListDialog = this.handleClosePortListDialog.bind(this);
     this.openTargetDialog = this.openTargetDialog.bind(this);
@@ -65,14 +64,14 @@ class TargetComponent extends React.Component {
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
     this.handleCreatePortList = this.handleCreatePortList.bind(this);
     this.handlePortListChange = this.handlePortListChange.bind(this);
-    this.handleEsxiCredentialChange = this.handleEsxiCredentialChange.bind(
-      this,
-    );
+    this.handleEsxiCredentialChange =
+      this.handleEsxiCredentialChange.bind(this);
     this.handleSshCredentialChange = this.handleSshCredentialChange.bind(this);
+    this.handleSshElevateCredentialChange =
+      this.handleSshElevateCredentialChange.bind(this);
     this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
-    this.handleSnmpCredentialChange = this.handleSnmpCredentialChange.bind(
-      this,
-    );
+    this.handleSnmpCredentialChange =
+      this.handleSnmpCredentialChange.bind(this);
   }
 
   openCredentialsDialog({id_field, types, title}) {
@@ -128,6 +127,7 @@ class TargetComponent extends React.Component {
           smb_credential_id: id_or__(entity.smb_credential),
           snmp_credential_id: id_or__(entity.snmp_credential),
           ssh_credential_id: id_or__(entity.ssh_credential),
+          ssh_elevate_credential_id: id_or__(entity.ssh_elevate_credential_id),
         });
       });
     } else {
@@ -154,6 +154,7 @@ class TargetComponent extends React.Component {
         smb_credential_id: undefined,
         snmp_credential_id: undefined,
         ssh_credential_id: undefined,
+        ssh_elevate_credential_id: undefined,
         target_source: undefined,
         target_exclude_source: undefined,
         target_title: _('New Target'),
@@ -269,6 +270,10 @@ class TargetComponent extends React.Component {
     this.setState({ssh_credential_id});
   }
 
+  handleSshElevateCredentialChange(ssh_elevate_credential_id) {
+    this.setState({ssh_elevate_credential_id});
+  }
+
   handleSnmpCredentialChange(snmp_credential_id) {
     this.setState({snmp_credential_id});
   }
@@ -327,6 +332,7 @@ class TargetComponent extends React.Component {
       smb_credential_id,
       snmp_credential_id,
       ssh_credential_id,
+      ssh_elevate_credential_id,
       target_source,
       target_exclude_source,
       target_title,
@@ -377,6 +383,7 @@ class TargetComponent extends React.Component {
                 smb_credential_id={smb_credential_id}
                 snmp_credential_id={snmp_credential_id}
                 ssh_credential_id={ssh_credential_id}
+                ssh_elevate_credential_id={ssh_elevate_credential_id}
                 target_source={target_source}
                 target_exclude_source={target_exclude_source}
                 title={target_title}
@@ -388,6 +395,9 @@ class TargetComponent extends React.Component {
                 onSshCredentialChange={this.handleSshCredentialChange}
                 onEsxiCredentialChange={this.handleEsxiCredentialChange}
                 onSmbCredentialChange={this.handleSmbCredentialChange}
+                onSshElevateCredentialChange={
+                  this.handleSshElevateCredentialChange
+                }
                 onSave={d => {
                   this.handleInteraction();
                   return save(d).then(() => this.closeTargetDialog());
