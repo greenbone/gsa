@@ -547,7 +547,6 @@ const TaskComponent = ({
           createAssetsMinQod: undefined,
           name: undefined,
           schedulePeriods: undefined,
-          sourceIface: undefined,
           task: undefined,
         }),
       );

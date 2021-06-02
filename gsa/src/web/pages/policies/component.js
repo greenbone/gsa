@@ -316,7 +316,6 @@ const PolicyComponent = ({
         name: undefined,
         scheduleId: defaultScheduleId,
         schedulePeriods: undefined,
-        sourceIface: undefined,
         targetId: defaultTargetId,
         title: _('New Audit'),
       }),
@@ -704,7 +703,6 @@ const PolicyComponent = ({
     scanners,
     scheduleId,
     schedulePeriods,
-    sourceIface,
     targetId,
     title,
   } = state;
@@ -776,7 +774,6 @@ const PolicyComponent = ({
                             scheduleId={scheduleId}
                             schedulePeriods={schedulePeriods}
                             schedules={schedules}
-                            sourceIface={sourceIface}
                             targetId={targetId}
                             targets={targets}
                             title={title}

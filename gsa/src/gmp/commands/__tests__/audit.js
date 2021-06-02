@@ -84,7 +84,6 @@ describe('AuditCommand tests', () => {
             scanner_type: OPENVAS_SCANNER_TYPE,
             schedule_id: undefined,
             schedule_periods: undefined,
-            source_iface: undefined,
             tag_id: undefined,
             target_id: 't1',
             usage_type: 'audit',
@@ -123,7 +122,6 @@ describe('AuditCommand tests', () => {
         scannerType: OPENVAS_SCANNER_TYPE,
         scheduleId: 's1',
         schedulePeriods: 1,
-        sourceIface: 'eth0',
         tagId: 't1',
         targetId: 't1',
       })
@@ -149,7 +147,6 @@ describe('AuditCommand tests', () => {
             scanner_type: OPENVAS_SCANNER_TYPE,
             schedule_id: 's1',
             schedule_periods: 1,
-            source_iface: 'eth0',
             tag_id: 't1',
             target_id: 't1',
             usage_type: 'audit',
@@ -203,7 +200,6 @@ describe('AuditCommand tests', () => {
             scanner_type: undefined,
             schedule_id: 0,
             schedule_periods: undefined,
-            source_iface: undefined,
             task_id: 'audit1',
             target_id: 0,
             usage_type: 'audit',
@@ -242,7 +238,6 @@ describe('AuditCommand tests', () => {
         scannerType: OPENVAS_SCANNER_TYPE,
         scheduleId: 's1',
         schedulePeriods: 1,
-        sourceIface: 'eth0',
         targetId: 't1',
       })
       .then(resp => {
@@ -266,7 +261,6 @@ describe('AuditCommand tests', () => {
             scanner_type: OPENVAS_SCANNER_TYPE,
             schedule_id: 's1',
             schedule_periods: 1,
-            source_iface: 'eth0',
             task_id: 'audit1',
             target_id: 't1',
             usage_type: 'audit',
