@@ -885,6 +885,8 @@ init_validator ()
   gvm_validator_alias (validator, "smb_credential_id", "credential_id");
   gvm_validator_alias (validator, "snmp_credential_id", "credential_id");
   gvm_validator_alias (validator, "ssh_credential_id", "credential_id");
+  gvm_validator_alias (validator, "ssh_elevate_credential_id",
+                       "credential_id");
   gvm_validator_alias (validator, "subgroup_column", "group_column");
   gvm_validator_alias (validator, "subject_id", "id");
   gvm_validator_alias (validator, "subject_id_optional", "id_optional");
