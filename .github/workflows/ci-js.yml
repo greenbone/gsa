@@ -1,0 +1,54 @@
+name: Build and test JavaScript
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  testing:
+    env:
+      WORKSPACE: ${{ github.workspace }}/gsa
+      REPORT_DIR: reports
+    name: Testing and upload coverage
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        #node-version: [10.x, 12.x, 14.x, 15.x]
+        node-version: [10.x]
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Set up node ${{ matrix.python-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
+      - name: Get Yarn cache directory
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Use Yarn cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+
+      # `--prefer-offline` gives cache priority
+      - name: Install dependencies
+        run: yarn install --prefer-offline
+        working-directory: ${{ env.WORKSPACE }}
+
+      - name: Run JavaScript tests
+        working-directory: ${{ env.WORKSPACE }}
+        env:
+          JEST_JUNIT_OUTPUT_DIR: ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
+        run: yarn test:coverage --reporters=default --reporters=jest-junit
+      - name: Submit test coverage to codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+          directory: ${{ env.WORKSPACE }}
+          fail_ci_if_error: true
+          flags: unittests
