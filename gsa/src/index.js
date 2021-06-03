@@ -27,7 +27,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import App from './web/app.js';
 
-const {sentryDSN, sentryEnvironment} = global.config;
+const config = isDefined(global.config) ? global.config : {};
+const {sentryDSN, sentryEnvironment} = config;
 
 Sentry.init({
   attachStacktrace: true,
