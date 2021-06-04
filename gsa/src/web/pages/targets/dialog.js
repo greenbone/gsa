@@ -17,8 +17,6 @@
  */
 import React from 'react';
 
-import styled from 'styled-components';
-
 import {_, _l} from 'gmp/locale/lang';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
@@ -40,8 +38,6 @@ import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
-import Theme from 'web/utils/theme';
 
 import {
   snmp_credential_filter,
@@ -117,10 +113,6 @@ const NEW_SNMP = {
   title: _l('Create new SNMP credential'),
   types: SNMP_CREDENTIAL_TYPES,
 };
-
-const ElevatePrivilegeText = styled(Layout)`
-  color: ${Theme.darkRed};
-`;
 
 const TargetDialog = ({
   alive_tests = ALIVE_TESTS_DEFAULT,
@@ -392,9 +384,7 @@ const TargetDialog = ({
                 {state.ssh_credential_id !== UNSET_VALUE && (
                   <FormGroup title={' '}>
                     <Divider>
-                      <ElevatePrivilegeText>
-                        {_('Elevate privileges')}
-                      </ElevatePrivilegeText>
+                      <Layout>{_('Elevate privileges')}</Layout>
                       <Select
                         name="ssh_elevate_credential_id"
                         disabled={in_use}
