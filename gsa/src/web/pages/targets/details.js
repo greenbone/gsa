@@ -167,7 +167,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
                       <TableData>{''}</TableData>
                       <TableData>
                         <span>
-                          {_('Elevate SSH ')}
+                          {_('SSH elevate credential ')}
                           <DetailsLink
                             id={ssh_elevate_credential.id}
                             type="credential"
