@@ -108,7 +108,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Set SameSite=strict for the session cookie to avoid CSRF [#2948](https://github.com/greenbone/gsa/pull/2948)
 
 ### Changed
+<<<<<<< HEAD
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867), [#2924](https://github.com/greenbone/gsa/pull/2924)
+=======
+- Properly space and linebreak roles and groups in users table row [#2949](https://github.com/greenbone/gsa/pull/2949)
+- Make HorizontalSep component wrappable [#2949](https://github.com/greenbone/gsa/pull/2949)
+- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
+>>>>>>> 7a5466ac4 (Update Changelog)
 
 ### Fixed
 - Fall back to cvss_base when severity subelement is missing from NVT severities [#2944](https://github.com/greenbone/gsa/pull/2944)
