@@ -30,6 +30,7 @@ export const TARGET_CREDENTIAL_NAMES = [
   'snmp_credential',
   'ssh_credential',
   'esxi_credential',
+  'ssh_elevate_credential',
 ];
 
 class Target extends Model {

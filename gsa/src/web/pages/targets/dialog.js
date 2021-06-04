@@ -97,7 +97,7 @@ const NEW_SSH = {
 const NEW_SSH_ELEVATE = {
   id_field: 'ssh_elevate_credential_id',
   types: SSH_ELEVATE_CREDENTIAL_TYPES,
-  title: _l('Create new credential for root privileges on target system'), // what is a shorter, more explanatory title?
+  title: _l('Create new SSH elevate credential'),
 };
 
 const NEW_SMB = {

@@ -25,6 +25,7 @@ import Target from 'gmp/models/target';
 
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
+import {UNSET_VALUE} from 'web/utils/render';
 
 const log = logger.getLogger('gmp.commands.targets');
 
@@ -72,7 +73,10 @@ class TargetCommand extends EntityCommand {
       alive_tests,
       port,
       ssh_credential_id,
-      ssh_elevate_credential_id,
+      ssh_elevate_credential_id:
+        ssh_credential_id === UNSET_VALUE
+          ? UNSET_VALUE
+          : ssh_elevate_credential_id,
       smb_credential_id,
       esxi_credential_id,
       snmp_credential_id,
@@ -127,7 +131,10 @@ class TargetCommand extends EntityCommand {
       smb_credential_id,
       snmp_credential_id,
       ssh_credential_id,
-      ssh_elevate_credential_id,
+      ssh_elevate_credential_id:
+        ssh_credential_id === UNSET_VALUE
+          ? UNSET_VALUE
+          : ssh_elevate_credential_id,
       target_source,
       target_exclude_source,
     });
