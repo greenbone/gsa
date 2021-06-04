@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import {TAG_NA} from 'gmp/models/nvt';
 
@@ -57,6 +57,7 @@ const NvtDetails = ({entity, links = true}) => {
   } = entity;
   return (
     <Layout flex="column" grow="1">
+      {entity.isDeprecated() && <div>{_('This NVT is deprecated.')}</div>}
       {isDefined(tags.summary) && (
         <DetailsBlock title={_('Summary')}>
           <Pre>{tags.summary}</Pre>
