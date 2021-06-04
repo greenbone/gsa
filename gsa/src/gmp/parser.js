@@ -27,7 +27,7 @@ export const parseScoreToSeverity = value => {
       value % 1 === 0 &&
       ((value <= 100 && value >= -3) || value === -99 || value === -98)
     ) {
-      return parseFloat(value / 10);
+      return parseFloat(value);
     }
   }
   return undefined;
