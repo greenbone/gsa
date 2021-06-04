@@ -38,7 +38,6 @@ import DetailsBlock from 'web/entity/block';
 import {Col} from 'web/entity/page';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
-import {ssh_credential_filter} from 'gmp/models/credential';
 
 const MAX_HOSTS_LISTINGS = 70;
 
@@ -168,7 +167,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
                       <TableData>{''}</TableData>
                       <TableData>
                         <span>
-                          {_('Elevate privileges with ')}
+                          {_('Elevate SSH ')}
                           <DetailsLink
                             id={ssh_elevate_credential.id}
                             type="credential"
