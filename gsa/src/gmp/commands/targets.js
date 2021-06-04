@@ -23,9 +23,10 @@ import registerCommand from 'gmp/command';
 
 import Target from 'gmp/models/target';
 
+import {UNSET_VALUE} from 'web/utils/render';
+
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
-import {UNSET_VALUE} from 'web/utils/render';
 
 const log = logger.getLogger('gmp.commands.targets');
 
