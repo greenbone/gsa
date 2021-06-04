@@ -20,7 +20,14 @@ import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
-import {parseDate, parseFloat, parseSeverity, parseText} from 'gmp/parser';
+import {
+  parseDate,
+  parseFloat,
+  parseSeverity,
+  parseText,
+  parseYesNo,
+  YES_VALUE,
+} from 'gmp/parser';
 
 import Info from './info';
 
@@ -197,6 +204,10 @@ class Nvt extends Info {
     }
 
     return ret;
+  }
+
+  isDeprecated() {
+    return parseYesNo(this.tags.deprecated) === YES_VALUE;
   }
 }
 
