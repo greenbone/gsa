@@ -37,4 +37,9 @@ describe('HorizontalSep tests', () => {
     const {element} = render(<HorizontalSep separator="|" spacing="10px" />);
     expect(element).toMatchSnapshot();
   });
+
+  test('should allow to wrap', () => {
+    const {element} = render(<HorizontalSep wrap />);
+    expect(element).toMatchSnapshot();
+  });
 });
