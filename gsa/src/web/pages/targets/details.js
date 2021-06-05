@@ -54,6 +54,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
     smb_credential,
     snmp_credential,
     ssh_credential,
+    ssh_elevate_credential,
     tasks,
     allowSimultaneousIPs,
   } = entity;
@@ -159,6 +160,24 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
                     </TableData>
                   </TableRow>
                 )}
+
+                {isDefined(ssh_credential) &&
+                  isDefined(ssh_elevate_credential) && ( // Skip one column, because there is no way to fit a variation of the word "elevate" without leaving lots of white space on other rows
+                    <TableRow>
+                      <TableData>{''}</TableData>
+                      <TableData>
+                        <span>
+                          {_('SSH elevate credential ')}
+                          <DetailsLink
+                            id={ssh_elevate_credential.id}
+                            type="credential"
+                          >
+                            {ssh_elevate_credential.name}
+                          </DetailsLink>
+                        </span>
+                      </TableData>
+                    </TableRow>
+                  )}
 
                 {isDefined(smb_credential) && (
                   <TableRow>
