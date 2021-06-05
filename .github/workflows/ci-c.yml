@@ -11,9 +11,44 @@ jobs:
   c_format_check:
     env:
       WORKSPACE: ${{ github.workspace }}/gsad
+      VERSION: 21.04
     name: Check C Source Code Formatting
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Check Source Format
-        run: clang-format -i -style=file ${{ env.WORKSPACE }}/src/*.{c,h} && git diff --exit-code
+        run: |
+          clang-format -i -style=file ${{ env.WORKSPACE }}/src/*.{c,h} \
+          && git diff --exit-code
+  build_gsad:
+    env:
+      WORKSPACE: ${{ github.workspace }}/gsad
+    name: Check C Source Code Formatting
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Checkout gvm-libs
+      - uses: actions/checkout@v2.3.4
+        with:
+          repository: greenbone/gvm-libs
+          path: gvm-libs
+          ref: gvm-libs-{{ env.VERSION}}
+      - name: Install required libraries
+        run: |
+          sudo apt-get install cmake pkg-config libglib2.0-dev libgpgme-dev \
+            libgnutls28-dev uuid-dev libssh-gcrypt-dev libhiredis-dev \
+            libxml2-dev libpcap-dev libnet1-dev libmicrohttpd-dev libxml2-dev
+      - name: Configure and compile gvm-libs
+        # uses: docker://greenbone/build-env-gsa-master-debian-stretch-gcc-gsad
+        run: |
+          mkdir build && cd build/ && \
+            cmake -DCMAKE_BUILD_TYPE=Release .. && make install
+        working-directory: $HOME/gvm-libs
+      - name: Fix permissions
+        run: chmod -R o+rw .
+        working-directory: $HOME/gvm-libs
+      - name: Configure and compile gsad
+        run: |
+          mkdir build && rm -rf .git && cd build/ \
+            && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
+        working-directory: ${{ env.WORKSPACE }}
