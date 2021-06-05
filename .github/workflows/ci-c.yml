@@ -25,6 +25,7 @@ jobs:
       VERSION: "21.04"
     name: Build gsad and gsa
     runs-on: 'ubuntu-latest'
+    container: greenbone/build-env-gsa-master-debian-stretch-gcc-gsad
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Checkout gvm-libs
@@ -33,13 +34,7 @@ jobs:
           repository: greenbone/gvm-libs
           path: gvm-libs
           ref: gvm-libs-${{ env.VERSION}}
-      - name: Install required libraries
-        run: |
-          sudo apt-get install cmake pkg-config libglib2.0-dev libgpgme-dev \
-            libgnutls28-dev uuid-dev libssh-gcrypt-dev libhiredis-dev \
-            libxml2-dev libpcap-dev libnet1-dev libmicrohttpd-dev libxml2-dev
       - name: Configure and compile gvm-libs
-        # uses: docker://greenbone/build-env-gsa-master-debian-stretch-gcc-gsad
         run: |
           ls && mkdir build && cd build/ && \
             cmake -DCMAKE_BUILD_TYPE=Release .. && sudo make install
