@@ -19,11 +19,11 @@ jobs:
         run: |
           clang-format -i -style=file ${{ env.WORKSPACE }}/src/*.{c,h} \
           && git diff --exit-code
-  build:
+  build_gsad:
     env:
       WORKSPACE: ${{ github.workspace }}/gsad
       VERSION: "21.04"
-    name: Build gsad and gsa
+    name: Build gsad
     runs-on: 'ubuntu-latest'
     container: greenbone/build-env-gsa-master-debian-buster-gcc-gsad
     steps:
@@ -34,16 +34,13 @@ jobs:
           repository: greenbone/gvm-libs
           path: gvm-libs
           ref: gvm-libs-${{ env.VERSION}}
-      - name: Configure and compile gvm-libs
-        run: |
-          ls && mkdir build && cd build/ && \
-            cmake -DCMAKE_BUILD_TYPE=Release .. && make install
-        working-directory: ${{ github.workspace }}/gvm-libs
+      # - name: Configure and compile gvm-libs
+      #   run: |
+      #     ls && mkdir build && cd build/ && \
+      #       cmake -DCMAKE_BUILD_TYPE=Release .. && make install
+      #   working-directory: ${{ github.workspace }}/gvm-libs
       - name: Configure and compile gsad
         run: |
           mkdir build && rm -rf .git && cd build/ \
             && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
         working-directory: ${{ env.WORKSPACE }}
-      - name: Configure and compile gsa
-        run: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
-        working-directory: ${{ github.WORKSPACE }}/gsa
