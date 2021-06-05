@@ -16,6 +16,11 @@ jobs:
     strategy:
       matrix:
         #node-version: [10.x, 12.x, 14.x, 15.x]
+        # 10.x for debian: https://packages.debian.org/buster/nodejs
+        #          ubuntu lts: https://packages.ubuntu.com/focal/nodejs
+        # 12.x for ubuntu-latest: https://packages.ubuntu.com/hirsute/nodejs
+        # 14.x is recommended by https://nodejs.org/en/
+        # 16.x is latest
         node-version: [10.x]
     steps:
       - uses: actions/checkout@v2.3.4
@@ -45,7 +50,7 @@ jobs:
         working-directory: ${{ env.WORKSPACE }}
         env:
           JEST_JUNIT_OUTPUT_DIR: ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
-        run: yarn test:coverage --reporters=default --reporters=jest-junit
+        run: yarn test:coverage --maxWorkers=8 --reporters=default --reporters=jest-junit
       - name: Submit test coverage to codecov.io
         uses: codecov/codecov-action@v1
         with:
@@ -61,7 +66,6 @@ jobs:
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
-        #node-version: [10.x, 12.x, 14.x, 15.x]
         node-version: [10.x]
     steps:
       - uses: actions/checkout@v2.3.4
@@ -89,3 +93,26 @@ jobs:
       - name: Lint JavaScript files
         working-directory: ${{ env.WORKSPACE }}
         run: yarn lint --format junit -o ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
+  build_gsa:
+    env:
+      WORKSPACE: ${{ github.workspace }}/gsa
+      VERSION: "21.04"
+    name: Build gsa
+    runs-on: 'ubuntu-latest'
+    container: greenbone/build-env-gsa-master-debian-buster-node10-ng
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Get Yarn cache directory
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Use Yarn cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Configure and compile gsa
+        run: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release ../gsa && make install
+        working-directory: ${{ github.WORKSPACE }}
