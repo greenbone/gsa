@@ -37,12 +37,12 @@ jobs:
       - name: Configure and compile gvm-libs
         run: |
           ls && mkdir build && cd build/ && \
-            cmake -DCMAKE_BUILD_TYPE=Release .. && sudo make install
+            cmake -DCMAKE_BUILD_TYPE=Release .. && make install
         working-directory: ${{ github.workspace }}/gvm-libs
       - name: Configure and compile gsad
         run: |
           mkdir build && rm -rf .git && cd build/ \
-            && cmake -DCMAKE_BUILD_TYPE=Release .. && sudo make install
+            && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
         working-directory: ${{ env.WORKSPACE }}
       - name: Configure and compile gsa
         run: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
