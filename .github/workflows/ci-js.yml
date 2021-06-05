@@ -49,6 +49,7 @@ jobs:
       - name: Submit test coverage to codecov.io
         uses: codecov/codecov-action@v1
         with:
+          # token: ${{ secrets.CODECOV_TOKEN }}
           directory: ${{ env.WORKSPACE }}
           fail_ci_if_error: true
           flags: unittests
@@ -88,3 +89,28 @@ jobs:
       - name: Lint JavaScript files
         working-directory: ${{ env.WORKSPACE }}
         run: yarn lint --format junit -o ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
+  build_gsa:
+    env:
+      WORKSPACE: ${{ github.workspace }}/gsa
+    name: Build gsa
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - uses: actions/checkout@v2.3.4
+
+      # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
+      - name: Get Yarn cache directory
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Use Yarn cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Install required libraries
+        run: |
+          sudo apt-get install libmicrohttpd-dev libxml2-dev
+      - name: Configure and compile
+        run: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
