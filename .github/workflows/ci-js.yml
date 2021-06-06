@@ -50,11 +50,11 @@ jobs:
         working-directory: ${{ env.WORKSPACE }}
         env:
           JEST_JUNIT_OUTPUT_DIR: ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
-        run: yarn test:coverage --maxWorkers=8 --reporters=default --reporters=jest-junit
+        run: yarn test:coverage --reporters=default --reporters=jest-junit
       - name: Submit test coverage to codecov.io
         uses: codecov/codecov-action@v1
         with:
-          # token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
           directory: ${{ env.WORKSPACE }}
           fail_ci_if_error: true
           flags: unittests
