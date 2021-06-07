@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04] - 2021-04-16
 
 ### Added
+- Allow to add ssh elevate credential to target dialog and display elevate credential in details [#2954](https://github.com/greenbone/gsa/pull/2954)
 - Allow to set unix socket permissions for gsad [#2816](https://github.com/greenbone/gsa/pull/2816)
 - Added CVSS date to NVT details [#2802](https://github.com/greenbone/gsa/pull/2802)
 - Added option to allow to scan simultaneous IPs to targets
