@@ -28,12 +28,6 @@ jobs:
     container: greenbone/build-env-gsa-master-debian-buster-gcc-gsad
     steps:
       - uses: actions/checkout@v2.3.4
-      - name: Checkout gvm-libs
-        uses: actions/checkout@v2.3.4
-        with:
-          repository: greenbone/gvm-libs
-          path: gvm-libs
-          ref: gvm-libs-${{ env.VERSION}}
       - name: Configure and compile gsad
         run: |
           mkdir build && rm -rf .git && cd build/ \
