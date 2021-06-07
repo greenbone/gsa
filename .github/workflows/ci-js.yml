@@ -52,7 +52,7 @@ jobs:
           JEST_JUNIT_OUTPUT_DIR: ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
         run: yarn test:coverage --reporters=default --reporters=jest-junit
       - name: Submit test coverage to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v1.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ${{ env.WORKSPACE }}
