@@ -3,8 +3,12 @@ name: Build and test C
 on:
   push:
     branches: [ master ]
+        paths:
+            - 'gsad/**'
   pull_request:
     branches: [ master ]
+        paths:
+            - 'gsad/**'
 
 
 jobs:

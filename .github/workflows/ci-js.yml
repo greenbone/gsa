@@ -3,8 +3,12 @@ name: Build and test JavaScript
 on:
   push:
     branches: [ master ]
+        paths:
+            - 'gsa/**'
   pull_request:
     branches: [ master ]
+        paths:
+            - 'gsa/**'
 
 jobs:
   testing:
