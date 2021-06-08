@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04.1] - Unreleased
 
 ### Added
+- Added isDeprecated() method to NVT model and use it in details [#2960](https://github.com/greenbone/gsa/pull/2960)
 - Added @testing-library/user-event as a dev-dependency [#2891](https://github.com/greenbone/gsa/pull/2891)
 
 ### Changed

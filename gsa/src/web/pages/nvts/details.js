@@ -57,6 +57,7 @@ const NvtDetails = ({entity, links = true}) => {
   } = entity;
   return (
     <Layout flex="column" grow="1">
+      {entity.isDeprecated() && <div>{_('This NVT is deprecated.')}</div>}
       {isDefined(tags.summary) && (
         <DetailsBlock title={_('Summary')}>
           <Pre>{tags.summary}</Pre>

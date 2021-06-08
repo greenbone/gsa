@@ -1650,6 +1650,7 @@
   "There was an error (422) when trying to add one or more hosts to this process. This might occur if the name of the process has invalid characters. Please make sure you are only using a-z, A-Z and 0-9.": "Bei dem Versuch einen oder mehrere Hosts zu diesem Prozess hinzuzufügen ist ein Fehler (422) aufgetreten. Dies kann durch ungültige Zeichen im Prozessnamen verursacht werden. Bitte benutzen Sie möglichst nur a-z, A-Z und 0-9.",
   "Third Party": "Drittanbieter",
   "This CPE does not appear in the CPE dictionary but is referenced by one or more CVE.": "Diese CPE ist nicht im CPE-Dictionary, wird aber von einem oder mehreren CVE referenziert.",
+  "This NVT is deprecated.": "Dieser NVT ist veraltet.",
   "This dialog will open a new window for {{- to}} if you click on \"follow link\". Following this link is on your own responsibility. Greenbone does not endorse the content you will see there.": "Dieser Dialog öffnet ein neues Fenster für {{-to}}, wenn Sie auf \"Link folgen\" klicken. Diesem Link zu folgen liegt in Ihrer Verantwortung. Greenbone hat keinen Einfluss auf den Inhalt, den Sie dort sehen werden.",
   "This form received invalid values. Please check the inputs and submit again.": "Dieses Formular erhielt ungültige Werte. Bitte überprüfen Sie Ihre Eingaben und senden sie erneut ab.",
   "This is an Alterable Audit. Reports may not relate to current Policy or Target!": "Dies ist ein änderbares Audit. Berichte könnten sich nicht auf die aktuelle Richtlinie oder das aktuelle Ziel beziehen!",
