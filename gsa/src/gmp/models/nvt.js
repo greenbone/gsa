@@ -26,6 +26,8 @@ import {
   parseSeverity,
   parseScoreToSeverity,
   parseText,
+  parseYesNo,
+  YES_VALUE,
 } from 'gmp/parser';
 
 import Info from './info';
@@ -127,6 +129,13 @@ class Nvt extends Info {
       ? parseScoreToSeverity(ret.score)
       : undefined;
 
+    if (isDefined(ret.severities)) {
+      const [severity = {}] = ret.severities;
+      const {origin, date} = severity;
+      ret.severityOrigin = hasValue(origin) ? parseText(origin) : undefined;
+      ret.severityDate = hasValue(date) ? parseDate(date) : undefined;
+    }
+
     if (ret.preferenceCount < 0) {
       // actually preferenceCount in the XML is -1 in get_info
       // right now.
@@ -219,6 +228,10 @@ class Nvt extends Info {
     }
 
     return ret;
+  }
+
+  isDeprecated() {
+    return parseYesNo(this.tags.deprecated) === YES_VALUE;
   }
 }
 

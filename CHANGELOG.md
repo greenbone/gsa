@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Hyperion] - unreleased
 
 ### Added
+- Add origin and date from NVT severities to parseObject() in NVT model [#2955](https://github.com/greenbone/gsa/pull/2955)
 
 ### Changed
 - Adjust tasks and audits to reflect schema changes in Hyperion[#2906](https://github.com/greenbone/gsa/pull/2906) [#2918](https://github.com/greenbone/gsa/pull/2918) [#2930](https://github.com/greenbone/gsa/pull/2930)
@@ -104,10 +105,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.04.1] - Unreleased
 
 ### Added
+- Added isDeprecated() method to NVT model and use it in details [#2960](https://github.com/greenbone/gsa/pull/2960)
 - Added @testing-library/user-event as a dev-dependency [#2891](https://github.com/greenbone/gsa/pull/2891)
 - Set SameSite=strict for the session cookie to avoid CSRF [#2948](https://github.com/greenbone/gsa/pull/2948)
 
 ### Changed
+- Properly space and linebreak roles and groups in users table row [#2949](https://github.com/greenbone/gsa/pull/2949)
+- Make HorizontalSep component wrappable [#2949](https://github.com/greenbone/gsa/pull/2949)
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867), [#2924](https://github.com/greenbone/gsa/pull/2924)
 
 ### Fixed
