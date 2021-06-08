@@ -23,6 +23,34 @@ import Info from 'gmp/models/info';
 import {testModelFromElement, testModelMethods} from 'gmp/models/testing';
 import date from 'gmp/models/date';
 
+describe('NVT model parseObject tests', () => {
+  test('should parse severities origin and date', () => {
+    const nvt1 = Nvt.fromObject({
+      severities: [
+        {
+          origin: 'Vendor',
+          date: '2020-03-10T06:40:13Z',
+        },
+      ],
+    });
+    const nvt2 = Nvt.fromObject({id: '1.3.6.1.4.1.25623.1.0.146043'});
+    expect(nvt1.severityOrigin).toEqual('Vendor');
+    expect(nvt1.severityDate).toEqual(date('2020-03-10T06:40:13Z'));
+    expect(nvt2.severityOrigin).toBeUndefined();
+    expect(nvt2.severityDate).toBeUndefined();
+  });
+
+  test('should parse preferenceCount', () => {
+    const nvt1 = Nvt.fromObject({
+      // actually preferenceCount in the XML is -1 in get_info
+      // right now.
+      preferenceCount: -1,
+      preferences: [{}, {}],
+    });
+    expect(nvt1.preferenceCount).toEqual(2);
+  });
+});
+
 describe('nvt Model tests', () => {
   testModelFromElement(Nvt, 'nvt');
   testModelMethods(Nvt);
