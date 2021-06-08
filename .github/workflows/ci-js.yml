@@ -51,13 +51,15 @@ jobs:
         env:
           JEST_JUNIT_OUTPUT_DIR: ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
         run: yarn test:coverage --reporters=default --reporters=jest-junit
+      - name: Load Lint Results
+        uses: actions/download-artifact@v2
+        with:
+          name: lint
       - name: Submit test coverage to codecov.io
         uses: codecov/codecov-action@v1.5.0
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           directory: ${{ env.WORKSPACE }}
           fail_ci_if_error: true
-          flags: unittests
   linting:
     env:
       WORKSPACE: ${{ github.workspace }}/gsa
@@ -93,6 +95,11 @@ jobs:
       - name: Lint JavaScript files
         working-directory: ${{ env.WORKSPACE }}
         run: yarn lint --format junit -o ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
+      - name: Store Lint Results
+        uses: actions/upload-artifact@v2
+        with: 
+          name: lint
+          path: ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
   build_gsa:
     env:
       WORKSPACE: ${{ github.workspace }}/gsa
@@ -112,7 +119,6 @@ jobs:
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-
       - name: Configure and compile gsa
         run: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release ../gsa && make install
         working-directory: ${{ github.WORKSPACE }}
