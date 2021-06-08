@@ -30,7 +30,7 @@ import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.targets');
 
-class TargetCommand extends EntityCommand {
+export class TargetCommand extends EntityCommand {
   constructor(http) {
     super(http, 'target', Target);
   }
