@@ -24,14 +24,10 @@ import {
   parseDate,
   parseFloat,
   parseSeverity,
-<<<<<<< HEAD
   parseScoreToSeverity,
-  parseText,
-=======
   parseText,
   parseYesNo,
   YES_VALUE,
->>>>>>> 8728dcb76 (Add isDeprecated() method to NVT model)
 } from 'gmp/parser';
 
 import Info from './info';
