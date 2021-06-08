@@ -26,6 +26,8 @@ import {
   parseSeverity,
   parseScoreToSeverity,
   parseText,
+  parseYesNo,
+  YES_VALUE,
 } from 'gmp/parser';
 
 import Info from './info';
@@ -226,6 +228,10 @@ class Nvt extends Info {
     }
 
     return ret;
+  }
+
+  isDeprecated() {
+    return parseYesNo(this.tags.deprecated) === YES_VALUE;
   }
 }
 

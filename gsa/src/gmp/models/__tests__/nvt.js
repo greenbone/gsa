@@ -580,4 +580,24 @@ describe('getFilteredRefIds tests', () => {
     expect(refs.length).toEqual(2);
     expect(refs).toEqual(['2', '4']);
   });
+
+  describe('NVT model method tests', () => {
+    test('isDeprecated() returns correct true/false', () => {
+      const nvt1 = Nvt.fromElement({
+        tags: 'summary=foo|deprecated=1',
+      });
+      const nvt2 = Nvt.fromElement({
+        tags: 'summary=bar',
+      });
+      const nvt3 = Nvt.fromElement({
+        tags: 'summary=lorem|deprecated=0',
+      });
+      expect(nvt1.tags.summary).toEqual('foo');
+      expect(nvt1.isDeprecated()).toEqual(true);
+      expect(nvt2.tags.summary).toEqual('bar');
+      expect(nvt2.isDeprecated()).toEqual(false);
+      expect(nvt3.tags.summary).toEqual('lorem');
+      expect(nvt3.isDeprecated()).toEqual(false);
+    });
+  });
 });
