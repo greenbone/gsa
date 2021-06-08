@@ -60,10 +60,7 @@ jobs:
         with:
           name: lint
       - name: Submit test coverage to codecov.io
-        uses: codecov/codecov-action@v1.5.0
-        with:
-          directory: ${{ env.WORKSPACE }}
-          fail_ci_if_error: true
+        run: bash <(curl -s https://codecov.io/bash)
   linting:
     env:
       WORKSPACE: ${{ github.workspace }}/gsa
