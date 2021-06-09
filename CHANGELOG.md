@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Hyperion] - unreleased
 
 ### Added
+<<<<<<< HEAD
 - Add origin and date from NVT severities to parseObject() in NVT model [#2955](https://github.com/greenbone/gsa/pull/2955)
 
 ### Changed
@@ -107,6 +108,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Added isDeprecated() method to NVT model and use it in details [#2960](https://github.com/greenbone/gsa/pull/2960)
 - Added @testing-library/user-event as a dev-dependency [#2891](https://github.com/greenbone/gsa/pull/2891)
+=======
+- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
+>>>>>>> b28f78dc3 (Update Changelog)
 - Set SameSite=strict for the session cookie to avoid CSRF [#2948](https://github.com/greenbone/gsa/pull/2948)
 
 ### Changed
