@@ -71,7 +71,7 @@
   },
   "scripts": {
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
-    "test:coverage": "react-scripts test --env=jest-environment-jsdom-sixteen --coverage --maxWorkers 2",
+    "test:coverage": "react-scripts test --env=jest-environment-jsdom-sixteen --coverage --maxWorkers 2 --silent",
     "lint": "eslint --max-warnings 0 src",
     "start": "react-scripts start",
     "build": "react-scripts build",
