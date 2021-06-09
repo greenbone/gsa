@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.10] - Unreleased
 
 ### Added
+<<<<<<< HEAD
 ### Changed
 ### Fixed
 ### Removed
@@ -49,6 +50,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#2813](https://github.com/greenbone/gsa/pull/2813)
 - Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
+=======
+- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
+- Set SameSite=strict for the session cookie to avoid CSRF [#2948](https://github.com/greenbone/gsa/pull/2948)
+>>>>>>> b28f78dc3 (Update Changelog)
 
 ### Changed
 - Properly space and linebreak roles and groups in users table row [#2949](https://github.com/greenbone/gsa/pull/2949)
