@@ -19,6 +19,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import DetailsBlock from 'web/entity/block';
 
 import CertLink from 'web/components/link/certlink';
@@ -102,7 +104,14 @@ const References = ({nvt, links = true}) => {
                       textOnly={!links || xref.type !== 'url'}
                       to={xref.id}
                     >
+<<<<<<< HEAD
                       {xref.id}
+=======
+                      {isDefined(xref.type) &&
+                        xref.type !== 'url' &&
+                        xref.type + ': '}
+                      {xref.ref}
+>>>>>>> 1add3f29a (Show xref type in NVT references)
                     </ExternalLink>
                   </span>
                 ))}
