@@ -19,7 +19,7 @@ import {TargetCommand} from '../targets';
 
 import {createActionResultResponse, createHttp} from '../testing';
 
-describe('TagCommand tests', () => {
+describe('TargetCommand tests', () => {
   test('should create target', () => {
     const response = createActionResultResponse();
     const fakeHttp = createHttp(response);
