@@ -24,7 +24,6 @@ jobs:
         #          ubuntu lts: https://packages.ubuntu.com/focal/nodejs
         # 12.x for ubuntu-latest: https://packages.ubuntu.com/hirsute/nodejs
         # 14.x is recommended by https://nodejs.org/en/
-        # 16.x is latest
         node-version: [10.x]
     steps:
       - uses: actions/checkout@v2.3.4
