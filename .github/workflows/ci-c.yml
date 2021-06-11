@@ -1,0 +1,35 @@
+name: Build and test C
+
+on:
+  push:
+    branches: [ master, gsa-21.10, gsa-21.04, gsa-20.08 ]
+  pull_request:
+    branches: [ master, gsa-21.10, gsa-21.04, gsa-20.08 ]
+
+
+jobs:
+  c_format_check:
+    env:
+      WORKSPACE: ${{ github.workspace }}/gsad
+    name: Check C Source Code Formatting
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Check Source Format
+        run: |
+          clang-format -i -style=file ${{ env.WORKSPACE }}/src/*.{c,h} \
+          && git diff --exit-code
+  build_gsad:
+    env:
+      WORKSPACE: ${{ github.workspace }}/gsad
+      VERSION: "21.04"
+    name: Build gsad
+    runs-on: 'ubuntu-latest'
+    container: greenbone/build-env-gsa-master-debian-buster-gcc-gsad
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Configure and compile gsad
+        run: |
+          mkdir build && rm -rf .git && cd build/ \
+            && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
+        working-directory: ${{ env.WORKSPACE }}

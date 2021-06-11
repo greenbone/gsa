@@ -587,8 +587,7 @@ handle_system_report (http_connection_t *connection, const char *method,
   if (slave_id && gvm_validate (http_validator, "slave_id", slave_id))
     {
       credentials_free (credentials);
-      g_warning ("%s: failed to validate slave_id, dropping request",
-                 __func__);
+      g_warning ("%s: failed to validate slave_id, dropping request", __func__);
       return MHD_NO;
     }
 

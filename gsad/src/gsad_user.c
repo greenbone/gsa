@@ -68,10 +68,9 @@ user_new ()
 
 user_t *
 user_new_with_data (const gchar *username, const gchar *password,
-                    const gchar *timezone,
-                    const gchar *role, const gchar *capabilities,
-                    const gchar *language, const gchar *pw_warning,
-                    const gchar *address)
+                    const gchar *timezone, const gchar *role,
+                    const gchar *capabilities, const gchar *language,
+                    const gchar *pw_warning, const gchar *address)
 {
   user_t *user = user_new ();
 
@@ -321,8 +320,8 @@ user_logout (user_t *user)
  */
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
-          const gchar *role, const gchar *capabilities,
-          const gchar *language, const gchar *pw_warning, const char *address)
+          const gchar *role, const gchar *capabilities, const gchar *language,
+          const gchar *pw_warning, const char *address)
 {
   user_t *user = session_get_user_by_username (username);
 
@@ -332,8 +331,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user_free (user);
     }
 
-  user = user_new_with_data (username, password, timezone, role,
-                             capabilities, language, pw_warning, address);
+  user = user_new_with_data (username, password, timezone, role, capabilities,
+                             language, pw_warning, address);
 
   session_add_user (user->token, user);
 

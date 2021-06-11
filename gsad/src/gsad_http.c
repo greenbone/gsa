@@ -198,8 +198,7 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
 
   if (!response)
     {
-      g_warning ("%s: failed to create response, dropping request",
-                 __func__);
+      g_warning ("%s: failed to create response, dropping request", __func__);
       return MHD_NO;
     }
   ret = MHD_add_response_header (response, MHD_HTTP_HEADER_LOCATION, uri);

@@ -885,8 +885,7 @@ init_validator ()
   gvm_validator_alias (validator, "smb_credential_id", "credential_id");
   gvm_validator_alias (validator, "snmp_credential_id", "credential_id");
   gvm_validator_alias (validator, "ssh_credential_id", "credential_id");
-  gvm_validator_alias (validator, "ssh_elevate_credential_id",
-                       "credential_id");
+  gvm_validator_alias (validator, "ssh_elevate_credential_id", "credential_id");
   gvm_validator_alias (validator, "subgroup_column", "group_column");
   gvm_validator_alias (validator, "subject_id", "id");
   gvm_validator_alias (validator, "subject_id_optional", "id_optional");
@@ -2269,8 +2268,7 @@ drop_privileges (struct passwd *user_pw)
 {
   if (setgroups (0, NULL))
     {
-      g_critical ("%s: failed to set groups: %s\n", __func__,
-                  strerror (errno));
+      g_critical ("%s: failed to set groups: %s\n", __func__, strerror (errno));
       return FALSE;
     }
   if (setgid (user_pw->pw_gid))
@@ -2599,7 +2597,8 @@ start_unix_http_daemon (const char *unix_socket_path,
       group = getgrnam (unix_socket_group);
       if (group == NULL)
         {
-          g_warning ("%s: Group %s not found.", __FUNCTION__, unix_socket_group);
+          g_warning ("%s: Group %s not found.", __FUNCTION__,
+                     unix_socket_group);
           return NULL;
         }
       if (chown (unix_socket_path, -1, group->gr_gid) == -1)
@@ -3198,10 +3197,9 @@ main (int argc, char **argv)
       gmp_init (gsad_manager_unix_socket_path, gsad_manager_address_string,
                 gsad_manager_port);
 
-      gsad_daemon =
-        start_unix_http_daemon (unix_socket_path, unix_socket_owner,
-                                unix_socket_group, unix_socket_mode,
-                                handle_request, handlers);
+      gsad_daemon = start_unix_http_daemon (unix_socket_path, unix_socket_owner,
+                                            unix_socket_group, unix_socket_mode,
+                                            handle_request, handlers);
 
       if (gsad_daemon == NULL)
         {
@@ -3256,8 +3254,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load private SSL key from %s: %s\n",
-                          __func__, ssl_private_key_filename,
-                          error->message);
+                          __func__, ssl_private_key_filename, error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
             }
@@ -3266,8 +3263,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load SSL certificate from %s: %s\n",
-                          __func__, ssl_certificate_filename,
-                          error->message);
+                          __func__, ssl_certificate_filename, error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
             }
