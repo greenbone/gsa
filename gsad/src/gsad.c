@@ -709,7 +709,6 @@ init_validator ()
                      "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
   gvm_validator_add (validator, "severity_optional",
                      "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
-  gvm_validator_add (validator, "source_iface", "^(.*){1,16}$");
   gvm_validator_add (validator, "uuid", "^[0-9abcdefABCDEF\\-]{1,40}$");
   gvm_validator_add (validator, "usage_type", "^(audit|policy|scan|)$");
   /* This must be "login" with space and comma. */
@@ -2268,8 +2267,7 @@ drop_privileges (struct passwd *user_pw)
 {
   if (setgroups (0, NULL))
     {
-      g_critical ("%s: failed to set groups: %s\n", __func__,
-                  strerror (errno));
+      g_critical ("%s: failed to set groups: %s\n", __func__, strerror (errno));
       return FALSE;
     }
   if (setgid (user_pw->pw_gid))
@@ -2598,7 +2596,8 @@ start_unix_http_daemon (const char *unix_socket_path,
       group = getgrnam (unix_socket_group);
       if (group == NULL)
         {
-          g_warning ("%s: Group %s not found.", __FUNCTION__, unix_socket_group);
+          g_warning ("%s: Group %s not found.", __FUNCTION__,
+                     unix_socket_group);
           return NULL;
         }
       if (chown (unix_socket_path, -1, group->gr_gid) == -1)
@@ -3197,10 +3196,9 @@ main (int argc, char **argv)
       gmp_init (gsad_manager_unix_socket_path, gsad_manager_address_string,
                 gsad_manager_port);
 
-      gsad_daemon =
-        start_unix_http_daemon (unix_socket_path, unix_socket_owner,
-                                unix_socket_group, unix_socket_mode,
-                                handle_request, handlers);
+      gsad_daemon = start_unix_http_daemon (unix_socket_path, unix_socket_owner,
+                                            unix_socket_group, unix_socket_mode,
+                                            handle_request, handlers);
 
       if (gsad_daemon == NULL)
         {
@@ -3255,8 +3253,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load private SSL key from %s: %s\n",
-                          __func__, ssl_private_key_filename,
-                          error->message);
+                          __func__, ssl_private_key_filename, error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
             }
@@ -3265,8 +3262,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load SSL certificate from %s: %s\n",
-                          __func__, ssl_certificate_filename,
-                          error->message);
+                          __func__, ssl_certificate_filename, error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
             }
