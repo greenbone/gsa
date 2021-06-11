@@ -53,8 +53,8 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
 
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
-          const gchar *role, const gchar *capabilities,
-          const gchar *language, const gchar *pw_warning, const char *address);
+          const gchar *role, const gchar *capabilities, const gchar *language,
+          const gchar *pw_warning, const char *address);
 
 void
 user_set_timezone (user_t *user, const gchar *timezone);
