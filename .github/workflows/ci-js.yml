@@ -2,13 +2,9 @@ name: Build and test JavaScript
 
 on:
   push:
-    branches: [ master ]
-    paths:
-      - 'gsa/**'
+    branches: [ master, gsa-21.10, gsa-21.04, gsa-20.08 ]
   pull_request:
-    branches: [ master ]
-    paths:
-      - 'gsa/**'
+    branches: [ master, gsa-21.10, gsa-21.04, gsa-20.08 ]
 
 jobs:
   testing:
@@ -24,7 +20,6 @@ jobs:
         #          ubuntu lts: https://packages.ubuntu.com/focal/nodejs
         # 12.x for ubuntu-latest: https://packages.ubuntu.com/hirsute/nodejs
         # 14.x is recommended by https://nodejs.org/en/
-        # 16.x is latest
         node-version: [10.x]
     steps:
       - uses: actions/checkout@v2.3.4
