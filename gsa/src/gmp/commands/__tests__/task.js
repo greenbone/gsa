@@ -75,7 +75,6 @@ describe('TaskCommand tests', () => {
             scanner_type: OPENVAS_SCANNER_TYPE,
             schedule_id: undefined,
             schedule_periods: undefined,
-            source_iface: undefined,
             tag_id: undefined,
             target_id: 't1',
             usage_type: 'scan',
@@ -114,7 +113,6 @@ describe('TaskCommand tests', () => {
         scanner_type: OPENVAS_SCANNER_TYPE,
         schedule_id: 's1',
         schedule_periods: 1,
-        source_iface: 'eth0',
         tag_id: 't1',
         target_id: 't1',
       })
@@ -140,7 +138,6 @@ describe('TaskCommand tests', () => {
             scanner_type: OPENVAS_SCANNER_TYPE,
             schedule_id: 's1',
             schedule_periods: 1,
-            source_iface: 'eth0',
             tag_id: 't1',
             target_id: 't1',
             usage_type: 'scan',
@@ -222,7 +219,6 @@ describe('TaskCommand tests', () => {
             scanner_type: undefined,
             schedule_id: 0,
             schedule_periods: undefined,
-            source_iface: undefined,
             task_id: 'task1',
             target_id: 0,
             usage_type: 'scan',
@@ -261,7 +257,6 @@ describe('TaskCommand tests', () => {
         scanner_type: OPENVAS_SCANNER_TYPE,
         schedule_id: 's1',
         schedule_periods: 1,
-        source_iface: 'eth0',
         target_id: 't1',
       })
       .then(resp => {
@@ -285,7 +280,6 @@ describe('TaskCommand tests', () => {
             scanner_type: OPENVAS_SCANNER_TYPE,
             schedule_id: 's1',
             schedule_periods: 1,
-            source_iface: 'eth0',
             task_id: 'task1',
             target_id: 't1',
             usage_type: 'scan',

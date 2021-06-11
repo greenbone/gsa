@@ -53,11 +53,7 @@ const ResultsDashboard = props => (
     id={RESULTS_DASHBOARD_ID}
     permittedDisplays={RESULTS_DISPLAYS}
     defaultDisplays={[
-      [
-        ResultsSeverityDisplay.displayId,
-        ResultsWordCloudDisplay.displayId,
-        ResultsCvssDisplay.displayId,
-      ],
+      [ResultsSeverityDisplay.displayId, ResultsCvssDisplay.displayId],
     ]}
   />
 );

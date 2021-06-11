@@ -87,7 +87,7 @@ export const GET_TASK = gql`
         lastReport {
           id
           severity
-          timestamp
+          creationTime
           scanStart
           scanEnd
         }
@@ -116,9 +116,12 @@ export const GET_TASK = gql`
       comment
       owner
       preferences {
-        name
-        value
-        description
+        autoDeleteReports
+        createAssets
+        createAssetsApplyOverrides
+        createAssetsMinQod
+        maxConcurrentNvts
+        maxConcurrentHosts
       }
       schedule {
         name
@@ -142,8 +145,6 @@ export const GET_TASK = gql`
         name
         type
       }
-      schedulePeriods
-      hostsOrdering
       userTags {
         count
         tags {
@@ -196,7 +197,8 @@ export const GET_TASKS = gql`
             lastReport {
               id
               severity
-              timestamp
+              creationTime
+              scanStart
             }
             counts {
               total
@@ -214,9 +216,12 @@ export const GET_TASKS = gql`
           comment
           owner
           preferences {
-            name
-            value
-            description
+            autoDeleteReports
+            createAssets
+            createAssetsApplyOverrides
+            createAssetsMinQod
+            maxConcurrentNvts
+            maxConcurrentHosts
           }
           schedule {
             name
@@ -239,7 +244,6 @@ export const GET_TASKS = gql`
             name
             type
           }
-          hostsOrdering
           observers {
             users
             roles {
@@ -403,10 +407,10 @@ export const useCreateTask = options => {
 };
 
 export const useDeleteTask = options => {
-  const [queryDeleteTask, data] = useMutation(DELETE_TASK, options);
+  const [queryDeleteTask, data] = useMutation(DELETE_TASKS_BY_IDS, options);
   const deleteTask = useCallback(
     // eslint-disable-next-line no-shadow
-    (id, options) => queryDeleteTask({...options, variables: {id}}),
+    (id, options) => queryDeleteTask({...options, variables: {ids: [id]}}),
     [queryDeleteTask],
   );
   return [deleteTask, data];

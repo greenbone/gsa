@@ -20,11 +20,7 @@ import React from 'react';
 import {render, fireEvent} from 'web/utils/testing';
 
 import AutoDeleteReportsGroup from '../autodeletereportsgroup';
-import {
-  AUTO_DELETE_KEEP,
-  AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  AUTO_DELETE_NO,
-} from 'gmp/models/task';
+import {AUTO_DELETE_KEEP_DEFAULT_VALUE} from 'gmp/models/task';
 
 describe('AutoDeleteReportsGroup tests', () => {
   test('should render dialog group', () => {
@@ -32,8 +28,8 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {element} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_KEEP}
-        autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
+        autoDelete={true}
+        autoDeleteReports={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
     );
@@ -46,8 +42,8 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {queryAllByTestId} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_KEEP}
-        autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
+        autoDelete={true}
+        autoDeleteReports={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
     );
@@ -56,7 +52,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     fireEvent.click(autoDeleteNoRadio);
 
-    expect(handleChange).toHaveBeenCalledWith(AUTO_DELETE_NO, 'auto_delete');
+    expect(handleChange).toHaveBeenCalledWith(false, 'autoDelete');
   });
 
   test('should allow to change auto delete keep', () => {
@@ -64,8 +60,8 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {queryAllByTestId} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_NO}
-        autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
+        autoDelete={false}
+        autoDeleteReports={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
     );
@@ -74,7 +70,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     fireEvent.click(autoDeleteKeepRadio);
 
-    expect(handleChange).toHaveBeenCalledWith(AUTO_DELETE_KEEP, 'auto_delete');
+    expect(handleChange).toHaveBeenCalledWith(true, 'autoDelete');
   });
 
   test('should allow to change auto delete keep value', () => {
@@ -82,8 +78,8 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_KEEP}
-        autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
+        autoDelete={true}
+        autoDeleteReports={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
     );
@@ -92,7 +88,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     fireEvent.change(autoDeleteKeepData, {target: {value: 10}});
 
-    expect(handleChange).toHaveBeenCalledWith(10, 'auto_delete_data');
+    expect(handleChange).toHaveBeenCalledWith(10, 'autoDeleteReports');
   });
 
   test('should keep auto delete keep value in range 2-1200', () => {
@@ -100,8 +96,8 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_KEEP}
-        autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
+        autoDelete={true}
+        autoDeleteReports={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
     );
@@ -118,7 +114,7 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     fireEvent.change(autoDeleteKeepData, {target: {value: 140}});
 
-    expect(handleChange).toHaveBeenCalledWith(140, 'auto_delete_data');
+    expect(handleChange).toHaveBeenCalledWith(140, 'autoDeleteReports');
   });
 
   test('should not allow to change auto delete keep value', () => {
@@ -126,8 +122,8 @@ describe('AutoDeleteReportsGroup tests', () => {
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup
-        autoDelete={AUTO_DELETE_NO}
-        autoDeleteData={AUTO_DELETE_KEEP_DEFAULT_VALUE}
+        autoDelete={false}
+        autoDeleteReports={AUTO_DELETE_KEEP_DEFAULT_VALUE}
         onChange={handleChange}
       />,
     );

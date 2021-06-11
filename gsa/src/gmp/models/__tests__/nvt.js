@@ -23,6 +23,34 @@ import Info from 'gmp/models/info';
 import {testModelFromElement, testModelMethods} from 'gmp/models/testing';
 import date from 'gmp/models/date';
 
+describe('NVT model parseObject tests', () => {
+  test('should parse severities origin and date', () => {
+    const nvt1 = Nvt.fromObject({
+      severities: [
+        {
+          origin: 'Vendor',
+          date: '2020-03-10T06:40:13Z',
+        },
+      ],
+    });
+    const nvt2 = Nvt.fromObject({id: '1.3.6.1.4.1.25623.1.0.146043'});
+    expect(nvt1.severityOrigin).toEqual('Vendor');
+    expect(nvt1.severityDate).toEqual(date('2020-03-10T06:40:13Z'));
+    expect(nvt2.severityOrigin).toBeUndefined();
+    expect(nvt2.severityDate).toBeUndefined();
+  });
+
+  test('should parse preferenceCount', () => {
+    const nvt1 = Nvt.fromObject({
+      // actually preferenceCount in the XML is -1 in get_info
+      // right now.
+      preferenceCount: -1,
+      preferences: [{}, {}],
+    });
+    expect(nvt1.preferenceCount).toEqual(2);
+  });
+});
+
 describe('nvt Model tests', () => {
   testModelFromElement(Nvt, 'nvt');
   testModelMethods(Nvt);
@@ -199,6 +227,18 @@ describe('nvt Model tests', () => {
     expect(nvt3.severity).toEqual(1.0);
     expect(nvt3.severityOrigin).toEqual('');
     expect(nvt3.severityDate).toBeUndefined();
+  });
+
+  test('should fall back to cvss_base when <severity> is missing from <severities>', () => {
+    const nvt = Nvt.fromElement({
+      cvss_base: '10.0',
+      severities: {},
+    });
+
+    expect(nvt.severity).toEqual(10.0);
+    expect(nvt.severityOrigin).toBeUndefined();
+    expect(nvt.severityDate).toBeUndefined();
+    expect(nvt.cvss_base).toBeUndefined();
   });
 
   test('should parse preferences', () => {
@@ -539,5 +579,25 @@ describe('getFilteredRefIds tests', () => {
 
     expect(refs.length).toEqual(2);
     expect(refs).toEqual(['2', '4']);
+  });
+
+  describe('NVT model method tests', () => {
+    test('isDeprecated() returns correct true/false', () => {
+      const nvt1 = Nvt.fromElement({
+        tags: 'summary=foo|deprecated=1',
+      });
+      const nvt2 = Nvt.fromElement({
+        tags: 'summary=bar',
+      });
+      const nvt3 = Nvt.fromElement({
+        tags: 'summary=lorem|deprecated=0',
+      });
+      expect(nvt1.tags.summary).toEqual('foo');
+      expect(nvt1.isDeprecated()).toEqual(true);
+      expect(nvt2.tags.summary).toEqual('bar');
+      expect(nvt2.isDeprecated()).toEqual(false);
+      expect(nvt3.tags.summary).toEqual('lorem');
+      expect(nvt3.isDeprecated()).toEqual(false);
+    });
   });
 });

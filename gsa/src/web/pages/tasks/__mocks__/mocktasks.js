@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import {setLocale} from 'gmp/locale/lang';
+import {SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
-import Task, {TASK_STATUS} from 'gmp/models/task';
+import Task, {HYPERION_TASK_STATUS, TASK_TREND} from 'gmp/models/task';
 
 import {deepFreeze} from 'web/utils/testing';
 
@@ -57,10 +57,75 @@ const greenboneSensor = deepFreeze({
 const scanConfig = deepFreeze({
   id: '314',
   name: 'foo',
-  comment: 'bar',
   trash: false,
-  scanner: scanner,
-  type: OPENVAS_SCAN_CONFIG_TYPE,
+  type: SCAN_CONFIG_TYPE.openvas,
+});
+
+export const detailsScanConfig = deepFreeze({
+  id: '314',
+  name: 'Half empty and slow',
+  creationTime: null,
+  comment: "Most NVT's",
+  families: [
+    {name: 'family1', growing: true, maxNvtCount: 10, nvtCount: 7},
+    {name: 'family2', growing: false, maxNvtCount: 5, nvtCount: 0},
+  ],
+  familyCount: 1,
+  familyGrowing: true,
+  nvtGrowing: false,
+  owner: 'admin',
+  inUse: false,
+  knownNvtCount: 99998,
+  maxNvtCount: 99999,
+  modificationTime: '2020-09-29T12:16:50+00:00',
+  nvtCount: 99998,
+  nvtSelectors: [
+    {
+      name: '436',
+      include: true,
+      type: 2,
+      familyOrNvt: '1.3.6.1.4.1.25623.1.0.100315',
+    },
+  ],
+  permissions: [{name: 'Everything'}],
+  predefined: true,
+  nvtPreferences: [
+    {
+      alternativeValues: ['postgres', 'regress'],
+      default: 'postgres',
+      hrName: 'Postgres Username:',
+      id: 1,
+      name: 'Postgres Username:',
+      type: 'entry',
+      value: 'regress',
+      nvt: {
+        id: '1.3.6.1.4.1.25623.1.0.100151',
+        name: 'PostgreSQL Detection',
+      },
+    },
+  ],
+  scannerPreferences: [
+    {
+      alternativeValues: ['foo', 'bar'],
+      default: '1',
+      hrName: 'scanner_pref',
+      id: null,
+      name: 'scanner_pref',
+      type: null,
+      value: '1',
+    },
+  ],
+  tasks: [
+    {
+      name: 'foo',
+      id: '457',
+    },
+  ],
+  trash: false,
+  type: SCAN_CONFIG_TYPE.openvas,
+  usageType: 'scan',
+  userTags: null,
+  writable: false,
 });
 
 // Schedule
@@ -76,14 +141,14 @@ const alert = deepFreeze({id: '151617', name: 'alert 1'});
 const lastReport = deepFreeze({
   id: '1234',
   severity: '5.0',
-  timestamp: '2019-07-30T13:23:30Z',
+  creationTime: '2019-07-30T13:23:30Z',
   scanStart: '2019-07-30T13:23:34Z',
   scanEnd: '2019-07-30T13:25:43Z',
 });
 
 const currentReport = deepFreeze({
   id: '5678',
-  timestamp: '2019-08-30T13:23:30Z',
+  creationTime: '2019-08-30T13:23:30Z',
   scanStart: '2019-08-30T13:23:34Z',
 });
 
@@ -118,43 +183,14 @@ const observers = deepFreeze({
 });
 
 // Preferences
-const preferences = deepFreeze([
-  {
-    description: 'Add results to Asset Management',
-    name: 'in_assets',
-    value: 'yes',
-  },
-  {
-    description: 'Apply Overrides when adding Assets',
-    name: 'assets_apply_overrides',
-    value: 'yes',
-  },
-  {
-    description: 'Min QOD when adding Assets',
-    name: 'assets_min_qod',
-    value: '70',
-  },
-  {
-    description: 'Auto Delete Reports',
-    name: 'auto_delete',
-    value: 'no',
-  },
-  {
-    description: 'Auto Delete Reports Data',
-    name: 'auto_delete_data',
-    value: '5',
-  },
-  {
-    description: 'Maximum concurrently executed NVTs per host',
-    name: 'max_checks',
-    value: '4',
-  },
-  {
-    description: 'Maximum concurrently scanned hosts',
-    name: 'max_hosts',
-    value: '20',
-  },
-]);
+const preferences = deepFreeze({
+  createAssets: true,
+  createAssetsApplyOverrides: true,
+  createAssetsMinQod: 70,
+  autoDeleteReports: null,
+  maxConcurrentNvts: 4,
+  maxConcurrentHosts: 20,
+});
 
 // Tasks
 const task = deepFreeze({
@@ -162,10 +198,10 @@ const task = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 1,
+  alterable: true,
   creationTime: '2019-07-30T13:00:00Z',
   modificationTime: '2019-08-30T13:23:30Z',
-  status: TASK_STATUS.stopped,
+  status: HYPERION_TASK_STATUS.stopped,
   reports: {
     lastReport,
     currentReport,
@@ -181,7 +217,6 @@ const task = deepFreeze({
   scanner: greenboneSensor,
   scanConfig: scanConfig,
   preferences: preferences,
-  hostsOrdering: 'sequential',
   observers: observers,
 });
 
@@ -190,8 +225,8 @@ const newTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 0,
-  status: TASK_STATUS.new,
+  alterable: false,
+  status: HYPERION_TASK_STATUS.new,
   reports: {
     counts: {
       total: 0,
@@ -212,7 +247,7 @@ const finishedTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  status: TASK_STATUS.done,
+  status: HYPERION_TASK_STATUS.done,
   reports: {
     lastReport,
     counts: {
@@ -234,9 +269,9 @@ const runningTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 0,
+  alterable: false,
   inUse: true,
-  status: TASK_STATUS.running,
+  status: HYPERION_TASK_STATUS.running,
   reports: {
     lastReport,
     currentReport,
@@ -259,8 +294,8 @@ const stoppedTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 0,
-  status: TASK_STATUS.stopped,
+  alterable: false,
+  status: HYPERION_TASK_STATUS.stopped,
   reports: {
     lastReport,
     currentReport,
@@ -283,8 +318,8 @@ const observedTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 0,
-  status: TASK_STATUS.done,
+  alterable: false,
+  status: HYPERION_TASK_STATUS.done,
   reports: {
     lastReport,
     counts: {
@@ -306,8 +341,8 @@ const containerTask = deepFreeze({
   name: 'foo',
   comment: 'bar',
   owner: 'admin',
-  alterable: 0,
-  status: TASK_STATUS.done,
+  alterable: false,
+  status: HYPERION_TASK_STATUS.done,
   reports: {
     lastReport,
     counts: {
@@ -334,10 +369,10 @@ const listMockTask = deepFreeze({
       finished: 1,
     },
   },
-  status: TASK_STATUS.done,
+  status: HYPERION_TASK_STATUS.done,
   target,
-  trend: 'up',
-  alterable: 0,
+  trend: TASK_TREND.up,
+  alterable: false,
   comment: 'bar',
   owner: 'admin',
   preferences,
@@ -345,7 +380,6 @@ const listMockTask = deepFreeze({
   alerts: [],
   scanConfig,
   scanner,
-  hostsOrdering: null,
   observers,
 });
 
@@ -363,9 +397,9 @@ const detailsMockTask = deepFreeze({
       finished: 1,
     },
   },
-  status: TASK_STATUS.stopped,
+  status: HYPERION_TASK_STATUS.stopped,
   target,
-  alterable: 0,
+  alterable: false,
   trend: null,
   comment: 'bar',
   owner: 'admin',
@@ -375,7 +409,6 @@ const detailsMockTask = deepFreeze({
   scanConfig,
   scanner,
   schedulePeriods: null,
-  hostsOrdering: 'sequential',
   userTags: null,
   observers,
 });

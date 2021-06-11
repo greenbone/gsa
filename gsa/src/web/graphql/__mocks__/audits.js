@@ -16,8 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {AUDIT_STATUS} from 'gmp/models/audit';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+import {HYPERION_AUDIT_STATUS} from 'gmp/models/audit';
+
 import {
   createGenericQueryMock,
   createGenericMutationResult,
@@ -74,7 +74,6 @@ export const auditPolicy = deepFreeze({
   creationTime: null,
   modificationTime: null,
   permissions: null,
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   trash: null,
   familyCount: null,
   familyGrowing: null,
@@ -101,7 +100,6 @@ export const auditDetailsPolicy = deepFreeze({
   creationTime: null,
   modificationTime: null,
   permissions: null,
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   trash: null,
   familyCount: null,
   familyGrowing: null,
@@ -124,8 +122,7 @@ export const auditDetailsPolicy = deepFreeze({
 // Reports
 const lastReport = deepFreeze({
   id: '1234',
-  severity: '5.0',
-  timestamp: '2019-07-30T13:23:30Z',
+  creationTime: '2019-07-30T13:23:30Z',
   scanStart: '2019-07-30T13:23:34Z',
   scanEnd: '2019-07-30T13:25:43Z',
   complianceCount: {
@@ -146,7 +143,7 @@ const auditDetailsLastReport = deepFreeze({
 
 const currentReport = deepFreeze({
   id: '5678',
-  timestamp: '2019-08-30T13:23:30Z',
+  creationTime: '2019-08-30T13:23:30Z',
   scanStart: '2019-08-30T13:23:34Z',
 });
 
@@ -213,61 +210,18 @@ const observers = deepFreeze({
 });
 
 // Preferences
-const preferences = deepFreeze([
-  {
-    description: 'Add results to Asset Management',
-    name: 'in_assets',
-    value: 'yes',
-  },
-  {
-    description: 'Apply Overrides when adding Assets',
-    name: 'assets_apply_overrides',
-    value: 'yes',
-  },
-  {
-    description: 'Min QOD when adding Assets',
-    name: 'assets_min_qod',
-    value: '70',
-  },
-  {
-    description: 'Auto Delete Reports',
-    name: 'auto_delete',
-    value: 'no',
-  },
-  {
-    description: 'Auto Delete Reports Data',
-    name: 'auto_delete_data',
-    value: '5',
-  },
-  {
-    description: 'Maximum concurrently executed NVTs per host',
-    name: 'max_checks',
-    value: '4',
-  },
-  {
-    description: 'Maximum concurrently scanned hosts',
-    name: 'max_hosts',
-    value: '20',
-  },
-]);
+const preferences = deepFreeze({
+  createAssets: true,
+  createAssetsApplyOverrides: true,
+  createAssetsMinQod: 70,
+  autoDeleteReports: 5,
+  maxConcurrentNvts: 4,
+  maxConcurrentHosts: 20,
+});
 
-const auditDetailsPreferences = deepFreeze([
-  {
-    name: 'Add results to Asset Management',
-    scanner_name: 'in_assets',
-    value: 'yes',
-  },
-  {
-    name: 'Auto Delete Reports',
-    scanner_name: 'auto_delete',
-    value: 'no',
-  },
-  {
-    description: 'Add results to Asset Management',
-    name: 'in_assets',
-    value: 'yes',
-  },
-]);
+const auditDetailsPreferences = deepFreeze({
+  createAssets: true, // if no autoDeleteReports field, then auto_delete is no
+});
 
 export const auditDetailsAudit = deepFreeze({
   name: 'foo',
@@ -285,11 +239,11 @@ export const auditDetailsAudit = deepFreeze({
     },
   },
   results: null,
-  status: AUDIT_STATUS.done,
+  status: HYPERION_AUDIT_STATUS.done,
   progress: null,
   target: auditDetailsTarget,
   trend: null,
-  alterable: 0,
+  alterable: false,
   comment: 'bar',
   owner: 'username',
   preferences: auditDetailsPreferences,
@@ -298,7 +252,6 @@ export const auditDetailsAudit = deepFreeze({
   policy: auditDetailsPolicy,
   scanner: auditDetailsScanner,
   schedulePeriods: null,
-  hostsOrdering: null,
   observers: null,
 });
 
@@ -322,11 +275,11 @@ export const detailsMockAudit = deepFreeze({
       current: 20,
     },
   },
-  status: AUDIT_STATUS.done,
+  status: HYPERION_AUDIT_STATUS.done,
   progress: 100,
   target,
   trend: null,
-  alterable: 0,
+  alterable: false,
   comment: 'bar',
   owner: 'admin',
   preferences,
@@ -335,7 +288,6 @@ export const detailsMockAudit = deepFreeze({
   policy: auditPolicy,
   scanner,
   schedulePeriods: null,
-  hostsOrdering: 'sequential',
   observers,
 });
 
@@ -359,11 +311,11 @@ export const unscheduledAudit = deepFreeze({
       current: 20,
     },
   },
-  status: AUDIT_STATUS.stopped,
+  status: HYPERION_AUDIT_STATUS.stopped,
   progress: 100,
   target,
   trend: null,
-  alterable: 0,
+  alterable: false,
   comment: 'bar',
   owner: 'admin',
   preferences,
@@ -372,7 +324,6 @@ export const unscheduledAudit = deepFreeze({
   policy: auditPolicy,
   scanner,
   schedulePeriods: null,
-  hostsOrdering: 'sequential',
   observers,
 });
 

@@ -36,8 +36,6 @@ const types = {
   nvts: 'info',
   operatingsystem: 'asset',
   operatingsystems: 'asset',
-  ovaldefs: 'info',
-  ovaldef: 'info',
   certbund: 'info',
   certbunds: 'info',
   secinfo: 'info',

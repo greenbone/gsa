@@ -184,7 +184,7 @@ const GetOverrideComponent = ({id}) => {
           <span data-testid="id">{override.id}</span>
           <span data-testid="active">{override.active}</span>
           <span data-testid="creationTime">{override.creationTime}</span>
-          <span data-testid="endTime">{override.endTime}</span>
+          <span data-testid="endTime">{override.endTime.toString()}</span>
           <span data-testid="hosts">{override.hosts}</span>
           <span data-testid="modificationTime">
             {override.modificationTime}
@@ -243,45 +243,9 @@ describe('useLazyGetOverrides tests', () => {
     overrideElements = screen.getAllByTestId('override');
     expect(overrideElements).toHaveLength(1);
 
-    expect(overrideElements[0]).toHaveTextContent('123');
-
-    expect(screen.queryByTestId('no-overrides')).not.toBeInTheDocument();
-
-    expect(screen.getByTestId('total')).toHaveTextContent(1);
-    expect(screen.getByTestId('filtered')).toHaveTextContent(1);
-    expect(screen.getByTestId('first')).toHaveTextContent(1);
-    expect(screen.getByTestId('limit')).toHaveTextContent(10);
-    expect(screen.getByTestId('length')).toHaveTextContent(1);
-  });
-});
-
-describe('useLazyGetOverrides tests', () => {
-  test('should query overrides after user interaction', async () => {
-    const [mock, resultFunc] = createGetOverridesQueryMock();
-    const {render} = rendererWith({queryMocks: [mock]});
-
-    render(<GetLazyOverridesComponent />);
-
-    let overrideElements = screen.queryAllByTestId('override');
-    expect(overrideElements).toHaveLength(0);
-
-    expect(screen.queryByTestId('no-overrides')).toBeInTheDocument();
-    expect(screen.queryByTestId('no-counts')).toBeInTheDocument();
-
-    const button = screen.getByTestId('load');
-    fireEvent.click(button);
-
-    const loading = await screen.findByTestId('loading');
-    expect(loading).toHaveTextContent('Loading');
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-
-    overrideElements = screen.getAllByTestId('override');
-    expect(overrideElements).toHaveLength(1);
-
-    expect(overrideElements[0]).toHaveTextContent('123');
+    expect(overrideElements[0]).toHaveTextContent(
+      '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+    );
 
     expect(screen.queryByTestId('no-overrides')).not.toBeInTheDocument();
 
@@ -458,9 +422,6 @@ describe('useGetOverride tests', () => {
     expect(screen.getByTestId('active')).toHaveTextContent('1');
     expect(screen.getByTestId('creationTime')).toHaveTextContent(
       '2021-02-19T14:14:11Z',
-    );
-    expect(screen.getByTestId('endTime')).toHaveTextContent(
-      '2021-12-23T14:14:11Z',
     );
     expect(screen.getByTestId('hosts')).toHaveTextContent('127.0.0.1127.0.0.2');
     expect(screen.getByTestId('modificationTime')).toHaveTextContent(

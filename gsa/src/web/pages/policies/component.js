@@ -33,13 +33,15 @@ import {
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 
-import {YES_VALUE, NO_VALUE} from 'gmp/parser';
+import {YES_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 import {shorten} from 'gmp/utils/string';
 
 import EntityComponent from 'web/entity/component';
+
+import {useCreateAudit} from 'web/graphql/audits';
 
 import {
   useCreatePolicy,
@@ -121,6 +123,7 @@ const PolicyComponent = ({
   const [createPolicy] = useCreatePolicy();
   const [getPolicy] = useLoadPolicyPromise();
   const [importPolicy] = useImportPolicy();
+  const [createAudit] = useCreateAudit();
 
   // Redux loaders
   const loadScannersAction = () =>
@@ -313,7 +316,6 @@ const PolicyComponent = ({
         name: undefined,
         scheduleId: defaultScheduleId,
         schedulePeriods: undefined,
-        sourceIface: undefined,
         targetId: defaultTargetId,
         title: _('New Audit'),
       }),
@@ -341,52 +343,41 @@ const PolicyComponent = ({
     auto_delete,
     auto_delete_data,
     comment,
-    hostsOrdering,
     in_assets,
     maxChecks,
     maxHosts,
     name,
     scannerId = OPENVAS_DEFAULT_SCANNER_ID,
-    scannerType = OPENVAS_SCANNER_TYPE,
     scheduleId,
     schedulePeriods,
-    sourceIface,
     targetId,
   }) => {
     const {policyId} = state;
-
-    const tagId = undefined;
-    const addTag = NO_VALUE;
 
     const applyOverrides = YES_VALUE;
     const minQod = DEFAULT_MIN_QOD;
 
     handleInteraction();
 
-    return gmp.audit
-      .create({
-        addTag,
-        alertIds,
-        alterable,
-        applyOverrides,
-        autoDelete: auto_delete,
-        autoDeleteData: auto_delete_data,
-        comment,
-        policyId,
-        hostsOrdering,
-        inAssets: in_assets,
-        maxChecks,
-        maxHosts,
-        minQod,
-        name,
-        scannerType,
-        scannerId,
-        scheduleId,
-        schedulePeriods,
-        sourceIface,
-        tagId,
-        targetId,
-      })
+    return createAudit({
+      alertIds,
+      alterable,
+      comment,
+      policyId,
+      name,
+      preferences: {
+        createAssets: in_assets,
+        createAssetsApplyOverrides: applyOverrides,
+        createAssetsMinQod: minQod,
+        autoDeleteReports: auto_delete ? auto_delete_data : null,
+        maxConcurrentNvts: maxChecks,
+        maxConcurrentHosts: maxHosts,
+      },
+      scannerId,
+      scheduleId,
+      schedulePeriods,
+      targetId,
+    })
       .then(onCreated, onCreateError)
       .then(() => closeCreateAuditDialog());
   };
@@ -712,7 +703,6 @@ const PolicyComponent = ({
     scanners,
     scheduleId,
     schedulePeriods,
-    sourceIface,
     targetId,
     title,
   } = state;
@@ -784,7 +774,6 @@ const PolicyComponent = ({
                             scheduleId={scheduleId}
                             schedulePeriods={schedulePeriods}
                             schedules={schedules}
-                            sourceIface={sourceIface}
                             targetId={targetId}
                             targets={targets}
                             title={title}

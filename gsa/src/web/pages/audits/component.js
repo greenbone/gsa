@@ -29,7 +29,7 @@ import {YES_VALUE} from 'gmp/parser';
 
 import {map} from 'gmp/utils/array';
 import {hasId} from 'gmp/utils/id';
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -249,21 +249,19 @@ const AuditComponent = ({
   const handleSaveAudit = ({
     alertIds,
     alterable,
-    auto_delete,
-    auto_delete_data,
+    autoDelete,
+    autoDeleteReports,
     comment,
     policyId,
-    hostsOrdering,
     id,
-    in_assets,
-    maxChecks,
-    maxHosts,
+    createAssets,
+    maxConcurrentNvts,
+    maxConcurrentHosts,
     name,
     scannerId = OPENVAS_DEFAULT_SCANNER_ID,
     scannerType = OPENVAS_SCANNER_TYPE,
     scheduleId,
     schedulePeriods,
-    sourceIface,
     targetId,
     audit,
   }) => {
@@ -274,33 +272,25 @@ const AuditComponent = ({
 
     if (isDefined(id)) {
       // save edit part
-      if (isDefined(audit) && !audit.isChangeable()) {
-        // arguments need to be undefined if the audit is not changeable
-        targetId = undefined;
-        scannerId = undefined;
-        policyId = undefined;
-      }
+      // does not need statusIsNew anymore. If audit is not changeable then these fields are disabled in the dialog, but still required in hyperion
       return modifyAudit({
         alertIds,
         alterable,
-        autoDelete: auto_delete,
-        autoDeleteData: auto_delete_data,
-        applyOverrides,
         comment,
         policyId,
-        hostsOrdering,
         id,
-        inAssets: in_assets,
-        maxChecks,
-        maxHosts,
-        minQod,
         name,
+        preferences: {
+          createAssets,
+          createAssetsApplyOverrides: applyOverrides,
+          createAssetsMinQod: minQod,
+          autoDeleteReports: autoDelete ? autoDeleteReports : null,
+          maxConcurrentNvts,
+          maxConcurrentHosts,
+        },
         scannerId,
-        scannerType,
         scheduleId,
-        schedulePeriods,
         targetId,
-        sourceIface,
       })
         .then(onSaved, onSaveError)
         .then(() => closeAuditDialog());
@@ -309,23 +299,20 @@ const AuditComponent = ({
     return createAudit({
       alertIds,
       alterable,
-      applyOverrides,
-      autoDelete: auto_delete,
-      autoDeleteData: auto_delete_data,
       comment,
       policyId,
-      hostsOrdering,
-      inAssets: in_assets,
-      maxChecks,
-      maxHosts,
-      minQod,
       name,
-      scannerType,
+      preferences: {
+        createAssets,
+        createAssetsApplyOverrides: applyOverrides,
+        createAssetsMinQod: minQod,
+        autoDeleteReports: autoDelete ? autoDeleteReports : null,
+        maxConcurrentNvts,
+        maxConcurrentHosts,
+      },
       scannerId,
       scheduleId,
-      schedulePeriods,
-      sourceIface,
-      targetId: targetId,
+      targetId,
     })
       .then(onCreated, onCreateError)
       .then(() => closeAuditDialog());
@@ -364,22 +351,22 @@ const AuditComponent = ({
           auditDialogVisible: true,
           alertIds: map(audit.alerts, alert => alert.id),
           alterable: audit.alterable,
-          applyOverrides: audit.applyOverrides,
-          autoDelete: audit.autoDelete,
-          autoDeleteData: audit.autoDeleteData,
+          applyOverrides: audit.preferences?.createAssetsApplyOverrides,
+          autoDelete: hasValue(audit.preferences?.autoDeleteReports),
+          autoDeleteReports: hasValue(audit.preferences?.autoDeleteReports)
+            ? audit.preferences.autoDeleteReports
+            : undefined,
           comment: audit.comment,
           policyId: hasId(audit.config) ? audit.config.id : undefined,
-          hostsOrdering: audit.hostsOrdering,
           id: audit.id,
-          inAssets: audit.inAssets,
-          maxChecks: audit.maxChecks,
-          maxHosts: audit.maxHosts,
-          minQod: audit.minQod,
+          createAssets: audit.preferences?.createAssets,
+          maxConcurrentNvts: audit.preferences?.maxConcurrentNvts,
+          maxConcurrentHosts: audit.preferences?.maxConcurrentHosts,
+          minQod: audit.preferences?.createAssetsMinQod,
           name: audit.name,
           scannerId: hasId(audit.scanner) ? audit.scanner.id : undefined,
           scheduleId,
           schedulePeriods,
-          sourceIface: audit.source_iface,
           targetId: hasId(audit.target) ? audit.target.id : undefined,
           audit,
           title: _('Edit Audit {{name}}', audit),
@@ -397,21 +384,19 @@ const AuditComponent = ({
           alterable: undefined,
           applyOverrides: undefined,
           autoDelete: undefined,
-          autoDeleteData: undefined,
+          autoDeleteReports: undefined,
           comment: undefined,
           policyId: undefined,
-          hostsOrdering: undefined,
           id: undefined,
-          inAssets: undefined,
-          maxChecks: undefined,
-          maxHosts: undefined,
+          createAssets: undefined,
+          maxConcurrentNvts: undefined,
+          maxConcurrentHosts: undefined,
           minQod: undefined,
           name: undefined,
           scannerId: defaultScannerId,
           scanner_type: defaultScannerType,
           scheduleId: defaultScheduleId,
           schedulePeriods: undefined,
-          sourceIface: undefined,
           targetId: defaultTargetId,
           audit: undefined,
           title: _('New Audit'),
@@ -436,7 +421,7 @@ const AuditComponent = ({
 
     handleInteraction();
 
-    const {id} = audit.last_report;
+    const {id} = audit.reports.lastReport;
 
     return gmp.report
       .download(
@@ -524,19 +509,17 @@ const AuditComponent = ({
     alertIds,
     alterable,
     autoDelete,
-    autoDeleteData,
+    autoDeleteReports,
     policyId,
     comment,
-    hostsOrdering,
     id,
-    inAssets,
-    maxChecks,
-    maxHosts,
+    createAssets,
+    maxConcurrentNvts,
+    maxConcurrentHosts,
     name,
     scannerId,
     scheduleId,
     schedulePeriods,
-    sourceIface,
     targetId,
     audit,
     auditDialogVisible,
@@ -596,20 +579,19 @@ const AuditComponent = ({
                             alerts={alerts}
                             alertIds={alertIds}
                             alterable={alterable}
-                            auto_delete={autoDelete}
-                            auto_delete_data={autoDeleteData}
+                            autoDelete={autoDelete}
+                            autoDeleteReports={autoDeleteReports}
                             comment={comment}
                             policyId={policyId}
-                            hostsOrdering={hostsOrdering}
                             id={id}
-                            in_assets={inAssets}
+                            createAssets={createAssets}
                             isLoadingAlerts={isLoadingAlerts}
                             isLoadingPolicies={isLoadingPolicies}
                             isLoadingScanners={isLoadingScanners}
                             isLoadingSchedules={isLoadingSchedules}
                             isLoadingTargets={isLoadingTargets}
-                            maxChecks={maxChecks}
-                            maxHosts={maxHosts}
+                            maxConcurrentNvts={maxConcurrentNvts}
+                            maxConcurrentHosts={maxConcurrentHosts}
                             name={name}
                             policies={policies}
                             scannerId={scannerId}
@@ -617,7 +599,6 @@ const AuditComponent = ({
                             scheduleId={scheduleId}
                             schedulePeriods={schedulePeriods}
                             schedules={schedules}
-                            sourceIface={sourceIface}
                             targetId={targetId}
                             targets={targets}
                             audit={audit}

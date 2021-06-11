@@ -38,7 +38,10 @@ import {
   createDeleteTaskQueryMock,
 } from 'web/graphql/__mocks__/tasks';
 
-import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+import {
+  detailsScanConfig,
+  getMockTasks,
+} from 'web/pages/tasks/__mocks__/mocktasks';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -109,7 +112,10 @@ describe('Task Detailspage tests', () => {
     const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
       filterString: 'resource_uuid=12345 first=1 rows=-1',
     });
-    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock();
+    const [scanConfigMock, scanConfigResult] = createGetScanConfigQueryMock(
+      '314',
+      detailsScanConfig,
+    );
 
     const {render, store} = rendererWith({
       capabilities: caps,
@@ -191,8 +197,6 @@ describe('Task Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('scanner 1');
     expect(baseElement).toHaveTextContent('OpenVAS Scanner');
     expect(detailslinks[6]).toHaveAttribute('href', '/scanconfig/314');
-    expect(baseElement).toHaveTextContent('Order for target hostssequential');
-    expect(baseElement).toHaveTextContent('Network Source Interface');
     expect(baseElement).toHaveTextContent(
       'Maximum concurrently executed NVTs per host4',
     );
@@ -212,7 +216,7 @@ describe('Task Detailspage tests', () => {
     expect(headings[6]).toHaveTextContent('Scan');
     expect(baseElement).toHaveTextContent('2 minutes');
     expect(baseElement).toHaveTextContent(
-      'Do not automatically delete reports',
+      'Automatically delete oldest reports but always keep newest 5 reports',
     );
   });
 
@@ -491,16 +495,15 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = screen.getAllByRole('link');
 
-    expect(icons[0]).toHaveAttribute('title', 'Help: Tasks');
+    expect(screen.getAllByTitle('Help: Tasks')[0]).toBeInTheDocument();
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/scanning.html#managing-tasks',
     );
 
-    expect(icons[1]).toHaveAttribute('title', 'Task List');
+    expect(screen.getAllByTitle('Task List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/tasks');
   });
 
@@ -544,7 +547,6 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = screen.getAllByRole('link');
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
@@ -557,29 +559,30 @@ describe('Task ToolBarIcons tests', () => {
     expect(handleContainerTaskCreate).toHaveBeenCalled();
     expect(divs[10]).toHaveTextContent('New Container Task');
 
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getAllByTitle('Clone Task');
+    fireEvent.click(cloneIcon[0]);
     expect(handleTaskClone).toHaveBeenCalledWith(newTask);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getAllByTitle('Edit Task');
+    fireEvent.click(editIcon[0]);
     expect(handleTaskEdit).toHaveBeenCalledWith(newTask);
-    expect(icons[4]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getAllByTitle('Move Task to trashcan');
+    fireEvent.click(deleteIcon[0]);
     expect(handleTaskDelete).toHaveBeenCalledWith(newTask);
-    expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getAllByTitle('Export Task as XML');
+    fireEvent.click(exportIcon[0]);
     expect(handleTaskDownload).toHaveBeenCalledWith(newTask);
-    expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
-    fireEvent.click(icons[7]);
+    const startIcon = screen.getAllByTitle('Start');
+    expect(startIcon[0]).toBeInTheDocument();
+    fireEvent.click(startIcon[0]);
     expect(handleTaskStart).toHaveBeenCalledWith(newTask);
-    expect(icons[7]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[8]);
+    const resumeIcon = screen.getAllByTitle('Task is not stopped');
+    fireEvent.click(resumeIcon[0]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[8]).toHaveAttribute('title', 'Task is not stopped');
 
     expect(links[2]).toHaveAttribute('href', '/reports?filter=task_id%3D12345');
     expect(links[2]).toHaveAttribute('title', 'Total Reports for Task foo');
@@ -641,7 +644,6 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = screen.getAllByRole('link');
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
@@ -654,30 +656,30 @@ describe('Task ToolBarIcons tests', () => {
     expect(handleContainerTaskCreate).toHaveBeenCalled();
     expect(divs[10]).toHaveTextContent('New Container Task');
 
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getAllByTitle('Clone Task');
+    fireEvent.click(cloneIcon[0]);
     expect(handleTaskClone).toHaveBeenCalledWith(runningTask);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getAllByTitle('Edit Task');
+    fireEvent.click(editIcon[0]);
     expect(handleTaskEdit).toHaveBeenCalledWith(runningTask);
-    expect(icons[4]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getAllByTitle('Task is still in use');
+    fireEvent.click(deleteIcon[0]);
     expect(handleTaskDelete).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute('title', 'Task is still in use');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getAllByTitle('Export Task as XML');
+    fireEvent.click(exportIcon[0]);
     expect(handleTaskDownload).toHaveBeenCalledWith(runningTask);
-    expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
-    fireEvent.click(icons[7]);
-    expect(handleTaskStart).not.toHaveBeenCalled();
+    const stopIcon = screen.getAllByTitle('Stop');
+    expect(stopIcon[0]).toBeInTheDocument();
+    fireEvent.click(stopIcon[0]);
     expect(handleTaskStop).toHaveBeenCalledWith(runningTask);
-    expect(icons[7]).toHaveAttribute('title', 'Stop');
 
-    fireEvent.click(icons[8]);
+    const resumeIcon = screen.getAllByTitle('Task is not stopped');
+    fireEvent.click(resumeIcon[0]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[8]).toHaveAttribute('title', 'Task is not stopped');
 
     expect(links[2]).toHaveAttribute('href', '/report/5678');
     expect(links[2]).toHaveAttribute(
@@ -745,7 +747,6 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = screen.getAllByRole('link');
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
@@ -758,29 +759,30 @@ describe('Task ToolBarIcons tests', () => {
     expect(handleContainerTaskCreate).toHaveBeenCalled();
     expect(divs[10]).toHaveTextContent('New Container Task');
 
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getAllByTitle('Clone Task');
+    fireEvent.click(cloneIcon[0]);
     expect(handleTaskClone).toHaveBeenCalledWith(stoppedTask);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getAllByTitle('Edit Task');
+    fireEvent.click(editIcon[0]);
     expect(handleTaskEdit).toHaveBeenCalledWith(stoppedTask);
-    expect(icons[4]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getAllByTitle('Move Task to trashcan');
+    fireEvent.click(deleteIcon[0]);
     expect(handleTaskDelete).toHaveBeenCalledWith(stoppedTask);
-    expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getAllByTitle('Export Task as XML');
+    fireEvent.click(exportIcon[0]);
     expect(handleTaskDownload).toHaveBeenCalledWith(stoppedTask);
-    expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
-    fireEvent.click(icons[7]);
+    const startIcon = screen.getAllByTitle('Start');
+    expect(startIcon[0]).toBeInTheDocument();
+    fireEvent.click(startIcon[0]);
     expect(handleTaskStart).toHaveBeenCalledWith(stoppedTask);
-    expect(icons[7]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[8]);
+    const resumeIcon = screen.getAllByTitle('Resume');
+    fireEvent.click(resumeIcon[0]);
     expect(handleTaskResume).toHaveBeenCalledWith(stoppedTask);
-    expect(icons[8]).toHaveAttribute('title', 'Resume');
 
     expect(links[2]).toHaveAttribute('href', '/report/5678');
     expect(links[2]).toHaveAttribute(
@@ -850,7 +852,6 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = screen.getAllByRole('link');
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
@@ -863,29 +864,26 @@ describe('Task ToolBarIcons tests', () => {
     expect(handleContainerTaskCreate).toHaveBeenCalled();
     expect(divs[10]).toHaveTextContent('New Container Task');
 
-    fireEvent.click(icons[3]);
-    expect(handleTaskClone).toHaveBeenCalledWith(finishedTask);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Task');
-
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getAllByTitle('Edit Task');
+    fireEvent.click(editIcon[0]);
     expect(handleTaskEdit).toHaveBeenCalledWith(finishedTask);
-    expect(icons[4]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getAllByTitle('Move Task to trashcan');
+    fireEvent.click(deleteIcon[0]);
     expect(handleTaskDelete).toHaveBeenCalledWith(finishedTask);
-    expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getAllByTitle('Export Task as XML');
+    fireEvent.click(exportIcon[0]);
     expect(handleTaskDownload).toHaveBeenCalledWith(finishedTask);
-    expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
-    fireEvent.click(icons[7]);
+    const startIcon = screen.getAllByTitle('Start');
+    expect(startIcon[0]).toBeInTheDocument();
+    fireEvent.click(startIcon[0]);
     expect(handleTaskStart).toHaveBeenCalledWith(finishedTask);
-    expect(icons[7]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[8]);
+    const resumeIcon = screen.getAllByTitle('Task is not stopped');
+    fireEvent.click(resumeIcon[0]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[8]).toHaveAttribute('title', 'Task is not stopped');
 
     expect(links[2]).toHaveAttribute('href', '/report/1234');
     expect(links[2]).toHaveAttribute(
@@ -953,7 +951,6 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = screen.getAllByRole('link');
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
@@ -966,35 +963,31 @@ describe('Task ToolBarIcons tests', () => {
     expect(handleContainerTaskCreate).toHaveBeenCalled();
     expect(divs[10]).toHaveTextContent('New Container Task');
 
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getAllByTitle('Clone Task');
+    fireEvent.click(cloneIcon[0]);
     expect(handleTaskClone).toHaveBeenCalledWith(observedTask);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getAllByTitle('Permission to edit Task denied');
+    fireEvent.click(editIcon[0]);
     expect(handleTaskEdit).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute('title', 'Permission to edit Task denied');
 
-    fireEvent.click(icons[5]);
-    expect(handleTaskDelete).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute(
-      'title',
+    const deleteIcon = screen.getAllByTitle(
       'Permission to move Task to trashcan denied',
     );
+    fireEvent.click(deleteIcon[0]);
+    expect(handleTaskDelete).not.toHaveBeenCalled();
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getAllByTitle('Export Task as XML');
+    fireEvent.click(exportIcon[0]);
     expect(handleTaskDownload).toHaveBeenCalledWith(observedTask);
-    expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
-    fireEvent.click(icons[7]);
+    const startIcon = screen.getAllByTitle('Permission to start task denied');
+    fireEvent.click(startIcon[0]);
     expect(handleTaskStart).not.toHaveBeenCalled();
-    expect(icons[7]).toHaveAttribute(
-      'title',
-      'Permission to start task denied',
-    );
 
-    fireEvent.click(icons[8]);
+    const resumeIcon = screen.getAllByTitle('Task is not stopped');
+    fireEvent.click(resumeIcon[0]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[8]).toHaveAttribute('title', 'Task is not stopped');
 
     expect(links[2]).toHaveAttribute('href', '/report/1234');
     expect(links[2]).toHaveAttribute(
@@ -1063,7 +1056,6 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const detailsLinks = screen.getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveAttribute('href', '/schedule/foo');
@@ -1072,13 +1064,13 @@ describe('Task ToolBarIcons tests', () => {
       'View Details of Schedule schedule 1 (Next due: over)',
     );
 
-    fireEvent.click(icons[9]);
+    const startIcon = screen.getAllByTitle('Start');
+    fireEvent.click(startIcon[0]);
     expect(handleTaskStart).toHaveBeenCalledWith(scheduledTask);
-    expect(icons[9]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(icons[10]);
+    const scheduleIcon = screen.getAllByTitle('Task is scheduled');
+    fireEvent.click(scheduleIcon[0]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(icons[10]).toHaveAttribute('title', 'Task is scheduled');
   });
 
   test('should call click handlers for container task', () => {
@@ -1121,7 +1113,6 @@ describe('Task ToolBarIcons tests', () => {
       />,
     );
 
-    const icons = screen.getAllByTestId('svg-icon');
     const links = screen.getAllByRole('link');
     const badgeIcons = screen.getAllByTestId('badge-icon');
     const divs = baseElement.querySelectorAll('div');
@@ -1134,25 +1125,25 @@ describe('Task ToolBarIcons tests', () => {
     expect(handleContainerTaskCreate).toHaveBeenCalled();
     expect(divs[10]).toHaveTextContent('New Container Task');
 
-    fireEvent.click(icons[3]);
+    const cloneIcon = screen.getAllByTitle('Clone Task');
+    fireEvent.click(cloneIcon[0]);
     expect(handleTaskClone).toHaveBeenCalledWith(containerTask);
-    expect(icons[3]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(icons[4]);
+    const editIcon = screen.getAllByTitle('Edit Task');
+    fireEvent.click(editIcon[0]);
     expect(handleTaskEdit).toHaveBeenCalledWith(containerTask);
-    expect(icons[4]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(icons[5]);
+    const deleteIcon = screen.getAllByTitle('Move Task to trashcan');
+    fireEvent.click(deleteIcon[0]);
     expect(handleTaskDelete).toHaveBeenCalledWith(containerTask);
-    expect(icons[5]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(icons[6]);
+    const exportIcon = screen.getAllByTitle('Export Task as XML');
+    fireEvent.click(exportIcon[0]);
     expect(handleTaskDownload).toHaveBeenCalledWith(containerTask);
-    expect(icons[6]).toHaveAttribute('title', 'Export Task as XML');
 
-    fireEvent.click(icons[7]);
+    const importIcon = screen.getAllByTitle('Import Report');
+    fireEvent.click(importIcon[0]);
     expect(handleReportImport).toHaveBeenCalledWith(containerTask);
-    expect(icons[7]).toHaveAttribute('title', 'Import Report');
 
     expect(links[2]).toHaveAttribute('href', '/report/1234');
     expect(links[2]).toHaveAttribute(

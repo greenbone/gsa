@@ -35,8 +35,6 @@ export const secInfoTypeName = (type, unknown) => {
       return _('CPE');
     case 'nvt':
       return _('NVT');
-    case 'ovaldef':
-      return _('OVAL Definition');
     case 'cert_bund_adv':
       return _('CERT-Bund Advisory');
     case 'dfn_cert_adv':

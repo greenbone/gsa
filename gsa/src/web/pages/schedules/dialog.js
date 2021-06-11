@@ -334,7 +334,10 @@ const ScheduleDialog = props => {
         interval: isPreDefined ? 1 : interval,
         monthdays: setMonthydays ? monthdays : undefined,
         weekdays: setWeekdays ? weekdays : undefined,
-        summary: name,
+        // convert name to string explicitly to not run into:
+        // `TypeError: e.replace is not a function`
+        // when name is just numbers.
+        summary: `${name}`,
         startDate,
       },
       timezone,

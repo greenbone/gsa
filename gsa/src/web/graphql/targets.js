@@ -58,22 +58,24 @@ export const GET_TARGETS = gql`
             name
             id
           }
-          sshCredential {
-            name
-            id
-            port
-          }
-          smbCredential {
-            name
-            id
-          }
-          esxiCredential {
-            name
-            id
-          }
-          snmpCredential {
-            name
-            id
+          credentials {
+            ssh {
+              id
+              name
+              port
+            }
+            smb {
+              id
+              name
+            }
+            esxi {
+              id
+              name
+            }
+            snmp {
+              id
+              name
+            }
           }
           aliveTest
           excludeHosts
@@ -121,22 +123,24 @@ export const GET_TARGET = gql`
         name
         id
       }
-      sshCredential {
-        name
-        id
-        port
-      }
-      smbCredential {
-        name
-        id
-      }
-      esxiCredential {
-        name
-        id
-      }
-      snmpCredential {
-        name
-        id
+      credentials {
+        ssh {
+          id
+          name
+          port
+        }
+        smb {
+          id
+          name
+        }
+        esxi {
+          id
+          name
+        }
+        snmp {
+          id
+          name
+        }
       }
       aliveTest
       allowSimultaneousIPs

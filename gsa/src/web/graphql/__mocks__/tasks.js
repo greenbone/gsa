@@ -16,14 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {TASK_STATUS} from 'gmp/models/task';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+import {SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+import {HYPERION_TASK_STATUS, TASK_TREND} from 'gmp/models/task';
 
 import {
   CLONE_TASK,
   CREATE_CONTAINER_TASK,
   CREATE_TASK,
-  DELETE_TASK,
   DELETE_TASKS_BY_IDS,
   GET_TASK,
   GET_TASKS,
@@ -36,7 +35,11 @@ import {
   EXPORT_TASKS_BY_IDS,
 } from 'web/graphql/tasks';
 
-import {deepFreeze, createGenericQueryMock} from 'web/utils/testing';
+import {
+  deepFreeze,
+  createGenericQueryMock,
+  createGenericMutationResult,
+} from 'web/utils/testing';
 
 const alert = deepFreeze({id: '151617', name: 'alert 1'});
 
@@ -56,24 +59,21 @@ const scanner = deepFreeze({
 const scanConfig = deepFreeze({
   id: '314',
   name: 'foo',
-  comment: 'bar',
   trash: false,
-  scanner: scanner,
-  type: OPENVAS_SCAN_CONFIG_TYPE,
+  type: SCAN_CONFIG_TYPE.openvas,
 });
 
 // Reports
 const lastReport = deepFreeze({
   id: '1234',
-  severity: '5.0',
-  timestamp: '2019-07-30T13:23:30Z',
+  severity: 5.0,
+  creationTime: '2019-07-30T13:23:30Z',
   scanStart: '2019-07-30T13:23:34Z',
   scanEnd: '2019-07-30T13:25:43Z',
 });
 
 const currentReport = deepFreeze({
   id: '5678',
-  timestamp: '2019-08-30T13:23:30Z',
   scanStart: '2019-08-30T13:23:34Z',
 });
 
@@ -129,43 +129,14 @@ const observers = deepFreeze({
 });
 
 // Preferences
-const preferences = deepFreeze([
-  {
-    description: 'Add results to Asset Management',
-    name: 'in_assets',
-    value: 'yes',
-  },
-  {
-    description: 'Apply Overrides when adding Assets',
-    name: 'assets_apply_overrides',
-    value: 'yes',
-  },
-  {
-    description: 'Min QOD when adding Assets',
-    name: 'assets_min_qod',
-    value: '70',
-  },
-  {
-    description: 'Auto Delete Reports',
-    name: 'auto_delete',
-    value: 'no',
-  },
-  {
-    description: 'Auto Delete Reports Data',
-    name: 'auto_delete_data',
-    value: '5',
-  },
-  {
-    description: 'Maximum concurrently executed NVTs per host',
-    name: 'max_checks',
-    value: '4',
-  },
-  {
-    description: 'Maximum concurrently scanned hosts',
-    name: 'max_hosts',
-    value: '20',
-  },
-]);
+const preferences = deepFreeze({
+  createAssets: true,
+  createAssetsApplyOverrides: true,
+  createAssetsMinQod: 70,
+  autoDeleteReports: 5,
+  maxConcurrentNvts: 4,
+  maxConcurrentHosts: 20,
+});
 
 const listMockTask = deepFreeze({
   name: 'foo',
@@ -180,9 +151,9 @@ const listMockTask = deepFreeze({
     },
   },
   progress: 100,
-  status: TASK_STATUS.done,
+  status: HYPERION_TASK_STATUS.done,
   target,
-  trend: 'up',
+  trend: TASK_TREND.up,
   alterable: 0,
   comment: 'bar',
   owner: 'admin',
@@ -191,7 +162,6 @@ const listMockTask = deepFreeze({
   alerts: [],
   scanConfig,
   scanner,
-  hostsOrdering: null,
   observers,
 });
 
@@ -232,7 +202,7 @@ const detailsMockTask = deepFreeze({
     },
   },
   progress: 100,
-  status: TASK_STATUS.stopped,
+  status: HYPERION_TASK_STATUS.stopped,
   target,
   alterable: 0,
   trend: null,
@@ -244,7 +214,6 @@ const detailsMockTask = deepFreeze({
   scanConfig,
   scanner,
   schedulePeriods: null,
-  hostsOrdering: 'sequential',
   userTags: null,
   observers,
   results: {
@@ -310,30 +279,12 @@ export const createGetTaskQueryErrorMock = (
   return [queryMock];
 };
 
-export const createDeleteTaskQueryMock = taskId => {
-  const queryResult = {
-    data: {
-      deleteTask: {
-        ok: true,
-      },
-    },
-  };
+const deleteTaskResult = createGenericMutationResult('task');
 
-  const resultFunc = jest.fn().mockReturnValue(queryResult);
-
-  const variables = {
-    id: taskId,
-  };
-
-  const queryMock = {
-    request: {
-      query: DELETE_TASK,
-      variables,
-    },
-    newData: resultFunc,
-  };
-  return [queryMock, resultFunc];
-};
+export const createDeleteTaskQueryMock = (taskId = 'foo') =>
+  createGenericQueryMock(DELETE_TASKS_BY_IDS, deleteTaskResult, {
+    ids: [taskId],
+  });
 
 export const createDeleteTasksByIdsQueryMock = taskIds => {
   const queryResult = {

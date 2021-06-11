@@ -61,7 +61,7 @@ export const renderReport = (report, links) => {
   return (
     <span>
       <DetailsLink type="report" id={report.id} textOnly={!links}>
-        <DateTime date={report.timestamp} />
+        <DateTime date={report.creationTime} />
       </DetailsLink>
     </span>
   );
@@ -129,7 +129,7 @@ const Row = ({
             {entity.name}
           </RowDetailsToggle>
           <IconDivider>
-            {entity.alterable === 1 && (
+            {entity.alterable && (
               <AlterableIcon size="small" title={_('Task is alterable')} />
             )}
             {isDefined(scanner) &&

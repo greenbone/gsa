@@ -34,7 +34,6 @@ import {VULNS_DISPLAYS} from 'web/pages/vulns/dashboard';
 import {HOSTS_DISPLAYS} from 'web/pages/hosts/dashboard';
 import {OS_DISPLAYS} from 'web/pages/operatingsystems/dashboard';
 import {NVTS_DISPLAYS} from 'web/pages/nvts/dashboard';
-import {OVALDEF_DISPLAYS} from 'web/pages/ovaldefs/dashboard';
 import {CERTBUND_DISPLAYS} from 'web/pages/certbund/dashboard';
 import {CVES_DISPLAYS} from 'web/pages/cves/dashboard';
 import {CPES_DISPLAYS} from 'web/pages/cpes/dashboard';
@@ -53,7 +52,6 @@ const ALL_DISPLAYS = [
   ...HOSTS_DISPLAYS,
   ...OS_DISPLAYS,
   ...NVTS_DISPLAYS,
-  ...OVALDEF_DISPLAYS,
   ...CERTBUND_DISPLAYS,
   ...CVES_DISPLAYS,
   ...CPES_DISPLAYS,

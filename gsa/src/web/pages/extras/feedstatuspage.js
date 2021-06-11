@@ -36,7 +36,6 @@ import DfnCertAdvIcon from 'web/components/icon/dfncertadvicon';
 import FeedIcon from 'web/components/icon/feedicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NvtIcon from 'web/components/icon/nvticon';
-import OvalDefIcon from 'web/components/icon/ovaldeficon';
 import CpeLogoIcon from 'web/components/icon/cpelogoicon';
 import PolicyIcon from 'web/components/icon/policyicon';
 import PortListIcon from 'web/components/icon/portlisticon';
@@ -147,12 +146,6 @@ const FeedStatus = ({feeds}) => {
                         <IconDivider align={['start', 'center']}>
                           <CpeLogoIcon size="medium" />
                           <span>{_('CPEs')}</span>
-                        </IconDivider>
-                      </Link>
-                      <Link to="ovaldefs">
-                        <IconDivider align={['start', 'center']}>
-                          <OvalDefIcon size="medium" />
-                          <span>{_('OVAL Definitions')}</span>
                         </IconDivider>
                       </Link>
                     </IconDivider>

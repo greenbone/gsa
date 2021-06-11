@@ -198,8 +198,7 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
 
   if (!response)
     {
-      g_warning ("%s: failed to create response, dropping request",
-                 __func__);
+      g_warning ("%s: failed to create response, dropping request", __func__);
       return MHD_NO;
     }
   ret = MHD_add_response_header (response, MHD_HTTP_HEADER_LOCATION, uri);
@@ -516,9 +515,9 @@ remove_sid (http_response_t *response)
    * Tim Brown's suggested cookie included a domain attribute.  How would
    * we get the domain in here?  Maybe a --domain option. */
 
-  value =
-    g_strdup_printf (SID_COOKIE_NAME "=0; expires=%s; path=/; %sHTTPonly",
-                     expires, (is_use_secure_cookie () ? "secure; " : ""));
+  value = g_strdup_printf (
+    SID_COOKIE_NAME "=0; expires=%s; path=/; %sHTTPonly; SameSite=strict",
+    expires, (is_use_secure_cookie () ? "secure; " : ""));
   ret = MHD_add_response_header (response, "Set-Cookie", value);
   g_free (value);
   return ret;
@@ -592,8 +591,9 @@ attach_sid (http_response_t *response, const char *sid)
    * we get the domain in here?  Maybe a --domain option. */
 
   value = g_strdup_printf (
-    SID_COOKIE_NAME "=%s; expires=%s; max-age=%d; path=/; %sHTTPonly", sid,
-    expires, timeout, (is_use_secure_cookie () ? "secure; " : ""));
+    SID_COOKIE_NAME
+    "=%s; expires=%s; max-age=%d; path=/; %sHTTPonly; SameSite=strict",
+    sid, expires, timeout, (is_use_secure_cookie () ? "secure; " : ""));
   ret = MHD_add_response_header (response, "Set-Cookie", value);
   g_free (value);
   return ret;

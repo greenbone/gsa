@@ -48,15 +48,15 @@ describe('Target model parseObject tests', () => {
   });
 
   test('should parse credentials', () => {
-    const target1 = Target.fromObject({smbCredential: {id: '123'}});
-    const target2 = Target.fromObject({smbCredential: {id: null}});
+    const target1 = Target.fromObject({credentials: {smb: {id: '123'}}});
+    const target2 = Target.fromObject({credentials: {ssh: {id: null}}});
     const target3 = Target.fromObject({});
 
-    expect(target1.smbCredential).toBeInstanceOf(Model);
-    expect(target1.smbCredential.entityType).toEqual('credential');
-    expect(target1.smbCredential.id).toEqual('123');
-    expect(target2.smbCredential).toBeUndefined();
-    expect(target3.smbCredential).toBeUndefined();
+    expect(target1.credentials.smb).toBeInstanceOf(Model);
+    expect(target1.credentials.smb.entityType).toEqual('credential');
+    expect(target1.credentials.smb.id).toEqual('123');
+    expect(target2.credentials.ssh).toBeUndefined();
+    expect(target3.credentials).toBeUndefined();
   });
 
   test('should parse allowSimultaneousIPs', () => {

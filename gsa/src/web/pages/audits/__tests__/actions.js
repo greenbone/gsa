@@ -26,7 +26,7 @@ import {rendererWith, fireEvent} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
 import Actions from '../actions';
-import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
+import Audit, {HYPERION_AUDIT_STATUS} from 'gmp/models/audit';
 
 setLocale('en');
 
@@ -41,7 +41,7 @@ describe('Audit Actions tests', () => {
 
   test('should render', () => {
     const audit = Audit.fromObject({
-      status: AUDIT_STATUS.new,
+      status: HYPERION_AUDIT_STATUS.new,
       alterable: false,
       reports: {
         lastReport: {id: 'id'},
@@ -82,7 +82,7 @@ describe('Audit Actions tests', () => {
 
   test('should call click handlers', () => {
     const audit = Audit.fromObject({
-      status: AUDIT_STATUS.done,
+      status: HYPERION_AUDIT_STATUS.done,
       alterable: false,
       reports: {
         lastReport: {id: 'id'},
@@ -155,7 +155,7 @@ describe('Audit Actions tests', () => {
 
   test('should not call click handlers without permissions', () => {
     const audit = Audit.fromObject({
-      status: AUDIT_STATUS.done,
+      status: HYPERION_AUDIT_STATUS.done,
       alterable: false,
       reports: {
         lastReport: {id: 'id'},
@@ -240,7 +240,7 @@ describe('Audit Actions tests', () => {
 
   test('should not call click handlers for stopped audit without permissions', () => {
     const audit = Audit.fromObject({
-      status: AUDIT_STATUS.stopped,
+      status: HYPERION_AUDIT_STATUS.stopped,
       alterable: false,
       reports: {
         lastReport: {id: 'id'},
@@ -327,7 +327,7 @@ describe('Audit Actions tests', () => {
 
   test('should not call click handlers for running audit without permissions', () => {
     const audit = Audit.fromObject({
-      status: AUDIT_STATUS.running,
+      status: HYPERION_AUDIT_STATUS.running,
       alterable: false,
       reports: {
         lastReport: {id: 'id'},
@@ -411,7 +411,7 @@ describe('Audit Actions tests', () => {
 
   test('should call click handlers for running audit', () => {
     const audit = Audit.fromObject({
-      status: AUDIT_STATUS.running,
+      status: HYPERION_AUDIT_STATUS.running,
       alterable: false,
       inUse: true,
       permissions: [{name: 'everything'}],
@@ -480,7 +480,7 @@ describe('Audit Actions tests', () => {
 
   test('should call click handlers for stopped audit', () => {
     const audit = Audit.fromObject({
-      status: AUDIT_STATUS.stopped,
+      status: HYPERION_AUDIT_STATUS.stopped,
       alterable: false,
       reports: {
         lastReport: {id: 'id'},
@@ -553,7 +553,7 @@ describe('Audit Actions tests', () => {
 
   test('should disable report download if grc format is not defined', () => {
     const audit = Audit.fromObject({
-      status: AUDIT_STATUS.stopped,
+      status: HYPERION_AUDIT_STATUS.stopped,
       alterable: false,
       reports: {
         lastReport: {id: 'id'},
@@ -602,7 +602,7 @@ describe('Audit Actions tests', () => {
 
   test('should render schedule icon if task is scheduled', () => {
     const audit = Audit.fromObject({
-      status: AUDIT_STATUS.stopped,
+      status: HYPERION_AUDIT_STATUS.stopped,
       alterable: false,
       reports: {
         lastReport: {id: 'id'},

@@ -1250,36 +1250,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                           <div
                             class="c28"
                           >
-                            Order for target hosts
-                          </div>
-                        </td>
-                        <td>
-                          <div
-                            class="c28"
-                          >
-                            sequential
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div
-                            class="c28"
-                          >
-                            Network Source Interface
-                          </div>
-                        </td>
-                        <td>
-                          <div
-                            class="c28"
-                          />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div
-                            class="c28"
-                          >
                             Maximum concurrently executed NVTs per host
                           </div>
                         </td>
@@ -1488,7 +1458,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                           <div
                             class="c28"
                           >
-                            Do not automatically delete reports
+                            Automatically delete oldest reports but always keep newest 5 reports
                           </div>
                         </td>
                       </tr>

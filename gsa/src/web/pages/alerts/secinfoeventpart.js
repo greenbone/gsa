@@ -83,10 +83,6 @@ const SecinfoEventPart = ({
           value: 'dfn_cert_adv',
           label: _('DFN-CERT Advisories'),
         },
-        {
-          value: 'ovaldef',
-          label: _('OVAL Definition'),
-        },
       ]}
       value={secinfoType}
       name={prefix + 'secinfo_type'}

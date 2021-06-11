@@ -153,8 +153,6 @@ const getPermissionTypeName = type => {
       return _('SecInfo');
     case 'os':
       return _('Operating Systems');
-    case 'ovaldefs':
-      return _('OVAL Definitions');
     case 'notes':
       return _('Notes');
     case 'nvts':
@@ -497,15 +495,17 @@ export const simplePermissionDescriptionWithSubject = (name, subject) => {
   }
 };
 
-export const setRef = (...refs) => ref => {
-  for (const rf of refs) {
-    if (isFunction(rf)) {
-      rf(ref);
-    } else if (isObject(rf) && isDefined(rf.current)) {
-      rf.current = ref;
+export const setRef =
+  (...refs) =>
+  ref => {
+    for (const rf of refs) {
+      if (isFunction(rf)) {
+        rf(ref);
+      } else if (isObject(rf) && isDefined(rf.current)) {
+        rf.current = ref;
+      }
     }
-  }
-};
+  };
 
 export const generateFilename = ({
   creationTime,

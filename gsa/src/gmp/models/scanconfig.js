@@ -37,6 +37,12 @@ export const OPENVAS_SCAN_CONFIG_TYPE = 0;
 export const SCANCONFIG_TREND_DYNAMIC = 1;
 export const SCANCONFIG_TREND_STATIC = 0;
 
+export const SCAN_CONFIG_TYPE = {
+  // for hyperion enum
+  openvas: 'OPENVAS',
+  osp: 'OSP',
+};
+
 export const getTranslatedType = config => {
   return config.scanConfigType === OSP_SCAN_CONFIG_TYPE
     ? _('OSP')

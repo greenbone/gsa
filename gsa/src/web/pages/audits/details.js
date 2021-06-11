@@ -23,7 +23,6 @@ import DateTime from 'web/components/date/datetime';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import {duration} from 'gmp/models/date';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
@@ -63,23 +62,22 @@ const AuditDetails = ({entity, links = true}) => {
 
   const {
     alerts,
-    autoDelete,
-    autoDeleteData,
     averageDuration,
-    hostsOrdering,
-    inAssets,
-    preferences,
+    preferences = {},
     scanner,
     schedulePeriods,
     target,
     reports,
-    maxChecks,
-    maxHosts,
   } = entity;
 
   const {lastReport} = reports;
 
-  const {iface = {}} = preferences;
+  const {
+    autoDeleteReports,
+    createAssets,
+    maxConcurrentHosts,
+    maxConcurrentNvts,
+  } = preferences;
 
   let dur;
   const hasDuration = hasValue(lastReport) && hasValue(lastReport.scanStart);
@@ -159,40 +157,22 @@ const AuditDetails = ({entity, links = true}) => {
                   </TableData>
                 </TableRow>
               )}
-              {hasValue(policy) &&
-                policy.policyType === OPENVAS_SCAN_CONFIG_TYPE && (
-                  <TableRow>
-                    <TableData>{_('Order for target hosts')}</TableData>
-                    <TableData>{hostsOrdering}</TableData>
-                  </TableRow>
-                )}
-              {hasValue(policy) &&
-                policy.policyType === OPENVAS_SCAN_CONFIG_TYPE && (
-                  <TableRow>
-                    <TableData>{_('Network Source Interface')}</TableData>
-                    <TableData>{iface.value}</TableData>
-                  </TableRow>
-                )}
-              {hasValue(policy) &&
-                policy.policyType === OPENVAS_SCAN_CONFIG_TYPE &&
-                hasValue(maxChecks) && (
-                  <TableRow>
-                    <TableData>
-                      {_('Maximum concurrently executed NVTs per host')}
-                    </TableData>
-                    <TableData>{maxChecks}</TableData>
-                  </TableRow>
-                )}
-              {hasValue(policy) &&
-                policy.policyType === OPENVAS_SCAN_CONFIG_TYPE &&
-                hasValue(maxHosts) && (
-                  <TableRow>
-                    <TableData>
-                      {_('Maximum concurrently scanned hosts')}
-                    </TableData>
-                    <TableData>{maxHosts}</TableData>
-                  </TableRow>
-                )}
+              {hasValue(maxConcurrentNvts) && ( // policies do not have types anymore
+                <TableRow>
+                  <TableData>
+                    {_('Maximum concurrently executed NVTs per host')}
+                  </TableData>
+                  <TableData>{maxConcurrentNvts}</TableData>
+                </TableRow>
+              )}
+              {hasValue(maxConcurrentHosts) && (
+                <TableRow>
+                  <TableData>
+                    {_('Maximum concurrently scanned hosts')}
+                  </TableData>
+                  <TableData>{maxConcurrentHosts}</TableData>
+                </TableRow>
+              )}
             </TableBody>
           </DetailsTable>
         </DetailsBlock>
@@ -203,7 +183,7 @@ const AuditDetails = ({entity, links = true}) => {
           <TableBody>
             <TableRow>
               <TableData>{_('Add to Assets')}</TableData>
-              <TableData>{renderYesNo(inAssets)}</TableData>
+              <TableData>{renderYesNo(createAssets)}</TableData>
             </TableRow>
           </TableBody>
         </DetailsTable>
@@ -270,11 +250,11 @@ const AuditDetails = ({entity, links = true}) => {
             <TableRow>
               <TableData>{_('Auto delete Reports')}</TableData>
               <TableData>
-                {autoDelete === 'keep'
+                {hasValue(autoDeleteReports)
                   ? _(
                       'Automatically delete oldest reports but always keep ' +
                         'newest {{nr}} reports',
-                      {nr: autoDeleteData},
+                      {nr: autoDeleteReports},
                     )
                   : _('Do not automatically delete reports')}
               </TableData>

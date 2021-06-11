@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {VULNS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
@@ -92,7 +92,12 @@ Page.propTypes = {
   onInteraction: PropTypes.func.isRequired,
 };
 
+const FALLBACK_VULNS_LIST_FILTER = Filter.fromString(
+  'sort-reverse=severity first=1',
+);
+
 export default withEntitiesContainer('vulnerability', {
+  fallbackFilter: FALLBACK_VULNS_LIST_FILTER,
   entitiesSelector,
   loadEntities,
 })(Page);

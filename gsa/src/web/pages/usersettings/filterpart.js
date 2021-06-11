@@ -58,7 +58,6 @@ const FilterPart = ({
   cveFilter,
   cpeFilter,
   nvtFilter,
-  ovalFilter,
   certBundFilter,
   dfnCertFilter,
   filters = [],
@@ -330,14 +329,6 @@ const FilterPart = ({
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('OVAL Definitions Filter')} titleSize="3">
-        <Select
-          name="ovalFilter"
-          value={ovalFilter}
-          items={renderSelectItems(filterFilters(filters, 'info'), UNSET_VALUE)}
-          onChange={onChange}
-        />
-      </FormGroup>
       <FormGroup title={_('CERT-Bund Advisories Filter')} titleSize="3">
         <Select
           name="certBundFilter"
@@ -373,7 +364,6 @@ FilterPart.propTypes = {
   notesFilter: PropTypes.string,
   nvtFilter: PropTypes.string,
   operatingSystemsFilter: PropTypes.string,
-  ovalFilter: PropTypes.string,
   overridesFilter: PropTypes.string,
   permissionsFilter: PropTypes.string,
   portListsFilter: PropTypes.string,

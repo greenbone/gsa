@@ -28,7 +28,6 @@ import {
   parseIntoArray,
   parseText,
   parseDuration,
-  NO_VALUE,
 } from 'gmp/parser';
 
 import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
@@ -47,8 +46,10 @@ import {
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
+  HYPERION_TASK_STATUS as HYPERION_AUDIT_STATUS,
   TASK_STATUS as AUDIT_STATUS,
   getTranslatableTaskStatus as getTranslatableAuditStatus,
+  getTranslatableHyperionTaskStatus as getTranslatableHyperionAuditStatus,
   isActive,
 } from './task';
 import Policy from './policy';
@@ -64,6 +65,7 @@ export {
   DEFAULT_MAX_HOSTS,
   DEFAULT_MIN_QOD,
   AUDIT_STATUS,
+  HYPERION_AUDIT_STATUS,
   getTranslatableAuditStatus,
   isActive,
 };
@@ -96,11 +98,7 @@ class Audit extends Model {
   }
 
   isChangeable() {
-    return this.isNew() || this.isAlterable();
-  }
-
-  isAlterable() {
-    return this.alterable !== NO_VALUE;
+    return this.isNew() || this.alterable;
   }
 
   isContainer() {
@@ -115,7 +113,6 @@ class Audit extends Model {
     const copy = super.parseObject(object);
     const {reports} = object;
 
-    copy.alterable = parseYesNo(object.alterable);
     const allReports = ['lastReport', 'currentReport'];
 
     if (hasValue(reports)) {
@@ -170,66 +167,14 @@ class Audit extends Model {
       copy.progress = 0;
     }
 
-    const prefs = {};
-
-    if (copy.preferences && isArray(object.preferences)) {
-      for (const pref of object.preferences) {
-        switch (pref.name) {
-          case 'in_assets':
-            copy.inAssets = parseYes(pref.value);
-            break;
-          case 'assets_apply_overrides':
-            copy.applyOverrides = parseYes(pref.value);
-            break;
-          case 'assets_min_qod':
-            copy.minQod = parseInt(pref.value);
-            break;
-          case 'auto_delete':
-            copy.autoDelete =
-              pref.value === AUTO_DELETE_KEEP
-                ? AUTO_DELETE_KEEP
-                : AUTO_DELETE_NO;
-            break;
-          case 'auto_delete_data':
-            copy.autoDeleteData =
-              pref.value === '0'
-                ? AUTO_DELETE_KEEP_DEFAULT_VALUE
-                : parseInt(pref.value);
-            break;
-          case 'max_hosts':
-            copy.maxHosts = parseInt(pref.value);
-            delete copy.max_hosts;
-            break;
-          case 'max_checks':
-            copy.maxChecks = parseInt(pref.value);
-            delete copy.max_checks;
-            break;
-          case 'source_iface':
-            copy.sourceIface = pref.value; // is this defined in selene?
-            delete copy.source_iface;
-            break;
-          default:
-            prefs[pref.name] = {value: pref.value, name: pref.name};
-            break;
-        }
-      }
-    }
-
-    copy.preferences = prefs;
-
     if (hasValue(object.averageDuration)) {
       copy.averageDuration = parseDuration(object.averageDuration);
     }
 
-    if (hasValue(object.hostsOrdering)) {
-      copy.hostsOrdering = object.hostsOrdering.toLowerCase();
-    }
-    if (
-      copy.hostsOrdering !== HOSTS_ORDERING_RANDOM &&
-      copy.hostsOrdering !== HOSTS_ORDERING_REVERSE &&
-      copy.hostsOrdering !== HOSTS_ORDERING_SEQUENTIAL
-    ) {
-      delete copy.hostsOrdering;
+    if (hasValue(object.status)) {
+      copy.status = getTranslatableHyperionAuditStatus(object.status);
+    } else {
+      delete copy.status;
     }
 
     return copy;
@@ -345,10 +290,7 @@ class Audit extends Model {
           case 'max_hosts':
           case 'max_checks':
             copy[pref.scanner_name] = parseInt(pref.value);
-            break;
-          case 'source_iface':
-            copy.source_iface = pref.value;
-            break;
+            break; // no more source_iface
           default:
             prefs[pref.scanner_name] = {value: pref.value, name: pref.name};
             break;
@@ -362,13 +304,7 @@ class Audit extends Model {
       copy.average_duration = parseDuration(element.average_duration);
     }
 
-    if (
-      copy.hosts_ordering !== HOSTS_ORDERING_RANDOM &&
-      copy.hosts_ordering !== HOSTS_ORDERING_REVERSE &&
-      copy.hosts_ordering !== HOSTS_ORDERING_SEQUENTIAL
-    ) {
-      delete copy.hosts_ordering;
-    }
+    // no more hosts_ordering
 
     return copy;
   }
