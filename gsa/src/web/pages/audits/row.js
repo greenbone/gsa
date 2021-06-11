@@ -22,7 +22,7 @@ import _ from 'gmp/locale';
 
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import ComplianceStatusBar from 'web/components/bar/compliancestatusbar';
 
@@ -50,22 +50,21 @@ import withUserName from 'web/utils/withUserName';
 
 import Actions from './actions';
 const getComplianceStatus = report => {
-  if (!isDefined(report)) {
+  if (!hasValue(report)) {
     return -1;
   }
 
-  const complianceResultsTotal = isDefined(report.compliance_count)
-    ? parseInt(report.compliance_count.yes) +
-      parseInt(report.compliance_count.no) +
-      parseInt(report.compliance_count.incomplete)
+  const complianceResultsTotal = hasValue(report.complianceCount)
+    ? parseInt(report.complianceCount.yes) +
+      parseInt(report.complianceCount.no) +
+      parseInt(report.complianceCount.incomplete)
     : 0;
 
   const complianceStatus =
     complianceResultsTotal === 0
       ? -1 // if there are no results at all there must have been an error
       : parseInt(
-          (parseInt(report.compliance_count.yes) / complianceResultsTotal) *
-            100,
+          (parseInt(report.complianceCount.yes) / complianceResultsTotal) * 100,
         );
 
   return complianceStatus;
@@ -79,20 +78,21 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const {scanner, observers} = entity;
+  const {scanner, observers, reports} = entity;
+  const {lastReport} = reports;
 
   const obs = [];
 
-  if (isDefined(observers)) {
-    if (isDefined(observers.user)) {
-      obs.user = _('Users {{user}}', {user: observers.user.join(', ')});
+  if (hasValue(observers)) {
+    if (hasValue(observers.users)) {
+      obs.user = _('Users {{user}}', {user: observers.users.join(', ')});
     }
-    if (isDefined(observers.role)) {
-      const role = observers.role.map(r => r.name);
+    if (isDefined(observers?.roles?.length) && observers.roles.length > 0) {
+      const role = observers.roles.map(r => r.name);
       obs.role = _('Roles {{role}}', {role: role.join(', ')});
     }
-    if (isDefined(observers.group)) {
-      const group = observers.group.map(g => g.name);
+    if (isDefined(observers?.roles?.length) && observers.roles.length > 0) {
+      const group = observers.groups.map(g => g.name);
       obs.group = _('Groups {{group}}', {group: group.join(', ')});
     }
   }
@@ -105,7 +105,7 @@ const Row = ({
             {entity.name}
           </RowDetailsToggle>
           <IconDivider>
-            {entity.alterable === 1 && (
+            {entity.alterable && (
               <AlterableIcon size="small" title={_('Audit is alterable')} />
             )}
             {isDefined(scanner) &&
@@ -122,7 +122,7 @@ const Row = ({
               entity={entity}
               userName={username}
             />
-            {isDefined(observers) && Object.keys(observers).length > 0 && (
+            {Object.keys(obs).length > 0 && (
               <ProvideViewIcon
                 size="small"
                 title={_(
@@ -142,11 +142,11 @@ const Row = ({
       <TableData>
         <AuditStatus task={entity} links={links} />
       </TableData>
-      <TableData>{renderReport(entity.last_report, links)}</TableData>
+      <TableData>{renderReport(lastReport, links)}</TableData>
       <TableData>
-        {isDefined(entity.last_report) && (
+        {hasValue(lastReport) && (
           <ComplianceStatusBar
-            complianceStatus={getComplianceStatus(entity.last_report)}
+            complianceStatus={getComplianceStatus(lastReport)}
           />
         )}
       </TableData>

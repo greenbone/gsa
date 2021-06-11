@@ -46,7 +46,7 @@ import {
   useBulkExportEntities,
 } from 'web/entities/bulkactions';
 import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import usePagination from 'web/entities/usePagination';
 
 import useExportEntity from 'web/entity/useExportEntity';
 
@@ -58,11 +58,6 @@ import {
   useExportHostsByIds,
   useLazyGetHosts,
 } from 'web/graphql/hosts';
-
-import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/hosts';
 
 import {goto_entity_details} from 'web/utils/graphql';
 import PropTypes from 'web/utils/proptypes';
@@ -134,7 +129,7 @@ const Page = props => {
   // host list state variables and methods
   const [
     getHosts,
-    {counts, hosts, error, loading: isLoading, refetch, called},
+    {counts, hosts, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetHosts();
 
   const exportEntity = useExportEntity();
@@ -157,6 +152,13 @@ const Page = props => {
     refetch,
     timeoutFunc,
   );
+
+  const [getFirst, getLast, getNext, getPrevious] = usePagination({
+    simpleFilter,
+    filter,
+    pageInfo,
+    refetch,
+  });
 
   // Host methods
   const handleDownloadHost = exportedHost => {
@@ -286,6 +288,10 @@ const Page = props => {
             onFilterCreated={changeFilter}
             onFilterReset={resetFilter}
             onFilterRemoved={removeFilter}
+            onFirstClick={getFirst}
+            onLastClick={getLast}
+            onNextClick={getNext}
+            onPreviousClick={getPrevious}
             onHostCreateClick={create}
             onHostDeleteClick={handleDeleteHost}
             onHostDownloadClick={handleDownloadHost}
@@ -307,9 +313,6 @@ const Page = props => {
   );
 };
 
-export default withEntitiesContainer('host', {
-  entitiesSelector,
-  loadEntities,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:

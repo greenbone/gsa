@@ -848,28 +848,30 @@ describe('loadDeltaReport function tests', () => {
     expect(loadDeltaReport).toBeDefined();
     expect(isFunction(loadDeltaReport)).toBe(true);
 
-    return loadDeltaReport(gmp)(id, deltaId, filter)(dispatch, getState).then(
-      () => {
-        expect(getState).toBeCalled();
-        expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
-        expect(dispatch).toHaveBeenCalledTimes(2);
-        expect(dispatch.mock.calls[0]).toEqual([
-          {
-            type: types.ENTITY_LOADING_REQUEST,
-            entityType: 'deltaReport',
-            id: identifier,
-          },
-        ]);
-        expect(dispatch.mock.calls[1]).toEqual([
-          {
-            type: types.ENTITY_LOADING_SUCCESS,
-            entityType: 'deltaReport',
-            data: {foo: 'bar'},
-            id: identifier,
-          },
-        ]);
-      },
-    );
+    return loadDeltaReport(gmp)(
+      id,
+      deltaId,
+      filter,
+    )(dispatch, getState).then(() => {
+      expect(getState).toBeCalled();
+      expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType: 'deltaReport',
+          id: identifier,
+        },
+      ]);
+      expect(dispatch.mock.calls[1]).toEqual([
+        {
+          type: types.ENTITY_LOADING_SUCCESS,
+          entityType: 'deltaReport',
+          data: {foo: 'bar'},
+          id: identifier,
+        },
+      ]);
+    });
   });
 
   test('should not load delta report if isLoading is true', () => {

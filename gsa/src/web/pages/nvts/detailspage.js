@@ -15,13 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 
 import _ from 'gmp/locale';
-
-import Filter from 'gmp/models/filter';
-
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue} from 'gmp/utils/identity';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import VulnerabilityIcon from 'web/components/icon/vulnerabilityicon';
@@ -45,6 +43,8 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
+import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
+import useExportEntity from 'web/entity/useExportEntity';
 
 import DetailsBlock from 'web/entity/block';
 import Note from 'web/entity/note';
@@ -52,34 +52,33 @@ import Override from 'web/entity/override';
 import EntityPage from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import withEntityContainer from 'web/entity/withEntityContainer';
 
-import {
-  selector as notesSelector,
-  loadEntities as loadNotes,
-} from 'web/store/entities/notes';
-
-import {selector as nvtsSelector, loadEntity} from 'web/store/entities/nvts';
-
-import {
-  selector as overridesSelector,
-  loadEntities as loadOverrides,
-} from 'web/store/entities/overrides';
+import {useLazyGetNotes} from 'web/graphql/notes';
+import {useLazyGetOverrides} from 'web/graphql/overrides';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
+
+import useDownload from 'web/components/form/useDownload';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import useReload from 'web/components/loading/useReload';
+import DialogNotification from 'web/components/notification/dialognotification';
+import Download from 'web/components/form/download';
+
+import useCapabilities from 'web/utils/useCapabilities';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import {useGetNvt, useExportNvtsByIds} from 'web/graphql/nvts';
 
 import NvtComponent from './component';
 import NvtDetails from './details';
 import Preferences from './preferences';
 
-export let ToolBarIcons = ({
-  capabilities,
+export const ToolBarIcons = ({
   entity,
   onNoteCreateClick,
   onNvtDownloadClick,
   onOverrideCreateClick,
 }) => {
+  const capabilities = useCapabilities();
   return (
     <Divider margin="10px">
       <IconDivider>
@@ -90,25 +89,25 @@ export let ToolBarIcons = ({
         />
         <ListIcon title={_('NVT List')} page="nvts" />
       </IconDivider>
-
-      <ExportIcon
-        value={entity}
-        title={_('Export NVT')}
-        onClick={onNvtDownloadClick}
-      />
-
+      <IconDivider>
+        <ExportIcon
+          value={entity}
+          title={_('Export NVT')}
+          onClick={onNvtDownloadClick}
+        />
+      </IconDivider>
       <IconDivider>
         {capabilities.mayCreate('note') && (
           <NewNoteIcon
             title={_('Add new Note')}
-            value={entity}
+            entity={entity}
             onClick={onNoteCreateClick}
           />
         )}
         {capabilities.mayCreate('override') && (
           <NewOverrideIcon
             title={_('Add new Override')}
-            value={entity}
+            entity={entity}
             onClick={onOverrideCreateClick}
           />
         )}
@@ -138,12 +137,11 @@ ToolBarIcons.propTypes = {
   onOverrideCreateClick: PropTypes.func.isRequired,
 };
 
-ToolBarIcons = withCapabilities(ToolBarIcons);
+// ToolBarIcons = withCapabilities(ToolBarIcons);
 
 const Details = ({entity, notes = [], overrides = []}) => {
   overrides = overrides.filter(override => override.isActive());
   notes = notes.filter(note => note.isActive());
-
   return (
     <Layout flex="column">
       <NvtDetails entity={entity} />
@@ -177,53 +175,104 @@ Details.propTypes = {
   overrides: PropTypes.array,
 };
 
-const open_dialog = (nvt, func) => {
-  func({
+const openDialog = (id, createFunction) => {
+  createFunction({
     fixed: true,
-    nvt,
-    oid: nvt.oid,
+    oid: id,
   });
 };
 
-const Page = ({
-  entity,
-  notes,
-  overrides,
-  onChanged,
-  onDownloaded,
-  onError,
-  onInteraction,
-  ...props
-}) => {
-  const defaultTimeout = isDefined(entity) ? entity.defaultTimeout : undefined;
-  const preferences = isDefined(entity) ? entity.preferences : [];
-  const userTags = isDefined(entity) ? entity.userTags : undefined;
-  const numPreferences = preferences.length;
+const Page = () => {
+  // Page methods
+  const {id} = useParams();
+  const [, renewSessionTimeout] = useUserSessionTimeout();
+
+  const [downloadRef, handleDownload] = useDownload();
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+
+  // Load nvt related entities
+  const {nvt, refetch: refetchAll, loading, error: entityError} = useGetNvt(id);
+
+  const [loadNotes, {notes}] = useLazyGetNotes({
+    filterString: 'nvt_id:' + id,
+  });
+
+  const [loadOverrides, {overrides}] = useLazyGetOverrides({
+    filterString: 'nvt_id:' + id,
+  });
+
+  // NVT related mutations
+  const exportEntity = useExportEntity();
+  const exportNvt = useExportNvtsByIds();
+
+  // NVT methods
+  const handleDownloadNvt = exportedNvt => {
+    exportEntity({
+      entity: exportedNvt,
+      exportFunc: exportNvt,
+      resourceType: 'nvts',
+      onDownload: handleDownload,
+      showError,
+    });
+  };
+
+  // Timeout and reload
+  const timeoutFunc = useEntityReloadInterval(nvt);
+
+  const [startReload, stopReload, hasRunningTimer] = useReload(
+    refetchAll,
+    timeoutFunc,
+  );
+
+  useEffect(() => {
+    // start reloading if alert is available and no timer is running yet
+    if (hasValue(nvt) && !hasRunningTimer) {
+      startReload();
+    }
+  }, [nvt, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // stop reload on unmount
+  useEffect(() => stopReload, [stopReload]);
+
+  // Load notes and overrides
+  useEffect(() => {
+    loadNotes();
+    loadOverrides();
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <NvtComponent
-      onChanged={onChanged}
-      onDownloaded={onDownloaded}
-      onDownloadError={onError}
-      onInteraction={onInteraction}
+      onChanged={refetchAll}
+      onDownloaded={handleDownload}
+      onDownloadError={showError}
+      onInteraction={renewSessionTimeout}
     >
-      {({notecreate, overridecreate, download}) => (
+      {({notecreate, overridecreate}) => (
         <EntityPage
-          {...props}
-          entity={entity}
-          toolBarIcons={ToolBarIcons}
-          title={_('NVT')}
+          entity={nvt}
+          entityError={entityError}
+          entityType={'nvt'}
+          isLoading={loading}
+          notes={notes}
+          overrides={overrides}
           sectionIcon={<NvtIcon size="large" />}
-          onChanged={onChanged}
-          onInteraction={onInteraction}
-          onNoteCreateClick={nvt => open_dialog(nvt, notecreate)}
-          onNvtDownloadClick={download}
-          onOverrideCreateClick={nvt => open_dialog(nvt, overridecreate)}
+          title={_('NVT')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={refetchAll}
+          onError={showError}
+          onInteraction={renewSessionTimeout}
+          onNoteCreateClick={nvtId => openDialog(nvtId, notecreate)}
+          onNvtDownloadClick={handleDownloadNvt}
+          onOverrideCreateClick={nvtId => openDialog(nvtId, overridecreate)}
         >
           {({activeTab = 0, onActivateTab}) => {
             return (
               <React.Fragment>
-                <PageTitle title={_('NVT: {{name}}', {name: entity.name})} />
+                <PageTitle title={_('NVT: {{name}}', {name: nvt.name})} />
                 <Layout grow="1" flex="column">
                   <TabLayout grow="1" align={['start', 'end']}>
                     <TabList
@@ -232,10 +281,10 @@ const Page = ({
                       onActivateTab={onActivateTab}
                     >
                       <Tab>{_('Information')}</Tab>
-                      <EntitiesTab count={numPreferences}>
+                      <EntitiesTab count={nvt.preferenceCount}>
                         {_('Preferences')}
                       </EntitiesTab>
-                      <EntitiesTab entities={userTags}>
+                      <EntitiesTab entities={nvt.userTags}>
                         {_('User Tags')}
                       </EntitiesTab>
                     </TabList>
@@ -247,26 +296,31 @@ const Page = ({
                         <Details
                           notes={notes}
                           overrides={overrides}
-                          entity={entity}
+                          entity={nvt}
                         />
                       </TabPanel>
                       <TabPanel>
                         <Preferences
-                          preferences={preferences}
-                          defaultTimeout={defaultTimeout}
+                          preferences={nvt.preferences}
+                          defaultTimeout={nvt.defaultTimeout}
                         />
                       </TabPanel>
                       <TabPanel>
                         <EntityTags
-                          entity={entity}
-                          onChanged={onChanged}
-                          onError={onError}
-                          onInteraction={onInteraction}
+                          entity={nvt}
+                          onChanged={() => refetchAll()}
+                          onError={showError}
+                          onInteraction={renewSessionTimeout}
                         />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>
+                <DialogNotification
+                  {...notificationDialogState}
+                  onCloseClick={closeNotificationDialog}
+                />
+                <Download ref={downloadRef} />
               </React.Fragment>
             );
           }}
@@ -276,43 +330,6 @@ const Page = ({
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  notes: PropTypes.array,
-  overrides: PropTypes.array,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-const nvtIdFilter = id => Filter.fromString('nvt_id=' + id).all();
-
-const mapStateToProps = (rootState, {id}) => {
-  const notesSel = notesSelector(rootState);
-  const overridesSel = overridesSelector(rootState);
-  return {
-    notes: notesSel.getEntities(nvtIdFilter(id)),
-    overrides: overridesSel.getEntities(nvtIdFilter(id)),
-  };
-};
-
-const load = gmp => {
-  const loadEntityFunc = loadEntity(gmp);
-  const loadNotesFunc = loadNotes(gmp);
-  const loadOverridesFunc = loadOverrides(gmp);
-  return id => dispatch =>
-    Promise.all([
-      dispatch(loadEntityFunc(id)),
-      dispatch(loadNotesFunc(nvtIdFilter(id))),
-      dispatch(loadOverridesFunc(nvtIdFilter(id))),
-    ]);
-};
-
-export default withEntityContainer('nvt', {
-  load,
-  entitySelector: nvtsSelector,
-  mapStateToProps,
-})(Page);
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:

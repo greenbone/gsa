@@ -164,7 +164,7 @@ describe('ScanConfig model parseObject tests', () => {
 
   test('should parse preferences', () => {
     const obj = {
-      preferences: [
+      nvtPreferences: [
         {
           alt: ['postgres', 'regress'],
           default: 'postgres',
@@ -178,6 +178,8 @@ describe('ScanConfig model parseObject tests', () => {
             name: 'PostgreSQL Detection',
           },
         },
+      ],
+      scannerPreferences: [
         {
           alt: ['a', 'b'],
           default: 'c',
@@ -186,10 +188,6 @@ describe('ScanConfig model parseObject tests', () => {
           name: 'foo',
           type: 'bar',
           value: 'lorem',
-          nvt: {
-            id: null,
-            name: null,
-          },
         },
       ],
     };
@@ -234,7 +232,10 @@ describe('ScanConfig model parseObject tests', () => {
   });
 
   test('should return empty arrays if null preferences are given', () => {
-    const scanConfig = ScanConfig.fromObject({preferences: null});
+    const scanConfig = ScanConfig.fromObject({
+      nvtPreferences: null,
+      scannerPreferences: null,
+    });
 
     expect(scanConfig.preferences.scanner).toEqual([]);
     expect(scanConfig.preferences.nvt).toEqual([]);

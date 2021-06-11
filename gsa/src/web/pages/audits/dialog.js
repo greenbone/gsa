@@ -22,8 +22,6 @@ import _ from 'gmp/locale';
 
 import {
   AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  HOSTS_ORDERING_SEQUENTIAL,
-  AUTO_DELETE_NO,
   DEFAULT_MAX_CHECKS,
   DEFAULT_MAX_HOSTS,
 } from 'gmp/models/audit';
@@ -32,8 +30,6 @@ import {
   OPENVAS_SCANNER_TYPE,
   OPENVAS_DEFAULT_SCANNER_ID,
 } from 'gmp/models/scanner';
-
-import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
@@ -44,7 +40,6 @@ import MultiSelect from 'web/components/form/multiselect';
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
-import Checkbox from 'web/components/form/checkbox';
 import YesNoRadio from 'web/components/form/yesnoradio';
 import TextField from 'web/components/form/textfield';
 
@@ -55,6 +50,7 @@ import Layout from 'web/components/layout/layout';
 
 import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
+import {toBoolean} from 'web/pages/tasks/dialog';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -101,17 +97,17 @@ ScannerSelect.propTypes = {
 const AuditDialog = ({
   alertIds = [],
   alerts = [],
-  alterable = NO_VALUE,
-  auto_delete = AUTO_DELETE_NO,
-  auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
+  alterable = false,
+  audit,
+  autoDelete = false,
+  autoDeleteReports = AUTO_DELETE_KEEP_DEFAULT_VALUE,
   capabilities,
   comment = '',
+  createAssets = true,
   fromPolicy = false,
-  hostsOrdering = HOSTS_ORDERING_SEQUENTIAL,
-  in_assets = YES_VALUE,
   isLoadingScanners = false,
-  maxChecks = DEFAULT_MAX_CHECKS,
-  maxHosts = DEFAULT_MAX_HOSTS,
+  maxConcurrentNvts = DEFAULT_MAX_CHECKS,
+  maxConcurrentHosts = DEFAULT_MAX_HOSTS,
   name = _('Unnamed'),
   policies = [],
   policyId,
@@ -123,12 +119,9 @@ const AuditDialog = ({
     },
   ],
   scheduleId = UNSET_VALUE,
-  schedulePeriods = NO_VALUE,
   schedules = [],
-  sourceIface = '',
   targetId,
   targets,
-  audit,
   title = _('New Audit'),
   onClose,
   onNewAlertClick,
@@ -160,17 +153,15 @@ const AuditDialog = ({
   const uncontrolledData = {
     ...data,
     alterable,
-    auto_delete,
-    auto_delete_data,
+    autoDelete,
+    autoDeleteReports,
     comment,
-    hostsOrdering,
-    in_assets,
-    maxChecks,
-    maxHosts,
+    createAssets,
+    maxConcurrentNvts,
+    maxConcurrentHosts,
     name,
     scannerId,
     scannerType,
-    sourceIface,
     audit,
   };
 
@@ -262,14 +253,6 @@ const AuditDialog = ({
                     items={scheduleItems}
                     onChange={onChange}
                   />
-                  <Checkbox
-                    name="schedulePeriods"
-                    checked={state.schedulePeriods === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    unCheckedValue={NO_VALUE}
-                    title={_('Once')}
-                    onChange={onValueChange}
-                  />
                   <Layout>
                     <NewIcon
                       title={_('Create a new schedule')}
@@ -281,7 +264,7 @@ const AuditDialog = ({
             )}
 
             <AddResultsToAssetsGroup
-              inAssets={state.in_assets}
+              createAssets={state.createAssets}
               onChange={onValueChange}
             />
 
@@ -291,14 +274,17 @@ const AuditDialog = ({
                   name="alterable"
                   disabled={audit && !audit.isNew()}
                   value={state.alterable}
+                  yesValue={true}
+                  noValue={false}
+                  convert={toBoolean}
                   onChange={onValueChange}
                 />
               </FormGroup>
             )}
 
             <AutoDeleteReportsGroup
-              autoDelete={state.auto_delete}
-              autoDeleteData={state.auto_delete_data}
+              autoDelete={state.autoDelete}
+              autoDeleteReports={state.autoDeleteReports}
               onChange={onValueChange}
             />
 
@@ -324,38 +310,10 @@ const AuditDialog = ({
               <FormGroup titleSize="2" title={_('Policy')}>
                 <Select
                   name="policyId"
-                  disabled={!changeAudit || hasAudit || fromPolicy}
+                  disabled={!changeAudit || fromPolicy}
                   items={policyItems}
                   value={policyId}
                   onChange={onChange}
-                />
-              </FormGroup>
-              <FormGroup titleSize="4" title={_('Network Source Interface')}>
-                <TextField
-                  name="sourceIface"
-                  value={state.sourceIface}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-              <FormGroup titleSize="4" title={_('Order for target hosts')}>
-                <Select
-                  name="hostsOrdering"
-                  items={[
-                    {
-                      value: 'sequential',
-                      label: _('Sequential'),
-                    },
-                    {
-                      value: 'random',
-                      label: _('Random'),
-                    },
-                    {
-                      value: 'reverse',
-                      label: _('Reverse'),
-                    },
-                  ]}
-                  value={state.hostsOrdering}
-                  onChange={onValueChange}
                 />
               </FormGroup>
               <FormGroup
@@ -363,11 +321,11 @@ const AuditDialog = ({
                 title={_('Maximum concurrently executed NVTs per host')}
               >
                 <Spinner
-                  name="maxChecks"
+                  name="maxConcurrentNvts"
                   size="10"
                   min="0"
                   maxLength="10"
-                  value={state.maxChecks}
+                  value={state.maxConcurrentNvts}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -376,12 +334,12 @@ const AuditDialog = ({
                 title={_('Maximum concurrently scanned hosts')}
               >
                 <Spinner
-                  name="maxHosts"
+                  name="maxConcurrentHosts"
                   type="int"
                   min="0"
                   size="10"
                   maxLength="10"
-                  value={state.maxHosts}
+                  value={state.maxConcurrentHosts}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -396,27 +354,24 @@ const AuditDialog = ({
 AuditDialog.propTypes = {
   alertIds: PropTypes.array,
   alerts: PropTypes.array,
-  alterable: PropTypes.yesno,
+  alterable: PropTypes.bool,
   audit: PropTypes.model,
-  auto_delete: PropTypes.oneOf(['keep', 'no']),
-  auto_delete_data: PropTypes.number,
+  autoDelete: PropTypes.bool,
+  autoDeleteReports: PropTypes.number,
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
+  createAssets: PropTypes.bool,
   fromPolicy: PropTypes.bool,
-  hostsOrdering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
-  in_assets: PropTypes.yesno,
   isLoadingScanners: PropTypes.bool,
-  maxChecks: PropTypes.number,
-  maxHosts: PropTypes.number,
+  maxConcurrentHosts: PropTypes.number,
+  maxConcurrentNvts: PropTypes.number,
   name: PropTypes.string,
   policies: PropTypes.arrayOf(PropTypes.model),
   policyId: PropTypes.idOrZero,
   scannerId: PropTypes.idOrZero,
   scanners: PropTypes.array,
   scheduleId: PropTypes.idOrZero,
-  schedulePeriods: PropTypes.yesno,
   schedules: PropTypes.array,
-  sourceIface: PropTypes.string,
   targetId: PropTypes.idOrZero,
   targets: PropTypes.array,
   title: PropTypes.string,

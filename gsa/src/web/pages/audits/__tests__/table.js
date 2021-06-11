@@ -22,7 +22,7 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
-import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
+import Audit, {HYPERION_AUDIT_STATUS} from 'gmp/models/audit';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
@@ -35,62 +35,60 @@ setLocale('en');
 const caps = new Capabilities(['everything']);
 
 const lastReport = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-08-10T12:51:27Z',
-    compliance_count: {yes: 4, no: 3, incomplete: 1},
-  },
+  id: '1234',
+  creationTime: '2019-08-10T12:51:27Z',
+  complianceCount: {yes: 4, no: 3, incomplete: 1},
 };
 
 const lastReport2 = {
-  report: {
-    _id: '1234',
-    timestamp: '2019-07-10T12:51:27Z',
-    compliance_count: {yes: 4, no: 3, incomplete: 1},
-  },
+  id: '1234',
+  creationTime: '2019-07-10T12:51:27Z',
+  complianceCount: {yes: 4, no: 3, incomplete: 1},
 };
 
 const currentReport = {
-  report: {
-    _id: '5678',
-    timestamp: '2019-07-10T12:51:27Z',
-  },
+  id: '5678',
+  creationTime: '2019-07-10T12:51:27Z',
 };
 
-const audit = Audit.fromElement({
-  _id: '1234',
-  owner: {name: 'admin'},
+const audit = Audit.fromObject({
+  id: '1234',
+  owner: 'admin',
   name: 'foo',
   comment: 'bar',
-  status: AUDIT_STATUS.done,
-  alterable: '0',
-  last_report: lastReport,
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: 'id1', name: 'target1'},
+  status: HYPERION_AUDIT_STATUS.done,
+  alterable: false,
+  reports: {
+    lastReport,
+  },
+  permissions: [{name: 'everything'}],
+  target: {id: 'id1', name: 'target1'},
 });
 
-const audit2 = Audit.fromElement({
-  _id: '12345',
-  owner: {name: 'user'},
+const audit2 = Audit.fromObject({
+  id: '12345',
+  owner: 'user',
   name: 'lorem',
   comment: 'ipsum',
-  status: AUDIT_STATUS.new,
-  alterable: '0',
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: 'id2', name: 'target2'},
+  status: HYPERION_AUDIT_STATUS.new,
+  alterable: false,
+  permissions: [{name: 'everything'}],
+  target: {id: 'id2', name: 'target2'},
 });
 
-const audit3 = Audit.fromElement({
-  _id: '123456',
-  owner: {name: 'user'},
+const audit3 = Audit.fromObject({
+  id: '123456',
+  owner: 'user',
   name: 'hello',
   comment: 'world',
-  status: AUDIT_STATUS.running,
-  alterable: '0',
-  current_report: currentReport,
-  last_report: lastReport2,
-  permissions: {permission: [{name: 'everything'}]},
-  target: {_id: 'id2', name: 'target2'},
+  status: HYPERION_AUDIT_STATUS.running,
+  alterable: false,
+  reports: {
+    currentReport,
+    lastReport: lastReport2,
+  },
+  permissions: [{name: 'everything'}],
+  target: {id: 'id2', name: 'target2'},
 });
 
 const counts = new CollectionCounts({

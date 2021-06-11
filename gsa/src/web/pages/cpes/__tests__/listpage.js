@@ -22,15 +22,28 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
-import CPE from 'gmp/models/cpe';
+import Cpe from 'gmp/models/cpe';
 
 import {entitiesLoadingActions} from 'web/store/entities/cpes';
+
+import {
+  cpeEntity,
+  createExportCpesByIdsQueryMock,
+  createExportCpesByFilterQueryMock,
+  createGetCpesQueryMock,
+} from 'web/graphql/__mocks__/cpes';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+import {
+  rendererWith,
+  waitFor,
+  fireEvent,
+  screen,
+  wait,
+} from 'web/utils/testing';
 
 import CpesPage, {ToolBarIcons} from '../listpage';
 
@@ -38,25 +51,7 @@ setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
 
-const cpe = CPE.fromElement({
-  _id: 'cpe:/a:foo',
-  name: 'foo',
-  title: 'bar',
-  creation_time: '2019-06-24T11:55:30Z',
-  modification_time: '2019-06-24T10:12:27Z',
-  update_time: '2019-06-24T10:12:27Z',
-  cve_refs: '3',
-  cves: {
-    cve: [
-      {entry: {cvss: {base_metrics: {score: 9.8}}, _id: 'CVE-2020-1234'}},
-      {entry: {cvss: {base_metrics: {score: 7.8}}, _id: 'CVE-2020-5678'}},
-      {entry: {cvss: {base_metrics: {score: 7.8}}, _id: 'CVE-2019-5678'}},
-    ],
-  },
-  score: 98,
-  status: '',
-  nvd_id: '',
-});
+const cpeObject = Cpe.fromObject(cpeEntity);
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -105,7 +100,7 @@ beforeEach(() => {
   );
 
   getCpes = jest.fn().mockResolvedValue({
-    data: [cpe],
+    data: [cpeObject],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
@@ -135,17 +130,24 @@ describe('CpesPage tests', () => {
       user: {currentSettings, getSetting},
     };
 
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+    const [mock, resultFunc] = createGetCpesQueryMock({
+      filterString,
+      first: 2,
+    });
+
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cpe', defaultSettingfilter),
@@ -161,12 +163,16 @@ describe('CpesPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesLoadingActions.success([cpe], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([cpeObject], filter, loadedFilter, counts),
     );
 
     const {baseElement} = render(<CpesPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
+
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     const display = screen.getAllByTestId('grid-item');
     const inputs = baseElement.querySelectorAll('input');
@@ -209,28 +215,18 @@ describe('CpesPage tests', () => {
 
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('bar');
-    expect(row[1]).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
+    expect(row[1]).toHaveTextContent('Tue, Sep 29, 2020 2:16 PM CEST');
     expect(row[1]).toHaveTextContent('3');
     expect(row[1]).toHaveTextContent('9.8 (High)');
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       cpes: {
         get: getCpes,
-        deleteByFilter,
-        exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getSeverityAggregates: getAggregates,
@@ -242,18 +238,30 @@ describe('CpesPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+
+    const [mock, resultFunc] = createGetCpesQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [
+      exportByIdsMock,
+      exportByIdsResult,
+    ] = createExportCpesByIdsQueryMock(['cpe:/a:foo']);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportByIdsMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cpe', defaultSettingfilter),
@@ -269,12 +277,14 @@ describe('CpesPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesLoadingActions.success([cpe], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([cpeObject], filter, loadedFilter, counts),
     );
 
     render(<CpesPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents');
@@ -284,26 +294,16 @@ describe('CpesPage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportByIdsResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected cpes', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByIds = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       cpes: {
         get: getCpes,
-        delete: deleteByIds,
-        export: exportByIds,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getSeverityAggregates: getAggregates,
@@ -315,18 +315,30 @@ describe('CpesPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting},
     };
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+
+    const [mock, resultFunc] = createGetCpesQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [
+      exportByIdsMock,
+      exportByIdsResult,
+    ] = createExportCpesByIdsQueryMock(['cpe:/a:foo']);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportByIdsMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cpe', defaultSettingfilter),
@@ -342,12 +354,14 @@ describe('CpesPage tests', () => {
     const filter = Filter.fromString('first=1 rows=10');
     const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      entitiesLoadingActions.success([cpe], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([cpeObject], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<CpesPage />);
+    const {baseElement} = render(<CpesPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -358,7 +372,7 @@ describe('CpesPage tests', () => {
     const selected = screen.getAllByTestId('select-selected-value');
     expect(selected[1]).toHaveTextContent('Apply to selection');
 
-    const inputs = element.querySelectorAll('input');
+    const inputs = baseElement.querySelectorAll('input');
 
     // select a cpe
     fireEvent.click(inputs[1]);
@@ -372,26 +386,16 @@ describe('CpesPage tests', () => {
 
     await wait();
 
-    expect(exportByIds).toHaveBeenCalled();
+    expect(exportByIdsResult).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered cpes', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
-    const exportByFilter = jest.fn().mockResolvedValue({
-      foo: 'bar',
-    });
-
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       cpes: {
         get: getCpes,
-        deleteByFilter,
-        exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getSeverityAggregates: getAggregates,
@@ -403,18 +407,32 @@ describe('CpesPage tests', () => {
       settings: {manualUrl, reloadInterval},
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
+    const filterString = 'foo=bar rows=2';
+    const defaultSettingfilter = Filter.fromString(filterString);
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+
+    const [mock, resultFunc] = createGetCpesQueryMock({
+      filterString,
+      first: 2,
+    });
+
+    const [
+      exportByFilterMock,
+      exportByFilterResult,
+    ] = createExportCpesByFilterQueryMock('foo=bar rows=-1 first=1');
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
+      queryMocks: [mock, exportByFilterMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('cpe', defaultSettingfilter),
@@ -427,15 +445,16 @@ describe('CpesPage tests', () => {
       length: 1,
       rows: 10,
     });
-    const filter = Filter.fromString('first=1 rows=10');
-    const loadedFilter = Filter.fromString('first=1 rows=10');
+
     store.dispatch(
-      entitiesLoadingActions.success([cpe], filter, loadedFilter, counts),
+      entitiesLoadingActions.success([cpeObject], filter, loadedFilter, counts),
     );
 
     render(<CpesPage />);
 
     await wait();
+
+    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -456,7 +475,7 @@ describe('CpesPage tests', () => {
 
     await wait();
 
-    expect(exportByFilter).toHaveBeenCalled();
+    expect(exportByFilterResult).toHaveBeenCalled();
   });
 });
 

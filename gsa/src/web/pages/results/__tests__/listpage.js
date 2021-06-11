@@ -249,8 +249,7 @@ describe('Results listpage tests', () => {
     expect(display[0]).toHaveTextContent(
       'Results by Severity Class (Total: 0)',
     );
-    expect(display[1]).toHaveTextContent('Results Vulnerability Word Cloud');
-    expect(display[2]).toHaveTextContent('Results by CVSS (Total: 0)');
+    expect(display[1]).toHaveTextContent('Results by CVSS (Total: 0)');
 
     // Headings
     const header = baseElement.querySelectorAll('th');

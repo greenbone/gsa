@@ -24,10 +24,9 @@ testModel(Cpe, 'cpe');
 
 describe('CPE model tests', () => {
   test('should parse severity correctly', () => {
-    const cpe = Cpe.fromElement({score: '50'});
-    const cpe2 = Cpe.fromElement({score: '100'});
+    const cpe = Cpe.fromElement({severity: '5.0'});
+    const cpe2 = Cpe.fromElement({severity: '10.0'});
 
-    expect(cpe.score).toBeUndefined();
     expect(cpe.severity).toEqual(5.0);
     expect(cpe2.severity).toEqual(10);
   });
@@ -67,7 +66,7 @@ describe('CPE model tests', () => {
     };
     const cpe = Cpe.fromElement(elem);
 
-    expect(cpe.cves).toEqual([
+    expect(cpe.cveRefs).toEqual([
       {
         id: '1337',
         severity: 9.0,
@@ -82,7 +81,7 @@ describe('CPE model tests', () => {
   test('should return empty array if no cves are defined', () => {
     const cpe = Cpe.fromElement({});
 
-    expect(cpe.cves).toEqual([]);
+    expect(cpe.cveRefs).toEqual([]);
   });
 
   test('should return undefined if status is empty', () => {
@@ -99,5 +98,19 @@ describe('CPE model tests', () => {
     expect(cpe.updateTime).toBeDefined();
     expect(cpe.update_time).toBeUndefined();
     expect(isDate(cpe.updateTime)).toBe(true);
+  });
+
+  test('should parse deprecatedBy', () => {
+    const cpe = Cpe.fromElement({
+      raw_data: {'cpe-item': {_deprecated_by: 'foo:/bar'}},
+    });
+
+    expect(cpe.deprecatedBy).toEqual('foo:/bar');
+  });
+
+  test('should not parse deprecatedBy', () => {
+    const cpe = Cpe.fromElement({raw_data: {'cpe-item': {}}});
+
+    expect(cpe.deprecatedBy).toBeUndefined();
   });
 });

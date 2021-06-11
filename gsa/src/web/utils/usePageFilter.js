@@ -130,7 +130,7 @@ const usePageFilter = (
   }
 
   if (!returnedFilter.has('rows') && isDefined(rowsPerPage)) {
-    returnedFilter.set('rows', rowsPerPage);
+    returnedFilter = returnedFilter.set('rows', rowsPerPage);
   }
 
   const finishedLoading =

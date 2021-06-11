@@ -68,11 +68,11 @@ class Nvt extends React.Component {
       pref_count = '';
     }
 
-    const {name, oid, severity, timeout, defaultTimeout} = nvt;
+    const {name, oid: nvtId, severity, timeout, defaultTimeout} = nvt; // change oid to id once hyperion is fully implemented
     return (
       <TableRow>
         <TableData>{name}</TableData>
-        <TableData>{oid}</TableData>
+        <TableData>{nvtId}</TableData>
         <TableData>
           <SeverityBar severity={severity} />
         </TableData>
@@ -86,7 +86,7 @@ class Nvt extends React.Component {
           <div>
             <Checkbox
               checked={selected === YES_VALUE}
-              name={oid}
+              name={nvtId}
               checkedValue={YES_VALUE}
               unCheckedValue={NO_VALUE}
               onChange={onSelectedChange}
@@ -96,7 +96,7 @@ class Nvt extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={_('Select and edit NVT details')}
-            value={nvt.oid}
+            value={nvt.id}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>
@@ -263,12 +263,12 @@ const EditScanConfigFamilyDialog = ({
                 </TableHeader>
                 <TableBody>
                   {sortedNvts.map(nvt => {
-                    const {oid} = nvt;
+                    const {oid: nvtId} = nvt; // change oid to id once hyperion is fully implemented
                     return (
                       <Nvt
-                        key={oid}
+                        key={nvtId}
                         nvt={nvt}
-                        selected={selectedNvts[oid]}
+                        selected={selectedNvts[nvtId]}
                         onSelectedChange={handleSelectedChange}
                         onEditNvtDetailsClick={onEditNvtDetailsClick}
                       />

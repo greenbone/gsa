@@ -53,7 +53,7 @@ const Row = ({
     <TableData>
       <DateTime date={entity.modificationTime} />
     </TableData>
-    <TableData>{entity.cve_refs}</TableData>
+    <TableData>{entity.cveRefCount}</TableData>
     <TableData>
       <SeverityBar severity={entity.severity} />
     </TableData>

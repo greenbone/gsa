@@ -77,8 +77,20 @@ export const GET_HOST = gql`
 `;
 
 export const GET_HOSTS = gql`
-  query Hosts($filterString: FilterString) {
-    hosts(filterString: $filterString) {
+  query Hosts(
+    $filterString: FilterString
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    hosts(
+      filterString: $filterString
+      after: $after
+      before: $before
+      first: $first
+      last: $last
+    ) {
       edges {
         node {
           id

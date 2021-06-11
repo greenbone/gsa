@@ -27,6 +27,18 @@ import {isEmpty} from 'gmp/utils/string';
 
 import date, {duration} from 'gmp/models/date';
 
+export const parseScoreToSeverity = value => {
+  if (!isEmpty(value) && !isNaN(value) && !/^\s+$/.test(value)) {
+    if (
+      value % 1 === 0 &&
+      ((value <= 100 && value >= -3) || value === -99 || value === -98)
+    ) {
+      return parseFloat(value / 10);
+    }
+  }
+  return undefined;
+};
+
 export const parseSeverity = value =>
   isEmpty(value) ? undefined : parseFloat(value);
 

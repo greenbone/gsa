@@ -17,7 +17,7 @@
  */
 import React from 'react';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import LoginForm from '../loginform';
 
@@ -30,7 +30,7 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {baseElement} = render(
+    const {getByName} = render(
       <LoginForm
         error="An Error Occurred"
         showGuestLogin
@@ -41,7 +41,8 @@ describe('LoginForm tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(getByName('username')).toBeInTheDocument();
+    expect(getByName('password')).toBeInTheDocument();
   });
 
   test('should display error', () => {
@@ -50,7 +51,7 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {getByTestId} = render(
+    render(
       <LoginForm
         error="An Error Occurred"
         onSubmit={handleSubmit}
@@ -58,7 +59,7 @@ describe('LoginForm tests', () => {
       />,
     );
 
-    expect(getByTestId('error')).toHaveTextContent('An Error Occurred');
+    expect(screen.getByTestId('error')).toHaveTextContent('An Error Occurred');
   });
 
   test('should not display error by default', () => {
@@ -67,11 +68,11 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <LoginForm onSubmit={handleSubmit} onGuestLoginClick={handleClick} />,
     );
 
-    expect(queryByTestId('error')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('error')).not.toBeInTheDocument();
   });
 
   test('should display insecure protocol message', () => {
@@ -80,7 +81,7 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {getByTestId} = render(
+    render(
       <LoginForm
         showProtocolInsecure
         onSubmit={handleSubmit}
@@ -88,7 +89,7 @@ describe('LoginForm tests', () => {
       />,
     );
 
-    expect(getByTestId('protocol-insecure')).toBeInTheDocument();
+    expect(screen.getByTestId('protocol-insecure')).toBeInTheDocument();
   });
 
   test('should not display insecure protocol message by default', () => {
@@ -110,7 +111,7 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {getByTestId} = render(
+    render(
       <LoginForm
         isIE11
         onSubmit={handleSubmit}
@@ -118,7 +119,7 @@ describe('LoginForm tests', () => {
       />,
     );
 
-    expect(getByTestId('IE11')).toBeInTheDocument();
+    expect(screen.getByTestId('IE11')).toBeInTheDocument();
   });
 
   test('should not display IE11 message by default', () => {
@@ -140,12 +141,12 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByName} = render(
+    const {getByName} = render(
       <LoginForm onSubmit={handleSubmit} onGuestLoginClick={handleClick} />,
     );
 
-    expect(queryByName('username')).toBeInTheDocument();
-    expect(queryByName('password')).toBeInTheDocument();
+    expect(getByName('username')).toBeInTheDocument();
+    expect(getByName('password')).toBeInTheDocument();
   });
 
   test('should allow to disable login fields', () => {
@@ -172,7 +173,7 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {getByName, getByTestId} = render(
+    const {getByName} = render(
       <LoginForm onSubmit={handleSubmit} onGuestLoginClick={handleClick} />,
     );
 
@@ -182,7 +183,7 @@ describe('LoginForm tests', () => {
     fireEvent.change(usernameField, {target: {value: 'foo'}});
     fireEvent.change(passwordField, {target: {value: 'bar'}});
 
-    const button = getByTestId('login-button');
+    const button = screen.getByTestId('login-button');
     fireEvent.click(button);
 
     expect(handleSubmit).toBeCalledWith('foo', 'bar');
@@ -194,12 +195,12 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {queryByTestId} = render(
+    render(
       <LoginForm onSubmit={handleSubmit} onGuestLoginClick={handleClick} />,
     );
 
-    expect(queryByTestId('guest-login')).not.toBeInTheDocument();
-    expect(queryByTestId('guest-login-button')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('guest-login')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('guest-login-button')).not.toBeInTheDocument();
   });
 
   test('should allow to display guest login', () => {
@@ -208,7 +209,7 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {getByTestId} = render(
+    render(
       <LoginForm
         showGuestLogin={true}
         onSubmit={handleSubmit}
@@ -216,8 +217,8 @@ describe('LoginForm tests', () => {
       />,
     );
 
-    expect(getByTestId('guest-login')).toBeInTheDocument();
-    expect(getByTestId('guest-login-button')).toBeInTheDocument();
+    expect(screen.getByTestId('guest-login')).toBeInTheDocument();
+    expect(screen.getByTestId('guest-login-button')).toBeInTheDocument();
   });
 
   test('should allow to login as guest', () => {
@@ -226,7 +227,7 @@ describe('LoginForm tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {getByTestId} = render(
+    render(
       <LoginForm
         showGuestLogin={true}
         onSubmit={handleSubmit}
@@ -234,7 +235,7 @@ describe('LoginForm tests', () => {
       />,
     );
 
-    const button = getByTestId('guest-login-button');
+    const button = screen.getByTestId('guest-login-button');
     fireEvent.click(button);
 
     expect(handleClick).toHaveBeenCalled();

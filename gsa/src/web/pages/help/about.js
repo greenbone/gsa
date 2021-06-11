@@ -38,7 +38,7 @@ import Section from 'web/components/section/section';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-const GSA_VERSION = process.env.REACT_APP_VERSION || '21.04';
+const GSA_VERSION = process.env.REACT_APP_VERSION || '22.04';
 
 const StyledLayout = styled(Layout)`
   margin: 0 auto;

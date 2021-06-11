@@ -51,9 +51,6 @@ class LegacyOmpPage extends React.Component {
       case 'cpe':
         history.replace('/cpe/' + id);
         break;
-      case 'ovaldef':
-        history.replace('/ovaldef/' + id);
-        break;
       case 'cert_bund_adv':
         history.replace('/certbund/' + id);
         break;

@@ -27,7 +27,7 @@ import {
 
 export const cveEntity = deepFreeze({
   id: 'CVE-314',
-  name: 'foo',
+  name: 'CVE-314',
   comment: 'Funny Bug',
   owner: null,
   writable: false,
@@ -38,7 +38,7 @@ export const cveEntity = deepFreeze({
   userTags: null,
   updateTime: '2020-09-29T12:16:50+00:00',
   cvssVector: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N',
-  score: 55,
+  score: 5.5,
   cvssV2Vector: {
     integrity: 'NONE',
     accessComplexity: 'MEDIUM',
@@ -95,8 +95,7 @@ export const cveEntity = deepFreeze({
       reference: 'bar baz',
     },
   ],
-  description:
-    'An information disclosure issue was addressed with improved state management. This issue is fixed in macOS Catalina 10.15.6, watchOS 6.2.8. A malicious application may disclose restricted memory.',
+  description: 'foo bar baz',
   products: ['cpe:/o:ab:c cpe:/o:a:bc'],
 });
 

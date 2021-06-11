@@ -82,7 +82,6 @@ const ENTITY_TYPES = {
   host: _l('Host'),
   info: _l('Info'),
   operatingsystem: _l('Operating System'),
-  ovaldef: _l('OVAL Definition'),
   override: _l('Override'),
   note: _l('Note'),
   nvt: _l('NVT'),
@@ -145,13 +144,16 @@ export const apiType = type => {
 // An array of hyperion entity types that might need special parsing in components
 export const hyperionEntityTypes = [
   'task',
+  'audit',
   'alert',
   'host',
   'note',
+  'override',
   'policy',
   'permission',
   'scanconfig',
   'schedule',
+  'target',
 ];
 
 // vim: set ts=2 sw=2 tw=80:

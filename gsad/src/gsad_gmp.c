@@ -348,8 +348,8 @@ envelope_gmp (gvm_connection_t *connection, credentials_t *credentials,
     GSAD_VERSION, vendor_version_get (), user_get_token (user), ctime_now,
     timezone ? timezone : "", user_get_username (user),
     user_get_session_timeout (user), user_get_role (user),
-    credentials_get_language (credentials),
-    user_get_client_address (user), credentials_get_cmd_duration (credentials));
+    credentials_get_language (credentials), user_get_client_address (user),
+    credentials_get_cmd_duration (credentials));
 
   g_string_append (string, res);
   g_free (res);
@@ -2092,7 +2092,7 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *name, *comment, *config_id, *target_id, *scanner_type;
   const char *scanner_id, *schedule_id, *schedule_periods;
   const char *max_checks, *max_hosts;
-  const char *in_assets, *hosts_ordering, *alterable, *source_iface;
+  const char *in_assets, *hosts_ordering, *alterable;
   const char *add_tag, *tag_id, *auto_delete, *auto_delete_data;
   const char *apply_overrides, *min_qod, *usage_type;
   gchar *name_escaped, *comment_escaped;
@@ -2116,7 +2116,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   scanner_type = params_value (params, "scanner_type");
   schedule_id = params_value (params, "schedule_id");
   schedule_periods = params_value (params, "schedule_periods");
-  source_iface = params_value (params, "source_iface");
   tag_id = params_value (params, "tag_id");
   target_id = params_value (params, "target_id");
   usage_type = params_value (params, "usage_type");
@@ -2126,7 +2125,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     {
       hosts_ordering = "";
       max_checks = "";
-      source_iface = "";
       max_hosts = "";
     }
   else if (!strcmp (scanner_type, "3"))
@@ -2134,7 +2132,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
       config_id = "";
       hosts_ordering = "";
       max_checks = "";
-      source_iface = "";
       max_hosts = "";
     }
 
@@ -2180,7 +2177,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     }
 
   CHECK_VARIABLE_INVALID (max_checks, "Create Task");
-  CHECK_VARIABLE_INVALID (source_iface, "Create Task");
   CHECK_VARIABLE_INVALID (auto_delete, "Create Task");
   CHECK_VARIABLE_INVALID (auto_delete_data, "Create Task");
   CHECK_VARIABLE_INVALID (max_hosts, "Create Task");
@@ -2252,10 +2248,6 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     "<value>%s</value>"
     "</preference>"
     "<preference>"
-    "<scanner_name>source_iface</scanner_name>"
-    "<value>%s</value>"
-    "</preference>"
-    "<preference>"
     "<scanner_name>auto_delete</scanner_name>"
     "<value>%s</value>"
     "</preference>"
@@ -2270,9 +2262,8 @@ create_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     config_id, schedule_periods, schedule_element, alert_element->str,
     target_id, scanner_id, hosts_ordering, name_escaped, comment_escaped,
     max_checks, max_hosts, strcmp (in_assets, "0") ? "yes" : "no",
-    strcmp (apply_overrides, "0") ? "yes" : "no", min_qod, source_iface,
-    auto_delete, auto_delete_data, alterable ? strcmp (alterable, "0") : 0,
-    usage_type);
+    strcmp (apply_overrides, "0") ? "yes" : "no", min_qod, auto_delete,
+    auto_delete_data, alterable ? strcmp (alterable, "0") : 0, usage_type);
 
   g_free (name_escaped);
   g_free (comment_escaped);
@@ -2439,7 +2430,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   gchar *html, *response, *format;
   const char *comment, *name, *schedule_id, *in_assets;
   const char *scanner_id, *task_id, *max_checks, *max_hosts;
-  const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
+  const char *config_id, *target_id, *hosts_ordering, *alterable;
   const char *scanner_type, *schedule_periods, *auto_delete, *auto_delete_data;
   const char *apply_overrides, *min_qod;
   int ret;
@@ -2463,7 +2454,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   scanner_type = params_value (params, "scanner_type");
   schedule_id = params_value (params, "schedule_id");
   schedule_periods = params_value (params, "schedule_periods");
-  source_iface = params_value (params, "source_iface");
   target_id = params_value (params, "target_id");
   task_id = params_value (params, "task_id");
 
@@ -2474,7 +2464,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
         {
           hosts_ordering = "";
           max_checks = "";
-          source_iface = "";
           max_hosts = "";
         }
       else if (!strcmp (scanner_type, "3"))
@@ -2482,7 +2471,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
           config_id = "0";
           hosts_ordering = "";
           max_checks = "";
-          source_iface = "";
           max_hosts = "";
         }
     }
@@ -2502,7 +2490,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (scanner_id, "Save Task");
   CHECK_VARIABLE_INVALID (task_id, "Save Task");
   CHECK_VARIABLE_INVALID (max_checks, "Save Task");
-  CHECK_VARIABLE_INVALID (source_iface, "Save Task");
   CHECK_VARIABLE_INVALID (auto_delete, "Save Task");
   CHECK_VARIABLE_INVALID (auto_delete_data, "Save Task");
   CHECK_VARIABLE_INVALID (max_hosts, "Save Task");
@@ -2582,10 +2569,6 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
     "<value>%%s</value>"
     "</preference>"
     "<preference>"
-    "<scanner_name>source_iface</scanner_name>"
-    "<value>%%s</value>"
-    "</preference>"
-    "<preference>"
     "<scanner_name>auto_delete</scanner_name>"
     "<value>%%s</value>"
     "</preference>"
@@ -2605,7 +2588,7 @@ save_task_gmp (gvm_connection_t *connection, credentials_t *credentials,
               schedule_periods, scanner_id, max_checks, max_hosts,
               strcmp (in_assets, "0") ? "yes" : "no",
               strcmp (apply_overrides, "0") ? "yes" : "no", min_qod,
-              source_iface, auto_delete, auto_delete_data);
+              auto_delete, auto_delete_data);
   g_free (format);
 
   g_string_free (alert_element, TRUE);
@@ -3224,8 +3207,8 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
               "</create_credential>",
               name, comment ? comment : "", type, community ? community : "",
               credential_login ? credential_login : "",
-              password ? password : "",
-              auth_algorithm ? auth_algorithm : "", allow_insecure);
+              password ? password : "", auth_algorithm ? auth_algorithm : "",
+              allow_insecure);
         }
       else if (str_equal (type, "pgp"))
         {
@@ -3786,8 +3769,6 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
             xml_string_append (command, "<private>%s</private>", private_key);
           xml_string_append (command, "</key>");
         }
-
-
     }
   else if (str_equal (type, "usk"))
     {
@@ -5287,6 +5268,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *target_exclude_source;
   const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
   const char *alive_tests, *hosts_filter, *file, *exclude_file;
+  const char *allow_simultaneous_ips;
   gchar *ssh_credentials_element, *smb_credentials_element;
   gchar *esxi_credentials_element, *snmp_credentials_element;
   gchar *asset_hosts_element;
@@ -5312,6 +5294,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   hosts_filter = params_value (params, "hosts_filter");
   file = params_value (params, "file");
   exclude_file = params_value (params, "exclude_file");
+  allow_simultaneous_ips = params_value (params, "allow_simultaneous_ips");
 
   CHECK_VARIABLE_INVALID (name, "Create Target");
   CHECK_VARIABLE_INVALID (target_source, "Create Target")
@@ -5343,6 +5326,7 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (target_esxi_credential, "Create Target");
   CHECK_VARIABLE_INVALID (target_snmp_credential, "Create Target");
   CHECK_VARIABLE_INVALID (alive_tests, "Create Target");
+  CHECK_VARIABLE_INVALID (allow_simultaneous_ips, "Create Target");
 
   if (comment != NULL)
     comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
@@ -5386,23 +5370,24 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
   xml = g_string_new ("");
 
-  xml_string_append (xml,
-                     "<name>%s</name>"
-                     "<hosts>%s</hosts>"
-                     "<exclude_hosts>%s</exclude_hosts>"
-                     "<reverse_lookup_only>%s</reverse_lookup_only>"
-                     "<reverse_lookup_unify>%s</reverse_lookup_unify>"
-                     "<port_list id=\"%s\"/>"
-                     "<alive_tests>%s</alive_tests>",
-                     name, strcmp (target_source, "file") == 0 ? file : hosts,
-                     target_exclude_source
-                       ? (strcmp (target_exclude_source, "file") == 0
-                            ? exclude_file
-                            : (exclude_hosts ? exclude_hosts : ""))
-                       : "",
-                     reverse_lookup_only ? reverse_lookup_only : "0",
-                     reverse_lookup_unify ? reverse_lookup_unify : "0",
-                     port_list_id, alive_tests);
+  xml_string_append (
+    xml,
+    "<name>%s</name>"
+    "<hosts>%s</hosts>"
+    "<exclude_hosts>%s</exclude_hosts>"
+    "<reverse_lookup_only>%s</reverse_lookup_only>"
+    "<reverse_lookup_unify>%s</reverse_lookup_unify>"
+    "<port_list id=\"%s\"/>"
+    "<alive_tests>%s</alive_tests>"
+    "<allow_simultaneous_ips>%s</allow_simultaneous_ips>",
+    name, strcmp (target_source, "file") == 0 ? file : hosts,
+    target_exclude_source ? (strcmp (target_exclude_source, "file") == 0
+                               ? exclude_file
+                               : (exclude_hosts ? exclude_hosts : ""))
+                          : "",
+    reverse_lookup_only ? reverse_lookup_only : "0",
+    reverse_lookup_unify ? reverse_lookup_unify : "0", port_list_id,
+    alive_tests, allow_simultaneous_ips ? allow_simultaneous_ips : "1");
 
   command = g_strdup_printf ("<create_target>"
                              "%s%s%s%s%s%s%s"
@@ -6188,6 +6173,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   const char *target_source, *target_exclude_source;
   const char *target_id, *port_list_id, *reverse_lookup_only;
   const char *reverse_lookup_unify, *alive_tests, *in_use;
+  const char *allow_simultaneous_ips;
   GString *command;
 
   alive_tests = params_value (params, "alive_tests");
@@ -6278,6 +6264,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   target_smb_credential = params_value (params, "smb_credential_id");
   target_esxi_credential = params_value (params, "esxi_credential_id");
   target_snmp_credential = params_value (params, "snmp_credential_id");
+  allow_simultaneous_ips = params_value (params, "allow_simultaneous_ips");
 
   CHECK_VARIABLE_INVALID (target_source, "Save Target");
   CHECK_VARIABLE_INVALID (target_exclude_source, "Save Target");
@@ -6286,6 +6273,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (target_smb_credential, "Save Target");
   CHECK_VARIABLE_INVALID (target_esxi_credential, "Save Target");
   CHECK_VARIABLE_INVALID (target_snmp_credential, "Save Target");
+  CHECK_VARIABLE_INVALID (allow_simultaneous_ips, "Save Target");
 
   if (strcmp (target_ssh_credential, "--")
       && strcmp (target_ssh_credential, "0"))
@@ -6344,7 +6332,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
       "<reverse_lookup_only>%s</reverse_lookup_only>"
       "<reverse_lookup_unify>%s</reverse_lookup_unify>"
       "<port_list id=\"%s\"/>"
-      "<alive_tests>%s</alive_tests>",
+      "<alive_tests>%s</alive_tests>"
+      "<allow_simultaneous_ips>%s</allow_simultaneous_ips>",
       target_id, name,
       str_equal (target_source, "file") ? params_value (params, "file") : hosts,
       str_equal (target_exclude_source, "file")
@@ -6352,7 +6341,7 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
         : exclude_hosts,
       reverse_lookup_only ? reverse_lookup_only : "0",
       reverse_lookup_unify ? reverse_lookup_unify : "0", port_list_id,
-      alive_tests);
+      alive_tests, allow_simultaneous_ips ? allow_simultaneous_ips : "1");
 
     g_string_append_printf (command,
                             "%s%s%s%s%s"
@@ -7423,10 +7412,9 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
             }
           g_strfreev (splits);
 
-          value = preference->value_size
-                    ? g_base64_encode ((guchar *) preference->value,
-                                       preference->value_size)
-                    : g_strdup ("");
+          value = preference->value_size ? g_base64_encode (
+                    (guchar *) preference->value, preference->value_size)
+                                         : g_strdup ("");
 
           if (is_timeout)
             {
@@ -9129,8 +9117,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
         new_severity = params_value (params, "new_severity_from_list");
       else if (params_original_value (params, "new_severity_from_list") == NULL
                || strcmp (
-                    params_original_value (params, "new_severity_from_list"),
-                    ""))
+                 params_original_value (params, "new_severity_from_list"), ""))
         new_severity = NULL;
       else
         new_severity = "";
@@ -14458,7 +14445,8 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       params_iterator_init (&iter, roles);
       while (params_iterator_next (&iter, &name, &param))
         {
-          if (param->value && strcmp (param->value, "--")
+          if (param->value
+              && strcmp (param->value, "--")
               /* Skip "Super Admin" which may not be added to a user. */
               && strcmp (param->value, "9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5"))
             g_string_append_printf (role_elements, "<role id=\"%s\"/>",
@@ -15338,8 +15326,8 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
           if (gvm_connection_sendf_xml (connection, command) == -1)
             {
               g_free (command);
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
+              cmd_response_data_set_status_code (
+                response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
                 credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while deleting resources. "
@@ -15352,8 +15340,8 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
           entity = NULL;
           if (read_entity_and_text_c (connection, &entity, &response))
             {
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
+              cmd_response_data_set_status_code (
+                response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
                 credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while deleting resources. "
@@ -15380,12 +15368,11 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
 
-      msg = g_strdup_printf
-             ("An error occurred while deleting one or more resources. "
-              "However, %i of the resources %s successfully deleted. "
-              "Diagnostics: At least one DELETE command failed.",
-              count,
-              count > 1 ? "were" : "was");
+      msg = g_strdup_printf (
+        "An error occurred while deleting one or more resources. "
+        "However, %i of the resources %s successfully deleted. "
+        "Diagnostics: At least one DELETE command failed.",
+        count, count > 1 ? "were" : "was");
 
       html = gsad_message (credentials, "Error", __func__, __LINE__, msg,
                            response_data);
@@ -15393,10 +15380,9 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
       return html;
     }
 
-  return action_result (connection, credentials, params, response_data, "Bulk Delete",
-                        "OK",
-                        "",    /* Status details. */
-                        NULL); /* ID. */
+  return action_result (connection, credentials, params, response_data,
+                        "Bulk Delete", "OK", "", /* Status details. */
+                        NULL);                   /* ID. */
 }
 
 /**
@@ -16561,8 +16547,8 @@ gvm_connection_open (gvm_connection_t *connection, const gchar *address,
  */
 int
 authenticate_gmp (const gchar *username, const gchar *password, gchar **role,
-                  gchar **timezone, gchar **capabilities,
-                  gchar **language, gchar **pw_warning)
+                  gchar **timezone, gchar **capabilities, gchar **language,
+                  gchar **pw_warning)
 {
   gvm_connection_t connection;
   int auth;
@@ -16701,8 +16687,8 @@ login (http_connection_t *con, params_t *params,
     password = "";
   if (login && password)
     {
-      ret = authenticate_gmp (login, password, &role, &timezone,
-                              &capabilities, &language, &pw_warning);
+      ret = authenticate_gmp (login, password, &role, &timezone, &capabilities,
+                              &language, &pw_warning);
       if (ret)
         {
           switch (ret)
@@ -16730,8 +16716,8 @@ login (http_connection_t *con, params_t *params,
       else
         {
           user_t *user;
-          user = user_add (login, password, timezone, role,
-                           capabilities, language, pw_warning, client_address);
+          user = user_add (login, password, timezone, role, capabilities,
+                           language, pw_warning, client_address);
 
           g_message ("Authentication success for '%s' from %s", login ?: "",
                      client_address);

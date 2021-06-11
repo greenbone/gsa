@@ -69,6 +69,10 @@ describe('isEmpty function test', () => {
     expect(isEmpty()).toBe(true);
   });
 
+  test('should return true for null', () => {
+    expect(isEmpty(null)).toBe(true);
+  });
+
   test('should return true for an empty string', () => {
     expect(isEmpty('')).toBe(true);
   });

@@ -19,7 +19,7 @@ cmake_minimum_required (VERSION 3.0)
 
 message ("-- Configuring gsa")
 
-project (gsa VERSION 21.4.0 LANGUAGES)
+project (gsa VERSION 22.04.0 LANGUAGES)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -98,7 +98,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/commands/notes.js
      ${GSA_SRC_DIR}/src/gmp/commands/nvt.js
      ${GSA_SRC_DIR}/src/gmp/commands/os.js
-     ${GSA_SRC_DIR}/src/gmp/commands/ovaldefs.js
      ${GSA_SRC_DIR}/src/gmp/commands/overrides.js
      ${GSA_SRC_DIR}/src/gmp/commands/permissions.js
      ${GSA_SRC_DIR}/src/gmp/commands/policies.js
@@ -158,7 +157,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/gmp/models/note.js
      ${GSA_SRC_DIR}/src/gmp/models/nvt.js
      ${GSA_SRC_DIR}/src/gmp/models/os.js
-     ${GSA_SRC_DIR}/src/gmp/models/ovaldef.js
      ${GSA_SRC_DIR}/src/gmp/models/override.js
      ${GSA_SRC_DIR}/src/gmp/models/permission.js
      ${GSA_SRC_DIR}/src/gmp/models/policy.js
@@ -362,7 +360,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/nvticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/osicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/ossvgicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/ovaldeficon.js
      ${GSA_SRC_DIR}/src/web/components/icon/overrideicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/performanceicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/permissionicon.js
@@ -487,7 +484,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/note.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/nvt.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/os.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/ovaldef.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/performance.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/permission.svg
@@ -832,18 +828,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/loaders.js
      ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/operatingsystems/dashboard/vulnscoredisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/details.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/detailspage.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/filterdialog.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/listpage.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/row.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/table.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/classdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/createddisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/cvssdisplay.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/index.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/loaders.js
-     ${GSA_SRC_DIR}/src/web/pages/ovaldefs/dashboard/severityclassdisplay.js
      ${GSA_SRC_DIR}/src/web/pages/overrides/component.js
      ${GSA_SRC_DIR}/src/web/pages/overrides/details.js
      ${GSA_SRC_DIR}/src/web/pages/overrides/detailspage.js
@@ -1114,7 +1098,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/store/entities/notes.js
      ${GSA_SRC_DIR}/src/web/store/entities/nvts.js
      ${GSA_SRC_DIR}/src/web/store/entities/operatingsystems.js
-     ${GSA_SRC_DIR}/src/web/store/entities/ovaldefs.js
      ${GSA_SRC_DIR}/src/web/store/entities/overrides.js
      ${GSA_SRC_DIR}/src/web/store/entities/permissions.js
      ${GSA_SRC_DIR}/src/web/store/entities/policies.js

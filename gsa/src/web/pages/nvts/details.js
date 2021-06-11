@@ -29,6 +29,7 @@ import Layout from 'web/components/layout/layout';
 
 import Link from 'web/components/link/link';
 
+import DateTime from 'web/components/date/datetime';
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
@@ -45,9 +46,18 @@ import Solution from './solution';
 import Pre from './preformatted';
 
 const NvtDetails = ({entity, links = true}) => {
-  const {tags = {}, severity, qod, family, solution, severityOrigin} = entity;
+  const {
+    tags = {},
+    severity,
+    qod,
+    family,
+    solution,
+    severityOrigin,
+    severityDate,
+  } = entity;
   return (
     <Layout flex="column" grow="1">
+      {entity.isDeprecated() && <div>{_('This NVT is deprecated.')}</div>}
       {isDefined(tags.summary) && (
         <DetailsBlock title={_('Summary')}>
           <Pre>{tags.summary}</Pre>
@@ -64,24 +74,33 @@ const NvtDetails = ({entity, links = true}) => {
               </TableData>
             </TableRow>
 
-            {isDefined(tags.cvss_base_vector) &&
-              tags.cvss_base_vector !== TAG_NA && (
-                <TableRow>
-                  <TableData>{_('CVSS Base Vector')}</TableData>
-                  <TableData>
-                    <Link
-                      to="cvsscalculator"
-                      query={{cvssVector: tags.cvss_base_vector}}
-                    >
-                      {tags.cvss_base_vector}
-                    </Link>
-                  </TableData>
-                </TableRow>
-              )}
+            {isDefined(tags.cvssBaseVector) && tags.cvssBaseVector !== TAG_NA && (
+              <TableRow>
+                <TableData>{_('CVSS Base Vector')}</TableData>
+                <TableData>
+                  <Link
+                    to="cvsscalculator"
+                    query={{cvssVector: tags.cvssBaseVector}}
+                  >
+                    {tags.cvssBaseVector}
+                  </Link>
+                </TableData>
+              </TableRow>
+            )}
             <TableRow>
               <TableData>{_('CVSS Origin')}</TableData>
               <TableData>
                 {na(getTranslatableSeverityOrigin(severityOrigin))}
+              </TableData>
+            </TableRow>
+            <TableRow>
+              <TableData>{_('CVSS Date')}</TableData>
+              <TableData>
+                {isDefined(severityDate) ? (
+                  <DateTime date={severityDate} />
+                ) : (
+                  _('N/A')
+                )}
               </TableData>
             </TableRow>
           </TableBody>
@@ -95,11 +114,13 @@ const NvtDetails = ({entity, links = true}) => {
       )}
 
       {(isDefined(qod) ||
-        (isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA)) && (
+        (isDefined(tags.detectionMethod) &&
+          tags.detectionMethod !== TAG_NA)) && (
         <DetailsBlock title={_('Detection Method')}>
-          {isDefined(tags.vuldetect) && tags.vuldetect !== TAG_NA && (
-            <Pre>{tags.vuldetect}</Pre>
-          )}
+          {isDefined(tags.detectionMethod) &&
+            tags.detectionMethod !== TAG_NA && (
+              <Pre>{tags.detectionMethod}</Pre>
+            )}
           {isDefined(qod) && (
             <Pre>
               <b>{_('Quality of Detection')}: </b>

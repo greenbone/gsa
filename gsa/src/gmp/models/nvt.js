@@ -16,11 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined, isArray, isString} from 'gmp/utils/identity';
+import {isDefined, hasValue, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
-import {parseFloat, parseSeverity, parseText} from 'gmp/parser';
+import {
+  parseDate,
+  parseFloat,
+  parseSeverity,
+  parseScoreToSeverity,
+  parseText,
+  parseYesNo,
+  YES_VALUE,
+} from 'gmp/parser';
 
 import Info from './info';
 
@@ -33,7 +41,8 @@ const parseTags = tags => {
     const splitted = tags.split('|');
     for (const t of splitted) {
       const [key, value] = split(t, '=', 1);
-      newTags[key] = value;
+      const newValue = isEmpty(value) ? undefined : value;
+      newTags[key] = newValue;
     }
   }
 
@@ -62,7 +71,7 @@ export const getFilteredRefIds = (refs = [], type) => {
   return filteredRefs.map(ref => ref._id);
 };
 
-const getFilteredUrlRefs = refs => {
+const getFilteredUrlRefs = (refs = []) => {
   return refs.filter(hasRefType('url')).map(ref => {
     let id = ref._id;
     if (
@@ -80,13 +89,13 @@ const getFilteredUrlRefs = refs => {
   });
 };
 
-const getFilteredRefs = (refs, type) =>
+const getFilteredRefs = (refs = [], type) =>
   refs.filter(hasRefType(type)).map(ref => ({
     id: ref._id,
     type,
   }));
 
-const getOtherRefs = refs => {
+const getOtherRefs = (refs = []) => {
   const filteredRefs = refs.filter(ref => {
     const referenceType = isString(ref._type)
       ? ref._type.toLowerCase()
@@ -113,6 +122,29 @@ const getOtherRefs = refs => {
 class Nvt extends Info {
   static entityType = 'nvt';
 
+  static parseObject(object) {
+    const ret = super.parseObject(object);
+
+    ret.severity = hasValue(ret.score)
+      ? parseScoreToSeverity(ret.score)
+      : undefined;
+
+    if (isDefined(ret.severities)) {
+      const [severity = {}] = ret.severities;
+      const {origin, date} = severity;
+      ret.severityOrigin = hasValue(origin) ? parseText(origin) : undefined;
+      ret.severityDate = hasValue(date) ? parseDate(date) : undefined;
+    }
+
+    if (ret.preferenceCount < 0) {
+      // actually preferenceCount in the XML is -1 in get_info
+      // right now.
+      ret.preferenceCount = ret.preferences.length;
+    }
+
+    return ret;
+  }
+
   static parseElement(element) {
     const ret = super.parseElement(element, 'nvt');
 
@@ -135,26 +167,30 @@ class Nvt extends Info {
       getFilteredRefs(refs, 'cert-bund'),
     );
 
-    if (isDefined(ret.solution)) {
-      ret.solution = {
-        type: ret.solution._type,
-        description: ret.solution.__text,
-        method: ret.solution._method,
-      };
-    }
-
     ret.xrefs = getFilteredUrlRefs(refs, 'url').concat(getOtherRefs(refs));
 
     delete ret.refs;
 
-    if (isDefined(ret.severities)) {
+    if (isDefined(ret?.severities?.severity)) {
       const {severity} = ret.severities;
-      ret.severity = parseSeverity(severity.score / 10);
+      ret.severity = parseSeverity(severity.score);
       ret.severityOrigin = parseText(severity.origin);
+      ret.severityDate = parseDate(severity.date);
     } else {
       ret.severity = parseSeverity(ret.cvss_base);
     }
     delete ret.cvss_base;
+
+    if (isDefined(ret.solution)) {
+      const solutionType = ret.solution._type;
+      const solutionText = ret.solution.__text;
+      const solutionMethod = ret.solution._method;
+      ret.solution = {
+        type: isEmpty(solutionType) ? undefined : solutionType,
+        description: isEmpty(solutionText) ? undefined : solutionText,
+        method: isEmpty(solutionMethod) ? undefined : solutionMethod,
+      };
+    }
 
     if (isDefined(ret.preferences)) {
       ret.preferences = map(ret.preferences.preference, preference => {
@@ -192,6 +228,10 @@ class Nvt extends Info {
     }
 
     return ret;
+  }
+
+  isDeprecated() {
+    return parseYesNo(this.tags.deprecated) === YES_VALUE;
   }
 }
 

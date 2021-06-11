@@ -40,7 +40,6 @@ import useDialogNotification from 'web/components/notification/useDialogNotifica
 import useReload from 'web/components/loading/useReload';
 
 import useDownload from 'web/components/form/useDownload';
-import withEntityContainer from 'web/entity/withEntityContainer';
 import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 import Download from 'web/components/form/download';
 
@@ -70,8 +69,6 @@ import EntityPage from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
 import useExportEntity from 'web/entity/useExportEntity';
-
-import {selector, loadEntity} from 'web/store/entities/cves';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -306,17 +303,4 @@ const Page = () => {
   );
 };
 
-Page.propTypes = {
-  entity: PropTypes.model,
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-export default withEntityContainer('cve', {
-  load: loadEntity,
-  entitySelector: selector,
-})(Page);
-
-// vim: set ts=2 sw=2 tw=80:
+export default Page;

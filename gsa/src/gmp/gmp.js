@@ -40,7 +40,6 @@ import 'gmp/commands/notes';
 import 'gmp/commands/nvt';
 import 'gmp/commands/nvtfamilies';
 import 'gmp/commands/os';
-import 'gmp/commands/ovaldefs';
 import 'gmp/commands/overrides';
 import 'gmp/commands/performance';
 import 'gmp/commands/permissions';

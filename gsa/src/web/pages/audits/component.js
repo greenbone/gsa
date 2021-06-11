@@ -15,20 +15,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useCallback, useEffect, useReducer} from 'react';
-
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useEffect, useReducer} from 'react';
 
 import _ from 'gmp/locale';
 
-import Filter, {ALL_FILTER} from 'gmp/models/filter';
+import logger from 'gmp/log';
+
+import {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
+import {getSettingValueByName} from 'gmp/models/setting';
 
 import {YES_VALUE} from 'gmp/parser';
 
 import {map} from 'gmp/utils/array';
 import {hasId} from 'gmp/utils/id';
-import {isDefined} from 'gmp/utils/identity';
+import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -41,6 +42,7 @@ import Download from 'web/components/form/download';
 
 import EntityComponent from 'web/entity/component';
 
+import {useLazyGetAlerts} from 'web/graphql/alerts';
 import {
   useCreateAudit,
   useModifyAudit,
@@ -48,46 +50,18 @@ import {
   useStartAudit,
   useStopAudit,
 } from 'web/graphql/audits';
+import {useGetUsername} from 'web/graphql/auth';
+import {useLazyGetPolicies} from 'web/graphql/policies';
+import {useLazyGetScanners} from 'web/graphql/scanners';
+import {useLazyGetSchedules} from 'web/graphql/schedules';
+import {useLazyGetTargets} from 'web/graphql/targets';
+import {useLazyGetReportFormats} from 'web/graphql/reportformats';
+import {useLazyGetSettings} from 'web/graphql/settings';
 
 import AlertComponent from 'web/pages/alerts/component';
 import AuditDialog from 'web/pages/audits/dialog';
 import ScheduleComponent from 'web/pages/schedules/component';
 import TargetComponent from 'web/pages/targets/component';
-
-import {
-  loadEntities as loadAlertsAction,
-  selector as alertSelector,
-} from 'web/store/entities/alerts';
-
-import {
-  loadEntities as loadPoliciesAction,
-  selector as policiesSelector,
-} from 'web/store/entities/policies';
-
-import {
-  loadEntities as loadScannersAction,
-  selector as scannerSelector,
-} from 'web/store/entities/scanners';
-
-import {
-  loadEntities as loadSchedulesAction,
-  selector as scheduleSelector,
-} from 'web/store/entities/schedules';
-
-import {
-  loadEntities as loadTargetsAction,
-  selector as targetSelector,
-} from 'web/store/entities/targets';
-
-import {
-  loadAllEntities as loadReportFormatsAction,
-  selector as reportFormatsSelector,
-} from 'web/store/entities/reportformats';
-
-import {loadUserSettingDefaults as loadUserSettingDefaultsAction} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
-
-import {getUsername} from 'web/store/usersettings/selectors';
 
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE, generateFilename} from 'web/utils/render';
@@ -95,9 +69,10 @@ import stateReducer, {updateState} from 'web/utils/stateReducer';
 import useGmp from 'web/utils/useGmp';
 import useCapabilities from 'web/utils/useCapabilities';
 
-const REPORT_FORMATS_FILTER = Filter.fromString(
-  'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
-);
+const log = logger.getLogger('web.pages.audits.component');
+
+const REPORT_FORMATS_FILTER =
+  'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1';
 
 const AuditComponent = ({
   children,
@@ -119,7 +94,6 @@ const AuditComponent = ({
   onSaved,
   onSaveError,
 }) => {
-  const dispatch = useDispatch();
   const gmp = useGmp();
   const capabilities = useCapabilities();
   const [downloadRef, handleDownload] = useDownload();
@@ -129,76 +103,34 @@ const AuditComponent = ({
     auditDialogVisible: false,
   });
 
-  // Loaders
-  const loadAlerts = useCallback(
-    () => dispatch(loadAlertsAction(gmp)(ALL_FILTER)),
-    [gmp, dispatch],
-  );
-  const loadPolicies = useCallback(
-    () => dispatch(loadPoliciesAction(gmp)(ALL_FILTER)),
-    [gmp, dispatch],
-  );
-  const loadScanners = useCallback(
-    () => dispatch(loadScannersAction(gmp)(ALL_FILTER)),
-    [gmp, dispatch],
-  );
-  const loadSchedules = useCallback(
-    () => dispatch(loadSchedulesAction(gmp)(ALL_FILTER)),
-    [gmp, dispatch],
-  );
-  const loadTargets = useCallback(
-    () => dispatch(loadTargetsAction(gmp)(ALL_FILTER)),
-    [gmp, dispatch],
-  );
-  const loadUserSettingsDefaults = useCallback(
-    () => dispatch(loadUserSettingDefaultsAction(gmp)()),
-    [gmp, dispatch],
-  );
-  const loadReportFormats = useCallback(
-    () => dispatch(loadReportFormatsAction(gmp)(REPORT_FORMATS_FILTER)),
-    [gmp, dispatch],
-  );
+  // GraphQL Loaders
+  const {username} = useGetUsername();
+  const [
+    loadAlerts,
+    {
+      alerts,
+      loading: isLoadingAlerts,
+      refetch: refetchAlerts,
+      error: alertError,
+    },
+  ] = useLazyGetAlerts({
+    filterString: ALL_FILTER.toFilterString(),
+  });
 
-  // Selectors
-  const alertSel = useSelector(alertSelector);
-  const userDefaults = useSelector(getUserSettingsDefaults);
-  const policiesSel = useSelector(policiesSelector);
-  const scannersSel = useSelector(scannerSelector);
-  const scheduleSel = useSelector(scheduleSelector);
-  const targetSel = useSelector(targetSelector);
-  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
-  const reportFormatsSel = useSelector(reportFormatsSelector);
-  const scannerList = scannersSel.getEntities(ALL_FILTER);
-  const username = useSelector(getUsername);
+  const [
+    loadPolicies,
+    {policies, loading: isLoadingPolicies, error: policyError},
+  ] = useLazyGetPolicies({
+    filterString: ALL_FILTER.toFilterString(),
+  });
 
-  const alerts = alertSel.getEntities(ALL_FILTER);
-  const defaultAlertId = userDefaults.getValueByName('defaultalert');
+  const [
+    loadScanners,
+    {scanners: scannerList, loading: isLoadingScanners, error: scannerError},
+  ] = useLazyGetScanners({
+    filterString: ALL_FILTER.toFilterString(),
+  });
 
-  let defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID;
-  const defaultScannerIdFromStore = userDefaults.getValueByName(
-    'defaultopenvasscanner',
-  );
-
-  if (isDefined(defaultScannerIdFromStore)) {
-    defaultScannerId = defaultScannerIdFromStore;
-  }
-
-  const defaultScheduleId = userDefaults.getValueByName('defaultschedule');
-  const defaultTargetId = userDefaults.getValueByName('defaulttarget');
-  const isLoadingScanners = scannersSel.isLoadingAllEntities(ALL_FILTER);
-  const reportExportFileName = userDefaultsSelector.getValueByName(
-    'reportexportfilename',
-  );
-  let reportFormats = [];
-  const reportFormatsFromStore = reportFormatsSel.getAllEntities(
-    REPORT_FORMATS_FILTER,
-  );
-
-  if (isDefined(reportFormatsFromStore)) {
-    reportFormats = reportFormatsFromStore;
-  }
-
-  const policies = policiesSel.getEntities(ALL_FILTER);
   const scanners = isDefined(scannerList)
     ? scannerList.filter(
         scanner =>
@@ -206,16 +138,66 @@ const AuditComponent = ({
           scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
       )
     : undefined;
-  const schedules = scheduleSel.getEntities(ALL_FILTER);
-  const targets = targetSel.getEntities(ALL_FILTER);
 
-  // GraphQL Queries and Mutations
+  const [
+    loadSchedules,
+    {
+      schedules,
+      loading: isLoadingSchedules,
+      error: scheduleError,
+      refetch: refetchSchedules,
+    },
+  ] = useLazyGetSchedules({
+    filterString: ALL_FILTER.toFilterString(),
+  });
+  const [
+    loadTargets,
+    {
+      targets,
+      loading: isLoadingTargets,
+      refetch: refetchTargets,
+      error: targetError,
+    },
+  ] = useLazyGetTargets({
+    filterString: ALL_FILTER.toFilterString(),
+  });
+
+  const [
+    loadUserSettingsDefaults,
+    {settings: userDefaults},
+  ] = useLazyGetSettings();
+  const [loadReportFormats, {reportFormats = []}] = useLazyGetReportFormats({
+    filterString: REPORT_FORMATS_FILTER,
+  });
+
+  // Default user settings
+  const defaultAlertId = getSettingValueByName(userDefaults)('Default Alert');
+
+  let defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID;
+  const defaultScannerIdFromStore = getSettingValueByName(userDefaults)(
+    'Default OpenVAS Scanner',
+  );
+
+  if (isDefined(defaultScannerIdFromStore)) {
+    defaultScannerId = defaultScannerIdFromStore;
+  }
+
+  const defaultScheduleId = getSettingValueByName(userDefaults)(
+    'Default Schedule',
+  );
+  const defaultTargetId = getSettingValueByName(userDefaults)('Default Target');
+  const reportExportFileName = getSettingValueByName(userDefaults)(
+    'Report Export File Name',
+  );
+
+  // GraphQL Mutations
   const [modifyAudit] = useModifyAudit();
   const [createAudit] = useCreateAudit();
   const [startAudit] = useStartAudit();
   const [stopAudit] = useStopAudit();
   const [resumeAudit] = useResumeAudit();
 
+  // Component methods
   const handleInteraction = () => {
     if (isDefined(onInteraction)) {
       onInteraction();
@@ -248,24 +230,18 @@ const AuditComponent = ({
     return resumeAudit(audit.id).then(onResumed, onResumeError);
   };
 
-  const handleAlertCreated = alertId => {
-    loadAlerts();
-
-    dispatchState(
-      updateState({
-        alertIds: [alertId, ...state.alertIds],
-      }),
-    );
+  const handleAlertCreated = () => {
+    refetchAlerts();
   };
 
   const handleScheduleCreated = scheduleId => {
-    loadSchedules();
+    refetchSchedules();
 
     dispatchState(updateState({scheduleId}));
   };
 
   const handleTargetCreated = targetId => {
-    loadTargets();
+    refetchTargets();
 
     dispatchState(updateState({targetId}));
   };
@@ -273,21 +249,19 @@ const AuditComponent = ({
   const handleSaveAudit = ({
     alertIds,
     alterable,
-    auto_delete,
-    auto_delete_data,
+    autoDelete,
+    autoDeleteReports,
     comment,
     policyId,
-    hostsOrdering,
     id,
-    in_assets,
-    maxChecks,
-    maxHosts,
+    createAssets,
+    maxConcurrentNvts,
+    maxConcurrentHosts,
     name,
     scannerId = OPENVAS_DEFAULT_SCANNER_ID,
     scannerType = OPENVAS_SCANNER_TYPE,
     scheduleId,
     schedulePeriods,
-    sourceIface,
     targetId,
     audit,
   }) => {
@@ -298,33 +272,25 @@ const AuditComponent = ({
 
     if (isDefined(id)) {
       // save edit part
-      if (isDefined(audit) && !audit.isChangeable()) {
-        // arguments need to be undefined if the audit is not changeable
-        targetId = undefined;
-        scannerId = undefined;
-        policyId = undefined;
-      }
+      // does not need statusIsNew anymore. If audit is not changeable then these fields are disabled in the dialog, but still required in hyperion
       return modifyAudit({
         alertIds,
         alterable,
-        autoDelete: auto_delete,
-        autoDeleteData: auto_delete_data,
-        applyOverrides,
         comment,
         policyId,
-        hostsOrdering,
         id,
-        inAssets: in_assets,
-        maxChecks,
-        maxHosts,
-        minQod,
         name,
+        preferences: {
+          createAssets,
+          createAssetsApplyOverrides: applyOverrides,
+          createAssetsMinQod: minQod,
+          autoDeleteReports: autoDelete ? autoDeleteReports : null,
+          maxConcurrentNvts,
+          maxConcurrentHosts,
+        },
         scannerId,
-        scannerType,
         scheduleId,
-        schedulePeriods,
         targetId,
-        sourceIface,
       })
         .then(onSaved, onSaveError)
         .then(() => closeAuditDialog());
@@ -333,23 +299,20 @@ const AuditComponent = ({
     return createAudit({
       alertIds,
       alterable,
-      applyOverrides,
-      autoDelete: auto_delete,
-      autoDeleteData: auto_delete_data,
       comment,
       policyId,
-      hostsOrdering,
-      inAssets: in_assets,
-      maxChecks,
-      maxHosts,
-      minQod,
       name,
-      scannerType,
+      preferences: {
+        createAssets,
+        createAssetsApplyOverrides: applyOverrides,
+        createAssetsMinQod: minQod,
+        autoDeleteReports: autoDelete ? autoDeleteReports : null,
+        maxConcurrentNvts,
+        maxConcurrentHosts,
+      },
       scannerId,
       scheduleId,
-      schedulePeriods,
-      sourceIface,
-      targetId: targetId,
+      targetId,
     })
       .then(onCreated, onCreateError)
       .then(() => closeAuditDialog());
@@ -388,22 +351,22 @@ const AuditComponent = ({
           auditDialogVisible: true,
           alertIds: map(audit.alerts, alert => alert.id),
           alterable: audit.alterable,
-          applyOverrides: audit.apply_overrides,
-          auto_delete: audit.auto_delete,
-          auto_delete_data: audit.auto_delete_data,
+          applyOverrides: audit.preferences?.createAssetsApplyOverrides,
+          autoDelete: hasValue(audit.preferences?.autoDeleteReports),
+          autoDeleteReports: hasValue(audit.preferences?.autoDeleteReports)
+            ? audit.preferences.autoDeleteReports
+            : undefined,
           comment: audit.comment,
           policyId: hasId(audit.config) ? audit.config.id : undefined,
-          hostsOrdering: audit.hosts_ordering,
           id: audit.id,
-          in_assets: audit.in_assets,
-          maxChecks: audit.max_checks,
-          maxHosts: audit.max_hosts,
-          minQod: audit.min_qod,
+          createAssets: audit.preferences?.createAssets,
+          maxConcurrentNvts: audit.preferences?.maxConcurrentNvts,
+          maxConcurrentHosts: audit.preferences?.maxConcurrentHosts,
+          minQod: audit.preferences?.createAssetsMinQod,
           name: audit.name,
           scannerId: hasId(audit.scanner) ? audit.scanner.id : undefined,
           scheduleId,
           schedulePeriods,
-          sourceIface: audit.source_iface,
           targetId: hasId(audit.target) ? audit.target.id : undefined,
           audit,
           title: _('Edit Audit {{name}}', audit),
@@ -420,22 +383,20 @@ const AuditComponent = ({
           alertIds,
           alterable: undefined,
           applyOverrides: undefined,
-          auto_delete: undefined,
-          auto_delete_data: undefined,
+          autoDelete: undefined,
+          autoDeleteReports: undefined,
           comment: undefined,
           policyId: undefined,
-          hostsOrdering: undefined,
           id: undefined,
-          in_assets: undefined,
-          maxChecks: undefined,
-          maxHosts: undefined,
+          createAssets: undefined,
+          maxConcurrentNvts: undefined,
+          maxConcurrentHosts: undefined,
           minQod: undefined,
           name: undefined,
           scannerId: defaultScannerId,
           scanner_type: defaultScannerType,
           scheduleId: defaultScheduleId,
           schedulePeriods: undefined,
-          sourceIface: undefined,
           targetId: defaultTargetId,
           audit: undefined,
           title: _('New Audit'),
@@ -460,7 +421,7 @@ const AuditComponent = ({
 
     handleInteraction();
 
-    const {id} = audit.last_report;
+    const {id} = audit.reports.lastReport;
 
     return gmp.report
       .download(
@@ -492,23 +453,73 @@ const AuditComponent = ({
     );
   };
 
+  useEffect(() => {
+    // display first loading error in the dialog
+    if (policyError) {
+      dispatchState(
+        updateState({
+          error: _('Error while loading scan configs.'),
+        }),
+      );
+    } else if (scannerError) {
+      dispatchState(
+        updateState({
+          error: _('Error while loading scanners.'),
+        }),
+      );
+    } else if (scheduleError) {
+      dispatchState(
+        updateState({
+          error: _('Error while loading schedules.'),
+        }),
+      );
+    } else if (targetError) {
+      dispatchState(
+        updateState({
+          error: _('Error while loading targets.'),
+        }),
+      );
+    } else if (alertError) {
+      dispatchState(
+        updateState({
+          error: _('Error while loading alerts.'),
+        }),
+      );
+    }
+
+    // log error all objects to be able to inspect them the console
+    if (policyError) {
+      log.error({policyError});
+    }
+    if (scannerError) {
+      log.error({scannerError});
+    }
+    if (scheduleError) {
+      log.error({scheduleError});
+    }
+    if (targetError) {
+      log.error({targetError});
+    }
+    if (alertError) {
+      log.error({alertError});
+    }
+  }, [policyError, scannerError, scheduleError, targetError, alertError]);
+
   const {
     alertIds,
     alterable,
-    auto_delete,
-    auto_delete_data,
+    autoDelete,
+    autoDeleteReports,
     policyId,
     comment,
-    hostsOrdering,
     id,
-    in_assets,
-    maxChecks,
-    maxHosts,
+    createAssets,
+    maxConcurrentNvts,
+    maxConcurrentHosts,
     name,
     scannerId,
     scheduleId,
     schedulePeriods,
-    sourceIface,
     targetId,
     audit,
     auditDialogVisible,
@@ -568,16 +579,19 @@ const AuditComponent = ({
                             alerts={alerts}
                             alertIds={alertIds}
                             alterable={alterable}
-                            auto_delete={auto_delete}
-                            auto_delete_data={auto_delete_data}
+                            autoDelete={autoDelete}
+                            autoDeleteReports={autoDeleteReports}
                             comment={comment}
                             policyId={policyId}
-                            hostsOrdering={hostsOrdering}
                             id={id}
-                            in_assets={in_assets}
+                            createAssets={createAssets}
+                            isLoadingAlerts={isLoadingAlerts}
+                            isLoadingPolicies={isLoadingPolicies}
                             isLoadingScanners={isLoadingScanners}
-                            maxChecks={maxChecks}
-                            maxHosts={maxHosts}
+                            isLoadingSchedules={isLoadingSchedules}
+                            isLoadingTargets={isLoadingTargets}
+                            maxConcurrentNvts={maxConcurrentNvts}
+                            maxConcurrentHosts={maxConcurrentHosts}
                             name={name}
                             policies={policies}
                             scannerId={scannerId}
@@ -585,7 +599,6 @@ const AuditComponent = ({
                             scheduleId={scheduleId}
                             schedulePeriods={schedulePeriods}
                             schedules={schedules}
-                            sourceIface={sourceIface}
                             targetId={targetId}
                             targets={targets}
                             audit={audit}

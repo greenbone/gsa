@@ -18,12 +18,7 @@
 
 import Model from 'gmp/model';
 
-import Task, {
-  HOSTS_ORDERING_RANDOM,
-  HOSTS_ORDERING_REVERSE,
-  HOSTS_ORDERING_SEQUENTIAL,
-  TASK_STATUS,
-} from 'gmp/models/task';
+import Task, {HYPERION_TASK_STATUS, TASK_STATUS} from 'gmp/models/task';
 
 import Report from '../report';
 import Scanner from '../scanner';
@@ -31,38 +26,10 @@ import Schedule from '../schedule';
 
 import {testModel} from '../testing';
 
-describe('Task Model parse tests', () => {
-  testModel(Task, 'task', {testIsActive: false});
-
-  test('should parse undefined hostsOrdering', () => {
-    const obj = {hostsOrdering: undefined};
-    const task = Task.fromObject(obj);
-    expect(task.hostsOrdering).toBeUndefined();
-  });
-
-  test('should parse unknown hostsOrdering as undefined', () => {
-    const obj = {hostsOrdering: 'foo'};
-    const task = Task.fromObject(obj);
-    expect(task.hostsOrdering).toBeUndefined();
-  });
-
-  test('should parse known hostsOrdering', () => {
-    let obj = {hostsOrdering: HOSTS_ORDERING_RANDOM};
-    let task = Task.fromObject(obj);
-    expect(task.hostsOrdering).toEqual(HOSTS_ORDERING_RANDOM);
-
-    obj = {hostsOrdering: HOSTS_ORDERING_REVERSE};
-    task = Task.fromObject(obj);
-    expect(task.hostsOrdering).toEqual(HOSTS_ORDERING_REVERSE);
-
-    obj = {hostsOrdering: HOSTS_ORDERING_SEQUENTIAL};
-    task = Task.fromObject(obj);
-    expect(task.hostsOrdering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
-  });
-
+describe('Task model parseObject tests', () => {
   test('should parse lastReport', () => {
-    const element = {
-      _id: 't1',
+    const object = {
+      id: 't1',
       reports: {
         lastReport: {
           id: 'r1',
@@ -70,7 +37,7 @@ describe('Task Model parse tests', () => {
       },
     };
 
-    const task = Task.fromObject(element);
+    const task = Task.fromObject(object);
 
     expect(task.id).toEqual('t1');
 
@@ -80,8 +47,8 @@ describe('Task Model parse tests', () => {
   });
 
   test('should parse current_report', () => {
-    const element = {
-      _id: 't1',
+    const object = {
+      id: 't1',
       reports: {
         currentReport: {
           id: 'r1',
@@ -89,7 +56,7 @@ describe('Task Model parse tests', () => {
       },
     };
 
-    const task = Task.fromObject(element);
+    const task = Task.fromObject(object);
 
     expect(task.id).toEqual('t1');
 
@@ -99,14 +66,14 @@ describe('Task Model parse tests', () => {
   });
 
   test('should parse config', () => {
-    const element = {
-      _id: 't1',
+    const object = {
+      id: 't1',
       scanConfig: {
-        _id: 'c1',
+        id: 'c1',
       },
     };
 
-    const task = Task.fromObject(element);
+    const task = Task.fromObject(object);
 
     expect(task.id).toEqual('t1');
 
@@ -115,32 +82,15 @@ describe('Task Model parse tests', () => {
     expect(task.config.entityType).toEqual('scanconfig');
   });
 
-  test('should parse slave', () => {
-    const element = {
-      _id: 't1',
-      slave: {
-        _id: 's1',
-      },
-    };
-
-    const task = Task.fromObject(element);
-
-    expect(task.id).toEqual('t1');
-
-    expect(task.slave).toBeInstanceOf(Model);
-    expect(task.slave.id).toEqual('s1');
-    expect(task.slave.entityType).toEqual('slave');
-  });
-
   test('should parse target', () => {
-    const element = {
-      _id: 't1',
+    const object = {
+      id: 't1',
       target: {
-        _id: 't1',
+        id: 't1',
       },
     };
 
-    const task = Task.fromObject(element);
+    const task = Task.fromObject(object);
 
     expect(task.id).toEqual('t1');
 
@@ -150,19 +100,19 @@ describe('Task Model parse tests', () => {
   });
 
   test('should parse alerts', () => {
-    const element = {
-      _id: 't1',
+    const object = {
+      id: 't1',
       alerts: [
         {
-          _id: 'a1',
+          id: 'a1',
         },
         {
-          _id: 'a2',
+          id: 'a2',
         },
       ],
     };
 
-    const task = Task.fromObject(element);
+    const task = Task.fromObject(object);
 
     expect(task.id).toEqual('t1');
 
@@ -175,14 +125,14 @@ describe('Task Model parse tests', () => {
   });
 
   test('should parse scanner', () => {
-    const element = {
-      _id: 't1',
+    const object = {
+      id: 't1',
       scanner: {
         id: 's1',
       },
     };
 
-    const task = Task.fromObject(element);
+    const task = Task.fromObject(object);
 
     expect(task.id).toEqual('t1');
 
@@ -192,14 +142,14 @@ describe('Task Model parse tests', () => {
   });
 
   test('should parse schedule', () => {
-    const element = {
-      _id: 't1',
+    const object = {
+      id: 't1',
       schedule: {
         id: 's1',
       },
     };
 
-    const task = Task.fromObject(element);
+    const task = Task.fromObject(object);
 
     expect(task.id).toEqual('t1');
 
@@ -209,7 +159,7 @@ describe('Task Model parse tests', () => {
   });
 
   test('should parse report counts', () => {
-    const element = {
+    const object = {
       id: 't1',
       reports: {
         counts: {
@@ -219,7 +169,7 @@ describe('Task Model parse tests', () => {
       },
     };
 
-    const task = Task.fromObject(element);
+    const task = Task.fromObject(object);
 
     expect(task.id).toEqual('t1');
 
@@ -228,8 +178,8 @@ describe('Task Model parse tests', () => {
   });
 
   test('should parse result counts', () => {
-    const element = {
-      _id: 't1',
+    const object = {
+      id: 't1',
       results: {
         counts: {
           current: 666,
@@ -237,7 +187,7 @@ describe('Task Model parse tests', () => {
       },
     };
 
-    const task = Task.fromObject(element);
+    const task = Task.fromObject(object);
 
     expect(task.id).toEqual('t1');
 
@@ -246,19 +196,19 @@ describe('Task Model parse tests', () => {
 
   test('should parse progress', () => {
     const task1 = Task.fromObject({
-      _id: 't1',
+      id: 't1',
     });
 
     expect(task1.progress).toEqual(0);
 
     const task2 = Task.fromObject({
-      _id: 't1',
+      id: 't1',
       progress: {},
     });
     expect(task2.progress).toEqual(0);
 
     const task3 = Task.fromObject({
-      _id: 't1',
+      id: 't1',
       progress: {
         __text: '66',
       },
@@ -266,7 +216,7 @@ describe('Task Model parse tests', () => {
     expect(task3.progress).toEqual(66);
 
     const task4 = Task.fromObject({
-      _id: 't1',
+      id: 't1',
       progress: '66',
     });
     expect(task4.progress).toEqual(66);
@@ -274,215 +224,34 @@ describe('Task Model parse tests', () => {
 
   test('should parse preferences', () => {
     const task1 = Task.fromObject({
-      _id: 't1',
-      preferences: [
-        {
-          name: 'in_assets',
-          value: 'yes',
-        },
-        {
-          name: 'assets_apply_overrides',
-          value: 'yes',
-        },
-        {
-          name: 'assets_min_qod',
-          value: '70',
-        },
-        {
-          name: 'auto_delete',
-          value: 'keep',
-        },
-        {
-          name: 'auto_delete_data',
-          value: 0,
-        },
-        {
-          name: 'max_hosts',
-          value: '20',
-        },
-        {
-          name: 'max_checks',
-          value: '4',
-        },
-        {
-          name: 'source_iface',
-          value: 'eth0',
-        },
-        {
-          value: 'bar',
-          name: 'foo',
-        },
-        {
-          value: 'ipsum',
-          name: 'lorem',
-        },
-      ],
+      id: 't1',
+      preferences: {
+        createAssets: true,
+        createAssetsApplyOverrides: true,
+        createAssetsMinQod: 70,
+        autoDeleteReports: 0,
+        maxConcurrentHosts: 20,
+        maxConcurrentNvts: 4,
+      },
     });
     const task2 = Task.fromObject({
-      _id: 't1',
-      preferences: [
-        {
-          name: 'in_assets',
-          value: 'no',
-        },
-        {
-          name: 'assets_apply_overrides',
-          value: 'no',
-        },
-        {
-          name: 'auto_delete',
-          value: 'no',
-        },
-        {
-          name: 'auto_delete_data',
-          value: 3,
-        },
-      ],
+      id: 't1',
+      preferences: {
+        createAssets: false,
+        createAssetsApplyOverrides: false,
+        autoDeleteReports: 3,
+      },
     });
 
-    expect(task1.inAssets).toEqual(1);
-    expect(task1.applyOverrides).toEqual(1);
-    expect(task1.minQod).toEqual(70);
-    expect(task1.autoDelete).toEqual('keep');
-    expect(task1.maxHosts).toEqual(20);
-    expect(task1.maxChecks).toEqual(4);
-    expect(task1.sourceIface).toEqual('eth0');
-    expect(task1.preferences).toEqual({
-      foo: {value: 'bar', name: 'foo'},
-      lorem: {value: 'ipsum', name: 'lorem'},
-    });
-    expect(task2.inAssets).toEqual(0);
-    expect(task2.applyOverrides).toEqual(0);
-    expect(task2.autoDelete).toEqual('no');
-    expect(task2.autoDeleteData).toEqual(3);
-  });
-});
-
-describe(`Task Model methods tests`, () => {
-  test('should be a container if target_id is not set', () => {
-    const task1 = Task.fromObject({});
-    const task2 = Task.fromObject({target: {_id: 'foo'}});
-
-    expect(task1.isContainer()).toEqual(true);
-    expect(task2.isContainer()).toEqual(false);
-  });
-
-  test('should use status for isActive', () => {
-    const statusList = {
-      [TASK_STATUS.running]: true,
-      [TASK_STATUS.stoprequested]: true,
-      [TASK_STATUS.deleterequested]: true,
-      [TASK_STATUS.ultimatedeleterequested]: true,
-      [TASK_STATUS.resumerequested]: true,
-      [TASK_STATUS.requested]: true,
-      [TASK_STATUS.stopped]: false,
-      [TASK_STATUS.new]: false,
-      [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
-      [TASK_STATUS.uploading]: false,
-      [TASK_STATUS.done]: false,
-    };
-
-    for (const [status, exp] of Object.entries(statusList)) {
-      const task = Task.fromObject({status});
-      expect(task.isActive()).toEqual(exp);
-    }
-  });
-
-  test('should use status for isRunning', () => {
-    const statusList = {
-      [TASK_STATUS.running]: true,
-      [TASK_STATUS.stoprequested]: false,
-      [TASK_STATUS.deleterequested]: false,
-      [TASK_STATUS.ultimatedeleterequested]: false,
-      [TASK_STATUS.resumerequested]: false,
-      [TASK_STATUS.requested]: false,
-      [TASK_STATUS.stopped]: false,
-      [TASK_STATUS.new]: false,
-      [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
-      [TASK_STATUS.uploading]: false,
-      [TASK_STATUS.done]: false,
-    };
-
-    for (const [status, exp] of Object.entries(statusList)) {
-      const task = Task.fromObject({status});
-      expect(task.isRunning()).toEqual(exp);
-    }
-  });
-
-  test('should use status for isStopped', () => {
-    const statusList = {
-      [TASK_STATUS.running]: false,
-      [TASK_STATUS.stoprequested]: false,
-      [TASK_STATUS.deleterequested]: false,
-      [TASK_STATUS.ultimatedeleterequested]: false,
-      [TASK_STATUS.resumerequested]: false,
-      [TASK_STATUS.requested]: false,
-      [TASK_STATUS.stopped]: true,
-      [TASK_STATUS.new]: false,
-      [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
-      [TASK_STATUS.uploading]: false,
-      [TASK_STATUS.done]: false,
-    };
-
-    for (const [status, exp] of Object.entries(statusList)) {
-      const task = Task.fromObject({status});
-      expect(task.isStopped()).toEqual(exp);
-    }
-  });
-
-  test('should use status for isInterrupted', () => {
-    const statusList = {
-      [TASK_STATUS.running]: false,
-      [TASK_STATUS.stoprequested]: false,
-      [TASK_STATUS.deleterequested]: false,
-      [TASK_STATUS.ultimatedeleterequested]: false,
-      [TASK_STATUS.resumerequested]: false,
-      [TASK_STATUS.requested]: false,
-      [TASK_STATUS.stopped]: false,
-      [TASK_STATUS.new]: false,
-      [TASK_STATUS.interrupted]: true,
-      [TASK_STATUS.container]: false,
-      [TASK_STATUS.uploading]: false,
-      [TASK_STATUS.done]: false,
-    };
-
-    for (const [status, exp] of Object.entries(statusList)) {
-      const task = Task.fromObject({status});
-      expect(task.isInterrupted()).toEqual(exp);
-    }
-  });
-
-  test('should use status for isNew', () => {
-    const statusList = {
-      [TASK_STATUS.running]: false,
-      [TASK_STATUS.stoprequested]: false,
-      [TASK_STATUS.deleterequested]: false,
-      [TASK_STATUS.ultimatedeleterequested]: false,
-      [TASK_STATUS.resumerequested]: false,
-      [TASK_STATUS.requested]: false,
-      [TASK_STATUS.stopped]: false,
-      [TASK_STATUS.new]: true,
-      [TASK_STATUS.interrupted]: false,
-      [TASK_STATUS.container]: false,
-      [TASK_STATUS.uploading]: false,
-      [TASK_STATUS.done]: false,
-    };
-
-    for (const [status, exp] of Object.entries(statusList)) {
-      const task = Task.fromObject({status});
-      expect(task.isNew()).toEqual(exp);
-    }
-  });
-
-  test('should be changeable if alterable or new', () => {
-    let task = Task.fromObject({status: TASK_STATUS.new, alterable: '0'});
-    expect(task.isChangeable()).toEqual(true);
-
-    task = Task.fromObject({status: TASK_STATUS.done, alterable: '1'});
-    expect(task.isChangeable()).toEqual(true);
+    expect(task1.preferences.createAssets).toEqual(true);
+    expect(task1.preferences.createAssetsApplyOverrides).toEqual(true);
+    expect(task1.preferences.createAssetsMinQod).toEqual(70);
+    expect(task1.preferences.maxConcurrentHosts).toEqual(20);
+    expect(task1.preferences.maxConcurrentNvts).toEqual(4);
+    expect(task1.preferences.autoDeleteReports).toBe(0);
+    expect(task2.preferences.createAssets).toEqual(false);
+    expect(task2.preferences.createAssetsApplyOverrides).toEqual(false);
+    expect(task2.preferences.autoDeleteReports).toEqual(3);
   });
 
   test('should parse all observers types', () => {
@@ -525,4 +294,334 @@ describe(`Task Model methods tests`, () => {
     expect(tags[1].value).toEqual('lorem1');
     expect(tags[1].comment).toEqual('ipsum1');
   });
+});
+
+describe('Task model parseElement tests', () => {
+  testModel(Task, 'task', {testIsActive: false});
+  // no more hosts_ordering
+  test('should parse preferences', () => {
+    const task1 = Task.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'in_assets',
+            value: 'yes',
+          },
+          {
+            scanner_name: 'assets_apply_overrides',
+            value: 'yes',
+          },
+          {
+            scanner_name: 'assets_min_qod',
+            value: '70',
+          },
+          {
+            scanner_name: 'auto_delete',
+            value: 'keep',
+          },
+          {
+            scanner_name: 'auto_delete_data',
+            value: 0,
+          },
+          {
+            scanner_name: 'max_hosts',
+            value: '20',
+          },
+          {
+            scanner_name: 'max_checks',
+            value: '4',
+          },
+          {
+            scanner_name: 'foo',
+            value: 'bar',
+            name: 'lorem',
+          },
+        ],
+      },
+    });
+    const task2 = Task.fromElement({
+      _id: 't1',
+      preferences: {
+        preference: [
+          {
+            scanner_name: 'in_assets',
+            value: 'no',
+          },
+          {
+            scanner_name: 'assets_apply_overrides',
+            value: 'no',
+          },
+          {
+            scanner_name: 'auto_delete',
+            value: 'no',
+          },
+          {
+            scanner_name: 'auto_delete_data',
+            value: 3,
+          },
+        ],
+      },
+    });
+
+    expect(task1.inAssets).toEqual(1);
+    expect(task1.applyOverrides).toEqual(1);
+    expect(task1.minQod).toEqual(70);
+    expect(task1.autoDelete).toEqual('keep');
+    expect(task1.maxHosts).toEqual(20);
+    expect(task1.maxChecks).toEqual(4);
+    expect(task1.preferences).toEqual({foo: {value: 'bar', name: 'lorem'}});
+    expect(task2.inAssets).toEqual(0);
+    expect(task2.applyOverrides).toEqual(0);
+    expect(task2.autoDelete).toEqual('no');
+    expect(task2.autoDeleteData).toEqual(3);
+  });
+});
+
+describe(`Task Model methods parseObject tests`, () => {
+  test('should be a container if targetid is not set', () => {
+    const task1 = Task.fromObject({});
+    const task2 = Task.fromObject({target: {id: 'foo'}});
+
+    expect(task1.isContainer()).toEqual(true);
+    expect(task2.isContainer()).toEqual(false);
+  });
+
+  test('should use status for isActive', () => {
+    const statusList = {
+      [HYPERION_TASK_STATUS.running]: true,
+      [HYPERION_TASK_STATUS.stoprequested]: true,
+      [HYPERION_TASK_STATUS.deleterequested]: true,
+      [HYPERION_TASK_STATUS.ultimatedeleterequested]: true,
+      [HYPERION_TASK_STATUS.resumerequested]: true,
+      [HYPERION_TASK_STATUS.requested]: true,
+      [HYPERION_TASK_STATUS.stopped]: false,
+      [HYPERION_TASK_STATUS.new]: false,
+      [HYPERION_TASK_STATUS.interrupted]: false,
+      [HYPERION_TASK_STATUS.container]: false,
+      [HYPERION_TASK_STATUS.uploading]: false,
+      [HYPERION_TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromObject({status});
+      expect(task.isActive()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isRunning', () => {
+    const statusList = {
+      [HYPERION_TASK_STATUS.running]: true,
+      [HYPERION_TASK_STATUS.stoprequested]: false,
+      [HYPERION_TASK_STATUS.deleterequested]: false,
+      [HYPERION_TASK_STATUS.ultimatedeleterequested]: false,
+      [HYPERION_TASK_STATUS.resumerequested]: false,
+      [HYPERION_TASK_STATUS.requested]: false,
+      [HYPERION_TASK_STATUS.stopped]: false,
+      [HYPERION_TASK_STATUS.new]: false,
+      [HYPERION_TASK_STATUS.interrupted]: false,
+      [HYPERION_TASK_STATUS.container]: false,
+      [HYPERION_TASK_STATUS.uploading]: false,
+      [HYPERION_TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromObject({status});
+      expect(task.isRunning()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isStopped', () => {
+    const statusList = {
+      [HYPERION_TASK_STATUS.running]: false,
+      [HYPERION_TASK_STATUS.stoprequested]: false,
+      [HYPERION_TASK_STATUS.deleterequested]: false,
+      [HYPERION_TASK_STATUS.ultimatedeleterequested]: false,
+      [HYPERION_TASK_STATUS.resumerequested]: false,
+      [HYPERION_TASK_STATUS.requested]: false,
+      [HYPERION_TASK_STATUS.stopped]: true,
+      [HYPERION_TASK_STATUS.new]: false,
+      [HYPERION_TASK_STATUS.interrupted]: false,
+      [HYPERION_TASK_STATUS.container]: false,
+      [HYPERION_TASK_STATUS.uploading]: false,
+      [HYPERION_TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromObject({status});
+      expect(task.isStopped()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isInterrupted', () => {
+    const statusList = {
+      [HYPERION_TASK_STATUS.running]: false,
+      [HYPERION_TASK_STATUS.stoprequested]: false,
+      [HYPERION_TASK_STATUS.deleterequested]: false,
+      [HYPERION_TASK_STATUS.ultimatedeleterequested]: false,
+      [HYPERION_TASK_STATUS.resumerequested]: false,
+      [HYPERION_TASK_STATUS.requested]: false,
+      [HYPERION_TASK_STATUS.stopped]: false,
+      [HYPERION_TASK_STATUS.new]: false,
+      [HYPERION_TASK_STATUS.interrupted]: true,
+      [HYPERION_TASK_STATUS.container]: false,
+      [HYPERION_TASK_STATUS.uploading]: false,
+      [HYPERION_TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromObject({status});
+      expect(task.isInterrupted()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isNew', () => {
+    const statusList = {
+      [HYPERION_TASK_STATUS.running]: false,
+      [HYPERION_TASK_STATUS.stoprequested]: false,
+      [HYPERION_TASK_STATUS.deleterequested]: false,
+      [HYPERION_TASK_STATUS.ultimatedeleterequested]: false,
+      [HYPERION_TASK_STATUS.resumerequested]: false,
+      [HYPERION_TASK_STATUS.requested]: false,
+      [HYPERION_TASK_STATUS.stopped]: false,
+      [HYPERION_TASK_STATUS.new]: true,
+      [HYPERION_TASK_STATUS.interrupted]: false,
+      [HYPERION_TASK_STATUS.container]: false,
+      [HYPERION_TASK_STATUS.uploading]: false,
+      [HYPERION_TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromObject({status});
+      expect(task.isNew()).toEqual(exp);
+    }
+  });
+
+  test('should be changeable if alterable or new', () => {
+    let task = Task.fromObject({
+      status: HYPERION_TASK_STATUS.new,
+      alterable: false,
+    });
+    expect(task.isChangeable()).toEqual(true);
+
+    task = Task.fromObject({
+      status: HYPERION_TASK_STATUS.done,
+      alterable: true,
+    });
+    expect(task.isChangeable()).toEqual(true);
+  });
+});
+
+describe(`Task Model methods parseElement tests`, () => {
+  test('should use status for isActive', () => {
+    const statusList = {
+      [TASK_STATUS.running]: true,
+      [TASK_STATUS.stoprequested]: true,
+      [TASK_STATUS.deleterequested]: true,
+      [TASK_STATUS.ultimatedeleterequested]: true,
+      [TASK_STATUS.resumerequested]: true,
+      [TASK_STATUS.requested]: true,
+      [TASK_STATUS.stopped]: false,
+      [TASK_STATUS.new]: false,
+      [TASK_STATUS.interrupted]: false,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isActive()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isRunning', () => {
+    const statusList = {
+      [TASK_STATUS.running]: true,
+      [TASK_STATUS.stoprequested]: false,
+      [TASK_STATUS.deleterequested]: false,
+      [TASK_STATUS.ultimatedeleterequested]: false,
+      [TASK_STATUS.resumerequested]: false,
+      [TASK_STATUS.requested]: false,
+      [TASK_STATUS.stopped]: false,
+      [TASK_STATUS.new]: false,
+      [TASK_STATUS.interrupted]: false,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isRunning()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isStopped', () => {
+    const statusList = {
+      [TASK_STATUS.running]: false,
+      [TASK_STATUS.stoprequested]: false,
+      [TASK_STATUS.deleterequested]: false,
+      [TASK_STATUS.ultimatedeleterequested]: false,
+      [TASK_STATUS.resumerequested]: false,
+      [TASK_STATUS.requested]: false,
+      [TASK_STATUS.stopped]: true,
+      [TASK_STATUS.new]: false,
+      [TASK_STATUS.interrupted]: false,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isStopped()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isInterrupted', () => {
+    const statusList = {
+      [TASK_STATUS.running]: false,
+      [TASK_STATUS.stoprequested]: false,
+      [TASK_STATUS.deleterequested]: false,
+      [TASK_STATUS.ultimatedeleterequested]: false,
+      [TASK_STATUS.resumerequested]: false,
+      [TASK_STATUS.requested]: false,
+      [TASK_STATUS.stopped]: false,
+      [TASK_STATUS.new]: false,
+      [TASK_STATUS.interrupted]: true,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isInterrupted()).toEqual(exp);
+    }
+  });
+
+  test('should use status for isNew', () => {
+    const statusList = {
+      [TASK_STATUS.running]: false,
+      [TASK_STATUS.stoprequested]: false,
+      [TASK_STATUS.deleterequested]: false,
+      [TASK_STATUS.ultimatedeleterequested]: false,
+      [TASK_STATUS.resumerequested]: false,
+      [TASK_STATUS.requested]: false,
+      [TASK_STATUS.stopped]: false,
+      [TASK_STATUS.new]: true,
+      [TASK_STATUS.interrupted]: false,
+      [TASK_STATUS.container]: false,
+      [TASK_STATUS.uploading]: false,
+      [TASK_STATUS.done]: false,
+    };
+
+    for (const [status, exp] of Object.entries(statusList)) {
+      const task = Task.fromElement({status});
+      expect(task.isNew()).toEqual(exp);
+    }
+  });
+
+  // isChangeable is only used with objects
 });

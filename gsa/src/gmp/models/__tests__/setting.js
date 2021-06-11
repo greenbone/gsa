@@ -15,7 +15,42 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import Setting from '../setting';
+import Setting, {getSettingValueByName} from '../setting';
+
+describe('getSettingValueByName tests', () => {
+  test('should get value by name', () => {
+    const setting = Setting.fromObject({
+      id: 'foo',
+      comment: 'bar',
+      name: 'lorem',
+      value: 'ipsum',
+    });
+
+    expect(getSettingValueByName([setting])('lorem')).toEqual('ipsum');
+  });
+  test('should return undefined if no such name', () => {
+    const setting = Setting.fromObject({
+      id: 'foo',
+      comment: 'bar',
+      name: 'lorem',
+      value: 'ipsum',
+    });
+
+    expect(getSettingValueByName([setting])('cat')).toBeUndefined();
+  });
+  test('should not crash on bad input', () => {
+    const setting = Setting.fromObject({
+      id: 'foo',
+      comment: 'bar',
+      name: 'lorem',
+      value: 'ipsum',
+    });
+
+    expect(getSettingValueByName([setting])()).toBeUndefined();
+    expect(getSettingValueByName()()).toBeUndefined();
+    expect(getSettingValueByName()('dog')).toBeUndefined();
+  });
+});
 
 describe('Setting tests', () => {
   test('should create setting from an element', () => {

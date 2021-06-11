@@ -45,7 +45,7 @@ import {
   useBulkDeleteEntities,
   useBulkExportEntities,
 } from 'web/entities/bulkactions';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+import usePagination from 'web/entities/usePagination';
 
 import {
   useCloneScanConfig,
@@ -56,11 +56,6 @@ import {
   useExportScanConfigsByIds,
   useLazyGetScanConfigs,
 } from 'web/graphql/scanconfigs';
-
-import {
-  loadEntities,
-  selector as entitiesSelector,
-} from 'web/store/entities/scanconfigs';
 
 import PropTypes from 'web/utils/proptypes';
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
@@ -115,7 +110,6 @@ const ScanConfigsPage = props => {
   const [, renewSession] = useUserSessionTimeout();
   const [filter, isLoadingFilter] = usePageFilter('scanconfig');
   const prevFilter = usePrevious(filter);
-  const simpleFilter = filter.withoutView();
   const {
     change: changeFilter,
     remove: removeFilter,
@@ -142,8 +136,14 @@ const ScanConfigsPage = props => {
   // ScanConfig list state variables and methods
   const [
     getScanConfigs,
-    {counts, scanConfigs, error, loading: isLoading, refetch, called},
+    {counts, scanConfigs, error, loading: isLoading, refetch, called, pageInfo},
   ] = useLazyGetScanConfigs();
+
+  const [getFirst, getLast, getNext, getPrevious] = usePagination({
+    filter,
+    pageInfo,
+    refetch,
+  });
 
   const exportScanConfigsByFilter = useExportScanConfigsByFilter();
   const exportScanConfigsByIds = useExportScanConfigsByIds();
@@ -241,7 +241,7 @@ const ScanConfigsPage = props => {
         last: undefined,
       });
     }
-  }, [filter, prevFilter, simpleFilter, refetch]);
+  }, [filter, prevFilter, refetch]);
 
   useEffect(() => {
     // start reloading if scanConfigs are available and no timer is running yet
@@ -294,6 +294,10 @@ const ScanConfigsPage = props => {
             onFilterCreated={changeFilter}
             onFilterReset={resetFilter}
             onFilterRemoved={removeFilter}
+            onFirstClick={getFirst}
+            onLastClick={getLast}
+            onNextClick={getNext}
+            onPreviousClick={getPrevious}
             onInteraction={renewSession}
             onScanConfigImportClick={import_func}
             onScanConfigCloneClick={handleCloneScanConfig}
@@ -326,16 +330,6 @@ const ScanConfigsPage = props => {
   );
 };
 
-ScanConfigsPage.propTypes = {
-  onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
-  onError: PropTypes.func.isRequired,
-  onInteraction: PropTypes.func.isRequired,
-};
-
-export default withEntitiesContainer('scanconfig', {
-  entitiesSelector,
-  loadEntities,
-})(ScanConfigsPage);
+export default ScanConfigsPage;
 
 // vim: set ts=2 sw=2 tw=80:

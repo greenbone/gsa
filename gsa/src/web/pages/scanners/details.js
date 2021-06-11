@@ -19,23 +19,22 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import DateTime from 'web/components/date/datetime';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import {
   scannerTypeName,
   CVE_SCANNER_TYPE,
   OSP_SCANNER_TYPE,
-  PARAM_TYPE_OVALDEF_FILE,
   PARAM_TYPE_SELECTION,
   PARAM_TYPE_BOOLEAN,
 } from 'gmp/models/scanner';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
 
+import DateTime from 'web/components/date/datetime';
 import InfoTable from 'web/components/table/infotable';
 import SimpleTable from 'web/components/table/simpletable';
 import TableBody from 'web/components/table/body';
@@ -62,14 +61,22 @@ const CertInfo = ({info}) => {
         <TableRow>
           <TableData>{_('Activation')}</TableData>
           <TableData>
-            <DateTime date={activationTime} />
+            {isDefined(activationTime) ? (
+              <DateTime date={activationTime} />
+            ) : (
+              _('N/A')
+            )}
           </TableData>
         </TableRow>
 
         <TableRow>
           <TableData>{_('Expiration')}</TableData>
           <TableData>
-            <DateTime date={expirationTime} />
+            {isDefined(expirationTime) ? (
+              <DateTime date={expirationTime} />
+            ) : (
+              _('N/A')
+            )}
           </TableData>
         </TableRow>
 
@@ -153,9 +160,7 @@ const OspScannerDetails = ({info}) => {
               {params.map(param => {
                 const {param_type} = param;
                 let {default: def} = param;
-                if (param_type === PARAM_TYPE_OVALDEF_FILE) {
-                  def = _('OVAL Definitions File List');
-                } else if (param_type === PARAM_TYPE_SELECTION) {
+                if (param_type === PARAM_TYPE_SELECTION) {
                   def = _('List');
                 } else if (param_type === PARAM_TYPE_BOOLEAN) {
                   def = renderYesNo(def);

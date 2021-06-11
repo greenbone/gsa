@@ -58,7 +58,6 @@ const TYPES = [
   'group',
   'note',
   'nvt',
-  'ovaldef',
   'override',
   'permission',
   'portlist',
@@ -126,15 +125,8 @@ const TagComponent = ({
 
     if (isDefined(tag)) {
       gmp.tag.get({id: tag.id}).then(response => {
-        const {
-          active,
-          comment,
-          id,
-          name,
-          resourceCount,
-          resourceType,
-          value,
-        } = response.data;
+        const {active, comment, id, name, resourceCount, resourceType, value} =
+          response.data;
         const filter = 'rows=' + SELECT_MAX_RESOURCES + ' tag_id="' + id;
         gmp[pluralizeType(resourceType)].get({filter}).then(resp => {
           const resources = resp.data;

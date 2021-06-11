@@ -18,7 +18,26 @@
 
 import {useCallback} from 'react';
 
-const usePagination = ({simpleFilter, filter, pageInfo, refetch}) => {
+import {isDefined} from 'gmp/utils/identity';
+
+/**
+ * Hook to to fetch the next, previous, last and first page for a list of
+ * entities gathered from a GraphQL query.
+ *
+ * @param {Filter} filter Current applied filter
+ * @param {Object} pageInfo Current information about the page with cursors (keyword relay)
+ * @param {Function} refetch Function to refetch the current data. Will be
+ *                           called with to fetch next, previous, last or first page.
+ * @param {Filter} simpleFilter Simplified filter without rows and first (Optional)
+ *
+ * @returns {Array} Tuple of functions to query data for the first, last, next
+ *                  and page.
+ */
+const usePagination = ({filter, pageInfo, refetch, simpleFilter}) => {
+  if (!isDefined(simpleFilter)) {
+    simpleFilter = filter.withoutView();
+  }
+
   const getNext = useCallback(() => {
     refetch({
       filterString: simpleFilter.toFilterString(),

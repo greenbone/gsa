@@ -15,12 +15,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import withSvgIcon from './withSvgIcon';
 
-import {ReactComponent as Icon} from './svg/ovaldef.svg';
+import React from 'react';
 
-const OvalDefIcon = withSvgIcon()(Icon);
+import Logo from 'web/components/icon/svg/greenbone-power.svg';
 
-export default OvalDefIcon;
+const PoweredByGreenbone = props => (
+  // eslint-disable-next-line react/jsx-no-target-blank
+  <a href="https://www.greenbone.net" target="_blank" rel="noopener">
+    <img alt="Powered By Greenbone Networks" {...props} src={Logo} />
+  </a>
+);
 
-// vim: set ts=2 sw=2 tw=80:
+export default PoweredByGreenbone;

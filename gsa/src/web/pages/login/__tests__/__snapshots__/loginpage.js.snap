@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LoginPage tests should render Loginpage 1`] = `
-.c2 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -15,7 +15,7 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   justify-content: center;
 }
 
-.c4 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -33,7 +33,7 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   align-items: stretch;
 }
 
-.c7 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -51,15 +51,75 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   align-items: center;
 }
 
-.c12 {
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  margin-top: -10px;
+}
+
+.c5 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5 > * {
+  margin-top: 10px;
+}
+
+.c4 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c17 {
   color: #787878;
 }
 
-.c12:link {
-  color: #66c430;
+.c17:link {
+  color: #787878;
 }
 
-.c11 {
+.c16 {
   position: fixed;
   bottom: 0;
   right: 0;
@@ -73,22 +133,39 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   z-index: 500;
 }
 
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 180px;
+}
+
 .c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  height: 95px;
-}
-
-.c1 {
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   background: #fff;
   box-shadow: 0px 14px 22px #787878;
+  border-radius: 3px;
   padding: 4rem;
-  max-width: 30rem;
+  width: 30rem;
+  z-index: 1;
 }
 
-.c8 {
+.c12 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -111,14 +188,14 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   justify-content: space-evenly;
 }
 
-.c6 {
+.c10 {
   color: #d83636;
   font-weight: bold;
   text-align: center;
   margin: 10px;
 }
 
-.c10 {
+.c15 {
   box-sizing: border-box;
   color: white;
   background-color: text:white;
@@ -137,23 +214,33 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   width: 100%;
 }
 
-.c10:hover {
+.c15:hover {
   cursor: pointer;
   background-color: #212121;
 }
 
-.c10 + .c9 {
+.c15 + .c14 {
   margin-left: 1.25rem;
 }
 
-.c5 {
+.c9 {
   margin: 5px auto;
   padding-bottom: 10px;
   font-size: 9pt;
-  border: 1px solid #c8d3d9;
   padding: 10px;
   margin-bottom: 10px;
   margin-top: 20px;
+}
+
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
 }
 
 .c0 {
@@ -172,7 +259,7 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  background: #c8d3d9;
+  background: radial-gradient( 51.84% 102.52% at 58.54% 44.97%, #baed81 0%, #66c430 67.26% );
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
@@ -187,6 +274,18 @@ exports[`LoginPage tests should render Loginpage 1`] = `
   height: 100vh;
 }
 
+.c1 {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+.c2 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
 <body>
   <div
     id="portals"
@@ -195,117 +294,155 @@ exports[`LoginPage tests should render Loginpage 1`] = `
     <div
       class="c0"
     >
-      <div
+      <img
+        alt=""
         class="c1"
+        src="/img/login-top.svg"
+      />
+      <img
+        alt=""
+        class="c2"
+        src="/img/login-bottom.svg"
+      />
+      <div
+        class="c3"
       >
-        <div
-          class="c2"
-        >
-          <img
-            alt="Greenbone Security Assistant"
-            class="c3"
-            src="/img/login-label.png"
-          />
-        </div>
         <div
           class="c4"
         >
           <div
             class="c5"
-            data-testid="protocol-insecure"
+            margin="10px"
           >
-            <p
+            <div
               class="c6"
             >
-              Warning: Connection unencrypted
-            </p>
-            <p>
-              The connection to this GSA is not encrypted, allowing anyone listening to the traffic to steal your credentials.
-            </p>
-            <p>
-              Please configure a TLS certificate for the HTTPS service or ask your administrator to do so as soon as possible.
-            </p>
-          </div>
-        </div>
-        <div
-          class="c7"
-        />
-        <div
-          class="c8"
-        >
-          <div
-            class="MuiFormControl-root sc-jSgupP cSAYIk"
-          >
+              <img
+                alt="Greenbone Security Assistant"
+                class="c7"
+                src="/img/login-label.png"
+              />
+            </div>
             <div
-              class="MuiFormControl-root MuiTextField-root sc-gKsewC kYJFYx MuiFormControl-marginNormal"
-              grow="1"
-              tabindex="1"
+              class="c8"
             >
-              <label
-                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink Mui-focused Mui-focused"
-                data-shrink="true"
-                style="font-family: 'DroidSans', Arial, sans-serif;"
-              >
-                Username
-              </label>
               <div
-                class="MuiInputBase-root MuiInput-root MuiInput-underline Mui-focused Mui-focused MuiInputBase-formControl MuiInput-formControl"
-                style="font-family: 'DroidSans', Arial, sans-serif;"
+                class="c9"
+                data-testid="protocol-insecure"
               >
-                <input
-                  aria-invalid="false"
-                  autocomplete="username"
-                  class="MuiInputBase-input MuiInput-input"
-                  name="username"
-                  type="text"
-                  value=""
-                />
+                <p
+                  class="c10"
+                >
+                  Warning: Connection unencrypted
+                </p>
+                <p>
+                  The connection to this GSA is not encrypted, allowing anyone listening to the traffic to steal your credentials.
+                </p>
+                <p>
+                  Please configure a TLS certificate for the HTTPS service or ask your administrator to do so as soon as possible.
+                </p>
               </div>
             </div>
-          </div>
-          <div
-            class="MuiFormControl-root sc-jSgupP cSAYIk"
-          >
             <div
-              class="MuiFormControl-root MuiTextField-root sc-gKsewC kYJFYx MuiFormControl-marginNormal"
-              grow="1"
+              class="c11"
+            />
+            <div
+              class="c12"
             >
-              <label
-                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated"
-                data-shrink="false"
-                style="font-family: 'DroidSans', Arial, sans-serif;"
+              <h1
+                class="c13"
               >
-                Password
-              </label>
+                Sign in to your account
+              </h1>
               <div
-                class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
-                style="font-family: 'DroidSans', Arial, sans-serif;"
+                class="MuiFormControl-root sc-jSgupP cSAYIk"
               >
-                <input
-                  aria-invalid="false"
-                  autocomplete="current-password"
-                  class="MuiInputBase-input MuiInput-input"
-                  name="password"
-                  type="password"
-                  value=""
-                />
+                <div
+                  class="MuiFormControl-root MuiTextField-root sc-gKsewC kYJFYx MuiFormControl-marginNormal"
+                  grow="1"
+                  tabindex="1"
+                >
+                  <label
+                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink Mui-focused Mui-focused"
+                    data-shrink="true"
+                    style="font-family: 'DroidSans', Arial, sans-serif;"
+                  >
+                    Username
+                  </label>
+                  <div
+                    class="MuiInputBase-root MuiInput-root MuiInput-underline Mui-focused Mui-focused MuiInputBase-formControl MuiInput-formControl"
+                    style="font-family: 'DroidSans', Arial, sans-serif;"
+                  >
+                    <input
+                      aria-invalid="false"
+                      autocomplete="username"
+                      class="MuiInputBase-input MuiInput-input"
+                      name="username"
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                </div>
               </div>
+              <div
+                class="MuiFormControl-root sc-jSgupP cSAYIk"
+              >
+                <div
+                  class="MuiFormControl-root MuiTextField-root sc-gKsewC kYJFYx MuiFormControl-marginNormal"
+                  grow="1"
+                >
+                  <label
+                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated"
+                    data-shrink="false"
+                    style="font-family: 'DroidSans', Arial, sans-serif;"
+                  >
+                    Password
+                  </label>
+                  <div
+                    class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+                    style="font-family: 'DroidSans', Arial, sans-serif;"
+                  >
+                    <input
+                      aria-invalid="false"
+                      autocomplete="current-password"
+                      class="MuiInputBase-input MuiInput-input"
+                      name="password"
+                      type="password"
+                      value=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                class="sc-dIUggk c14 c15"
+                data-testid="login-button"
+              >
+                Sign In
+              </button>
+            </div>
+            <div
+              class="c6"
+            >
+              <a
+                href="https://www.greenbone.net"
+                rel="noopener"
+                target="_blank"
+              >
+                <img
+                  alt="Powered By Greenbone Networks"
+                  src="greenbone-power.svg"
+                />
+              </a>
             </div>
           </div>
-          <button
-            class="sc-dIUggk c9 c10"
-            data-testid="login-button"
-          >
-            Login
-          </button>
         </div>
       </div>
       <footer
-        class="c11"
+        class="c16"
       >
         Greenbone Security Assistant (GSA) Copyright (C) 2009-2021 by Greenbone Networks GmbH, 
         <a
-          class="c12"
+          class="c17"
           href="http://www.greenbone.net"
           rel="noopener noreferrer"
           target="_blank"

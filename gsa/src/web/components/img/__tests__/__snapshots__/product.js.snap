@@ -6,7 +6,7 @@ exports[`ProductImage tests should render 1`] = `
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  height: 95px;
+  height: 180px;
 }
 
 <img

@@ -27,7 +27,7 @@ import DialogFooter from 'web/components/dialog/footer';
 import DialogTitle from 'web/components/dialog/title';
 import ScrollableContent from 'web/components/dialog/scrollablecontent';
 
-import PropTypes from 'web/utils/proptypes'
+import PropTypes from 'web/utils/proptypes';
 
 const DialogNotification = ({title, message, onCloseClick}) =>
   hasValue(message) ? (

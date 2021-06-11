@@ -26,23 +26,29 @@ import _ from 'gmp/locale';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import Layout from 'web/components/layout/layout';
+import ErrorContainer from 'web/components/error/errorcontainer';
+import useFormValues from 'web/components/form/useFormValues';
 import ProductImage from 'web/components/img/product';
+import PoweredByGreenbone from 'web/components/img/powered';
+import Divider from 'web/components/layout/divider';
+import Layout from 'web/components/layout/layout';
+
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
-const Paper = styled.div`
+const Paper = styled(Layout)`
   background: ${Theme.white};
   box-shadow: 0px 14px 22px ${Theme.mediumGray};
+  border-radius: 3px;
   padding: 4rem;
-  max-width: 30rem;
+  width: 30rem;
+  z-index: ${Theme.Layers.higher};
 `;
 
 const Panel = styled.div`
   margin: 5px auto;
   padding-bottom: 10px;
   font-size: 9pt;
-  border: 1px solid ${Theme.lightGray};
   padding: 10px;
   margin-bottom: 10px;
 `;
@@ -59,6 +65,12 @@ const Error = styled.p`
   margin: 10px;
 `;
 
+const StyledErrorContainer = styled(ErrorContainer)`
+  margin: 0 0 0 0;
+  font-size: 15px;
+  border-radius: 4px;
+`;
+
 const StyledButton = styled(Button)`
   margin-top: 2rem;
   width: 100%;
@@ -68,54 +80,40 @@ const StyledPanel = styled(Panel)`
   margin-top: 20px;
 `;
 
-class LoginForm extends React.Component {
-  constructor(props) {
-    super(props);
+const H1 = styled.h1`
+  display: flex;
+  flex-grow: 1;
+`;
 
-    this.state = {
-      username: '',
-      password: '',
-    };
+const LoginForm = ({
+  error,
+  showGuestLogin = false,
+  showLogin = true,
+  showProtocolInsecure = false,
+  isIE11 = false,
+  onGuestLoginClick,
+  onSubmit,
+}) => {
+  const [{username, password}, handleValueChange] = useFormValues({
+    username: '',
+    password: '',
+  });
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleValueChange = this.handleValueChange.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-  }
-
-  handleSubmit() {
-    const {onSubmit} = this.props;
-
-    if (!isDefined(onSubmit)) {
-      return;
+  const handleSubmit = () => {
+    if (isDefined(onSubmit)) {
+      onSubmit(username, password);
     }
+  };
 
-    const {username, password} = this.state;
-    onSubmit(username, password);
-  }
-
-  handleValueChange(value, name) {
-    this.setState({[name]: value});
-  }
-
-  handleKeyDown(event) {
+  const handleKeyDown = event => {
     if (event.keyCode === KeyCode.ENTER) {
-      this.handleSubmit(event);
+      handleSubmit();
     }
-  }
+  };
 
-  render() {
-    const {
-      error,
-      showGuestLogin = false,
-      showLogin = true,
-      showProtocolInsecure = false,
-      isIE11 = false,
-      onGuestLoginClick,
-    } = this.props;
-    const {username, password} = this.state;
-
-    return (
-      <Paper>
+  return (
+    <Paper>
+      <Divider flex="column" margin="10px" grow="1">
         <Layout align={'center'}>
           <ProductImage />
         </Layout>
@@ -153,8 +151,15 @@ class LoginForm extends React.Component {
         </Layout>
 
         <>
+          {isDefined(error) && (
+            <StyledErrorContainer data-testid="error">
+              {error}
+            </StyledErrorContainer>
+          )}
+
           {showLogin && !isIE11 && (
             <StyledLayout flex={'column'}>
+              <H1>{_('Sign in to your account')}</H1>
               <Input
                 margin={'normal'}
                 type={'text'}
@@ -165,9 +170,7 @@ class LoginForm extends React.Component {
                 value={username}
                 autoFocus="autofocus"
                 tabIndex="1"
-                onChange={e =>
-                  this.handleValueChange(e.target.value, e.target.name)
-                }
+                onChange={e => handleValueChange(e.target.value, e.target.name)}
               />
               <Input
                 margin={'normal'}
@@ -177,20 +180,14 @@ class LoginForm extends React.Component {
                 grow="1"
                 label={_('Password')}
                 value={password}
-                onKeyDown={this.handleKeyDown}
-                onChange={e =>
-                  this.handleValueChange(e.target.value, e.target.name)
-                }
+                onKeyDown={handleKeyDown}
+                onChange={e => handleValueChange(e.target.value, e.target.name)}
               />
-              <StyledButton
-                data-testid="login-button"
-                onClick={this.handleSubmit}
-              >
-                {_('Login')}
+              <StyledButton data-testid="login-button" onClick={handleSubmit}>
+                {_('Sign In')}
               </StyledButton>
             </StyledLayout>
           )}
-          {isDefined(error) && <Error data-testid="error">{error}</Error>}
         </>
 
         {showGuestLogin && (
@@ -199,14 +196,17 @@ class LoginForm extends React.Component {
               data-testid="guest-login-button"
               onClick={onGuestLoginClick}
             >
-              {_('Login as Guest')}
+              {_('Sign In as Guest')}
             </StyledButton>
           </div>
         )}
-      </Paper>
-    );
-  }
-}
+        <Layout align={'center'}>
+          <PoweredByGreenbone />
+        </Layout>
+      </Divider>
+    </Paper>
+  );
+};
 
 LoginForm.propTypes = {
   error: PropTypes.string,

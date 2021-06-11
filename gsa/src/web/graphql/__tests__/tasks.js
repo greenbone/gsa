@@ -26,7 +26,6 @@ import {
   useCloneTask,
   useCreateContainerTask,
   useCreateTask,
-  useDeleteTask,
   useDeleteTasksByIds,
   useGetTasks,
   useGetTask,
@@ -38,12 +37,12 @@ import {
   useDeleteTasksByFilter,
   useExportTasksByIds,
   useExportTasksByFilter,
+  useDeleteTask,
 } from '../tasks';
 import {
   createCloneTaskQueryMock,
   createCreateContainerTaskQueryMock,
   createCreateTaskQueryMock,
-  createDeleteTaskQueryMock,
   createGetTasksQueryMock,
   createGetTaskQueryMock,
   createModifyTaskQueryMock,
@@ -55,6 +54,7 @@ import {
   createGetTaskQueryErrorMock,
   createExportTasksByFilterQueryMock,
   createExportTasksByIdsQueryMock,
+  createDeleteTaskQueryMock,
 } from '../__mocks__/tasks';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -192,7 +192,7 @@ const DeleteTaskComponent = () => {
 
 describe('useDeleteTask tests', () => {
   test('should delete a task after user interaction', async () => {
-    const [mock, resultFunc] = createDeleteTaskQueryMock('foo');
+    const [mock, resultFunc] = createDeleteTaskQueryMock();
     const {render} = rendererWith({queryMocks: [mock]});
 
     render(<DeleteTaskComponent />);
