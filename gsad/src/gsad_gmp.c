@@ -3225,8 +3225,8 @@ create_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
               "</create_credential>",
               name, comment ? comment : "", type, community ? community : "",
               credential_login ? credential_login : "",
-              password ? password : "",
-              auth_algorithm ? auth_algorithm : "", allow_insecure);
+              password ? password : "", auth_algorithm ? auth_algorithm : "",
+              allow_insecure);
         }
       else if (str_equal (type, "pgp"))
         {
@@ -3787,8 +3787,6 @@ save_credential_gmp (gvm_connection_t *connection, credentials_t *credentials,
             xml_string_append (command, "<private>%s</private>", private_key);
           xml_string_append (command, "</key>");
         }
-
-
     }
   else if (str_equal (type, "usk"))
     {
@@ -7424,10 +7422,9 @@ save_config_nvt_gmp (gvm_connection_t *connection, credentials_t *credentials,
             }
           g_strfreev (splits);
 
-          value = preference->value_size
-                    ? g_base64_encode ((guchar *) preference->value,
-                                       preference->value_size)
-                    : g_strdup ("");
+          value = preference->value_size ? g_base64_encode (
+                    (guchar *) preference->value, preference->value_size)
+                                         : g_strdup ("");
 
           if (is_timeout)
             {
@@ -9130,8 +9127,7 @@ create_override_gmp (gvm_connection_t *connection, credentials_t *credentials,
         new_severity = params_value (params, "new_severity_from_list");
       else if (params_original_value (params, "new_severity_from_list") == NULL
                || strcmp (
-                    params_original_value (params, "new_severity_from_list"),
-                    ""))
+                 params_original_value (params, "new_severity_from_list"), ""))
         new_severity = NULL;
       else
         new_severity = "";
@@ -14522,7 +14518,8 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       params_iterator_init (&iter, roles);
       while (params_iterator_next (&iter, &name, &param))
         {
-          if (param->value && strcmp (param->value, "--")
+          if (param->value
+              && strcmp (param->value, "--")
               /* Skip "Super Admin" which may not be added to a user. */
               && strcmp (param->value, "9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5"))
             g_string_append_printf (role_elements, "<role id=\"%s\"/>",
@@ -15402,8 +15399,8 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
           if (gvm_connection_sendf_xml (connection, command) == -1)
             {
               g_free (command);
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
+              cmd_response_data_set_status_code (
+                response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
                 credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while deleting resources. "
@@ -15416,8 +15413,8 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
           entity = NULL;
           if (read_entity_and_text_c (connection, &entity, &response))
             {
-              cmd_response_data_set_status_code (response_data,
-                                                 MHD_HTTP_INTERNAL_SERVER_ERROR);
+              cmd_response_data_set_status_code (
+                response_data, MHD_HTTP_INTERNAL_SERVER_ERROR);
               return gsad_message (
                 credentials, "Internal error", __func__, __LINE__,
                 "An internal error occurred while deleting resources. "
@@ -15444,12 +15441,11 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
 
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
 
-      msg = g_strdup_printf
-             ("An error occurred while deleting one or more resources. "
-              "However, %i of the resources %s successfully deleted. "
-              "Diagnostics: At least one DELETE command failed.",
-              count,
-              count > 1 ? "were" : "was");
+      msg = g_strdup_printf (
+        "An error occurred while deleting one or more resources. "
+        "However, %i of the resources %s successfully deleted. "
+        "Diagnostics: At least one DELETE command failed.",
+        count, count > 1 ? "were" : "was");
 
       html = gsad_message (credentials, "Error", __func__, __LINE__, msg,
                            response_data);
@@ -15457,10 +15453,9 @@ bulk_delete_gmp (gvm_connection_t *connection, credentials_t *credentials,
       return html;
     }
 
-  return action_result (connection, credentials, params, response_data, "Bulk Delete",
-                        "OK",
-                        "",    /* Status details. */
-                        NULL); /* ID. */
+  return action_result (connection, credentials, params, response_data,
+                        "Bulk Delete", "OK", "", /* Status details. */
+                        NULL);                   /* ID. */
 }
 
 /**
