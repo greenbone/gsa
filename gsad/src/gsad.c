@@ -2270,8 +2270,7 @@ drop_privileges (struct passwd *user_pw)
 {
   if (setgroups (0, NULL))
     {
-      g_critical ("%s: failed to set groups: %s\n", __func__,
-                  strerror (errno));
+      g_critical ("%s: failed to set groups: %s\n", __func__, strerror (errno));
       return FALSE;
     }
   if (setgid (user_pw->pw_gid))
@@ -3223,8 +3222,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load private SSL key from %s: %s\n",
-                          __func__, ssl_private_key_filename,
-                          error->message);
+                          __func__, ssl_private_key_filename, error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
             }
@@ -3233,8 +3231,7 @@ main (int argc, char **argv)
                                     NULL, &error))
             {
               g_critical ("%s: Could not load SSL certificate from %s: %s\n",
-                          __func__, ssl_certificate_filename,
-                          error->message);
+                          __func__, ssl_certificate_filename, error->message);
               g_error_free (error);
               exit (EXIT_FAILURE);
             }
