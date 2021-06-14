@@ -24,8 +24,8 @@
   },
   "dependencies": {
     "@greenbone/ui-components": "2021.1.2",
-    "@babel/core": "^7.14.3",
     "@sentry/react": "^6.6.0",
+    "@babel/core": "^7.14.5",
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
     "@vx/shape": "^0.0.179",
