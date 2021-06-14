@@ -469,7 +469,7 @@ describe('TargetDialog component tests', () => {
     expect(createCredentialIcons.length).toEqual(10); // Each icon has both a span and an svg icon. There should be 5 total, including elevate privileges
   });
 
-  test('ssh elevate credential dropdown should only allow username + password options', () => {
+  test('ssh elevate credential dropdown should only allow username + password options and remove ssh credential from list', () => {
     const handleClose = jest.fn();
     const handleChange = jest.fn();
     const handleSave = jest.fn();
@@ -490,7 +490,7 @@ describe('TargetDialog component tests', () => {
         name={'target'}
         reverse_lookup_only={0}
         reverse_lookup_unify={0}
-        smb_credential_id={'2345'}
+        smb_credential_id={'23456'}
         ssh_credential_id={'2345'}
         target_title={'Edit Target target'}
         onClose={handleClose}
@@ -519,11 +519,10 @@ describe('TargetDialog component tests', () => {
     fireEvent.click(selectOpenButton[3]);
 
     selectItems = queryAllByTestId('select-item');
-    expect(selectItems.length).toBe(3);
+    expect(selectItems.length).toBe(2); // "original" ssh option removed
 
     expect(selectItems[0]).toHaveTextContent('--'); // null option
-    expect(selectItems[1]).toHaveTextContent('username+password');
-    expect(selectItems[2]).toHaveTextContent('up2');
+    expect(selectItems[1]).toHaveTextContent('up2');
   });
 
   test('should disable editing certain fields if target is in use', () => {
@@ -547,7 +546,7 @@ describe('TargetDialog component tests', () => {
         name={'target'}
         reverse_lookup_only={0}
         reverse_lookup_unify={0}
-        smb_credential_id={'2345'}
+        smb_credential_id={'23456'}
         ssh_credential_id={'2345'}
         ssh_elevate_credential_id={'2345'}
         target_title={'Edit Target target'}
@@ -579,9 +578,9 @@ describe('TargetDialog component tests', () => {
     expect(selectedValues[2]).toHaveTextContent('username+password');
     expect(selectedValues[2]).toHaveAttribute('disabled');
 
-    expect(selectedValues[3]).toHaveTextContent('username+password');
+    expect(selectedValues[3]).toHaveTextContent('2345');
     expect(selectedValues[3]).toHaveAttribute('disabled');
-    expect(selectedValues[4]).toHaveTextContent('username+password');
+    expect(selectedValues[4]).toHaveTextContent('23456');
     expect(selectedValues[4]).toHaveAttribute('disabled');
 
     expect(selectedValues[5]).toHaveTextContent('--');
