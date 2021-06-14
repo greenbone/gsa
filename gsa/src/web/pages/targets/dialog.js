@@ -154,6 +154,9 @@ const TargetDialog = ({
   const up_credentials = credentials.filter(
     value => value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
   );
+  const elevateUpCredentials = up_credentials.filter(
+    value => value.id !== ssh_credential_id,
+  );
   const snmp_credentials = credentials.filter(snmp_credential_filter);
 
   const uncontrolledValues = {
@@ -388,7 +391,10 @@ const TargetDialog = ({
                       <Select
                         name="ssh_elevate_credential_id"
                         disabled={in_use}
-                        items={renderSelectItems(up_credentials, UNSET_VALUE)}
+                        items={renderSelectItems(
+                          elevateUpCredentials,
+                          UNSET_VALUE,
+                        )}
                         value={state.ssh_elevate_credential_id}
                         onChange={onSshElevateCredentialChange}
                       />
