@@ -502,7 +502,7 @@ const TargetDialog = ({
 
 TargetDialog.propTypes = {
   alive_tests: PropTypes.oneOf([ALIVE_TESTS_DEFAULT, ...ALIVE_TESTS]),
-  allowSimultaneousIPs: PropTypes.bool,
+  allowSimultaneousIPs: PropTypes.yesno,
   capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   credentials: PropTypes.array,
