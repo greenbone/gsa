@@ -121,10 +121,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed number-only names within schedules/dialog [#2914](https://github.com/greenbone/gsa/pull/2914)
 - Fixed changing Trend and Select for NVT-families and whole selection only [#2905](https://github.com/greenbone/gsa/pull/2905)
 - Fixed missing name for CVE results on result detailspage [#2892](https://github.com/greenbone/gsa/pull/2892)
-- Fix setting secret key in RADIUS dialog [#2891](https://github.com/greenbone/gsa/pull/2891)
-- Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
-- Fixed setting whether to include related resources for new permissions [#2931](https://github.com/greenbone/gsa/pull/2891)
 - Fixed setting secret key in RADIUS dialog, backport from [#2891](https://github.com/greenbone/gsa/pull/2891), [#2915](https://github.com/greenbone/gsa/pull/2915)
+- Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
 
 ### Removed
 
