@@ -110,7 +110,7 @@ Cred.propTypes = {
   title: PropTypes.string,
 };
 
-const Row = ({
+export const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
