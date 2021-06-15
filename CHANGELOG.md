@@ -22,12 +22,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added @testing-library/user-event as a dev-dependency [#2891](https://github.com/greenbone/gsa/pull/2891)
 
 ### Changed
-<<<<<<< HEAD
-=======
 - Disallow using the same credential for ssh and elevate credential in targets [#2994](https://github.com/greenbone/gsa/pull/2994)
 - Properly space and linebreak roles and groups in users table row [#2949](https://github.com/greenbone/gsa/pull/2949)
 - Make HorizontalSep component wrappable [#2949](https://github.com/greenbone/gsa/pull/2949)
->>>>>>> c56c13ff7 (Update Changelog)
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867), [#2924](https://github.com/greenbone/gsa/pull/2924)
 
 ### Fixed
