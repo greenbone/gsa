@@ -1354,6 +1354,7 @@
   "SNMP to {{agent}}": "SNMP an {{agent}}",
   "SSH": "SSH",
   "SSH Credential": "SSH-Anmeldedaten",
+  "SSH Elevate": "SSH erweitert",
   "SSH authentication was successful": "SSH-Authentifizierung war erfolgreich",
   "SSH authentication was unsuccessful": "SSH-Authentifizierung ist fehlgeschlagen",
   "SSH elevate credential ": "SSH-Anmeldedaten für zusätzliche Berechtigungen ",
