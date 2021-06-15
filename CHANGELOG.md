@@ -7,7 +7,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.10] - Unreleased
 
 ### Added
-<<<<<<< HEAD
 ### Changed
 ### Fixed
 ### Removed
@@ -50,10 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#2813](https://github.com/greenbone/gsa/pull/2813)
 - Added CVSS origin to NVT details [#2588](https://github.com/greenbone/gsa/pull/2588)
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
-=======
-- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
 - Set SameSite=strict for the session cookie to avoid CSRF [#2948](https://github.com/greenbone/gsa/pull/2948)
->>>>>>> b28f78dc3 (Update Changelog)
 
 ### Changed
 - Properly space and linebreak roles and groups in users table row [#2949](https://github.com/greenbone/gsa/pull/2949)
@@ -94,12 +90,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.8.1] - 2021-02-02
 
 ### Added
+- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
 - Added icon to host detailspage to link to TLS certificates [#2624](https://github.com/greenbone/gsa/pull/2624)
 - Added form validation for user setting "rows per page"
   [#2478](https://github.com/greenbone/gsa/pull/2478), [#2505](https://github.com/greenbone/gsa/pull/2505)
 - Added option for "Start Task" event upon "New SecInfo arrived" condition in alerts dialog [#2418](https://github.com/greenbone/gsa/pull/2418)
 
 ### Changed
+- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
 - Ensure superadmins can edit themselves [#2633](https://github.com/greenbone/gsa/pull/2633)
 - Disable clone icon for superadmins [#2634](https://github.com/greenbone/gsa/pull/2634)
 - Allow äüöÄÜÖß in form validation rule for "name" [#2586](https://github.com/greenbone/gsa/pull/2586)
