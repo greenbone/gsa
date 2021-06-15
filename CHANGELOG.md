@@ -50,7 +50,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added the CVSS v3.1 BaseScore calculator to the `/cvsscalculator` page in the Help section. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Changed
-<<<<<<< HEAD
+- Properly space and linebreak roles and groups in users table row [#2949](https://github.com/greenbone/gsa/pull/2949)
+- Make HorizontalSep component wrappable [#2949](https://github.com/greenbone/gsa/pull/2949)
 - Don't show word cloud as default in result dashboard [#2883](https://github.com/greenbone/gsa/pull/2883)
 - Sort host, os and vulns listpage by descending severity [#2880](https://github.com/greenbone/gsa/pull/2880)
 - Revert the changes from integer `score` to a float `severity` [#2854](https://github.com/greenbone/gsa/pull/2854)
@@ -66,12 +67,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#2756](https://github.com/greenbone/gsa/pull/2756)
 - CVE Tables Page can now be used with the updated xml-format and CVSSv3(.1). [#2583](https://github.com/greenbone/gsa/pull/2583)
 - The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
-
-=======
-- Properly space and linebreak roles and groups in users table row [#2949](https://github.com/greenbone/gsa/pull/2949)
-- Make HorizontalSep component wrappable [#2949](https://github.com/greenbone/gsa/pull/2949)
-- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
->>>>>>> 7a5466ac4 (Update Changelog)
 
 ### Fixed
 - Fix dynamic severity checkbox not being checked upon clicking [#2882](https://github.com/greenbone/gsa/pull/2882)
