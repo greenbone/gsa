@@ -110,7 +110,7 @@ Cred.propTypes = {
   title: PropTypes.string,
 };
 
-const Row = ({
+export const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
@@ -136,6 +136,11 @@ const Row = ({
     </TableData>
     <TableData flex="column" align="center">
       <Cred cred={entity.ssh_credential} title={'SSH'} links={links} />
+      <Cred
+        cred={entity.ssh_elevate_credential}
+        title={_('SSH Elevate')}
+        links={links}
+      />
       <Cred cred={entity.smb_credential} title={'SMB'} links={links} />
       <Cred cred={entity.esxi_credential} title={'ESXi'} links={links} />
       <Cred cred={entity.snmp_credential} title={'SNMP'} links={links} />
