@@ -7,12 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unrelased]
 
 ### Added
-<<<<<<< HEAD
 - Added isDeprecated() method to NVT model and use it in details [#2960](https://github.com/greenbone/gsa/pull/2960)
 - Added @testing-library/user-event as a dev-dependency [#2891](https://github.com/greenbone/gsa/pull/2891)
-=======
-- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
->>>>>>> b28f78dc3 (Update Changelog)
 - Set SameSite=strict for the session cookie to avoid CSRF [#2948](https://github.com/greenbone/gsa/pull/2948)
 
 ### Changed
@@ -90,6 +86,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added option for "Start Task" event upon "New SecInfo arrived" condition in alerts dialog [#2418](https://github.com/greenbone/gsa/pull/2418)
 
 ### Changed
+- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
 - Ensure superadmins can edit themselves [#2633](https://github.com/greenbone/gsa/pull/2633)
 - Disable clone icon for superadmins [#2634](https://github.com/greenbone/gsa/pull/2634)
 - Allow äüöÄÜÖß in form validation rule for "name" [#2586](https://github.com/greenbone/gsa/pull/2586)
