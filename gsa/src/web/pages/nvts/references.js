@@ -19,6 +19,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import DetailsBlock from 'web/entity/block';
 
 import PropTypes from 'web/utils/proptypes';
@@ -94,6 +96,9 @@ const References = ({nvt, links = true}) => {
                       textOnly={!links || xref.type !== 'url'}
                       to={xref.ref}
                     >
+                      {isDefined(xref.type) &&
+                        xref.type !== 'url' &&
+                        xref.type + ': '}
                       {xref.ref}
                     </ExternalLink>
                   </span>
