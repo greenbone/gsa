@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.8.2] - Unreleased
 
 ### Added
+- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
 - Set SameSite=strict for the session cookie to avoid CSRF [#2948](https://github.com/greenbone/gsa/pull/2948)
 
 ### Changed
