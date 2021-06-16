@@ -90,6 +90,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [20.8.1] - 2021-02-02
 
 ### Added
+- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
 - Added icon to host detailspage to link to TLS certificates [#2624](https://github.com/greenbone/gsa/pull/2624)
 - Added form validation for user setting "rows per page"
   [#2478](https://github.com/greenbone/gsa/pull/2478), [#2505](https://github.com/greenbone/gsa/pull/2505)
