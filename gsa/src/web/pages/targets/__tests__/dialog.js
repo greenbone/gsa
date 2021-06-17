@@ -22,6 +22,7 @@ import {setLocale} from 'gmp/locale/lang';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
+  USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
@@ -48,7 +49,13 @@ const cred3 = Credential.fromElement({
   type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
 
-const credentials = [cred1, cred2, cred3];
+const cred4 = Credential.fromElement({
+  id: '6536',
+  name: 'ssh_key',
+  type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
+});
+
+const credentials = [cred1, cred2, cred3, cred4];
 
 const gmp = {settings: {enableGreenboneSensor: true}};
 
@@ -574,10 +581,11 @@ describe('TargetDialog component tests', () => {
     fireEvent.click(selectOpenButton[2]);
 
     selectItems = queryAllByTestId('select-item');
-    expect(selectItems.length).toBe(2); // ssh elevate option removed
+    expect(selectItems.length).toBe(3); // ssh elevate option removed
 
     expect(selectItems[0]).toHaveTextContent('--'); // null option
     expect(selectItems[1]).toHaveTextContent('username+password');
+    expect(selectItems[2]).toHaveTextContent('ssh_key');
   });
 
   test('should disable editing certain fields if target is in use', () => {
