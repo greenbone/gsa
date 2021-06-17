@@ -150,7 +150,9 @@ const TargetDialog = ({
   onSshElevateCredentialChange,
   ...initial
 }) => {
-  const ssh_credentials = credentials.filter(ssh_credential_filter);
+  const ssh_credentials = credentials
+    .filter(ssh_credential_filter)
+    .filter(value => value.id !== ssh_elevate_credential_id); // filter out ssh_elevate_credential_id. If ssh_elevate_credential_id is UNSET_VALUE, this is ok. Because the Select will add back the UNSET_VALUE
   const up_credentials = credentials.filter(
     value => value.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
   );
