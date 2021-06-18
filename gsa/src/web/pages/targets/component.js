@@ -272,6 +272,10 @@ class TargetComponent extends React.Component {
 
   handleSshCredentialChange(ssh_credential_id) {
     this.setState({ssh_credential_id});
+
+    if (ssh_credential_id === UNSET_VALUE) {
+      this.setState({ssh_elevate_credential_id: UNSET_VALUE}); // if ssh_credential_id is changed to UNSET_VALUE, elevate privileges option will not be rendered anymore. If we don't reset ssh_elevate_credential_id, then the previously set ssh_elevate_credential_id will never be available for the SSH dropdown again because it will still be set in the dialog state. ssh_elevate_credential_id should be available again if we ever unset ssh_credential_id
+    }
   }
 
   handleSshElevateCredentialChange(ssh_elevate_credential_id) {
