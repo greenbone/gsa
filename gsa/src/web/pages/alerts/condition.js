@@ -51,7 +51,7 @@ const Condition = ({condition = {}, event}) => {
       type = 'result';
     }
 
-    if (isDefined(condition.data.count)) {
+    if (isDefined(condition.data?.count)) {
       count = parseInt(condition.data.count.value);
       if (count > 1) {
         type += 's';
@@ -61,7 +61,7 @@ const Condition = ({condition = {}, event}) => {
   }
 
   if (condition.type === CONDITION_TYPE_FILTER_COUNT_CHANGED) {
-    if (isDefined(condition.data.count)) {
+    if (isDefined(condition.data?.count)) {
       count = parseInt(condition.data.count.value);
     }
 
@@ -78,7 +78,7 @@ const Condition = ({condition = {}, event}) => {
 
   if (
     condition.type === CONDITION_TYPE_SEVERITY_AT_LEAST &&
-    isDefined(condition.data.severity)
+    isDefined(condition.data?.severity)
   ) {
     return _('Severity at least {{severity}}', {
       severity: condition.data.severity.value,

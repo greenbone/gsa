@@ -79,8 +79,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
           </TableRow>
 
           {capabilities.mayAccess('report') &&
-            isDefined(method.data.delta_type) &&
-            method.data.delta_type.value === DELTA_TYPE_PREVIOUS && (
+            method?.data?.delta_type?.value === DELTA_TYPE_PREVIOUS && (
               <TableRow>
                 <TableData>{_('Delta Report')}</TableData>
                 <TableData>
@@ -90,8 +89,8 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
             )}
 
           {capabilities.mayAccess('report') &&
-            isDefined(method.data.delta_type) &&
-            isDefined(method.data.delta_report_id) &&
+            isDefined(method?.data?.delta_type) &&
+            isDefined(method?.data?.delta_report_id) &&
             method.data.delta_type.value === DELTA_TYPE_REPORT && (
               <TableRow>
                 <TableData>{_('Delta Report')}</TableData>
@@ -119,9 +118,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
             </TableData>
           </TableRow>
 
-          {isDefined(method.data) &&
-            isDefined(method.data.details_url) &&
-            isDefined(method.data.details_url.value) &&
+          {isDefined(method?.data?.details_url?.value) &&
             (event.type === EVENT_TYPE_NEW_SECINFO ||
               event.type === EVENT_TYPE_UPDATED_SECINFO) && (
               <TableRow>
