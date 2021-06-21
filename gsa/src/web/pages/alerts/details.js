@@ -79,8 +79,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
           </TableRow>
 
           {capabilities.mayAccess('report') &&
-            isDefined(method?.data?.delta_type?.value) &&
-            method.data.delta_type.value === DELTA_TYPE_PREVIOUS && (
+            method?.data?.delta_type?.value === DELTA_TYPE_PREVIOUS && (
               <TableRow>
                 <TableData>{_('Delta Report')}</TableData>
                 <TableData>
