@@ -128,7 +128,7 @@ class Alert extends Model {
       ret.tasks = [];
     }
 
-    const methDatRepForm = ret.method.data.report_formats;
+    const methDatRepForm = ret.method?.data?.report_formats; // in case method is not defined
 
     if (isDefined(methDatRepForm) && isDefined(methDatRepForm.value)) {
       const methDatRepFormSplit = methDatRepForm.value.split(',');
@@ -137,7 +137,7 @@ class Alert extends Model {
       ret.method.data.report_formats = [];
     }
 
-    if (isDefined(ret.method.data.notice?.value)) {
+    if (isDefined(ret.method?.data?.notice?.value)) {
       ret.method.data.notice.value = ret.method.data.notice.value.toString();
     }
 
