@@ -13376,7 +13376,7 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t *credentials,
   char *text = NULL;
   gchar *response;
   time_t now;
-  struct tm *tm;
+  struct tm tm;
   gchar current_timestamp[30];
 
   if (gvm_connection_sendf (connection, "<get_feeds/>") == -1)
@@ -13404,9 +13404,8 @@ get_feeds_gmp (gvm_connection_t *connection, credentials_t *credentials,
     }
 
   time (&now);
-  tm = gmtime (&now);
-  if (tm == NULL
-      || (strftime (current_timestamp, 29, "%Y-%m-%dT%H:%M:%S", tm) == 0))
+  if (gmtime_r (&now, &tm) == NULL
+      || (strftime (current_timestamp, 29, "%Y-%m-%dT%H:%M:%S", &tm) == 0))
     {
       current_timestamp[0] = '\0';
     }
