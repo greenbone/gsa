@@ -673,7 +673,7 @@ file_content_response (http_connection_t *connection, const char *url,
                        const char *path, cmd_response_data_t *response_data)
 {
   char date_2822[DATE_2822_LEN];
-  struct tm *mtime;
+  struct tm mtime;
   time_t next_week;
   http_response_t *response;
   FILE *file;
@@ -721,17 +721,17 @@ file_content_response (http_connection_t *connection, const char *url,
     buf.st_size, 32 * 1024, (MHD_ContentReaderCallback) &file_reader, file,
     (MHD_ContentReaderFreeCallback) &fclose);
 
-  mtime = localtime (&buf.st_mtime);
-  if (mtime
-      && strftime (date_2822, DATE_2822_LEN, "%a, %d %b %Y %H:%M:%S %Z", mtime))
+  if (localtime_r (&buf.st_mtime, &mtime)
+      && strftime (date_2822, DATE_2822_LEN, "%a, %d %b %Y %H:%M:%S %Z",
+                   &mtime))
     {
       MHD_add_response_header (response, "Last-Modified", date_2822);
     }
 
   next_week = time (NULL) + 7 * 24 * 60 * 60;
-  mtime = localtime (&next_week);
-  if (mtime
-      && strftime (date_2822, DATE_2822_LEN, "%a, %d %b %Y %H:%M:%S %Z", mtime))
+  if (localtime_r (&next_week, &mtime)
+      && strftime (date_2822, DATE_2822_LEN, "%a, %d %b %Y %H:%M:%S %Z",
+                   &mtime))
     {
       MHD_add_response_header (response, "Expires", date_2822);
     }
