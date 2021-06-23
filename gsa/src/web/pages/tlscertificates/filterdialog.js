@@ -22,7 +22,7 @@ import {createFilterDialog} from 'web/components/powerfilter/dialog';
 const SORT_FIELDS = [
   {
     name: 'name',
-    displayName: _l('Issuer DN'),
+    displayName: _l('Subject DN'),
   },
   {
     name: 'serial',
