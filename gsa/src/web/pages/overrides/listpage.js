@@ -47,7 +47,7 @@ import OverrideComponent from './component';
 
 import OverridesDashboard, {OVERRIDES_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({capabilities, onOverrideCreateClick}) => (
     <IconDivider>
       <ManualIcon
