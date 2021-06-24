@@ -13,7 +13,7 @@ See at the end of this section how to easily install these prerequisites on
 some supported platforms.
 
 Prerequisites:
-* libgvm_base, libgvm_util, libgvm_gmp >= 10.0.0
+* libgvm_base, libgvm_util, libgvm_gmp >= 21.4.1
 * gnutls >= 3.2.15
 * libgcrypt
 * cmake >= 3.0
@@ -90,7 +90,7 @@ Compiling Greenbone Security Assistant GUI
 ------------------------------------------
 
 Prerequisites for using the GUI:
-* node.js >= 8.0
+* node.js >= 10.0
 * Either yarn >= 1.0 or npm. yarn is faster and more reliable, but younger.
 
 
