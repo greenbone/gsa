@@ -19,6 +19,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import GSA_VERSION from 'version';
+
 import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -37,8 +39,6 @@ import Section from 'web/components/section/section';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
-
-const GSA_VERSION = process.env.REACT_APP_VERSION || '21.04';
 
 const StyledLayout = styled(Layout)`
   margin: 0 auto;
