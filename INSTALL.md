@@ -13,7 +13,7 @@ See at the end of this section how to easily install these prerequisites on
 some supported platforms.
 
 Prerequisites:
-* libgvm_base, libgvm_util, libgvm_gmp >= 10.0.0
+* libgvm_base, libgvm_util, libgvm_gmp >= 20.8.2
 * gnutls >= 3.2.15
 * libgcrypt
 * cmake >= 3.0
