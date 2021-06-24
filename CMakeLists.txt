@@ -43,9 +43,7 @@ if (PROJECT_DEV_VERSION)
   set (PROJECT_VERSION_SUFFIX "~dev${PROJECT_DEV_VERSION}")
 endif (PROJECT_DEV_VERSION)
 
-# set if this is in prerelease status, starting at 0 before first beta release,
-# unset if this is a stable release series.
-# set (PROJECT_BETA_RELEASE 0)
+set (PROJECT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}${PROJECT_VERSION_SUFFIX}${GIT_REVISION}")
 
 ## Retrieve git revision (at configure time)
 include (ProjectVersion)

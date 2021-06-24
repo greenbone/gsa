@@ -22,12 +22,6 @@ message ("-- Configuring gsad")
 
 project (gsad VERSION 21.4.1 LANGUAGES C)
 
-if (NOT DEFINED PROJECT_VERSION_STRING)
-   set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
-   include (ProjectVersion)
-endif()
-
-set (GSAD_VERSION "${PROJECT_VERSION_STRING}")
 
 # Set dev version if this is a development version and not a full release,
 # unset (put value 0 or delete line) before a full release and reset after.
@@ -41,6 +35,9 @@ set (PROJECT_DEV_VERSION 1)
 if (PROJECT_DEV_VERSION)
   set (PROJECT_VERSION_SUFFIX "~dev${PROJECT_DEV_VERSION}")
 endif (PROJECT_DEV_VERSION)
+
+set (PROJECT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}${PROJECT_VERSION_SUFFIX}${GIT_REVISION}")
+set (GSAD_VERSION "${PROJECT_VERSION_STRING}")
 
 message (STATUS "Building gsad version ${GSAD_VERSION}")
 
