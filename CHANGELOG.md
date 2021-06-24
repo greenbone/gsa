@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [20.8.2] - Unreleased
+## [20.8.2] - 2021-06-24
 
 ### Added
 - Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
@@ -21,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 
-[20.8.2]: https://github.com/greenbone/gsa/compare/v20.8.1...gsa-20.08
+[20.8.2]: https://github.com/greenbone/gsa/compare/v20.8.2...v20.8.1
 
 ## [20.8.1] - 2021-02-02
 
