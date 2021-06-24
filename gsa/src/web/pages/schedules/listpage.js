@@ -44,7 +44,7 @@ import {
 import ScheduleComponent from './component';
 import SchedulesTable, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({capabilities, onScheduleCreateClick}) => (
     <IconDivider>
       <ManualIcon
