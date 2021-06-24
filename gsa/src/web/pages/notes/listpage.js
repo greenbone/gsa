@@ -47,18 +47,20 @@ import NoteComponent from './component';
 import NotesDashboard, {NOTES_DASHBOARD_ID} from './dashboard';
 import NoteIcon from 'web/components/icon/noteicon';
 
-const ToolBarIcons = withCapabilities(({capabilities, onNoteCreateClick}) => (
-  <IconDivider>
-    <ManualIcon
-      page="reports"
-      anchor="managing-notes"
-      title={_('Help: Notes')}
-    />
-    {capabilities.mayCreate('note') && (
-      <NewIcon title={_('New Note')} onClick={onNoteCreateClick} />
-    )}
-  </IconDivider>
-));
+export const ToolBarIcons = withCapabilities(
+  ({capabilities, onNoteCreateClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="reports"
+        anchor="managing-notes"
+        title={_('Help: Notes')}
+      />
+      {capabilities.mayCreate('note') && (
+        <NewIcon title={_('New Note')} onClick={onNoteCreateClick} />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   onNoteCreateClick: PropTypes.func,
