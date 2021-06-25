@@ -71,11 +71,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Fixed
+<<<<<<< HEAD
 - Fix dynamic severity checkbox not being checked upon clicking [#2882](https://github.com/greenbone/gsa/pull/2882)
 - Fixed result CVE parsing for result listpage and CVE reports [#2869](https://github.com/greenbone/gsa/pull/2869)
 - Fixed setting comments of business process nodes [#2781](https://github.com/greenbone/gsa/pull/2781)
 - Added the deprecatedBy field to CPEs [#2751](https://github.com/greenbone/gsa/pull/2751)
 - Fixed the severity for different advisories [#2611](https://github.com/greenbone/gsa/pull/2611)
+=======
+- Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
+- Fixed setting whether to include related resources for new permissions [#2931](https://github.com/greenbone/gsa/pull/2891)
+- Fixed setting secret key in RADIUS dialog, backport from [#2891](https://github.com/greenbone/gsa/pull/2891), [#2915](https://github.com/greenbone/gsa/pull/2915)
+>>>>>>> 4276eaad2 (Update Changelog)
 
 ### Removed
 - Removed Edge <= 18 support [#2691](https://github.com/greenbone/gsa/pull/2691)
