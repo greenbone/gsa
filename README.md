@@ -4,7 +4,8 @@
 
 [![GitHub releases](https://img.shields.io/github/release/greenbone/gsa.svg)](https://github.com/greenbone/gsa/releases)
 [![code test coverage](https://codecov.io/gh/greenbone/gsa/branch/gsa-20.08/graph/badge.svg)](https://codecov.io/gh/greenbone/gsa)
-[![CircleCI](https://circleci.com/gh/greenbone/gsa/tree/gsa-8.0.svg?style=svg)](https://circleci.com/gh/greenbone/gsa/tree/gsa-20.08)
+[![Build and test C](https://github.com/greenbone/gsa/actions/workflows/ci-c.yml/badge.svg?branch=gsa-21.04)](https://github.com/greenbone/gsa/actions/workflows/ci-c.yml?query=branch%3Agsa-21.04++)
+[![Build and test JS](https://github.com/greenbone/gsa/actions/workflows/ci-js.yml/badge.svg?branch=gsa-21.04)](https://github.com/greenbone/gsa/actions/workflows/ci-js.yml?query=branch%3Agsa-21.04++)
 
 The Greenbone Security Assistant is the web interface developed for the
 [Greenbone Security Manager
