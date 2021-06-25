@@ -4,15 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
-### Added
-### Changed
-### Deprecated
-### Removed
+## [21.4.2] - 2021-06-25
+
 ### Fixed
 * Removed a CMake dependency in the CMakeLists, so GSA can be build again. [#3028](https://github.com/greenbone/gsa/pull/3028)
 
-[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.1...gsa-21.04
+[21.4.1]: https://github.com/greenbone/gsa/compare/v21.4.1...v21.4.1
 
 ## [21.4.1] - 2021-06-24
 
