@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 * Removed a CMake dependency in the CMakeLists, so GSA can be build again. [#3028](https://github.com/greenbone/gsa/pull/3028)
 
-[21.4.1]: https://github.com/greenbone/gsa/compare/v21.4.1...v21.4.2
+[21.4.2]: https://github.com/greenbone/gsa/compare/v21.4.1...v21.4.2
 
 ## [21.4.1] - 2021-06-24
 
