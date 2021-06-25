@@ -10,11 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Deprecated
 ### Removed
 ### Fixed
-* Removed a CMake dependency in the CMakeLists, so GSA can be build again. [#3028](https://github.com/greenbone/gsa/pull/3028)
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.1...gsa-21.04
 
-## [21.4.1] - 2021-06-24
+## [21.4.1] - 2021-06-25
 
 ### Added
 - Added SSH Elevate credential to target row [#2996](https://github.com/greenbone/gsa/pull/2996)
@@ -29,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867), [#2924](https://github.com/greenbone/gsa/pull/2924)
 
 ### Fixed
+* Removed a CMake dependency in the CMakeLists, so GSA can be build again. [#3028](https://github.com/greenbone/gsa/pull/3028)
 - Fall back to cvss_base when severity subelement is missing from NVT severities [#2944](https://github.com/greenbone/gsa/pull/2944)
 - Fix loading NVT information in result details [#2934](https://github.com/greenbone/gsa/pull/2934)
 - Fixed setting whether to include related resources for new permissions [#2931](https://github.com/greenbone/gsa/pull/2931)
@@ -38,9 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed setting secret key in RADIUS dialog, backport from [#2891](https://github.com/greenbone/gsa/pull/2891), [#2915](https://github.com/greenbone/gsa/pull/2915)
 - Fixed setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
 
-### Removed
-
-[21.4.1]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
+[21.4.1]: https://github.com/greenbone/gsa/compare/v21.4.0...v21.4.1
 
 ## [21.4.0] - 2021-04-16
 
