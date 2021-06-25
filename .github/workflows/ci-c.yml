@@ -41,7 +41,7 @@ jobs:
         build_type:
           - Debug
           - Release
-    container: build-env-gsa-master-debian-buster-gcc-gsa-full
+    container: greenbone/build-env-gsa-master-debian-buster-gcc-gsa-full
     env:
       BUILD_TYPE: ${{ matrix.build_type }}
     steps:
