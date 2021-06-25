@@ -43,7 +43,7 @@ import ResultsFilterDialog from './filterdialog';
 import ResultsTable from './table';
 import ResultsDashboard, {RESULTS_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = () => (
+export const ToolBarIcons = () => (
   <Layout>
     <ManualIcon
       page="reports"
