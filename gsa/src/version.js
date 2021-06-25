@@ -16,6 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-const VERSION = '21.4.1';
+const VERSION = '21.4.2';
 
 export default VERSION;
