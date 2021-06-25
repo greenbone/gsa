@@ -33,7 +33,7 @@ jobs:
           mkdir build && rm -rf .git && cd build/ \
             && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
         working-directory: ${{ env.WORKSPACE }}
-  build_gsad:
+  build_full:
     name: Build all
     runs-on: 'ubuntu-latest'
     strategy:
