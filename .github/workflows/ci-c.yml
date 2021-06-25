@@ -34,7 +34,7 @@ jobs:
             && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
         working-directory: ${{ env.WORKSPACE }}
   build_full:
-    name: Build all
+    name: Build gsa and gsad from root dir
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
