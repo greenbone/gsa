@@ -25,7 +25,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
 
 ### Fixed
-* Removed a CMake dependency in the CMakeLists, so GSA can be build again. [#3030](https://github.com/greenbone/gsa/pull/3030)
+- Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
+- Removed a CMake dependency in the CMakeLists, so GSA can be build again. [#3030](https://github.com/greenbone/gsa/pull/3030)
 - Fixed setting whether to include related resources for new permissions [#2931](https://github.com/greenbone/gsa/pull/2891)
 - Fixed setting secret key in RADIUS dialog, backport from [#2891](https://github.com/greenbone/gsa/pull/2891), [#2915](https://github.com/greenbone/gsa/pull/2915)
 

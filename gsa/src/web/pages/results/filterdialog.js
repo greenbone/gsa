@@ -122,7 +122,7 @@ const ResultsFilterDialogComponent = ({
       />
 
       <SeverityValuesGroup
-        name="cvss_base"
+        name="severity"
         filter={filter}
         title={_('Severity')}
         onChange={onFilterValueChange}
