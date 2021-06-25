@@ -37,7 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Removed
 
-[21.4.1]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
+[21.4.1]: https://github.com/greenbone/gsa/compare/v21.4.0...v21.4.1
 
 ## [21.4.0] - 2021-04-16
 
