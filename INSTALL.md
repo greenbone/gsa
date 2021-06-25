@@ -21,6 +21,7 @@ Prerequisites:
 * libxml
 * libmicrohttpd >= 0.9.0
 * pkg-config
+* g++ [when not using clang]
 
 Prerequisites for using translations:
 * gettext

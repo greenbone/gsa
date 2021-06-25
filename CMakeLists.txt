@@ -46,7 +46,7 @@ endif (PROJECT_DEV_VERSION)
 set (PROJECT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}${PROJECT_VERSION_SUFFIX}${GIT_REVISION}")
 
 ## Retrieve git revision (at configure time)
-include (ProjectVersion)
+include (GetGit)
 
 ## Variables
 
