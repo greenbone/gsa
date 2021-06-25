@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unrelased]
+## [21.4.1] - 2021-06-24
 
 ### Added
 - Added SSH Elevate credential to target row [#2996](https://github.com/greenbone/gsa/pull/2996)
@@ -32,7 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
 
-## [21.04] - 2021-04-16
+## [21.4.0] - 2021-04-16
 
 ### Added
 - Allow to add ssh elevate credential to target dialog and display elevate credential in details [#2954](https://github.com/greenbone/gsa/pull/2954)
@@ -76,7 +76,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
 
-[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.04.0
+[21.4.0]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.4.0
 
 ## [20.8.1] - 2021-02-02
 
