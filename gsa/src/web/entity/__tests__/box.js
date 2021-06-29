@@ -17,7 +17,7 @@
  */
 import React from 'react';
 
-import date, {setLocale} from 'gmp/models/date';
+import Date, {setLocale} from 'gmp/models/date';
 
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/testing';
@@ -26,8 +26,8 @@ import EntityBox from '../box';
 
 setLocale('en');
 
-const date1 = date('2019-01-01T12:00:00Z');
-const date2 = date('2019-02-02T12:00:00Z');
+const date1 = Date('2019-01-01T12:00:00Z');
+const date2 = Date('2019-02-02T12:00:00Z');
 
 describe('EntityBox component tests', () => {
   test('should render', () => {
