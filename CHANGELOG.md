@@ -91,6 +91,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [21.4.0]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.4.0
 
+## [20.8.3] (unreleased)
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+
+ [Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.2...gsa-20.08
+
+## [20.8.2] - 2021-06-25
+
+### Added
+- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
+- Set SameSite=strict for the session cookie to avoid CSRF [#2948](https://github.com/greenbone/gsa/pull/2948)
+
+### Changed
+- Properly space and linebreak roles and groups in users table row [#2949](https://github.com/greenbone/gsa/pull/2949)
+- Make HorizontalSep component wrappable [#2949](https://github.com/greenbone/gsa/pull/2949)
+- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
+
+### Fixed
+- Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
+- Removed a CMake dependency in the CMakeLists, so GSA can be build again. [#3030](https://github.com/greenbone/gsa/pull/3030)
+- Fixed setting whether to include related resources for new permissions [#2931](https://github.com/greenbone/gsa/pull/2891)
+- Fixed setting secret key in RADIUS dialog, backport from [#2891](https://github.com/greenbone/gsa/pull/2891), [#2915](https://github.com/greenbone/gsa/pull/2915)
+
+### Removed
+
+[20.8.2]: https://github.com/greenbone/gsa/compare/v20.8.1...v20.8.2
+
 ## [20.8.1] - 2021-02-02
 
 ### Added
