@@ -78,7 +78,7 @@ import PropTypes from 'web/utils/proptypes';
 import NoteDetails from './details';
 import NoteComponent from './component';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   onNoteCloneClick,
   onNoteCreateClick,
