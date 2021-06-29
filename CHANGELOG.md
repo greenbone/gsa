@@ -15,7 +15,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [21.10]: https://github.com/greenbone/gsa/compare/gsa-21.04...gsa-21.10
 
-## [21.04.1] - Unreleased
+## [21.4.2] (unreleased)
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+
+[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.1...gsa-21.04
+
+## [21.4.1] - 2021-06-25
 
 ### Added
 - Added SSH Elevate credential to target row [#2996](https://github.com/greenbone/gsa/pull/2996)
@@ -24,22 +34,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Disallow using the same credential for ssh and elevate credential in targets [#2994](https://github.com/greenbone/gsa/pull/2994)
+- Properly space and linebreak roles and groups in users table row [#2949](https://github.com/greenbone/gsa/pull/2949)
+- Make HorizontalSep component wrappable [#2949](https://github.com/greenbone/gsa/pull/2949)
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867), [#2924](https://github.com/greenbone/gsa/pull/2924)
 
 ### Fixed
+* Removed a CMake dependency in the CMakeLists, so GSA can be build again. [#3028](https://github.com/greenbone/gsa/pull/3028)
 - Fall back to cvss_base when severity subelement is missing from NVT severities [#2944](https://github.com/greenbone/gsa/pull/2944)
 - Fix loading NVT information in result details [#2934](https://github.com/greenbone/gsa/pull/2934)
 - Fixed number-only names within schedules/dialog [#2914](https://github.com/greenbone/gsa/pull/2914)
 - Fixed changing Trend and Select for NVT-families and whole selection only [#2905](https://github.com/greenbone/gsa/pull/2905)
 - Fixed missing name for CVE results on result detailspage [#2892](https://github.com/greenbone/gsa/pull/2892)
-- Fix setting secret key in RADIUS dialog [#2891](https://github.com/greenbone/gsa/pull/2891)
-- Fix setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
+- Fixed setting secret key in RADIUS dialog, backport from [#2891](https://github.com/greenbone/gsa/pull/2891), [#2915](https://github.com/greenbone/gsa/pull/2915)
+- Fixed setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
 
-### Removed
+[21.4.1]: https://github.com/greenbone/gsa/compare/v21.4.0...v21.4.1
 
-[21.04.1]: https://github.com/greenbone/gsa/compare/v21.4.0...gsa-21.04
-
-## [21.04] - 2021-04-16
+## [21.4.0] - 2021-04-16
 
 ### Added
 - Allow to add ssh elevate credential to target dialog and display elevate credential in details [#2954](https://github.com/greenbone/gsa/pull/2954)
@@ -92,6 +103,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
 
 [21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.04.0
+
+## [20.8.3] (unreleased)
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+
+[Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.2...gsa-20.08
+
+## [20.8.2] - 2021-06-25
+
+### Added
+- Show type of xrefs in NVT details [#2980](https://github.com/greenbone/gsa/pull/2980)
+- Set SameSite=strict for the session cookie to avoid CSRF [#2948](https://github.com/greenbone/gsa/pull/2948)
+
+### Changed
+- Properly space and linebreak roles and groups in users table row [#2949](https://github.com/greenbone/gsa/pull/2949)
+- Make HorizontalSep component wrappable [#2949](https://github.com/greenbone/gsa/pull/2949)
+- Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867)
+
+### Fixed
+- Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
+- Removed a CMake dependency in the CMakeLists, so GSA can be build again. [#3030](https://github.com/greenbone/gsa/pull/3030)
+- Fixed setting whether to include related resources for new permissions [#2931](https://github.com/greenbone/gsa/pull/2891)
+- Fixed setting secret key in RADIUS dialog, backport from [#2891](https://github.com/greenbone/gsa/pull/2891), [#2915](https://github.com/greenbone/gsa/pull/2915)
+
+[20.8.2]: https://github.com/greenbone/gsa/compare/v20.8.1...v20.8.2
 
 ## [20.8.1] - 2021-02-02
 
