@@ -37,7 +37,7 @@ const SeverityValuesGroup = ({filter, name, title, onChange}) => {
    */
 
   const term = filter.getTerm(name);
-  const severity = isDefined(term) ? parseSeverity(term.value) : undefined;
+  const severity = isDefined(term) ? parseSeverity(term.value) : 0;
 
   const [rel, setRel] = useState(isDefined(term) ? term.relation : '='); // here rel is set to '='
   const keyword = name;
