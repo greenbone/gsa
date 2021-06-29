@@ -44,7 +44,7 @@ import {
 import CredentialComponent from './component';
 import CredentialsTable, {SORT_FIELDS} from './table';
 
-const ToolBarIcons = withCapabilities(
+export const ToolBarIcons = withCapabilities(
   ({capabilities, onCredentialCreateClick}) => (
     <IconDivider>
       <ManualIcon

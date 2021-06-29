@@ -81,7 +81,7 @@ import {renderYesNo} from 'web/utils/render';
 import OverrideDetails from './details';
 import OverrideComponent from './component';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   onOverrideCloneClick,
   onOverrideCreateClick,
