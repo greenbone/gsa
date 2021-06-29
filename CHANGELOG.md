@@ -4,12 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [21.4.2] (unreleased)
 ### Added
 ### Changed
 ### Deprecated
 ### Removed
 ### Fixed
+- Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.1...gsa-21.04
 
@@ -28,7 +29,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Use greenbone sensor as default scanner type when opening the dialog if available [#2867](https://github.com/greenbone/gsa/pull/2867), [#2924](https://github.com/greenbone/gsa/pull/2924)
 
 ### Fixed
-<<<<<<< HEAD
 * Removed a CMake dependency in the CMakeLists, so GSA can be build again. [#3028](https://github.com/greenbone/gsa/pull/3028)
 - Fall back to cvss_base when severity subelement is missing from NVT severities [#2944](https://github.com/greenbone/gsa/pull/2944)
 - Fix loading NVT information in result details [#2934](https://github.com/greenbone/gsa/pull/2934)
@@ -36,10 +36,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed number-only names within schedules/dialog [#2914](https://github.com/greenbone/gsa/pull/2914)
 - Fixed changing Trend and Select for NVT-families and whole selection only [#2905](https://github.com/greenbone/gsa/pull/2905)
 - Fixed missing name for CVE results on result detailspage [#2892](https://github.com/greenbone/gsa/pull/2892)
-=======
-- Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
-- Fixed setting whether to include related resources for new permissions [#2931](https://github.com/greenbone/gsa/pull/2891)
->>>>>>> 4276eaad2 (Update Changelog)
 - Fixed setting secret key in RADIUS dialog, backport from [#2891](https://github.com/greenbone/gsa/pull/2891), [#2915](https://github.com/greenbone/gsa/pull/2915)
 - Fixed setting result UUID in notes dialog [#2889](https://github.com/greenbone/gsa/pull/2889)
 
