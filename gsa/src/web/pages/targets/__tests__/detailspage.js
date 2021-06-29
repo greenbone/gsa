@@ -96,6 +96,31 @@ const target = Target.fromElement({
   alive_tests: 'Scan Config Default',
   allow_simultaneous_ips: 1,
   port_range: '1-5',
+  ssh_credential: {
+    _id: '1235',
+    name: 'ssh',
+    port: '22',
+    trash: '0',
+  },
+  ssh_elevate_credential: {
+    _id: '3456',
+    name: 'ssh_elevate',
+    trash: '0',
+  },
+  smb_credential: {
+    _id: '4784',
+    name: 'smb_credential',
+  },
+  esxi_credential: {
+    _id: '',
+    name: '',
+    trash: '0',
+  },
+  snmp_credential: {
+    _id: '',
+    name: '',
+    trash: '0',
+  },
 });
 
 const targetInUse = Target.fromElement({
@@ -222,8 +247,23 @@ describe('Target Detailspage tests', () => {
     expect(links[2]).toHaveAttribute('href', '/portlist/32323');
     expect(element).toHaveTextContent('All IANA assigned TCP');
 
+    expect(element).toHaveTextContent('Credentials');
+
+    expect(element).toHaveTextContent('SSH');
+    expect(element).toHaveTextContent('ssh');
+    expect(links[3]).toHaveAttribute('href', '/credential/1235');
+    expect(element).toHaveTextContent('on Port 22');
+
+    expect(element).toHaveTextContent('SSH elevate credential');
+    expect(element).toHaveTextContent('ssh_elevate');
+    expect(links[4]).toHaveAttribute('href', '/credential/3456');
+
+    expect(element).toHaveTextContent('SMB');
+    expect(element).toHaveTextContent('smb_credential');
+    expect(links[5]).toHaveAttribute('href', '/credential/4784');
+
     expect(element).toHaveTextContent('Tasks using this Target (1)');
-    expect(links[3]).toHaveAttribute('href', '/task/465');
+    expect(links[6]).toHaveAttribute('href', '/task/465');
     expect(element).toHaveTextContent('foo');
   });
 

@@ -101,6 +101,17 @@ const target = Target.fromElement({
   alive_tests: 'Scan Config Default',
   allow_simultaneous_ips: 1,
   port_range: '1-5',
+  ssh_credential: {
+    _id: '1235',
+    name: 'ssh',
+    port: '22',
+    trash: '0',
+  },
+  ssh_elevate_credential: {
+    _id: '3456',
+    name: 'ssh_elevate',
+    trash: '0',
+  },
 });
 
 const caps = new Capabilities(['everything']);
@@ -190,6 +201,9 @@ describe('TargetPage tests', () => {
     expect(row[1]).toHaveTextContent('2');
     expect(row[1]).toHaveTextContent('All IANA assigned TCP');
 
+    expect(row[1]).toHaveTextContent('SSH: ssh');
+    expect(row[1]).toHaveTextContent('SSH Elevate: ssh_elevate');
+
     expect(
       screen.getAllByTitle('Move Target to trashcan')[0],
     ).toBeInTheDocument();
@@ -273,7 +287,7 @@ describe('TargetPage tests', () => {
     expect(deleteByFilter).toHaveBeenCalled();
   });
 
-  test.skip('should allow to bulk action on selected targets', async () => {
+  test('should allow to bulk action on selected targets', async () => {
     // mock cache issues will cause these tests to randomly fail. Will fix later.
     const deleteByIds = jest.fn().mockResolvedValue({
       foo: 'bar',
@@ -365,7 +379,7 @@ describe('TargetPage tests', () => {
     expect(deleteByIds).toHaveBeenCalled();
   });
 
-  test.skip('should allow to bulk action on filtered targets', async () => {
+  test('should allow to bulk action on filtered targets', async () => {
     // mock cache issues will cause these tests to randomly fail. Will fix later.
     const deleteByFilter = jest.fn().mockResolvedValue({
       foo: 'bar',
