@@ -16,4 +16,4 @@ TimeoutStopSec=10
 
 [Install]
 WantedBy=multi-user.target
-Alias=gsad.service
+Alias=greenbone-security-assistant.service
