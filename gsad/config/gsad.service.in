@@ -1,8 +1,9 @@
 [Unit]
 Description=Greenbone Security Assistant daemon (gsad)
 After=network.target networking.service gvmd.service
-Documentation=man:gsad(8)
-ConditionKernelCommandLine=!recovery
+Documentation=man:gsad(8) https://www.greenbone.net
+After=network.target gvmd.service
+Wants=gvmd.service
 
 [Service]
 Type=forking
@@ -15,3 +16,4 @@ TimeoutStopSec=10
 
 [Install]
 WantedBy=multi-user.target
+Alias=gsad.service
