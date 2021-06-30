@@ -7,8 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.4.2] (unreleased)
 ### Added
 ### Changed
+- Changed defaults for installation locations [#3045](https://github.com/greenbone/gsa/pull/3045)
+  - LOCALSTATEDIR is /var by default now
+  - SYSCONFDIR is /etc by default now
+  - GVM_RUN_DIR and GSAD_PID_DIR are /run/gvm by default now
+  - SYSTEMD_SERVICE_DIR is /lib/systemd/system by default now
+
 ### Deprecated
 ### Removed
+- Removed gsad.default file and adjusted gsad.service file accordingly.
+  Packagers should patch gsad.service file to adjust it on their requirements or
+  just ship their own [#3045](https://github.com/greenbone/gsa/pull/3045)
+
 ### Fixed
 - Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
 
