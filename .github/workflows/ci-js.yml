@@ -59,6 +59,7 @@ jobs:
         with:
           directory: ${{ env.WORKSPACE }}
           fail_ci_if_error: true
+
   linting:
     env:
       WORKSPACE: ${{ github.workspace }}/gsa
@@ -99,13 +100,13 @@ jobs:
         with: 
           name: lint
           path: ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
+
   build_gsa:
     env:
       WORKSPACE: ${{ github.workspace }}/gsa
-      VERSION: "21.04"
     name: Build gsa
     runs-on: 'ubuntu-latest'
-    container: greenbone/build-env-gsa-master-debian-buster-node10-ng
+    container: greenbone/gsa-master-gcc-testing
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Get Yarn cache directory
