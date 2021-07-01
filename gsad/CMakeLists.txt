@@ -51,7 +51,7 @@ else (CLANG_FORMAT)
 endif (CLANG_FORMAT)
 
 if (NOT SYSCONFDIR)
-  set (SYSCONFDIR "${CMAKE_INSTALL_PREFIX}/etc")
+  set (SYSCONFDIR "/etc")
 endif (NOT SYSCONFDIR)
 
 if (NOT EXEC_PREFIX)
@@ -71,7 +71,7 @@ if (NOT LIBDIR)
 endif (NOT LIBDIR)
 
 if (NOT LOCALSTATEDIR)
-  set (LOCALSTATEDIR "${CMAKE_INSTALL_PREFIX}/var")
+  set (LOCALSTATEDIR "/var")
 endif (NOT LOCALSTATEDIR)
 
 if (NOT INCLUDEDIR)
@@ -85,13 +85,14 @@ endif (NOT DATADIR)
 set (GSAD_DATA_DIR "${DATADIR}/gvm/gsad")
 set (GSAD_CONFIG_DIR "${SYSCONFDIR}/gvm/")
 
+if (NOT GVM_RUN_DIR)
+  set (GVM_RUN_DIR  "/run/gvm")
+endif (NOT GVM_RUN_DIR)
+
 if (NOT GSAD_PID_DIR)
-  set (GSAD_PID_DIR "${LOCALSTATEDIR}/run")
+  set (GSAD_PID_DIR "${GVM_RUN_DIR}")
 endif (NOT GSAD_PID_DIR)
 
-if (NOT GVM_RUN_DIR)
-  set (GVM_RUN_DIR  "${LOCALSTATEDIR}/run")
-endif (NOT GVM_RUN_DIR)
 
 if (NOT GVM_STATE_DIR)
   set (GVM_STATE_DIR "${LOCALSTATEDIR}/lib/gvm")
