@@ -128,7 +128,7 @@ describe('Severity Values Group Tests', () => {
 
     const domItems = getItemElements(baseElement);
 
-    fireEvent.click(domItems[2]);
+    fireEvent.click(domItems[3]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith(3, 'severity', '<');

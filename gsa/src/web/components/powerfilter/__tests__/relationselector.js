@@ -52,10 +52,11 @@ describe('Relation Selector Tests', () => {
 
     domItems = getItemElements(baseElement);
 
-    expect(domItems.length).toEqual(3);
-    expect(domItems[0]).toHaveTextContent('is equal to');
-    expect(domItems[1]).toHaveTextContent('is greater than');
-    expect(domItems[2]).toHaveTextContent('is less than');
+    expect(domItems.length).toEqual(4);
+    expect(domItems[0]).toHaveTextContent('--');
+    expect(domItems[1]).toHaveTextContent('is equal to');
+    expect(domItems[2]).toHaveTextContent('is greater than');
+    expect(domItems[3]).toHaveTextContent('is less than');
   });
 
   test('should call onChange handler', () => {
@@ -69,7 +70,7 @@ describe('Relation Selector Tests', () => {
 
     const domItems = getItemElements(baseElement);
 
-    fireEvent.click(domItems[0]);
+    fireEvent.click(domItems[1]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('=', undefined);
@@ -89,7 +90,7 @@ describe('Relation Selector Tests', () => {
 
     const domItems = getItemElements(baseElement);
 
-    fireEvent.click(domItems[2]);
+    fireEvent.click(domItems[3]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('<', undefined);
@@ -103,7 +104,7 @@ describe('Relation Selector Tests', () => {
     openSelectElement(element);
 
     let domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(3);
+    expect(domItems.length).toEqual(4);
 
     const input = getInputBox(baseElement);
 
