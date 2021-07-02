@@ -71,7 +71,6 @@ import PoliciesPage from './pages/policies/listpage';
 import PoliciesDetailsPage from './pages/policies/detailspage';
 import PortListsPage from './pages/portlists/listpage';
 import PortListDetailsPage from './pages/portlists/detailspage';
-import ProcessMapsPage from './pages/processmaps/processmapspage';
 import RadiusPage from './pages/radius/radiuspage';
 import ReportFormatsPage from './pages/reportformats/listpage';
 import ReportFormatDetailsPage from './pages/reportformats/detailspage';
@@ -154,7 +153,6 @@ const Routes = () => (
               <Route path="/permissions" component={PermissionsPage} />
               <Route path="/policies" component={PoliciesPage} />
               <Route path="/portlists" component={PortListsPage} />
-              <Route path="/processmaps" component={ProcessMapsPage} />
               <Route path="/radius" component={RadiusPage} />
               <Route path="/reports" component={ReportsPage} />
               <Route path="/reportformats" component={ReportFormatsPage} />
