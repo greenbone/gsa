@@ -470,7 +470,7 @@ exports[`Severity Values Group Tests should render 1`] = `
         <input
           max="10"
           min="0"
-          name="cvss_base"
+          name="severity"
           size="5"
           value="3"
         />

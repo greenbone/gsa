@@ -26,6 +26,8 @@ import RelationSelector from 'web/components/powerfilter/relationselector';
 import NumberField from 'web/components/form/numberfield';
 import Divider from 'web/components/layout/divider';
 
+import {UNSET_VALUE} from 'web/utils/render';
+
 const SeverityValuesGroup = ({filter, name, title, onChange}) => {
   /* useState is analogous to setState in class components.
    * the first argument is the state variable.
@@ -37,9 +39,9 @@ const SeverityValuesGroup = ({filter, name, title, onChange}) => {
    */
 
   const term = filter.getTerm(name);
-  const severity = isDefined(term) ? parseSeverity(term.value) : undefined;
+  const severity = isDefined(term) ? parseSeverity(term.value) : 0;
 
-  const [rel, setRel] = useState(isDefined(term) ? term.relation : '='); // here rel is set to '='
+  const [rel, setRel] = useState(isDefined(term) ? term.relation : UNSET_VALUE);
   const keyword = name;
 
   return (
