@@ -33,11 +33,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   just ship their own [#3045](https://github.com/greenbone/gsa/pull/3045)
 
 ### Fixed
+<<<<<<< HEAD
 - Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.1...gsa-21.04
 
 ## [21.4.1] - 2021-06-25
+=======
+- Fixed setting/displaying timeout in EditNvtDetailsDialog [#3057](https://github.com/greenbone/gsa/pull/3057)
+>>>>>>> ee2c73941 (Update Changelog)
 
 ### Added
 - Added SSH Elevate credential to target row [#2996](https://github.com/greenbone/gsa/pull/2996)
