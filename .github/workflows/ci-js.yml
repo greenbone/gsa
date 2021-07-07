@@ -27,20 +27,17 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-
-      # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
+        # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
       - name: Get Yarn cache directory
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-
       - name: Use Yarn cache
         uses: actions/cache@v2
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-
-      # `--prefer-offline` gives cache priority
+        # `--prefer-offline` gives cache priority
       - name: Install dependencies
         run: yarn install --prefer-offline
         working-directory: ${{ env.WORKSPACE }}
@@ -75,20 +72,17 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-
-      # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
+        # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
       - name: Get Yarn cache directory
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-
       - name: Use Yarn cache
         uses: actions/cache@v2
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-
-      # `--prefer-offline` gives cache priority
+        # `--prefer-offline` gives cache priority
       - name: Install dependencies
         run: yarn install --prefer-offline
         working-directory: ${{ env.WORKSPACE }}
@@ -104,9 +98,10 @@ jobs:
   build_gsa:
     env:
       WORKSPACE: ${{ github.workspace }}/gsa
+      VERSION: "21.04"
     name: Build gsa
     runs-on: 'ubuntu-latest'
-    container: greenbone/gsa-master-gcc-testing
+    container: greenbone/build-env-gsa-master-debian-buster-node10-ng
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Get Yarn cache directory
