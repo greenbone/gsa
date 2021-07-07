@@ -19,8 +19,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {typeName, getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
+import {typeName, getEntityType} from 'gmp/utils/entitytype';
+
+import PropTypes from 'web/utils/proptypes';
+import {permissionDescription} from 'web/utils/render';
+
+import EntityLink from 'web/entity/link';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
@@ -30,11 +35,7 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import EntityLink from 'web/entity/link';
 import {Col} from 'web/entity/page';
-
-import PropTypes from 'web/utils/proptypes';
-import {permissionDescription} from 'web/utils/render';
 
 const PermissionDetails = ({entity}) => {
   const {comment, name, resource, subject} = entity;

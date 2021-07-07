@@ -31,8 +31,8 @@ import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.alerts');
 
-export const event_data_fields = ['status', 'feed_event', 'secinfo_type'];
-export const method_data_fields = [
+const event_data_fields = ['status', 'feed_event', 'secinfo_type'];
+const method_data_fields = [
   'composer_include_notes',
   'composer_include_overrides',
   'details_url',
@@ -88,7 +88,7 @@ export const method_data_fields = [
   'vfire_call_impact_name',
   'vfire_call_urgency_name',
 ];
-export const condition_data_fields = [
+const condition_data_fields = [
   'severity',
   'direction',
   'at_least_filter_id',

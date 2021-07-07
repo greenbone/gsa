@@ -26,7 +26,9 @@ describe('arc class tests', () => {
   });
 
   test('should calculate central position', () => {
-    const c = arc().outerRadiusX(100).centroid();
+    const c = arc()
+      .outerRadiusX(100)
+      .centroid();
 
     expect(c.x).toEqual(-50);
     expect(c.y).toBeCloseTo(0); // it can't be zero due to floating point numbers

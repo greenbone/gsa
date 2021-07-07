@@ -20,9 +20,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import timezones from 'gmp/timezones';
-
 import {map} from 'gmp/utils/array';
+
+import timezones from 'gmp/timezones';
 
 import PropTypes from 'web/utils/proptypes';
 

@@ -21,6 +21,13 @@ import {_, _l} from 'gmp/locale/lang';
 
 import Layout from 'web/components/layout/layout';
 
+import PropTypes from 'web/utils/proptypes';
+
+import {createEntitiesFooter} from 'web/entities/footer';
+import {withEntitiesHeader} from 'web/entities/header';
+import {createEntitiesTable} from 'web/entities/table';
+import withRowDetails from 'web/entities/withRowDetails';
+
 import SolutionTypeSvgIcon from 'web/components/icon/solutiontypesvgicon';
 
 import Sort from 'web/components/sortby/sortby';
@@ -28,13 +35,6 @@ import Sort from 'web/components/sortby/sortby';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
-import {createEntitiesFooter} from 'web/entities/footer';
-import {withEntitiesHeader} from 'web/entities/header';
-import {createEntitiesTable} from 'web/entities/table';
-import withRowDetails from 'web/entities/withRowDetails';
-
-import PropTypes from 'web/utils/proptypes';
 
 import NvtDetails from './details';
 import NvtRow from './row';

@@ -23,12 +23,12 @@ import {isDefined} from 'gmp/utils/identity';
 import {first} from 'gmp/utils/array';
 import {shorten} from 'gmp/utils/string';
 
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
 import EntityComponent from 'web/entity/component';
 
 import FilterDialog from 'web/pages/filters/dialog';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 const FILTER_OPTIONS = [
   ['alert', _l('Alert')],

@@ -34,13 +34,13 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import EntityNameTableData from 'web/entities/entitynametabledata';
-import withEntitiesActions from 'web/entities/withEntitiesActions';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
 import PropTypes from 'web/utils/proptypes';
+import withEntitiesActions from 'web/entities/withEntitiesActions';
 
 const Actions = withEntitiesActions(
   ({
@@ -110,46 +110,44 @@ Cred.propTypes = {
   title: PropTypes.string,
 };
 
-const Row = ({
+export const Row = ({
   actionsComponent: ActionsComponent = Actions,
   entity,
   links = true,
   onToggleDetailsClick,
   ...props
-}) => {
-  const {credentials} = entity;
-  return (
-    <TableRow>
-      <EntityNameTableData
-        entity={entity}
-        link={links}
-        type="target"
-        displayName={_('Target')}
-        onToggleDetailsClick={onToggleDetailsClick}
+}) => (
+  <TableRow>
+    <EntityNameTableData
+      entity={entity}
+      link={links}
+      type="target"
+      displayName={_('Target')}
+      onToggleDetailsClick={onToggleDetailsClick}
+    />
+    <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
+    <TableData>{entity.max_hosts}</TableData>
+    <TableData>
+      <span>
+        <DetailsLink type="portlist" id={entity.port_list.id} textOnly={!links}>
+          {entity.port_list.name}
+        </DetailsLink>
+      </span>
+    </TableData>
+    <TableData flex="column" align="center">
+      <Cred cred={entity.ssh_credential} title={'SSH'} links={links} />
+      <Cred
+        cred={entity.ssh_elevate_credential}
+        title={_('SSH Elevate')}
+        links={links}
       />
-      <TableData>{shorten(entity.hosts.join(', '), 500)}</TableData>
-      <TableData>{entity.hostCount}</TableData>
-      <TableData>
-        <span>
-          <DetailsLink
-            type="portlist"
-            id={entity.portList.id}
-            textOnly={!links}
-          >
-            {entity.portList.name}
-          </DetailsLink>
-        </span>
-      </TableData>
-      <TableData flex="column" align="center">
-        <Cred cred={credentials.ssh} title={'SSH'} links={links} />
-        <Cred cred={credentials.smb} title={'SMB'} links={links} />
-        <Cred cred={credentials.esxi} title={'ESXi'} links={links} />
-        <Cred cred={credentials.snmp} title={'SNMP'} links={links} />
-      </TableData>
-      <ActionsComponent {...props} entity={entity} />
-    </TableRow>
-  );
-};
+      <Cred cred={entity.smb_credential} title={'SMB'} links={links} />
+      <Cred cred={entity.esxi_credential} title={'ESXi'} links={links} />
+      <Cred cred={entity.snmp_credential} title={'SNMP'} links={links} />
+    </TableData>
+    <ActionsComponent {...props} entity={entity} />
+  </TableRow>
+);
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

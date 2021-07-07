@@ -16,14 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import registerCommand from 'gmp/command';
-
-import DfnCertAdv from 'gmp/models/dfncert';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import InfoEntitiesCommand from './infoentities';
 import InfoEntityCommand from './infoentity';
+
+import registerCommand from 'gmp/command';
+
+import DfnCertAdv from 'gmp/models/dfncert';
 
 const info_filter = info => isDefined(info.dfn_cert_adv);
 

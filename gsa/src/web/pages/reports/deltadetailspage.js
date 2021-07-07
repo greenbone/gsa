@@ -77,7 +77,7 @@ import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 
-import TargetComponent from 'web/pages/targets/component';
+import TargetComponent from '../targets/component';
 
 import Page from './deltadetailscontent';
 import FilterDialog from './detailsfilterdialog';

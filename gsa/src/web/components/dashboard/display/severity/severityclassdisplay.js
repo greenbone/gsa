@@ -17,19 +17,19 @@
  */
 import React from 'react';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import DonutChart from 'web/components/chart/donut';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-import {renderDonutChartIcons} from 'web/components/dashboard/display/datadisplayicons';
+import {NA_VALUE} from 'web/utils/severity';
 
 import PropTypes from 'web/utils/proptypes';
 
-import {NA_VALUE} from 'web/utils/severity';
+import DonutChart from 'web/components/chart/donut';
+
+import DataDisplay from '../datadisplay';
+import {renderDonutChartIcons} from '../datadisplayicons';
 
 import transformSeverityData from './severityclasstransform';
 

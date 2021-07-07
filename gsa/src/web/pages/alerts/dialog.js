@@ -15,11 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useReducer} from 'react';
+
+import React from 'react';
 
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
+
+import {isDefined} from 'gmp/utils/identity';
+import {selectSaveId} from 'gmp/utils/id';
 
 import {parseInt, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
@@ -46,9 +50,7 @@ import {
   isSecinfoEvent,
 } from 'gmp/models/alert';
 
-import {isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
-
+import PropTypes from 'web/utils/proptypes';
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import Select from 'web/components/form/select';
@@ -62,10 +64,8 @@ import ReportIcon from 'web/components/icon/reporticon';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import PropTypes from 'web/utils/proptypes';
 import {UNSET_VALUE} from 'web/utils/render';
-import reducer, {updateState} from 'web/utils/stateReducer';
-import useCapabilities from 'web/utils/useCapabilities';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import AlembaVfireMethodPart from './alembavfiremethodpart';
 import HttpMethodPart from './httpmethodpart';
@@ -238,23 +238,21 @@ const StyledDivider = styled(Divider)`
   cursor: pointer;
 `;
 
-const AlertDialog = props => {
-  const capabilities = useCapabilities();
+class AlertDialog extends React.Component {
+  constructor(...args) {
+    super(...args);
 
-  const [state, dispatch] = useReducer(reducer, DEFAULTS);
+    const {event} = this.props;
 
-  useEffect(() => {
-    dispatch(
-      updateState({
-        stateEvent: isDefined(props.event)
-          ? props.event
-          : EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
-      }),
-    );
-  }, [props.event]);
+    this.state = {
+      stateEvent: isDefined(event) ? event : EVENT_TYPE_TASK_RUN_STATUS_CHANGED,
+    };
 
-  const handleEventChange = (value, onValueChange) => {
-    const {result_filters, secinfo_filters} = props;
+    this.handleEventChange = this.handleEventChange.bind(this);
+  }
+
+  handleEventChange(value, onValueChange) {
+    const {result_filters, secinfo_filters} = this.props;
 
     const is_task_event = isTaskEvent(value);
     let filter_id;
@@ -292,569 +290,584 @@ const AlertDialog = props => {
     }
     // in addition to changing the event in the dialog, change it here as well
     // to have it handy in render()
-    dispatch(updateState({stateEvent: value}));
-  };
-
-  const {
-    credentials,
-    filter_id,
-    title = _('New Alert'),
-    report_formats,
-    report_format_ids,
-    method_data_composer_include_notes,
-    method_data_composer_include_overrides,
-    method_data_recipient_credential,
-    method_data_scp_credential,
-    method_data_smb_credential,
-    method_data_tp_sms_credential,
-    method_data_verinice_server_credential,
-    method_data_pkcs12_credential,
-    method_data_vfire_base_url,
-    method_data_vfire_credential,
-    method_data_vfire_session_type,
-    method_data_vfire_client_id,
-    method_data_vfire_call_partition_name,
-    method_data_vfire_call_description,
-    method_data_vfire_call_template_name,
-    method_data_vfire_call_type_name,
-    method_data_vfire_call_impact_name,
-    method_data_vfire_call_urgency_name,
-    onClose,
-    onEmailCredentialChange,
-    onNewEmailCredentialClick,
-    onNewPasswordOnlyCredentialClick,
-    onNewScpCredentialClick,
-    onNewSmbCredentialClick,
-    onNewVeriniceCredentialClick,
-    onNewVfireCredentialClick,
-    onNewTippingPointCredentialClick,
-    onOpenContentComposerDialogClick,
-    onReportFormatsChange,
-    onSave,
-    onPasswordOnlyCredentialChange,
-    onScpCredentialChange,
-    onSmbCredentialChange,
-    onTippingPointCredentialChange,
-    onVerinceCredentialChange,
-    onVfireCredentialChange,
-  } = props;
-
-  const {stateEvent: event} = state;
-
-  const methodTypes = [];
-
-  const taskEvent = isTaskEvent(event);
-  const secinfoEvent = isSecinfoEvent(event);
-  const ticketEvent = isTicketEvent(event);
-
-  if (taskEvent) {
-    methodTypes.push(
-      {
-        value: METHOD_TYPE_EMAIL,
-        label: _('Email'),
-      },
-      {
-        value: METHOD_TYPE_HTTP_GET,
-        label: _('HTTP Get'),
-      },
-      {
-        value: METHOD_TYPE_SCP,
-        label: _('SCP'),
-      },
-      {
-        value: METHOD_TYPE_SEND,
-        label: _('Send to host'),
-      },
-      {
-        value: METHOD_TYPE_SMB,
-        label: _('SMB'),
-      },
-      {
-        value: METHOD_TYPE_SNMP,
-        label: _('SNMP'),
-      },
-      {
-        value: METHOD_TYPE_SOURCEFIRE,
-        label: _('Sourcefire Connector'),
-      },
-      {
-        value: METHOD_TYPE_START_TASK,
-        label: _('Start Task'),
-      },
-      {
-        value: METHOD_TYPE_SYSLOG,
-        label: _('System Logger'),
-      },
-      {
-        value: METHOD_TYPE_VERINICE,
-        label: _('verinice.PRO Connector'),
-      },
-      {
-        value: METHOD_TYPE_TIPPING_POINT,
-        label: _('TippingPoint SMS'),
-      },
-      {
-        value: METHOD_TYPE_ALEMBA_VFIRE,
-        label: _('Alemba vFire'),
-      },
-    );
-  } else if (ticketEvent) {
-    methodTypes.push(
-      {
-        value: METHOD_TYPE_EMAIL,
-        label: _('Email'),
-      },
-      {
-        value: METHOD_TYPE_SYSLOG,
-        label: _('System Logger'),
-      },
-      {
-        value: METHOD_TYPE_START_TASK,
-        label: _('Start Task'),
-      },
-    );
-  } else {
-    methodTypes.push(
-      {
-        value: METHOD_TYPE_EMAIL,
-        label: _('Email'),
-      },
-      {
-        value: METHOD_TYPE_SCP,
-        label: _('SCP'),
-      },
-      {
-        value: METHOD_TYPE_SEND,
-        label: _('Send to host'),
-      },
-      {
-        value: METHOD_TYPE_SMB,
-        label: _('SMB'),
-      },
-      {
-        value: METHOD_TYPE_SNMP,
-        label: _('SNMP'),
-      },
-      {
-        value: METHOD_TYPE_SYSLOG,
-        label: _('System Logger'),
-      },
-      {
-        value: METHOD_TYPE_VERINICE,
-        label: _('verinice.PRO Connector'),
-      },
-      {
-        value: METHOD_TYPE_TIPPING_POINT,
-        label: _('TippingPoint SMS'),
-      },
-      {
-        value: METHOD_TYPE_ALEMBA_VFIRE,
-        label: _('Alemba vFire'),
-      },
-    );
+    this.setState({stateEvent: value});
   }
 
-  const data = {
-    ...DEFAULTS,
-    ...alert,
-    method_data_vfire_base_url,
-    method_data_vfire_client_id,
-    method_data_vfire_call_partition_name,
-    method_data_vfire_call_description,
-    method_data_vfire_call_template_name,
-    method_data_vfire_call_type_name,
-    method_data_vfire_call_impact_name,
-    method_data_vfire_call_urgency_name,
-    method_data_vfire_session_type,
-  };
+  render() {
+    const {
+      capabilities,
+      credentials,
+      filter_id,
+      title = _('New Alert'),
+      report_formats,
+      report_format_ids,
+      method_data_composer_include_notes,
+      method_data_composer_include_overrides,
+      method_data_recipient_credential,
+      method_data_scp_credential,
+      method_data_smb_credential,
+      method_data_tp_sms_credential,
+      method_data_verinice_server_credential,
+      method_data_pkcs12_credential,
+      method_data_vfire_base_url,
+      method_data_vfire_credential,
+      method_data_vfire_session_type,
+      method_data_vfire_client_id,
+      method_data_vfire_call_partition_name,
+      method_data_vfire_call_description,
+      method_data_vfire_call_template_name,
+      method_data_vfire_call_type_name,
+      method_data_vfire_call_impact_name,
+      method_data_vfire_call_urgency_name,
+      onClose,
+      onEmailCredentialChange,
+      onNewEmailCredentialClick,
+      onNewPasswordOnlyCredentialClick,
+      onNewScpCredentialClick,
+      onNewSmbCredentialClick,
+      onNewVeriniceCredentialClick,
+      onNewVfireCredentialClick,
+      onNewTippingPointCredentialClick,
+      onOpenContentComposerDialogClick,
+      onReportFormatsChange,
+      onSave,
+      onPasswordOnlyCredentialChange,
+      onScpCredentialChange,
+      onSmbCredentialChange,
+      onTippingPointCredentialChange,
+      onVerinceCredentialChange,
+      onVfireCredentialChange,
+      ...props
+    } = this.props;
 
-  for (const [key, value] of Object.entries(props)) {
-    if (isDefined(value)) {
-      data[key] = value;
+    const {stateEvent: event} = this.state;
+
+    const methodTypes = [];
+
+    const taskEvent = isTaskEvent(event);
+    const secinfoEvent = isSecinfoEvent(event);
+    const ticketEvent = isTicketEvent(event);
+
+    if (taskEvent) {
+      methodTypes.push(
+        {
+          value: METHOD_TYPE_EMAIL,
+          label: _('Email'),
+        },
+        {
+          value: METHOD_TYPE_HTTP_GET,
+          label: _('HTTP Get'),
+        },
+        {
+          value: METHOD_TYPE_SCP,
+          label: _('SCP'),
+        },
+        {
+          value: METHOD_TYPE_SEND,
+          label: _('Send to host'),
+        },
+        {
+          value: METHOD_TYPE_SMB,
+          label: _('SMB'),
+        },
+        {
+          value: METHOD_TYPE_SNMP,
+          label: _('SNMP'),
+        },
+        {
+          value: METHOD_TYPE_SOURCEFIRE,
+          label: _('Sourcefire Connector'),
+        },
+        {
+          value: METHOD_TYPE_START_TASK,
+          label: _('Start Task'),
+        },
+        {
+          value: METHOD_TYPE_SYSLOG,
+          label: _('System Logger'),
+        },
+        {
+          value: METHOD_TYPE_VERINICE,
+          label: _('verinice.PRO Connector'),
+        },
+        {
+          value: METHOD_TYPE_TIPPING_POINT,
+          label: _('TippingPoint SMS'),
+        },
+        {
+          value: METHOD_TYPE_ALEMBA_VFIRE,
+          label: _('Alemba vFire'),
+        },
+      );
+    } else if (ticketEvent) {
+      methodTypes.push(
+        {
+          value: METHOD_TYPE_EMAIL,
+          label: _('Email'),
+        },
+        {
+          value: METHOD_TYPE_SYSLOG,
+          label: _('System Logger'),
+        },
+        {
+          value: METHOD_TYPE_START_TASK,
+          label: _('Start Task'),
+        },
+      );
+    } else {
+      methodTypes.push(
+        {
+          value: METHOD_TYPE_EMAIL,
+          label: _('Email'),
+        },
+        {
+          value: METHOD_TYPE_SCP,
+          label: _('SCP'),
+        },
+        {
+          value: METHOD_TYPE_SEND,
+          label: _('Send to host'),
+        },
+        {
+          value: METHOD_TYPE_SMB,
+          label: _('SMB'),
+        },
+        {
+          value: METHOD_TYPE_SNMP,
+          label: _('SNMP'),
+        },
+        {
+          value: METHOD_TYPE_START_TASK,
+          label: _('Start Task'),
+        },
+        {
+          value: METHOD_TYPE_SYSLOG,
+          label: _('System Logger'),
+        },
+        {
+          value: METHOD_TYPE_VERINICE,
+          label: _('verinice.PRO Connector'),
+        },
+        {
+          value: METHOD_TYPE_TIPPING_POINT,
+          label: _('TippingPoint SMS'),
+        },
+        {
+          value: METHOD_TYPE_ALEMBA_VFIRE,
+          label: _('Alemba vFire'),
+        },
+      );
     }
-  }
 
-  const controlledValues = {
-    event,
-    filter_id,
-    method_data_pkcs12_credential,
-    method_data_composer_include_notes,
-    method_data_composer_include_overrides,
-    method_data_recipient_credential,
-    method_data_scp_credential,
-    method_data_smb_credential,
-    method_data_tp_sms_credential,
-    method_data_verinice_server_credential,
-    method_data_vfire_credential,
-    report_format_ids,
-  };
+    const data = {
+      ...DEFAULTS,
+      ...alert,
+      method_data_vfire_base_url,
+      method_data_vfire_client_id,
+      method_data_vfire_call_partition_name,
+      method_data_vfire_call_description,
+      method_data_vfire_call_template_name,
+      method_data_vfire_call_type_name,
+      method_data_vfire_call_impact_name,
+      method_data_vfire_call_urgency_name,
+      method_data_vfire_session_type,
+    };
 
-  return (
-    <SaveDialog
-      title={title}
-      defaultValues={data}
-      values={controlledValues}
-      onClose={onClose}
-      onSave={onSave}
-    >
-      {({values, onValueChange}) => {
-        return (
-          <Layout flex="column">
-            <FormGroup title={_('Name')}>
-              <TextField
-                name="name"
-                grow="1"
-                value={values.name}
-                size="30"
-                onChange={onValueChange}
-              />
-            </FormGroup>
+    for (const [key, value] of Object.entries(props)) {
+      if (isDefined(value)) {
+        data[key] = value;
+      }
+    }
 
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={values.comment}
-                grow="1"
-                size="30"
-                onChange={onValueChange}
-              />
-            </FormGroup>
+    const controlledValues = {
+      event,
+      filter_id,
+      method_data_pkcs12_credential,
+      method_data_composer_include_notes,
+      method_data_composer_include_overrides,
+      method_data_recipient_credential,
+      method_data_scp_credential,
+      method_data_smb_credential,
+      method_data_tp_sms_credential,
+      method_data_verinice_server_credential,
+      method_data_vfire_credential,
+      report_format_ids,
+    };
 
-            <FormGroup title={_('Event')} flex="column">
-              <Divider flex="column">
-                <TaskEventPart
-                  prefix="event_data"
-                  event={values.event}
-                  status={values.event_data_status}
-                  onEventChange={value =>
-                    handleEventChange(value, onValueChange)
-                  }
-                  onChange={onValueChange}
-                />
-
-                <SecInfoEventPart
-                  prefix="event_data"
-                  event={values.event}
-                  secinfoType={values.event_data_secinfo_type}
-                  feedEvent={values.event_data_feed_event}
-                  onEventChange={value =>
-                    handleEventChange(value, onValueChange)
-                  }
-                  onChange={onValueChange}
-                />
-                <TicketEventPart
-                  event={values.event}
-                  onEventChange={value =>
-                    handleEventChange(value, onValueChange)
-                  }
-                />
-              </Divider>
-            </FormGroup>
-
-            <FormGroup title={_('Condition')} flex="column">
-              <Divider flex="column">
-                <Radio
-                  title={_('Always')}
-                  name="condition"
-                  value={CONDITION_TYPE_ALWAYS}
-                  checked={values.condition === CONDITION_TYPE_ALWAYS}
-                  onChange={onValueChange}
-                />
-
-                {taskEvent && (
-                  <SeverityLeastConditionPart
-                    prefix="condition_data"
-                    condition={values.condition}
-                    severity={values.condition_data_severity}
-                    onChange={onValueChange}
-                  />
-                )}
-
-                {taskEvent && (
-                  <SeverityChangedConditionPart
-                    prefix="condition_data"
-                    condition={values.condition}
-                    direction={values.condition_data_direction}
-                    onChange={onValueChange}
-                  />
-                )}
-
-                {(secinfoEvent || taskEvent) && (
-                  <FilterCountLeastConditionPart
-                    prefix="condition_data"
-                    condition={values.condition}
-                    atLeastFilterId={values.condition_data_at_least_filter_id}
-                    atLeastCount={values.condition_data_at_least_count}
-                    filters={values.condition_data_filters}
-                    onChange={onValueChange}
-                  />
-                )}
-
-                {taskEvent && (
-                  <FilterCountChangedConditionPart
-                    prefix="condition_data"
-                    condition={values.condition}
-                    filterId={values.condition_data_filter_id}
-                    count={values.condition_data_count}
-                    filters={values.condition_data_filters}
-                    onChange={onValueChange}
-                  />
-                )}
-              </Divider>
-            </FormGroup>
-
-            {secinfoEvent && (
-              <FormGroup title={_('Details URL')}>
+    return (
+      <SaveDialog
+        title={title}
+        defaultValues={data}
+        values={controlledValues}
+        onClose={onClose}
+        onSave={onSave}
+      >
+        {({values, onValueChange}) => {
+          return (
+            <Layout flex="column">
+              <FormGroup title={_('Name')}>
                 <TextField
+                  name="name"
                   grow="1"
-                  name="method_data_details_url"
-                  value={values.method_data_details_url}
+                  value={values.name}
+                  size="30"
                   onChange={onValueChange}
                 />
               </FormGroup>
-            )}
 
-            {capabilities.mayOp('get_filters') && taskEvent && (
-              <FormGroup title={_('Report Content')}>
-                <StyledDivider onClick={onOpenContentComposerDialogClick}>
-                  <ReportIcon title={_('Compose Report Content')} />
-                  <span>{_('Compose')}</span>
-                </StyledDivider>
+              <FormGroup title={_('Comment')}>
+                <TextField
+                  name="comment"
+                  value={values.comment}
+                  grow="1"
+                  size="30"
+                  onChange={onValueChange}
+                />
               </FormGroup>
-            )}
 
-            {taskEvent && (
-              <FormGroup title={_('Delta Report')} flex="column">
+              <FormGroup title={_('Event')} flex="column">
                 <Divider flex="column">
-                  <Radio
-                    title={_('None')}
-                    name="method_data_delta_type"
-                    value={DELTA_TYPE_NONE}
-                    checked={values.method_data_delta_type === DELTA_TYPE_NONE}
-                    onChange={onValueChange}
-                  />
-
-                  <Radio
-                    title={_('Previous completed report of the same task')}
-                    name="method_data_delta_type"
-                    value={DELTA_TYPE_PREVIOUS}
-                    checked={
-                      values.method_data_delta_type === DELTA_TYPE_PREVIOUS
+                  <TaskEventPart
+                    prefix="event_data"
+                    event={values.event}
+                    status={values.event_data_status}
+                    onEventChange={value =>
+                      this.handleEventChange(value, onValueChange)
                     }
                     onChange={onValueChange}
                   />
 
-                  <Divider>
+                  <SecInfoEventPart
+                    prefix="event_data"
+                    event={values.event}
+                    secinfoType={values.event_data_secinfo_type}
+                    feedEvent={values.event_data_feed_event}
+                    onEventChange={value =>
+                      this.handleEventChange(value, onValueChange)
+                    }
+                    onChange={onValueChange}
+                  />
+                  <TicketEventPart
+                    event={values.event}
+                    onEventChange={value =>
+                      this.handleEventChange(value, onValueChange)
+                    }
+                  />
+                </Divider>
+              </FormGroup>
+
+              <FormGroup title={_('Condition')} flex="column">
+                <Divider flex="column">
+                  <Radio
+                    title={_('Always')}
+                    name="condition"
+                    value={CONDITION_TYPE_ALWAYS}
+                    checked={values.condition === CONDITION_TYPE_ALWAYS}
+                    onChange={onValueChange}
+                  />
+
+                  {taskEvent && (
+                    <SeverityLeastConditionPart
+                      prefix="condition_data"
+                      condition={values.condition}
+                      severity={values.condition_data_severity}
+                      onChange={onValueChange}
+                    />
+                  )}
+
+                  {taskEvent && (
+                    <SeverityChangedConditionPart
+                      prefix="condition_data"
+                      condition={values.condition}
+                      direction={values.condition_data_direction}
+                      onChange={onValueChange}
+                    />
+                  )}
+
+                  {(secinfoEvent || taskEvent) && (
+                    <FilterCountLeastConditionPart
+                      prefix="condition_data"
+                      condition={values.condition}
+                      atLeastFilterId={values.condition_data_at_least_filter_id}
+                      atLeastCount={values.condition_data_at_least_count}
+                      filters={values.condition_data_filters}
+                      onChange={onValueChange}
+                    />
+                  )}
+
+                  {taskEvent && (
+                    <FilterCountChangedConditionPart
+                      prefix="condition_data"
+                      condition={values.condition}
+                      filterId={values.condition_data_filter_id}
+                      count={values.condition_data_count}
+                      filters={values.condition_data_filters}
+                      onChange={onValueChange}
+                    />
+                  )}
+                </Divider>
+              </FormGroup>
+
+              {secinfoEvent && (
+                <FormGroup title={_('Details URL')}>
+                  <TextField
+                    grow="1"
+                    name="method_data_details_url"
+                    value={values.method_data_details_url}
+                    onChange={onValueChange}
+                  />
+                </FormGroup>
+              )}
+
+              {capabilities.mayOp('get_filters') && taskEvent && (
+                <FormGroup title={_('Report Content')}>
+                  <StyledDivider onClick={onOpenContentComposerDialogClick}>
+                    <ReportIcon title={_('Compose Report Content')} />
+                    <span>{_('Compose')}</span>
+                  </StyledDivider>
+                </FormGroup>
+              )}
+
+              {taskEvent && (
+                <FormGroup title={_('Delta Report')} flex="column">
+                  <Divider flex="column">
                     <Radio
-                      title={_('Report with ID')}
+                      title={_('None')}
                       name="method_data_delta_type"
-                      value={DELTA_TYPE_REPORT}
+                      value={DELTA_TYPE_NONE}
                       checked={
-                        values.method_data_delta_type === DELTA_TYPE_REPORT
+                        values.method_data_delta_type === DELTA_TYPE_NONE
                       }
                       onChange={onValueChange}
                     />
-                    <TextField
-                      grow="1"
-                      name="method_data_delta_report_id"
-                      value={values.method_data_delta_report_id}
+
+                    <Radio
+                      title={_('Previous completed report of the same task')}
+                      name="method_data_delta_type"
+                      value={DELTA_TYPE_PREVIOUS}
+                      checked={
+                        values.method_data_delta_type === DELTA_TYPE_PREVIOUS
+                      }
                       onChange={onValueChange}
                     />
+
+                    <Divider>
+                      <Radio
+                        title={_('Report with ID')}
+                        name="method_data_delta_type"
+                        value={DELTA_TYPE_REPORT}
+                        checked={
+                          values.method_data_delta_type === DELTA_TYPE_REPORT
+                        }
+                        onChange={onValueChange}
+                      />
+                      <TextField
+                        grow="1"
+                        name="method_data_delta_report_id"
+                        value={values.method_data_delta_report_id}
+                        onChange={onValueChange}
+                      />
+                    </Divider>
                   </Divider>
-                </Divider>
+                </FormGroup>
+              )}
+
+              <FormGroup title={_('Method')}>
+                <Select
+                  name="method"
+                  value={values.method}
+                  items={methodTypes}
+                  onChange={onValueChange}
+                />
               </FormGroup>
-            )}
 
-            <FormGroup title={_('Method')}>
-              <Select
-                name="method"
-                value={values.method}
-                items={methodTypes}
-                onChange={onValueChange}
-              />
-            </FormGroup>
+              {values.method === METHOD_TYPE_EMAIL && (
+                <EmailMethodPart
+                  prefix="method_data"
+                  credentials={credentials}
+                  event={event}
+                  fromAddress={values.method_data_from_address}
+                  message={values.method_data_message}
+                  messageAttach={values.method_data_message_attach}
+                  notice={values.method_data_notice}
+                  noticeAttachFormat={values.method_data_notice_attach_format}
+                  noticeReportFormat={values.method_data_notice_report_format}
+                  subject={values.method_data_subject}
+                  toAddress={values.method_data_to_address}
+                  recipientCredential={values.method_data_recipient_credential}
+                  reportFormats={report_formats}
+                  onChange={onValueChange}
+                  onCredentialChange={onEmailCredentialChange}
+                  onNewCredentialClick={onNewEmailCredentialClick}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_EMAIL && (
-              <EmailMethodPart
-                prefix="method_data"
-                credentials={credentials}
-                event={event}
-                fromAddress={values.method_data_from_address}
-                message={values.method_data_message}
-                messageAttach={values.method_data_message_attach}
-                notice={values.method_data_notice}
-                noticeAttachFormat={values.method_data_notice_attach_format}
-                noticeReportFormat={values.method_data_notice_report_format}
-                subject={values.method_data_subject}
-                toAddress={values.method_data_to_address}
-                recipientCredential={values.method_data_recipient_credential}
-                reportFormats={report_formats}
-                onChange={onValueChange}
-                onCredentialChange={onEmailCredentialChange}
-                onNewCredentialClick={onNewEmailCredentialClick}
-              />
-            )}
+              {values.method === METHOD_TYPE_HTTP_GET && (
+                <HttpMethodPart
+                  prefix="method_data"
+                  URL={values.method_data_URL}
+                  onChange={onValueChange}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_HTTP_GET && (
-              <HttpMethodPart
-                prefix="method_data"
-                URL={values.method_data_URL}
-                onChange={onValueChange}
-              />
-            )}
+              {values.method === METHOD_TYPE_SCP && (
+                <ScpMethodPart
+                  prefix="method_data"
+                  credentials={credentials}
+                  reportFormats={report_formats}
+                  scpCredential={values.method_data_scp_credential}
+                  scpHost={values.method_data_scp_host}
+                  scpKnownHosts={values.method_data_scp_known_hosts}
+                  scpPath={values.method_data_scp_path}
+                  scpReportFormat={values.method_data_scp_report_format}
+                  onNewCredentialClick={onNewScpCredentialClick}
+                  onCredentialChange={onScpCredentialChange}
+                  onChange={onValueChange}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_SCP && (
-              <ScpMethodPart
-                prefix="method_data"
-                credentials={credentials}
-                reportFormats={report_formats}
-                scpCredential={values.method_data_scp_credential}
-                scpHost={values.method_data_scp_host}
-                scpKnownHosts={values.method_data_scp_known_hosts}
-                scpPath={values.method_data_scp_path}
-                scpReportFormat={values.method_data_scp_report_format}
-                onNewCredentialClick={onNewScpCredentialClick}
-                onCredentialChange={onScpCredentialChange}
-                onChange={onValueChange}
-              />
-            )}
+              {values.method === METHOD_TYPE_SEND && (
+                <SendMethodPart
+                  prefix="method_data"
+                  sendHost={values.method_data_send_host}
+                  sendPort={values.method_data_send_port}
+                  sendReportFormat={values.method_data_send_report_format}
+                  reportFormats={report_formats}
+                  onChange={onValueChange}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_SEND && (
-              <SendMethodPart
-                prefix="method_data"
-                sendHost={values.method_data_send_host}
-                sendPort={values.method_data_send_port}
-                sendReportFormat={values.method_data_send_report_format}
-                reportFormats={report_formats}
-                onChange={onValueChange}
-              />
-            )}
+              {values.method === METHOD_TYPE_START_TASK && (
+                <StartTaskMethodPart
+                  prefix="method_data"
+                  tasks={values.tasks}
+                  startTaskTask={values.method_data_start_task_task}
+                  onChange={onValueChange}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_START_TASK && (
-              <StartTaskMethodPart
-                prefix="method_data"
-                tasks={values.tasks}
-                startTaskTask={values.method_data_start_task_task}
-                onChange={onValueChange}
-              />
-            )}
+              {values.method === METHOD_TYPE_SMB && (
+                <SmbMethodPart
+                  prefix="method_data"
+                  credentials={credentials}
+                  reportFormats={report_formats}
+                  smbCredential={values.method_data_smb_credential}
+                  smbFilePath={values.method_data_smb_file_path}
+                  smbSharePath={values.method_data_smb_share_path}
+                  smbReportFormat={values.method_data_smb_report_format}
+                  onNewCredentialClick={onNewSmbCredentialClick}
+                  onChange={onValueChange}
+                  onCredentialChange={onSmbCredentialChange}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_SMB && (
-              <SmbMethodPart
-                prefix="method_data"
-                credentials={credentials}
-                reportFormats={report_formats}
-                smbCredential={values.method_data_smb_credential}
-                smbFilePath={values.method_data_smb_file_path}
-                smbSharePath={values.method_data_smb_share_path}
-                smbReportFormat={values.method_data_smb_report_format}
-                onNewCredentialClick={onNewSmbCredentialClick}
-                onChange={onValueChange}
-                onCredentialChange={onSmbCredentialChange}
-              />
-            )}
+              {values.method === METHOD_TYPE_SNMP && (
+                <SnmpMethodPart
+                  prefix="method_data"
+                  snmpAgent={values.method_data_snmp_agent}
+                  snmpCommunity={values.method_data_snmp_community}
+                  snmpMessage={values.method_data_snmp_message}
+                  onChange={onValueChange}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_SNMP && (
-              <SnmpMethodPart
-                prefix="method_data"
-                snmpAgent={values.method_data_snmp_agent}
-                snmpCommunity={values.method_data_snmp_community}
-                snmpMessage={values.method_data_snmp_message}
-                onChange={onValueChange}
-              />
-            )}
+              {values.method === METHOD_TYPE_SOURCEFIRE && (
+                <SourcefireMethodPart
+                  credentials={credentials}
+                  pkcs12Credential={values.method_data_pkcs12_credential}
+                  prefix="method_data"
+                  defenseCenterIp={values.method_data_defense_center_ip}
+                  defenseCenterPort={parseInt(
+                    values.method_data_defense_center_port,
+                  )}
+                  onChange={onValueChange}
+                  onCredentialChange={onPasswordOnlyCredentialChange}
+                  onNewCredentialClick={onNewPasswordOnlyCredentialClick}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_SOURCEFIRE && (
-              <SourcefireMethodPart
-                credentials={credentials}
-                pkcs12Credential={values.method_data_pkcs12_credential}
-                prefix="method_data"
-                defenseCenterIp={values.method_data_defense_center_ip}
-                defenseCenterPort={parseInt(
-                  values.method_data_defense_center_port,
-                )}
-                onChange={onValueChange}
-                onCredentialChange={onPasswordOnlyCredentialChange}
-                onNewCredentialClick={onNewPasswordOnlyCredentialClick}
-              />
-            )}
+              {values.method === METHOD_TYPE_VERINICE && (
+                <VeriniceMethodPart
+                  prefix="method_data"
+                  credentials={credentials}
+                  reportFormats={report_formats}
+                  veriniceServerUrl={values.method_data_verinice_server_url}
+                  veriniceServerCredential={
+                    values.method_data_verinice_server_credential
+                  }
+                  veriniceServerReportFormat={
+                    values.method_data_verinice_server_report_format
+                  }
+                  onNewCredentialClick={onNewVeriniceCredentialClick}
+                  onChange={onValueChange}
+                  onCredentialChange={onVerinceCredentialChange}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_VERINICE && (
-              <VeriniceMethodPart
-                prefix="method_data"
-                credentials={credentials}
-                reportFormats={report_formats}
-                veriniceServerUrl={values.method_data_verinice_server_url}
-                veriniceServerCredential={
-                  values.method_data_verinice_server_credential
-                }
-                veriniceServerReportFormat={
-                  values.method_data_verinice_server_report_format
-                }
-                onNewCredentialClick={onNewVeriniceCredentialClick}
-                onChange={onValueChange}
-                onCredentialChange={onVerinceCredentialChange}
-              />
-            )}
+              {values.method === METHOD_TYPE_TIPPING_POINT && (
+                <TippingPontMethodPart
+                  prefix="method_data"
+                  credentials={credentials}
+                  tpSmsCredential={values.method_data_tp_sms_credential}
+                  tpSmsHostname={values.method_data_tp_sms_hostname}
+                  tpSmsTlsWorkaround={values.method_data_tp_sms_tls_workaround}
+                  onNewCredentialClick={onNewTippingPointCredentialClick}
+                  onChange={onValueChange}
+                  onCredentialChange={onTippingPointCredentialChange}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_TIPPING_POINT && (
-              <TippingPontMethodPart
-                prefix="method_data"
-                credentials={credentials}
-                tpSmsCredential={values.method_data_tp_sms_credential}
-                tpSmsHostname={values.method_data_tp_sms_hostname}
-                tpSmsTlsWorkaround={values.method_data_tp_sms_tls_workaround}
-                onNewCredentialClick={onNewTippingPointCredentialClick}
-                onChange={onValueChange}
-                onCredentialChange={onTippingPointCredentialChange}
-              />
-            )}
+              {values.method === METHOD_TYPE_ALEMBA_VFIRE && (
+                <AlembaVfireMethodPart
+                  prefix="method_data"
+                  credentials={credentials}
+                  reportFormats={report_formats}
+                  reportFormatIds={values.report_format_ids}
+                  vFireBaseUrl={values.method_data_vfire_base_url}
+                  vFireCallDescription={
+                    values.method_data_vfire_call_description
+                  }
+                  vFireCallImpactName={
+                    values.method_data_vfire_call_impact_name
+                  }
+                  vFireCallPartitionName={
+                    values.method_data_vfire_call_partition_name
+                  }
+                  vFireCallTemplateName={
+                    values.method_data_vfire_call_template_name
+                  }
+                  vFireCallTypeName={values.method_data_vfire_call_type_name}
+                  vFireCallUrgencyName={
+                    values.method_data_vfire_call_urgency_name
+                  }
+                  vFireClientId={values.method_data_vfire_client_id}
+                  vFireCredential={values.method_data_vfire_credential}
+                  vFireSessionType={values.method_data_vfire_session_type}
+                  onChange={onValueChange}
+                  onCredentialChange={onVfireCredentialChange}
+                  onReportFormatsChange={onReportFormatsChange}
+                  onNewVfireCredentialClick={onNewVfireCredentialClick}
+                />
+              )}
 
-            {values.method === METHOD_TYPE_ALEMBA_VFIRE && (
-              <AlembaVfireMethodPart
-                prefix="method_data"
-                credentials={credentials}
-                reportFormats={report_formats}
-                reportFormatIds={values.report_format_ids}
-                vFireBaseUrl={values.method_data_vfire_base_url}
-                vFireCallDescription={values.method_data_vfire_call_description}
-                vFireCallImpactName={values.method_data_vfire_call_impact_name}
-                vFireCallPartitionName={
-                  values.method_data_vfire_call_partition_name
-                }
-                vFireCallTemplateName={
-                  values.method_data_vfire_call_template_name
-                }
-                vFireCallTypeName={values.method_data_vfire_call_type_name}
-                vFireCallUrgencyName={
-                  values.method_data_vfire_call_urgency_name
-                }
-                vFireClientId={values.method_data_vfire_client_id}
-                vFireCredential={values.method_data_vfire_credential}
-                vFireSessionType={values.method_data_vfire_session_type}
-                onChange={onValueChange}
-                onCredentialChange={onVfireCredentialChange}
-                onReportFormatsChange={onReportFormatsChange}
-                onNewVfireCredentialClick={onNewVfireCredentialClick}
-              />
-            )}
-
-            <FormGroup title={_('Active')}>
-              <YesNoRadio
-                name="active"
-                value={values.active}
-                onChange={onValueChange}
-              />
-            </FormGroup>
-          </Layout>
-        );
-      }}
-    </SaveDialog>
-  );
-};
+              <FormGroup title={_('Active')}>
+                <YesNoRadio
+                  name="active"
+                  value={values.active}
+                  onChange={onValueChange}
+                />
+              </FormGroup>
+            </Layout>
+          );
+        }}
+      </SaveDialog>
+    );
+  }
+}
 
 AlertDialog.propTypes = {
   active: PropTypes.yesno,
+  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   condition: PropTypes.string,
   condition_data_at_least_count: PropTypes.number,
@@ -948,6 +961,6 @@ AlertDialog.propTypes = {
   onVfireCredentialChange: PropTypes.func.isRequired,
 };
 
-export default AlertDialog;
+export default withCapabilities(AlertDialog);
 
 // vim: set ts=2 sw=2 tw=80:

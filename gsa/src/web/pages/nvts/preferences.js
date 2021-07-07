@@ -19,7 +19,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
+
+import PropTypes from 'web/utils/proptypes';
 
 import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
@@ -27,8 +29,6 @@ import TableData from 'web/components/table/data';
 import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
-
-import PropTypes from 'web/utils/proptypes';
 
 const Preferences = ({preferences = [], defaultTimeout}) => {
   return (
@@ -43,12 +43,12 @@ const Preferences = ({preferences = [], defaultTimeout}) => {
         <TableRow>
           <TableData>{_('Timeout')}</TableData>
           <TableData>
-            {hasValue(defaultTimeout) ? defaultTimeout : _('default')}
+            {isDefined(defaultTimeout) ? defaultTimeout : _('default')}
           </TableData>
         </TableRow>
         {preferences.map(pref => (
           <TableRow key={pref.name}>
-            <TableData>{pref.hrName}</TableData>
+            <TableData>{pref.hr_name}</TableData>
             <TableData>{pref.default}</TableData>
           </TableRow>
         ))}

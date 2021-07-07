@@ -34,10 +34,7 @@ describe('Settings model tests', () => {
     settings.set('foo', 'bar');
     settings.set('lorem', 'ipsum');
 
-    expect(settings.getEntries()).toEqual([
-      ['foo', 'bar'],
-      ['lorem', 'ipsum'],
-    ]);
+    expect(settings.getEntries()).toEqual([['foo', 'bar'], ['lorem', 'ipsum']]);
   });
 
   test('should not have non existing key', () => {

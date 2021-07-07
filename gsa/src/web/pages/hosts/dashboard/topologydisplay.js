@@ -22,17 +22,17 @@ import {withRouter} from 'react-router-dom';
 
 import {_, _l} from 'gmp/locale/lang';
 
+import {isDefined, hasValue} from 'gmp/utils/identity';
+
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
 
 import TopologyChart from 'web/components/chart/topology';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard/registry';
-
-import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
 
 import {HostsTopologyLoader} from './loaders';
 

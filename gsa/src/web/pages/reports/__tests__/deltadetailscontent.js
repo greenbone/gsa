@@ -47,17 +47,12 @@ const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
 
-let currentSettings;
-let getReportComposerDefaults;
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
-
-  getReportComposerDefaults = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+const getReportComposerDefaults = jest.fn().mockResolvedValue({
+  foo: 'bar',
 });
 
 describe('Delta Report Details Content tests', () => {

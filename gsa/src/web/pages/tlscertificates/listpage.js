@@ -21,23 +21,23 @@ import _ from 'gmp/locale';
 
 import {TLS_CERTIFICATES_FILTER_FILTER} from 'gmp/models/filter';
 
+import PropTypes from 'web/utils/proptypes';
+
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
+
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import DashboardControls from 'web/components/dashboard/controls';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import TlsCertificateIcon from 'web/components/icon/tlscertificateicon';
 
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/tlscertificates';
-
-import PropTypes from 'web/utils/proptypes';
 
 import TlsCertificatesDashboard, {
   TLS_CERTIFICATES_DASHBOARD_ID,

@@ -20,14 +20,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
+import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
-
-import PropTypes from 'web/utils/proptypes';
 
 const EntityDeleteIcon = ({
   capabilities,

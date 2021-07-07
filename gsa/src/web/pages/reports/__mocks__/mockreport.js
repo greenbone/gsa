@@ -30,7 +30,7 @@ const task1 = {
 };
 
 // Results
-export const result1 = {
+const result1 = {
   _id: '101',
   name: 'Result 1',
   owner: {name: 'admin'},
@@ -58,7 +58,7 @@ export const result1 = {
   },
 };
 
-export const result2 = {
+const result2 = {
   _id: '102',
   name: 'Result 2',
   owner: {name: 'admin'},
@@ -86,7 +86,7 @@ export const result2 = {
   },
 };
 
-export const result3 = {
+const result3 = {
   _id: '103',
   name: 'Result 3',
   owner: {name: 'admin'},
@@ -236,25 +236,6 @@ const error2 = {
   },
 };
 
-// Filters
-
-const filters = {
-  filter: ['High', 'Medium', 'Low'],
-  keywords: {
-    keyword: [
-      {column: 'apply_overrides', relation: '=', value: '0'},
-      {column: 'levels', relation: '=', value: 'hml'},
-      {column: 'rows', relation: '=', value: '100'},
-      {column: 'min_qod', relation: '=', value: '70'},
-      {column: 'first', relation: '=', value: '1'},
-      {column: 'sort-reverse', relation: '=', value: 'severity'},
-    ],
-  },
-  term:
-    'apply_overrides=0 levels=hml rows=100 min_qod=70 first=1 sort-reverse=severity',
-  _id: '0',
-};
-
 export const getMockReport = () => {
   const report = {
     _id: '1234',
@@ -270,16 +251,7 @@ export const getMockReport = () => {
     apps: {count: 4},
     os: {count: 2},
     ssl_certs: {count: 2},
-    result_count: {
-      __text: 24,
-      full: 24,
-      filtered: 24,
-      hole: {filtered: 3},
-      info: {filtered: 10},
-      warning: {filtered: 5},
-      log: {filtered: 2},
-      false_positive: {filtered: 4},
-    },
+    result_count: {__text: 3, full: 3, filtered: 2},
     results: {result: [result1, result2, result3]},
     hosts: {count: 2},
     host: [host1, host2],
@@ -291,11 +263,6 @@ export const getMockReport = () => {
       count: 2,
       error: [error1, error2],
     },
-    severity: {
-      full: 10.0,
-      filtered: 10.0,
-    },
-    filters: filters,
   };
 
   const entity = Report.fromElement({
@@ -304,7 +271,6 @@ export const getMockReport = () => {
     modification_time: '2019-06-03T11:00:22Z',
     name: '2019-06-03T11:00:22Z',
     owner: {name: 'admin'},
-    task: task1,
     _id: '1234',
   });
 

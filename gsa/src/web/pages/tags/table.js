@@ -19,19 +19,19 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import {createEntitiesFooter} from 'web/entities/footer';
-import {withEntitiesHeader} from 'web/entities/header';
-import {createEntitiesTable} from 'web/entities/table';
-import withRowDetails from 'web/entities/withRowDetails';
+import PropTypes from '../../utils/proptypes.js';
 
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
-import TableRow from 'web/components/table/row';
+import {createEntitiesFooter} from '../../entities/footer.js';
+import {withEntitiesHeader} from '../../entities/header.js';
+import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
-import PropTypes from 'web/utils/proptypes';
+import TableHead from '../../components/table/head.js';
+import TableHeader from '../../components/table/header.js';
+import TableRow from '../../components/table/row.js';
 
-import TagDetails from './details';
-import Row from './row';
+import TagDetails from './details.js';
+import Row from './row.js';
 
 const Header = ({
   actionsColumn = true,

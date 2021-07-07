@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined} from '../../utils/identity';
 
 export const filter_string = filter =>
   isDefined(filter) && isDefined(filter.toFilterString)

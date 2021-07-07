@@ -20,9 +20,14 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
+import {isDefined} from 'gmp/utils/identity';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import PropTypes from 'web/utils/proptypes';
+import withUserName from 'web/utils/withUserName';
+
+import {RowDetailsToggle} from 'web/entities/row';
+
+import ObserverIcon from 'web/entity/icon/observericon';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -43,39 +48,32 @@ import Link from 'web/components/link/link';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
-import {RowDetailsToggle} from 'web/entities/row';
-
-import ObserverIcon from 'web/entity/icon/observericon';
-
-import PropTypes from 'web/utils/proptypes';
-import withUserName from 'web/utils/withUserName';
-
 import Actions from './actions';
 import TaskStatus from './status';
 import Trend from './trend';
 
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
+
 export const renderReport = (report, links) => {
-  if (!hasValue(report)) {
+  if (!isDefined(report)) {
     return null;
   }
   return (
     <span>
       <DetailsLink type="report" id={report.id} textOnly={!links}>
-        <DateTime date={report.creationTime} />
+        <DateTime date={report.timestamp} />
       </DetailsLink>
     </span>
   );
 };
 
 const renderReportTotal = (entity, links) => {
-  const total = entity?.reports?.counts?.total;
-  if (!hasValue(total) || total <= 0) {
+  if (entity.report_count.total <= 0) {
     return null;
   }
   return (
     <Layout>
       <Link
-        data-testid="reports-total-link"
         to={'reports'}
         filter={'task_id=' + entity.id + ' sort-reverse=date'}
         title={_(
@@ -83,9 +81,9 @@ const renderReportTotal = (entity, links) => {
             ' including unfinished ones',
           {name: entity.name},
         )}
-        textOnly={!links || total === 0}
+        textOnly={!links || entity.report_count.total === 0}
       >
-        {total}
+        {entity.report_count.total}
       </Link>
     </Layout>
   );
@@ -99,37 +97,33 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
-  const {scanner, observers, reports} = entity;
-  const {lastReport} = reports;
+  const {scanner, observers} = entity;
+
   const obs = [];
 
-  if (hasValue(observers)) {
-    if (hasValue(observers.users)) {
-      obs.user = _('Users {{user}}', {user: observers.users.join(', ')});
+  if (isDefined(observers)) {
+    if (isDefined(observers.user)) {
+      obs.user = _('Users {{user}}', {user: observers.user.join(', ')});
     }
-    if (isDefined(observers?.roles?.length) && observers.roles.length > 0) {
-      const role = observers.roles.map(r => r.name);
+    if (isDefined(observers.role)) {
+      const role = observers.role.map(r => r.name);
       obs.role = _('Roles {{role}}', {role: role.join(', ')});
     }
-    if (isDefined(observers?.roles?.length) && observers.roles.length > 0) {
-      const group = observers.groups.map(g => g.name);
+    if (isDefined(observers.group)) {
+      const group = observers.group.map(g => g.name);
       obs.group = _('Groups {{group}}', {group: group.join(', ')});
     }
   }
 
   return (
     <TableRow>
-      <TableData data-testid="task-details">
+      <TableData>
         <Layout align="space-between">
-          <RowDetailsToggle
-            name={entity.id}
-            onClick={onToggleDetailsClick}
-            data-testid="task-details-toggle"
-          >
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
             {entity.name}
           </RowDetailsToggle>
           <IconDivider>
-            {entity.alterable && (
+            {entity.alterable === 1 && (
               <AlterableIcon size="small" title={_('Task is alterable')} />
             )}
             {isDefined(scanner) &&
@@ -146,7 +140,7 @@ const Row = ({
               entity={entity}
               userName={username}
             />
-            {Object.keys(obs).length > 0 && (
+            {isDefined(observers) && Object.keys(observers).length > 0 && (
               <ProvideViewIcon
                 size="small"
                 title={_(
@@ -163,29 +157,20 @@ const Row = ({
         </Layout>
         {entity.comment && <Comment>({entity.comment})</Comment>}
       </TableData>
-      <TableData data-testid="task-status">
+      <TableData>
         <TaskStatus task={entity} links={links} />
       </TableData>
-      <TableData data-testid="reports-total">
-        {renderReportTotal(entity, links)}
-      </TableData>
-      <TableData data-testid="last-report">
-        {renderReport(lastReport, links)}
-      </TableData>
-      <TableData data-testid="severity-bar">
-        {!entity.isContainer() && hasValue(lastReport) && (
-          <SeverityBar severity={lastReport.severity} />
+      <TableData>{renderReportTotal(entity, links)}</TableData>
+      <TableData>{renderReport(entity.last_report, links)}</TableData>
+      <TableData>
+        {!entity.isContainer() && isDefined(entity.last_report) && (
+          <SeverityBar severity={entity.last_report.severity} />
         )}
       </TableData>
-      <TableData align="center" data-testid="trend">
+      <TableData align="center">
         {!entity.isContainer() && <Trend name={entity.trend} />}
       </TableData>
-      <ActionsComponent
-        {...props}
-        links={links}
-        entity={entity}
-        data-testid="task-actions"
-      />
+      <ActionsComponent {...props} links={links} entity={entity} />
     </TableRow>
   );
 };

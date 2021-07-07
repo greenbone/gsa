@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {hasValue, isDefined, isString} from './identity';
+import {isDefined, isString} from './identity';
 
 export const capitalizeFirstLetter = string =>
   string.charAt(0).toUpperCase() + string.slice(1);
@@ -58,6 +58,6 @@ export const split = (string, separator, limit) => {
   return splits;
 };
 
-export const isEmpty = string => !hasValue(string) || string.length === 0;
+export const isEmpty = string => !isDefined(string) || string.length === 0;
 
 // vim: set ts=2 sw=2 tw=80:

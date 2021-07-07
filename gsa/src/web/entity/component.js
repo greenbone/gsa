@@ -15,21 +15,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {useEffect, useCallback} from 'react';
+import React from 'react';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {getUsername} from 'web/store/usersettings/selectors';
 import {createDeleteEntity} from 'web/store/entities/utils/actions';
 
+import compose from 'web/utils/compose';
+
 import PropTypes from 'web/utils/proptypes';
+
 import {generateFilename} from 'web/utils/render';
-import useGmp from 'web/utils/useGmp';
-import useUserName from 'web/utils/useUserName';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+
+import withGmp from 'web/utils/withGmp';
 
 export const goto_details = (type, props) => ({data}) => {
   const {history} = props;
@@ -41,116 +45,110 @@ export const goto_list = (type, props) => () => {
   return history.push('/' + type);
 };
 
-const EntityComponent = ({
-  children,
-  name,
-  onCloned,
-  onCloneError,
-  onCreated,
-  onCreateError,
-  onDeleted,
-  onDeleteError,
-  onDownloaded,
-  onDownloadError,
-  onSaved,
-  onSaveError,
-}) => {
-  const gmp = useGmp();
-  const username = useUserName();
-  const dispatch = useDispatch();
-  const [, renewSession] = useUserSessionTimeout();
+class EntityComponent extends React.Component {
+  constructor(...args) {
+    super(...args);
 
-  const cmd = gmp[name];
+    this.handleEntityClone = this.handleEntityClone.bind(this);
+    this.handleEntityDelete = this.handleEntityDelete.bind(this);
+    this.handleEntityDownload = this.handleEntityDownload.bind(this);
+    this.handleEntitySave = this.handleEntitySave.bind(this);
+  }
 
-  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
-  const detailsExportFileName = userDefaultsSelector.getValueByName(
-    'detailsexportfilename',
-  );
+  componentDidMount() {
+    this.props.loadSettings();
+  }
 
-  const deleteEntityFunc = createDeleteEntity({entityType: name});
-  const deleteEntity = id => dispatch(deleteEntityFunc(gmp)(id));
+  handleEntityDelete(entity) {
+    const {deleteEntity, onDeleted, onDeleteError} = this.props;
 
-  const loadSettings = useCallback(
-    () => dispatch(loadUserSettingDefaults(gmp)()),
-    [dispatch, gmp],
-  );
-
-  useEffect(() => {
-    // load settings on mount
-    loadSettings();
-  }, [loadSettings]);
-
-  const handleEntityDelete = entity => {
-    renewSession();
+    this.handleInteraction();
 
     return deleteEntity(entity.id).then(onDeleted, onDeleteError);
-  };
+  }
 
-  const handleEntityClone = useCallback(
-    entity => {
-      renewSession();
+  handleEntityClone(entity) {
+    const {onCloned, onCloneError, gmp, name} = this.props;
+    const cmd = gmp[name];
 
-      return cmd.clone(entity).then(onCloned, onCloneError);
-    },
-    [cmd, renewSession, onCloneError, onCloned],
-  );
+    this.handleInteraction();
 
-  const handleEntitySave = useCallback(
-    data => {
-      renewSession();
+    return cmd.clone(entity).then(onCloned, onCloneError);
+  }
 
-      if (isDefined(data.id)) {
-        return cmd.save(data).then(onSaved, onSaveError);
-      }
+  handleEntitySave(data) {
+    const {gmp, name} = this.props;
+    const cmd = gmp[name];
 
-      return cmd.create(data).then(onCreated, onCreateError);
-    },
-    [cmd, renewSession, onCreateError, onCreated, onSaveError, onSaved],
-  );
+    this.handleInteraction();
 
-  const handleEntityDownload = useCallback(
-    entity => {
-      renewSession();
+    if (isDefined(data.id)) {
+      const {onSaved, onSaveError} = this.props;
+      return cmd.save(data).then(onSaved, onSaveError);
+    }
 
-      const promise = cmd.export(entity).then(response => {
-        const filename = generateFilename({
-          creationTime: entity.creationTime,
-          fileNameFormat: detailsExportFileName,
-          id: entity.id,
-          modificationTime: entity.modificationTime,
-          resourceName: entity.name,
-          resourceType: name,
-          username,
-        });
+    const {onCreated, onCreateError} = this.props;
+    return cmd.create(data).then(onCreated, onCreateError);
+  }
 
-        return {filename, data: response.data};
+  handleEntityDownload(entity) {
+    const {
+      detailsExportFileName,
+      username,
+      gmp,
+      name,
+      onDownloaded,
+      onDownloadError,
+    } = this.props;
+    const cmd = gmp[name];
+
+    this.handleInteraction();
+
+    const promise = cmd.export(entity).then(response => {
+      const filename = generateFilename({
+        creationTime: entity.creationTime,
+        fileNameFormat: detailsExportFileName,
+        id: entity.id,
+        modificationTime: entity.modificationTime,
+        resourceName: entity.name,
+        resourceType: name,
+        username,
       });
 
-      return promise.then(onDownloaded, onDownloadError);
-    },
-    [
-      cmd,
-      name,
-      detailsExportFileName,
-      renewSession,
-      username,
-      onDownloadError,
-      onDownloaded,
-    ],
-  );
+      return {filename, data: response.data};
+    });
 
-  return children({
-    create: handleEntitySave,
-    clone: handleEntityClone,
-    delete: handleEntityDelete,
-    save: handleEntitySave,
-    download: handleEntityDownload,
-  });
-};
+    return promise.then(onDownloaded, onDownloadError);
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
+  render() {
+    const {children} = this.props;
+
+    return children({
+      create: this.handleEntitySave,
+      clone: this.handleEntityClone,
+      delete: this.handleEntityDelete,
+      save: this.handleEntitySave,
+      download: this.handleEntityDownload,
+    });
+  }
+}
 
 EntityComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  deleteEntity: PropTypes.func.isRequired,
+  detailsExportFileName: PropTypes.string,
+  gmp: PropTypes.gmp.isRequired,
+  loadSettings: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
+  username: PropTypes.string,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -164,6 +162,33 @@ EntityComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default EntityComponent;
+const mapStateToProps = rootState => {
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
+  const detailsExportFileName = userDefaultsSelector.getValueByName(
+    'detailsexportfilename',
+  );
+  return {
+    detailsExportFileName,
+    username,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {name, gmp}) => {
+  const deleteEntity = createDeleteEntity({entityType: name});
+  return {
+    deleteEntity: id => dispatch(deleteEntity(gmp)(id)),
+    loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+  };
+};
+
+export default compose(
+  withGmp,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(EntityComponent);
 
 // vim: set ts=2 sw=2 tw=80:

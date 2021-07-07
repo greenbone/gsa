@@ -21,6 +21,12 @@ import _ from 'gmp/locale';
 
 import {REPORT_FORMATS_FILTER_FILTER} from 'gmp/models/filter';
 
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
 import ManualIcon from 'web/components/icon/manualicon';
 import ImportIcon from 'web/components/icon/importicon';
 import ReportFormatIcon from 'web/components/icon/reportformaticon';
@@ -30,16 +36,10 @@ import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/reportformats';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 import ReportFormatComponent from './component';
 import ReportFormatsTable, {SORT_FIELDS} from './table';

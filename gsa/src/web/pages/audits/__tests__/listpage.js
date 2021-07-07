@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -23,78 +24,108 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
+import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
+import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, screen, fireEvent, wait} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
-import {
-  createDeleteAuditsByFilterQueryMock,
-  createDeleteAuditsByIdsQueryMock,
-  createExportAuditsByFilterQueryMock,
-  createExportAuditsByIdsQueryMock,
-  createGetAuditsQueryMock,
-} from 'web/graphql/__mocks__/audits';
 
 setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
 
+const lastReport = {
+  report: {
+    _id: '1234',
+    timestamp: '2019-07-10T12:51:27Z',
+    compliance_count: {yes: 4, no: 3, incomplete: 1},
+  },
+};
+
+const audit = Audit.fromElement({
+  _id: '1234',
+  owner: {name: 'admin'},
+  name: 'foo',
+  comment: 'bar',
+  status: AUDIT_STATUS.done,
+  alterable: '0',
+  last_report: lastReport,
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: 'id1', name: 'target1'},
+});
+
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
-const reloadInterval = -1;
+const reloadInterval = 1;
 const manualUrl = 'test/';
 
-let currentSettings;
-let getFilters;
-let getSetting;
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+const getSetting = jest.fn().mockResolvedValue({
+  filter: null,
+});
 
-  getSetting = jest.fn().mockResolvedValue({
-    filter: null,
-  });
+const getFilters = jest.fn().mockReturnValue(
+  Promise.resolve({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+);
 
-  getFilters = jest.fn().mockReturnValue(
-    Promise.resolve({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    }),
-  );
+const getAudits = jest.fn().mockResolvedValue({
+  data: [audit],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const getReportFormats = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
 });
 
 describe('AuditPage tests', () => {
   test('should render full AuditPage', async () => {
     const gmp = {
+      audits: {
+        get: getAudits,
+      },
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
+      reportformats: {
+        get: getReportFormats,
+      },
+      reloadInterval,
+      settings: {manualUrl},
       user: {currentSettings, getSetting},
     };
-
-    const [mock, resultFunc] = createGetAuditsQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -106,92 +137,60 @@ describe('AuditPage tests', () => {
       defaultFilterLoadingActions.success('audit', defaultSettingfilter),
     );
 
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
+    );
+
     const {baseElement} = render(<AuditPage />);
 
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
     expect(baseElement).toMatchSnapshot();
-
-    const inputs = baseElement.querySelectorAll('input');
-    const selects = screen.getAllByTestId('select-selected-value');
-
-    // Toolbar Icons
-    expect(screen.getAllByTitle('Help: Audits')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('New Audit')[0]).toBeInTheDocument();
-
-    // Powerfilter
-    expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
-
-    // Table
-    const header = baseElement.querySelectorAll('th');
-
-    expect(header[0]).toHaveTextContent('Name');
-    expect(header[1]).toHaveTextContent('Status');
-    expect(header[2]).toHaveTextContent('Report');
-    expect(header[3]).toHaveTextContent('Compliance Status');
-    expect(header[4]).toHaveTextContent('Actions');
-
-    const row = baseElement.querySelectorAll('tr');
-
-    expect(row[1]).toHaveTextContent('foo');
-    expect(row[1]).toHaveTextContent('(bar)');
-
-    expect(
-      screen.getAllByTitle(
-        'View Details of Schedule schedule 1 (Next due: over)',
-      )[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Audit is scheduled')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Move Audit to trashcan')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Audit')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Clone Audit')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export Audit')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Report download not available')[0],
-    ).toBeInTheDocument();
   });
 
-  test('should allow to bulk action on page contents', async () => {
+  test('should call commands for bulk actions', async () => {
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
     const gmp = {
+      audits: {
+        get: getAudits,
+        deleteByFilter,
+        exportByFilter,
+      },
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting},
+      reportformats: {
+        get: getReportFormats,
+      },
+      reloadInterval,
+      settings: {manualUrl},
+      user: {renewSession, currentSettings, getSetting: getSetting},
     };
-
-    const [mock, resultFunc] = createGetAuditsQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
-
-    const [exportMock, exportResult] = createExportAuditsByIdsQueryMock([
-      '657',
-    ]);
-    const [deleteMock, deleteResult] = createDeleteAuditsByIdsQueryMock([
-      '657',
-    ]);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock, exportMock, deleteMock],
     });
 
+    store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
     const defaultSettingfilter = Filter.fromString('foo=bar');
@@ -200,184 +199,37 @@ describe('AuditPage tests', () => {
       defaultFilterLoadingActions.success('audit', defaultSettingfilter),
     );
 
-    render(<AuditPage />);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-    // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
-    expect(exportResult).toHaveBeenCalled();
-
-    // move page contents to trashcan
-    const deleteIcon = screen.getAllByTitle('Move page contents to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
-    expect(deleteResult).toHaveBeenCalled();
-  });
-
-  test('should allow to bulk action on selected audits', async () => {
-    const gmp = {
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
-    const [mock, resultFunc] = createGetAuditsQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
     });
-
-    const [exportMock, exportResult] = createExportAuditsByIdsQueryMock([
-      '657',
-    ]);
-    const [deleteMock, deleteResult] = createDeleteAuditsByIdsQueryMock([
-      '657',
-    ]);
-
-    const {render, store} = rendererWith({
-      gmp,
-      capabilities: true,
-      store: true,
-      router: true,
-      queryMocks: [mock, exportMock, deleteMock],
-    });
-
-    store.dispatch(setUsername('admin'));
-
-    const defaultSettingfilter = Filter.fromString('foo=bar');
-    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      defaultFilterLoadingActions.success('audit', defaultSettingfilter),
+      entitiesLoadingActions.success([audit], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<AuditPage />);
+    const {baseElement, getAllByTestId} = render(<AuditPage />);
 
-    await wait();
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
-    expect(resultFunc).toHaveBeenCalled();
+    const icons = getAllByTestId('svg-icon');
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
+    await act(async () => {
+      expect(icons[19]).toHaveAttribute(
+        'title',
+        'Move page contents to trashcan',
+      );
+      fireEvent.click(icons[19]);
+      expect(deleteByFilter).toHaveBeenCalled();
 
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[1]);
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to selection');
-
-    const inputs = element.querySelectorAll('input');
-
-    // select an audit
-    fireEvent.click(inputs[1]);
-    await wait();
-
-    // export selected audit
-    const exportIcon = screen.getAllByTitle('Export selection');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
-    expect(exportResult).toHaveBeenCalled();
-
-    // move selected audit to trashcan
-    const deleteIcon = screen.getAllByTitle('Move selection to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
-    expect(deleteResult).toHaveBeenCalled();
-  });
-
-  test('should allow to bulk action on filtered audits', async () => {
-    const gmp = {
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
-    const [mock, resultFunc] = createGetAuditsQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
+      expect(icons[20]).toHaveAttribute('title', 'Export page contents');
+      fireEvent.click(icons[20]);
+      expect(exportByFilter).toHaveBeenCalled();
     });
-
-    const [exportMock, exportResult] = createExportAuditsByFilterQueryMock(
-      'foo=bar rows=-1 first=1',
-    );
-    const [deleteMock, deleteResult] = createDeleteAuditsByFilterQueryMock(
-      'foo=bar rows=-1 first=1',
-    );
-
-    const {render, store} = rendererWith({
-      gmp,
-      capabilities: true,
-      store: true,
-      router: true,
-      queryMocks: [mock, exportMock, deleteMock],
-    });
-
-    store.dispatch(setUsername('admin'));
-
-    const defaultSettingfilter = Filter.fromString('foo=bar');
-    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
-    store.dispatch(
-      defaultFilterLoadingActions.success('audit', defaultSettingfilter),
-    );
-
-    render(<AuditPage />);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[2]);
-
-    await wait();
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to all filtered');
-
-    // export all filtered audits
-    const exportIcon = screen.getAllByTitle('Export all filtered');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
-    expect(exportResult).toHaveBeenCalled();
-
-    // move all filtered audits to trashcan
-    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
-    expect(deleteResult).toHaveBeenCalled();
   });
 });
 

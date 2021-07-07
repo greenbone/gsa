@@ -119,11 +119,6 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
     false,
   );
 
-  const mayOpBpm = ['hosts', 'tags'].reduce(
-    (sum, cur) => sum || capabilities.mayAccess(cur),
-    false,
-  );
-
   return (
     <React.Fragment>
       <MenuBarPlaceholder />
@@ -185,14 +180,6 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                   <MenuEntry title={_('Compliance Audits')} to="audits" />
                 )}
               </MenuSection>
-              {mayOpBpm && (
-                <MenuSection>
-                  <MenuEntry
-                    title={_('Business Process Map')}
-                    to="processmaps"
-                  />
-                </MenuSection>
-              )}
             </Menu>
           )}
           {capabilities.mayAccess('info') && (

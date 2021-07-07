@@ -23,6 +23,8 @@ import _ from 'gmp/locale';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
+import PropTypes from 'web/utils/proptypes';
+
 import Checkbox from 'web/components/form/checkbox';
 import FileField from 'web/components/form/filefield';
 import PasswordField from 'web/components/form/passwordfield';
@@ -35,8 +37,6 @@ import Layout from 'web/components/layout/layout';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
-import PropTypes from 'web/utils/proptypes';
 
 const noop_convert = value => value;
 

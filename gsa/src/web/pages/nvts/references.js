@@ -23,6 +23,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import DetailsBlock from 'web/entity/block';
 
+import PropTypes from 'web/utils/proptypes';
+
 import CertLink from 'web/components/link/certlink';
 import CveLink from 'web/components/link/cvelink';
 import ExternalLink from 'web/components/link/externallink';
@@ -32,20 +34,10 @@ import TableBody from 'web/components/table/body';
 import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import PropTypes from 'web/utils/proptypes';
-
 const References = ({nvt, links = true}) => {
-  const {
-    cveReferences = [],
-    bidReferences = [],
-    certReferences = [],
-    otherReferences = [],
-  } = nvt;
+  const {cves = [], bids = [], certs = [], xrefs = []} = nvt;
   const has_reference =
-    cveReferences.length > 0 ||
-    bidReferences.length > 0 ||
-    certReferences.length > 0 ||
-    otherReferences.length > 0;
+    cves.length > 0 || bids.length > 0 || certs.length > 0 || xrefs.length > 0;
   if (!has_reference) {
     return null;
   }
@@ -53,15 +45,15 @@ const References = ({nvt, links = true}) => {
     <DetailsBlock title={_('References')}>
       <InfoTable>
         <TableBody>
-          {cveReferences.length > 0 && (
+          {cves.length > 0 && (
             <TableRow>
               <TableDataAlignTop>{_('CVE')}</TableDataAlignTop>
               <TableData>
-                {cveReferences.map(cve => (
-                  <span key={cve.id}>
+                {cves.map(cve_id => (
+                  <span key={cve_id}>
                     <CveLink
-                      title={_('View Details of {{id}}', {id: cve.id})}
-                      id={cve.id}
+                      title={_('View Details of {{cve_id}}', {cve_id})}
+                      id={cve_id}
                       textOnly={!links}
                     />
                   </span>
@@ -70,22 +62,22 @@ const References = ({nvt, links = true}) => {
             </TableRow>
           )}
 
-          {bidReferences.length > 0 && (
+          {bids.length > 0 && (
             <TableRow>
               <TableDataAlignTop>{_('BID')}</TableDataAlignTop>
               <TableData>
-                {bidReferences.map(bid => (
-                  <span key={bid.id}>{bid.id}</span>
+                {bids.map(bid => (
+                  <span key={bid}>{bid}</span>
                 ))}
               </TableData>
             </TableRow>
           )}
 
-          {certReferences.length > 0 && (
+          {certs.length > 0 && (
             <TableRow>
               <TableDataAlignTop>{_('CERT')}</TableDataAlignTop>
               <TableData>
-                {certReferences.map(cert => (
+                {certs.map(cert => (
                   <span key={cert.id}>
                     <CertLink type={cert.type} id={cert.id} textOnly={!links} />
                   </span>
@@ -94,20 +86,20 @@ const References = ({nvt, links = true}) => {
             </TableRow>
           )}
 
-          {otherReferences.length > 0 && (
+          {xrefs.length > 0 && (
             <TableRow>
               <TableDataAlignTop>{_('Other')}</TableDataAlignTop>
               <TableData>
-                {otherReferences.map(xref => (
-                  <span key={xref.id}>
+                {xrefs.map(xref => (
+                  <span key={xref.ref}>
                     <ExternalLink
                       textOnly={!links || xref.type !== 'url'}
-                      to={xref.id}
+                      to={xref.ref}
                     >
                       {isDefined(xref.type) &&
                         xref.type !== 'url' &&
                         xref.type + ': '}
-                      {xref.id}
+                      {xref.ref}
                     </ExternalLink>
                   </span>
                 ))}

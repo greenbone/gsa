@@ -21,8 +21,8 @@ import {pack, hierarchy} from 'd3-hierarchy';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import PropTypes from '../../utils/proptypes';
+import Theme from '../../utils/theme';
 
 import Group from './group';
 import Svg from './svg';
@@ -41,7 +41,9 @@ const BubbleChart = ({data = [], width, height, svgRef, onDataClick}) => {
 
   const hasBubbles = data.length > 0;
 
-  const bubbles = pack().size([maxWidth, maxHeight]).padding(1.5);
+  const bubbles = pack()
+    .size([maxWidth, maxHeight])
+    .padding(1.5);
 
   const root = hierarchy({children: data}).sum(d => d.value);
 

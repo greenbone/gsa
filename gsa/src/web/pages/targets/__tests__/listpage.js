@@ -23,14 +23,9 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
+import Target from 'gmp/models/target';
 
-import {
-  createDeleteTargetsByFilterQueryMock,
-  createDeleteTargetsByIdsQueryMock,
-  createExportTargetsByFilterQueryMock,
-  createExportTargetsByIdsQueryMock,
-  createGetTargetsQueryMock,
-} from 'web/graphql/__mocks__/targets';
+import {entitiesLoadingActions} from 'web/store/entities/targets';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
@@ -47,6 +42,7 @@ window.URL.createObjectURL = jest.fn();
 let currentSettings;
 let getSetting;
 let getFilters;
+let getTargets;
 let renewSession;
 
 beforeEach(() => {
@@ -68,9 +64,54 @@ beforeEach(() => {
     }),
   );
 
+  getTargets = jest.fn().mockResolvedValue({
+    data: [target],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  });
+
   renewSession = jest.fn().mockResolvedValue({
     foo: 'bar',
   });
+});
+
+const target = Target.fromElement({
+  _id: '46264',
+  name: 'target 1',
+  commen: 'hello world',
+  creation_time: '2020-12-23T14:14:11Z',
+  modification_time: '2021-01-04T11:54:12Z',
+  in_use: 0,
+  permissions: {permission: {name: 'Everything'}},
+  owner: {name: 'admin'},
+  writable: 1,
+  port_list: {
+    _id: '32323',
+    name: 'All IANA assigned TCP',
+    trash: 0,
+  },
+  hosts: '127.0.0.1, 123.456.574.64',
+  exclude_hosts: '192.168.0.1',
+  max_hosts: 2,
+  reverse_lookup_only: 1,
+  reverse_lookup_unify: 0,
+  tasks: {task: {_id: '465', name: 'foo'}},
+  alive_tests: 'Scan Config Default',
+  allow_simultaneous_ips: 1,
+  port_range: '1-5',
+  ssh_credential: {
+    _id: '1235',
+    name: 'ssh',
+    port: '22',
+    trash: '0',
+  },
+  ssh_elevate_credential: {
+    _id: '3456',
+    name: 'ssh_elevate',
+    trash: '0',
+  },
 });
 
 const caps = new Capabilities(['everything']);
@@ -82,6 +123,9 @@ const manualUrl = 'test/';
 describe('TargetPage tests', () => {
   test('should render full TargetPage', async () => {
     const gmp = {
+      targets: {
+        get: getTargets,
+      },
       filters: {
         get: getFilters,
       },
@@ -89,17 +133,11 @@ describe('TargetPage tests', () => {
       user: {currentSettings, getSetting},
     };
 
-    const [mock, resultFunc] = createGetTargetsQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -111,11 +149,22 @@ describe('TargetPage tests', () => {
       defaultFilterLoadingActions.success('target', defaultSettingfilter),
     );
 
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([target], filter, loadedFilter, counts),
+    );
+
     const {baseElement} = render(<TargetPage />);
 
     await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
 
     const inputs = baseElement.querySelectorAll('input');
     const selects = screen.getAllByTestId('select-selected-value');
@@ -148,10 +197,12 @@ describe('TargetPage tests', () => {
     const row = baseElement.querySelectorAll('tr');
 
     expect(row[1]).toHaveTextContent('target 1');
-    expect(row[1]).toHaveTextContent('123.234.345.456, 127.0.0.12');
-    expect(row[1]).toHaveTextContent('(detailspage)');
+    expect(row[1]).toHaveTextContent('127.0.0.1, 123.456.574.642');
     expect(row[1]).toHaveTextContent('2');
-    expect(row[1]).toHaveTextContent('list');
+    expect(row[1]).toHaveTextContent('All IANA assigned TCP');
+
+    expect(row[1]).toHaveTextContent('SSH: ssh');
+    expect(row[1]).toHaveTextContent('SSH Elevate: ssh_elevate');
 
     expect(
       screen.getAllByTitle('Move Target to trashcan')[0],
@@ -161,7 +212,20 @@ describe('TargetPage tests', () => {
     expect(screen.getAllByTitle('Export Target')[0]).toBeInTheDocument();
   });
   test('should allow to bulk action on page contents', async () => {
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
     const gmp = {
+      targets: {
+        get: getTargets,
+        deleteByFilter,
+        exportByFilter,
+      },
       filters: {
         get: getFilters,
       },
@@ -169,26 +233,11 @@ describe('TargetPage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
-    const [mock, resultFunc] = createGetTargetsQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
-
-    const [exportMock, exportResult] = createExportTargetsByIdsQueryMock([
-      '159',
-      '343',
-    ]);
-    const [deleteMock, deleteResult] = createDeleteTargetsByIdsQueryMock([
-      '159',
-      '343',
-    ]);
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -200,11 +249,22 @@ describe('TargetPage tests', () => {
       defaultFilterLoadingActions.success('target', defaultSettingfilter),
     );
 
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([target], filter, loadedFilter, counts),
+    );
+
     render(<TargetPage />);
 
     await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
 
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents');
@@ -214,7 +274,7 @@ describe('TargetPage tests', () => {
 
     await wait();
 
-    expect(exportResult).toHaveBeenCalled();
+    expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getAllByTitle('Move page contents to trashcan');
@@ -224,11 +284,25 @@ describe('TargetPage tests', () => {
 
     await wait();
 
-    expect(deleteResult).toHaveBeenCalled();
+    expect(deleteByFilter).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected targets', async () => {
+    // mock cache issues will cause these tests to randomly fail. Will fix later.
+    const deleteByIds = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByIds = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
     const gmp = {
+      targets: {
+        get: getTargets,
+        delete: deleteByIds,
+        export: exportByIds,
+      },
       filters: {
         get: getFilters,
       },
@@ -236,20 +310,11 @@ describe('TargetPage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
-    const [mock, resultFunc] = createGetTargetsQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
-
-    const [exportMock, exportResult] = createExportTargetsByIdsQueryMock();
-    const [deleteMock, deleteResult] = createDeleteTargetsByIdsQueryMock();
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -261,11 +326,22 @@ describe('TargetPage tests', () => {
       defaultFilterLoadingActions.success('target', defaultSettingfilter),
     );
 
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([target], filter, loadedFilter, counts),
+    );
+
     const {element} = render(<TargetPage />);
 
     await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -290,7 +366,7 @@ describe('TargetPage tests', () => {
 
     await wait();
 
-    expect(exportResult).toHaveBeenCalled();
+    expect(exportByIds).toHaveBeenCalled();
 
     // move selected target to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan');
@@ -300,11 +376,25 @@ describe('TargetPage tests', () => {
 
     await wait();
 
-    expect(deleteResult).toHaveBeenCalled();
+    expect(deleteByIds).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered targets', async () => {
+    // mock cache issues will cause these tests to randomly fail. Will fix later.
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
     const gmp = {
+      targets: {
+        get: getTargets,
+        deleteByFilter,
+        exportByFilter,
+      },
       filters: {
         get: getFilters,
       },
@@ -312,25 +402,13 @@ describe('TargetPage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
-    const [mock, resultFunc] = createGetTargetsQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
-
-    const [exportMock, exportResult] = createExportTargetsByFilterQueryMock(
-      'foo=bar rows=-1 first=1',
-    );
-    const [deleteMock, deleteResult] = createDeleteTargetsByFilterQueryMock(
-      'foo=bar rows=-1 first=1',
-    );
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock, exportMock, deleteMock],
     });
+
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
@@ -340,11 +418,22 @@ describe('TargetPage tests', () => {
       defaultFilterLoadingActions.success('target', defaultSettingfilter),
     );
 
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([target], filter, loadedFilter, counts),
+    );
+
     render(<TargetPage />);
 
     await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -365,7 +454,7 @@ describe('TargetPage tests', () => {
 
     await wait();
 
-    expect(exportResult).toHaveBeenCalled();
+    expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered targets to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan');
@@ -375,7 +464,7 @@ describe('TargetPage tests', () => {
 
     await wait();
 
-    expect(deleteResult).toHaveBeenCalled();
+    expect(deleteByFilter).toHaveBeenCalled();
   });
 });
 

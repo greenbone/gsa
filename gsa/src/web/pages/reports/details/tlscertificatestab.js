@@ -18,6 +18,9 @@
 
 import React from 'react';
 
+import TLSCertificatesTable from './tlscertificatestable';
+import ReportEntitiesContainer from './reportentitiescontainer';
+
 import PropTypes from 'web/utils/proptypes';
 
 import {
@@ -26,9 +29,6 @@ import {
   makeComparePort,
   makeCompareString,
 } from 'web/utils/sort';
-
-import TLSCertificatesTable from './tlscertificatestable';
-import ReportEntitiesContainer from './reportentitiescontainer';
 
 const tlsCertificatesSortFunctions = {
   dn: makeCompareString('issuer'),

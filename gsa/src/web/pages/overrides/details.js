@@ -19,7 +19,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
+
+import PropTypes from 'web/utils/proptypes';
+import {
+  translatedResultSeverityRiskFactor,
+  LOG_VALUE,
+} from 'web/utils/severity';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
@@ -34,12 +40,6 @@ import EntityLink from 'web/entity/link';
 import DetailsBlock from 'web/entity/block';
 import OverrideBox from 'web/entity/override';
 import {Col} from 'web/entity/page';
-
-import PropTypes from 'web/utils/proptypes';
-import {
-  translatedResultSeverityRiskFactor,
-  LOG_VALUE,
-} from 'web/utils/severity';
 
 const OverrideDetails = ({entity}) => {
   const {hosts, port, result, severity, task} = entity;
@@ -88,7 +88,7 @@ const OverrideDetails = ({entity}) => {
               <TableData>
                 {entity.isOrphan() ? (
                   <b>{_('Orphan')}</b>
-                ) : hasValue(task?.id) ? (
+                ) : isDefined(task) ? (
                   <span>
                     <EntityLink entity={task} />
                   </span>
@@ -103,7 +103,7 @@ const OverrideDetails = ({entity}) => {
               <TableData>
                 {entity.isOrphan() ? (
                   <b>{_('Orphan')}</b>
-                ) : hasValue(result?.id) ? (
+                ) : isDefined(result) ? (
                   <span>
                     <EntityLink entity={result} />
                   </span>

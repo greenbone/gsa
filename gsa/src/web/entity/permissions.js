@@ -26,15 +26,15 @@ import {getEntityType} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
 
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
+
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import Layout from 'web/components/layout/layout';
 import IconDivider from 'web/components/layout/icondivider';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
-import withGmp from 'web/utils/withGmp';
 
 import MultiplePermissionDialog, {
   CURRENT_RESOURCE_ONLY,

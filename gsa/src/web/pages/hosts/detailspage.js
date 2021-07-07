@@ -16,19 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useEffect} from 'react';
-import {useHistory, useParams} from 'react-router-dom';
+import React from 'react';
 
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import SeverityBar from 'web/components/bar/severitybar';
-
-import Download from 'web/components/form/download';
-import useDownload from 'web/components/form/useDownload';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import HostIcon from 'web/components/icon/hosticon';
@@ -45,11 +41,6 @@ import Layout from 'web/components/layout/layout';
 import DetailsLink from 'web/components/link/detailslink';
 import Link from 'web/components/link/link';
 
-import useReload from 'web/components/loading/useReload';
-
-import DialogNotification from 'web/components/notification/dialognotification';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
@@ -63,34 +54,31 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import EntityPage, {Col} from 'web/entity/page';
-import {goto_list} from 'web/entity/component';
+import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
 
 import CreateIcon from 'web/entity/icon/createicon';
 import DeleteIcon from 'web/entity/icon/deleteicon';
 import EditIcon from 'web/entity/icon/editicon';
 
-import useExportEntity from 'web/entity/useExportEntity';
+import {selector as hostsSelector, loadEntity} from 'web/store/entities/hosts';
 
 import {
-  useDeleteHost,
-  useExportHostsByIds,
-  useGetHost,
-} from 'web/graphql/hosts';
-import {useGetPermissions} from 'web/graphql/permissions';
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
 
 import PropTypes from 'web/utils/proptypes';
-import {goto_entity_details} from 'web/utils/graphql';
-import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import HostDetails from './details';
 import HostComponent from './component';
 
-export const ToolBarIcons = ({
+const ToolBarIcons = ({
   entity,
   onHostCreateClick,
   onHostDeleteClick,
@@ -190,7 +178,7 @@ const Details = ({entity, ...props}) => {
   );
 
   const bestMatchingOsId = isDefined(bestOsMatchingIdentifier)
-    ? bestOsMatchingIdentifier.os?.id
+    ? bestOsMatchingIdentifier.os.id
     : undefined;
 
   return (
@@ -238,7 +226,7 @@ const Details = ({entity, ...props}) => {
                 <RouteList>
                   {routes.map((route, idx) => (
                     <li key={idx}>
-                      {route.hosts.map(host => (
+                      {route.map(host => (
                         <Hop key={host.ip}>
                           <DetailsLink
                             type="host"
@@ -274,153 +262,93 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = () => {
-  // Page methods
-  const {id} = useParams();
-  const history = useHistory();
-  const [, renewSessionTimeout] = useUserSessionTimeout();
-  const [downloadRef, handleDownload] = useDownload();
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
-
-  // Load host related entities
-  const {host, refetch: refetchHost, loading, error: entityError} = useGetHost(
-    id,
-  );
-  const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
-    filterString: permissionsResourceFilter(id).toFilterString(),
-  });
-
-  // host related mutations
-  const exportEntity = useExportEntity();
-
-  const [deleteHost] = useDeleteHost();
-  const exportHost = useExportHostsByIds();
-
-  // host methods
-  const handleDeleteHost = deletedHost => {
-    return deleteHost(deletedHost.id)
-      .then(goto_list('hosts', {history}))
-      .catch(showError);
-  };
-
-  const handleDownloadHost = exportedHost => {
-    exportEntity({
-      entity: exportedHost,
-      exportFunc: exportHost,
-      resourceType: 'hosts',
-      onDownload: handleDownload,
-      showError,
-    });
-  };
-
-  // Timeout and reload
-  const timeoutFunc = useDefaultReloadInterval();
-
-  const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetchHost,
-    timeoutFunc,
-  );
-
-  useEffect(() => {
-    // start reloading if host is available and no timer is running yet
-    if (hasValue(host) && !hasRunningTimer) {
-      startReload();
-    }
-  }, [host, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // stop reload on unmount
-  useEffect(() => stopReload, [stopReload]);
-
+const Page = ({
+  entity,
+  permissions = [],
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
+  const goto_host = goto_details('host', props);
   return (
     <HostComponent
-      onTargetCreated={goto_entity_details('target', {history})}
-      onTargetCreateError={showError}
-      onCreated={goto_entity_details('host', {history})}
-      onDeleted={goto_list('hosts', {history})}
-      onDownloaded={handleDownload}
-      onDownloadError={showError}
-      onIdentifierDeleted={() => refetchHost()}
-      onIdentifierDeleteError={showError}
-      onInteraction={renewSessionTimeout}
-      onSaved={() => refetchHost()}
+      onTargetCreated={goto_details('target', props)}
+      onTargetCreateError={onError}
+      onCreated={goto_host}
+      onDeleted={goto_list('hosts', props)}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onIdentifierDeleted={onChanged}
+      onIdentifierDeleteError={onError}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
     >
-      {({create, deleteidentifier, edit}) => (
+      {({create, delete: delete_func, deleteidentifier, download, edit}) => (
         <EntityPage
-          entity={host}
-          entityError={entityError}
-          entityType={'host'}
-          isLoading={loading}
+          {...props}
+          entity={entity}
           sectionIcon={<HostIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Host')}
-          onChanged={() => refetchHost()}
-          onDownloaded={handleDownload}
-          onError={showError}
-          onInteraction={renewSessionTimeout}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onInteraction={onInteraction}
           onHostCreateClick={create}
-          onHostDeleteClick={handleDeleteHost}
-          onHostDownloadClick={handleDownloadHost}
+          onHostDeleteClick={delete_func}
+          onHostDownloadClick={download}
           onHostEditClick={edit}
         >
           {({activeTab = 0, onActivateTab}) => {
             return (
-              <React.Fragment>
-                <Layout grow="1" flex="column">
-                  <TabLayout grow="1" align={['start', 'end']}>
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
-                      <Tab>{_('Information')}</Tab>
-                      <EntitiesTab entities={host.userTags}>
-                        {_('User Tags')}
-                      </EntitiesTab>
-                      <EntitiesTab entities={permissions}>
-                        {_('Permissions')}
-                      </EntitiesTab>
-                    </TabList>
-                  </TabLayout>
+              <Layout grow="1" flex="column">
+                <TabLayout grow="1" align={['start', 'end']}>
+                  <TabList
+                    active={activeTab}
+                    align={['start', 'stretch']}
+                    onActivateTab={onActivateTab}
+                  >
+                    <Tab>{_('Information')}</Tab>
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={permissions}>
+                      {_('Permissions')}
+                    </EntitiesTab>
+                  </TabList>
+                </TabLayout>
 
-                  <Tabs active={activeTab}>
-                    <TabPanels>
-                      <TabPanel>
-                        <Details
-                          entity={host}
-                          onHostIdentifierDeleteClick={deleteidentifier}
-                        />
-                      </TabPanel>
-                      <TabPanel>
-                        <EntityTags
-                          entity={host}
-                          onChanged={() => refetchHost()}
-                          onError={showError}
-                          onInteraction={renewSessionTimeout}
-                        />
-                      </TabPanel>
-                      <TabPanel>
-                        <EntityPermissions
-                          entity={host}
-                          permissions={permissions}
-                          onChanged={() => refetchPermissions()}
-                          onDownloaded={handleDownload}
-                          onError={showError}
-                          onInteraction={renewSessionTimeout}
-                        />
-                      </TabPanel>
-                    </TabPanels>
-                  </Tabs>
-                </Layout>
-                <DialogNotification
-                  {...notificationDialogState}
-                  onCloseClick={closeNotificationDialog}
-                />
-                <Download ref={downloadRef} />
-              </React.Fragment>
+                <Tabs active={activeTab}>
+                  <TabPanels>
+                    <TabPanel>
+                      <Details
+                        entity={entity}
+                        onHostIdentifierDeleteClick={deleteidentifier}
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityTags
+                        entity={entity}
+                        onChanged={onChanged}
+                        onError={onError}
+                        onInteraction={onInteraction}
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityPermissions
+                        entity={entity}
+                        permissions={permissions}
+                        onChanged={onChanged}
+                        onDownloaded={onDownloaded}
+                        onError={onError}
+                        onInteraction={onInteraction}
+                      />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </Layout>
             );
           }}
         </EntityPage>
@@ -429,6 +357,36 @@ const Page = () => {
   );
 };
 
-export default Page;
+Page.propTypes = {
+  entity: PropTypes.model,
+  permissions: PropTypes.array,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
+
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
+};
+
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+  };
+};
+
+export default withEntityContainer('host', {
+  entitySelector: hostsSelector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

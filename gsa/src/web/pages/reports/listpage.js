@@ -69,7 +69,7 @@ import ReportsDashboard, {REPORTS_DASHBOARD_ID} from './dashboard';
 
 const CONTAINER_TASK_FILTER = Filter.fromString('target=""');
 
-export const ToolBarIcons = ({onUploadReportClick}) => (
+const ToolBarIcons = ({onUploadReportClick}) => (
   <IconDivider>
     <ManualIcon
       page="reports"
@@ -296,7 +296,10 @@ const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withEntitiesContainer('report', {
     fallbackFilter: FALLBACK_REPORT_LIST_FILTER,
     entitiesSelector,

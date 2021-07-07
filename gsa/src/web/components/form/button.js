@@ -20,11 +20,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import withLayout from 'web/components/layout/withLayout';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+
+import withLayout from 'web/components/layout/withLayout';
 
 import withClickHandler from './withClickHandler';
 

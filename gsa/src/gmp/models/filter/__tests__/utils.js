@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import Filter from 'gmp/models/filter';
-import {filter_string} from 'gmp/models/filter/utils';
+import {filter_string} from '../utils';
+import Filter from '../../filter';
 
 describe('filter_string function tests', () => {
   test('should return string for non Filter objects', () => {

@@ -16,8 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React, {useState, useEffect} from 'react';
+
 import _ from 'gmp/locale';
+
 import {isDefined} from 'gmp/utils/identity';
+
+import State from 'web/utils/state';
+import PropTypes from 'web/utils/proptypes';
+
+import ErrorBoundary from 'web/components/error/errorboundary';
 
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
@@ -26,11 +33,6 @@ import DialogFooter from 'web/components/dialog/twobuttonfooter';
 import DialogTitle from 'web/components/dialog/title';
 import MultiStepFooter from 'web/components/dialog/multistepfooter';
 import ScrollableContent from 'web/components/dialog/scrollablecontent';
-
-import ErrorBoundary from 'web/components/error/errorboundary';
-
-import State from 'web/utils/state';
-import PropTypes from 'web/utils/proptypes';
 
 const SaveDialogContent = ({
   onSave,
@@ -42,34 +44,37 @@ const SaveDialogContent = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [stateError, setStateError] = useState(undefined);
+
   const [currentStep, setCurrentStep] = useState(0);
+
   const [prevDisabled, setPrevDisabled] = useState(true);
   const [nextDisabled, setNextDisabled] = useState(false);
+
   useEffect(() => {
     setPrevDisabled(currentStep === 0);
     setNextDisabled(currentStep === multiStep);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep]);
+
   useEffect(() => {
     setStateError(error);
     setLoading(false);
   }, [error]);
+
   const setError = err => {
     setLoading(false);
-    const {graphQLErrors, networkError} = err;
+
     if (onError) {
       onError(err);
-    } else if (isDefined(networkError) && networkError) {
-      setStateError(networkError.message);
-    } else if (isDefined(graphQLErrors) && graphQLErrors.length > 0) {
-      setStateError(graphQLErrors[0].message);
     } else {
       setStateError(err.message);
     }
   };
+
   const handleStepChange = index => {
     setCurrentStep(index);
   };
+
   const handleSaveClick = state => {
     if (onSave && !loading) {
       const promise = onSave(state);
@@ -80,6 +85,7 @@ const SaveDialogContent = ({
       }
     }
   };
+
   const handleErrorClose = () => {
     if (isDefined(onErrorClose)) {
       onErrorClose();
@@ -87,6 +93,7 @@ const SaveDialogContent = ({
       setStateError(undefined);
     }
   };
+
   const {
     buttonTitle,
     children,
@@ -97,6 +104,7 @@ const SaveDialogContent = ({
     title,
     values,
   } = props;
+
   return (
     <State {...defaultValues}>
       {({state, onValueChange}) => {
@@ -153,6 +161,7 @@ const SaveDialogContent = ({
     </State>
   );
 };
+
 SaveDialogContent.propTypes = {
   buttonTitle: PropTypes.string,
   close: PropTypes.func.isRequired,
@@ -170,6 +179,7 @@ SaveDialogContent.propTypes = {
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };
+
 const SaveDialog = ({
   buttonTitle = _('Save'),
   children,
@@ -216,6 +226,7 @@ const SaveDialog = ({
     </Dialog>
   );
 };
+
 SaveDialog.propTypes = {
   buttonTitle: PropTypes.string,
   defaultValues: PropTypes.object, // default values for uncontrolled values
@@ -232,5 +243,7 @@ SaveDialog.propTypes = {
   onErrorClose: PropTypes.func,
   onSave: PropTypes.func.isRequired,
 };
+
 export default SaveDialog;
+
 // vim: set ts=2 sw=2 tw=80:

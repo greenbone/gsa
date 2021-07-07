@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined, hasValue, isArray, isString} from 'gmp/utils/identity';
+import {isDefined, isArray, isString} from 'gmp/utils/identity';
 import {isEmpty, split} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
@@ -24,7 +24,6 @@ import {
   parseDate,
   parseFloat,
   parseSeverity,
-  parseScoreToSeverity,
   parseText,
   parseYesNo,
   YES_VALUE,
@@ -71,7 +70,7 @@ export const getFilteredRefIds = (refs = [], type) => {
   return filteredRefs.map(ref => ref._id);
 };
 
-const getFilteredUrlRefs = (refs = []) => {
+const getFilteredUrlRefs = refs => {
   return refs.filter(hasRefType('url')).map(ref => {
     let id = ref._id;
     if (
@@ -89,13 +88,13 @@ const getFilteredUrlRefs = (refs = []) => {
   });
 };
 
-const getFilteredRefs = (refs = [], type) =>
+const getFilteredRefs = (refs, type) =>
   refs.filter(hasRefType(type)).map(ref => ({
     id: ref._id,
     type,
   }));
 
-const getOtherRefs = (refs = []) => {
+const getOtherRefs = refs => {
   const filteredRefs = refs.filter(ref => {
     const referenceType = isString(ref._type)
       ? ref._type.toLowerCase()
@@ -121,29 +120,6 @@ const getOtherRefs = (refs = []) => {
 
 class Nvt extends Info {
   static entityType = 'nvt';
-
-  static parseObject(object) {
-    const ret = super.parseObject(object);
-
-    ret.severity = hasValue(ret.score)
-      ? parseScoreToSeverity(ret.score)
-      : undefined;
-
-    if (isDefined(ret.severities)) {
-      const [severity = {}] = ret.severities;
-      const {origin, date} = severity;
-      ret.severityOrigin = hasValue(origin) ? parseText(origin) : undefined;
-      ret.severityDate = hasValue(date) ? parseDate(date) : undefined;
-    }
-
-    if (ret.preferenceCount < 0) {
-      // actually preferenceCount in the XML is -1 in get_info
-      // right now.
-      ret.preferenceCount = ret.preferences.length;
-    }
-
-    return ret;
-  }
 
   static parseElement(element) {
     const ret = super.parseElement(element, 'nvt');

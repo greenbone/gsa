@@ -19,12 +19,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {getTranslatableAliveTest} from 'gmp/models/target';
+import {isDefined} from 'gmp/utils/identity';
 
-import {hasValue} from 'gmp/utils/identity';
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import Layout from 'web/components/layout/layout';
-import HorizontalSep from 'web/components/layout/horizontalsep';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -36,33 +37,33 @@ import TableRow from 'web/components/table/row';
 import DetailsBlock from 'web/entity/block';
 import {Col} from 'web/entity/page';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderYesNo} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
+import HorizontalSep from 'web/components/layout/horizontalsep';
 
 const MAX_HOSTS_LISTINGS = 70;
 
 const TargetDetails = ({capabilities, entity, links = true}) => {
   const {
-    aliveTest,
-    credentials,
-    excludeHosts,
+    alive_tests,
+    esxi_credential,
+    exclude_hosts,
     hosts,
-    hostCount,
-    portList,
-    reverseLookupOnly,
-    reverseLookupUnify,
+    max_hosts,
+    port_list,
+    reverse_lookup_only,
+    reverse_lookup_unify,
+    smb_credential,
+    snmp_credential,
+    ssh_credential,
+    ssh_elevate_credential,
     tasks,
     allowSimultaneousIPs,
   } = entity;
-
-  const {ssh, esxi, snmp, smb} = credentials;
 
   const hostsListing = hosts
     .slice(0, MAX_HOSTS_LISTINGS)
     .map(host => <span key={host}>{host}</span>);
 
-  const excludeHostsListing = excludeHosts
+  const excludeHostsListing = exclude_hosts
     .slice(0, MAX_HOSTS_LISTINGS)
     .map(host => <span key={host}>{host}</span>);
 
@@ -85,13 +86,13 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
               </TableData>
             </TableRow>
 
-            {excludeHosts.length > 0 && (
+            {exclude_hosts.length > 0 && (
               <TableRow>
                 <TableDataAlignTop>{_('Excluded')}</TableDataAlignTop>
                 <TableData>
                   <HorizontalSep separator="," wrap spacing="0">
                     {excludeHostsListing}
-                    {excludeHosts.length > MAX_HOSTS_LISTINGS && '[...]'}
+                    {exclude_hosts.length > MAX_HOSTS_LISTINGS && '[...]'}
                   </HorizontalSep>
                 </TableData>
               </TableRow>
@@ -99,7 +100,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
             <TableRow>
               <TableData>{_('Maximum Number of Hosts')}</TableData>
-              <TableData>{hostCount}</TableData>
+              <TableData>{max_hosts}</TableData>
             </TableRow>
 
             <TableRow>
@@ -111,25 +112,25 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
 
             <TableRow>
               <TableData>{_('Reverse Lookup Only')}</TableData>
-              <TableData>{renderYesNo(reverseLookupOnly)}</TableData>
+              <TableData>{renderYesNo(reverse_lookup_only)}</TableData>
             </TableRow>
 
             <TableRow>
               <TableData>{_('Reverse Lookup Unify')}</TableData>
-              <TableData>{renderYesNo(reverseLookupUnify)}</TableData>
+              <TableData>{renderYesNo(reverse_lookup_unify)}</TableData>
             </TableRow>
 
             <TableRow>
               <TableData>{_('Alive Test')}</TableData>
-              <TableData>{getTranslatableAliveTest(aliveTest)}</TableData>
+              <TableData>{alive_tests}</TableData>
             </TableRow>
 
             <TableRow>
               <TableData>{_('Port List')}</TableData>
               <TableData>
                 <span>
-                  <DetailsLink id={portList.id} type="portlist">
-                    {portList.name}
+                  <DetailsLink id={port_list.id} type="portlist">
+                    {port_list.name}
                   </DetailsLink>
                 </span>
               </TableData>
@@ -138,61 +139,79 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
         </InfoTable>
       </DetailsBlock>
 
-      {capabilities.mayAccess('credentials') && // querying for a nonexistent credential will always lead to the credential being defined, BUT the name and id being null
-        (hasValue(ssh?.id) ||
-          hasValue(smb?.id) ||
-          hasValue(snmp?.id) ||
-          hasValue(esxi?.id)) && (
+      {capabilities.mayAccess('credentials') &&
+        (isDefined(ssh_credential) ||
+          isDefined(snmp_credential) ||
+          isDefined(smb_credential) ||
+          isDefined(esxi_credential)) && (
           <DetailsBlock title={_('Credentials')}>
             <InfoTable>
               <TableBody>
-                {hasValue(ssh?.id) && (
+                {isDefined(ssh_credential) && (
                   <TableRow>
                     <TableData>{_('SSH')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={ssh.id} type="credential">
-                          {ssh.name}
+                        <DetailsLink id={ssh_credential.id} type="credential">
+                          {ssh_credential.name}
                         </DetailsLink>
                       </span>
-                      {_(' on Port {{port}}', {port: ssh.port})}
+                      {_(' on Port {{port}}', {port: ssh_credential.port})}
                     </TableData>
                   </TableRow>
                 )}
 
-                {hasValue(smb?.id) && (
+                {isDefined(ssh_credential) &&
+                  isDefined(ssh_elevate_credential) && ( // Skip one column, because there is no way to fit a variation of the word "elevate" without leaving lots of white space on other rows
+                    <TableRow>
+                      <TableData>{''}</TableData>
+                      <TableData>
+                        <span>
+                          {_('SSH elevate credential ')}
+                          <DetailsLink
+                            id={ssh_elevate_credential.id}
+                            type="credential"
+                          >
+                            {ssh_elevate_credential.name}
+                          </DetailsLink>
+                        </span>
+                      </TableData>
+                    </TableRow>
+                  )}
+
+                {isDefined(smb_credential) && (
                   <TableRow>
                     <TableData>{_('SMB')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={smb.id} type="credential">
-                          {smb.name}
+                        <DetailsLink id={smb_credential.id} type="credential">
+                          {smb_credential.name}
                         </DetailsLink>
                       </span>
                     </TableData>
                   </TableRow>
                 )}
 
-                {hasValue(esxi?.id) && (
+                {isDefined(esxi_credential) && (
                   <TableRow>
                     <TableData>{_('ESXi')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={esxi.id} type="credential">
-                          {esxi.name}
+                        <DetailsLink id={esxi_credential.id} type="credential">
+                          {esxi_credential.name}
                         </DetailsLink>
                       </span>
                     </TableData>
                   </TableRow>
                 )}
 
-                {hasValue(snmp?.id) && (
+                {isDefined(snmp_credential) && (
                   <TableRow>
                     <TableData>{_('SNMP')}</TableData>
                     <TableData>
                       <span>
-                        <DetailsLink id={snmp.id} type="credential">
-                          {snmp.name}
+                        <DetailsLink id={snmp_credential.id} type="credential">
+                          {snmp_credential.name}
                         </DetailsLink>
                       </span>
                     </TableData>
@@ -202,7 +221,7 @@ const TargetDetails = ({capabilities, entity, links = true}) => {
             </InfoTable>
           </DetailsBlock>
         )}
-      {hasValue(tasks) && tasks.length > 0 && (
+      {isDefined(tasks) && tasks.length > 0 && (
         <DetailsBlock
           title={_('Tasks using this Target ({{count}})', {
             count: tasks.length,

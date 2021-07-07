@@ -23,12 +23,12 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
+
 import Layout from 'web/components/layout/layout';
 
 import Sort from 'web/components/sortby/sortby';
-
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
 
 const TableHead = ({
   children,

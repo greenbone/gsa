@@ -15,15 +15,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isModelElement, hasValue} from 'gmp/utils/identity';
+import {isModelElement} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
+import Model, {parseModelFromElement} from 'gmp/model';
 import {
   parseCsv,
   parseSeverity,
   parseTextElement,
   parseYesNo,
+  YES_VALUE,
 } from 'gmp/parser';
 
 import Nvt from './nvt';
@@ -34,40 +35,15 @@ export const NOTE_INACTIVE_VALUE = -1;
 class Note extends Model {
   static entityType = 'note';
 
-  static parseObject(object) {
-    const ret = super.parseObject(object);
-
-    if (hasValue(object.task)) {
-      ret.task = parseModelFromObject(object.task, 'task');
-    } else {
-      ret.task = null;
-    }
-
-    if (hasValue(object.result)) {
-      ret.result = parseModelFromObject(object.result, 'result');
-    } else {
-      ret.result = null;
-    }
-
-    if (hasValue(object.nvt)) {
-      ret.nvt = Nvt.fromObject(object.nvt);
-      ret.name = object.nvt.name;
-    }
-
-    ret.endTime = hasValue(object.endTime) ? object.endTime : undefined;
-
-    ret.severity = hasValue(object.severity) ? object.severity : undefined;
-    return ret;
-  }
-
   static parseElement(element) {
     let ret = super.parseElement(element);
+
     if (ret.nvt) {
       ret.nvt = Nvt.fromElement(ret.nvt);
       ret.name = ret.nvt.name;
     }
 
-    ret = {...ret, text: parseTextElement(ret.text)};
+    ret = {...ret, ...parseTextElement(ret.text)};
 
     ret.severity = parseSeverity(ret.severity);
 
@@ -84,6 +60,7 @@ class Note extends Model {
     }
 
     ret.active = parseYesNo(element.active);
+    ret.textExcerpt = parseYesNo(element.text_excerpt);
 
     ret.hosts = parseCsv(element.hosts);
 
@@ -92,6 +69,10 @@ class Note extends Model {
     }
 
     return ret;
+  }
+
+  isExcerpt() {
+    return this.textExcerpt === YES_VALUE;
   }
 }
 

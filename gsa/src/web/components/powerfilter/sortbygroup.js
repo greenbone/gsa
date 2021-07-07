@@ -22,11 +22,11 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import FormGroup from 'web/components/form/formgroup';
-import Radio from 'web/components/form/radio';
-import Select from 'web/components/form/select';
+import PropTypes from '../../utils/proptypes.js';
 
-import PropTypes from 'web/utils/proptypes';
+import FormGroup from '../form/formgroup.js';
+import Radio from '../form/radio.js';
+import Select from '../form/select.js';
 
 class SortByGroup extends React.Component {
   renderSortFieldItems() {

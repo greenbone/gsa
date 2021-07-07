@@ -185,9 +185,9 @@ describe('Credential Detailspage tests', () => {
     expect(element).toHaveTextContent('Modified:Tue, Mar 2, 2021 11:28 AM CET');
     expect(element).toHaveTextContent('Owner:admin');
 
-    const tabs = screen.getAllByTestId('entities-tab-title');
-    expect(tabs[0]).toHaveTextContent('User Tags');
-    expect(tabs[1]).toHaveTextContent('Permissions');
+    const spans = baseElement.querySelectorAll('span');
+    expect(spans[10]).toHaveTextContent('User Tags');
+    expect(spans[12]).toHaveTextContent('Permissions');
 
     expect(element).toHaveTextContent('Comment');
     expect(element).toHaveTextContent('blah');
@@ -242,10 +242,10 @@ describe('Credential Detailspage tests', () => {
 
     const {baseElement} = render(<Detailspage id="6575" />);
 
-    const tabs = screen.getAllByTestId('entities-tab-title');
+    const spans = baseElement.querySelectorAll('span');
+    expect(spans[10]).toHaveTextContent('User Tags');
 
-    expect(tabs[0]).toHaveTextContent('User Tags');
-    fireEvent.click(tabs[0]);
+    fireEvent.click(spans[10]);
 
     expect(baseElement).toHaveTextContent('No user tags available');
   });
@@ -279,10 +279,10 @@ describe('Credential Detailspage tests', () => {
 
     const {baseElement} = render(<Detailspage id="6575" />);
 
-    const tabs = screen.getAllByTestId('entities-tab-title');
+    const spans = baseElement.querySelectorAll('span');
+    expect(spans[12]).toHaveTextContent('Permissions');
 
-    expect(tabs[1]).toHaveTextContent('Permissions');
-    fireEvent.click(tabs[1]);
+    fireEvent.click(spans[12]);
 
     expect(baseElement).toHaveTextContent('No permissions available');
   });

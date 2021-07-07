@@ -16,197 +16,42 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Model from 'gmp/model';
-import Audit, {AUDIT_STATUS, HYPERION_AUDIT_STATUS} from 'gmp/models/audit';
-import Policy from 'gmp/models/policy';
-import Scanner from 'gmp/models/scanner';
-import Schedule from 'gmp/models/schedule';
-import {testModel} from 'gmp/models/testing';
+import Audit, {
+  HOSTS_ORDERING_RANDOM,
+  HOSTS_ORDERING_REVERSE,
+  HOSTS_ORDERING_SEQUENTIAL,
+  AUDIT_STATUS,
+} from 'gmp/models/audit';
+import {testModel} from '../testing';
 
-describe('Audit model parseObject tests', () => {
+describe('Audit model tests', () => {
   testModel(Audit, 'audit', {testIsActive: false});
 
-  test('should parse preferences', () => {
-    const audit1 = Audit.fromObject({
-      id: 'a1',
-      preferences: {
-        createAssets: true,
-        createAssetsApplyOverrides: true,
-        createAssetsMinQod: 70,
-        autoDeleteReports: 0,
-        maxConcurrentHosts: 20,
-        maxConcurrentNvts: 4,
-      },
-    });
-    const audit2 = Audit.fromObject({
-      id: 'a1',
-      preferences: {
-        createAssets: false,
-        createAssetsApplyOverrides: false,
-        autoDeleteReports: 3,
-      },
-    });
-
-    expect(audit1.preferences.createAssets).toEqual(true);
-    expect(audit1.preferences.createAssetsApplyOverrides).toEqual(true);
-    expect(audit1.preferences.createAssetsMinQod).toEqual(70);
-    expect(audit1.preferences.maxConcurrentHosts).toEqual(20);
-    expect(audit1.preferences.maxConcurrentNvts).toEqual(4);
-    expect(audit2.preferences.createAssets).toEqual(false);
-    expect(audit2.preferences.createAssetsApplyOverrides).toEqual(false);
-    expect(audit2.preferences.autoDeleteReports).toEqual(3);
+  test('should parse undefined hosts_ordering', () => {
+    const obj = {hosts_ordering: undefined};
+    const audit = Audit.fromElement(obj);
+    expect(audit.hosts_ordering).toBeUndefined();
   });
 
-  test('should parse audit progress', () => {
-    const obj = {progress: 13};
-    const obj2 = {};
-    const obj3 = {progress: -1};
-    const obj4 = {progress: null};
-
-    const audit = Audit.fromObject(obj);
-    const audit2 = Audit.fromObject(obj2);
-    const audit3 = Audit.fromObject(obj3);
-    const audit4 = Audit.fromObject(obj4);
-
-    expect(audit.progress).toEqual(13);
-    expect(audit2.progress).toEqual(0);
-    expect(audit3.progress).toEqual(-1);
-    expect(audit4.progress).toEqual(0);
+  test('should parse unknown hosts_ordering as undefined', () => {
+    const obj = {hosts_ordering: 'foo'};
+    const audit = Audit.fromElement(obj);
+    expect(audit.hosts_ordering).toBeUndefined();
   });
 
-  test('should parse reports', () => {
-    const obj = {
-      reports: {
-        lastReport: {
-          id: '1234',
-          complianceCount: {
-            yes: 3,
-            no: 2,
-            incomplete: 4,
-          },
-        },
-        currentReport: {
-          id: '5678',
-        },
-        counts: {
-          total: 2,
-          finished: 1,
-        },
-      },
-    };
+  test('should parse known hosts_ordering', () => {
+    let obj = {hosts_ordering: HOSTS_ORDERING_RANDOM};
+    let audit = Audit.fromElement(obj);
+    expect(audit.hosts_ordering).toEqual(HOSTS_ORDERING_RANDOM);
 
-    const audit = Audit.fromObject(obj);
-    const {reports} = audit;
+    obj = {hosts_ordering: HOSTS_ORDERING_REVERSE};
+    audit = Audit.fromElement(obj);
+    expect(audit.hosts_ordering).toEqual(HOSTS_ORDERING_REVERSE);
 
-    const {lastReport, currentReport, counts} = reports;
-
-    expect(lastReport.id).toEqual('1234');
-    expect(lastReport.complianceCount).toEqual({
-      yes: 3,
-      no: 2,
-      incomplete: 4,
-    });
-    expect(lastReport.entityType).toEqual('report');
-
-    expect(currentReport.id).toEqual('5678');
-    expect(currentReport.entityType).toEqual('report');
-    expect(counts).toEqual({total: 2, finished: 1});
+    obj = {hosts_ordering: HOSTS_ORDERING_SEQUENTIAL};
+    audit = Audit.fromElement(obj);
+    expect(audit.hosts_ordering).toEqual(HOSTS_ORDERING_SEQUENTIAL);
   });
-  test('should parse policy', () => {
-    const obj = {
-      id: 't1',
-      policy: {
-        id: 'p1',
-      },
-    };
-
-    const audit = Audit.fromObject(obj);
-
-    expect(audit.id).toEqual('t1');
-
-    expect(audit.policy).toBeInstanceOf(Policy);
-    expect(audit.policy.id).toEqual('p1');
-    expect(audit.policy.entityType).toEqual('policy');
-  });
-  test('should parse target', () => {
-    const obj = {
-      id: 't1',
-      target: {
-        id: 't1',
-      },
-    };
-
-    const audit = Audit.fromObject(obj);
-
-    expect(audit.id).toEqual('t1');
-
-    expect(audit.target).toBeInstanceOf(Model);
-    expect(audit.target.id).toEqual('t1');
-    expect(audit.target.entityType).toEqual('target');
-  });
-
-  test('should parse alerts', () => {
-    const obj = {
-      id: 't1',
-      alerts: [
-        {
-          id: 'a1',
-        },
-        {
-          id: 'a2',
-        },
-      ],
-    };
-
-    const audit = Audit.fromObject(obj);
-
-    expect(audit.id).toEqual('t1');
-
-    expect(audit.alerts[0]).toBeInstanceOf(Model);
-    expect(audit.alerts[0].id).toEqual('a1');
-    expect(audit.alerts[0].entityType).toEqual('alert');
-    expect(audit.alerts[1]).toBeInstanceOf(Model);
-    expect(audit.alerts[1].entityType).toEqual('alert');
-    expect(audit.alerts[1].id).toEqual('a2');
-  });
-
-  test('should parse scanner', () => {
-    const obj = {
-      id: 't1',
-      scanner: {
-        id: 's1',
-      },
-    };
-
-    const audit = Audit.fromObject(obj);
-
-    expect(audit.id).toEqual('t1');
-
-    expect(audit.scanner).toBeInstanceOf(Scanner);
-    expect(audit.scanner.id).toEqual('s1');
-    expect(audit.scanner.entityType).toEqual('scanner');
-  });
-
-  test('should parse schedule', () => {
-    const obj = {
-      id: 't1',
-      schedule: {
-        id: 's1',
-      },
-    };
-
-    const audit = Audit.fromObject(obj);
-
-    expect(audit.id).toEqual('t1');
-
-    expect(audit.schedule).toBeInstanceOf(Schedule);
-    expect(audit.schedule.id).toEqual('s1');
-    expect(audit.schedule.entityType).toEqual('schedule');
-  });
-});
-
-describe('Audit model parseElement tests', () => {
-  testModel(Audit, 'audit', {testIsActive: false});
 
   test('should parse preferences', () => {
     const audit1 = Audit.fromElement({
@@ -285,167 +130,9 @@ describe('Audit model parseElement tests', () => {
     expect(audit2.auto_delete).toEqual('no');
     expect(audit2.auto_delete_data).toEqual(3);
   });
-
-  test('should parse observer strings', () => {
-    const audit = Audit.fromElement({
-      observers: 'foo bar',
-    });
-
-    const {observers} = audit;
-    expect(observers.user).toEqual(['foo', 'bar']);
-  });
-  test('should parse all observers types', () => {
-    const audit = Audit.fromElement({
-      observers: {
-        __text: 'anon nymous',
-        role: [{name: 'lorem'}],
-        group: [{name: 'ipsum'}, {name: 'dolor'}],
-      },
-    });
-
-    const {observers} = audit;
-
-    expect(observers.user).toEqual(['anon', 'nymous']);
-    expect(observers.role).toEqual([{name: 'lorem'}]);
-    expect(observers.group).toEqual([{name: 'ipsum'}, {name: 'dolor'}]);
-  });
 });
 
-describe(`Audit Model methods parseObject tests`, () => {
-  test('should be a container if targetid is not set', () => {
-    const audit1 = Audit.fromObject({});
-    const audit2 = Audit.fromObject({target: {id: 'foo'}});
-
-    expect(audit1.isContainer()).toEqual(true);
-    expect(audit2.isContainer()).toEqual(false);
-  });
-
-  test('should use status for isActive', () => {
-    const statusList = {
-      [HYPERION_AUDIT_STATUS.running]: true,
-      [HYPERION_AUDIT_STATUS.stoprequested]: true,
-      [HYPERION_AUDIT_STATUS.deleterequested]: true,
-      [HYPERION_AUDIT_STATUS.ultimatedeleterequested]: true,
-      [HYPERION_AUDIT_STATUS.resumerequested]: true,
-      [HYPERION_AUDIT_STATUS.requested]: true,
-      [HYPERION_AUDIT_STATUS.stopped]: false,
-      [HYPERION_AUDIT_STATUS.new]: false,
-      [HYPERION_AUDIT_STATUS.interrupted]: false,
-      [HYPERION_AUDIT_STATUS.container]: false,
-      [HYPERION_AUDIT_STATUS.uploading]: false,
-      [HYPERION_AUDIT_STATUS.done]: false,
-    };
-
-    for (const [status, exp] of Object.entries(statusList)) {
-      const audit = Audit.fromObject({status});
-      expect(audit.isActive()).toEqual(exp);
-    }
-  });
-
-  test('should use status for isRunning', () => {
-    const statusList = {
-      [HYPERION_AUDIT_STATUS.running]: true,
-      [HYPERION_AUDIT_STATUS.stoprequested]: false,
-      [HYPERION_AUDIT_STATUS.deleterequested]: false,
-      [HYPERION_AUDIT_STATUS.ultimatedeleterequested]: false,
-      [HYPERION_AUDIT_STATUS.resumerequested]: false,
-      [HYPERION_AUDIT_STATUS.requested]: false,
-      [HYPERION_AUDIT_STATUS.stopped]: false,
-      [HYPERION_AUDIT_STATUS.new]: false,
-      [HYPERION_AUDIT_STATUS.interrupted]: false,
-      [HYPERION_AUDIT_STATUS.container]: false,
-      [HYPERION_AUDIT_STATUS.uploading]: false,
-      [HYPERION_AUDIT_STATUS.done]: false,
-    };
-
-    for (const [status, exp] of Object.entries(statusList)) {
-      const audit = Audit.fromObject({status});
-      expect(audit.isRunning()).toEqual(exp);
-    }
-  });
-
-  test('should use status for isStopped', () => {
-    const statusList = {
-      [HYPERION_AUDIT_STATUS.running]: false,
-      [HYPERION_AUDIT_STATUS.stoprequested]: false,
-      [HYPERION_AUDIT_STATUS.deleterequested]: false,
-      [HYPERION_AUDIT_STATUS.ultimatedeleterequested]: false,
-      [HYPERION_AUDIT_STATUS.resumerequested]: false,
-      [HYPERION_AUDIT_STATUS.requested]: false,
-      [HYPERION_AUDIT_STATUS.stopped]: true,
-      [HYPERION_AUDIT_STATUS.new]: false,
-      [HYPERION_AUDIT_STATUS.interrupted]: false,
-      [HYPERION_AUDIT_STATUS.container]: false,
-      [HYPERION_AUDIT_STATUS.uploading]: false,
-      [HYPERION_AUDIT_STATUS.done]: false,
-    };
-
-    for (const [status, exp] of Object.entries(statusList)) {
-      const audit = Audit.fromObject({status});
-      expect(audit.isStopped()).toEqual(exp);
-    }
-  });
-
-  test('should use status for isInterrupted', () => {
-    const statusList = {
-      [HYPERION_AUDIT_STATUS.running]: false,
-      [HYPERION_AUDIT_STATUS.stoprequested]: false,
-      [HYPERION_AUDIT_STATUS.deleterequested]: false,
-      [HYPERION_AUDIT_STATUS.ultimatedeleterequested]: false,
-      [HYPERION_AUDIT_STATUS.resumerequested]: false,
-      [HYPERION_AUDIT_STATUS.requested]: false,
-      [HYPERION_AUDIT_STATUS.stopped]: false,
-      [HYPERION_AUDIT_STATUS.new]: false,
-      [HYPERION_AUDIT_STATUS.interrupted]: true,
-      [HYPERION_AUDIT_STATUS.container]: false,
-      [HYPERION_AUDIT_STATUS.uploading]: false,
-      [HYPERION_AUDIT_STATUS.done]: false,
-    };
-
-    for (const [status, exp] of Object.entries(statusList)) {
-      const audit = Audit.fromObject({status});
-      expect(audit.isInterrupted()).toEqual(exp);
-    }
-  });
-
-  test('should use status for isNew', () => {
-    const statusList = {
-      [HYPERION_AUDIT_STATUS.running]: false,
-      [HYPERION_AUDIT_STATUS.stoprequested]: false,
-      [HYPERION_AUDIT_STATUS.deleterequested]: false,
-      [HYPERION_AUDIT_STATUS.ultimatedeleterequested]: false,
-      [HYPERION_AUDIT_STATUS.resumerequested]: false,
-      [HYPERION_AUDIT_STATUS.requested]: false,
-      [HYPERION_AUDIT_STATUS.stopped]: false,
-      [HYPERION_AUDIT_STATUS.new]: true,
-      [HYPERION_AUDIT_STATUS.interrupted]: false,
-      [HYPERION_AUDIT_STATUS.container]: false,
-      [HYPERION_AUDIT_STATUS.uploading]: false,
-      [HYPERION_AUDIT_STATUS.done]: false,
-    };
-
-    for (const [status, exp] of Object.entries(statusList)) {
-      const audit = Audit.fromObject({status});
-      expect(audit.isNew()).toEqual(exp);
-    }
-  });
-
-  test('should be changeable if alterable or new', () => {
-    let audit = Audit.fromObject({
-      status: HYPERION_AUDIT_STATUS.new,
-      alterable: false,
-    });
-    expect(audit.isChangeable()).toEqual(true);
-
-    audit = Audit.fromObject({
-      status: HYPERION_AUDIT_STATUS.done,
-      alterable: true,
-    });
-    expect(audit.isChangeable()).toEqual(true);
-  });
-});
-
-describe(`Audit Model methods parseElement tests`, () => {
+describe(`Audit Model methods tests`, () => {
   test('should use status for isActive', () => {
     const statusList = {
       [AUDIT_STATUS.running]: true,
@@ -556,5 +243,35 @@ describe(`Audit Model methods parseElement tests`, () => {
     }
   });
 
-  // isChangeable is only used with objects
+  test('should be changeable if alterable or new', () => {
+    let audit = Audit.fromElement({status: AUDIT_STATUS.new, alterable: '0'});
+    expect(audit.isChangeable()).toEqual(true);
+
+    audit = Audit.fromElement({status: AUDIT_STATUS.done, alterable: '1'});
+    expect(audit.isChangeable()).toEqual(true);
+  });
+
+  test('should parse observer strings', () => {
+    const audit = Audit.fromElement({
+      observers: 'foo bar',
+    });
+
+    const {observers} = audit;
+    expect(observers.user).toEqual(['foo', 'bar']);
+  });
+  test('should parse all observers types', () => {
+    const audit = Audit.fromElement({
+      observers: {
+        __text: 'anon nymous',
+        role: [{name: 'lorem'}],
+        group: [{name: 'ipsum'}, {name: 'dolor'}],
+      },
+    });
+
+    const {observers} = audit;
+
+    expect(observers.user).toEqual(['anon', 'nymous']);
+    expect(observers.role).toEqual([{name: 'lorem'}]);
+    expect(observers.group).toEqual([{name: 'ipsum'}, {name: 'dolor'}]);
+  });
 });

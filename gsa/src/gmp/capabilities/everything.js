@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Capabilities from './capabilities';
+import Capabilities from './capabilities.js';
 
 class EverythingCapabilities extends Capabilities {
   constructor() {

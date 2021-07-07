@@ -25,6 +25,8 @@ import {isEmpty} from 'gmp/utils/string';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
+import PropTypes from 'web/utils/proptypes';
+
 import SeverityBar from 'web/components/bar/severitybar';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -49,7 +51,6 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
-import PropTypes from 'web/utils/proptypes';
 import {makeCompareSeverity, makeCompareString} from 'web/utils/sort';
 
 class Nvt extends React.Component {
@@ -68,11 +69,11 @@ class Nvt extends React.Component {
       pref_count = '';
     }
 
-    const {name, oid: nvtId, severity, timeout, defaultTimeout} = nvt; // change oid to id once hyperion is fully implemented
+    const {name, oid, severity, timeout, defaultTimeout} = nvt;
     return (
       <TableRow>
         <TableData>{name}</TableData>
-        <TableData>{nvtId}</TableData>
+        <TableData>{oid}</TableData>
         <TableData>
           <SeverityBar severity={severity} />
         </TableData>
@@ -86,7 +87,7 @@ class Nvt extends React.Component {
           <div>
             <Checkbox
               checked={selected === YES_VALUE}
-              name={nvtId}
+              name={oid}
               checkedValue={YES_VALUE}
               unCheckedValue={NO_VALUE}
               onChange={onSelectedChange}
@@ -96,7 +97,7 @@ class Nvt extends React.Component {
         <TableData align={['center', 'center']}>
           <EditIcon
             title={_('Select and edit NVT details')}
-            value={nvt.id}
+            value={nvt.oid}
             onClick={onEditNvtDetailsClick}
           />
         </TableData>
@@ -263,12 +264,12 @@ const EditScanConfigFamilyDialog = ({
                 </TableHeader>
                 <TableBody>
                   {sortedNvts.map(nvt => {
-                    const {oid: nvtId} = nvt; // change oid to id once hyperion is fully implemented
+                    const {oid} = nvt;
                     return (
                       <Nvt
-                        key={nvtId}
+                        key={oid}
                         nvt={nvt}
-                        selected={selectedNvts[nvtId]}
+                        selected={selectedNvts[oid]}
                         onSelectedChange={handleSelectedChange}
                         onEditNvtDetailsClick={onEditNvtDetailsClick}
                       />

@@ -20,8 +20,9 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
+import {isDefined} from 'gmp/utils/identity';
+
+import DetailsBlock from 'web/entity/block';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -35,26 +36,24 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import DetailsBlock from 'web/entity/block';
-
 import PropTypes from 'web/utils/proptypes';
 
 const CVSS_PROPS = {
-  accessVector: _l('Access Vector'),
-  accessComplexity: _l('Access Complexity'),
-  authentication: _l('Authentication'),
-  attackVector: _l('Attack Vector'),
-  attackComplexity: _l('Attack Complexity'),
-  privilegesRequired: _l('Privileges Required'),
-  userInteraction: _l('User Interaction'),
-  scope: _l('Scope'),
-  confidentiality: _l('Confidentiality Impact'),
-  integrity: _l('Integrity Impact'),
-  availability: _l('Availability Impact'),
+  cvssAccessVector: _l('Access Vector'),
+  cvssAccessComplexity: _l('Access Complexity'),
+  cvssAuthentication: _l('Authentication'),
+  cvssAttackVector: _l('Attack Vector'),
+  cvssAttackComplexity: _l('Attack Complexity'),
+  cvssPrivilegesRequired: _l('Privileges Required'),
+  cvssUserInteraction: _l('User Interaction'),
+  cvssScope: _l('Scope'),
+  cvssConfidentialityImpact: _l('Confidentiality Impact'),
+  cvssIntegrityImpact: _l('Integrity Impact'),
+  cvssAvailabilityImpact: _l('Availability Impact'),
 };
 
 const CveDetails = ({entity}) => {
-  const {description, severity, refs = [], cvssVector, vector} = entity;
+  const {cvssBaseVector, description, references = [], severity} = entity;
 
   return (
     <Layout flex="column" grow="1">
@@ -73,38 +72,41 @@ const CveDetails = ({entity}) => {
                 <SeverityBar severity={severity} />
               </TableData>
             </TableRow>
-            {!isEmpty(cvssVector) && (
+            {isDefined(cvssBaseVector) && (
               <TableRow>
                 <TableData>{_('Base Vector')}</TableData>
                 <TableData>
-                  <Link to="cvsscalculator" query={cvssVector}>
-                    {cvssVector}
+                  <Link
+                    to="cvsscalculator"
+                    query={{cvssVector: cvssBaseVector}}
+                  >
+                    {cvssBaseVector}
                   </Link>
                 </TableData>
               </TableRow>
             )}
             {Object.entries(CVSS_PROPS)
-              .filter(([name]) => hasValue(vector[name]))
+              .filter(([name]) => isDefined(entity[name]))
               .map(([name, title]) => (
                 <TableRow key={name}>
                   <TableData>{`${title}`}</TableData>
-                  <TableData>{vector[name]}</TableData>
+                  <TableData>{entity[name]}</TableData>
                 </TableRow>
               ))}
           </TableBody>
         </InfoTable>
       </DetailsBlock>
 
-      {refs.length > 0 && (
+      {references.length > 0 && (
         <DetailsBlock title={_('References')}>
           <InfoTable>
             <TableBody>
-              {refs.map(ref => (
-                <TableRow key={ref.reference}>
+              {references.map(ref => (
+                <TableRow key={ref.name}>
                   <TableData>{ref.source}</TableData>
                   <TableData>
                     <span>
-                      <ExternalLink to={ref.link}>{ref.reference}</ExternalLink>
+                      <ExternalLink to={ref.href}>{ref.name}</ExternalLink>
                     </span>
                   </TableData>
                 </TableRow>

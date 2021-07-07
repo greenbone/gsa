@@ -23,6 +23,8 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+
 import FirstIcon from 'web/components/icon/firsticon';
 import LastIcon from 'web/components/icon/lasticon';
 import NextIcon from 'web/components/icon/nexticon';
@@ -30,8 +32,6 @@ import PreviousIcon from 'web/components/icon/previousicon';
 
 import Layout from 'web/components/layout/layout';
 import IconDivider from 'web/components/layout/icondivider';
-
-import PropTypes from 'web/utils/proptypes';
 
 const PaginationText = styled.span`
   margin: 0 3px;

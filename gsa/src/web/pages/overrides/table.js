@@ -19,6 +19,8 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
+import PropTypes from 'web/utils/proptypes';
+
 import {createEntitiesFooter} from 'web/entities/footer';
 import {withEntitiesHeader} from 'web/entities/header';
 import {createEntitiesTable} from 'web/entities/table';
@@ -27,8 +29,6 @@ import withRowDetails from 'web/entities/withRowDetails';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
-
-import PropTypes from 'web/utils/proptypes';
 
 import OverrideDetails from './details';
 import Row from './row';

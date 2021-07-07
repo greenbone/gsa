@@ -21,11 +21,11 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Divider from 'web/components/layout/divider';
-import withLayout from 'web/components/layout/withLayout';
-
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
+
+import Divider from 'web/components/layout/divider';
+import withLayout from 'web/components/layout/withLayout';
 
 export const StyledElement = styled.label`
   display: inline-flex;

@@ -21,13 +21,12 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+import DetailsBlock from 'web/entity/block';
+
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 
 import IconDivider from 'web/components/layout/icondivider';
-
-import DetailsBlock from 'web/entity/block';
-
-import PropTypes from 'web/utils/proptypes';
 
 import Pre from './preformatted';
 

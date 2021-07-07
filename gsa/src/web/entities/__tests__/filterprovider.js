@@ -23,15 +23,15 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {pageFilter} from 'web/store/pages/actions';
 
-import {rendererWith, screen, wait} from 'web/utils/testing';
+import {rendererWith, screen} from 'web/utils/testing';
 
 import FilterProvider from '../filterprovider';
 
 describe('FilterProvider component tests', () => {
-  test('should prefer locationQueryFilterString filter over defaultSettingFilter', async () => {
+  test('should prefer locationQuery filter over defaultSettingFilter', async () => {
     const resultingFilter = Filter.fromString('location=query rows=42');
 
-    const locationQueryFilterString = 'location=query';
+    const locationQuery = {filter: 'location=query'};
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
 
@@ -58,10 +58,7 @@ describe('FilterProvider component tests', () => {
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
     render(
-      <FilterProvider
-        locationQueryFilterString={locationQueryFilterString}
-        gmpname="task"
-      >
+      <FilterProvider locationQuery={locationQuery} gmpname="task">
         {renderFunc}
       </FilterProvider>,
     );
@@ -152,8 +149,6 @@ describe('FilterProvider component tests', () => {
     );
 
     await screen.findByTestId('awaiting-span');
-
-    await wait();
 
     expect(renderFunc).toHaveBeenCalledWith({filter: resultingFilter});
     expect(renderFunc).not.toHaveBeenCalledWith({filter: emptyFilter});
@@ -277,7 +272,7 @@ describe('FilterProvider component tests', () => {
   });
 
   test('should use default fallbackFilter as last resort', async () => {
-    const resultingFilter = DEFAULT_FALLBACK_FILTER.set('rows', 42);
+    const resultingFilter = DEFAULT_FALLBACK_FILTER.copy().set('rows', 42);
 
     const getSetting = jest.fn().mockResolvedValue({});
     const subscribe = jest.fn();

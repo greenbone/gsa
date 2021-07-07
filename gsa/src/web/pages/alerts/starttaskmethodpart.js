@@ -19,12 +19,12 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Select from 'web/components/form/select';
-import FormGroup from 'web/components/form/formgroup';
+import PropTypes from '../../utils/proptypes.js';
+import {renderSelectItems} from '../../utils/render.js';
+import withPrefix from '../../utils/withPrefix.js';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-import withPrefix from 'web/utils/withPrefix';
+import Select from '../../components/form/select.js';
+import FormGroup from '../../components/form/formgroup.js';
 
 const StartTaskMethodPart = ({prefix, tasks, startTaskTask, onChange}) => (
   <FormGroup title={_('Start Task')}>

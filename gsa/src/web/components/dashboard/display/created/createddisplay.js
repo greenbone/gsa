@@ -17,18 +17,17 @@
  */
 import React from 'react';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import Filter from 'gmp/models/filter';
 import FilterTerm from 'gmp/models/filter/filterterm';
 
-import {isDefined} from 'gmp/utils/identity';
-
-import LineChart, {lineDataPropType} from 'web/components/chart/line';
-
-import DataDisplay from 'web/components/dashboard/display/datadisplay';
-
 import PropTypes from 'web/utils/proptypes';
 
+import LineChart, {lineDataPropType} from '../../../chart/line';
+
 import transformCreated from './createdtransform';
+import DataDisplay from '../datadisplay';
 
 class CreatedDisplay extends React.Component {
   constructor(...args) {

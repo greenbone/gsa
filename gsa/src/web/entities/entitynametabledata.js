@@ -19,8 +19,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {getEntityType} from 'gmp/utils/entitytype';
+
+import PropTypes from 'web/utils/proptypes';
+import withUsername from 'web/utils/withUserName';
 
 import Comment from 'web/components/comment/comment';
 
@@ -31,9 +34,6 @@ import DetailsLink from 'web/components/link/detailslink';
 import TableData from 'web/components/table/data';
 
 import ObserverIcon from 'web/entity/icon/observericon';
-
-import PropTypes from 'web/utils/proptypes';
-import withUsername from 'web/utils/withUserName';
 
 import {RowDetailsToggle} from './row';
 
@@ -70,7 +70,7 @@ const EntityNameTableData = ({
         userName={username}
       />
     </Layout>
-    {hasValue(entity.comment) && <Comment>({entity.comment})</Comment>}
+    {isDefined(entity.comment) && <Comment>({entity.comment})</Comment>}
     {children}
   </TableData>
 );

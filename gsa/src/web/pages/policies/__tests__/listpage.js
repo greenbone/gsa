@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -26,21 +27,13 @@ import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {
-  createDeletePoliciesByFilterQueryMock,
-  createDeletePoliciesByIdsQueryMock,
-  createExportPoliciesByFilterQueryMock,
-  createExportPoliciesByIdsQueryMock,
-  createGetPoliciesQueryMock,
-} from 'web/graphql/__mocks__/policies';
-
 import {setUsername} from 'web/store/usersettings/actions';
 
 import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, screen, fireEvent, wait} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
 
 import PoliciesPage, {ToolBarIcons} from '../listpage';
 
@@ -72,36 +65,29 @@ const policy = Policy.fromElement({
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
-const reloadInterval = -1;
+const reloadInterval = 1;
 const manualUrl = 'test/';
 
-let currentSettings;
-let getFilters;
-let getSetting;
-let getPolicies;
+const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
 
-beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
+const getSetting = jest.fn().mockResolvedValue({filter: null});
 
-  getSetting = jest.fn().mockResolvedValue({filter: null});
-
-  getFilters = jest.fn().mockReturnValue(
-    Promise.resolve({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    }),
-  );
-
-  getPolicies = jest.fn().mockResolvedValue({
-    data: [policy],
+const getFilters = jest.fn().mockReturnValue(
+  Promise.resolve({
+    data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
+  }),
+);
+
+const getPolicies = jest.fn().mockResolvedValue({
+  data: [policy],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
 });
 
 describe('PoliciesPage tests', () => {
@@ -113,21 +99,16 @@ describe('PoliciesPage tests', () => {
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
+      reloadInterval,
+      settings: {manualUrl},
       user: {currentSettings, getSetting},
     };
-
-    const [mock, resultFunc] = createGetPoliciesQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
     });
 
     store.dispatch(setUsername('admin'));
@@ -153,79 +134,41 @@ describe('PoliciesPage tests', () => {
 
     const {baseElement} = render(<PoliciesPage />);
 
-    await wait();
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
-    expect(resultFunc).toHaveBeenCalled();
-
-    const inputs = baseElement.querySelectorAll('input');
-    const selects = screen.getAllByTestId('select-selected-value');
-
-    // Toolbar Icons
-    expect(screen.getAllByTitle('Help: Policies')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('New Policy')[0]).toBeInTheDocument();
-
-    // Powerfilter
-    expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(screen.getAllByTitle('Update Filter')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Remove Filter')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Reset to Default Filter')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
-
-    // Table
-    const header = baseElement.querySelectorAll('th');
-
-    expect(header[0]).toHaveTextContent('Name');
-    expect(header[1]).toHaveTextContent('Actions');
-    const row = baseElement.querySelectorAll('tr');
-
-    expect(row[1]).toHaveTextContent('unnamed policy');
-    expect(row[1]).toHaveTextContent('(some policy description)');
-
-    expect(
-      screen.getAllByTitle('Move Policy to trashcan')[0],
-    ).toBeInTheDocument();
-    expect(screen.getAllByTitle('Edit Policy')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Clone Policy')[0]).toBeInTheDocument();
-    expect(screen.getAllByTitle('Export Policy')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Create Audit from Policy')[0],
-    ).toBeInTheDocument();
+    expect(baseElement).toMatchSnapshot();
   });
 
-  test('should allow to bulk action on page contents', async () => {
+  test('should call commands for bulk actions', async () => {
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const renewSession = jest.fn().mockResolvedValue({data: {}});
+
     const gmp = {
       policies: {
         get: getPolicies,
+        deleteByFilter,
+        exportByFilter,
       },
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
+      reloadInterval,
+      settings: {manualUrl},
+      user: {currentSettings, getSetting: getSetting, renewSession},
     };
-
-    const [mock, resultFunc] = createGetPoliciesQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
-
-    const [exportMock, exportResult] = createExportPoliciesByIdsQueryMock([
-      '234',
-    ]);
-    const [deleteMock, deleteResult] = createDeletePoliciesByIdsQueryMock([
-      '234',
-    ]);
 
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setUsername('admin'));
@@ -236,190 +179,37 @@ describe('PoliciesPage tests', () => {
       defaultFilterLoadingActions.success('policy', defaultSettingfilter),
     );
 
-    render(<PoliciesPage />);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-    // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
-    expect(exportResult).toHaveBeenCalled();
-
-    // move page contents to trashcan
-    const deleteIcon = screen.getAllByTitle('Move page contents to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
-    expect(deleteResult).toHaveBeenCalled();
-  });
-
-  test('should allow to bulk action on selected policies', async () => {
-    const gmp = {
-      policies: {
-        get: getPolicies,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
-    const [mock, resultFunc] = createGetPoliciesQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
     });
-
-    const [exportMock, exportResult] = createExportPoliciesByIdsQueryMock([
-      '234',
-    ]);
-    const [deleteMock, deleteResult] = createDeletePoliciesByIdsQueryMock([
-      '234',
-    ]);
-
-    const {render, store} = rendererWith({
-      gmp,
-      capabilities: true,
-      store: true,
-      router: true,
-      queryMocks: [mock, exportMock, deleteMock],
-    });
-
-    store.dispatch(setUsername('admin'));
-
-    const defaultSettingfilter = Filter.fromString('foo=bar');
-    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
     store.dispatch(
-      defaultFilterLoadingActions.success('policy', defaultSettingfilter),
+      entitiesLoadingActions.success([policy], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<PoliciesPage />);
+    const {baseElement, getAllByTestId} = render(<PoliciesPage />);
 
-    await wait();
+    await waitFor(() => baseElement.querySelectorAll('table'));
 
-    expect(resultFunc).toHaveBeenCalled();
+    const icons = getAllByTestId('svg-icon');
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
+    await act(async () => {
+      expect(icons[18]).toHaveAttribute(
+        'title',
+        'Move page contents to trashcan',
+      );
+      fireEvent.click(icons[18]);
+      expect(deleteByFilter).toHaveBeenCalled();
 
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[1]);
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to selection');
-
-    const inputs = element.querySelectorAll('input');
-
-    // select an policy
-    fireEvent.click(inputs[1]);
-    await wait();
-
-    // export selected policy
-    const exportIcon = screen.getAllByTitle('Export selection');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
-    expect(exportResult).toHaveBeenCalled();
-
-    // move selected policy to trashcan
-    const deleteIcon = screen.getAllByTitle('Move selection to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
-    expect(deleteResult).toHaveBeenCalled();
-  });
-
-  test('should allow to bulk action on filtered policies', async () => {
-    const gmp = {
-      policies: {
-        get: getPolicies,
-      },
-      filters: {
-        get: getFilters,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings, getSetting: getSetting},
-    };
-
-    const [mock, resultFunc] = createGetPoliciesQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
+      expect(icons[19]).toHaveAttribute('title', 'Export page contents');
+      fireEvent.click(icons[19]);
+      expect(exportByFilter).toHaveBeenCalled();
     });
-
-    const [exportMock, exportResult] = createExportPoliciesByFilterQueryMock(
-      'foo=bar rows=-1 first=1',
-    );
-    const [deleteMock, deleteResult] = createDeletePoliciesByFilterQueryMock(
-      'foo=bar rows=-1 first=1',
-    );
-
-    const {render, store} = rendererWith({
-      gmp,
-      capabilities: true,
-      store: true,
-      router: true,
-      queryMocks: [mock, exportMock, deleteMock],
-    });
-
-    store.dispatch(setUsername('admin'));
-
-    const defaultSettingfilter = Filter.fromString('foo=bar');
-    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
-    store.dispatch(
-      defaultFilterLoadingActions.success('policy', defaultSettingfilter),
-    );
-
-    render(<PoliciesPage />);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[2]);
-
-    await wait();
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to all filtered');
-
-    // export all filtered policies
-    const exportIcon = screen.getAllByTitle('Export all filtered');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
-    expect(exportResult).toHaveBeenCalled();
-
-    // move all filtered policies to trashcan
-    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
-    expect(deleteResult).toHaveBeenCalled();
   });
 });
 
@@ -437,7 +227,7 @@ describe('PoliciesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    const {element} = render(
+    const {element, getAllByTestId} = render(
       <ToolBarIcons
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
@@ -445,10 +235,10 @@ describe('PoliciesPage ToolBarIcons test', () => {
     );
     expect(element).toMatchSnapshot();
 
+    const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
 
-    expect(screen.getAllByTitle('Help: Policies')[0]).toBeInTheDocument();
-
+    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-policies',
@@ -469,24 +259,22 @@ describe('PoliciesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    render(
+    const {getAllByTestId} = render(
       <ToolBarIcons
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
       />,
     );
 
-    const newIcon = screen.getAllByTitle('New Policy');
-    expect(newIcon[0]).toBeInTheDocument();
+    const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(newIcon[0]);
+    fireEvent.click(icons[1]);
     expect(handlePolicyCreateClick).toHaveBeenCalled();
+    expect(icons[1]).toHaveAttribute('title', 'New Policy');
 
-    const importIcon = screen.getAllByTitle('Import Policy');
-    expect(importIcon[0]).toBeInTheDocument();
-
-    fireEvent.click(importIcon[0]);
+    fireEvent.click(icons[2]);
     expect(handlePolicyImportClick).toHaveBeenCalled();
+    expect(icons[2]).toHaveAttribute('title', 'Import Policy');
   });
 
   test('should not show icons if user does not have the right permissions', () => {
@@ -501,13 +289,15 @@ describe('PoliciesPage ToolBarIcons test', () => {
       router: true,
     });
 
-    render(
+    const {queryAllByTestId} = render(
       <ToolBarIcons
         onPolicyCreateClick={handlePolicyCreateClick}
         onPolicyImportClick={handlePolicyImportClick}
       />,
     );
 
-    expect(screen.getAllByTitle('Help: Policies')[0]).toBeInTheDocument();
+    const icons = queryAllByTestId('svg-icon');
+    expect(icons.length).toBe(1);
+    expect(icons[0]).toHaveAttribute('title', 'Help: Policies');
   });
 });

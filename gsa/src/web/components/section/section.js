@@ -21,15 +21,15 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+
 import {withFolding, withFoldToggle} from 'web/components/folding/folding';
 
 import FoldIcon from 'web/components/icon/foldstateicon';
 
 import Layout from 'web/components/layout/layout';
 
-import PropTypes from 'web/utils/proptypes';
-
-import SectionHeader from './header';
+import SectionHeader from './header.js';
 
 const FoldableLayout = withFolding(Layout);
 
@@ -41,7 +41,6 @@ const FoldLayout = styled(Layout)`
 const Section = ({
   children,
   className,
-  'data-testid': dataTestId,
   extra,
   foldable,
   foldState,
@@ -70,7 +69,7 @@ const Section = ({
     );
   }
   return (
-    <section data-testid={dataTestId} className={className}>
+    <section className={className}>
       {header}
       {foldable ? (
         <FoldableLayout
@@ -89,7 +88,6 @@ const Section = ({
 
 Section.propTypes = {
   className: PropTypes.string,
-  'data-testid': PropTypes.string,
   extra: PropTypes.element,
   foldState: PropTypes.string,
   foldable: PropTypes.bool,

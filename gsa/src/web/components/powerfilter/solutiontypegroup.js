@@ -18,25 +18,24 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import PropTypes from 'web/utils/proptypes';
 
 import Radio from 'web/components/form/radio';
 import FormGroup from 'web/components/form/formgroup';
 
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
 
-import Layout from 'web/components/layout/layout';
+import {isDefined} from 'gmp/utils/identity';
 
 import Table from 'web/components/table/table';
 import TableBody from 'web/components/table/body';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
+import Layout from 'web/components/layout/layout';
 
-import PropTypes from 'web/utils/proptypes';
+import styled from 'styled-components';
 
 const StyledLayout = styled(Layout)`
   flex-grow: 0;

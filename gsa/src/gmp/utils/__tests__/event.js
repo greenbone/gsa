@@ -17,11 +17,9 @@
  */
 import {debounce, throttleAnimation} from '../event';
 
-beforeEach(() => {
-  jest.useFakeTimers();
-});
-
 describe('debounce function tests', () => {
+  jest.useFakeTimers();
+
   test('should debounce function', () => {
     const callback = jest.fn();
     const func = debounce(callback);
@@ -57,6 +55,8 @@ describe('debounce function tests', () => {
 });
 
 describe('throttleAnimation function tests', () => {
+  jest.useFakeTimers();
+
   test('should throttle running callback', () => {
     global.requestAnimationFrame = cb => setTimeout(cb, 0);
 

@@ -20,10 +20,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Model from 'gmp/model';
-
 import {isDefined} from 'gmp/utils/identity';
-import {split} from 'gmp/utils/string';
+
+import PropTypes from 'web/utils/proptypes';
+import {permissionDescription, renderSelectItems} from 'web/utils/render';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -34,10 +35,9 @@ import TextField from 'web/components/form/textfield';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+import Model from 'gmp/model';
 
-import PropTypes from 'web/utils/proptypes';
-import {permissionDescription, renderSelectItems} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
+import {split} from 'gmp/utils/string';
 
 const NEED_RESOURCE_ID = [
   'Super',

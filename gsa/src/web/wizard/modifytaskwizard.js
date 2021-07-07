@@ -15,11 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useReducer} from 'react';
+import React from 'react';
 
 import _ from 'gmp/locale';
 
 import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
+
+import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -34,64 +36,33 @@ import Datepicker from 'web/components/form/datepicker';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
-import reducer, {updateState} from 'web/utils/stateReducer';
 import withCapabilities from 'web/utils/withCapabilities';
 
 import {WizardContent, WizardIcon} from './taskwizard';
 
 const ModifyTaskWizard = ({
-  alertEmail = '',
+  alert_email = '',
   capabilities,
   reschedule,
-  startDate,
-  startTimezone,
-  taskId,
+  start_date,
+  start_hour,
+  start_minute,
+  start_timezone,
+  task_id,
   tasks = [],
   onClose,
   onSave,
 }) => {
-  const [timeState, dispatch] = useReducer(reducer, {
-    startDate,
-    startTimezone,
-  });
-
-  const handleTimeChange = (value, name) => {
-    if (name === 'startDate') {
-      dispatch(
-        updateState({
-          startDate: value,
-        }),
-      );
-    } else if (name === 'startHour') {
-      dispatch(
-        updateState({
-          startDate: timeState.startDate.hours(value),
-        }),
-      );
-    } else if (name === 'startMinute') {
-      dispatch(
-        updateState({
-          startDate: timeState.startDate.minutes(value),
-        }),
-      );
-    } else if (name === 'startTimezone') {
-      dispatch(
-        updateState({
-          startDate: timeState.startDate.tz(value),
-          startTimezone: value,
-        }),
-      );
-    }
-  };
-
   const data = {
-    alertEmail,
+    alert_email,
+    start_date,
     reschedule,
-    taskId,
+    start_hour,
+    start_minute,
+    start_timezone,
+    task_id,
     tasks,
-    ...timeState,
   };
 
   return (
@@ -148,8 +119,8 @@ const ModifyTaskWizard = ({
           <Layout basis="0" grow="1" flex="column">
             <FormGroup title={_('Task')} titleSize="3">
               <Select
-                name="taskId"
-                value={state.taskId}
+                name="task_id"
+                value={state.task_id}
                 items={renderSelectItems(tasks)}
                 onChange={onValueChange}
               />
@@ -180,9 +151,9 @@ const ModifyTaskWizard = ({
                   </FormGroup>
                   <FormGroup offset="1">
                     <Datepicker
-                      name="startDate"
-                      value={timeState.startDate}
-                      onChange={handleTimeChange}
+                      name="start_date"
+                      value={state.start_date}
+                      onChange={onValueChange}
                     />
                   </FormGroup>
                   <FormGroup offset="1">
@@ -190,33 +161,32 @@ const ModifyTaskWizard = ({
                       <span>{_('at')}</span>
                       <Spinner
                         type="int"
-                        min={0}
-                        max={23}
+                        min="0"
+                        max="23"
                         size="2"
-                        step={1}
-                        name="startHour"
-                        value={timeState.startDate.hours()}
-                        onChange={handleTimeChange}
+                        name="start_hour"
+                        value={state.start_hour}
+                        onChange={onValueChange}
                       />
                       <span>{_('h')}</span>
                       <Spinner
                         type="int"
-                        min={0}
-                        max={59}
-                        step={1}
+                        min="0"
+                        max="59"
                         size="2"
-                        name="startMinute"
-                        value={timeState.startDate.minutes()}
-                        onChange={handleTimeChange}
+                        name="start_minute"
+                        value={state.start_minute}
+                        onChange={onValueChange}
+                        i
                       />
                       <span>{_('m')}</span>
                     </Divider>
                   </FormGroup>
                   <FormGroup offset="1">
                     <TimeZoneSelect
-                      name="startTimezone"
-                      value={timeState.startTimezone}
-                      onChange={handleTimeChange}
+                      name="start_timezone"
+                      value={state.start_timezone}
+                      onChange={onValueChange}
                     />
                   </FormGroup>
                 </FormGroup>
@@ -227,8 +197,8 @@ const ModifyTaskWizard = ({
                 <FormGroup title={_('Email report to')} titleSize="3">
                   <TextField
                     grow="1"
-                    name="alertEmail"
-                    value={state.alertEmail}
+                    name="alert_email"
+                    value={state.alert_email}
                     size="30"
                     maxLength="80"
                     onChange={onValueChange}
@@ -243,12 +213,14 @@ const ModifyTaskWizard = ({
 };
 
 ModifyTaskWizard.propTypes = {
-  alertEmail: PropTypes.string,
+  alert_email: PropTypes.string,
   capabilities: PropTypes.capabilities.isRequired,
   reschedule: PropTypes.oneOf([NO_VALUE, YES_VALUE]),
-  startDate: PropTypes.date,
-  startTimezone: PropTypes.string,
-  taskId: PropTypes.id,
+  start_date: PropTypes.date,
+  start_hour: PropTypes.number,
+  start_minute: PropTypes.number,
+  start_timezone: PropTypes.string,
+  task_id: PropTypes.id,
   tasks: PropTypes.array,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,

@@ -24,13 +24,14 @@ import _ from 'gmp/locale';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
+import PropTypes from 'web/utils/proptypes';
+
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 export const COMPOSER_CONTENT_DEFAULTS = {

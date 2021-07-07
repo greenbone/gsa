@@ -17,17 +17,33 @@
  */
 import React from 'react';
 
-import Download from './download';
-import useDownload from './useDownload';
+import Download from './download.js';
 
-const withDownload = Component => props => {
-  const [ref, handleDownload] = useDownload();
-  return (
-    <React.Fragment>
-      <Component {...props} onDownload={handleDownload} />
-      <Download ref={ref} />
-    </React.Fragment>
-  );
+const withDownload = Component => {
+  class DownloadWrapper extends React.Component {
+    constructor(...args) {
+      super(...args);
+
+      this.handleDownload = this.handleDownload.bind(this);
+    }
+
+    handleDownload({filename, data, mimetype}) {
+      this.download.setFilename(filename);
+      this.download.setData(data, mimetype);
+      this.download.download();
+    }
+
+    render() {
+      return (
+        <React.Fragment>
+          <Component {...this.props} onDownload={this.handleDownload} />
+          <Download ref={ref => (this.download = ref)} />
+        </React.Fragment>
+      );
+    }
+  }
+
+  return DownloadWrapper;
 };
 
 export default withDownload;

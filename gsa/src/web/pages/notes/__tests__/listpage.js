@@ -25,13 +25,7 @@ import {setLocale} from 'gmp/locale/lang';
 import Filter from 'gmp/models/filter';
 import Note from 'gmp/models/note';
 
-import {
-  createDeleteNotesByFilterQueryMock,
-  createDeleteNotesByIdsQueryMock,
-  createExportNotesByFilterQueryMock,
-  createExportNotesByIdsQueryMock,
-  createGetNotesQueryMock,
-} from 'web/graphql/__mocks__/notes';
+import {entitiesLoadingActions} from 'web/store/entities/notes';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
@@ -45,15 +39,23 @@ setLocale('en');
 
 window.URL.createObjectURL = jest.fn();
 
-const note = Note.fromObject({
-  id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
-  hosts: ['127.0.0.1'],
+const note = Note.fromElement({
+  _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+  active: 1,
+  creation_time: '2020-12-23T14:14:11Z',
+  hosts: '127.0.0.1',
+  in_use: 0,
+  modification_time: '2021-01-04T11:54:12Z',
   nvt: {
+    _oid: '123',
     name: 'foo nvt',
+    type: 'nvt',
   },
-  permissions: [{name: 'Everything'}],
-  port: '666/tcp',
+  owner: {name: 'admin'},
+  permissions: {permission: {name: 'Everything'}},
+  port: '666',
   text: 'note text',
+  writable: 1,
 });
 
 const caps = new Capabilities(['everything']);
@@ -62,60 +64,50 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-let currentSettings;
-let getAggregates;
-let getDashboardSetting;
-let getFilters;
-let getNotes;
-let getSetting;
-let renewSession;
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+const getSetting = jest.fn().mockResolvedValue({
+  filter: null,
+});
 
-  getSetting = jest.fn().mockResolvedValue({
-    filter: null,
-  });
+const getDashboardSetting = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
-  getDashboardSetting = jest.fn().mockResolvedValue({
+const getAggregates = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const getFilters = jest.fn().mockReturnValue(
+  Promise.resolve({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
+  }),
+);
 
-  getAggregates = jest.fn().mockResolvedValue({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
+const getNotes = jest.fn().mockResolvedValue({
+  data: [note],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
-  getFilters = jest.fn().mockReturnValue(
-    Promise.resolve({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    }),
-  );
-
-  getNotes = jest.fn().mockResolvedValue({
-    data: [note],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
-
-  renewSession = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
 });
 
 describe('NotesPage tests', () => {
@@ -137,33 +129,38 @@ describe('NotesPage tests', () => {
       user: {currentSettings, getSetting},
     };
 
-    const [mock, resultFunc] = createGetNotesQueryMock({
-      filterString: 'rows=2',
-      first: 2,
-    });
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('rows=2');
+    const defaultSettingfilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
       defaultFilterLoadingActions.success('note', defaultSettingfilter),
     );
 
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([note], filter, loadedFilter, counts),
+    );
+
     const {baseElement} = render(<NotesPage />);
 
     await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
 
     const display = screen.getAllByTestId('grid-item');
     const inputs = baseElement.querySelectorAll('input');
@@ -221,12 +218,22 @@ describe('NotesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       notes: {
         get: getNotes,
+        deleteByFilter,
+        exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
@@ -238,20 +245,11 @@ describe('NotesPage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
-    const [mock, resultFunc] = createGetNotesQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
-
-    const [exportMock, exportResult] = createExportNotesByIdsQueryMock(['123']);
-    const [deleteMock, deleteResult] = createDeleteNotesByIdsQueryMock(['123']);
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -263,11 +261,22 @@ describe('NotesPage tests', () => {
       defaultFilterLoadingActions.success('note', defaultSettingfilter),
     );
 
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([note], filter, loadedFilter, counts),
+    );
+
     render(<NotesPage />);
 
     await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
 
     // export page contents
     const exportIcon = screen.getAllByTitle('Export page contents');
@@ -277,7 +286,7 @@ describe('NotesPage tests', () => {
 
     await wait();
 
-    expect(exportResult).toHaveBeenCalled();
+    expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
     const deleteIcon = screen.getAllByTitle('Move page contents to trashcan');
@@ -287,16 +296,26 @@ describe('NotesPage tests', () => {
 
     await wait();
 
-    expect(deleteResult).toHaveBeenCalled();
+    expect(deleteByFilter).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on selected notes', async () => {
+    const deleteByIds = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByIds = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       notes: {
         get: getNotes,
+        delete: deleteByIds,
+        export: exportByIds,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
@@ -308,20 +327,11 @@ describe('NotesPage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
-    const [mock, resultFunc] = createGetNotesQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
-
-    const [exportMock, exportResult] = createExportNotesByIdsQueryMock(['123']);
-    const [deleteMock, deleteResult] = createDeleteNotesByIdsQueryMock(['123']);
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -333,11 +343,22 @@ describe('NotesPage tests', () => {
       defaultFilterLoadingActions.success('note', defaultSettingfilter),
     );
 
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([note], filter, loadedFilter, counts),
+    );
+
     const {element} = render(<NotesPage />);
 
     await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -362,7 +383,7 @@ describe('NotesPage tests', () => {
 
     await wait();
 
-    expect(exportResult).toHaveBeenCalled();
+    expect(exportByIds).toHaveBeenCalled();
 
     // move selected note to trashcan
     const deleteIcon = screen.getAllByTitle('Move selection to trashcan');
@@ -372,16 +393,26 @@ describe('NotesPage tests', () => {
 
     await wait();
 
-    expect(deleteResult).toHaveBeenCalled();
+    expect(deleteByIds).toHaveBeenCalled();
   });
 
   test('should allow to bulk action on filtered notes', async () => {
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
     const gmp = {
       dashboard: {
         getSetting: getDashboardSetting,
       },
       notes: {
         get: getNotes,
+        deleteByFilter,
+        exportByFilter,
         getActiveDaysAggregates: getAggregates,
         getCreatedAggregates: getAggregates,
         getWordCountsAggregates: getAggregates,
@@ -393,24 +424,11 @@ describe('NotesPage tests', () => {
       user: {renewSession, currentSettings, getSetting: getSetting},
     };
 
-    const [mock, resultFunc] = createGetNotesQueryMock({
-      filterString: 'foo=bar rows=2',
-      first: 2,
-    });
-
-    const [exportMock, exportResult] = createExportNotesByFilterQueryMock(
-      'foo=bar rows=-1 first=1',
-    );
-    const [deleteMock, deleteResult] = createDeleteNotesByFilterQueryMock(
-      'foo=bar rows=-1 first=1',
-    );
-
     const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
       router: true,
-      queryMocks: [mock, exportMock, deleteMock],
     });
 
     store.dispatch(setTimezone('CET'));
@@ -422,11 +440,22 @@ describe('NotesPage tests', () => {
       defaultFilterLoadingActions.success('note', defaultSettingfilter),
     );
 
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesLoadingActions.success([note], filter, loadedFilter, counts),
+    );
+
     render(<NotesPage />);
 
     await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
 
     const selectFields = screen.getAllByTestId('select-open-button');
     fireEvent.click(selectFields[1]);
@@ -447,7 +476,7 @@ describe('NotesPage tests', () => {
 
     await wait();
 
-    expect(exportResult).toHaveBeenCalled();
+    expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered notes to trashcan
     const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan');
@@ -457,7 +486,7 @@ describe('NotesPage tests', () => {
 
     await wait();
 
-    expect(deleteResult).toHaveBeenCalled();
+    expect(deleteByFilter).toHaveBeenCalled();
   });
 });
 

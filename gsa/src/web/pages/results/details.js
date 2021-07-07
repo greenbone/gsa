@@ -22,7 +22,7 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import {TAG_NA} from 'gmp/models/nvt';
@@ -31,6 +31,12 @@ import {DEFAULT_OID_VALUE} from 'gmp/models/override';
 
 import Layout from 'web/components/layout/layout';
 
+import PropTypes from 'web/utils/proptypes';
+import {renderNvtName} from 'web/utils/render';
+
+import DetailsBlock from 'web/entity/block';
+import {Col} from 'web/entity/page';
+
 import DetailsLink from 'web/components/link/detailslink';
 
 import InfoTable from 'web/components/table/infotable';
@@ -38,15 +44,9 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import DetailsBlock from 'web/entity/block';
-import {Col} from 'web/entity/page';
-
-import References from 'web/pages/nvts/references';
-import Solution from 'web/pages/nvts/solution';
-import P from 'web/pages/nvts/preformatted';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderNvtName} from 'web/utils/render';
+import References from '../nvts/references';
+import Solution from '../nvts/solution';
+import P from '../nvts/preformatted';
 
 import Diff, {Added, Removed} from './diff';
 
@@ -103,12 +103,13 @@ const ResultDetails = ({className, links = true, entity}) => {
   const result = entity;
 
   const {information} = result;
-  const {id: infoId, tags, solution} = information;
+  const {id: infoId, tags = {}, solution} = information;
 
-  const hasDetection = hasValue(result.originResult);
+  const has_detection =
+    isDefined(result.detection) && isDefined(result.detection.result);
 
-  const detectionDetails = hasDetection
-    ? result.originResult.details
+  const detection_details = has_detection
+    ? result.detection.result.details
     : undefined;
 
   const result2 = isDefined(result.delta) ? result.delta.result : undefined;
@@ -147,11 +148,12 @@ const ResultDetails = ({className, links = true, entity}) => {
 
   return (
     <Layout flex="column" grow="1" className={className}>
-      {hasValue(tags?.summary) && (
+      {isDefined(tags.summary) && (
         <DetailsBlock title={_('Summary')}>
           <P>{tags.summary}</P>
         </DetailsBlock>
       )}
+
       {result.hasDelta() ? (
         <DetailsBlock title={_('Detection Results')}>
           <div>
@@ -210,7 +212,7 @@ const ResultDetails = ({className, links = true, entity}) => {
         </DetailsBlock>
       )}
 
-      {hasDetection && (
+      {has_detection && (
         <DetailsBlock title={_('Product Detection Result')}>
           <InfoTable>
             <TableBody>
@@ -220,10 +222,10 @@ const ResultDetails = ({className, links = true, entity}) => {
                   <span>
                     <DetailsLink
                       type="cpe"
-                      id={detectionDetails.product}
+                      id={detection_details.product}
                       textOnly={!links}
                     >
-                      {detectionDetails.product}
+                      {detection_details.product}
                     </DetailsLink>
                   </span>
                 </TableData>
@@ -233,17 +235,17 @@ const ResultDetails = ({className, links = true, entity}) => {
                 <TableData>
                   <span>
                     <DetailsLink
-                      id={detectionDetails.source_oid}
+                      id={detection_details.source_oid}
                       type={
-                        detectionDetails.source_oid.startsWith('CVE-')
+                        detection_details.source_oid.startsWith('CVE-')
                           ? 'cve'
                           : 'nvt'
                       }
                       textOnly={!links}
                     >
-                      {detectionDetails.source_name +
+                      {detection_details.source_name +
                         ' (OID: ' +
-                        detectionDetails.source_oid +
+                        detection_details.source_oid +
                         ')'}
                     </DetailsLink>
                   </span>
@@ -255,7 +257,7 @@ const ResultDetails = ({className, links = true, entity}) => {
                   <span>
                     <DetailsLink
                       type="result"
-                      id={result.originResult.id}
+                      id={result.detection.result.id}
                       textOnly={!links}
                     >
                       {_('View details of product detection')}
@@ -268,16 +270,15 @@ const ResultDetails = ({className, links = true, entity}) => {
         </DetailsBlock>
       )}
 
-      {hasValue(tags?.insight) && tags.insight !== TAG_NA && (
+      {isDefined(tags.insight) && tags.insight !== TAG_NA && (
         <DetailsBlock title={_('Insight')}>
           <P>{tags.insight}</P>
         </DetailsBlock>
       )}
+
       <DetailsBlock title={_('Detection Method')}>
         <Layout flex="column">
-          {hasValue(tags?.detectionMethod) && (
-            <Layout>{tags.detectionMethod}</Layout>
-          )}
+          <Layout>{tags.vuldetect}</Layout>
           <InfoTable>
             <colgroup>
               <Col width="10%" />
@@ -287,7 +288,7 @@ const ResultDetails = ({className, links = true, entity}) => {
               <TableRow>
                 <TableData>{_('Details: ')}</TableData>
                 <TableData>
-                  {hasValue(infoId) && infoId.startsWith(DEFAULT_OID_VALUE) && (
+                  {isDefined(infoId) && infoId.startsWith(DEFAULT_OID_VALUE) && (
                     <span>
                       <DetailsLink type="nvt" id={infoId} textOnly={!links}>
                         {renderNvtName(infoId, information.name)}
@@ -295,14 +296,14 @@ const ResultDetails = ({className, links = true, entity}) => {
                       </DetailsLink>
                     </span>
                   )}
-                  {!hasValue(infoId) &&
+                  {!isDefined(infoId) &&
                     _('No details available for this method.')}
                 </TableData>
               </TableRow>
-              {!isEmpty(information.version) && (
+              {!isEmpty(result.scan_nvt_version) && (
                 <TableRow>
                   <TableData>{_('Version used: ')}</TableData>
-                  <TableData>{information.version}</TableData>
+                  <TableData>{result.scan_nvt_version}</TableData>
                 </TableRow>
               )}
             </TableBody>
@@ -310,13 +311,13 @@ const ResultDetails = ({className, links = true, entity}) => {
         </Layout>
       </DetailsBlock>
 
-      {hasValue(tags?.affected) && tags.affected !== TAG_NA && (
+      {isDefined(tags.affected) && tags.affected !== TAG_NA && (
         <DetailsBlock title={_('Affected Software/OS')}>
           <P>{tags.affected}</P>
         </DetailsBlock>
       )}
 
-      {hasValue(tags?.impact) && tags.impact !== TAG_NA && (
+      {isDefined(tags.impact) && tags.impact !== TAG_NA && (
         <DetailsBlock title={_('Impact')}>
           <P>{tags.impact}</P>
         </DetailsBlock>

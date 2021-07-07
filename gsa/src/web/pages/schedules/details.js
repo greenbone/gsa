@@ -21,6 +21,8 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+
 import DateTime from 'web/components/date/datetime';
 
 import Divider from 'web/components/layout/divider';
@@ -34,8 +36,6 @@ import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
-
-import PropTypes from 'web/utils/proptypes';
 
 import {renderDuration, renderRecurrence} from './render';
 

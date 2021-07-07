@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import Filter from 'gmp/models/filter';
+import Filter from 'gmp/models/filter.js';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -85,8 +85,8 @@ const Row = ({
       </TableData>
       <TableData>
         <Divider wrap>
-          {entity.cveReferences.map(cve => (
-            <CveLink key={cve.id} id={cve.id} textOnly={!links} />
+          {entity.cves.map(id => (
+            <CveLink key={id} id={id} textOnly={!links} />
           ))}
         </Divider>
       </TableData>

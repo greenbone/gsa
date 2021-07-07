@@ -19,10 +19,10 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import StopIcon from 'web/components/icon/stopicon';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
+
+import StopIcon from 'web/components/icon/stopicon';
 
 const TaskStopIcon = ({
   capabilities,

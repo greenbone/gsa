@@ -20,9 +20,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
+
+import Layout from 'web/components/layout/layout';
 
 const ScrollableContent = styled.div`
   overflow: auto;

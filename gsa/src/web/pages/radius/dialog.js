@@ -20,6 +20,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import PropTypes from 'web/utils/proptypes';
+
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import CheckBox from 'web/components/form/checkbox';
@@ -28,8 +30,6 @@ import PasswordField from 'web/components/form/passwordfield';
 import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
-
-import PropTypes from 'web/utils/proptypes';
 
 const RadiusDialog = ({
   enable = false,

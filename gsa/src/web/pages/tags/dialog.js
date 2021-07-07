@@ -22,12 +22,16 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {YES_VALUE} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 import {isEmpty} from 'gmp/utils/string';
 import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
+
+import {YES_VALUE} from 'gmp/parser';
+
+import PropTypes from 'web/utils/proptypes';
+import {renderSelectItems} from 'web/utils/render';
+import withGmp from 'web/utils/withGmp';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -40,10 +44,6 @@ import YesNoRadio from 'web/components/form/yesnoradio';
 import Layout from 'web/components/layout/layout';
 
 import {SELECT_MAX_RESOURCES} from 'web/pages/tags/component';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-import withGmp from 'web/utils/withGmp';
 
 const Divider = styled.div`
   margin: 0 5px;

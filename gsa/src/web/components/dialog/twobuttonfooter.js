@@ -22,9 +22,9 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {DialogFooterLayout} from 'web/components/dialog/footer';
-
 import PropTypes from 'web/utils/proptypes';
+
+import {DialogFooterLayout} from 'web/components/dialog/footer';
 
 import Button from './button';
 

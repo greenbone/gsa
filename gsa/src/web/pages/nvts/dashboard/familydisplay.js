@@ -27,6 +27,9 @@ import {parseFloat, parseSeverity} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
+import PropTypes from 'web/utils/proptypes';
+import {severityFormat} from 'web/utils/render';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
 
 import BubbleChart from 'web/components/chart/bubble';
 
@@ -37,10 +40,6 @@ import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import withFilterSelection from 'web/components/dashboard/display/withFilterSelection'; // eslint-disable-line max-len
 import {registerDisplay} from 'web/components/dashboard/registry';
-
-import PropTypes from 'web/utils/proptypes';
-import {severityFormat} from 'web/utils/render';
-import {resultSeverityRiskFactor} from 'web/utils/severity';
 
 import {NvtsFamilyLoader} from './loaders';
 

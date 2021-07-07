@@ -20,20 +20,15 @@ import React from 'react';
 import date from 'gmp/models/date';
 import {longDate} from 'gmp/locale/date';
 
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
-
 import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
 
-import {fireEvent, rendererWith, wait} from 'web/utils/testing';
+import {fireEvent, rendererWith} from 'web/utils/testing';
 
-import UserMenu, {LOGOUT} from '../usermenu';
+import UserMenu from '../usermenu';
 
 describe('UserMenu component tests', () => {
   test('should render UserMenu', () => {
-    const gmp = {
-      settings: {},
-    };
-    const {render} = rendererWith({gmp, router: true, store: true});
+    const {render} = rendererWith({gmp: {}, router: true, store: true});
 
     const {element} = render(<UserMenu />);
 
@@ -41,10 +36,7 @@ describe('UserMenu component tests', () => {
   });
 
   test('should render username and sessionTimeout', () => {
-    const gmp = {
-      settings: {},
-    };
-    const {render, store} = rendererWith({gmp, router: true, store: true});
+    const {render, store} = rendererWith({gmp: {}, router: true, store: true});
     const timeout = date('2018-10-10');
 
     store.dispatch(setSessionTimeout(timeout));
@@ -57,11 +49,8 @@ describe('UserMenu component tests', () => {
   });
 
   test('should route to usersettings on click', () => {
-    const gmp = {
-      settings: {},
-    };
     const {render, history} = rendererWith({
-      gmp,
+      gmp: {},
       store: true,
       router: true,
     });
@@ -74,64 +63,31 @@ describe('UserMenu component tests', () => {
     expect(history.location.pathname).toMatch('usersettings');
   });
 
-  test('should logout user on click', async () => {
-    const mock = {
-      request: {
-        query: LOGOUT,
-        variables: {},
-      },
-      result: {
-        data: {
-          logout: {
-            ok: true,
-          },
-        },
-      },
-    };
+  test('should logout user on click', () => {
     const doLogout = jest.fn().mockResolvedValue();
     const gmp = {
-      settings: {
-        enableHyperionOnly: false,
-      },
       doLogout,
     };
-    const {render} = rendererWith({
-      gmp,
-      store: true,
-      router: true,
-      queryMocks: [mock],
-    });
+    const {render} = rendererWith({gmp, store: true, router: true});
 
     const {getByTestId} = render(<UserMenu />);
-
     const userSettingsElement = getByTestId('usermenu-logout');
 
     fireEvent.click(userSettingsElement);
-
-    await wait();
 
     expect(gmp.doLogout).toHaveBeenCalled();
   });
 
   test('should renew session timeout on click', () => {
-    const renewDate = '2019-10-10T12:00:00Z';
-    const [queryMock, resultFunc] = createRenewSessionQueryMock(renewDate);
-
-    const renewSession = jest.fn().mockResolvedValue({data: renewDate});
+    const renewSession = jest
+      .fn()
+      .mockResolvedValue({data: '2019-10-10T12:00:00Z'});
     const gmp = {
       user: {
         renewSession,
       },
-      settings: {
-        enableHyperionOnly: false,
-      },
     };
-    const {render} = rendererWith({
-      gmp,
-      store: true,
-      router: true,
-      queryMocks: [queryMock],
-    });
+    const {render} = rendererWith({gmp, store: true, router: true});
 
     const {getAllByTestId} = render(<UserMenu />);
     const icons = getAllByTestId('svg-icon');
@@ -139,7 +95,6 @@ describe('UserMenu component tests', () => {
     fireEvent.click(icons[3]);
 
     expect(gmp.user.renewSession).toHaveBeenCalled();
-    expect(resultFunc).toHaveBeenCalled();
   });
 });
 

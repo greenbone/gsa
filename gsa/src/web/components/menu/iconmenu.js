@@ -21,10 +21,10 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Icon from 'web/components/icon/icon';
+import PropTypes from 'web/utils/proptypes.js';
+import Theme from 'web/utils/theme.js';
 
-import PropTypes from 'web/utils/proptypes';
-import Theme from 'web/utils/theme';
+import Icon from 'web/components/icon/icon.js';
 
 const IconMenu = styled.span`
   display: inline-flex;

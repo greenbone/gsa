@@ -19,14 +19,14 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {parseInt} from 'gmp/parser';
-
 import {isDefined} from 'gmp/utils/identity';
 
-import FormGroup from 'web/components/form/formgroup';
-import YesNoRadio from 'web/components/form/yesnoradio';
+import {parseInt} from 'gmp/parser';
 
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from '../../utils/proptypes.js';
+
+import FormGroup from '../form/formgroup.js';
+import YesNoRadio from '../form/yesnoradio.js';
 
 const ApplyOverridesGroup = ({
   filter,

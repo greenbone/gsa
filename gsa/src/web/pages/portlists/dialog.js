@@ -26,6 +26,8 @@ import {isDefined} from 'gmp/utils/identity';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
+import PropTypes from 'web/utils/proptypes';
+
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FileField from 'web/components/form/filefield';
@@ -37,8 +39,6 @@ import NewIcon from 'web/components/icon/newicon';
 
 import Section from 'web/components/section/section';
 
-import PropTypes from 'web/utils/proptypes';
-
 import PortRangesTable from './portrangestable';
 
 const FROM_FILE = YES_VALUE;
@@ -46,24 +46,24 @@ const NOT_FROM_FILE = NO_VALUE;
 
 const PortListsDialog = ({
   comment = '',
-  fromFile = NO_VALUE,
+  from_file = NO_VALUE,
   id,
   name = _('Unnamed'),
-  portList,
-  portRange = 'T:1-5,7,9,U:1-3,5,7,9',
-  portRanges = [],
+  port_list,
+  port_range = 'T:1-5,7,9,U:1-3,5,7,9',
+  port_ranges = [],
   title = _('New Port List'),
   onClose,
   onNewPortRangeClick,
   onTmpDeletePortRange,
   onSave,
 }) => {
-  const isEdit = isDefined(portList);
+  const is_edit = isDefined(port_list);
 
   const newrangeicon = (
     <div>
       <NewIcon
-        value={portList}
+        value={port_list}
         title={_('Add Port Range')}
         onClick={onNewPortRangeClick}
       />
@@ -73,9 +73,9 @@ const PortListsDialog = ({
   const data = {
     id,
     comment,
-    fromFile,
+    from_file,
     name,
-    portRange,
+    port_range,
   };
 
   return (
@@ -84,7 +84,7 @@ const PortListsDialog = ({
       onClose={onClose}
       onSave={onSave}
       defaultValues={data}
-      values={{portRanges}}
+      values={{port_ranges}}
     >
       {({values: state, onValueChange}) => {
         return (
@@ -109,22 +109,22 @@ const PortListsDialog = ({
               />
             </FormGroup>
 
-            {!isEdit && (
+            {!is_edit && (
               <FormGroup title={_('Port Ranges')} flex="column">
                 <Divider flex="column">
                   <Divider>
                     <Radio
                       title={_('Manual')}
-                      name="fromFile"
+                      name="from_file"
                       value={NOT_FROM_FILE}
                       onChange={onValueChange}
-                      checked={parseYesNo(state.fromFile) !== FROM_FILE}
+                      checked={parseYesNo(state.from_file) !== FROM_FILE}
                     />
                     <TextField
                       grow="1"
-                      name="portRange"
-                      value={state.portRange}
-                      disabled={parseYesNo(state.fromFile) === FROM_FILE}
+                      name="port_range"
+                      value={state.port_range}
+                      disabled={parseYesNo(state.from_file) === FROM_FILE}
                       onChange={onValueChange}
                       size="30"
                     />
@@ -132,25 +132,25 @@ const PortListsDialog = ({
                   <Divider>
                     <Radio
                       title={_('From file')}
-                      name="fromFile"
+                      name="from_file"
                       value={FROM_FILE}
                       onChange={onValueChange}
-                      checked={parseYesNo(state.fromFile) === FROM_FILE}
+                      checked={parseYesNo(state.from_file) === FROM_FILE}
                     />
                     <FileField
                       name="file"
-                      disabled={parseYesNo(state.fromFile) !== FROM_FILE}
+                      disabled={parseYesNo(state.from_file) !== FROM_FILE}
                       onChange={onValueChange}
                     />
                   </Divider>
                 </Divider>
               </FormGroup>
             )}
-            {isEdit && (
+            {is_edit && (
               <Section title={_('Port Ranges')} extra={newrangeicon}>
-                {isDefined(portList) && (
+                {isDefined(port_list) && (
                   <PortRangesTable
-                    portRanges={state.portRanges}
+                    portRanges={state.port_ranges}
                     onDeleteClick={onTmpDeletePortRange}
                   />
                 )}
@@ -165,12 +165,12 @@ const PortListsDialog = ({
 
 PortListsDialog.propTypes = {
   comment: PropTypes.string,
-  fromFile: PropTypes.yesno,
+  from_file: PropTypes.yesno,
   id: PropTypes.string,
   name: PropTypes.string,
-  portList: PropTypes.model,
-  portRange: PropTypes.string,
-  portRanges: PropTypes.array,
+  port_list: PropTypes.model,
+  port_range: PropTypes.string,
+  port_ranges: PropTypes.array,
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onDeletePortRangeClick: PropTypes.func,

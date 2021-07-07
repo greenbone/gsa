@@ -23,6 +23,8 @@ import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
 import {shortDate} from 'gmp/locale/date';
 
+import PropTypes from 'web/utils/proptypes';
+
 import DateTime from 'web/components/date/datetime';
 
 import DownloadIcon from 'web/components/icon/downloadicon';
@@ -35,8 +37,6 @@ import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
 import {createEntitiesTable} from 'web/entities/table';
-
-import PropTypes from 'web/utils/proptypes';
 
 const Header = ({
   actions = true,

@@ -30,6 +30,11 @@ import {
   PARAM_TYPE_BOOLEAN,
 } from 'gmp/models/scanner';
 
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
+
+import DetailsBlock from 'web/entity/block';
+
 import Layout from 'web/components/layout/layout';
 
 import DetailsLink from 'web/components/link/detailslink';
@@ -43,11 +48,7 @@ import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
-import DetailsBlock from 'web/entity/block';
 import {Col} from 'web/entity/page';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderYesNo} from 'web/utils/render';
 
 const CertInfo = ({info}) => {
   const {activationTime, expirationTime, issuer, md5_fingerprint} = info;

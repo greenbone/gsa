@@ -21,20 +21,22 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import SaveDialog from 'web/components/dialog/savedialog';
+import {YES_VALUE} from 'gmp/parser';
 
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
+import PropTypes from '../../utils/proptypes.js';
 
-import Layout from 'web/components/layout/layout';
+import SaveDialog from '../../components/dialog/savedialog.js';
 
-import PropTypes from 'web/utils/proptypes';
+import FormGroup from '../../components/form/formgroup.js';
+import TextField from '../../components/form/textfield.js';
 
-import AddResultsToAssetsGroup from './addresultstoassetsgroup';
+import Layout from '../../components/layout/layout.js';
+
+import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
 
 const ContainerTaskDialog = ({
   comment = '',
-  createAssets = true,
+  in_assets = YES_VALUE,
   name = '',
   task,
   title = _('New Container Task'),
@@ -45,7 +47,7 @@ const ContainerTaskDialog = ({
 
   const data = {
     comment,
-    createAssets,
+    in_assets,
     name,
     id: isEdit ? task.id : undefined,
   };
@@ -81,7 +83,7 @@ const ContainerTaskDialog = ({
 
             {isEdit && (
               <AddResultsToAssetsGroup
-                inAssets={state.createAssets}
+                inAssets={state.in_assets}
                 onChange={onValueChange}
               />
             )}
@@ -93,10 +95,10 @@ const ContainerTaskDialog = ({
 };
 
 ContainerTaskDialog.propTypes = {
-  autoDelete: PropTypes.bool,
-  autoDeleteReports: PropTypes.number,
+  auto_delete: PropTypes.oneOf(['keep', 'no']),
+  auto_delete_data: PropTypes.number,
   comment: PropTypes.string,
-  createAssets: PropTypes.bool,
+  in_assets: PropTypes.yesno,
   name: PropTypes.string,
   task: PropTypes.model,
   title: PropTypes.string,

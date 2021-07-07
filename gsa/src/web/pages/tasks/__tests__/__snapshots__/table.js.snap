@@ -119,7 +119,7 @@ exports[`Tasks table tests should render 1`] = `
   align-items: stretch;
 }
 
-.c36 {
+.c37 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -137,7 +137,7 @@ exports[`Tasks table tests should render 1`] = `
   align-items: center;
 }
 
-.c41 {
+.c42 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -293,7 +293,7 @@ exports[`Tasks table tests should render 1`] = `
   width: inherit;
 }
 
-.c42 {
+.c43 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -318,18 +318,18 @@ exports[`Tasks table tests should render 1`] = `
   cursor: pointer;
 }
 
-.c43 {
+.c44 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c43 * {
+.c44 * {
   height: inherit;
   width: inherit;
 }
 
-.c39 {
+.c40 {
   border: 1px solid #aaaaaa;
   border-radius: 2px;
   display: -webkit-box;
@@ -353,7 +353,7 @@ exports[`Tasks table tests should render 1`] = `
   font-weight: normal;
 }
 
-.c38 {
+.c39 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -365,7 +365,7 @@ exports[`Tasks table tests should render 1`] = `
   width: 180px;
 }
 
-.c44 {
+.c45 {
   color: #a94442;
   font-weight: bold;
   font-size: 19px;
@@ -374,7 +374,7 @@ exports[`Tasks table tests should render 1`] = `
   display: none;
 }
 
-.c40 {
+.c41 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -394,7 +394,7 @@ exports[`Tasks table tests should render 1`] = `
   cursor: default;
 }
 
-.c37 {
+.c38 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -461,7 +461,7 @@ exports[`Tasks table tests should render 1`] = `
   width: 10em;
 }
 
-.c45 {
+.c46 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -615,6 +615,12 @@ exports[`Tasks table tests should render 1`] = `
   background: #70c000;
 }
 
+.c36 {
+  height: 13px;
+  width: 100%;
+  background: #c83814;
+}
+
 .c28 {
   white-space: nowrap;
 }
@@ -764,6 +770,12 @@ exports[`Tasks table tests should render 1`] = `
   }
 }
 
+@media print {
+  .c36 {
+    background: none;
+  }
+}
+
 <body>
   <div
     id="portals"
@@ -771,7 +783,6 @@ exports[`Tasks table tests should render 1`] = `
   <div>
     <div
       class="c0 entities-table"
-      data-testid="entities-table"
     >
       <div
         class="c1"
@@ -935,9 +946,7 @@ exports[`Tasks table tests should render 1`] = `
           class=""
         >
           <tr>
-            <td
-              data-testid="task-details"
-            >
+            <td>
               <div
                 class="c20"
               >
@@ -946,8 +955,7 @@ exports[`Tasks table tests should render 1`] = `
                 >
                   <span
                     class="c22"
-                    data-testid="task-details-toggle"
-                    name="12345"
+                    name="1234"
                   >
                     foo
                   </span>
@@ -969,9 +977,7 @@ exports[`Tasks table tests should render 1`] = `
                 </div>
               </div>
             </td>
-            <td
-              data-testid="task-status"
-            >
+            <td>
               <div
                 class="c20"
               >
@@ -1002,9 +1008,7 @@ exports[`Tasks table tests should render 1`] = `
                 </a>
               </div>
             </td>
-            <td
-              data-testid="reports-total"
-            >
+            <td>
               <div
                 class="c20"
               >
@@ -1013,8 +1017,7 @@ exports[`Tasks table tests should render 1`] = `
                 >
                   <a
                     class="c23"
-                    data-testid="reports-total-link"
-                    href="/reports?filter=task_id%3D12345%20sort-reverse%3Ddate"
+                    href="/reports?filter=task_id%3D1234%20sort-reverse%3Ddate"
                     title="View list of all reports for Task foo, including unfinished ones"
                   >
                     1
@@ -1022,9 +1025,7 @@ exports[`Tasks table tests should render 1`] = `
                 </div>
               </div>
             </td>
-            <td
-              data-testid="last-report"
-            >
+            <td>
               <div
                 class="c20"
               >
@@ -1034,14 +1035,12 @@ exports[`Tasks table tests should render 1`] = `
                     data-testid="details-link"
                     href="/report/1234"
                   >
-                    Tue, Jul 30, 2019 3:23 PM CEST
+                    Sat, Aug 10, 2019 2:51 PM CEST
                   </a>
                 </span>
               </div>
             </td>
-            <td
-              data-testid="severity-bar"
-            >
+            <td>
               <div
                 class="c20"
               >
@@ -1062,18 +1061,14 @@ exports[`Tasks table tests should render 1`] = `
                 </div>
               </div>
             </td>
-            <td
-              data-testid="trend"
-            >
+            <td>
               <div
                 class="c30"
               >
                 <span />
               </div>
             </td>
-            <td
-              data-testid="task-actions"
-            >
+            <td>
               <div
                 class="c31"
               >
@@ -1157,9 +1152,7 @@ exports[`Tasks table tests should render 1`] = `
             </td>
           </tr>
           <tr>
-            <td
-              data-testid="task-details"
-            >
+            <td>
               <div
                 class="c20"
               >
@@ -1168,10 +1161,9 @@ exports[`Tasks table tests should render 1`] = `
                 >
                   <span
                     class="c22"
-                    data-testid="task-details-toggle"
                     name="12345"
                   >
-                    foo
+                    lorem
                   </span>
                   <div
                     class="c6"
@@ -1179,27 +1171,37 @@ exports[`Tasks table tests should render 1`] = `
                     <div
                       class="c7"
                       margin="5px"
-                    />
+                    >
+                      <span
+                        alt="Task owned by user"
+                        class="c3"
+                        data-testid="svg-icon"
+                        title="Task owned by user"
+                      >
+                        <svg
+                          title="Task owned by user"
+                        >
+                          view_other.svg
+                        </svg>
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div
                   class="comment"
                 >
                   (
-                  bar
+                  ipsum
                   )
                 </div>
               </div>
             </td>
-            <td
-              data-testid="task-status"
-            >
+            <td>
               <div
                 class="c20"
               >
                 <span
                   class="c23 c24"
-                  data-testid="details-link"
                 >
                   <div
                     class="c25"
@@ -1223,39 +1225,29 @@ exports[`Tasks table tests should render 1`] = `
                 </span>
               </div>
             </td>
-            <td
-              data-testid="reports-total"
-            >
+            <td>
               <div
                 class="c20"
               />
             </td>
-            <td
-              data-testid="last-report"
-            >
+            <td>
               <div
                 class="c20"
               />
             </td>
-            <td
-              data-testid="severity-bar"
-            >
+            <td>
               <div
                 class="c20"
               />
             </td>
-            <td
-              data-testid="trend"
-            >
+            <td>
               <div
                 class="c30"
               >
                 <span />
               </div>
             </td>
-            <td
-              data-testid="task-actions"
-            >
+            <td>
               <div
                 class="c31"
               >
@@ -1339,9 +1331,7 @@ exports[`Tasks table tests should render 1`] = `
             </td>
           </tr>
           <tr>
-            <td
-              data-testid="task-details"
-            >
+            <td>
               <div
                 class="c20"
               >
@@ -1350,10 +1340,9 @@ exports[`Tasks table tests should render 1`] = `
                 >
                   <span
                     class="c22"
-                    data-testid="task-details-toggle"
-                    name="12345"
+                    name="123456"
                   >
-                    foo
+                    hello
                   </span>
                   <div
                     class="c6"
@@ -1361,21 +1350,32 @@ exports[`Tasks table tests should render 1`] = `
                     <div
                       class="c7"
                       margin="5px"
-                    />
+                    >
+                      <span
+                        alt="Task owned by user"
+                        class="c3"
+                        data-testid="svg-icon"
+                        title="Task owned by user"
+                      >
+                        <svg
+                          title="Task owned by user"
+                        >
+                          view_other.svg
+                        </svg>
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div
                   class="comment"
                 >
                   (
-                  bar
+                  world
                   )
                 </div>
               </div>
             </td>
-            <td
-              data-testid="task-status"
-            >
+            <td>
               <div
                 class="c20"
               >
@@ -1406,9 +1406,7 @@ exports[`Tasks table tests should render 1`] = `
                 </a>
               </div>
             </td>
-            <td
-              data-testid="reports-total"
-            >
+            <td>
               <div
                 class="c20"
               >
@@ -1417,18 +1415,15 @@ exports[`Tasks table tests should render 1`] = `
                 >
                   <a
                     class="c23"
-                    data-testid="reports-total-link"
-                    href="/reports?filter=task_id%3D12345%20sort-reverse%3Ddate"
-                    title="View list of all reports for Task foo, including unfinished ones"
+                    href="/reports?filter=task_id%3D123456%20sort-reverse%3Ddate"
+                    title="View list of all reports for Task hello, including unfinished ones"
                   >
                     2
                   </a>
                 </div>
               </div>
             </td>
-            <td
-              data-testid="last-report"
-            >
+            <td>
               <div
                 class="c20"
               >
@@ -1438,46 +1433,40 @@ exports[`Tasks table tests should render 1`] = `
                     data-testid="details-link"
                     href="/report/1234"
                   >
-                    Tue, Jul 30, 2019 3:23 PM CEST
+                    Wed, Jul 10, 2019 2:51 PM CEST
                   </a>
                 </span>
               </div>
             </td>
-            <td
-              data-testid="severity-bar"
-            >
+            <td>
               <div
                 class="c20"
               >
                 <div
                   class="c25"
                   data-testid="progressbar-box"
-                  title="Medium"
+                  title="High"
                 >
                   <div
-                    class="c29"
+                    class="c36"
                     data-testid="progress"
                   />
                   <div
                     class="c27"
                   >
-                    5.0 (Medium)
+                    10.0 (High)
                   </div>
                 </div>
               </div>
             </td>
-            <td
-              data-testid="trend"
-            >
+            <td>
               <div
                 class="c30"
               >
                 <span />
               </div>
             </td>
-            <td
-              data-testid="task-actions"
-            >
+            <td>
               <div
                 class="c31"
               >
@@ -1512,12 +1501,12 @@ exports[`Tasks table tests should render 1`] = `
                       </svg>
                     </span>
                     <span
-                      class="c8 c3"
+                      class="c2 c3"
                       data-testid="svg-icon"
-                      title="Task is still in use"
+                      title="Move Task to trashcan"
                     >
                       <svg
-                        title="Task is still in use"
+                        title="Move Task to trashcan"
                       >
                         trashcan.svg
                       </svg>
@@ -1561,15 +1550,13 @@ exports[`Tasks table tests should render 1`] = `
             </td>
           </tr>
         </tbody>
-        <tfoot
-          data-testid="entities-footer"
-        >
+        <tfoot>
           <tr>
             <td
               colspan="10"
             >
               <div
-                class="c36"
+                class="c37"
               >
                 <div
                   class="c6"
@@ -1582,30 +1569,30 @@ exports[`Tasks table tests should render 1`] = `
                       aria-expanded="false"
                       aria-haspopup="listbox"
                       aria-labelledby="downshift-0-label"
-                      class="c37"
+                      class="c38"
                       role="combobox"
                     >
                       <div
-                        class="c38"
+                        class="c39"
                         width="180px"
                       >
                         <div
                           aria-haspopup="true"
                           aria-label="open menu"
-                          class="c39"
+                          class="c40"
                           data-toggle="true"
                           role="button"
                           type="button"
                         >
                           <div
-                            class="c40"
+                            class="c41"
                             data-testid="select-selected-value"
                           />
                           <div
-                            class="c41"
+                            class="c42"
                           >
                             <span
-                              class="c42 c43"
+                              class="c43 c44"
                               data-testid="select-open-button"
                             >
                               ▼
@@ -1614,7 +1601,7 @@ exports[`Tasks table tests should render 1`] = `
                         </div>
                       </div>
                       <div
-                        class="c44"
+                        class="c45"
                         data-testid="error-marker"
                       >
                         ×
@@ -1664,7 +1651,7 @@ exports[`Tasks table tests should render 1`] = `
         class="c21"
       >
         <div
-          class="c45"
+          class="c46"
         >
           (Applied filter: rows=2)
         </div>

@@ -17,12 +17,12 @@
  */
 import Model, {parseModelFromElement} from 'gmp/model';
 
-import {_, _l} from 'gmp/locale/lang';
+import {_l} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
-import {parseYesNo, NO_VALUE, parseDate, parseBoolean} from 'gmp/parser';
+import {parseYesNo, NO_VALUE, parseDate} from 'gmp/parser';
 
 export const USERNAME_PASSWORD_CREDENTIAL_TYPE = 'up';
 export const USERNAME_SSH_KEY_CREDENTIAL_TYPE = 'usk';
@@ -36,6 +36,8 @@ export const SSH_CREDENTIAL_TYPES = [
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 ];
+
+export const SSH_ELEVATE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
 export const SMB_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
@@ -59,62 +61,6 @@ export const ALL_CREDENTIAL_TYPES = [
   PGP_CREDENTIAL_TYPE,
   PASSWORD_ONLY_CREDENTIAL_TYPE,
 ];
-
-export function parseCredentialType(credentialType) {
-  if (credentialType === 'USERNAME_PASSWORD') {
-    return USERNAME_PASSWORD_CREDENTIAL_TYPE;
-  } else if (credentialType === 'USERNAME_SSH_KEY') {
-    return USERNAME_SSH_KEY_CREDENTIAL_TYPE;
-  } else if (credentialType === 'CLIENT_CERTIFICATE') {
-    return CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
-  } else if (credentialType === 'SNMP') {
-    return SNMP_CREDENTIAL_TYPE;
-  } else if (credentialType === 'SMIME_CERTIFICATE') {
-    return SMIME_CREDENTIAL_TYPE;
-  } else if (credentialType === 'PGP_ENCRYPTION_KEY') {
-    return PGP_CREDENTIAL_TYPE;
-  } else if (credentialType === 'PASSWORD_ONLY') {
-    return PASSWORD_ONLY_CREDENTIAL_TYPE;
-  }
-  return _('Unknown type ({{type}})', {type: credentialType});
-}
-
-export function convertCredentialTypeEnum(credentialType) {
-  if (credentialType === 'up') {
-    return 'USERNAME_PASSWORD';
-  } else if (credentialType === 'usk') {
-    return 'USERNAME_SSH_KEY';
-  } else if (credentialType === 'cc') {
-    return 'CLIENT_CERTIFICATE';
-  } else if (credentialType === 'snmp') {
-    return 'SNMP';
-  } else if (credentialType === 'smime') {
-    return 'SMIME_CERTIFICATE';
-  } else if (credentialType === 'pgp') {
-    return 'PGP_ENCRYPTION_KEY';
-  } else if (credentialType === 'pw') {
-    return 'PASSWORD_ONLY';
-  }
-  return null;
-}
-
-export function convertAuthAlgorithmEnum(authAlgorithm) {
-  if (authAlgorithm === 'md5') {
-    return 'MD5';
-  } else if (authAlgorithm === 'sha1') {
-    return 'SHA1';
-  }
-  return null;
-}
-
-export function convertPrivacyAlgorithmEnum(privacyAlgorithm) {
-  if (privacyAlgorithm === 'aes') {
-    return 'AES';
-  } else if (privacyAlgorithm === 'des') {
-    return 'DES';
-  }
-  return null;
-}
 
 export const ssh_credential_filter = credential =>
   credential.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
@@ -163,18 +109,6 @@ export const getCredentialTypeName = type => `${TYPE_NAMES[type]}`;
 
 class Credential extends Model {
   static entityType = 'credential';
-
-  static parseObject(object) {
-    const copy = super.parseObject(object);
-
-    copy.credential_type = parseCredentialType(object.type);
-
-    copy.allow_insecure = parseBoolean(object.allow_insecure);
-
-    // TODO for detailspage: parse certificate_info, targets, scanners
-
-    return copy;
-  }
 
   static parseElement(element) {
     const ret = super.parseElement(element);

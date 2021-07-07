@@ -20,17 +20,17 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-import {dateTimeWithTimeZone} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
+
+import PropTypes from 'web/utils/proptypes';
 
 import ScheduleIcon from 'web/components/icon/scheduleicon';
 
 import DetailsLink from 'web/components/link/detailslink';
 
+import {dateTimeWithTimeZone} from 'gmp/locale/date';
 import {getTimezone} from 'web/store/usersettings/selectors';
-
-import PropTypes from 'web/utils/proptypes';
 
 const TaskScheduleIcon = ({size, links = true, schedule, timezone}) => {
   if (

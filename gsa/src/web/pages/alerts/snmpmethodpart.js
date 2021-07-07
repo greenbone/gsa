@@ -19,13 +19,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
+import Layout from '../../components/layout/layout.js';
 
-import Layout from 'web/components/layout/layout';
+import PropTypes from '../../utils/proptypes.js';
+import withPrefix from '../../utils/withPrefix.js';
 
-import PropTypes from 'web/utils/proptypes';
-import withPrefix from 'web/utils/withPrefix';
+import FormGroup from '../../components/form/formgroup.js';
+import TextField from '../../components/form/textfield.js';
 
 const SnmpMethodPart = ({
   prefix,

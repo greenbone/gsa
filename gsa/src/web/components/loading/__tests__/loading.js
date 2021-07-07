@@ -19,7 +19,7 @@ import React from 'react';
 
 import {render} from 'web/utils/testing';
 
-import Loading from '../loading';
+import Loading from '../loading.js';
 
 describe('Loading component tests', () => {
   test('should render', () => {

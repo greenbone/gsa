@@ -28,6 +28,6 @@
 
 int
 authenticate_gmp (const gchar *, const gchar *, gchar **, gchar **, gchar **,
-                  gchar **, gchar **);
+                  gchar **, gchar **, gchar **);
 
 #endif /* _GSAD_GMP_AUTH_H */

@@ -19,6 +19,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import {
   EVENT_TYPE_UPDATED_SECINFO,
   EVENT_TYPE_NEW_SECINFO,
@@ -26,7 +28,8 @@ import {
   DELTA_TYPE_REPORT,
 } from 'gmp/models/alert';
 
-import {hasValue} from 'gmp/utils/identity';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import Layout from 'web/components/layout/layout';
 import HorizontalSep from 'web/components/layout/horizontalsep';
@@ -39,9 +42,6 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 import Condition from './condition';
 import Event from './event';
@@ -57,7 +57,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
           <Col width="90%" />
         </colgroup>
         <TableBody>
-          {hasValue(comment) && (
+          {isDefined(comment) && (
             <TableRow>
               <TableData>{_('Comment')}</TableData>
               <TableData>{comment}</TableData>
@@ -79,8 +79,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
           </TableRow>
 
           {capabilities.mayAccess('report') &&
-            hasValue(method.data.delta_type) &&
-            method.data.delta_type.value === DELTA_TYPE_PREVIOUS && (
+            method?.data?.delta_type?.value === DELTA_TYPE_PREVIOUS && (
               <TableRow>
                 <TableData>{_('Delta Report')}</TableData>
                 <TableData>
@@ -90,8 +89,8 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
             )}
 
           {capabilities.mayAccess('report') &&
-            hasValue(method.data.delta_type) &&
-            hasValue(method.data.delta_report_id) &&
+            isDefined(method?.data?.delta_type) &&
+            isDefined(method?.data?.delta_report_id) &&
             method.data.delta_type.value === DELTA_TYPE_REPORT && (
               <TableRow>
                 <TableData>{_('Delta Report')}</TableData>
@@ -119,9 +118,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
             </TableData>
           </TableRow>
 
-          {hasValue(method.data) &&
-            hasValue(method.data.details_url) &&
-            hasValue(method.data.details_url.value) &&
+          {isDefined(method?.data?.details_url?.value) &&
             (event.type === EVENT_TYPE_NEW_SECINFO ||
               event.type === EVENT_TYPE_UPDATED_SECINFO) && (
               <TableRow>
@@ -130,7 +127,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
               </TableRow>
             )}
 
-          {capabilities.mayAccess('filter') && hasValue(filter) && (
+          {capabilities.mayAccess('filter') && isDefined(filter) && (
             <TableRow>
               <TableData>{_('Results Filter')}</TableData>
               <TableData>

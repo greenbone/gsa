@@ -21,11 +21,11 @@ import {color as d3color} from 'd3-color';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Group from 'web/components/chart/group';
-import ToolTip from 'web/components/chart/tooltip';
-
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+
+import Group from '../group';
+import ToolTip from '../tooltip';
 
 import {PieOuterPath, PieTopPath, PieInnerPath} from './paths';
 import {ArcDataPropType} from './proptypes';

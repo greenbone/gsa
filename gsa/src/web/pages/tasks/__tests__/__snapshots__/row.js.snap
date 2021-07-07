@@ -33,7 +33,7 @@ exports[`Task Row tests should render 1`] = `
   justify-content: space-between;
 }
 
-.c12 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -51,7 +51,7 @@ exports[`Task Row tests should render 1`] = `
   align-items: center;
 }
 
-.c14 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -87,7 +87,7 @@ exports[`Task Row tests should render 1`] = `
   align-items: stretch;
 }
 
-.c6 {
+.c5 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -214,13 +214,13 @@ exports[`Task Row tests should render 1`] = `
   fill: #aaaaaa;
 }
 
-.c5 {
+.c14 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c5 * {
+.c14 * {
   height: inherit;
   width: inherit;
 }
@@ -238,7 +238,7 @@ exports[`Task Row tests should render 1`] = `
   color: #0000ff;
 }
 
-.c8 {
+.c7 {
   height: 13px;
   box-sizing: content-box;
   display: inline-block;
@@ -248,7 +248,7 @@ exports[`Task Row tests should render 1`] = `
   text-align: center;
 }
 
-.c10 {
+.c9 {
   z-index: 1;
   font-weight: bold;
   color: #fff;
@@ -259,23 +259,23 @@ exports[`Task Row tests should render 1`] = `
   padding-top: 1px;
 }
 
-.c9 {
+.c8 {
   height: 13px;
   width: 100%;
   background: #4f91c7;
 }
 
-.c13 {
+.c12 {
   height: 13px;
   width: 50%;
   background: #f0a519;
 }
 
-.c11 {
+.c10 {
   white-space: nowrap;
 }
 
-.c7:hover {
+.c6:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
 }
@@ -293,26 +293,26 @@ exports[`Task Row tests should render 1`] = `
 }
 
 @media print {
-  .c8 {
+  .c7 {
     background: none;
     border: 0;
   }
 }
 
 @media print {
-  .c10 {
+  .c9 {
     color: black;
   }
 }
 
 @media print {
-  .c9 {
+  .c8 {
     background: none;
   }
 }
 
 @media print {
-  .c13 {
+  .c12 {
     background: none;
   }
 }
@@ -323,9 +323,7 @@ exports[`Task Row tests should render 1`] = `
   />
   <div>
     <tr>
-      <td
-        data-testid="task-details"
-      >
+      <td>
         <div
           class="c0"
         >
@@ -334,8 +332,7 @@ exports[`Task Row tests should render 1`] = `
           >
             <span
               class="c2"
-              data-testid="task-details-toggle"
-              name="12345"
+              name="314"
             >
               foo
             </span>
@@ -345,25 +342,7 @@ exports[`Task Row tests should render 1`] = `
               <div
                 class="c4"
                 margin="5px"
-              >
-                <span
-                  class="c5"
-                  data-testid="svg-icon"
-                  title="Task made visible for:
-Users john, jane
-Roles admin role, user role
-Groups group 1, group 2"
-                >
-                  <svg
-                    title="Task made visible for:
-Users john, jane
-Roles admin role, user role
-Groups group 1, group 2"
-                  >
-                    provide_view.svg
-                  </svg>
-                </span>
-              </div>
+              />
             </div>
           </div>
           <div
@@ -375,31 +354,29 @@ Groups group 1, group 2"
           </div>
         </div>
       </td>
-      <td
-        data-testid="task-status"
-      >
+      <td>
         <div
           class="c0"
         >
           <a
-            class="c6 c7"
+            class="c5 c6"
             data-testid="details-link"
             href="/report/1234"
           >
             <div
-              class="c8"
+              class="c7"
               data-testid="progressbar-box"
               title="Done"
             >
               <div
-                class="c9"
+                class="c8"
                 data-testid="progress"
               />
               <div
-                class="c10"
+                class="c9"
               >
                 <span
-                  class="c11"
+                  class="c10"
                 >
                   Done
                 </span>
@@ -408,75 +385,66 @@ Groups group 1, group 2"
           </a>
         </div>
       </td>
-      <td
-        data-testid="reports-total"
-      >
+      <td>
         <div
           class="c0"
         >
           <div
-            class="c12"
+            class="c11"
           >
             <a
-              class="c6"
-              data-testid="reports-total-link"
-              href="/reports?filter=task_id%3D12345%20sort-reverse%3Ddate"
+              class="c5"
+              href="/reports?filter=task_id%3D314%20sort-reverse%3Ddate"
               title="View list of all reports for Task foo, including unfinished ones"
             >
-              1
+              3
             </a>
           </div>
         </div>
       </td>
-      <td
-        data-testid="last-report"
-      >
+      <td>
         <div
           class="c0"
         >
           <span>
             <a
-              class="c6"
+              class="c5"
               data-testid="details-link"
               href="/report/1234"
             >
-              Tue, Jul 30, 2019 3:23 PM CEST
+              Wed, Jul 10, 2019 2:51 PM CEST
             </a>
           </span>
         </div>
       </td>
-      <td
-        data-testid="severity-bar"
-      >
+      <td>
         <div
           class="c0"
         >
           <div
-            class="c8"
+            class="c7"
             data-testid="progressbar-box"
             title="Medium"
           >
             <div
-              class="c13"
+              class="c12"
               data-testid="progress"
             />
             <div
-              class="c10"
+              class="c9"
             >
               5.0 (Medium)
             </div>
           </div>
         </div>
       </td>
-      <td
-        data-testid="trend"
-      >
+      <td>
         <div
-          class="c14"
+          class="c13"
         >
           <span
             alt="Severity increased"
-            class="c5"
+            class="c14"
             data-testid="svg-icon"
             title="Severity increased"
           >
@@ -488,9 +456,7 @@ Groups group 1, group 2"
           </span>
         </div>
       </td>
-      <td
-        data-testid="task-actions"
-      >
+      <td>
         <div
           class="c15"
         >
@@ -502,7 +468,7 @@ Groups group 1, group 2"
               margin="5px"
             >
               <span
-                class="c18 c5"
+                class="c18 c14"
                 data-testid="svg-icon"
                 title="Start"
               >
@@ -514,7 +480,7 @@ Groups group 1, group 2"
               </span>
               <span
                 alt="Resume"
-                class="c19 c5"
+                class="c19 c14"
                 data-testid="svg-icon"
                 title="Task is not stopped"
               >
@@ -525,7 +491,7 @@ Groups group 1, group 2"
                 </svg>
               </span>
               <span
-                class="c18 c5"
+                class="c18 c14"
                 data-testid="svg-icon"
                 title="Move Task to trashcan"
               >
@@ -536,7 +502,7 @@ Groups group 1, group 2"
                 </svg>
               </span>
               <span
-                class="c18 c5"
+                class="c18 c14"
                 data-testid="svg-icon"
                 title="Edit Task"
               >
@@ -547,7 +513,7 @@ Groups group 1, group 2"
                 </svg>
               </span>
               <span
-                class="c18 c5"
+                class="c18 c14"
                 data-testid="svg-icon"
                 title="Clone Task"
               >
@@ -558,7 +524,7 @@ Groups group 1, group 2"
                 </svg>
               </span>
               <span
-                class="c18 c5"
+                class="c18 c14"
                 data-testid="svg-icon"
                 title="Export Task"
               >

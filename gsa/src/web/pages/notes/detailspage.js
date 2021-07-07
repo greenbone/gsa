@@ -16,17 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useEffect} from 'react';
+import React from 'react';
 
-import {useHistory, useParams} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
-
-import Download from 'web/components/form/download';
-import useDownload from 'web/components/form/useDownload';
+import {isDefined} from 'gmp/utils/identity';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
@@ -38,11 +35,7 @@ import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
 
-import useReload from 'web/components/loading/useReload';
 import DetailsLink from 'web/components/link/detailslink';
-
-import DialogNotification from 'web/components/notification/dialognotification';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -56,33 +49,31 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import {
-  useCloneNote,
-  useDeleteNotesByIds,
-  useExportNotesByIds,
-  useGetNote,
-} from 'web/graphql/notes';
-import {useGetPermissions} from 'web/graphql/permissions';
-
-import {goto_list} from 'web/entity/component';
 import EntityPage, {Col} from 'web/entity/page';
+import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import useExportEntity from 'web/entity/useExportEntity';
-import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
-import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
-import {goto_entity_details} from 'web/utils/graphql';
+import {selector as notesSelector, loadEntity} from 'web/store/entities/notes';
+
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+
+import {getTimezone} from 'web/store/usersettings/selectors';
+
 import {renderYesNo} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import useUserTimezone from 'web/utils/useUserTimezone';
 
 import NoteDetails from './details';
 import NoteComponent from './component';
@@ -127,9 +118,10 @@ ToolBarIcons.propTypes = {
   onNoteEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, ...props}) => {
+const Details = connect(rootState => ({
+  timezone: getTimezone(rootState),
+}))(({entity, timezone, ...props}) => {
   const {nvt} = entity;
-  const [timezone] = useUserTimezone();
   return (
     <Layout flex="column">
       <InfoTable>
@@ -176,168 +168,135 @@ const Details = ({entity, ...props}) => {
       <NoteDetails entity={entity} {...props} />
     </Layout>
   );
-};
+});
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = () => {
-  // Page methods
-  const {id} = useParams();
-  const history = useHistory();
-  const [, renewSessionTimeout] = useUserSessionTimeout();
-  const [downloadRef, handleDownload] = useDownload();
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
+const Page = ({
+  permissions = [],
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => (
+  <NoteComponent
+    onCloned={goto_details('note', props)}
+    onCloneError={onError}
+    onCreated={goto_details('note', props)}
+    onDeleted={goto_list('notes', props)}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onInteraction={onInteraction}
+    onSaved={onChanged}
+  >
+    {({clone, create, delete: delete_func, download, edit, save}) => (
+      <EntityPage
+        {...props}
+        entity={entity}
+        sectionIcon={<NoteIcon size="large" />}
+        title={_('Note')}
+        toolBarIcons={ToolBarIcons}
+        onChanged={onChanged}
+        onDownloaded={onDownloaded}
+        onInteraction={onInteraction}
+        onError={onError}
+        onNoteCloneClick={clone}
+        onNoteCreateClick={create}
+        onNoteDeleteClick={delete_func}
+        onNoteDownloadClick={download}
+        onNoteEditClick={edit}
+        onNoteSaveClick={save}
+      >
+        {({activeTab = 0, onActivateTab}) => {
+          return (
+            <React.Fragment>
+              <PageTitle title={_('Note Details')} />
+              <Layout grow="1" flex="column">
+                <TabLayout grow="1" align={['start', 'end']}>
+                  <TabList
+                    active={activeTab}
+                    align={['start', 'stretch']}
+                    onActivateTab={onActivateTab}
+                  >
+                    <Tab>{_('Information')}</Tab>
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={permissions}>
+                      {_('Permissions')}
+                    </EntitiesTab>
+                  </TabList>
+                </TabLayout>
 
-  // Load note related entities
-  const {note, refetch: refetchNote, loading, error: entityError} = useGetNote(
-    id,
-  );
-  const {permissions, refetch: refetchPermissions} = useGetPermissions({
-    filterString: permissionsResourceFilter(id).toFilterString(),
-  });
+                <Tabs active={activeTab}>
+                  <TabPanels>
+                    <TabPanel>
+                      <Details entity={entity} />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityTags
+                        entity={entity}
+                        onChanged={onChanged}
+                        onError={onError}
+                        onInteraction={onInteraction}
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityPermissions
+                        entity={entity}
+                        permissions={permissions}
+                        onChanged={onChanged}
+                        onDownloaded={onDownloaded}
+                        onError={onError}
+                        onInteraction={onInteraction}
+                      />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </Layout>
+            </React.Fragment>
+          );
+        }}
+      </EntityPage>
+    )}
+  </NoteComponent>
+);
 
-  // note related mutations
-  const exportEntity = useExportEntity();
-  const [cloneNote] = useCloneNote();
-  const [deleteNote] = useDeleteNotesByIds();
-  const exportNote = useExportNotesByIds();
-
-  // note methods
-  const handleCloneNote = clonedNote => {
-    return cloneNote(clonedNote.id)
-      .then(noteId => goto_entity_details('note', {history})(noteId))
-      .catch(showError);
-  };
-
-  const handleDeleteNote = deletedNote => {
-    return deleteNote([deletedNote.id])
-      .then(goto_list('notes', {history}))
-      .catch(showError);
-  };
-
-  const handleDownloadNote = exportedNote => {
-    exportEntity({
-      entity: exportedNote,
-      exportFunc: exportNote,
-      resourceType: 'notes',
-      onDownload: handleDownload,
-      showError,
-    });
-  };
-
-  // Timeout and reload
-  const timeoutFunc = useEntityReloadInterval(note);
-
-  const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetchNote,
-    timeoutFunc,
-  );
-
-  useEffect(() => {
-    // start reloading if schedule is available and no timer is running yet
-    if (hasValue(note) && !hasRunningTimer) {
-      startReload();
-    }
-  }, [note, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // stop reload on unmount
-  useEffect(() => stopReload, [stopReload]);
-  return (
-    <NoteComponent
-      onCloned={goto_entity_details('note', {history})}
-      onCloneError={showError}
-      onCreated={goto_entity_details('note', {history})}
-      onDeleted={goto_list('notes', {history})}
-      onDeleteError={showError}
-      onDownloaded={handleDownload}
-      onDownloadError={showError}
-      onInteraction={renewSessionTimeout}
-      onSaved={() => refetchNote()}
-    >
-      {({create, edit, save}) => (
-        <EntityPage
-          entity={note}
-          entityError={entityError}
-          entityType={'note'}
-          isLoading={loading}
-          sectionIcon={<NoteIcon size="large" />}
-          title={_('Note')}
-          toolBarIcons={ToolBarIcons}
-          onInteraction={renewSessionTimeout}
-          onNoteCloneClick={handleCloneNote}
-          onNoteCreateClick={create}
-          onNoteDeleteClick={handleDeleteNote}
-          onNoteDownloadClick={handleDownloadNote}
-          onNoteEditClick={edit}
-          onNoteSaveClick={save}
-        >
-          {({activeTab = 0, onActivateTab}) => {
-            return (
-              <React.Fragment>
-                <PageTitle title={_('Note Details')} />
-                <Layout grow="1" flex="column">
-                  <TabLayout grow="1" align={['start', 'end']}>
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
-                      <Tab>{_('Information')}</Tab>
-                      <EntitiesTab entities={note.userTags}>
-                        {_('User Tags')}
-                      </EntitiesTab>
-                      <EntitiesTab entities={permissions}>
-                        {_('Permissions')}
-                      </EntitiesTab>
-                    </TabList>
-                  </TabLayout>
-
-                  <Tabs active={activeTab}>
-                    <TabPanels>
-                      <TabPanel>
-                        <Details entity={note} />
-                      </TabPanel>
-                      <TabPanel>
-                        <EntityTags
-                          entity={note}
-                          onChanged={() => refetchNote()}
-                          onError={showError}
-                          onInteraction={renewSessionTimeout}
-                        />
-                      </TabPanel>
-                      <TabPanel>
-                        <EntityPermissions
-                          entity={note}
-                          permissions={permissions}
-                          onChanged={() => refetchPermissions()}
-                          onDownloaded={handleDownload}
-                          onError={showError}
-                          onInteraction={renewSessionTimeout}
-                        />
-                      </TabPanel>
-                    </TabPanels>
-                  </Tabs>
-                </Layout>
-                <DialogNotification
-                  {...notificationDialogState}
-                  onCloseClick={closeNotificationDialog}
-                />
-                <Download ref={downloadRef} />
-              </React.Fragment>
-            );
-          }}
-        </EntityPage>
-      )}
-    </NoteComponent>
-  );
+Page.propTypes = {
+  entity: PropTypes.model,
+  permissions: PropTypes.array,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default Page;
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
+};
+
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+  };
+};
+
+export default withEntityContainer('note', {
+  entitySelector: notesSelector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

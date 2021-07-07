@@ -16,7 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useEffect} from 'react';
+import memoize from 'memoize-one';
+
+import React from 'react';
 
 import {connect} from 'react-redux';
 
@@ -24,12 +26,19 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
-
 import Logger from 'gmp/log';
+
+import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {isDefined} from 'gmp/utils/identity';
 import {excludeObjectProps} from 'gmp/utils/object';
+
+import {
+  loadSettings,
+  saveSettings,
+  setDashboardSettingDefaults,
+} from 'web/store/dashboard/settings/actions';
+import DashboardSettings from 'web/store/dashboard/settings/selectors';
 import {
   convertDefaultDisplays,
   convertDisplaysToGridItems,
@@ -45,19 +54,12 @@ import Loading from 'web/components/loading/loading';
 
 import Grid from 'web/components/sortable/grid';
 
-import {
-  loadSettings as loadSettingsAction,
-  saveSettings as saveSettingsAction,
-  setDashboardSettingDefaults,
-} from 'web/store/dashboard/settings/actions';
-import DashboardSettings from 'web/store/dashboard/settings/selectors';
-
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 import compose from 'web/utils/compose';
 
 import {getDisplay} from './registry';
-import {getRows as getRowsUtil} from './utils';
+import {getRows} from './utils';
 
 const log = Logger.getLogger('web.components.dashboard');
 
@@ -86,33 +88,40 @@ const RowPlaceHolder = styled.div`
   margin: 15px 0;
 `;
 
-export const Dashboard = ({
-  error,
-  id,
-  isLoading,
-  settings,
-  permittedDisplays = [],
-  defaultDisplays,
-  maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
-  maxRows = DEFAULT_MAX_ROWS,
-  loadSettings,
-  saveSettings,
-  setDefaultSettings,
-  onInteraction,
-  ...props
-}) => {
-  const components = {};
-  permittedDisplays.forEach(displayId => {
-    const display = getDisplay(displayId);
+export class Dashboard extends React.Component {
+  constructor(...args) {
+    super(...args);
 
-    if (isDefined(display)) {
-      components[displayId] = display.component;
-    } else {
-      log.warn('Unknown Dashboard display', displayId);
-    }
-  });
+    const {permittedDisplays = []} = this.props;
 
-  useEffect(() => {
+    this.components = {};
+    permittedDisplays.forEach(displayId => {
+      const display = getDisplay(displayId);
+
+      if (isDefined(display)) {
+        this.components[displayId] = display.component;
+      } else {
+        log.warn('Unknown Dashboard display', displayId);
+      }
+    });
+
+    this.handleItemsChange = this.handleItemsChange.bind(this);
+    this.handleRowResize = this.handleRowResize.bind(this);
+    this.handleUpdateDisplay = this.handleUpdateDisplay.bind(this);
+    this.handleRemoveDisplay = this.handleRemoveDisplay.bind(this);
+
+    this.getDisplaysById = memoize(rows => getDisplaysById(rows));
+  }
+
+  componentDidMount() {
+    const {
+      id,
+      permittedDisplays,
+      defaultDisplays,
+      maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
+      maxRows = DEFAULT_MAX_ROWS,
+    } = this.props;
+
     const defaultDashboardSettings = convertDefaultDisplays(defaultDisplays);
     const defaults = {
       ...defaultDashboardSettings,
@@ -121,30 +130,30 @@ export const Dashboard = ({
       maxRows,
     };
 
-    setDefaultSettings(id, defaultDashboardSettings);
-    loadSettings(id, defaults);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    this.props.setDefaultSettings(id, defaultDashboardSettings);
+    this.props.loadSettings(id, defaults);
+  }
 
-  const handleItemsChange = (gridItems = []) => {
-    const rows = getRows();
+  handleItemsChange(gridItems = []) {
+    const rows = this.getRows();
 
-    const displaysById = getDisplaysById(rows);
+    const displaysById = this.getDisplaysById(rows);
 
-    updateRows(convertGridItemsToDisplays(gridItems, displaysById));
-  };
+    this.updateRows(convertGridItemsToDisplays(gridItems, displaysById));
+  }
 
-  const handleUpdateDisplay = (displayId, args) => {
-    updateDisplay(displayId, args);
-  };
+  handleUpdateDisplay(id, props) {
+    this.updateDisplay(id, props);
+  }
 
-  const handleRemoveDisplay = displayId => {
-    const rows = getRows();
+  handleRemoveDisplay(id) {
+    const rows = this.getRows();
 
-    updateRows(removeDisplay(rows, displayId));
-  };
+    this.updateRows(removeDisplay(rows, id));
+  }
 
-  const handleRowResize = (rowId, height) => {
-    const rows = getRows([]);
+  handleRowResize(rowId, height) {
+    const rows = this.getRows([]);
 
     const rowIndex = rows.findIndex(row => row.id === rowId);
     const row = rows[rowIndex];
@@ -156,56 +165,58 @@ export const Dashboard = ({
     };
     newRows[rowIndex] = newRow;
 
-    updateRows(newRows);
-  };
+    this.updateRows(newRows);
+  }
 
-  const handleInteraction = () => {
+  handleInteraction() {
+    const {onInteraction} = this.props;
+
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  };
+  }
 
-  const handleSetDisplayState = (displayId, stateFunc) => {
-    const currentState = getDisplayState(displayId);
+  handleSetDisplayState(id, stateFunc) {
+    const currentState = this.getDisplayState(id);
     const newState = stateFunc(currentState);
 
-    updateDisplayState(displayId, {
+    this.updateDisplayState(id, {
       ...currentState,
       ...newState,
     });
-  };
+  }
 
-  const getRows = defaultRows => {
-    return getRowsUtil(settings, defaultRows);
-  };
+  getRows(defaultRows) {
+    return getRows(this.props.settings, defaultRows);
+  }
 
-  const getDisplayState = displayId => {
-    const rows = getRows();
-    const displaysById = getDisplaysById(rows);
-    const display = displaysById[displayId];
+  getDisplayState(id) {
+    const rows = this.getRows();
+    const displaysById = this.getDisplaysById(rows);
+    const display = displaysById[id];
     return isDefined(display) ? display.state : undefined;
-  };
+  }
 
-  const updateDisplayState = (displayId, state) => {
-    updateDisplay(displayId, {state});
-  };
+  updateDisplayState(id, state) {
+    this.updateDisplay(id, {state});
+  }
 
-  const updateDisplay = (displayId, args) => {
-    const rows = getRows();
+  updateDisplay(id, props) {
+    const rows = this.getRows();
 
     const rowIndex = rows.findIndex(row =>
-      row.items.some(item => item.id === displayId),
+      row.items.some(item => item.id === id),
     );
 
     const row = rows[rowIndex];
 
     const rowItems = [...row.items];
 
-    const displayIndex = rowItems.findIndex(i => i.id === displayId);
+    const displayIndex = rowItems.findIndex(i => i.id === id);
 
     const newDisplay = {
       ...rowItems[displayIndex],
-      ...args,
+      ...props,
     };
 
     rowItems[displayIndex] = newDisplay;
@@ -218,91 +229,100 @@ export const Dashboard = ({
 
     newRows[rowIndex] = newRow;
 
-    updateRows(newRows);
-  };
-
-  const updateRows = rows => {
-    save({rows});
-  };
-
-  const save = dashboardSettings => {
-    saveSettings(id, dashboardSettings);
-
-    handleInteraction();
-  };
-
-  let rows;
-
-  if (isDefined(settings)) {
-    rows = settings.rows;
-  } else {
-    rows = getRows();
-  }
-  if (isDefined(error) && !isLoading && !isDefined(settings)) {
-    return (
-      <RowPlaceHolder>
-        {_('Could not load dashboard settings. Reason: {{error}}', {
-          error: error.message,
-        })}
-      </RowPlaceHolder>
-    );
-  } else if (!isDefined(rows) && isLoading) {
-    return (
-      <RowPlaceHolder>
-        <Loading />
-      </RowPlaceHolder>
-    );
+    this.updateRows(newRows);
   }
 
-  const displaysById = getDisplaysById(rows);
+  updateRows(rows) {
+    this.save({rows});
+  }
 
-  const getDisplayComponent = displayId => components[displayId];
-  const getDisplaySettings = displayId => displaysById[displayId];
-  const isAllowed = displayId => {
-    const displaySettings = getDisplaySettings(displayId);
+  save(settings) {
+    const {id} = this.props;
+
+    this.props.saveSettings(id, settings);
+
+    this.handleInteraction();
+  }
+
+  render() {
+    const {
+      error,
+      isLoading,
+      maxItemsPerRow = DEFAULT_MAX_ITEMS_PER_ROW,
+      maxRows = DEFAULT_MAX_ROWS,
+      ...props
+    } = this.props;
+
+    const rows = this.getRows();
+
+    if (isDefined(error) && !isLoading) {
+      return (
+        <RowPlaceHolder>
+          {_('Could not load dashboard settings. Reason: {{error}}', {
+            error: error.message,
+          })}
+        </RowPlaceHolder>
+      );
+    } else if (!isDefined(rows) && isLoading) {
+      return (
+        <RowPlaceHolder>
+          <Loading />
+        </RowPlaceHolder>
+      );
+    }
+
+    const displaysById = this.getDisplaysById(rows);
+
+    const getDisplayComponent = displayId => this.components[displayId];
+    const getDisplaySettings = id => displaysById[id];
+    const isAllowed = id => {
+      const settings = getDisplaySettings(id);
+      return (
+        isDefined(settings) &&
+        isDefined(getDisplayComponent(settings.displayId))
+      );
+    };
+
+    const other = excludeObjectProps(props, ownPropNames);
+
     return (
-      isDefined(displaySettings) &&
-      isDefined(getDisplayComponent(displaySettings.displayId))
+      <ErrorBoundary message={_('An error occurred on this dashboard.')}>
+        <Grid
+          items={convertDisplaysToGridItems(filterDisplays(rows, isAllowed))}
+          maxItemsPerRow={maxItemsPerRow}
+          maxRows={maxRows}
+          onChange={this.handleItemsChange}
+          onRowResize={this.handleRowResize}
+        >
+          {({id, dragHandleProps, height, width}) => {
+            const {displayId, ...displayProps} = getDisplaySettings(id);
+            const Component = getDisplayComponent(displayId);
+            const state = this.getDisplayState(id);
+            return (
+              <Component
+                {...other}
+                {...displayProps}
+                dragHandleProps={dragHandleProps}
+                height={height}
+                width={width}
+                id={id}
+                state={state}
+                setState={stateFunc =>
+                  this.handleSetDisplayState(id, stateFunc)
+                }
+                onFilterIdChanged={filterId =>
+                  this.handleUpdateDisplay(id, {filterId})
+                }
+                onInteractive={this.props.onInteraction}
+                onRemoveClick={() => this.handleRemoveDisplay(id)}
+              />
+            );
+          }}
+        </Grid>
+      </ErrorBoundary>
     );
-  };
-
-  const other = excludeObjectProps(props, ownPropNames);
-
-  return (
-    <ErrorBoundary message={_('An error occurred on this dashboard.')}>
-      <Grid
-        items={convertDisplaysToGridItems(filterDisplays(rows, isAllowed))}
-        maxItemsPerRow={maxItemsPerRow}
-        maxRows={maxRows}
-        onChange={handleItemsChange}
-        onRowResize={handleRowResize}
-      >
-        {({id: itemId, dragHandleProps, height, width}) => {
-          const {displayId, ...displayProps} = getDisplaySettings(itemId);
-          const Component = getDisplayComponent(displayId);
-          const state = getDisplayState(itemId);
-          return (
-            <Component
-              {...other}
-              {...displayProps}
-              dragHandleProps={dragHandleProps}
-              height={height}
-              width={width}
-              id={itemId}
-              state={state}
-              setState={stateFunc => handleSetDisplayState(itemId, stateFunc)}
-              onFilterIdChanged={filterId =>
-                handleUpdateDisplay(itemId, {filterId})
-              }
-              onInteractive={props.onInteraction}
-              onRemoveClick={() => handleRemoveDisplay(itemId)}
-            />
-          );
-        }}
-      </Grid>
-    </ErrorBoundary>
-  );
-};
+  }
+}
 
 const itemPropType = PropTypes.shape({
   id: PropTypes.id.isRequired,
@@ -339,7 +359,6 @@ const mapStateToProps = (rootState, {id}) => {
   const settings = settingsSelector.getById(id);
   const error = settingsSelector.getError(id);
   const isLoading = settingsSelector.getIsLoading(id);
-
   return {
     error,
     isLoading,
@@ -348,10 +367,8 @@ const mapStateToProps = (rootState, {id}) => {
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadSettings: (id, defaults) =>
-    dispatch(loadSettingsAction(gmp)(id, defaults)),
-  saveSettings: (id, settings) =>
-    dispatch(saveSettingsAction(gmp)(id, settings)),
+  loadSettings: (id, defaults) => dispatch(loadSettings(gmp)(id, defaults)),
+  saveSettings: (id, settings) => dispatch(saveSettings(gmp)(id, settings)),
   setDefaultSettings: (id, settings) =>
     dispatch(setDashboardSettingDefaults(id, settings)),
 });

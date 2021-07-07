@@ -23,11 +23,11 @@ import React from 'react';
 import {_} from 'gmp/locale/lang';
 import {dateFormat} from 'gmp/locale/date';
 
-import {hasValue, isDefined, isFunction, isObject} from 'gmp/utils/identity';
-import {shorten, split} from 'gmp/utils/string';
+import {isDefined, isFunction, isObject} from 'gmp/utils/identity';
+import {isEmpty, shorten, split} from 'gmp/utils/string';
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
-export const UNSET_VALUE = null;
+export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';
 
 /**
@@ -84,7 +84,7 @@ export const renderChildren = children =>
   );
 
 export const na = value => {
-  return hasValue(value) ? value : _('N/A');
+  return isEmpty(value) ? _('N/A') : value;
 };
 
 export const renderYesNo = value => {

@@ -243,7 +243,7 @@ describe('CredentialPage tests', () => {
     expect(deleteByFilter).toHaveBeenCalled();
   });
 
-  test.skip('should allow to bulk action on selected credentials', async () => {
+  test('should allow to bulk action on selected credentials', async () => {
     // mock cache issues will cause these tests to randomly fail. Will fix later.
     const deleteByIds = jest.fn().mockResolvedValue({
       foo: 'bar',
@@ -326,7 +326,7 @@ describe('CredentialPage tests', () => {
     expect(deleteByIds).toHaveBeenCalled();
   });
 
-  test.skip('should allow to bulk action on filtered credentials', async () => {
+  test('should allow to bulk action on filtered credentials', async () => {
     // mock cache issues will cause these tests to randomly fail. Will fix later.
     const deleteByFilter = jest.fn().mockResolvedValue({
       foo: 'bar',

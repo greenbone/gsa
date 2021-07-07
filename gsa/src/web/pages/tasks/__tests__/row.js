@@ -21,13 +21,12 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
 
-import {TASK_STATUS} from 'gmp/models/task';
+import Task, {TASK_STATUS} from 'gmp/models/task';
+import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
-
-import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import Row from '../row';
 
@@ -36,14 +35,41 @@ setLocale('en');
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
 
+const lastReport = {
+  report: {
+    _id: '1234',
+    timestamp: '2019-07-10T12:51:27Z',
+    severity: '5.0',
+  },
+};
+
+const currentReport = {
+  report: {
+    _id: '5678',
+    timestamp: '2019-07-10T12:51:27Z',
+  },
+};
+
 describe('Task Row tests', () => {
   // deactivate console.error for tests
   // to make it possible to test a row without a table
   const consoleError = console.error;
   console.error = () => {};
 
-  test('should render', async () => {
-    const {listMockTask: task} = getMockTasks();
+  test('should render', () => {
+    const task = Task.fromElement({
+      _id: '314',
+      owner: {name: 'username'},
+      name: 'foo',
+      comment: 'bar',
+      status: TASK_STATUS.done,
+      alterable: '0',
+      report_count: {__text: '3', finished: '3'},
+      last_report: lastReport,
+      trend: 'up',
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: '5678', name: 'target'},
+    });
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -63,9 +89,9 @@ describe('Task Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
+    store.dispatch(setUsername('username'));
 
-    const {baseElement, getByTestId} = render(
+    const {baseElement, getAllByTestId} = render(
       <Row
         entity={task}
         links={true}
@@ -88,78 +114,75 @@ describe('Task Row tests', () => {
     expect(baseElement).toHaveTextContent('(bar)');
 
     // Status
-    const taskStatusBarTableData = getByTestId('task-status');
-    const taskStatusBar = taskStatusBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
+    const bars = getAllByTestId('progressbar-box');
 
-    expect(taskStatusBar).toHaveAttribute('title', TASK_STATUS.done);
-    expect(taskStatusBar).toHaveTextContent(TASK_STATUS.done);
+    expect(bars[0]).toHaveAttribute('title', TASK_STATUS.done);
+    expect(bars[0]).toHaveTextContent(TASK_STATUS.done);
 
-    const lastReportTableData = getByTestId('last-report');
-    const lastReportLink = lastReportTableData.querySelector(
-      "[data-testid='details-link'",
-    );
-    expect(lastReportLink).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
-    expect(lastReportLink).toHaveAttribute('href', '/report/1234');
+    const detailsLinks = getAllByTestId('details-link');
 
-    const reportsTotalTableData = getByTestId('reports-total');
-    const reportsTotalLink = reportsTotalTableData.querySelector(
-      "[data-testid='reports-total-link']",
-    );
+    expect(detailsLinks[0]).toHaveTextContent('Done');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
-    expect(reportsTotalLink).toHaveTextContent('1');
-    expect(reportsTotalLink).toHaveAttribute(
+    // Reports
+    const links = baseElement.querySelectorAll('a');
+    expect(links[1]).toHaveTextContent('3');
+    expect(links[1]).toHaveAttribute(
       'title',
       'View list of all reports for Task foo, including unfinished ones',
     );
-    expect(reportsTotalLink).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'href',
-      '/reports?filter=task_id%3D12345%20sort-reverse%3Ddate',
+      '/reports?filter=task_id%3D314%20sort-reverse%3Ddate',
     );
+
+    // Last Report
+    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
-    const severityBarTableData = getByTestId('severity-bar');
-    const severityBar = severityBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
-    expect(severityBar).toHaveAttribute('title', 'Medium');
-    expect(severityBar).toHaveTextContent('5.0 (Medium)');
-
-    const taskDetailsTableData = getByTestId('task-details');
-    const icons = taskDetailsTableData.querySelectorAll(
-      "[data-testid='svg-icon']",
-    );
-
-    // Observer Icon
-    expect(icons[0]).toHaveAttribute(
-      'title',
-      'Task made visible for:\nUsers john, jane\nRoles admin role, user role\nGroups group 1, group 2',
-    );
-    expect(icons[0]).toHaveTextContent('provide_view.svg');
+    expect(bars[1]).toHaveAttribute('title', 'Medium');
+    expect(bars[1]).toHaveTextContent('5.0 (Medium)');
 
     // Trend
-    const trendTableData = getByTestId('trend');
-    const trendIcon = trendTableData.querySelector("[data-testid='svg-icon']");
-    expect(trendIcon).toHaveAttribute('title', 'Severity increased');
-    expect(trendIcon).toHaveTextContent('trend_up.svg');
+    const icons = getAllByTestId('svg-icon');
+
+    expect(icons[0]).toHaveAttribute('title', 'Severity increased');
+    expect(icons[0]).toHaveTextContent('trend_up.svg');
 
     // Actions
-    const actionTableData = getByTestId('task-actions');
-    const actionIcons = actionTableData.querySelectorAll(
-      "[data-testid='svg-icon']",
-    );
 
-    expect(actionIcons[0]).toHaveAttribute('title', 'Start');
-    expect(actionIcons[1]).toHaveAttribute('title', 'Task is not stopped');
-    expect(actionIcons[2]).toHaveAttribute('title', 'Move Task to trashcan');
-    expect(actionIcons[3]).toHaveAttribute('title', 'Edit Task');
-    expect(actionIcons[4]).toHaveAttribute('title', 'Clone Task');
-    expect(actionIcons[5]).toHaveAttribute('title', 'Export Task');
+    expect(icons[1]).toHaveAttribute('title', 'Start');
+    expect(icons[2]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[3]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[4]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[5]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[6]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should render icons', () => {
-    const {task} = getMockTasks();
+    const task = Task.fromElement({
+      _id: '314',
+      owner: {name: 'username'},
+      name: 'foo',
+      comment: 'bar',
+      status: TASK_STATUS.done,
+      alterable: '1',
+      report_count: {__text: '1', finished: '1'},
+      last_report: lastReport,
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: 'id', name: 'target'},
+      scanner: {
+        _id: 'id',
+        name: 'scanner',
+        type: GREENBONE_SENSOR_SCANNER_TYPE,
+      },
+      observers: {
+        __text: 'anon nymous',
+        role: [{name: 'lorem'}],
+        group: [{name: 'ipsum'}, {name: 'dolor'}],
+      },
+    });
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -179,9 +202,9 @@ describe('Task Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
+    store.dispatch(setUsername('username'));
 
-    const {getByTestId} = render(
+    const {getAllByTestId} = render(
       <Row
         entity={task}
         links={true}
@@ -197,24 +220,31 @@ describe('Task Row tests', () => {
       />,
     );
 
-    const taskDetailsTableData = getByTestId('task-details');
-    const icons = taskDetailsTableData.querySelectorAll(
-      "[data-testid='svg-icon']",
-    );
+    const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Task is alterable');
     expect(icons[1]).toHaveAttribute(
       'title',
-      'Task is configured to run on sensor scanner 2',
+      'Task is configured to run on sensor scanner',
     );
     expect(icons[2]).toHaveAttribute(
       'title',
-      'Task made visible for:\nUsers john, jane\nRoles admin role, user role\nGroups group 1, group 2',
+      'Task made visible for:\nUsers anon, nymous\nRoles lorem\nGroups ipsum, dolor',
     );
   });
 
-  test('should call click handlers for new task', async () => {
-    const {newTask: task} = getMockTasks();
+  test('should call click handlers for new task', () => {
+    const task = Task.fromElement({
+      _id: '314',
+      owner: {name: 'username'},
+      name: 'foo',
+      comment: 'bar',
+      status: TASK_STATUS.new,
+      report_count: {__text: '0', finished: '0'},
+      alterable: '0',
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: 'id', name: 'target'},
+    });
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -234,9 +264,9 @@ describe('Task Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
+    store.dispatch(setUsername('username'));
 
-    const {getByTestId, queryByTestId} = render(
+    const {baseElement, getAllByTestId, queryAllByTestId} = render(
       <Row
         entity={task}
         links={true}
@@ -253,74 +283,62 @@ describe('Task Row tests', () => {
     );
 
     // Name
-    const taskDetailsToggle = getByTestId('task-details-toggle');
-    fireEvent.click(taskDetailsToggle);
-
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '12345');
+    const spans = baseElement.querySelectorAll('span');
+    fireEvent.click(spans[0]);
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     // Status
-    const taskStatusBarTableData = getByTestId('task-status');
-    const taskStatusBar = taskStatusBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
-    expect(taskStatusBar).toHaveAttribute('title', TASK_STATUS.new);
-    expect(taskStatusBar).toHaveTextContent(TASK_STATUS.new);
+    const bars = getAllByTestId('progressbar-box');
 
-    // Reports
-    const lastReportTableData = queryByTestId('last-report');
-    const lastReportLink = lastReportTableData.querySelector(
-      "[data-testid='details-link'",
-    );
-    expect(lastReportLink).not.toBeInTheDocument();
+    expect(bars[0]).toHaveAttribute('title', TASK_STATUS.new);
+    expect(bars[0]).toHaveTextContent(TASK_STATUS.new);
 
-    const reportsTotalTableData = getByTestId('reports-total');
-    const reportsTotalLink = reportsTotalTableData.querySelector(
-      "[data-testid='reports-total-link']",
-    );
-
-    expect(reportsTotalLink).not.toBeInTheDocument();
-
-    // Severity
-    const severityBarTableData = getByTestId('severity-bar');
-    const severityBar = severityBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
-    // because there is no severity bar yet
-    expect(severityBar).not.toBeInTheDocument();
+    const detailsLinks = queryAllByTestId('details-link');
+    expect(detailsLinks.length).toBe(0);
+    // because there are no reports yet
 
     // Actions
-    const actionTableData = getByTestId('task-actions');
-    const actionIcons = actionTableData.querySelectorAll(
-      "[data-testid='svg-icon']",
-    );
+    const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(actionIcons[0]);
+    fireEvent.click(icons[0]);
     expect(handleTaskStart).toHaveBeenCalledWith(task);
-    expect(actionIcons[0]).toHaveAttribute('title', 'Start');
+    expect(icons[0]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(actionIcons[1]);
+    fireEvent.click(icons[1]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(actionIcons[1]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
-    fireEvent.click(actionIcons[2]);
+    fireEvent.click(icons[2]);
     expect(handleTaskDelete).toHaveBeenCalledWith(task);
-    expect(actionIcons[2]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(actionIcons[3]);
+    fireEvent.click(icons[3]);
     expect(handleTaskEdit).toHaveBeenCalledWith(task);
-    expect(actionIcons[3]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(actionIcons[4]);
+    fireEvent.click(icons[4]);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(actionIcons[4]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(actionIcons[5]);
+    fireEvent.click(icons[5]);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(actionIcons[5]).toHaveAttribute('title', 'Export Task');
+    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
-  test('should call click handlers for running task', async () => {
-    const {runningTask: task} = getMockTasks();
+  test('should call click handlers for running task', () => {
+    const task = Task.fromElement({
+      _id: '314',
+      owner: {name: 'username'},
+      name: 'foo',
+      comment: 'bar',
+      in_use: true,
+      status: TASK_STATUS.running,
+      alterable: '0',
+      report_count: {__text: '1', finished: '0'},
+      current_report: currentReport,
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: 'id', name: 'target'},
+    });
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -340,9 +358,9 @@ describe('Task Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
+    store.dispatch(setUsername('username'));
 
-    const {getByTestId} = render(
+    const {baseElement, getAllByTestId} = render(
       <Row
         entity={task}
         links={true}
@@ -359,90 +377,83 @@ describe('Task Row tests', () => {
     );
 
     // Name
-    const taskDetailsToggle = getByTestId('task-details-toggle');
-    fireEvent.click(taskDetailsToggle);
-
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '12345');
+    const spans = baseElement.querySelectorAll('span');
+    fireEvent.click(spans[0]);
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     // Status
-    const taskStatusBarTableData = getByTestId('task-status');
-    const taskStatusBar = taskStatusBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
+    const bars = getAllByTestId('progressbar-box');
 
-    expect(taskStatusBar).toHaveAttribute('title', TASK_STATUS.running);
-    expect(taskStatusBar).toHaveTextContent('0 %');
-    const taskStatusDetailsLink = taskStatusBarTableData.querySelector(
-      "[data-testid='details-link']",
-    );
+    expect(bars[0]).toHaveAttribute('title', TASK_STATUS.running);
+    expect(bars[0]).toHaveTextContent('0 %');
 
-    expect(taskStatusDetailsLink).toHaveTextContent('0 %');
-    expect(taskStatusDetailsLink).toHaveAttribute('href', '/report/5678');
+    const detailsLinks = getAllByTestId('details-link');
+
+    expect(detailsLinks[0]).toHaveTextContent('0 %');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/report/5678');
 
     // Reports
-    const reportsTotalTableData = getByTestId('reports-total');
-    const reportsTotalLink = reportsTotalTableData.querySelector(
-      "[data-testid='reports-total-link']",
-    );
-    expect(reportsTotalLink).toHaveTextContent('2');
-    expect(reportsTotalLink).toHaveAttribute(
+    const links = baseElement.querySelectorAll('a');
+    expect(links[1]).toHaveTextContent('1');
+    expect(links[1]).toHaveAttribute(
       'title',
       'View list of all reports for Task foo, including unfinished ones',
     );
-    expect(reportsTotalLink).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'href',
-      '/reports?filter=task_id%3D12345%20sort-reverse%3Ddate',
+      '/reports?filter=task_id%3D314%20sort-reverse%3Ddate',
     );
 
     // Last Report
-    const lastReportTableData = getByTestId('last-report');
-    const lastReportLink = lastReportTableData.querySelector(
-      "[data-testid='details-link'",
-    );
-    expect(lastReportLink).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
-    expect(lastReportLink).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks.length).toBe(1);
+    // because there is no last report yet
 
     // Severity
-    const severityBarTableData = getByTestId('severity-bar');
-    const severityBar = severityBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
-    expect(severityBar).toHaveAttribute('title', 'Medium');
-    expect(severityBar).toHaveTextContent('5.0 (Medium)');
+    expect(bars.length).toBe(1);
+    // because there is no severity bar yet
 
     // Actions
-    const actionTableData = getByTestId('task-actions');
-    const actionIcons = actionTableData.querySelectorAll(
-      "[data-testid='svg-icon']",
-    );
+    const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(actionIcons[0]);
+    fireEvent.click(icons[0]);
     expect(handleTaskStart).not.toHaveBeenCalled();
-    expect(actionIcons[0]).toHaveAttribute('title', 'Stop');
+    expect(icons[0]).toHaveAttribute('title', 'Stop');
 
-    fireEvent.click(actionIcons[1]);
+    fireEvent.click(icons[1]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(actionIcons[1]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
-    fireEvent.click(actionIcons[2]);
+    fireEvent.click(icons[2]);
     expect(handleTaskDelete).not.toHaveBeenCalled();
-    expect(actionIcons[2]).toHaveAttribute('title', 'Task is still in use');
+    expect(icons[2]).toHaveAttribute('title', 'Task is still in use');
 
-    fireEvent.click(actionIcons[3]);
+    fireEvent.click(icons[3]);
     expect(handleTaskEdit).toHaveBeenCalledWith(task);
-    expect(actionIcons[3]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(actionIcons[4]);
+    fireEvent.click(icons[4]);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(actionIcons[4]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(actionIcons[5]);
+    fireEvent.click(icons[5]);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(actionIcons[5]).toHaveAttribute('title', 'Export Task');
+    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should call click handlers for stopped task', () => {
-    const {stoppedTask: task} = getMockTasks();
+    const task = Task.fromElement({
+      _id: '314',
+      owner: {name: 'username'},
+      name: 'foo',
+      comment: 'bar',
+      status: TASK_STATUS.stopped,
+      alterable: '0',
+      report_count: {__text: '2', finished: '1'},
+      current_report: currentReport,
+      last_report: lastReport,
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: 'id', name: 'target'},
+    });
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -462,9 +473,9 @@ describe('Task Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
+    store.dispatch(setUsername('username'));
 
-    const {getByTestId} = render(
+    const {baseElement, getAllByTestId} = render(
       <Row
         entity={task}
         links={true}
@@ -481,89 +492,82 @@ describe('Task Row tests', () => {
     );
 
     // Name
-    const taskDetailsToggle = getByTestId('task-details-toggle');
-    fireEvent.click(taskDetailsToggle);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '12345');
+    const spans = baseElement.querySelectorAll('span');
+    fireEvent.click(spans[0]);
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     // Status
-    const taskStatusBarTableData = getByTestId('task-status');
-    const taskStatusBar = taskStatusBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
+    const bars = getAllByTestId('progressbar-box');
 
-    expect(taskStatusBar).toHaveAttribute('title', TASK_STATUS.stopped);
-    expect(taskStatusBar).toHaveTextContent(TASK_STATUS.stopped);
+    expect(bars[0]).toHaveAttribute('title', TASK_STATUS.stopped);
+    expect(bars[0]).toHaveTextContent(TASK_STATUS.stopped);
 
-    const taskStatusDetailsLink = taskStatusBarTableData.querySelector(
-      "[data-testid='details-link']",
-    );
-    expect(taskStatusDetailsLink).toHaveTextContent('Stopped');
-    expect(taskStatusDetailsLink).toHaveAttribute('href', '/report/5678');
+    const detailsLinks = getAllByTestId('details-link');
+
+    expect(detailsLinks[0]).toHaveTextContent('Stopped');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/report/5678');
 
     // Reports
-    const reportsTotalTableData = getByTestId('reports-total');
-    const reportsTotalLink = reportsTotalTableData.querySelector(
-      "[data-testid='reports-total-link']",
-    );
-    expect(reportsTotalLink).toHaveTextContent('2');
-    expect(reportsTotalLink).toHaveAttribute(
+    const links = baseElement.querySelectorAll('a');
+    expect(links[1]).toHaveTextContent('2');
+    expect(links[1]).toHaveAttribute(
       'title',
       'View list of all reports for Task foo, including unfinished ones',
     );
-    expect(reportsTotalLink).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'href',
-      '/reports?filter=task_id%3D12345%20sort-reverse%3Ddate',
+      '/reports?filter=task_id%3D314%20sort-reverse%3Ddate',
     );
 
     // Last Report
-    const lastReportTableData = getByTestId('last-report');
-    const lastReportLink = lastReportTableData.querySelector(
-      "[data-testid='details-link'",
-    );
-    expect(lastReportLink).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
-    expect(lastReportLink).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
-    const severityBarTableData = getByTestId('severity-bar');
-    const severityBar = severityBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
-    expect(severityBar).toHaveAttribute('title', 'Medium');
-    expect(severityBar).toHaveTextContent('5.0 (Medium)');
+    expect(bars[1]).toHaveAttribute('title', 'Medium');
+    expect(bars[1]).toHaveTextContent('5.0 (Medium)');
 
     // Actions
-    const actionTableData = getByTestId('task-actions');
-    const actionIcons = actionTableData.querySelectorAll(
-      "[data-testid='svg-icon']",
-    );
+    const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(actionIcons[0]);
+    fireEvent.click(icons[0]);
     expect(handleTaskStart).toHaveBeenCalledWith(task);
-    expect(actionIcons[0]).toHaveAttribute('title', 'Start');
+    expect(icons[0]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(actionIcons[1]);
+    fireEvent.click(icons[1]);
     expect(handleTaskResume).toHaveBeenCalledWith(task);
-    expect(actionIcons[1]).toHaveAttribute('title', 'Resume');
+    expect(icons[1]).toHaveAttribute('title', 'Resume');
 
-    fireEvent.click(actionIcons[2]);
+    fireEvent.click(icons[2]);
     expect(handleTaskDelete).toHaveBeenCalledWith(task);
-    expect(actionIcons[2]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(actionIcons[3]);
+    fireEvent.click(icons[3]);
     expect(handleTaskEdit).toHaveBeenCalledWith(task);
-    expect(actionIcons[3]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(actionIcons[4]);
+    fireEvent.click(icons[4]);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(actionIcons[4]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(actionIcons[5]);
+    fireEvent.click(icons[5]);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(actionIcons[5]).toHaveAttribute('title', 'Export Task');
+    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should call click handlers for finished task', () => {
-    const {finishedTask: task} = getMockTasks();
+    const task = Task.fromElement({
+      _id: '314',
+      owner: {name: 'username'},
+      name: 'foo',
+      comment: 'bar',
+      status: TASK_STATUS.done,
+      alterable: '0',
+      report_count: {__text: '1', finished: '1'},
+      last_report: lastReport,
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: 'id', name: 'target'},
+    });
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -583,9 +587,9 @@ describe('Task Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
+    store.dispatch(setUsername('username'));
 
-    const {getByTestId} = render(
+    const {baseElement, getAllByTestId} = render(
       <Row
         entity={task}
         links={true}
@@ -602,89 +606,82 @@ describe('Task Row tests', () => {
     );
 
     // Name
-    const taskDetailsToggle = getByTestId('task-details-toggle');
-    fireEvent.click(taskDetailsToggle);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '12345');
+    const spans = baseElement.querySelectorAll('span');
+    fireEvent.click(spans[0]);
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     // Status
-    const taskStatusBarTableData = getByTestId('task-status');
-    const taskStatusBar = taskStatusBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
+    const bars = getAllByTestId('progressbar-box');
 
-    expect(taskStatusBar).toHaveAttribute('title', TASK_STATUS.done);
-    expect(taskStatusBar).toHaveTextContent(TASK_STATUS.done);
+    expect(bars[0]).toHaveAttribute('title', TASK_STATUS.done);
+    expect(bars[0]).toHaveTextContent(TASK_STATUS.done);
 
-    const taskStatusDetailsLink = taskStatusBarTableData.querySelector(
-      "[data-testid='details-link']",
-    );
-    expect(taskStatusDetailsLink).toHaveTextContent('Done');
-    expect(taskStatusDetailsLink).toHaveAttribute('href', '/report/1234');
+    const detailsLinks = getAllByTestId('details-link');
+
+    expect(detailsLinks[0]).toHaveTextContent('Done');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Reports
-    const reportsTotalTableData = getByTestId('reports-total');
-    const reportsTotalLink = reportsTotalTableData.querySelector(
-      "[data-testid='reports-total-link']",
-    );
-    expect(reportsTotalLink).toHaveTextContent('1');
-    expect(reportsTotalLink).toHaveAttribute(
+    const links = baseElement.querySelectorAll('a');
+    expect(links[1]).toHaveTextContent('1');
+    expect(links[1]).toHaveAttribute(
       'title',
       'View list of all reports for Task foo, including unfinished ones',
     );
-    expect(reportsTotalLink).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'href',
-      '/reports?filter=task_id%3D12345%20sort-reverse%3Ddate',
+      '/reports?filter=task_id%3D314%20sort-reverse%3Ddate',
     );
 
     // Last Report
-    const lastReportTableData = getByTestId('last-report');
-    const lastReportLink = lastReportTableData.querySelector(
-      "[data-testid='details-link'",
-    );
-    expect(lastReportLink).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
-    expect(lastReportLink).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
-    const severityBarTableData = getByTestId('severity-bar');
-    const severityBar = severityBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
-    expect(severityBar).toHaveAttribute('title', 'Medium');
-    expect(severityBar).toHaveTextContent('5.0 (Medium)');
+    expect(bars[1]).toHaveAttribute('title', 'Medium');
+    expect(bars[1]).toHaveTextContent('5.0 (Medium)');
 
     // Actions
-    const actionTableData = getByTestId('task-actions');
-    const actionIcons = actionTableData.querySelectorAll(
-      "[data-testid='svg-icon']",
-    );
+    const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(actionIcons[0]);
+    fireEvent.click(icons[0]);
     expect(handleTaskStart).toHaveBeenCalledWith(task);
-    expect(actionIcons[0]).toHaveAttribute('title', 'Start');
+    expect(icons[0]).toHaveAttribute('title', 'Start');
 
-    fireEvent.click(actionIcons[1]);
+    fireEvent.click(icons[1]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(actionIcons[1]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[1]).toHaveAttribute('title', 'Task is not stopped');
 
-    fireEvent.click(actionIcons[2]);
+    fireEvent.click(icons[2]);
     expect(handleTaskDelete).toHaveBeenCalledWith(task);
-    expect(actionIcons[2]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(actionIcons[3]);
+    fireEvent.click(icons[3]);
     expect(handleTaskEdit).toHaveBeenCalledWith(task);
-    expect(actionIcons[3]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(actionIcons[4]);
+    fireEvent.click(icons[4]);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(actionIcons[4]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(actionIcons[5]);
+    fireEvent.click(icons[5]);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(actionIcons[5]).toHaveAttribute('title', 'Export Task');
+    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should not call click handlers for task without permission', () => {
-    const {observedTask: task} = getMockTasks();
+    const task = Task.fromElement({
+      _id: '314',
+      owner: {name: 'user'},
+      name: 'foo',
+      comment: 'bar',
+      status: TASK_STATUS.done,
+      alterable: '0',
+      report_count: {__text: '1', finished: '1'},
+      last_report: lastReport,
+      permissions: {permission: [{name: 'get_tasks'}]},
+      target: {_id: 'id', name: 'target'},
+    });
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -704,9 +701,9 @@ describe('Task Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('user'));
+    store.dispatch(setUsername('username'));
 
-    const {getByTestId} = render(
+    const {baseElement, getAllByTestId} = render(
       <Row
         entity={task}
         links={true}
@@ -723,104 +720,86 @@ describe('Task Row tests', () => {
     );
 
     // Name
-    const taskDetailsToggle = getByTestId('task-details-toggle');
-    fireEvent.click(taskDetailsToggle);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '12345');
+    const spans = baseElement.querySelectorAll('span');
+    fireEvent.click(spans[0]);
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
-    const taskDetailsTableData = getByTestId('task-details');
-    const icons = taskDetailsTableData.querySelectorAll(
-      "[data-testid='svg-icon']",
-    );
-    expect(icons[0]).toHaveAttribute('title', 'Task owned by admin');
+    const icons = getAllByTestId('svg-icon');
+    expect(icons[0]).toHaveAttribute('title', 'Task owned by user');
 
     // Status
-    const taskStatusBarTableData = getByTestId('task-status');
-    const taskStatusBar = taskStatusBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
+    const bars = getAllByTestId('progressbar-box');
 
-    expect(taskStatusBar).toHaveAttribute('title', TASK_STATUS.done);
-    expect(taskStatusBar).toHaveTextContent(TASK_STATUS.done);
+    expect(bars[0]).toHaveAttribute('title', TASK_STATUS.done);
+    expect(bars[0]).toHaveTextContent(TASK_STATUS.done);
 
-    const taskStatusDetailsLink = taskStatusBarTableData.querySelector(
-      "[data-testid='details-link']",
-    );
-    expect(taskStatusDetailsLink).toHaveTextContent('Done');
-    expect(taskStatusDetailsLink).toHaveAttribute('href', '/report/1234');
+    const detailsLinks = getAllByTestId('details-link');
+
+    expect(detailsLinks[0]).toHaveTextContent('Done');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Reports
-    const reportsTotalTableData = getByTestId('reports-total');
-    const reportsTotalLink = reportsTotalTableData.querySelector(
-      "[data-testid='reports-total-link']",
-    );
-    expect(reportsTotalLink).toHaveTextContent('1');
-    expect(reportsTotalLink).toHaveAttribute(
+    const links = baseElement.querySelectorAll('a');
+    expect(links[1]).toHaveTextContent('1');
+    expect(links[1]).toHaveAttribute(
       'title',
       'View list of all reports for Task foo, including unfinished ones',
     );
-    expect(reportsTotalLink).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'href',
-      '/reports?filter=task_id%3D12345%20sort-reverse%3Ddate',
+      '/reports?filter=task_id%3D314%20sort-reverse%3Ddate',
     );
 
     // Last Report
-    const lastReportTableData = getByTestId('last-report');
-    const lastReportLink = lastReportTableData.querySelector(
-      "[data-testid='details-link'",
-    );
-    expect(lastReportLink).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
-    expect(lastReportLink).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
-    const severityBarTableData = getByTestId('severity-bar');
-    const severityBar = severityBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
-    expect(severityBar).toHaveAttribute('title', 'Medium');
-    expect(severityBar).toHaveTextContent('5.0 (Medium)');
+    expect(bars[1]).toHaveAttribute('title', 'Medium');
+    expect(bars[1]).toHaveTextContent('5.0 (Medium)');
 
     // Actions
-    const actionTableData = getByTestId('task-actions');
-    const actionIcons = actionTableData.querySelectorAll(
-      "[data-testid='svg-icon']",
-    );
-
-    fireEvent.click(actionIcons[0]);
+    fireEvent.click(icons[1]);
     expect(handleTaskStart).not.toHaveBeenCalled();
-    expect(actionIcons[0]).toHaveAttribute(
+    expect(icons[1]).toHaveAttribute(
       'title',
       'Permission to start task denied',
     );
 
-    fireEvent.click(actionIcons[1]);
+    fireEvent.click(icons[2]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(actionIcons[1]).toHaveAttribute('title', 'Task is not stopped');
+    expect(icons[2]).toHaveAttribute('title', 'Task is not stopped');
 
-    fireEvent.click(actionIcons[2]);
+    fireEvent.click(icons[3]);
     expect(handleTaskDelete).not.toHaveBeenCalled();
-    expect(actionIcons[2]).toHaveAttribute(
+    expect(icons[3]).toHaveAttribute(
       'title',
       'Permission to move Task to trashcan denied',
     );
 
-    fireEvent.click(actionIcons[3]);
+    fireEvent.click(icons[4]);
     expect(handleTaskEdit).not.toHaveBeenCalled();
-    expect(actionIcons[3]).toHaveAttribute(
-      'title',
-      'Permission to edit Task denied',
-    );
+    expect(icons[4]).toHaveAttribute('title', 'Permission to edit Task denied');
 
-    fireEvent.click(actionIcons[4]);
+    fireEvent.click(icons[5]);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(actionIcons[4]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[5]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(actionIcons[5]);
+    fireEvent.click(icons[6]);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(actionIcons[5]).toHaveAttribute('title', 'Export Task');
+    expect(icons[6]).toHaveAttribute('title', 'Export Task');
   });
 
   test('should call click handlers for container task', () => {
-    const {containerTask: task} = getMockTasks();
+    const task = Task.fromElement({
+      _id: '314',
+      owner: {name: 'username'},
+      name: 'foo',
+      comment: 'bar',
+      report_count: {__text: '1', finished: '1'},
+      last_report: lastReport,
+      permissions: {permission: [{name: 'everything'}]},
+    });
 
     const handleReportImport = jest.fn();
     const handleTaskClone = jest.fn();
@@ -840,9 +819,9 @@ describe('Task Row tests', () => {
     });
 
     store.dispatch(setTimezone('CET'));
-    store.dispatch(setUsername('admin'));
+    store.dispatch(setUsername('username'));
 
-    const {getByTestId} = render(
+    const {baseElement, getAllByTestId} = render(
       <Row
         entity={task}
         links={true}
@@ -859,86 +838,68 @@ describe('Task Row tests', () => {
     );
 
     // Name
-    const taskDetailsToggle = getByTestId('task-details-toggle');
-    fireEvent.click(taskDetailsToggle);
-    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '12345');
+    const spans = baseElement.querySelectorAll('span');
+    fireEvent.click(spans[0]);
+    expect(handleToggleDetailsClick).toHaveBeenCalledWith(undefined, '314');
 
     // Status
-    const taskStatusBarTableData = getByTestId('task-status');
-    const taskStatusBar = taskStatusBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
+    const bars = getAllByTestId('progressbar-box');
 
-    expect(taskStatusBar).toHaveAttribute('title', 'Container');
-    expect(taskStatusBar).toHaveTextContent('Container');
+    expect(bars[0]).toHaveAttribute('title', 'Container');
+    expect(bars[0]).toHaveTextContent('Container');
 
-    const taskStatusDetailsLink = taskStatusBarTableData.querySelector(
-      "[data-testid='details-link']",
-    );
-    expect(taskStatusDetailsLink).toHaveTextContent('Container');
-    expect(taskStatusDetailsLink).toHaveAttribute('href', '/report/1234');
+    const detailsLinks = getAllByTestId('details-link');
+
+    expect(detailsLinks[0]).toHaveTextContent('Container');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/report/1234');
 
     // Reports
-    const reportsTotalTableData = getByTestId('reports-total');
-    const reportsTotalLink = reportsTotalTableData.querySelector(
-      "[data-testid='reports-total-link']",
-    );
-    expect(reportsTotalLink).toHaveTextContent('1');
-    expect(reportsTotalLink).toHaveAttribute(
+    const links = baseElement.querySelectorAll('a');
+    expect(links[1]).toHaveTextContent('1');
+    expect(links[1]).toHaveAttribute(
       'title',
       'View list of all reports for Task foo, including unfinished ones',
     );
-    expect(reportsTotalLink).toHaveAttribute(
+    expect(links[1]).toHaveAttribute(
       'href',
-      '/reports?filter=task_id%3D12345%20sort-reverse%3Ddate',
+      '/reports?filter=task_id%3D314%20sort-reverse%3Ddate',
     );
 
     // Last Report
-    const lastReportTableData = getByTestId('last-report');
-    const lastReportLink = lastReportTableData.querySelector(
-      "[data-testid='details-link'",
-    );
-    expect(lastReportLink).toHaveTextContent('Tue, Jul 30, 2019 3:23 PM CEST');
-    expect(lastReportLink).toHaveAttribute('href', '/report/1234');
+    expect(detailsLinks[1]).toHaveTextContent('Wed, Jul 10, 2019 2:51 PM CEST');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/report/1234');
 
     // Severity
-    const severityBarTableData = getByTestId('severity-bar');
-    const severityBar = severityBarTableData.querySelector(
-      "[data-testid='progressbar-box']",
-    );
+    expect(bars.length).toBe(1);
     // because container tasks do not have a severity
-    expect(severityBar).not.toBeInTheDocument();
 
     // Actions
-    const actionTableData = getByTestId('task-actions');
-    const actionIcons = actionTableData.querySelectorAll(
-      "[data-testid='svg-icon']",
-    );
+    const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(actionIcons[0]);
+    fireEvent.click(icons[0]);
     expect(handleReportImport).toHaveBeenCalledWith(task);
     expect(handleTaskStart).not.toHaveBeenCalled();
-    expect(actionIcons[0]).toHaveAttribute('title', 'Import Report');
+    expect(icons[0]).toHaveAttribute('title', 'Import Report');
 
-    fireEvent.click(actionIcons[1]);
+    fireEvent.click(icons[1]);
     expect(handleTaskResume).not.toHaveBeenCalled();
-    expect(actionIcons[1]).toHaveAttribute('title', 'Task is a container');
+    expect(icons[1]).toHaveAttribute('title', 'Task is a container');
 
-    fireEvent.click(actionIcons[2]);
+    fireEvent.click(icons[2]);
     expect(handleTaskDelete).toHaveBeenCalledWith(task);
-    expect(actionIcons[2]).toHaveAttribute('title', 'Move Task to trashcan');
+    expect(icons[2]).toHaveAttribute('title', 'Move Task to trashcan');
 
-    fireEvent.click(actionIcons[3]);
+    fireEvent.click(icons[3]);
     expect(handleTaskEdit).toHaveBeenCalledWith(task);
-    expect(actionIcons[3]).toHaveAttribute('title', 'Edit Task');
+    expect(icons[3]).toHaveAttribute('title', 'Edit Task');
 
-    fireEvent.click(actionIcons[4]);
+    fireEvent.click(icons[4]);
     expect(handleTaskClone).toHaveBeenCalledWith(task);
-    expect(actionIcons[4]).toHaveAttribute('title', 'Clone Task');
+    expect(icons[4]).toHaveAttribute('title', 'Clone Task');
 
-    fireEvent.click(actionIcons[5]);
+    fireEvent.click(icons[5]);
     expect(handleTaskDownload).toHaveBeenCalledWith(task);
-    expect(actionIcons[5]).toHaveAttribute('title', 'Export Task');
+    expect(icons[5]).toHaveAttribute('title', 'Export Task');
   });
 
   console.warn = consoleError;

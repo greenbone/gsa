@@ -18,6 +18,9 @@
 
 import React from 'react';
 
+import ApplicationsTable from './applicationstable';
+import ReportEntitiesContainer from './reportentitiescontainer';
+
 import PropTypes from 'web/utils/proptypes';
 
 import {
@@ -25,9 +28,6 @@ import {
   makeCompareSeverity,
   makeCompareString,
 } from 'web/utils/sort';
-
-import ApplicationsTable from './applicationstable';
-import ReportEntitiesContainer from './reportentitiescontainer';
 
 const appsSortFunctions = {
   name: makeCompareString('name'),

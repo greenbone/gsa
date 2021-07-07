@@ -55,58 +55,49 @@ const tlsCertificate = TlsCertificate.fromElement({
   permissions: {permission: [{name: 'everything'}]},
 });
 
-const reloadInterval = -1;
+const reloadInterval = 1;
 const manualUrl = 'test/';
 
-let currentSettings;
-let getAggregates;
-let getDashboardSetting;
-let getFilters;
-let getTlsCertificates;
-let getUserSetting;
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
-
-  getFilters = jest.fn().mockReturnValue(
-    Promise.resolve({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    }),
-  );
-
-  getDashboardSetting = jest.fn().mockResolvedValue({
+const getFilters = jest.fn().mockReturnValue(
+  Promise.resolve({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
-  });
+  }),
+);
 
-  getUserSetting = jest.fn().mockResolvedValue({
-    filter: null,
-  });
+const getDashboardSetting = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
 
-  getAggregates = jest.fn().mockResolvedValue({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
+const getUserSetting = jest.fn().mockResolvedValue({
+  filter: null,
+});
 
-  getTlsCertificates = jest.fn().mockResolvedValue({
-    data: [tlsCertificate],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
+const getAggregates = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const getTlsCertificates = jest.fn().mockResolvedValue({
+  data: [tlsCertificate],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
 });
 
 describe('TlsCertificatePage tests', () => {
@@ -124,7 +115,8 @@ describe('TlsCertificatePage tests', () => {
       dashboard: {
         getSetting: getDashboardSetting,
       },
-      settings: {manualUrl, reloadInterval},
+      reloadInterval,
+      settings: {manualUrl},
       user: {currentSettings, getSetting: getUserSetting},
     };
 

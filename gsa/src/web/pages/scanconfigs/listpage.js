@@ -15,57 +15,33 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useState, useCallback} from 'react';
+import React from 'react';
 
 import _ from 'gmp/locale';
 
 import {SCANCONFIGS_FILTER_FILTER} from 'gmp/models/filter';
-import {hasValue} from 'gmp/utils/identity';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import UploadIcon from 'web/components/icon/uploadicon';
 import NewIcon from 'web/components/icon/newicon';
 import ScanConfigIcon from 'web/components/icon/scanconfigicon';
-import useDownload from 'web/components/form/useDownload';
 
 import PageTitle from 'web/components/layout/pagetitle';
 
 import IconDivider from 'web/components/layout/icondivider';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-
-import DialogNotification from 'web/components/notification/dialognotification';
-import Download from 'web/components/form/download';
-import useReload from 'web/components/loading/useReload';
-
-import EntitiesPage from 'web/entities/page';
-import {
-  BulkTagComponent,
-  useBulkDeleteEntities,
-  useBulkExportEntities,
-} from 'web/entities/bulkactions';
-import usePagination from 'web/entities/usePagination';
 
 import {
-  useCloneScanConfig,
-  useDeleteScanConfig,
-  useDeleteScanConfigsByFilter,
-  useDeleteScanConfigsByIds,
-  useExportScanConfigsByFilter,
-  useExportScanConfigsByIds,
-  useLazyGetScanConfigs,
-} from 'web/graphql/scanconfigs';
-
-import PropTypes from 'web/utils/proptypes';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import usePageFilter from 'web/utils/usePageFilter';
-import usePrevious from 'web/utils/usePrevious';
-import useChangeFilter from 'web/utils/useChangeFilter';
-import useSelection from 'web/utils/useSelection';
-import useFilterSortBy from 'web/utils/useFilterSortby';
-import useGmpSettings from 'web/utils/useGmpSettings';
-import withCapabilities from 'web/utils/withCapabilities';
+  loadEntities,
+  selector as entitiesSelector,
+} from 'web/store/entities/scanconfigs';
 
 import ScanConfigComponent from './component';
 import Table, {SORT_FIELDS} from './table';
@@ -103,233 +79,67 @@ const ScanConfigFilterDialog = createFilterDialog({
   sortFields: SORT_FIELDS,
 });
 
-const ScanConfigsPage = props => {
-  // Page methods and hooks
-  const gmpSettings = useGmpSettings();
-  const [downloadRef, handleDownload] = useDownload();
-  const [, renewSession] = useUserSessionTimeout();
-  const [filter, isLoadingFilter] = usePageFilter('scanconfig');
-  const prevFilter = usePrevious(filter);
-  const {
-    change: changeFilter,
-    remove: removeFilter,
-    reset: resetFilter,
-  } = useChangeFilter('scanconfig');
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
-  const {
-    selectionType,
-    selected = [],
-    changeSelectionType,
-    select,
-    deselect,
-  } = useSelection();
-  const [sortBy, sortDir, handleSortChange] = useFilterSortBy(
-    filter,
-    changeFilter,
-  );
-  const [tagsDialogVisible, setTagsDialogVisible] = useState(false);
+const ScanConfigsPage = ({
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => (
+  <ScanConfigComponent
+    onCloned={onChanged}
+    onCloneError={onError}
+    onCreated={onChanged}
+    onDeleted={onChanged}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onImported={onChanged}
+    onInteraction={onInteraction}
+    onSaved={onChanged}
+  >
+    {({
+      clone,
+      create,
+      delete: delete_func,
+      download,
+      edit,
+      import: import_func,
+    }) => (
+      <React.Fragment>
+        <PageTitle title={_('Scan Configs')} />
+        <EntitiesPage
+          {...props}
+          filterEditDialog={ScanConfigFilterDialog}
+          filtersFilter={SCANCONFIGS_FILTER_FILTER}
+          sectionIcon={<ScanConfigIcon size="large" />}
+          table={Table}
+          title={_('Scan Configs')}
+          toolBarIcons={ToolBarIcons}
+          onError={onError}
+          onInteraction={onInteraction}
+          onScanConfigImportClick={import_func}
+          onScanConfigCloneClick={clone}
+          onScanConfigCreateClick={create}
+          onScanConfigDeleteClick={delete_func}
+          onScanConfigDownloadClick={download}
+          onScanConfigEditClick={edit}
+        />
+      </React.Fragment>
+    )}
+  </ScanConfigComponent>
+);
 
-  // ScanConfig list state variables and methods
-  const [
-    getScanConfigs,
-    {counts, scanConfigs, error, loading: isLoading, refetch, called, pageInfo},
-  ] = useLazyGetScanConfigs();
-
-  const [getFirst, getLast, getNext, getPrevious] = usePagination({
-    filter,
-    pageInfo,
-    refetch,
-  });
-
-  const exportScanConfigsByFilter = useExportScanConfigsByFilter();
-  const exportScanConfigsByIds = useExportScanConfigsByIds();
-  const bulkExportScanConfigs = useBulkExportEntities();
-
-  const [deleteScanConfig] = useDeleteScanConfig();
-  const [deleteScanConfigsByIds] = useDeleteScanConfigsByIds();
-  const [deleteScanConfigsByFilter] = useDeleteScanConfigsByFilter();
-  const bulkDeleteScanConfigs = useBulkDeleteEntities();
-  const [cloneScanConfig] = useCloneScanConfig();
-
-  const timeoutFunc = useCallback(
-    ({isVisible}) => {
-      if (!isVisible) {
-        return gmpSettings.reloadIntervalInactive;
-      }
-      return gmpSettings.reloadInterval;
-    },
-    [gmpSettings], // scanconfig does not have active field so it can't use the same function as the other entities
-  );
-
-  const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetch,
-    timeoutFunc,
-  );
-
-  // Pagination methods
-  // usePagination does not work with this page yet. Not sure why. Keep withEntitiesContainer for now.
-
-  // ScanConfig methods
-  const handleCloneScanConfig = useCallback(
-    scanConfig => cloneScanConfig(scanConfig.id).then(refetch, showError),
-    [cloneScanConfig, refetch, showError],
-  );
-  const handleDeleteScanConfig = useCallback(
-    scanConfig => deleteScanConfig(scanConfig.id).then(refetch, showError),
-    [deleteScanConfig, refetch, showError],
-  );
-
-  // Bulk action methods
-  const openTagsDialog = () => {
-    renewSession();
-    setTagsDialogVisible(true);
-  };
-
-  const closeTagsDialog = () => {
-    renewSession();
-    setTagsDialogVisible(false);
-  };
-
-  const handleBulkDeleteScanConfigs = () => {
-    return bulkDeleteScanConfigs({
-      selectionType,
-      filter,
-      selected,
-      entities: scanConfigs,
-      deleteByIdsFunc: deleteScanConfigsByIds,
-      deleteByFilterFunc: deleteScanConfigsByFilter,
-      onDeleted: refetch,
-      onError: showError,
-    });
-  };
-
-  const handleBulkExportScanConfigs = () => {
-    return bulkExportScanConfigs({
-      entities: scanConfigs,
-      selected,
-      filter,
-      resourceType: 'scanConfigs',
-      selectionType,
-      exportByFilterFunc: exportScanConfigsByFilter,
-      exportByIdsFunc: exportScanConfigsByIds,
-      onDownload: handleDownload,
-      onError: showError,
-    });
-  };
-
-  // Side effects
-  useEffect(() => {
-    // load scanConfigs initially after the filter is resolved
-    if (!isLoadingFilter && hasValue(filter) && !called) {
-      getScanConfigs({
-        filterString: filter.toFilterString(),
-        first: filter.get('rows'),
-      });
-    }
-  }, [isLoadingFilter, filter, getScanConfigs, called]);
-
-  useEffect(() => {
-    // reload if filter has changed
-    if (hasValue(refetch) && !filter.equals(prevFilter)) {
-      refetch({
-        filterString: filter.toFilterString(),
-        first: undefined,
-        last: undefined,
-      });
-    }
-  }, [filter, prevFilter, refetch]);
-
-  useEffect(() => {
-    // start reloading if scanConfigs are available and no timer is running yet
-    if (hasValue(scanConfigs) && !hasRunningTimer) {
-      startReload();
-    }
-  }, [scanConfigs, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => stopReload, [stopReload]);
-  return (
-    <ScanConfigComponent
-      onCloned={refetch}
-      onCloneError={showError}
-      onCreated={refetch}
-      onDeleted={refetch}
-      onDeleteError={showError}
-      onDownloaded={handleDownload}
-      onDownloadError={showError}
-      onImported={refetch}
-      onInteraction={renewSession}
-      onSaved={refetch}
-    >
-      {({create, download, edit, import: import_func}) => (
-        <React.Fragment>
-          <PageTitle title={_('Scan Configs')} />
-          <EntitiesPage
-            {...props}
-            entities={scanConfigs}
-            entitiesCounts={counts}
-            entitiesError={error}
-            entitiesSelected={selected}
-            filter={filter}
-            filterEditDialog={ScanConfigFilterDialog}
-            filtersFilter={SCANCONFIGS_FILTER_FILTER}
-            isLoading={isLoading}
-            isUpdating={isLoading}
-            selectionType={selectionType}
-            sectionIcon={<ScanConfigIcon size="large" />}
-            sortBy={sortBy}
-            sortDir={sortDir}
-            table={Table}
-            title={_('Scan Configs')}
-            toolBarIcons={ToolBarIcons}
-            onDeleteBulk={handleBulkDeleteScanConfigs}
-            onDownloadBulk={handleBulkExportScanConfigs}
-            onEntitySelected={select}
-            onEntityDeselected={deselect}
-            onError={showError}
-            onFilterChanged={changeFilter}
-            onFilterCreated={changeFilter}
-            onFilterReset={resetFilter}
-            onFilterRemoved={removeFilter}
-            onFirstClick={getFirst}
-            onLastClick={getLast}
-            onNextClick={getNext}
-            onPreviousClick={getPrevious}
-            onInteraction={renewSession}
-            onScanConfigImportClick={import_func}
-            onScanConfigCloneClick={handleCloneScanConfig}
-            onScanConfigCreateClick={create}
-            onScanConfigDeleteClick={handleDeleteScanConfig}
-            onScanConfigDownloadClick={download}
-            onScanConfigEditClick={edit}
-            onSortChange={handleSortChange}
-            onSelectionTypeChange={changeSelectionType}
-            onTagsBulk={openTagsDialog}
-          />
-          <DialogNotification
-            {...notificationDialogState}
-            onCloseClick={closeNotificationDialog}
-          />
-          <Download ref={downloadRef} />
-          {tagsDialogVisible && (
-            <BulkTagComponent
-              entities={scanConfigs}
-              selected={selected}
-              filter={filter}
-              selectionType={selectionType}
-              entitiesCounts={counts}
-              onClose={closeTagsDialog}
-            />
-          )}
-        </React.Fragment>
-      )}
-    </ScanConfigComponent>
-  );
+ScanConfigsPage.propTypes = {
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default ScanConfigsPage;
+export default withEntitiesContainer('scanconfig', {
+  entitiesSelector,
+  loadEntities,
+})(ScanConfigsPage);
 
 // vim: set ts=2 sw=2 tw=80:

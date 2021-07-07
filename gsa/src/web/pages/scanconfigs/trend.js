@@ -24,10 +24,10 @@ import {
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
 
+import PropTypes from 'web/utils/proptypes';
+
 import TrendNoChangeIcon from 'web/components/icon/trendnochangeicon';
 import TrendMoreIcon from 'web/components/icon/trendmoreicon';
-
-import PropTypes from 'web/utils/proptypes';
 
 const Trend = ({trend, titleDynamic, titleStatic, ...props}) => {
   if (trend === SCANCONFIG_TREND_DYNAMIC) {

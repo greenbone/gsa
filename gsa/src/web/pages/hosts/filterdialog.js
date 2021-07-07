@@ -17,7 +17,7 @@
  */
 import {_l} from 'gmp/locale/lang';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
+import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   {

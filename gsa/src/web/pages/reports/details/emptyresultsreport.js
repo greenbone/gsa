@@ -24,6 +24,8 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
@@ -33,8 +35,6 @@ import ReportPanel from './reportpanel';
 import FilterIcon from 'web/components/icon/filtericon';
 import EditIcon from 'web/components/icon/editicon';
 import DeleteIcon from 'web/components/icon/deleteicon';
-
-import PropTypes from 'web/utils/proptypes';
 
 const FilterString = styled.span`
   font-style: italic;

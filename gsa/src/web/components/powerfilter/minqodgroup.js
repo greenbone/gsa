@@ -21,12 +21,12 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import FormGroup from 'web/components/form/formgroup';
-import Spinner from 'web/components/form/spinner';
-
-import Divider from 'web/components/layout/divider';
-
 import PropTypes from 'web/utils/proptypes';
+
+import FormGroup from '../form/formgroup';
+import Spinner from '../form/spinner';
+
+import Divider from '../layout/divider';
 
 const MinQodGroup = ({qod, onChange, filter, name = 'min_qod'}) => {
   if (!isDefined(qod) && isDefined(filter)) {

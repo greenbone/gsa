@@ -20,10 +20,12 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
 import Layout from 'web/components/layout/layout';
+
+import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -31,8 +33,6 @@ import Checkbox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import MultiSelect from 'web/components/form/multiselect';
 import TextField from 'web/components/form/textfield';
-
-import PropTypes from 'web/utils/proptypes';
 
 const Dialog = ({
   allUsers,

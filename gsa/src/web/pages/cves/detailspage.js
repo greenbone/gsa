@@ -15,15 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
-import {useParams} from 'react-router-dom';
-
-import {useExportCvesByIds, useGetCve} from 'web/graphql/cves';
-
-import {hasValue} from 'gmp/utils/identity';
+import React from 'react';
 
 import _ from 'gmp/locale';
-
 import DateTime from 'web/components/date/datetime';
 
 import CveIcon from 'web/components/icon/cveicon';
@@ -35,13 +29,6 @@ import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-import useReload from 'web/components/loading/useReload';
-
-import useDownload from 'web/components/form/useDownload';
-import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
-import Download from 'web/components/form/download';
 
 import CertLink from 'web/components/link/certlink';
 import DetailsLink from 'web/components/link/detailslink';
@@ -60,21 +47,21 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-
 import DetailsBlock from 'web/entity/block';
+import EntityPage from 'web/entity/page';
 import EntityComponent from 'web/entity/component';
 import {InfoLayout} from 'web/entity/info';
-import EntityPage from 'web/entity/page';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import useExportEntity from 'web/entity/useExportEntity';
+
+import {selector, loadEntity} from 'web/store/entities/cves';
 
 import PropTypes from 'web/utils/proptypes';
 
 import CveDetails from './details';
+import withEntityContainer from 'web/entity/withEntityContainer';
 
-export const ToolBarIcons = ({entity, onCveDownloadClick}) => (
+const ToolBarIcons = ({entity, onCveDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
@@ -98,14 +85,14 @@ ToolBarIcons.propTypes = {
 };
 
 const Details = ({entity, links = true}) => {
-  const {certRefs = [], nvtRefs = []} = entity;
+  const {certs = [], nvts = []} = entity;
   let {products} = entity;
-  products = products.slice().sort();
+  products = products.sort();
   return (
     <Layout flex="column">
       <CveDetails entity={entity} />
 
-      {certRefs.length > 0 && (
+      {certs.length > 0 && (
         <DetailsBlock title={_('CERT Advisories referencing this CVE')}>
           <Table>
             <TableHeader>
@@ -115,13 +102,13 @@ const Details = ({entity, links = true}) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {certRefs.map(cert => (
+              {certs.map(cert => (
                 <TableRow key={cert.name}>
                   <TableData>
                     <span>
                       <CertLink
                         id={cert.name}
-                        type={cert.type}
+                        type={cert.cert_type}
                         textOnly={!links}
                       />
                     </span>
@@ -148,10 +135,10 @@ const Details = ({entity, links = true}) => {
         </DetailsBlock>
       )}
 
-      {nvtRefs.length > 0 && (
+      {nvts.length > 0 && (
         <DetailsBlock title={_('NVTs addressing this CVE')}>
           <Layout flex="column">
-            {nvtRefs.map(nvt => (
+            {nvts.map(nvt => (
               <span key={nvt.id}>
                 <DetailsLink type="nvt" id={nvt.id}>
                   {nvt.name}
@@ -171,14 +158,14 @@ Details.propTypes = {
 };
 
 const EntityInfo = ({entity}) => {
-  const {id, creationTime, modificationTime, updateTime} = entity;
+  const {id, publishedTime, lastModifiedTime, updateTime} = entity;
   return (
     <InfoLayout>
       <div>{_('ID:')}</div>
       <div>{id}</div>
       <div>{_('Published:')}</div>
       <div>
-        <DateTime date={creationTime} />
+        <DateTime date={publishedTime} />
       </div>
       <div>{_('Modified:')}</div>
       <div>
@@ -186,7 +173,7 @@ const EntityInfo = ({entity}) => {
       </div>
       <div>{_('Last updated:')}</div>
       <div>
-        <DateTime date={modificationTime} />
+        <DateTime date={lastModifiedTime} />
       </div>
     </InfoLayout>
   );
@@ -196,111 +183,84 @@ EntityInfo.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = () => {
-  // Page methods
-  const {id} = useParams();
-  const [, renewSessionTimeout] = useUserSessionTimeout();
-  const [downloadRef, handleDownload] = useDownload();
-  const {showError} = useDialogNotification();
+const CvePage = ({
+  entity,
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => (
+  <EntityComponent
+    name="cve"
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onInteraction={onInteraction}
+  >
+    {({download}) => (
+      <EntityPage
+        {...props}
+        entity={entity}
+        sectionIcon={<CveIcon size="large" />}
+        title={_('CVE')}
+        infoComponent={EntityInfo}
+        toolBarIcons={ToolBarIcons}
+        onCveDownloadClick={download}
+        onInteraction={onInteraction}
+      >
+        {({activeTab = 0, onActivateTab}) => {
+          return (
+            <React.Fragment>
+              <PageTitle title={_('CVE: {{name}}', {name: entity.name})} />
+              <Layout grow="1" flex="column">
+                <TabLayout grow="1" align={['start', 'end']}>
+                  <TabList
+                    active={activeTab}
+                    align={['start', 'stretch']}
+                    onActivateTab={onActivateTab}
+                  >
+                    <Tab>{_('Information')}</Tab>
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
+                  </TabList>
+                </TabLayout>
 
-  // Load cve related entities
-  const {cve, refetch: refetchCve, loading, error: entityError} = useGetCve(id);
+                <Tabs active={activeTab}>
+                  <TabPanels>
+                    <TabPanel>
+                      <Details entity={entity} />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityTags
+                        entity={entity}
+                        onChanged={onChanged}
+                        onError={onError}
+                        onInteraction={onInteraction}
+                      />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </Layout>
+            </React.Fragment>
+          );
+        }}
+      </EntityPage>
+    )}
+  </EntityComponent>
+);
 
-  // Cve related mutations
-  const exportEntity = useExportEntity();
-  const exportCve = useExportCvesByIds();
-
-  // Cve methods
-  const handleDownloadCve = exportedCve => {
-    exportEntity({
-      entity: exportedCve,
-      exportFunc: exportCve,
-      resourceType: 'cves',
-      onDownload: handleDownload,
-      showError,
-    });
-  };
-
-  // Timeout and reload
-  const timeoutFunc = useEntityReloadInterval(cve);
-
-  const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetchCve,
-    timeoutFunc,
-  );
-
-  useEffect(() => {
-    // start reloading if cve is available and no timer is running yet
-    if (hasValue(cve) && !hasRunningTimer) {
-      startReload();
-    }
-  }, [cve, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // stop reload on unmount
-  useEffect(() => stopReload, [stopReload]);
-
-  return (
-    <EntityComponent
-      name="cve"
-      onDownloaded={handleDownload}
-      onDownloadError={showError}
-      onInteraction={renewSessionTimeout}
-    >
-      {({download}) => (
-        <EntityPage
-          entity={cve}
-          entityError={entityError}
-          entityType={'cve'}
-          isLoading={loading}
-          sectionIcon={<CveIcon size="large" />}
-          title={_('CVE')}
-          infoComponent={EntityInfo}
-          toolBarIcons={ToolBarIcons}
-          onCveDownloadClick={handleDownloadCve}
-          onInteraction={renewSessionTimeout}
-        >
-          {({activeTab = 0, onActivateTab}) => {
-            return (
-              <React.Fragment>
-                <PageTitle title={_('CVE: {{name}}', {name: cve.name})} />
-                <Layout grow="1" flex="column">
-                  <TabLayout grow="1" align={['start', 'end']}>
-                    <TabList
-                      active={activeTab}
-                      align={['start', 'stretch']}
-                      onActivateTab={onActivateTab}
-                    >
-                      <Tab>{_('Information')}</Tab>
-                      <EntitiesTab entities={cve.userTags}>
-                        {_('User Tags')}
-                      </EntitiesTab>
-                    </TabList>
-                  </TabLayout>
-
-                  <Tabs active={activeTab}>
-                    <TabPanels>
-                      <TabPanel>
-                        <Details entity={cve} />
-                      </TabPanel>
-                      <TabPanel>
-                        <EntityTags
-                          entity={cve}
-                          onChanged={() => refetchCve()}
-                          onError={showError}
-                          onInteraction={renewSessionTimeout}
-                        />
-                      </TabPanel>
-                    </TabPanels>
-                  </Tabs>
-                </Layout>
-                <Download ref={downloadRef} />
-              </React.Fragment>
-            );
-          }}
-        </EntityPage>
-      )}
-    </EntityComponent>
-  );
+CvePage.propTypes = {
+  entity: PropTypes.model,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default Page;
+export default withEntityContainer('cve', {
+  load: loadEntity,
+  entitySelector: selector,
+})(CvePage);
+
+// vim: set ts=2 sw=2 tw=80:

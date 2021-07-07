@@ -21,11 +21,11 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import TrashcanIcon from 'web/components/icon/trashcanicon';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SelectionType from 'web/utils/selectiontype';
+
+import TrashcanIcon from 'web/components/icon/trashcanicon';
 
 const TrashIcon = ({selectionType, title, ...other}) => {
   if (!isDefined(title)) {

@@ -65,7 +65,6 @@ exports[`Task Status tests should render 1`] = `
 
 <span
   class="c0 c1"
-  data-testid="details-link"
 >
   <div
     class="c2"

@@ -27,13 +27,12 @@ import InfoPanel from 'web/components/panel/infopanel';
 
 import FilterIcon from 'web/components/icon/filtericon';
 
-import EditIcon from 'web/components/icon/editicon';
-import FootNote from 'web/components/footnote/footnote';
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 
 import ReportPanel from './reportpanel';
+import EditIcon from 'web/components/icon/editicon';
+import FootNote from 'web/components/footnote/footnote';
+import Layout from 'web/components/layout/layout';
 
 const UpdatingDivider = styled(({isUpdating, ...props}) => (
   <Divider {...props} />

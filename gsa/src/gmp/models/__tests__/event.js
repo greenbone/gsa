@@ -76,7 +76,11 @@ END:VCALENDAR
   });
 
   test('should calculate start date as next date for daily recurrence', () => {
-    const now = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
+    const now = date
+      .tz('utc')
+      .minutes(0)
+      .seconds(0)
+      .milliseconds(0);
     const startDate = now.clone().add(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -101,7 +105,11 @@ END:VCALENDAR
   });
 
   test('should calculate next day as next day for daily recurrence', () => {
-    const now = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
+    const now = date
+      .tz('utc')
+      .minutes(0)
+      .seconds(0)
+      .milliseconds(0);
     const startDate = now.clone().subtract(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -130,7 +138,11 @@ END:VCALENDAR
   });
 
   test('should calculate start date as next date for no recurrence', () => {
-    const now = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
+    const now = date
+      .tz('utc')
+      .minutes(0)
+      .seconds(0)
+      .milliseconds(0);
     const startDate = now.clone().add(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -154,7 +166,11 @@ END:VCALENDAR
   });
 
   test('should calculate no next date for no recurrence if start date is already over', () => {
-    const startDate = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
+    const startDate = date
+      .tz('utc')
+      .minutes(0)
+      .seconds(0)
+      .milliseconds(0);
     const now = startDate.clone().add(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0

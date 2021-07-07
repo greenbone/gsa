@@ -16,40 +16,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useReducer} from 'react';
+import React from 'react';
 
 import _ from 'gmp/locale';
 
-import moment from 'gmp/models/date';
-import {ALL_FILTER} from 'gmp/models/filter';
+import {isDefined} from 'gmp/utils/identity';
+import {shorten} from 'gmp/utils/string';
+import {hasId} from 'gmp/utils/id';
 
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {
-  ACTIVE_NO_VALUE,
-  ACTIVE_YES_ALWAYS_VALUE,
-  ACTIVE_YES_FOR_NEXT_VALUE,
-  ACTIVE_YES_UNTIL_VALUE,
   ANY,
-  DEFAULT_OID_VALUE,
   MANUAL,
-  RESULT_ANY,
-  RESULT_UUID,
   TASK_ANY,
   TASK_SELECTED,
+  RESULT_ANY,
+  RESULT_UUID,
+  ACTIVE_NO_VALUE,
+  ACTIVE_YES_ALWAYS_VALUE,
+  ACTIVE_YES_UNTIL_VALUE,
 } from 'gmp/models/override';
 
-import {isDefined, hasValue} from 'gmp/utils/identity';
-import {isEmpty, shorten} from 'gmp/utils/string';
-import {hasId} from 'gmp/utils/id';
-
-import EntityComponent from 'web/entity/component';
-
-import {useCreateOverride, useModifyOverride} from 'web/graphql/overrides';
-import {useLazyGetTasks} from 'web/graphql/tasks';
-
 import PropTypes from 'web/utils/proptypes';
-
+import withGmp from 'web/utils/withGmp';
 import {
   FALSE_POSITIVE_VALUE,
   LOG_VALUE,
@@ -58,7 +48,7 @@ import {
   LOW_VALUE,
 } from 'web/utils/severity';
 
-import reducer, {updateState} from 'web/utils/stateReducer';
+import EntityComponent from 'web/entity/component';
 
 import OverrideDialog from './dialog';
 
@@ -70,29 +60,18 @@ const SEVERITIES_LIST = [
   FALSE_POSITIVE_VALUE,
 ];
 
-const OverrideComponent = ({
-  children,
-  onCloned,
-  onCloneError,
-  onCreated,
-  onCreateError,
-  onDeleted,
-  onDeleteError,
-  onDownloaded,
-  onDownloadError,
-  onInteraction,
-  onSaved,
-  onSaveError,
-}) => {
-  const [state, dispatch] = useReducer(reducer, {dialogVisible: false});
-  const [createOverride] = useCreateOverride();
-  const [modifyOverride] = useModifyOverride();
+class OverrideComponent extends React.Component {
+  constructor(...args) {
+    super(...args);
 
-  const [loadTasks, {tasks}] = useLazyGetTasks({
-    filterString: ALL_FILTER.toFilterString(),
-  });
+    this.state = {dialogVisible: false};
 
-  const openOverrideDialog = (override, initial) => {
+    this.handleCloseOverrideDialog = this.handleCloseOverrideDialog.bind(this);
+    this.openCreateOverrideDialog = this.openCreateOverrideDialog.bind(this);
+    this.openOverrideDialog = this.openOverrideDialog.bind(this);
+  }
+
+  openOverrideDialog(override, initial) {
     if (isDefined(override)) {
       let active = ACTIVE_NO_VALUE;
       if (override.isActive()) {
@@ -103,244 +82,205 @@ const OverrideComponent = ({
         }
       }
 
-      let customSeverity = NO_VALUE;
-      let newSeverityFromList;
+      let custom_severity = NO_VALUE;
+      let new_severity_from_list;
       let newSeverity;
 
       if (SEVERITIES_LIST.includes(override.newSeverity)) {
-        newSeverityFromList = override.newSeverity;
+        new_severity_from_list = override.newSeverity;
       } else {
-        customSeverity = YES_VALUE;
+        custom_severity = YES_VALUE;
         newSeverity = override.newSeverity;
       }
 
       const {result, task, nvt, hosts} = override;
 
-      dispatch(
-        updateState({
-          dialogVisible: true,
-          id: override.id,
-          active,
-          customSeverity,
-          hosts: hosts.length > 0 ? MANUAL : ANY,
-          hostsManual: hosts.join(', '),
-          newSeverity,
-          newSeverityFromList,
-          nvtName: isDefined(nvt) ? nvt.name : undefined,
-          oid: isDefined(nvt) ? nvt.id : undefined,
-          override,
-          port: isDefined(override.port) ? MANUAL : ANY,
-          portManual: override.port,
-          resultId: hasId(result) ? RESULT_UUID : RESULT_ANY,
-          resultName: hasId(result) ? result.name : undefined,
-          resultUuid: hasId(result) ? result.id : undefined,
-          severity: override.severity,
-          taskId: hasId(task) ? TASK_SELECTED : TASK_ANY,
-          taskUuid: hasId(task) ? task.id : undefined,
-          text: override.text,
-          title: _('Edit Override {{- name}}', {
-            name: shorten(override.text, 20),
-          }),
+      this.setState({
+        dialogVisible: true,
+        id: override.id,
+        active,
+        custom_severity,
+        hosts: hosts.length > 0 ? MANUAL : ANY,
+        hosts_manual: hosts.join(', '),
+        newSeverity,
+        new_severity_from_list,
+        nvt_name: isDefined(nvt) ? nvt.name : undefined,
+        oid: isDefined(nvt) ? nvt.oid : undefined,
+        override,
+        port: isDefined(override.port) ? MANUAL : ANY,
+        port_manual: override.port,
+        result_id: hasId(result) ? RESULT_UUID : RESULT_ANY,
+        result_name: hasId(result) ? result.name : undefined,
+        result_uuid: hasId(result) ? result.id : undefined,
+        severity: override.severity,
+        task_id: hasId(task) ? TASK_SELECTED : TASK_ANY,
+        task_uuid: hasId(task) ? task.id : undefined,
+        text: override.text,
+        title: _('Edit Override {{- name}}', {
+          name: shorten(override.text, 20),
         }),
-      );
+      });
     } else {
-      dispatch(
-        updateState({
-          dialogVisible: true,
-          active: undefined,
-          customSeverity: undefined,
-          hosts: undefined,
-          hostsManual: undefined,
-          id: undefined,
-          newSeverity: undefined,
-          nvtName: undefined,
-          oid: undefined,
-          override: undefined,
-          port: undefined,
-          portManual: undefined,
-          resultId: undefined,
-          resultName: undefined,
-          resultUuid: undefined,
-          severity: undefined,
-          taskId: undefined,
-          taskUuid: undefined,
-          text: undefined,
-          title: undefined,
-          ...initial,
-        }),
-      );
+      this.setState({
+        dialogVisible: true,
+        active: undefined,
+        custom_severity: undefined,
+        hosts: undefined,
+        hosts_manual: undefined,
+        id: undefined,
+        newSeverity: undefined,
+        nvt_name: undefined,
+        oid: undefined,
+        override: undefined,
+        port: undefined,
+        port_manual: undefined,
+        result_id: undefined,
+        result_name: undefined,
+        result_uuid: undefined,
+        severity: undefined,
+        task_id: undefined,
+        task_uuid: undefined,
+        text: undefined,
+        title: undefined,
+        ...initial,
+      });
     }
+    this.handleInteraction();
 
-    handleInteraction();
-    loadTasks();
-  };
+    this.loadTasks();
+  }
 
-  const closeOverrideDialog = () => {
-    dispatch(updateState({dialogVisible: false}));
-  };
+  closeOverrideDialog() {
+    this.setState({dialogVisible: false});
+  }
 
-  const handleCloseOverrideDialog = () => {
-    closeOverrideDialog();
-    handleInteraction();
-  };
+  handleCloseOverrideDialog() {
+    this.setState({dialogVisible: false});
+    this.handleInteraction();
+  }
 
-  const openCreateOverrideDialog = (initial = {}) => {
-    openOverrideDialog(undefined, initial);
-  };
+  openCreateOverrideDialog(initial = {}) {
+    this.openOverrideDialog(undefined, initial);
+  }
 
-  const handleSaveOverride = data => {
-    handleInteraction();
-
-    const {
-      severity,
-      active,
-      days,
-      hostsManual,
-      id,
-      newSeverity,
-      newSeverityFromList,
-      override,
-      portManual,
-      resultId,
-      resultUuid,
-      taskId,
-      taskUuid,
-      text,
-    } = data;
-
-    let daysActive;
-    if (active === ACTIVE_YES_UNTIL_VALUE) {
-      // calculate days from now until endTime date. Needs +1, because otherwise
-      // each edit to the override reduces the days left by 1 each
-      daysActive = override.endTime?.diff(moment(), 'days') + 1;
-    } else if (active === ACTIVE_YES_FOR_NEXT_VALUE) {
-      daysActive = parseInt(days);
-    } else {
-      daysActive = parseInt(active);
-    }
-
-    const modifyData = {
-      id,
-      severity: severity === '' ? undefined : severity,
-      daysActive,
-      hosts: hostsManual.split(','),
-      newSeverity: hasValue(newSeverity) ? newSeverity : newSeverityFromList,
-      port: portManual,
-      resultId:
-        resultId === RESULT_UUID && !isEmpty(resultUuid)
-          ? resultUuid
-          : undefined,
-      taskId:
-        taskId === TASK_SELECTED && !isEmpty(taskUuid) ? taskUuid : undefined,
-      text,
-    };
-
-    if (isDefined(id)) {
-      return modifyOverride(modifyData)
-        .then(onSaved, onSaveError)
-        .then(() => closeOverrideDialog());
-    }
-
-    const createData = {
-      ...modifyData,
-      nvtOid: isDefined(data?.oid) ? data.oid : DEFAULT_OID_VALUE,
-      id: undefined,
-    };
-
-    return createOverride(createData)
-      .then(onCreated, onCreateError)
-      .then(() => closeOverrideDialog());
-  };
-
-  const handleInteraction = () => {
+  handleInteraction() {
+    const {onInteraction} = this.props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  };
+  }
 
-  const {
-    dialogVisible,
-    active,
-    customSeverity,
-    hosts,
-    hostsManual,
-    id,
-    newSeverity,
-    newSeverityFromList,
-    nvtName,
-    oid,
-    override,
-    port,
-    portManual,
-    resultId,
-    resultName,
-    resultUuid,
-    severity,
-    taskId,
-    taskUuid,
-    text,
-    title,
-    ...initial
-  } = state;
+  loadTasks() {
+    const {gmp} = this.props;
 
-  return (
-    <EntityComponent
-      name="override"
-      onCreated={onCreated}
-      onCreateError={onCreateError}
-      onCloned={onCloned}
-      onCloneError={onCloneError}
-      onDeleted={onDeleted}
-      onDeleteError={onDeleteError}
-      onDownloaded={onDownloaded}
-      onDownloadError={onDownloadError}
-      onInteraction={onInteraction}
-      onSaved={onSaved}
-      onSaveError={onSaveError}
-    >
-      {({save, ...other}) => (
-        <React.Fragment>
-          {children({
-            ...other,
-            create: openCreateOverrideDialog,
-            edit: openOverrideDialog,
-          })}
-          {dialogVisible && (
-            <OverrideDialog
-              active={active}
-              customSeverity={customSeverity}
-              hosts={hosts}
-              hostsManual={hostsManual}
-              id={id}
-              newSeverity={newSeverity}
-              newSeverityFromList={newSeverityFromList}
-              nvtName={nvtName}
-              oid={oid}
-              override={override}
-              port={port}
-              portManual={portManual}
-              resultId={resultId}
-              resultName={resultName}
-              resultUuid={resultUuid}
-              severity={severity}
-              taskId={taskId}
-              taskUuid={taskUuid}
-              tasks={tasks}
-              text={text}
-              title={title}
-              onClose={handleCloseOverrideDialog}
-              onSave={handleSaveOverride}
-              {...initial}
-            />
-          )}
-        </React.Fragment>
-      )}
-    </EntityComponent>
-  );
-};
+    gmp.tasks.getAll().then(response => this.setState({tasks: response.data}));
+  }
+
+  render() {
+    const {
+      children,
+      onCloned,
+      onCloneError,
+      onCreated,
+      onCreateError,
+      onDeleted,
+      onDeleteError,
+      onDownloaded,
+      onDownloadError,
+      onInteraction,
+      onSaved,
+      onSaveError,
+    } = this.props;
+
+    const {
+      dialogVisible,
+      active,
+      custom_severity,
+      hosts,
+      hosts_manual,
+      id,
+      newSeverity,
+      new_severity_from_list,
+      nvt_name,
+      oid,
+      override,
+      port,
+      port_manual,
+      result_id,
+      result_name,
+      result_uuid,
+      severity,
+      task_id,
+      task_uuid,
+      tasks,
+      text,
+      title,
+      ...initial
+    } = this.state;
+
+    return (
+      <EntityComponent
+        name="override"
+        onCreated={onCreated}
+        onCreateError={onCreateError}
+        onCloned={onCloned}
+        onCloneError={onCloneError}
+        onDeleted={onDeleted}
+        onDeleteError={onDeleteError}
+        onDownloaded={onDownloaded}
+        onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
+        onSaved={onSaved}
+        onSaveError={onSaveError}
+      >
+        {({save, ...other}) => (
+          <React.Fragment>
+            {children({
+              ...other,
+              create: this.openCreateOverrideDialog,
+              edit: this.openOverrideDialog,
+            })}
+            {dialogVisible && (
+              <OverrideDialog
+                active={active}
+                custom_severity={custom_severity}
+                hosts={hosts}
+                hosts_manual={hosts_manual}
+                id={id}
+                newSeverity={newSeverity}
+                new_severity_from_list={new_severity_from_list}
+                nvt_name={nvt_name}
+                oid={oid}
+                override={override}
+                port={port}
+                port_manual={port_manual}
+                result_id={result_id}
+                result_name={result_name}
+                result_uuid={result_uuid}
+                severity={severity}
+                task_id={task_id}
+                task_uuid={task_uuid}
+                tasks={tasks}
+                text={text}
+                title={title}
+                onClose={this.handleCloseOverrideDialog}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeOverrideDialog());
+                }}
+                {...initial}
+              />
+            )}
+          </React.Fragment>
+        )}
+      </EntityComponent>
+    );
+  }
+}
 
 OverrideComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -354,6 +294,6 @@ OverrideComponent.propTypes = {
   onSaved: PropTypes.func,
 };
 
-export default OverrideComponent;
+export default withGmp(OverrideComponent);
 
 // vim: set ts=2 sw=2 tw=80:

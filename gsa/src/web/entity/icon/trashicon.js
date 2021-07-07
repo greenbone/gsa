@@ -19,15 +19,16 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
 
-import TrashcanIcon from 'web/components/icon/trashcanicon';
-
 import PropTypes from 'web/utils/proptypes';
-import useCapabilities from 'web/utils/useCapabilities';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import TrashcanIcon from 'web/components/icon/trashcanicon';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 const EntityTrashIcon = ({
+  capabilities,
   displayName,
   entity,
   name,
@@ -42,8 +43,6 @@ const EntityTrashIcon = ({
   if (!isDefined(displayName)) {
     displayName = typeName(name);
   }
-
-  const capabilities = useCapabilities();
 
   const mayDelete =
     capabilities.mayDelete(name) && entity.userCapabilities.mayDelete(name);
@@ -77,6 +76,7 @@ const EntityTrashIcon = ({
 };
 
 EntityTrashIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
   name: PropTypes.string,
@@ -84,6 +84,6 @@ EntityTrashIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default EntityTrashIcon;
+export default withCapabilities(EntityTrashIcon);
 
 // vim: set ts=2 sw=2 tw=80:

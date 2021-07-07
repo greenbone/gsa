@@ -19,7 +19,7 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from '../../utils/proptypes.js';
 
 const TabPanels = ({active = 0, children}) => {
   const child = React.Children.toArray(children)[active];

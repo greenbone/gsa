@@ -17,7 +17,7 @@
  */
 import React from 'react';
 
-import {rendererWith, wait} from 'web/utils/testing';
+import {rendererWith, waitFor} from 'web/utils/testing';
 
 import FeedStatus from '../feedstatuspage';
 import {Feed} from 'gmp/commands/feedstatus';
@@ -67,21 +67,21 @@ const xhr = {
 
 const response = new Response(xhr, data);
 
+const gmp = {
+  feedstatus: {
+    readFeedInformation: jest.fn(() => Promise.resolve(response)),
+  },
+  settings: {
+    manualUrl: 'http://foo.bar',
+  },
+};
+
 describe('Feed status page tests', () => {
   test('should render', async () => {
-    const gmp = {
-      feedstatus: {
-        readFeedInformation: jest.fn(() => Promise.resolve(response)),
-      },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
-    };
-
     const {render} = rendererWith({gmp, router: true});
     const {element, getAllByTestId} = render(<FeedStatus />);
 
-    await wait();
+    await waitFor(() => element.querySelectorAll('table'));
 
     // Should render all icons
     const icons = getAllByTestId('svg-icon');

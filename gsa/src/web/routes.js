@@ -71,7 +71,6 @@ import PoliciesPage from './pages/policies/listpage';
 import PoliciesDetailsPage from './pages/policies/detailspage';
 import PortListsPage from './pages/portlists/listpage';
 import PortListDetailsPage from './pages/portlists/detailspage';
-import ProcessMapsPage from './pages/processmaps/processmapspage';
 import RadiusPage from './pages/radius/radiuspage';
 import ReportFormatsPage from './pages/reportformats/listpage';
 import ReportFormatDetailsPage from './pages/reportformats/detailspage';
@@ -103,6 +102,9 @@ import UserDetailsPage from './pages/users/detailspage';
 import UserSettingsPage from './pages/usersettings/usersettingspage';
 import UsersPage from './pages/users/listpage';
 import VulnerabilitiesPage from './pages/vulns/listpage';
+
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
 import Authorized from './authorized';
 
@@ -151,7 +153,6 @@ const Routes = () => (
               <Route path="/permissions" component={PermissionsPage} />
               <Route path="/policies" component={PoliciesPage} />
               <Route path="/portlists" component={PortListsPage} />
-              <Route path="/processmaps" component={ProcessMapsPage} />
               <Route path="/radius" component={RadiusPage} />
               <Route path="/reports" component={ReportsPage} />
               <Route path="/reportformats" component={ReportFormatsPage} />
@@ -230,6 +231,10 @@ const Routes = () => (
   </Router>
 );
 
-export default Routes;
+Routes.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
+};
+
+export default withGmp(Routes);
 
 // vim: set ts=2 sw=2 tw=80:

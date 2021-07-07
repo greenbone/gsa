@@ -21,10 +21,10 @@ import styled from 'styled-components';
 
 import {hasValue} from 'gmp/utils/identity';
 
-import Portal from 'web/components/portal/portal';
-
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+
+import Portal from 'web/components/portal/portal';
 
 const ToolTipText = styled.div`
   box-sizing: border-box;

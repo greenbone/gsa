@@ -19,7 +19,11 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
+
+import CreateIcon from 'web/entity/icon/createicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 import Divider from 'web/components/layout/divider';
+import EditIcon from 'web/entity/icon/editicon';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
@@ -41,11 +45,8 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
-import CreateIcon from 'web/entity/icon/createicon';
-import TrashIcon from 'web/entity/icon/trashicon';
-import EditIcon from 'web/entity/icon/editicon';
-import {goto_details, goto_list} from 'web/entity/component';
 import EntityPage from 'web/entity/page';
+import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';

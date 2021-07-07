@@ -17,10 +17,10 @@
  */
 import React from 'react';
 
-import Label from 'web/components/chart/label';
-import ToolTip from 'web/components/chart/tooltip';
-
 import PropTypes from 'web/utils/proptypes';
+
+import Label from '../label';
+import ToolTip from '../tooltip';
 
 import Pie from './pie';
 import {DataPropType} from './proptypes';

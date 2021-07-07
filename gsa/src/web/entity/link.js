@@ -19,18 +19,14 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {
-  hyperionEntityTypes,
-  getEntityType,
-  normalizeType,
-} from 'gmp/utils/entitytype';
-import {hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import DetailsLink from 'web/components/link/detailslink';
-import Link from 'web/components/link/link';
+import PropTypes from '../utils/proptypes.js';
+import withCapabilities from '../utils/withCapabilities.js';
 
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
+import DetailsLink from '../components/link/detailslink.js';
+import Link from '../components/link/link.js';
+import {getEntityType, normalizeType} from 'gmp/utils/entitytype.js';
 
 const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
   const {id, name, userCapabilities, deleted} = entity;
@@ -48,14 +44,9 @@ const EntityLink = ({capabilities, entity, textOnly, ...props}) => {
     );
   }
 
-  if (hasValue(deleted)) {
+  if (isDefined(deleted) && deleted !== 0) {
     // FIXME is this still used?
-    if (hyperionEntityTypes.includes(type) && deleted === true) {
-      return <b>{_('Orphan')}</b>;
-    } else if (deleted === 1) {
-      // explicitly use deleted === 1. If we use deleted !== 0, and the entityType is not from hyperion and deleted === false, this can cause Orphan to be returned
-      return <b>{_('Orphan')}</b>;
-    }
+    return <b>{_('Orphan')}</b>;
   }
 
   if (

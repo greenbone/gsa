@@ -21,46 +21,112 @@ import {setLocale} from 'gmp/locale/lang';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import Audit from 'gmp/models/audit';
+import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
+import Policy from 'gmp/models/policy';
+import Schedule from 'gmp/models/schedule';
+import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {
-  auditDetailsAudit,
-  auditDetailsPolicy,
-  auditDetailsSchedule,
-} from 'web/graphql/__mocks__/audits';
-import {rendererWith, wait} from 'web/utils/testing';
+import {entityLoadingActions as policyActions} from 'web/store/entities/policies';
+import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedules';
+
+import {rendererWith} from 'web/utils/testing';
 
 import Details from '../details';
-import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
-import {createGetPolicyQueryMock} from 'web/graphql/__mocks__/policies';
 
 setLocale('en');
 
+const policy = Policy.fromElement({
+  _id: '314',
+  name: 'foo',
+  comment: 'bar',
+  scanner: {name: 'scanner1', type: '0'},
+  policy_type: OPENVAS_SCAN_CONFIG_TYPE,
+  tasks: {
+    task: [{id: '12345', name: 'foo'}, {id: '678910', name: 'audit2'}],
+  },
+});
+
+const lastReport = {
+  report: {
+    _id: '1234',
+    timestamp: '2019-07-30T13:23:30Z',
+    scan_start: '2019-07-30T13:23:34Z',
+    scan_end: '2019-07-30T13:25:43Z',
+    compliance_count: {yes: 4, no: 3, incomplete: 1},
+  },
+};
+
+const preferences = {
+  preference: [
+    {
+      name: 'Add results to Asset Management',
+      scanner_name: 'in_assets',
+      value: 'yes',
+    },
+    {
+      name: 'Auto Delete Reports',
+      scanner_name: 'auto_delete',
+      value: 'no',
+    },
+  ],
+};
+
+const schedule = Schedule.fromElement({_id: '121314', name: 'schedule1'});
+
+const getPolicy = jest.fn().mockReturnValue(
+  Promise.resolve({
+    data: policy,
+  }),
+);
+
+const getSchedule = jest.fn().mockReturnValue(
+  Promise.resolve({
+    data: schedule,
+  }),
+);
+
+const gmp = {
+  policy: {
+    get: getPolicy,
+  },
+  schedule: {
+    get: getSchedule,
+  },
+};
+
 describe('Audit Details tests', () => {
-  test('should render full audit details', async () => {
-    const audit = Audit.fromObject(auditDetailsAudit);
+  test('should render full audit details', () => {
+    const audit = Audit.fromElement({
+      _id: '12345',
+      owner: {name: 'username'},
+      name: 'foo',
+      comment: 'bar',
+      status: AUDIT_STATUS.done,
+      alterable: '0',
+      last_report: lastReport,
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: '5678', name: 'target1'},
+      alert: {_id: '91011', name: 'alert1'},
+      scanner: {_id: '1516', name: 'scanner1', type: '2'},
+      preferences: preferences,
+      schedule: schedule,
+      config: policy,
+    });
     const caps = new Capabilities(['everything']);
 
-    const [scheduleMock, scheduleResult] = createGetScheduleQueryMock(
-      '121314',
-      auditDetailsSchedule,
-    );
-    const [policyMock, policyResult] = createGetPolicyQueryMock(
-      '314',
-      auditDetailsPolicy,
-    );
-    const {render} = rendererWith({
+    const {render, store} = rendererWith({
       capabilities: caps,
       router: true,
-      queryMocks: [scheduleMock, policyMock],
+      store: true,
+      gmp,
     });
+
+    store.dispatch(policyActions.success('314', policy));
+    store.dispatch(scheduleActions.success('121314', schedule));
 
     const {element, getAllByTestId} = render(<Details entity={audit} />);
 
-    await wait();
-
-    expect(scheduleResult).toHaveBeenCalled();
-    expect(policyResult).toHaveBeenCalled();
+    expect(element).toMatchSnapshot();
 
     const headings = element.querySelectorAll('h2');
     const detailslinks = getAllByTestId('details-link');
@@ -77,16 +143,10 @@ describe('Audit Details tests', () => {
     expect(detailslinks[2]).toHaveAttribute('href', '/scanner/1516');
     expect(element).toHaveTextContent('scanner1');
     expect(element).toHaveTextContent('OpenVAS Scanner');
-    expect(detailslinks[3]).toHaveAttribute('href', '/policy/314');
 
     expect(headings[3]).toHaveTextContent('Assets');
-    expect(element).toHaveTextContent('Add to Assets');
-    expect(element).toHaveTextContent('Yes');
 
-    expect(headings[4]).toHaveTextContent('Schedule');
-    expect(detailslinks[4]).toHaveAttribute('href', '/schedule/121314');
-
-    expect(headings[5]).toHaveTextContent('Scan');
+    expect(headings[4]).toHaveTextContent('Scan');
     expect(element).toHaveTextContent('2 minutes');
     expect(element).toHaveTextContent('Do not automatically delete reports');
   });

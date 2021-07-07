@@ -23,11 +23,11 @@ import _ from 'gmp/locale';
 
 import {isDefined, isFunction} from 'gmp/utils/identity';
 
-import withIconSize from 'web/components/icon/withIconSize';
-
 import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
+
+import withIconSize from 'web/components/icon/withIconSize';
 
 const Anchor = styled.a`
   display: flex;

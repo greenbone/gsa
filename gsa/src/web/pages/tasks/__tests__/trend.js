@@ -18,8 +18,6 @@
 
 import React from 'react';
 
-import {TASK_TREND} from 'gmp/models/task';
-
 import {render} from 'web/utils/testing';
 
 import Trend from '../trend';
@@ -30,41 +28,41 @@ setLocale('en');
 
 describe('Task Trend tests', () => {
   test('should render', () => {
-    const {element} = render(<Trend name={TASK_TREND.up} />);
+    const {element} = render(<Trend name="up" />);
 
     expect(element).toMatchSnapshot();
   });
 
   test('should render trend up icon', () => {
-    const {element} = render(<Trend name={TASK_TREND.up} />);
+    const {element} = render(<Trend name="up" />);
 
     expect(element).toHaveAttribute('title', 'Severity increased');
     expect(element).toHaveTextContent('trend_up.svg');
   });
 
   test('should render trend down icon', () => {
-    const {element} = render(<Trend name={TASK_TREND.down} />);
+    const {element} = render(<Trend name="down" />);
 
     expect(element).toHaveAttribute('title', 'Severity decreased');
     expect(element).toHaveTextContent('trend_down.svg');
   });
 
   test('should render trend less icon', () => {
-    const {element} = render(<Trend name={TASK_TREND.less} />);
+    const {element} = render(<Trend name="less" />);
 
     expect(element).toHaveAttribute('title', 'Vulnerability count decreased');
     expect(element).toHaveTextContent('trend_less.svg');
   });
 
   test('should render trend more icon', () => {
-    const {element} = render(<Trend name={TASK_TREND.more} />);
+    const {element} = render(<Trend name="more" />);
 
     expect(element).toHaveAttribute('title', 'Vulnerability count increased');
     expect(element).toHaveTextContent('trend_more.svg');
   });
 
   test('should render trend no change icon', () => {
-    const {element} = render(<Trend name={TASK_TREND.same} />);
+    const {element} = render(<Trend name="same" />);
 
     expect(element).toHaveAttribute('title', 'Vulnerabilities did not change');
     expect(element).toHaveTextContent('trend_nochange.svg');

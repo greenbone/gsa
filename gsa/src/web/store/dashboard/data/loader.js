@@ -21,10 +21,10 @@ import {connect} from 'react-redux';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
 
-import compose from 'web/utils/compose';
-import withGmp from 'web/utils/withGmp';
-import withSubscription from 'web/utils/withSubscription';
-import PropTypes from 'web/utils/proptypes';
+import compose from '../../../utils/compose';
+import withGmp from '../../../utils/withGmp';
+import withSubscription from '../../../utils/withSubscription';
+import PropTypes from '../../../utils/proptypes';
 
 import {
   receivedDashboardData,
@@ -103,10 +103,8 @@ class Loader extends React.Component {
       this.load();
     }
 
-    if (isDefined(subscribe)) {
-      for (const subscription of subscriptions) {
-        this.subscriptions.push(subscribe(subscription, this.load));
-      }
+    for (const subscription of subscriptions) {
+      this.subscriptions.push(subscribe(subscription, this.load));
     }
   }
 
@@ -140,7 +138,7 @@ Loader.propTypes = {
   filter: PropTypes.filter,
   isLoading: PropTypes.bool.isRequired,
   load: PropTypes.func.isRequired,
-  subscribe: PropTypes.func,
+  subscribe: PropTypes.func.isRequired,
   subscriptions: PropTypes.arrayOf(PropTypes.string),
 };
 
@@ -159,7 +157,10 @@ const mapDispatchToProps = (dispatch, {load, ...props}) => ({
 export default compose(
   withGmp,
   withSubscription,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(Loader);
 
 // vim: set ts=2 sw=2 tw=80:

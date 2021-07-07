@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {forEach, map} from 'gmp/utils/array';
 
@@ -124,47 +124,6 @@ class Host extends Asset {
     }
 
     return ret;
-  }
-
-  static parseObject(object) {
-    const copy = super.parseObject(object);
-
-    const hostDetails = {};
-    forEach(copy.details, details => {
-      hostDetails[details.name] = {
-        value: details.value,
-        source: newProperties(details.source),
-      };
-    });
-    copy.details = hostDetails;
-
-    copy.routes = hasValue(copy.routes) ? copy.routes : [];
-
-    copy.identifiers = hasValue(copy.identifiers) ? copy.identifiers : [];
-
-    let hostname = get_identifier(copy.identifiers, 'hostname');
-
-    if (!hasValue(hostname)) {
-      hostname = get_identifier(copy.identifiers, 'DNS-via-TargetDefinition');
-    }
-
-    const ip = get_identifier(copy.identifiers, 'ip');
-
-    copy.hostname = hasValue(hostname) ? hostname.value : undefined;
-    copy.ip = hasValue(ip) ? ip.value : undefined;
-
-    if (hasValue(copy.details?.best_os_cpe)) {
-      copy.os = copy.details.best_os_cpe.value;
-    } else if (hasValue(copy.identifiers)) {
-      const firstOs = copy.identifiers.find(
-        identifier => identifier.name === 'OS',
-      );
-      copy.os = hasValue(firstOs) ? firstOs.value : undefined;
-    } else {
-      copy.os = undefined;
-    }
-
-    return copy;
   }
 }
 

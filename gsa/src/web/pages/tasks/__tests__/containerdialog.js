@@ -70,7 +70,7 @@ describe('ContainerDialog tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       comment: 'lorem',
-      createAssets: true,
+      in_assets: 1,
       id: undefined,
       name: 'ipsum',
     });
@@ -97,15 +97,15 @@ describe('ContainerDialog tests', () => {
     const commentInput = getByName('comment');
     fireEvent.change(commentInput, {target: {value: 'lorem'}});
 
-    const [, createAssetsNoRadio] = queryAllByName('createAssets');
-    fireEvent.click(createAssetsNoRadio);
+    const [, inAssetsNoRadio] = queryAllByName('in_assets');
+    fireEvent.click(inAssetsNoRadio);
 
     const saveButton = getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
       comment: 'lorem',
-      createAssets: false,
+      in_assets: 0,
       id: 't1',
       name: 'ipsum',
     });

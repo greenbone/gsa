@@ -24,9 +24,13 @@ import styled from 'styled-components';
 import {_, _l} from 'gmp/locale/lang';
 import {longDate} from 'gmp/locale/date';
 
+import {parseFloat, parseSeverity} from 'gmp/parser';
+
 import {HOSTS_FILTER_FILTER} from 'gmp/models/filter';
 
-import {parseFloat, parseSeverity} from 'gmp/parser';
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
+import {resultSeverityRiskFactor} from 'web/utils/severity';
 
 import BarChart from 'web/components/chart/bar';
 
@@ -36,10 +40,6 @@ import withFilterSelection from 'web/components/dashboard/display/withFilterSele
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import {riskFactorColorScale} from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
-
-import PropTypes from 'web/utils/proptypes';
-import compose from 'web/utils/compose';
-import {resultSeverityRiskFactor} from 'web/utils/severity';
 
 import {HostsVulnScoreLoader} from './loaders';
 

@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import logger from 'gmp/log';
-import {isDefined, hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 
 import Model, {parseModelFromElement} from 'gmp/model';
@@ -64,29 +64,6 @@ class Schedule extends Model {
       );
     } else {
       ret.tasks = [];
-    }
-
-    return ret;
-  }
-
-  static fromObject(object) {
-    const ret = super.fromObject(object);
-
-    const {timezone, icalendar} = object;
-
-    if (hasValue(icalendar)) {
-      try {
-        ret.event = Event.fromIcal(icalendar, timezone);
-      } catch (error) {
-        log.error(
-          'Could not parse ical data of Schedule',
-          ret.id,
-          error,
-          icalendar,
-        );
-      }
-
-      // delete ret.icalendar;
     }
 
     return ret;

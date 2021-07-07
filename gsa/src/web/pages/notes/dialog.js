@@ -46,13 +46,6 @@ import SaveDialog from 'web/components/dialog/savedialog';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
-import FormGroup from 'web/components/form/formgroup';
-import TextArea from 'web/components/form/textarea';
-import TextField from 'web/components/form/textfield';
-import Radio from 'web/components/form/radio';
-import Select from 'web/components/form/select';
-import Spinner from 'web/components/form/spinner';
-
 import PropTypes from 'web/utils/proptypes';
 import {
   renderNvtName,
@@ -64,26 +57,33 @@ import {
   translatedResultSeverityRiskFactor,
 } from 'web/utils/severity';
 
+import FormGroup from 'web/components/form/formgroup';
+import TextArea from 'web/components/form/textarea';
+import TextField from 'web/components/form/textfield';
+import Radio from 'web/components/form/radio';
+import Select from 'web/components/form/select';
+import Spinner from 'web/components/form/spinner';
+
 const NoteDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
   days = DEFAULT_DAYS,
   fixed = false,
   id,
   hosts = ANY,
-  hostsManual = '',
+  hosts_manual = '',
   note,
-  nvtName,
-  nvtId,
+  nvt_name,
+  oid,
   port = ANY,
-  portManual = '',
-  resultId = RESULT_ANY,
-  resultName,
-  resultUuid,
+  port_manual = '',
+  result_id = RESULT_ANY,
+  result_name,
+  result_uuid,
   severity,
-  taskId = TASK_ANY,
-  taskName,
+  task_id = TASK_ANY,
+  task_name,
   tasks,
-  taskUuid,
+  task_uuid,
   text = '',
   title = _('New Note'),
   onClose,
@@ -97,17 +97,17 @@ const NoteDialog = ({
     days,
     fixed,
     hosts,
-    hostsManual,
+    hosts_manual,
     id,
-    nvtId: isDefined(nvtId) ? nvtId : DEFAULT_OID_VALUE,
+    oid: isDefined(oid) ? oid : DEFAULT_OID_VALUE,
     port,
-    portManual,
-    resultId,
-    resultUuid,
-    resultName,
-    taskId,
-    taskUuid,
-    taskName,
+    port_manual,
+    result_id,
+    result_uuid,
+    result_name,
+    task_id,
+    task_uuid,
+    task_name,
     text,
   };
 
@@ -122,38 +122,36 @@ const NoteDialog = ({
       {({values: state, onValueChange}) => {
         return (
           <Layout flex="column">
-            {state.fixed && isDefined(nvtId) && (
+            {state.fixed && isDefined(oid) && (
               <FormGroup title={_('NVT')} flex="column">
-                <span>{renderNvtName(nvtId, nvtName)}</span>
+                <span>{renderNvtName(oid, nvt_name)}</span>
               </FormGroup>
             )}
-            {state.fixed && !isDefined(nvtId) && (
+            {state.fixed && !isDefined(oid) && (
               <FormGroup title={_('NVT')} flex="column">
-                <span>{renderNvtName(state.nvtId, nvtName)}</span>
+                <span>{renderNvtName(state.oid, nvt_name)}</span>
               </FormGroup>
             )}
             {is_edit && !state.fixed && (
               <FormGroup title={_('NVT')} flex="column">
                 <Radio
-                  title={renderNvtName(nvtId, nvtName)}
-                  name="nvtId"
-                  checked={state.nvtId === nvtId}
-                  value={nvtId}
+                  title={renderNvtName(oid, nvt_name)}
+                  name="oid"
+                  checked={state.oid === oid}
+                  value={oid}
                   onChange={onValueChange}
                 />
                 <Divider>
                   <Radio
-                    name="nvtId"
-                    checked={state.nvtId !== nvtId}
+                    name="oid"
+                    checked={state.oid !== oid}
                     value={DEFAULT_OID_VALUE}
                     onChange={onValueChange}
                   />
                   <TextField
-                    name="nvtId"
-                    disabled={state.nvtId === nvtId}
-                    value={
-                      state.nvtId === nvtId ? DEFAULT_OID_VALUE : state.nvtId
-                    }
+                    name="oid"
+                    disabled={state.oid === oid}
+                    value={state.oid === oid ? DEFAULT_OID_VALUE : state.oid}
                     onChange={onValueChange}
                   />
                 </Divider>
@@ -162,8 +160,8 @@ const NoteDialog = ({
             {!is_edit && !state.fixed && (
               <FormGroup title={_('NVT OID')}>
                 <TextField
-                  name="nvtId"
-                  value={state.nvtId}
+                  name="oid"
+                  value={state.oid}
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -234,9 +232,9 @@ const NoteDialog = ({
                   onChange={onValueChange}
                 />
                 <TextField
-                  name="hostsManual"
+                  name="hosts_manual"
                   disabled={state.hosts !== MANUAL}
-                  value={state.hostsManual}
+                  value={state.hosts_manual}
                   onChange={onValueChange}
                 />
               </Divider>
@@ -258,9 +256,9 @@ const NoteDialog = ({
                   onChange={onValueChange}
                 />
                 <TextField
-                  name="portManual"
+                  name="port_manual"
                   disabled={state.port !== MANUAL}
-                  value={state.portManual}
+                  value={state.port_manual}
                   onChange={onValueChange}
                 />
               </Divider>
@@ -321,24 +319,24 @@ const NoteDialog = ({
 
             <FormGroup title={_('Task')}>
               <Radio
-                name="taskId"
+                name="task_id"
                 title={_('Any')}
-                checked={state.taskId === ''}
+                checked={state.task_id === ''}
                 value=""
                 onChange={onValueChange}
               />
               <Divider>
                 <Radio
-                  name="taskId"
-                  checked={state.taskId === '0'}
+                  name="task_id"
+                  checked={state.task_id === '0'}
                   value="0"
                   onChange={onValueChange}
                 />
                 <Select
-                  name="taskUuid"
-                  value={state.taskUuid}
+                  name="task_uuid"
+                  value={state.task_uuid}
                   items={renderSelectItems(tasks)}
-                  disabled={state.taskId !== '0'}
+                  disabled={state.task_id !== '0'}
                   onChange={onValueChange}
                 />
               </Divider>
@@ -346,7 +344,7 @@ const NoteDialog = ({
 
             <FormGroup title={_('Result')}>
               <Radio
-                name="resultId"
+                name="result_id"
                 title={_('Any')}
                 checked={state.result_id === RESULT_ANY}
                 value={RESULT_ANY}
@@ -354,11 +352,11 @@ const NoteDialog = ({
               />
               <Divider>
                 <Radio
-                  name="resultId"
+                  name="result_id"
                   title={
                     state.fixed
                       ? _('Only selected result ({{- name}})', {
-                          name: state.resultName,
+                          name: state.result_name,
                         })
                       : _('UUID')
                   }
@@ -368,7 +366,7 @@ const NoteDialog = ({
                 />
                 {!fixed && (
                   <TextField
-                    name="resultUuid"
+                    name="result_uuid"
                     size="34"
                     disabled={state.result_id !== RESULT_UUID}
                     value={state.result_uuid}
@@ -405,20 +403,20 @@ NoteDialog.propTypes = {
   days: PropTypes.number,
   fixed: PropTypes.bool,
   hosts: PropTypes.string,
-  hostsManual: PropTypes.string,
+  hosts_manual: PropTypes.string,
   id: PropTypes.string,
   note: PropTypes.model,
-  nvtId: PropTypes.string,
-  nvtName: PropTypes.string,
+  nvt_name: PropTypes.string,
+  oid: PropTypes.string,
   port: PropTypes.string,
-  portManual: PropTypes.string,
-  resultId: PropTypes.id,
-  resultName: PropTypes.string,
-  resultUuid: PropTypes.id,
+  port_manual: PropTypes.string,
+  result_id: PropTypes.id,
+  result_name: PropTypes.string,
+  result_uuid: PropTypes.id,
   severity: PropTypes.number,
-  taskId: PropTypes.id,
-  taskName: PropTypes.string,
-  taskUuid: PropTypes.id,
+  task_id: PropTypes.id,
+  task_name: PropTypes.string,
+  task_uuid: PropTypes.id,
   tasks: PropTypes.array,
   text: PropTypes.string,
   title: PropTypes.string,

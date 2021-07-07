@@ -117,25 +117,6 @@ describe('EntityLink component tests', () => {
     expect(a).toBe(null);
     expect(element).toHaveTextContent('Orphan');
   });
-  test('should indicate orphaned status for hyperion entities', () => {
-    const entity = Model.fromObject({
-      id: '123',
-      entityType: 'alert',
-      name: 'bar',
-      deleted: true,
-    });
-
-    const {render} = rendererWith({
-      capabilities: caps,
-      router: true,
-    });
-    const {element} = render(<EntityLink entity={entity} />);
-
-    const a = element.querySelector('a');
-
-    expect(a).toBe(null);
-    expect(element).toHaveTextContent('Orphan');
-  });
 });
 
 // vim: set ts=2 sw=2 tw=80:

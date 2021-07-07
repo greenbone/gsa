@@ -21,11 +21,11 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+
 import Divider from 'web/components/layout/divider';
 
 import InfoPanel from 'web/components/panel/infopanel';
-
-import PropTypes from 'web/utils/proptypes';
 
 const Content = styled.span`
   ${props => {

@@ -22,14 +22,14 @@ import styled from 'styled-components';
 
 import {isDefined, isString} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+
+import Theme from 'web/utils/theme';
+
 import Icon from 'web/components/icon/icon';
 
 import Layout from 'web/components/layout/layout';
 import withLayout from 'web/components/layout/withLayout';
-
-import PropTypes from 'web/utils/proptypes';
-
-import Theme from 'web/utils/theme';
 
 const HeaderLayout = styled(Layout)`
   margin: 10px 0px;

@@ -23,9 +23,9 @@ import {onLanguageChange} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {setLocale} from 'web/store/usersettings/actions';
-
 import PropTypes from 'web/utils/proptypes';
+
+import {setLocale} from 'web/store/usersettings/actions';
 
 class LocaleObserver extends React.Component {
   constructor(...args) {
@@ -71,6 +71,9 @@ LocaleObserver.propTypes = {
   setLocale: PropTypes.func.isRequired,
 };
 
-export default connect(undefined, {
-  setLocale,
-})(LocaleObserver);
+export default connect(
+  undefined,
+  {
+    setLocale,
+  },
+)(LocaleObserver);

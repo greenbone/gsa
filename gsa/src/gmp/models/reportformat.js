@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {hasValue, isDefined, isObject} from 'gmp/utils/identity';
+import {isDefined, isObject} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 import {isEmpty} from 'gmp/utils/string';
 
@@ -56,27 +56,6 @@ class Param {
 
 class ReportFormat extends Model {
   static entityType = 'reportformat';
-
-  static parseObject(object) {
-    const ret = super.parseObject(object);
-
-    if (hasValue(ret.trust)) {
-      ret.trust = {
-        value: ret.trust,
-        time: isEmpty(object.trustTime)
-          ? undefined
-          : parseDate(object.trustTime),
-      };
-    } else {
-      ret.trust = {};
-    }
-
-    // object has no params
-    // Has no alert field
-    // active and predefined are already boolean
-
-    return ret;
-  }
 
   static parseElement(element) {
     const ret = super.parseElement(element);

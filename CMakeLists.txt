@@ -22,7 +22,7 @@ message ("-- Configuring Greenbone Security Assistant")
 # VERSION: Set patch version for stable releases, e.g. "9.0.1",
 #          unset patch version for prereleases, e.g. "9.0"
 project (greenbone-security-assistant
-         VERSION 22.04.0)
+         VERSION 21.10.0)
 
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 

@@ -134,14 +134,14 @@ class EntitiesTable extends React.Component {
 
   renderEmpty() {
     const {emptyTitle, filter, footnote = true} = this.props;
-    const filterString = isDefined(filter) ? filter.toFilterString() : '';
+    const filterstring = isDefined(filter) ? filter.toFilterString() : '';
     return (
       <React.Fragment>
         <EmptyTitle>{`${emptyTitle}`}</EmptyTitle>
         {footnote && (
           <Layout align="space-between">
             <FootNote>
-              {_('(Applied filter: {{- filter}})', {filter: filterString})}
+              {_('(Applied filter: {{- filter}})', {filter: filterstring})}
             </FootNote>
           </Layout>
         )}
@@ -176,7 +176,7 @@ class EntitiesTable extends React.Component {
 
     const other = excludeObjectProps(this.props, exclude_props);
 
-    const filterString = isDefined(filter) ? filter.toFilterString() : '';
+    const filterstring = isDefined(filter) ? filter.toFilterString() : '';
 
     if (entities.length === 0) {
       return this.renderEmpty();
@@ -214,7 +214,9 @@ class EntitiesTable extends React.Component {
     }
 
     const pagination =
-      PaginationComponent === false ? undefined : (
+      PaginationComponent === false ? (
+        undefined
+      ) : (
         <PaginationComponent
           {...other}
           onFirstClick={this.handleFirst}
@@ -226,7 +228,9 @@ class EntitiesTable extends React.Component {
       );
 
     const header =
-      !isDefined(HeaderComponent) || HeaderComponent === false ? undefined : (
+      !isDefined(HeaderComponent) || HeaderComponent === false ? (
+        undefined
+      ) : (
         <HeaderComponent
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
@@ -235,7 +239,9 @@ class EntitiesTable extends React.Component {
       );
 
     const footer =
-      !isDefined(FooterComponent) || FooterComponent === false ? undefined : (
+      !isDefined(FooterComponent) || FooterComponent === false ? (
+        undefined
+      ) : (
         <FooterComponent {...other} />
       );
 
@@ -251,12 +257,7 @@ class EntitiesTable extends React.Component {
     );
 
     return (
-      <TableBox
-        flex="column"
-        grow="1"
-        className="entities-table"
-        data-testid="entities-table"
-      >
+      <TableBox flex="column" grow="1" className="entities-table">
         {toggleDetailsIcon ? (
           <Layout align="space-between" grow="1">
             {detailsIcon}
@@ -275,7 +276,7 @@ class EntitiesTable extends React.Component {
         {footnote ? (
           <Layout align="space-between">
             <FootNote>
-              {_('(Applied filter: {{- filter}})', {filter: filterString})}
+              {_('(Applied filter: {{- filter}})', {filter: filterstring})}
             </FootNote>
             {pagination}
           </Layout>

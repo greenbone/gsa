@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from '../../utils/proptypes.js';
 
 const props_value = (event, props) => props.value;
 const noop_convert = value => value;

@@ -25,21 +25,14 @@ import DateTime from 'web/components/date/datetime';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+
 import Layout from 'web/components/layout/layout';
 
-import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 const OwnerInfo = ({owner}) =>
-  isDefined(owner) ? (
-    isDefined(owner.name) ? (
-      <span>{owner.name}</span>
-    ) : (
-      <span>{owner}</span>
-    )
-  ) : (
-    <i>{_('(Global Object)')}</i>
-  );
+  isDefined(owner) ? <span>{owner.name}</span> : <i>{_('(Global Object)')}</i>;
 OwnerInfo.propTypes = {
   owner: PropTypes.object,
 };

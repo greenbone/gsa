@@ -16,13 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import registerCommand from 'gmp/command';
-
-import Nvt from 'gmp/models/nvt';
 import {isDefined} from 'gmp/utils/identity';
 
 import InfoEntitiesCommand from './infoentities';
 import InfoEntityCommand from './infoentity';
+
+import registerCommand from 'gmp/command';
+
+import Nvt from 'gmp/models/nvt';
 
 const info_filter = info => isDefined(info.nvt);
 

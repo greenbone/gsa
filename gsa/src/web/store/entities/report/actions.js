@@ -158,8 +158,11 @@ export const loadDeltaReport = gmp => (id, deltaId, filter) => (
 
   dispatch(deltaReportActions.request(identifier));
 
-  return gmp.report.getDelta({id}, {id: deltaId}, {filter}).then(
-    response => dispatch(deltaReportActions.success(identifier, response.data)),
-    error => dispatch(deltaReportActions.error(identifier, error)),
-  );
+  return gmp.report
+    .getDelta({id}, {id: deltaId}, {filter})
+    .then(
+      response =>
+        dispatch(deltaReportActions.success(identifier, response.data)),
+      error => dispatch(deltaReportActions.error(identifier, error)),
+    );
 };

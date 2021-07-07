@@ -21,13 +21,13 @@ import React from 'react';
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import Portal from 'web/components/portal/portal';
+import PropTypes from '../../utils/proptypes.js';
 
-import PropTypes from 'web/utils/proptypes';
+import Portal from '../portal/portal';
 
-import DialogContainer from './container';
-import DialogOverlay from './overlay';
-import Resizer from './resizer';
+import DialogContainer from './container.js';
+import DialogOverlay from './overlay.js';
+import Resizer from './resizer.js';
 
 const DEFAULT_DIALOG_WIDTH = '800px';
 const DEFAULT_DIALOG_HEIGHT = undefined; // use auto height by default

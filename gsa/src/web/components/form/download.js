@@ -20,7 +20,7 @@
 
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from '../../utils/proptypes.js';
 
 class Download extends React.Component {
   componentWillUnmount() {

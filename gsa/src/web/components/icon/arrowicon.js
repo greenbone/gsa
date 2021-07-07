@@ -19,11 +19,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import PropTypes from 'web/utils/proptypes.js';
+
 import withIconSize, {
   ICON_SIZE_SMALL_PIXELS,
 } from 'web/components/icon/withIconSize';
-
-import PropTypes from 'web/utils/proptypes';
 
 const Styled = styled.span`
   background-color: transparent;

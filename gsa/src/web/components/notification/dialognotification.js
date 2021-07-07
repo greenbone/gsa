@@ -19,7 +19,9 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
+
+import PropTypes from 'web/utils/proptypes';
 
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
@@ -27,34 +29,86 @@ import DialogFooter from 'web/components/dialog/footer';
 import DialogTitle from 'web/components/dialog/title';
 import ScrollableContent from 'web/components/dialog/scrollablecontent';
 
-import PropTypes from 'web/utils/proptypes';
+class DialogNotification extends React.Component {
+  constructor(...args) {
+    super(...args);
 
-const DialogNotification = ({title, message, onCloseClick}) =>
-  hasValue(message) ? (
-    <Dialog width="400px" onClose={onCloseClick}>
-      {({close, moveProps, heightProps}) => (
-        <DialogContent>
-          <DialogTitle title={title} onCloseClick={close} {...moveProps} />
-          <ScrollableContent
-            {...heightProps}
-            data-testid="dialog-notification-message"
-          >
-            {message}
-          </ScrollableContent>
-          <DialogFooter
-            title={_('Close')}
-            onClick={close}
-            data-testid="dialog-notification-footer"
-          />
-        </DialogContent>
-      )}
-    </Dialog>
-  ) : null;
+    this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.handleShowError = this.handleShowError.bind(this);
+    this.handleShowErrorMessage = this.handleShowErrorMessage.bind(this);
+    this.handleShowMessage = this.handleShowMessage.bind(this);
+    this.handleShowSuccessMessage = this.handleShowSuccessMessage.bind(this);
+
+    this.state = {};
+  }
+
+  handleShowError(error) {
+    this.handleShowErrorMessage(error.message);
+  }
+
+  handleShowErrorMessage(message) {
+    this.handleShowMessage(message, _('Error'));
+  }
+
+  handleShowSuccessMessage(message) {
+    this.handleShowMessage(message, _('Success'));
+  }
+
+  handleShowMessage(message, subject = _('Message')) {
+    this.setState({
+      message,
+      title: subject,
+    });
+  }
+
+  handleDialogClose() {
+    this.setState({message: undefined});
+  }
+
+  isDialogOpen() {
+    return isDefined(this.state.message);
+  }
+
+  render() {
+    const {children} = this.props;
+
+    if (!isDefined(children)) {
+      return null;
+    }
+
+    const {title, message} = this.state;
+    return (
+      <React.Fragment>
+        {children({
+          showError: this.handleShowError,
+          showErrorMessage: this.handleShowErrorMessage,
+          showMessage: this.handleShowMessage,
+          showSuccessMessage: this.handleShowSuccessMessage,
+        })}
+        {this.isDialogOpen() && (
+          <Dialog width="400px" onClose={this.handleDialogClose}>
+            {({close, moveProps, heightProps}) => (
+              <DialogContent>
+                <DialogTitle
+                  title={title}
+                  onCloseClick={close}
+                  {...moveProps}
+                />
+                <ScrollableContent {...heightProps}>
+                  {message}
+                </ScrollableContent>
+                <DialogFooter title={_('Close')} onClick={close} />
+              </DialogContent>
+            )}
+          </Dialog>
+        )}
+      </React.Fragment>
+    );
+  }
+}
 
 DialogNotification.propTypes = {
-  message: PropTypes.string,
-  title: PropTypes.string,
-  onCloseClick: PropTypes.func,
+  children: PropTypes.func,
 };
 
 export default DialogNotification;

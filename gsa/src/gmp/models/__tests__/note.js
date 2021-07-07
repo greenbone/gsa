@@ -44,6 +44,14 @@ describe('Note model tests', () => {
     expect(note2.active).toEqual(YES_VALUE);
   });
 
+  test('should parse text_excerpt as yes/no correctly', () => {
+    const note1 = Note.fromElement({text_excerpt: '0'});
+    const note2 = Note.fromElement({text_excerpt: '1'});
+
+    expect(note1.textExcerpt).toEqual(NO_VALUE);
+    expect(note2.textExcerpt).toEqual(YES_VALUE);
+  });
+
   test('should parse hosts or return empty array', () => {
     const elem = {
       hosts: '123.456.789.42, 987.654.321.1',
@@ -61,6 +69,14 @@ describe('Note model tests', () => {
 
     expect(note1.port).toEqual('general/tcp');
     expect(note2.port).toBeUndefined();
+  });
+
+  test('isExcerpt() should return correct true/false', () => {
+    const note1 = Note.fromElement({text_excerpt: '1'});
+    const note2 = Note.fromElement({text_excerpt: '0'});
+
+    expect(note1.isExcerpt()).toEqual(true);
+    expect(note2.isExcerpt()).toEqual(false);
   });
 
   test('should return task if it is a model element', () => {

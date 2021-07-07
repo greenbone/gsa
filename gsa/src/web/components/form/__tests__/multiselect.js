@@ -21,7 +21,7 @@ import {setLocale} from 'gmp/locale/lang';
 
 import {render, fireEvent} from 'web/utils/testing';
 
-import MultiSelect from '../multiselect';
+import MultiSelect from '../multiselect.js';
 
 setLocale('en');
 

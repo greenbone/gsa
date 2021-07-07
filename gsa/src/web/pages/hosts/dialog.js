@@ -21,12 +21,14 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import SaveDialog from 'web/components/dialog/savedialog';
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
 import Layout from 'web/components/layout/layout';
 
+import SaveDialog from 'web/components/dialog/savedialog';
+
 import PropTypes from 'web/utils/proptypes';
+
+import FormGroup from 'web/components/form/formgroup';
+import TextField from 'web/components/form/textfield';
 
 const DEFAULTS = {name: '127.0.0.1', comment: ''};
 

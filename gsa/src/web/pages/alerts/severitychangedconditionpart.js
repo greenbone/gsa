@@ -19,13 +19,13 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import Divider from 'web/components/layout/divider';
+import Divider from '../../components/layout/divider.js';
 
-import Select from 'web/components/form/select';
-import Radio from 'web/components/form/radio';
+import PropTypes from '../../utils/proptypes.js';
+import withPrefix from '../../utils/withPrefix.js';
 
-import PropTypes from 'web/utils/proptypes';
-import withPrefix from 'web/utils/withPrefix';
+import Select from '../../components/form/select.js';
+import Radio from '../../components/form/radio.js';
 
 const VALUE = 'Severity changed';
 

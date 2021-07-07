@@ -24,19 +24,20 @@ import {
   ssh_credential_filter,
 } from 'gmp/models/credential';
 
-import Select from 'web/components/form/select';
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
-import TextArea from 'web/components/form/textarea';
+import Divider from '../../components/layout/divider.js';
+import Layout from '../../components/layout/layout.js';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+import PropTypes from '../../utils/proptypes.js';
 
-import NewIcon from 'web/components/icon/newicon';
+import {renderSelectItems} from '../../utils/render.js';
+import withPrefix from '../../utils/withPrefix.js';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
-import withPrefix from 'web/utils/withPrefix';
+import Select from '../../components/form/select.js';
+import FormGroup from '../../components/form/formgroup.js';
+import TextField from '../../components/form/textfield.js';
+import TextArea from '../../components/form/textarea.js';
+
+import NewIcon from '../../components/icon/newicon.js';
 
 const ScpMethodPart = ({
   prefix,

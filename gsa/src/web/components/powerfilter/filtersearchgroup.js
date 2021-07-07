@@ -23,10 +23,10 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import FormGroup from 'web/components/form/formgroup';
-import TextField from 'web/components/form/textfield';
+import PropTypes from 'web/utils/proptypes.js';
 
-import PropTypes from 'web/utils/proptypes';
+import FormGroup from 'web/components/form/formgroup.js';
+import TextField from 'web/components/form/textfield.js';
 
 const FilterSearchGroup = ({name, filter, title, onChange}) => {
   let filterVal;

@@ -15,53 +15,59 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {useCallback, useEffect} from 'react';
+import React from 'react';
 
 import logger from 'gmp/log';
 
 import PropTypes from 'web/utils/proptypes';
-import usePrevious from 'web/utils/usePrevious';
 
 const log = logger.getLogger('web.entity.container');
 
-const EntityContainer = ({
-  children,
-  id,
-  reload,
-  onDownload,
-  showError,
-  showSuccessMessage,
-  ...other
-}) => {
-  const prevId = usePrevious(id);
+class EntityContainer extends React.Component {
+  constructor(...args) {
+    super(...args);
 
-  const handleError = useCallback(
-    error => {
-      log.error(error);
-      showError(error);
-    },
-    [showError],
-  );
+    this.reload = this.reload.bind(this);
 
-  const handleReload = useCallback(() => {
-    reload(id);
-  }, [reload, id]);
+    this.handleChanged = this.handleChanged.bind(this);
+    this.handleError = this.handleError.bind(this);
+  }
 
-  useEffect(() => {
-    if (id !== prevId) {
-      reload(id);
+  componentDidUpdate(prevProps) {
+    const {id} = this.props;
+    if (id !== prevProps.id) {
+      this.reload();
     }
-  }, [id, prevId, reload]);
+  }
 
-  return children({
-    ...other,
-    onChanged: handleReload,
-    onSuccess: handleReload,
-    onError: handleError,
-    onDownloaded: onDownload,
-    showSuccess: showSuccessMessage,
-  });
-};
+  reload() {
+    const {id} = this.props;
+
+    this.props.reload(id);
+  }
+
+  handleChanged() {
+    this.reload();
+  }
+
+  handleError(error) {
+    const {showError} = this.props;
+    log.error(error);
+    showError(error);
+  }
+
+  render() {
+    const {children, onDownload, showSuccessMessage} = this.props;
+    return children({
+      ...this.props,
+      onChanged: this.handleChanged,
+      onSuccess: this.handleChanged,
+      onError: this.handleError,
+      onDownloaded: onDownload,
+      showSuccess: showSuccessMessage,
+    });
+  }
+}
 
 EntityContainer.propTypes = {
   children: PropTypes.func.isRequired,

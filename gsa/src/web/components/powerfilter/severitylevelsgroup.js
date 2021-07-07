@@ -22,14 +22,14 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Checkbox from 'web/components/form/checkbox';
-import FormGroup from 'web/components/form/formgroup';
+import PropTypes from '../../utils/proptypes.js';
 
-import SeverityClassLabel from 'web/components/label/severityclass';
+import Checkbox from '../form/checkbox.js';
+import FormGroup from '../form/formgroup.js';
 
-import IconDivider from 'web/components/layout/icondivider';
+import IconDivider from '../layout/icondivider.js';
 
-import PropTypes from 'web/utils/proptypes';
+import SeverityClassLabel from '../label/severityclass.js';
 
 class SeverityLevelsFilterGroup extends React.Component {
   constructor(...args) {

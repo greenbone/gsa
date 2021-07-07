@@ -15,16 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
-import {useHistory, useParams} from 'react-router-dom';
+import React from 'react';
 
-import {useSelector} from 'react-redux';
+import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
 import {MANUAL, TASK_SELECTED, RESULT_ANY} from 'gmp/models/override';
 
-import {hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import Badge from 'web/components/badge/badge';
 
@@ -51,11 +50,6 @@ import DetailsLink from 'web/components/link/detailslink';
 import InnerLink from 'web/components/link/innerlink';
 import Link from 'web/components/link/link';
 
-import useReload from 'web/components/loading/useReload';
-
-import DialogNotification from 'web/components/notification/dialognotification';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
@@ -75,17 +69,12 @@ import Note from 'web/entity/note';
 import Override from 'web/entity/override';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
 import withEntityContainer from 'web/entity/withEntityContainer';
-
-import {useGetResult} from 'web/graphql/results';
-
-import NoteComponent from 'web/pages/notes/component';
-import OverrideComponent from 'web/pages/overrides/component';
-import TicketComponent from 'web/pages/tickets/component';
 
 import {loadEntity, selector} from 'web/store/entities/results';
 
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
 import {getUsername} from 'web/store/usersettings/selectors';
 
@@ -93,8 +82,12 @@ import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
 import useCapabilities from 'web/utils/useCapabilities';
-import useGmp from 'web/utils/useGmp';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+
+import NoteComponent from '../notes/component';
+
+import OverrideComponent from '../overrides/component';
+
+import TicketComponent from '../tickets/component';
 
 import ResultDetails from './details';
 
@@ -146,12 +139,12 @@ export const ToolBarIcons = ({
         )}
       </IconDivider>
       <IconDivider>
-        {capabilities.mayAccess('tasks') && hasValue(entity.task) && (
+        {capabilities.mayAccess('tasks') && isDefined(entity.task) && (
           <DetailsLink type="task" id={entity.task.id}>
             <TaskIcon title={_('Corresponding Task ({{name}})', entity.task)} />
           </DetailsLink>
         )}
-        {capabilities.mayAccess('reports') && hasValue(entity?.report?.id) && (
+        {capabilities.mayAccess('reports') && isDefined(entity.report) && (
           <DetailsLink type="report" id={entity.report.id}>
             <ReportIcon title={_('Corresponding Report')} />
           </DetailsLink>
@@ -225,7 +218,7 @@ const Details = ({entity, ...props}) => {
                   <TableData>{_('Host')}</TableData>
                   <TableData>
                     <span>
-                      {hasValue(host.id) ? (
+                      {isDefined(host.id) ? (
                         <DetailsLink type="host" id={host.id}>
                           {host.name}
                         </DetailsLink>
@@ -237,7 +230,7 @@ const Details = ({entity, ...props}) => {
                 </TableRow>
                 <TableRow>
                   <TableData>{_('Location')}</TableData>
-                  <TableData>{entity.location}</TableData>
+                  <TableData>{entity.port}</TableData>
                 </TableRow>
               </TableBody>
             </InfoTable>
@@ -248,7 +241,7 @@ const Details = ({entity, ...props}) => {
           <DetailsBlock title={_('Tags')}>
             <Divider>
               {userTags.map(tag => {
-                const valueString = hasValue(tag.value) ? '' : '=' + tag.value;
+                const valueString = isDefined(tag.value) ? '' : '=' + tag.value;
                 return (
                   <DetailsLink key={tag.id} id={tag.id} type="tag">
                     {tag.name + valueString}
@@ -289,66 +282,27 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = ({onDownloaded}) => {
-  // Page methods
-  const {id} = useParams();
-  const history = useHistory();
-  const [, renewSessionTimeout] = useUserSessionTimeout();
+class Page extends React.Component {
+  constructor(...args) {
+    super(...args);
 
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
-  const gmp = useGmp();
+    this.handleDownload = this.handleDownload.bind(this);
 
-  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
-  const username = useSelector(getUsername);
+    this.openDialog = this.openDialog.bind(this);
+  }
 
-  const detailsExportFileName = userDefaultsSelector.getValueByName(
-    'detailsexportfilename',
-  );
+  handleDownload(result) {
+    const {gmp} = this.props;
 
-  // Load result related entities
-  const {
-    result,
-    refetch: refetchResult,
-    loading,
-    error: entityError,
-  } = useGetResult(id);
-
-  // Timeout and reload
-  const timeoutFunc = useEntityReloadInterval(result);
-
-  const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetchResult,
-    timeoutFunc,
-  );
-
-  useEffect(() => {
-    // start reloading if result is available and no timer is running yet
-    if (hasValue(result) && !hasRunningTimer) {
-      startReload();
-    }
-  }, [result, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // stop reload on unmount
-  useEffect(() => stopReload, [stopReload]);
-
-  const handleResultDownload = exportedResult => {
+    const {detailsExportFileName, username, onError, onDownloaded} = this.props;
     return gmp.result
-      .export(exportedResult)
+      .export(result)
       .then(response => {
-        const {
-          creationTime,
-          entityType,
-          modificationTime,
-          name,
-        } = exportedResult;
+        const {creationTime, entityType, id, modificationTime, name} = result;
         const filename = generateFilename({
           creationTime: creationTime,
           fileNameFormat: detailsExportFileName,
-          id: exportedResult.id,
+          id: id,
           modificationTime,
           resourceName: name,
           resourceType: entityType,
@@ -356,66 +310,61 @@ const Page = ({onDownloaded}) => {
         });
         return {filename, data: response.data};
       })
-      .then(onDownloaded, showError);
-  };
+      .then(onDownloaded, onError);
+  }
 
-  const openDialog = (resultEntity = {}, createfunc) => {
-    const {nvt = {}, task = {}, host = {}} = resultEntity;
+  openDialog(result = {}, createfunc) {
+    const {information = {}, task = {}, host = {}} = result;
     createfunc({
       fixed: true,
-      nvtId: nvt.id,
-      nvtName: nvt.name,
-      taskId: TASK_SELECTED,
-      taskName: task.name,
-      resultId: RESULT_ANY,
-      taskUuid: task.id,
-      resultUuid: resultEntity.id,
-      resultName: resultEntity.name,
-      severity:
-        resultEntity.originalSeverity > 0 ? 0.1 : resultEntity.originalSeverity,
+      oid: information.id,
+      nvt_name: information.name,
+      task_id: TASK_SELECTED,
+      task_name: task.name,
+      result_id: RESULT_ANY,
+      task_uuid: task.id,
+      result_uuid: result.id,
+      result_name: result.name,
+      severity: result.original_severity > 0 ? 0.1 : result.original_severity,
       hosts: MANUAL,
-      hostsManual: host.name,
+      hosts_manual: host.name,
       port: MANUAL,
-      portManual: resultEntity.port,
+      port_manual: result.port,
     });
-  };
+  }
 
-  return (
-    <NoteComponent
-      onCreated={refetchResult}
-      onInteraction={renewSessionTimeout}
-    >
-      {({create: createnote}) => (
-        <OverrideComponent
-          onCreated={refetchResult}
-          onInteraction={renewSessionTimeout}
-        >
-          {({create: createoverride}) => (
-            <TicketComponent
-              onCreated={goto_details('ticket', {history})}
-              onInteraction={renewSessionTimeout}
-            >
-              {({createFromResult: createticket}) => (
-                <EntityPage
-                  entity={result}
-                  entityError={entityError}
-                  entityType={'result'}
-                  isLoading={loading}
-                  sectionIcon={<ResultIcon size="large" />}
-                  title={_('Result')}
-                  toolBarIcons={ToolBarIcons}
-                  onInteraction={renewSessionTimeout}
-                  onNoteCreateClick={dialogResult =>
-                    openDialog(dialogResult, createnote)
-                  }
-                  onOverrideCreateClick={dialogResult =>
-                    openDialog(dialogResult, createoverride)
-                  }
-                  onResultDownloadClick={handleResultDownload}
-                  onTicketCreateClick={createticket}
-                >
-                  {({activeTab = 0, onActivateTab}) => (
-                    <React.Fragment>
+  render() {
+    const {entity, onChanged, onError, onInteraction} = this.props;
+    return (
+      <NoteComponent onCreated={onChanged} onInteraction={onInteraction}>
+        {({create: createnote}) => (
+          <OverrideComponent
+            onCreated={onChanged}
+            onInteraction={onInteraction}
+          >
+            {({create: createoverride}) => (
+              <TicketComponent
+                onCreated={goto_details('ticket', this.props)}
+                onInteraction={onInteraction}
+              >
+                {({createFromResult: createticket}) => (
+                  <EntityPage
+                    {...this.props}
+                    entity={entity}
+                    sectionIcon={<ResultIcon size="large" />}
+                    title={_('Result')}
+                    toolBarIcons={ToolBarIcons}
+                    onInteraction={onInteraction}
+                    onNoteCreateClick={result =>
+                      this.openDialog(result, createnote)
+                    }
+                    onOverrideCreateClick={result =>
+                      this.openDialog(result, createoverride)
+                    }
+                    onResultDownloadClick={this.handleDownload}
+                    onTicketCreateClick={createticket}
+                  >
+                    {({activeTab = 0, onActivateTab}) => (
                       <Layout grow="1" flex="column">
                         <TabLayout grow="1" align={['start', 'end']}>
                           <TabList
@@ -424,7 +373,7 @@ const Page = ({onDownloaded}) => {
                             onActivateTab={onActivateTab}
                           >
                             <Tab>{_('Information')}</Tab>
-                            <EntitiesTab entities={result.userTags}>
+                            <EntitiesTab entities={entity.userTags}>
                               {_('User Tags')}
                             </EntitiesTab>
                           </TabList>
@@ -433,47 +382,65 @@ const Page = ({onDownloaded}) => {
                         <Tabs active={activeTab}>
                           <TabPanels>
                             <TabPanel>
-                              <Details entity={result} />
+                              <Details entity={entity} />
                             </TabPanel>
                             <TabPanel>
                               <EntityTags
-                                entity={result}
-                                onChanged={() => refetchResult()}
-                                onError={showError}
-                                onInteraction={renewSessionTimeout}
+                                entity={entity}
+                                onChanged={onChanged}
+                                onError={onError}
+                                onInteraction={onInteraction}
                               />
                             </TabPanel>
                           </TabPanels>
                         </Tabs>
                       </Layout>
-                      <DialogNotification
-                        {...notificationDialogState}
-                        onCloseClick={closeNotificationDialog}
-                      />
-                    </React.Fragment>
-                  )}
-                </EntityPage>
-              )}
-            </TicketComponent>
-          )}
-        </OverrideComponent>
-      )}
-    </NoteComponent>
-  );
-};
+                    )}
+                  </EntityPage>
+                )}
+              </TicketComponent>
+            )}
+          </OverrideComponent>
+        )}
+      </NoteComponent>
+    );
+  }
+}
 
 Page.propTypes = {
+  detailsExportFileName: PropTypes.object,
   entity: PropTypes.model,
+  gmp: PropTypes.gmp.isRequired,
+  username: PropTypes.string,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func,
 };
+
+const mapStateToProps = rootState => {
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
+  const detailsExportFileName = userDefaultsSelector.getValueByName(
+    'detailsexportfilename',
+  );
+  return {
+    detailsExportFileName,
+    username,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
 
 export default compose(
   withEntityContainer('result', {
     entitySelector: selector,
     load: loadEntity,
   }),
+  connect(mapStateToProps, mapDispatchToProps),
 )(Page);
 
 // vim: set ts=2 sw=2 tw=80:

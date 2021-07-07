@@ -22,7 +22,7 @@ import styled from 'styled-components';
 import {debounce} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from '../../utils/proptypes';
 
 const Container = styled.div`
   overflow: hidden;

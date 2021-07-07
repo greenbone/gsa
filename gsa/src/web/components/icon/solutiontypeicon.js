@@ -20,6 +20,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import PropTypes from 'web/utils/proptypes';
+
 import StMitigateIcon from 'web/components/icon/stmitigateicon';
 import StNonAvailableIcon from 'web/components/icon/stnonavailableicon';
 import StUnknownIcon from 'web/components/icon/stunknownicon';
@@ -28,8 +30,6 @@ import StWillNotFixIcon from 'web/components/icon/stwillnotfixicon';
 import StWorkaroundIcon from 'web/components/icon/stworkaroundicon';
 
 import Divider from 'web/components/layout/divider';
-
-import PropTypes from 'web/utils/proptypes';
 
 const SolutionType = ({type, displayTitleText = false}) => {
   let IconComponent;

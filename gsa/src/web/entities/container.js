@@ -26,12 +26,9 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import {RESET_FILTER} from 'gmp/models/filter';
-
-import {YES_VALUE} from 'gmp/parser';
-
 import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
+import {excludeObjectProps} from 'gmp/utils/object';
 import {
   getEntityType,
   apiType,
@@ -39,13 +36,10 @@ import {
   pluralizeType,
 } from 'gmp/utils/entitytype';
 import {debounce} from 'gmp/utils/event';
-import {excludeObjectProps} from 'gmp/utils/object';
 
-import SortBy from 'web/components/sortby/sortby';
+import {RESET_FILTER} from 'gmp/models/filter';
 
-import TagDialog from 'web/pages/tags/dialog';
-
-import {createDeleteEntity} from 'web/store/entities/utils/actions';
+import {YES_VALUE} from 'gmp/parser';
 
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
@@ -53,9 +47,16 @@ import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors
 import {getUsername} from 'web/store/usersettings/selectors';
 
 import compose from 'web/utils/compose';
+
 import PropTypes from 'web/utils/proptypes';
 import {generateFilename} from 'web/utils/render';
 import SelectionType from 'web/utils/selectiontype';
+
+import {createDeleteEntity} from 'web/store/entities/utils/actions';
+
+import SortBy from 'web/components/sortby/sortby';
+
+import TagDialog from 'web/pages/tags/dialog';
 
 import TagsDialog from './tagsdialog';
 

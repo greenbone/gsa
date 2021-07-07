@@ -22,18 +22,10 @@ import _ from 'gmp/locale';
 
 import DateTime from 'web/components/date/datetime';
 
-import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
-import ExportIcon from 'web/components/icon/exporticon';
-import ManualIcon from 'web/components/icon/manualicon';
-import ListIcon from 'web/components/icon/listicon';
-
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
-import DetailsLink from 'web/components/link/detailslink';
-import ExternalLink from 'web/components/link/externallink';
 
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
@@ -41,6 +33,9 @@ import TabList from 'web/components/tab/tablist';
 import TabPanel from 'web/components/tab/tabpanel';
 import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
+
+import DetailsLink from 'web/components/link/detailslink';
+import ExternalLink from 'web/components/link/externallink';
 
 import InfoTable from 'web/components/table/infotable';
 import TableBody from 'web/components/table/body';
@@ -58,6 +53,11 @@ import withEntityContainer from 'web/entity/withEntityContainer';
 
 import {selector, loadEntity} from 'web/store/entities/certbund';
 
+import CertBundAdvIcon from 'web/components/icon/certbundadvicon';
+import ExportIcon from 'web/components/icon/exporticon';
+import ManualIcon from 'web/components/icon/manualicon';
+import ListIcon from 'web/components/icon/listicon';
+
 import PropTypes from 'web/utils/proptypes';
 
 import CertBundAdvDetails from './details';
@@ -68,7 +68,7 @@ const ToolBarIcons = ({entity, onCertBundAdvDownloadClick}) => (
       <ManualIcon
         page="managing-secinfo"
         anchor="cert-bund-advisories"
-        title={_('Help: CERT-Bund Advisories')}
+        title={_('Help:  CERT-Bund Advisories')}
       />
       <ListIcon title={_('CERT-Bund Advisories')} page="certbunds" />
     </IconDivider>

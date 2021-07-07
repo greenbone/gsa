@@ -24,6 +24,9 @@ import _ from 'gmp/locale';
 
 import {typeName, getEntityType} from 'gmp/utils/entitytype';
 
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
 import DisableIcon from 'web/components/icon/disableicon';
 import EditIcon from 'web/components/icon/editicon';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -44,9 +47,6 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 import TagComponent from 'web/pages/tags/component';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 const SectionElementDivider = styled(Divider)`
   margin-bottom: 3px;
@@ -108,7 +108,7 @@ class EntityTagsTable extends React.Component {
 
   render() {
     const {entity, onTagDisableClick, onTagRemoveClick} = this.props;
-    const {userTags = []} = entity;
+    const {userTags} = entity;
     const count = userTags.length;
     const entityType = getEntityType(entity);
     return (

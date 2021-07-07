@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from 'web/utils/proptypes.js';
 
 export const IconSizeContext = React.createContext();
 

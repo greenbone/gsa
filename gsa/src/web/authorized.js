@@ -15,79 +15,108 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useCallback} from 'react';
+import React from 'react';
 
-import {useHistory, useLocation} from 'react-router-dom';
+import {connect} from 'react-redux';
 
-import {useDispatch} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 
-import {hasValue} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
-import Loading from 'web/components/loading/loading';
+import {setIsLoggedIn} from './store/usersettings/actions';
+import {isLoggedIn} from 'web/store/usersettings/selectors';
 
-import {useIsAuthenticated} from 'web/graphql/auth';
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
 
-import {setIsLoggedIn} from 'web/store/usersettings/actions';
+class Authorized extends React.Component {
+  constructor(...args) {
+    super(...args);
 
-import useGmp from 'web/utils/useGmp';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+    this.responseError = this.responseError.bind(this);
+  }
 
-const Authorized = ({children}) => {
-  const {isAuthenticated, loading: isLoading, error} = useIsAuthenticated();
-  const [, renewSession] = useUserSessionTimeout();
+  componentDidMount() {
+    const {gmp} = this.props;
 
-  const gmp = useGmp();
-  const location = useLocation();
-  const history = useHistory();
-  const dispatch = useDispatch();
+    this.responseError = this.responseError.bind(this);
 
-  const toLoginPage = useCallback(() => {
+    this.unsubscribe = gmp.addHttpErrorHandler(this.responseError);
+
+    this.checkIsLoggedIn();
+  }
+
+  componentWillUnmount() {
+    if (isDefined(this.unsubscribe)) {
+      this.unsubscribe();
+    }
+  }
+
+  componentDidUpdate() {
+    this.checkIsLoggedIn();
+  }
+
+  responseError(xhr) {
+    const {logout} = this.props;
+
+    if (xhr.status === 401) {
+      logout();
+      return Promise.resolve(xhr);
+    }
+    return Promise.reject(xhr);
+  }
+
+  checkIsLoggedIn() {
+    if (!this.props.isLoggedIn) {
+      this.toLoginPage();
+    }
+  }
+
+  toLoginPage() {
+    const {history, location} = this.props;
+
     if (location.pathname === '/login') {
-      // already at login page. not sure if that can happen anymore.
+      // already at login page
       return;
     }
 
     history.replace('/login', {
-      next: location.pathname,
+      next: this.props.location.pathname,
     });
-  }, [location, history]);
-
-  useEffect(() => {
-    const unsubscribe = gmp.subscribeToLogout(() => toLoginPage());
-    return unsubscribe;
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (hasValue(isAuthenticated)) {
-      dispatch(setIsLoggedIn(isAuthenticated));
-
-      if (isAuthenticated) {
-        renewSession();
-      } else {
-        toLoginPage();
-      }
-    }
-  }, [isAuthenticated, toLoginPage, dispatch, renewSession]);
-
-  useEffect(() => {
-    // redirect to login page if an error has occurred when requesting the
-    // authentication status. this should be a general issue with the setup and
-    // therefore we should avoid rendering anything then the login page.
-
-    if (hasValue(error)) {
-      toLoginPage();
-    }
-  }, [toLoginPage, error]);
-
-  if (isLoading) {
-    return <Loading />;
   }
 
-  // don't render children if user is not authenticated. this can happen for one
-  // render cycle after the data has loaded and the effect has not fired yet.
-  return isAuthenticated ? children : null;
+  render() {
+    return this.props.isLoggedIn ? this.props.children : null;
+  }
+}
+
+Authorized.propTypes = {
+  gmp: PropTypes.gmp.isRequired,
+  history: PropTypes.object.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  location: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
-export default Authorized;
+const mapStateToProps = rootState => ({
+  isLoggedIn: isLoggedIn(rootState),
+});
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  logout: () => {
+    gmp.logout();
+    dispatch(setIsLoggedIn(false));
+  },
+});
+
+export default compose(
+  withGmp,
+  withRouter,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(Authorized);
 
 // vim: set ts=2 sw=2 tw=80:

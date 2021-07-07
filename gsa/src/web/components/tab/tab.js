@@ -20,9 +20,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme.js';
 
-import Theme from 'web/utils/theme';
+import PropTypes from 'web/utils/proptypes.js';
 
 const StyledDiv = styled.div`
   font-size: 16px;
@@ -68,7 +68,6 @@ const Tab = ({
   onActivate,
 }) => (
   <StyledDiv
-    data-testid="tab"
     active={isActive}
     className={className}
     onClick={disabled ? undefined : onActivate}

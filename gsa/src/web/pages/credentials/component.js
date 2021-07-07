@@ -15,207 +15,203 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useCallback, useState, useEffect} from 'react';
+import React from 'react';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-
-import {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
 
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 
-import EntityComponent from 'web/entity/component';
-
-import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
-import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
 
 import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+
+import EntityComponent from 'web/entity/component';
+
+import {renewSessionTimeout} from 'web/store/usersettings/actions';
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+import {getUsername} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
+
 import {generateFilename} from 'web/utils/render';
-import useGmp from 'web/utils/useGmp';
-import useUserName from 'web/utils/useUserName';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
 
 import CredentialsDialog from './dialog';
 
-const CredentialsComponent = ({
-  children,
-  onCreateError,
-  onCreated,
-  onCloneError,
-  onCloned,
-  onDeleteError,
-  onDeleted,
-  onDownloadError,
-  onDownloaded,
-  onInstallerDownloadError,
-  onInstallerDownloaded,
-  onSaved,
-  onSaveError,
-}) => {
-  const dispatch = useDispatch();
-  const userDefaultsSelector = useSelector(getUserSettingsDefaults);
-  const userName = useUserName();
-  const gmp = useGmp();
-  const [, renewSessionTimeout] = useUserSessionTimeout();
+class CredentialsComponent extends React.Component {
+  constructor(...args) {
+    super(...args);
 
-  const [credentialDialogState, setCredentialDialogState] = useState({
-    allowedCredentialTypes: ALL_CREDENTIAL_TYPES,
-    visible: false,
-    title: _('New Credential'),
-  });
+    this.state = {dialogVisible: false};
 
-  const loadSettings = useCallback(
-    () => dispatch(loadUserSettingDefaults(gmp)()),
-    [dispatch, gmp],
-  );
+    this.handleCloseCredentialDialog = this.handleCloseCredentialDialog.bind(
+      this,
+    );
+    this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
+    this.handleDownloadInstaller = this.handleDownloadInstaller.bind(this);
+  }
 
-  const detailsExportFileName = userDefaultsSelector.getValueByName(
-    'detailsexportfilename',
-  );
+  openCredentialsDialog(credential) {
+    if (isDefined(credential)) {
+      const title = _('Edit Credential {{name}}', {
+        name: shorten(credential.name),
+      });
 
-  useEffect(() => {
-    // load settings on mount
-    loadSettings();
-  }, [loadSettings]);
+      this.setState({
+        allow_insecure: credential.allow_insecure,
+        comment: credential.comment,
+        credential,
+        credential_type: credential.credential_type,
+        auth_algorithm: credential.auth_algorithm,
+        name: credential.name,
+        credential_login: credential.login,
+        privacy_algorithm: isDefined(credential.privacy)
+          ? credential.privacy.algorithm
+          : undefined,
+        types: [credential.credential_type],
+        dialogVisible: true,
+        title,
+      });
+    } else {
+      // reset all values in state to not show values from last edit
+      this.setState({
+        allow_insecure: undefined,
+        comment: undefined,
+        credential: undefined,
+        credential_type: undefined,
+        auth_algorithm: undefined,
+        name: undefined,
+        credential_login: undefined,
+        privacy_algorithm: undefined,
+        types: ALL_CREDENTIAL_TYPES,
+        dialogVisible: true,
+        title: _('New Credential'),
+      });
+    }
 
-  const handleCloseCredentialDialog = useCallback(() => {
-    setCredentialDialogState(state => ({...state, visible: false}));
-    renewSessionTimeout();
-  }, [renewSessionTimeout]);
+    this.handleInteraction();
+  }
 
-  const openCredentialsDialog = useCallback(
-    // eslint-disable-next-line no-shadow
-    credential => {
-      if (isDefined(credential)) {
-        setCredentialDialogState(state => ({
-          ...state,
-          title: _('Edit Credential {{name}}', {
-            name: shorten(credential.name),
-          }),
-          allowInsecure: credential.allow_insecure,
-          allowedCredentialTypes: [credential.credential_type],
-          authAlgorithm: credential.auth_algorithm,
-          comment: credential.comment,
-          credential,
-          credentialLogin: credential.login,
-          credentialName: credential.name,
-          credentialType: credential.credential_type,
-          privacyAlgorithm: isDefined(credential.privacy)
-            ? credential.privacy.algorithm
-            : undefined,
-          visible: true,
-        }));
-      } else {
-        // reset all values in state to not show values from last edit
-        setCredentialDialogState(state => ({
-          ...state,
-          title: _('New Credential'),
-          allowInsecure: undefined,
-          allowedCredentialTypes: ALL_CREDENTIAL_TYPES,
-          authAlgorithm: undefined,
-          comment: undefined,
-          credential: undefined,
-          credentialLogin: undefined,
-          credentialName: undefined,
-          credentialType: undefined,
-          privacyAlgorithm: undefined,
-          visible: true,
-        }));
-      }
+  closeCredentialDialog() {
+    this.setState({dialogVisible: false});
+  }
 
-      renewSessionTimeout();
-    },
-    [renewSessionTimeout],
-  );
+  handleCloseCredentialDialog() {
+    this.closeCredentialDialog();
+    this.handleInteraction();
+  }
 
-  const handleDownloadInstaller = useCallback(
-    // eslint-disable-next-line no-shadow
-    (credential, format) => {
-      renewSessionTimeout();
-
-      return gmp.credential
-        .download(credential, format)
-        .then(response => {
-          const {
-            creationTime,
-            entityType,
-            id,
-            modificationTime,
-            name,
-          } = credential;
-          const filename = generateFilename({
-            creationTime: creationTime,
-            extension: format,
-            fileNameFormat: detailsExportFileName,
-            id: id,
-            modificationTime,
-            resourceName: name,
-            resourceType: entityType,
-            username: userName,
-          });
-          return {filename, data: response.data};
-        })
-        .then(onInstallerDownloaded, onInstallerDownloadError);
-    },
-    [
+  handleDownloadInstaller(credential, format) {
+    const {
       detailsExportFileName,
-      renewSessionTimeout,
-      gmp.credential,
-      userName,
-      onInstallerDownloadError,
+      gmp,
+      username,
       onInstallerDownloaded,
-    ],
-  );
-  return (
-    <EntityComponent
-      name="credential"
-      onCreated={onCreated}
-      onCreateError={onCreateError}
-      onCloned={onCloned}
-      onCloneError={onCloneError}
-      onDeleted={onDeleted}
-      onDeleteError={onDeleteError}
-      onDownloaded={onDownloaded}
-      onDownloadError={onDownloadError}
-      onInteraction={renewSessionTimeout}
-      onSaved={onSaved}
-      onSaveError={onSaveError}
-    >
-      {({save, ...other}) => (
-        <React.Fragment>
-          {children({
-            ...other,
-            create: openCredentialsDialog,
-            edit: openCredentialsDialog,
-            downloadinstaller: handleDownloadInstaller,
-          })}
+      onInstallerDownloadError,
+    } = this.props;
 
-          {credentialDialogState.visible && (
-            <CredentialsDialog
-              title={credentialDialogState.title}
-              allow_insecure={credentialDialogState.allowInsecure}
-              auth_algorithm={credentialDialogState.authAlgorithm}
-              comment={credentialDialogState.comment}
-              credential={credentialDialogState.credential}
-              credential_login={credentialDialogState.credentialLogin}
-              credential_type={credentialDialogState.credentialType}
-              name={credentialDialogState.credentialName}
-              privacy_algorithm={credentialDialogState.privacyAlgorithm}
-              types={credentialDialogState.allowedCredentialTypes}
-              onClose={handleCloseCredentialDialog}
-              onSave={d => save(d).then(handleCloseCredentialDialog)}
-            />
-          )}
-        </React.Fragment>
-      )}
-    </EntityComponent>
-  );
-};
+    this.handleInteraction();
+
+    return gmp.credential
+      .download(credential, format)
+      .then(response => {
+        const {
+          creationTime,
+          entityType,
+          id,
+          modificationTime,
+          name,
+        } = credential;
+        const filename = generateFilename({
+          creationTime: creationTime,
+          extension: format,
+          fileNameFormat: detailsExportFileName,
+          id: id,
+          modificationTime,
+          resourceName: name,
+          resourceType: entityType,
+          username,
+        });
+        return {filename, data: response.data};
+      })
+      .then(onInstallerDownloaded, onInstallerDownloadError);
+  }
+
+  handleInteraction() {
+    const {onInteraction} = this.props;
+    if (isDefined(onInteraction)) {
+      onInteraction();
+    }
+  }
+
+  render() {
+    const {
+      children,
+      onCloned,
+      onCloneError,
+      onCreated,
+      onCreateError,
+      onDeleted,
+      onDeleteError,
+      onDownloaded,
+      onDownloadError,
+      onInteraction,
+      onSaved,
+      onSaveError,
+    } = this.props;
+
+    const {dialogVisible, ...dialogProps} = this.state;
+
+    return (
+      <EntityComponent
+        name="credential"
+        onCreated={onCreated}
+        onCreateError={onCreateError}
+        onCloned={onCloned}
+        onCloneError={onCloneError}
+        onDeleted={onDeleted}
+        onDeleteError={onDeleteError}
+        onDownloaded={onDownloaded}
+        onDownloadError={onDownloadError}
+        onInteraction={onInteraction}
+        onSaved={onSaved}
+        onSaveError={onSaveError}
+      >
+        {({save, ...other}) => (
+          <React.Fragment>
+            {children({
+              ...other,
+              create: this.openCredentialsDialog,
+              edit: this.openCredentialsDialog,
+              downloadinstaller: this.handleDownloadInstaller,
+            })}
+
+            {dialogVisible && (
+              <CredentialsDialog
+                {...dialogProps}
+                onClose={this.handleCloseCredentialDialog}
+                onSave={d => {
+                  this.handleInteraction();
+                  return save(d).then(() => this.closeCredentialDialog());
+                }}
+              />
+            )}
+          </React.Fragment>
+        )}
+      </EntityComponent>
+    );
+  }
+}
 
 CredentialsComponent.propTypes = {
   children: PropTypes.func.isRequired,
+  detailsExportFileName: PropTypes.object,
+  gmp: PropTypes.gmp.isRequired,
+  username: PropTypes.string,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -226,10 +222,34 @@ CredentialsComponent.propTypes = {
   onDownloaded: PropTypes.func,
   onInstallerDownloadError: PropTypes.func,
   onInstallerDownloaded: PropTypes.func,
+  onInteraction: PropTypes.func.isRequired,
   onSaveError: PropTypes.func,
   onSaved: PropTypes.func,
 };
 
-export default CredentialsComponent;
+const mapStateToProps = rootState => {
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
+  const detailsExportFileName = userDefaultsSelector.getValueByName(
+    'detailsexportfilename',
+  );
+  return {
+    detailsExportFileName,
+    username,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
+  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+});
+
+export default compose(
+  withGmp,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+)(CredentialsComponent);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -17,16 +17,16 @@
  */
 import React, {useState} from 'react';
 
-import {parseSeverity} from 'gmp/parser';
-
+import PropTypes from 'web/utils/proptypes.js';
 import {isDefined} from 'gmp/utils/identity';
 
-import FormGroup from 'web/components/form/formgroup';
+import FormGroup from 'web/components/form/formgroup.js';
+import {parseSeverity} from 'gmp/parser.js';
+import RelationSelector from 'web/components/powerfilter/relationselector';
 import NumberField from 'web/components/form/numberfield';
 import Divider from 'web/components/layout/divider';
-import RelationSelector from 'web/components/powerfilter/relationselector';
 
-import PropTypes from 'web/utils/proptypes';
+import {UNSET_VALUE} from 'web/utils/render';
 
 const SeverityValuesGroup = ({filter, name, title, onChange}) => {
   /* useState is analogous to setState in class components.
@@ -39,9 +39,9 @@ const SeverityValuesGroup = ({filter, name, title, onChange}) => {
    */
 
   const term = filter.getTerm(name);
-  const severity = isDefined(term) ? parseSeverity(term.value) : undefined;
+  const severity = isDefined(term) ? parseSeverity(term.value) : 0;
 
-  const [rel, setRel] = useState(isDefined(term) ? term.relation : '='); // here rel is set to '='
+  const [rel, setRel] = useState(isDefined(term) ? term.relation : UNSET_VALUE);
   const keyword = name;
 
   return (

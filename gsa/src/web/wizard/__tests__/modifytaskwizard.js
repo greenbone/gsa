@@ -42,6 +42,8 @@ const tasks = [task1];
 const reschedule = 0;
 
 const startDate = Date('2020-01-01T12:10:00Z');
+const startMinute = 10;
+const startHour = 12;
 const startTimezone = 'UTC';
 
 describe('ModifyTaskWizard component tests', () => {
@@ -55,11 +57,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     const {baseElement} = render(
       <ModifyTaskWizard
-        startDate={startDate}
+        start_date={startDate}
         tasks={tasks}
         reschedule={reschedule}
-        taskId={taskId}
-        startTimezone={startTimezone}
+        task_id={taskId}
+        start_minute={startMinute}
+        start_hour={startHour}
+        start_timezone={startTimezone}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -96,11 +100,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     const {baseElement} = render(
       <ModifyTaskWizard
-        startDate={startDate}
+        start_date={startDate}
         tasks={tasks}
         reschedule={reschedule}
-        taskId={taskId}
-        startTimezone={startTimezone}
+        task_id={taskId}
+        start_minute={startMinute}
+        start_hour={startHour}
+        start_timezone={startTimezone}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -131,11 +137,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     const {baseElement} = render(
       <ModifyTaskWizard
-        startDate={startDate}
+        start_date={startDate}
         tasks={tasks}
         reschedule={reschedule}
-        taskId={taskId}
-        startTimezone={startTimezone}
+        task_id={taskId}
+        start_minute={startMinute}
+        start_hour={startHour}
+        start_timezone={startTimezone}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -173,11 +181,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     render(
       <ModifyTaskWizard
-        startDate={startDate}
+        start_date={startDate}
         tasks={tasks}
         reschedule={reschedule}
-        taskId={taskId}
-        startTimezone={startTimezone}
+        task_id={taskId}
+        start_minute={startMinute}
+        start_hour={startHour}
+        start_timezone={startTimezone}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -200,11 +210,13 @@ describe('ModifyTaskWizard component tests', () => {
 
     render(
       <ModifyTaskWizard
-        startDate={startDate}
+        start_date={startDate}
         tasks={tasks}
         reschedule={reschedule}
-        taskId={taskId}
-        startTimezone={startTimezone}
+        task_id={taskId}
+        start_minute={startMinute}
+        start_hour={startHour}
+        start_timezone={startTimezone}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -227,28 +239,32 @@ describe('ModifyTaskWizard component tests', () => {
 
     const {getByName} = render(
       <ModifyTaskWizard
-        startDate={startDate}
+        start_date={startDate}
         tasks={tasks}
         reschedule={reschedule}
-        taskId={taskId}
-        startTimezone={startTimezone}
+        task_id={taskId}
+        start_minute={startMinute}
+        start_hour={startHour}
+        start_timezone={startTimezone}
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
-    const emailInput = getByName('alertEmail');
+    const emailInput = getByName('alert_email');
     fireEvent.change(emailInput, {target: {value: 'foo@bar.com'}});
 
     const saveButton = screen.getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      alertEmail: 'foo@bar.com',
+      alert_email: 'foo@bar.com',
       reschedule: 0,
-      startDate,
-      startTimezone,
-      taskId,
+      start_date: startDate,
+      start_hour: startHour,
+      start_minute: startMinute,
+      start_timezone: startTimezone,
+      task_id: taskId,
       tasks: tasks,
     });
   });

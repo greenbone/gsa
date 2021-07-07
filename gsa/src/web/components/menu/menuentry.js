@@ -21,13 +21,13 @@ import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import withClickHandler from 'web/components/form/withClickHandler';
+import PropTypes from '../../utils/proptypes.js';
 
-import Layout from 'web/components/layout/layout';
+import withClickHandler from '../form/withClickHandler.js';
 
-import Link from 'web/components/link/link';
+import Layout from '../layout/layout.js';
 
-import PropTypes from 'web/utils/proptypes';
+import Link from '../link/link.js';
 
 const StyledLink = styled(Link)`
   height: 100%;

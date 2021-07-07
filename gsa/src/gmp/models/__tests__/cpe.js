@@ -66,7 +66,7 @@ describe('CPE model tests', () => {
     };
     const cpe = Cpe.fromElement(elem);
 
-    expect(cpe.cveRefs).toEqual([
+    expect(cpe.cves).toEqual([
       {
         id: '1337',
         severity: 9.0,
@@ -81,7 +81,7 @@ describe('CPE model tests', () => {
   test('should return empty array if no cves are defined', () => {
     const cpe = Cpe.fromElement({});
 
-    expect(cpe.cveRefs).toEqual([]);
+    expect(cpe.cves).toEqual([]);
   });
 
   test('should return undefined if status is empty', () => {

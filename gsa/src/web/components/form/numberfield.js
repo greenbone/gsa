@@ -18,11 +18,11 @@
 
 import React from 'react';
 
-import {parseFloat} from 'gmp/parser';
-
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
 import {fixedValue} from 'gmp/utils/number';
+
+import {parseFloat} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 

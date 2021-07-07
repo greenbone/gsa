@@ -19,10 +19,10 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {capitalizeFirstLetter} from 'gmp/utils/string';
-
 import PropTypes from 'web/utils/proptypes';
+import {capitalizeFirstLetter} from 'gmp/utils/string';
 import withCapabilities from 'web/utils/withCapabilities';
+
 import StartIcon from 'web/components/icon/starticon';
 
 const TaskStartIcon = ({

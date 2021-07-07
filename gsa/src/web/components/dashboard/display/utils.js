@@ -31,7 +31,7 @@ import {
   MEDIUM,
   HIGH,
   NA,
-} from 'web/utils/severity';
+} from '../../../utils/severity';
 
 export const totalCount = (groups = []) => {
   if (groups.length === 0) {

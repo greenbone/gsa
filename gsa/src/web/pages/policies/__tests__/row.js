@@ -32,13 +32,13 @@ import Row from '../row';
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
 
-const entity = Policy.fromObject({
-  id: '1234',
+const entity = Policy.fromElement({
+  _id: '1234',
   name: 'foo',
   comment: 'bar',
-  inUse: false,
-  writable: true,
-  permissions: [{name: 'everything'}],
+  in_use: '0',
+  writable: '1',
+  permissions: {permission: [{name: 'everything'}]},
 });
 
 describe('Row tests', () => {
@@ -79,14 +79,14 @@ describe('Row tests', () => {
   });
 
   test('should render observer icon', () => {
-    const policy = Policy.fromObject({
-      id: '1234',
+    const policy = Policy.fromElement({
+      _id: '1234',
       name: 'foo',
       comment: 'bar',
-      inUse: false,
-      writable: true,
-      owner: 'user',
-      permissions: [{name: 'everything'}],
+      in_use: '0',
+      writable: '1',
+      owner: {name: 'user'},
+      permissions: {permission: [{name: 'everything'}]},
     });
 
     const handleToggleDetailsClick = jest.fn();
@@ -128,7 +128,7 @@ describe('Row tests', () => {
     const handlePolicyEdit = jest.fn();
     const handleCreateAudit = jest.fn();
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWith({
       gmp,
       capabilities: true,
       store: true,
@@ -181,17 +181,17 @@ describe('Row tests', () => {
     const handlePolicyEdit = jest.fn();
     const handleCreateAudit = jest.fn();
 
-    const policy = Policy.fromObject({
-      id: '1234',
+    const policy = Policy.fromElement({
+      _id: '1234',
       name: 'foo',
       comment: 'bar',
-      inUse: false,
-      writable: true,
+      in_use: '0',
+      writable: '1',
     });
 
     const wrongCaps = new Capabilities(['authenticate']);
 
-    const {render} = rendererWith({
+    const {render, store} = rendererWith({
       gmp,
       capabilities: wrongCaps,
       store: true,
@@ -252,13 +252,13 @@ describe('Row tests', () => {
     const handlePolicyEdit = jest.fn();
     const handleCreateAudit = jest.fn();
 
-    const policy = Policy.fromObject({
-      id: '1234',
+    const policy = Policy.fromElement({
+      _id: '1234',
       name: 'foo',
       comment: 'bar',
-      inUse: true,
-      writable: true,
-      permissions: [{name: 'everything'}],
+      in_use: '1',
+      writable: '1',
+      permissions: {permission: [{name: 'everything'}]},
     });
 
     const {render, store} = rendererWith({
@@ -314,13 +314,13 @@ describe('Row tests', () => {
     const handlePolicyEdit = jest.fn();
     const handleCreateAudit = jest.fn();
 
-    const policy = Policy.fromObject({
-      id: '1234',
+    const policy = Policy.fromElement({
+      _id: '1234',
       name: 'foo',
       comment: 'bar',
-      inUse: false,
-      writable: false,
-      permissions: [{name: 'everything'}],
+      in_use: '0',
+      writable: '0',
+      permissions: {permission: [{name: 'everything'}]},
     });
 
     const {render, store} = rendererWith({

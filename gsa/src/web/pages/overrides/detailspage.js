@@ -16,17 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useEffect} from 'react';
+import React from 'react';
 
-import {useHistory, useParams} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 import {longDate} from 'gmp/locale/date';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
-
-import Download from 'web/components/form/download';
-import useDownload from 'web/components/form/useDownload';
+import {isDefined} from 'gmp/utils/identity';
 
 import ExportIcon from 'web/components/icon/exporticon';
 import ListIcon from 'web/components/icon/listicon';
@@ -37,8 +34,6 @@ import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
-
-import useReload from 'web/components/loading/useReload';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -54,37 +49,34 @@ import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
-import DialogNotification from 'web/components/notification/dialognotification';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-
 import EntityPage, {Col} from 'web/entity/page';
 import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
 import EntityTags from 'web/entity/tags';
-import useExportEntity from 'web/entity/useExportEntity';
-import useEntityReloadInterval from 'web/entity/useEntityReloadInterval';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import CreateIcon from 'web/entity/icon/createicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
 
 import {
-  useCloneOverride,
-  useDeleteOverridesByIds,
-  useExportOverridesByIds,
-  useGetOverride,
-} from 'web/graphql/overrides';
-import {useGetPermissions} from 'web/graphql/permissions';
+  selector as overridesSelector,
+  loadEntity,
+} from 'web/store/entities/overrides';
 
-import {goto_entity_details} from 'web/utils/graphql';
+import {
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+
+import {getTimezone} from 'web/store/usersettings/selectors';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderYesNo} from 'web/utils/render';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import useUserTimezone from 'web/utils/useUserTimezone';
 
 import OverrideDetails from './details';
 import OverrideComponent from './component';
@@ -129,9 +121,10 @@ ToolBarIcons.propTypes = {
   onOverrideEditClick: PropTypes.func.isRequired,
 };
 
-const Details = ({entity, ...props}) => {
+const Details = connect(rootState => ({
+  timezone: getTimezone(rootState),
+}))(({entity, timezone, ...props}) => {
   const {nvt} = entity;
-  const [timezone] = useUserTimezone();
   return (
     <Layout flex="column">
       <InfoTable>
@@ -178,168 +171,135 @@ const Details = ({entity, ...props}) => {
       <OverrideDetails entity={entity} {...props} />
     </Layout>
   );
-};
+});
 
 Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = () => {
-  const {id} = useParams();
-  const history = useHistory();
-  const [, renewSessionTimeout] = useUserSessionTimeout();
-  const [downloadRef, handleDownload] = useDownload();
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
+const Page = ({
+  entity,
+  permissions = [],
+  onError,
+  onChanged,
+  onDownloaded,
+  onInteraction,
+  ...props
+}) => (
+  <OverrideComponent
+    onCloned={goto_details('override', props)}
+    onCloneError={onError}
+    onCreated={goto_details('override', props)}
+    onDeleted={goto_list('overrides', props)}
+    onDeleteError={onError}
+    onDownloaded={onDownloaded}
+    onDownloadError={onError}
+    onInteraction={onInteraction}
+    onSaved={onChanged}
+  >
+    {({clone, create, delete: delete_func, download, edit, save}) => (
+      <React.Fragment>
+        <PageTitle title={_('Override Details')} />
+        <EntityPage
+          {...props}
+          entity={entity}
+          sectionIcon={<OverrideIcon size="large" />}
+          title={_('Override')}
+          toolBarIcons={ToolBarIcons}
+          onChanged={onChanged}
+          onDownloaded={onDownloaded}
+          onError={onError}
+          onInteraction={onInteraction}
+          onOverrideCloneClick={clone}
+          onOverrideCreateClick={create}
+          onOverrideDeleteClick={delete_func}
+          onOverrideDownloadClick={download}
+          onOverrideEditClick={edit}
+          onOverrideSaveClick={save}
+        >
+          {({activeTab = 0, onActivateTab}) => {
+            return (
+              <Layout grow="1" flex="column">
+                <TabLayout grow="1" align={['start', 'end']}>
+                  <TabList
+                    active={activeTab}
+                    align={['start', 'stretch']}
+                    onActivateTab={onActivateTab}
+                  >
+                    <Tab>{_('Information')}</Tab>
+                    <EntitiesTab entities={entity.userTags}>
+                      {_('User Tags')}
+                    </EntitiesTab>
+                    <EntitiesTab entities={permissions}>
+                      {_('Permissions')}
+                    </EntitiesTab>
+                  </TabList>
+                </TabLayout>
 
-  const {
-    override,
-    refetch: refetchOverride,
-    loading,
-    error: entityError,
-  } = useGetOverride(id);
-  const {permissions, refetch: refetchPermissions} = useGetPermissions({
-    filterString: permissionsResourceFilter(id).toFilterString(),
-  });
-  const exportEntity = useExportEntity();
-  const [cloneOverride] = useCloneOverride();
-  const [deleteOverride] = useDeleteOverridesByIds();
-  const exportOverride = useExportOverridesByIds();
+                <Tabs active={activeTab}>
+                  <TabPanels>
+                    <TabPanel>
+                      <Details entity={entity} />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityTags
+                        entity={entity}
+                        onChanged={onChanged}
+                        onError={onError}
+                        onInteraction={onInteraction}
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <EntityPermissions
+                        entity={entity}
+                        permissions={permissions}
+                        onChanged={onChanged}
+                        onDownloaded={onDownloaded}
+                        onError={onError}
+                        onInteraction={onInteraction}
+                      />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </Layout>
+            );
+          }}
+        </EntityPage>
+      </React.Fragment>
+    )}
+  </OverrideComponent>
+);
 
-  const handleCloneOverride = clonedOverride => {
-    return cloneOverride(clonedOverride.id)
-      .then(overrideId =>
-        goto_entity_details('override', {history})(overrideId),
-      )
-      .catch(showError);
-  };
-
-  const handleDeleteOverride = deletedOverride => {
-    return deleteOverride([deletedOverride.id])
-      .then(goto_list('overrides', {history}))
-      .catch(showError);
-  };
-
-  const handleDownloadOverride = exportedOverride => {
-    exportEntity({
-      entity: exportedOverride,
-      exportFunc: exportOverride,
-      resourceType: 'overrides',
-      onDownload: handleDownload,
-      showError,
-    });
-  };
-
-  const timeoutFunc = useEntityReloadInterval(override);
-
-  const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetchOverride,
-    timeoutFunc,
-  );
-
-  useEffect(() => {
-    if (hasValue(override) && !hasRunningTimer) {
-      startReload();
-    }
-  }, [override, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // stop reload on unmount
-  useEffect(() => stopReload, [stopReload]);
-  return (
-    <OverrideComponent
-      onCloned={goto_details('override', {history})}
-      onCloneError={showError}
-      onCreated={goto_entity_details('override', {history})}
-      onDeleted={goto_list('overrides', {history})}
-      onDeleteError={showError}
-      onDownloaded={handleDownload}
-      onDownloadError={showError}
-      onInteraction={renewSessionTimeout}
-      onSaved={() => refetchOverride()}
-    >
-      {({create, edit, save}) => (
-        <React.Fragment>
-          <PageTitle title={_('Override Details')} />
-          <EntityPage
-            entity={override}
-            entityError={entityError}
-            isLoading={loading}
-            sectionIcon={<OverrideIcon size="large" />}
-            title={_('Override')}
-            toolBarIcons={ToolBarIcons}
-            onInteraction={renewSessionTimeout}
-            onOverrideCloneClick={handleCloneOverride}
-            onOverrideCreateClick={create}
-            onOverrideDeleteClick={handleDeleteOverride}
-            onOverrideDownloadClick={handleDownloadOverride}
-            onOverrideEditClick={edit}
-            onOverrideSaveClick={save}
-          >
-            {({activeTab = 0, onActivateTab}) => {
-              return (
-                <React.Fragment>
-                  <Layout grow="1" flex="column">
-                    <TabLayout grow="1" align={['start', 'end']}>
-                      <TabList
-                        active={activeTab}
-                        align={['start', 'stretch']}
-                        onActivateTab={onActivateTab}
-                      >
-                        <Tab>{_('Information')}</Tab>
-                        <EntitiesTab entities={override.userTags}>
-                          {_('User Tags')}
-                        </EntitiesTab>
-                        <EntitiesTab entities={permissions}>
-                          {_('Permissions')}
-                        </EntitiesTab>
-                      </TabList>
-                    </TabLayout>
-
-                    <Tabs active={activeTab}>
-                      <TabPanels>
-                        <TabPanel>
-                          <Details entity={override} />
-                        </TabPanel>
-                        <TabPanel>
-                          <EntityTags
-                            entity={override}
-                            onChanged={() => refetchOverride()}
-                            onDownloaded={handleDownload}
-                            onError={showError}
-                            onInteraction={renewSessionTimeout}
-                          />
-                        </TabPanel>
-                        <TabPanel>
-                          <EntityPermissions
-                            entity={override}
-                            permissions={permissions}
-                            onChanged={() => refetchPermissions()}
-                            onDownloaded={handleDownload}
-                            onError={showError}
-                            onInteraction={renewSessionTimeout}
-                          />
-                        </TabPanel>
-                      </TabPanels>
-                    </Tabs>
-                  </Layout>
-                  <DialogNotification
-                    {...notificationDialogState}
-                    onCloseClick={closeNotificationDialog}
-                  />
-                  <Download ref={downloadRef} />
-                </React.Fragment>
-              );
-            }}
-          </EntityPage>
-        </React.Fragment>
-      )}
-    </OverrideComponent>
-  );
+Page.propTypes = {
+  entity: PropTypes.model,
+  permissions: PropTypes.array,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
 };
 
-export default Page;
+const load = gmp => {
+  const loadOverride = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadOverride(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
+};
+
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+  };
+};
+
+export default withEntityContainer('override', {
+  entitySelector: overridesSelector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

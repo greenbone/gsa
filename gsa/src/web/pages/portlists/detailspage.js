@@ -59,7 +59,6 @@ import {
 } from 'web/store/entities/permissions';
 
 import PropTypes from 'web/utils/proptypes';
-import {goto_entity_details} from 'web/utils/graphql';
 
 import PortListComponent from './component';
 import PortListDetails from './details';
@@ -152,7 +151,7 @@ const Page = ({
   <PortListComponent
     onCloned={goto_details('portlist', props)}
     onCloneError={onError}
-    onCreated={goto_entity_details('portlist', props)}
+    onCreated={goto_details('portlist', props)}
     onDeleted={goto_list('portlists', props)}
     onDeleteError={onError}
     onDownloaded={onDownloaded}

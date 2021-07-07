@@ -1207,11 +1207,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                                   margin="5px"
                                 >
                                   <input
+                                    checked=""
                                     class="c19 c20"
                                     data-testid="radio-input"
-                                    name="createAssets"
+                                    name="in_assets"
                                     type="radio"
-                                    value="true"
+                                    value="1"
                                   />
                                   <span
                                     class="c21"
@@ -1235,9 +1236,9 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                                   <input
                                     class="c19 c20"
                                     data-testid="radio-input"
-                                    name="createAssets"
+                                    name="in_assets"
                                     type="radio"
-                                    value="false"
+                                    value="0"
                                   />
                                   <span
                                     class="c21"

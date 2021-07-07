@@ -22,9 +22,7 @@ import {setLocale} from 'gmp/locale/lang';
 
 import {rendererWith} from 'web/utils/testing';
 
-import {TASK_STATUS} from 'gmp/models/task';
-
-import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
+import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import Status from '../status';
 
@@ -34,11 +32,16 @@ const caps = new Capabilities(['everything']);
 
 describe('Task Status tests', () => {
   test('should render', () => {
-    const {newTask} = getMockTasks();
+    const task = Task.fromElement({
+      status: TASK_STATUS.new,
+      alterable: '0',
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: 'id', name: 'target'},
+    });
 
     const {render} = rendererWith({capabilities: caps});
     const {element, getByTestId, queryByTestId} = render(
-      <Status task={newTask} />,
+      <Status task={task} />,
     );
 
     expect(element).toMatchSnapshot();
@@ -48,14 +51,20 @@ describe('Task Status tests', () => {
     expect(bar).toHaveTextContent(TASK_STATUS.new);
 
     const detailslink = queryByTestId('details-link');
-    expect(detailslink).not.toHaveAttribute('href');
+    expect(detailslink).toBe(null);
   });
 
   test('should render with last report', () => {
-    const {finishedTask} = getMockTasks();
+    const task = Task.fromElement({
+      status: TASK_STATUS.done,
+      alterable: '0',
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: 'id', name: 'target'},
+      last_report: {report: {_id: '42'}},
+    });
 
     const {render} = rendererWith({capabilities: caps, router: true});
-    const {getByTestId, queryByTestId} = render(<Status task={finishedTask} />);
+    const {getByTestId, queryByTestId} = render(<Status task={task} />);
 
     const bar = getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', TASK_STATUS.done);
@@ -63,14 +72,21 @@ describe('Task Status tests', () => {
 
     const detailslink = queryByTestId('details-link');
     expect(detailslink).toHaveTextContent('Done');
-    expect(detailslink).toHaveAttribute('href', '/report/1234');
+    expect(detailslink).toHaveAttribute('href', '/report/42');
   });
 
   test('should render with current report', () => {
-    const {runningTask} = getMockTasks();
+    const task = Task.fromElement({
+      status: TASK_STATUS.running,
+      alterable: '0',
+      permissions: {permission: [{name: 'everything'}]},
+      target: {_id: 'id', name: 'target'},
+      last_report: {report: {_id: '42'}},
+      current_report: {report: {_id: '1234'}},
+    });
 
     const {render} = rendererWith({capabilities: caps, router: true});
-    const {getByTestId, queryByTestId} = render(<Status task={runningTask} />);
+    const {getByTestId, queryByTestId} = render(<Status task={task} />);
 
     const bar = getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', TASK_STATUS.running);
@@ -78,16 +94,17 @@ describe('Task Status tests', () => {
 
     const detailslink = queryByTestId('details-link');
     expect(detailslink).toHaveTextContent('0 %');
-    expect(detailslink).toHaveAttribute('href', '/report/5678');
+    expect(detailslink).toHaveAttribute('href', '/report/1234');
   });
 
   test('should render container', () => {
-    const {containerTask} = getMockTasks();
+    const task = Task.fromElement({
+      permissions: {permission: [{name: 'everything'}]},
+      last_report: {report: {_id: '42'}},
+    });
 
     const {render} = rendererWith({capabilities: caps, router: true});
-    const {getByTestId, queryByTestId} = render(
-      <Status task={containerTask} />,
-    );
+    const {getByTestId, queryByTestId} = render(<Status task={task} />);
 
     const bar = getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', 'Container');
@@ -95,6 +112,6 @@ describe('Task Status tests', () => {
 
     const detailslink = queryByTestId('details-link');
     expect(detailslink).toHaveTextContent('Container');
-    expect(detailslink).toHaveAttribute('href', '/report/1234');
+    expect(detailslink).toHaveAttribute('href', '/report/42');
   });
 });

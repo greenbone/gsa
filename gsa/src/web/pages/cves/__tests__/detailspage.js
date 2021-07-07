@@ -25,28 +25,12 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Cve from 'gmp/models/cve';
 
-import Filter from 'gmp/models/filter';
-import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import {
-  createExportCvesByIdsQueryMock,
-  createGetCveQueryMock,
-  cveEntity,
-} from 'web/graphql/__mocks__/cves';
+import {entityLoadingActions} from 'web/store/entities/cves';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
+import {rendererWith} from 'web/utils/testing';
 
-import {rendererWith, wait, fireEvent} from 'web/utils/testing';
-
-import CvePage, {ToolBarIcons} from '../detailspage';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: 'CVE-314',
-  }),
-}));
+import CvePage from '../detailspage';
 
 if (!isDefined(window.URL)) {
   window.URL = {};
@@ -152,25 +136,19 @@ const entity_v2 = Cve.fromElement({
 
 const caps = new Capabilities(['everything']);
 
-const reloadInterval = -1;
-const manualUrl = 'test/';
-
-let currentSettings;
-let getPermissions;
-let renewSession;
-
-beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
-
-  renewSession = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
 });
 
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
+
+const reloadInterval = 1;
+const manualUrl = 'test/';
+
 describe('CVE Detailspage tests', () => {
-  test('should render full Detailspage', async () => {
+  test('should render full Detailspage', () => {
     const getCve = jest.fn().mockResolvedValue({
       data: entity_v2,
     });
@@ -179,34 +157,29 @@ describe('CVE Detailspage tests', () => {
       cve: {
         get: getCve,
       },
-      permissions: {
-        get: getPermissions,
-      },
-      settings: {manualUrl, reloadInterval},
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
+        renewSession,
       },
     };
-
-    const [mock, resultFunc] = createGetCveQueryMock();
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, renewSessionQueryMock],
     });
 
     store.dispatch(setTimezone('UTC'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(<CvePage id="CVE-314" />);
+    store.dispatch(entityLoadingActions.success('CVE-2020-9997', entity_v2));
 
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
+    const {baseElement, element, getAllByTestId} = render(
+      <CvePage id="CVE-2020-9997" />,
+    );
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
@@ -222,204 +195,42 @@ describe('CVE Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Export CVE');
 
-    expect(baseElement).toHaveTextContent('CVE: CVE-314');
+    expect(element).toHaveTextContent('CVE: CVE-2020-9997');
 
-    expect(baseElement).toHaveTextContent(
-      'Published:Mon, Aug 17, 2020 12:18 PM UTC',
+    expect(element).toHaveTextContent('CVE-2020-9997');
+    expect(element).toHaveTextContent(
+      'Published:Thu, Oct 22, 2020 7:15 PM UTC',
     );
-    expect(baseElement).toHaveTextContent(
-      'Modified:Tue, Sep 29, 2020 12:16 PM UTC',
+    expect(element).toHaveTextContent(
+      'Modified:Fri, Oct 30, 2020 11:44 AM UTC',
     );
-    expect(baseElement).toHaveTextContent(
-      'Last updated:Tue, Sep 29, 2020 12:16 PM UTC',
+    expect(element).toHaveTextContent(
+      'Last updated:Mon, Oct 26, 2020 8:27 PM UTC',
     );
 
-    expect(baseElement).toHaveTextContent('Attack VectorLOCAL');
-    expect(baseElement).toHaveTextContent('Attack ComplexityLOW');
-    expect(baseElement).toHaveTextContent('Privileges RequiredNONE');
-    expect(baseElement).toHaveTextContent('User InteractionREQUIRED');
-    expect(baseElement).toHaveTextContent('ScopeUNCHANGED');
-    expect(baseElement).toHaveTextContent('Confidentiality ImpactHIGH');
-    expect(baseElement).toHaveTextContent('Integrity ImpactNONE');
-    expect(baseElement).toHaveTextContent('Availability ImpactNONE');
+    expect(element).toHaveTextContent('Attack VectorLOCAL');
+    expect(element).toHaveTextContent('Attack ComplexityLOW');
+    expect(element).toHaveTextContent('Privileges RequiredNONE');
+    expect(element).toHaveTextContent('User InteractionREQUIRED');
+    expect(element).toHaveTextContent('ScopeUNCHANGED');
+    expect(element).toHaveTextContent('Confidentiality ImpactHIGH');
+    expect(element).toHaveTextContent('Integrity ImpactNONE');
+    expect(element).toHaveTextContent('Availability ImpactNONE');
     const progressBars = getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Medium');
     expect(progressBars[0]).toHaveTextContent('5.5 (Medium)');
-    expect(baseElement).toHaveTextContent('References');
-    expect(baseElement).toHaveTextContent('TESTfoo bar');
-    expect(baseElement).toHaveTextContent('TEST2bar baz');
-    expect(baseElement).toHaveTextContent(
-      'CERT Advisories referencing this CVE',
+    expect(element).toHaveTextContent('References');
+    expect(element).toHaveTextContent(
+      'MISChttps://support.apple.com/kb/HT211289',
     );
-    expect(baseElement).toHaveTextContent('CB-1');
-    expect(baseElement).toHaveTextContent('blooob');
-    expect(baseElement).toHaveTextContent('CB-2');
-    expect(baseElement).toHaveTextContent('foo');
-    expect(baseElement).toHaveTextContent('Vulnerable Products');
-    expect(baseElement).toHaveTextContent('cpe:/o:ab:c');
-    expect(baseElement).toHaveTextContent('cpe:/o:a:bc');
-  });
-
-  test('should render user tags tab', async () => {
-    const getCve = jest.fn().mockResolvedValue({
-      data: entity_v2,
-    });
-
-    const getTags = jest.fn().mockResolvedValue({
-      data: [],
-      meta: {
-        filter: Filter.fromString(),
-        counts: new CollectionCounts(),
-      },
-    });
-
-    const gmp = {
-      cve: {
-        get: getCve,
-      },
-      permissions: {
-        get: getPermissions,
-      },
-      tags: {
-        get: getTags,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-        renewSession,
-      },
-    };
-
-    const [mock, resultFunc] = createGetCveQueryMock();
-
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-
-    const {render, store} = rendererWith({
-      capabilities: caps,
-      gmp,
-      router: true,
-      store: true,
-      queryMocks: [mock, renewSessionQueryMock],
-    });
-
-    store.dispatch(setTimezone('CET'));
-
-    const {baseElement} = render(<CvePage id="CVE-314" />);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-
-    const spans = baseElement.querySelectorAll('span');
-    fireEvent.click(spans[4]);
-
-    expect(baseElement).toHaveTextContent('No user tags available');
-  });
-
-  test('should call commands', async () => {
-    const getCve = jest.fn().mockReturnValue(
-      Promise.resolve({
-        data: entity_v2,
-      }),
+    expect(element).toHaveTextContent(
+      'MISChttps://support.apple.com/kb/HT211291',
     );
-
-    const gmp = {
-      cve: {
-        get: getCve,
-      },
-      settings: {manualUrl, reloadInterval},
-      user: {
-        currentSettings,
-        renewSession,
-      },
-    };
-
-    const [mock, resultFunc] = createGetCveQueryMock('CVE-314', cveEntity);
-    const [
-      exportQueryMock,
-      exportQueryResult,
-    ] = createExportCvesByIdsQueryMock(['CVE-314']);
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-
-    const {render, store} = rendererWith({
-      capabilities: caps,
-      gmp,
-      router: true,
-      store: true,
-      queryMocks: [mock, renewSessionQueryMock, exportQueryMock],
-    });
-
-    store.dispatch(setTimezone('CET'));
-
-    const {getAllByTestId} = render(<CvePage id="CVE-314" />);
-
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: CVEs');
-    expect(icons[1]).toHaveAttribute('title', 'CVE List');
-
-    expect(icons[2]).toHaveAttribute('title', 'Export CVE');
-    fireEvent.click(icons[2]);
-    expect(exportQueryResult).toHaveBeenCalled();
-  });
-});
-
-describe('CVEs ToolBarIcons tests', () => {
-  test('should render', () => {
-    const handleCveDownload = jest.fn();
-
-    const {render} = rendererWith({
-      gmp: {settings: {manualUrl}},
-      capabilities: caps,
-      router: true,
-    });
-
-    const {element, getAllByTestId} = render(
-      <ToolBarIcons
-        entity={entity_v2}
-        onCveDownloadClick={handleCveDownload}
-      />,
-    );
-
-    const links = element.querySelectorAll('a');
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: CVEs');
-    expect(links[0]).toHaveAttribute(
-      'href',
-      'test/en/managing-secinfo.html#cve',
-    );
-
-    expect(links[1]).toHaveAttribute('href', '/cves');
-    expect(icons[1]).toHaveAttribute('title', 'CVE List');
-  });
-
-  test('should call click handlers', () => {
-    const handleCveDownload = jest.fn();
-
-    const {render} = rendererWith({
-      gmp: {settings: {manualUrl}},
-      capabilities: caps,
-      router: true,
-    });
-
-    const {getAllByTestId} = render(
-      <ToolBarIcons
-        entity={entity_v2}
-        onCveDownloadClick={handleCveDownload}
-      />,
-    );
-
-    const icons = getAllByTestId('svg-icon');
-
-    expect(icons[0]).toHaveAttribute('title', 'Help: CVEs');
-    expect(icons[1]).toHaveAttribute('title', 'CVE List');
-
-    fireEvent.click(icons[2]);
-    expect(handleCveDownload).toHaveBeenCalledWith(entity_v2);
-    expect(icons[2]).toHaveAttribute('title', 'Export CVE');
+    expect(element).toHaveTextContent('CERT Advisories referencing this CVE');
+    expect(element).toHaveTextContent('CB-K20/0730');
+    expect(element).toHaveTextContent('Apple macOS: Mehrere Schwachstellen');
+    expect(element).toHaveTextContent('Vulnerable Products');
+    expect(element).toHaveTextContent('cpe:/o:apple:mac_os_x:10.15.5');
+    expect(element).toHaveTextContent('cpe:/o:apple:watchos:6.2.8');
   });
 });

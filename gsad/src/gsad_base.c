@@ -109,10 +109,10 @@ set_http_only (int state)
 char *
 ctime_r_strip_newline (time_t *time, char *string)
 {
-  struct tm tm;
+  struct tm *tm;
 
-  if (localtime_r (time, &tm) == NULL
-      || (strftime (string, 199, "%c %Z", &tm) == 0))
+  tm = localtime (time);
+  if (tm == NULL || (strftime (string, 199, "%c %Z", tm) == 0))
     {
       string[0] = '\0';
       return string;

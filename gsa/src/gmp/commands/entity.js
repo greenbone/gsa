@@ -16,11 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {isDefined} from 'gmp/utils/identity';
+
 import logger from 'gmp/log';
 
 import DefaultTransform from 'gmp/http/transform/default';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import GmpCommand, {BULK_SELECT_BY_IDS} from './gmp';
 

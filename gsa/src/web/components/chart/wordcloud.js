@@ -23,7 +23,7 @@ import d3cloud from 'd3-cloud';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from '../../utils/proptypes';
 
 import Group from './group';
 import Svg from './svg';

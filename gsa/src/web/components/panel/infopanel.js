@@ -20,11 +20,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
+
+import Layout from 'web/components/layout/layout';
 
 const Panel = styled(Layout)`
   background-color: ${Theme.white};

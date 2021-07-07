@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
 
 import {setLocale} from 'gmp/locale/lang';
 
@@ -25,36 +26,14 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
-import ScanConfig from 'gmp/models/scanconfig';
+import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
-import {createGetScannersQueryMock} from 'web/graphql/__mocks__/scanners';
-import {
-  createGetPermissionsQueryMock,
-  noPermissions,
-} from 'web/graphql/__mocks__/permissions';
-import {
-  createCloneScanConfigQueryMock,
-  createDeleteScanConfigsByIdsQueryMock,
-  createExportScanConfigsByIdsQueryMock,
-  createGetScanConfigQueryMock,
-  editableConfig,
-  inUseConfig,
-  noPermConfig,
-  nonWritableConfig,
-} from 'web/graphql/__mocks__/scanconfigs';
-import {setTimezone} from 'web/store/usersettings/actions';
+import {entityLoadingActions} from 'web/store/entities/scanconfigs';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent, act, wait} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: '314',
-  }),
-}));
 
 if (!isDefined(window.URL)) {
   window.URL = {};
@@ -63,45 +42,203 @@ window.URL.createObjectURL = jest.fn();
 
 setLocale('en');
 
-const config = ScanConfig.fromObject(editableConfig);
+const families = [
+  {
+    name: 'family1',
+    nvt_count: '1',
+    max_nvt_count: '1',
+    growing: 1,
+  },
+  {
+    name: 'family2',
+    nvt_count: '2',
+    max_nvt_count: '4',
+    growing: 0,
+  },
+  {
+    name: 'family3',
+    nvt_count: '0',
+    max_nvt_count: '2',
+    growing: 0,
+  },
+];
 
-const config2 = ScanConfig.fromObject(noPermConfig);
+const preferences = {
+  preference: [
+    {
+      name: 'preference0',
+      hr_name: 'preference0',
+      id: '0',
+      value: 'yes',
+      type: 'checkbox',
+      default: 'no',
+      nvt: {
+        _oid: '0',
+        name: 'nvt0',
+      },
+    },
+    {
+      name: 'preference1',
+      hr_name: 'preference1',
+      id: '1',
+      value: 'value2',
+      type: 'radio',
+      default: 'value1',
+      alt: ['value2', 'value3'],
+      nvt: {
+        _oid: '1',
+        name: 'nvt1',
+      },
+    },
+    {
+      name: 'preference2',
+      hr_name: 'preference2',
+      id: '2',
+      type: 'entry',
+      value: 'foo',
+      default: 'bar',
+      nvt: {
+        _oid: '2',
+        name: 'nvt2',
+      },
+    },
+    {
+      name: 'scannerpref0',
+      hr_name: 'Scanner Preference 1',
+      value: '0',
+      default: '0',
+      nvt: {},
+    },
+  ],
+};
 
-const config3 = ScanConfig.fromObject(inUseConfig);
+const config = ScanConfig.fromElement({
+  _id: '12345',
+  name: 'foo',
+  comment: 'bar',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  owner: {name: 'admin'},
+  writable: '1',
+  in_use: '0',
+  usage_type: 'scan',
+  family_count: {growing: 1},
+  families: {family: families},
+  preferences: preferences,
+  permissions: {permission: [{name: 'everything'}]},
+  scanner: {name: 'scanner', type: '42'},
+  type: OPENVAS_SCAN_CONFIG_TYPE,
+  tasks: {
+    task: [
+      {id: '1234', name: 'task1'},
+      {id: '5678', name: 'task2'},
+    ],
+  },
+});
 
-const config4 = ScanConfig.fromObject(nonWritableConfig);
+const configId = {
+  id: '12345',
+};
+
+const config2 = ScanConfig.fromElement({
+  _id: '12345',
+  name: 'foo',
+  comment: 'bar',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  owner: {name: 'user'},
+  writable: '1',
+  in_use: '0',
+  usage_type: 'scan',
+  family_count: {growing: 1},
+  families: {family: families},
+  preferences: preferences,
+  permissions: {permission: [{name: 'get_config'}]},
+  scanner: {name: 'scanner', type: '42'},
+  type: OPENVAS_SCAN_CONFIG_TYPE,
+  tasks: {
+    task: [
+      {id: '1234', name: 'task1'},
+      {id: '5678', name: 'task2'},
+    ],
+  },
+});
+
+const config3 = ScanConfig.fromElement({
+  _id: '12345',
+  name: 'foo',
+  comment: 'bar',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  owner: {name: 'user'},
+  writable: '1',
+  in_use: '1',
+  usage_type: 'scan',
+  family_count: {growing: 1},
+  families: {family: families},
+  preferences: preferences,
+  permissions: {permission: [{name: 'everything'}]},
+  scanner: {name: 'scanner', type: '42'},
+  type: OPENVAS_SCAN_CONFIG_TYPE,
+  tasks: {
+    task: [
+      {id: '1234', name: 'task1'},
+      {id: '5678', name: 'task2'},
+    ],
+  },
+});
+
+const config4 = ScanConfig.fromElement({
+  _id: '12345',
+  name: 'foo',
+  comment: 'bar',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  owner: {name: 'user'},
+  writable: '0',
+  in_use: '0',
+  usage_type: 'scan',
+  family_count: {growing: 1},
+  families: {family: families},
+  preferences: preferences,
+  permissions: {permission: [{name: 'everything'}]},
+  scanner: {name: 'scanner', type: '42'},
+  type: OPENVAS_SCAN_CONFIG_TYPE,
+  tasks: {
+    task: [
+      {id: '1234', name: 'task1'},
+      {id: '5678', name: 'task2'},
+    ],
+  },
+});
+
+const scanners = [{name: 'scanner1'}, {name: 'scanner2'}];
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
 
 const entityType = 'scanconfig';
-const reloadInterval = -1;
+const reloadInterval = 1;
 const manualUrl = 'test/';
 
-let currentSettings;
-let getPermissions;
-let renewSession;
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-  renewSession = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
-
-  getPermissions = jest.fn().mockResolvedValue({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
+const getPermissions = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
 });
 
 describe('Scan Config Detailspage tests', () => {
-  test('should render full Detailspage', async () => {
+  test('should render full Detailspage', () => {
     const getConfig = jest.fn().mockResolvedValue({
       data: config,
     });
@@ -113,35 +250,31 @@ describe('Scan Config Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      settings: {manualUrl, reloadInterval},
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
       },
     };
 
-    const [mock, resultFunc] = createGetScanConfigQueryMock();
-
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-    const [permissionQueryMock] = createGetPermissionsQueryMock({
-      filterString: 'resource_uuid=314 first=1 rows=-1',
-    });
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
-    const {getAllByTestId, baseElement} = render(<Detailspage id="314" />);
+    store.dispatch(entityLoadingActions.success('12345', config));
 
-    await wait();
+    const {baseElement, element, getAllByTestId} = render(
+      <Detailspage id="12345" />,
+    );
 
-    expect(resultFunc).toHaveBeenCalled();
-
-    expect(baseElement).toHaveTextContent('Scan Config: Half empty and slow');
+    expect(element).toMatchSnapshot();
+    expect(element).toHaveTextContent('Scan Config: foo');
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
@@ -156,20 +289,23 @@ describe('Scan Config Detailspage tests', () => {
     expect(links[1]).toHaveAttribute('href', '/scanconfigs');
     expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
 
-    expect(baseElement).toHaveTextContent('314');
-    expect(baseElement).toHaveTextContent('Mon, Aug 17, 2020 2:18 PM CEST');
-    expect(baseElement).toHaveTextContent('Tue, Sep 29, 2020 2:16 PM CEST');
-    expect(baseElement).toHaveTextContent('admin');
+    expect(element).toHaveTextContent('12345');
+    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
+    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:44 AM CEST');
+    expect(element).toHaveTextContent('admin');
 
-    expect(baseElement).toHaveTextContent("Most NVT's");
+    expect(element).toHaveTextContent('bar');
 
-    expect(baseElement).toHaveTextContent('foo');
-    expect(detailslinks[0]).toHaveAttribute('href', '/task/457');
+    expect(element).toHaveTextContent('task1');
+    expect(detailslinks[0]).toHaveAttribute('href', '/task/1234');
 
-    expect(baseElement).not.toHaveTextContent('scanner');
+    expect(element).toHaveTextContent('task2');
+    expect(detailslinks[1]).toHaveAttribute('href', '/task/5678');
+
+    expect(element).not.toHaveTextContent('scanner');
   });
 
-  test('should render nvt families tab', async () => {
+  test('should render nvt families tab', () => {
     const getConfig = jest.fn().mockResolvedValue({
       data: config,
     });
@@ -178,42 +314,42 @@ describe('Scan Config Detailspage tests', () => {
       [entityType]: {
         get: getConfig,
       },
-      settings: {manualUrl, reloadInterval},
+      permissions: {
+        get: getPermissions,
+      },
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
       },
     };
 
-    const [mock, resultFunc] = createGetScanConfigQueryMock();
-
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-    const [permissionQueryMock] = createGetPermissionsQueryMock({
-      filterString: 'resource_uuid=314 first=1 rows=-1',
-    });
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
-    const {getAllByTestId, baseElement} = render(<Detailspage id="314" />);
+    store.dispatch(entityLoadingActions.success('12345', config));
 
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
+    const {baseElement, element, getAllByTestId} = render(
+      <Detailspage id="12345" />,
+    );
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[12]);
 
-    expect(baseElement).toHaveTextContent('family1');
-    expect(baseElement).toHaveTextContent('7 of 10');
-    expect(baseElement).toHaveTextContent('family2');
-    expect(baseElement).toHaveTextContent('0 of 5');
+    expect(element).toHaveTextContent('family1');
+    expect(element).toHaveTextContent('1 of 1');
+    expect(element).toHaveTextContent('family2');
+    expect(element).toHaveTextContent('2 of 4');
+    expect(element).toHaveTextContent('family3');
+    expect(element).toHaveTextContent('0 of 2');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -229,14 +365,16 @@ describe('Scan Config Detailspage tests', () => {
       '/nvts?filter=family%3D%22family2%22',
     );
     expect(links[3]).toHaveAttribute('title', 'NVTs of family family2');
-
-    expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
+    expect(links[4]).toHaveAttribute(
+      'href',
+      '/nvts?filter=family%3D%22family3%22',
+    );
+    expect(links[4]).toHaveAttribute('title', 'NVTs of family family3');
 
     expect(icons[9]).toHaveAttribute(
       'title',
       'The families selection is DYNAMIC. New families will automatically be added and considered.',
     );
-
     expect(icons[10]).toHaveAttribute(
       'title',
       'The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.',
@@ -245,9 +383,13 @@ describe('Scan Config Detailspage tests', () => {
       'title',
       'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
     );
+    expect(icons[12]).toHaveAttribute(
+      'title',
+      'The NVT selection is STATIC. New NVTs will NOT automatically be added and considered.',
+    );
   });
 
-  test('should render nvt preferences tab', async () => {
+  test('should render nvt preferences tab', () => {
     const getConfig = jest.fn().mockResolvedValue({
       data: config,
     });
@@ -256,50 +398,55 @@ describe('Scan Config Detailspage tests', () => {
       [entityType]: {
         get: getConfig,
       },
-      settings: {manualUrl, reloadInterval},
+      permissions: {
+        get: getPermissions,
+      },
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
       },
     };
 
-    const [mock, resultFunc] = createGetScanConfigQueryMock();
-
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-    const [permissionQueryMock] = createGetPermissionsQueryMock({
-      filterString: 'resource_uuid=314 first=1 rows=-1',
-    });
-
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(<Detailspage id="314" />);
-    await wait();
+    store.dispatch(entityLoadingActions.success('12345', config));
 
-    expect(resultFunc).toHaveBeenCalled();
+    const {baseElement, element, getAllByTestId} = render(
+      <Detailspage id="12345" />,
+    );
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[14]);
 
     const detailsLinks = getAllByTestId('details-link');
 
-    expect(detailsLinks[0]).toHaveAttribute(
-      'href',
-      '/nvt/1.3.6.1.4.1.25623.1.0.100151',
-    );
-    expect(detailsLinks[0]).toHaveTextContent('PostgreSQL Detection');
-    expect(baseElement).toHaveTextContent('regress');
-    expect(baseElement).toHaveTextContent('postgres');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/nvt/0');
+    expect(detailsLinks[0]).toHaveTextContent('nvt0');
+    expect(element).toHaveTextContent('value2');
+    expect(element).toHaveTextContent('value1');
+
+    expect(detailsLinks[1]).toHaveAttribute('href', '/nvt/1');
+    expect(detailsLinks[1]).toHaveTextContent('nvt1');
+    expect(element).toHaveTextContent('yes');
+    expect(element).toHaveTextContent('no');
+
+    expect(detailsLinks[2]).toHaveAttribute('href', '/nvt/2');
+    expect(detailsLinks[2]).toHaveTextContent('nvt2');
+    expect(element).toHaveTextContent('foo');
+    expect(element).toHaveTextContent('bar');
   });
 
-  test('should render user tags tab', async () => {
+  test('should render user tags tab', () => {
     const getConfig = jest.fn().mockResolvedValue({
       data: config,
     });
@@ -322,43 +469,35 @@ describe('Scan Config Detailspage tests', () => {
       tags: {
         get: getTags,
       },
-      settings: {manualUrl, reloadInterval},
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
       },
     };
 
-    const [mock, resultFunc] = createGetScanConfigQueryMock();
-
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-    const [permissionQueryMock] = createGetPermissionsQueryMock({
-      filterString: 'resource_uuid=314 first=1 rows=-1',
-    });
-
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(<Detailspage id="314" />);
+    store.dispatch(entityLoadingActions.success('12345', config));
 
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
+    const {baseElement, element} = render(<Detailspage id="12345" />);
 
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[16]);
 
-    expect(baseElement).toHaveTextContent('No user tags available');
+    expect(element).toHaveTextContent('No user tags available');
   });
 
-  test('should render permissions tab', async () => {
+  test('should render permissions tab', () => {
     const getConfig = jest.fn().mockResolvedValue({
       data: config,
     });
@@ -370,47 +509,32 @@ describe('Scan Config Detailspage tests', () => {
       permissions: {
         get: getPermissions,
       },
-      settings: {manualUrl, reloadInterval},
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
       },
     };
 
-    const [mock, resultFunc] = createGetScanConfigQueryMock(
-      '314',
-      noPermConfig,
-    );
-
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-    const [permissionQueryMock] = createGetPermissionsQueryMock(
-      {
-        filterString: 'resource_uuid=314 first=1 rows=-1',
-      },
-      noPermissions,
-    );
-
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, renewSessionQueryMock, permissionQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(<Detailspage id="314" />);
+    store.dispatch(entityLoadingActions.success('12345', config));
 
-    await wait();
+    const {baseElement, element} = render(<Detailspage id="12345" />);
 
-    expect(resultFunc).toHaveBeenCalled();
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[18]);
 
-    await wait();
-
-    expect(baseElement).toHaveTextContent('No permissions available');
+    expect(element).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
@@ -419,7 +543,27 @@ describe('Scan Config Detailspage tests', () => {
         data: config,
       }),
     );
+    const clone = jest.fn().mockReturnValue(
+      Promise.resolve({
+        data: {id: 'foo'},
+      }),
+    );
     const getNvtFamilies = jest.fn().mockReturnValue(
+      Promise.resolve({
+        foo: 'bar',
+      }),
+    );
+    const getAllScanners = jest.fn().mockReturnValue(
+      Promise.resolve({
+        data: scanners,
+      }),
+    );
+    const deleteFunc = jest.fn().mockReturnValue(
+      Promise.resolve({
+        foo: 'bar',
+      }),
+    );
+    const exportFunc = jest.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -428,84 +572,64 @@ describe('Scan Config Detailspage tests', () => {
     const gmp = {
       [entityType]: {
         get: getConfig,
+        clone,
+        delete: deleteFunc,
+        export: exportFunc,
+      },
+      permissions: {
+        get: getPermissions,
       },
       nvtfamilies: {
         get: getNvtFamilies,
       },
-      settings: {manualUrl, reloadInterval},
+      scanners: {
+        getAll: getAllScanners,
+      },
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
       },
     };
 
-    const [mock, resultFunc] = createGetScanConfigQueryMock(
-      '314',
-      editableConfig,
-    );
-
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-    const [permissionQueryMock] = createGetPermissionsQueryMock({
-      filterString: 'resource_uuid=314 first=1 rows=-1',
-    });
-    const [cloneQueryMock, cloneQueryResult] = createCloneScanConfigQueryMock();
-    const [
-      exportQueryMock,
-      exportQueryResult,
-    ] = createExportScanConfigsByIdsQueryMock(['314']);
-    const [
-      deleteQueryMock,
-      deleteQueryResult,
-    ] = createDeleteScanConfigsByIdsQueryMock();
-    const [scannerQueryMock, scannerQueryResult] = createGetScannersQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [
-        mock,
-        renewSessionQueryMock,
-        permissionQueryMock,
-        cloneQueryMock,
-        exportQueryMock,
-        deleteQueryMock,
-        scannerQueryMock,
-      ],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+    store.dispatch(entityLoadingActions.success('12345', config));
 
-    const {getAllByTestId} = render(<Detailspage id="314" />);
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
 
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
     const icons = getAllByTestId('svg-icon');
-
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
     expect(icons[1]).toHaveAttribute('title', 'ScanConfig List');
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
-    fireEvent.click(icons[3]);
-    expect(cloneQueryResult).toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.click(icons[3]);
+      expect(clone).toHaveBeenCalledWith(config);
+      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
 
-    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
-    fireEvent.click(icons[4]);
+      fireEvent.click(icons[4]);
+      expect(getNvtFamilies).toHaveBeenCalled();
+      expect(getAllScanners).toHaveBeenCalled();
+      expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
 
-    await wait();
-    expect(getNvtFamilies).toHaveBeenCalled();
-    expect(scannerQueryResult).toHaveBeenCalled();
+      fireEvent.click(icons[5]);
+      expect(deleteFunc).toHaveBeenCalledWith(configId);
+      expect(icons[5]).toHaveAttribute('title', 'Move Scan Config to trashcan');
 
-    expect(icons[5]).toHaveAttribute('title', 'Move Scan Config to trashcan');
-    fireEvent.click(icons[5]);
-    expect(deleteQueryResult).toHaveBeenCalled();
-
-    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
-    fireEvent.click(icons[6]);
-    expect(exportQueryResult).toHaveBeenCalled();
+      fireEvent.click(icons[6]);
+      expect(exportFunc).toHaveBeenCalledWith(config);
+      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    });
 
     expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
   });
@@ -517,7 +641,27 @@ describe('Scan Config Detailspage tests', () => {
       }),
     );
 
+    const clone = jest.fn().mockReturnValue(
+      Promise.resolve({
+        data: {id: 'foo'},
+      }),
+    );
     const getNvtFamilies = jest.fn().mockReturnValue(
+      Promise.resolve({
+        foo: 'bar',
+      }),
+    );
+    const getAllScanners = jest.fn().mockReturnValue(
+      Promise.resolve({
+        data: scanners,
+      }),
+    );
+    const deleteFunc = jest.fn().mockReturnValue(
+      Promise.resolve({
+        foo: 'bar',
+      }),
+    );
+    const exportFunc = jest.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -526,64 +670,40 @@ describe('Scan Config Detailspage tests', () => {
     const gmp = {
       [entityType]: {
         get: getConfig,
+        clone,
+        delete: deleteFunc,
+        export: exportFunc,
+      },
+      permissions: {
+        get: getPermissions,
       },
       nvtfamilies: {
         get: getNvtFamilies,
       },
-      settings: {manualUrl, reloadInterval},
+      scanners: {
+        getAll: getAllScanners,
+      },
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
       },
     };
 
-    const [mock, resultFunc] = createGetScanConfigQueryMock(
-      '314',
-      noPermConfig,
-    );
-
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-    const [permissionQueryMock] = createGetPermissionsQueryMock(
-      {
-        filterString: 'resource_uuid=314 first=1 rows=-1',
-      },
-      noPermissions,
-    );
-    const [cloneQueryMock, cloneQueryResult] = createCloneScanConfigQueryMock();
-    const [
-      exportQueryMock,
-      exportQueryResult,
-    ] = createExportScanConfigsByIdsQueryMock(['314']);
-    const [
-      deleteQueryMock,
-      deleteQueryResult,
-    ] = createDeleteScanConfigsByIdsQueryMock();
-
-    const [scannerQueryMock, scannerQueryResult] = createGetScannersQueryMock();
-
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [
-        mock,
-        renewSessionQueryMock,
-        permissionQueryMock,
-        cloneQueryMock,
-        exportQueryMock,
-        deleteQueryMock,
-        scannerQueryMock,
-      ],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+    store.dispatch(entityLoadingActions.success('12345', config2));
 
-    const {getAllByTestId} = render(<Detailspage id="314" />);
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
 
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -593,7 +713,7 @@ describe('Scan Config Detailspage tests', () => {
 
     await act(async () => {
       fireEvent.click(icons[3]);
-      expect(cloneQueryResult).not.toHaveBeenCalled();
+      expect(clone).not.toHaveBeenCalled();
       expect(icons[3]).toHaveAttribute(
         'title',
         'Permission to clone Scan Config denied',
@@ -601,21 +721,21 @@ describe('Scan Config Detailspage tests', () => {
 
       fireEvent.click(icons[4]);
       expect(getNvtFamilies).not.toHaveBeenCalled();
-      expect(scannerQueryResult).not.toHaveBeenCalled();
+      expect(getAllScanners).not.toHaveBeenCalled();
       expect(icons[4]).toHaveAttribute(
         'title',
         'Permission to edit Scan Config denied',
       );
 
       fireEvent.click(icons[5]);
-      expect(deleteQueryResult).not.toHaveBeenCalled();
+      expect(deleteFunc).not.toHaveBeenCalled();
       expect(icons[5]).toHaveAttribute(
         'title',
         'Permission to move Scan Config to trashcan denied',
       );
 
       fireEvent.click(icons[6]);
-      expect(exportQueryResult).toHaveBeenCalled();
+      expect(exportFunc).toHaveBeenCalledWith(config2);
       expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
     });
 
@@ -625,11 +745,31 @@ describe('Scan Config Detailspage tests', () => {
   test('should (not) call commands if config is in use', async () => {
     const getConfig = jest.fn().mockReturnValue(
       Promise.resolve({
-        data: ScanConfig.fromObject(inUseConfig),
+        data: config3,
       }),
     );
 
+    const clone = jest.fn().mockReturnValue(
+      Promise.resolve({
+        data: {id: 'foo'},
+      }),
+    );
     const getNvtFamilies = jest.fn().mockReturnValue(
+      Promise.resolve({
+        foo: 'bar',
+      }),
+    );
+    const getAllScanners = jest.fn().mockReturnValue(
+      Promise.resolve({
+        data: scanners,
+      }),
+    );
+    const deleteFunc = jest.fn().mockReturnValue(
+      Promise.resolve({
+        foo: 'bar',
+      }),
+    );
+    const exportFunc = jest.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -638,58 +778,40 @@ describe('Scan Config Detailspage tests', () => {
     const gmp = {
       [entityType]: {
         get: getConfig,
+        clone,
+        delete: deleteFunc,
+        export: exportFunc,
+      },
+      permissions: {
+        get: getPermissions,
       },
       nvtfamilies: {
         get: getNvtFamilies,
       },
-      settings: {manualUrl, reloadInterval},
+      scanners: {
+        getAll: getAllScanners,
+      },
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
       },
     };
 
-    const [mock, resultFunc] = createGetScanConfigQueryMock('314', inUseConfig);
-
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-    const [permissionQueryMock] = createGetPermissionsQueryMock({
-      filterString: 'resource_uuid=314 first=1 rows=-1',
-    });
-    const [cloneQueryMock, cloneQueryResult] = createCloneScanConfigQueryMock();
-    const [
-      exportQueryMock,
-      exportQueryResult,
-    ] = createExportScanConfigsByIdsQueryMock(['314']);
-    const [
-      deleteQueryMock,
-      deleteQueryResult,
-    ] = createDeleteScanConfigsByIdsQueryMock();
-
-    const [scannerQueryMock, scannerQueryResult] = createGetScannersQueryMock();
-
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [
-        mock,
-        renewSessionQueryMock,
-        permissionQueryMock,
-        cloneQueryMock,
-        exportQueryMock,
-        deleteQueryMock,
-        scannerQueryMock,
-      ],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+    store.dispatch(entityLoadingActions.success('12345', config3));
 
-    const {getAllByTestId} = render(<Detailspage id="314" />);
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
 
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -697,87 +819,98 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
-    fireEvent.click(icons[3]);
-    await wait();
-    expect(cloneQueryResult).toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.click(icons[3]);
+      expect(clone).toHaveBeenCalledWith(config3);
+      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
 
-    expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
-    fireEvent.click(icons[4]);
-    await wait();
+      fireEvent.click(icons[4]);
+      expect(getNvtFamilies).toHaveBeenCalled();
+      expect(getAllScanners).toHaveBeenCalled();
+      expect(icons[4]).toHaveAttribute('title', 'Edit Scan Config');
 
-    expect(getNvtFamilies).toHaveBeenCalled();
-    expect(scannerQueryResult).toHaveBeenCalled();
+      fireEvent.click(icons[5]);
+      expect(deleteFunc).not.toHaveBeenCalled();
+      expect(icons[5]).toHaveAttribute('title', 'Scan Config is still in use');
 
-    expect(icons[5]).toHaveAttribute('title', 'Scan Config is still in use');
-    fireEvent.click(icons[5]);
-    await wait();
-
-    expect(deleteQueryResult).not.toHaveBeenCalled();
-
-    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
-    fireEvent.click(icons[6]);
-    await wait();
-
-    expect(exportQueryResult).toHaveBeenCalled();
+      fireEvent.click(icons[6]);
+      expect(exportFunc).toHaveBeenCalledWith(config3);
+      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    });
 
     expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
   });
 
   test('should (not) call commands if config is not writable', async () => {
+    const getConfig = jest.fn().mockReturnValue(
+      Promise.resolve({
+        data: config4,
+      }),
+    );
+
+    const clone = jest.fn().mockReturnValue(
+      Promise.resolve({
+        data: {id: 'foo'},
+      }),
+    );
     const getNvtFamilies = jest.fn().mockReturnValue(
+      Promise.resolve({
+        foo: 'bar',
+      }),
+    );
+    const getAllScanners = jest.fn().mockReturnValue(
+      Promise.resolve({
+        data: scanners,
+      }),
+    );
+    const deleteFunc = jest.fn().mockReturnValue(
+      Promise.resolve({
+        foo: 'bar',
+      }),
+    );
+    const exportFunc = jest.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
 
     const gmp = {
+      [entityType]: {
+        get: getConfig,
+        clone,
+        delete: deleteFunc,
+        export: exportFunc,
+      },
+      permissions: {
+        get: getPermissions,
+      },
       nvtfamilies: {
         get: getNvtFamilies,
       },
-      settings: {manualUrl, reloadInterval},
-      user: {currentSettings},
+      scanners: {
+        getAll: getAllScanners,
+      },
+      reloadInterval,
+      settings: {manualUrl},
+      user: {
+        currentSettings,
+        renewSession,
+      },
     };
 
-    const [mock, resultFunc] = createGetScanConfigQueryMock();
-
-    const [renewSessionQueryMock] = createRenewSessionQueryMock();
-    const [permissionQueryMock] = createGetPermissionsQueryMock({
-      filterString: 'resource_uuid=314 first=1 rows=-1',
-    });
-    const [cloneQueryMock, cloneQueryResult] = createCloneScanConfigQueryMock();
-    const [
-      exportQueryMock,
-      exportQueryResult,
-    ] = createExportScanConfigsByIdsQueryMock(['314']);
-    const [
-      deleteQueryMock,
-      deleteQueryResult,
-    ] = createDeleteScanConfigsByIdsQueryMock();
-    const [scannerQueryMock, scannerQueryResult] = createGetScannersQueryMock();
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [
-        mock,
-        renewSessionQueryMock,
-        permissionQueryMock,
-        cloneQueryMock,
-        exportQueryMock,
-        deleteQueryMock,
-        scannerQueryMock,
-      ],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+    store.dispatch(entityLoadingActions.success('12345', config4));
 
-    const {getAllByTestId} = render(<Detailspage id="314" />);
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
 
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
@@ -785,25 +918,24 @@ describe('Scan Config Detailspage tests', () => {
 
     expect(icons[2]).toHaveAttribute('title', 'Create new Scan Config');
 
-    expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
-    fireEvent.click(icons[3]);
+    await act(async () => {
+      fireEvent.click(icons[3]);
+      expect(clone).toHaveBeenCalledWith(config4);
+      expect(icons[3]).toHaveAttribute('title', 'Clone Scan Config');
 
-    await wait();
-    expect(cloneQueryResult).toHaveBeenCalled();
+      fireEvent.click(icons[4]);
+      expect(getNvtFamilies).not.toHaveBeenCalled();
+      expect(getAllScanners).not.toHaveBeenCalled();
+      expect(icons[4]).toHaveAttribute('title', 'Scan Config is not writable');
 
-    fireEvent.click(icons[4]);
-    expect(getNvtFamilies).not.toHaveBeenCalled();
-    expect(scannerQueryResult).not.toHaveBeenCalled();
-    expect(icons[4]).toHaveAttribute('title', 'Scan Config is not writable');
+      fireEvent.click(icons[5]);
+      expect(deleteFunc).not.toHaveBeenCalled();
+      expect(icons[5]).toHaveAttribute('title', 'Scan Config is not writable');
 
-    fireEvent.click(icons[5]);
-    expect(deleteQueryResult).not.toHaveBeenCalled();
-    expect(icons[5]).toHaveAttribute('title', 'Scan Config is not writable');
-
-    fireEvent.click(icons[6]);
-    await wait();
-    expect(exportQueryResult).toHaveBeenCalled();
-    expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+      fireEvent.click(icons[6]);
+      expect(exportFunc).toHaveBeenCalledWith(config4);
+      expect(icons[6]).toHaveAttribute('title', 'Export Scan Config as XML');
+    });
 
     expect(icons[7]).toHaveAttribute('title', 'Import Scan Config');
   });

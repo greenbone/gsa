@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import PropTypes from './proptypes';
+import PropTypes from './proptypes.js';
 
 class State extends React.Component {
   constructor(...args) {

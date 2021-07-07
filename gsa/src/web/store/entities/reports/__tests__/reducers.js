@@ -20,8 +20,8 @@ import Filter from 'gmp/models/filter';
 
 import {isFunction} from 'gmp/utils/identity';
 
-import {entitiesActions as actions} from 'web/store/entities/reports';
-import {reportsReducer} from 'web/store/entities/reports/reducers';
+import {entitiesActions as actions} from '../../reports';
+import {reportsReducer} from '../reducers';
 import {filterIdentifier} from 'web/store/utils';
 
 describe('report entities reducer tests', () => {

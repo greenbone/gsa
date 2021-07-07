@@ -22,11 +22,11 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
+import Task, {TASK_STATUS} from 'gmp/models/task';
+
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
-
-import {getMockTasks} from 'web/pages/tasks/__mocks__/mocktasks';
 
 import Table from '../table';
 
@@ -34,7 +34,67 @@ setLocale('en');
 
 const caps = new Capabilities(['everything']);
 
-const {finishedTask: task, newTask: task2, runningTask: task3} = getMockTasks();
+const lastReport = {
+  report: {
+    _id: '1234',
+    timestamp: '2019-08-10T12:51:27Z',
+    severity: '5.0',
+  },
+};
+
+const lastReport2 = {
+  report: {
+    _id: '1234',
+    timestamp: '2019-07-10T12:51:27Z',
+    severity: '10.0',
+  },
+};
+
+const currentReport = {
+  report: {
+    _id: '5678',
+    timestamp: '2019-07-10T12:51:27Z',
+  },
+};
+
+const task = Task.fromElement({
+  _id: '1234',
+  owner: {name: 'admin'},
+  name: 'foo',
+  comment: 'bar',
+  status: TASK_STATUS.done,
+  alterable: '0',
+  report_count: {__text: '1', finished: '1'},
+  last_report: lastReport,
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: 'id1', name: 'target1'},
+});
+
+const task2 = Task.fromElement({
+  _id: '12345',
+  owner: {name: 'user'},
+  name: 'lorem',
+  comment: 'ipsum',
+  status: TASK_STATUS.new,
+  alterable: '0',
+  report_count: {__text: '0', finished: '0'},
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: 'id2', name: 'target2'},
+});
+
+const task3 = Task.fromElement({
+  _id: '123456',
+  owner: {name: 'user'},
+  name: 'hello',
+  comment: 'world',
+  status: TASK_STATUS.running,
+  alterable: '0',
+  current_report: currentReport,
+  last_report: lastReport2,
+  report_count: {__text: '2', finished: '1'},
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: 'id2', name: 'target2'},
+});
 
 const counts = new CollectionCounts({
   first: 1,
@@ -147,9 +207,8 @@ describe('Tasks table tests', () => {
     const icons = getAllByTestId('svg-icon');
     fireEvent.click(icons[0]);
     expect(icons[0]).toHaveAttribute('title', 'Unfold all details');
-    expect(element).toHaveTextContent('target 1');
-    expect(element).toHaveTextContent('target 2');
-    expect(element).toHaveTextContent('target 3');
+    expect(element).toHaveTextContent('target1');
+    expect(element).toHaveTextContent('target2');
   });
 
   test('should call click handlers', () => {

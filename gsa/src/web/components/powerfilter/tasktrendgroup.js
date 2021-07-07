@@ -23,10 +23,10 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
-
-import PropTypes from 'web/utils/proptypes';
 
 const TaskTrendGroup = ({trend, name = 'trend', filter, onChange}) => {
   if (!isDefined(trend) && isDefined(filter)) {

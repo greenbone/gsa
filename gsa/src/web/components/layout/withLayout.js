@@ -19,8 +19,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
+import {map} from 'gmp/utils/array';
 
 import PropTypes from 'web/utils/proptypes';
 

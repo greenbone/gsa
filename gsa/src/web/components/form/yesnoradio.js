@@ -21,10 +21,10 @@ import _ from 'gmp/locale';
 
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
+import PropTypes from 'web/utils/proptypes';
+
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
-import PropTypes from 'web/utils/proptypes';
 
 import Radio from './radio';
 
@@ -33,7 +33,7 @@ const YesNoRadio = ({
   disabled,
   value,
   name,
-  yesValue = YES_VALUE, // once everything is using hyperion and not gsad, we should probably change these default values to boolean and the default convert function to toBoolean
+  yesValue = YES_VALUE,
   noValue = NO_VALUE,
   onChange,
   ...other

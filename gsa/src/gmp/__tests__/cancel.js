@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import CancelToken from '../cancel';
+import CancelToken from '../cancel.js';
 
 describe('CancelToken tests', () => {
   test('new CancelToken resolve', () => {

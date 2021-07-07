@@ -19,7 +19,7 @@ import React from 'react';
 
 import Theme from 'web/utils/theme';
 
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from '../../utils/proptypes';
 
 const Label = React.forwardRef(({x, y, children, ...props}, ref) => (
   <text

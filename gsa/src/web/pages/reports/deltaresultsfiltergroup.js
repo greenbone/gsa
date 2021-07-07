@@ -22,12 +22,12 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import Checkbox from 'web/components/form/checkbox';
-import FormGroup from 'web/components/form/formgroup';
+import PropTypes from '../../utils/proptypes.js';
 
-import Divider from 'web/components/layout/divider';
+import Checkbox from '../../components/form/checkbox.js';
+import FormGroup from '../../components/form/formgroup.js';
 
-import PropTypes from 'web/utils/proptypes';
+import Divider from '../../components/layout/divider.js';
 
 class DeltaStatesFilterGroup extends React.Component {
   constructor(...args) {

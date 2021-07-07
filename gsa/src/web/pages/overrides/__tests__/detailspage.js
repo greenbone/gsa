@@ -18,25 +18,14 @@
 import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
+import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import {setLocale} from 'gmp/locale/lang';
 
+import Filter from 'gmp/models/filter';
 import Override from 'gmp/models/override';
 
 import {isDefined} from 'gmp/utils/identity';
-
-import {
-  createCloneOverrideQueryMock,
-  createDeleteOverrideQueryMock,
-  createExportOverridesByIdsQueryMock,
-  createGetOverrideQueryMock,
-  detailsOverride,
-  inUseOverride,
-  noPermOverride,
-} from 'web/graphql/__mocks__/overrides';
-
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
-import {createGetPermissionsQueryMock} from 'web/graphql/__mocks__/permissions';
 
 import {entityLoadingActions} from 'web/store/entities/overrides';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -44,13 +33,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: '456',
-  }),
-}));
 
 setLocale('en');
 
@@ -64,56 +46,130 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const parsedOverride = Override.fromObject(detailsOverride);
-const parsedNoPermOverride = Override.fromObject(noPermOverride);
-const parsedInUseOverride = Override.fromObject(inUseOverride);
+const override = Override.fromElement({
+  _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+  active: 1,
+  creation_time: '2020-12-23T14:14:11Z',
+  hosts: '127.0.0.1',
+  in_use: 0,
+  modification_time: '2021-01-04T11:54:12Z',
+  new_severity: '-1', // false positive
+  nvt: {
+    _oid: '123',
+    name: 'foo nvt',
+    type: 'nvt',
+  },
+  owner: {name: 'admin'},
+  permissions: {permission: {name: 'Everything'}},
+  port: '666',
+  severity: '0.1',
+  task: {
+    name: 'task x',
+    _id: '42',
+  },
+  text: 'override text',
+  writable: 1,
+});
 
-let currentSettings;
-let renewSession;
+const overrideInUse = Override.fromElement({
+  _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+  active: 1,
+  creation_time: '2020-12-23T14:14:11Z',
+  hosts: '127.0.0.1',
+  in_use: 1,
+  modification_time: '2021-01-04T11:54:12Z',
+  new_severity: '-1', // false positive
+  nvt: {
+    _oid: '123',
+    name: 'foo nvt',
+    type: 'nvt',
+  },
+  owner: {name: 'admin'},
+  permissions: {permission: {name: 'Everything'}},
+  port: '666',
+  severity: '0.1',
+  text: 'override text',
+  writable: 1,
+});
 
-beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+const noPermOverride = Override.fromElement({
+  _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+  active: 1,
+  creation_time: '2020-12-23T14:14:11Z',
+  hosts: '127.0.0.1',
+  in_use: 0,
+  modification_time: '2021-01-04T11:54:12Z',
+  new_severity: '-1', // false positive
+  nvt: {
+    _oid: '123',
+    name: 'foo nvt',
+    type: 'nvt',
+  },
+  owner: {name: 'admin'},
+  permissions: {permission: {name: 'get_overrides'}},
+  port: '666',
+  severity: '0.1',
+  text: 'override text',
+  writable: 1,
+});
 
-  renewSession = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+const getOverride = jest.fn().mockResolvedValue({
+  data: override,
+});
+
+const getEntities = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
+
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
 });
 
 describe('Override detailspage tests', () => {
-  test('should render full detailspage', async () => {
+  test('should render full detailspage', () => {
     const gmp = {
+      override: {
+        get: getOverride,
+      },
+      permissions: {
+        get: getEntities,
+      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
       },
     };
 
-    const [mock, resultFunc] = createGetOverrideQueryMock();
-    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
-      filterString: 'resource_uuid=456 first=1 rows=-1',
-    });
-
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(<Detailspage id="456" />);
+    store.dispatch(
+      entityLoadingActions.success(
+        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+        override,
+      ),
+    );
 
-    await wait();
+    const {baseElement, element} = render(
+      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
+    );
 
-    expect(resultFunc).toHaveBeenCalled();
-    expect(permissionResult).toHaveBeenCalled();
-
-    expect(baseElement).toHaveTextContent('override text');
+    expect(element).toHaveTextContent('override text');
 
     const links = baseElement.querySelectorAll('a');
 
@@ -126,56 +182,60 @@ describe('Override detailspage tests', () => {
     expect(screen.getAllByTitle('Override List')[0]).toBeInTheDocument();
     expect(links[1]).toHaveAttribute('href', '/overrides');
 
-    expect(baseElement).toHaveTextContent('ID:456');
-    expect(baseElement).toHaveTextContent(
-      'Created:Fri, Feb 19, 2021 3:14 PM CET',
+    expect(element).toHaveTextContent(
+      'ID:6d00d22f-551b-4fbe-8215-d8615eff73ea',
     );
-    expect(baseElement).toHaveTextContent(
-      'Modified:Mon, Jan 4, 2021 12:54 PM CET',
-    );
-    expect(baseElement).toHaveTextContent('Owner:admin');
+    expect(element).toHaveTextContent('Created:Wed, Dec 23, 2020 3:14 PM CET');
+    expect(element).toHaveTextContent('Modified:Mon, Jan 4, 2021 12:54 PM CET');
+    expect(element).toHaveTextContent('Owner:admin');
 
-    const tabs = screen.getAllByTestId('entities-tab-title');
-    expect(tabs[0]).toHaveTextContent('User Tags');
-    expect(tabs[1]).toHaveTextContent('Permissions');
+    const spans = baseElement.querySelectorAll('span');
+    expect(spans[9]).toHaveTextContent('User Tags');
+    expect(spans[11]).toHaveTextContent('Permissions');
 
-    expect(baseElement).toHaveTextContent('NVT Name');
-    expect(baseElement).toHaveTextContent('foo nvt');
+    expect(element).toHaveTextContent('NVT Name');
+    expect(element).toHaveTextContent('foo nvt');
 
-    expect(baseElement).toHaveTextContent('NVT OID');
-    expect(baseElement).toHaveTextContent('123');
+    expect(element).toHaveTextContent('NVT OID');
+    expect(element).toHaveTextContent('123');
 
-    expect(baseElement).toHaveTextContent('Active');
-    expect(baseElement).toHaveTextContent('Yes');
+    expect(element).toHaveTextContent('Active');
+    expect(element).toHaveTextContent('Yes');
 
-    expect(baseElement).toHaveTextContent('Application');
+    expect(element).toHaveTextContent('Application');
 
-    expect(baseElement).toHaveTextContent('Hosts');
-    expect(baseElement).toHaveTextContent('127.0.0.1');
+    expect(element).toHaveTextContent('Hosts');
+    expect(element).toHaveTextContent('127.0.0.1');
 
-    expect(baseElement).toHaveTextContent('Port');
-    expect(baseElement).toHaveTextContent('66/tcp');
+    expect(element).toHaveTextContent('Port');
+    expect(element).toHaveTextContent('666');
 
-    expect(baseElement).toHaveTextContent('Severity');
-    expect(baseElement).toHaveTextContent('> 0.0');
+    expect(element).toHaveTextContent('Severity');
+    expect(element).toHaveTextContent('Any');
 
-    expect(baseElement).toHaveTextContent('Task');
-    expect(baseElement).toHaveTextContent('task x');
+    expect(element).toHaveTextContent('Task');
+    expect(element).toHaveTextContent('task x');
 
-    expect(baseElement).toHaveTextContent('Result');
-    expect(baseElement).toHaveTextContent('result name');
+    expect(element).toHaveTextContent('Result');
+    expect(element).toHaveTextContent('Any');
 
-    expect(baseElement).toHaveTextContent('Appearance');
+    expect(element).toHaveTextContent('Appearance');
 
-    expect(baseElement).toHaveTextContent(
-      'Override from Severity > 0.0 to 9.0',
+    expect(element).toHaveTextContent(
+      'Override from Severity > 0.0 to False Positive',
     );
 
-    expect(baseElement).toHaveTextContent('override text');
+    expect(element).toHaveTextContent('override text');
   });
 
-  test('should render user tags tab', async () => {
+  test('should render user tags tab', () => {
     const gmp = {
+      override: {
+        get: getOverride,
+      },
+      permissions: {
+        get: getEntities,
+      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -183,49 +243,43 @@ describe('Override detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetOverrideQueryMock(
-      '456',
-      detailsOverride,
-    );
-    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
-      filterString: 'resource_uuid=456 first=1 rows=-1',
-    });
-    const [
-      renewSessionMock,
-      renewSessionResult,
-    ] = createRenewSessionQueryMock();
-
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock, renewSessionMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(<Detailspage id="456" />);
+    store.dispatch(
+      entityLoadingActions.success(
+        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+        override,
+      ),
+    );
 
-    await wait();
+    const {baseElement} = render(
+      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
+    );
 
-    expect(resultFunc).toHaveBeenCalled();
-    expect(permissionResult).toHaveBeenCalled();
+    const spans = baseElement.querySelectorAll('span');
+    expect(spans[9]).toHaveTextContent('User Tags');
 
-    const tabs = screen.getAllByTestId('entities-tab-title');
+    fireEvent.click(spans[9]);
 
-    expect(tabs[0]).toHaveTextContent('User Tags');
-    fireEvent.click(tabs[0]);
-
-    await wait();
-    expect(renewSessionResult).toHaveBeenCalled();
-
-    expect(baseElement).toHaveTextContent('override:unnamed');
+    expect(baseElement).toHaveTextContent('No user tags available');
   });
 
-  test('should render permissions tab', async () => {
+  test('should render permissions tab', () => {
     const gmp = {
+      override: {
+        get: getOverride,
+      },
+      permissions: {
+        get: getEntities,
+      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -233,66 +287,58 @@ describe('Override detailspage tests', () => {
       },
     };
 
-    const [mock, resultFunc] = createGetOverrideQueryMock(
-      '456',
-      detailsOverride,
-    );
-    const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
-      {
-        filterString: 'resource_uuid=456 first=1 rows=-1',
-      },
-      {permissions: null},
-    );
-    const [
-      renewSessionMock,
-      renewSessionResult,
-    ] = createRenewSessionQueryMock();
-
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock, renewSessionMock],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(<Detailspage id="456" />);
+    store.dispatch(
+      entityLoadingActions.success(
+        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+        override,
+      ),
+    );
 
-    await wait();
+    const {baseElement} = render(
+      <Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />,
+    );
 
-    expect(resultFunc).toHaveBeenCalled();
-    expect(permissionResult).toHaveBeenCalled();
+    const spans = baseElement.querySelectorAll('span');
+    expect(spans[11]).toHaveTextContent('Permissions');
 
-    const tabs = screen.getAllByTestId('entities-tab-title');
+    fireEvent.click(spans[11]);
 
-    expect(tabs[1]).toHaveTextContent('Permissions');
-    fireEvent.click(tabs[1]);
-
-    await wait();
-
-    expect(renewSessionResult).toHaveBeenCalled();
     expect(baseElement).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
-    const [renewQueryMock] = createRenewSessionQueryMock();
-    const [mock, resultFunc] = createGetOverrideQueryMock(
-      '456',
-      detailsOverride,
-    );
-    const [cloneMock, cloneResult] = createCloneOverrideQueryMock();
-    const [deleteMock, deleteResult] = createDeleteOverrideQueryMock();
-    const [exportMock, exportResult] = createExportOverridesByIdsQueryMock([
-      '456',
-    ]);
-    const [permissionMock, permissionResult] = createGetPermissionsQueryMock({
-      filterString: 'resource_uuid=456 first=1 rows=-1',
+    const clone = jest.fn().mockResolvedValue({
+      data: {id: 'foo'},
+    });
+
+    const deleteFunc = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportFunc = jest.fn().mockResolvedValue({
+      foo: 'bar',
     });
 
     const gmp = {
+      override: {
+        get: getOverride,
+        clone,
+        delete: deleteFunc,
+        export: exportFunc,
+      },
+      permissions: {
+        get: getEntities,
+      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -305,27 +351,21 @@ describe('Override detailspage tests', () => {
       gmp,
       router: true,
       store: true,
-      queryMocks: [
-        renewQueryMock,
-        mock,
-        cloneMock,
-        deleteMock,
-        exportMock,
-        permissionMock,
-      ],
     });
 
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    store.dispatch(entityLoadingActions.success('456', parsedOverride));
+    store.dispatch(
+      entityLoadingActions.success(
+        '6d00d22f-551b-4fbe-8215-d8615eff73ea',
+        override,
+      ),
+    );
 
-    render(<Detailspage id="456" />);
+    render(<Detailspage id="6d00d22f-551b-4fbe-8215-d8615eff73ea" />);
 
     await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-    expect(permissionResult).toHaveBeenCalled();
 
     const cloneIcon = screen.getAllByTitle('Clone Override');
     expect(cloneIcon[0]).toBeInTheDocument();
@@ -334,7 +374,7 @@ describe('Override detailspage tests', () => {
 
     await wait();
 
-    expect(cloneResult).toHaveBeenCalled();
+    expect(clone).toHaveBeenCalledWith(override);
 
     const exportIcon = screen.getAllByTitle('Export Override as XML');
     expect(exportIcon[0]).toBeInTheDocument();
@@ -343,7 +383,7 @@ describe('Override detailspage tests', () => {
 
     await wait();
 
-    expect(exportResult).toHaveBeenCalled();
+    expect(exportFunc).toHaveBeenCalledWith(override);
 
     const deleteIcon = screen.getAllByTitle('Move Override to trashcan');
     expect(deleteIcon[0]).toBeInTheDocument();
@@ -352,7 +392,7 @@ describe('Override detailspage tests', () => {
 
     await wait();
 
-    expect(deleteResult).toHaveBeenCalled();
+    expect(deleteFunc).toHaveBeenCalledWith({id: override.id});
   });
 });
 
@@ -374,7 +414,7 @@ describe('Override ToolBarIcons tests', () => {
 
     const {element} = render(
       <ToolBarIcons
-        entity={parsedOverride}
+        entity={override}
         onOverrideCloneClick={handleOverrideCloneClick}
         onOverrideDeleteClick={handleOverrideDeleteClick}
         onOverrideDownloadClick={handleOverrideDownloadClick}
@@ -412,7 +452,7 @@ describe('Override ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={parsedOverride}
+        entity={override}
         onOverrideCloneClick={handleOverrideCloneClick}
         onOverrideDeleteClick={handleOverrideDeleteClick}
         onOverrideDownloadClick={handleOverrideDownloadClick}
@@ -428,19 +468,19 @@ describe('Override ToolBarIcons tests', () => {
 
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
-    expect(handleOverrideCloneClick).toHaveBeenCalledWith(parsedOverride);
+    expect(handleOverrideCloneClick).toHaveBeenCalledWith(override);
 
     expect(editIcon[0]).toBeInTheDocument();
     fireEvent.click(editIcon[0]);
-    expect(handleOverrideEditClick).toHaveBeenCalledWith(parsedOverride);
+    expect(handleOverrideEditClick).toHaveBeenCalledWith(override);
 
     expect(deleteIcon[0]).toBeInTheDocument();
     fireEvent.click(deleteIcon[0]);
-    expect(handleOverrideDeleteClick).toHaveBeenCalledWith(parsedOverride);
+    expect(handleOverrideDeleteClick).toHaveBeenCalledWith(override);
 
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
-    expect(handleOverrideDownloadClick).toHaveBeenCalledWith(parsedOverride);
+    expect(handleOverrideDownloadClick).toHaveBeenCalledWith(override);
   });
 
   test('should not call click handlers without permission', () => {
@@ -460,7 +500,7 @@ describe('Override ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={parsedNoPermOverride}
+        entity={noPermOverride}
         onOverrideCloneClick={handleOverrideCloneClick}
         onOverrideDeleteClick={handleOverrideDeleteClick}
         onOverrideDownloadClick={handleOverrideDownloadClick}
@@ -479,7 +519,7 @@ describe('Override ToolBarIcons tests', () => {
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
 
-    expect(handleOverrideCloneClick).toHaveBeenCalledWith(parsedNoPermOverride);
+    expect(handleOverrideCloneClick).toHaveBeenCalledWith(noPermOverride);
 
     expect(editIcon[0]).toBeInTheDocument();
     fireEvent.click(editIcon[0]);
@@ -494,9 +534,7 @@ describe('Override ToolBarIcons tests', () => {
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
 
-    expect(handleOverrideDownloadClick).toHaveBeenCalledWith(
-      parsedNoPermOverride,
-    );
+    expect(handleOverrideDownloadClick).toHaveBeenCalledWith(noPermOverride);
   });
 
   test('should call correct click handlers for override in use', () => {
@@ -516,7 +554,7 @@ describe('Override ToolBarIcons tests', () => {
 
     render(
       <ToolBarIcons
-        entity={parsedInUseOverride}
+        entity={overrideInUse}
         onOverrideCloneClick={handleOverrideCloneClick}
         onOverrideDeleteClick={handleOverrideDeleteClick}
         onOverrideDownloadClick={handleOverrideDownloadClick}
@@ -532,7 +570,7 @@ describe('Override ToolBarIcons tests', () => {
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
 
-    expect(handleOverrideCloneClick).toHaveBeenCalledWith(parsedInUseOverride);
+    expect(handleOverrideCloneClick).toHaveBeenCalledWith(overrideInUse);
 
     expect(editIcon[0]).toBeInTheDocument();
     fireEvent.click(editIcon[0]);
@@ -546,8 +584,6 @@ describe('Override ToolBarIcons tests', () => {
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
 
-    expect(handleOverrideDownloadClick).toHaveBeenCalledWith(
-      parsedInUseOverride,
-    );
+    expect(handleOverrideDownloadClick).toHaveBeenCalledWith(overrideInUse);
   });
 });

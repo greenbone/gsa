@@ -18,12 +18,12 @@
 
 import React from 'react';
 
+import ErrorsTable from './errorstable';
+import ReportEntitiesContainer from './reportentitiescontainer';
+
 import PropTypes from 'web/utils/proptypes';
 
 import {makeCompareIp, makeCompareString} from 'web/utils/sort';
-
-import ErrorsTable from './errorstable';
-import ReportEntitiesContainer from './reportentitiescontainer';
 
 export const errorsSortFunctions = {
   error: makeCompareString('description'),

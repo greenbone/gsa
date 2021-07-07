@@ -102,7 +102,7 @@ const ScanConfigRow = ({
       displayName={_('Scan Config')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
-    <TableData>{getTranslatedType(entity.scanConfigType)}</TableData>
+    <TableData>{getTranslatedType(entity.scan_config_type)}</TableData>
     <TableData>{na(entity.families.count)}</TableData>
     <TableData>
       <Trend

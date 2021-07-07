@@ -87,8 +87,14 @@ class StartTimeSelection extends React.Component {
     } = this.state;
 
     onChanged({
-      startDate: startDate.clone().hour(startHour).minute(startMinute),
-      endDate: endDate.clone().hour(endHour).minute(endMinute),
+      startDate: startDate
+        .clone()
+        .hour(startHour)
+        .minute(startMinute),
+      endDate: endDate
+        .clone()
+        .hour(endHour)
+        .minute(endMinute),
     });
   }
 

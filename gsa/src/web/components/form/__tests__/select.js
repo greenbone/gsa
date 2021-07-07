@@ -26,7 +26,7 @@ import {
   getByTestId,
 } from 'web/utils/testing';
 
-import Select from '../select';
+import Select from '../select.js';
 
 setLocale('en');
 

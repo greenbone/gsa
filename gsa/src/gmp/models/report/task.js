@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined} from 'gmp/utils/identity';
-import {isEmpty} from 'gmp/utils/string';
+import {isDefined} from '../../utils/identity';
+import {isEmpty} from '../../utils/string';
 
-import {parseProgressElement} from 'gmp/parser';
+import {parseProgressElement} from '../../parser';
 
-import Model, {parseModelFromElement} from 'gmp/model';
+import Model, {parseModelFromElement} from '../../model';
 
 /*
  * Use own task model for reports to avoid cyclic dependencies

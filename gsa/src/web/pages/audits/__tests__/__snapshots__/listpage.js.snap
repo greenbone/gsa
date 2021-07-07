@@ -966,7 +966,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
 
 .c54 {
   height: 13px;
-  width: 33%;
+  width: 50%;
   background: #70c000;
 }
 
@@ -1176,7 +1176,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       name="userFilterString"
                       size="53"
                       type="text"
-                      value="foo=bar"
+                      value=""
                     />
                     <div
                       class="c15"
@@ -1298,7 +1298,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
       </div>
       <section
         class="entities-section"
-        data-testid="entities-section"
       >
         <div
           class="c23 section-header"
@@ -1321,7 +1320,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
             <div
               class="c28"
             >
-              Audits 1 of 1
+              Audits 0 of 0
             </div>
           </h2>
           <div
@@ -1333,7 +1332,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
         >
           <div
             class="c29 entities-table"
-            data-testid="entities-table"
           >
             <div
               class="c30"
@@ -1386,7 +1384,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 <span
                   class="c34"
                 >
-                  1 - 1 of 1
+                  0 - 0 of 0
                 </span>
                 <div
                   class="c2"
@@ -1500,7 +1498,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       >
                         <span
                           class="c46"
-                          name="657"
+                          name="1234"
                         >
                           foo
                         </span>
@@ -1510,25 +1508,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                           <div
                             class="c3"
                             margin="5px"
-                          >
-                            <span
-                              class="c4"
-                              data-testid="svg-icon"
-                              title="Audit made visible for:
-Users john, jane
-Roles admin role, user role
-Groups group 1, group 2"
-                            >
-                              <svg
-                                title="Audit made visible for:
-Users john, jane
-Roles admin role, user role
-Groups group 1, group 2"
-                              >
-                                provide_view.svg
-                              </svg>
-                            </span>
-                          </div>
+                          />
                         </div>
                       </div>
                       <div
@@ -1547,7 +1527,7 @@ Groups group 1, group 2"
                       <a
                         class="c47 c48"
                         data-testid="details-link"
-                        href="/report/5678"
+                        href="/report/1234"
                       >
                         <div
                           class="c49"
@@ -1581,7 +1561,7 @@ Groups group 1, group 2"
                           data-testid="details-link"
                           href="/report/1234"
                         >
-                          Tue, Jul 30, 2019 3:23 PM CEST
+                          Wed, Jul 10, 2019 2:51 PM CEST
                         </a>
                       </span>
                     </div>
@@ -1593,7 +1573,7 @@ Groups group 1, group 2"
                       <div
                         class="c53"
                         data-testid="progressbar-box"
-                        title="33%"
+                        title="50%"
                       >
                         <div
                           class="c54"
@@ -1602,14 +1582,12 @@ Groups group 1, group 2"
                         <div
                           class="c51"
                         >
-                          33%
+                          50%
                         </div>
                       </div>
                     </div>
                   </td>
-                  <td
-                    data-testid="entities-table"
-                  >
+                  <td>
                     <div
                       class="c0"
                     >
@@ -1620,30 +1598,25 @@ Groups group 1, group 2"
                           class="c56"
                           margin="5px"
                         >
-                          <a
-                            class="c47"
-                            data-testid="details-link"
-                            href="/schedule/foo"
-                            title="View Details of Schedule schedule 1 (Next due: over)"
+                          <span
+                            class="c5 c4"
+                            data-testid="svg-icon"
+                            title="Start"
                           >
-                            <span
-                              alt="Schedule Details"
-                              class="c4"
-                              data-testid="svg-icon"
+                            <svg
+                              title="Start"
                             >
-                              <svg>
-                                schedule.svg
-                              </svg>
-                            </span>
-                          </a>
+                              start.svg
+                            </svg>
+                          </span>
                           <span
                             alt="Resume"
                             class="c33 c4"
                             data-testid="svg-icon"
-                            title="Audit is scheduled"
+                            title="Audit is not stopped"
                           >
                             <svg
-                              title="Audit is scheduled"
+                              title="Audit is not stopped"
                             >
                               resume.svg
                             </svg>
@@ -1709,9 +1682,7 @@ Groups group 1, group 2"
                   </td>
                 </tr>
               </tbody>
-              <tfoot
-                data-testid="entities-footer"
-              >
+              <tfoot>
                 <tr>
                   <td
                     colspan="5"
@@ -1815,7 +1786,7 @@ Groups group 1, group 2"
               <div
                 class="c59"
               >
-                (Applied filter: foo=bar rows=2)
+                (Applied filter: )
               </div>
               <div
                 class="c32"
@@ -1854,7 +1825,7 @@ Groups group 1, group 2"
                 <span
                   class="c34"
                 >
-                  1 - 1 of 1
+                  0 - 0 of 0
                 </span>
                 <div
                   class="c2"

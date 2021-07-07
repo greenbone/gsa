@@ -37,7 +37,6 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 import PropTypes from 'web/utils/proptypes';
-import {updateState} from 'web/utils/stateReducer';
 
 const ScannerPreference = ({
   displayName,
@@ -81,7 +80,7 @@ const ScannerPreference = ({
               yesValue={1}
               noValue={0}
               name={name}
-              value={parseInt(value)} // scanner preferences are "1" and "0" and should be preconverted for the right radio button to be checked.
+              value={value}
               convert={parseInt}
               onChange={onPreferenceChange}
             />
@@ -129,11 +128,11 @@ const ScannerPreferences = ({
             <ScannerPreference
               key={pref.name}
               defaultValue={pref.default}
-              displayName={pref.hrName}
+              displayName={pref.hr_name}
               name={pref.name}
               value={values[pref.name]}
               onPreferenceChange={(value, name) =>
-                onValuesChange(updateState({[name]: value}))
+                onValuesChange({type: 'setValue', newState: {[name]: value}})
               }
             />
           ))}
@@ -145,7 +144,7 @@ const ScannerPreferences = ({
 
 export const ScannerPreferencePropType = PropTypes.shape({
   default: PropTypes.any,
-  hrName: PropTypes.string.isRequired,
+  hr_name: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.any,
 });

@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import registerCommand from 'gmp/command';
-
 import {parseInt} from 'gmp/parser';
 
 import {map} from 'gmp/utils/array';
 
 import GmpCommand from './gmp';
+
+import registerCommand from 'gmp/command';
 
 export class NvtFamiliesCommand extends GmpCommand {
   constructor(http) {

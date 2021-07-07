@@ -18,9 +18,9 @@
 
 import React from 'react';
 
-import ResultsTable from 'web/pages/results/table';
-
 import PropTypes from 'web/utils/proptypes';
+
+import ResultsTable from 'web/pages/results/table';
 
 import {
   makeCompareDate,

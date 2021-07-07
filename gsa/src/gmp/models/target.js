@@ -15,11 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {_l} from 'gmp/locale/lang';
+import Model, {parseModelFromElement} from 'gmp/model';
 
-import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
-
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {map} from 'gmp/utils/array';
 
@@ -32,34 +30,14 @@ export const TARGET_CREDENTIAL_NAMES = [
   'snmp_credential',
   'ssh_credential',
   'esxi_credential',
+  'ssh_elevate_credential',
 ];
-
-export const HYPERION_TARGET_CREDENTIAL_NAMES = ['smb', 'snmp', 'ssh', 'esxi'];
-
-export const ALIVE_TESTS = {
-  SCAN_CONFIG_DEFAULT: _l('Scan Config Default'),
-  ICMP_PING: _l('ICMP Ping'),
-  TCP_ACK_SERVICE_PING: _l('TCP-ACK Service Ping'),
-  TCP_SYN_SERVICE_PING: _l('TCP-SYN Service Ping'),
-  ARP_PING: _l('ARP Ping'),
-  ICMP_AND_TCP_ACK_SERVICE_PING: _l('ICMP & TCP-ACK Service Ping'),
-  ICMP_AND_ARP_PING: _l('ICMP & ARP Ping'),
-  TCP_ACK_SERVICE_AND_ARP_PING: _l('TCP-ACK Service & ARP Ping'),
-  ICMP_TCP_ACK_SERVICE_AND_ARP_PING: _l('ICMP, TCP-ACK Service & ARP Ping'),
-  CONSIDER_ALIVE: _l('Consider Alive'),
-};
-
-export const getTranslatableAliveTest = key => `${ALIVE_TESTS[key]}`;
 
 class Target extends Model {
   static entityType = 'target';
 
   static parseElement(element) {
     const ret = super.parseElement(element);
-
-    if (!isDefined(ret.id) && isDefined(ret.uuid)) {
-      ret.id = ret.uuid;
-    }
 
     if (isDefined(element.port_list) && !isEmpty(element.port_list._id)) {
       ret.port_list = PortList.fromElement(ret.port_list);
@@ -91,42 +69,6 @@ class Target extends Model {
     }
 
     ret.allowSimultaneousIPs = parseYesNo(element.allow_simultaneous_ips);
-
-    return ret;
-  }
-
-  static parseObject(object) {
-    const ret = super.parseObject(object);
-
-    if (hasValue(object.portList) && hasValue(object.portList.id)) {
-      ret.portList = PortList.fromObject(ret.portList);
-    } else {
-      delete ret.portList;
-    }
-
-    if (hasValue(object.credentials)) {
-      ret.credentials = {};
-      // in some instances we do not query for target credentials
-      for (const name of HYPERION_TARGET_CREDENTIAL_NAMES) {
-        const cred = object.credentials[name];
-        if (hasValue(cred) && hasValue(cred.id)) {
-          ret.credentials[name] = parseModelFromObject(cred, 'credential');
-        }
-      }
-    } else {
-      delete ret.credentials;
-    }
-
-    ret.reverseLookupOnly = parseYesNo(object.reverseLookupOnly);
-    ret.reverseLookupUnify = parseYesNo(object.reverseLookupUnify);
-
-    if (hasValue(object.tasks)) {
-      ret.tasks = map(object.tasks, task =>
-        parseModelFromElement(task, 'task'),
-      );
-    }
-
-    ret.allowSimultaneousIPs = parseYesNo(object.allowSimultaneousIPs);
 
     return ret;
   }

@@ -591,7 +591,6 @@ exports[`Policies table tests should render 1`] = `
   <div>
     <div
       class="c0 entities-table"
-      data-testid="entities-table"
     >
       <div
         class="c1"
@@ -1013,9 +1012,7 @@ exports[`Policies table tests should render 1`] = `
             </td>
           </tr>
         </tbody>
-        <tfoot
-          data-testid="entities-footer"
-        >
+        <tfoot>
           <tr>
             <td
               colspan="2"

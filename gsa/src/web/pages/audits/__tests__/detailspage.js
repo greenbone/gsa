@@ -16,40 +16,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
+import {act} from 'react-dom/test-utils';
+
+import {setLocale} from 'gmp/locale/lang';
+
+import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import Filter from 'gmp/models/filter';
-import Audit, {HYPERION_AUDIT_STATUS} from 'gmp/models/audit';
+import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
+import Policy from 'gmp/models/policy';
+import Schedule from 'gmp/models/schedule';
 import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
-import {isDefined} from 'gmp/utils/identity';
+import {entityLoadingActions} from 'web/store/entities/audits';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {
-  auditPolicy,
-  auditSchedule,
-  createCloneAuditQueryMock,
-  createDeleteAuditQueryMock,
-  createExportAuditsByIdsQueryMock,
-  createGetAuditQueryMock,
-  createResumeAuditQueryMock,
-  createStartAuditQueryMock,
-  unscheduledAudit,
-} from 'web/graphql/__mocks__/audits';
-import {createGetScheduleQueryMock} from 'web/graphql/__mocks__/schedules';
-import {createRenewSessionQueryMock} from 'web/graphql/__mocks__/session';
-import {createGetPolicyQueryMock} from 'web/graphql/__mocks__/policies';
-import {
-  createGetPermissionsQueryMock,
-  noPermissions,
-} from 'web/graphql/__mocks__/permissions';
-
-import {setTimezone} from 'web/store/usersettings/actions';
-
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
@@ -60,525 +45,481 @@ window.URL.createObjectURL = jest.fn();
 
 setLocale('en');
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({
-    id: '657',
-  }),
-}));
-
-const policy = {
-  id: '314',
+const policy = Policy.fromElement({
+  _id: '314',
   name: 'foo',
   comment: 'bar',
   scanner: {name: 'scanner1', type: '0'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
-  tasks: [
-    {id: '12345', name: 'foo'},
-    {id: '678910', name: 'audit2'},
-  ],
-};
+  policy_type: OPENVAS_SCAN_CONFIG_TYPE,
+  tasks: {
+    task: [
+      {id: '12345', name: 'foo'},
+      {id: '678910', name: 'audit2'},
+    ],
+  },
+});
+
+const schedule = Schedule.fromElement({
+  _id: '121314',
+  name: 'schedule1',
+  permissions: {permission: [{name: 'everything'}]},
+});
 
 const lastReport = {
-  id: '1234',
-  timestamp: '2019-07-30T13:23:30Z',
-  scanStart: '2019-07-30T13:23:34Z',
-  scanEnd: '2019-07-30T13:25:43Z',
-  complianceCount: {yes: 4, no: 3, incomplete: 1},
+  report: {
+    _id: '1234',
+    timestamp: '2019-07-30T13:23:30Z',
+    scan_start: '2019-07-30T13:23:34Z',
+    scan_end: '2019-07-30T13:25:43Z',
+    compliance_count: {yes: 4, no: 3, incomplete: 1},
+  },
 };
 
 const currentReport = {
-  id: '12342',
-  timestamp: '2019-07-30T13:23:30Z',
-  scanStart: '2019-07-30T13:23:34Z',
+  report: {
+    _id: '12342',
+    timestamp: '2019-07-30T13:23:30Z',
+    scan_start: '2019-07-30T13:23:34Z',
+  },
 };
 
-const preferences = [
-  {
-    description: 'Add results to Asset Management',
-    name: 'in_assets',
-    value: 'yes',
-  },
-  {
-    description: 'Auto Delete Reports',
-    name: 'auto_delete',
-    value: 'no',
-  },
-];
+const preferences = {
+  preference: [
+    {
+      name: 'Add results to Asset Management',
+      scanner_name: 'in_assets',
+      value: 'yes',
+    },
+    {
+      name: 'Auto Delete Reports',
+      scanner_name: 'auto_delete',
+      value: 'no',
+    },
+  ],
+};
 
-const audit = Audit.fromObject({
-  id: '12345',
-  owner: 'admin',
+const audit = Audit.fromElement({
+  _id: '12345',
+  owner: {name: 'admin'},
   name: 'foo',
   comment: 'bar',
-  creationTime: '2019-07-16T06:31:29Z',
-  modificationTime: '2019-07-16T06:44:55Z',
-  status: HYPERION_AUDIT_STATUS.done,
-  alterable: true,
-  reports: {
-    lastReport,
-    counts: {
-      total: 1,
-      finished: 1,
-    },
-  },
-  results: {
-    counts: {
-      current: 1,
-    },
-  },
-  permissions: [{name: 'everything'}],
-  target: {id: '5678', name: 'target1'},
-  alert: {id: '91011', name: 'alert1'},
-  scanner: {id: '1516', name: 'scanner1', type: '2'},
-  policy,
-  preferences,
-  usageType: 'audit',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  status: AUDIT_STATUS.done,
+  alterable: '1',
+  last_report: lastReport,
+  report_count: {__text: '1'},
+  result_count: '1',
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: '5678', name: 'target1'},
+  alert: {_id: '91011', name: 'alert1'},
+  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  config: policy,
+  preferences: preferences,
+  usage_type: 'audit',
 });
 
-const audit2 = Audit.fromObject({
-  id: '12345',
-  owner: 'admin',
+const audit2 = Audit.fromElement({
+  _id: '12345',
+  owner: {name: 'admin'},
   name: 'foo',
   comment: 'bar',
-  creationTime: '2019-07-16T06:31:29Z',
-  modificationTime: '2019-07-16T06:44:55Z',
-  status: HYPERION_AUDIT_STATUS.done,
-  alterable: false,
-  reports: {
-    lastReport,
-    counts: {
-      total: 1,
-      finished: 1,
-    },
-  },
-  results: {
-    counts: {
-      current: 1,
-    },
-  },
-  permissions: [{name: 'everything'}],
-  target: {id: '5678', name: 'target1'},
-  alert: {id: '91011', name: 'alert1'},
-  scanner: {id: '1516', name: 'scanner1', type: '2'},
-  policy,
-  preferences,
-  usageType: 'audit',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  status: AUDIT_STATUS.done,
+  alterable: '0',
+  last_report: lastReport,
+  report_count: {__text: '1'},
+  result_count: '1',
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: '5678', name: 'target1'},
+  alert: {_id: '91011', name: 'alert1'},
+  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  config: policy,
+  preferences: preferences,
+  usage_type: 'audit',
 });
 
-const audit3 = Audit.fromObject({
-  id: '12345',
-  owner: 'admin',
+const audit3 = Audit.fromElement({
+  _id: '12345',
+  owner: {name: 'admin'},
   name: 'foo',
   comment: 'bar',
-  creationTime: '2019-07-16T06:31:29Z',
-  modificationTime: '2019-07-16T06:44:55Z',
-  status: HYPERION_AUDIT_STATUS.new,
-  alterable: false,
-  reports: {
-    counts: {
-      total: 0,
-    },
-  },
-  results: {
-    counts: {
-      current: 0,
-    },
-  },
-  permissions: [{name: 'everything'}],
-  target: {id: '5678', name: 'target1'},
-  alert: {id: '91011', name: 'alert1'},
-  scanner: {id: '1516', name: 'scanner1', type: '2'},
-  policy,
-  preferences,
-  usageType: 'audit',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  status: AUDIT_STATUS.new,
+  alterable: '0',
+  report_count: {__text: '0'},
+  result_count: '0',
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: '5678', name: 'target1'},
+  alert: {_id: '91011', name: 'alert1'},
+  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  config: policy,
+  preferences: preferences,
+  usage_type: 'audit',
 });
 
-const audit4 = Audit.fromObject({
-  id: '12345',
-  owner: 'admin',
+const audit4 = Audit.fromElement({
+  _id: '12345',
+  owner: {name: 'admin'},
   name: 'foo',
   comment: 'bar',
-  inUse: true,
-  creationTime: '2019-07-16T06:31:29Z',
-  modificationTime: '2019-07-16T06:44:55Z',
-  status: HYPERION_AUDIT_STATUS.running,
-  alterable: false,
-  reports: {
-    currentReport,
-    counts: {
-      total: 1,
-    },
-  },
-  results: {
-    counts: {
-      current: 0,
-    },
-  },
-  permissions: [{name: 'everything'}],
-  target: {id: '5678', name: 'target1'},
-  alert: {id: '91011', name: 'alert1'},
-  scanner: {id: '1516', name: 'scanner1', type: '2'},
-  policy,
-  preferences,
-  usageType: 'audit',
+  in_use: '1',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  status: AUDIT_STATUS.running,
+  alterable: '0',
+  current_report: currentReport,
+  report_count: {__text: '1'},
+  result_count: '0',
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: '5678', name: 'target1'},
+  alert: {_id: '91011', name: 'alert1'},
+  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  config: policy,
+  preferences: preferences,
+  usage_type: 'audit',
 });
 
-const audit5 = Audit.fromObject({
-  id: '12345',
-  owner: 'admin',
+const audit5 = Audit.fromElement({
+  _id: '12345',
+  owner: {name: 'admin'},
   name: 'foo',
   comment: 'bar',
-  creationTime: '2019-07-16T06:31:29Z',
-  modificationTime: '2019-07-16T06:44:55Z',
-  status: HYPERION_AUDIT_STATUS.stopped,
-  alterable: false,
-  reports: {
-    currentReport,
-    lastReport,
-    counts: {
-      total: 2,
-      finished: 1,
-    },
-  },
-  results: {
-    counts: {
-      current: 10,
-    },
-  },
-  permissions: [{name: 'everything'}],
-  target: {id: '5678', name: 'target1'},
-  alert: {id: '91011', name: 'alert1'},
-  scanner: {id: '1516', name: 'scanner1', type: '2'},
-  policy,
-  preferences,
-  usageType: 'audit',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  status: AUDIT_STATUS.stopped,
+  alterable: '0',
+  current_report: currentReport,
+  last_report: lastReport,
+  report_count: {__text: '2'},
+  result_count: '10',
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: '5678', name: 'target1'},
+  alert: {_id: '91011', name: 'alert1'},
+  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  config: policy,
+  preferences: preferences,
+  usage_type: 'audit',
 });
 
-const audit6 = Audit.fromObject({
+const audit5Id = {
   id: '12345',
-  owner: 'admin',
+};
+
+const audit6 = Audit.fromElement({
+  _id: '12345',
+  owner: {name: 'admin'},
   name: 'foo',
   comment: 'bar',
-  creationTime: '2019-07-16T06:31:29Z',
-  modificationTime: '2019-07-16T06:44:55Z',
-  status: HYPERION_AUDIT_STATUS.done,
-  alterable: false,
-  reports: {
-    lastReport,
-    counts: {
-      total: 1,
-      finished: 1,
-    },
-  },
-  results: {
-    counts: {
-      current: 1,
-    },
-  },
-  permissions: [{name: 'get_tasks'}],
-  target: {id: '5678', name: 'target1'},
-  alert: {id: '91011', name: 'alert1'},
-  scanner: {id: '1516', name: 'scanner1', type: '2'},
-  policy,
-  preferences,
-  usageType: 'audit',
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  status: AUDIT_STATUS.done,
+  alterable: '0',
+  last_report: lastReport,
+  report_count: {__text: '1'},
+  result_count: '1',
+  permissions: {permission: [{name: 'get_tasks'}]},
+  target: {_id: '5678', name: 'target1'},
+  alert: {_id: '91011', name: 'alert1'},
+  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  config: policy,
+  preferences: preferences,
+  usage_type: 'audit',
 });
 
-const audit7 = Audit.fromObject({
-  id: '12345',
-  owner: 'admin',
+const audit7 = Audit.fromElement({
+  _id: '12345',
+  owner: {name: 'admin'},
   name: 'foo',
   comment: 'bar',
-  creationTime: '2019-07-16T06:31:29Z',
-  modificationTime: '2019-07-16T06:44:55Z',
-  status: HYPERION_AUDIT_STATUS.done,
-  alterable: false,
-  reports: {
-    lastReport,
-    counts: {
-      total: 1,
-      finished: 1,
-    },
-  },
-  results: {
-    counts: {
-      current: 1,
-    },
-  },
-  permissions: [{name: 'everything'}],
-  target: {id: '5678', name: 'target1'},
-  alert: {id: '91011', name: 'alert1'},
-  scanner: {id: '1516', name: 'scanner1', type: '2'},
-  policy,
+  creation_time: '2019-07-16T06:31:29Z',
+  modification_time: '2019-07-16T06:44:55Z',
+  status: AUDIT_STATUS.done,
+  alterable: '0',
+  last_report: lastReport,
+  report_count: {__text: '1'},
+  result_count: '1',
+  permissions: {permission: [{name: 'everything'}]},
+  target: {_id: '5678', name: 'target1'},
+  alert: {_id: '91011', name: 'alert1'},
+  scanner: {_id: '1516', name: 'scanner1', type: '2'},
+  config: policy,
   schedule: {
-    id: '121314',
+    _id: '121314',
     name: 'schedule1',
-    permissions: [{name: 'everything'}],
+    permissions: {permission: [{name: 'everything'}]},
   },
-  schedulePeriods: 1,
-  preferences,
-  usageType: 'audit',
+  schedule_periods: '1',
+  preferences: preferences,
+  usage_type: 'audit',
 });
 
 const caps = new Capabilities(['everything']);
 
-const reloadInterval = -1;
+const reloadInterval = 1;
 const manualUrl = 'test/';
 
-let currentSettings;
-let getEntities;
-let renewSession;
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+const renewSession = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
 
-  renewSession = jest.fn().mockResolvedValue({
-    foo: 'bar',
-  });
+const getPolicy = jest.fn().mockResolvedValue({
+  data: policy,
+});
 
-  getEntities = jest.fn().mockResolvedValue({
-    data: [],
-    meta: {
-      filter: Filter.fromString(),
-      counts: new CollectionCounts(),
-    },
-  });
+const getSchedule = jest.fn().mockResolvedValue({
+  data: schedule,
+});
+
+const getEntities = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
 });
 
 describe('Audit Detailspage tests', () => {
-  test('should render full Detailspage', async () => {
+  test('should render full Detailspage', () => {
+    const getAudit = jest.fn().mockResolvedValue({
+      data: audit,
+    });
+
     const gmp = {
+      audit: {
+        get: getAudit,
+      },
+      policy: {
+        get: getPolicy,
+      },
+      schedule: {
+        get: getSchedule,
+      },
+      permissions: {
+        get: getEntities,
+      },
       reportformats: {
         get: getEntities,
       },
-      settings: {manualUrl, reloadInterval},
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
       },
     };
-
-    const [mock, resultFunc] = createGetAuditQueryMock();
-    const [scheduleMock, scheduleResult] = createGetScheduleQueryMock(
-      'foo',
-      auditSchedule,
-    );
-    const [policyMock, policyResult] = createGetPolicyQueryMock(
-      '234',
-      auditPolicy,
-    );
 
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, scheduleMock, policyMock],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
-    const {baseElement, getAllByTestId} = render(<Detailspage />);
+    store.dispatch(entityLoadingActions.success('12345', audit));
 
-    await wait();
+    const {baseElement, element, getAllByTestId} = render(
+      <Detailspage id="12345" />,
+    );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(element).toMatchSnapshot();
 
-    expect(resultFunc).toHaveBeenCalled();
-    expect(scheduleResult).toHaveBeenCalled();
-    expect(policyResult).toHaveBeenCalled();
-
-    expect(baseElement).toHaveTextContent('Audit: foo');
+    expect(element).toHaveTextContent('Audit: foo');
 
     const links = baseElement.querySelectorAll('a');
+    const icons = getAllByTestId('svg-icon');
 
-    expect(screen.getAllByTitle('Help: Audits')[0]).toBeInTheDocument();
+    expect(icons[0]).toHaveAttribute('title', 'Help: Audits');
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-audits',
     );
 
-    expect(screen.getAllByTitle('Audit List')[0]).toBeInTheDocument();
+    expect(icons[1]).toHaveAttribute('title', 'Audit List');
     expect(links[1]).toHaveAttribute('href', '/audits');
 
-    expect(baseElement).toHaveTextContent('657');
-    expect(baseElement).toHaveTextContent('Tue, Jul 30, 2019 3:00 PM CEST');
-    expect(baseElement).toHaveTextContent('Fri, Aug 30, 2019 3:23 PM CEST');
-    expect(baseElement).toHaveTextContent('admin');
+    expect(element).toHaveTextContent('12345');
+    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:31 AM CEST');
+    expect(element).toHaveTextContent('Tue, Jul 16, 2019 8:44 AM CEST');
+    expect(element).toHaveTextContent('admin');
 
-    expect(baseElement).toHaveTextContent('foo');
-    expect(baseElement).toHaveTextContent('bar');
+    expect(element).toHaveTextContent('foo');
+    expect(element).toHaveTextContent('bar');
 
     const progressBars = getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Done');
     expect(progressBars[0]).toHaveTextContent('Done');
 
-    const headings = baseElement.querySelectorAll('h2');
+    const headings = element.querySelectorAll('h2');
     const detailslinks = getAllByTestId('details-link');
 
     expect(headings[1]).toHaveTextContent('Target');
-    expect(detailslinks[3]).toHaveAttribute('href', '/target/159');
-    expect(baseElement).toHaveTextContent('target 1');
+    expect(detailslinks[2]).toHaveAttribute('href', '/target/5678');
+    expect(element).toHaveTextContent('target1');
 
     expect(headings[2]).toHaveTextContent('Alerts');
-    expect(detailslinks[4]).toHaveAttribute('href', '/alert/151617');
-    expect(baseElement).toHaveTextContent('alert 1');
+    expect(detailslinks[3]).toHaveAttribute('href', '/alert/91011');
+    expect(element).toHaveTextContent('alert1');
 
     expect(headings[3]).toHaveTextContent('Scanner');
-    expect(detailslinks[5]).toHaveAttribute('href', '/scanner/212223');
-    expect(baseElement).toHaveTextContent('scanner 1');
-    expect(baseElement).toHaveTextContent('OpenVAS Scanner');
-
-    expect(detailslinks[6]).toHaveAttribute('href', '/policy/234');
-    expect(baseElement).toHaveTextContent('unnamed policy');
-    expect(baseElement).toHaveTextContent(
-      'Maximum concurrently executed NVTs per host',
-    );
-    expect(baseElement).toHaveTextContent('4');
-    expect(baseElement).toHaveTextContent('Maximum concurrently scanned hosts');
-    expect(baseElement).toHaveTextContent('20');
+    expect(detailslinks[4]).toHaveAttribute('href', '/scanner/1516');
+    expect(element).toHaveTextContent('scanner1');
+    expect(element).toHaveTextContent('OpenVAS Scanner');
 
     expect(headings[4]).toHaveTextContent('Assets');
-    expect(baseElement).toHaveTextContent('Add to Assets');
-    expect(baseElement).toHaveTextContent('Yes');
 
-    expect(headings[5]).toHaveTextContent('Schedule');
-    expect(detailslinks[7]).toHaveAttribute('href', '/schedule/foo');
-    expect(baseElement).toHaveTextContent('schedule 1');
-
-    expect(headings[6]).toHaveTextContent('Scan');
-    expect(baseElement).toHaveTextContent('2 minutes');
-    expect(baseElement).toHaveTextContent(
-      'Automatically delete oldest reports but always keep newest 5 reports',
-    );
+    expect(headings[5]).toHaveTextContent('Scan');
+    expect(element).toHaveTextContent('2 minutes');
+    expect(element).toHaveTextContent('Do not automatically delete reports');
   });
 
-  test('should render permissions tab', async () => {
+  test('should render permissions tab', () => {
+    const getAudit = jest.fn().mockResolvedValue({
+      data: audit2,
+    });
+
     const gmp = {
+      audit: {
+        get: getAudit,
+      },
+      policy: {
+        get: getPolicy,
+      },
+      schedule: {
+        get: getSchedule,
+      },
+      permissions: {
+        get: getEntities,
+      },
       reportformats: {
         get: getEntities,
       },
-      settings: {manualUrl, reloadInterval},
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
       },
     };
 
-    const [mock, resultFunc] = createGetAuditQueryMock();
-    const [permissionMock, permissionResult] = createGetPermissionsQueryMock(
-      {
-        filterString: 'resource_uuid=657 first=1 rows=-1',
-      },
-      noPermissions,
-    );
-    const [renewQueryMock] = createRenewSessionQueryMock();
-
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [mock, permissionMock, renewQueryMock],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
-    const {baseElement} = render(<Detailspage />);
+    store.dispatch(entityLoadingActions.success('12345', audit2));
 
-    await wait();
-
-    expect(resultFunc).toHaveBeenCalled();
-    expect(permissionResult).toHaveBeenCalled();
-
+    const {baseElement, element} = render(<Detailspage id="12345" />);
     const spans = baseElement.querySelectorAll('span');
     fireEvent.click(spans[16]);
 
-    expect(baseElement).toHaveTextContent('No permissions available');
+    expect(element).toHaveTextContent('No permissions available');
   });
 
   test('should call commands', async () => {
+    const getAudit = jest.fn().mockResolvedValue({
+      data: audit5,
+    });
+
+    const clone = jest.fn().mockResolvedValue({
+      data: {id: 'foo'},
+    });
+
+    const deleteFunc = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportFunc = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const start = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const resume = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
     const gmp = {
+      audit: {
+        get: getAudit,
+        clone,
+        delete: deleteFunc,
+        export: exportFunc,
+        start,
+        resume,
+      },
+      policy: {
+        get: getPolicy,
+      },
+      schedule: {
+        get: getSchedule,
+      },
+      permissions: {
+        get: getEntities,
+      },
       reportformats: {
         get: getEntities,
       },
-      settings: {manualUrl, reloadInterval},
+      reloadInterval,
+      settings: {manualUrl},
       user: {
         currentSettings,
         renewSession,
       },
     };
 
-    const [mock, resultFunc] = createGetAuditQueryMock('657', unscheduledAudit);
-
-    const [renewQueryMock] = createRenewSessionQueryMock();
-    const [startMock, startResult] = createStartAuditQueryMock('657', 'r1');
-    const [resumeMock, resumeResult] = createResumeAuditQueryMock('657');
-    const [cloneMock, cloneResult] = createCloneAuditQueryMock('657', '456');
-    const [exportMock, exportResult] = createExportAuditsByIdsQueryMock();
-    const [deleteMock, deleteResult] = createDeleteAuditQueryMock();
-
     const {render, store} = rendererWith({
       capabilities: caps,
       gmp,
       router: true,
       store: true,
-      queryMocks: [
-        mock,
-        renewQueryMock,
-        startMock,
-        resumeMock,
-        cloneMock,
-        exportMock,
-        deleteMock,
-      ],
     });
 
     store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
 
-    render(<Detailspage />);
+    store.dispatch(entityLoadingActions.success('12345', audit5));
 
-    await wait();
+    const {getAllByTestId} = render(<Detailspage id="12345" />);
 
-    expect(resultFunc).toHaveBeenCalled();
+    const icons = getAllByTestId('svg-icon');
 
-    const cloneIcon = screen.getAllByTitle('Clone Audit');
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
+    await act(async () => {
+      fireEvent.click(icons[2]);
+      expect(clone).toHaveBeenCalledWith(audit5);
+      expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
 
-    await wait();
-    expect(cloneResult).toHaveBeenCalled();
+      fireEvent.click(icons[4]);
+      expect(deleteFunc).toHaveBeenCalledWith(audit5Id);
+      expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    const exportIcon = screen.getAllByTitle('Export Audit as XML');
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
+      fireEvent.click(icons[5]);
+      expect(exportFunc).toHaveBeenCalledWith(audit5);
+      expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
 
-    await wait();
-    expect(exportResult).toHaveBeenCalled();
+      fireEvent.click(icons[6]);
+      expect(start).toHaveBeenCalledWith(audit5);
+      expect(icons[6]).toHaveAttribute('title', 'Start');
 
-    const startIcon = screen.getAllByTitle('Start');
-    expect(startIcon[0]).toBeInTheDocument();
-    fireEvent.click(startIcon[0]);
-
-    await wait();
-    expect(startResult).toHaveBeenCalled();
-
-    const resumeIcon = screen.getAllByTitle('Resume');
-    expect(resumeIcon[0]).toBeInTheDocument();
-    fireEvent.click(resumeIcon[0]);
-
-    await wait();
-    expect(resumeResult).toHaveBeenCalled();
-
-    const deleteIcon = screen.getAllByTitle('Move Audit to trashcan');
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
-    expect(deleteResult).toHaveBeenCalled();
+      fireEvent.click(icons[7]);
+      expect(resume).toHaveBeenCalledWith(audit5);
+      expect(icons[7]).toHaveAttribute('title', 'Resume');
+    });
   });
 });
 
@@ -600,7 +541,7 @@ describe('Audit ToolBarIcons tests', () => {
       router: true,
     });
 
-    const {element} = render(
+    const {element, getAllByTestId} = render(
       <ToolBarIcons
         entity={audit}
         onAuditCloneClick={handleAuditCloneClick}
@@ -615,16 +556,17 @@ describe('Audit ToolBarIcons tests', () => {
 
     expect(element).toMatchSnapshot();
 
+    const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');
 
     expect(links[0]).toHaveAttribute(
       'href',
       'test/en/compliance-and-special-scans.html#configuring-and-managing-audits',
     );
-    expect(screen.getAllByTitle('Help: Audits')[0]).toBeInTheDocument();
+    expect(icons[0]).toHaveAttribute('title', 'Help: Audits');
 
     expect(links[1]).toHaveAttribute('href', '/audits');
-    expect(screen.getAllByTitle('Audit List')[0]).toBeInTheDocument();
+    expect(icons[1]).toHaveAttribute('title', 'Audit List');
   });
 
   test('should call click handlers for new audit', () => {
@@ -657,32 +599,33 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
+    const icons = getAllByTestId('svg-icon');
     const badgeIcons = getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const cloneIcon = screen.getAllByTitle('Clone Audit');
-    fireEvent.click(cloneIcon[0]);
+    fireEvent.click(icons[2]);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit3);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
 
-    const editIcon = screen.getAllByTitle('Edit Audit');
-    fireEvent.click(editIcon[0]);
+    fireEvent.click(icons[3]);
     expect(handleAuditEditClick).toHaveBeenCalledWith(audit3);
+    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
 
-    const deleteIcon = screen.getAllByTitle('Move Audit to trashcan');
-    fireEvent.click(deleteIcon[0]);
+    fireEvent.click(icons[4]);
     expect(handleAuditDeleteClick).toHaveBeenCalledWith(audit3);
+    expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    const exportIcon = screen.getAllByTitle('Export Audit as XML');
-    fireEvent.click(exportIcon[0]);
+    fireEvent.click(icons[5]);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit3);
+    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
 
-    const startIcon = screen.getAllByTitle('Start');
-    fireEvent.click(startIcon[0]);
+    fireEvent.click(icons[6]);
     expect(handleAuditStartClick).toHaveBeenCalledWith(audit3);
+    expect(icons[6]).toHaveAttribute('title', 'Start');
 
-    const resumeIcon = screen.getAllByTitle('Audit is not stopped');
-    fireEvent.click(resumeIcon[0]);
+    fireEvent.click(icons[7]);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
+    expect(icons[7]).toHaveAttribute('title', 'Audit is not stopped');
 
     expect(links[2]).toHaveAttribute('href', '/reports?filter=task_id%3D12345');
     expect(links[2]).toHaveAttribute('title', 'Total Reports for Audit foo');
@@ -723,33 +666,34 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
+    const icons = getAllByTestId('svg-icon');
     const badgeIcons = getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const cloneIcon = screen.getAllByTitle('Clone Audit');
-    fireEvent.click(cloneIcon[0]);
+    fireEvent.click(icons[2]);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit4);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
 
-    const editIcon = screen.getAllByTitle('Edit Audit');
-    fireEvent.click(editIcon[0]);
+    fireEvent.click(icons[3]);
     expect(handleAuditEditClick).toHaveBeenCalledWith(audit4);
+    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
 
-    const deleteIcon = screen.getAllByTitle('Audit is still in use');
-    fireEvent.click(deleteIcon[0]);
+    fireEvent.click(icons[4]);
     expect(handleAuditDeleteClick).not.toHaveBeenCalled();
+    expect(icons[4]).toHaveAttribute('title', 'Audit is still in use');
 
-    const exportIcon = screen.getAllByTitle('Export Audit as XML');
-    fireEvent.click(exportIcon[0]);
+    fireEvent.click(icons[5]);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit4);
+    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
 
-    const stopIcon = screen.getAllByTitle('Stop');
-    expect(stopIcon[0]).toBeInTheDocument();
-    fireEvent.click(stopIcon[0]);
+    fireEvent.click(icons[6]);
+    expect(handleAuditStartClick).not.toHaveBeenCalled();
     expect(handleAuditStopClick).toHaveBeenCalledWith(audit4);
+    expect(icons[6]).toHaveAttribute('title', 'Stop');
 
-    const resumeIcon = screen.getAllByTitle('Audit is not stopped');
-    fireEvent.click(resumeIcon[0]);
+    fireEvent.click(icons[7]);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
+    expect(icons[7]).toHaveAttribute('title', 'Audit is not stopped');
 
     expect(links[2]).toHaveAttribute('href', '/report/12342');
     expect(links[2]).toHaveAttribute(
@@ -796,32 +740,33 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
+    const icons = getAllByTestId('svg-icon');
     const badgeIcons = getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const cloneIcon = screen.getAllByTitle('Clone Audit');
-    fireEvent.click(cloneIcon[0]);
+    fireEvent.click(icons[2]);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit5);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
 
-    const editIcon = screen.getAllByTitle('Edit Audit');
-    fireEvent.click(editIcon[0]);
+    fireEvent.click(icons[3]);
     expect(handleAuditEditClick).toHaveBeenCalledWith(audit5);
+    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
 
-    const deleteIcon = screen.getAllByTitle('Move Audit to trashcan');
-    fireEvent.click(deleteIcon[0]);
+    fireEvent.click(icons[4]);
     expect(handleAuditDeleteClick).toHaveBeenCalledWith(audit5);
+    expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    const exportIcon = screen.getAllByTitle('Export Audit as XML');
-    fireEvent.click(exportIcon[0]);
+    fireEvent.click(icons[5]);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit5);
+    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
 
-    const startIcon = screen.getAllByTitle('Start');
-    fireEvent.click(startIcon[0]);
+    fireEvent.click(icons[6]);
     expect(handleAuditStartClick).toHaveBeenCalledWith(audit5);
+    expect(icons[6]).toHaveAttribute('title', 'Start');
 
-    const resumeIcon = screen.getAllByTitle('Resume');
-    fireEvent.click(resumeIcon[0]);
+    fireEvent.click(icons[7]);
     expect(handleAuditResumeClick).toHaveBeenCalledWith(audit5);
+    expect(icons[7]).toHaveAttribute('title', 'Resume');
 
     expect(links[2]).toHaveAttribute('href', '/report/12342');
     expect(links[2]).toHaveAttribute(
@@ -868,32 +813,33 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
+    const icons = getAllByTestId('svg-icon');
     const badgeIcons = getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const cloneIcon = screen.getAllByTitle('Clone Audit');
-    fireEvent.click(cloneIcon[0]);
+    fireEvent.click(icons[2]);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit2);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
 
-    const editIcon = screen.getAllByTitle('Edit Audit');
-    fireEvent.click(editIcon[0]);
+    fireEvent.click(icons[3]);
     expect(handleAuditEditClick).toHaveBeenCalledWith(audit2);
+    expect(icons[3]).toHaveAttribute('title', 'Edit Audit');
 
-    const deleteIcon = screen.getAllByTitle('Move Audit to trashcan');
-    fireEvent.click(deleteIcon[0]);
+    fireEvent.click(icons[4]);
     expect(handleAuditDeleteClick).toHaveBeenCalledWith(audit2);
+    expect(icons[4]).toHaveAttribute('title', 'Move Audit to trashcan');
 
-    const exportIcon = screen.getAllByTitle('Export Audit as XML');
-    fireEvent.click(exportIcon[0]);
+    fireEvent.click(icons[5]);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit2);
+    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
 
-    const startIcon = screen.getAllByTitle('Start');
-    fireEvent.click(startIcon[0]);
+    fireEvent.click(icons[6]);
     expect(handleAuditStartClick).toHaveBeenCalledWith(audit2);
+    expect(icons[6]).toHaveAttribute('title', 'Start');
 
-    const resumeIcon = screen.getAllByTitle('Audit is not stopped');
-    fireEvent.click(resumeIcon[0]);
+    fireEvent.click(icons[7]);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
+    expect(icons[7]).toHaveAttribute('title', 'Audit is not stopped');
 
     expect(links[2]).toHaveAttribute('href', '/report/1234');
     expect(links[2]).toHaveAttribute(
@@ -940,34 +886,42 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
+    const icons = getAllByTestId('svg-icon');
     const badgeIcons = getAllByTestId('badge-icon');
     const links = baseElement.querySelectorAll('a');
 
-    const cloneIcon = screen.getAllByTitle('Clone Audit');
-    fireEvent.click(cloneIcon[0]);
+    fireEvent.click(icons[2]);
     expect(handleAuditCloneClick).toHaveBeenCalledWith(audit6);
+    expect(icons[2]).toHaveAttribute('title', 'Clone Audit');
 
-    const editIcon = screen.getAllByTitle('Permission to edit Audit denied');
-    fireEvent.click(editIcon[0]);
+    fireEvent.click(icons[3]);
     expect(handleAuditEditClick).not.toHaveBeenCalled();
+    expect(icons[3]).toHaveAttribute(
+      'title',
+      'Permission to edit Audit denied',
+    );
 
-    const deleteIcon = screen.getAllByTitle(
+    fireEvent.click(icons[4]);
+    expect(handleAuditDeleteClick).not.toHaveBeenCalled();
+    expect(icons[4]).toHaveAttribute(
+      'title',
       'Permission to move Audit to trashcan denied',
     );
-    fireEvent.click(deleteIcon[0]);
-    expect(handleAuditDeleteClick).not.toHaveBeenCalled();
 
-    const exportIcon = screen.getAllByTitle('Export Audit as XML');
-    fireEvent.click(exportIcon[0]);
+    fireEvent.click(icons[5]);
     expect(handleAuditDownloadClick).toHaveBeenCalledWith(audit6);
+    expect(icons[5]).toHaveAttribute('title', 'Export Audit as XML');
 
-    const startIcon = screen.getAllByTitle('Permission to start audit denied');
-    fireEvent.click(startIcon[0]);
+    fireEvent.click(icons[6]);
     expect(handleAuditStartClick).not.toHaveBeenCalled();
+    expect(icons[6]).toHaveAttribute(
+      'title',
+      'Permission to start audit denied',
+    );
 
-    const resumeIcon = screen.getAllByTitle('Audit is not stopped');
-    fireEvent.click(resumeIcon[0]);
+    fireEvent.click(icons[7]);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
+    expect(icons[7]).toHaveAttribute('title', 'Audit is not stopped');
 
     expect(links[2]).toHaveAttribute('href', '/report/1234');
     expect(links[2]).toHaveAttribute(
@@ -1015,6 +969,7 @@ describe('Audit ToolBarIcons tests', () => {
       />,
     );
 
+    const icons = getAllByTestId('svg-icon');
     const detailsLinks = getAllByTestId('details-link');
 
     expect(detailsLinks[0]).toHaveAttribute('href', '/schedule/121314');
@@ -1023,12 +978,12 @@ describe('Audit ToolBarIcons tests', () => {
       'View Details of Schedule schedule1 (Next due: over)',
     );
 
-    const startIcon = screen.getAllByTitle('Start');
-    fireEvent.click(startIcon[0]);
+    fireEvent.click(icons[7]);
     expect(handleAuditStartClick).toHaveBeenCalledWith(audit7);
+    expect(icons[7]).toHaveAttribute('title', 'Start');
 
-    const resumeIcon = screen.getAllByTitle('Audit is scheduled');
-    fireEvent.click(resumeIcon[0]);
+    fireEvent.click(icons[8]);
     expect(handleAuditResumeClick).not.toHaveBeenCalled();
+    expect(icons[8]).toHaveAttribute('title', 'Audit is scheduled');
   });
 });

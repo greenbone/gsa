@@ -53,10 +53,12 @@ export const loadUserSettingDefaults = gmp => () => (dispatch, getState) => {
 
   dispatch(loadingActions.request());
 
-  return gmp.user.currentSettings().then(
-    response => dispatch(loadingActions.success(response.data)),
-    err => dispatch(loadingActions.error(err)),
-  );
+  return gmp.user
+    .currentSettings()
+    .then(
+      response => dispatch(loadingActions.success(response.data)),
+      err => dispatch(loadingActions.error(err)),
+    );
 };
 
 export const loadUserSettingDefault = gmp => id => (dispatch, getState) => {

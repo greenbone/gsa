@@ -21,11 +21,10 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
-import withIconSize from 'web/components/icon/withIconSize';
-
 import Theme from 'web/utils/theme';
 
 import PropTypes from 'web/utils/proptypes';
+import withIconSize from 'web/components/icon/withIconSize';
 
 const StyledCloseButton = styled.div`
   display: flex;

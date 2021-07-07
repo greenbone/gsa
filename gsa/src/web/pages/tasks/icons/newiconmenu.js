@@ -25,11 +25,9 @@ import IconMenu from 'web/components/menu/iconmenu';
 import MenuEntry from 'web/components/menu/menuentry';
 
 import PropTypes from 'web/utils/proptypes';
-import useCapabilities from 'web/utils/useCapabilities';
+import withCapabilities from 'web/utils/withCapabilities';
 
-const NewIconMenu = ({onNewClick, onNewContainerClick}) => {
-  const capabilities = useCapabilities();
-
+const NewIconMenu = ({capabilities, onNewClick, onNewContainerClick}) => {
   if (capabilities.mayCreate('task')) {
     return (
       <IconMenu icon={<NewIcon />} onClick={onNewClick}>
@@ -45,10 +43,11 @@ const NewIconMenu = ({onNewClick, onNewContainerClick}) => {
 };
 
 NewIconMenu.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   onNewClick: PropTypes.func,
   onNewContainerClick: PropTypes.func,
 };
 
-export default NewIconMenu;
+export default withCapabilities(NewIconMenu);
 
 // vim: set ts=2 sw=2 tw=80:

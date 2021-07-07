@@ -15,21 +15,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useReducer} from 'react';
+import React from 'react';
+
+import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import logger from 'gmp/log';
-
-import {ALL_FILTER} from 'gmp/models/filter';
+import Filter, {ALL_FILTER} from 'gmp/models/filter';
 import {DEFAULT_MIN_QOD} from 'gmp/models/audit';
-import {getSettingValueByName} from 'gmp/models/setting';
 
-import {YES_VALUE} from 'gmp/parser';
+import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
 import {hasId} from 'gmp/utils/id';
-import {hasValue, isDefined} from 'gmp/utils/identity';
+
+import withDownload from 'web/components/form/withDownload';
+import {withRouter} from 'react-router-dom';
 
 import {
   OPENVAS_DEFAULT_SCANNER_ID,
@@ -37,226 +39,170 @@ import {
   GREENBONE_SENSOR_SCANNER_TYPE,
 } from 'gmp/models/scanner';
 
-import useDownload from 'web/components/form/useDownload';
-import Download from 'web/components/form/download';
+import {
+  loadEntities as loadAlerts,
+  selector as alertSelector,
+} from 'web/store/entities/alerts';
+
+import {
+  loadEntities as loadPolicies,
+  selector as policiesSelector,
+} from 'web/store/entities/policies';
+
+import {
+  loadEntities as loadScanners,
+  selector as scannerSelector,
+} from 'web/store/entities/scanners';
+
+import {
+  loadEntities as loadSchedules,
+  selector as scheduleSelector,
+} from 'web/store/entities/schedules';
+
+import {
+  loadEntities as loadTargets,
+  selector as targetSelector,
+} from 'web/store/entities/targets';
+
+import {
+  loadAllEntities as loadReportFormats,
+  selector as reportFormatsSelector,
+} from 'web/store/entities/reportformats';
+
+import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
+import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
+
+import {getUsername} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+import withGmp from 'web/utils/withGmp';
+import {UNSET_VALUE, generateFilename} from 'web/utils/render';
 
 import EntityComponent from 'web/entity/component';
 
-import {useLazyGetAlerts} from 'web/graphql/alerts';
-import {
-  useCreateAudit,
-  useModifyAudit,
-  useResumeAudit,
-  useStartAudit,
-  useStopAudit,
-} from 'web/graphql/audits';
-import {useGetUsername} from 'web/graphql/auth';
-import {useLazyGetPolicies} from 'web/graphql/policies';
-import {useLazyGetScanners} from 'web/graphql/scanners';
-import {useLazyGetSchedules} from 'web/graphql/schedules';
-import {useLazyGetTargets} from 'web/graphql/targets';
-import {useLazyGetReportFormats} from 'web/graphql/reportformats';
-import {useLazyGetSettings} from 'web/graphql/settings';
-
-import AlertComponent from 'web/pages/alerts/component';
-import AuditDialog from 'web/pages/audits/dialog';
 import ScheduleComponent from 'web/pages/schedules/component';
+import AlertComponent from 'web/pages/alerts/component';
 import TargetComponent from 'web/pages/targets/component';
 
-import PropTypes from 'web/utils/proptypes';
-import {UNSET_VALUE, generateFilename} from 'web/utils/render';
-import stateReducer, {updateState} from 'web/utils/stateReducer';
-import useGmp from 'web/utils/useGmp';
-import useCapabilities from 'web/utils/useCapabilities';
+import AuditDialog from 'web/pages/audits/dialog';
 
-const log = logger.getLogger('web.pages.audits.component');
+const REPORT_FORMATS_FILTER = Filter.fromString(
+  'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1',
+);
 
-const REPORT_FORMATS_FILTER =
-  'uuid="dc51a40a-c022-11e9-b02d-3f7ca5bdcb11" and active=1 and trust=1';
+class AuditComponent extends React.Component {
+  constructor(...args) {
+    super(...args);
 
-const AuditComponent = ({
-  children,
-  onCloned,
-  onCloneError,
-  onCreated,
-  onCreateError,
-  onDeleted,
-  onDeleteError,
-  onDownloaded,
-  onDownloadError,
-  onInteraction,
-  onStarted,
-  onStartError,
-  onStopped,
-  onStopError,
-  onResumed,
-  onResumeError,
-  onSaved,
-  onSaveError,
-}) => {
-  const gmp = useGmp();
-  const capabilities = useCapabilities();
-  const [downloadRef, handleDownload] = useDownload();
+    this.state = {
+      showDownloadReportDialog: false,
+      auditDialogVisible: false,
+    };
 
-  const [state, dispatchState] = useReducer(stateReducer, {
-    showDownloadReportDialog: false,
-    auditDialogVisible: false,
-  });
+    const {gmp} = this.props;
 
-  // GraphQL Loaders
-  const {username} = useGetUsername();
-  const [
-    loadAlerts,
-    {
-      alerts,
-      loading: isLoadingAlerts,
-      refetch: refetchAlerts,
-      error: alertError,
-    },
-  ] = useLazyGetAlerts({
-    filterString: ALL_FILTER.toFilterString(),
-  });
+    this.cmd = gmp.audit;
 
-  const [
-    loadPolicies,
-    {policies, loading: isLoadingPolicies, error: policyError},
-  ] = useLazyGetPolicies({
-    filterString: ALL_FILTER.toFilterString(),
-  });
+    this.handleAuditResume = this.handleAuditResume.bind(this);
 
-  const [
-    loadScanners,
-    {scanners: scannerList, loading: isLoadingScanners, error: scannerError},
-  ] = useLazyGetScanners({
-    filterString: ALL_FILTER.toFilterString(),
-  });
+    this.handleSaveAudit = this.handleSaveAudit.bind(this);
 
-  const scanners = isDefined(scannerList)
-    ? scannerList.filter(
-        scanner =>
-          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
-          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
-      )
-    : undefined;
+    this.handleAuditStart = this.handleAuditStart.bind(this);
+    this.handleAuditStop = this.handleAuditStop.bind(this);
 
-  const [
-    loadSchedules,
-    {
-      schedules,
-      loading: isLoadingSchedules,
-      error: scheduleError,
-      refetch: refetchSchedules,
-    },
-  ] = useLazyGetSchedules({
-    filterString: ALL_FILTER.toFilterString(),
-  });
-  const [
-    loadTargets,
-    {
-      targets,
-      loading: isLoadingTargets,
-      refetch: refetchTargets,
-      error: targetError,
-    },
-  ] = useLazyGetTargets({
-    filterString: ALL_FILTER.toFilterString(),
-  });
+    this.handleReportDownload = this.handleReportDownload.bind(this);
 
-  const [
-    loadUserSettingsDefaults,
-    {settings: userDefaults},
-  ] = useLazyGetSettings();
-  const [loadReportFormats, {reportFormats = []}] = useLazyGetReportFormats({
-    filterString: REPORT_FORMATS_FILTER,
-  });
+    this.openAuditDialog = this.openAuditDialog.bind(this);
+    this.handleCloseAuditDialog = this.handleCloseAuditDialog.bind(this);
 
-  // Default user settings
-  const defaultAlertId = getSettingValueByName(userDefaults)('Default Alert');
+    this.handleAlertCreated = this.handleAlertCreated.bind(this);
+    this.handleTargetCreated = this.handleTargetCreated.bind(this);
+    this.handleScheduleCreated = this.handleScheduleCreated.bind(this);
 
-  let defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID;
-  const defaultScannerIdFromStore = getSettingValueByName(userDefaults)(
-    'Default OpenVAS Scanner',
-  );
+    this.handleInteraction = this.handleInteraction.bind(this);
 
-  if (isDefined(defaultScannerIdFromStore)) {
-    defaultScannerId = defaultScannerIdFromStore;
+    this.handleChange = this.handleChange.bind(this);
+    this.handleScannerChange = this.handleScannerChange.bind(this);
   }
 
-  const defaultScheduleId = getSettingValueByName(userDefaults)(
-    'Default Schedule',
-  );
-  const defaultTargetId = getSettingValueByName(userDefaults)('Default Target');
-  const reportExportFileName = getSettingValueByName(userDefaults)(
-    'Report Export File Name',
-  );
+  componentDidMount() {
+    this.props.loadUserSettingsDefaults();
+    this.props.loadReportFormats();
+  }
 
-  // GraphQL Mutations
-  const [modifyAudit] = useModifyAudit();
-  const [createAudit] = useCreateAudit();
-  const [startAudit] = useStartAudit();
-  const [stopAudit] = useStopAudit();
-  const [resumeAudit] = useResumeAudit();
-
-  // Component methods
-  const handleInteraction = () => {
+  handleInteraction() {
+    const {onInteraction} = this.props;
     if (isDefined(onInteraction)) {
       onInteraction();
     }
-  };
+  }
 
-  const handleChange = (value, name) => {
-    dispatchState(
-      updateState({
-        [name]: value,
-      }),
-    );
-  };
+  handleChange(value, name) {
+    this.setState({[name]: value});
+  }
 
-  const handleAuditStart = audit => {
-    handleInteraction();
+  handleAuditStart(audit) {
+    const {onStarted, onStartError} = this.props;
 
-    return startAudit(audit.id).then(onStarted, onStartError);
-  };
+    this.handleInteraction();
 
-  const handleAuditStop = audit => {
-    handleInteraction();
+    return this.cmd.start(audit).then(onStarted, onStartError);
+  }
 
-    return stopAudit(audit.id).then(onStopped, onStopError);
-  };
+  handleAuditStop(audit) {
+    const {onStopped, onStopError} = this.props;
 
-  const handleAuditResume = audit => {
-    handleInteraction();
+    this.handleInteraction();
 
-    return resumeAudit(audit.id).then(onResumed, onResumeError);
-  };
+    return this.cmd.stop(audit).then(onStopped, onStopError);
+  }
 
-  const handleAlertCreated = () => {
-    refetchAlerts();
-  };
+  handleAuditResume(audit) {
+    const {onResumed, onResumeError} = this.props;
 
-  const handleScheduleCreated = scheduleId => {
-    refetchSchedules();
+    this.handleInteraction();
 
-    dispatchState(updateState({scheduleId}));
-  };
+    return this.cmd.resume(audit).then(onResumed, onResumeError);
+  }
 
-  const handleTargetCreated = targetId => {
-    refetchTargets();
+  handleAlertCreated(resp) {
+    const {data} = resp;
 
-    dispatchState(updateState({targetId}));
-  };
+    this.props.loadAlerts();
 
-  const handleSaveAudit = ({
+    this.setState(({alertIds}) => ({alertIds: [data.id, ...alertIds]}));
+  }
+
+  handleScheduleCreated(resp) {
+    const {data} = resp;
+
+    this.props.loadSchedules();
+
+    this.setState({scheduleId: data.id});
+  }
+
+  handleTargetCreated(resp) {
+    const {data} = resp;
+
+    this.props.loadTargets();
+
+    this.setState({targetId: data.id});
+  }
+
+  handleSaveAudit({
     alertIds,
     alterable,
-    autoDelete,
-    autoDeleteReports,
+    auto_delete,
+    auto_delete_data,
     comment,
     policyId,
+    hostsOrdering,
     id,
-    createAssets,
-    maxConcurrentNvts,
-    maxConcurrentHosts,
+    in_assets,
+    maxChecks,
+    maxHosts,
     name,
     scannerId = OPENVAS_DEFAULT_SCANNER_ID,
     scannerType = OPENVAS_SCANNER_TYPE,
@@ -264,79 +210,97 @@ const AuditComponent = ({
     schedulePeriods,
     targetId,
     audit,
-  }) => {
+  }) {
+    const {gmp} = this.props;
+
+    const tagId = undefined;
+    const addTag = NO_VALUE;
+
     const applyOverrides = YES_VALUE;
     const minQod = DEFAULT_MIN_QOD;
 
-    handleInteraction();
+    this.handleInteraction();
 
     if (isDefined(id)) {
       // save edit part
-      // does not need statusIsNew anymore. If audit is not changeable then these fields are disabled in the dialog, but still required in hyperion
-      return modifyAudit({
-        alertIds,
-        alterable,
-        comment,
-        policyId,
-        id,
-        name,
-        preferences: {
-          createAssets,
-          createAssetsApplyOverrides: applyOverrides,
-          createAssetsMinQod: minQod,
-          autoDeleteReports: autoDelete ? autoDeleteReports : null,
-          maxConcurrentNvts,
-          maxConcurrentHosts,
-        },
-        scannerId,
-        scheduleId,
-        targetId,
-      })
+      if (isDefined(audit) && !audit.isChangeable()) {
+        // arguments need to be undefined if the audit is not changeable
+        targetId = undefined;
+        scannerId = undefined;
+        policyId = undefined;
+      }
+      const {onSaved, onSaveError} = this.props;
+      return gmp.audit
+        .save({
+          alertIds,
+          alterable,
+          autoDelete: auto_delete,
+          autoDeleteData: auto_delete_data,
+          applyOverrides,
+          comment,
+          policyId,
+          hostsOrdering,
+          id,
+          inAssets: in_assets,
+          maxChecks,
+          maxHosts,
+          minQod,
+          name,
+          scannerId,
+          scannerType,
+          scheduleId,
+          schedulePeriods,
+          targetId,
+        })
         .then(onSaved, onSaveError)
-        .then(() => closeAuditDialog());
+        .then(() => this.closeAuditDialog());
     }
 
-    return createAudit({
-      alertIds,
-      alterable,
-      comment,
-      policyId,
-      name,
-      preferences: {
-        createAssets,
-        createAssetsApplyOverrides: applyOverrides,
-        createAssetsMinQod: minQod,
-        autoDeleteReports: autoDelete ? autoDeleteReports : null,
-        maxConcurrentNvts,
-        maxConcurrentHosts,
-      },
-      scannerId,
-      scheduleId,
-      targetId,
-    })
+    const {onCreated, onCreateError} = this.props;
+    return gmp.audit
+      .create({
+        addTag,
+        alertIds,
+        alterable,
+        applyOverrides,
+        autoDelete: auto_delete,
+        autoDeleteData: auto_delete_data,
+        comment,
+        policyId,
+        hostsOrdering,
+        inAssets: in_assets,
+        maxChecks,
+        maxHosts,
+        minQod,
+        name,
+        scannerType,
+        scannerId,
+        scheduleId,
+        schedulePeriods,
+        tagId,
+        targetId: targetId,
+      })
       .then(onCreated, onCreateError)
-      .then(() => closeAuditDialog());
-  };
+      .then(() => this.closeAuditDialog());
+  }
 
-  const closeAuditDialog = () => {
-    dispatchState(
-      updateState({
-        auditDialogVisible: false,
-      }),
-    );
-  };
+  closeAuditDialog() {
+    this.setState({auditDialogVisible: false});
+  }
 
-  const handleCloseAuditDialog = () => {
-    closeAuditDialog();
-    handleInteraction();
-  };
+  handleCloseAuditDialog() {
+    this.closeAuditDialog();
+    this.handleInteraction();
+  }
 
-  const openAuditDialog = audit => {
-    loadAlerts();
-    loadPolicies();
-    loadScanners();
-    loadSchedules();
-    loadTargets();
+  openAuditDialog(audit) {
+    const {capabilities} = this.props;
+
+    this.props.loadAlerts();
+    this.props.loadPolicies();
+    this.props.loadScanners();
+    this.props.loadSchedules();
+    this.props.loadTargets();
 
     if (isDefined(audit)) {
       const canAccessSchedules =
@@ -346,72 +310,81 @@ const AuditComponent = ({
         ? audit.schedule_periods
         : undefined;
 
-      dispatchState(
-        updateState({
-          auditDialogVisible: true,
-          alertIds: map(audit.alerts, alert => alert.id),
-          alterable: audit.alterable,
-          applyOverrides: audit.preferences?.createAssetsApplyOverrides,
-          autoDelete: hasValue(audit.preferences?.autoDeleteReports),
-          autoDeleteReports: hasValue(audit.preferences?.autoDeleteReports)
-            ? audit.preferences.autoDeleteReports
-            : undefined,
-          comment: audit.comment,
-          policyId: hasId(audit.config) ? audit.config.id : undefined,
-          id: audit.id,
-          createAssets: audit.preferences?.createAssets,
-          maxConcurrentNvts: audit.preferences?.maxConcurrentNvts,
-          maxConcurrentHosts: audit.preferences?.maxConcurrentHosts,
-          minQod: audit.preferences?.createAssetsMinQod,
-          name: audit.name,
-          scannerId: hasId(audit.scanner) ? audit.scanner.id : undefined,
-          scheduleId,
-          schedulePeriods,
-          targetId: hasId(audit.target) ? audit.target.id : undefined,
-          audit,
-          title: _('Edit Audit {{name}}', audit),
-        }),
-      );
+      this.setState({
+        auditDialogVisible: true,
+        alertIds: map(audit.alerts, alert => alert.id),
+        alterable: audit.alterable,
+        applyOverrides: audit.apply_overrides,
+        auto_delete: audit.auto_delete,
+        auto_delete_data: audit.auto_delete_data,
+        comment: audit.comment,
+        policyId: hasId(audit.config) ? audit.config.id : undefined,
+        hostsOrdering: audit.hosts_ordering,
+        id: audit.id,
+        in_assets: audit.in_assets,
+        maxChecks: audit.max_checks,
+        maxHosts: audit.max_hosts,
+        minQod: audit.min_qod,
+        name: audit.name,
+        scannerId: hasId(audit.scanner) ? audit.scanner.id : undefined,
+        scheduleId,
+        schedulePeriods,
+        targetId: hasId(audit.target) ? audit.target.id : undefined,
+        audit,
+        title: _('Edit Audit {{name}}', audit),
+      });
     } else {
+      const {
+        defaultAlertId,
+        defaultScannerId = OPENVAS_DEFAULT_SCANNER_ID,
+        defaultScheduleId,
+        defaultTargetId,
+      } = this.props;
+
       const alertIds = isDefined(defaultAlertId) ? [defaultAlertId] : [];
 
       const defaultScannerType = OPENVAS_SCANNER_TYPE;
 
-      dispatchState(
-        updateState({
-          auditDialogVisible: true,
-          alertIds,
-          alterable: undefined,
-          applyOverrides: undefined,
-          autoDelete: undefined,
-          autoDeleteReports: undefined,
-          comment: undefined,
-          policyId: undefined,
-          id: undefined,
-          createAssets: undefined,
-          maxConcurrentNvts: undefined,
-          maxConcurrentHosts: undefined,
-          minQod: undefined,
-          name: undefined,
-          scannerId: defaultScannerId,
-          scanner_type: defaultScannerType,
-          scheduleId: defaultScheduleId,
-          schedulePeriods: undefined,
-          targetId: defaultTargetId,
-          audit: undefined,
-          title: _('New Audit'),
-        }),
-      );
+      this.setState({
+        auditDialogVisible: true,
+        alertIds,
+        alterable: undefined,
+        applyOverrides: undefined,
+        auto_delete: undefined,
+        auto_delete_data: undefined,
+        comment: undefined,
+        policyId: undefined,
+        hostsOrdering: undefined,
+        id: undefined,
+        in_assets: undefined,
+        maxChecks: undefined,
+        maxHosts: undefined,
+        minQod: undefined,
+        name: undefined,
+        scannerId: defaultScannerId,
+        scanner_type: defaultScannerType,
+        scheduleId: defaultScheduleId,
+        schedulePeriods: undefined,
+        targetId: defaultTargetId,
+        audit: undefined,
+        title: _('New Audit'),
+      });
     }
-    handleInteraction();
-  };
+    this.handleInteraction();
+  }
 
-  const handleReportDownload = audit => {
-    dispatchState(
-      updateState({
-        audit,
-      }),
-    );
+  handleReportDownload(audit) {
+    this.setState({
+      audit,
+    });
+
+    const {
+      gmp,
+      reportExportFileName,
+      username,
+      reportFormats = [],
+      onDownload,
+    } = this.props;
 
     const [reportFormat] = reportFormats;
 
@@ -419,9 +392,9 @@ const AuditComponent = ({
       ? reportFormat.extension
       : 'unknown'; // unknown should never happen but we should be save here
 
-    handleInteraction();
+    this.handleInteraction();
 
-    const {id} = audit.reports.lastReport;
+    const {id} = audit.last_report;
 
     return gmp.report
       .download(
@@ -441,193 +414,172 @@ const AuditComponent = ({
           resourceType: 'report',
           username,
         });
-        handleDownload({filename, data});
-      }); // handleError
-  };
+        onDownload({filename, data});
+      }, this.handleError);
+  }
 
-  const handleScannerChange = scannerId => {
-    dispatchState(
-      updateState({
-        scannerId,
-      }),
+  handleScannerChange(scannerId) {
+    this.setState({scannerId});
+  }
+
+  render() {
+    const {
+      alerts,
+      isLoadingScanners,
+      policies,
+      reportFormats = [],
+      scanners,
+      schedules,
+      targets,
+      children,
+      onCloned,
+      onCloneError,
+      onCreated,
+      onCreateError,
+      onDeleted,
+      onDeleteError,
+      onDownloaded,
+      onDownloadError,
+      onInteraction,
+    } = this.props;
+
+    const {
+      alertIds,
+      alterable,
+      auto_delete,
+      auto_delete_data,
+      policyId,
+      comment,
+      hostsOrdering,
+      id,
+      in_assets,
+      maxChecks,
+      maxHosts,
+      name,
+      scannerId,
+      scheduleId,
+      schedulePeriods,
+      targetId,
+      audit,
+      auditDialogVisible,
+      title = _('Edit Audit {{name}}', audit),
+    } = this.state;
+    const gcrFormatDefined = reportFormats.length > 0;
+    return (
+      <React.Fragment>
+        <EntityComponent
+          name="audit"
+          onCreated={onCreated}
+          onCreateError={onCreateError}
+          onCloned={onCloned}
+          onCloneError={onCloneError}
+          onDeleted={onDeleted}
+          onDeleteError={onDeleteError}
+          onDownloaded={onDownloaded}
+          onDownloadError={onDownloadError}
+          onInteraction={onInteraction}
+        >
+          {other => (
+            <React.Fragment>
+              {children({
+                ...other,
+                create: this.openAuditDialog,
+                edit: this.openAuditDialog,
+                start: this.handleAuditStart,
+                stop: this.handleAuditStop,
+                resume: this.handleAuditResume,
+                reportDownload: this.handleReportDownload,
+                gcrFormatDefined,
+              })}
+
+              {auditDialogVisible && (
+                <TargetComponent
+                  onCreated={this.handleTargetCreated}
+                  onInteraction={onInteraction}
+                >
+                  {({create: createtarget}) => (
+                    <AlertComponent
+                      onCreated={this.handleAlertCreated}
+                      onInteraction={onInteraction}
+                    >
+                      {({create: createalert}) => (
+                        <ScheduleComponent
+                          onCreated={this.handleScheduleCreated}
+                          onInteraction={onInteraction}
+                        >
+                          {({create: createschedule}) => (
+                            <AuditDialog
+                              alerts={alerts}
+                              alertIds={alertIds}
+                              alterable={alterable}
+                              auto_delete={auto_delete}
+                              auto_delete_data={auto_delete_data}
+                              comment={comment}
+                              policyId={policyId}
+                              hostsOrdering={hostsOrdering}
+                              id={id}
+                              in_assets={in_assets}
+                              isLoadingScanners={isLoadingScanners}
+                              maxChecks={maxChecks}
+                              maxHosts={maxHosts}
+                              name={name}
+                              policies={policies}
+                              scannerId={scannerId}
+                              scanners={scanners}
+                              scheduleId={scheduleId}
+                              schedulePeriods={schedulePeriods}
+                              schedules={schedules}
+                              targetId={targetId}
+                              targets={targets}
+                              audit={audit}
+                              title={title}
+                              onNewAlertClick={createalert}
+                              onNewTargetClick={createtarget}
+                              onNewScheduleClick={createschedule}
+                              onChange={this.handleChange}
+                              onClose={this.handleCloseAuditDialog}
+                              onSave={this.handleSaveAudit}
+                              onScannerChange={this.handleScannerChange}
+                            />
+                          )}
+                        </ScheduleComponent>
+                      )}
+                    </AlertComponent>
+                  )}
+                </TargetComponent>
+              )}
+            </React.Fragment>
+          )}
+        </EntityComponent>
+      </React.Fragment>
     );
-  };
-
-  useEffect(() => {
-    // display first loading error in the dialog
-    if (policyError) {
-      dispatchState(
-        updateState({
-          error: _('Error while loading scan configs.'),
-        }),
-      );
-    } else if (scannerError) {
-      dispatchState(
-        updateState({
-          error: _('Error while loading scanners.'),
-        }),
-      );
-    } else if (scheduleError) {
-      dispatchState(
-        updateState({
-          error: _('Error while loading schedules.'),
-        }),
-      );
-    } else if (targetError) {
-      dispatchState(
-        updateState({
-          error: _('Error while loading targets.'),
-        }),
-      );
-    } else if (alertError) {
-      dispatchState(
-        updateState({
-          error: _('Error while loading alerts.'),
-        }),
-      );
-    }
-
-    // log error all objects to be able to inspect them the console
-    if (policyError) {
-      log.error({policyError});
-    }
-    if (scannerError) {
-      log.error({scannerError});
-    }
-    if (scheduleError) {
-      log.error({scheduleError});
-    }
-    if (targetError) {
-      log.error({targetError});
-    }
-    if (alertError) {
-      log.error({alertError});
-    }
-  }, [policyError, scannerError, scheduleError, targetError, alertError]);
-
-  const {
-    alertIds,
-    alterable,
-    autoDelete,
-    autoDeleteReports,
-    policyId,
-    comment,
-    id,
-    createAssets,
-    maxConcurrentNvts,
-    maxConcurrentHosts,
-    name,
-    scannerId,
-    scheduleId,
-    schedulePeriods,
-    targetId,
-    audit,
-    auditDialogVisible,
-    title = _('Edit Audit {{name}}', audit),
-  } = state;
-  const gcrFormatDefined = reportFormats.length > 0;
-
-  useEffect(() => {
-    loadUserSettingsDefaults();
-    loadReportFormats();
-  }, [loadUserSettingsDefaults, loadReportFormats]);
-
-  return (
-    <React.Fragment>
-      <EntityComponent
-        name="audit"
-        onCreated={onCreated}
-        onCreateError={onCreateError}
-        onCloned={onCloned}
-        onCloneError={onCloneError}
-        onDeleted={onDeleted}
-        onDeleteError={onDeleteError}
-        onDownloaded={onDownloaded}
-        onDownloadError={onDownloadError}
-        onInteraction={onInteraction}
-      >
-        {other => (
-          <React.Fragment>
-            {children({
-              ...other,
-              create: openAuditDialog,
-              edit: openAuditDialog,
-              start: handleAuditStart,
-              stop: handleAuditStop,
-              resume: handleAuditResume,
-              reportDownload: handleReportDownload,
-              gcrFormatDefined,
-            })}
-
-            {auditDialogVisible && (
-              <TargetComponent
-                onCreated={handleTargetCreated}
-                onInteraction={onInteraction}
-              >
-                {({create: createtarget}) => (
-                  <AlertComponent
-                    onCreated={handleAlertCreated}
-                    onInteraction={onInteraction}
-                  >
-                    {({create: createalert}) => (
-                      <ScheduleComponent
-                        onCreated={handleScheduleCreated}
-                        onInteraction={onInteraction}
-                      >
-                        {({create: createschedule}) => (
-                          <AuditDialog
-                            alerts={alerts}
-                            alertIds={alertIds}
-                            alterable={alterable}
-                            autoDelete={autoDelete}
-                            autoDeleteReports={autoDeleteReports}
-                            comment={comment}
-                            policyId={policyId}
-                            id={id}
-                            createAssets={createAssets}
-                            isLoadingAlerts={isLoadingAlerts}
-                            isLoadingPolicies={isLoadingPolicies}
-                            isLoadingScanners={isLoadingScanners}
-                            isLoadingSchedules={isLoadingSchedules}
-                            isLoadingTargets={isLoadingTargets}
-                            maxConcurrentNvts={maxConcurrentNvts}
-                            maxConcurrentHosts={maxConcurrentHosts}
-                            name={name}
-                            policies={policies}
-                            scannerId={scannerId}
-                            scanners={scanners}
-                            scheduleId={scheduleId}
-                            schedulePeriods={schedulePeriods}
-                            schedules={schedules}
-                            targetId={targetId}
-                            targets={targets}
-                            audit={audit}
-                            title={title}
-                            onNewAlertClick={createalert}
-                            onNewTargetClick={createtarget}
-                            onNewScheduleClick={createschedule}
-                            onChange={handleChange}
-                            onClose={handleCloseAuditDialog}
-                            onSave={handleSaveAudit}
-                            onScannerChange={handleScannerChange}
-                          />
-                        )}
-                      </ScheduleComponent>
-                    )}
-                  </AlertComponent>
-                )}
-              </TargetComponent>
-            )}
-          </React.Fragment>
-        )}
-      </EntityComponent>
-      <Download ref={downloadRef} />
-    </React.Fragment>
-  );
-};
+  }
+}
 
 AuditComponent.propTypes = {
+  alerts: PropTypes.arrayOf(PropTypes.model),
+  capabilities: PropTypes.capabilities.isRequired,
   children: PropTypes.func.isRequired,
+  defaultAlertId: PropTypes.id,
+  defaultScannerId: PropTypes.id,
+  defaultScheduleId: PropTypes.id,
+  defaultTargetId: PropTypes.id,
+  gmp: PropTypes.gmp.isRequired,
+  isLoadingScanners: PropTypes.bool,
+  loadAlerts: PropTypes.func.isRequired,
+  loadPolicies: PropTypes.func.isRequired,
+  loadReportFormats: PropTypes.func.isRequired,
+  loadScanners: PropTypes.func.isRequired,
+  loadSchedules: PropTypes.func.isRequired,
+  loadTargets: PropTypes.func.isRequired,
+  loadUserSettingsDefaults: PropTypes.func.isRequired,
+  policies: PropTypes.arrayOf(PropTypes.model),
+  reportExportFileName: PropTypes.object,
+  reportFormats: PropTypes.array,
+  scanners: PropTypes.arrayOf(PropTypes.model),
+  schedules: PropTypes.arrayOf(PropTypes.model),
+  targets: PropTypes.arrayOf(PropTypes.model),
+  username: PropTypes.string,
   onCloneError: PropTypes.func,
   onCloned: PropTypes.func,
   onCreateError: PropTypes.func,
@@ -648,4 +600,61 @@ AuditComponent.propTypes = {
   onStopped: PropTypes.func,
 };
 
-export default AuditComponent;
+const mapStateToProps = (rootState, {match}) => {
+  const alertSel = alertSelector(rootState);
+  const userDefaults = getUserSettingsDefaults(rootState);
+  const policiesSel = policiesSelector(rootState);
+  const scannersSel = scannerSelector(rootState);
+  const scheduleSel = scheduleSelector(rootState);
+  const targetSel = targetSelector(rootState);
+  const userDefaultsSelector = getUserSettingsDefaults(rootState);
+  const username = getUsername(rootState);
+
+  const reportFormatsSel = reportFormatsSelector(rootState);
+
+  const scannerList = scannersSel.getEntities(ALL_FILTER);
+  const scanners = isDefined(scannerList)
+    ? scannerList.filter(
+        scanner =>
+          scanner.scannerType === OPENVAS_SCANNER_TYPE ||
+          scanner.scannerType === GREENBONE_SENSOR_SCANNER_TYPE,
+      )
+    : undefined;
+
+  return {
+    alerts: alertSel.getEntities(ALL_FILTER),
+    defaultAlertId: userDefaults.getValueByName('defaultalert'),
+    defaultScannerId: userDefaults.getValueByName('defaultopenvasscanner'),
+    defaultScheduleId: userDefaults.getValueByName('defaultschedule'),
+    defaultTargetId: userDefaults.getValueByName('defaulttarget'),
+    isLoadingScanners: scannersSel.isLoadingAllEntities(ALL_FILTER),
+    reportExportFileName: userDefaultsSelector.getValueByName(
+      'reportexportfilename',
+    ),
+    reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
+    policies: policiesSel.getEntities(ALL_FILTER),
+    scanners,
+    schedules: scheduleSel.getEntities(ALL_FILTER),
+    targets: targetSel.getEntities(ALL_FILTER),
+    username,
+  };
+};
+
+const mapDispatchToProp = (dispatch, {gmp}) => ({
+  loadAlerts: () => dispatch(loadAlerts(gmp)(ALL_FILTER)),
+  loadPolicies: () => dispatch(loadPolicies(gmp)(ALL_FILTER)),
+  loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
+  loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),
+  loadTargets: () => dispatch(loadTargets(gmp)(ALL_FILTER)),
+  loadUserSettingsDefaults: () => dispatch(loadUserSettingDefaults(gmp)()),
+  loadReportFormats: () =>
+    dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
+});
+
+export default compose(
+  withGmp,
+  withCapabilities,
+  withDownload,
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProp),
+)(AuditComponent);

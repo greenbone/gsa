@@ -22,22 +22,21 @@ import styled from 'styled-components';
 import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
+import {isDefined} from 'gmp/utils/identity';
 
 import {parseFloat, parseYesNo} from 'gmp/parser';
 
-import {isDefined} from 'gmp/utils/identity';
-
 import SaveDialog from 'web/components/dialog/savedialog';
+
+import Section from 'web/components/section/section';
 
 import useFormValues from 'web/components/form/useFormValues';
 import useFormValidation from 'web/components/form/useFormValidation';
 
-import Section from 'web/components/section/section';
-
 import compose from 'web/utils/compose';
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import withCapabilities from 'web/utils/withCapabilities';
+import PropTypes from 'web/utils/proptypes';
 
 import DefaultsPart from './defaultspart';
 import FilterPart from './filterpart';

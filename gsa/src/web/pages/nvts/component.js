@@ -17,59 +17,56 @@
  */
 
 import React from 'react';
-import {ALL_FILTER} from 'gmp/models/filter';
 
-import EntityComponent from 'web/entity/component';
-import {useLazyGetNotes} from 'web/graphql/notes';
-import OverrideComponent from 'web/pages/overrides/component';
-import NoteComponent from 'web/pages/notes/component';
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from '../../utils/proptypes.js';
+
+import OverrideComponent from '../overrides/component.js';
+import NoteComponent from '../notes/component.js';
+
+import EntityComponent from '../../entity/component.js';
 
 const NvtComponent = ({
   children,
-  onCreated,
+  onChanged,
   onDownloaded,
   onDownloadError,
   onInteraction,
-}) => {
-  // GraphQL Loaders and Data
-  const [{refetch: refetchNotes}] = useLazyGetNotes({
-    filterString: ALL_FILTER.toFilterString(),
-  });
-
-  const handleNoteCreated = () => {
-    refetchNotes();
-  };
-
-  return (
-    <NoteComponent onCreated={handleNoteCreated} onInteraction={onInteraction}>
-      {({create: notecreate}) => (
-        <OverrideComponent onCreated={onCreated} onInteraction={onInteraction}>
-          {({create: overridecreate}) => (
-            <EntityComponent
-              name="nvt"
-              onDownloaded={onDownloaded}
-              onDownloadError={onDownloadError}
-              onInteraction={onInteraction}
-            >
-              {({download}) =>
-                children({
-                  overridecreate,
-                  notecreate,
-                  download,
-                })
-              }
-            </EntityComponent>
-          )}
-        </OverrideComponent>
-      )}
-    </NoteComponent>
-  );
-};
+}) => (
+  <NoteComponent
+    onCreated={onChanged}
+    onInteraction={onInteraction}
+    onSaved={onChanged}
+  >
+    {({create: notecreate}) => (
+      <OverrideComponent
+        onCreated={onChanged}
+        onInteraction={onInteraction}
+        onSaved={onChanged}
+      >
+        {({create: overridecreate}) => (
+          <EntityComponent
+            name="nvt"
+            onDownloaded={onDownloaded}
+            onDownloadError={onDownloadError}
+            onInteraction={onInteraction}
+          >
+            {({download}) =>
+              children({
+                overridecreate,
+                notecreate,
+                download,
+              })
+            }
+          </EntityComponent>
+        )}
+      </OverrideComponent>
+    )}
+  </NoteComponent>
+);
 
 NvtComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  onCreated: PropTypes.func,
+  onChanged: PropTypes.func,
   onDownloadError: PropTypes.func,
   onDownloaded: PropTypes.func,
   onInteraction: PropTypes.func.isRequired,

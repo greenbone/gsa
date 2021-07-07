@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import IconDivider from 'web/components/layout/icondivider';
 
@@ -51,67 +51,58 @@ const Actions = ({
   onAuditResumeClick,
   onAuditStartClick,
   onAuditStopClick,
-}) => {
-  const {reports} = entity;
-  const {lastReport} = reports;
-
-  return (
-    <IconDivider align={['center', 'center']} grow>
-      {isDefined(entity.schedule) ? (
-        <ScheduleIcon schedule={entity.schedule} links={links} />
-      ) : (
-        <StartIcon
-          task={entity}
-          usageType={_('audit')}
-          onClick={onAuditStartClick}
-        />
-      )}
-      <StopIcon
+}) => (
+  <IconDivider align={['center', 'center']} grow>
+    {isDefined(entity.schedule) ? (
+      <ScheduleIcon schedule={entity.schedule} links={links} />
+    ) : (
+      <StartIcon
         task={entity}
         usageType={_('audit')}
-        onClick={onAuditStopClick}
+        onClick={onAuditStartClick}
       />
-      <ResumeIcon
-        task={entity}
-        usageType={_('audit')}
-        onClick={onAuditResumeClick}
-      />
-      <TrashIcon
-        entity={entity}
-        name="task"
-        displayName="Audit"
-        onClick={onAuditDeleteClick}
-      />
-      <EditIcon
-        entity={entity}
-        name="task"
-        displayName="Audit"
-        onClick={onAuditEditClick}
-      />
-      <CloneIcon
-        entity={entity}
-        name="task"
-        displayName="Audit"
-        onClick={onAuditCloneClick}
-      />
-      <ExportIcon
-        value={entity}
-        title={_('Export Audit')}
-        onClick={onAuditDownloadClick}
-      />
-      <DownloadIcon
-        value={entity}
-        title={
-          gcrFormatDefined && hasValue(lastReport)
-            ? _('Download Greenbone Compliance Report')
-            : _('Report download not available')
-        }
-        onClick={onReportDownloadClick}
-        disabled={!gcrFormatDefined || !hasValue(lastReport)}
-      />
-    </IconDivider>
-  );
-};
+    )}
+    <StopIcon task={entity} usageType={_('audit')} onClick={onAuditStopClick} />
+    <ResumeIcon
+      task={entity}
+      usageType={_('audit')}
+      onClick={onAuditResumeClick}
+    />
+    <TrashIcon
+      entity={entity}
+      name="task"
+      displayName="Audit"
+      onClick={onAuditDeleteClick}
+    />
+    <EditIcon
+      entity={entity}
+      name="task"
+      displayName="Audit"
+      onClick={onAuditEditClick}
+    />
+    <CloneIcon
+      entity={entity}
+      name="task"
+      displayName="Audit"
+      onClick={onAuditCloneClick}
+    />
+    <ExportIcon
+      value={entity}
+      title={_('Export Audit')}
+      onClick={onAuditDownloadClick}
+    />
+    <DownloadIcon
+      value={entity}
+      title={
+        gcrFormatDefined && isDefined(entity.last_report)
+          ? _('Download Greenbone Compliance Report')
+          : _('Report download not available')
+      }
+      onClick={onReportDownloadClick}
+      disabled={!gcrFormatDefined || !isDefined(entity.last_report)}
+    />
+  </IconDivider>
+);
 
 Actions.propTypes = {
   entity: PropTypes.model.isRequired,

@@ -23,12 +23,14 @@ import registerCommand from 'gmp/command';
 
 import Target from 'gmp/models/target';
 
+import {UNSET_VALUE} from 'web/utils/render';
+
 import EntitiesCommand from './entities';
 import EntityCommand from './entity';
 
 const log = logger.getLogger('gmp.commands.targets');
 
-class TargetCommand extends EntityCommand {
+export class TargetCommand extends EntityCommand {
   constructor(http) {
     super(http, 'target', Target);
   }
@@ -47,6 +49,7 @@ class TargetCommand extends EntityCommand {
       alive_tests,
       allowSimultaneousIPs,
       ssh_credential_id = 0,
+      ssh_elevate_credential_id = 0,
       port,
       smb_credential_id = 0,
       esxi_credential_id = 0,
@@ -71,6 +74,10 @@ class TargetCommand extends EntityCommand {
       alive_tests,
       port,
       ssh_credential_id,
+      ssh_elevate_credential_id:
+        ssh_credential_id === UNSET_VALUE
+          ? UNSET_VALUE
+          : ssh_elevate_credential_id,
       smb_credential_id,
       esxi_credential_id,
       snmp_credential_id,
@@ -95,6 +102,7 @@ class TargetCommand extends EntityCommand {
       alive_tests,
       allowSimultaneousIPs,
       ssh_credential_id = 0,
+      ssh_elevate_credential_id = 0,
       port,
       smb_credential_id = 0,
       esxi_credential_id = 0,
@@ -124,6 +132,10 @@ class TargetCommand extends EntityCommand {
       smb_credential_id,
       snmp_credential_id,
       ssh_credential_id,
+      ssh_elevate_credential_id:
+        ssh_credential_id === UNSET_VALUE
+          ? UNSET_VALUE
+          : ssh_elevate_credential_id,
       target_source,
       target_exclude_source,
     });

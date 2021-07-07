@@ -17,16 +17,16 @@
  */
 import React from 'react';
 
+import {useLocation} from 'react-router-dom';
+
 import {connect} from 'react-redux';
 
-import {isDefined} from 'gmp/utils/identity';
+import FilterProvider from 'web/entities/filterprovider';
 
 import SubscriptionProvider from 'web/components/provider/subscriptionprovider';
 import Reload from 'web/components/loading/reload';
 import withDownload from 'web/components/form/withDownload';
 import withDialogNotification from 'web/components/notification/withDialogNotifiaction'; // eslint-disable-line max-len
-
-import FilterProvider from 'web/entities/filterprovider';
 
 import {pageFilter} from 'web/store/pages/actions';
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
@@ -51,49 +51,32 @@ const withEntitiesContainer = (
   let EntitiesContainerWrapper = ({
     children,
     filter,
-    entities,
-    entitiesCounts,
-    entitiesError,
-    loadedFilter,
     loadEntities,
     notify,
     ...props
-  }) => {
-    const reloadFunc = isDefined(loadEntities)
-      ? (newFilter = filter) => loadEntities(newFilter)
-      : undefined;
-    return (
-      <Reload
-        reloadInterval={() => reloadInterval(props)}
-        reload={reloadFunc}
-        name={gmpname}
-      >
-        {({reload}) => (
-          <EntitiesContainer
-            {...props}
-            filter={filter}
-            notify={notify}
-            gmpname={gmpname}
-            reload={reload}
-            entities={entities}
-            entitiesCounts={entitiesCounts}
-            entitiesError={entitiesError}
-            loadedFilter={loadedFilter}
-          >
-            {pageProps => <Component {...pageProps} />}
-          </EntitiesContainer>
-        )}
-      </Reload>
-    );
-  };
+  }) => (
+    <Reload
+      reloadInterval={() => reloadInterval(props)}
+      reload={(newFilter = filter) => loadEntities(newFilter)}
+      name={gmpname}
+    >
+      {({reload}) => (
+        <EntitiesContainer
+          {...props}
+          filter={filter}
+          notify={notify}
+          gmpname={gmpname}
+          reload={reload}
+        >
+          {pageProps => <Component {...pageProps} />}
+        </EntitiesContainer>
+      )}
+    </Reload>
+  );
 
   EntitiesContainerWrapper.propTypes = {
-    entities: PropTypes.array,
-    entitiesCounts: PropTypes.counts,
-    entitiesError: PropTypes.error,
     filter: PropTypes.filter,
-    loadEntities: PropTypes.func,
-    loadedFilter: PropTypes.filter,
+    loadEntities: PropTypes.func.isRequired,
     notify: PropTypes.func.isRequired,
   };
 
@@ -110,40 +93,44 @@ const withEntitiesContainer = (
     };
   };
 
-  const mapDispatchToProps = (dispatch, {gmp}) => {
-    const loadEntities = isDefined(loadEntitiesFunc)
-      ? filter => dispatch(loadEntitiesFunc(gmp)(filter))
-      : undefined;
-
-    return {
-      loadEntities,
-      updateFilter: filter => dispatch(pageFilter(gmpname, filter)),
-      onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-    };
-  };
+  const mapDispatchToProps = (dispatch, {gmp}) => ({
+    loadEntities: filter => dispatch(loadEntitiesFunc(gmp)(filter)),
+    updateFilter: filter => dispatch(pageFilter(gmpname, filter)),
+    onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
+  });
 
   EntitiesContainerWrapper = compose(
     withDialogNotification,
     withDownload,
     withGmp,
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(
+      mapStateToProps,
+      mapDispatchToProps,
+    ),
   )(EntitiesContainerWrapper);
 
-  return props => (
-    <SubscriptionProvider>
-      {({notify}) => (
-        <FilterProvider fallbackFilter={fallbackFilter} gmpname={gmpname}>
-          {({filter}) => (
-            <EntitiesContainerWrapper
-              {...props}
-              filter={filter}
-              notify={notify}
-            />
-          )}
-        </FilterProvider>
-      )}
-    </SubscriptionProvider>
-  );
+  return props => {
+    const location = useLocation();
+    return (
+      <SubscriptionProvider>
+        {({notify}) => (
+          <FilterProvider
+            fallbackFilter={fallbackFilter}
+            gmpname={gmpname}
+            locationQuery={location.query}
+          >
+            {({filter}) => (
+              <EntitiesContainerWrapper
+                {...props}
+                filter={filter}
+                notify={notify}
+              />
+            )}
+          </FilterProvider>
+        )}
+      </SubscriptionProvider>
+    );
+  };
 };
 
 export default withEntitiesContainer;

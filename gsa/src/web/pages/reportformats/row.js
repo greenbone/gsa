@@ -21,17 +21,17 @@ import React from 'react';
 import _ from 'gmp/locale';
 import {shortDate} from 'gmp/locale/date';
 
+import EntityNameTableData from 'web/entities/entitynametabledata';
+
 import Comment from 'web/components/comment/comment';
+
+import EditIcon from 'web/entity/icon/editicon';
+import TrashIcon from 'web/entity/icon/trashicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 
 import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
-
-import EntityNameTableData from 'web/entities/entitynametabledata';
-
-import EditIcon from 'web/entity/icon/editicon';
-import TrashIcon from 'web/entity/icon/trashicon';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';

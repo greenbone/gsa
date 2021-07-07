@@ -21,6 +21,12 @@ import _ from 'gmp/locale';
 
 import {ROLES_FILTER_FILTER} from 'gmp/models/filter';
 
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import EntitiesPage from 'web/entities/page';
+import withEntitiesContainer from 'web/entities/withEntitiesContainer';
+
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
 import RoleIcon from 'web/components/icon/roleicon';
@@ -30,16 +36,10 @@ import PageTitle from 'web/components/layout/pagetitle';
 
 import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
-import EntitiesPage from 'web/entities/page';
-import withEntitiesContainer from 'web/entities/withEntitiesContainer';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/roles';
-
-import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 import RoleComponent from './component';
 import Table, {SORT_FIELDS} from './table';

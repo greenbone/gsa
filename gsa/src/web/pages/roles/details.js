@@ -19,6 +19,8 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
+import PropTypes from 'web/utils/proptypes';
+
 import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
 
@@ -28,8 +30,6 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
-
-import PropTypes from 'web/utils/proptypes';
 
 const RoleDetails = ({entity, links = true}) => {
   const {users = [], comment} = entity;

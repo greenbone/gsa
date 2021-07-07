@@ -15,15 +15,34 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect} from 'react';
+import React from 'react';
+
+import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
-import DateTime from 'web/components/date/datetime';
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import {duration} from 'gmp/models/date';
+import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
+
+import {
+  loadEntity as loadSchedule,
+  selector as scheduleSelector,
+} from 'web/store/entities/schedules';
+
+import {
+  loadEntity as loadPolicy,
+  selector as policySelector,
+} from 'web/store/entities/policies';
+
+import PropTypes from 'web/utils/proptypes';
+import compose from 'web/utils/compose';
+import withGmp from 'web/utils/withGmp';
+import {renderYesNo} from 'web/utils/render';
+
+import DateTime from 'web/components/date/datetime';
 
 import HorizontalSep from 'web/components/layout/horizontalsep';
 import Layout from 'web/components/layout/layout';
@@ -37,240 +56,269 @@ import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
 
-import {useLazyGetSchedule} from 'web/graphql/schedules';
-import {useLazyGetPolicy} from 'web/graphql/policies';
-
 import {compareAlerts} from 'web/pages/tasks/details';
 
-import PropTypes from 'web/utils/proptypes';
-import {renderYesNo} from 'web/utils/render';
+class AuditDetails extends React.Component {
+  componentDidMount() {
+    const {entity} = this.props;
 
-const AuditDetails = ({entity, links = true}) => {
-  const [loadSchedule, {schedule}] = useLazyGetSchedule(entity?.schedule?.id);
-  const [loadPolicy, {policy = undefined}] = useLazyGetPolicy(
-    entity?.policy?.id,
-  );
-
-  useEffect(() => {
-    if (hasValue(entity.schedule)) {
-      loadSchedule(entity.schedule.id);
+    if (isDefined(entity.config)) {
+      this.props.loadPolicy(entity.config.id);
     }
-    if (hasValue(entity.policy)) {
-      loadPolicy(entity.policy.id);
+    if (isDefined(entity.schedule)) {
+      this.props.loadSchedule(entity.schedule.id);
     }
-  }, [loadSchedule, loadPolicy]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const {
-    alerts,
-    averageDuration,
-    preferences = {},
-    scanner,
-    schedulePeriods,
-    target,
-    reports,
-  } = entity;
-
-  const {lastReport} = reports;
-
-  const {
-    autoDeleteReports,
-    createAssets,
-    maxConcurrentHosts,
-    maxConcurrentNvts,
-  } = preferences;
-
-  let dur;
-  const hasDuration = hasValue(lastReport) && hasValue(lastReport.scanStart);
-  if (hasDuration) {
-    if (hasValue(lastReport.scanEnd)) {
-      const diff = lastReport.scanEnd.diff(lastReport.scanStart);
-      dur = duration(diff).humanize();
-    } else {
-      dur = _('Not finished yet');
-    }
-  } else {
-    dur = _('No scans yet');
   }
 
-  const hasAvDuration = hasValue(averageDuration) && averageDuration > 0;
-  const avDuration = hasAvDuration ? averageDuration.humanize() : '';
+  render() {
+    const {links = true, entity, policy, schedule} = this.props;
+    const {
+      alerts,
+      auto_delete,
+      auto_delete_data,
+      average_duration,
+      config,
+      hosts_ordering,
+      in_assets,
+      last_report,
+      scanner,
+      schedule_periods,
+      target,
+      max_checks,
+      max_hosts,
+    } = entity;
 
-  return (
-    <Layout grow="1" flex="column">
-      {hasValue(target) && (
-        <DetailsBlock title={_('Target')}>
-          <DetailsLink textOnly={!links} type="target" id={target.id}>
-            {target.name}
-          </DetailsLink>
-        </DetailsBlock>
-      )}
+    let dur;
+    const hasDuration =
+      isDefined(last_report) && isDefined(last_report.scan_start);
+    if (hasDuration) {
+      if (isDefined(last_report.scan_end)) {
+        const diff = last_report.scan_end.diff(last_report.scan_start);
+        dur = duration(diff).humanize();
+      } else {
+        dur = _('Not finished yet');
+      }
+    } else {
+      dur = _('No scans yet');
+    }
 
-      {hasValue(alerts) && (
-        <DetailsBlock title={_('Alerts')}>
-          <HorizontalSep>
-            {alerts.sort(compareAlerts).map(alert => (
-              <span key={alert.id}>
-                <DetailsLink textOnly={!links} type="alert" id={alert.id}>
-                  {alert.name}
-                </DetailsLink>
-              </span>
-            ))}
-          </HorizontalSep>
-        </DetailsBlock>
-      )}
+    const hasAvDuration = isDefined(average_duration) && average_duration > 0;
+    const avDuration = hasAvDuration ? average_duration.humanize() : '';
 
-      {hasValue(scanner) && (
-        <DetailsBlock title={_('Scanner')}>
-          <DetailsTable>
-            <TableBody>
-              <TableRow>
-                <TableData>{_('Name')}</TableData>
-                <TableData>
-                  <span>
-                    <DetailsLink
-                      textOnly={!links}
-                      type="scanner"
-                      id={scanner.id}
-                    >
-                      {scanner.name}
-                    </DetailsLink>
-                  </span>
-                </TableData>
-              </TableRow>
-              <TableRow>
-                <TableData>{_('Type')}</TableData>
-                <TableData>{scannerTypeName(scanner.scannerType)}</TableData>
-              </TableRow>
-              {hasValue(policy) && (
+    return (
+      <Layout grow="1" flex="column">
+        {isDefined(target) && (
+          <DetailsBlock title={_('Target')}>
+            <DetailsLink textOnly={!links} type="target" id={target.id}>
+              {target.name}
+            </DetailsLink>
+          </DetailsBlock>
+        )}
+
+        {isDefined(alerts) && (
+          <DetailsBlock title={_('Alerts')}>
+            <HorizontalSep>
+              {alerts.sort(compareAlerts).map(alert => (
+                <span key={alert.id}>
+                  <DetailsLink textOnly={!links} type="alert" id={alert.id}>
+                    {alert.name}
+                  </DetailsLink>
+                </span>
+              ))}
+            </HorizontalSep>
+          </DetailsBlock>
+        )}
+
+        {isDefined(scanner) && (
+          <DetailsBlock title={_('Scanner')}>
+            <DetailsTable>
+              <TableBody>
                 <TableRow>
-                  <TableData>{_('Policy')}</TableData>
+                  <TableData>{_('Name')}</TableData>
                   <TableData>
                     <span>
                       <DetailsLink
                         textOnly={!links}
-                        type="policy"
-                        id={policy.id}
+                        type="scanner"
+                        id={scanner.id}
                       >
-                        {policy.name}
+                        {scanner.name}
                       </DetailsLink>
                     </span>
                   </TableData>
                 </TableRow>
-              )}
-              {hasValue(maxConcurrentNvts) && ( // policies do not have types anymore
                 <TableRow>
-                  <TableData>
-                    {_('Maximum concurrently executed NVTs per host')}
-                  </TableData>
-                  <TableData>{maxConcurrentNvts}</TableData>
+                  <TableData>{_('Type')}</TableData>
+                  <TableData>{scannerTypeName(scanner.scannerType)}</TableData>
                 </TableRow>
-              )}
-              {hasValue(maxConcurrentHosts) && (
-                <TableRow>
-                  <TableData>
-                    {_('Maximum concurrently scanned hosts')}
-                  </TableData>
-                  <TableData>{maxConcurrentHosts}</TableData>
-                </TableRow>
-              )}
-            </TableBody>
-          </DetailsTable>
-        </DetailsBlock>
-      )}
+                {isDefined(config) && (
+                  <TableRow>
+                    <TableData>{_('Policy')}</TableData>
+                    <TableData>
+                      <span>
+                        <DetailsLink
+                          textOnly={!links}
+                          type="policy"
+                          id={config.id}
+                        >
+                          {config.name}
+                        </DetailsLink>
+                      </span>
+                    </TableData>
+                  </TableRow>
+                )}
+                {isDefined(policy) &&
+                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE && (
+                    <TableRow>
+                      <TableData>{_('Order for target hosts')}</TableData>
+                      <TableData>{hosts_ordering}</TableData>
+                    </TableRow>
+                  )}
+                {isDefined(policy) &&
+                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                  isDefined(max_checks) && (
+                    <TableRow>
+                      <TableData>
+                        {_('Maximum concurrently executed NVTs per host')}
+                      </TableData>
+                      <TableData>{max_checks}</TableData>
+                    </TableRow>
+                  )}
+                {isDefined(policy) &&
+                  policy.policy_type === OPENVAS_SCAN_CONFIG_TYPE &&
+                  isDefined(max_hosts) && (
+                    <TableRow>
+                      <TableData>
+                        {_('Maximum concurrently scanned hosts')}
+                      </TableData>
+                      <TableData>{max_hosts}</TableData>
+                    </TableRow>
+                  )}
+              </TableBody>
+            </DetailsTable>
+          </DetailsBlock>
+        )}
 
-      <DetailsBlock title={_('Assets')}>
-        <DetailsTable>
-          <TableBody>
-            <TableRow>
-              <TableData>{_('Add to Assets')}</TableData>
-              <TableData>{renderYesNo(createAssets)}</TableData>
-            </TableRow>
-          </TableBody>
-        </DetailsTable>
-      </DetailsBlock>
-
-      {hasValue(schedule) && (
-        <DetailsBlock title={_('Schedule')}>
+        <DetailsBlock title={_('Assets')}>
           <DetailsTable>
             <TableBody>
               <TableRow>
-                <TableData>{_('Name')}</TableData>
-                <TableData>
-                  <span>
-                    <DetailsLink
-                      textOnly={!links}
-                      type="schedule"
-                      id={schedule.id}
-                    >
-                      {schedule.name}
-                    </DetailsLink>
-                  </span>
-                </TableData>
+                <TableData>{_('Add to Assets')}</TableData>
+                <TableData>{renderYesNo(in_assets)}</TableData>
               </TableRow>
-              {hasValue(schedule.event) && (
-                <TableRow>
-                  <TableData>{_('Next')}</TableData>
-                  <TableData>
-                    {isDefined(schedule.event.nextDate) ? (
-                      <DateTime date={schedule.event.nextDate} />
-                    ) : (
-                      _('N/A')
-                    )}
-                  </TableData>
-                </TableRow>
-              )}
             </TableBody>
           </DetailsTable>
         </DetailsBlock>
-      )}
 
-      <DetailsBlock title={_('Scan')}>
-        <DetailsTable>
-          <TableBody>
-            <TableRow>
-              <TableData>{_('Duration of last Scan')}</TableData>
-              <TableData>{dur}</TableData>
-            </TableRow>
-            {hasAvDuration && (
+        {isDefined(schedule) && (
+          <DetailsBlock title={_('Schedule')}>
+            <DetailsTable>
+              <TableBody>
+                <TableRow>
+                  <TableData>{_('Name')}</TableData>
+                  <TableData>
+                    <span>
+                      <DetailsLink
+                        textOnly={!links}
+                        type="schedule"
+                        id={schedule.id}
+                      >
+                        {schedule.name}
+                      </DetailsLink>
+                    </span>
+                  </TableData>
+                </TableRow>
+                {isDefined(schedule.event) && (
+                  <TableRow>
+                    <TableData>{_('Next')}</TableData>
+                    <TableData>
+                      {isDefined(schedule.event.nextDate) ? (
+                        <DateTime date={schedule.event.nextDate} />
+                      ) : (
+                        _('N/A')
+                      )}
+                    </TableData>
+                  </TableRow>
+                )}
+              </TableBody>
+            </DetailsTable>
+          </DetailsBlock>
+        )}
+
+        <DetailsBlock title={_('Scan')}>
+          <DetailsTable>
+            <TableBody>
               <TableRow>
-                <TableData>{_('Average Scan duration')}</TableData>
-                <TableData>{avDuration}</TableData>
+                <TableData>{_('Duration of last Scan')}</TableData>
+                <TableData>{dur}</TableData>
               </TableRow>
-            )}
-            {schedulePeriods > 0 && (
+              {hasAvDuration && (
+                <TableRow>
+                  <TableData>{_('Average Scan duration')}</TableData>
+                  <TableData>{avDuration}</TableData>
+                </TableRow>
+              )}
+              {schedule_periods > 0 && (
+                <TableRow>
+                  <TableData>{_('Period')}</TableData>
+                  <TableData>
+                    {schedule_periods > 1
+                      ? _('{{nr}} more times', {nr: schedule_periods})
+                      : _('Once')}
+                  </TableData>
+                </TableRow>
+              )}
               <TableRow>
-                <TableData>{_('Period')}</TableData>
+                <TableData>{_('Auto delete Reports')}</TableData>
                 <TableData>
-                  {schedulePeriods > 1
-                    ? _('{{nr}} more times', {nr: schedulePeriods})
-                    : _('Once')}
+                  {auto_delete === 'keep'
+                    ? _(
+                        'Automatically delete oldest reports but always keep ' +
+                          'newest {{nr}} reports',
+                        {nr: auto_delete_data},
+                      )
+                    : _('Do not automatically delete reports')}
                 </TableData>
               </TableRow>
-            )}
-            <TableRow>
-              <TableData>{_('Auto delete Reports')}</TableData>
-              <TableData>
-                {hasValue(autoDeleteReports)
-                  ? _(
-                      'Automatically delete oldest reports but always keep ' +
-                        'newest {{nr}} reports',
-                      {nr: autoDeleteReports},
-                    )
-                  : _('Do not automatically delete reports')}
-              </TableData>
-            </TableRow>
-          </TableBody>
-        </DetailsTable>
-      </DetailsBlock>
-    </Layout>
-  );
-};
+            </TableBody>
+          </DetailsTable>
+        </DetailsBlock>
+      </Layout>
+    );
+  }
+}
 
 AuditDetails.propTypes = {
   entity: PropTypes.model.isRequired,
+  gmp: PropTypes.gmp.isRequired,
   links: PropTypes.bool,
+  loadPolicy: PropTypes.func.isRequired,
+  loadSchedule: PropTypes.func.isRequired,
+  policy: PropTypes.model,
+  schedule: PropTypes.model,
 };
 
-export default AuditDetails;
+const mapStateToProps = (rootState, {entity = {}}) => {
+  const scheduleSel = scheduleSelector(rootState);
+  const policySel = policySelector(rootState);
+  return {
+    policy: isDefined(entity.config)
+      ? policySel.getEntity(entity.config.id)
+      : undefined,
+    schedule: isDefined(entity.schedule)
+      ? scheduleSel.getEntity(entity.schedule.id)
+      : undefined,
+  };
+};
+
+const mapDispatchToProps = (dispatch, {gmp}) => ({
+  loadPolicy: id => dispatch(loadPolicy(gmp)(id)),
+  loadSchedule: id => dispatch(loadSchedule(gmp)(id)),
+});
+
+export default compose(
+  withGmp,
+  connect(mapStateToProps, mapDispatchToProps),
+)(AuditDetails);
 
 // vim: set ts=2 sw=2 tw=80:

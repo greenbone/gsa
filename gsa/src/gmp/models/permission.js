@@ -16,34 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {hasValue, isDefined} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
+import Model, {parseModelFromElement} from 'gmp/model';
 
 class Permission extends Model {
   static entityType = 'permission';
-
-  static parseObject(object) {
-    const ret = super.parseObject(object);
-
-    if (hasValue(object.resource) && !isEmpty(object.resource.id)) {
-      ret.resource = parseModelFromObject(
-        object.resource,
-        object.resource.type,
-      );
-    } else {
-      delete ret.resource;
-    }
-
-    if (hasValue(object.subject) && !isEmpty(object.subject.id)) {
-      ret.subject = parseModelFromObject(object.subject, object.subject.type);
-    } else {
-      delete ret.subject;
-    }
-
-    return ret;
-  }
 
   static parseElement(element) {
     const ret = super.parseElement(element);

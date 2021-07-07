@@ -17,14 +17,13 @@
  */
 import {_l} from 'gmp/locale/lang';
 
-import {createEntitiesFooter} from 'web/entities/footer';
-import {createEntitiesTable} from 'web/entities/table';
-import withRowDetails from 'web/entities/withRowDetails';
+import {createEntitiesFooter} from '../../entities/footer.js';
+import {createEntitiesTable} from '../../entities/table.js';
+import withRowDetails from '../../entities/withRowDetails.js';
 
-import Header from 'web/pages/groups/header';
-
-import Row from './row';
-import RoleDetails from './details';
+import Header from '../groups/header.js';
+import Row from './row.js';
+import RoleDetails from './details.js';
 
 export const SORT_FIELDS = [
   {

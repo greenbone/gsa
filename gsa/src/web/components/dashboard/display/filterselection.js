@@ -24,10 +24,10 @@ import _ from 'gmp/locale';
 
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
-import SaveDialog from 'web/components/dialog/savedialog';
+import SaveDialog from '../../dialog/savedialog';
 
-import FormGroup from 'web/components/form/formgroup';
-import Select from 'web/components/form/select';
+import FormGroup from '../../form/formgroup';
+import Select from '../../form/select';
 
 import {loadEntities, selector} from 'web/store/entities/filters';
 

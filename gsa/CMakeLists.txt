@@ -19,7 +19,7 @@ cmake_minimum_required (VERSION 3.0)
 
 message ("-- Configuring gsa")
 
-project (gsa VERSION 22.04.0 LANGUAGES)
+project (gsa VERSION 21.10.0 LANGUAGES)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -301,11 +301,9 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/alterableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/arrowicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/auditicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/bpmicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/calendaricon.js
      ${GSA_SRC_DIR}/src/web/components/icon/certbundadvicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cloneicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/condcoloricon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cpeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/cpelogoicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/credentialicon.js
@@ -325,7 +323,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/downloadkeyicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadrpmicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/downloadsvgicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/edgeicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/editicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/enableicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/exporticon.js
@@ -347,13 +344,10 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/listsvgicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/logouticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/manualicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/magnifiericon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/minusicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/mysettingsicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newnoteicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newoverrideicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/newprocessicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/newticketicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/nexticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/noteicon.js
@@ -363,7 +357,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/overrideicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/performanceicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/permissionicon.js
-     ${GSA_SRC_DIR}/src/web/components/icon/plusicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/policyicon.js
      ${GSA_SRC_DIR}/src/web/components/icon/portlisticon.js
      ${GSA_SRC_DIR}/src/web/components/icon/previousicon.js
@@ -424,10 +417,8 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alert.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/alterable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/audit.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/bpm.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/calendar.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cert_bund_adv.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/cond_color.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/clone.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/config.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/cpe.svg
@@ -448,7 +439,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_rpm.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/dl_svg.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/download.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/edge.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/edit.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/enable.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/export.svg
@@ -472,11 +462,8 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_vendorfix.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_willnotfix.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/st_workaround.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/magnifier.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/minus.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/my_setting.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/new_process.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_note.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/new_ticket.svg
@@ -487,7 +474,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/icon/svg/override.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/performance.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/permission.svg
-     ${GSA_SRC_DIR}/src/web/components/icon/svg/plus.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/policy.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/port_list.svg
      ${GSA_SRC_DIR}/src/web/components/icon/svg/previous.svg
@@ -576,19 +562,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/components/powerfilter/solutiontypegroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/sortbygroup.js
      ${GSA_SRC_DIR}/src/web/components/powerfilter/withFilterDialog.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/background.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/createprocessdialog.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/edge.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/hosttable.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/processmap.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/processmaploader.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/processnode.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/processpanel.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/resultstable.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/tools.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/usecolorize.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/utils.js
-     ${GSA_SRC_DIR}/src/web/components/processmap/validationrules.js
      ${GSA_SRC_DIR}/src/web/components/provider/capabilitiesprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/gmpprovider.js
      ${GSA_SRC_DIR}/src/web/components/provider/iconsizeprovider.js
@@ -871,7 +844,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/portlists/portrangestable.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/row.js
      ${GSA_SRC_DIR}/src/web/pages/portlists/table.js
-     ${GSA_SRC_DIR}/src/web/pages/processmaps/processmapspage.js
      ${GSA_SRC_DIR}/src/web/pages/radius/dialog.js
      ${GSA_SRC_DIR}/src/web/pages/radius/radiuspage.js
      ${GSA_SRC_DIR}/src/web/pages/reportformats/component.js
@@ -1021,6 +993,7 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/tasks/row.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/status.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/table.js
+     ${GSA_SRC_DIR}/src/web/pages/tasks/task.js
      ${GSA_SRC_DIR}/src/web/pages/tasks/trend.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/component.js
      ${GSA_SRC_DIR}/src/web/pages/tickets/createdialog.js
@@ -1073,9 +1046,6 @@ set (GSA_JS_SRC_FILES
      ${GSA_SRC_DIR}/src/web/pages/vulns/table.js
      ${GSA_SRC_DIR}/src/web/routes.js
      ${GSA_SRC_DIR}/src/web/store/actions.js
-     ${GSA_SRC_DIR}/src/web/store/businessprocessmaps/actions.js
-     ${GSA_SRC_DIR}/src/web/store/businessprocessmaps/reducers.js
-     ${GSA_SRC_DIR}/src/web/store/businessprocessmaps/selectors.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/data/actions.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/data/loader.js
      ${GSA_SRC_DIR}/src/web/store/dashboard/data/reducers.js

@@ -29,7 +29,7 @@ import Select from 'web/components/form/select';
 
 import Divider from 'web/components/layout/divider';
 
-import PropTypes from 'web/utils/proptypes';
+import PropTypes from 'web/utils/proptypes.js';
 import withPrefix from 'web/utils/withPrefix';
 
 const TaskEventPart = ({prefix, event, status, onChange, onEventChange}) => (

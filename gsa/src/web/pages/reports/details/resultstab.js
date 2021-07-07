@@ -265,7 +265,6 @@ ResultsTab.propTypes = {
   reportFilter: PropTypes.filter.isRequired,
   reportId: PropTypes.id.isRequired,
   reportResultsCounts: PropTypes.counts,
-  results: PropTypes.array,
   resultsCounts: PropTypes.counts,
   resultsError: PropTypes.error,
   resultsFilter: PropTypes.filter,

@@ -21,10 +21,10 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import FormGroup from 'web/components/form/formgroup';
-import Spinner from 'web/components/form/spinner';
+import PropTypes from '../../utils/proptypes.js';
 
-import PropTypes from 'web/utils/proptypes';
+import FormGroup from '../form/formgroup.js';
+import Spinner from '../form/spinner.js';
 
 const FirstResultGroup = ({first, filter, onChange, name = 'first'}) => {
   if (isDefined(filter)) {

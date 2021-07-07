@@ -22,39 +22,22 @@ import {map} from 'gmp/utils/array';
 
 import Info from './info';
 
-import {parseSeverity, parseScoreToSeverity, parseDate} from 'gmp/parser';
+import {parseSeverity, parseDate} from 'gmp/parser';
 
 class Cpe extends Info {
   static entityType = 'cpe';
-
-  static parseObject(object) {
-    const ret = super.parseObject(object);
-
-    ret.severity = parseScoreToSeverity(ret.score);
-    delete ret.score;
-
-    return ret;
-  }
 
   static parseElement(element) {
     const ret = super.parseElement(element, 'cpe');
     ret.severity = parseSeverity(ret.severity);
 
-    ret.cveRefCount = ret.cve_refs;
-    delete ret.cve_refs;
-
-    if (isDefined(ret.nvd_id)) {
-      ret.nvdId = ret.nvd_id;
-      delete ret.nvd_id;
-    }
-
     if (isDefined(ret.cves) && isDefined(ret.cves.cve)) {
-      ret.cveRefs = map(ret.cves.cve, cve => ({
+      ret.cves = map(ret.cves.cve, cve => ({
         id: cve.entry._id,
         severity: parseSeverity(cve.entry.cvss.base_metrics.score),
       }));
     } else {
-      ret.cveRefs = [];
+      ret.cves = [];
     }
 
     if (isEmpty(ret.status)) {

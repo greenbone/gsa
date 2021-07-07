@@ -24,16 +24,6 @@ import _ from 'gmp/locale';
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 
-import SaveDialog from 'web/components/dialog/savedialog';
-
-import FormGroup from 'web/components/form/formgroup';
-import Select from 'web/components/form/select';
-
-import NewIcon from 'web/components/icon/newicon';
-import ResetIcon from 'web/components/icon/reseticon';
-
-import IconDivider from 'web/components/layout/icondivider';
-
 import {
   resetSettings,
   saveSettings,
@@ -43,6 +33,16 @@ import getDashboardSettings from 'web/store/dashboard/settings/selectors';
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
+
+import SaveDialog from 'web/components/dialog/savedialog';
+
+import FormGroup from 'web/components/form/formgroup';
+import Select from 'web/components/form/select';
+
+import NewIcon from 'web/components/icon/newicon';
+import ResetIcon from 'web/components/icon/reseticon';
+
+import IconDivider from 'web/components/layout/icondivider';
 
 import {getDisplay} from './registry';
 import {
@@ -200,7 +200,10 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 )(DashboardControls);
 
 // vim: set ts=2 sw=2 tw=80:

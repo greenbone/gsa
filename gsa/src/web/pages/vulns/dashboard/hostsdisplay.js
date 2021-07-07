@@ -26,6 +26,8 @@ import Filter, {VULNS_FILTER_FILTER} from 'gmp/models/filter';
 import {parseFloat} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+
 import BarChart from 'web/components/chart/bar';
 import DataDisplay from 'web/components/dashboard/display/datadisplay';
 import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'; // eslint-disable-line max-len
@@ -36,8 +38,6 @@ import {
   percent,
 } from 'web/components/dashboard/display/utils';
 import {registerDisplay} from 'web/components/dashboard/registry';
-
-import PropTypes from 'web/utils/proptypes';
 
 import {VulnsHostsLoader} from './loaders';
 

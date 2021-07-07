@@ -18,7 +18,7 @@
 
 import React from 'react';
 
-import Field from './field';
+import Field from './field.js';
 
 const PasswordField = props => <Field {...props} type="password" />;
 

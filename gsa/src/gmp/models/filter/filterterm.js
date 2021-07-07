@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined} from '../../utils/identity';
 
-import convert from './convert';
+import convert from './convert.js';
 
 const RELATIONS = ['=', ':', '~', '>', '<'];
 

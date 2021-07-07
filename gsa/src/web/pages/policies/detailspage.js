@@ -16,15 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React, {useEffect} from 'react';
-import {useHistory, useParams} from 'react-router-dom';
+import React from 'react';
 
 import _ from 'gmp/locale';
-
-import {hasValue} from 'gmp/utils/identity';
-
-import Download from 'web/components/form/download';
-import useDownload from 'web/components/form/useDownload';
 
 import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
@@ -36,11 +30,6 @@ import ListIcon from 'web/components/icon/listicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import PolicyIcon from 'web/components/icon/policyicon';
 
-import useReload from 'web/components/loading/useReload';
-
-import DialogNotification from 'web/components/notification/dialognotification';
-import useDialogNotification from 'web/components/notification/useDialogNotification';
-
 import Tab from 'web/components/tab/tab';
 import TabLayout from 'web/components/tab/tablayout';
 import TabList from 'web/components/tab/tablist';
@@ -49,39 +38,35 @@ import TabPanels from 'web/components/tab/tabpanels';
 import Tabs from 'web/components/tab/tabs';
 
 import EntityPage from 'web/entity/page';
-import {goto_list} from 'web/entity/component';
+import {goto_details, goto_list} from 'web/entity/component';
 import EntityPermissions from 'web/entity/permissions';
 import EntitiesTab from 'web/entity/tab';
-import {permissionsResourceFilter} from 'web/entity/withEntityContainer';
+import withEntityContainer, {
+  permissionsResourceFilter,
+} from 'web/entity/withEntityContainer';
 
 import CloneIcon from 'web/entity/icon/cloneicon';
 import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
-import useExportEntity from 'web/entity/useExportEntity';
 
-import {useGetPermissions} from 'web/graphql/permissions';
+import {selector, loadEntity} from 'web/store/entities/policies';
+
 import {
-  useClonePolicy,
-  useDeletePolicy,
-  useExportPoliciesByIds,
-  useGetPolicy,
-} from 'web/graphql/policies';
+  selector as permissionsSelector,
+  loadEntities as loadPermissions,
+} from 'web/store/entities/permissions';
+
+import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import PolicyDetails from './details';
+import PolicyComponent from './component';
 
 import {
   NvtFamilies,
   ScannerPreferences,
   NvtPreferences,
 } from 'web/pages/scanconfigs/detailspage';
-
-import {goto_entity_details} from 'web/utils/graphql';
-
-import PropTypes from 'web/utils/proptypes';
-import useDefaultReloadInterval from 'web/utils/useDefaultReloadInterval';
-import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import withCapabilities from 'web/utils/withCapabilities';
-
-import PolicyDetails from './details';
-import PolicyComponent from './component';
 
 export const ToolBarIcons = withCapabilities(
   ({
@@ -148,108 +133,45 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
 };
 
-const Page = () => {
-  // Page methods
-  const {id} = useParams();
-  const history = useHistory();
-  const [, renewSessionTimeout] = useUserSessionTimeout();
-  const [downloadRef, handleDownload] = useDownload();
-  const {
-    dialogState: notificationDialogState,
-    closeDialog: closeNotificationDialog,
-    showError,
-  } = useDialogNotification();
-
-  // Load policy related entities
-  const {
-    policy,
-    refetch: refetchPolicy,
-    loading,
-    error: entityError,
-  } = useGetPolicy(id, {fetchPolicy: 'no-cache'}); // if we allow caching, all scanner preferences will be parsed as auto_enable_dependencies
-  const {permissions = [], refetch: refetchPermissions} = useGetPermissions({
-    filterString: permissionsResourceFilter(id).toFilterString(),
-  });
-
-  // Policy related mutations
-  const exportEntity = useExportEntity();
-
-  const [clonePolicy] = useClonePolicy();
-  const [deletePolicy] = useDeletePolicy();
-  const exportPolicy = useExportPoliciesByIds();
-
-  // Policy methods
-  const handleClonePolicy = clonedPolicy => {
-    return clonePolicy(clonedPolicy.id)
-      .then(policyId => goto_entity_details('policy', {history})(policyId))
-      .catch(showError);
-  };
-
-  const handleDeletePolicy = deletedPolicy => {
-    return deletePolicy(deletedPolicy.id)
-      .then(goto_list('policy', {history}))
-      .catch(showError);
-  };
-
-  const handleDownloadPolicy = exportedPolicy => {
-    exportEntity({
-      entity: exportedPolicy,
-      exportFunc: exportPolicy,
-      resourceType: 'policies',
-      onDownload: handleDownload,
-      showError,
-    });
-  };
-
-  // Timeout and reload
-  const timeoutFunc = useDefaultReloadInterval();
-
-  const [startReload, stopReload, hasRunningTimer] = useReload(
-    refetchPolicy,
-    timeoutFunc,
-  );
-
-  useEffect(() => {
-    // start reloading if policy is available and no timer is running yet
-    if (hasValue(policy) && !hasRunningTimer) {
-      startReload();
-    }
-  }, [policy, startReload]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // stop reload on unmount
-  useEffect(() => stopReload, [stopReload]);
+const Page = ({
+  entity,
+  permissions = [],
+  onChanged,
+  onDownloaded,
+  onError,
+  onInteraction,
+  ...props
+}) => {
   return (
     <PolicyComponent
-      onCloned={goto_entity_details('policy', {history})}
-      onCloneError={showError}
-      onDeleted={goto_list('policies', {history})}
-      onDeleteError={showError}
-      onDownloaded={handleDownload}
-      onDownloadError={showError}
-      onInteraction={renewSessionTimeout}
-      onSaved={() => refetchPolicy()}
+      onCloned={goto_details('policies', props)}
+      onCloneError={onError}
+      onDeleted={goto_list('policies', props)}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+      onSaved={onChanged}
     >
-      {({edit, save}) => (
+      {({clone, delete: delete_func, download, edit, save}) => (
         <EntityPage
-          entity={policy}
-          entityError={entityError}
-          entityType={'policy'}
-          isLoading={loading}
+          {...props}
+          entity={entity}
           sectionIcon={<PolicyIcon size="large" />}
           toolBarIcons={ToolBarIcons}
           title={_('Policy')}
-          onInteraction={renewSessionTimeout}
-          onPolicyCloneClick={handleClonePolicy}
-          onPolicyDeleteClick={handleDeletePolicy}
-          onPolicyDownloadClick={handleDownloadPolicy}
+          onInteraction={onInteraction}
+          onPolicyCloneClick={clone}
+          onPolicyDeleteClick={delete_func}
+          onPolicyDownloadClick={download}
           onPolicyEditClick={edit}
           onPolicySaveClick={save}
         >
           {({activeTab = 0, onActivateTab}) => {
-            const {preferences} = policy;
+            const {preferences} = entity;
             return (
               <React.Fragment>
-                <PageTitle title={_('Policy: {{name}}', {name: policy.name})} />
+                <PageTitle title={_('Policy: {{name}}', {name: entity.name})} />
                 <Layout grow="1" flex="column">
                   <TabLayout grow="1" align={['start', 'end']}>
                     <TabList
@@ -261,7 +183,7 @@ const Page = () => {
                       <EntitiesTab entities={preferences.scanner}>
                         {_('Scanner Preferences')}
                       </EntitiesTab>
-                      <EntitiesTab entities={policy.familyList}>
+                      <EntitiesTab entities={entity.family_list}>
                         {_('NVT Families')}
                       </EntitiesTab>
                       <EntitiesTab entities={preferences.nvt}>
@@ -276,35 +198,30 @@ const Page = () => {
                   <Tabs active={activeTab}>
                     <TabPanels>
                       <TabPanel>
-                        <Details entity={policy} />
+                        <Details entity={entity} />
                       </TabPanel>
                       <TabPanel>
-                        <ScannerPreferences entity={policy} />
+                        <ScannerPreferences entity={entity} />
                       </TabPanel>
                       <TabPanel>
-                        <NvtFamilies entity={policy} />
+                        <NvtFamilies entity={entity} />
                       </TabPanel>
                       <TabPanel>
-                        <NvtPreferences entity={policy} />
+                        <NvtPreferences entity={entity} />
                       </TabPanel>
                       <TabPanel>
                         <EntityPermissions
-                          entity={policy}
+                          entity={entity}
                           permissions={permissions}
-                          onChanged={() => refetchPermissions()}
-                          onDownloaded={handleDownload}
-                          onError={showError}
-                          onInteraction={renewSessionTimeout}
+                          onChanged={onChanged}
+                          onDownloaded={onDownloaded}
+                          onError={onError}
+                          onInteraction={onInteraction}
                         />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
                 </Layout>
-                <DialogNotification
-                  {...notificationDialogState}
-                  onCloseClick={closeNotificationDialog}
-                />
-                <Download ref={downloadRef} />
               </React.Fragment>
             );
           }}
@@ -314,6 +231,36 @@ const Page = () => {
   );
 };
 
-export default Page;
+Page.propTypes = {
+  entity: PropTypes.model,
+  permissions: PropTypes.array,
+  onChanged: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func.isRequired,
+  onError: PropTypes.func.isRequired,
+  onInteraction: PropTypes.func.isRequired,
+};
+
+const load = gmp => {
+  const loadEntityFunc = loadEntity(gmp);
+  const loadPermissionsFunc = loadPermissions(gmp);
+  return id => dispatch =>
+    Promise.all([
+      dispatch(loadEntityFunc(id)),
+      dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
+    ]);
+};
+
+const mapStateToProps = (rootState, {id}) => {
+  const permissionsSel = permissionsSelector(rootState);
+  return {
+    permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
+  };
+};
+
+export default withEntityContainer('policy', {
+  entitySelector: selector,
+  load,
+  mapStateToProps,
+})(Page);
 
 // vim: set ts=2 sw=2 tw=80:

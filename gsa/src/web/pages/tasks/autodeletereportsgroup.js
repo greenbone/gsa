@@ -19,45 +19,44 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import FormGroup from 'web/components/form/formgroup';
-import Radio from 'web/components/form/radio';
-import Spinner from 'web/components/form/spinner';
+import {AUTO_DELETE_KEEP, AUTO_DELETE_NO} from 'gmp/models/task';
 
-import Divider from 'web/components/layout/divider';
+import PropTypes from '../../utils/proptypes.js';
 
-import PropTypes from 'web/utils/proptypes';
-import {toBoolean} from './dialog';
+import FormGroup from '../../components/form/formgroup.js';
+import Radio from '../../components/form/radio.js';
+import Spinner from '../../components/form/spinner.js';
+
+import Divider from '../../components/layout/divider.js';
 
 const AutoDeleteReportsGroup = ({
-  autoDelete = false,
-  autoDeleteReports,
+  autoDelete = AUTO_DELETE_NO,
+  autoDeleteData,
   onChange,
 }) => (
   <FormGroup title={_('Auto Delete Reports')} flex="column">
     <Radio
       title={_('Do not automatically delete reports')}
-      name="autoDelete"
-      value={false}
+      name="auto_delete"
+      value={AUTO_DELETE_NO}
       onChange={onChange}
-      checked={autoDelete === false}
-      convert={toBoolean}
+      checked={autoDelete !== AUTO_DELETE_KEEP}
     />
     <Divider>
       <Radio
-        name="autoDelete"
-        value={true}
+        name="auto_delete"
+        value="keep"
         onChange={onChange}
         title={_('Automatically delete oldest reports but always keep newest')}
-        checked={autoDelete === true}
-        convert={toBoolean}
+        checked={autoDelete === AUTO_DELETE_KEEP}
       />
       <Spinner
         type="int"
         min="2"
         max="1200"
-        name="autoDeleteReports"
-        value={autoDeleteReports}
-        disabled={autoDelete === false}
+        name="auto_delete_data"
+        value={autoDeleteData}
+        disabled={autoDelete !== AUTO_DELETE_KEEP}
         onChange={onChange}
       />
       <span>{_('reports')}</span>
@@ -66,8 +65,8 @@ const AutoDeleteReportsGroup = ({
 );
 
 AutoDeleteReportsGroup.propTypes = {
-  autoDelete: PropTypes.bool,
-  autoDeleteReports: PropTypes.number,
+  autoDelete: PropTypes.oneOf([AUTO_DELETE_KEEP, AUTO_DELETE_NO]),
+  autoDeleteData: PropTypes.number,
   onChange: PropTypes.func,
 };
 

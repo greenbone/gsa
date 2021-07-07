@@ -18,25 +18,17 @@
 import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
-import useCapabilities from 'web/utils/useCapabilities';
+import withCapabilities from 'web/utils/withCapabilities';
 
 import Link from './link';
 
-const DetailsLink = ({
-  id,
-  type,
-  textOnly = false,
-  'data-testid': dataTestId = 'details-link',
-  ...props
-}) => {
-  const capabilities = useCapabilities();
-
+const DetailsLink = ({capabilities, id, type, textOnly = false, ...props}) => {
   textOnly = textOnly || !capabilities.mayAccess(type);
 
   return (
     <Link
       {...props}
-      data-testid={dataTestId}
+      data-testid="details-link"
       textOnly={textOnly}
       to={`/${type}/${encodeURIComponent(id)}`}
     />
@@ -44,12 +36,12 @@ const DetailsLink = ({
 };
 
 DetailsLink.propTypes = {
-  'data-testid': PropTypes.string,
+  capabilities: PropTypes.capabilities.isRequired,
   id: PropTypes.id.isRequired,
   textOnly: PropTypes.bool,
   type: PropTypes.string.isRequired,
 };
 
-export default DetailsLink;
+export default withCapabilities(DetailsLink);
 
 // vim: set ts=2 sw=2 tw=80:

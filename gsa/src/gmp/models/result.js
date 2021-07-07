@@ -17,10 +17,10 @@
  */
 
 import {forEach, map} from 'gmp/utils/array';
-import {hasValue, isDefined, isString} from 'gmp/utils/identity';
+import {isDefined, isString} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
-import Model, {parseModelFromElement, parseModelFromObject} from 'gmp/model';
+import Model, {parseModelFromElement} from 'gmp/model';
 import {parseSeverity, parseQod} from 'gmp/parser';
 
 import Nvt from './nvt';
@@ -50,86 +50,6 @@ export class Delta {
 class Result extends Model {
   static entityType = 'result';
 
-  static parseObject(object) {
-    const copy = super.parseObject(object);
-
-    const {
-      originResult,
-      host = {},
-      name,
-      notes,
-      information = {},
-      overrides,
-      originalSeverity,
-      qod = {},
-      severity,
-      task,
-      tickets,
-      type,
-    } = object;
-
-    copy.host = {
-      name: host.ip,
-      id: hasValue(host.id) && !isEmpty(host.id) ? host.id : undefined,
-      hostname: hasValue(host.hostname) ? host.hostname : '',
-    };
-
-    if (type === 'NVT') {
-      copy.information = Nvt.fromObject(information);
-    } else {
-      // assuming result can only be NVT or CVE
-      copy.information = Cve.fromObject(information);
-      copy.name = information.id;
-    }
-
-    if (hasValue(task)) {
-      copy.task = parseModelFromObject(task, 'task');
-    }
-
-    if (hasValue(originResult)) {
-      const details = {};
-
-      if (hasValue(originResult.details)) {
-        forEach(originResult.details, detail => {
-          details[detail.name] = detail.value;
-        });
-      }
-
-      copy.originResult = {
-        id: originResult.id,
-        details: details,
-      };
-    }
-
-    copy.notes = hasValue(notes)
-      ? map(notes, note => Note.fromObject(note))
-      : [];
-    copy.overrides = hasValue(overrides)
-      ? map(overrides, override => Override.fromObject(override))
-      : [];
-
-    // parse tickets as models only. we don't have other data then the id here
-    copy.tickets = hasValue(tickets)
-      ? map(tickets, ticket => parseModelFromObject(ticket, 'ticket'))
-      : [];
-
-    copy.qod = parseQod(qod);
-
-    if (hasValue(severity)) {
-      copy.severity = parseSeverity(severity);
-    }
-
-    if (hasValue(originalSeverity)) {
-      copy.originalSeverity = parseSeverity(originalSeverity);
-    }
-
-    copy.vulnerability = hasValue(name) ? name : information?.id;
-
-    // ToDo: Delta
-
-    return copy;
-  }
-
   static parseElement(element) {
     const copy = super.parseElement(element);
 
@@ -139,7 +59,7 @@ class Result extends Model {
       host = {},
       name,
       notes,
-      nvt = {},
+      nvt: information = {},
       original_severity,
       overrides,
       report,
@@ -167,7 +87,14 @@ class Result extends Model {
       };
     }
 
-    copy.nvt = Nvt.fromElement(nvt);
+    if (information.type === 'nvt') {
+      copy.information = Nvt.fromElement(information);
+    } else {
+      copy.information = Cve.fromResultElement(information);
+      copy.name = isDefined(copy.name) ? copy.name : information.name;
+    }
+
+    delete copy.nvt;
 
     if (isDefined(description)) {
       copy.description = description;
@@ -177,7 +104,7 @@ class Result extends Model {
       copy.severity = parseSeverity(severity);
     }
 
-    copy.vulnerability = isDefined(name) ? name : nvt._oid;
+    copy.vulnerability = isDefined(name) ? name : information._oid;
 
     if (isDefined(report)) {
       copy.report = parseModelFromElement(report, 'report');

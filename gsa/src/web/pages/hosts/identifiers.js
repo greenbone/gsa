@@ -24,6 +24,8 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import PropTypes from 'web/utils/proptypes';
+
 import DateTime from 'web/components/date/datetime';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
@@ -38,8 +40,6 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
-
-import PropTypes from 'web/utils/proptypes';
 
 const Action = styled.a`
   cursor: pointer;
@@ -56,30 +56,24 @@ const filter_identifiers = (identifiers, latest = true) => {
   if (!latest || !isDefined(identifiers) || identifiers.length === 0) {
     return identifiers;
   }
-  const lastId = identifiers[0].sourceId;
-  return identifiers.filter(identifier => identifier.sourceId === lastId);
+  const last_id = identifiers[0].source.id;
+  return identifiers.filter(identifier => identifier.source.id === last_id);
 };
 
-const Source = ({identifier}) => {
-  const {
-    sourceType,
-    sourceDeleted,
-    sourceId,
-    sourceData,
-    sourceName,
-  } = identifier;
+const Source = ({source}) => {
+  const {source_type, deleted, id, data, name} = source;
 
-  if (sourceType === 'Report Host Detail') {
+  if (source_type === 'Report Host Detail') {
     return (
       <div>
         <span>{_('Report')}</span>{' '}
-        <DetailsLink textOnly={sourceDeleted} type="report" id={sourceId}>
-          {sourceId}
+        <DetailsLink textOnly={deleted} type="report" id={id}>
+          {id}
         </DetailsLink>{' '}
         <span>
           <span>(NVT</span>{' '}
-          <DetailsLink type="nvt" id={sourceData}>
-            {sourceData}
+          <DetailsLink type="nvt" id={data}>
+            {data}
           </DetailsLink>
           <span>)</span>
         </span>
@@ -87,24 +81,24 @@ const Source = ({identifier}) => {
     );
   }
 
-  if (sourceType?.startsWith('Report')) {
+  if (source_type.startsWith('Report')) {
     return (
       <div>
         <span>{_('Report')}</span>{' '}
-        <DetailsLink textOnly={sourceDeleted} type="report" id={sourceId}>
-          {sourceId}
+        <DetailsLink textOnly={deleted} type="report" id={id}>
+          {id}
         </DetailsLink>{' '}
         <span>{_('(Target Host)')}</span>
       </div>
     );
   }
 
-  if (sourceType?.startsWith('User')) {
+  if (source_type.startsWith('User')) {
     return (
       <div>
         <span>{_('User')}</span>{' '}
-        <DetailsLink textOnly={sourceDeleted} type="user" id={sourceId}>
-          {sourceName}
+        <DetailsLink textOnly={deleted} type="user" id={id}>
+          {name}
         </DetailsLink>
       </div>
     );
@@ -112,14 +106,14 @@ const Source = ({identifier}) => {
 
   return (
     <div>
-      <span>{sourceType}</span>
-      <span>{sourceId}</span>
+      <span>{source_type}</span>
+      <span>{id}</span>
     </div>
   );
 };
 
 Source.propTypes = {
-  identifier: PropTypes.object.isRequired,
+  source: PropTypes.object.isRequired,
 };
 
 const Identifiers = props => {
@@ -203,7 +197,7 @@ const Identifiers = props => {
                 <DateTime date={identifier.creationTime} />
               </TableData>
               <TableData>
-                <Source identifier={identifier} />
+                <Source source={identifier.source} />
               </TableData>
               {displayActions && (
                 <TableData align={['center', 'center']}>

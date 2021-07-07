@@ -59,8 +59,8 @@ const Row = ({
         <DateTime date={entity.creationTime} />
       </TableData>
       <TableData>
-        <Link to="cvsscalculator" query={{cvssVector: entity.cvssVector}}>
-          {entity.cvssVector}
+        <Link to="cvsscalculator" query={{cvssVector: entity.cvssBaseVector}}>
+          {entity.cvssBaseVector}
         </Link>
       </TableData>
       <TableData>

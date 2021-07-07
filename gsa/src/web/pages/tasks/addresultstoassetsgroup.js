@@ -19,29 +19,21 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import FormGroup from 'web/components/form/formgroup';
-import YesNoRadio from 'web/components/form/yesnoradio';
+import PropTypes from '../../utils/proptypes.js';
 
-import PropTypes from 'web/utils/proptypes';
-import {toBoolean} from './dialog';
+import FormGroup from '../../components/form/formgroup.js';
+import YesNoRadio from '../../components/form/yesnoradio.js';
 
-export const AddResultsToAssetsGroup = ({createAssets, onChange}) => {
+export const AddResultsToAssetsGroup = ({inAssets, onChange}) => {
   return (
     <FormGroup title={_('Add results to Assets')}>
-      <YesNoRadio
-        name="createAssets"
-        value={createAssets}
-        onChange={onChange}
-        yesValue={true}
-        noValue={false}
-        convert={toBoolean}
-      />
+      <YesNoRadio name="in_assets" value={inAssets} onChange={onChange} />
     </FormGroup>
   );
 };
 
 AddResultsToAssetsGroup.propTypes = {
-  createAssets: PropTypes.bool,
+  inAssets: PropTypes.yesno,
   onChange: PropTypes.func,
 };
 

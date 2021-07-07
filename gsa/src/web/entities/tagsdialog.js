@@ -21,6 +21,10 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 
+import {renderSelectItems} from 'web/utils/render';
+
+import PropTypes from 'web/utils/proptypes';
+
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
@@ -30,9 +34,6 @@ import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
 
 const ENTITIES_THRESHOLD = 50000;
 

@@ -19,15 +19,16 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
-import {getEntityType, typeName} from 'gmp/utils/entitytype';
 import {isDefined} from 'gmp/utils/identity';
-
-import useCapabilities from 'web/utils/useCapabilities';
-import EditIcon from 'web/components/icon/editicon';
+import {getEntityType, typeName} from 'gmp/utils/entitytype';
 
 import PropTypes from 'web/utils/proptypes';
+import withCapabilities from 'web/utils/withCapabilities';
+
+import EditIcon from 'web/components/icon/editicon';
 
 const EntityEditIcon = ({
+  capabilities,
   disabled,
   displayName,
   entity,
@@ -36,8 +37,6 @@ const EntityEditIcon = ({
   onClick,
   ...props
 }) => {
-  const capabilities = useCapabilities();
-
   if (!isDefined(name)) {
     name = getEntityType(entity);
   }
@@ -75,6 +74,7 @@ const EntityEditIcon = ({
 };
 
 EntityEditIcon.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
   disabled: PropTypes.bool,
   displayName: PropTypes.string,
   entity: PropTypes.model.isRequired,
@@ -83,6 +83,6 @@ EntityEditIcon.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default EntityEditIcon;
+export default withCapabilities(EntityEditIcon);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -23,6 +23,9 @@ import {shortDate} from 'gmp/locale/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+import {renderYesNo} from 'web/utils/render';
+
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
@@ -34,9 +37,6 @@ import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
-
-import PropTypes from 'web/utils/proptypes';
-import {renderYesNo} from 'web/utils/render';
 
 const ReportFormatDetails = ({entity, links = true}) => {
   const {

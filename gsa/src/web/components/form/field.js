@@ -17,14 +17,14 @@
  */
 
 import React, {useCallback} from 'react';
+import {isDefined} from 'gmp/utils/identity';
+import PropTypes from 'web/utils/proptypes';
 
 import styled from 'styled-components';
 
-import withLayout from 'web/components/layout/withLayout';
-
-import {isDefined} from 'gmp/utils/identity';
-import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+
+import withLayout from 'web/components/layout/withLayout';
 
 export const DISABLED_OPACITY = 0.65;
 

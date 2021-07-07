@@ -21,8 +21,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {parseFloat} from 'gmp/parser';
 
-import PropTypes from 'web/utils/proptypes';
-import {severityFormat} from 'web/utils/render';
+import PropTypes from '../../utils/proptypes.js';
+import {severityFormat} from '../../utils/render.js';
 
 import {
   resultSeverityRiskFactor,
@@ -32,9 +32,9 @@ import {
   HIGH,
   translateRiskFactor,
   LOG_VALUE,
-} from 'web/utils/severity';
+} from '../../utils/severity';
 
-import ProgressBar from './progressbar';
+import ProgressBar from './progressbar.js';
 
 const SeverityBar = ({severity, toolTip}) => {
   let cvss;

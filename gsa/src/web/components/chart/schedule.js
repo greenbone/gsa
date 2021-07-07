@@ -28,10 +28,10 @@ import date from 'gmp/models/date';
 
 import {shorten} from 'gmp/utils/string';
 
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
+
+import Layout from 'web/components/layout/layout';
 
 import path from './utils/path';
 import {shouldUpdate} from './utils/update';
