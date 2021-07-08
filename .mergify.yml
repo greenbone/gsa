@@ -1,0 +1,82 @@
+pull_request_rules:
+  - name: port master patches to 21.04 branch
+    conditions:
+      - base=master
+      - label=port-to-21.04
+    actions:
+      backport:
+        branches:
+          - gsa-21.04
+
+  - name: port master patches to 20.08 branch
+    conditions:
+      - base=master
+      - label=port-to-20.08
+    actions:
+      backport:
+        branches:
+          - gsa-20.08
+
+  - name: port 21.04 patches to master branch
+    conditions:
+      - base=gsa-21.04
+      - label=port-to-master
+    actions:
+      backport:
+        branches:
+          - master
+
+  - name: port 21.04 patches to 20.08 branch
+    conditions:
+      - base=gsa-21.04
+      - label=port-to-20.08
+    actions:
+      backport:
+        branches:
+          - gsa-20.08
+
+  # backports from current release branch
+  - name: port 20.08 patches to master branch
+    conditions:
+      - base=gsa-20.08
+      - label=port-to-master
+    actions:
+      backport:
+        branches:
+          - master
+
+  - name: port 20.08 patches to 21.04 branch
+    conditions:
+      - base=gsa-20.08
+      - label=port-to-21.04
+    actions:
+      backport:
+        branches:
+          - gsa-21.04
+          
+  - name: port 20.08 patches to 21.10 branch
+    conditions:
+      - base=gsa-20.08
+      - label=port-to-21.10
+    actions:
+      backport:
+        branches:
+          - gsa-21.10
+          
+  - name: port 21.04 patches to 21.10 branch
+    conditions:
+      - base=gsa-21.04
+      - label=port-to-21.10
+    actions:
+      backport:
+        branches:
+          - gsa-21.10
+          
+  - name: port 21.10 patches to master branch
+    conditions:
+      - base=gsa-21.10
+      - label=port-to-master
+    actions:
+      backport:
+        branches:
+          - master
