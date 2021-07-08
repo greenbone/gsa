@@ -25,7 +25,12 @@ jobs:
       VERSION: "21.04"
     name: Build gsad
     runs-on: 'ubuntu-latest'
-    container: greenbone/build-env-gsa-master-debian-buster-gcc-gsad
+    strategy:
+      matrix:
+        container:
+          - greenbone/gsa-21.04-gcc-testing
+          - greenbone/gsa-21.04-clang-testing
+    container: ${{ matrix.container }}
     steps:
       - uses: actions/checkout@v2.3.4
       - name: Configure and compile gsad
@@ -41,7 +46,10 @@ jobs:
         build_type:
           - Debug
           - Release
-    container: greenbone/build-env-gsa-master-debian-buster-gcc-gsa-full
+        container:
+          - greenbone/gsa-21.04-gcc-testing
+          - greenbone/gsa-21.04-clang-testing
+    container: ${{ matrix.container }}
     env:
       BUILD_TYPE: ${{ matrix.build_type }}
     steps:
