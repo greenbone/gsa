@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Changed
+* Changed default Content-Security-Policy (CSP) Header to "default-src 'self'; img-src 'self' blob:;" [#3068](https://github.com/greenbone/gsa/pull/3068)
+
 ### Deprecated
 ### Removed
 ### Fixed
