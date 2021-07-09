@@ -157,9 +157,8 @@
  * @brief Default value for HTTP header "Content-Security-Policy"
  */
 #define DEFAULT_GSAD_CONTENT_SECURITY_POLICY \
-  "default-src 'self' 'unsafe-inline';"      \
-  " img-src 'self' blob:;"                   \
-  " frame-ancestors 'self'"
+  "default-src 'self';"                      \
+  " img-src 'self' blob:;"
 
 /**
  * @brief Default "max-age" for HTTP header "Strict-Transport-Security"
