@@ -24,10 +24,29 @@ jobs:
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
+        container:
+          - greenbone/gsa-20.08-gcc-testing
+          - greenbone/gsa-20.08-clang-testing
+    container: ${{ matrix.container }}
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Configure and compile gsad
+        run: |
+          mkdir build && rm -rf .git && cd build/ \
+            && cmake -DCMAKE_BUILD_TYPE=Release .. && make install
+        working-directory: ${{ env.WORKSPACE }}
+  build_full:
+    name: Build gsa and gsad from root dir
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
         build_type:
           - Debug
           - Release
-    container: greenbone/build-env-gsa-20.08-debian-buster-gcc-gsad
+        container:
+          - greenbone/gsa-20.08-gcc-testing
+          - greenbone/gsa-20.08-clang-testing
+    container: ${{ matrix.container }}
     env:
       WORKSPACE: ${{ github.workspace }}/gsad
       BUILD_TYPE: ${{ matrix.build_type }}
@@ -38,21 +57,3 @@ jobs:
           mkdir build && rm -rf .git && cd build/ \
             && cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE .. && make install
         working-directory: ${{ env.WORKSPACE }}
-  build_full:
-     name: Build gsa and gsad from root dir
-     runs-on: 'ubuntu-latest'
-     strategy:
-       matrix:
-         build_type:
-           - Debug
-           - Release
-     container: greenbone/build-env-gsa-20.08-debian-buster-gcc-gsa-full
-     env:
-       BUILD_TYPE: ${{ matrix.build_type }}
-     steps:
-       - uses: actions/checkout@v2.3.4
-       - name: Configure and compile
-         run: |
-           mkdir build && rm -rf .git && cd build/ \
-             && cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE .. && make install
-         working-directory: ${{ github.WORKSPACE }}
