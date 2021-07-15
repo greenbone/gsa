@@ -53,6 +53,12 @@ const TlsCertificateDetails = ({entity, links = true}) => {
           <Col width="90%" />
         </colgroup>
         <TableBody>
+          {isDefined(entity.issuer_dn) && (
+            <TableRow>
+              <TableData>{_('Issuer DN')}</TableData>
+              <TableData>{entity.issuer_dn}</TableData>
+            </TableRow>
+          )}
           {isDefined(entity.valid) && (
             <TableRow>
               <TableData>{_('Valid')}</TableData>

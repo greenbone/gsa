@@ -46,9 +46,9 @@ const Header = ({
           width="30%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'issuer_dn' : false}
+          sortBy={sort ? 'subject_dn' : false}
           onSortChange={onSortChange}
-          title={_('Issuer DN')}
+          title={_('Subject DN')}
         />
         <TableHead
           width="26%"
