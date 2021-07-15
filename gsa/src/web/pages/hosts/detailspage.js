@@ -78,7 +78,7 @@ import PropTypes from 'web/utils/proptypes';
 import HostDetails from './details';
 import HostComponent from './component';
 
-const ToolBarIcons = ({
+export const ToolBarIcons = ({
   entity,
   onHostCreateClick,
   onHostDeleteClick,

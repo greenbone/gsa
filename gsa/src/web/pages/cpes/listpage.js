@@ -43,7 +43,7 @@ import CpesTable from './table';
 
 import CpesDashboard, {CPES_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = props => (
+export const ToolBarIcons = props => (
   <ManualIcon page="managing-secinfo" anchor="cpe" title={_('Help: CPEs')} />
 );
 
