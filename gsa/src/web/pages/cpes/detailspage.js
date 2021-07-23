@@ -67,7 +67,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import CpeDetails from './details';
 
-const ToolBarIcons = ({entity, onCpeDownloadClick}) => (
+export const ToolBarIcons = ({entity, onCpeDownloadClick}) => (
   <Divider margin="10px">
     <IconDivider>
       <ManualIcon
