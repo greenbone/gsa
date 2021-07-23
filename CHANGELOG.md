@@ -116,6 +116,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 * Changed default Content-Security-Policy (CSP) Header to
   `default-src 'self'; script-src 'self'; style-src-elem 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob:;`
   [#3068](https://github.com/greenbone/gsa/pull/3068)
+* Avoid caching of the index.html file [#3082](https://github.com/greenbone/gsa/pull/3082)
 
 ### Deprecated
 ### Removed
