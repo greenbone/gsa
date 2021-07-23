@@ -670,7 +670,7 @@ handle_index (http_connection_t *connection, const char *method,
   cmd_response_data_t *response_data;
 
   response_data = cmd_response_data_new ();
-  cmd_response_data_set_allow_caching (response_data, 1);
+  cmd_response_data_set_allow_caching (response_data, FALSE);
 
   response =
     file_content_response (connection, url, "index.html", response_data);
