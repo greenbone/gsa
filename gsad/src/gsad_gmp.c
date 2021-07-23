@@ -5326,7 +5326,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (target_ssh_credential, "Create Target");
   if (strcmp (target_ssh_credential, "--"))
     CHECK_VARIABLE_INVALID (port, "Create Target");
-  CHECK_VARIABLE_INVALID (target_ssh_elevate_credential, "Create Target");
+  if (params_given (params, "ssh_elevate_credential_id"))
+    CHECK_VARIABLE_INVALID (target_ssh_elevate_credential, "Create Target");
   CHECK_VARIABLE_INVALID (target_smb_credential, "Create Target");
   CHECK_VARIABLE_INVALID (target_esxi_credential, "Create Target");
   CHECK_VARIABLE_INVALID (target_snmp_credential, "Create Target");
@@ -5349,8 +5350,11 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                                  "<port>%s</port>"
                                                  "</ssh_credential>",
                                                  target_ssh_credential, port);
-      ssh_elevate_credentials_element = g_strdup_printf (
-        "<ssh_elevate_credential id=\"%s\"/>", target_ssh_elevate_credential);
+      if (target_ssh_elevate_credential)
+        ssh_elevate_credentials_element = g_strdup_printf (
+          "<ssh_elevate_credential id=\"%s\"/>", target_ssh_elevate_credential);
+      else
+        ssh_elevate_credentials_element = NULL;
     }
 
   if (strcmp (target_smb_credential, "0") == 0)
@@ -5405,7 +5409,8 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
                              "%s%s%s%s%s%s%s%s"
                              "</create_target>",
                              xml->str, comment_element, ssh_credentials_element,
-                             ssh_elevate_credentials_element,
+                             ssh_elevate_credentials_element
+                              ? ssh_elevate_credentials_element : "",
                              smb_credentials_element, esxi_credentials_element,
                              snmp_credentials_element, asset_hosts_element);
 
@@ -6296,7 +6301,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
       && strcmp (target_ssh_credential, "0"))
     {
       CHECK_VARIABLE_INVALID (port, "Save Target");
-      CHECK_VARIABLE_INVALID (target_ssh_elevate_credential, "Save Target");
+      if (params_given (params, "ssh_elevate_credential_id"))
+        CHECK_VARIABLE_INVALID (target_ssh_elevate_credential, "Save Target");
     }
 
   if (str_equal (target_source, "manual"))
@@ -6328,8 +6334,12 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                                    "<port>%s</port>"
                                                    "</ssh_credential>",
                                                    target_ssh_credential, port);
-        ssh_elevate_credentials_element = g_strdup_printf (
-          "<ssh_elevate_credential id=\"%s\"/>", target_ssh_elevate_credential);
+        if (target_ssh_elevate_credential)
+          ssh_elevate_credentials_element = g_strdup_printf (
+            "<ssh_elevate_credential id=\"%s\"/>",
+            target_ssh_elevate_credential);
+        else
+          ssh_elevate_credentials_element = NULL;
       }
 
     if (str_equal (target_smb_credential, "--"))
@@ -6375,7 +6385,8 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
                             "%s%s%s%s%s%s"
                             "</modify_target>",
                             comment_element, ssh_credentials_element,
-                            ssh_elevate_credentials_element,
+                            ssh_elevate_credentials_element
+                              ? ssh_elevate_credentials_element : "",
                             smb_credentials_element, esxi_credentials_element,
                             snmp_credentials_element);
 
