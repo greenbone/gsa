@@ -5405,14 +5405,14 @@ create_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
     reverse_lookup_unify ? reverse_lookup_unify : "0", port_list_id,
     alive_tests, allow_simultaneous_ips ? allow_simultaneous_ips : "1");
 
-  command = g_strdup_printf ("<create_target>"
-                             "%s%s%s%s%s%s%s%s"
-                             "</create_target>",
-                             xml->str, comment_element, ssh_credentials_element,
-                             ssh_elevate_credentials_element
-                              ? ssh_elevate_credentials_element : "",
-                             smb_credentials_element, esxi_credentials_element,
-                             snmp_credentials_element, asset_hosts_element);
+  command = g_strdup_printf (
+    "<create_target>"
+    "%s%s%s%s%s%s%s%s"
+    "</create_target>",
+    xml->str, comment_element, ssh_credentials_element,
+    ssh_elevate_credentials_element ? ssh_elevate_credentials_element : "",
+    smb_credentials_element, esxi_credentials_element, snmp_credentials_element,
+    asset_hosts_element);
 
   g_string_free (xml, TRUE);
   g_free (comment_element);
@@ -6335,9 +6335,9 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
                                                    "</ssh_credential>",
                                                    target_ssh_credential, port);
         if (target_ssh_elevate_credential)
-          ssh_elevate_credentials_element = g_strdup_printf (
-            "<ssh_elevate_credential id=\"%s\"/>",
-            target_ssh_elevate_credential);
+          ssh_elevate_credentials_element =
+            g_strdup_printf ("<ssh_elevate_credential id=\"%s\"/>",
+                             target_ssh_elevate_credential);
         else
           ssh_elevate_credentials_element = NULL;
       }
@@ -6381,14 +6381,14 @@ save_target_gmp (gvm_connection_t *connection, credentials_t *credentials,
       reverse_lookup_unify ? reverse_lookup_unify : "0", port_list_id,
       alive_tests, allow_simultaneous_ips ? allow_simultaneous_ips : "1");
 
-    g_string_append_printf (command,
-                            "%s%s%s%s%s%s"
-                            "</modify_target>",
-                            comment_element, ssh_credentials_element,
-                            ssh_elevate_credentials_element
-                              ? ssh_elevate_credentials_element : "",
-                            smb_credentials_element, esxi_credentials_element,
-                            snmp_credentials_element);
+    g_string_append_printf (
+      command,
+      "%s%s%s%s%s%s"
+      "</modify_target>",
+      comment_element, ssh_credentials_element,
+      ssh_elevate_credentials_element ? ssh_elevate_credentials_element : "",
+      smb_credentials_element, esxi_credentials_element,
+      snmp_credentials_element);
 
     g_free (comment_element);
     g_free (ssh_credentials_element);
