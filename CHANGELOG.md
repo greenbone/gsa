@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [21.4.2] (unreleased)
 ### Added
+- Added new InfoIcon and use it in TargetDialog for information about the elevate credential feature [#3091](https://github.com/greenbone/gsa/pull/3091)
 ### Changed
 - Changed defaults for installation locations [#3045](https://github.com/greenbone/gsa/pull/3045)
   - LOCALSTATEDIR is /var by default now
