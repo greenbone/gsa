@@ -34,6 +34,7 @@ import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 import YesNoRadio from 'web/components/form/yesnoradio';
 
+import InfoIcon from 'web/components/icon/infoicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
@@ -390,7 +391,17 @@ const TargetDialog = ({
                 {state.ssh_credential_id !== UNSET_VALUE && (
                   <FormGroup title={' '}>
                     <Divider>
-                      <Layout>{_('Elevate privileges')}</Layout>
+                      <Layout>
+                        <Divider>
+                          <InfoIcon
+                            title={_(
+                              'This feature is experimental and may ' +
+                                'not work reliable under all circumstances.',
+                            )}
+                          />
+                          <span>{_('Elevate privileges')}</span>
+                        </Divider>
+                      </Layout>
                       <Select
                         name="ssh_elevate_credential_id"
                         disabled={in_use}

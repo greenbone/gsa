@@ -1693,6 +1693,7 @@
   "This CPE does not appear in the CPE dictionary but is referenced by one or more CVE.": "Diese CPE ist nicht im CPE-Dictionary, wird aber von einem oder mehreren CVE referenziert.",
   "This NVT is deprecated.": "Dieser NVT ist veraltet.",
   "This dialog will open a new window for {{- to}} if you click on \"follow link\". Following this link is on your own responsibility. Greenbone does not endorse the content you will see there.": "Dieser Dialog öffnet ein neues Fenster für {{-to}}, wenn Sie auf \"Link folgen\" klicken. Diesem Link zu folgen liegt in Ihrer Verantwortung. Greenbone hat keinen Einfluss auf den Inhalt, den Sie dort sehen werden.",
+  "This feature is experimental and may not work reliable under all circumstances.": "Dieses Feature ist experimentell und funktioniert eventuell nicht unter allen Bedingungen verlässlich.",
   "This form received invalid values. Please check the inputs and submit again.": "Dieses Formular erhielt ungültige Werte. Bitte überprüfen Sie Ihre Eingaben und senden sie erneut ab.",
   "This is an Alterable Audit. Reports may not relate to current Policy or Target!": "Dies ist ein änderbares Audit. Berichte könnten sich nicht auf die aktuelle Richtlinie oder das aktuelle Ziel beziehen!",
   "This is an Alterable Task. Reports may not relate to current Scan Config or Target!": "Dies ist eine änderbare Aufgabe. Berichte könnten sich nicht auf die aktuelle Scan-Konfiguration oder das aktuelle Ziel beziehen!",
