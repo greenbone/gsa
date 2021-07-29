@@ -56,9 +56,7 @@ let UserSettingsDialog = ({
   credentials,
   filters,
   openVasScanConfigs,
-  ospScanConfigs,
   openVasScanners,
-  ospScanners,
   portLists,
   reportFormats,
   schedules,
@@ -75,8 +73,6 @@ let UserSettingsDialog = ({
   defaultSeverity,
   defaultAlert,
   defaultEsxiCredential,
-  defaultOspScanConfig,
-  defaultOspScanner,
   defaultOpenvasScanConfig,
   defaultOpenvasScanner,
   defaultPortList,
@@ -134,8 +130,6 @@ let UserSettingsDialog = ({
     defaultSeverity: parseFloat(defaultSeverity),
     defaultAlert,
     defaultEsxiCredential,
-    defaultOspScanConfig,
-    defaultOspScanner,
     defaultOpenvasScanConfig,
     defaultOpenvasScanner,
     defaultPortList,
@@ -235,17 +229,13 @@ let UserSettingsDialog = ({
                 alerts={alerts}
                 credentials={credentials}
                 openVasScanConfigs={openVasScanConfigs}
-                ospScanConfigs={ospScanConfigs}
                 openVasScanners={openVasScanners}
-                ospScanners={ospScanners}
                 portLists={portLists}
                 reportFormats={reportFormats}
                 schedules={schedules}
                 targets={targets}
                 defaultAlert={values.defaultAlert}
                 defaultEsxiCredential={values.defaultEsxiCredential}
-                defaultOspScanConfig={values.defaultOspScanConfig}
-                defaultOspScanner={values.defaultOspScanner}
                 defaultOpenvasScanConfig={values.defaultOpenvasScanConfig}
                 defaultOpenvasScanner={values.defaultOpenvasScanner}
                 defaultPortList={values.defaultPortList}
@@ -319,8 +309,6 @@ UserSettingsDialog.propTypes = {
   defaultEsxiCredential: PropTypes.string,
   defaultOpenvasScanConfig: PropTypes.string,
   defaultOpenvasScanner: PropTypes.string,
-  defaultOspScanConfig: PropTypes.string,
-  defaultOspScanner: PropTypes.string,
   defaultPortList: PropTypes.string,
   defaultReportFormat: PropTypes.string,
   defaultSchedule: PropTypes.string,
@@ -343,8 +331,6 @@ UserSettingsDialog.propTypes = {
   openVasScanConfigs: PropTypes.array,
   openVasScanners: PropTypes.array,
   operatingSystemsFilter: PropTypes.string,
-  ospScanConfigs: PropTypes.array,
-  ospScanners: PropTypes.array,
   overridesFilter: PropTypes.string,
   permissionsFilter: PropTypes.string,
   portLists: PropTypes.array,

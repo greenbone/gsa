@@ -31,17 +31,13 @@ const DefaultsPart = ({
   alerts,
   credentials,
   openVasScanConfigs,
-  ospScanConfigs,
   openVasScanners,
-  ospScanners,
   portLists,
   reportFormats,
   schedules,
   targets,
   defaultAlert,
   defaultEsxiCredential,
-  defaultOspScanConfig,
-  defaultOspScanner,
   defaultOpenvasScanConfig,
   defaultOpenvasScanner,
   defaultPortList,
@@ -72,26 +68,6 @@ const DefaultsPart = ({
             name="defaultEsxiCredential"
             value={defaultEsxiCredential}
             items={renderSelectItems(credentials, UNSET_VALUE)}
-            onChange={onChange}
-          />
-        </FormGroup>
-      )}
-      {capabilities.mayAccess('scanconfig') && (
-        <FormGroup title={_('Default OSP Scan Config')} titleSize="3">
-          <Select
-            name="defaultOspScanConfig"
-            value={defaultOspScanConfig}
-            items={renderSelectItems(ospScanConfigs, UNSET_VALUE)}
-            onChange={onChange}
-          />
-        </FormGroup>
-      )}
-      {capabilities.mayAccess('scanner') && (
-        <FormGroup title={_('Default OSP Scanner')} titleSize="3">
-          <Select
-            name="defaultOspScanner"
-            value={defaultOspScanner}
-            items={renderSelectItems(ospScanners, UNSET_VALUE)}
             onChange={onChange}
           />
         </FormGroup>
@@ -198,8 +174,6 @@ DefaultsPart.propTypes = {
   defaultEsxiCredential: PropTypes.string,
   defaultOpenvasScanConfig: PropTypes.string,
   defaultOpenvasScanner: PropTypes.string,
-  defaultOspScanConfig: PropTypes.string,
-  defaultOspScanner: PropTypes.string,
   defaultPortList: PropTypes.string,
   defaultReportFormat: PropTypes.string,
   defaultSchedule: PropTypes.string,
@@ -209,8 +183,6 @@ DefaultsPart.propTypes = {
   defaultTarget: PropTypes.string,
   openVasScanConfigs: PropTypes.array,
   openVasScanners: PropTypes.array,
-  ospScanConfigs: PropTypes.array,
-  ospScanners: PropTypes.array,
   portLists: PropTypes.array,
   reportFormats: PropTypes.array,
   schedules: PropTypes.array,

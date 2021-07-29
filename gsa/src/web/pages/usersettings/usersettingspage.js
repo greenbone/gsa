@@ -25,9 +25,8 @@ import {ALL_FILTER} from 'gmp/models/filter';
 import {
   filterEmptyScanConfig,
   openVasScanConfigsFilter,
-  ospScanConfigsFilter,
 } from 'gmp/models/scanconfig';
-import {openVasScannersFilter, ospScannersFilter} from 'gmp/models/scanner';
+import {openVasScannersFilter} from 'gmp/models/scanner';
 
 import {YES_VALUE, parseYesNo} from 'gmp/parser';
 
@@ -301,8 +300,6 @@ class UserSettings extends React.Component {
       defaultSeverity = {},
       defaultAlert = {},
       defaultEsxiCredential = {},
-      defaultOspScanConfig = {},
-      defaultOspScanner = {},
       defaultOpenvasScanConfig = {},
       defaultOpenvasScanner = {},
       defaultPortList = {},
@@ -383,9 +380,7 @@ class UserSettings extends React.Component {
     dfnCertFilter = hasValue(dfnCertFilter) ? dfnCertFilter : {};
 
     const openVasScanConfigs = scanconfigs.filter(openVasScanConfigsFilter);
-    const ospScanConfigs = scanconfigs.filter(ospScanConfigsFilter);
     const openVasScanners = scanners.filter(openVasScannersFilter);
-    const ospScanners = scanners.filter(ospScannersFilter);
 
     return (
       <React.Fragment>
@@ -512,20 +507,6 @@ class UserSettings extends React.Component {
                             setting={defaultEsxiCredential}
                             title={_('Default ESXi Credential')}
                             type="credential"
-                          />
-                        )}
-                        {capabilities.mayAccess('scanconfig') && (
-                          <SettingTableRow
-                            setting={defaultOspScanConfig}
-                            title={_('Default OSP Scan Config')}
-                            type="scanconfig"
-                          />
-                        )}
-                        {capabilities.mayAccess('scanner') && (
-                          <SettingTableRow
-                            setting={defaultOspScanner}
-                            title={_('Default OSP Scanner')}
-                            type="scanner"
                           />
                         )}
                         {capabilities.mayAccess('scanconfig') && (
@@ -759,9 +740,7 @@ class UserSettings extends React.Component {
               filters={filters}
               credentials={credentials}
               openVasScanConfigs={openVasScanConfigs}
-              ospScanConfigs={ospScanConfigs}
               openVasScanners={openVasScanners}
-              ospScanners={ospScanners}
               portLists={portlists}
               reportFormats={reportformats}
               schedules={schedules}
@@ -778,8 +757,6 @@ class UserSettings extends React.Component {
               defaultSeverity={defaultSeverity.value}
               defaultAlert={defaultAlert.id}
               defaultEsxiCredential={defaultEsxiCredential.id}
-              defaultOspScanConfig={defaultOspScanConfig.id}
-              defaultOspScanner={defaultOspScanner.id}
               defaultOpenvasScanConfig={defaultOpenvasScanConfig.id}
               defaultOpenvasScanner={defaultOpenvasScanner.id}
               defaultPortList={defaultPortList.id}
@@ -844,8 +821,6 @@ UserSettings.propTypes = {
   defaultEsxiCredential: PropTypes.object,
   defaultOpenvasScanConfig: PropTypes.object,
   defaultOpenvasScanner: PropTypes.object,
-  defaultOspScanConfig: PropTypes.object,
-  defaultOspScanner: PropTypes.object,
   defaultPortList: PropTypes.object,
   defaultReportFormat: PropTypes.object,
   defaultSchedule: PropTypes.object,
@@ -936,11 +911,6 @@ const mapStateToProps = rootState => {
   const defaultEsxiCredentialId = userDefaultsSelector.getValueByName(
     'defaultesxicredential',
   );
-  const defaultOspScanConfigId = userDefaultsSelector.getValueByName(
-    'defaultospscanconfig',
-  );
-  const defaultOspScannerId =
-    userDefaultsSelector.getValueByName('defaultospscanner');
   const defaultOpenvasScanConfigId = userDefaultsSelector.getValueByName(
     'defaultopenvasscanconfig',
   );
@@ -981,8 +951,6 @@ const mapStateToProps = rootState => {
   const defaultEsxiCredential = credentialsSel.getEntity(
     defaultEsxiCredentialId,
   );
-  const defaultOspScanConfig = scanConfigsSel.getEntity(defaultOspScanConfigId);
-  const defaultOspScanner = scannersSel.getEntity(defaultOspScannerId);
   const defaultOpenvasScanConfig = scanConfigsSel.getEntity(
     defaultOpenvasScanConfigId,
   );
@@ -1057,8 +1025,6 @@ const mapStateToProps = rootState => {
     isLoading: userDefaultsSelector.isLoading(),
     defaultAlert,
     defaultEsxiCredential,
-    defaultOspScanConfig,
-    defaultOspScanner,
     defaultOpenvasScanConfig,
     defaultOpenvasScanner,
     defaultPortList,
