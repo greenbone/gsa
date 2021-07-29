@@ -36,7 +36,7 @@ import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 
 const ScanConfigDetails = ({entity}) => {
-  const {comment, scan_config_type, scanner, tasks = []} = entity;
+  const {comment, tasks = []} = entity;
   return (
     <Layout flex="column" grow>
       <InfoTable>

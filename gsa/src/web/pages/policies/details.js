@@ -36,7 +36,7 @@ import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 
 const PolicyDetails = ({entity}) => {
-  const {comment, policy_type, scanner, audits = []} = entity;
+  const {comment, audits = []} = entity;
   return (
     <Layout flex="column" grow>
       <InfoTable>
