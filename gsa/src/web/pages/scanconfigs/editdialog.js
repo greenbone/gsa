@@ -22,7 +22,6 @@ import _ from 'gmp/locale';
 
 import {
   OPENVAS_SCAN_CONFIG_TYPE,
-  OSP_SCAN_CONFIG_TYPE,
   SCANCONFIG_TREND_STATIC,
 } from 'gmp/models/scanconfig';
 
@@ -31,14 +30,12 @@ import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 import DialogInlineNotification from 'web/components/dialog/dialoginlinenotification';
 
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
-import Select from 'web/components/form/select';
 import Loading from 'web/components/loading/loading';
 
 import Layout from 'web/components/layout/layout';
@@ -202,20 +199,6 @@ const EditScanConfigDialog = ({
             </DialogInlineNotification>
           ) : (
             <React.Fragment>
-              {configType === OSP_SCAN_CONFIG_TYPE &&
-                (isLoadingScanners ? (
-                  <Loading />
-                ) : (
-                  <FormGroup title={_('Scanner')}>
-                    <Select
-                      name="scannerId"
-                      items={renderSelectItems(scanners)}
-                      value={state.scannerId}
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
-                ))}
-
               {isLoadingConfig || isLoadingFamilies ? (
                 <Loading />
               ) : (
