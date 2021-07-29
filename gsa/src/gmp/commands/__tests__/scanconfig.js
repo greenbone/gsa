@@ -119,7 +119,6 @@ describe('ScanConfigCommand tests', () => {
       .create({
         baseScanConfig: 'uuid1',
         name: 'foo',
-        scannerId: 's1',
         comment: 'somecomment',
       })
       .then(() => {
@@ -130,7 +129,6 @@ describe('ScanConfigCommand tests', () => {
             comment: 'somecomment',
             name: 'foo',
             usage_type: 'scan',
-            scanner_id: 's1',
           },
         });
       });
@@ -163,7 +161,6 @@ describe('ScanConfigCommand tests', () => {
         comment: 'somecomment',
         trend,
         select,
-        scannerId: 's1',
         scannerPreferenceValues,
       })
       .then(() => {
@@ -173,7 +170,6 @@ describe('ScanConfigCommand tests', () => {
             comment: 'somecomment',
             config_id: 'c1',
             name: 'foo',
-            scanner_id: 's1',
             'preference:scanner:scanner:scanner:foo': 'bar',
             'select:AIX Local Security Checks': 1,
             'select:Brute force attacks': 1,
@@ -199,7 +195,6 @@ describe('ScanConfigCommand tests', () => {
         trend: undefined,
         select: undefined,
         scannerPreferenceValues: undefined,
-        scannerId: undefined,
       })
       .then(() => {
         expect(fakeHttp.request).toHaveBeenCalledWith('post', {
