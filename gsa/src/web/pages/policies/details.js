@@ -21,8 +21,6 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {OSP_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
-
 import PropTypes from 'web/utils/proptypes';
 
 import Divider from 'web/components/layout/divider';
@@ -53,19 +51,6 @@ const PolicyDetails = ({entity}) => {
               <TableData>{comment}</TableData>
             </TableRow>
           )}
-          {policy_type === OSP_SCAN_CONFIG_TYPE && isDefined(scanner) && (
-            <TableRow>
-              <TableData>{_('Scanner')}</TableData>
-              <TableData>
-                <span>
-                  <DetailsLink type="scanner" id={scanner.id}>
-                    {scanner.name}
-                  </DetailsLink>
-                </span>
-              </TableData>
-            </TableRow>
-          )}
-
           {audits.length > 0 && (
             <TableRow>
               <TableData>{_('Audits using this Policy')}</TableData>
