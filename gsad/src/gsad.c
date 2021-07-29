@@ -157,8 +157,13 @@
  * @brief Default value for HTTP header "Content-Security-Policy"
  */
 #define DEFAULT_GSAD_CONTENT_SECURITY_POLICY \
-  "default-src 'self'; "                     \
+  "default-src 'none'; "                     \
+  "object-src 'none'; "                      \
+  "base-uri 'none'; "                        \
+  "connect-src 'self'; "                     \
   "script-src 'self'; "                      \
+  "frame-ancestors 'none'; "                 \
+  "form-action 'self'; "                     \
   "style-src-elem 'self' 'unsafe-inline'; "  \
   "style-src 'self' 'unsafe-inline'; "       \
   "img-src 'self' blob:;"
