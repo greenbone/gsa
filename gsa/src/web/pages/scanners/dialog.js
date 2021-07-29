@@ -38,9 +38,7 @@ import SaveDialog from 'web/components/dialog/savedialog';
 
 import FootNote from 'web/components/footnote/footnote';
 
-import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
-import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 
@@ -53,17 +51,13 @@ import Layout from 'web/components/layout/layout';
 import {getTimezone} from 'web/store/usersettings/selectors';
 
 import {
-  OSP_SCANNER_TYPE,
   GREENBONE_SENSOR_SCANNER_TYPE,
   scannerTypeName,
 } from 'gmp/models/scanner';
 
 import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
 
-const AVAILABLE_SCANNER_TYPES = [
-  OSP_SCANNER_TYPE,
-  GREENBONE_SENSOR_SCANNER_TYPE,
-];
+const AVAILABLE_SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
 
 const client_cert_credentials_filter = credential => {
   return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
@@ -154,16 +148,16 @@ const ScannerDialog = ({
     which_cert,
   };
 
-  let SCANNER_TYPES;
+  let SCANNER_TYPES = [];
 
   const {gmp} = props;
 
   if (gmp.settings.enableGreenboneSensor) {
     type = hasValue(type) ? type : GREENBONE_SENSOR_SCANNER_TYPE;
-    SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE, OSP_SCANNER_TYPE];
+    SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
   } else {
-    type = hasValue(type) ? type : OSP_SCANNER_TYPE;
-    SCANNER_TYPES = [OSP_SCANNER_TYPE];
+    type = hasValue(type) ? type : undefined;
+    SCANNER_TYPES = [];
   }
 
   let {credential_id} = props;
@@ -177,7 +171,6 @@ const ScannerDialog = ({
     credentials,
     client_cert_credentials_filter,
   );
-  const is_edit = isDefined(scanner);
   const isInUse = isDefined(scanner) && scanner.isInUse();
   const show_cred_info =
     isDefined(scanner) &&
@@ -185,7 +178,6 @@ const ScannerDialog = ({
     scanner.credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
 
   const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
-  const isOspScannerType = type === OSP_SCANNER_TYPE;
 
   if (isGreenboneSensorType) {
     credential_id = '';
@@ -240,62 +232,6 @@ const ScannerDialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
-
-            {isOspScannerType && (
-              <React.Fragment>
-                <FormGroup title={_('Port')}>
-                  <TextField
-                    name="port"
-                    value={state.port}
-                    disabled={isInUse}
-                    grow="1"
-                    onChange={onValueChange}
-                  />
-                </FormGroup>
-
-                <FormGroup title={_('CA Certificate')} flex="column">
-                  <Layout>
-                    <Divider>
-                      {is_edit && (
-                        <Layout>
-                          {isDefined(state.ca_pub) && (
-                            <Radio
-                              title={_('Existing')}
-                              name="which_cert"
-                              value="existing"
-                              checked={state.which_cert === 'existing'}
-                              onChange={onValueChange}
-                            />
-                          )}
-                          <Radio
-                            title={_('Default')}
-                            name="which_cert"
-                            value="default"
-                            checked={state.which_cert === 'default'}
-                            onChange={onValueChange}
-                          />
-                          <Radio
-                            title={_('New:')}
-                            name="which_cert"
-                            value="new"
-                            checked={state.which_cert === 'new'}
-                            onChange={onValueChange}
-                          />
-                        </Layout>
-                      )}
-                      <FileField
-                        disabled={is_edit && state.which_cert !== 'new'}
-                        name="ca_pub"
-                        onChange={onValueChange}
-                      />
-                    </Divider>
-                  </Layout>
-                  {is_edit && isDefined(state.ca_pub) && (
-                    <CertStatus info={state.ca_pub_info} />
-                  )}
-                </FormGroup>
-              </React.Fragment>
-            )}
 
             {!isGreenboneSensorType && (
               <FormGroup title={_('Credential')} flex="column">
