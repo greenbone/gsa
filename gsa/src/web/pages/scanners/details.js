@@ -22,16 +22,9 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {
-  scannerTypeName,
-  CVE_SCANNER_TYPE,
-  OSP_SCANNER_TYPE,
-  PARAM_TYPE_SELECTION,
-  PARAM_TYPE_BOOLEAN,
-} from 'gmp/models/scanner';
+import {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import PropTypes from 'web/utils/proptypes';
-import {renderYesNo} from 'web/utils/render';
 
 import DetailsBlock from 'web/entity/block';
 
@@ -41,11 +34,8 @@ import DetailsLink from 'web/components/link/detailslink';
 
 import DateTime from 'web/components/date/datetime';
 import InfoTable from 'web/components/table/infotable';
-import SimpleTable from 'web/components/table/simpletable';
 import TableBody from 'web/components/table/body';
 import TableData, {TableDataAlignTop} from 'web/components/table/data';
-import TableHead from 'web/components/table/head';
-import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
@@ -99,96 +89,6 @@ CertInfo.propTypes = {
   info: PropTypes.object.isRequired,
 };
 
-const OspScannerDetails = ({info}) => {
-  const {scanner, daemon, protocol, description, params = []} = info;
-  if (isDefined(scanner.name)) {
-    return (
-      <div>
-        <DetailsBlock title={_('OSP Scanner Details')}>
-          <InfoTable>
-            <colgroup>
-              <Col width="10%" />
-              <Col width="90%" />
-            </colgroup>
-            <TableBody>
-              <TableRow>
-                <TableData>{_('Scanner Name')}</TableData>
-                <TableData>{scanner.name}</TableData>
-              </TableRow>
-
-              <TableRow>
-                <TableData>{_('Scanner Version')}</TableData>
-                <TableData>{scanner.version}</TableData>
-              </TableRow>
-
-              <TableRow>
-                <TableData>{_('OSP Daemon')}</TableData>
-                <TableData>
-                  <span>
-                    {daemon.name} {daemon.version}
-                  </span>
-                </TableData>
-              </TableRow>
-
-              <TableRow>
-                <TableData>{_('Protocol')}</TableData>
-                <TableData>
-                  <span>
-                    {protocol.name} {protocol.version}
-                  </span>
-                </TableData>
-              </TableRow>
-            </TableBody>
-          </InfoTable>
-        </DetailsBlock>
-
-        <DetailsBlock title={_('Description')}>
-          <pre>{description}</pre>
-        </DetailsBlock>
-
-        <DetailsBlock title={_('Scanner Parameters')}>
-          <SimpleTable>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{_('Name')}</TableHead>
-                <TableHead>{_('Description')}</TableHead>
-                <TableHead>{_('Type')}</TableHead>
-                <TableHead>{_('Default')}</TableHead>
-                <TableHead>{_('Mandatory')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {params.map(param => {
-                const {param_type} = param;
-                let {default: def} = param;
-                if (param_type === PARAM_TYPE_SELECTION) {
-                  def = _('List');
-                } else if (param_type === PARAM_TYPE_BOOLEAN) {
-                  def = renderYesNo(def);
-                }
-                return (
-                  <TableRow key={param.name}>
-                    <TableData>{param.name}</TableData>
-                    <TableData>{param.description}</TableData>
-                    <TableData>{param_type}</TableData>
-                    <TableData>{def}</TableData>
-                    <TableData>{renderYesNo(param.mandatory)}</TableData>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </SimpleTable>
-        </DetailsBlock>
-      </div>
-    );
-  }
-  return <h2>{_('OSP Scanner is offline')}</h2>;
-};
-
-OspScannerDetails.propTypes = {
-  info: PropTypes.object.isRequired,
-};
-
 const ScannerDetails = ({entity}) => {
   const {
     comment,
@@ -198,7 +98,6 @@ const ScannerDetails = ({entity}) => {
     credential,
     tasks = [],
     configs = [],
-    info,
   } = entity;
   return (
     <Layout flex="column" grow>
@@ -290,10 +189,6 @@ const ScannerDetails = ({entity}) => {
           )}
         </TableBody>
       </InfoTable>
-
-      {scannerType === OSP_SCANNER_TYPE && isDefined(info) && (
-        <OspScannerDetails info={info} />
-      )}
 
       {!entity.hasUnixSocket() &&
         isDefined(credential) &&

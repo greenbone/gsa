@@ -41,22 +41,28 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/scanners';
 
+import useGmp from 'web/utils/useGmp';
+
 import ScannerComponent from './component';
 import ScannersTable, {SORT_FIELDS} from './table';
 
 const ToolBarIcons = withCapabilities(
-  ({capabilities, onScannerCreateClick}) => (
-    <IconDivider>
-      <ManualIcon
-        page="scanning"
-        anchor="managing-scanners"
-        title={_('Help: Scanners')}
-      />
-      {capabilities.mayCreate('scanner') && (
-        <NewIcon title={_('New Scanner')} onClick={onScannerCreateClick} />
-      )}
-    </IconDivider>
-  ),
+  ({capabilities, onScannerCreateClick}) => {
+    const gmp = useGmp();
+    return (
+      <IconDivider>
+        <ManualIcon
+          page="scanning"
+          anchor="managing-scanners"
+          title={_('Help: Scanners')}
+        />
+        {capabilities.mayCreate('scanner') &&
+          gmp.settings.enableGreenboneSensor && (
+            <NewIcon title={_('New Scanner')} onClick={onScannerCreateClick} />
+          )}
+      </IconDivider>
+    );
+  },
 );
 
 ToolBarIcons.propTypes = {
