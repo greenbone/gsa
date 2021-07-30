@@ -31,16 +31,14 @@ export const FULL_AND_FAST_SCAN_CONFIG_ID =
   'daba56c8-73ec-11df-a475-002264764cea';
 export const BASE_SCAN_CONFIG_ID = 'd21f6c81-2b88-4ac1-b7b4-a2a9f2ad4663';
 
-export const OSP_SCAN_CONFIG_TYPE = 1;
 export const OPENVAS_SCAN_CONFIG_TYPE = 0;
 
 export const SCANCONFIG_TREND_DYNAMIC = 1;
 export const SCANCONFIG_TREND_STATIC = 0;
 
 export const getTranslatedType = config => {
-  return config.scan_config_type === OSP_SCAN_CONFIG_TYPE
-    ? _('OSP')
-    : _('OpenVAS');
+  return _('OpenVAS'); // return OpenVAS as last type left. This needs to be
+  // extended with possible new scan config types
 };
 
 export const parseCount = count => {
@@ -52,8 +50,6 @@ export const filterEmptyScanConfig = config =>
 
 export const openVasScanConfigsFilter = config =>
   config.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE;
-export const ospScanConfigsFilter = config =>
-  config.scan_config_type === OSP_SCAN_CONFIG_TYPE;
 
 export const parseTrend = parseInt;
 

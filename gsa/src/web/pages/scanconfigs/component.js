@@ -20,8 +20,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {ospScannersFilter} from 'gmp/models/scanner';
-
 import {forEach} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
@@ -73,23 +71,18 @@ class ScanConfigComponent extends React.Component {
     this.handleSaveConfigFamily = this.handleSaveConfigFamily.bind(this);
     this.handleSaveConfigNvt = this.handleSaveConfigNvt.bind(this);
     this.openCreateConfigDialog = this.openCreateConfigDialog.bind(this);
-    this.handleCloseCreateConfigDialog = this.handleCloseCreateConfigDialog.bind(
-      this,
-    );
+    this.handleCloseCreateConfigDialog =
+      this.handleCloseCreateConfigDialog.bind(this);
     this.openEditConfigDialog = this.openEditConfigDialog.bind(this);
-    this.handleCloseEditConfigDialog = this.handleCloseEditConfigDialog.bind(
-      this,
-    );
-    this.openEditConfigFamilyDialog = this.openEditConfigFamilyDialog.bind(
-      this,
-    );
-    this.handleCloseEditConfigFamilyDialog = this.handleCloseEditConfigFamilyDialog.bind(
-      this,
-    );
+    this.handleCloseEditConfigDialog =
+      this.handleCloseEditConfigDialog.bind(this);
+    this.openEditConfigFamilyDialog =
+      this.openEditConfigFamilyDialog.bind(this);
+    this.handleCloseEditConfigFamilyDialog =
+      this.handleCloseEditConfigFamilyDialog.bind(this);
     this.openEditNvtDetailsDialog = this.openEditNvtDetailsDialog.bind(this);
-    this.handleCloseEditNvtDetailsDialog = this.handleCloseEditNvtDetailsDialog.bind(
-      this,
-    );
+    this.handleCloseEditNvtDetailsDialog =
+      this.handleCloseEditNvtDetailsDialog.bind(this);
     this.openImportDialog = this.openImportDialog.bind(this);
     this.handleCloseImportDialog = this.handleCloseImportDialog.bind(this);
     this.handleSaveScanConfig = this.handleSaveScanConfig.bind(this);
@@ -366,8 +359,7 @@ class ScanConfigComponent extends React.Component {
     return gmp.scanners
       .getAll()
       .then(response => {
-        let {data: scanners} = response;
-        scanners = scanners.filter(ospScannersFilter);
+        const {data: scanners} = response;
         this.setState({
           scanners,
           scannerId: selectSaveId(scanners),

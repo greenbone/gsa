@@ -19,7 +19,11 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {scannerTypeName, CVE_SCANNER_TYPE} from 'gmp/models/scanner';
+import {
+  scannerTypeName,
+  CVE_SCANNER_TYPE,
+  GREENBONE_SENSOR_SCANNER_TYPE,
+} from 'gmp/models/scanner';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -42,6 +46,7 @@ import EditIcon from 'web/entity/icon/editicon';
 import TrashIcon from 'web/entity/icon/trashicon';
 
 import PropTypes from 'web/utils/proptypes';
+import useGmp from 'web/utils/useGmp';
 
 const Actions = withEntitiesActions(
   ({
@@ -120,36 +125,45 @@ const Row = ({
   links = true,
   onToggleDetailsClick,
   ...props
-}) => (
-  <TableRow>
-    <EntityNameTableData
-      entity={entity}
-      link={links}
-      type="scanner"
-      displayName={_('Scanner')}
-      onToggleDetailsClick={onToggleDetailsClick}
-    />
-    <TableData>
-      {entity.scannerType !== CVE_SCANNER_TYPE &&
-        !entity.hasUnixSocket() &&
-        entity.host}
-    </TableData>
-    <TableData>
-      {entity.scannerType !== CVE_SCANNER_TYPE &&
-        !entity.hasUnixSocket() &&
-        entity.port}
-    </TableData>
-    <TableData>{scannerTypeName(entity.scannerType)}</TableData>
-    <TableData>
-      {isDefined(entity.credential) && (
-        <span>
-          <EntityLink entity={entity.credential} />
-        </span>
+}) => {
+  const gmp = useGmp();
+  const isSensor = entity.scannerType === GREENBONE_SENSOR_SCANNER_TYPE;
+  const showSensors = gmp.settings.enableGreenboneSensor && isSensor;
+  return (
+    <React.Fragment>
+      {(showSensors || !isSensor) && (
+        <TableRow>
+          <EntityNameTableData
+            entity={entity}
+            link={links}
+            type="scanner"
+            displayName={_('Scanner')}
+            onToggleDetailsClick={onToggleDetailsClick}
+          />
+          <TableData>
+            {entity.scannerType !== CVE_SCANNER_TYPE &&
+              !entity.hasUnixSocket() &&
+              entity.host}
+          </TableData>
+          <TableData>
+            {entity.scannerType !== CVE_SCANNER_TYPE &&
+              !entity.hasUnixSocket() &&
+              entity.port}
+          </TableData>
+          <TableData>{scannerTypeName(entity.scannerType)}</TableData>
+          <TableData>
+            {isDefined(entity.credential) && (
+              <span>
+                <EntityLink entity={entity.credential} />
+              </span>
+            )}
+          </TableData>
+          <ActionsComponent {...props} entity={entity} />
+        </TableRow>
       )}
-    </TableData>
-    <ActionsComponent {...props} entity={entity} />
-  </TableRow>
-);
+    </React.Fragment>
+  );
+};
 
 Row.propTypes = {
   actionsComponent: PropTypes.component,

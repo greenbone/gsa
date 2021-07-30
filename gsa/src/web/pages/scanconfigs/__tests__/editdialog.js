@@ -21,7 +21,6 @@ import {setLocale} from 'gmp/locale/lang';
 
 import {
   OPENVAS_SCAN_CONFIG_TYPE,
-  OSP_SCAN_CONFIG_TYPE,
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
@@ -290,57 +289,6 @@ describe('EditScanConfigDialog component tests', () => {
     expect(inUseNotification).toHaveTextContent(
       'The policy is currently in use by one or more audits, therefore only name and comment can be modified.',
     );
-  });
-
-  test('should render dialog for osp config', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditConfigFamilyDialog = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
-
-    const {render} = rendererWith({capabilities: true, router: true});
-    const {baseElement, getByTestId} = render(
-      <EditScanConfigDialog
-        comment="bar"
-        configFamilies={configFamilies}
-        configId="c1"
-        configIsInUse={false}
-        configType={OSP_SCAN_CONFIG_TYPE}
-        editNvtDetailsTitle="Edit Scan Config NVT Details"
-        editNvtFamiliesTitle="Edit Scan Config Family"
-        families={families}
-        isLoadingConfig={false}
-        isLoadingFamilies={false}
-        isLoadingScanners={false}
-        name="Config"
-        nvtPreferences={nvtPreferences}
-        scannerPreferences={scannerPreferences}
-        scanners={scanners}
-        scannerId="1"
-        title="Edit Scan Config"
-        onClose={handleClose}
-        onEditConfigFamilyClick={handleOpenEditConfigFamilyDialog}
-        onEditNvtDetailsClick={handleOpenEditNvtDetailsDialog}
-        onSave={handleSave}
-      />,
-    );
-
-    expect(baseElement).toMatchSnapshot();
-
-    const titleBar = getByTestId('dialog-title-bar');
-    expect(titleBar).toHaveTextContent('Edit Scan Config');
-
-    const content = getByTestId('save-dialog-content');
-    expect(content).not.toHaveTextContent(
-      'Edit Network Vulnerability Test Families',
-    );
-    expect(content).toHaveTextContent('Edit Scanner Preferences');
-    expect(content).not.toHaveTextContent(
-      'Network Vulnerability Test Preferences',
-    );
-
-    const scannerSelection = content.querySelector('[role=combobox]');
-    expect(scannerSelection).toBeInTheDocument();
   });
 
   test('should save data', () => {

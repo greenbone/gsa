@@ -81,28 +81,19 @@ export class ScanConfigCommand extends EntityCommand {
     return this.httpPost(data);
   }
 
-  create({baseScanConfig, name, comment, scannerId}) {
+  create({baseScanConfig, name, comment}) {
     const data = {
       cmd: 'create_config',
       base: baseScanConfig,
       comment,
       name,
-      scanner_id: scannerId,
       usage_type: 'scan',
     };
     log.debug('Creating scanconfig', data);
     return this.action(data);
   }
 
-  save({
-    id,
-    name,
-    comment = '',
-    trend,
-    select,
-    scannerId,
-    scannerPreferenceValues,
-  }) {
+  save({id, name, comment = '', trend, select, scannerPreferenceValues}) {
     const trendData = isDefined(trend) ? convert(trend, 'trend:') : {};
     const scannerPreferenceData = isDefined(scannerPreferenceValues)
       ? convert(scannerPreferenceValues, 'preference:scanner:scanner:scanner:')
@@ -119,7 +110,6 @@ export class ScanConfigCommand extends EntityCommand {
       id,
       comment,
       name,
-      scanner_id: scannerId, // seems to be used for osp scan configs only
     };
     log.debug('Saving scanconfig', data);
     return this.action(data);

@@ -24,7 +24,7 @@ import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
-import Scanner, {OSP_SCANNER_TYPE} from 'gmp/models/scanner';
+import Scanner, {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
@@ -32,7 +32,7 @@ import ScannerDialog from 'web/pages/scanners/dialog';
 
 setLocale('en');
 
-const ospScanner = {
+const sensorScanner = {
   _id: '1234',
   name: 'john',
   ca_pub: 'foo',
@@ -40,9 +40,8 @@ const ospScanner = {
     _id: '5678',
   },
   comment: 'lorem ipsum',
-  type: OSP_SCANNER_TYPE,
+  type: GREENBONE_SENSOR_SCANNER_TYPE,
   host: 'mypc',
-  port: '1357',
 };
 
 const cred1 = Credential.fromElement({
@@ -57,7 +56,7 @@ const cred2 = Credential.fromElement({
   type: USERNAME_PASSWORD_CREDENTIAL_TYPE,
 });
 
-// crendentials list is necessary along with 'type' to generate
+// credentials list is necessary along with 'type' to generate
 // nonempty string items for the Select component for credential_id.
 // Otherwise it would fail prop validation as '' is not a valid value
 // for that component.
@@ -67,7 +66,7 @@ const gmp = {settings: {enableGreenboneSensor: true}};
 
 describe('ScannerDialog component tests', () => {
   test('should render', () => {
-    const elem = {_id: 'foo', type: OSP_SCANNER_TYPE};
+    const elem = {_id: 'foo', type: GREENBONE_SENSOR_SCANNER_TYPE};
     const scanner = Scanner.fromElement(elem);
     const handleClose = jest.fn();
     const handleCredentialChange = jest.fn();
@@ -93,7 +92,7 @@ describe('ScannerDialog component tests', () => {
   });
 
   test('should display default info', () => {
-    const scanner = Scanner.fromElement(ospScanner);
+    const scanner = Scanner.fromElement(sensorScanner);
 
     const handleClose = jest.fn();
     const handleCredentialChange = jest.fn();
@@ -103,7 +102,7 @@ describe('ScannerDialog component tests', () => {
     const {render} = rendererWith({gmp});
 
     const {getAllByTestId, baseElement} = render(
-      <ScannerDialog // using OSP Scanner to render the most amount of fields
+      <ScannerDialog
         credentials={credentials}
         scanner={scanner}
         type={scanner.scannerType}
@@ -126,17 +125,13 @@ describe('ScannerDialog component tests', () => {
     expect(inputs[2]).toHaveAttribute('name', 'host');
     expect(inputs[2]).toHaveAttribute('value', 'localhost');
 
-    expect(inputs[3]).toHaveAttribute('name', 'port');
-    expect(inputs[3]).toHaveAttribute('value', '22');
-
     const selectedValues = getAllByTestId('select-selected-value');
 
-    expect(selectedValues[0]).toHaveAttribute('title', 'OSP Scanner');
-    expect(selectedValues[1]).toHaveAttribute('title', 'foo');
+    expect(selectedValues[0]).toHaveAttribute('title', 'Greenbone Sensor');
   });
 
   test('should display value from props', () => {
-    const scanner = Scanner.fromElement(ospScanner);
+    const scanner = Scanner.fromElement(sensorScanner);
 
     const handleClose = jest.fn();
     const handleCredentialChange = jest.fn();
@@ -146,13 +141,12 @@ describe('ScannerDialog component tests', () => {
     const {render} = rendererWith({gmp});
 
     const {getAllByTestId, baseElement} = render(
-      <ScannerDialog // using OSP Scanner to render the most amount of fields
+      <ScannerDialog
         comment={scanner.comment}
         credentials={credentials}
         credential_id={scanner.credential.id}
         host={scanner.host}
         name={scanner.name}
-        port={scanner.port}
         scanner={scanner}
         type={scanner.scannerType}
         onClose={handleClose}
@@ -173,18 +167,13 @@ describe('ScannerDialog component tests', () => {
     expect(inputs[2]).toHaveAttribute('name', 'host');
     expect(inputs[2]).toHaveAttribute('value', 'mypc');
 
-    expect(inputs[3]).toHaveAttribute('name', 'port');
-    expect(inputs[3]).toHaveAttribute('value', '1357');
-
     const selectedValues = getAllByTestId('select-selected-value');
 
-    expect(selectedValues[0]).toHaveAttribute('title', 'OSP Scanner');
-    expect(selectedValues[1]).toHaveAttribute('title', 'foo');
+    expect(selectedValues[0]).toHaveAttribute('title', 'Greenbone Sensor');
   });
 
   test('should save valid form state', () => {
-    const scanner = Scanner.fromElement(ospScanner);
-
+    const scanner = Scanner.fromElement(sensorScanner);
     const handleClose = jest.fn();
     const handleCredentialChange = jest.fn();
     const handleSave = jest.fn();
@@ -218,8 +207,8 @@ describe('ScannerDialog component tests', () => {
       host: 'mypc',
       name: 'john',
       comment: 'lorem ipsum',
-      credential_id: '5678',
-      type: 1,
+      credential_id: '',
+      type: 5,
       id: '1234',
       port: '22',
       which_cert: undefined,
@@ -227,7 +216,7 @@ describe('ScannerDialog component tests', () => {
   });
 
   test('should change fields in create dialog', () => {
-    const scanner = Scanner.fromElement(ospScanner);
+    const scanner = Scanner.fromElement(sensorScanner);
 
     const handleClose = jest.fn();
     const handleCredentialChange = jest.fn();
@@ -272,8 +261,8 @@ describe('ScannerDialog component tests', () => {
       host: 'mypc',
       name: 'ipsum',
       comment: 'lorem',
-      credential_id: '5678',
-      type: 1,
+      credential_id: '',
+      type: 5,
       id: '1234',
       port: '22',
       which_cert: undefined,
@@ -281,7 +270,7 @@ describe('ScannerDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const elem = {_id: 'foo', type: OSP_SCANNER_TYPE};
+    const elem = {_id: 'foo', type: GREENBONE_SENSOR_SCANNER_TYPE};
     const scanner = Scanner.fromElement(elem);
     const handleClose = jest.fn();
     const handleCredentialChange = jest.fn();

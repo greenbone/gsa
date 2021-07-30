@@ -37,87 +37,6 @@ exports[`ScannerDialog component tests should render 1`] = `
   align-items: center;
 }
 
-.c23 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c25 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-left: -5px;
-}
-
-.c25 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c25 > * {
-  margin-left: 5px;
-}
-
-.c24 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c31 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c31 * {
-  height: inherit;
-  width: inherit;
-}
-
 .c1 {
   position: relative;
   display: -webkit-box;
@@ -151,7 +70,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   height: 100%;
 }
 
-.c37 {
+.c27 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -160,7 +79,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c36 {
+.c26 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -227,7 +146,7 @@ exports[`ScannerDialog component tests should render 1`] = `
   width: inherit;
 }
 
-.c33 {
+.c23 {
   display: inline-block;
   padding: 0 15px;
   color: #393637;
@@ -247,12 +166,12 @@ exports[`ScannerDialog component tests should render 1`] = `
   z-index: 1;
 }
 
-.c33:focus,
-.c33:hover {
+.c23:focus,
+.c23:hover {
   border: 1px solid #393637;
 }
 
-.c33:hover {
+.c23:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #66c430;
@@ -260,26 +179,26 @@ exports[`ScannerDialog component tests should render 1`] = `
   color: #fff;
 }
 
-.c33[disabled] {
+.c23[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c33 img {
+.c23 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c33:link {
+.c23:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #393637;
 }
 
-.c34 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -297,18 +216,18 @@ exports[`ScannerDialog component tests should render 1`] = `
   align-items: center;
 }
 
-.c35 {
+.c25 {
   border: 1px solid #787878;
   color: #519032;
   background: #87d050;
 }
 
-.c35:hover {
+.c25:hover {
   color: #fff;
   background: #519032;
 }
 
-.c32 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -452,27 +371,6 @@ exports[`ScannerDialog component tests should render 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  width: 83.33333333%;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.c22 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
@@ -626,73 +524,6 @@ exports[`ScannerDialog component tests should render 1`] = `
   align-items: center;
 }
 
-.c26 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  font-weight: normal;
-  cursor: pointer;
-}
-
-.c27 {
-  font-family: inherit;
-  font-size: inherit;
-  padding: 0;
-  margin: 0;
-  margin-left: 10px;
-  line-height: normal;
-  width: auto;
-  height: auto;
-}
-
-.c29 {
-  opacity: 1;
-}
-
-.c28 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c30 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
 <body>
   <div
     id="portals"
@@ -828,9 +659,9 @@ exports[`ScannerDialog component tests should render 1`] = `
                             <div
                               class="c18"
                               data-testid="select-selected-value"
-                              title="OSP Scanner"
+                              title="Greenbone Sensor"
                             >
-                              OSP Scanner
+                              Greenbone Sensor
                             </div>
                             <div
                               class="c19"
@@ -881,225 +712,21 @@ exports[`ScannerDialog component tests should render 1`] = `
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="c9"
-                  >
-                    <label
-                      class="c10"
-                      data-testid="formgroup-title"
-                    >
-                      Port
-                    </label>
-                    <div
-                      class="c11"
-                      data-testid="formgroup-content"
-                      size="10"
-                    >
-                      <input
-                        class="c12 c13"
-                        name="port"
-                        type="text"
-                        value="22"
-                      />
-                      <div
-                        class="c14"
-                        data-testid="error-marker"
-                      >
-                        ×
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="c9"
-                  >
-                    <label
-                      class="c10"
-                      data-testid="formgroup-title"
-                    >
-                      CA Certificate
-                    </label>
-                    <div
-                      class="c22"
-                      data-testid="formgroup-content"
-                      size="10"
-                    >
-                      <div
-                        class="c23"
-                      >
-                        <div
-                          class="c24"
-                        >
-                          <div
-                            class="c25"
-                            margin="5px"
-                          >
-                            <div
-                              class="c23"
-                            >
-                              <label
-                                class="c26"
-                              >
-                                <div
-                                  class="c24"
-                                >
-                                  <div
-                                    class="c25"
-                                    margin="5px"
-                                  >
-                                    <input
-                                      class="c27 c28"
-                                      data-testid="radio-input"
-                                      name="which_cert"
-                                      type="radio"
-                                      value="default"
-                                    />
-                                    <span
-                                      class="c29"
-                                      data-testid="radio-title"
-                                    >
-                                      Default
-                                    </span>
-                                  </div>
-                                </div>
-                              </label>
-                              <label
-                                class="c26"
-                              >
-                                <div
-                                  class="c24"
-                                >
-                                  <div
-                                    class="c25"
-                                    margin="5px"
-                                  >
-                                    <input
-                                      class="c27 c28"
-                                      data-testid="radio-input"
-                                      name="which_cert"
-                                      type="radio"
-                                      value="new"
-                                    />
-                                    <span
-                                      class="c29"
-                                      data-testid="radio-title"
-                                    >
-                                      New:
-                                    </span>
-                                  </div>
-                                </div>
-                              </label>
-                            </div>
-                            <input
-                              class="c30"
-                              disabled=""
-                              name="ca_pub"
-                              type="file"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="c9"
-                  >
-                    <label
-                      class="c10"
-                      data-testid="formgroup-title"
-                    >
-                      Credential
-                    </label>
-                    <div
-                      class="c22"
-                      data-testid="formgroup-content"
-                      size="10"
-                    >
-                      <div
-                        class="c24"
-                      >
-                        <div
-                          class="c25"
-                          margin="5px"
-                        >
-                          <div
-                            aria-expanded="false"
-                            aria-haspopup="listbox"
-                            aria-labelledby="downshift-1-label"
-                            class="c15"
-                            role="combobox"
-                          >
-                            <div
-                              class="c16"
-                              width="180px"
-                            >
-                              <div
-                                aria-haspopup="true"
-                                aria-label="open menu"
-                                class="c17"
-                                data-toggle="true"
-                                role="button"
-                                type="button"
-                              >
-                                <div
-                                  class="c18"
-                                  data-testid="select-selected-value"
-                                  title="foo"
-                                >
-                                  foo
-                                </div>
-                                <div
-                                  class="c19"
-                                >
-                                  <span
-                                    class="c20 c21"
-                                    data-testid="select-open-button"
-                                  >
-                                    ▼
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              class="c14"
-                              data-testid="error-marker"
-                            >
-                              ×
-                            </div>
-                          </div>
-                          <div
-                            class="c23"
-                          >
-                            <span
-                              class="c31"
-                              data-testid="svg-icon"
-                              title="Create a new Credential"
-                            >
-                              <svg
-                                title="Create a new Credential"
-                              >
-                                new.svg
-                              </svg>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
             <div
-              class="c32"
+              class="c22"
             >
               <button
-                class="c33 c34 c35"
+                class="c23 c24 c25"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c33 c34 c35"
+                class="c23 c24 c25"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1108,10 +735,10 @@ exports[`ScannerDialog component tests should render 1`] = `
             </div>
           </div>
           <div
-            class="c36"
+            class="c26"
           >
             <div
-              class="c37"
+              class="c27"
             />
           </div>
         </div>
