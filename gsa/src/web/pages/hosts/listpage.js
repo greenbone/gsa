@@ -49,18 +49,20 @@ import HostComponent from './component';
 
 import HostsDashboard, {HOSTS_DASHBOARD_ID} from './dashboard';
 
-const ToolBarIcons = withCapabilities(({capabilities, onHostCreateClick}) => (
-  <IconDivider>
-    <ManualIcon
-      page="managing-assets"
-      anchor="managing-hosts"
-      title={_('Help: Hosts')}
-    />
-    {capabilities.mayCreate('host') && (
-      <NewIcon title={_('New Host')} onClick={onHostCreateClick} />
-    )}
-  </IconDivider>
-));
+export const ToolBarIcons = withCapabilities(
+  ({capabilities, onHostCreateClick}) => (
+    <IconDivider>
+      <ManualIcon
+        page="managing-assets"
+        anchor="managing-hosts"
+        title={_('Help: Hosts')}
+      />
+      {capabilities.mayCreate('host') && (
+        <NewIcon title={_('New Host')} onClick={onHostCreateClick} />
+      )}
+    </IconDivider>
+  ),
+);
 
 ToolBarIcons.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,

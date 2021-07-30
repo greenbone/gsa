@@ -157,9 +157,16 @@
  * @brief Default value for HTTP header "Content-Security-Policy"
  */
 #define DEFAULT_GSAD_CONTENT_SECURITY_POLICY \
-  "default-src 'self' 'unsafe-inline';"      \
-  " img-src 'self' blob:;"                   \
-  " frame-ancestors 'self'"
+  "default-src 'none'; "                     \
+  "object-src 'none'; "                      \
+  "base-uri 'none'; "                        \
+  "connect-src 'self'; "                     \
+  "script-src 'self'; "                      \
+  "frame-ancestors 'none'; "                 \
+  "form-action 'self'; "                     \
+  "style-src-elem 'self' 'unsafe-inline'; "  \
+  "style-src 'self' 'unsafe-inline'; "       \
+  "img-src 'self' blob:;"
 
 /**
  * @brief Default "max-age" for HTTP header "Strict-Transport-Security"
@@ -172,7 +179,7 @@
 #define DEFAULT_GSAD_PER_IP_CONNECTION_LIMIT 30
 
 #define COPYRIGHT                                                        \
-  "Copyright (C) 2010 - 2020 Greenbone Networks GmbH\n"                  \
+  "Copyright (C) 2010 - 2021 Greenbone Networks GmbH\n"                  \
   "License: AGPL-3.0-or-later\n"                                         \
   "This is free software: you are free to change and redistribute it.\n" \
   "There is NO WARRANTY, to the extent permitted by law.\n\n"

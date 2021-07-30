@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.4.2] (unreleased)
 
 ### Added
+- Added new InfoIcon and use it in TargetDialog for information about the elevate credential feature [#3091](https://github.com/greenbone/gsa/pull/3091)
 ### Changed
 - Changed defaults for installation locations [#3045](https://github.com/greenbone/gsa/pull/3045)
   - LOCALSTATEDIR is /var by default now
@@ -35,6 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
+- Make SSH elevate credential optional in gsad [#3085](https://github.com/greenbone/gsa/pull/3085)
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.1...gsa-21.04
 
@@ -114,9 +116,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Changed
+* Changed default Content-Security-Policy (CSP) Header to
+  `default-src 'none'; object-src 'none'; base-uri 'none'; connect-src 'self'; script-src 'self'; frame-ancestors 'none'; form-action 'self'; style-src-elem 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob:;`
+  [#3068](https://github.com/greenbone/gsa/pull/3068)
+  [#3095](https://github.com/greenbone/gsa/pull/3095)
+* Avoid caching of the index.html file [#3082](https://github.com/greenbone/gsa/pull/3082)
+
 ### Deprecated
 ### Removed
 ### Fixed
+- Fixed setting/displaying timeout in EditNvtDetailsDialog [#3057](https://github.com/greenbone/gsa/pull/3057)
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.2...gsa-20.08
 

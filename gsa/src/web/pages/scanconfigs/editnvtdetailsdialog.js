@@ -71,9 +71,6 @@ const createPrefValues = (preferences = []) => {
   return preferenceValues;
 };
 
-const convertTimeout = value =>
-  !isDefined(value) || value.trim().length === 0 ? undefined : value;
-
 const reducer = (state, action) => {
   switch (action.type) {
     case 'setValue':
@@ -120,8 +117,6 @@ const EditNvtDetailsDialog = ({
   onClose,
   onSave,
 }) => {
-  timeout = convertTimeout(timeout);
-
   const [preferenceValues, dispatch] = useReducer(
     reducer,
     createPrefValues(preferences),
@@ -145,7 +140,7 @@ const EditNvtDetailsDialog = ({
   }, [timeout]);
 
   const handleChangeTimeout = value => {
-    setControlledTimeout(convertTimeout(value));
+    setControlledTimeout(value);
   };
 
   const controlledData = {
