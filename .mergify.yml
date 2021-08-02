@@ -54,29 +54,3 @@ pull_request_rules:
         branches:
           - gsa-21.04
           
-  - name: port 20.08 patches to 21.10 branch
-    conditions:
-      - base=gsa-20.08
-      - label=port-to-21.10
-    actions:
-      backport:
-        branches:
-          - gsa-21.10
-          
-  - name: port 21.04 patches to 21.10 branch
-    conditions:
-      - base=gsa-21.04
-      - label=port-to-21.10
-    actions:
-      backport:
-        branches:
-          - gsa-21.10
-          
-  - name: port 21.10 patches to master branch
-    conditions:
-      - base=gsa-21.10
-      - label=port-to-master
-    actions:
-      backport:
-        branches:
-          - master
