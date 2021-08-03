@@ -20,7 +20,7 @@ cmake_minimum_required (VERSION 3.0)
 
 message ("-- Configuring gsad")
 
-project (gsad VERSION 20.8.1 LANGUAGES C)
+project (gsad VERSION 20.8.3 LANGUAGES C)
 
 # Set dev version if this is a development version and not a full release,
 # unset (put value 0 or delete line) before a full release and reset after.
