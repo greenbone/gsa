@@ -19,7 +19,7 @@ cmake_minimum_required (VERSION 3.0)
 
 message ("-- Configuring gsa")
 
-project (gsa VERSION 21.4.2 LANGUAGES)
+project (gsa VERSION 21.4.3 LANGUAGES)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -28,7 +28,7 @@ find_package (Yarn 1.0)
 
 # Set dev version if this is a development version and not a full release,
 # unset (put value 0 or delete line) before a full release and reset after.
-set (PROJECT_DEV_VERSION 0)
+set (PROJECT_DEV_VERSION 1)
 
 # If PROJECT_DEV_VERSION is set, the version string will be set to:
 #   "major.minor.patch~dev${PROJECT_DEV_VERSION}${GIT_REVISION}"
