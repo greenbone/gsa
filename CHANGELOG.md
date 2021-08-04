@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [21.4.3] (unreleased)
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.2...gsa-21.04
+
 ## [21.4.2] 2021-08-03
 ### Added
 - Added new InfoIcon and use it in TargetDialog for information about the elevate credential feature [#3091](https://github.com/greenbone/gsa/pull/3091)
@@ -24,7 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
 - Make SSH elevate credential optional in gsad [#3085](https://github.com/greenbone/gsa/pull/3085)
 
-[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.2...v21.4.1
+[21.4.2]: https://github.com/greenbone/gsa/compare/v21.4.1...v21.4.2
 
 ## [21.4.1] - 2021-06-25
 
