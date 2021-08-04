@@ -15,7 +15,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed OVAL Definitions [#2918](https://github.com/greenbone/gsa/pull/2918), [#2921](https://github.com/greenbone/gsa/pull/2921), [#2923](https://github.com/greenbone/gsa/pull/2923)
 - Removed Network Source Interface from GSA for Tasks and Audits [#2902](https://github.com/greenbone/gsa/pull/2902) [#2942](https://github.com/greenbone/gsa/pull/2942)
 
+<<<<<<< HEAD
 [21.10]: https://github.com/greenbone/gsa/compare/gsa-21.04...gsa-21.10
+=======
+### Fixed
+- Don't crash target table when port_list is undefined [#3120](https://github.com/greenbone/gsa/pull/3120)
+
+>>>>>>> cf739351b (Update Changelog)
 
 ## [21.4.2] (unreleased)
 
