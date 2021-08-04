@@ -16,6 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-const VERSION = '20.8.3';
+const VERSION = '20.8.4.dev1';
 
 export default VERSION;
