@@ -89,6 +89,55 @@ const target_elevate = Target.fromElement({
   },
 });
 
+const target_no_portlist = Target.fromElement({
+  _id: 'foo',
+  name: 'target',
+  owner: {name: 'admin'},
+  alive_tests: 'Scan Config Default',
+  comment: 'hello world',
+  writable: '1',
+  in_use: '1',
+  permissions: {permission: [{name: 'Everything'}]},
+  hosts: '127.0.0.1, 192.168.0.1',
+  exclude_hosts: '',
+  max_hosts: '2',
+  reverse_lookup_only: '1',
+  reverse_lookup_unify: '0',
+  ssh_credential: {
+    _id: '1235',
+    name: 'ssh',
+    port: '22',
+    trash: '0',
+  },
+  ssh_elevate_credential: {
+    _id: '3456',
+    name: 'ssh_elevate',
+    trash: '0',
+  },
+  smb_credential: {
+    _id: '4784',
+    name: 'smb_credential',
+  },
+  esxi_credential: {
+    _id: '',
+    name: '',
+    trash: '0',
+  },
+  snmp_credential: {
+    _id: '',
+    name: '',
+    trash: '0',
+  },
+  tasks: {
+    task: [
+      {
+        _id: 'task_id',
+        name: 'task1',
+      },
+    ],
+  },
+});
+
 const target_no_elevate = Target.fromElement({
   _id: 'foo',
   name: 'target',
@@ -240,6 +289,44 @@ describe('Target row tests', () => {
     expect(baseElement).toHaveTextContent('SMB');
     expect(links[3]).toHaveAttribute('href', '/credential/4784');
     expect(links[3]).toHaveTextContent('smb_credential');
+  });
+
+  test('should render with undefined portlist', () => {
+    const handleToggleDetailsClick = jest.fn();
+    const handleTargetCloneClick = jest.fn();
+    const handleTargetDeleteClick = jest.fn();
+    const handleTargetDownloadClick = jest.fn();
+    const handleTargetEditClick = jest.fn();
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: caps,
+      router: true,
+      store: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const {baseElement} = render(
+      <Row
+        entity={target_no_portlist}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onTargetCloneClick={handleTargetCloneClick}
+        onTargetDeleteClick={handleTargetDeleteClick}
+        onTargetDownloadClick={handleTargetDownloadClick}
+        onTargetEditClick={handleTargetEditClick}
+      />,
+    );
+
+    const links = baseElement.querySelectorAll('a');
+
+    expect(baseElement).toHaveTextContent('target');
+    expect(baseElement).toHaveTextContent('(hello world)');
+
+    // First link is no longer to portlist, because it shouldn't be in the table
+    expect(links[0]).toHaveAttribute('href', '/credential/1235');
+    expect(links[0]).toHaveTextContent('ssh');
   });
 
   test('should call click handlers', () => {
