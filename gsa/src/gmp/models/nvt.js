@@ -62,8 +62,10 @@ export const getRefs = element => {
   return [element.refs.ref];
 };
 
-export const hasRefType = refType => (ref = {}) =>
-  isString(ref._type) && ref._type.toLowerCase() === refType;
+export const hasRefType =
+  refType =>
+  (ref = {}) =>
+    isString(ref._type) && ref._type.toLowerCase() === refType;
 
 export const getFilteredRefIds = (refs = [], type) => {
   const filteredRefs = refs.filter(hasRefType(type));
@@ -103,8 +105,6 @@ const getOtherRefs = refs => {
       referenceType !== 'url' &&
       referenceType !== 'cve' &&
       referenceType !== 'cve_id' &&
-      referenceType !== 'bid' &&
-      referenceType !== 'bugtraq_id' &&
       referenceType !== 'dfn-cert' &&
       referenceType !== 'cert-bund'
     );
@@ -135,10 +135,6 @@ class Nvt extends Info {
     ret.cves = getFilteredRefIds(refs, 'cve').concat(
       getFilteredRefIds(refs, 'cve_id'),
     );
-    ret.bids = getFilteredRefIds(refs, 'bid').concat(
-      getFilteredRefIds(refs, 'bugtraq_id'),
-    );
-
     ret.certs = getFilteredRefs(refs, 'dfn-cert').concat(
       getFilteredRefs(refs, 'cert-bund'),
     );
