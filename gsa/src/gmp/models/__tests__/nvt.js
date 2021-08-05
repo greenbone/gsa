@@ -91,14 +91,6 @@ describe('nvt Model tests', () => {
             _type: 'cve_id',
           },
           {
-            _id: 'bidId',
-            _type: 'bid',
-          },
-          {
-            _id: 'bugtraq_idId',
-            _type: 'bugtraq_id',
-          },
-          {
             _id: 'dfn-certId',
             _type: 'dfn-cert',
           },
@@ -123,8 +115,6 @@ describe('nvt Model tests', () => {
 
     expect(nvt1.cves).toEqual(['cveId', 'cve_idId']);
     expect(nvt2.cves).toEqual([]);
-    expect(nvt1.bids).toEqual(['bidId', 'bugtraq_idId']);
-    expect(nvt2.bids).toEqual([]);
     expect(nvt1.certs).toEqual([
       {id: 'dfn-certId', type: 'dfn-cert'},
       {id: 'DFN-certId', type: 'dfn-cert'},
@@ -135,7 +125,6 @@ describe('nvt Model tests', () => {
     expect(nvt2.xrefs).toEqual([]);
 
     expect(nvt3.cves).toEqual(['cveId', 'cve_idId']);
-    expect(nvt3.bids).toEqual(['bidId', 'bugtraq_idId']);
     expect(nvt3.certs).toEqual([
       {id: 'dfn-certId', type: 'dfn-cert'},
       {id: 'DFN-certId', type: 'dfn-cert'},
