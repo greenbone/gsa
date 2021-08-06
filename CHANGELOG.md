@@ -124,7 +124,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 [21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.04.0
 
-## [20.8.3] (unreleased)
+## [20.8.4] (unreleased)
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124)
+
+[Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.3...gsa-20.08
+
+## [20.8.3] 2021-08-03
 
 ### Added
 ### Changed
@@ -137,9 +148,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Deprecated
 ### Removed
 ### Fixed
+- Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124)
 - Fixed setting/displaying timeout in EditNvtDetailsDialog [#3057](https://github.com/greenbone/gsa/pull/3057)
 
-[Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.2...gsa-20.08
+[20.8.3]: https://github.com/greenbone/gsa/compare/v20.8.2...gsa-20.08
 
 ## [20.8.2] - 2021-06-25
 
