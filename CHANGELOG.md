@@ -108,7 +108,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The CVSS v2 BaseScore calculator calculates the score on the client side now. [#2536](https://github.com/greenbone/gsa/pull/2536)
 
 ### Fixed
-<<<<<<< HEAD
 - Fix dynamic severity checkbox not being checked upon clicking [#2882](https://github.com/greenbone/gsa/pull/2882)
 - Fixed result CVE parsing for result listpage and CVE reports [#2869](https://github.com/greenbone/gsa/pull/2869)
 - Fixed setting comments of business process nodes [#2781](https://github.com/greenbone/gsa/pull/2781)
@@ -122,13 +121,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Drop gmp scanner type from GSA [#2498](https://github.com/greenbone/gsa/pull/2498)
 - Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
-=======
-- Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124)
->>>>>>> 4e7dcb429 (Update Changelog)
 
 [21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.04.0
 
-## [20.8.3] (unreleased)
+## [20.8.4] (unreleased)
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124)
+
+[Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.3...gsa-20.08
+
+## [20.8.3] 2021-08-03
 
 ### Added
 ### Changed
@@ -141,9 +148,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Deprecated
 ### Removed
 ### Fixed
+- Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124)
 - Fixed setting/displaying timeout in EditNvtDetailsDialog [#3057](https://github.com/greenbone/gsa/pull/3057)
 
-[Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.2...gsa-20.08
+[20.08.3]: https://github.com/greenbone/gsa/compare/v20.8.2...gsa-20.08
 
 ## [20.8.2] - 2021-06-25
 
