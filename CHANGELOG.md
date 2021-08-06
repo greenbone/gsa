@@ -14,12 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Removed
 
 ### Fixed
-<<<<<<< HEAD
 - Don't crash target table when port_list is undefined [#3120](https://github.com/greenbone/gsa/pull/3120)
-=======
-
->>>>>>> 4e7dcb429 (Update Changelog)
-
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.2...gsa-21.04
 
