@@ -62,17 +62,6 @@ class User extends Model {
       };
     }
 
-    if (isDefined(element.ifaces)) {
-      ret.ifaces = {
-        addresses: parseCsv(element.ifaces.__text),
-        allow: element.ifaces._allow,
-      };
-    } else {
-      ret.ifaces = {
-        addresses: [],
-      };
-    }
-
     if (isDefined(element.sources)) {
       const {source} = element.sources;
       if (source === 'ldap_connect') {
