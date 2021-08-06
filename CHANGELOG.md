@@ -16,9 +16,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed OVAL Definitions [#2918](https://github.com/greenbone/gsa/pull/2918), [#2921](https://github.com/greenbone/gsa/pull/2921), [#2923](https://github.com/greenbone/gsa/pull/2923)
 - Removed Network Source Interface from GSA for Tasks and Audits [#2902](https://github.com/greenbone/gsa/pull/2902) [#2942](https://github.com/greenbone/gsa/pull/2942)
 
-[21.10]: https://github.com/greenbone/gsa/compare/gsa-21.04...gsa-21.10
+[Unreleased]: https://github.com/greenbone/gsa/compare/gsa-21.04...master
 
-## [21.4.2] (unreleased)
+
+## [21.4.3] (unreleased)
+
+### Added
+### Changed
+### Fixed
+- Don't crash target table when port_list is undefined [#3120](https://github.com/greenbone/gsa/pull/3120)
+### Removed
+
+[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.2...gsa-21.04
+
+## [21.4.2] (2021-08-03)
 
 ### Added
 - Added new InfoIcon and use it in TargetDialog for information about the elevate credential feature [#3091](https://github.com/greenbone/gsa/pull/3091)
