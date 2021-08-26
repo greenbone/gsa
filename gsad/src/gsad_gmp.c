@@ -808,7 +808,7 @@ get_entity (gvm_connection_t *connection, const char *type,
 
   xml = g_string_new ("");
 
-  if (str_equal (type, "info"))
+  if (str_equal (type, "info") || str_equal (type, "license"))
     {
       cmd = g_strdup_printf ("get_%s", type);
     }
@@ -16403,6 +16403,45 @@ delete_tls_certificate_gmp (gvm_connection_t *connection,
   return move_resource_to_trash (connection, "tls_certificate", credentials,
                                  params, response_data);
 }
+
+/**
+ * @brief Get the current license and its status, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+static char *
+get_license (gvm_connection_t *connection, credentials_t *credentials,
+             params_t *params, const char *extra_xml,
+             cmd_response_data_t *response_data)
+{
+  
+  return get_entity (connection, "license", credentials, params, NULL,
+                     response_data);
+}
+
+/**
+ * @brief Get the current license and its status, envelope the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_license_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                 params_t *params, cmd_response_data_t *response_data)
+{
+  return get_license (connection, credentials, params, NULL, response_data);
+}
+
 
 char *
 renew_session_gmp (gvm_connection_t *connection, credentials_t *credentials,

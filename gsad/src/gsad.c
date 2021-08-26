@@ -370,6 +370,7 @@ init_validator ()
                      "|(get_group)"
                      "|(get_groups)"
                      "|(get_info)"
+                     "|(get_license)"
                      "|(get_note)"
                      "|(get_notes)"
                      "|(get_nvt_families)"
@@ -2088,6 +2089,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_group)
   ELSE (get_groups)
   ELSE (get_info)
+  ELSE (get_license)
   ELSE (get_note)
   ELSE (get_notes)
   ELSE (get_nvt_families)
