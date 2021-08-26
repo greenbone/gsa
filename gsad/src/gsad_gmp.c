@@ -16420,7 +16420,6 @@ get_license (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t *response_data)
 {
-  
   return get_entity (connection, "license", credentials, params, NULL,
                      response_data);
 }
@@ -16441,7 +16440,6 @@ get_license_gmp (gvm_connection_t *connection, credentials_t *credentials,
 {
   return get_license (connection, credentials, params, NULL, response_data);
 }
-
 
 char *
 renew_session_gmp (gvm_connection_t *connection, credentials_t *credentials,
