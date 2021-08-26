@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.10] - Unreleased
 
 ### Added
+- Added command for getting appliance license information [#3137](https://github.com/greenbone/gsa/pull/3137)
 ### Changed
 ### Fixed
 ### Removed
