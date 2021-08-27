@@ -20,20 +20,28 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import {isDefined} from 'gmp/utils/identity';
+
+import DeleteIcon from 'web/components/icon/deleteicon';
+
 import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
 
 import Layout from 'web/components/layout/layout';
 
+import Button from './button';
+
 const Panel = styled(Layout)`
   background-color: ${Theme.white};
   border: 1px solid ${Theme.lightBlue};
-  margin-top: 5px;
+  margin-top: ${props => (props.noMargin ? '0px' : '5px')};
 `;
 
 const Heading = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 15px;
   min-height: 35px;
   background-color: ${Theme.lightBlue};
@@ -54,10 +62,19 @@ const Body = styled.div`
   flex-grow: 1;
 `;
 
-const InfoPanel = ({heading, footer, children, ...props}) => {
+const InfoPanel = ({heading, footer, children, onCloseClick, ...props}) => {
   return (
     <Panel {...props} align={['start', 'stretch']} flex="column">
-      {heading && <Heading>{heading}</Heading>}
+      {heading && (
+        <Heading>
+          {heading}
+          {isDefined(onCloseClick) && (
+            <Button onClick={onCloseClick}>
+              <DeleteIcon />
+            </Button>
+          )}
+        </Heading>
+      )}
       {children && <Body>{children}</Body>}
       {footer && <Footer>{footer}</Footer>}
     </Panel>
@@ -67,6 +84,7 @@ const InfoPanel = ({heading, footer, children, ...props}) => {
 InfoPanel.propTypes = {
   footer: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   heading: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  onCloseClick: PropTypes.func,
 };
 
 export default InfoPanel;
