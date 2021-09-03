@@ -582,7 +582,6 @@ init_validator ()
   gvm_validator_add (validator, "id_list:name", "^ *[0-9]+ *$");
   gvm_validator_add (validator, "id_list:value",
                      "^[[:alnum:]\\-_ ]+:[a-z0-9\\-]+$");
-  gvm_validator_add (validator, "ifaces_allow", "^(0|1)$");
   gvm_validator_add (validator, "include_id_list:name", "^[[:alnum:]\\-_ ]+$");
   gvm_validator_add (validator, "include_id_list:value", "^(0|1)$");
   gvm_validator_add (validator, "installer_sig", "(?s)^.*$");
@@ -810,7 +809,6 @@ init_validator ()
   gvm_validator_alias (validator, "ignore_pagination", "boolean");
   gvm_validator_alias (validator, "event", "condition");
   gvm_validator_alias (validator, "access_hosts", "hosts_opt");
-  gvm_validator_alias (validator, "access_ifaces", "hosts_opt");
   gvm_validator_alias (validator, "max_checks", "number");
   gvm_validator_alias (validator, "max_hosts", "number");
   gvm_validator_alias (validator, "method", "condition");
