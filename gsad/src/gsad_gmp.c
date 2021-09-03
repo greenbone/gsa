@@ -14110,7 +14110,7 @@ char *
 create_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
-  const char *name, *password, *hosts, *hosts_allow, *ifaces, *ifaces_allow;
+  const char *name, *password, *hosts, *hosts_allow;
   const char *auth_method, *comment;
   int ret;
   params_t *groups, *roles;
@@ -14122,16 +14122,12 @@ create_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   password = params_value (params, "password");
   hosts = params_value (params, "access_hosts");
   hosts_allow = params_value (params, "hosts_allow");
-  ifaces = params_value (params, "access_ifaces");
-  ifaces_allow = params_value (params, "ifaces_allow");
   auth_method = params_value (params, "auth_method");
   comment = params_value (params, "comment");
 
   CHECK_VARIABLE_INVALID (name, "Create User");
   CHECK_VARIABLE_INVALID (hosts, "Create User");
   CHECK_VARIABLE_INVALID (hosts_allow, "Create User");
-  CHECK_VARIABLE_INVALID (ifaces, "Create User");
-  CHECK_VARIABLE_INVALID (ifaces_allow, "Create User");
 
   if (auth_method && strcmp (auth_method, "1") == 0)
     {
@@ -14200,9 +14196,8 @@ create_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   g_string_append (string, role_elements->str);
   g_string_free (role_elements, TRUE);
 
-  buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>"
-                                 "<ifaces allow=\"%s\">%s</ifaces>",
-                                 hosts_allow, hosts, ifaces_allow, ifaces);
+  buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>", hosts_allow,
+                                 hosts);
   g_string_append (string, buf);
   g_free (buf);
   if (auth_method && !strcmp (auth_method, "1"))
@@ -14368,7 +14363,7 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   int ret;
   gchar *html, *response, *buf;
   const char *user_id, *login, *old_login, *modify_password, *password;
-  const char *hosts, *hosts_allow, *ifaces, *ifaces_allow, *comment;
+  const char *hosts, *hosts_allow, *comment;
   entity_t entity;
   GString *command, *group_elements, *role_elements;
   params_t *groups, *roles;
@@ -14379,8 +14374,6 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   /* Whether hosts grants ("1") or forbids ("0") access.  "2" for all
    * access. */
   hosts_allow = params_value (params, "hosts_allow");
-  ifaces = params_value (params, "access_ifaces");
-  ifaces_allow = params_value (params, "ifaces_allow");
   login = params_value (params, "login");
   old_login = params_value (params, "old_login");
   modify_password = params_value (params, "modify_password");
@@ -14392,8 +14385,6 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
   CHECK_VARIABLE_INVALID (modify_password, "Save User");
   CHECK_VARIABLE_INVALID (hosts, "Save User");
   CHECK_VARIABLE_INVALID (hosts_allow, "Save User");
-  CHECK_VARIABLE_INVALID (ifaces, "Save User");
-  CHECK_VARIABLE_INVALID (ifaces_allow, "Save User");
   CHECK_VARIABLE_INVALID (login, "Save User");
   CHECK_VARIABLE_INVALID (old_login, "Save User");
 
@@ -14430,9 +14421,8 @@ save_user_gmp (gvm_connection_t *connection, credentials_t *credentials,
       g_free (buf);
     }
 
-  buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>"
-                                 "<ifaces allow=\"%s\">%s</ifaces>",
-                                 hosts_allow, hosts, ifaces_allow, ifaces);
+  buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>", hosts_allow,
+                                 hosts);
   g_string_append (command, buf);
   g_free (buf);
 

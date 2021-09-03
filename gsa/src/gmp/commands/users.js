@@ -178,12 +178,10 @@ export class UserCommand extends EntityCommand {
 
   create({
     access_hosts,
-    access_ifaces,
     auth_method,
     comment,
     group_ids,
     hosts_allow,
-    ifaces_allow,
     name,
     password,
     role_ids,
@@ -198,12 +196,10 @@ export class UserCommand extends EntityCommand {
     const data = {
       cmd: 'create_user',
       access_hosts,
-      access_ifaces,
       auth_method,
       comment,
       'group_ids:': group_ids,
       hosts_allow,
-      ifaces_allow,
       login: name,
       password,
       'role_ids:': role_ids,
@@ -215,12 +211,10 @@ export class UserCommand extends EntityCommand {
   save({
     id,
     access_hosts = '',
-    access_ifaces = '',
     auth_method,
     comment = '',
     group_ids,
     hosts_allow,
-    ifaces_allow,
     name,
     old_name,
     password = '', // needs to be included in httpPost, should be optional in gsad
@@ -238,12 +232,10 @@ export class UserCommand extends EntityCommand {
     const data = {
       cmd: 'save_user',
       access_hosts,
-      access_ifaces,
       comment,
       'group_ids:': group_ids,
       hosts_allow,
       id,
-      ifaces_allow,
       login: name,
       modify_password: auth_method,
       old_login: old_name,
@@ -310,9 +302,8 @@ export class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('group')]: data.groupsFilter,
       [saveDefaultFilterSettingId('host')]: data.hostsFilter,
       [saveDefaultFilterSettingId('note')]: data.notesFilter,
-      [saveDefaultFilterSettingId(
-        'operatingsystem',
-      )]: data.operatingSystemsFilter,
+      [saveDefaultFilterSettingId('operatingsystem')]:
+        data.operatingSystemsFilter,
       [saveDefaultFilterSettingId('override')]: data.overridesFilter,
       [saveDefaultFilterSettingId('permission')]: data.permissionsFilter,
       [saveDefaultFilterSettingId('portlist')]: data.portListsFilter,
@@ -326,9 +317,8 @@ export class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('target')]: data.targetsFilter,
       [saveDefaultFilterSettingId('task')]: data.tasksFilter,
       [saveDefaultFilterSettingId('ticket')]: data.ticketsFilter,
-      [saveDefaultFilterSettingId(
-        'tlscertificate',
-      )]: data.tlsCertificatesFilter,
+      [saveDefaultFilterSettingId('tlscertificate')]:
+        data.tlsCertificatesFilter,
       [saveDefaultFilterSettingId('user')]: data.usersFilter,
       [saveDefaultFilterSettingId('vulnerability')]: data.vulnerabilitiesFilter,
       [saveDefaultFilterSettingId('cpe')]: data.cpeFilter,

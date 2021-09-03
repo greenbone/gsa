@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 ### Fixed
 ### Removed
+- Removed interface access from users in GSA and gsad [#3123](https://github.com/greenbone/gsa/pull/3123)
 - Removed bid and bugtraq_id handling [#3122](https://github.com/greenbone/gsa/pull/3122)
 - Removed OSP scanner and scan config handling [#3094](https://github.com/greenbone/gsa/pull/3094)
 - Removed business process map feature [#3051](https://github.com/greenbone/gsa/pull/3051), [#3058] (https://github.com/greenbone/gsa/pull/3058)

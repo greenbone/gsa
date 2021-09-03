@@ -92,13 +92,11 @@ class Dialog extends React.Component {
   render() {
     const {
       accessHosts = '',
-      accessIfaces = '',
       capabilities,
       comment = '',
       groups,
       groupIds = [],
       hostsAllow = ACCESS_ALLOW_ALL,
-      ifacesAllow = ACCESS_ALLOW_ALL,
       name = _('Unnamed'),
       oldName,
       password = '',
@@ -117,7 +115,6 @@ class Dialog extends React.Component {
     const data = {
       ...user,
       access_hosts: accessHosts,
-      access_ifaces: accessIfaces,
       auth_method:
         isEdit && isDefined(user.authMethod)
           ? user.authMethod
@@ -126,7 +123,6 @@ class Dialog extends React.Component {
       group_ids: groupIds,
       groups,
       hosts_allow: hostsAllow,
-      ifaces_allow: ifacesAllow,
       name,
       old_name: oldName,
       password,
@@ -318,33 +314,6 @@ class Dialog extends React.Component {
                     />
                   </Divider>
                 </FormGroup>
-
-                <FormGroup title={_('Interface Access')}>
-                  <Divider flex="column">
-                    <Divider>
-                      <Radio
-                        name="ifaces_allow"
-                        title={_('Allow all and deny')}
-                        value={ACCESS_ALLOW_ALL}
-                        checked={state.ifaces_allow === ACCESS_ALLOW_ALL}
-                        onChange={onValueChange}
-                      />
-                      <Radio
-                        name="ifaces_allow"
-                        title={_('Deny all and allow')}
-                        value={ACCESS_DENY_ALL}
-                        checked={state.ifaces_allow === ACCESS_DENY_ALL}
-                        onChange={onValueChange}
-                      />
-                    </Divider>
-                    <TextField
-                      name="access_ifaces"
-                      size="30"
-                      value={state.access_ifaces}
-                      onChange={onValueChange}
-                    />
-                  </Divider>
-                </FormGroup>
               </Layout>
               {confirmationDialogVisible && (
                 <ConfirmationDialog
@@ -369,7 +338,6 @@ class Dialog extends React.Component {
 
 Dialog.propTypes = {
   accessHosts: PropTypes.string,
-  accessIfaces: PropTypes.string,
   authMethod: PropTypes.oneOf([
     AUTH_METHOD_LDAP,
     AUTH_METHOD_NEW_PASSWORD,
@@ -382,7 +350,6 @@ Dialog.propTypes = {
   groups: PropTypes.array,
   hostsAllow: PropTypes.oneOf([ACCESS_ALLOW_ALL, ACCESS_DENY_ALL]),
   id: PropTypes.id,
-  ifacesAllow: PropTypes.oneOf([ACCESS_ALLOW_ALL, ACCESS_DENY_ALL]),
   name: PropTypes.string,
   oldName: PropTypes.string,
   password: PropTypes.string,

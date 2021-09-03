@@ -81,27 +81,6 @@ describe('User model tests', () => {
     expect(user2.hosts).toEqual(res2);
   });
 
-  test('should parse ifaces', () => {
-    const elem = {
-      ifaces: {
-        __text: '123.456.789.42, 987.654.321.1',
-        _allow: '0',
-      },
-    };
-    const res = {
-      addresses: ['123.456.789.42', '987.654.321.1'],
-      allow: '0',
-    };
-    const res2 = {
-      addresses: [],
-    };
-    const user = User.fromElement(elem);
-    const user2 = User.fromElement({});
-
-    expect(user.ifaces).toEqual(res);
-    expect(user2.ifaces).toEqual(res2);
-  });
-
   test('should parse sources to auth_method', () => {
     const elem1 = {
       sources: {
