@@ -395,6 +395,7 @@ init_validator ()
                      "|(get_setting)"
                      "|(get_settings)"
                      "|(get_system_reports)"
+                     "|(get_system_report)"
                      "|(get_tag)"
                      "|(get_tags)"
                      "|(get_target)"
@@ -2112,6 +2113,7 @@ exec_gmp_get (http_connection_t *con, gsad_connection_info_t *con_info,
   ELSE (get_setting)
   ELSE (get_settings)
   ELSE (get_system_reports)
+  ELSE (get_system_report)
   ELSE (get_tag)
   ELSE (get_tags)
   ELSE (get_target)

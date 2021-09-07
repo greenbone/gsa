@@ -10138,6 +10138,102 @@ get_system_reports_gmp (gvm_connection_t *connection,
 }
 
 /**
+ * @brief Get a single system report
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Enveloped XML object.
+ */
+char *
+get_system_report_gmp (gvm_connection_t *connection,
+                       credentials_t *credentials, params_t *params,
+                       cmd_response_data_t *response_data)
+{
+  GString *xml;
+
+  const char *name, *slave_id, *duration, *start_time, *end_time;
+  char *gmp_command;
+
+  name = params_value (params, "name");
+  slave_id = params_value (params, "slave_id");
+
+  duration = params_value (params, "duration");
+  start_time = params_value (params, "start_time");
+  end_time = params_value (params, "end_time");
+
+  CHECK_VARIABLE_INVALID (name, "Get System Report");
+  xml = g_string_new ("<get_system_report>");
+
+  if (duration && strcmp (duration, ""))
+    {
+      gmp_command =
+        g_markup_printf_escaped ("<get_system_reports"
+                                 " name=\"%s\""
+                                 " duration=\"%s\""
+                                 " slave_id=\"%s\"/>",
+                                 name, duration, slave_id ? slave_id : "0");
+    }
+  else
+    {
+      start_time = params_value (params, "start_time");
+      end_time = params_value (params, "end_time");
+
+      CHECK_VARIABLE_INVALID (start_time, "Get System Report")
+      CHECK_VARIABLE_INVALID (end_time, "Get System Report")
+
+      gmp_command = g_markup_printf_escaped ("<get_system_reports"
+                                             " name=\"%s\""
+                                             " start_time=\"%s\""
+                                             " end_time=\"%s\""
+                                             " slave_id=\"%s\"/>",
+                                             name, start_time, end_time,
+                                             slave_id ? slave_id : "0");
+    }
+
+  if (gvm_connection_sendf (connection,
+                            "%s",
+                            gmp_command)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      g_free (gmp_command);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while getting the system reports. "
+        "The current list of system reports is not available. "
+        "Diagnostics: Failure to send command to manager daemon.",
+        response_data);
+    }
+
+  if (read_string_c (connection, &xml))
+    {
+      g_string_free (xml, TRUE);
+      g_free (gmp_command);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
+      return gsad_message (
+        credentials, "Internal error", __func__, __LINE__,
+        "An internal error occurred while getting the system reports. "
+        "The current list of system reports is not available. "
+        "Diagnostics: Failure to receive response from manager daemon.",
+        response_data);
+    }
+
+  g_free (gmp_command);
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_system_report>");
+  return envelope_gmp (connection, credentials, params,
+                       g_string_free (xml, FALSE), response_data);
+}
+
+/**
  * @brief Return system report image.
  *
  * @param[in]  connection     Connection to manager.
@@ -10149,9 +10245,9 @@ get_system_reports_gmp (gvm_connection_t *connection,
  * @return Image, or NULL.
  */
 char *
-get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
-                       const char *url, params_t *params,
-                       cmd_response_data_t *response_data)
+get_system_report_gmp_from_url (gvm_connection_t *connection, credentials_t *credentials,
+                                const char *url, params_t *params,
+                                cmd_response_data_t *response_data)
 {
   entity_t entity;
   entity_t report_entity;
@@ -10235,8 +10331,16 @@ get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
               content = (char *) g_base64_decode (content_64, &content_length);
 
 #if 1
-              cmd_response_data_set_content_type (response_data,
-                                                  GSAD_CONTENT_TYPE_IMAGE_PNG);
+              if (strcmp(entity_attribute (report_entity, "format"), "png") == 0)
+                {
+                  cmd_response_data_set_content_type (response_data,
+                                                      GSAD_CONTENT_TYPE_IMAGE_PNG);
+                }
+	      else
+                {
+                  cmd_response_data_set_content_type (response_data,
+                                                      GSAD_CONTENT_TYPE_TEXT_PLAIN);
+                }
               //*content_disposition = g_strdup_printf ("attachment;
               // filename=\"xxx.png\"");
 #else

@@ -25,7 +25,7 @@
 
 #include "gsad_base.h"        /* for ctime_r_strip_newline */
 #include "gsad_credentials.h" /* for credentials_t */
-#include "gsad_gmp.h"         /* for get_system_report_gmp */
+#include "gsad_gmp.h"         /* for get_system_report_gmp_from_url */
 #include "gsad_i18n.h"        /* for accept_language_to_env_fmt */
 #include "gsad_settings.h"    /* for get_guest_usernmae */
 #include "gsad_user.h"        /* for user_t */
@@ -597,9 +597,9 @@ handle_system_report (http_connection_t *connection, const char *method,
   switch (manager_connect (credentials, &con, response_data))
     {
     case 0: /* success */
-      res = get_system_report_gmp (&con, credentials,
-                                   &url[0] + strlen ("/system_report/"), params,
-                                   response_data);
+      res = get_system_report_gmp_from_url (&con, credentials,
+                                            &url[0] + strlen ("/system_report/"), params,
+                                            response_data);
       gvm_connection_close (&con);
       break;
     case 1: /* manager closed connection */
