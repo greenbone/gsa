@@ -10148,9 +10148,8 @@ get_system_reports_gmp (gvm_connection_t *connection,
  * @return Enveloped XML object.
  */
 char *
-get_system_report_gmp (gvm_connection_t *connection,
-                       credentials_t *credentials, params_t *params,
-                       cmd_response_data_t *response_data)
+get_system_report_gmp (gvm_connection_t *connection, credentials_t *credentials,
+                       params_t *params, cmd_response_data_t *response_data)
 {
   GString *xml;
 
@@ -10193,10 +10192,7 @@ get_system_report_gmp (gvm_connection_t *connection,
                                              slave_id ? slave_id : "0");
     }
 
-  if (gvm_connection_sendf (connection,
-                            "%s",
-                            gmp_command)
-      == -1)
+  if (gvm_connection_sendf (connection, "%s", gmp_command) == -1)
     {
       g_string_free (xml, TRUE);
       g_free (gmp_command);
@@ -10245,8 +10241,9 @@ get_system_report_gmp (gvm_connection_t *connection,
  * @return Image, or NULL.
  */
 char *
-get_system_report_gmp_from_url (gvm_connection_t *connection, credentials_t *credentials,
-                                const char *url, params_t *params,
+get_system_report_gmp_from_url (gvm_connection_t *connection,
+                                credentials_t *credentials, const char *url,
+                                params_t *params,
                                 cmd_response_data_t *response_data)
 {
   entity_t entity;
@@ -10331,18 +10328,19 @@ get_system_report_gmp_from_url (gvm_connection_t *connection, credentials_t *cre
               content = (char *) g_base64_decode (content_64, &content_length);
 
 #if 1
-              if (strcmp(entity_attribute (report_entity, "format"), "png") == 0)
+              if (strcmp (entity_attribute (report_entity, "format"), "png")
+                  == 0)
                 {
-                  cmd_response_data_set_content_type (response_data,
-                                                      GSAD_CONTENT_TYPE_IMAGE_PNG);
+                  cmd_response_data_set_content_type (
+                    response_data, GSAD_CONTENT_TYPE_IMAGE_PNG);
                 }
-	      else
+              else
                 {
-                  cmd_response_data_set_content_type (response_data,
-                                                      GSAD_CONTENT_TYPE_TEXT_PLAIN);
+                  cmd_response_data_set_content_type (
+                    response_data, GSAD_CONTENT_TYPE_TEXT_PLAIN);
                 }
-              //*content_disposition = g_strdup_printf ("attachment;
-              // filename=\"xxx.png\"");
+                //*content_disposition = g_strdup_printf ("attachment;
+                // filename=\"xxx.png\"");
 #else
               g_free (content);
               content = g_strdup ("helo");

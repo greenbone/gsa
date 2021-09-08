@@ -510,8 +510,9 @@ char *
 get_system_report_gmp (gvm_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t *);
 char *
-get_system_report_gmp_from_url (gvm_connection_t *, credentials_t *, const char *,
-                                params_t *, cmd_response_data_t *);
+get_system_report_gmp_from_url (gvm_connection_t *, credentials_t *,
+                                const char *, params_t *,
+                                cmd_response_data_t *);
 
 char *
 get_report_format_gmp (gvm_connection_t *, credentials_t *, params_t *,

@@ -597,9 +597,9 @@ handle_system_report (http_connection_t *connection, const char *method,
   switch (manager_connect (credentials, &con, response_data))
     {
     case 0: /* success */
-      res = get_system_report_gmp_from_url (&con, credentials,
-                                            &url[0] + strlen ("/system_report/"), params,
-                                            response_data);
+      res = get_system_report_gmp_from_url (
+        &con, credentials, &url[0] + strlen ("/system_report/"), params,
+        response_data);
       gvm_connection_close (&con);
       break;
     case 1: /* manager closed connection */
