@@ -29,7 +29,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Changed conditions for enabling CreateTicketIcon on results detailspage [#3154](https://github.com/greenbone/gsa/pull/3154)
 ### Fixed
 - Don't crash target table when port_list is undefined [#3120](https://github.com/greenbone/gsa/pull/3120)
+<<<<<<< HEAD
 ### Removed
+=======
+- Ensure gvmd sends error messages if gvmcg fails [#3149](https://github.com/greenbone/gsa/pull/3149)
+>>>>>>> f4fab55d9 (Added CHANGELOG entry for error messages from gvmcg.)
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.2...gsa-21.04
 
