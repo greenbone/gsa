@@ -24,8 +24,8 @@
   },
   "dependencies": {
     "@greenbone/ui-components": "2021.1.2",
-    "@babel/core": "^7.15.0",
-    "@sentry/react": "^6.11.0",
+    "@babel/core": "^7.15.5",
+    "@sentry/react": "^6.12.0",
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
     "@vx/shape": "^0.0.179",
@@ -80,7 +80,7 @@
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "devDependencies": {
-    "@babel/cli": "^7.14.8",
+    "@babel/cli": "^7.15.4",
     "@storybook/react": "^6.3.8",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
@@ -93,7 +93,7 @@
     "jest-junit": "^12.2.0",
     "jest-styled-components": "^6.3.4",
     "lint-staged": "^8.2.1",
-    "prettier": "^2.3.2"
+    "prettier": "^2.4.0"
   },
   "jest": {
     "collectCoverageFrom": [
