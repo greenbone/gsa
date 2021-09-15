@@ -100,6 +100,15 @@ export const ToolBarIcons = ({
 }) => {
   const capabilities = useCapabilities();
 
+  const isMissingPermissions =
+    !capabilities.mayCreate('permission') || !capabilities.mayAccess('users');
+  const createTicketIconTitle = isMissingPermissions
+    ? _(
+        'Permissions to create a ticket are insufficient. You need the ' +
+          'create_permission and get_users permissions.',
+      )
+    : _('Create new Ticket');
+
   return (
     <Divider margin="10px">
       <IconDivider>
@@ -132,7 +141,8 @@ export const ToolBarIcons = ({
         )}
         {capabilities.mayCreate('ticket') && (
           <NewTicketIcon
-            title={_('Create new Ticket')}
+            title={createTicketIconTitle}
+            disabled={isMissingPermissions}
             value={entity}
             onClick={onTicketCreateClick}
           />
