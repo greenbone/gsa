@@ -10,7 +10,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added new license page [#3138](https://github.com/greenbone/gsa/pull/3138)
 - Added command for getting appliance license information [#3137](https://github.com/greenbone/gsa/pull/3137)
 ### Changed
-<<<<<<< HEAD
 ### Fixed
 ### Removed
 - Removed interface access from users in GSA and gsad [#3123](https://github.com/greenbone/gsa/pull/3123)
@@ -19,9 +18,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed business process map feature [#3051](https://github.com/greenbone/gsa/pull/3051), [#3058] (https://github.com/greenbone/gsa/pull/3058)
 - Removed OVAL Definitions [#2918](https://github.com/greenbone/gsa/pull/2918), [#2921](https://github.com/greenbone/gsa/pull/2921), [#2923](https://github.com/greenbone/gsa/pull/2923)
 - Removed Network Source Interface from GSA for Tasks and Audits [#2902](https://github.com/greenbone/gsa/pull/2902) [#2942](https://github.com/greenbone/gsa/pull/2942)
-=======
-- Changed conditions for enabling CreateTicketIcon on results detailspage [#3154](https://github.com/greenbone/gsa/pull/3154)
->>>>>>> d292ef4a5 (Update Changelog)
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/gsa-21.04...master
 
@@ -30,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 ### Changed
+- Changed conditions for enabling CreateTicketIcon on results detailspage [#3154](https://github.com/greenbone/gsa/pull/3154)
 ### Fixed
 - Don't crash target table when port_list is undefined [#3120](https://github.com/greenbone/gsa/pull/3120)
 ### Removed
