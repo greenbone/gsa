@@ -1196,6 +1196,7 @@
   "Permissions": "Berechtigungen",
   "Permissions ({{count}})": "Berechtigungen ({{count}})",
   "Permissions Filter": "Berechtigungen-Filter",
+  "Permissions to create a ticket are insufficient. You need the create_permission and get_users permissions.": "Die Berechtigungen ein Ticket zu erstellen sind unzureichend. Sie benötigen die create_permission- und get_users-Berechtigungen.",
   "Physical": "Physisch",
   "Platform": "Plattform",
   "Please be aware that:": "Bitte beachten Sie, dass:",
