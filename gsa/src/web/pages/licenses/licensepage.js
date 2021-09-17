@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -39,36 +39,25 @@ import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
+import useGmp from 'web/utils/useGmp';
+
 // import useCapabilities from 'web/utils/useCapabilities';
 
 import LicenseDialog from './dialog';
 
-export const fakeLicense = {
-  id: '12345',
-  customerName: 'Monsters Inc.',
-  creationDate: '2019-10-10T11:09:23.022Z',
-  version: '21.10',
-  begin: '2019-10-10T12:09:23.022Z',
-  expires: '2026-10-10T11:09:23.022Z',
-  model: 'GSM 450',
-  modeType: 'Hardware Appliance',
-  cpu: '8',
-  memory: '8GB',
-};
-
 const ToolBarIcons = ({onNewLicenseClick}) => {
   // const capabilities = useCapabilities();
-  const mayCreate = true; // TODO Change!
+  const mayCreate = false; // TODO Adjust for capabilities
   return (
     <Layout>
       <IconDivider>
         <ManualIcon
           size="small"
           page="web-interface" // TODO Change!
-          anchor="changing-the-user-settings" // TODO Change!
+          anchor="license-management" // TODO Change!
           title={_('Help: License Management')}
         />
-        {mayCreate && (
+        {mayCreate && ( // TODO Adjust for capabilities
           <NewIcon
             size="small"
             title={_('New License')}
@@ -84,9 +73,16 @@ ToolBarIcons.propTypes = {
 };
 
 const LicensePage = () => {
-  const [license, setLicense] = useState(fakeLicense);
+  const gmp = useGmp();
+
+  const [license, setLicense] = useState({});
   const [newLicenseDialogVisible, setNewLicenseDialogVisible] = useState(false);
-  // TODO license = gmp.get_license
+
+  useEffect(() => {
+    gmp.license.getLicenseInformation().then(response => {
+      setLicense(response.data);
+    });
+  }, [gmp.license]);
 
   const handleNewLicenseClick = () => {
     setNewLicenseDialogVisible(true);
@@ -124,7 +120,7 @@ const LicensePage = () => {
                   <TableData>{license.id}</TableData>
                 </TableRow>
                 <TableRow>
-                  <TableData>{_('Name')}</TableData>
+                  <TableData>{_('Customer Name')}</TableData>
                   <TableData>{license.customerName}</TableData>
                 </TableRow>
                 <TableRow>
@@ -140,7 +136,7 @@ const LicensePage = () => {
                 <TableRow>
                   <TableData>{_('Begins')}</TableData>
                   <TableData>
-                    <DateTime date={license.begin} />
+                    <DateTime date={license.begins} />
                   </TableData>
                 </TableRow>
                 <TableRow>
@@ -163,16 +159,8 @@ const LicensePage = () => {
                   <TableData>{license.model}</TableData>
                 </TableRow>
                 <TableRow>
-                  <TableData>{_('Mode Type')}</TableData>
-                  <TableData>{license.modeType}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('CPU')}</TableData>
-                  <TableData>{license.cpu}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Memory')}</TableData>
-                  <TableData>{license.memory}</TableData>
+                  <TableData>{_('Model Type')}</TableData>
+                  <TableData>{license.modelType}</TableData>
                 </TableRow>
               </TableBody>
             </InfoTable>
