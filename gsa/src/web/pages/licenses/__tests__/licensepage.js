@@ -23,6 +23,8 @@ import {License} from 'gmp/commands/license';
 
 import Response from 'gmp/http/response';
 
+import {setTimezone} from 'web/store/usersettings/actions';
+
 import {rendererWith, waitFor} from 'web/utils/testing';
 import LicensePage from '../licensepage';
 
@@ -75,8 +77,10 @@ const gmp = {
 
 describe('LicensePage tests', () => {
   test('should render', async () => {
-    const {render} = rendererWith({gmp, router: true, store: true});
+    const {render, store} = rendererWith({gmp, router: true, store: true});
     const {element, getAllByRole, getAllByTestId} = render(<LicensePage />);
+
+    store.dispatch(setTimezone('UTC'));
 
     await waitFor(() => element.querySelectorAll('table'));
 
@@ -105,13 +109,13 @@ describe('LicensePage tests', () => {
     expect(element).toHaveTextContent('Customer Name');
     expect(element).toHaveTextContent('Monsters Inc.');
     expect(element).toHaveTextContent('Creation Date');
-    expect(element).toHaveTextContent('Fri, Aug 27, 2021 8:05 AM');
+    expect(element).toHaveTextContent('Fri, Aug 27, 2021 7:05 AM UTC');
     expect(element).toHaveTextContent('Version');
     expect(element).toHaveTextContent('1.0.0');
     expect(element).toHaveTextContent('Begins');
-    expect(element).toHaveTextContent('Fri, Aug 27, 2021 9:05 AM');
+    expect(element).toHaveTextContent('Fri, Aug 27, 2021 7:05 AM UTC');
     expect(element).toHaveTextContent('Expires');
-    expect(element).toHaveTextContent('Sat, Sep 4, 2021 9:05 AM');
+    expect(element).toHaveTextContent('Sat, Sep 4, 2021 7:05 AM UTC');
     expect(element).toHaveTextContent('Model');
     expect(element).toHaveTextContent('trial');
     expect(element).toHaveTextContent('Model Type');
