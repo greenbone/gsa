@@ -149,7 +149,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Deprecated
 ### Removed
 ### Fixed
-- Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124)
+- Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124), [#3157](https://github.com/greenbone/gsa/pull/3157)
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.3...gsa-20.08
 
