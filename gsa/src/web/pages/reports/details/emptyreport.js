@@ -19,7 +19,7 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {isActive} from 'gmp/models/task';
+import {isActive, TASK_STATUS} from 'gmp/models/task';
 
 import TaskIcon from 'web/components/icon/taskicon';
 import RefreshIcon from 'web/components/icon/refreshicon';
@@ -94,7 +94,7 @@ const EmptyReport = ({
             {_('Just wait for results to arrive.')}
           </ReportPanel>
         )}
-        {progress < 1 && hasTarget && (
+        {progress < 1 && hasTarget && status !== TASK_STATUS.interrupted && (
           <ReportPanel
             icon={props => <TargetIcon {...props} />}
             title={_('The target hosts could be regarded dead')}
