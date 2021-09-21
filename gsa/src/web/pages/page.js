@@ -52,7 +52,7 @@ import compose from 'web/utils/compose';
 
 const log = logger.getLogger('web.page');
 
-const LICENSE_EXPIRATION_THRESHOLD = 30; // TODO fix this
+const LICENSE_EXPIRATION_THRESHOLD = 30;
 
 const StyledLayout = styled(Layout)`
   height: 100%;
