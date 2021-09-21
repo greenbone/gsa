@@ -26,13 +26,11 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
+import date from 'gmp/models/date';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-
-import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
-import compose from 'web/utils/compose';
 
 import MenuBar from 'web/components/bar/menubar';
 
@@ -46,15 +44,57 @@ import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 import Main from 'web/components/structure/main';
 
+import InfoPanel from 'web/components/panel/infopanel';
+
+import PropTypes from 'web/utils/proptypes';
+import withGmp from 'web/utils/withGmp';
+import compose from 'web/utils/compose';
+
 const log = logger.getLogger('web.page');
+
+const LICENSE_EXPIRATION_THRESHOLD = 30;
 
 const StyledLayout = styled(Layout)`
   height: 100%;
 `;
 
+const LicenseNotification = ({capabilities, days, license, onCloseClick}) => {
+  const {model} = license;
+  const titleMessage = _('Your {{model}} license ends in {{days}} days!', {
+    model,
+    days,
+  });
+
+  // TODO change message depending on user capabilities (link to license page or note to contact admin)
+
+  return (
+    <InfoPanel
+      noMargin={true}
+      heading={titleMessage}
+      onCloseClick={onCloseClick}
+    >
+      {_(
+        'After that your appliance remains valid and you can still log in ' +
+          'and view or download all of your scan reports. You can re-activate ' +
+          'the security feed via menu item "Administration > License".',
+      )}
+    </InfoPanel>
+  );
+};
+
+LicenseNotification.propTypes = {
+  capabilities: PropTypes.capabilities.isRequired,
+  days: PropTypes.number.isRequired,
+  license: PropTypes.object.isRequired,
+  onCloseClick: PropTypes.func.isRequired,
+};
+
 class Page extends React.Component {
   constructor(...args) {
     super(...args);
+
+    this.handleCloseLicenseNotification =
+      this.handleCloseLicenseNotification.bind(this);
 
     this.state = {};
   }
@@ -74,23 +114,46 @@ class Page extends React.Component {
         // use empty capabilities
         this.setState({capabilities: new Capabilities()});
       });
+
+    gmp.license.getLicenseInformation().then(license => {
+      this.setState({license: license.data});
+    });
+
+    this.setState({
+      notificationClosed: false,
+    });
+  }
+
+  handleCloseLicenseNotification() {
+    this.setState({notificationClosed: true});
   }
 
   render() {
     const {children, location} = this.props;
-    const {capabilities} = this.state;
+    const {capabilities, license = {}, notificationClosed} = this.state;
 
     if (!isDefined(capabilities)) {
       // only show content after caps have been loaded
       // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
       return null;
     }
+    const days = date(license.expires).diff(date(), 'days');
+    const showLicenseNotification =
+      days < LICENSE_EXPIRATION_THRESHOLD && !notificationClosed;
 
     return (
       <CapabilitiesContext.Provider value={capabilities}>
         <StyledLayout flex="column" align={['start', 'stretch']}>
           <MenuBar />
           <Header />
+          {showLicenseNotification && (
+            <LicenseNotification
+              license={license}
+              days={days}
+              capabilities={capabilities}
+              onCloseClick={this.handleCloseLicenseNotification}
+            />
+          )}
           <Main>
             <ErrorBoundary
               key={location.pathname}
@@ -110,9 +173,6 @@ Page.propTypes = {
   gmp: PropTypes.gmp.isRequired,
 };
 
-export default compose(
-  withGmp,
-  withRouter,
-)(Page);
+export default compose(withGmp, withRouter)(Page);
 
 // vim: set ts=2 sw=2 tw=80:

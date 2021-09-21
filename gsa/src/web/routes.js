@@ -55,6 +55,7 @@ import GroupDetailsPage from './pages/groups/detailspage';
 import HostsPage from './pages/hosts/listpage';
 import HostDetailsPage from './pages/hosts/detailspage';
 import LdapPage from './pages/ldap/ldappage';
+import LicensePage from './pages/licenses/licensepage';
 import LoginPage from './pages/login/loginpage';
 import NotesPage from './pages/notes/listpage';
 import NoteDetailsPage from './pages/notes/detailspage';
@@ -142,6 +143,7 @@ const Routes = () => (
               <Route path="/groups" component={GroupsPage} />
               <Route path="/hosts" component={HostsPage} />
               <Route path="/ldap" component={LdapPage} />
+              <Route path="/license" component={LicensePage} />
               <Route path="/notes" component={NotesPage} />
               <Route
                 path="/operatingsystems"
