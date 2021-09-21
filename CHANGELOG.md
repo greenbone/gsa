@@ -4,13 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-<<<<<<< HEAD
 ## [21.10] - Unreleased
-=======
-## [21.4.3] (unreleased)
-### Added
-- Add new handler for single performance report [#3149](https://github.com/greenbone/gsa/pull/3149)
->>>>>>> cb0403ff4 (Fix CHANGELOG.md entry for #3149)
 
 ### Added
 - Added new license page [#3138](https://github.com/greenbone/gsa/pull/3138)
@@ -31,19 +25,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.4.3] (unreleased)
 
 ### Added
+- Add new handler for single performance report [#3149](https://github.com/greenbone/gsa/pull/3149)
 ### Changed
 - Changed conditions for enabling CreateTicketIcon on results detailspage [#3154](https://github.com/greenbone/gsa/pull/3154)
+### Deprecated
 ### Fixed
 - Don't crash target table when port_list is undefined [#3120](https://github.com/greenbone/gsa/pull/3120)
-<<<<<<< HEAD
-<<<<<<< HEAD
 ### Removed
-=======
-- Ensure gvmd sends error messages if gvmcg fails [#3149](https://github.com/greenbone/gsa/pull/3149)
->>>>>>> f4fab55d9 (Added CHANGELOG entry for error messages from gvmcg.)
-=======
-
->>>>>>> cb0403ff4 (Fix CHANGELOG.md entry for #3149)
 
 [Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.2...gsa-21.04
 
