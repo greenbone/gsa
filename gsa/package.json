@@ -17,7 +17,7 @@
   "license": "AGPL-3.0+",
   "main": "src/index.js",
   "engines": {
-    "node": ">=10.0"
+    "node": ">=14.0"
   },
   "eslintConfig": {
     "extends": "react-app"
