@@ -95,7 +95,8 @@ Prerequisites for using the GUI:
 
 Install node.js >= 14 on Debian GNU/Linux:
 ```sh
-curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+curl --silent --show-error https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
+echo "deb https://deb.nodesource.com/node_14.x buster main" > /etc/apt/sources.list.d/nodesource.list
 apt-get install -y nodejs
 ```
 
