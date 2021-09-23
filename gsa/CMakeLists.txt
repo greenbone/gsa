@@ -23,7 +23,7 @@ project (gsa VERSION 21.10.0 LANGUAGES)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-find_package (Node 10.0 REQUIRED)
+find_package (Node 14.0 REQUIRED)
 find_package (Yarn 1.0)
 
 if (NOT DEFINED PROJECT_VERSION_STRING)

@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added new license page [#3138](https://github.com/greenbone/gsa/pull/3138), [#3160](https://github.com/greenbone/gsa/pull/3160)
 - Added command for getting appliance license information [#3137](https://github.com/greenbone/gsa/pull/3137)
 ### Changed
+- Require node.js >= 14 [#3164](https://github.com/greenbone/gsa/pull/3164)
 ### Fixed
 ### Removed
 - Removed interface access from users in GSA and gsad [#3123](https://github.com/greenbone/gsa/pull/3123)
