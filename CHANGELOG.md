@@ -26,8 +26,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [21.4.3] (unreleased)
 
 ### Added
+- Add new handler for single performance report [#3149](https://github.com/greenbone/gsa/pull/3149)
 ### Changed
 - Changed conditions for enabling CreateTicketIcon on results detailspage [#3154](https://github.com/greenbone/gsa/pull/3154)
+### Deprecated
 ### Fixed
 - Don't crash target table when port_list is undefined [#3120](https://github.com/greenbone/gsa/pull/3120)
 ### Removed
