@@ -29,6 +29,10 @@ const Languages = {
     name: 'English',
     native_name: 'English',
   },
+  zh_TW: { 
+    name: 'Traditional Chinese', 
+    native_name: '繁體中文',
+  },
 };
 
 export default Languages;
