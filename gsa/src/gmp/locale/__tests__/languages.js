@@ -22,7 +22,7 @@ import Languages, {getLanguageCodes} from '../languages';
 
 describe('Language tests', () => {
   test('should contain list of languagegs', () => {
-    expect(Object.keys(Languages).length).toEqual(2);
+    expect(Object.keys(Languages).length).toEqual(3);
 
     let called = false;
 
@@ -41,7 +41,7 @@ describe('getLanguageCodes test', () => {
   test('should return list of language codes', () => {
     const codes = getLanguageCodes();
 
-    expect(codes.length).toEqual(2);
+    expect(codes.length).toEqual(3);
 
     let called = false;
 
