@@ -27,7 +27,6 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
 import Policy from 'gmp/models/policy';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {entityLoadingActions} from 'web/store/entities/policies';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -128,7 +127,6 @@ const policy = Policy.fromElement({
   preferences: preferences,
   permissions: {permission: [{name: 'everything'}]},
   scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
     task: [
       {id: '1234', name: 'audit1'},
@@ -156,7 +154,6 @@ const policy2 = Policy.fromElement({
   preferences: preferences,
   permissions: {permission: [{name: 'get_config'}]},
   scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
     task: [
       {id: '1234', name: 'audit1'},
@@ -180,7 +177,6 @@ const policy3 = Policy.fromElement({
   preferences: preferences,
   permissions: {permission: [{name: 'everything'}]},
   scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
     task: [
       {id: '1234', name: 'audit1'},
@@ -204,7 +200,6 @@ const policy4 = Policy.fromElement({
   preferences: preferences,
   permissions: {permission: [{name: 'everything'}]},
   scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
     task: [
       {id: '1234', name: 'audit1'},

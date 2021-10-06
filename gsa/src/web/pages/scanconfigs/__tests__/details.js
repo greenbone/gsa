@@ -19,7 +19,7 @@ import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+import ScanConfig from 'gmp/models/scanconfig';
 
 import {OPENVAS_SCANNER_TYPE} from 'gmp/models/scanner';
 
@@ -33,7 +33,6 @@ describe('Scan Config Details tests', () => {
       name: 'foo',
       comment: 'bar',
       scanner: {name: 'scanner1', id: '42', type: OPENVAS_SCANNER_TYPE},
-      type: OPENVAS_SCAN_CONFIG_TYPE,
       tasks: {
         task: [
           {id: '1234', name: 'task1'},

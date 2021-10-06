@@ -21,7 +21,6 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
 import ScanConfig, {
-  OPENVAS_SCAN_CONFIG_TYPE,
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
@@ -37,7 +36,6 @@ const config = ScanConfig.fromElement({
   name: 'foo',
   comment: 'bar',
   owner: {name: 'admin'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   permissions: {permission: [{name: 'everything'}]},
   family_count: {
     __text: 2,
@@ -54,7 +52,6 @@ const config2 = ScanConfig.fromElement({
   name: 'lorem',
   comment: 'ipsum',
   owner: {name: 'admin'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   permissions: {permission: [{name: 'everything'}]},
   family_count: {
     __text: 3,
@@ -71,7 +68,6 @@ const config3 = ScanConfig.fromElement({
   name: 'hello',
   comment: 'world',
   owner: {name: 'admin'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   permissions: {permission: [{name: 'everything'}]},
   family_count: {
     __text: 1,
@@ -127,14 +123,13 @@ describe('Scan Config table tests', () => {
     expect(baseElement).toMatchSnapshot();
     const header = baseElement.querySelectorAll('th');
     expect(header[0]).toHaveTextContent('Name');
-    expect(header[1]).toHaveTextContent('Type');
-    expect(header[2]).toHaveTextContent('Family');
-    expect(header[3]).toHaveTextContent('NVTs');
-    expect(header[4]).toHaveTextContent('Actions');
-    expect(header[5]).toHaveTextContent('Total');
-    expect(header[6]).toHaveTextContent('Trend');
-    expect(header[7]).toHaveTextContent('Total');
-    expect(header[8]).toHaveTextContent('Trend');
+    expect(header[1]).toHaveTextContent('Family');
+    expect(header[2]).toHaveTextContent('NVTs');
+    expect(header[3]).toHaveTextContent('Actions');
+    expect(header[4]).toHaveTextContent('Total');
+    expect(header[5]).toHaveTextContent('Trend');
+    expect(header[6]).toHaveTextContent('Total');
+    expect(header[7]).toHaveTextContent('Trend');
   });
 
   test('should unfold all details', () => {

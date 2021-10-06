@@ -20,10 +20,7 @@ import React, {useReducer, useState, useEffect} from 'react';
 
 import _ from 'gmp/locale';
 
-import {
-  OPENVAS_SCAN_CONFIG_TYPE,
-  SCANCONFIG_TREND_STATIC,
-} from 'gmp/models/scanconfig';
+import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
@@ -101,7 +98,6 @@ const EditScanConfigDialog = ({
   configId,
   configFamilies,
   configIsInUse = false,
-  configType,
   editNvtDetailsTitle,
   editNvtFamiliesTitle,
   families,
@@ -202,17 +198,15 @@ const EditScanConfigDialog = ({
               {isLoadingConfig || isLoadingFamilies ? (
                 <Loading />
               ) : (
-                configType === OPENVAS_SCAN_CONFIG_TYPE && (
-                  <NvtFamilies
-                    configFamilies={configFamilies}
-                    editTitle={editNvtFamiliesTitle}
-                    families={families}
-                    trend={trendValues}
-                    select={selectValues}
-                    onEditConfigFamilyClick={onEditConfigFamilyClick}
-                    onValueChange={onValueChange}
-                  />
-                )
+                <NvtFamilies
+                  configFamilies={configFamilies}
+                  editTitle={editNvtFamiliesTitle}
+                  families={families}
+                  trend={trendValues}
+                  select={selectValues}
+                  onEditConfigFamilyClick={onEditConfigFamilyClick}
+                  onValueChange={onValueChange}
+                />
               )}
 
               {isLoadingConfig ? (
@@ -228,13 +222,11 @@ const EditScanConfigDialog = ({
               {isLoadingConfig ? (
                 <Loading />
               ) : (
-                configType === OPENVAS_SCAN_CONFIG_TYPE && (
-                  <NvtPreferences
-                    editTitle={editNvtDetailsTitle}
-                    preferences={nvtPreferences}
-                    onEditNvtDetailsClick={onEditNvtDetailsClick}
-                  />
-                )
+                <NvtPreferences
+                  editTitle={editNvtDetailsTitle}
+                  preferences={nvtPreferences}
+                  onEditNvtDetailsClick={onEditNvtDetailsClick}
+                />
               )}
             </React.Fragment>
           )}
@@ -249,7 +241,6 @@ EditScanConfigDialog.propTypes = {
   configFamilies: PropTypes.object,
   configId: PropTypes.id.isRequired,
   configIsInUse: PropTypes.bool,
-  configType: PropTypes.number,
   editNvtDetailsTitle: PropTypes.string.isRequired,
   editNvtFamiliesTitle: PropTypes.string.isRequired,
   families: PropTypes.arrayOf(

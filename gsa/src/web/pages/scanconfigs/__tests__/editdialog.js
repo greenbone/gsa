@@ -20,7 +20,6 @@ import React from 'react';
 import {setLocale} from 'gmp/locale/lang';
 
 import {
-  OPENVAS_SCAN_CONFIG_TYPE,
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
@@ -148,7 +147,6 @@ describe('EditScanConfigDialog component tests', () => {
         configFamilies={configFamilies}
         configId="c1"
         configIsInUse={false}
-        configType={OPENVAS_SCAN_CONFIG_TYPE}
         editNvtDetailsTitle="Edit Scan Config NVT Details"
         editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
@@ -196,7 +194,6 @@ describe('EditScanConfigDialog component tests', () => {
         configFamilies={configFamilies}
         configId="c1"
         configIsInUse={true}
-        configType={OPENVAS_SCAN_CONFIG_TYPE}
         editNvtDetailsTitle="Edit Scan Config NVT Details"
         editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
@@ -251,7 +248,6 @@ describe('EditScanConfigDialog component tests', () => {
         configFamilies={configFamilies}
         configId="c1"
         configIsInUse={true}
-        configType={OPENVAS_SCAN_CONFIG_TYPE}
         editNvtDetailsTitle="Edit Policy NVT Details"
         editNvtFamiliesTitle="Edit Policy Family'"
         families={families}
@@ -304,7 +300,6 @@ describe('EditScanConfigDialog component tests', () => {
         configFamilies={configFamilies}
         configId="c1"
         configIsInUse={false}
-        configType={OPENVAS_SCAN_CONFIG_TYPE}
         editNvtDetailsTitle="Edit Scan Config NVT Details"
         editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
@@ -352,7 +347,6 @@ describe('EditScanConfigDialog component tests', () => {
         configFamilies={configFamilies}
         configId="c1"
         configIsInUse={false}
-        configType={OPENVAS_SCAN_CONFIG_TYPE}
         editNvtDetailsTitle="Edit Scan Config NVT Details"
         editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
@@ -392,7 +386,6 @@ describe('EditScanConfigDialog component tests', () => {
         configFamilies={configFamilies}
         configId="c1"
         configIsInUse={false}
-        configType={OPENVAS_SCAN_CONFIG_TYPE}
         editNvtDetailsTitle="Edit Scan Config NVT Details"
         editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
@@ -446,7 +439,6 @@ describe('EditScanConfigDialog component tests', () => {
         configFamilies={configFamilies}
         configId="c1"
         configIsInUse={false}
-        configType={OPENVAS_SCAN_CONFIG_TYPE}
         editNvtDetailsTitle="Edit Scan Config NVT Details"
         editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}
@@ -516,7 +508,6 @@ describe('EditScanConfigDialog component tests', () => {
         configFamilies={configFamilies}
         configId="c1"
         configIsInUse={false}
-        configType={OPENVAS_SCAN_CONFIG_TYPE}
         editNvtDetailsTitle="Edit Scan Config NVT Details"
         editNvtFamiliesTitle="Edit Scan Config Family"
         families={families}

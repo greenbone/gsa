@@ -26,7 +26,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {YES_VALUE} from 'gmp/parser';
 
 import {duration} from 'gmp/models/date';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 import {scannerTypeName} from 'gmp/models/scanner';
 
 import {
@@ -181,33 +180,28 @@ class TaskDetails extends React.Component {
                     </TableData>
                   </TableRow>
                 )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE && (
-                    <TableRow>
-                      <TableData>{_('Order for target hosts')}</TableData>
-                      <TableData>{hosts_ordering}</TableData>
-                    </TableRow>
-                  )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_checks) && (
-                    <TableRow>
-                      <TableData>
-                        {_('Maximum concurrently executed NVTs per host')}
-                      </TableData>
-                      <TableData>{max_checks}</TableData>
-                    </TableRow>
-                  )}
-                {isDefined(scanConfig) &&
-                  scanConfig.scan_config_type === OPENVAS_SCAN_CONFIG_TYPE &&
-                  isDefined(max_hosts) && (
-                    <TableRow>
-                      <TableData>
-                        {_('Maximum concurrently scanned hosts')}
-                      </TableData>
-                      <TableData>{max_hosts}</TableData>
-                    </TableRow>
-                  )}
+                {isDefined(scanConfig) && (
+                  <TableRow>
+                    <TableData>{_('Order for target hosts')}</TableData>
+                    <TableData>{hosts_ordering}</TableData>
+                  </TableRow>
+                )}
+                {isDefined(scanConfig) && isDefined(max_checks) && (
+                  <TableRow>
+                    <TableData>
+                      {_('Maximum concurrently executed NVTs per host')}
+                    </TableData>
+                    <TableData>{max_checks}</TableData>
+                  </TableRow>
+                )}
+                {isDefined(scanConfig) && isDefined(max_hosts) && (
+                  <TableRow>
+                    <TableData>
+                      {_('Maximum concurrently scanned hosts')}
+                    </TableData>
+                    <TableData>{max_hosts}</TableData>
+                  </TableRow>
+                )}
               </TableBody>
             </DetailsTable>
           </DetailsBlock>

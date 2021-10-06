@@ -26,7 +26,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
-import ScanConfig, {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
+import ScanConfig from 'gmp/models/scanconfig';
 
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -127,7 +127,6 @@ const config = ScanConfig.fromElement({
   preferences: preferences,
   permissions: {permission: [{name: 'everything'}]},
   scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
     task: [
       {id: '1234', name: 'task1'},
@@ -155,7 +154,6 @@ const config2 = ScanConfig.fromElement({
   preferences: preferences,
   permissions: {permission: [{name: 'get_config'}]},
   scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
     task: [
       {id: '1234', name: 'task1'},
@@ -179,7 +177,6 @@ const config3 = ScanConfig.fromElement({
   preferences: preferences,
   permissions: {permission: [{name: 'everything'}]},
   scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
     task: [
       {id: '1234', name: 'task1'},
@@ -203,7 +200,6 @@ const config4 = ScanConfig.fromElement({
   preferences: preferences,
   permissions: {permission: [{name: 'everything'}]},
   scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
     task: [
       {id: '1234', name: 'task1'},

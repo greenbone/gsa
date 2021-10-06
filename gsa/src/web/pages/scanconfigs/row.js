@@ -20,8 +20,6 @@ import React from 'react';
 
 import _ from 'gmp/locale';
 
-import {getTranslatedType} from 'gmp/models/scanconfig';
-
 import IconDivider from 'web/components/layout/icondivider';
 
 import ExportIcon from 'web/components/icon/exporticon';
@@ -102,7 +100,6 @@ const ScanConfigRow = ({
       displayName={_('Scan Config')}
       onToggleDetailsClick={onToggleDetailsClick}
     />
-    <TableData>{getTranslatedType(entity.scan_config_type)}</TableData>
     <TableData>{na(entity.families.count)}</TableData>
     <TableData>
       <Trend

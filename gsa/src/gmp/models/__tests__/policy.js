@@ -202,12 +202,6 @@ describe('Policy model tests', () => {
     expect(policy.preferences.nvt).toEqual([]);
   });
 
-  test('should parse type', () => {
-    const policy = Policy.fromElement({type: '21'});
-
-    expect(policy.policy_type).toEqual(21);
-  });
-
   test('should parse scanner', () => {
     const elem = {
       scanner: {

@@ -29,7 +29,6 @@ import Filter from 'gmp/models/filter';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Policy from 'gmp/models/policy';
 import Schedule from 'gmp/models/schedule';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -50,7 +49,6 @@ const policy = Policy.fromElement({
   name: 'foo',
   comment: 'bar',
   scanner: {name: 'scanner1', type: '0'},
-  policy_type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
     task: [
       {id: '12345', name: 'foo'},

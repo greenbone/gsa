@@ -748,7 +748,6 @@ class PolicyComponent extends React.Component {
                   configFamilies={policy.families}
                   configId={policy.id}
                   configIsInUse={policy.isInUse()}
-                  configType={policy.policy_type}
                   editNvtDetailsTitle={_('Edit Policy NVT Details')}
                   editNvtFamiliesTitle={_('Edit Policy Family')}
                   families={families}
