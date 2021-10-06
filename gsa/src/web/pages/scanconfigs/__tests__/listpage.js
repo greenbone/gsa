@@ -23,7 +23,6 @@ import CollectionCounts from 'gmp/collection/collectioncounts';
 
 import Filter from 'gmp/models/filter';
 import ScanConfig, {
-  OPENVAS_SCAN_CONFIG_TYPE,
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
@@ -52,7 +51,6 @@ const config = ScanConfig.fromElement({
   usage_type: 'scan',
   permissions: {permission: [{name: 'everything'}]},
   scanner: {name: 'scanner', type: '42'},
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   tasks: {
     task: [
       {id: '1234', name: 'task1'},

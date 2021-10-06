@@ -22,10 +22,7 @@ import {connect} from 'react-redux';
 import _ from 'gmp/locale';
 
 import {ALL_FILTER} from 'gmp/models/filter';
-import {
-  filterEmptyScanConfig,
-  openVasScanConfigsFilter,
-} from 'gmp/models/scanconfig';
+import {filterEmptyScanConfig} from 'gmp/models/scanconfig';
 import {openVasScannersFilter} from 'gmp/models/scanner';
 
 import {YES_VALUE, parseYesNo} from 'gmp/parser';
@@ -379,7 +376,6 @@ class UserSettings extends React.Component {
     certBundFilter = hasValue(certBundFilter) ? certBundFilter : {};
     dfnCertFilter = hasValue(dfnCertFilter) ? dfnCertFilter : {};
 
-    const openVasScanConfigs = scanconfigs.filter(openVasScanConfigsFilter);
     const openVasScanners = scanners.filter(openVasScannersFilter);
 
     return (
@@ -739,7 +735,7 @@ class UserSettings extends React.Component {
               alerts={alerts}
               filters={filters}
               credentials={credentials}
-              openVasScanConfigs={openVasScanConfigs}
+              openVasScanConfigs={scanconfigs}
               openVasScanners={openVasScanners}
               portLists={portlists}
               reportFormats={reportformats}

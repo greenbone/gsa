@@ -291,7 +291,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   align-items: center;
 }
 
-.c43 {
+.c42 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -759,7 +759,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   color: #000;
   border-top: 1px solid #c8d3d9;
   font-weight: bold;
-  width: 5%;
+  width: 10%;
 }
 
 .c41 {
@@ -767,15 +767,15 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
   color: #000;
   border-top: 1px solid #c8d3d9;
   font-weight: bold;
-  width: 10%;
+  width: 8%;
 }
 
-.c42 {
+.c43 {
   background-color: #fff;
   color: #000;
   border-top: 1px solid #c8d3d9;
   font-weight: bold;
-  width: 8%;
+  width: 5%;
 }
 
 .c13 {
@@ -978,7 +978,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
 }
 
 @media print {
-  .c42 {
+  .c43 {
     color: #000;
     font-size: 1.2em;
     background-color: none;
@@ -1384,20 +1384,6 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                   </th>
                   <th
                     class="c40"
-                    rowspan="2"
-                  >
-                    <a
-                      class="c38"
-                    >
-                      <div
-                        class="c39"
-                      >
-                        Type
-                      </div>
-                    </a>
-                  </th>
-                  <th
-                    class="c41"
                     colspan="2"
                   >
                     <div
@@ -1407,7 +1393,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     </div>
                   </th>
                   <th
-                    class="c41"
+                    class="c40"
                     colspan="2"
                   >
                     <div
@@ -1417,11 +1403,11 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     </div>
                   </th>
                   <th
-                    class="c42"
+                    class="c41"
                     rowspan="2"
                   >
                     <div
-                      class="c43"
+                      class="c42"
                     >
                       Actions
                     </div>
@@ -1429,7 +1415,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                 </tr>
                 <tr>
                   <th
-                    class="c40"
+                    class="c43"
                   >
                     <a
                       class="c38"
@@ -1442,7 +1428,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     </a>
                   </th>
                   <th
-                    class="c40"
+                    class="c43"
                   >
                     <a
                       class="c38"
@@ -1455,7 +1441,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     </a>
                   </th>
                   <th
-                    class="c40"
+                    class="c43"
                   >
                     <a
                       class="c38"
@@ -1468,7 +1454,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                     </a>
                   </th>
                   <th
-                    class="c40"
+                    class="c43"
                   >
                     <a
                       class="c38"
@@ -1513,13 +1499,6 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
                         bar
                         )
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div
-                      class="c44"
-                    >
-                      OpenVAS
                     </div>
                   </td>
                   <td>
@@ -1636,7 +1615,7 @@ exports[`ScanConfigsPage tests should render full ScanConfigsPage 1`] = `
               <tfoot>
                 <tr>
                   <td
-                    colspan="7"
+                    colspan="6"
                   >
                     <div
                       class="c49"

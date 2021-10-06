@@ -31,10 +31,6 @@ export const SORT_FIELDS = [
     displayName: _l('Name'),
   },
   {
-    name: 'type',
-    displayName: _l('Type'),
-  },
-  {
     name: 'families_total',
     displayName: _l('Families: Total'),
   },
@@ -59,7 +55,7 @@ const ScanConfigsTable = createEntitiesTable({
   rowDetails: withRowDetails('scanconfig')(ScanConfigDetails),
   footer: createEntitiesFooter({
     download: 'scanconfigs.xml',
-    span: 7,
+    span: 6,
     trash: true,
   }),
 });

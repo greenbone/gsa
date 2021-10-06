@@ -194,13 +194,6 @@ exports[`Scan Config row tests should render 1`] = `
         <div
           class="c0"
         >
-          OpenVAS
-        </div>
-      </td>
-      <td>
-        <div
-          class="c0"
-        >
           2
         </div>
       </td>

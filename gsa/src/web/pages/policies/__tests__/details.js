@@ -20,7 +20,6 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 
 import Policy from 'gmp/models/policy';
-import {OPENVAS_SCAN_CONFIG_TYPE} from 'gmp/models/scanconfig';
 
 import {rendererWith} from 'web/utils/testing';
 
@@ -32,9 +31,11 @@ describe('Policy Details tests', () => {
       name: 'foo',
       comment: 'bar',
       scanner: {name: 'scanner', type: '42'},
-      type: OPENVAS_SCAN_CONFIG_TYPE,
       tasks: {
-        task: [{id: '1234', name: 'audit1'}, {id: '5678', name: 'audit2'}],
+        task: [
+          {id: '1234', name: 'audit1'},
+          {id: '5678', name: 'audit2'},
+        ],
       },
     });
     const caps = new Capabilities(['everything']);

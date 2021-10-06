@@ -504,7 +504,6 @@ class ScanConfigComponent extends React.Component {
                   configFamilies={config.families}
                   configId={config.id}
                   configIsInUse={config.isInUse()}
-                  configType={config.scan_config_type}
                   editNvtDetailsTitle={_('Edit Scan Config NVT Details')}
                   editNvtFamiliesTitle={_('Edit Scan Config Family')}
                   families={families}

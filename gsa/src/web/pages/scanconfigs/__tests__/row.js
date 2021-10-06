@@ -22,7 +22,6 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 
 import ScanConfig, {
-  OPENVAS_SCAN_CONFIG_TYPE,
   SCANCONFIG_TREND_STATIC,
   SCANCONFIG_TREND_DYNAMIC,
 } from 'gmp/models/scanconfig';
@@ -42,7 +41,6 @@ const entity = ScanConfig.fromElement({
   comment: 'bar',
   in_use: '0',
   writable: '1',
-  type: OPENVAS_SCAN_CONFIG_TYPE,
   permissions: {permission: [{name: 'everything'}]},
   family_count: {
     __text: 2,
@@ -87,7 +85,6 @@ describe('Scan Config row tests', () => {
     expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('(bar)');
-    expect(baseElement).toHaveTextContent('OpenVAS');
 
     const icons = getAllByTestId('svg-icon');
     expect(icons[0]).toHaveAttribute(
@@ -110,7 +107,6 @@ describe('Scan Config row tests', () => {
       owner: {
         name: 'user',
       },
-      type: OPENVAS_SCAN_CONFIG_TYPE,
       permissions: {permission: [{name: 'everything'}]},
       family_count: {
         __text: 2,
@@ -211,7 +207,6 @@ describe('Scan Config row tests', () => {
       comment: 'bar',
       in_use: '0',
       writable: '1',
-      type: OPENVAS_SCAN_CONFIG_TYPE,
       family_count: {
         __text: 2,
         growing: SCANCONFIG_TREND_STATIC,
@@ -284,7 +279,6 @@ describe('Scan Config row tests', () => {
       comment: 'bar',
       in_use: '1',
       writable: '1',
-      type: OPENVAS_SCAN_CONFIG_TYPE,
       permissions: {permission: [{name: 'everything'}]},
       family_count: {
         __text: 2,
@@ -349,7 +343,6 @@ describe('Scan Config row tests', () => {
       comment: 'bar',
       in_use: '0',
       writable: '0',
-      type: OPENVAS_SCAN_CONFIG_TYPE,
       permissions: {permission: [{name: 'everything'}]},
       family_count: {
         __text: 2,
