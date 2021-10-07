@@ -279,7 +279,7 @@ const ResultDetails = ({className, links = true, entity}) => {
 
       <DetailsBlock title={_('Detection Method')}>
         <Layout flex="column">
-          <Layout>{tags.vuldetect}</Layout>
+          <P>{tags.vuldetect}</P>
           <InfoTable>
             <colgroup>
               <Col width="10%" />
