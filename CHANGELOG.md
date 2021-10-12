@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [21.4.3] (unreleased)
+## [21.4.3] 2021-10-12
 ### Added
 - Add new handler for single performance report [#3149](https://github.com/greenbone/gsa/pull/3149)
 
@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Don't crash target table when port_list is undefined [#3120](https://github.com/greenbone/gsa/pull/3120)
 
-[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.2...gsa-21.04
+[21.4.3]: https://github.com/greenbone/gsa/compare/v21.4.3...v21.4.2
 
 ## [21.4.2] 2021-08-03
 ### Added
