@@ -91,7 +91,7 @@
     "eslint-config-prettier": "^8.3.0",
     "husky": "^2.7.0",
     "jest-environment-jsdom-sixteen": "^2.0.0",
-    "jest-junit": "^12.3.0",
+    "jest-junit": "^13.0.0",
     "jest-styled-components": "^6.3.4",
     "lint-staged": "^8.2.1",
     "prettier": "^2.4.1"
