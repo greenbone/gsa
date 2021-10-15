@@ -1,56 +1,56 @@
 pull_request_rules:
-  - name: port master patches to 21.04 branch
+  - name: port main patches to stable branch
     conditions:
-      - base=master
-      - label=port-to-21.04
+      - base=main
+      - label=port-to-stable
     actions:
       backport:
         branches:
-          - gsa-21.04
+          - stable
 
-  - name: port master patches to 20.08 branch
+  - name: port main patches to oldstable branch
     conditions:
-      - base=master
-      - label=port-to-20.08
+      - base=main
+      - label=port-to-oldstable
     actions:
       backport:
         branches:
-          - gsa-20.08
+          - oldstable
 
-  - name: port 21.04 patches to master branch
+  - name: port stable patches to main branch
     conditions:
-      - base=gsa-21.04
-      - label=port-to-master
+      - base=stable
+      - label=port-to-main
     actions:
       backport:
         branches:
-          - master
+          - main
 
-  - name: port 21.04 patches to 20.08 branch
+  - name: port stable patches to oldstable branch
     conditions:
-      - base=gsa-21.04
-      - label=port-to-20.08
+      - base=stable
+      - label=port-to-oldstable
     actions:
       backport:
         branches:
-          - gsa-20.08
+          - oldstable
 
   # backports from current release branch
-  - name: port 20.08 patches to master branch
+  - name: port oldstable patches to main branch
     conditions:
-      - base=gsa-20.08
-      - label=port-to-master
+      - base=oldstable
+      - label=port-to-main
     actions:
       backport:
         branches:
-          - master
+          - main
 
-  - name: port 20.08 patches to 21.04 branch
+  - name: port oldstable patches to stable branch
     conditions:
-      - base=gsa-20.08
-      - label=port-to-21.04
+      - base=oldstable
+      - label=port-to-stable
     actions:
       backport:
         branches:
-          - gsa-21.04
+          - stable
           
