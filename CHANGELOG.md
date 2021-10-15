@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Don't crash target table when port_list is undefined [#3120](https://github.com/greenbone/gsa/pull/3120)
 
-[21.4.3]: https://github.com/greenbone/gsa/compare/v21.4.3...v21.4.2
+[21.4.3]: https://github.com/greenbone/gsa/compare/v21.4.2...v21.4.3
 
 ## [21.4.2] 2021-08-03
 ### Added
@@ -113,7 +113,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
 
-[21.4.0]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.4.0
+[21.4.0]: https://github.com/greenbone/gsa/compare/oldstable...v21.4.0
 
 ## [20.8.4] (unreleased)
 ### Added
@@ -124,7 +124,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124), [#3157](https://github.com/greenbone/gsa/pull/3157)
 - Fixed setting/displaying timeout in EditNvtDetailsDialog [#3057](https://github.com/greenbone/gsa/pull/3057)
 
- [Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.3...gsa-20.08
+[Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.3...oldstable
 
 ### Fixed
 - Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124)
