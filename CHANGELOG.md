@@ -5,18 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [20.8.4] 2021-10-12
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 - Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124), [#3157](https://github.com/greenbone/gsa/pull/3157)
 
-[20.8.4]: https://github.com/greenbone/gsa/compare/v20.8.4...v20.8.3
+[20.8.4]: https://github.com/greenbone/gsa/compare/v20.8.3...v20.8.4
 
 ## [20.8.3] 2021-08-03
 
@@ -28,8 +21,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   [#3095](https://github.com/greenbone/gsa/pull/3095)
 * Avoid caching of the index.html file [#3082](https://github.com/greenbone/gsa/pull/3082)
 
-### Deprecated
-### Removed
 ### Fixed
 - Fixed setting/displaying timeout in EditNvtDetailsDialog [#3057](https://github.com/greenbone/gsa/pull/3057)
 
