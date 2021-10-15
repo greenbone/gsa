@@ -20,7 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed OVAL Definitions [#2918](https://github.com/greenbone/gsa/pull/2918), [#2921](https://github.com/greenbone/gsa/pull/2921), [#2923](https://github.com/greenbone/gsa/pull/2923)
 - Removed Network Source Interface from GSA for Tasks and Audits [#2902](https://github.com/greenbone/gsa/pull/2902) [#2942](https://github.com/greenbone/gsa/pull/2942)
 
-[Unreleased]: https://github.com/greenbone/gsa/compare/gsa-21.04...master
+[Unreleased]: https://github.com/greenbone/gsa/compare/stable...main
 
 
 ## [21.4.3] (unreleased)
@@ -34,7 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Don't crash target table when port_list is undefined [#3120](https://github.com/greenbone/gsa/pull/3120)
 ### Removed
 
-[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.2...gsa-21.04
+[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.2...stable
 
 ## [21.4.2] (2021-08-03)
 
@@ -57,7 +57,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Initialize severity value with 0 in powerfilter SeverityValuesGroup [#3031](https://github.com/greenbone/gsa/pull/3031)
 - Make SSH elevate credential optional in gsad [#3085](https://github.com/greenbone/gsa/pull/3085)
 
-[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.1...gsa-21.04
+[Unreleased]: https://github.com/greenbone/gsa/compare/v21.4.1...stable
 
 ## [21.4.1] - 2021-06-25
 
@@ -129,7 +129,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed filter element "autofp" [#2480](https://github.com/greenbone/gsa/pull/2480)
 - Drop dynamic severity classes [#2448](https://github.com/greenbone/gsa/pull/2448)
 
-[21.04]: https://github.com/greenbone/gsa/compare/gsa-20.08...v21.04.0
+[21.4.0]: https://github.com/greenbone/gsa/compare/oldstable...v21.4.0
 
 ## [20.8.4] (unreleased)
 
@@ -140,7 +140,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124), [#3157](https://github.com/greenbone/gsa/pull/3157)
 
-[Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.3...gsa-20.08
+[Unreleased]: https://github.com/greenbone/gsa/compare/v20.8.3...oldstable
 
 ## [20.8.3] 2021-08-03
 
@@ -158,7 +158,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Show dead hosts as possible reason in empty report when scan finishes [#3124](https://github.com/greenbone/gsa/pull/3124)
 - Fixed setting/displaying timeout in EditNvtDetailsDialog [#3057](https://github.com/greenbone/gsa/pull/3057)
 
-[20.8.3]: https://github.com/greenbone/gsa/compare/v20.8.2...gsa-20.08
+[20.8.3]: https://github.com/greenbone/gsa/compare/v20.8.2...oldstable
 
 ## [20.8.2] - 2021-06-25
 

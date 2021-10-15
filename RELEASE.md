@@ -20,12 +20,12 @@ version number for the new release. We are following
   make -j6
   ```
 
-* Update [CHANGELOG.md](https://github.com/greenbone/gsa/blob/master/CHANGELOG.md)
+* Update [CHANGELOG.md](https://github.com/greenbone/gsa/blob/main/CHANGELOG.md)
 
-* Unset the `dev` version to `0` in [CMakeLists.txt](https://github.com/greenbone/gsa/blob/master/CMakeLists.txt), [gsa/CMakeLists.txt](https://github.com/greenbone/gsa/blob/master/gsa/CMakeLists.txt), and [gsad/CMakeLists.txt](https://github.com/greenbone/gsa/blob/master/gsad/CMakeLists.txt)
+* Unset the `dev` version to `0` in [CMakeLists.txt](https://github.com/greenbone/gsa/blob/main/CMakeLists.txt), [gsa/CMakeLists.txt](https://github.com/greenbone/gsa/blob/main/gsa/CMakeLists.txt), and [gsad/CMakeLists.txt](https://github.com/greenbone/gsa/blob/main/gsad/CMakeLists.txt)
 `set (PROJECT_DEV_VERSION 1)` -> `set (PROJECT_DEV_VERSION 0)`
 
-* Remove the `.dev1` from the version string in [package.json](https://github.com/greenbone/gsa/blob/master/gsa/package.json) and [version.js](https://github.com/greenbone/gsa/blob/master/gsa/src/version.js)
+* Remove the `.dev1` from the version string in [package.json](https://github.com/greenbone/gsa/blob/main/gsa/package.json) and [version.js](https://github.com/greenbone/gsa/blob/main/gsa/src/version.js)
 
 * Create a git commit
 
@@ -63,7 +63,7 @@ Now you need to create a GitHub release. This will include the actual release an
   * Select the version number you want to release in the "Version Tag" input.
   * Select the branch you want to release in the "Target:" input
   * As title add `Greenbone Security Assistant (GSA) <version>`
-  * Copy the relevant [CHANGELOG.md](https://github.com/greenbone/gsa/blob/master/CHANGELOG.md) entries into the description
+  * Copy the relevant [CHANGELOG.md](https://github.com/greenbone/gsa/blob/main/CHANGELOG.md) entries into the description
   * If you are ready to release, click on "Publish release", otherwise you can save it as a draft.
 * Sign the release
   * Go to the "Releases" section on GitHub and download the source code tarballs created automatically by GitHub
@@ -88,5 +88,5 @@ Now you need to create a GitHub release. This will include the actual release an
   * Create a new, empty unreleased section in the `CHANGELOG.md` file
   * Update the version in _all_ version files:
     * increment the version in the `CMakeLists.txt` files, and set `dev` version again (`set (PROJECT_DEV_VERSION 1)`)
-    * increment the version in [package.json](https://github.com/greenbone/gsa/blob/master/gsa/package.json) and [version.js](https://github.com/greenbone/gsa/blob/master/gsa/src/version.js) and add a `.dev1` flag to the version.
+    * increment the version in [package.json](https://github.com/greenbone/gsa/blob/main/gsa/package.json) and [version.js](https://github.com/greenbone/gsa/blob/main/gsa/src/version.js) and add a `.dev1` flag to the version.
   * Create new PR with these changes. Only after this PR is merged, the release is  done.

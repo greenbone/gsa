@@ -30,5 +30,5 @@
 <!-- to check an item, place an "x" in the box like so: "- [x] Tests" -->
 
 - [ ] Tests
-- [ ] [CHANGELOG](https://github.com/greenbone/gsa/blob/master/CHANGELOG.md) Entry
+- [ ] PR merge commit message adjusted
 - [ ] Labels for ports to other branches
