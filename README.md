@@ -3,9 +3,9 @@
 # Greenbone Security Assistant
 
 [![GitHub releases](https://img.shields.io/github/release/greenbone/gsa.svg)](https://github.com/greenbone/gsa/releases)
-[![code test coverage](https://codecov.io/gh/greenbone/gsa/branch/gsa-20.08/graph/badge.svg)](https://codecov.io/gh/greenbone/gsa)
-[![Build and test C](https://github.com/greenbone/gsa/actions/workflows/ci-c.yml/badge.svg?branch=gsa-21.04)](https://github.com/greenbone/gsa/actions/workflows/ci-c.yml?query=branch%3Agsa-21.04++)
-[![Build and test JS](https://github.com/greenbone/gsa/actions/workflows/ci-js.yml/badge.svg?branch=gsa-21.04)](https://github.com/greenbone/gsa/actions/workflows/ci-js.yml?query=branch%3Agsa-21.04++)
+[![code test coverage](https://codecov.io/gh/greenbone/gsa/branch/stable/graph/badge.svg)](https://codecov.io/gh/greenbone/gsa)
+[![Build and test C](https://github.com/greenbone/gsa/actions/workflows/ci-c.yml/badge.svg?branch=stable)](https://github.com/greenbone/gsa/actions/workflows/ci-c.yml?query=branch%3Astable++)
+[![Build and test JS](https://github.com/greenbone/gsa/actions/workflows/ci-js.yml/badge.svg?branch=stable)](https://github.com/greenbone/gsa/actions/workflows/ci-js.yml?query=branch%3Astable++)
 
 The Greenbone Security Assistant is the web interface developed for the
 [Greenbone Security Manager
@@ -16,11 +16,11 @@ full-featured user interface for vulnerability management.
 
 Greenbone Security Assistant consists of
 
-* [GSA](https://github.com/greenbone/gsa/tree/master/gsa) - The webpage written in [React](https://reactjs.org/)
+* [GSA](https://github.com/greenbone/gsa/tree/main/gsa) - The webpage written in [React](https://reactjs.org/)
 
 and
 
-* [GSAD](https://github.com/greenbone/gsa/tree/master/gsad) - The HTTP server talking to the [GVM daemon](https://github.com/greenbone/gvmd)
+* [GSAD](https://github.com/greenbone/gsa/tree/main/gsad) - The HTTP server talking to the [GVM daemon](https://github.com/greenbone/gvmd)
 
 ## Releases
 
