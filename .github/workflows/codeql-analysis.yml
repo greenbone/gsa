@@ -19,7 +19,7 @@ jobs:
       actions: read
       contents: read
       security-events: write
-    container: greenbone/build-env-gsa-main-debian-buster-gcc-gsad
+    container: greenbone/gsa-main-gcc-testing
 
     strategy:
       fail-fast: false
