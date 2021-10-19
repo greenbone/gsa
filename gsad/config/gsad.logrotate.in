@@ -1,8 +1,0 @@
-${GVM_LOG_DIR}/gsad.log {
-	compress
-	missingok
-	notifempty
-	sharedscripts
-	copytruncate
-}
-
