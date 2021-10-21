@@ -81,6 +81,6 @@ jobs:
         run: yarn lint --format junit -o ${{ env.REPORT_DIR }}
       - name: Store Lint Results
         uses: actions/upload-artifact@v2
-        with: 
+        with:
           name: lint
           path: ${{ env.REPORT_DIR }}
