@@ -15,7 +15,4 @@ WORKDIR /usr/local/src
 
 # clone and install gsa
 RUN cd gsa && \
-    mkdir build && \
-    cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release .. && \
-    make install
+    yarn install
