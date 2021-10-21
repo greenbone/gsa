@@ -18,10 +18,6 @@ Greenbone Security Assistant consists of
 
 * [GSA](https://github.com/greenbone/gsa/tree/main/gsa) - The webpage written in [React](https://reactjs.org/)
 
-and
-
-* [GSAD](https://github.com/greenbone/gsa/tree/main/gsad) - The HTTP server talking to the [GVM daemon](https://github.com/greenbone/gvmd)
-
 ## Releases
 
 All [release files](https://github.com/greenbone/gsa/releases) are signed with
