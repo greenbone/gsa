@@ -44,7 +44,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: lint
-          directory: .
+          path: .
       - name: Submit test coverage to codecov.io
         uses: codecov/codecov-action@v2
         with:
