@@ -43,8 +43,8 @@ jobs:
       - name: Load Lint Results
         uses: actions/download-artifact@v2
         with:
-          name: lint
-          path: .
+          name: linting-report
+          path: ${{ env.REPORT_DIR }}
       - name: Submit test coverage to codecov.io
         uses: codecov/codecov-action@v2
         with:
@@ -52,7 +52,7 @@ jobs:
 
   linting:
     env:
-      REPORT_DIR: reports
+      REPORT_FILE: linting-report.xml
     name: Linting
     runs-on: 'ubuntu-latest'
     strategy:
@@ -78,9 +78,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --prefer-offline
       - name: Lint JavaScript files
-        run: yarn lint --format junit -o ${{ env.REPORT_DIR }}
+        run: yarn lint --format junit -o ${{ env.REPORT_FILE }}
       - name: Store Lint Results
         uses: actions/upload-artifact@v2
         with:
-          name: lint
-          path: ${{ env.REPORT_DIR }}
+          name: linting-report
+          path: ${{ env.REPORT_FILE }}
