@@ -9,21 +9,16 @@ on:
 jobs:
   testing:
     env:
-      WORKSPACE: ${{ github.workspace }}/gsa
       REPORT_DIR: reports
     name: Testing and upload coverage
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
-        #node-version: [10.x, 12.x, 14.x, 15.x]
-        # 10.x for debian: https://packages.debian.org/buster/nodejs
-        #          ubuntu lts: https://packages.ubuntu.com/focal/nodejs
-        # 12.x for ubuntu-latest: https://packages.ubuntu.com/hirsute/nodejs
         # 14.x is recommended by https://nodejs.org/en/
         node-version: [10.x]
     steps:
-      - uses: actions/checkout@v2.3.4
-      - name: Set up node ${{ matrix.python-version }}
+      - uses: actions/checkout@v2
+      - name: Set up node ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
@@ -40,35 +35,32 @@ jobs:
         # `--prefer-offline` gives cache priority
       - name: Install dependencies
         run: yarn install --prefer-offline
-        working-directory: ${{ env.WORKSPACE }}
 
       - name: Run JavaScript tests
-        working-directory: ${{ env.WORKSPACE }}
         env:
-          JEST_JUNIT_OUTPUT_DIR: ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
+          JEST_JUNIT_OUTPUT_DIR: ${{ env.REPORT_DIR }}
         run: yarn test:coverage --reporters=default --reporters=jest-junit
       - name: Load Lint Results
         uses: actions/download-artifact@v2
         with:
-          name: lint
+          name: linting-report
+          path: ${{ env.REPORT_DIR }}
       - name: Submit test coverage to codecov.io
-        uses: codecov/codecov-action@v1.5.0
+        uses: codecov/codecov-action@v2
         with:
-          directory: ${{ env.WORKSPACE }}
           fail_ci_if_error: true
 
   linting:
     env:
-      WORKSPACE: ${{ github.workspace }}/gsa
-      REPORT_DIR: reports
+      REPORT_FILE: linting-report.xml
     name: Linting
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
         node-version: [10.x]
     steps:
-      - uses: actions/checkout@v2.3.4
-      - name: Set up node ${{ matrix.python-version }}
+      - uses: actions/checkout@v2
+      - name: Set up node ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
@@ -85,34 +77,10 @@ jobs:
         # `--prefer-offline` gives cache priority
       - name: Install dependencies
         run: yarn install --prefer-offline
-        working-directory: ${{ env.WORKSPACE }}
       - name: Lint JavaScript files
-        working-directory: ${{ env.WORKSPACE }}
-        run: yarn lint --format junit -o ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
+        run: yarn lint --format junit -o ${{ env.REPORT_FILE }}
       - name: Store Lint Results
         uses: actions/upload-artifact@v2
-        with: 
-          name: lint
-          path: ${{ env.WORKSPACE }}/${{ env.REPORT_DIR }}
-
-  build_gsa:
-    env:
-      WORKSPACE: ${{ github.workspace }}/gsa
-    name: Build gsa
-    runs-on: 'ubuntu-latest'
-    container: greenbone/gsa-stable-gcc-testing
-    steps:
-      - uses: actions/checkout@v2.3.4
-      - name: Get Yarn cache directory
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Use Yarn cache
-        uses: actions/cache@v2
-        id: yarn-cache
         with:
-          key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-      - name: Configure and compile gsa
-        run: mkdir build && cd build/ && cmake -DCMAKE_BUILD_TYPE=Release ../gsa && make install
-        working-directory: ${{ github.WORKSPACE }}
+          name: linting-report
+          path: ${{ env.REPORT_FILE }}

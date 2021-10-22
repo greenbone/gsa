@@ -5,9 +5,6 @@ ARG VERSION=main
 ARG BUILD_TYPE=Debug
 ARG COMPILER=gcc
 
-# We want gvm-libs to be ready so we use the build docker image of gvm-libs
-FROM greenbone/gvm-libs-$VERSION-$COMPILER-build
-
 # This will make apt-get install without question
 ARG DEBIAN_FRONTEND=noninteractive
 
