@@ -28,8 +28,22 @@ and the fingerprint is `8AE4 BE42 9B60 A59B 311C  2E73 9823 FAA6 0ED1 E580`.
 ## Installation
 
 Prerequisites for GSA:
-* node.js >= 10.0
+* node.js >= 14.0
 * yarn >= 1.0
+
+To install nodejs 14 the following commands can be used
+
+```bash
+VERSION=node_14.x
+KEYRING=/usr/share/keyrings/nodesource.gpg
+DISTRIBUTION="$(lsb_release -s -c)"
+
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" >/dev/null
+gpg --no-default-keyring --keyring "$KEYRING" --list-keys
+
+echo "deb [signed-by=$KEYRING] https://deb.nodesource.com/$VERSION $DISTRIBUTION main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+echo "deb-src [signed-by=$KEYRING] https://deb.nodesource.com/$VERSION $DISTRIBUTION main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+```
 
 Change into the gsa source directory and delete the possible existing build output
 directory.
