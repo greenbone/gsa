@@ -1,22 +1,22 @@
-![Greenbone Logo](https://www.greenbone.net/wp-content/uploads/gb_logo_resilience_horizontal.png)
+![Greenbone Logo](https://www.greenbone.net/wp-content/uploads/gb_new-logo_horizontal_rgb_small.png)
 
-# Greenbone Security Assistant
+# Greenbone Security Assistant <!-- omit in toc -->
 
 [![GitHub releases](https://img.shields.io/github/release/greenbone/gsa.svg)](https://github.com/greenbone/gsa/releases)
 [![code test coverage](https://codecov.io/gh/greenbone/gsa/branch/main/graph/badge.svg)](https://codecov.io/gh/greenbone/gsa)
-[![Build and test C](https://github.com/greenbone/gsa/actions/workflows/ci-c.yml/badge.svg?branch=main)](https://github.com/greenbone/gsa/actions/workflows/ci-c.yml?query=branch%3Amain++)
 [![Build and test JS](https://github.com/greenbone/gsa/actions/workflows/ci-js.yml/badge.svg?branch=main)](https://github.com/greenbone/gsa/actions/workflows/ci-js.yml?query=branch%3Amain++)
 
 The Greenbone Security Assistant is the web interface developed for the
-[Greenbone Security Manager
-appliances](https://www.greenbone.net/en/product-comparison/).
+[Greenbone Security Manager appliances](https://www.greenbone.net/en/product-comparison/)
+written in [React](https://reactjs.org/).
 
-It connects to the Greenbone Vulnerability Manager **GVM** to provide a
-full-featured user interface for vulnerability management.
-
-Greenbone Security Assistant consists of
-
-* [GSA](https://github.com/greenbone/gsa/tree/main/gsa) - The webpage written in [React](https://reactjs.org/)
+- [Releases](#releases)
+- [Installation](#installation)
+- [Developing](#developing)
+- [Support](#support)
+- [Maintainer](#maintainer)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Releases
 
