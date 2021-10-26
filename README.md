@@ -31,7 +31,7 @@ Prerequisites for GSA:
 * node.js >= 10.0
 * yarn >= 1.0
 
-Change into the gsa source directory and delete possible existing build output
+Change into the gsa source directory and delete the possible existing build output
 directory.
 
 ```bash
@@ -39,9 +39,9 @@ cd path/to/gsa
 rm -rf build
 ```
 
-Install JavaScript dependencies and start the build process. The build process
-creates a `build` directory with a production build of GSA. The `build/img` will
-contain images like logos and banners. The `build/static` directory will contain
+Install the JavaScript dependencies and start the build process. The build process
+creates a `build` directory with a production build of GSA. The `build/img` directory
+will contain images like logos and banners. The `build/static` directory will contain
 generated JavaScript and CSS files and additionally in the `build/static/media`
 directory SVG files for all icons will be found.
 
