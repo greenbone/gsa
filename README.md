@@ -71,6 +71,7 @@ chosen `CMAKE_INSTALL_PREFIX` directory when building `gsad`. Normally this is
 set to `/usr` or `/usr/local`.
 
 ```bash
+mkdip -p $INSTALL_PREFIX/share/gvm/gsad/web/
 cp -r build/* $INSTALL_PREFIX/share/gvm/gsad/web/
 ```
 
