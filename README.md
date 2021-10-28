@@ -34,9 +34,9 @@ Prerequisites for GSA:
 To install nodejs 14 the following commands can be used
 
 ```bash
-VERSION=node_14.x
-KEYRING=/usr/share/keyrings/nodesource.gpg
-DISTRIBUTION="$(lsb_release -s -c)"
+export VERSION=node_14.x
+export KEYRING=/usr/share/keyrings/nodesource.gpg
+export DISTRIBUTION="$(lsb_release -s -c)"
 
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" >/dev/null
 gpg --no-default-keyring --keyring "$KEYRING" --list-keys
