@@ -1,26 +1,22 @@
-![Greenbone Logo](https://www.greenbone.net/wp-content/uploads/gb_logo_resilience_horizontal.png)
+![Greenbone Logo](https://www.greenbone.net/wp-content/uploads/gb_new-logo_horizontal_rgb_small.png)
 
-# Greenbone Security Assistant
+# Greenbone Security Assistant <!-- omit in toc -->
 
 [![GitHub releases](https://img.shields.io/github/release/greenbone/gsa.svg)](https://github.com/greenbone/gsa/releases)
 [![code test coverage](https://codecov.io/gh/greenbone/gsa/branch/stable/graph/badge.svg)](https://codecov.io/gh/greenbone/gsa)
-[![Build and test C](https://github.com/greenbone/gsa/actions/workflows/ci-c.yml/badge.svg?branch=stable)](https://github.com/greenbone/gsa/actions/workflows/ci-c.yml?query=branch%3Astable++)
 [![Build and test JS](https://github.com/greenbone/gsa/actions/workflows/ci-js.yml/badge.svg?branch=stable)](https://github.com/greenbone/gsa/actions/workflows/ci-js.yml?query=branch%3Astable++)
 
 The Greenbone Security Assistant is the web interface developed for the
-[Greenbone Security Manager
-appliances](https://www.greenbone.net/en/product-comparison/).
+[Greenbone Security Manager appliances](https://www.greenbone.net/en/product-comparison/)
+written in [React](https://reactjs.org/).
 
-It connects to the Greenbone Vulnerability Manager **GVM** to provide a
-full-featured user interface for vulnerability management.
-
-Greenbone Security Assistant consists of
-
-* [GSA](https://github.com/greenbone/gsa/tree/main/gsa) - The webpage written in [React](https://reactjs.org/)
-
-and
-
-* [GSAD](https://github.com/greenbone/gsa/tree/main/gsad) - The HTTP server talking to the [GVM daemon](https://github.com/greenbone/gvmd)
+- [Releases](#releases)
+- [Installation](#installation)
+- [Developing](#developing)
+- [Support](#support)
+- [Maintainer](#maintainer)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Releases
 
@@ -31,35 +27,83 @@ and the fingerprint is `8AE4 BE42 9B60 A59B 311C  2E73 9823 FAA6 0ED1 E580`.
 
 ## Installation
 
-This module can be configured, built and installed with following commands:
+Prerequisites for GSA:
+* node.js >= 10.0
+* yarn >= 1.0
 
-    cmake .
-    make install
+Change into the gsa source directory and delete the possible existing build output
+directory.
 
-For detailed installation requirements and instructions, please see the file
-[INSTALL.md](INSTALL.md).
+```bash
+cd path/to/gsa
+rm -rf build
+```
+
+Install the JavaScript dependencies and start the build process. The build process
+creates a `build` directory with a production build of GSA. The `build/img` directory
+will contain images like logos and banners. The `build/static` directory will contain
+generated JavaScript and CSS files and additionally in the `build/static/media`
+directory SVG files for all icons will be found.
+
+```bash
+yarn
+yarn build
+```
+
+All content of the production build can be shipped with every web server. For
+providing GSA via our [gsad web server](https://github.com/greenbone/gsad/), the
+files need to be copied into the `share/gvm/gsad/web/` subdirectory of your
+chosen `CMAKE_INSTALL_PREFIX` directory when building `gsad`. Normally this is
+set to `/usr` or `/usr/local`.
+
+```bash
+cp -r build/* $INSTALL_PREFIX/share/gvm/gsad/web/
+```
 
 If you are not familiar or comfortable building from source code, we recommend
 that you use the Greenbone Security Manager TRIAL (GSM TRIAL), a prepared virtual
 machine with a readily available setup. Information regarding the virtual machine
 is available at <https://www.greenbone.net/en/testnow>.
 
-## Usage
+## Developing
 
-In case everything was installed using the defaults, then starting the HTTP
-daemon of the Greenbone Security Assistant can be done with this simple command:
+Using GSA requires to re-build the JavaScript bundle. This process is very
+time-consuming and therefore may be avoided during development. It is possible
+to run GSA in a special web development server. The development server can be
+started with:
 
-    gsad
+```sh
+cd path/to/gsa && yarn run start
+```
 
-The daemon will listen on port 443, making the web interface
-available in your network at `https://<your host>`.
+Afterwards the development web server is set up and a new browser window is
+opened at the URL `http://127.0.0.1:8080`, containing the GSA web application.
+When a JavaScript file of GSA in the src folder is changed, the browser window
+will reload automatically.
 
-If port 443 was not available or the user has no root privileges,
-gsad tries to serve at port 9392 as a fallback (`https://<your host>:9392`).
+Besides the development server [gsad](https://github.com/greenbone/gsad/) needs
+to be running with CORS enabled.
 
-To see all available command line options of gsad, enter this command:
+```sh
+gsad --http-cors="http://127.0.0.1:8080"
+```
 
-    gsad --help
+To be able to communicate with gsad, the web application needs to know the
+server URL. This can be accomplished by editing the `path/to/gsa/public/config.js`
+file. The following lines can be used for a local gsad running with HTTP on
+port 9392:
+
+```javascript
+  config = {
+    protocol: 'http',
+    server: '127.0.0.1:9392',
+  };
+```
+
+For HTTPS only the protocol property must be `'https'` accordingly.
+
+After changing the `config.js` file, the browser window should be reloaded
+manually.
 
 ## Support
 
