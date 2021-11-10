@@ -64,20 +64,24 @@ const LicenseNotification = ({capabilities, days, license, onCloseClick}) => {
     model,
     days,
   });
-
-  // TODO change message depending on user capabilities (link to license page or note to contact admin)
-
+  const message = capabilities.mayOp('modify_license')
+    ? _(
+        'After that your appliance remains valid and you can still log in ' +
+          'and view or download all of your scan reports. You can re-activate ' +
+          'the security feed via menu item "Administration > License".',
+      )
+    : _(
+        'After that your appliance remains valid and you can still log in ' +
+          'and view or download all of your scan reports. Please contact your ' +
+          'administrator for re-activating the security feed.',
+      );
   return (
     <InfoPanel
       noMargin={true}
       heading={titleMessage}
       onCloseClick={onCloseClick}
     >
-      {_(
-        'After that your appliance remains valid and you can still log in ' +
-          'and view or download all of your scan reports. You can re-activate ' +
-          'the security feed via menu item "Administration > License".',
-      )}
+      {message}
     </InfoPanel>
   );
 };
@@ -113,11 +117,14 @@ class Page extends React.Component {
         log.error('An error occurred during fetching capabilities', rejection);
         // use empty capabilities
         this.setState({capabilities: new Capabilities()});
+      })
+      .then(res => {
+        if (this.state.capabilities.mayAccess('license')) {
+          gmp.license.getLicenseInformation().then(license => {
+            this.setState({license: license.data});
+          });
+        }
       });
-
-    gmp.license.getLicenseInformation().then(license => {
-      this.setState({license: license.data});
-    });
 
     this.setState({
       notificationClosed: false,
@@ -146,7 +153,7 @@ class Page extends React.Component {
         <StyledLayout flex="column" align={['start', 'stretch']}>
           <MenuBar />
           <Header />
-          {showLicenseNotification && (
+          {capabilities.mayOp('get_license') && showLicenseNotification && (
             <LicenseNotification
               license={license}
               days={days}
