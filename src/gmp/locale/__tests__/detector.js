@@ -32,7 +32,7 @@ describe('LanguageDetector tests', () => {
   test('should detect language from store', () => {
     const languageUtils = {
       formatLanguageCode: jest.fn().mockReturnValue('foo'),
-      isWhitelisted: jest.fn().mockReturnValue(true),
+      isSupportedCode: jest.fn().mockReturnValue(true),
     };
     const storage = {};
     const locale = jest.fn().mockReturnValue('foo');
@@ -47,13 +47,13 @@ describe('LanguageDetector tests', () => {
     expect(detector.detect()).toEqual('foo');
     expect(locale).toHaveBeenCalled();
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('foo');
-    expect(languageUtils.isWhitelisted).toHaveBeenCalledWith('foo');
+    expect(languageUtils.isSupportedCode).toHaveBeenCalledWith('foo');
   });
 
   test('should return fallback language', () => {
     const languageUtils = {
       formatLanguageCode: jest.fn().mockReturnValue('foo'),
-      isWhitelisted: jest.fn().mockReturnValue(false),
+      isSupportedCode: jest.fn().mockReturnValue(false),
     };
     const storage = {};
     const locale = jest.fn().mockReturnValue('foo');
@@ -68,14 +68,14 @@ describe('LanguageDetector tests', () => {
     expect(detector.detect()).toEqual('bar');
     expect(locale).toHaveBeenCalled();
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('foo');
-    expect(languageUtils.isWhitelisted).toHaveBeenCalledWith('foo');
+    expect(languageUtils.isSupportedCode).toHaveBeenCalledWith('foo');
   });
 
   test('should return language from navigator', () => {
     const storage = {};
     const languageUtils = {
       formatLanguageCode: jest.fn().mockImplementation(l => l),
-      isWhitelisted: jest.fn().mockReturnValue(true),
+      isSupportedCode: jest.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
@@ -88,15 +88,15 @@ describe('LanguageDetector tests', () => {
     expect(detector.detect()).toEqual('en-US');
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledTimes(1);
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('en-US');
-    expect(languageUtils.isWhitelisted).toHaveBeenCalledTimes(1);
-    expect(languageUtils.isWhitelisted).toHaveBeenCalledWith('en-US');
+    expect(languageUtils.isSupportedCode).toHaveBeenCalledTimes(1);
+    expect(languageUtils.isSupportedCode).toHaveBeenCalledWith('en-US');
   });
 
   test('should return languages from fake navigator', () => {
     const storage = {};
     const languageUtils = {
       formatLanguageCode: jest.fn().mockImplementation(l => l),
-      isWhitelisted: jest.fn().mockReturnValue(true),
+      isSupportedCode: jest.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
@@ -113,15 +113,15 @@ describe('LanguageDetector tests', () => {
     expect(languages).toHaveBeenCalled();
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledTimes(1);
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('lorem');
-    expect(languageUtils.isWhitelisted).toHaveBeenCalledTimes(1);
-    expect(languageUtils.isWhitelisted).toHaveBeenCalledWith('lorem');
+    expect(languageUtils.isSupportedCode).toHaveBeenCalledTimes(1);
+    expect(languageUtils.isSupportedCode).toHaveBeenCalledWith('lorem');
   });
 
   test('should return language from fake navigator', () => {
     const storage = {};
     const languageUtils = {
       formatLanguageCode: jest.fn().mockImplementation(l => l),
-      isWhitelisted: jest.fn().mockReturnValue(true),
+      isSupportedCode: jest.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
@@ -138,15 +138,15 @@ describe('LanguageDetector tests', () => {
     expect(language).toHaveBeenCalled();
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledTimes(1);
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('lorem');
-    expect(languageUtils.isWhitelisted).toHaveBeenCalledTimes(1);
-    expect(languageUtils.isWhitelisted).toHaveBeenCalledWith('lorem');
+    expect(languageUtils.isSupportedCode).toHaveBeenCalledTimes(1);
+    expect(languageUtils.isSupportedCode).toHaveBeenCalledWith('lorem');
   });
 
   test('should return userLanguage from fake navigator', () => {
     const storage = {};
     const languageUtils = {
       formatLanguageCode: jest.fn().mockImplementation(l => l),
-      isWhitelisted: jest.fn().mockReturnValue(true),
+      isSupportedCode: jest.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
@@ -163,15 +163,15 @@ describe('LanguageDetector tests', () => {
     expect(userLanguage).toHaveBeenCalled();
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledTimes(1);
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('lorem');
-    expect(languageUtils.isWhitelisted).toHaveBeenCalledTimes(1);
-    expect(languageUtils.isWhitelisted).toHaveBeenCalledWith('lorem');
+    expect(languageUtils.isSupportedCode).toHaveBeenCalledTimes(1);
+    expect(languageUtils.isSupportedCode).toHaveBeenCalledWith('lorem');
   });
 
   test('should return fallback when navigator is not available', () => {
     const storage = {};
     const languageUtils = {
       formatLanguageCode: jest.fn().mockImplementation(l => l),
-      isWhitelisted: jest.fn().mockReturnValue(true),
+      isSupportedCode: jest.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
@@ -184,7 +184,7 @@ describe('LanguageDetector tests', () => {
 
     expect(detector.detect()).toEqual('bar');
     expect(languageUtils.formatLanguageCode).not.toHaveBeenCalled();
-    expect(languageUtils.isWhitelisted).not.toHaveBeenCalled();
+    expect(languageUtils.isSupportedCode).not.toHaveBeenCalled();
   });
 });
 
