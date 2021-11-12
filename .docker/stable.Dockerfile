@@ -3,7 +3,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 FROM debian:stable-slim as builder
 
-ENV NODE_VERSION=node_14.x
+ENV NODE_VERSION=node_10.x
 ENV NODE_KEYRING=/usr/share/keyrings/nodesource.gpg
 ENV DISTRIBUTION=bullseye
 ENV YARN_KEYRING=/usr/share/keyrings/yarn.gpg
