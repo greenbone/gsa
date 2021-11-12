@@ -41,6 +41,7 @@ const data = new License({
       created: '2021-08-27T06:05:21Z',
       begins: '2021-08-27T07:05:21Z',
       expires: '2021-09-04T07:05:21Z',
+      comment: 'Han shot first',
     },
     appliance: {
       model: 'trial',
@@ -116,6 +117,8 @@ describe('LicensePage tests', () => {
     expect(element).toHaveTextContent('Fri, Aug 27, 2021 7:05 AM UTC');
     expect(element).toHaveTextContent('Expires');
     expect(element).toHaveTextContent('Sat, Sep 4, 2021 7:05 AM UTC');
+    expect(element).toHaveTextContent('Comment');
+    expect(element).toHaveTextContent('Han shot first');
     expect(element).toHaveTextContent('Model');
     expect(element).toHaveTextContent('trial');
     expect(element).toHaveTextContent('Model Type');
