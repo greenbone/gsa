@@ -145,6 +145,10 @@ const LicensePage = () => {
                     <DateTime date={license.expires} />
                   </TableData>
                 </TableRow>
+                <TableRow>
+                  <TableData>{_('Comment')}</TableData>
+                  <TableData>{license.comment}</TableData>
+                </TableRow>
               </TableBody>
             </InfoTable>
             <h3>Model</h3>
