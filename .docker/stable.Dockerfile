@@ -1,4 +1,4 @@
-ARG VERSION=unstable
+ARG VERSION=stable
 ARG DEBIAN_FRONTEND=noninteractive
 
 FROM debian:stable-slim as builder
@@ -19,9 +19,6 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dear
 RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee "$YARN_KEYRING" >/dev/null && \
     echo "deb [signed-by=$YARN_KEYRING] https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
-
-# Install Debian core dependencies required for building gvm with PostgreSQL
-# support and not yet installed as dependencies of gvm-libs-core
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     nodejs \
