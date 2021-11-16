@@ -19,6 +19,8 @@ import React, {useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import DateTime from 'web/components/date/datetime';
 
 import LicenseIcon from 'web/components/icon/licenseicon';
@@ -145,6 +147,12 @@ const LicensePage = () => {
                     <DateTime date={license.expires} />
                   </TableData>
                 </TableRow>
+                {isDefined(license.comment) && (
+                  <TableRow>
+                    <TableData>{_('Comment')}</TableData>
+                    <TableData>{license.comment}</TableData>
+                  </TableRow>
+                )}
               </TableBody>
             </InfoTable>
             <h3>Model</h3>
