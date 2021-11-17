@@ -72,10 +72,6 @@ import {
   selector as portListsSelector,
 } from 'web/store/entities/portlists';
 import {
-  loadEntities as loadReportFormats,
-  selector as reportFormatsSelector,
-} from 'web/store/entities/reportformats';
-import {
   loadEntities as loadScanConfigs,
   selector as scanConfigsSelector,
 } from 'web/store/entities/scanconfigs';
@@ -213,7 +209,6 @@ class UserSettings extends React.Component {
     this.props.loadCredentials();
     this.props.loadFilters();
     this.props.loadPortLists();
-    this.props.loadReportFormats();
     this.props.loadScanConfigs();
     this.props.loadScanners();
     this.props.loadSchedules();
@@ -286,7 +281,6 @@ class UserSettings extends React.Component {
       scanconfigs = [],
       scanners = [],
       portlists,
-      reportformats,
       schedules,
       targets,
       isLoading = true,
@@ -306,7 +300,6 @@ class UserSettings extends React.Component {
       defaultOpenvasScanConfig = {},
       defaultOpenvasScanner = {},
       defaultPortList = {},
-      defaultReportFormat = {},
       defaultSmbCredential = {},
       defaultSnmpCredential = {},
       defaultSshCredential = {},
@@ -551,13 +544,6 @@ class UserSettings extends React.Component {
                             type="portlist"
                           />
                         )}
-                        {capabilities.mayAccess('reportformat') && (
-                          <SettingTableRow
-                            setting={defaultReportFormat}
-                            title={_('Default Report Format')}
-                            type="reportformat"
-                          />
-                        )}
                         {capabilities.mayAccess('credential') && (
                           <SettingTableRow
                             setting={defaultSmbCredential}
@@ -770,7 +756,6 @@ class UserSettings extends React.Component {
               openVasScanners={openVasScanners}
               ospScanners={ospScanners}
               portLists={portlists}
-              reportFormats={reportformats}
               schedules={schedules}
               targets={targets}
               timezone={timezone}
@@ -790,7 +775,6 @@ class UserSettings extends React.Component {
               defaultOpenvasScanConfig={defaultOpenvasScanConfig.id}
               defaultOpenvasScanner={defaultOpenvasScanner.id}
               defaultPortList={defaultPortList.id}
-              defaultReportFormat={defaultReportFormat.id}
               defaultSmbCredential={defaultSmbCredential.id}
               defaultSnmpCredential={defaultSnmpCredential.id}
               defaultSshCredential={defaultSshCredential.id}
@@ -855,7 +839,6 @@ UserSettings.propTypes = {
   defaultOspScanConfig: PropTypes.object,
   defaultOspScanner: PropTypes.object,
   defaultPortList: PropTypes.object,
-  defaultReportFormat: PropTypes.object,
   defaultSchedule: PropTypes.object,
   defaultSeverity: PropTypes.object,
   defaultSmbCredential: PropTypes.object,
@@ -877,7 +860,6 @@ UserSettings.propTypes = {
   loadFilterDefaults: PropTypes.func.isRequired,
   loadFilters: PropTypes.func.isRequired,
   loadPortLists: PropTypes.func.isRequired,
-  loadReportFormats: PropTypes.func.isRequired,
   loadScanConfigs: PropTypes.func.isRequired,
   loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
@@ -894,7 +876,6 @@ UserSettings.propTypes = {
   portlists: PropTypes.array,
   reportExportFileName: PropTypes.object,
   reportFormatsFilter: PropTypes.object,
-  reportformats: PropTypes.array,
   reportsFilter: PropTypes.object,
   resultsFilter: PropTypes.object,
   rolesFilter: PropTypes.object,
@@ -930,9 +911,8 @@ const mapStateToProps = rootState => {
   const detailsExportFileName = userDefaultsSelector.getByName(
     'detailsexportfilename',
   );
-  const listExportFileName = userDefaultsSelector.getByName(
-    'listexportfilename',
-  );
+  const listExportFileName =
+    userDefaultsSelector.getByName('listexportfilename');
   const reportExportFileName = userDefaultsSelector.getByName(
     'reportexportfilename',
   );
@@ -949,9 +929,8 @@ const mapStateToProps = rootState => {
   const defaultOspScanConfigId = userDefaultsSelector.getValueByName(
     'defaultospscanconfig',
   );
-  const defaultOspScannerId = userDefaultsSelector.getValueByName(
-    'defaultospscanner',
-  );
+  const defaultOspScannerId =
+    userDefaultsSelector.getValueByName('defaultospscanner');
   const defaultOpenvasScanConfigId = userDefaultsSelector.getValueByName(
     'defaultopenvasscanconfig',
   );
@@ -959,12 +938,8 @@ const mapStateToProps = rootState => {
     'defaultopenvasscanner',
   );
 
-  const defaultPortListId = userDefaultsSelector.getValueByName(
-    'defaultportlist',
-  );
-  const defaultReportFormatId = userDefaultsSelector.getValueByName(
-    'defaultreportformat',
-  );
+  const defaultPortListId =
+    userDefaultsSelector.getValueByName('defaultportlist');
   const defaultSmbCredentialId = userDefaultsSelector.getValueByName(
     'defaultsmbcredential',
   );
@@ -974,16 +949,14 @@ const mapStateToProps = rootState => {
   const defaultSshCredentialId = userDefaultsSelector.getValueByName(
     'defaultsshcredential',
   );
-  const defaultScheduleId = userDefaultsSelector.getValueByName(
-    'defaultschedule',
-  );
+  const defaultScheduleId =
+    userDefaultsSelector.getValueByName('defaultschedule');
   const defaultTargetId = userDefaultsSelector.getValueByName('defaulttarget');
 
   const alertsSel = alertsSelector(rootState);
   const credentialsSel = credentialsSelector(rootState);
   const filtersSel = filtersSelector(rootState);
   const portListsSel = portListsSelector(rootState);
-  const reportFormatsSel = reportFormatsSelector(rootState);
   const scannersSel = scannersSelector(rootState);
   const scanConfigsSel = scanConfigsSelector(rootState);
   const schedulesSel = schedulesSelector(rootState);
@@ -1001,7 +974,6 @@ const mapStateToProps = rootState => {
   );
   const defaultOpenvasScanner = scannersSel.getEntity(defaultOpenvasScannerId);
   const defaultPortList = portListsSel.getEntity(defaultPortListId);
-  const defaultReportFormat = reportFormatsSel.getEntity(defaultReportFormatId);
   const defaultSmbCredential = credentialsSel.getEntity(defaultSmbCredentialId);
   const defaultSnmpCredential = credentialsSel.getEntity(
     defaultSnmpCredentialId,
@@ -1016,16 +988,14 @@ const mapStateToProps = rootState => {
   const groupsFilter = userDefaultFilterSelector.getFilter('group');
   const hostsFilter = userDefaultFilterSelector.getFilter('host');
   const notesFilter = userDefaultFilterSelector.getFilter('note');
-  const operatingSystemsFilter = userDefaultFilterSelector.getFilter(
-    'operatingsystem',
-  );
+  const operatingSystemsFilter =
+    userDefaultFilterSelector.getFilter('operatingsystem');
   const overridesFilter = userDefaultFilterSelector.getFilter('override');
   const permissionsFilter = userDefaultFilterSelector.getFilter('permission');
   const portListsFilter = userDefaultFilterSelector.getFilter('portlist');
   const reportsFilter = userDefaultFilterSelector.getFilter('report');
-  const reportFormatsFilter = userDefaultFilterSelector.getFilter(
-    'reportformat',
-  );
+  const reportFormatsFilter =
+    userDefaultFilterSelector.getFilter('reportformat');
   const resultsFilter = userDefaultFilterSelector.getFilter('result');
   const rolesFilter = userDefaultFilterSelector.getFilter('role');
   const scannersFilter = userDefaultFilterSelector.getFilter('scanner');
@@ -1034,13 +1004,11 @@ const mapStateToProps = rootState => {
   const targetsFilter = userDefaultFilterSelector.getFilter('target');
   const tasksFilter = userDefaultFilterSelector.getFilter('task');
   const ticketsFilter = userDefaultFilterSelector.getFilter('ticket');
-  const tlsCertificatesFilter = userDefaultFilterSelector.getFilter(
-    'tlscertificate',
-  );
+  const tlsCertificatesFilter =
+    userDefaultFilterSelector.getFilter('tlscertificate');
   const usersFilter = userDefaultFilterSelector.getFilter('user');
-  const vulnerabilitiesFilter = userDefaultFilterSelector.getFilter(
-    'vulnerability',
-  );
+  const vulnerabilitiesFilter =
+    userDefaultFilterSelector.getFilter('vulnerability');
   const cpeFilter = userDefaultFilterSelector.getFilter('cpe');
   const cveFilter = userDefaultFilterSelector.getFilter('cve');
   const certBundFilter = userDefaultFilterSelector.getFilter('certbund');
@@ -1058,7 +1026,6 @@ const mapStateToProps = rootState => {
     credentials: credentialsSel.getEntities(ALL_FILTER),
     filters: filtersSel.getEntities(ALL_FILTER),
     portlists: portListsSel.getEntities(ALL_FILTER),
-    reportformats: reportFormatsSel.getEntities(ALL_FILTER),
     scanconfigs,
     scanners: scannersSel.getEntities(ALL_FILTER),
     schedules: schedulesSel.getEntities(ALL_FILTER),
@@ -1080,7 +1047,6 @@ const mapStateToProps = rootState => {
     defaultOpenvasScanConfig,
     defaultOpenvasScanner,
     defaultPortList,
-    defaultReportFormat,
     defaultSmbCredential,
     defaultSnmpCredential,
     defaultSshCredential,
@@ -1158,7 +1124,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
       dispatch(loadUserSettingsDefaultFilter(gmp)('ovaldef')),
     ]),
   loadPortLists: () => dispatch(loadPortLists(gmp)(ALL_FILTER)),
-  loadReportFormats: () => dispatch(loadReportFormats(gmp)(ALL_FILTER)),
   loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
   loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),

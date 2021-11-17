@@ -60,7 +60,6 @@ let UserSettingsDialog = ({
   openVasScanners,
   ospScanners,
   portLists,
-  reportFormats,
   schedules,
   targets,
   timezone,
@@ -80,7 +79,6 @@ let UserSettingsDialog = ({
   defaultOpenvasScanConfig,
   defaultOpenvasScanner,
   defaultPortList,
-  defaultReportFormat,
   defaultSmbCredential,
   defaultSnmpCredential,
   defaultSshCredential,
@@ -140,7 +138,6 @@ let UserSettingsDialog = ({
     defaultOpenvasScanConfig,
     defaultOpenvasScanner,
     defaultPortList,
-    defaultReportFormat,
     defaultSmbCredential,
     defaultSnmpCredential,
     defaultSshCredential,
@@ -241,7 +238,6 @@ let UserSettingsDialog = ({
                 openVasScanners={openVasScanners}
                 ospScanners={ospScanners}
                 portLists={portLists}
-                reportFormats={reportFormats}
                 schedules={schedules}
                 targets={targets}
                 defaultAlert={values.defaultAlert}
@@ -251,7 +247,6 @@ let UserSettingsDialog = ({
                 defaultOpenvasScanConfig={values.defaultOpenvasScanConfig}
                 defaultOpenvasScanner={values.defaultOpenvasScanner}
                 defaultPortList={values.defaultPortList}
-                defaultReportFormat={values.defaultReportFormat}
                 defaultSmbCredential={values.defaultSmbCredential}
                 defaultSnmpCredential={values.defaultSnmpCredential}
                 defaultSshCredential={values.defaultSshCredential}
@@ -325,7 +320,6 @@ UserSettingsDialog.propTypes = {
   defaultOspScanConfig: PropTypes.string,
   defaultOspScanner: PropTypes.string,
   defaultPortList: PropTypes.string,
-  defaultReportFormat: PropTypes.string,
   defaultSchedule: PropTypes.string,
   defaultSeverity: PropTypes.number,
   defaultSmbCredential: PropTypes.string,
@@ -354,7 +348,6 @@ UserSettingsDialog.propTypes = {
   portLists: PropTypes.array,
   portListsFilter: PropTypes.string,
   reportExportFileName: PropTypes.string,
-  reportFormats: PropTypes.array,
   reportFormatsFilter: PropTypes.string,
   reportsFilter: PropTypes.string,
   resultsFilter: PropTypes.string,
