@@ -53,8 +53,11 @@ const I18N_OPTIONS = {
   backend: {
     loadPath: '/locales/{{ns}}-{{lng}}.json', // e.g. /locales/gsa-en.json
   },
-  whitelist,
-  nonExplicitWhitelist: true,
+  supportedLngs: whitelist,
+  nonExplicitSupportedLngs: true,
+  interpolation: {
+    skipOnVariables: false,
+  },
 };
 
 i18next.on('languageChanged', lang => {
