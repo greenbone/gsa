@@ -23,6 +23,8 @@ import {isDefined} from 'gmp/utils/identity';
 
 import DateTime from 'web/components/date/datetime';
 
+import ErrorDialog from 'web/components/dialog/errordialog';
+
 import LicenseIcon from 'web/components/icon/licenseicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
@@ -78,12 +80,16 @@ const LicensePage = () => {
   const gmp = useGmp();
 
   const [license, setLicense] = useState({});
+  const [error, setError] = useState();
   const [newLicenseDialogVisible, setNewLicenseDialogVisible] = useState(false);
 
   useEffect(() => {
-    gmp.license.getLicenseInformation().then(response => {
-      setLicense(response.data);
-    });
+    gmp.license
+      .getLicenseInformation()
+      .then(response => {
+        setLicense(response.data);
+      })
+      .catch(err => setError(err));
   }, [gmp.license]);
 
   const handleNewLicenseClick = () => {
@@ -100,11 +106,22 @@ const LicensePage = () => {
     setLicense(value);
   };
 
+  const handleErrorClose = () => {
+    setError(undefined);
+  };
+
   return (
     <React.Fragment>
       <PageTitle title={_('License Management')} />
       <Layout flex="column">
         <ToolBarIcons onNewLicenseClick={handleNewLicenseClick} />
+        {error && (
+          <ErrorDialog
+            text={error.message}
+            title={_('Error while loading license information')}
+            onClose={handleErrorClose}
+          />
+        )}
         <Section
           img={<LicenseIcon size="large" />}
           title={_('License Management')}
