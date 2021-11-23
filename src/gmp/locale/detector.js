@@ -70,7 +70,7 @@ class LanguageDetector {
     let lang;
     for (const l of detected) {
       const cleaned = this.services.languageUtils.formatLanguageCode(l);
-      if (this.services.languageUtils.isWhitelisted(cleaned)) {
+      if (this.services.languageUtils.isSupportedCode(cleaned)) {
         lang = cleaned;
         break;
       }
