@@ -559,6 +559,7 @@
   "Error": "Fehler",
   "Error Message": "Fehlermeldung",
   "Error Messages": "Fehlermeldungen",
+  "Error while loading license information": "Fehler beim Laden der Lizenzinformationen",
   "Error while loading Report {{reportId}}": "Fehler beim Laden des Berichts {{reportId}}",
   "Error while loading Results for Report {{reportId}}": "Fehler beim Laden von Ergebnissen des Berichts {{reportId}}",
   "Event": "Ereignis",
