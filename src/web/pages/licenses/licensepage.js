@@ -45,13 +45,14 @@ import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 
-// import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import LicenseDialog from './dialog';
 
 const ToolBarIcons = ({onNewLicenseClick}) => {
-  // const capabilities = useCapabilities();
-  const mayCreate = false; // TODO Adjust for capabilities
+  const capabilities = useCapabilities();
+  const mayModify = capabilities.mayOp('modify_license');
+
   return (
     <Layout>
       <IconDivider>
@@ -61,7 +62,7 @@ const ToolBarIcons = ({onNewLicenseClick}) => {
           anchor="license-management" // TODO Change!
           title={_('Help: License Management')}
         />
-        {mayCreate && ( // TODO Adjust for capabilities
+        {mayModify && (
           <NewIcon
             size="small"
             title={_('New License')}
@@ -80,6 +81,7 @@ const LicensePage = () => {
   const gmp = useGmp();
 
   const [license, setLicense] = useState({});
+  const [file, setFile] = useState();
   const [error, setError] = useState();
   const [newLicenseDialogVisible, setNewLicenseDialogVisible] = useState(false);
 
@@ -98,12 +100,14 @@ const LicensePage = () => {
   const handleCloseDialog = () => {
     setNewLicenseDialogVisible(false);
   };
+
   const handleSaveLicense = data => {
-    // gmp.save_license(data).then(setNewLicenseDialogVisible(false));
-    setNewLicenseDialogVisible(false);
+    return gmp.license
+      .modifyLicense(file)
+      .then(() => setNewLicenseDialogVisible(false));
   };
   const handleValueChange = value => {
-    setLicense(value);
+    setFile(value);
   };
 
   const handleErrorClose = () => {

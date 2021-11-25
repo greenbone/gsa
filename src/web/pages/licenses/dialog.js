@@ -52,7 +52,7 @@ const LicenseDialog = ({license, onClose, onSave, onValueChange}) => {
       {({values}) => (
         <React.Fragment>
           <FormGroup title={_('License File')}>
-            <FileField name="xml_file" onChange={onValueChange} />
+            <FileField name="file" onChange={onValueChange} />
           </FormGroup>
           <FormGroup title={_('Or Copy & Paste')}>
             <TextArea
