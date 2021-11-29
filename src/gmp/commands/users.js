@@ -295,8 +295,6 @@ export class UserCommand extends EntityCommand {
         data.defaultSnmpCredential,
       'settings_default:d74a9ee8-7d35-4879-9485-ab23f1bd45bc':
         data.defaultPortList,
-      'settings_default:353304fc-645e-11e6-ba7a-28d24461215b':
-        data.defaultReportFormat,
       'settings_default:f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d':
         data.defaultOpenvasScanner,
       'settings_default:b20697c9-be0a-4cd4-8b4d-5fe7841ebb03':
@@ -313,9 +311,8 @@ export class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('group')]: data.groupsFilter,
       [saveDefaultFilterSettingId('host')]: data.hostsFilter,
       [saveDefaultFilterSettingId('note')]: data.notesFilter,
-      [saveDefaultFilterSettingId(
-        'operatingsystem',
-      )]: data.operatingSystemsFilter,
+      [saveDefaultFilterSettingId('operatingsystem')]:
+        data.operatingSystemsFilter,
       [saveDefaultFilterSettingId('override')]: data.overridesFilter,
       [saveDefaultFilterSettingId('permission')]: data.permissionsFilter,
       [saveDefaultFilterSettingId('portlist')]: data.portListsFilter,
@@ -329,9 +326,8 @@ export class UserCommand extends EntityCommand {
       [saveDefaultFilterSettingId('target')]: data.targetsFilter,
       [saveDefaultFilterSettingId('task')]: data.tasksFilter,
       [saveDefaultFilterSettingId('ticket')]: data.ticketsFilter,
-      [saveDefaultFilterSettingId(
-        'tlscertificate',
-      )]: data.tlsCertificatesFilter,
+      [saveDefaultFilterSettingId('tlscertificate')]:
+        data.tlsCertificatesFilter,
       [saveDefaultFilterSettingId('user')]: data.usersFilter,
       [saveDefaultFilterSettingId('vulnerability')]: data.vulnerabilitiesFilter,
       [saveDefaultFilterSettingId('cpe')]: data.cpeFilter,

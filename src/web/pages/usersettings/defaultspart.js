@@ -35,7 +35,6 @@ const DefaultsPart = ({
   openVasScanners,
   ospScanners,
   portLists,
-  reportFormats,
   schedules,
   targets,
   defaultAlert,
@@ -45,7 +44,6 @@ const DefaultsPart = ({
   defaultOpenvasScanConfig,
   defaultOpenvasScanner,
   defaultPortList,
-  defaultReportFormat,
   defaultSmbCredential,
   defaultSnmpCredential,
   defaultSshCredential,
@@ -126,16 +124,6 @@ const DefaultsPart = ({
           />
         </FormGroup>
       )}
-      {capabilities.mayAccess('reportformat') && (
-        <FormGroup title={_('Default Report Format')} titleSize="3">
-          <Select
-            name="defaultReportFormat"
-            value={defaultReportFormat}
-            items={renderSelectItems(reportFormats, UNSET_VALUE)}
-            onChange={onChange}
-          />
-        </FormGroup>
-      )}
       {capabilities.mayAccess('credential') && (
         <FormGroup title={_('Default SMB Credential')} titleSize="3">
           <Select
@@ -201,7 +189,6 @@ DefaultsPart.propTypes = {
   defaultOspScanConfig: PropTypes.string,
   defaultOspScanner: PropTypes.string,
   defaultPortList: PropTypes.string,
-  defaultReportFormat: PropTypes.string,
   defaultSchedule: PropTypes.string,
   defaultSmbCredential: PropTypes.string,
   defaultSnmpCredential: PropTypes.string,
@@ -212,7 +199,6 @@ DefaultsPart.propTypes = {
   ospScanConfigs: PropTypes.array,
   ospScanners: PropTypes.array,
   portLists: PropTypes.array,
-  reportFormats: PropTypes.array,
   schedules: PropTypes.array,
   targets: PropTypes.array,
   onChange: PropTypes.func,
