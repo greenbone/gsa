@@ -81,7 +81,7 @@
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.7",
+    "@babel/cli": "^7.16.0",
     "@storybook/react": "^6.4.0",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",
