@@ -28,7 +28,7 @@ import TextArea from 'web/components/form/textarea';
 
 import PropTypes from 'web/utils/proptypes';
 
-const LicenseDialog = ({license, onClose, onSave, onValueChange}) => {
+const LicenseDialog = ({error, license, onClose, onSave, onValueChange}) => {
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
   const closeConfirmationDialog = () => {
@@ -45,6 +45,7 @@ const LicenseDialog = ({license, onClose, onSave, onValueChange}) => {
 
   return (
     <SaveDialog
+      error={error}
       title={_('New License')}
       onClose={onClose}
       onSave={data => handleSaveClick(onSave, data)}
@@ -52,7 +53,7 @@ const LicenseDialog = ({license, onClose, onSave, onValueChange}) => {
       {({values}) => (
         <React.Fragment>
           <FormGroup title={_('License File')}>
-            <FileField name="xml_file" onChange={onValueChange} />
+            <FileField name="file" onChange={onValueChange} />
           </FormGroup>
           <FormGroup title={_('Or Copy & Paste')}>
             <TextArea
@@ -83,6 +84,7 @@ const LicenseDialog = ({license, onClose, onSave, onValueChange}) => {
 };
 
 LicenseDialog.propTypes = {
+  error: PropTypes.string,
   license: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
