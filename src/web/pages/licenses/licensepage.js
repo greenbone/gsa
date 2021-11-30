@@ -83,6 +83,7 @@ const LicensePage = () => {
   const [license, setLicense] = useState({});
   const [file, setFile] = useState();
   const [error, setError] = useState();
+  const [dialogError, setDialogError] = useState();
   const [newLicenseDialogVisible, setNewLicenseDialogVisible] = useState(false);
 
   useEffect(() => {
@@ -104,7 +105,11 @@ const LicensePage = () => {
   const handleSaveLicense = data => {
     return gmp.license
       .modifyLicense(file)
-      .then(() => setNewLicenseDialogVisible(false));
+      .then(() => setNewLicenseDialogVisible(false))
+      .catch(err => {
+        setDialogError(err.message);
+      })
+      .then(gmp.license.getLicenseInformation());
   };
   const handleValueChange = value => {
     setFile(value);
@@ -198,6 +203,7 @@ const LicensePage = () => {
       </Layout>
       {newLicenseDialogVisible && (
         <LicenseDialog
+          error={dialogError}
           onClose={handleCloseDialog}
           onSave={handleSaveLicense}
           onValueChange={handleValueChange}
