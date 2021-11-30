@@ -17,6 +17,8 @@
  */
 import React from 'react';
 
+import Capabilities from 'gmp/capabilities/capabilities';
+
 import {setLocale} from 'gmp/locale/lang';
 
 import {License} from 'gmp/commands/license';
@@ -66,6 +68,8 @@ const xhr = {
   responseXML: 'ipsum',
 };
 
+const caps = new Capabilities(['everything']);
+
 const response = new Response(xhr, data);
 const gmp = {
   license: {
@@ -78,7 +82,12 @@ const gmp = {
 
 describe('LicensePage tests', () => {
   test('should render', async () => {
-    const {render, store} = rendererWith({gmp, router: true, store: true});
+    const {render, store} = rendererWith({
+      capabilities: caps,
+      gmp,
+      router: true,
+      store: true,
+    });
     const {element, getAllByRole, getAllByTestId} = render(<LicensePage />);
 
     store.dispatch(setTimezone('UTC'));
@@ -88,11 +97,12 @@ describe('LicensePage tests', () => {
     // Should render all icons
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons.length).toEqual(2);
+    expect(icons.length).toEqual(3);
 
     expect(icons[0]).toHaveTextContent('help.svg');
     expect(icons[0]).toHaveAttribute('title', 'Help: License Management');
-    expect(icons[1]).toHaveTextContent('license.svg');
+    expect(icons[1]).toHaveTextContent('new.svg');
+    expect(icons[2]).toHaveTextContent('license.svg');
 
     // Should render links
     const links = element.querySelectorAll('a');
