@@ -55,6 +55,13 @@ export class LicenseCommand extends HttpCommand {
       return response.setData(license);
     });
   }
+
+  modifyLicense(file) {
+    return this.httpPost({
+      cmd: 'save_license',
+      file,
+    });
+  }
 }
 
 registerCommand('license', LicenseCommand);
