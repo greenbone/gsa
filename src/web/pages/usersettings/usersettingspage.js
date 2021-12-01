@@ -888,14 +888,7 @@ const mapStateToProps = rootState => {
   const defaultEsxiCredentialId = userDefaultsSelector.getValueByName(
     'defaultesxicredential',
   );
-<<<<<<< HEAD
-=======
-  const defaultOspScanConfigId = userDefaultsSelector.getValueByName(
-    'defaultospscanconfig',
-  );
-  const defaultOspScannerId =
-    userDefaultsSelector.getValueByName('defaultospscanner');
->>>>>>> 8c08b0a32 (Remove default report format usersetting)
+
   const defaultOpenvasScanConfigId = userDefaultsSelector.getValueByName(
     'defaultopenvasscanconfig',
   );
@@ -905,12 +898,7 @@ const mapStateToProps = rootState => {
 
   const defaultPortListId =
     userDefaultsSelector.getValueByName('defaultportlist');
-<<<<<<< HEAD
-  const defaultReportFormatId = userDefaultsSelector.getValueByName(
-    'defaultreportformat',
-  );
-=======
->>>>>>> 8c08b0a32 (Remove default report format usersetting)
+
   const defaultSmbCredentialId = userDefaultsSelector.getValueByName(
     'defaultsmbcredential',
   );
