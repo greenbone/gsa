@@ -27,7 +27,14 @@ import FormGroup from 'web/components/form/formgroup';
 
 import PropTypes from 'web/utils/proptypes';
 
-const LicenseDialog = ({error, license, onClose, onSave, onValueChange}) => {
+const LicenseDialog = ({
+  error,
+  license,
+  onClose,
+  onErrorClose,
+  onSave,
+  onValueChange,
+}) => {
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
   const closeConfirmationDialog = () => {
@@ -41,12 +48,12 @@ const LicenseDialog = ({error, license, onClose, onSave, onValueChange}) => {
     closeConfirmationDialog();
     onSave(data);
   };
-
   return (
     <SaveDialog
       error={error}
       title={_('New License')}
       onClose={onClose}
+      onErrorClose={onErrorClose}
       onSave={data => handleSaveClick(onSave, data)}
     >
       {({values}) => (
@@ -77,6 +84,7 @@ LicenseDialog.propTypes = {
   error: PropTypes.string,
   license: PropTypes.string,
   onClose: PropTypes.func.isRequired,
+  onErrorClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onValueChange: PropTypes.func,
 };
