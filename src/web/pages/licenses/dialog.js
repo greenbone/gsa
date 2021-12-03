@@ -24,7 +24,6 @@ import SaveDialog from 'web/components/dialog/savedialog';
 
 import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
-import TextArea from 'web/components/form/textarea';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -54,15 +53,6 @@ const LicenseDialog = ({error, license, onClose, onSave, onValueChange}) => {
         <React.Fragment>
           <FormGroup title={_('License File')}>
             <FileField name="file" onChange={onValueChange} />
-          </FormGroup>
-          <FormGroup title={_('Or Copy & Paste')}>
-            <TextArea
-              name="license"
-              rows="8"
-              cols="50"
-              value={license}
-              onChange={onValueChange}
-            />
           </FormGroup>
           {confirmationDialogVisible && (
             <ConfirmationDialog
