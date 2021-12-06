@@ -82,8 +82,8 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
-    "@storybook/react": "^6.4.0",
-    "@testing-library/jest-dom": "^5.15.0",
+    "@storybook/react": "^6.4.8",
+    "@testing-library/jest-dom": "^5.16.0",
     "@testing-library/react": "^12.1.2",
     "@types/jest": "^27.0.3",
     "@testing-library/user-event": "^13.5.0",

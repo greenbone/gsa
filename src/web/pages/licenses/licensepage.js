@@ -100,6 +100,7 @@ const LicensePage = () => {
   };
   const handleCloseDialog = () => {
     setNewLicenseDialogVisible(false);
+    setDialogError(undefined);
   };
 
   const handleSaveLicense = data => {
@@ -117,6 +118,10 @@ const LicensePage = () => {
 
   const handleErrorClose = () => {
     setError(undefined);
+  };
+
+  const handleDialogErrorClose = () => {
+    setDialogError(undefined);
   };
 
   return (
@@ -205,6 +210,7 @@ const LicensePage = () => {
         <LicenseDialog
           error={dialogError}
           onClose={handleCloseDialog}
+          onErrorClose={handleDialogErrorClose}
           onSave={handleSaveLicense}
           onValueChange={handleValueChange}
         />
