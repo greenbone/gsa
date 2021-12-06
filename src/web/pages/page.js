@@ -145,7 +145,7 @@ class Page extends React.Component {
       return null;
     }
     const days = date(license.expires).diff(date(), 'days');
-    const showLicenseNotification =
+    const showLicenseNotification = // eslint-disable-line
       days < LICENSE_EXPIRATION_THRESHOLD && !notificationClosed;
 
     return (
@@ -153,14 +153,14 @@ class Page extends React.Component {
         <StyledLayout flex="column" align={['start', 'stretch']}>
           <MenuBar />
           <Header />
-          {capabilities.mayOp('get_license') && showLicenseNotification && (
+          {/* {capabilities.mayOp('get_license') && showLicenseNotification && (
             <LicenseNotification
               license={license}
               days={days}
               capabilities={capabilities}
               onCloseClick={this.handleCloseLicenseNotification}
             />
-          )}
+          )} */}
           <Main>
             <ErrorBoundary
               key={location.pathname}
