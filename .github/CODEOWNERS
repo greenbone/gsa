@@ -1,9 +1,6 @@
 # default reviewers
 *                 @greenbone/gsa-maintainers
-<<<<<<< HEAD
-=======
 
 # dev ops
 .github/          @greenbone/devops @greenbone/gsa-maintainers
 .docker/          @greenbone/devops @greenbone/gsa-maintainers
->>>>>>> 8c23c6c87 (Update CODEOWNERS)
