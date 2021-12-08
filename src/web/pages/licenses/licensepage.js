@@ -106,12 +106,15 @@ const LicensePage = () => {
   const handleCloseDialog = () => {
     setNewLicenseDialogVisible(false);
     setDialogError(undefined);
+    setFile(undefined);
   };
 
   const handleSaveLicense = data => {
     return gmp.license
       .modifyLicense(file)
-      .then(() => setNewLicenseDialogVisible(false))
+      .then(() => {
+        handleCloseDialog();
+      })
       .catch(err => {
         setDialogError(err.message);
       })
