@@ -258,7 +258,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: flex-end;
   margin: 10px 0px;
   padding-bottom: 1px;
-  border-bottom: 2px solid #c8d3d9;
+  border-bottom: 2px solid #e5e5e5;
   position: relative;
 }
 
@@ -386,9 +386,9 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   height: inherit;
   padding: 0;
   background: #fff;
-  box-shadow: 5px 5px 10px #787878;
+  box-shadow: 5px 5px 10px #7F7F7F;
   border-radius: 3px;
-  border: 1px solid #787878;
+  border: 1px solid #7F7F7F;
 }
 
 .c4 {
@@ -396,11 +396,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  border: 1px solid #519032;
   font-weight: bold;
   font-size: 12px;
   font-family: Verdana,sans-serif;
-  color: #519032;
+  color: #074320;
   cursor: pointer;
   border-radius: 2px;
   padding: 0;
@@ -418,8 +417,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 }
 
 .c4:hover {
-  color: #fff;
-  background: #519032;
+  border: 1px solid #074320;
 }
 
 .c5 {
@@ -436,7 +434,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 .c48 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -447,7 +445,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -455,13 +453,13 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 
 .c48:focus,
 .c48:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c48:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -482,7 +480,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 .c48:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c49 {
@@ -504,14 +502,14 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 }
 
 .c50 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
+  border: 1px solid #7F7F7F;
+  color: #fff;
+  background: #11ab51;
 }
 
 .c50:hover {
-  color: #fff;
-  background: #519032;
+  color: #074320;
+  background: #A1DDBA;
 }
 
 .c47 {
@@ -535,7 +533,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
-  border-color: #c8d3d9;
+  border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
   -webkit-box-pack: justify;
@@ -563,10 +561,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
-  border-bottom: 1px solid #787878;
+  border-bottom: 1px solid #7F7F7F;
   color: #fff;
   font-weight: bold;
-  background: #66c430;
+  background: #11ab51;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -664,7 +662,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 }
 
 .c14 {
-  color: #a94442;
+  color: #c12c30;
   font-weight: bold;
   font-size: 19px;
   padding-bottom: 1px;
@@ -684,7 +682,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 .c25 th,
 .c25 td {
   padding: 4px 10px;
-  border-bottom: 1px solid #c8d3d9;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .c25 tfoot tr {
@@ -692,7 +690,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 }
 
 .c25 tfoot tr td {
-  border-bottom: 1px solid #c8d3d9;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .c43 {
@@ -707,7 +705,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 .c43 th,
 .c43 td {
   padding: 4px 10px;
-  border-bottom: 1px solid #c8d3d9;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .c43 tfoot tr {
@@ -715,7 +713,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 }
 
 .c43 tfoot tr td {
-  border-bottom: 1px solid #c8d3d9;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .c26 a {
@@ -733,14 +731,14 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 .c27 {
   background-color: #fff;
   color: #000;
-  border-top: 1px solid #c8d3d9;
+  border-top: 1px solid #e5e5e5;
   font-weight: bold;
 }
 
 .c29 {
   background-color: #fff;
   color: #000;
-  border-top: 1px solid #c8d3d9;
+  border-top: 1px solid #e5e5e5;
   font-weight: bold;
   width: 9em;
 }
@@ -748,7 +746,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 .c44 {
   background-color: #fff;
   color: #000;
-  border-top: 1px solid #c8d3d9;
+  border-top: 1px solid #e5e5e5;
   font-weight: bold;
   width: 30%;
 }
@@ -756,7 +754,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 .c45 {
   background-color: #fff;
   color: #000;
-  border-top: 1px solid #c8d3d9;
+  border-top: 1px solid #e5e5e5;
   font-weight: bold;
   width: 10%;
 }
@@ -767,10 +765,10 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   line-height: inherit;
   display: block;
   height: 22px;
-  color: #393637;
+  color: #4C4C4C;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   border-radius: 2px;
   padding: 1px 8px;
 }
@@ -901,12 +899,12 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 @media screen {
   .c25 > tbody:nth-of-type(even),
   .c25 > tbody:only-of-type > tr:nth-of-type(even) {
-    background: #eeeeee;
+    background: #f3f3f3;
   }
 
   .c25 > tbody:not(:only-of-type):hover,
   .c25 > tbody:only-of-type > tr:hover {
-    background: #c8d3d9;
+    background: #e5e5e5;
   }
 }
 
@@ -919,12 +917,12 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
 @media screen {
   .c43 > tbody:nth-of-type(even),
   .c43 > tbody:only-of-type > tr:nth-of-type(even) {
-    background: #eeeeee;
+    background: #f3f3f3;
   }
 
   .c43 > tbody:not(:only-of-type):hover,
   .c43 > tbody:only-of-type > tr:hover {
-    background: #c8d3d9;
+    background: #e5e5e5;
   }
 }
 
@@ -2171,9 +2169,9 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   height: inherit;
   padding: 0;
   background: #fff;
-  box-shadow: 5px 5px 10px #787878;
+  box-shadow: 5px 5px 10px #7F7F7F;
   border-radius: 3px;
-  border: 1px solid #787878;
+  border: 1px solid #7F7F7F;
 }
 
 .c4 {
@@ -2181,11 +2179,10 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  border: 1px solid #519032;
   font-weight: bold;
   font-size: 12px;
   font-family: Verdana,sans-serif;
-  color: #519032;
+  color: #074320;
   cursor: pointer;
   border-radius: 2px;
   padding: 0;
@@ -2203,8 +2200,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
 }
 
 .c4:hover {
-  color: #fff;
-  background: #519032;
+  border: 1px solid #074320;
 }
 
 .c5 {
@@ -2221,7 +2217,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
 .c17 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -2232,7 +2228,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -2240,13 +2236,13 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
 
 .c17:focus,
 .c17:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c17:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -2267,7 +2263,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
 .c17:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c18 {
@@ -2289,14 +2285,14 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
 }
 
 .c19 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
+  border: 1px solid #7F7F7F;
+  color: #fff;
+  background: #11ab51;
 }
 
 .c19:hover {
-  color: #fff;
-  background: #519032;
+  color: #074320;
+  background: #A1DDBA;
 }
 
 .c16 {
@@ -2320,7 +2316,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
-  border-color: #c8d3d9;
+  border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
   -webkit-box-pack: justify;
@@ -2348,10 +2344,10 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
-  border-bottom: 1px solid #787878;
+  border-bottom: 1px solid #7F7F7F;
   color: #fff;
   font-weight: bold;
-  background: #66c430;
+  background: #11ab51;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -2449,7 +2445,7 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
 }
 
 .c14 {
-  color: #a94442;
+  color: #c12c30;
   font-weight: bold;
   font-size: 19px;
   padding-bottom: 1px;
@@ -2463,10 +2459,10 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
   line-height: inherit;
   display: block;
   height: 22px;
-  color: #393637;
+  color: #4C4C4C;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   border-radius: 2px;
   padding: 1px 8px;
 }
@@ -2735,9 +2731,9 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
   height: inherit;
   padding: 0;
   background: #fff;
-  box-shadow: 5px 5px 10px #787878;
+  box-shadow: 5px 5px 10px #7F7F7F;
   border-radius: 3px;
-  border: 1px solid #787878;
+  border: 1px solid #7F7F7F;
 }
 
 .c4 {
@@ -2745,11 +2741,10 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  border: 1px solid #519032;
   font-weight: bold;
   font-size: 12px;
   font-family: Verdana,sans-serif;
-  color: #519032;
+  color: #074320;
   cursor: pointer;
   border-radius: 2px;
   padding: 0;
@@ -2767,8 +2762,7 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
 }
 
 .c4:hover {
-  color: #fff;
-  background: #519032;
+  border: 1px solid #074320;
 }
 
 .c5 {
@@ -2785,7 +2779,7 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
 .c17 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -2796,7 +2790,7 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -2804,13 +2798,13 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
 
 .c17:focus,
 .c17:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c17:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -2831,7 +2825,7 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
 .c17:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c18 {
@@ -2853,14 +2847,14 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
 }
 
 .c19 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
+  border: 1px solid #7F7F7F;
+  color: #fff;
+  background: #11ab51;
 }
 
 .c19:hover {
-  color: #fff;
-  background: #519032;
+  color: #074320;
+  background: #A1DDBA;
 }
 
 .c16 {
@@ -2884,7 +2878,7 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
   align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
-  border-color: #c8d3d9;
+  border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
   -webkit-box-pack: justify;
@@ -2912,10 +2906,10 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
-  border-bottom: 1px solid #787878;
+  border-bottom: 1px solid #7F7F7F;
   color: #fff;
   font-weight: bold;
-  background: #66c430;
+  background: #11ab51;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -3013,7 +3007,7 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
 }
 
 .c14 {
-  color: #a94442;
+  color: #c12c30;
   font-weight: bold;
   font-size: 19px;
   padding-bottom: 1px;
@@ -3027,10 +3021,10 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
   line-height: inherit;
   display: block;
   height: 22px;
-  color: #393637;
+  color: #4C4C4C;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   border-radius: 2px;
   padding: 1px 8px;
 }

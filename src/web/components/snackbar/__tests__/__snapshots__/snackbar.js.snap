@@ -25,11 +25,11 @@ exports[`Snackbar tests should render 1`] = `
   -ms-flex-align: center;
   align-items: center;
   z-index: 600;
-  box-shadow: 5px 5px 10px #787878;
+  box-shadow: 5px 5px 10px #7F7F7F;
   box-sizing: border-box;
   border-radius: 5px;
-  border: 1px solid #66c430;
-  background-color: #393637;
+  border: 1px solid #11ab51;
+  background-color: #4C4C4C;
   color: #fff;
   font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
   -webkit-animation: hRwsCZ 5s ease-in-out;

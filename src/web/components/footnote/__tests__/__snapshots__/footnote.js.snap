@@ -18,7 +18,7 @@ exports[`Footnote tests should render footnote 1`] = `
   -ms-flex-align: center;
   align-items: center;
   font-size: 10px;
-  color: #787878;
+  color: #7F7F7F;
   text-align: left;
 }
 

@@ -2,11 +2,11 @@
 
 exports[`Footer tests should render footer with copyright 1`] = `
 .c1 {
-  color: #787878;
+  color: #7F7F7F;
 }
 
 .c1:link {
-  color: #787878;
+  color: #7F7F7F;
 }
 
 .c0 {
@@ -17,7 +17,7 @@ exports[`Footer tests should render footer with copyright 1`] = `
   padding: 2px;
   font-size: 10px;
   text-align: right;
-  color: #787878;
+  color: #7F7F7F;
   margin-top: 10px;
   padding-right: 5px;
   z-index: 500;

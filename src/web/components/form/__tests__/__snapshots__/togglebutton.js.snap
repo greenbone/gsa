@@ -8,8 +8,8 @@ exports[`ToggleButton tests should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-color: #c8d3d9;
-  color: #393637;
+  background-color: #e5e5e5;
+  color: #4C4C4C;
   cursor: pointer;
   width: 32px;
 }

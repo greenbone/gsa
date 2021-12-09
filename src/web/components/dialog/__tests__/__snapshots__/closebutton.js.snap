@@ -6,11 +6,10 @@ exports[`Dialog CloseButton tests should render 1`] = `
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  border: 1px solid #519032;
   font-weight: bold;
   font-size: 12px;
   font-family: Verdana,sans-serif;
-  color: #519032;
+  color: #074320;
   cursor: pointer;
   border-radius: 2px;
   padding: 0;
@@ -28,8 +27,7 @@ exports[`Dialog CloseButton tests should render 1`] = `
 }
 
 .c0:hover {
-  color: #fff;
-  background: #519032;
+  border: 1px solid #074320;
 }
 
 .c1 {

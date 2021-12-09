@@ -152,7 +152,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
 
 .c9 {
   border-radius: 2px;
-  border: 1px solid #c8d3d9;
+  border: 1px solid #bfbfbf;
   background-color: #fff;
   font-size: 1.1em;
   position: relative;
@@ -177,9 +177,9 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
 }
 
 .c11 {
-  background-color: #c8d3d9;
-  color: #787878;
-  border-left: 1px solid #393637;
+  background-color: #e5e5e5;
+  color: #7F7F7F;
+  border-left: 1px solid #4C4C4C;
   width: 16px;
   height: 50%;
   font-size: 0.6em;
@@ -203,7 +203,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
 }
 
 .c11:hover {
-  background-color: #66c430;
+  background-color: #11ab51;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -211,15 +211,15 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
 
 .c11:active {
   background-color: #fff;
-  color: #519032;
+  color: #074320;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 .c12 {
-  background-color: #c8d3d9;
-  color: #787878;
-  border-left: 1px solid #393637;
+  background-color: #e5e5e5;
+  color: #7F7F7F;
+  border-left: 1px solid #4C4C4C;
   width: 16px;
   height: 50%;
   font-size: 0.6em;
@@ -243,7 +243,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
 }
 
 .c12:hover {
-  background-color: #66c430;
+  background-color: #11ab51;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -251,7 +251,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
 
 .c12:active {
   background-color: #fff;
-  color: #519032;
+  color: #074320;
   -webkit-text-decoration: none;
   text-decoration: none;
 }

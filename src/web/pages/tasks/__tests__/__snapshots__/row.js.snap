@@ -211,7 +211,7 @@ exports[`Task Row tests should render 1`] = `
 }
 
 .c19 svg path {
-  fill: #aaaaaa;
+  fill: #bfbfbf;
 }
 
 .c14 {
@@ -229,13 +229,13 @@ exports[`Task Row tests should render 1`] = `
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #0000ff;
+  color: #0a53b8;
 }
 
 .c2:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
-  color: #0000ff;
+  color: #0a53b8;
 }
 
 .c7 {
@@ -243,7 +243,7 @@ exports[`Task Row tests should render 1`] = `
   box-sizing: content-box;
   display: inline-block;
   width: 100px;
-  background: #393637;
+  background: #4C4C4C;
   vertical-align: middle;
   text-align: center;
 }

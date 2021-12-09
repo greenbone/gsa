@@ -3,7 +3,7 @@
 exports[`Spinner tests should render 1`] = `
 .c0 {
   border-radius: 2px;
-  border: 1px solid #c8d3d9;
+  border: 1px solid #bfbfbf;
   background-color: #fff;
   font-size: 1.1em;
   position: relative;
@@ -28,9 +28,9 @@ exports[`Spinner tests should render 1`] = `
 }
 
 .c2 {
-  background-color: #c8d3d9;
-  color: #787878;
-  border-left: 1px solid #393637;
+  background-color: #e5e5e5;
+  color: #7F7F7F;
+  border-left: 1px solid #4C4C4C;
   width: 16px;
   height: 50%;
   font-size: 0.6em;
@@ -54,7 +54,7 @@ exports[`Spinner tests should render 1`] = `
 }
 
 .c2:hover {
-  background-color: #66c430;
+  background-color: #11ab51;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -62,15 +62,15 @@ exports[`Spinner tests should render 1`] = `
 
 .c2:active {
   background-color: #fff;
-  color: #519032;
+  color: #074320;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 .c3 {
-  background-color: #c8d3d9;
-  color: #787878;
-  border-left: 1px solid #393637;
+  background-color: #e5e5e5;
+  color: #7F7F7F;
+  border-left: 1px solid #4C4C4C;
   width: 16px;
   height: 50%;
   font-size: 0.6em;
@@ -94,7 +94,7 @@ exports[`Spinner tests should render 1`] = `
 }
 
 .c3:hover {
-  background-color: #66c430;
+  background-color: #11ab51;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -102,7 +102,7 @@ exports[`Spinner tests should render 1`] = `
 
 .c3:active {
   background-color: #fff;
-  color: #519032;
+  color: #074320;
   -webkit-text-decoration: none;
   text-decoration: none;
 }

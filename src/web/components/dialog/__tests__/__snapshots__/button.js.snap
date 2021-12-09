@@ -4,7 +4,7 @@ exports[`Dialog Button tests should render button 1`] = `
 .c0 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -15,7 +15,7 @@ exports[`Dialog Button tests should render button 1`] = `
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -23,13 +23,13 @@ exports[`Dialog Button tests should render button 1`] = `
 
 .c0:focus,
 .c0:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c0:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -50,7 +50,7 @@ exports[`Dialog Button tests should render button 1`] = `
 .c0:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c1 {
@@ -72,14 +72,14 @@ exports[`Dialog Button tests should render button 1`] = `
 }
 
 .c2 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
+  border: 1px solid #7F7F7F;
+  color: #fff;
+  background: #11ab51;
 }
 
 .c2:hover {
-  color: #fff;
-  background: #519032;
+  color: #074320;
+  background: #A1DDBA;
 }
 
 <button
@@ -91,7 +91,7 @@ exports[`Dialog Button tests should render button when loading 1`] = `
 .c0 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -102,7 +102,7 @@ exports[`Dialog Button tests should render button when loading 1`] = `
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -110,13 +110,13 @@ exports[`Dialog Button tests should render button when loading 1`] = `
 
 .c0:focus,
 .c0:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c0:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -137,7 +137,7 @@ exports[`Dialog Button tests should render button when loading 1`] = `
 .c0:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c1 {
@@ -159,14 +159,14 @@ exports[`Dialog Button tests should render button when loading 1`] = `
 }
 
 .c2 {
-  border: 1px solid #787878;
+  border: 1px solid #7F7F7F;
   color: rgba(0,0,0,0.0);
-  background: #87d050 url(/img/loading.gif) center center no-repeat;
+  background: #11ab51 url(/img/loading.gif) center center no-repeat;
 }
 
 .c2:hover {
   color: rgba(0,0,0,0.0);
-  background: #66c430 url(/img/loading.gif) center center no-repeat;
+  background: #11ab51 url(/img/loading.gif) center center no-repeat;
 }
 
 <button

@@ -19,9 +19,9 @@ exports[`ErrorContainer tests should render 1`] = `
   align-items: center;
   padding: 15px;
   margin: 15px 15px 15px 15px;
-  border: 1px solid #ebccd1;
-  color: #a94442;
-  background-color: #f2dede;
+  border: 1px solid #f4b1b2;
+  color: #c12c30;
+  background-color: #fbddde;
 }
 
 <div

@@ -115,7 +115,7 @@ exports[`StartTimeSelection tests should render 1`] = `
 .c15 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -126,7 +126,7 @@ exports[`StartTimeSelection tests should render 1`] = `
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -134,13 +134,13 @@ exports[`StartTimeSelection tests should render 1`] = `
 
 .c15:focus,
 .c15:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c15:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -161,7 +161,7 @@ exports[`StartTimeSelection tests should render 1`] = `
 .c15:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c16 {
@@ -251,7 +251,7 @@ exports[`StartTimeSelection tests should render 1`] = `
 
 .c10 {
   border-radius: 2px;
-  border: 1px solid #c8d3d9;
+  border: 1px solid #bfbfbf;
   background-color: #fff;
   font-size: 1.1em;
   position: relative;
@@ -276,9 +276,9 @@ exports[`StartTimeSelection tests should render 1`] = `
 }
 
 .c12 {
-  background-color: #c8d3d9;
-  color: #787878;
-  border-left: 1px solid #393637;
+  background-color: #e5e5e5;
+  color: #7F7F7F;
+  border-left: 1px solid #4C4C4C;
   width: 16px;
   height: 50%;
   font-size: 0.6em;
@@ -302,7 +302,7 @@ exports[`StartTimeSelection tests should render 1`] = `
 }
 
 .c12:hover {
-  background-color: #66c430;
+  background-color: #11ab51;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -310,15 +310,15 @@ exports[`StartTimeSelection tests should render 1`] = `
 
 .c12:active {
   background-color: #fff;
-  color: #519032;
+  color: #074320;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 .c13 {
-  background-color: #c8d3d9;
-  color: #787878;
-  border-left: 1px solid #393637;
+  background-color: #e5e5e5;
+  color: #7F7F7F;
+  border-left: 1px solid #4C4C4C;
   width: 16px;
   height: 50%;
   font-size: 0.6em;
@@ -342,7 +342,7 @@ exports[`StartTimeSelection tests should render 1`] = `
 }
 
 .c13:hover {
-  background-color: #66c430;
+  background-color: #11ab51;
   color: #fff;
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -350,7 +350,7 @@ exports[`StartTimeSelection tests should render 1`] = `
 
 .c13:active {
   background-color: #fff;
-  color: #519032;
+  color: #074320;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
