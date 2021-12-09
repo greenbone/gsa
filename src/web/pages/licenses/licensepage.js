@@ -86,32 +86,41 @@ const LicensePage = () => {
   const [dialogError, setDialogError] = useState();
   const [newLicenseDialogVisible, setNewLicenseDialogVisible] = useState(false);
 
-  useEffect(() => {
+  const updateLicenseInformation = () => {
     gmp.license
       .getLicenseInformation()
       .then(response => {
         setLicense(response.data);
       })
       .catch(err => setError(err));
-  }, [gmp.license]);
+  };
+
+  useEffect(() => {
+    updateLicenseInformation();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNewLicenseClick = () => {
     setNewLicenseDialogVisible(true);
   };
+
   const handleCloseDialog = () => {
     setNewLicenseDialogVisible(false);
     setDialogError(undefined);
+    setFile(undefined);
   };
 
   const handleSaveLicense = data => {
     return gmp.license
       .modifyLicense(file)
-      .then(() => setNewLicenseDialogVisible(false))
+      .then(() => {
+        handleCloseDialog();
+      })
       .catch(err => {
         setDialogError(err.message);
       })
-      .then(gmp.license.getLicenseInformation());
+      .then(updateLicenseInformation());
   };
+
   const handleValueChange = value => {
     setFile(value);
   };
