@@ -36,7 +36,7 @@ describe('MultiStepFooter tests', () => {
     const prevButton = element.querySelector('button[title="🠬"]');
     const nextButton = element.querySelector('button[title="🠮"]');
 
-    expect(button).toHaveStyleRule('background', Theme.lightGreen);
+    expect(button).toHaveStyleRule('background', Theme.green);
     expect(prevButton).toHaveStyleRule('background', Theme.white);
     expect(nextButton).toHaveStyleRule('background', Theme.white);
   });
@@ -53,7 +53,7 @@ describe('MultiStepFooter tests', () => {
 
     expect(button).toHaveStyleRule(
       'background',
-      `${Theme.lightGreen} url(/img/loading.gif) center center no-repeat`,
+      `${Theme.green} url(/img/loading.gif) center center no-repeat`,
     );
     expect(buttonLeft).toHaveAttribute('disabled');
   });

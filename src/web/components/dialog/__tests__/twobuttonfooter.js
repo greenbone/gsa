@@ -30,7 +30,7 @@ describe('DialogTwoButtonFooter tests', () => {
 
     const button = element.querySelector('button[title="Foo"]');
 
-    expect(button).toHaveStyleRule('background', Theme.lightGreen);
+    expect(button).toHaveStyleRule('background', Theme.green);
   });
 
   test('should render loading and disable cancel button', () => {
@@ -45,7 +45,7 @@ describe('DialogTwoButtonFooter tests', () => {
 
     expect(button).toHaveStyleRule(
       'background',
-      `${Theme.lightGreen} url(/img/loading.gif) center center no-repeat`,
+      `${Theme.green} url(/img/loading.gif) center center no-repeat`,
     );
     expect(buttonLeft).toHaveAttribute('disabled');
   });
