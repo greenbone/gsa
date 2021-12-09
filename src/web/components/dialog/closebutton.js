@@ -28,7 +28,6 @@ import withIconSize from 'web/components/icon/withIconSize';
 
 const StyledCloseButton = styled.div`
   display: flex;
-  border: 1px solid ${Theme.darkGreen};
   font-weight: bold;
   font-size: 12px;
   font-family: ${Theme.Font.default};
@@ -40,8 +39,7 @@ const StyledCloseButton = styled.div`
   justify-content: center;
   flex-shrink: 0;
   :hover {
-    color: ${Theme.white};
-    background: ${Theme.darkGreen};
+    border: 1px solid ${Theme.darkGreen};
   }
 `;
 

@@ -41,15 +41,11 @@ const StyledLayout = styled(Layout)`
 `;
 
 const DialogCloseButton = styled(CloseButton)`
-  border: 1px solid ${Theme.lightRed};
   background: 0;
   color: ${Theme.darkRed};
 
   :hover {
     border: 1px solid ${Theme.darkRed};
-    background: 0;
-    color: ${Theme.black};
-    opacity: 0.5;
   }
 `;
 
