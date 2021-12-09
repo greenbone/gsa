@@ -45,9 +45,7 @@ const StyledDiv = styled.div`
     props.active ? '1px solid ' + Theme.dialogGray : undefined};
   margin-bottom: ${props => (props.active ? '-2px' : undefined)};
   border-top: ${props =>
-    props.active
-      ? '2px solid ' + Theme.lightGreen
-      : '2px solid ' + Theme.white};
+    props.active ? '2px solid ' + Theme.green : '2px solid ' + Theme.white};
   :hover {
     border-top: ${props =>
       props.active ? undefined : '2px solid ' + Theme.lightGray};

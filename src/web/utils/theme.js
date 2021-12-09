@@ -21,7 +21,7 @@ const Theme = {
   lightGreen: '#A1DDBA',
   green: '#11ab51',
 
-  lightGray: '#bfbfbf', // used by: disabled inputs
+  lightGray: '#e5e5e5', // used by: disabled inputs
   mediumGray: '#7F7F7F',
   darkGray: '#4C4C4C',
 
@@ -33,7 +33,7 @@ const Theme = {
 
   lightRed: '#fbddde', // used by: dialog errors background
   mediumLightRed: '#f4b1b2', // used by: dialog errors border
-  warningRed: '#35393d', // used for warning font color at login dialog
+  warningRed: '#e5393d', // used for warning font color at login dialog
   darkRed: '#c12c30', // used by: dialog errors font
   errorRed: '#c83814', // used by: progressbar
 
