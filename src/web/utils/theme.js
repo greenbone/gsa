@@ -18,32 +18,28 @@
 
 const Theme = {
   /* source styleguide */
-  lightGreen: '#87d050',
-  green: '#66c430',
+  lightGreen: '#A1DDBA',
+  green: '#11ab51',
 
-  lightGray: '#c8d3d9', // used by: disabled inputs
-  mediumGray: '#787878',
-  darkGray: '#393637',
-
-  goldYellow: '#fdc300',
-  redBrown: '#a54317',
+  lightGray: '#bfbfbf', // used by: disabled inputs
+  mediumGray: '#7F7F7F',
+  darkGray: '#4C4C4C',
 
   /* source own */
   white: '#fff',
-  offWhite: '#fefefe', // used by: Login-background
-  dialogGray: '#eeeeee', // used by: dialog and dashboard display backgrounds
-  inputBorderGray: '#aaaaaa', // used by: form field, (Multi-)Select, ProgressBar
+  dialogGray: '#f3f3f3', // used by: dialog and dashboard display backgrounds
+  inputBorderGray: '#bfbfbf', // used by: form field, (Multi-)Select, ProgressBar
   black: '#000',
 
-  lightRed: '#f2dede', // used by: dialog errors background
-  mediumLightRed: '#ebccd1', // used by: dialog errors border
-  warningRed: '#d83636', // used for warning font color at login dialog
-  darkRed: '#a94442', // used by: dialog errors font
+  lightRed: '#fbddde', // used by: dialog errors background
+  mediumLightRed: '#f4b1b2', // used by: dialog errors border
+  warningRed: '#35393d', // used for warning font color at login dialog
+  darkRed: '#c12c30', // used by: dialog errors font
   errorRed: '#c83814', // used by: progressbar
 
-  lightBlue: '#bce8f1', // used by InfoPanel and dashboard hovering
-  mediumBlue: '#5897fb', // used by active/hovered items in Select
-  blue: '#0000ff', // used by: links
+  lightBlue: '#d6e6fd', // used by InfoPanel and dashboard hovering
+  mediumBlue: '#77acf7', // used by active/hovered items in Select
+  blue: '#0a53b8', // used by: links
   severityLowBlue: '#4f91c7', // used by: progressbar
 
   severityWarnYellow: '#f0a519', // used by: progressbar
@@ -54,8 +50,8 @@ const Theme = {
   paleGreen: '#99BE48', // used by: compliance status bar
 
   /* source ? */
-  darkGreen: '#519032', // RGB: 81, 144, 50
-  darkGreenTransparent: 'rgba(81, 144, 50, 0.8)', // corresponds to darkGreen
+  darkGreen: '#074320', // RGB: 7, 67, 32
+  darkGreenTransparent: 'rgba(7, 67, 32, 0.8)', // corresponds to darkGreen
 
   Layers: {
     menu: 600,
