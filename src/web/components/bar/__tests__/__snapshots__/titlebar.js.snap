@@ -51,7 +51,7 @@ exports[`Titlebar tests should not render content if user is logged out 1`] = `
   -ms-flex-align: center;
   align-items: center;
   height: 42px;
-  background-color: #66c430;
+  background-color: #11ab51;
   padding: 0px 5px 0px 5px;
   position: fixed;
   top: 0;
@@ -233,8 +233,8 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
 .c12 {
   height: 30px;
   width: 300px;
-  border-left: 1px solid #787878;
-  border-right: 1px solid #787878;
+  border-left: 1px solid #7F7F7F;
+  border-right: 1px solid #7F7F7F;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -248,15 +248,15 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
 }
 
 .c12:hover {
-  background: #66c430;
+  background: #11ab51;
   color: #fff;
   cursor: pointer;
 }
 
 .c12:first-child {
-  border-top: 1px solid #787878;
+  border-top: 1px solid #7F7F7F;
   cursor: default;
-  background-color: #eeeeee;
+  background-color: #f3f3f3;
 }
 
 .c12:first-child:hover {
@@ -265,7 +265,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
 
 .c12:nth-child(2) {
   cursor: default;
-  background-color: #eeeeee;
+  background-color: #f3f3f3;
 }
 
 .c12:nth-child(2):hover {
@@ -273,8 +273,8 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
 }
 
 .c12:last-child {
-  border-top: 1px solid #787878;
-  border-bottom: 1px solid #787878;
+  border-top: 1px solid #7F7F7F;
+  border-bottom: 1px solid #7F7F7F;
 }
 
 .c9 {
@@ -328,7 +328,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   -ms-flex-align: center;
   align-items: center;
   height: 42px;
-  background-color: #66c430;
+  background-color: #11ab51;
   padding: 0px 5px 0px 5px;
   position: fixed;
   top: 0;

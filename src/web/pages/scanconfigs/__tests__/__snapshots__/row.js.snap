@@ -134,13 +134,13 @@ exports[`Scan Config row tests should render 1`] = `
   cursor: pointer;
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #0000ff;
+  color: #0a53b8;
 }
 
 .c2:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
-  color: #0000ff;
+  color: #0a53b8;
 }
 
 @media print {

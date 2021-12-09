@@ -51,7 +51,7 @@ exports[`Badge tests should render badge 1`] = `
   min-width: 10px;
   padding: 3px 5px;
   z-index: 1;
-  background-color: #66c430;
+  background-color: #11ab51;
   color: #fff;
   bottom: -8px;
   right: 0px;

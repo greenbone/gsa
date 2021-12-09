@@ -269,7 +269,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
 }
 
 .c9 svg path {
-  fill: #aaaaaa;
+  fill: #bfbfbf;
 }
 
 .c5 {
@@ -312,7 +312,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   align-items: flex-end;
   margin: 10px 0px;
   padding-bottom: 1px;
-  border-bottom: 2px solid #c8d3d9;
+  border-bottom: 2px solid #e5e5e5;
   position: relative;
 }
 
@@ -395,17 +395,17 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   padding-right: 8px;
   padding-bottom: 2px;
   padding-top: 2px;
-  border-left: 1px solid #eeeeee;
-  border-right: 1px solid #c8d3d9;
+  border-left: 1px solid #f3f3f3;
+  border-right: 1px solid #e5e5e5;
   cursor: pointer;
-  background-color: #eeeeee;
-  border-bottom: 1px solid #eeeeee;
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #f3f3f3;
   margin-bottom: -2px;
-  border-top: 2px solid #87d050;
+  border-top: 2px solid #11ab51;
 }
 
 .c24:first-child {
-  border-left: 1px solid #c8d3d9;
+  border-left: 1px solid #e5e5e5;
 }
 
 .c25 {
@@ -427,13 +427,13 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   padding-bottom: 2px;
   padding-top: 2px;
   border-left: 1px solid #fff;
-  border-right: 1px solid #c8d3d9;
+  border-right: 1px solid #e5e5e5;
   cursor: pointer;
   border-top: 2px solid #fff;
 }
 
 .c25:hover {
-  border-top: 2px solid #c8d3d9;
+  border-top: 2px solid #e5e5e5;
 }
 
 .c25:first-child {
@@ -460,7 +460,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   -webkit-box-align: flex-end;
   -ms-flex-align: flex-end;
   align-items: flex-end;
-  border-bottom: 2px solid #66c430;
+  border-bottom: 2px solid #11ab51;
   margin-top: 30px;
   margin-bottom: 15px;
 }
@@ -512,7 +512,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   -ms-flex-align: center;
   align-items: center;
   border-spacing: 0px;
-  color: #787878;
+  color: #7F7F7F;
   font-size: 10px;
 }
 
@@ -541,7 +541,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   box-sizing: content-box;
   display: inline-block;
   width: 100px;
-  background: #393637;
+  background: #4C4C4C;
   vertical-align: middle;
   text-align: center;
 }
@@ -611,7 +611,7 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   min-width: 10px;
   padding: 3px 5px;
   z-index: 1;
-  background-color: #66c430;
+  background-color: #11ab51;
   color: #fff;
   bottom: -8px;
   right: 0px;
@@ -1445,7 +1445,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
 }
 
 .c7 svg path {
-  fill: #aaaaaa;
+  fill: #bfbfbf;
 }
 
 .c3 {
@@ -1498,7 +1498,7 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
   min-width: 10px;
   padding: 3px 5px;
   z-index: 1;
-  background-color: #66c430;
+  background-color: #11ab51;
   color: #fff;
   bottom: -8px;
   right: 0px;

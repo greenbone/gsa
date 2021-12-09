@@ -120,8 +120,8 @@ exports[`TaskPage ToolBarIcons test should render 1`] = `
 .c7 {
   height: 22px;
   width: 255px;
-  border-left: 1px solid #787878;
-  border-right: 1px solid #787878;
+  border-left: 1px solid #7F7F7F;
+  border-right: 1px solid #7F7F7F;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -137,15 +137,15 @@ exports[`TaskPage ToolBarIcons test should render 1`] = `
 }
 
 .c7:first-child {
-  border-top: 1px solid #787878;
+  border-top: 1px solid #7F7F7F;
 }
 
 .c7:last-child {
-  border-bottom: 1px solid #787878;
+  border-bottom: 1px solid #7F7F7F;
 }
 
 .c7:hover {
-  background: #66c430;
+  background: #11ab51;
   color: #fff;
 }
 

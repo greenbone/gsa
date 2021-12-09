@@ -186,7 +186,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   align-items: flex-end;
   margin: 10px 0px;
   padding-bottom: 1px;
-  border-bottom: 2px solid #c8d3d9;
+  border-bottom: 2px solid #e5e5e5;
   position: relative;
 }
 
@@ -294,9 +294,9 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   height: inherit;
   padding: 0;
   background: #fff;
-  box-shadow: 5px 5px 10px #787878;
+  box-shadow: 5px 5px 10px #7F7F7F;
   border-radius: 3px;
-  border: 1px solid #787878;
+  border: 1px solid #7F7F7F;
 }
 
 .c4 {
@@ -304,11 +304,10 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  border: 1px solid #519032;
   font-weight: bold;
   font-size: 12px;
   font-family: Verdana,sans-serif;
-  color: #519032;
+  color: #074320;
   cursor: pointer;
   border-radius: 2px;
   padding: 0;
@@ -326,8 +325,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 }
 
 .c4:hover {
-  color: #fff;
-  background: #519032;
+  border: 1px solid #074320;
 }
 
 .c5 {
@@ -344,7 +342,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 .c35 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -355,7 +353,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -363,13 +361,13 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 
 .c35:focus,
 .c35:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c35:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -390,7 +388,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 .c35:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c36 {
@@ -412,14 +410,14 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 }
 
 .c37 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
+  border: 1px solid #7F7F7F;
+  color: #fff;
+  background: #11ab51;
 }
 
 .c37:hover {
-  color: #fff;
-  background: #519032;
+  color: #074320;
+  background: #A1DDBA;
 }
 
 .c34 {
@@ -443,7 +441,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
-  border-color: #c8d3d9;
+  border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
   -webkit-box-pack: justify;
@@ -471,10 +469,10 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
-  border-bottom: 1px solid #787878;
+  border-bottom: 1px solid #7F7F7F;
   color: #fff;
   font-weight: bold;
-  background: #66c430;
+  background: #11ab51;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -543,7 +541,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 .c15 th,
 .c15 td {
   padding: 4px 10px;
-  border-bottom: 1px solid #c8d3d9;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .c15 tfoot tr {
@@ -551,7 +549,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 }
 
 .c15 tfoot tr td {
-  border-bottom: 1px solid #c8d3d9;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .c16 a {
@@ -573,7 +571,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 .c17 {
   background-color: #fff;
   color: #000;
-  border-top: 1px solid #c8d3d9;
+  border-top: 1px solid #e5e5e5;
   font-weight: bold;
 }
 
@@ -627,7 +625,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   box-sizing: content-box;
   display: inline-block;
   width: 100px;
-  background: #393637;
+  background: #4C4C4C;
   vertical-align: middle;
   text-align: center;
 }
@@ -676,12 +674,12 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 @media screen {
   .c15 > tbody:nth-of-type(even),
   .c15 > tbody:only-of-type > tr:nth-of-type(even) {
-    background: #eeeeee;
+    background: #f3f3f3;
   }
 
   .c15 > tbody:not(:only-of-type):hover,
   .c15 > tbody:only-of-type > tr:hover {
-    background: #c8d3d9;
+    background: #e5e5e5;
   }
 }
 
@@ -1260,9 +1258,9 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   height: inherit;
   padding: 0;
   background: #fff;
-  box-shadow: 5px 5px 10px #787878;
+  box-shadow: 5px 5px 10px #7F7F7F;
   border-radius: 3px;
-  border: 1px solid #787878;
+  border: 1px solid #7F7F7F;
 }
 
 .c4 {
@@ -1270,11 +1268,10 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  border: 1px solid #519032;
   font-weight: bold;
   font-size: 12px;
   font-family: Verdana,sans-serif;
-  color: #519032;
+  color: #074320;
   cursor: pointer;
   border-radius: 2px;
   padding: 0;
@@ -1292,8 +1289,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
 }
 
 .c4:hover {
-  color: #fff;
-  background: #519032;
+  border: 1px solid #074320;
 }
 
 .c5 {
@@ -1310,7 +1306,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
 .c11 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -1321,7 +1317,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -1329,13 +1325,13 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
 
 .c11:focus,
 .c11:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c11:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -1356,7 +1352,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
 .c11:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c12 {
@@ -1378,14 +1374,14 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
 }
 
 .c13 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
+  border: 1px solid #7F7F7F;
+  color: #fff;
+  background: #11ab51;
 }
 
 .c13:hover {
-  color: #fff;
-  background: #519032;
+  color: #074320;
+  background: #A1DDBA;
 }
 
 .c10 {
@@ -1409,7 +1405,7 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
-  border-color: #c8d3d9;
+  border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
   -webkit-box-pack: justify;
@@ -1437,10 +1433,10 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
-  border-bottom: 1px solid #787878;
+  border-bottom: 1px solid #7F7F7F;
   color: #fff;
   font-weight: bold;
-  background: #66c430;
+  background: #11ab51;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;

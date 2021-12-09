@@ -38,7 +38,7 @@ describe('Dialog Button tests', () => {
 
     expect(element).toMatchSnapshot();
 
-    expect(element).toHaveStyleRule('background', Theme.lightGreen);
+    expect(element).toHaveStyleRule('background', Theme.green);
   });
 
   test('should render button when loading', () => {
@@ -47,7 +47,7 @@ describe('Dialog Button tests', () => {
     expect(element).toMatchSnapshot();
     expect(element).toHaveStyleRule(
       'background',
-      `${Theme.lightGreen} url(/img/loading.gif) center center no-repeat`,
+      `${Theme.green} url(/img/loading.gif) center center no-repeat`,
     );
   });
 });

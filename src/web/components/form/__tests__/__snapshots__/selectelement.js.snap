@@ -2,7 +2,7 @@
 
 exports[`Box tests should render 1`] = `
 .c0 {
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -32,7 +32,7 @@ exports[`Box tests should render 1`] = `
 
 exports[`Box tests should render disabled 1`] = `
 .c0 {
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -53,7 +53,7 @@ exports[`Box tests should render disabled 1`] = `
   background-color: #fff;
   color: #000;
   font-weight: normal;
-  background-color: #eeeeee;
+  background-color: #f3f3f3;
 }
 
 <div
@@ -64,7 +64,7 @@ exports[`Box tests should render disabled 1`] = `
 
 exports[`Box tests should render opened 1`] = `
 .c0 {
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -118,7 +118,7 @@ exports[`Item tests should render 1`] = `
 }
 
 .c0:hover {
-  background-color: #5897fb;
+  background-color: #77acf7;
   color: #fff;
 }
 
@@ -131,12 +131,12 @@ exports[`Item tests should render active 1`] = `
 .c0 {
   padding: 1px 5px;
   cursor: pointer;
-  background-color: #5897fb;
+  background-color: #77acf7;
   color: #fff;
 }
 
 .c0:hover {
-  background-color: #5897fb;
+  background-color: #77acf7;
   color: #fff;
 }
 
@@ -149,11 +149,11 @@ exports[`Item tests should render selected 1`] = `
 .c0 {
   padding: 1px 5px;
   cursor: pointer;
-  background-color: #c8d3d9;
+  background-color: #e5e5e5;
 }
 
 .c0:hover {
-  background-color: #5897fb;
+  background-color: #77acf7;
   color: #fff;
 }
 
@@ -188,7 +188,7 @@ exports[`Menu tests should render 1`] = `
   -webkit-transition: opacity 0.1s ease;
   transition: opacity 0.1s ease;
   box-shadow: 0 2px 3px 0 rgba(34,36,38,0.15);
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   background-color: #fff;
   display: -webkit-box;
   display: -webkit-flex;
@@ -222,7 +222,7 @@ exports[`Menu tests should render with position adjust 1`] = `
   -webkit-transition: opacity 0.1s ease;
   transition: opacity 0.1s ease;
   box-shadow: 0 2px 3px 0 rgba(34,36,38,0.15);
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   background-color: #fff;
   display: -webkit-box;
   display: -webkit-flex;
@@ -256,7 +256,7 @@ exports[`Menu tests should render with position right 1`] = `
   -webkit-transition: opacity 0.1s ease;
   transition: opacity 0.1s ease;
   box-shadow: 0 2px 3px 0 rgba(34,36,38,0.15);
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   background-color: #fff;
   display: -webkit-box;
   display: -webkit-flex;

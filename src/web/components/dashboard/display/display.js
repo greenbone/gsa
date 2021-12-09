@@ -49,12 +49,11 @@ const Header = styled.div`
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;
-  background-color: ${Theme.green};
-  border: 1px solid ${Theme.mediumGray};
-  color: ${Theme.white};
+  background-color: ${Theme.lightGray};
+  border: 1px solid ${Theme.lightGray};
+  color: ${Theme.black};
   text-overflow: ellipsis;
   padding: 0px 5px;
-  font-weight: bold;
   user-select: none;
   overflow: hidden;
 `;
@@ -76,7 +75,6 @@ const DisplayView = styled.div`
   flex-shrink: 1;
   flex-basis: 0;
   background-color: ${Theme.white};
-  box-shadow: 5px 5px 10px ${Theme.lightGray};
 `;
 
 const DisplayContent = styled.div`

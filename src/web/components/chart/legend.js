@@ -37,8 +37,7 @@ const StyledLegend = styled.div`
   display: flex;
   flex-direction: column;
   user-select: none;
-  background-color: ${Theme.mediumGray};
-  color: ${Theme.white};
+  color: ${Theme.black};
   opacity: 0.75;
 `;
 

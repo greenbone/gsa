@@ -156,7 +156,7 @@ exports[`SortByGroup tests should render 1`] = `
 }
 
 .c5 {
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -192,7 +192,7 @@ exports[`SortByGroup tests should render 1`] = `
 }
 
 .c10 {
-  color: #a94442;
+  color: #c12c30;
   font-weight: bold;
   font-size: 19px;
   padding-bottom: 1px;

@@ -45,9 +45,9 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   height: inherit;
   padding: 0;
   background: #fff;
-  box-shadow: 5px 5px 10px #787878;
+  box-shadow: 5px 5px 10px #7F7F7F;
   border-radius: 3px;
-  border: 1px solid #787878;
+  border: 1px solid #7F7F7F;
 }
 
 .c4 {
@@ -55,11 +55,10 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  border: 1px solid #519032;
   font-weight: bold;
   font-size: 12px;
   font-family: Verdana,sans-serif;
-  color: #519032;
+  color: #074320;
   cursor: pointer;
   border-radius: 2px;
   padding: 0;
@@ -77,8 +76,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
 }
 
 .c4:hover {
-  color: #fff;
-  background: #519032;
+  border: 1px solid #074320;
 }
 
 .c5 {
@@ -95,7 +93,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
 .c9 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -106,7 +104,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -114,13 +112,13 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
 
 .c9:focus,
 .c9:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c9:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -141,7 +139,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
 .c9:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c10 {
@@ -163,14 +161,14 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
 }
 
 .c11 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
+  border: 1px solid #7F7F7F;
+  color: #fff;
+  background: #11ab51;
 }
 
 .c11:hover {
-  color: #fff;
-  background: #519032;
+  color: #074320;
+  background: #A1DDBA;
 }
 
 .c8 {
@@ -194,7 +192,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
-  border-color: #c8d3d9;
+  border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
   -webkit-box-pack: justify;
@@ -222,10 +220,10 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
-  border-bottom: 1px solid #787878;
+  border-bottom: 1px solid #7F7F7F;
   color: #fff;
   font-weight: bold;
-  background: #66c430;
+  background: #11ab51;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;

@@ -88,7 +88,7 @@ exports[`Task Actions tests should render 1`] = `
 }
 
 .c5 svg path {
-  fill: #aaaaaa;
+  fill: #bfbfbf;
 }
 
 .c4 {

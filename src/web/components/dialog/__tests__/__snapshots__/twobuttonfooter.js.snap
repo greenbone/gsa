@@ -4,7 +4,7 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 .c1 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -15,7 +15,7 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -23,13 +23,13 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 
 .c1:focus,
 .c1:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c1:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -50,7 +50,7 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 .c1:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c2 {
@@ -72,14 +72,14 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 }
 
 .c3 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
+  border: 1px solid #7F7F7F;
+  color: #fff;
+  background: #11ab51;
 }
 
 .c3:hover {
-  color: #fff;
-  background: #519032;
+  color: #074320;
+  background: #A1DDBA;
 }
 
 .c0 {
@@ -103,7 +103,7 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
   align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
-  border-color: #c8d3d9;
+  border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
   -webkit-box-pack: justify;
@@ -136,7 +136,7 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
 .c1 {
   display: inline-block;
   padding: 0 15px;
-  color: #393637;
+  color: #4C4C4C;
   text-align: center;
   vertical-align: middle;
   font-size: 11px;
@@ -147,7 +147,7 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
   white-space: nowrap;
   background-color: #fff;
   border-radius: 2px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   cursor: pointer;
   overflow: visible;
   z-index: 1;
@@ -155,13 +155,13 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
 
 .c1:focus,
 .c1:hover {
-  border: 1px solid #393637;
+  border: 1px solid #4C4C4C;
 }
 
 .c1:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background: #66c430;
+  background: #11ab51;
   font-weight: bold;
   color: #fff;
 }
@@ -182,7 +182,7 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
 .c1:link {
   -webkit-text-decoration: none;
   text-decoration: none;
-  color: #393637;
+  color: #4C4C4C;
 }
 
 .c2 {
@@ -204,25 +204,25 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
 }
 
 .c3 {
-  border: 1px solid #787878;
-  color: #519032;
-  background: #87d050;
+  border: 1px solid #7F7F7F;
+  color: #fff;
+  background: #11ab51;
 }
 
 .c3:hover {
-  color: #fff;
-  background: #519032;
+  color: #074320;
+  background: #A1DDBA;
 }
 
 .c4 {
-  border: 1px solid #787878;
+  border: 1px solid #7F7F7F;
   color: rgba(0,0,0,0.0);
-  background: #87d050 url(/img/loading.gif) center center no-repeat;
+  background: #11ab51 url(/img/loading.gif) center center no-repeat;
 }
 
 .c4:hover {
   color: rgba(0,0,0,0.0);
-  background: #66c430 url(/img/loading.gif) center center no-repeat;
+  background: #11ab51 url(/img/loading.gif) center center no-repeat;
 }
 
 .c0 {
@@ -246,7 +246,7 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
   align-items: center;
   border-width: 1px 0 0 0;
   border-style: solid;
-  border-color: #c8d3d9;
+  border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
   -webkit-box-pack: justify;

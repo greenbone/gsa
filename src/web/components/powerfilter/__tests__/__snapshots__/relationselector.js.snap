@@ -56,7 +56,7 @@ exports[`Relation Selector Tests should render 1`] = `
 }
 
 .c2 {
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -92,7 +92,7 @@ exports[`Relation Selector Tests should render 1`] = `
 }
 
 .c7 {
-  color: #a94442;
+  color: #c12c30;
   font-weight: bold;
   font-size: 19px;
   padding-bottom: 1px;
@@ -230,7 +230,7 @@ exports[`Select component tests should render 1`] = `
 }
 
 .c2 {
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -251,7 +251,7 @@ exports[`Select component tests should render 1`] = `
   background-color: #fff;
   color: #000;
   font-weight: normal;
-  background-color: #eeeeee;
+  background-color: #f3f3f3;
 }
 
 .c1 {
@@ -267,7 +267,7 @@ exports[`Select component tests should render 1`] = `
 }
 
 .c7 {
-  color: #a94442;
+  color: #c12c30;
   font-weight: bold;
   font-size: 19px;
   padding-bottom: 1px;

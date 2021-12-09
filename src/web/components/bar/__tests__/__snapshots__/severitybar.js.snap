@@ -6,7 +6,7 @@ exports[`SeverityBar tests should render 1`] = `
   box-sizing: content-box;
   display: inline-block;
   width: 100px;
-  background: #393637;
+  background: #4C4C4C;
   vertical-align: middle;
   text-align: center;
 }

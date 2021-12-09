@@ -36,7 +36,7 @@ exports[`FilterSearchGroup tests should render 1`] = `
 }
 
 .c4 {
-  color: #a94442;
+  color: #c12c30;
   font-weight: bold;
   font-size: 19px;
   padding-bottom: 1px;
@@ -50,10 +50,10 @@ exports[`FilterSearchGroup tests should render 1`] = `
   line-height: inherit;
   display: block;
   height: 22px;
-  color: #393637;
+  color: #4C4C4C;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #bfbfbf;
   border-radius: 2px;
   padding: 1px 8px;
 }
