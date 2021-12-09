@@ -30,6 +30,7 @@ export class License {
     this.version = content?.meta?.version;
     this.begins = parseDate(content?.meta?.begins);
     this.expires = parseDate(content?.meta?.expires);
+    this.comment = content?.meta?.comment;
 
     this.model = content?.appliance?.model;
     this.modelType = content?.appliance?.model_type;
@@ -52,6 +53,13 @@ export class LicenseCommand extends HttpCommand {
       const license = new License(licenseResponse.license);
 
       return response.setData(license);
+    });
+  }
+
+  modifyLicense(file) {
+    return this.httpPost({
+      cmd: 'save_license',
+      file,
     });
   }
 }

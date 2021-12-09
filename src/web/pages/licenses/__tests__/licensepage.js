@@ -17,6 +17,8 @@
  */
 import React from 'react';
 
+import Capabilities from 'gmp/capabilities/capabilities';
+
 import {setLocale} from 'gmp/locale/lang';
 
 import {License} from 'gmp/commands/license';
@@ -41,6 +43,7 @@ const data = new License({
       created: '2021-08-27T06:05:21Z',
       begins: '2021-08-27T07:05:21Z',
       expires: '2021-09-04T07:05:21Z',
+      comment: 'Han shot first',
     },
     appliance: {
       model: 'trial',
@@ -65,6 +68,8 @@ const xhr = {
   responseXML: 'ipsum',
 };
 
+const caps = new Capabilities(['everything']);
+
 const response = new Response(xhr, data);
 const gmp = {
   license: {
@@ -77,7 +82,12 @@ const gmp = {
 
 describe('LicensePage tests', () => {
   test('should render', async () => {
-    const {render, store} = rendererWith({gmp, router: true, store: true});
+    const {render, store} = rendererWith({
+      capabilities: caps,
+      gmp,
+      router: true,
+      store: true,
+    });
     const {element, getAllByRole, getAllByTestId} = render(<LicensePage />);
 
     store.dispatch(setTimezone('UTC'));
@@ -87,11 +97,12 @@ describe('LicensePage tests', () => {
     // Should render all icons
     const icons = getAllByTestId('svg-icon');
 
-    expect(icons.length).toEqual(2);
+    expect(icons.length).toEqual(3);
 
     expect(icons[0]).toHaveTextContent('help.svg');
     expect(icons[0]).toHaveAttribute('title', 'Help: License Management');
-    expect(icons[1]).toHaveTextContent('license.svg');
+    expect(icons[1]).toHaveTextContent('new.svg');
+    expect(icons[2]).toHaveTextContent('license.svg');
 
     // Should render links
     const links = element.querySelectorAll('a');
@@ -116,6 +127,8 @@ describe('LicensePage tests', () => {
     expect(element).toHaveTextContent('Fri, Aug 27, 2021 7:05 AM UTC');
     expect(element).toHaveTextContent('Expires');
     expect(element).toHaveTextContent('Sat, Sep 4, 2021 7:05 AM UTC');
+    expect(element).toHaveTextContent('Comment');
+    expect(element).toHaveTextContent('Han shot first');
     expect(element).toHaveTextContent('Model');
     expect(element).toHaveTextContent('trial');
     expect(element).toHaveTextContent('Model Type');

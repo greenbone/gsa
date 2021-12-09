@@ -38,6 +38,7 @@ describe('LicenseCommand tests', () => {
                 created: '2021-08-27T06:05:21Z',
                 begins: '2021-08-27T07:05:21Z',
                 expires: '2021-09-04T07:05:21Z',
+                comment: 'foo',
               },
               appliance: {
                 model: 'trial',
@@ -75,6 +76,7 @@ describe('LicenseCommand tests', () => {
       expect(license.version).toEqual('1.0.0');
       expect(license.begins).toEqual(parseDate('2021-08-27T07:05:21Z'));
       expect(license.expires).toEqual(parseDate('2021-09-04T07:05:21Z'));
+      expect(license.comment).toEqual('foo');
       expect(license.model).toEqual('trial');
       expect(license.modelType).toEqual('450');
       expect(license.key.name).toEqual('feed');

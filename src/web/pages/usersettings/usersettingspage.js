@@ -68,10 +68,6 @@ import {
   selector as portListsSelector,
 } from 'web/store/entities/portlists';
 import {
-  loadEntities as loadReportFormats,
-  selector as reportFormatsSelector,
-} from 'web/store/entities/reportformats';
-import {
   loadEntities as loadScanConfigs,
   selector as scanConfigsSelector,
 } from 'web/store/entities/scanconfigs';
@@ -209,7 +205,6 @@ class UserSettings extends React.Component {
     this.props.loadCredentials();
     this.props.loadFilters();
     this.props.loadPortLists();
-    this.props.loadReportFormats();
     this.props.loadScanConfigs();
     this.props.loadScanners();
     this.props.loadSchedules();
@@ -282,7 +277,6 @@ class UserSettings extends React.Component {
       scanconfigs = [],
       scanners = [],
       portlists,
-      reportformats,
       schedules,
       targets,
       isLoading = true,
@@ -300,7 +294,6 @@ class UserSettings extends React.Component {
       defaultOpenvasScanConfig = {},
       defaultOpenvasScanner = {},
       defaultPortList = {},
-      defaultReportFormat = {},
       defaultSmbCredential = {},
       defaultSnmpCredential = {},
       defaultSshCredential = {},
@@ -526,13 +519,6 @@ class UserSettings extends React.Component {
                             type="portlist"
                           />
                         )}
-                        {capabilities.mayAccess('reportformat') && (
-                          <SettingTableRow
-                            setting={defaultReportFormat}
-                            title={_('Default Report Format')}
-                            type="reportformat"
-                          />
-                        )}
                         {capabilities.mayAccess('credential') && (
                           <SettingTableRow
                             setting={defaultSmbCredential}
@@ -738,7 +724,6 @@ class UserSettings extends React.Component {
               openVasScanConfigs={scanconfigs}
               openVasScanners={openVasScanners}
               portLists={portlists}
-              reportFormats={reportformats}
               schedules={schedules}
               targets={targets}
               timezone={timezone}
@@ -756,7 +741,6 @@ class UserSettings extends React.Component {
               defaultOpenvasScanConfig={defaultOpenvasScanConfig.id}
               defaultOpenvasScanner={defaultOpenvasScanner.id}
               defaultPortList={defaultPortList.id}
-              defaultReportFormat={defaultReportFormat.id}
               defaultSmbCredential={defaultSmbCredential.id}
               defaultSnmpCredential={defaultSnmpCredential.id}
               defaultSshCredential={defaultSshCredential.id}
@@ -818,7 +802,6 @@ UserSettings.propTypes = {
   defaultOpenvasScanConfig: PropTypes.object,
   defaultOpenvasScanner: PropTypes.object,
   defaultPortList: PropTypes.object,
-  defaultReportFormat: PropTypes.object,
   defaultSchedule: PropTypes.object,
   defaultSeverity: PropTypes.object,
   defaultSmbCredential: PropTypes.object,
@@ -840,7 +823,6 @@ UserSettings.propTypes = {
   loadFilterDefaults: PropTypes.func.isRequired,
   loadFilters: PropTypes.func.isRequired,
   loadPortLists: PropTypes.func.isRequired,
-  loadReportFormats: PropTypes.func.isRequired,
   loadScanConfigs: PropTypes.func.isRequired,
   loadScanners: PropTypes.func.isRequired,
   loadSchedules: PropTypes.func.isRequired,
@@ -856,7 +838,6 @@ UserSettings.propTypes = {
   portlists: PropTypes.array,
   reportExportFileName: PropTypes.object,
   reportFormatsFilter: PropTypes.object,
-  reportformats: PropTypes.array,
   reportsFilter: PropTypes.object,
   resultsFilter: PropTypes.object,
   rolesFilter: PropTypes.object,
@@ -907,6 +888,7 @@ const mapStateToProps = rootState => {
   const defaultEsxiCredentialId = userDefaultsSelector.getValueByName(
     'defaultesxicredential',
   );
+
   const defaultOpenvasScanConfigId = userDefaultsSelector.getValueByName(
     'defaultopenvasscanconfig',
   );
@@ -916,9 +898,7 @@ const mapStateToProps = rootState => {
 
   const defaultPortListId =
     userDefaultsSelector.getValueByName('defaultportlist');
-  const defaultReportFormatId = userDefaultsSelector.getValueByName(
-    'defaultreportformat',
-  );
+
   const defaultSmbCredentialId = userDefaultsSelector.getValueByName(
     'defaultsmbcredential',
   );
@@ -936,7 +916,6 @@ const mapStateToProps = rootState => {
   const credentialsSel = credentialsSelector(rootState);
   const filtersSel = filtersSelector(rootState);
   const portListsSel = portListsSelector(rootState);
-  const reportFormatsSel = reportFormatsSelector(rootState);
   const scannersSel = scannersSelector(rootState);
   const scanConfigsSel = scanConfigsSelector(rootState);
   const schedulesSel = schedulesSelector(rootState);
@@ -952,7 +931,6 @@ const mapStateToProps = rootState => {
   );
   const defaultOpenvasScanner = scannersSel.getEntity(defaultOpenvasScannerId);
   const defaultPortList = portListsSel.getEntity(defaultPortListId);
-  const defaultReportFormat = reportFormatsSel.getEntity(defaultReportFormatId);
   const defaultSmbCredential = credentialsSel.getEntity(defaultSmbCredentialId);
   const defaultSnmpCredential = credentialsSel.getEntity(
     defaultSnmpCredentialId,
@@ -1004,7 +982,6 @@ const mapStateToProps = rootState => {
     credentials: credentialsSel.getEntities(ALL_FILTER),
     filters: filtersSel.getEntities(ALL_FILTER),
     portlists: portListsSel.getEntities(ALL_FILTER),
-    reportformats: reportFormatsSel.getEntities(ALL_FILTER),
     scanconfigs,
     scanners: scannersSel.getEntities(ALL_FILTER),
     schedules: schedulesSel.getEntities(ALL_FILTER),
@@ -1024,7 +1001,6 @@ const mapStateToProps = rootState => {
     defaultOpenvasScanConfig,
     defaultOpenvasScanner,
     defaultPortList,
-    defaultReportFormat,
     defaultSmbCredential,
     defaultSnmpCredential,
     defaultSshCredential,
@@ -1100,7 +1076,6 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
       dispatch(loadUserSettingsDefaultFilter(gmp)('nvt')),
     ]),
   loadPortLists: () => dispatch(loadPortLists(gmp)(ALL_FILTER)),
-  loadReportFormats: () => dispatch(loadReportFormats(gmp)(ALL_FILTER)),
   loadScanConfigs: () => dispatch(loadScanConfigs(gmp)(ALL_FILTER)),
   loadScanners: () => dispatch(loadScanners(gmp)(ALL_FILTER)),
   loadSchedules: () => dispatch(loadSchedules(gmp)(ALL_FILTER)),

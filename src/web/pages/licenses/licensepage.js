@@ -19,7 +19,11 @@ import React, {useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import DateTime from 'web/components/date/datetime';
+
+import ErrorDialog from 'web/components/dialog/errordialog';
 
 import LicenseIcon from 'web/components/icon/licenseicon';
 import ManualIcon from 'web/components/icon/manualicon';
@@ -41,13 +45,14 @@ import {Col} from 'web/entity/page';
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
 
-// import useCapabilities from 'web/utils/useCapabilities';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import LicenseDialog from './dialog';
 
 const ToolBarIcons = ({onNewLicenseClick}) => {
-  // const capabilities = useCapabilities();
-  const mayCreate = false; // TODO Adjust for capabilities
+  const capabilities = useCapabilities();
+  const mayModify = capabilities.mayOp('modify_license');
+
   return (
     <Layout>
       <IconDivider>
@@ -57,7 +62,7 @@ const ToolBarIcons = ({onNewLicenseClick}) => {
           anchor="license-management" // TODO Change!
           title={_('Help: License Management')}
         />
-        {mayCreate && ( // TODO Adjust for capabilities
+        {mayModify && (
           <NewIcon
             size="small"
             title={_('New License')}
@@ -76,26 +81,56 @@ const LicensePage = () => {
   const gmp = useGmp();
 
   const [license, setLicense] = useState({});
+  const [file, setFile] = useState();
+  const [error, setError] = useState();
+  const [dialogError, setDialogError] = useState();
   const [newLicenseDialogVisible, setNewLicenseDialogVisible] = useState(false);
 
+  const updateLicenseInformation = () => {
+    gmp.license
+      .getLicenseInformation()
+      .then(response => {
+        setLicense(response.data);
+      })
+      .catch(err => setError(err));
+  };
+
   useEffect(() => {
-    gmp.license.getLicenseInformation().then(response => {
-      setLicense(response.data);
-    });
-  }, [gmp.license]);
+    updateLicenseInformation();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNewLicenseClick = () => {
     setNewLicenseDialogVisible(true);
   };
+
   const handleCloseDialog = () => {
     setNewLicenseDialogVisible(false);
+    setDialogError(undefined);
+    setFile(undefined);
   };
+
   const handleSaveLicense = data => {
-    // gmp.save_license(data).then(setNewLicenseDialogVisible(false));
-    setNewLicenseDialogVisible(false);
+    return gmp.license
+      .modifyLicense(file)
+      .then(() => {
+        handleCloseDialog();
+      })
+      .catch(err => {
+        setDialogError(err.message);
+      })
+      .then(updateLicenseInformation());
   };
+
   const handleValueChange = value => {
-    setLicense(value);
+    setFile(value);
+  };
+
+  const handleErrorClose = () => {
+    setError(undefined);
+  };
+
+  const handleDialogErrorClose = () => {
+    setDialogError(undefined);
   };
 
   return (
@@ -103,6 +138,13 @@ const LicensePage = () => {
       <PageTitle title={_('License Management')} />
       <Layout flex="column">
         <ToolBarIcons onNewLicenseClick={handleNewLicenseClick} />
+        {error && (
+          <ErrorDialog
+            text={error.message}
+            title={_('Error while loading license information')}
+            onClose={handleErrorClose}
+          />
+        )}
         <Section
           img={<LicenseIcon size="large" />}
           title={_('License Management')}
@@ -145,6 +187,12 @@ const LicensePage = () => {
                     <DateTime date={license.expires} />
                   </TableData>
                 </TableRow>
+                {isDefined(license.comment) && (
+                  <TableRow>
+                    <TableData>{_('Comment')}</TableData>
+                    <TableData>{license.comment}</TableData>
+                  </TableRow>
+                )}
               </TableBody>
             </InfoTable>
             <h3>Model</h3>
@@ -169,7 +217,9 @@ const LicensePage = () => {
       </Layout>
       {newLicenseDialogVisible && (
         <LicenseDialog
+          error={dialogError}
           onClose={handleCloseDialog}
+          onErrorClose={handleDialogErrorClose}
           onSave={handleSaveLicense}
           onValueChange={handleValueChange}
         />

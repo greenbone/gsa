@@ -284,8 +284,6 @@ export class UserCommand extends EntityCommand {
         data.defaultSnmpCredential,
       'settings_default:d74a9ee8-7d35-4879-9485-ab23f1bd45bc':
         data.defaultPortList,
-      'settings_default:353304fc-645e-11e6-ba7a-28d24461215b':
-        data.defaultReportFormat,
       'settings_default:f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d':
         data.defaultOpenvasScanner,
       'settings_default:b20697c9-be0a-4cd4-8b4d-5fe7841ebb03':
