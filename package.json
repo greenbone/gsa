@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@greenbone/ui-components": "2021.1.2",
-    "@babel/runtime": "^7.16.5",
+    "@babel/runtime": "^7.16.7",
     "@babel/core": "^7.16.5",
     "@sentry/react": "^6.16.1",
     "@vx/axis": "^0.0.183",
@@ -51,7 +51,7 @@
     "memoize-one": "^6.0.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
-    "prop-types": "^15.6.2",
+    "prop-types": "^15.8.0",
     "qhistory": "^1.1.0",
     "qs": "^6.10.2",
     "react": "^16.14.0",
