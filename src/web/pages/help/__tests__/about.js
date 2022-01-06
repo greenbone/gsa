@@ -54,7 +54,7 @@ describe('AboutPage tests', () => {
 
     expect(version).toHaveTextContent('1337.42');
 
-    expect(image).toHaveAttribute('src', '/img/greenbone_banner.jpeg');
+    expect(image).toHaveAttribute('src', '/img/greenbone_banner.png');
   });
 
   test('should open external link dialog on click', async () => {
