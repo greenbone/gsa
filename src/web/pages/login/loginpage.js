@@ -60,7 +60,7 @@ const log = logger.getLogger('web.login');
 const StyledLayout = styled(Layout)`
   background: radial-gradient(
     51.84% 102.52% at 58.54% 44.97%,
-    #baed81 0%,
+    #a1ddba 0%,
     ${Theme.green} 67.26%
   );
   flex-direction: column;
