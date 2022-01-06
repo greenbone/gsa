@@ -55,7 +55,7 @@ const About = ({gmp}) => (
     <Layout flex="column">
       <Section img={<HelpIcon size="large" />} title={_('About GSA')}>
         <StyledLayout flex="column" align="center">
-          <Img src="greenbone_banner.jpeg" alt="GSA" width="100%" />
+          <Img src="greenbone_banner.png" alt="GSA" width="100%" />
           <h1>Greenbone Security Assistant</h1>
           <h3>
             {isDefined(gmp.settings.vendorVersion)
