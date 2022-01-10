@@ -47,7 +47,7 @@
     "hoist-non-react-statics": "^3.3.2",
     "i18next": "^21.6.4",
     "i18next-xhr-backend": "3.2.2",
-    "ical.js": "^1.4.0",
+    "ical.js": "^1.5.0",
     "memoize-one": "^6.0.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
