@@ -29,7 +29,7 @@ import {isDefined} from 'gmp/utils/identity';
 import ErrorContainer from 'web/components/error/errorcontainer';
 import useFormValues from 'web/components/form/useFormValues';
 import ProductImage from 'web/components/img/product';
-import PoweredByGreenbone from 'web/components/img/powered';
+import GreenboneLoginLogo from 'web/components/img/greenboneloginlogo';
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
@@ -85,6 +85,10 @@ const H1 = styled.h1`
   flex-grow: 1;
 `;
 
+const ProductImageContainer = styled(Layout)`
+  margin-top: 30px;
+`;
+
 const LoginForm = ({
   error,
   showGuestLogin = false,
@@ -115,8 +119,9 @@ const LoginForm = ({
     <Paper>
       <Divider flex="column" margin="10px" grow="1">
         <Layout align={'center'}>
-          <ProductImage />
+          <GreenboneLoginLogo width="300px" />
         </Layout>
+
         <Layout flex={'column'}>
           {showProtocolInsecure && (
             <StyledPanel data-testid="protocol-insecure">
@@ -200,9 +205,10 @@ const LoginForm = ({
             </StyledButton>
           </div>
         )}
-        <Layout align={'center'}>
-          <PoweredByGreenbone />
-        </Layout>
+
+        <ProductImageContainer align={'center'}>
+          <ProductImage />
+        </ProductImageContainer>
       </Divider>
     </Paper>
   );
