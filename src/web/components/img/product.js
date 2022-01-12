@@ -42,7 +42,7 @@ const ProductImage = props => {
       src={
         isDefined(settings) && isDefined(settings.vendorLabel)
           ? settings.vendorLabel
-          : 'login-label.png'
+          : 'login-label.svg'
       }
     />
   );
