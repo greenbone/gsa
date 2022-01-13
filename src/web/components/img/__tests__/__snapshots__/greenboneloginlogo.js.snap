@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ProductImage tests should render 1`] = `
+exports[`GreenboneLogo tests should render 1`] = `
 .c0 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  height: 180px;
+  width: 300px;
 }
 
 <img
-  alt="Greenbone Security Assistant"
+  alt="Greenbone Networks GmbH"
   class="c0"
-  src="/img/login-label.svg"
+  src="/img/greenbonehorizontal.png"
 />
 `;

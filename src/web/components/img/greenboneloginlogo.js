@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2021 Greenbone Networks GmbH
+/* Copyright (C) 2019-2021 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -18,13 +18,23 @@
 
 import React from 'react';
 
-import Logo from 'web/components/icon/svg/greenbone-power.svg';
+import styled from 'styled-components';
 
-const PoweredByGreenbone = props => (
-  // eslint-disable-next-line react/jsx-no-target-blank
-  <a href="https://www.greenbone.net" target="_blank" rel="noopener">
-    <img alt="Powered By Greenbone Networks" {...props} src={Logo} />
-  </a>
-);
+import _ from 'gmp/locale';
 
-export default PoweredByGreenbone;
+import Img from './img';
+
+const Image = styled(Img)`
+  display: flex;
+  width: 300px;
+`;
+
+const LoginLogo = props => {
+  return (
+    <Image alt={_('Greenbone Networks GmbH')} src={'greenbonehorizontal.png'} />
+  );
+};
+
+export default LoginLogo;
+
+// vim: set ts=2 sw=2 tw=80:

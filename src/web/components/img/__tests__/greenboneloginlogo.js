@@ -18,36 +18,14 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
+import {render} from 'web/utils/testing';
 
-import _ from 'gmp/locale';
+import GreenboneLoginLogo from '../greenboneloginlogo';
 
-import {isDefined} from 'gmp/utils/identity';
+describe('GreenboneLogo tests', () => {
+  test('should render', () => {
+    const {element} = render(<GreenboneLoginLogo />);
 
-import useGmp from 'web/utils/useGmp';
-
-import Img from './img';
-
-const Image = styled(Img)`
-  display: flex;
-  height: 180px;
-`;
-
-const ProductImage = props => {
-  const {settings} = useGmp();
-  return (
-    <Image
-      alt={_('Greenbone Security Assistant')}
-      {...props}
-      src={
-        isDefined(settings) && isDefined(settings.vendorLabel)
-          ? settings.vendorLabel
-          : 'login-label.svg'
-      }
-    />
-  );
-};
-
-export default ProductImage;
-
-// vim: set ts=2 sw=2 tw=80:
+    expect(element).toMatchSnapshot();
+  });
+});
