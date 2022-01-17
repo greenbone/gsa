@@ -20,7 +20,7 @@ import registerCommand from 'gmp/command';
 
 import {parseDate} from 'gmp/parser';
 
-import HTTPCommand from './http';
+import GMPCommand from './gmp';
 
 export class License {
   constructor({content}) {
@@ -41,7 +41,7 @@ export class License {
   }
 }
 
-export class LicenseCommand extends HTTPCommand {
+export class LicenseCommand extends GMPCommand {
   constructor(http) {
     super(http, {cmd: 'get_license'});
   }
@@ -57,7 +57,7 @@ export class LicenseCommand extends HTTPCommand {
   }
 
   modifyLicense(file) {
-    return this.httpPost({
+    return this.action({
       cmd: 'save_license',
       file,
     });
