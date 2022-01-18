@@ -114,12 +114,10 @@ const LicensePage = () => {
       .modifyLicense(file)
       .then(() => {
         handleCloseDialog();
+        updateLicenseInformation();
       })
       .catch(err => {
         setDialogError(err.message);
-      })
-      .then(() => {
-        updateLicenseInformation();
       });
   };
 
