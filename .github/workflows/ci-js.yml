@@ -11,7 +11,9 @@ jobs:
     env:
       REPORT_DIR: reports
     name: Testing and upload coverage
-    runs-on: 'ubuntu-latest'
+    runs-on: 
+      - self-hosted
+      - gsa
     strategy:
       matrix:
         # 14.x is recommended by https://nodejs.org/en/
