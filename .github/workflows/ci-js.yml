@@ -11,9 +11,7 @@ jobs:
     env:
       REPORT_DIR: reports
     name: Testing and upload coverage
-    runs-on:
-      - self-hosted
-      - self-hosted-generic
+    runs-on: 'ubuntu-latest'
     strategy:
       matrix:
         # 14.x is recommended by https://nodejs.org/en/
@@ -37,7 +35,6 @@ jobs:
         # `--prefer-offline` gives cache priority
       - name: Install dependencies
         run: yarn install --prefer-offline
-
       - name: Run JavaScript tests
         env:
           JEST_JUNIT_OUTPUT_DIR: ${{ env.REPORT_DIR }}
