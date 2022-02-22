@@ -130,6 +130,7 @@ export const qodTypeColorScale = scaleOrdinal()
     '#555555', // general_note
     '#011f4b', // executable_version
     '#596d8a', // package
+    '#d6d624', // package_unreliable
     '#a9c9ce', // registry
     '#98df8a', // remote_active
     '#80c674', // remote_analysis
