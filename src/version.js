@@ -16,4 +16,4 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export const GSA_VERSION = process.env.REACT_APP_VERSION || '21.10';
+export const GSA_VERSION = process.env.REACT_APP_VERSION || '22.04';

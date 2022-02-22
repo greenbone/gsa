@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [21.10] - Unreleased
+## [22.4] - Unreleased
 
 ### Added
 - Added new license page [#3138](https://github.com/greenbone/gsa/pull/3138), [#3160](https://github.com/greenbone/gsa/pull/3160)
