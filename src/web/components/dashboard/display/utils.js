@@ -94,6 +94,7 @@ export const QOD_TYPES = {
   general_note: _l('General note'),
   executable_version: _l('Executable version'),
   package: _l('Package check'),
+  package_unreliable: _l('Unreliable package check'),
   registry: _l('Registry check'),
   remote_active: _l('Remote active'),
   remote_analysis: _l('Remote analysis'),
