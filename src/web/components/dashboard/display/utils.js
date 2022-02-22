@@ -94,6 +94,7 @@ export const QOD_TYPES = {
   general_note: _l('General note'),
   executable_version: _l('Executable version'),
   package: _l('Package check'),
+  package_unreliable: _l('Unreliable package check'),
   registry: _l('Registry check'),
   remote_active: _l('Remote active'),
   remote_analysis: _l('Remote analysis'),
@@ -129,6 +130,7 @@ export const qodTypeColorScale = scaleOrdinal()
     '#555555', // general_note
     '#011f4b', // executable_version
     '#596d8a', // package
+    '#d6d624', // package_unreliable
     '#a9c9ce', // registry
     '#98df8a', // remote_active
     '#80c674', // remote_analysis
