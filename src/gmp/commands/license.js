@@ -23,7 +23,8 @@ import {parseDate} from 'gmp/parser';
 import GMPCommand from './gmp';
 
 export class License {
-  constructor({content}) {
+  constructor({content, status}) {
+    this.status = status;
     this.id = content?.meta?.id;
     this.customerName = content?.meta?.customer_name;
     this.creationDate = parseDate(content?.meta?.created);
