@@ -84,6 +84,7 @@ describe('LicensePage tests', () => {
   test('should render', async () => {
     const {render, store} = rendererWith({
       capabilities: caps,
+      license: data,
       gmp,
       router: true,
       store: true,
