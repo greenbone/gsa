@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import _ from 'gmp/locale';
 
@@ -44,6 +44,7 @@ import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
+import useLicense from 'web/utils/useLicense';
 
 import useCapabilities from 'web/utils/useCapabilities';
 
@@ -79,25 +80,11 @@ ToolBarIcons.propTypes = {
 
 const LicensePage = () => {
   const gmp = useGmp();
-
-  const [license, setLicense] = useState({});
+  const {license, updateLicense} = useLicense();
   const [file, setFile] = useState();
   const [error, setError] = useState();
   const [dialogError, setDialogError] = useState();
   const [newLicenseDialogVisible, setNewLicenseDialogVisible] = useState(false);
-
-  const updateLicenseInformation = () => {
-    gmp.license
-      .getLicenseInformation()
-      .then(response => {
-        setLicense(response.data);
-      })
-      .catch(err => setError(err));
-  };
-
-  useEffect(() => {
-    updateLicenseInformation();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNewLicenseClick = () => {
     setNewLicenseDialogVisible(true);
@@ -114,7 +101,7 @@ const LicensePage = () => {
       .modifyLicense(file)
       .then(() => {
         handleCloseDialog();
-        updateLicenseInformation();
+        updateLicense();
       })
       .catch(err => {
         setDialogError(err.message);
