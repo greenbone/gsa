@@ -42,6 +42,9 @@ import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import GmpContext from 'web/components/provider/gmpprovider';
 import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
+import LicenseProvider, {
+  LicenseContext,
+} from 'web/components/provider/licenseprovider';
 
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
@@ -100,26 +103,30 @@ export const render = ui => {
   };
 };
 
-const withProvider = (name, key = name) => Component => ({
-  children,
-  ...props
-}) =>
-  isDefined(props[name]) ? (
-    <Component {...{[key]: props[name]}}>{children}</Component>
-  ) : (
-    children
-  );
+const withProvider =
+  (name, key = name) =>
+  Component =>
+  ({children, ...props}) =>
+    isDefined(props[name]) ? (
+      <Component {...{[key]: props[name]}}>{children}</Component>
+    ) : (
+      children
+    );
 
-const TestingGmpPropvider = withProvider('gmp', 'value')(GmpContext.Provider);
+const TestingGmpProvider = withProvider('gmp', 'value')(GmpContext.Provider);
 const TestingStoreProvider = withProvider('store')(Provider);
 const TestingRouter = withProvider('history')(Router);
 const TestingCapabilitiesProvider = withProvider(
   'capabilities',
   'value',
 )(CapabilitiesContext.Provider);
+const TestingLicenseProvider = withProvider(
+  'license',
+  'value',
+)(LicenseProvider);
 
 export const rendererWith = (
-  {capabilities, gmp, store, router} = {
+  {capabilities, gmp, license, store, router} = {
     store: true,
     router: true,
   },
@@ -136,16 +143,19 @@ export const rendererWith = (
   if (capabilities === true) {
     capabilities = new EverythingCapabilities();
   }
+
   return {
     render: ui =>
       render(
-        <TestingGmpPropvider gmp={gmp}>
+        <TestingGmpProvider gmp={gmp}>
           <TestingCapabilitiesProvider capabilities={capabilities}>
-            <TestingStoreProvider store={store}>
-              <TestingRouter history={history}>{ui}</TestingRouter>
-            </TestingStoreProvider>
+            <TestingLicenseProvider license={license}>
+              <TestingStoreProvider store={store}>
+                <TestingRouter history={history}>{ui}</TestingRouter>
+              </TestingStoreProvider>
+            </TestingLicenseProvider>
           </TestingCapabilitiesProvider>
-        </TestingGmpPropvider>,
+        </TestingGmpProvider>,
       ),
     gmp,
     store,
