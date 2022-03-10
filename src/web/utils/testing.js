@@ -42,9 +42,7 @@ import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import GmpContext from 'web/components/provider/gmpprovider';
 import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
-import LicenseProvider, {
-  LicenseContext,
-} from 'web/components/provider/licenseprovider';
+import LicenseProvider from 'web/components/provider/licenseprovider';
 
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
