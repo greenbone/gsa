@@ -51,15 +51,6 @@ const data = new License({
       model_type: '450',
       sensor: false,
     },
-    keys: {
-      key: {
-        _name: 'feed',
-        __text: '*base64 GSF key*',
-      },
-    },
-    signatures: {
-      license: '*base64 signature*',
-    },
   },
 });
 

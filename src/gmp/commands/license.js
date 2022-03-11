@@ -35,10 +35,6 @@ export class License {
 
     this.model = content?.appliance?.model;
     this.modelType = content?.appliance?.model_type;
-
-    this.key = {};
-    this.key.name = content?.keys?.key._name;
-    this.key.value = content?.keys?.key.__text;
   }
 }
 

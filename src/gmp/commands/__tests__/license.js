@@ -45,15 +45,6 @@ describe('LicenseCommand tests', () => {
                 model_type: '450',
                 sensor: false,
               },
-              keys: {
-                key: {
-                  _name: 'feed',
-                  __text: '*base64 GSF key*',
-                },
-              },
-              signatures: {
-                license: '*base64 signature*',
-              },
             },
           },
         },
@@ -79,8 +70,6 @@ describe('LicenseCommand tests', () => {
       expect(license.comment).toEqual('foo');
       expect(license.model).toEqual('trial');
       expect(license.modelType).toEqual('450');
-      expect(license.key.name).toEqual('feed');
-      expect(license.key.value).toEqual('*base64 GSF key*');
     });
   });
 });
