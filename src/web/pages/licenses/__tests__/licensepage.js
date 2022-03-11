@@ -27,7 +27,7 @@ import Response from 'gmp/http/response';
 
 import {setTimezone} from 'web/store/usersettings/actions';
 
-import {rendererWith, waitFor} from 'web/utils/testing';
+import {rendererWith, waitFor, wait} from 'web/utils/testing';
 import LicensePage from '../licensepage';
 
 setLocale('en');
@@ -74,6 +74,15 @@ const response = new Response(xhr, data);
 const gmp = {
   license: {
     getLicenseInformation: jest.fn(() => Promise.resolve(response)),
+  },
+  settings: {
+    manualUrl: 'http://foo.bar',
+  },
+};
+
+const gmpRejected = {
+  license: {
+    getLicenseInformation: jest.fn(() => Promise.reject(new Error('foo'))),
   },
   settings: {
     manualUrl: 'http://foo.bar',
@@ -140,5 +149,24 @@ describe('LicensePage tests', () => {
     expect(headings[0]).toHaveTextContent('License Management');
     expect(headings[1]).toHaveTextContent('Information');
     expect(headings[2]).toHaveTextContent('Model');
+  });
+
+  test('should render error dialog if no license could be loaded', async () => {
+    const {render, store} = rendererWith({
+      capabilities: caps,
+      license: data,
+      gmp: gmpRejected,
+      router: true,
+      store: true,
+    });
+    const {getByTestId} = render(<LicensePage />);
+
+    store.dispatch(setTimezone('UTC'));
+
+    await wait();
+
+    const content = getByTestId('errordialog-content');
+
+    expect(content).toHaveTextContent('foo');
   });
 });
