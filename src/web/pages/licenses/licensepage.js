@@ -19,7 +19,7 @@ import React, {useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined, isEmpty} from 'gmp/utils/identity';
+import {isDefined} from 'gmp/utils/identity';
 
 import DateTime from 'web/components/date/datetime';
 
@@ -82,7 +82,7 @@ ToolBarIcons.propTypes = {
 
 const LicensePage = () => {
   const gmp = useGmp();
-  const {license, licenseError, updateLicense} = useLicense();
+  const {isLoading, license, licenseError, updateLicense} = useLicense();
   const [file, setFile] = useState();
   const [error, setError] = useState(licenseError);
   const [dialogError, setDialogError] = useState();
@@ -142,70 +142,74 @@ const LicensePage = () => {
           img={<LicenseIcon size="large" />}
           title={_('License Management')}
         >
-          <Layout flex="column" grow>
-            <h3>Information</h3>
-            <InfoTable>
-              <colgroup>
-                <Col width="10%" />
-                <Col width="90%" />
-              </colgroup>
-              <TableBody>
-                <TableRow>
-                  <TableData>{_('ID')}</TableData>
-                  <TableData>{license.id}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Customer Name')}</TableData>
-                  <TableData>{license.customerName}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Creation Date')}</TableData>
-                  <TableData>
-                    <DateTime date={license.creationDate} />
-                  </TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Version')}</TableData>
-                  <TableData>{license.version}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Begins')}</TableData>
-                  <TableData>
-                    <DateTime date={license.begins} />
-                  </TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Expires')}</TableData>
-                  <TableData>
-                    <DateTime date={license.expires} />
-                  </TableData>
-                </TableRow>
-                {isDefined(license.comment) && (
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <Layout flex="column" grow>
+              <h3>Information</h3>
+              <InfoTable>
+                <colgroup>
+                  <Col width="10%" />
+                  <Col width="90%" />
+                </colgroup>
+                <TableBody>
                   <TableRow>
-                    <TableData>{_('Comment')}</TableData>
-                    <TableData>{license.comment}</TableData>
+                    <TableData>{_('ID')}</TableData>
+                    <TableData>{license.id}</TableData>
                   </TableRow>
-                )}
-              </TableBody>
-            </InfoTable>
-            <h3>Model</h3>
-            <InfoTable>
-              <colgroup>
-                <Col width="10%" />
-                <Col width="90%" />
-              </colgroup>
-              <TableBody>
-                <TableRow>
-                  <TableData>{_('Model')}</TableData>
-                  <TableData>{license.model}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Model Type')}</TableData>
-                  <TableData>{license.modelType}</TableData>
-                </TableRow>
-              </TableBody>
-            </InfoTable>
-          </Layout>
+                  <TableRow>
+                    <TableData>{_('Customer Name')}</TableData>
+                    <TableData>{license.customerName}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Creation Date')}</TableData>
+                    <TableData>
+                      <DateTime date={license.creationDate} />
+                    </TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Version')}</TableData>
+                    <TableData>{license.version}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Begins')}</TableData>
+                    <TableData>
+                      <DateTime date={license.begins} />
+                    </TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Expires')}</TableData>
+                    <TableData>
+                      <DateTime date={license.expires} />
+                    </TableData>
+                  </TableRow>
+                  {isDefined(license.comment) && (
+                    <TableRow>
+                      <TableData>{_('Comment')}</TableData>
+                      <TableData>{license.comment}</TableData>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </InfoTable>
+              <h3>Model</h3>
+              <InfoTable>
+                <colgroup>
+                  <Col width="10%" />
+                  <Col width="90%" />
+                </colgroup>
+                <TableBody>
+                  <TableRow>
+                    <TableData>{_('Model')}</TableData>
+                    <TableData>{license.model}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Model Type')}</TableData>
+                    <TableData>{license.modelType}</TableData>
+                  </TableRow>
+                </TableBody>
+              </InfoTable>
+            </Layout>
+          )}
         </Section>
       </Layout>
       {newLicenseDialogVisible && (
