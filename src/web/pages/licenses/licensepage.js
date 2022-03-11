@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import _ from 'gmp/locale';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isEmpty} from 'gmp/utils/identity';
 
 import DateTime from 'web/components/date/datetime';
 
@@ -32,6 +32,8 @@ import NewIcon from 'web/components/icon/newicon';
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
+
+import Loading from 'web/components/loading/loading';
 
 import Section from 'web/components/section/section';
 
@@ -80,11 +82,15 @@ ToolBarIcons.propTypes = {
 
 const LicensePage = () => {
   const gmp = useGmp();
-  const {license, updateLicense} = useLicense();
+  const {license, licenseError, updateLicense} = useLicense();
   const [file, setFile] = useState();
-  const [error, setError] = useState();
+  const [error, setError] = useState(licenseError);
   const [dialogError, setDialogError] = useState();
   const [newLicenseDialogVisible, setNewLicenseDialogVisible] = useState(false);
+
+  useEffect(() => {
+    setError(licenseError);
+  }, [licenseError]);
 
   const handleNewLicenseClick = () => {
     setNewLicenseDialogVisible(true);

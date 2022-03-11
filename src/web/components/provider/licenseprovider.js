@@ -26,19 +26,25 @@ const LicenseProvider = ({children}) => {
   const gmp = useGmp();
 
   const [license, setLicense] = useState({});
+  const [licenseError, setLicenseError] = useState();
 
   useEffect(() => {
     updateLicense();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateLicense = () => {
-    gmp.license.getLicenseInformation().then(response => {
-      setLicense(response.data);
-    });
+    gmp.license
+      .getLicenseInformation()
+      .then(response => {
+        setLicense(response.data);
+      })
+      .catch(err => {
+        setLicenseError(err);
+      });
   };
 
   return (
-    <LicenseContext.Provider value={{license, updateLicense}}>
+    <LicenseContext.Provider value={{license, licenseError, updateLicense}}>
       {children}
     </LicenseContext.Provider>
   );
