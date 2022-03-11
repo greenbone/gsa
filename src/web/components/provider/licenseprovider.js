@@ -27,7 +27,7 @@ const LicenseProvider = ({children}) => {
 
   const [license, setLicense] = useState({});
   const [licenseError, setLicenseError] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     updateLicense();
