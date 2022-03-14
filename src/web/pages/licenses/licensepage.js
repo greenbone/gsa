@@ -17,7 +17,11 @@
  */
 import React, {useEffect, useState} from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
+
+import date from 'gmp/models/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -28,10 +32,13 @@ import ErrorDialog from 'web/components/dialog/errordialog';
 import LicenseIcon from 'web/components/icon/licenseicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+import HelpIcon from 'web/components/icon/helpicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
 import PageTitle from 'web/components/layout/pagetitle';
+
+import Loading from 'web/components/loading/loading';
 
 import Section from 'web/components/section/section';
 
@@ -44,10 +51,15 @@ import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
 import useGmp from 'web/utils/useGmp';
+import useLicense from 'web/utils/useLicense';
 
 import useCapabilities from 'web/utils/useCapabilities';
 
 import LicenseDialog from './dialog';
+
+const HowToDiv = styled.div`
+  width: 33%;
+`;
 
 const ToolBarIcons = ({onNewLicenseClick}) => {
   const capabilities = useCapabilities();
@@ -79,25 +91,15 @@ ToolBarIcons.propTypes = {
 
 const LicensePage = () => {
   const gmp = useGmp();
-
-  const [license, setLicense] = useState({});
+  const {isLoading, license, licenseError, updateLicense} = useLicense();
   const [file, setFile] = useState();
-  const [error, setError] = useState();
+  const [error, setError] = useState(licenseError);
   const [dialogError, setDialogError] = useState();
   const [newLicenseDialogVisible, setNewLicenseDialogVisible] = useState(false);
 
-  const updateLicenseInformation = () => {
-    gmp.license
-      .getLicenseInformation()
-      .then(response => {
-        setLicense(response.data);
-      })
-      .catch(err => setError(err));
-  };
-
   useEffect(() => {
-    updateLicenseInformation();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    setError(licenseError);
+  }, [licenseError]);
 
   const handleNewLicenseClick = () => {
     setNewLicenseDialogVisible(true);
@@ -114,7 +116,7 @@ const LicensePage = () => {
       .modifyLicense(file)
       .then(() => {
         handleCloseDialog();
-        updateLicenseInformation();
+        updateLicense();
       })
       .catch(err => {
         setDialogError(err.message);
@@ -133,6 +135,15 @@ const LicensePage = () => {
     setDialogError(undefined);
   };
 
+  const dur = date(license.expires).diff(date(), 'days');
+  let durationUntilExpires;
+
+  if (dur > 30) {
+    durationUntilExpires = date(license.expires).fromNow();
+  } else {
+    durationUntilExpires = _('in {{dur}} days', {dur});
+  }
+
   return (
     <React.Fragment>
       <PageTitle title={_('License Management')} />
@@ -149,70 +160,103 @@ const LicensePage = () => {
           img={<LicenseIcon size="large" />}
           title={_('License Management')}
         >
-          <Layout flex="column" grow>
-            <h3>Information</h3>
-            <InfoTable>
-              <colgroup>
-                <Col width="10%" />
-                <Col width="90%" />
-              </colgroup>
-              <TableBody>
-                <TableRow>
-                  <TableData>{_('ID')}</TableData>
-                  <TableData>{license.id}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Customer Name')}</TableData>
-                  <TableData>{license.customerName}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Creation Date')}</TableData>
-                  <TableData>
-                    <DateTime date={license.creationDate} />
-                  </TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Version')}</TableData>
-                  <TableData>{license.version}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Begins')}</TableData>
-                  <TableData>
-                    <DateTime date={license.begins} />
-                  </TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Expires')}</TableData>
-                  <TableData>
-                    <DateTime date={license.expires} />
-                  </TableData>
-                </TableRow>
-                {isDefined(license.comment) && (
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <Layout flex="column" grow>
+              <h3>Information</h3>
+              <InfoTable>
+                <colgroup>
+                  <Col width="10%" />
+                  <Col width="90%" />
+                </colgroup>
+                <TableBody>
                   <TableRow>
-                    <TableData>{_('Comment')}</TableData>
-                    <TableData>{license.comment}</TableData>
+                    <TableData>{_('The license expires')}</TableData>
+                    <TableData>{durationUntilExpires}</TableData>
                   </TableRow>
-                )}
-              </TableBody>
-            </InfoTable>
-            <h3>Model</h3>
-            <InfoTable>
-              <colgroup>
-                <Col width="10%" />
-                <Col width="90%" />
-              </colgroup>
-              <TableBody>
-                <TableRow>
-                  <TableData>{_('Model')}</TableData>
-                  <TableData>{license.model}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Model Type')}</TableData>
-                  <TableData>{license.modelType}</TableData>
-                </TableRow>
-              </TableBody>
-            </InfoTable>
-          </Layout>
+                  <TableRow>
+                    <TableData>{_('Status')}</TableData>
+                    <TableData>{license.status}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('ID')}</TableData>
+                    <TableData>{license.id}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Customer Name')}</TableData>
+                    <TableData>{license.customerName}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Creation Date')}</TableData>
+                    <TableData>
+                      <DateTime date={license.creationDate} />
+                    </TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Version')}</TableData>
+                    <TableData>{license.version}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Begins')}</TableData>
+                    <TableData>
+                      <DateTime date={license.begins} />
+                    </TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Expires on')}</TableData>
+                    <TableData>
+                      <DateTime date={license.expires} />
+                    </TableData>
+                  </TableRow>
+                  {isDefined(license.comment) && (
+                    <TableRow>
+                      <TableData>{_('Comment')}</TableData>
+                      <TableData>{license.comment}</TableData>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </InfoTable>
+              <h3>Model</h3>
+              <InfoTable>
+                <colgroup>
+                  <Col width="10%" />
+                  <Col width="90%" />
+                </colgroup>
+                <TableBody>
+                  <TableRow>
+                    <TableData>{_('Model')}</TableData>
+                    <TableData>{license.model}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Model Type')}</TableData>
+                    <TableData>{license.modelType}</TableData>
+                  </TableRow>
+                </TableBody>
+              </InfoTable>
+              <h3>
+                <HelpIcon /> {_('How to get a Greenbone Enterprise License')}
+              </h3>
+              <HowToDiv>
+                <p>
+                  {_(
+                    'A Greenbone Enterprise License grants access to the ' +
+                      'newest vulnerability information, including tests for ' +
+                      'several proprietary products, policies, report formats and' +
+                      ' system updates.',
+                  )}
+                </p>
+                <p>
+                  {_(
+                    'Please contact our sales team for purchasing or ' +
+                      ' re-newing a subscription to Greenbone Enterprise ' +
+                      'products:',
+                  )}
+                </p>
+                <a href={'mailto:sales@greenbone.net'}>sales@greenbone.net</a>
+              </HowToDiv>
+            </Layout>
+          )}
         </Section>
       </Layout>
       {newLicenseDialogVisible && (

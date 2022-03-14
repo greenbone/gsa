@@ -26,8 +26,6 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import date from 'gmp/models/date';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import Capabilities from 'gmp/capabilities/capabilities';
@@ -38,13 +36,14 @@ import ErrorBoundary from 'web/components/error/errorboundary';
 
 import Layout from 'web/components/layout/layout';
 
+import LicenseNotification from 'web/components/notification/licensenotification';
+
 import CapabilitiesContext from 'web/components/provider/capabilitiesprovider';
+import LicenseProvider from 'web/components/provider/licenseprovider';
 
 import Footer from 'web/components/structure/footer';
 import Header from 'web/components/structure/header';
 import Main from 'web/components/structure/main';
-
-import InfoPanel from 'web/components/panel/infopanel';
 
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
@@ -52,46 +51,9 @@ import compose from 'web/utils/compose';
 
 const log = logger.getLogger('web.page');
 
-const LICENSE_EXPIRATION_THRESHOLD = 30;
-
 const StyledLayout = styled(Layout)`
   height: 100%;
 `;
-
-const LicenseNotification = ({capabilities, days, license, onCloseClick}) => {
-  const {model} = license;
-  const titleMessage = _('Your {{model}} license ends in {{days}} days!', {
-    model,
-    days,
-  });
-  const message = capabilities.mayOp('modify_license')
-    ? _(
-        'After that your appliance remains valid and you can still log in ' +
-          'and view or download all of your scan reports. You can re-activate ' +
-          'the security feed via menu item "Administration > License".',
-      )
-    : _(
-        'After that your appliance remains valid and you can still log in ' +
-          'and view or download all of your scan reports. Please contact your ' +
-          'administrator for re-activating the security feed.',
-      );
-  return (
-    <InfoPanel
-      noMargin={true}
-      heading={titleMessage}
-      onCloseClick={onCloseClick}
-    >
-      {message}
-    </InfoPanel>
-  );
-};
-
-LicenseNotification.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
-  days: PropTypes.number.isRequired,
-  license: PropTypes.object.isRequired,
-  onCloseClick: PropTypes.func.isRequired,
-};
 
 class Page extends React.Component {
   constructor(...args) {
@@ -117,13 +79,6 @@ class Page extends React.Component {
         log.error('An error occurred during fetching capabilities', rejection);
         // use empty capabilities
         this.setState({capabilities: new Capabilities()});
-      })
-      .then(res => {
-        if (this.state.capabilities.mayAccess('license')) {
-          gmp.license.getLicenseInformation().then(license => {
-            this.setState({license: license.data});
-          });
-        }
       });
 
     this.setState({
@@ -137,40 +92,36 @@ class Page extends React.Component {
 
   render() {
     const {children, location} = this.props;
-    const {capabilities, license = {}, notificationClosed} = this.state;
-
+    const {capabilities, notificationClosed} = this.state;
     if (!isDefined(capabilities)) {
       // only show content after caps have been loaded
       // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
       return null;
     }
-    const days = date(license.expires).diff(date(), 'days');
-    const showLicenseNotification = // eslint-disable-line
-      days < LICENSE_EXPIRATION_THRESHOLD && !notificationClosed;
 
     return (
       <CapabilitiesContext.Provider value={capabilities}>
-        <StyledLayout flex="column" align={['start', 'stretch']}>
-          <MenuBar />
-          <Header />
-          {/* {capabilities.mayOp('get_license') && showLicenseNotification && (
-            <LicenseNotification
-              license={license}
-              days={days}
-              capabilities={capabilities}
-              onCloseClick={this.handleCloseLicenseNotification}
-            />
-          )} */}
-          <Main>
-            <ErrorBoundary
-              key={location.pathname}
-              message={_('An error occurred on this page.')}
-            >
-              {children}
-            </ErrorBoundary>
-          </Main>
-          <Footer />
-        </StyledLayout>
+        <LicenseProvider>
+          <StyledLayout flex="column" align={['start', 'stretch']}>
+            <MenuBar />
+            <Header />
+            {!notificationClosed && (
+              <LicenseNotification
+                capabilities={capabilities}
+                onCloseClick={this.handleCloseLicenseNotification}
+              />
+            )}
+            <Main>
+              <ErrorBoundary
+                key={location.pathname}
+                message={_('An error occurred on this page.')}
+              >
+                {children}
+              </ErrorBoundary>
+            </Main>
+            <Footer />
+          </StyledLayout>
+        </LicenseProvider>
       </CapabilitiesContext.Provider>
     );
   }
