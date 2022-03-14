@@ -190,7 +190,7 @@ const LicensePage = () => {
                   <TableRow>
                     <TableData>{_('Creation Date')}</TableData>
                     <TableData>
-                      <DateTime date={license.creationDate} />
+                      <DateTime date={license.created} />
                     </TableData>
                   </TableRow>
                   <TableRow>
