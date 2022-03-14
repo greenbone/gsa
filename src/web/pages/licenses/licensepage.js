@@ -250,7 +250,7 @@ const LicensePage = () => {
                   {_(
                     'Please contact our sales team for purchasing or ' +
                       ' re-newing a subscription to Greenbone Enterprise ' +
-                      'products:',
+                      'products.',
                   )}
                 </p>
                 <a href={'mailto:sales@greenbone.net'}>sales@greenbone.net</a>
