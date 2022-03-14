@@ -63,7 +63,7 @@ const HowToDiv = styled.div`
 
 const ToolBarIcons = ({onNewLicenseClick}) => {
   const capabilities = useCapabilities();
-  const mayModify = capabilities.mayOp('modify_license');
+  const mayModify = capabilities.mayEdit('license');
 
   return (
     <Layout>
