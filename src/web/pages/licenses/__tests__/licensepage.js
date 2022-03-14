@@ -21,18 +21,19 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import {setLocale} from 'gmp/locale/lang';
 
-import {License} from 'gmp/commands/license';
+import {License} from 'gmp/models/license';
 
 import Response from 'gmp/http/response';
 
 import {setTimezone} from 'web/store/usersettings/actions';
 
 import {rendererWith, waitFor, wait} from 'web/utils/testing';
+
 import LicensePage from '../licensepage';
 
 setLocale('en');
 
-const data = new License({
+const data = License.fromElement({
   status: 'active',
   content: {
     meta: {
@@ -54,7 +55,7 @@ const data = new License({
   },
 });
 
-const data2 = new License({
+const data2 = License.fromElement({
   status: 'active',
   content: {
     meta: {
