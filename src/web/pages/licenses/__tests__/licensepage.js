@@ -48,8 +48,8 @@ const data = License.fromElement({
       comment: 'Han shot first',
     },
     appliance: {
-      model: 'trial',
-      model_type: '450',
+      model: '450',
+      model_type: 'hardware',
       sensor: false,
     },
   },
@@ -70,8 +70,8 @@ const data2 = License.fromElement({
       comment: 'Han shot first',
     },
     appliance: {
-      model: 'trial',
-      model_type: '450',
+      model: '450',
+      model_type: 'hardware',
       sensor: false,
     },
     keys: {
@@ -169,9 +169,9 @@ describe('LicensePage tests', () => {
     expect(element).toHaveTextContent('Comment');
     expect(element).toHaveTextContent('Han shot first');
     expect(element).toHaveTextContent('Model');
-    expect(element).toHaveTextContent('trial');
+    expect(element).toHaveTextContent('Greenbone Enterprise 450');
     expect(element).toHaveTextContent('Model Type');
-    expect(element).toHaveTextContent('450');
+    expect(element).toHaveTextContent('Hardware Appliance');
 
     // Headings
     const headings = getAllByRole('heading');
@@ -249,9 +249,9 @@ describe('LicensePage tests', () => {
     expect(element).toHaveTextContent('Comment');
     expect(element).toHaveTextContent('Han shot first');
     expect(element).toHaveTextContent('Model');
-    expect(element).toHaveTextContent('trial');
+    expect(element).toHaveTextContent('Greenbone Enterprise 450');
     expect(element).toHaveTextContent('Model Type');
-    expect(element).toHaveTextContent('450');
+    expect(element).toHaveTextContent('Hardware Appliance');
 
     // Headings
     const headings = getAllByRole('heading');

@@ -16,7 +16,62 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'gmp/locale';
+
 import {parseDate} from 'gmp/parser';
+
+import {isDefined} from 'gmp/utils/identity';
+
+const LICENSE_MODEL = {
+  trial: 'Greenbone Enterprise TRIAL',
+  '25v': 'Greenbone Enterprise 25V',
+  25: 'Greenbone Enterprise 25',
+  35: 'Greenbone Enterprise 35',
+  maven: 'Greenbone Enterprise MAVEN',
+  one: 'Greenbone Enterprise ONE',
+  100: 'Greenbone Enterprise 100',
+  150: 'Greenbone Enterprise 150',
+  ceno: 'Greenbone Enterprise CENO',
+  deca: 'Greenbone Enterprise DECA',
+  400: 'Greenbone Enterprise 400',
+  '400r2': 'Greenbone Enterprise 400',
+  450: 'Greenbone Enterprise 450',
+  '450r2': 'Greenbone Enterprise 450',
+  tera: 'Greenbone Enterprise TERA',
+  500: 'Greenbone Enterprise 500',
+  510: 'Greenbone Enterprise 510',
+  550: 'Greenbone Enterprise 550',
+  600: 'Greenbone Enterprise 600',
+  '600r2': 'Greenbone Enterprise 600',
+  peta: 'Greenbone Enterprise PETA',
+  650: 'Greenbone Enterprise 650',
+  '650r2': 'Greenbone Enterprise 650',
+  exa: 'Greenbone Enterprise EXA',
+  5300: 'Greenbone Enterprise 5300',
+  6400: 'Greenbone Enterprise 6400',
+  5400: 'Greenbone Enterprise 5400',
+  6500: 'Greenbone Enterprise 6500',
+  expo: 'Greenbone Enterprise EXPO',
+  '150c-siesta': 'Greenbone Enterprise 150C-SiESTA',
+};
+
+export const getLicenseApplianceModelName = value => {
+  const name = LICENSE_MODEL[value];
+  return isDefined(name) ? name : value;
+};
+
+export const getLicenseApplianceModelType = value => {
+  if (!isDefined(value)) {
+    return value;
+  }
+  if (value === 'virtual') {
+    return 'Virtual Appliance';
+  }
+  if (value === 'hardware') {
+    return 'Hardware Appliance';
+  }
+  return _('Unknown');
+};
 
 export class License {
   constructor({

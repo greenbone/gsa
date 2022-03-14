@@ -22,6 +22,10 @@ import styled from 'styled-components';
 import _ from 'gmp/locale';
 
 import date from 'gmp/models/date';
+import {
+  getLicenseApplianceModelName,
+  getLicenseApplianceModelType,
+} from 'gmp/models/license';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -226,11 +230,15 @@ const LicensePage = () => {
                 <TableBody>
                   <TableRow>
                     <TableData>{_('Model')}</TableData>
-                    <TableData>{license.model}</TableData>
+                    <TableData>
+                      {getLicenseApplianceModelName(license.applianceModel)}
+                    </TableData>
                   </TableRow>
                   <TableRow>
                     <TableData>{_('Model Type')}</TableData>
-                    <TableData>{license.modelType}</TableData>
+                    <TableData>
+                      {getLicenseApplianceModelType(license.applianceModelType)}
+                    </TableData>
                   </TableRow>
                 </TableBody>
               </InfoTable>
