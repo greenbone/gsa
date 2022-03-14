@@ -36,16 +36,17 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
   const days = license?.expires
     ? date(license?.expires).diff(date(), 'days')
     : undefined;
-  const model = license?.model;
 
   if (!isDefined(days) || days > LICENSE_EXPIRATION_THRESHOLD) {
     return null;
   }
 
-  const titleMessage = _('Your {{model}} license ends in {{days}} days!', {
-    model,
-    days,
-  });
+  const titleMessage = _(
+    'Your Greenbone Enterprise License ends in {{days}} days!',
+    {
+      days,
+    },
+  );
 
   const message = capabilities.mayOp('modify_license')
     ? _(

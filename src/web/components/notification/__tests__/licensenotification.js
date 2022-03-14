@@ -40,8 +40,8 @@ const data1 = License.fromElement({
       comment: 'Han shot first',
     },
     appliance: {
-      model: 'trial',
-      model_type: '450',
+      model: '450',
+      model_type: 'hardware',
       sensor: false,
     },
   },
@@ -62,8 +62,8 @@ const data2 = License.fromElement({
       comment: 'Han shot first',
     },
     appliance: {
-      model: 'trial',
-      model_type: '450',
+      model: '450',
+      model_type: 'hardware',
       sensor: false,
     },
   },
@@ -103,7 +103,9 @@ describe('LicenseNotification tests', () => {
 
     await wait();
 
-    expect(baseElement).toHaveTextContent('Your trial license ends in 26 days');
+    expect(baseElement).toHaveTextContent(
+      'Your Greenbone Enterprise License ends in 26 days',
+    );
   });
 
   test('should not render if >30 days valid', async () => {
