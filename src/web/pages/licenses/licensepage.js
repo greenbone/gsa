@@ -217,7 +217,7 @@ const LicensePage = () => {
                   )}
                 </TableBody>
               </InfoTable>
-              <h3>Model</h3>
+              <h3>{_('Model')}</h3>
               <InfoTable>
                 <colgroup>
                   <Col width="10%" />
