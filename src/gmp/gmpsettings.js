@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {GSA_VERSION} from '../version';
+import GSA_VERSION from '../version';
 
 import {isDefined} from './utils/identity';
 

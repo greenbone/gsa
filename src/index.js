@@ -21,7 +21,7 @@ import ReactDOM from 'react-dom';
 
 import * as Sentry from '@sentry/react';
 
-import {GSA_VERSION} from 'version';
+import GSA_VERSION from 'version';
 
 import {isDefined} from 'gmp/utils/identity';
 
