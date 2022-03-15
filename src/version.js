@@ -16,6 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+<<<<<<< HEAD
 const VERSION = '21.4.3';
+=======
+// must be only major.minor
+export const VERSION = '22.04';
+>>>>>>> 33187667d (Rework version module to use same veriable as on (old)stable)
 
 export default VERSION;
