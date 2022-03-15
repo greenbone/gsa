@@ -17,10 +17,22 @@
  */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const VERSION = '21.4.3';
 =======
 // must be only major.minor
 export const VERSION = '22.04';
 >>>>>>> 33187667d (Rework version module to use same veriable as on (old)stable)
+=======
+const getMajorMinorVersion = () => {
+  // eslint-disable-next-line no-unused-vars
+  const [major, minor, ...rest] = VERSION.split('.');
+  return `${major}.${minor}`;
+};
+
+export const VERSION = '22.04.1';
+
+export const RELEASE_VERSION = getMajorMinorVersion();
+>>>>>>> 7e32ef6bd (Introduce a special release version variable)
 
 export default VERSION;
