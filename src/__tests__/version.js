@@ -16,10 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import VERSION from '../version';
+import {RELEASE_VERSION} from '../version';
 
 describe('Version tests', () => {
-  test('should only be major.minor', () => {
-    expect(VERSION.split('.').length).toEqual(2);
+  test('release version should only contain major.minor', () => {
+    expect(RELEASE_VERSION.split('.').length).toEqual(2);
   });
 });

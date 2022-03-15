@@ -16,7 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// must be only major.minor
-export const VERSION = '22.04';
+const getMajorMinorVersion = () => {
+  // eslint-disable-next-line no-unused-vars
+  const [major, minor, ...rest] = VERSION.split('.');
+  return `${major}.${minor}`;
+};
+
+export const VERSION = '22.04.1';
+
+export const RELEASE_VERSION = getMajorMinorVersion();
 
 export default VERSION;
