@@ -19,7 +19,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {GSA_VERSION} from 'version';
+import GSA_VERSION from 'version';
 
 import _ from 'gmp/locale';
 
