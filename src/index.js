@@ -19,15 +19,6 @@ import React from 'react';
 
 import ReactDOM from 'react-dom';
 
-<<<<<<< HEAD
-=======
-import * as Sentry from '@sentry/react';
-
-import GSA_VERSION from 'version';
-
-import {isDefined} from 'gmp/utils/identity';
-
->>>>>>> f66ae03d2 (Use default export to import VERSION variable)
 import App from './web/app.js';
 
 ReactDOM.render(<App />, document.getElementById('app'));
