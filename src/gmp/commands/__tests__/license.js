@@ -42,7 +42,7 @@ describe('LicenseCommand tests', () => {
               },
               appliance: {
                 model: 'trial',
-                model_type: '450',
+                model_type: 'virtual',
                 sensor: false,
               },
             },
@@ -63,13 +63,14 @@ describe('LicenseCommand tests', () => {
       const {data: license} = resp;
       expect(license.id).toEqual('12345');
       expect(license.customerName).toEqual('Monsters Inc.');
-      expect(license.creationDate).toEqual(parseDate('2021-08-27T06:05:21Z'));
       expect(license.version).toEqual('1.0.0');
+      expect(license.created).toEqual(parseDate('2021-08-27T06:05:21Z'));
       expect(license.begins).toEqual(parseDate('2021-08-27T07:05:21Z'));
       expect(license.expires).toEqual(parseDate('2021-09-04T07:05:21Z'));
       expect(license.comment).toEqual('foo');
-      expect(license.model).toEqual('trial');
-      expect(license.modelType).toEqual('450');
+      expect(license.applianceModel).toEqual('trial');
+      expect(license.applianceModelType).toEqual('virtual');
+      expect(license.type).toEqual('trial');
     });
   });
 });

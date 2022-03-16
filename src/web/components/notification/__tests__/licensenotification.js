@@ -19,13 +19,13 @@ import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import {License} from 'gmp/commands/license';
+import {License} from 'gmp/models/license';
 
 import {rendererWith, wait} from 'web/utils/testing';
 
 import LicenseNotification from '../licensenotification';
 
-const data1 = new License({
+const data1 = License.fromElement({
   status: 'active',
   content: {
     meta: {
@@ -40,14 +40,14 @@ const data1 = new License({
       comment: 'Han shot first',
     },
     appliance: {
-      model: 'trial',
-      model_type: '450',
+      model: '450',
+      model_type: 'hardware',
       sensor: false,
     },
   },
 });
 
-const data2 = new License({
+const data2 = License.fromElement({
   status: 'active',
   content: {
     meta: {
@@ -62,8 +62,8 @@ const data2 = new License({
       comment: 'Han shot first',
     },
     appliance: {
-      model: 'trial',
-      model_type: '450',
+      model: '450',
+      model_type: 'hardware',
       sensor: false,
     },
   },
@@ -103,7 +103,9 @@ describe('LicenseNotification tests', () => {
 
     await wait();
 
-    expect(baseElement).toHaveTextContent('Your trial license ends in 26 days');
+    expect(baseElement).toHaveTextContent(
+      'Your Greenbone Enterprise License ends in 26 days',
+    );
   });
 
   test('should not render if >30 days valid', async () => {

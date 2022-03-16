@@ -22,6 +22,10 @@ import styled from 'styled-components';
 import _ from 'gmp/locale';
 
 import date from 'gmp/models/date';
+import {
+  getLicenseApplianceModelName,
+  getLicenseApplianceModelType,
+} from 'gmp/models/license';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -63,7 +67,7 @@ const HowToDiv = styled.div`
 
 const ToolBarIcons = ({onNewLicenseClick}) => {
   const capabilities = useCapabilities();
-  const mayModify = capabilities.mayOp('modify_license');
+  const mayModify = capabilities.mayEdit('license');
 
   return (
     <Layout>
@@ -190,7 +194,7 @@ const LicensePage = () => {
                   <TableRow>
                     <TableData>{_('Creation Date')}</TableData>
                     <TableData>
-                      <DateTime date={license.creationDate} />
+                      <DateTime date={license.created} />
                     </TableData>
                   </TableRow>
                   <TableRow>
@@ -217,7 +221,7 @@ const LicensePage = () => {
                   )}
                 </TableBody>
               </InfoTable>
-              <h3>Model</h3>
+              <h3>{_('Model')}</h3>
               <InfoTable>
                 <colgroup>
                   <Col width="10%" />
@@ -226,11 +230,15 @@ const LicensePage = () => {
                 <TableBody>
                   <TableRow>
                     <TableData>{_('Model')}</TableData>
-                    <TableData>{license.model}</TableData>
+                    <TableData>
+                      {getLicenseApplianceModelName(license.applianceModel)}
+                    </TableData>
                   </TableRow>
                   <TableRow>
                     <TableData>{_('Model Type')}</TableData>
-                    <TableData>{license.modelType}</TableData>
+                    <TableData>
+                      {getLicenseApplianceModelType(license.applianceModelType)}
+                    </TableData>
                   </TableRow>
                 </TableBody>
               </InfoTable>

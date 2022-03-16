@@ -18,25 +18,9 @@
 
 import registerCommand from 'gmp/command';
 
-import {parseDate} from 'gmp/parser';
+import {License} from 'gmp/models/license';
 
 import GMPCommand from './gmp';
-
-export class License {
-  constructor({content, status}) {
-    this.status = status;
-    this.id = content?.meta?.id;
-    this.customerName = content?.meta?.customer_name;
-    this.creationDate = parseDate(content?.meta?.created);
-    this.version = content?.meta?.version;
-    this.begins = parseDate(content?.meta?.begins);
-    this.expires = parseDate(content?.meta?.expires);
-    this.comment = content?.meta?.comment;
-
-    this.model = content?.appliance?.model;
-    this.modelType = content?.appliance?.model_type;
-  }
-}
 
 export class LicenseCommand extends GMPCommand {
   constructor(http) {
@@ -47,7 +31,7 @@ export class LicenseCommand extends GMPCommand {
     return this.httpGet().then(response => {
       const {data: envelope} = response;
       const {get_license_response: licenseResponse} = envelope.get_license;
-      const license = new License(licenseResponse.license);
+      const license = License.fromElement(licenseResponse.license);
 
       return response.setData(license);
     });
