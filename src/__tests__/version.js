@@ -1,4 +1,4 @@
-/* Copyright (C) 2021 Greenbone Networks GmbH
+/* Copyright (C) 2022 Greenbone Networks GmbH
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,14 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-const getMajorMinorVersion = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [major, minor, ...rest] = VERSION.split('.');
-  return `${major}.${minor}`;
-};
+import {RELEASE_VERSION} from '../version';
 
-export const VERSION = '21.4.3';
-
-export const RELEASE_VERSION = getMajorMinorVersion();
-
-export default VERSION;
+describe('Version tests', () => {
+  test('release version should only contain major.minor', () => {
+    expect(RELEASE_VERSION.split('.').length).toEqual(2);
+  });
+});
