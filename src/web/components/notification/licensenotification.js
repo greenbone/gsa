@@ -24,6 +24,7 @@ import date from 'gmp/models/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import Link from 'web/components/link/link';
 import InfoPanel from 'web/components/panel/infopanel';
 
 import PropTypes from 'web/utils/proptypes';
@@ -31,41 +32,65 @@ import useLicense from 'web/utils/useLicense';
 
 const LICENSE_EXPIRATION_THRESHOLD = 30;
 
+const LinkComponent = () => (
+  <Link to="license">{_('License Management page')}</Link>
+);
+
 const LicenseNotification = ({capabilities, onCloseClick}) => {
   const {license} = useLicense();
   const days = license?.expires
     ? date(license?.expires).diff(date(), 'days')
     : undefined;
 
-  if (!isDefined(days) || days > LICENSE_EXPIRATION_THRESHOLD) {
-    return null;
-  }
-
-  const titleMessage = _(
+  const expiringMessageAdmin = _(
+    'The Greenbone Enterprise License for this system will expire in ' +
+      '{{days}} days. After that your appliance remains valid and you can ' +
+      'still use the system without restrictions, but you will not receive ' +
+      'updates anymore. You can find information about extending your ' +
+      'license on the',
+    {days},
+  );
+  const expiringMessageUser = _(
+    'The Greenbone Enterprise License for this system will expire in ' +
+      '{{days}} days. After that your appliance remains valid and you can ' +
+      'still use the system without restrictions, but you will not receive ' +
+      'updates anymore. Please contact your administrator for extending the ' +
+      'license.',
+    {days},
+  );
+  const expiringTitleMessage = _(
     'Your Greenbone Enterprise License ends in {{days}} days!',
     {
       days,
     },
   );
 
-  const message = capabilities.mayOp('modify_license')
-    ? _(
-        'After that your appliance remains valid and you can still log in ' +
-          'and view or download all of your scan reports. You can re-activate ' +
-          'the security feed via menu item "Administration > License".',
-      )
-    : _(
-        'After that your appliance remains valid and you can still log in ' +
-          'and view or download all of your scan reports. Please contact your ' +
-          'administrator for re-activating the security feed.',
-      );
+  const {status} = license;
+
+  let titleMessage;
+  let message;
+
+  if (status === 'expired') {
+    return null;
+  }
+  if (status === 'active') {
+    if (!isDefined(days) || days > LICENSE_EXPIRATION_THRESHOLD) {
+      return null;
+    }
+    message = capabilities.mayEdit('license')
+      ? expiringMessageAdmin
+      : expiringMessageUser;
+    titleMessage = expiringTitleMessage;
+  }
+
   return (
     <InfoPanel
       noMargin={true}
       heading={titleMessage}
       onCloseClick={onCloseClick}
     >
-      {message}
+      {message}&nbsp;
+      <LinkComponent />
     </InfoPanel>
   );
 };
