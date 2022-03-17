@@ -93,14 +93,14 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
     _(
       'The Greenbone Enterprise License for ' +
         'this system expired {{days}} days ago. You can still use the system without ' +
-        ' restrictions, but you will not receive updates anymore. Especially you ' +
+        'restrictions, but you will not receive updates anymore. Especially you ' +
         'will miss new vulnerability tests and thus your scans will not detect ' +
         'important new vulnerabilities in your network. Please contact your ' +
         'administrator for renewing the license.',
       {days: Math.abs(days)},
     );
   const expiredTitleMessage = _(
-    'Your Greenbone Enterprise License has ' + 'expired {{days}} days ago!',
+    'Your Greenbone Enterprise License has expired {{days}} days ago!',
     {days: Math.abs(days)},
   );
 
