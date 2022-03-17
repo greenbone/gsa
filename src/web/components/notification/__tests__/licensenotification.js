@@ -278,7 +278,7 @@ describe('LicenseNotification tests', () => {
     expect(links[0]).toHaveTextContent('License Management page');
 
     expect(baseElement).toHaveTextContent(
-      'Your Greenbone Enterprise License ' + 'has expired 1 days ago!',
+      'Your Greenbone Enterprise License has expired 1 days ago!',
     );
     expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
   });
@@ -317,7 +317,7 @@ describe('LicenseNotification tests', () => {
     expect(links.length).toEqual(0);
 
     expect(baseElement).toHaveTextContent(
-      'Your Greenbone Enterprise License ' + 'has expired 1 days ago!',
+      'Your Greenbone Enterprise License has expired 1 days ago!',
     );
     expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
   });
