@@ -92,6 +92,10 @@ const dataExpired = License.fromElement({
   },
 });
 
+const dataCorrupt = License.fromElement({
+  status: 'corrupt',
+});
+
 const mockDate = new Date('2021-08-09T07:05:21Z');
 
 const capsAdmin = new Capabilities(['everything']);
@@ -318,6 +322,92 @@ describe('LicenseNotification tests', () => {
 
     expect(baseElement).toHaveTextContent(
       'Your Greenbone Enterprise License has expired 1 days ago!',
+    );
+    expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
+  });
+
+  test('should render warning if corrupt for Admin user', async () => {
+    const handler = jest.fn();
+
+    const gmp = {
+      license: {
+        getLicenseInformation: jest.fn().mockReturnValue(
+          Promise.resolve({
+            data: dataCorrupt,
+          }),
+        ),
+      },
+      settings: {
+        manualUrl: 'http://foo.bar',
+      },
+    };
+
+    const {render} = rendererWith({
+      license: dataCorrupt,
+      gmp,
+      router: true,
+      store: true,
+    });
+    const {baseElement, getByTestId} = render(
+      <LicenseNotification capabilities={capsAdmin} onCloseClick={handler} />,
+    );
+
+    await wait();
+
+    const heading = getByTestId('infopanel-heading');
+
+    const links = baseElement.querySelectorAll('a');
+
+    expect(links.length).toEqual(2);
+
+    expect(links[0]).toHaveAttribute('href', 'https://service.greenbone.net');
+    expect(links[0]).toHaveTextContent('https://service.greenbone.net');
+
+    expect(links[1]).toHaveAttribute('href', 'mailto:support@greenbone.net');
+    expect(links[1]).toHaveTextContent('support@greenbone.net');
+
+    expect(baseElement).toHaveTextContent(
+      'Your Greenbone Enterprise License is invalid!',
+    );
+    expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
+  });
+
+  test('should render warning if corrupt for User user', async () => {
+    const handler = jest.fn();
+
+    const gmp = {
+      license: {
+        getLicenseInformation: jest.fn().mockReturnValue(
+          Promise.resolve({
+            data: dataCorrupt,
+          }),
+        ),
+      },
+      settings: {
+        manualUrl: 'http://foo.bar',
+      },
+    };
+
+    const {render} = rendererWith({
+      license: dataCorrupt,
+      gmp,
+      router: true,
+      store: true,
+    });
+    const {baseElement, getByTestId} = render(
+      <LicenseNotification capabilities={capsUser} onCloseClick={handler} />,
+    );
+
+    await wait();
+
+    const heading = getByTestId('infopanel-heading');
+
+    const links = baseElement.querySelectorAll('a');
+
+    expect(links.length).toEqual(0);
+
+    expect(baseElement).toHaveTextContent(
+      'Your Greenbone Enterprise License is invalid!',
     );
     expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
   });
