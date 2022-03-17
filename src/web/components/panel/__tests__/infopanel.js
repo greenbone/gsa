@@ -19,6 +19,7 @@ import React from 'react';
 import userEvent from '@testing-library/user-event';
 
 import {render} from 'web/utils/testing';
+import Theme from 'web/utils/theme';
 
 import InfoPanel from '../infopanel';
 
@@ -55,6 +56,45 @@ describe('InfoPanel tests', () => {
     expect(element).toHaveTextContent('heading text');
     expect(element).toHaveTextContent('footer text');
     expect(closeButton).toBeInTheDocument();
+  });
+
+  test('should render blue if info', () => {
+    const handleCloseClick = jest.fn();
+    const {element, queryByRole, getByTestId} = render(
+      <InfoPanel
+        heading="heading text"
+        footer="footer text"
+        onCloseClick={handleCloseClick}
+      />,
+    );
+
+    const heading = getByTestId('infopanel-heading');
+    const closeButton = queryByRole('button');
+
+    expect(element).toHaveTextContent('heading text');
+    expect(element).toHaveTextContent('footer text');
+    expect(closeButton).toBeInTheDocument();
+    expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
+  });
+
+  test('should render red if warning', () => {
+    const handleCloseClick = jest.fn();
+    const {element, queryByRole, getByTestId} = render(
+      <InfoPanel
+        isWarning={true}
+        heading="heading text"
+        footer="footer text"
+        onCloseClick={handleCloseClick}
+      />,
+    );
+
+    const heading = getByTestId('infopanel-heading');
+    const closeButton = queryByRole('button');
+
+    expect(element).toHaveTextContent('heading text');
+    expect(element).toHaveTextContent('footer text');
+    expect(closeButton).toBeInTheDocument();
+    expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
   });
 
   test('should call click handler', () => {

@@ -24,6 +24,7 @@ import date from 'gmp/models/date';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import Layout from 'web/components/layout/layout';
 import Link from 'web/components/link/link';
 import InfoPanel from 'web/components/panel/infopanel';
 
@@ -41,14 +42,19 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
   const days = license?.expires
     ? date(license?.expires).diff(date(), 'days')
     : undefined;
-
-  const expiringMessageAdmin = _(
-    'The Greenbone Enterprise License for this system will expire in ' +
-      '{{days}} days. After that your appliance remains valid and you can ' +
-      'still use the system without restrictions, but you will not receive ' +
-      'updates anymore. You can find information about extending your ' +
-      'license on the',
-    {days},
+  const expiringMessageAdmin = (
+    <span>
+      {_(
+        'The Greenbone Enterprise License for this system will expire in ' +
+          '{{days}} days. After that your appliance remains valid and you can ' +
+          'still use the system without restrictions, but you will not receive ' +
+          'updates anymore. You can find information about extending your ' +
+          'license on the',
+        {days},
+      )}
+      &nbsp;
+      <LinkComponent />
+    </span>
   );
   const expiringMessageUser = _(
     'The Greenbone Enterprise License for this system will expire in ' +
@@ -65,13 +71,51 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
     },
   );
 
+  const expiredMessageAdmin = (
+    <Layout flex="column">
+      {_(
+        'The Greenbone Enterprise License for this system expired {{days}} days ' +
+          'ago. You can still use the system without restrictions, but you will ' +
+          'not receive updates anymore. Especially, you will miss new ' +
+          'vulnerability tests and thus your scans will not detect important new ' +
+          'vulnerabilities in your network.',
+        {days: Math.abs(days)},
+      )}
+      <br />
+      <br />
+      <span>
+        {_('You can find information about renewing your license on the')}&nbsp;
+        <LinkComponent />
+      </span>
+    </Layout>
+  );
+  const expiredMessageUser = () =>
+    _(
+      'The Greenbone Enterprise License for ' +
+        'this system expired {{days}} days ago. You can still use the system without ' +
+        'restrictions, but you will not receive updates anymore. Especially you ' +
+        'will miss new vulnerability tests and thus your scans will not detect ' +
+        'important new vulnerabilities in your network. Please contact your ' +
+        'administrator for renewing the license.',
+      {days: Math.abs(days)},
+    );
+  const expiredTitleMessage = _(
+    'Your Greenbone Enterprise License has expired {{days}} days ago!',
+    {days: Math.abs(days)},
+  );
+
   const {status} = license;
 
   let titleMessage;
   let message;
+  let isWarning = false;
 
   if (status === 'expired') {
-    return null;
+    isWarning = true;
+    message = capabilities.mayEdit('license')
+      ? expiredMessageAdmin
+      : expiredMessageUser;
+    titleMessage = expiredTitleMessage;
   }
   if (status === 'active') {
     if (!isDefined(days) || days > LICENSE_EXPIRATION_THRESHOLD) {
@@ -85,12 +129,12 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
 
   return (
     <InfoPanel
+      isWarning={isWarning}
       noMargin={true}
       heading={titleMessage}
       onCloseClick={onCloseClick}
     >
-      {message}&nbsp;
-      <LinkComponent />
+      {message}
     </InfoPanel>
   );
 };
