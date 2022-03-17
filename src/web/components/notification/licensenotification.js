@@ -62,7 +62,7 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
         'The Greenbone Enterprise License for this system is invalid. ' +
           'You can still use the system without restrictions, but you will not ' +
           'receive updates anymore. For further advice please contact the ' +
-          'Greenbone Enterprise Support at ',
+          'Greenbone Enterprise Support at',
       )}
       &nbsp;
       <SupportPageLinkComponent />
