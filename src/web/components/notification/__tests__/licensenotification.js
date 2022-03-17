@@ -100,7 +100,7 @@ beforeEach(() => {
 });
 
 describe('LicenseNotification tests', () => {
-  test('should render if <=30 days valid and active', async () => {
+  test('should render if <=30 days active', async () => {
     const handler = jest.fn();
     const gmp = {
       license: {
