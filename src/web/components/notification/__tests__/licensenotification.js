@@ -22,6 +22,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 import {License} from 'gmp/models/license';
 
 import {rendererWith, wait} from 'web/utils/testing';
+import Theme from 'web/utils/theme';
 
 import LicenseNotification from '../licensenotification';
 
@@ -93,14 +94,15 @@ const dataExpired = License.fromElement({
 
 const mockDate = new Date('2021-08-09T07:05:21Z');
 
-const caps = new Capabilities(['everything']);
+const capsAdmin = new Capabilities(['everything']);
+const capsUser = new Capabilities(['get_license']);
 
 beforeEach(() => {
   jest.spyOn(global.Date, 'now').mockImplementation(() => mockDate);
 });
 
 describe('LicenseNotification tests', () => {
-  test('should render if <=30 days active', async () => {
+  test('should render if <=30 days active for Admin user', async () => {
     const handler = jest.fn();
     const gmp = {
       license: {
@@ -120,12 +122,13 @@ describe('LicenseNotification tests', () => {
       router: true,
       store: true,
     });
-    const {baseElement} = render(
-      <LicenseNotification capabilities={caps} onCloseClick={handler} />,
+    const {baseElement, getByTestId} = render(
+      <LicenseNotification capabilities={capsAdmin} onCloseClick={handler} />,
     );
 
     await wait();
 
+    const heading = getByTestId('infopanel-heading');
     const links = baseElement.querySelectorAll('a');
 
     expect(links.length).toEqual(1);
@@ -136,9 +139,46 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your Greenbone Enterprise License ends in 26 days',
     );
+    expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
+  });
+  test('should render if <=30 days active for User user', async () => {
+    const handler = jest.fn();
+    const gmp = {
+      license: {
+        getLicenseInformation: jest.fn().mockReturnValue(
+          Promise.resolve({
+            data: dataLessThan30days,
+          }),
+        ),
+      },
+      settings: {
+        manualUrl: 'http://foo.bar',
+      },
+    };
+    const {render} = rendererWith({
+      license: dataLessThan30days,
+      gmp,
+      router: true,
+      store: true,
+    });
+    const {baseElement, getByTestId} = render(
+      <LicenseNotification capabilities={capsUser} onCloseClick={handler} />,
+    );
+
+    await wait();
+
+    const heading = getByTestId('infopanel-heading');
+    const links = baseElement.querySelectorAll('a');
+
+    expect(links.length).toEqual(0);
+
+    expect(baseElement).toHaveTextContent(
+      'Your Greenbone Enterprise License ends in 26 days',
+    );
+    expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
   });
 
-  test('should not render if >30 days and active', async () => {
+  test('should not render if >30 days and active for Admin user', async () => {
     const handler = jest.fn();
 
     const gmp = {
@@ -161,7 +201,7 @@ describe('LicenseNotification tests', () => {
       store: true,
     });
     const {baseElement} = render(
-      <LicenseNotification capabilities={caps} onCloseClick={handler} />,
+      <LicenseNotification capabilities={capsAdmin} onCloseClick={handler} />,
     );
 
     await wait();
@@ -169,7 +209,38 @@ describe('LicenseNotification tests', () => {
     expect(baseElement).not.toHaveTextContent();
   });
 
-  test('should not render if expired', async () => {
+  test('should not render if >30 days and active for User user', async () => {
+    const handler = jest.fn();
+
+    const gmp = {
+      license: {
+        getLicenseInformation: jest.fn().mockReturnValue(
+          Promise.resolve({
+            data: dataMoreThan30days,
+          }),
+        ),
+      },
+      settings: {
+        manualUrl: 'http://foo.bar',
+      },
+    };
+
+    const {render} = rendererWith({
+      license: dataMoreThan30days,
+      gmp,
+      router: true,
+      store: true,
+    });
+    const {baseElement} = render(
+      <LicenseNotification capabilities={capsUser} onCloseClick={handler} />,
+    );
+
+    await wait();
+
+    expect(baseElement).not.toHaveTextContent();
+  });
+
+  test('should render warning if expired for Admin user', async () => {
     const handler = jest.fn();
 
     const gmp = {
@@ -191,13 +262,64 @@ describe('LicenseNotification tests', () => {
       router: true,
       store: true,
     });
-    const {baseElement} = render(
-      <LicenseNotification capabilities={caps} onCloseClick={handler} />,
+    const {baseElement, getByTestId} = render(
+      <LicenseNotification capabilities={capsAdmin} onCloseClick={handler} />,
     );
 
     await wait();
 
-    expect(baseElement).not.toHaveTextContent();
+    const heading = getByTestId('infopanel-heading');
+
+    const links = baseElement.querySelectorAll('a');
+
+    expect(links.length).toEqual(1);
+
+    expect(links[0]).toHaveAttribute('href', '/license');
+    expect(links[0]).toHaveTextContent('License Management page');
+
+    expect(baseElement).toHaveTextContent(
+      'Your Greenbone Enterprise License ' + 'has expired 1 days ago!',
+    );
+    expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
+  });
+
+  test('should render warning if expired for User user', async () => {
+    const handler = jest.fn();
+
+    const gmp = {
+      license: {
+        getLicenseInformation: jest.fn().mockReturnValue(
+          Promise.resolve({
+            data: dataExpired,
+          }),
+        ),
+      },
+      settings: {
+        manualUrl: 'http://foo.bar',
+      },
+    };
+
+    const {render} = rendererWith({
+      license: dataExpired,
+      gmp,
+      router: true,
+      store: true,
+    });
+    const {baseElement, getByTestId} = render(
+      <LicenseNotification capabilities={capsUser} onCloseClick={handler} />,
+    );
+
+    await wait();
+
+    const heading = getByTestId('infopanel-heading');
+    const links = baseElement.querySelectorAll('a');
+
+    expect(links.length).toEqual(0);
+
+    expect(baseElement).toHaveTextContent(
+      'Your Greenbone Enterprise License ' + 'has expired 1 days ago!',
+    );
+    expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
   });
 });
 
