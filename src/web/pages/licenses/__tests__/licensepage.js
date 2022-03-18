@@ -21,18 +21,19 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import {setLocale} from 'gmp/locale/lang';
 
-import {License} from 'gmp/commands/license';
+import {License} from 'gmp/models/license';
 
 import Response from 'gmp/http/response';
 
 import {setTimezone} from 'web/store/usersettings/actions';
 
 import {rendererWith, waitFor, wait} from 'web/utils/testing';
+
 import LicensePage from '../licensepage';
 
 setLocale('en');
 
-const data = new License({
+const data = License.fromElement({
   status: 'active',
   content: {
     meta: {
@@ -47,14 +48,14 @@ const data = new License({
       comment: 'Han shot first',
     },
     appliance: {
-      model: 'trial',
-      model_type: '450',
+      model: '450',
+      model_type: 'hardware',
       sensor: false,
     },
   },
 });
 
-const data2 = new License({
+const data2 = License.fromElement({
   status: 'active',
   content: {
     meta: {
@@ -69,8 +70,8 @@ const data2 = new License({
       comment: 'Han shot first',
     },
     appliance: {
-      model: 'trial',
-      model_type: '450',
+      model: '450',
+      model_type: 'hardware',
       sensor: false,
     },
     keys: {
@@ -168,9 +169,9 @@ describe('LicensePage tests', () => {
     expect(element).toHaveTextContent('Comment');
     expect(element).toHaveTextContent('Han shot first');
     expect(element).toHaveTextContent('Model');
-    expect(element).toHaveTextContent('trial');
+    expect(element).toHaveTextContent('Greenbone Enterprise 450');
     expect(element).toHaveTextContent('Model Type');
-    expect(element).toHaveTextContent('450');
+    expect(element).toHaveTextContent('Hardware Appliance');
 
     // Headings
     const headings = getAllByRole('heading');
@@ -248,9 +249,9 @@ describe('LicensePage tests', () => {
     expect(element).toHaveTextContent('Comment');
     expect(element).toHaveTextContent('Han shot first');
     expect(element).toHaveTextContent('Model');
-    expect(element).toHaveTextContent('trial');
+    expect(element).toHaveTextContent('Greenbone Enterprise 450');
     expect(element).toHaveTextContent('Model Type');
-    expect(element).toHaveTextContent('450');
+    expect(element).toHaveTextContent('Hardware Appliance');
 
     // Headings
     const headings = getAllByRole('heading');
