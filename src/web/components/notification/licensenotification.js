@@ -103,12 +103,28 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
     {days},
   );
   const expiringTitleMessage = _(
-    'Your Greenbone Enterprise License ends in {{days}} days!',
+    'Your Greenbone Enterprise License will expire in {{days}} days!',
     {
       days,
     },
   );
-
+  const expiringTrialMessageAdmin = (
+    <span>
+      {_(
+        'The trial period for this system will end in {{days}} days. ' +
+          'You can find further information about purchasing a ' +
+          'license on the',
+        {days},
+      )}
+      &nbsp;
+      <LicenseLinkComponent />
+    </span>
+  );
+  const expiringTrialMessageUser = _(
+    'The trial period for this system will end in {{days}} days. Please contact ' +
+      'your administrator for purchasing a new license.',
+    {days},
+  );
   const expiredMessageAdmin = (
     <Layout flex="column">
       {_(
@@ -141,13 +157,15 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
     {days: Math.abs(days)},
   );
 
-  const {status} = license;
+  const {status, type} = license;
 
   let titleMessage;
   let message;
   let isWarning = false;
 
-  if (status === 'expired') {
+  if (status === 'no_license') {
+    return null;
+  } else if (status === 'expired') {
     isWarning = true;
     message = capabilities.mayEdit('license')
       ? expiredMessageAdmin
@@ -163,9 +181,15 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
     if (!isDefined(days) || days > LICENSE_EXPIRATION_THRESHOLD) {
       return null;
     }
-    message = capabilities.mayEdit('license')
-      ? expiringMessageAdmin
-      : expiringMessageUser;
+    if (type === 'trial') {
+      message = capabilities.mayEdit('license')
+        ? expiringTrialMessageAdmin
+        : expiringTrialMessageUser;
+    } else {
+      message = capabilities.mayEdit('license')
+        ? expiringMessageAdmin
+        : expiringMessageUser;
+    }
     titleMessage = expiringTitleMessage;
   }
 

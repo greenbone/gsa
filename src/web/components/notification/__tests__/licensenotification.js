@@ -26,7 +26,33 @@ import Theme from 'web/utils/theme';
 
 import LicenseNotification from '../licensenotification';
 
+const dataNoLicense = License.fromElement({
+  status: 'no_license',
+});
+
 const dataLessThan30days = License.fromElement({
+  status: 'active',
+  content: {
+    meta: {
+      id: '12345',
+      version: '1.0.0',
+      title: 'Test License',
+      type: 'commercial',
+      customer_name: 'Monsters Inc.',
+      created: '2021-08-08T06:05:21Z',
+      begins: '2021-08-08T07:05:21Z',
+      expires: '2021-09-04T07:05:21Z',
+      comment: 'Han shot first',
+    },
+    appliance: {
+      model: '450',
+      model_type: 'hardware',
+      sensor: false,
+    },
+  },
+});
+
+const dataLessThan30daysTrial = License.fromElement({
   status: 'active',
   content: {
     meta: {
@@ -35,9 +61,9 @@ const dataLessThan30days = License.fromElement({
       title: 'Test License',
       type: 'trial',
       customer_name: 'Monsters Inc.',
-      created: '2021-08-27T06:05:21Z',
-      begins: '2021-08-27T07:05:21Z',
-      expires: '2021-09-04T07:05:21Z',
+      created: '2021-08-08T06:05:21Z',
+      begins: '2021-08-08T07:05:21Z',
+      expires: '2021-08-22T07:05:21Z',
       comment: 'Han shot first',
     },
     appliance: {
@@ -57,8 +83,8 @@ const dataMoreThan30days = License.fromElement({
       title: 'Test License',
       type: 'trial',
       customer_name: 'Monsters Inc.',
-      created: '2021-08-27T06:05:21Z',
-      begins: '2021-08-27T07:05:21Z',
+      created: '2021-08-08T06:05:21Z',
+      begins: '2021-08-08T07:05:21Z',
       expires: '2022-09-04T07:05:21Z',
       comment: 'Han shot first',
     },
@@ -116,9 +142,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
     const {render} = rendererWith({
       license: dataLessThan30days,
@@ -141,10 +164,11 @@ describe('LicenseNotification tests', () => {
     expect(links[0]).toHaveTextContent('License Management page');
 
     expect(baseElement).toHaveTextContent(
-      'Your Greenbone Enterprise License ends in 26 days',
+      'The Greenbone Enterprise License for this system will expire in 26 days',
     );
     expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
   });
+
   test('should render if <=30 days active for User user', async () => {
     const handler = jest.fn();
     const gmp = {
@@ -154,9 +178,6 @@ describe('LicenseNotification tests', () => {
             data: dataLessThan30days,
           }),
         ),
-      },
-      settings: {
-        manualUrl: 'http://foo.bar',
       },
     };
     const {render} = rendererWith({
@@ -177,7 +198,78 @@ describe('LicenseNotification tests', () => {
     expect(links.length).toEqual(0);
 
     expect(baseElement).toHaveTextContent(
-      'Your Greenbone Enterprise License ends in 26 days',
+      'The Greenbone Enterprise License for this system will expire in 26 days',
+    );
+    expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
+  });
+
+  test('should render if <=30 days active for Admin user Trial', async () => {
+    const handler = jest.fn();
+    const gmp = {
+      license: {
+        getLicenseInformation: jest.fn().mockReturnValue(
+          Promise.resolve({
+            data: dataLessThan30daysTrial,
+          }),
+        ),
+      },
+    };
+    const {render} = rendererWith({
+      license: dataLessThan30daysTrial,
+      gmp,
+      router: true,
+      store: true,
+    });
+    const {baseElement, getByTestId} = render(
+      <LicenseNotification capabilities={capsAdmin} onCloseClick={handler} />,
+    );
+
+    await wait();
+
+    const heading = getByTestId('infopanel-heading');
+    const links = baseElement.querySelectorAll('a');
+
+    expect(links.length).toEqual(1);
+
+    expect(links[0]).toHaveAttribute('href', '/license');
+    expect(links[0]).toHaveTextContent('License Management page');
+
+    expect(baseElement).toHaveTextContent(
+      'The trial period for this system will end in 13 days',
+    );
+    expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
+  });
+
+  test('should render if <=30 days active for User user Trial', async () => {
+    const handler = jest.fn();
+    const gmp = {
+      license: {
+        getLicenseInformation: jest.fn().mockReturnValue(
+          Promise.resolve({
+            data: dataLessThan30daysTrial,
+          }),
+        ),
+      },
+    };
+    const {render} = rendererWith({
+      license: dataLessThan30daysTrial,
+      gmp,
+      router: true,
+      store: true,
+    });
+    const {baseElement, getByTestId} = render(
+      <LicenseNotification capabilities={capsUser} onCloseClick={handler} />,
+    );
+
+    await wait();
+
+    const heading = getByTestId('infopanel-heading');
+    const links = baseElement.querySelectorAll('a');
+
+    expect(links.length).toEqual(0);
+
+    expect(baseElement).toHaveTextContent(
+      'The trial period for this system will end in 13 days',
     );
     expect(heading).toHaveStyleRule('background-color', Theme.lightBlue);
   });
@@ -192,9 +284,6 @@ describe('LicenseNotification tests', () => {
             data: dataMoreThan30days,
           }),
         ),
-      },
-      settings: {
-        manualUrl: 'http://foo.bar',
       },
     };
 
@@ -224,9 +313,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
 
     const {render} = rendererWith({
@@ -254,9 +340,6 @@ describe('LicenseNotification tests', () => {
             data: dataExpired,
           }),
         ),
-      },
-      settings: {
-        manualUrl: 'http://foo.bar',
       },
     };
 
@@ -298,9 +381,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
 
     const {render} = rendererWith({
@@ -336,9 +416,6 @@ describe('LicenseNotification tests', () => {
             data: dataCorrupt,
           }),
         ),
-      },
-      settings: {
-        manualUrl: 'http://foo.bar',
       },
     };
 
@@ -383,9 +460,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
 
     const {render} = rendererWith({
@@ -410,6 +484,62 @@ describe('LicenseNotification tests', () => {
       'Your Greenbone Enterprise License is invalid!',
     );
     expect(heading).toHaveStyleRule('background-color', Theme.mediumLightRed);
+  });
+
+  test('should not render if status is no_license for Admin user', async () => {
+    const handler = jest.fn();
+
+    const gmp = {
+      license: {
+        getLicenseInformation: jest.fn().mockReturnValue(
+          Promise.resolve({
+            data: dataNoLicense,
+          }),
+        ),
+      },
+    };
+
+    const {render} = rendererWith({
+      license: dataNoLicense,
+      gmp,
+      router: true,
+      store: true,
+    });
+    const {baseElement} = render(
+      <LicenseNotification capabilities={capsAdmin} onCloseClick={handler} />,
+    );
+
+    await wait();
+
+    expect(baseElement).not.toHaveTextContent();
+  });
+
+  test('should not render if status is no_license for User user', async () => {
+    const handler = jest.fn();
+
+    const gmp = {
+      license: {
+        getLicenseInformation: jest.fn().mockReturnValue(
+          Promise.resolve({
+            data: dataNoLicense,
+          }),
+        ),
+      },
+    };
+
+    const {render} = rendererWith({
+      license: dataNoLicense,
+      gmp,
+      router: true,
+      store: true,
+    });
+    const {baseElement} = render(
+      <LicenseNotification capabilities={capsUser} onCloseClick={handler} />,
+    );
+
+    await wait();
+
+    expect(baseElement).not.toHaveTextContent();
   });
 });
 
