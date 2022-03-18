@@ -142,9 +142,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
     const {render} = rendererWith({
       license: dataLessThan30days,
@@ -182,9 +179,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
     const {render} = rendererWith({
       license: dataLessThan30days,
@@ -218,9 +212,6 @@ describe('LicenseNotification tests', () => {
             data: dataLessThan30daysTrial,
           }),
         ),
-      },
-      settings: {
-        manualUrl: 'http://foo.bar',
       },
     };
     const {render} = rendererWith({
@@ -259,9 +250,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
     const {render} = rendererWith({
       license: dataLessThan30daysTrial,
@@ -297,9 +285,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
 
     const {render} = rendererWith({
@@ -328,9 +313,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
 
     const {render} = rendererWith({
@@ -358,9 +340,6 @@ describe('LicenseNotification tests', () => {
             data: dataExpired,
           }),
         ),
-      },
-      settings: {
-        manualUrl: 'http://foo.bar',
       },
     };
 
@@ -402,9 +381,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
 
     const {render} = rendererWith({
@@ -440,9 +416,6 @@ describe('LicenseNotification tests', () => {
             data: dataCorrupt,
           }),
         ),
-      },
-      settings: {
-        manualUrl: 'http://foo.bar',
       },
     };
 
@@ -487,9 +460,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
 
     const {render} = rendererWith({
@@ -527,9 +497,6 @@ describe('LicenseNotification tests', () => {
           }),
         ),
       },
-      settings: {
-        manualUrl: 'http://foo.bar',
-      },
     };
 
     const {render} = rendererWith({
@@ -557,9 +524,6 @@ describe('LicenseNotification tests', () => {
             data: dataNoLicense,
           }),
         ),
-      },
-      settings: {
-        manualUrl: 'http://foo.bar',
       },
     };
 
