@@ -17,7 +17,15 @@
  */
 import React, {useEffect, useState} from 'react';
 
+import styled from 'styled-components';
+
 import _ from 'gmp/locale';
+
+import date from 'gmp/models/date';
+import {
+  getLicenseApplianceModelName,
+  getLicenseApplianceModelType,
+} from 'gmp/models/license';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -28,6 +36,7 @@ import ErrorDialog from 'web/components/dialog/errordialog';
 import LicenseIcon from 'web/components/icon/licenseicon';
 import ManualIcon from 'web/components/icon/manualicon';
 import NewIcon from 'web/components/icon/newicon';
+import HelpIcon from 'web/components/icon/helpicon';
 
 import IconDivider from 'web/components/layout/icondivider';
 import Layout from 'web/components/layout/layout';
@@ -52,9 +61,13 @@ import useCapabilities from 'web/utils/useCapabilities';
 
 import LicenseDialog from './dialog';
 
+const HowToDiv = styled.div`
+  width: 33%;
+`;
+
 const ToolBarIcons = ({onNewLicenseClick}) => {
   const capabilities = useCapabilities();
-  const mayModify = capabilities.mayOp('modify_license');
+  const mayModify = capabilities.mayEdit('license');
 
   return (
     <Layout>
@@ -126,6 +139,15 @@ const LicensePage = () => {
     setDialogError(undefined);
   };
 
+  const dur = date(license.expires).diff(date(), 'days');
+  let durationUntilExpires;
+
+  if (dur > 30) {
+    durationUntilExpires = date(license.expires).fromNow();
+  } else {
+    durationUntilExpires = _('in {{dur}} days', {dur});
+  }
+
   return (
     <React.Fragment>
       <PageTitle title={_('License Management')} />
@@ -154,6 +176,14 @@ const LicensePage = () => {
                 </colgroup>
                 <TableBody>
                   <TableRow>
+                    <TableData>{_('The license expires')}</TableData>
+                    <TableData>{durationUntilExpires}</TableData>
+                  </TableRow>
+                  <TableRow>
+                    <TableData>{_('Status')}</TableData>
+                    <TableData>{license.status}</TableData>
+                  </TableRow>
+                  <TableRow>
                     <TableData>{_('ID')}</TableData>
                     <TableData>{license.id}</TableData>
                   </TableRow>
@@ -164,7 +194,7 @@ const LicensePage = () => {
                   <TableRow>
                     <TableData>{_('Creation Date')}</TableData>
                     <TableData>
-                      <DateTime date={license.creationDate} />
+                      <DateTime date={license.created} />
                     </TableData>
                   </TableRow>
                   <TableRow>
@@ -178,7 +208,7 @@ const LicensePage = () => {
                     </TableData>
                   </TableRow>
                   <TableRow>
-                    <TableData>{_('Expires')}</TableData>
+                    <TableData>{_('Expires on')}</TableData>
                     <TableData>
                       <DateTime date={license.expires} />
                     </TableData>
@@ -191,7 +221,7 @@ const LicensePage = () => {
                   )}
                 </TableBody>
               </InfoTable>
-              <h3>Model</h3>
+              <h3>{_('Model')}</h3>
               <InfoTable>
                 <colgroup>
                   <Col width="10%" />
@@ -200,14 +230,39 @@ const LicensePage = () => {
                 <TableBody>
                   <TableRow>
                     <TableData>{_('Model')}</TableData>
-                    <TableData>{license.model}</TableData>
+                    <TableData>
+                      {getLicenseApplianceModelName(license.applianceModel)}
+                    </TableData>
                   </TableRow>
                   <TableRow>
                     <TableData>{_('Model Type')}</TableData>
-                    <TableData>{license.modelType}</TableData>
+                    <TableData>
+                      {getLicenseApplianceModelType(license.applianceModelType)}
+                    </TableData>
                   </TableRow>
                 </TableBody>
               </InfoTable>
+              <h3>
+                <HelpIcon /> {_('How to get a Greenbone Enterprise License')}
+              </h3>
+              <HowToDiv>
+                <p>
+                  {_(
+                    'A Greenbone Enterprise License grants access to the ' +
+                      'newest vulnerability information, including tests for ' +
+                      'several proprietary products, policies, report formats and' +
+                      ' system updates.',
+                  )}
+                </p>
+                <p>
+                  {_(
+                    'Please contact our sales team for purchasing or ' +
+                      ' re-newing a subscription to Greenbone Enterprise ' +
+                      'products.',
+                  )}
+                </p>
+                <a href={'mailto:sales@greenbone.net'}>sales@greenbone.net</a>
+              </HowToDiv>
             </Layout>
           )}
         </Section>
