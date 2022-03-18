@@ -163,7 +163,9 @@ const LicenseNotification = ({capabilities, onCloseClick}) => {
   let message;
   let isWarning = false;
 
-  if (status === 'expired') {
+  if (status === 'no_license') {
+    return null;
+  } else if (status === 'expired') {
     isWarning = true;
     message = capabilities.mayEdit('license')
       ? expiredMessageAdmin

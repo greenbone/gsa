@@ -139,13 +139,16 @@ const LicensePage = () => {
     setDialogError(undefined);
   };
 
-  const dur = date(license.expires).diff(date(), 'days');
   let durationUntilExpires;
 
-  if (dur > 30) {
-    durationUntilExpires = date(license.expires).fromNow();
-  } else {
-    durationUntilExpires = _('in {{dur}} days', {dur});
+  if (license.status === 'active') {
+    const dur = date(license.expires).diff(date(), 'days');
+
+    if (dur > 30) {
+      durationUntilExpires = date(license.expires).fromNow();
+    } else {
+      durationUntilExpires = _('in {{dur}} days', {dur});
+    }
   }
 
   return (
