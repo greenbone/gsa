@@ -34,7 +34,8 @@ import Button from './button';
 
 const Panel = styled(Layout)`
   background-color: ${Theme.white};
-  border: 1px solid ${Theme.lightBlue};
+  border: 1px solid
+    ${props => (props.isWarning ? Theme.darkRed : Theme.lightBlue)};
   margin-top: ${props => (props.noMargin ? '0px' : '5px')};
 `;
 
@@ -44,7 +45,8 @@ const Heading = styled.div`
   align-items: center;
   padding: 10px 15px;
   min-height: 35px;
-  background-color: ${Theme.lightBlue};
+  background-color: ${props =>
+    props.isWarning ? Theme.mediumLightRed : Theme.lightBlue};
   border-color: ${Theme.mediumBlue};
 `;
 
@@ -62,11 +64,23 @@ const Body = styled.div`
   flex-grow: 1;
 `;
 
-const InfoPanel = ({heading, footer, children, onCloseClick, ...props}) => {
+const InfoPanel = ({
+  heading,
+  footer,
+  isWarning = false,
+  children,
+  onCloseClick,
+  ...props
+}) => {
   return (
-    <Panel {...props} align={['start', 'stretch']} flex="column">
+    <Panel
+      isWarning={isWarning}
+      {...props}
+      align={['start', 'stretch']}
+      flex="column"
+    >
       {heading && (
-        <Heading>
+        <Heading data-testid="infopanel-heading" isWarning={isWarning}>
           {heading}
           {isDefined(onCloseClick) && (
             <Button onClick={onCloseClick}>
@@ -84,6 +98,7 @@ const InfoPanel = ({heading, footer, children, onCloseClick, ...props}) => {
 InfoPanel.propTypes = {
   footer: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   heading: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  isWarning: PropTypes.bool,
   onCloseClick: PropTypes.func,
 };
 

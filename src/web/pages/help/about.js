@@ -19,7 +19,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {GSA_VERSION} from 'version';
+import GSA_VERSION from 'version';
 
 import _ from 'gmp/locale';
 
@@ -85,7 +85,7 @@ const About = ({gmp}) => (
             '
           </DivP>
           <DivP>
-            Copyright (C) 2017-2021 by&nbsp;
+            Copyright (C) 2017-2022 by&nbsp;
             <a
               href="https://www.greenbone.net"
               target="_blank"
