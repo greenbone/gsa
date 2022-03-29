@@ -83,7 +83,7 @@
   "devDependencies": {
     "@babel/cli": "^7.17.6",
     "@storybook/react": "^6.4.19",
-    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@types/jest": "^27.4.1",
     "@testing-library/user-event": "^13.5.0",
@@ -94,7 +94,7 @@
     "jest-junit": "^13.0.0",
     "jest-styled-components": "^6.3.4",
     "lint-staged": "^8.2.1",
-    "prettier": "^2.6.0"
+    "prettier": "^2.6.1"
   },
   "jest": {
     "collectCoverageFrom": [
