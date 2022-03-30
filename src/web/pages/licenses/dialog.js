@@ -29,7 +29,7 @@ import PropTypes from 'web/utils/proptypes';
 
 const LicenseDialog = ({
   error,
-  license,
+  status,
   onClose,
   onErrorClose,
   onSave,
@@ -43,7 +43,7 @@ const LicenseDialog = ({
   };
 
   const handleSaveClick = data => {
-    if (license.status === 'active') {
+    if (status === 'active') {
       setConfirmationDialogVisible(true);
     } else {
       onSave(data);
@@ -89,7 +89,7 @@ const LicenseDialog = ({
 
 LicenseDialog.propTypes = {
   error: PropTypes.string,
-  license: PropTypes.object,
+  status: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onErrorClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
