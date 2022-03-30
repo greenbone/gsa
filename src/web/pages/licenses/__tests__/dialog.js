@@ -89,11 +89,10 @@ describe('LicenseDialog component tests', () => {
   test('should call clickhandler for save button if license not active', () => {
     const handleClose = jest.fn();
     const handleSave = jest.fn();
-    const license = {status: 'corrupt'};
 
     const {getByTestId} = render(
       <Dialog
-        license={license}
+        status="corrupt"
         onClose={handleClose}
         onErrorClose={handleClose}
         onSave={handleSave}
@@ -113,11 +112,10 @@ describe('LicenseDialog component tests', () => {
     // ConfirmationDialog, which should pop up for valid/active licenses
     const handleClose = jest.fn();
     const handleSave = jest.fn();
-    const license = {status: 'active'};
 
     const {getByTestId} = render(
       <Dialog
-        license={license}
+        status="active"
         onClose={handleClose}
         onErrorClose={handleClose}
         onSave={handleSave}
