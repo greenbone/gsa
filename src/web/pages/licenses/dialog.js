@@ -37,17 +37,24 @@ const LicenseDialog = ({
 }) => {
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
+
   const closeConfirmationDialog = () => {
     setConfirmationDialogVisible(false);
   };
 
   const handleSaveClick = data => {
-    setConfirmationDialogVisible(true);
+    if (license.status === 'active') {
+      setConfirmationDialogVisible(true);
+    } else {
+      onSave(data);
+    }
   };
+
   const handleResumeClick = data => {
     closeConfirmationDialog();
     onSave(data);
   };
+
   return (
     <SaveDialog
       error={error}

@@ -272,6 +272,7 @@ const LicensePage = () => {
       </Layout>
       {newLicenseDialogVisible && (
         <LicenseDialog
+          license={license}
           error={dialogError}
           onClose={handleCloseDialog}
           onErrorClose={handleDialogErrorClose}
