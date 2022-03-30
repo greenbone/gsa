@@ -89,7 +89,7 @@ const LicenseDialog = ({
 
 LicenseDialog.propTypes = {
   error: PropTypes.string,
-  license: PropTypes.string,
+  license: PropTypes.object,
   onClose: PropTypes.func.isRequired,
   onErrorClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
