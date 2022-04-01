@@ -153,7 +153,7 @@ describe('LicensePage tests', () => {
     expect(element).toHaveTextContent('The license expires');
     expect(element).toHaveTextContent('in 30 days');
     expect(element).toHaveTextContent('Status');
-    expect(element).toHaveTextContent('active');
+    expect(element).toHaveTextContent('License is active');
     expect(element).toHaveTextContent('ID');
     expect(element).toHaveTextContent('12345');
     expect(element).toHaveTextContent('Customer Name');
@@ -233,7 +233,7 @@ describe('LicensePage tests', () => {
     expect(element).toHaveTextContent('The license expires');
     expect(element).toHaveTextContent('in a month');
     expect(element).toHaveTextContent('Status');
-    expect(element).toHaveTextContent('active');
+    expect(element).toHaveTextContent('License is active');
     expect(element).toHaveTextContent('ID');
     expect(element).toHaveTextContent('12345');
     expect(element).toHaveTextContent('Customer Name');
