@@ -73,6 +73,21 @@ export const getLicenseApplianceModelType = value => {
   return _('Unknown');
 };
 
+export const getTranslatableLicenseStatus = value => {
+  switch (value) {
+    case 'active':
+      return _('License is active');
+    case 'corrupt':
+      return _('License is corrupted');
+    case 'expired':
+      return _('License has expired');
+    case 'no_license':
+      return _('No license available');
+    default:
+      return _('N/A');
+  }
+};
+
 export class License {
   constructor({
     id,
