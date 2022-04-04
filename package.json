@@ -60,7 +60,7 @@
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.8",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.3",
+    "react-scripts": "^5.0.0",
     "redux": "^4.1.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.1",
