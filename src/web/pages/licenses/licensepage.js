@@ -25,6 +25,7 @@ import date from 'gmp/models/date';
 import {
   getLicenseApplianceModelName,
   getLicenseApplianceModelType,
+  getTranslatableLicenseStatus,
 } from 'gmp/models/license';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -184,7 +185,9 @@ const LicensePage = () => {
                   </TableRow>
                   <TableRow>
                     <TableData>{_('Status')}</TableData>
-                    <TableData>{license.status}</TableData>
+                    <TableData>
+                      {getTranslatableLicenseStatus(license.status)}
+                    </TableData>
                   </TableRow>
                   <TableRow>
                     <TableData>{_('ID')}</TableData>
@@ -273,6 +276,7 @@ const LicensePage = () => {
       {newLicenseDialogVisible && (
         <LicenseDialog
           error={dialogError}
+          status={license.status}
           onClose={handleCloseDialog}
           onErrorClose={handleDialogErrorClose}
           onSave={handleSaveLicense}
