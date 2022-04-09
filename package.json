@@ -49,7 +49,7 @@
     "i18next-xhr-backend": "3.2.2",
     "ical.js": "^1.5.0",
     "memoize-one": "^6.0.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.34",
     "prop-types": "^15.8.1",
     "qhistory": "^1.1.0",
