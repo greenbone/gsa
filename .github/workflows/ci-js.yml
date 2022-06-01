@@ -17,9 +17,9 @@ jobs:
         # 14.x is recommended by https://nodejs.org/en/
         node-version: [14.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up node ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
         # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
@@ -45,7 +45,7 @@ jobs:
           name: linting-report
           path: ${{ env.REPORT_DIR }}
       - name: Submit test coverage to codecov.io
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: true
 
@@ -58,9 +58,9 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up node ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
         # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
@@ -79,7 +79,7 @@ jobs:
       - name: Lint JavaScript files
         run: yarn lint --format junit -o ${{ env.REPORT_FILE }}
       - name: Store Lint Results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: linting-report
           path: ${{ env.REPORT_FILE }}
