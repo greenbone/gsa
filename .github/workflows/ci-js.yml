@@ -40,7 +40,7 @@ jobs:
           JEST_JUNIT_OUTPUT_DIR: ${{ env.REPORT_DIR }}
         run: yarn test:coverage --reporters=default --reporters=jest-junit
       - name: Load Lint Results
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: linting-report
           path: ${{ env.REPORT_DIR }}
