@@ -28,7 +28,11 @@ const getCleanedMajorMinorVersion = () => {
   return `${major}.${parseInt(minor)}`;
 };
 
+<<<<<<< HEAD
 export const VERSION = '21.4.5.dev1';
+=======
+export const VERSION = '22.04.0.dev1';
+>>>>>>> ca25599c7 (Fix: Introduce new function to remove leading zero fron version for correct links to GSM-Manual)
 
 export const RELEASE_VERSION = getMajorMinorVersion();
 export const REMOVED_ZERO_RELEASE_VERSION = getCleanedMajorMinorVersion();
