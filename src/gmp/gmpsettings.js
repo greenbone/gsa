@@ -17,6 +17,10 @@
  */
 
 import {RELEASE_VERSION, REMOVED_ZERO_RELEASE_VERSION} from '../version';
+<<<<<<< HEAD
+=======
+
+>>>>>>> ca25599c7 (Fix: Introduce new function to remove leading zero fron version for correct links to GSM-Manual)
 import {isDefined} from './utils/identity';
 
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
