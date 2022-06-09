@@ -22,8 +22,19 @@ const getMajorMinorVersion = () => {
   return `${major}.${minor}`;
 };
 
+<<<<<<< HEAD
 export const VERSION = '21.4.5.dev1';
+=======
+const getCleanedMajorMinorVersion = () => {
+  // eslint-disable-next-line no-unused-vars
+  const [major, minor, ...rest] = VERSION.split('.');
+  return `${major}.${parseInt(minor)}`;
+};
+
+export const VERSION = '22.04.0.dev1';
+>>>>>>> 7cb61dcce (Fix: Introduce new function to remove leading zero fron version for correct links to GSM-Manual (#3460))
 
 export const RELEASE_VERSION = getMajorMinorVersion();
+export const REMOVED_ZERO_RELEASE_VERSION = getCleanedMajorMinorVersion();
 
 export default VERSION;
