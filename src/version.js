@@ -22,8 +22,15 @@ const getMajorMinorVersion = () => {
   return `${major}.${minor}`;
 };
 
+const getCleanedMajorMinorVersion = () => {
+  // eslint-disable-next-line no-unused-vars
+  const [major, minor, ...rest] = VERSION.split('.');
+  return `${major}.${parseInt(minor)}`;
+};
+
 export const VERSION = '21.4.5.dev1';
 
 export const RELEASE_VERSION = getMajorMinorVersion();
+export const REMOVED_ZERO_RELEASE_VERSION = getCleanedMajorMinorVersion();
 
 export default VERSION;
