@@ -16,6 +16,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+<<<<<<< HEAD
 const VERSION = '20.8.4';
+=======
+const getMajorMinorVersion = () => {
+  // eslint-disable-next-line no-unused-vars
+  const [major, minor, ...rest] = VERSION.split('.');
+  return `${major}.${minor}`;
+};
+
+const getCleanedMajorMinorVersion = () => {
+  // eslint-disable-next-line no-unused-vars
+  const [major, minor, ...rest] = VERSION.split('.');
+  return `${major}.${parseInt(minor)}`;
+};
+
+export const VERSION = '22.04.0.dev1';
+
+export const RELEASE_VERSION = getMajorMinorVersion();
+export const REMOVED_ZERO_RELEASE_VERSION = getCleanedMajorMinorVersion();
+>>>>>>> 7cb61dcce (Fix: Introduce new function to remove leading zero fron version for correct links to GSM-Manual (#3460))
 
 export default VERSION;
