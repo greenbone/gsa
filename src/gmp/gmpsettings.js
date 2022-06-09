@@ -15,15 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+import {RELEASE_VERSION, REMOVED_ZERO_RELEASE_VERSION} from '../version';
 import {isDefined} from './utils/identity';
 
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
 export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
 export const DEFAULT_RELOAD_INTERVAL_INACTIVE = 60 * 1000; // one minute
-export const DEFAULT_MANUAL_URL =
-  'http://docs.greenbone.net/GSM-Manual/gos-20.08/';
-export const DEFAULT_PROTOCOLDOC_URL =
-  'https://docs.greenbone.net/API/GMP/gmp-20.08.html';
+export const DEFAULT_MANUAL_URL = `http://docs.greenbone.net/GSM-Manual/gos-${REMOVED_ZERO_RELEASE_VERSION}/`;
+export const DEFAULT_PROTOCOLDOC_URL = `https://docs.greenbone.net/API/GMP/gmp-${RELEASE_VERSION}.html`;
 export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
 export const DEFAULT_LOG_LEVEL = 'warn';
 export const DEFAULT_TIMEOUT = 300000; // 5 minutes
