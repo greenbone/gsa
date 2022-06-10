@@ -16,9 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+<<<<<<< HEAD
 import {RELEASE_VERSION, REMOVED_ZERO_RELEASE_VERSION} from '../version';
 <<<<<<< HEAD
 =======
+=======
+import {RELEASE_VERSION} from '../version';
+>>>>>>> ac264b224 (Fix: Adjust the release version string for the manual links)
 
 >>>>>>> ca25599c7 (Fix: Introduce new function to remove leading zero fron version for correct links to GSM-Manual)
 import {isDefined} from './utils/identity';
@@ -26,7 +30,7 @@ import {isDefined} from './utils/identity';
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
 export const DEFAULT_RELOAD_INTERVAL_ACTIVE = 3 * 1000; // three seconds
 export const DEFAULT_RELOAD_INTERVAL_INACTIVE = 60 * 1000; // one minute
-export const DEFAULT_MANUAL_URL = `http://docs.greenbone.net/GSM-Manual/gos-${REMOVED_ZERO_RELEASE_VERSION}/`;
+export const DEFAULT_MANUAL_URL = `http://docs.greenbone.net/GSM-Manual/gos-${RELEASE_VERSION}/`;
 export const DEFAULT_PROTOCOLDOC_URL = `https://docs.greenbone.net/API/GMP/gmp-${RELEASE_VERSION}.html`;
 export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
 export const DEFAULT_LOG_LEVEL = 'warn';
