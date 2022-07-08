@@ -16,19 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-import {RELEASE_VERSION, REMOVED_ZERO_RELEASE_VERSION} from '../version';
-<<<<<<< HEAD
-=======
-=======
 import {RELEASE_VERSION} from '../version';
->>>>>>> ac264b224 (Fix: Adjust the release version string for the manual links)
-=======
-import {RELEASE_VERSION} from '../version';
->>>>>>> 6e3e66e38 (Remove: Faulty previous changes, regarding version string)
 
->>>>>>> ca25599c7 (Fix: Introduce new function to remove leading zero fron version for correct links to GSM-Manual)
 import {isDefined} from './utils/identity';
 
 export const DEFAULT_RELOAD_INTERVAL = 15 * 1000; // fifteen seconds
