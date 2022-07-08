@@ -27,23 +27,7 @@ const getMajorMinorVersion = () => {
   return `${major}.${minor}`;
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-const getCleanedMajorMinorVersion = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [major, minor, ...rest] = VERSION.split('.');
-  return `${major}.${parseInt(minor)}`;
-};
-
-<<<<<<< HEAD
 const VERSION = '20.8.4';
-=======
-=======
->>>>>>> ac264b224 (Fix: Adjust the release version string for the manual links)
-=======
->>>>>>> 6e3e66e38 (Remove: Faulty previous changes, regarding version string)
-export const VERSION = '22.04.0.dev1';
->>>>>>> ca25599c7 (Fix: Introduce new function to remove leading zero fron version for correct links to GSM-Manual)
 
 export const RELEASE_VERSION = getMajorMinorVersion();
 
