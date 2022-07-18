@@ -18,19 +18,17 @@
 
 const getMajorMinorVersion = () => {
   // eslint-disable-next-line no-unused-vars
-  const [major, minor, ...rest] = VERSION.split('.');
+  let [major, minor, ...rest] = VERSION.split('.');
+  minor = parseInt(minor);
+  if (minor < 10) {
+    // add a leading zero for the links
+    minor = `0${minor}`;
+  }
   return `${major}.${minor}`;
-};
-
-const getCleanedMajorMinorVersion = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [major, minor, ...rest] = VERSION.split('.');
-  return `${major}.${parseInt(minor)}`;
 };
 
 export const VERSION = '21.4.5.dev1';
 
 export const RELEASE_VERSION = getMajorMinorVersion();
-export const REMOVED_ZERO_RELEASE_VERSION = getCleanedMajorMinorVersion();
 
 export default VERSION;
