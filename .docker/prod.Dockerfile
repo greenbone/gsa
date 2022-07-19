@@ -1,4 +1,4 @@
-ARG VERSION=unstable
+ARG VERSION=stable
 ARG DEBIAN_FRONTEND=noninteractive
 
 FROM --platform=linux/amd64 debian:stable-slim as builder
