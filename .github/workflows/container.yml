@@ -6,6 +6,9 @@ on:
     tags: ["v*"]
   pull_request:
     branches: [main, stable, oldstable]
+    tags: ['v*']
+  pull_request:
+    branches: [ main, stable , oldstable ]
   workflow_dispatch:
 
 jobs:
