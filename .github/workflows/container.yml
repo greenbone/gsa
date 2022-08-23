@@ -2,8 +2,14 @@ name: Container Image Builds
 
 on:
   push:
+<<<<<<< HEAD
     branches: [main, stable]
+=======
+    branches: [ main, stable , oldstable ]
+>>>>>>> a336e88d5 (Change: Build container images for pull requests too)
     tags: ['v*']
+  pull_request:
+    branches: [ main, stable , oldstable ]
   workflow_dispatch:
 
 jobs:
@@ -15,6 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Login to Docker Registry
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -46,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           file: .docker/prod.Dockerfile
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
