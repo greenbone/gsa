@@ -55,7 +55,7 @@
     "qhistory": "^1.1.0",
     "qs": "^6.11.0",
     "react": "^16.14.0",
-    "react-beautiful-dnd": "^13.1.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-datepicker": "^1.8.0",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.8",
