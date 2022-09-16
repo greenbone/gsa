@@ -25,7 +25,7 @@
   "dependencies": {
     "@greenbone/ui-components": "2021.1.2",
     "@babel/runtime": "^7.17.8",
-    "@babel/core": "7.16.7",
+    "@babel/core": "7.19.1",
     "@sentry/react": "^7.8.0",
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
@@ -55,7 +55,7 @@
     "qhistory": "^1.1.0",
     "qs": "^6.11.0",
     "react": "^16.14.0",
-    "react-beautiful-dnd": "^13.1.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-datepicker": "^1.8.0",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.8",
@@ -81,7 +81,7 @@
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.10",
+    "@babel/cli": "^7.18.10",
     "@storybook/react": "^6.4.22",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
