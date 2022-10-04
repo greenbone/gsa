@@ -26,7 +26,7 @@
     "@greenbone/ui-components": "2021.1.2",
     "@babel/runtime": "^7.19.0",
     "@babel/core": "7.19.1",
-    "@sentry/react": "^7.8.0",
+    "@sentry/react": "^7.14.0",
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
     "@vx/shape": "^0.0.179",
@@ -81,7 +81,7 @@
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "devDependencies": {
-    "@babel/cli": "^7.18.10",
+    "@babel/cli": "^7.19.3",
     "@storybook/react": "^6.4.22",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
