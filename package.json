@@ -23,8 +23,15 @@
     "extends": "react-app"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@greenbone/ui-components": "2021.1.2",
     "@babel/core": "^7.14.0",
+=======
+    "@babel/core": "7.19.3",
+    "@babel/runtime": "^7.19.4",
+    "@greenbone/ui-components": "2021.1.2",
+    "@sentry/react": "^7.15.0",
+>>>>>>> 6a7347bbf (Update dependencies, that do not have a major update (#3519))
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
     "@vx/shape": "^0.0.179",
@@ -43,7 +50,11 @@
     "glamor": "^2.20.40",
     "history": "^4.10.1",
     "hoist-non-react-statics": "^3.3.2",
+<<<<<<< HEAD
     "i18next": "^20.2.2",
+=======
+    "i18next": "^21.10.0",
+>>>>>>> 6a7347bbf (Update dependencies, that do not have a major update (#3519))
     "i18next-xhr-backend": "3.2.2",
     "ical.js": "^1.4.0",
     "memoize-one": "^5.2.1",
@@ -58,8 +69,13 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
+<<<<<<< HEAD
     "react-scripts": "^4.0.3",
     "redux": "^4.1.0",
+=======
+    "react-scripts": "^5.0.1",
+    "redux": "^4.2.0",
+>>>>>>> 6a7347bbf (Update dependencies, that do not have a major update (#3519))
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.4.1",
@@ -79,6 +95,7 @@
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@babel/cli": "^7.13.16",
     "@storybook/react": "^6.2.9",
     "@testing-library/jest-dom": "^5.12.0",
@@ -87,6 +104,16 @@
     "@types/jest": "^26.0.23",
     "babel-plugin-i18next-extract": "^0.8.3",
     "eslint-config-prettier": "^8.3.0",
+=======
+    "@babel/cli": "^7.19.3",
+    "@storybook/react": "^6.5.12",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^29.1.2",
+    "babel-plugin-i18next-extract": "^0.9.0",
+    "eslint-config-prettier": "^8.5.0",
+>>>>>>> 6a7347bbf (Update dependencies, that do not have a major update (#3519))
     "husky": "^2.7.0",
     "jest-environment-jsdom-sixteen": "^2.0.0",
     "jest-junit": "^12.0.0",
