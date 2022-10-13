@@ -23,10 +23,17 @@
     "extends": "react-app"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@greenbone/ui-components": "2021.1.2",
     "@babel/runtime": "^7.17.8",
     "@babel/core": "7.16.7",
     "@sentry/react": "^7.0.0",
+=======
+    "@babel/core": "7.19.3",
+    "@babel/runtime": "^7.19.4",
+    "@greenbone/ui-components": "2021.1.2",
+    "@sentry/react": "^7.15.0",
+>>>>>>> 6a7347bbf (Update dependencies, that do not have a major update (#3519))
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
     "@vx/shape": "^0.0.179",
@@ -45,7 +52,11 @@
     "glamor": "^2.20.40",
     "history": "^4.10.1",
     "hoist-non-react-statics": "^3.3.2",
+<<<<<<< HEAD
     "i18next": "^21.6.14",
+=======
+    "i18next": "^21.10.0",
+>>>>>>> 6a7347bbf (Update dependencies, that do not have a major update (#3519))
     "i18next-xhr-backend": "3.2.2",
     "ical.js": "^1.5.0",
     "memoize-one": "^6.0.0",
@@ -61,7 +72,7 @@
     "react-redux": "^7.2.8",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.1",
-    "redux": "^4.1.2",
+    "redux": "^4.2.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.1",
     "styled-components": "^4.4.1",
@@ -81,6 +92,7 @@
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@babel/cli": "^7.17.10",
     "@storybook/react": "^6.4.22",
     "@testing-library/jest-dom": "^5.16.4",
@@ -88,6 +100,15 @@
     "@types/jest": "^27.5.1",
     "@testing-library/user-event": "^13.5.0",
     "babel-plugin-i18next-extract": "^0.8.3",
+=======
+    "@babel/cli": "^7.19.3",
+    "@storybook/react": "^6.5.12",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^29.1.2",
+    "babel-plugin-i18next-extract": "^0.9.0",
+>>>>>>> 6a7347bbf (Update dependencies, that do not have a major update (#3519))
     "eslint-config-prettier": "^8.5.0",
     "husky": "^2.7.0",
     "jest-environment-jsdom": "^28.1.0",
