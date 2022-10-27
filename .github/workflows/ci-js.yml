@@ -80,7 +80,7 @@ jobs:
       - name: Lint JavaScript files
         run: yarn lint --format junit -o ${{ env.REPORT_FILE }}
       - name: Store Lint Results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: linting-report
           path: ${{ env.REPORT_FILE }}
