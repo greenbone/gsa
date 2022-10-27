@@ -17,7 +17,7 @@ jobs:
         # 14.x is recommended by https://nodejs.org/en/
         node-version: [10.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up node ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
@@ -59,7 +59,7 @@ jobs:
       matrix:
         node-version: [10.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up node ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
