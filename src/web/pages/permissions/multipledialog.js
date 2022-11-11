@@ -200,7 +200,7 @@ const MultiplePermissionDialog = withCapabilities(
                     name="includeRelated"
                     value={state.includeRelated}
                     items={includeRelatedItems}
-                    onChange={onValueChange}
+                    onChange={onChange}
                   />
                 </Divider>
                 {hasRelated && (
