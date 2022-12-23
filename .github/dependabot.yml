@@ -2,6 +2,7 @@ version: 2
 updates:
   - package-ecosystem: npm
     directory: '/'
+    target-branch: "stable"
     schedule:
       interval: monthly
       time: '04:00'
