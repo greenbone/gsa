@@ -63,7 +63,7 @@
     "react-scripts": "^5.0.1",
     "redux": "^4.1.2",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.4.1",
+    "redux-thunk": "^2.4.2",
     "styled-components": "^4.4.1",
     "uuid": "^8.3.2",
     "whatwg-fetch": "^3.6.2"
