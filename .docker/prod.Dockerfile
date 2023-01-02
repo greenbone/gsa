@@ -1,7 +1,7 @@
 ARG VERSION=stable
 ARG DEBIAN_FRONTEND=noninteractive
 
-FROM debian:stable-slim as builder
+FROM --platform=linux/amd64 debian:stable-slim as builder
 
 ENV NODE_VERSION=node_14.x
 ENV NODE_KEYRING=/usr/share/keyrings/nodesource.gpg
