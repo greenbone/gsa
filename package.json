@@ -1,6 +1,6 @@
 {
   "name": "gsa",
-  "version": "22.4.0",
+  "version": "22.4.1",
   "description": "Greenbone Security Assistant",
   "keywords": [
     "openvas",
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "main": "src/index.js",
   "engines": {
