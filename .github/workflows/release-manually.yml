@@ -1,4 +1,4 @@
-name: Manually release gvmd with pontos
+name: Manually release GSA with pontos
 
 on:
   workflow_dispatch:
