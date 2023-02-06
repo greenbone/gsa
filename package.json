@@ -30,7 +30,12 @@
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
     "@vx/shape": "^0.0.179",
+<<<<<<< HEAD
     "babel-loader": "9.1.2",
+=======
+    "babel-loader": "9.1.0",
+    "core-js": "^3.27.2",
+>>>>>>> e11b811a2 (Remove storybook)
     "d3-cloud": "^1.2.5",
     "d3-color": "^2.0.0",
     "d3-force": "^2.0.0",
@@ -75,14 +80,11 @@
     "start": "react-scripts start",
     "build": "INLINE_RUNTIME_CHUNK=false react-scripts build && rm -f build/*.js*",
     "eject": "react-scripts eject",
-    "storybook": "NODE_PATH=src start-storybook",
-    "build-storybook": "NODE_PATH=src build-storybook",
     "i18n-extract": "NODE_ENV=development babel -f .babelrc 'src/**/*.{js,jsx,ts,tsx}'",
     "clean-up-translations": "node scripts/cleanuptranslations"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
-    "@storybook/react": "^6.5.13",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
