@@ -8,4 +8,3 @@ public/config.js
 # directory files for image previews
 .directory
 coverage/
-storybook-static/
