@@ -23,13 +23,8 @@
     "extends": "react-app"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@babel/core": "7.20.5",
-    "@babel/runtime": "^7.20.6",
-=======
     "@babel/core": "7.20.12",
     "@babel/runtime": "^7.20.13",
->>>>>>> 23c2225d2 (Build(deps): Bump @babel/runtime from 7.20.6 to 7.20.13)
     "@greenbone/ui-components": "2021.1.2",
     "@sentry/react": "^7.22.0",
     "@vx/axis": "^0.0.183",
