@@ -2188,13 +2188,6 @@
     terminal-link "^2.0.0"
     v8-to-istanbul "^8.1.0"
 
-"@jest/schemas@^29.0.0":
-  version "29.0.0"
-  resolved "https://registry.yarnpkg.com/@jest/schemas/-/schemas-29.0.0.tgz#5f47f5994dd4ef067fb7b4188ceac45f77fe952a"
-  integrity sha512-3Ab5HgYIIAnS0HjqJHQYZS+zXc4tUmTmBH3z83ajI6afXp8X3ZtdLX+nXx+I7LNkJD7uN9LAVhgnjDgZa2z0kA==
-  dependencies:
-    "@sinclair/typebox" "^0.24.1"
-
 "@jest/schemas@^29.4.0":
   version "29.4.0"
   resolved "https://registry.yarnpkg.com/@jest/schemas/-/schemas-29.4.0.tgz#0d6ad358f295cc1deca0b643e6b4c86ebd539f17"
@@ -2522,11 +2515,6 @@
   dependencies:
     "@sentry/types" "7.22.0"
     tslib "^1.9.3"
-
-"@sinclair/typebox@^0.24.1":
-  version "0.24.22"
-  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.24.22.tgz#0da18e6e75701d6609c7c68fe18002bb1f47345f"
-  integrity sha512-JsBe3cOFpNZ6yjBYnXKhcENWy5qZE3PQZwExQ5ksA/h8qp4bwwxFmy07A6bC2R6qv6+RF3SfrbQTskTwYNTXUQ==
 
 "@sinclair/typebox@^0.25.16":
   version "0.25.21"
@@ -2929,10 +2917,10 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@*", "@types/jest@^29.2.3":
-  version "29.2.3"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.2.3.tgz#f5fd88e43e5a9e4221ca361e23790d48fcf0a211"
-  integrity sha512-6XwoEbmatfyoCjWRX7z0fKMmgYKe9+/HrviJ5k0X/tjJWHGAezZOfYaxqQKuzG/TvQyr+ktjm4jgbk0s4/oF2w==
+"@types/jest@*", "@types/jest@^29.4.0":
+  version "29.4.0"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.4.0.tgz#a8444ad1704493e84dbf07bb05990b275b3b9206"
+  integrity sha512-VaywcGQ9tPorCX/Jkkni7RWGFfI11whqzs8dvxF41P17Z+z872thvEvlIbznjPJ02kl1HMX3LmLOonsj2n7HeQ==
   dependencies:
     expect "^29.0.0"
     pretty-format "^29.0.0"
@@ -8352,6 +8340,13 @@ lower-case@^2.0.2:
   dependencies:
     tslib "^2.0.3"
 
+lru-cache@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-5.1.1.tgz#1da27e6710271947695daf6848e847f01d84b920"
+  integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
+  dependencies:
+    yallist "^3.0.2"
+
 lru-cache@^7.4.0:
   version "7.7.3"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.7.3.tgz#98cd19eef89ce6a4a3c4502c17c833888677c252"
@@ -9821,16 +9816,7 @@ pretty-format@^27.0.2, pretty-format@^27.5.1:
     ansi-styles "^5.0.0"
     react-is "^17.0.1"
 
-pretty-format@^29.0.0, pretty-format@^29.0.3:
-  version "29.2.1"
-  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-29.2.1.tgz#86e7748fe8bbc96a6a4e04fa99172630907a9611"
-  integrity sha512-Y41Sa4aLCtKAXvwuIpTvcFBkyeYp2gdFWzXGA+ZNES3VwURIB165XO/z7CjETwzCCS53MjW/rLMyyqEnTtaOfA==
-  dependencies:
-    "@jest/schemas" "^29.0.0"
-    ansi-styles "^5.0.0"
-    react-is "^18.0.0"
-
-pretty-format@^29.4.1:
+pretty-format@^29.0.0, pretty-format@^29.0.3, pretty-format@^29.4.1:
   version "29.4.1"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-29.4.1.tgz#0da99b532559097b8254298da7c75a0785b1751c"
   integrity sha512-dt/Z761JUVsrIKaY215o1xQJBGlSmTx/h4cSqXqjHLnU1+Kt+mavVE7UgqJJO5ukx5HjSswHfmXz4LjS2oIJfg==
@@ -12485,6 +12471,11 @@ y18n@^5.0.5:
   version "5.0.8"
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-5.0.8.tgz#7f4934d0f7ca8c56f95314939ddcd2dd91ce1d55"
   integrity sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==
+
+yallist@^3.0.2:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
+  integrity sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
 
 yaml@^1.10.0:
   version "1.10.0"
