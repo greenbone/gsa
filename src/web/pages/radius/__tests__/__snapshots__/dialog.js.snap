@@ -627,7 +627,7 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
                         name="radiuskey"
                         size="50"
                         type="password"
-                        value="bar"
+                        value=""
                       />
                     </div>
                   </div>
