@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 import Settings from 'gmp/models/settings';
-import {rendererWith, fireEvent, wait} from 'web/utils/testing';
+import {rendererWith, wait} from 'web/utils/testing';
 
 import RadiusAuthentication from '../radiuspage';
 
@@ -44,7 +43,7 @@ describe('RADIUS page renders', () => {
 
     const {render} = rendererWith({gmp, store: true});
 
-    const {element, queryByText} = render(<RadiusAuthentication />);
+    const {queryByText} = render(<RadiusAuthentication />);
 
     await wait();
 
@@ -72,7 +71,7 @@ describe('RADIUS page renders', () => {
 
     const {render} = rendererWith({gmp, store: true});
 
-    const {element, getByText} = render(<RadiusAuthentication />);
+    const {getByText} = render(<RadiusAuthentication />);
 
     await wait();
 
