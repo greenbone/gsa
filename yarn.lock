@@ -3237,12 +3237,12 @@
   dependencies:
     d3-shape "^1.0.6"
 
-"@vx/gradient@^0.0.183":
-  version "0.0.183"
-  resolved "https://registry.yarnpkg.com/@vx/gradient/-/gradient-0.0.183.tgz#85ba9764082d5ed2e044f1f4cab6aef9a2e2463d"
-  integrity sha512-Lxq9wRVesUAWZTFxB6k3VtGBgHhSTEJIUoyhetwPanXma8y0l6udXzVEeVovl8J2OTmSnxZs0RP4GPXD65ht4Q==
+"@vx/gradient@^0.0.199":
+  version "0.0.199"
+  resolved "https://registry.yarnpkg.com/@vx/gradient/-/gradient-0.0.199.tgz#f30fd62281281c39127438e09fc4a793066b62bf"
+  integrity sha512-DI4PBH5+eDquTXS1vVEv6VtTZlDmj2g3DRPuDq7BL2EXTSI8tdyEdxkDHTWeO2XHLaltVSR9YTykFbfp3VBiEw==
   dependencies:
-    classnames "^2.2.5"
+    "@types/react" "*"
     prop-types "^15.5.7"
 
 "@vx/group@0.0.170":
