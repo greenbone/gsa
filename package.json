@@ -29,7 +29,7 @@
     "@sentry/react": "^7.22.0",
     "@vx/axis": "^0.0.183",
     "@vx/gradient": "^0.0.183",
-    "@vx/shape": "^0.0.179",
+    "@vx/shape": "^0.0.199",
     "babel-loader": "9.1.0",
     "core-js": "^3.27.2",
     "d3-cloud": "^1.2.5",
