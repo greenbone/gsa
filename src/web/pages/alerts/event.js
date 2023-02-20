@@ -29,6 +29,8 @@ import {
   EVENT_TYPE_OWNED_TICKET_CHANGED,
 } from 'gmp/models/alert';
 
+import PropTypes from 'web/utils/proptypes';
+
 const Event = ({event = {}}) => {
   if (!isDefined(event.type) || !isDefined(event.data)) {
     return null;
@@ -68,6 +70,10 @@ const Event = ({event = {}}) => {
     return _('Owned Ticket changed');
   }
   return event.type;
+};
+
+Event.propTypes = {
+  event: PropTypes.object,
 };
 
 export default Event;
