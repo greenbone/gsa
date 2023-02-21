@@ -31,6 +31,8 @@ import {
   CONDITION_DIRECTION_INCREASED,
 } from 'gmp/models/alert';
 
+import PropTypes from 'web/utils/proptypes';
+
 const Condition = ({condition = {}, event}) => {
   if (!isDefined(condition.type) || !isDefined(condition.data)) {
     return null;
@@ -96,6 +98,11 @@ const Condition = ({condition = {}, event}) => {
     return _('Severity level changed');
   }
   return condition.type;
+};
+
+Condition.propTypes = {
+  condition: PropTypes.object,
+  event: PropTypes.object.isRequired,
 };
 
 export default Condition;
