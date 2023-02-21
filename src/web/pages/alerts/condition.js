@@ -102,7 +102,7 @@ const Condition = ({condition = {}, event}) => {
 
 Condition.propTypes = {
   condition: PropTypes.object,
-  event: PropTypes.object,
+  event: PropTypes.object.isRequired,
 };
 
 export default Condition;
