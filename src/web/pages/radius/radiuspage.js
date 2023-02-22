@@ -148,13 +148,8 @@ class RadiusAuthentication extends React.Component {
       return <Loading />;
     }
 
-    const {
-      hasRadiusSupport,
-      dialogVisible,
-      enabled,
-      radiushost,
-      radiuskey,
-    } = this.state;
+    const {hasRadiusSupport, dialogVisible, enabled, radiushost, radiuskey} =
+      this.state;
 
     return (
       <React.Fragment>
@@ -184,7 +179,7 @@ class RadiusAuthentication extends React.Component {
                 </TableRow>
                 <TableRow>
                   <TableData>{_('Secret Key')}</TableData>
-                  <TableData>********</TableData>
+                  <TableData>{radiuskey}</TableData>
                 </TableRow>
               </TableBody>
             </Table>
@@ -196,7 +191,6 @@ class RadiusAuthentication extends React.Component {
           <RadiusDialog
             enable={enabled}
             radiushost={radiushost}
-            radiuskey={radiuskey}
             onClose={this.closeDialog}
             onSave={this.handleSaveSettings}
           />
@@ -217,10 +211,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    undefined,
-    mapDispatchToProps,
-  ),
+  connect(undefined, mapDispatchToProps),
 )(RadiusAuthentication);
 
 // vim: set ts=2 sw=2 tw=80:
