@@ -31,17 +31,11 @@ import TextField from 'web/components/form/textfield';
 
 import Layout from 'web/components/layout/layout';
 
-const RadiusDialog = ({
-  enable = false,
-  radiushost = '',
-  radiuskey = '',
-  onClose,
-  onSave,
-}) => {
+const RadiusDialog = ({enable = false, radiushost = '', onClose, onSave}) => {
   const uncontrolledValues = {
     enable,
     radiushost,
-    radiuskey,
+    radiuskey: '',
   };
   return (
     <SaveDialog
@@ -90,7 +84,6 @@ const RadiusDialog = ({
 RadiusDialog.propTypes = {
   enable: PropTypes.bool,
   radiushost: PropTypes.string,
-  radiuskey: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };

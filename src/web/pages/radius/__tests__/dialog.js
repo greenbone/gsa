@@ -30,7 +30,6 @@ describe('RADIUS dialog component tests', () => {
       <Dialog
         enable={true}
         radiushost="foo"
-        radiuskey="bar"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -47,7 +46,6 @@ describe('RADIUS dialog component tests', () => {
       <Dialog
         enable={true}
         radiushost="foo"
-        radiuskey="bar"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -58,7 +56,7 @@ describe('RADIUS dialog component tests', () => {
     expect(handleSave).toHaveBeenCalledWith({
       enable: true,
       radiushost: 'foo',
-      radiuskey: 'bar',
+      radiuskey: '',
     });
   });
 
@@ -70,7 +68,6 @@ describe('RADIUS dialog component tests', () => {
       <Dialog
         enable={true}
         radiushost="foo"
-        radiuskey="bar"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -91,7 +88,6 @@ describe('RADIUS dialog component tests', () => {
       <Dialog
         enable={true}
         radiushost="foo"
-        radiuskey="x"
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -104,7 +100,7 @@ describe('RADIUS dialog component tests', () => {
     userEvent.type(radiusHostTextField, 'lorem');
 
     const radiusKeyTextField = getByTestId('radiuskey-textfield');
-    userEvent.type(radiusKeyTextField, '{backspace}bar');
+    userEvent.type(radiusKeyTextField, 'bar');
 
     const saveButton = getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
