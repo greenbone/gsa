@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {parse} from 'fast-xml-parser';
+import {XMLParser} from 'fast-xml-parser';
 
 import {parseEnvelopeMeta, parseXmlEncodedString} from 'gmp/parser';
 
@@ -28,20 +28,23 @@ const PARSER_OPTIONS = {
   ignoreAttributes: false,
   ignoreNameSpace: true,
   textNodeName: '__text',
-  attrValueProcessor: attr => parseXmlEncodedString(attr),
-  tagValueProcessor: value => parseXmlEncodedString(value),
+  attributeValueProcessor: (name, value, jPath) => parseXmlEncodedString(value),
+  tagValueProcessor: (name, value, jPath, hasAttributes, isLeafNode) =>
+    parseXmlEncodedString(value),
 };
+
+const xmlParser = new XMLParser(PARSER_OPTIONS);
 
 const transformXmlData = response => {
   const xmlString = response.plainData('text');
-  const {envelope} = parse(xmlString, PARSER_OPTIONS);
+  const {envelope} = xmlParser.parse(xmlString);
   const meta = parseEnvelopeMeta(envelope);
   return response.set(envelope, meta);
 };
 
 const transformRejection = rej => {
   const xmlString = rej.plainData('text');
-  return isDefined(xmlString) ? parse(xmlString, PARSER_OPTIONS) : undefined;
+  return isDefined(xmlString) ? xmlParser.parse(xmlString) : undefined;
 };
 
 const transformObject = {
