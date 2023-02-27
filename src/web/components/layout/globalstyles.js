@@ -78,6 +78,16 @@ const GlobalStyles = createGlobalStyle`
   p {
     margin: 0 0 10px;
   }
+
+  .axis-label {
+    fill: ${Theme.darkGray}
+  }
+
+  .axis-line, .axis-tick line {
+    shape-rendering: 'crispEdges';
+    stroke: ${Theme.mediumGray};
+    stroke-width: 0.99;
+  }
 `;
 
 export default GlobalStyles;
