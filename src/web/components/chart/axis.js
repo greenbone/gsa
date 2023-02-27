@@ -17,8 +17,6 @@
  */
 import React from 'react';
 
-import {css} from 'glamor';
-
 import {Axis as VxAxis} from '@vx/axis';
 
 import PropTypes from 'web/utils/proptypes';
@@ -27,24 +25,6 @@ import Theme from 'web/utils/theme';
 const FONT_SIZE = 10;
 
 const DEFAULT_TICK_LENGTH = 8;
-
-const labelCss = css({
-  fill: Theme.darkGray,
-});
-
-const lineCss = css({
-  shapeRendering: 'crispEdges',
-  stroke: Theme.mediumGray,
-  strokeWidth: 0.99,
-});
-
-const tickCss = css({
-  '& line': {
-    stroke: Theme.mediumGray,
-    shapeRendering: 'crispEdges',
-    strokeWidth: 0.99,
-  },
-});
 
 const DEFAULT_TICK_PROPS = {
   fill: Theme.mediumGray,
@@ -98,10 +78,10 @@ const Axis = ({
 }) => (
   <VxAxis
     {...props}
-    axisLineClassName={`${lineCss}`}
-    tickClassName={`${tickCss}`}
+    axisLineClassName="axis-line"
+    tickClassName="axis-tick"
     labelOffset={labelOffset}
-    labelClassName={`${labelCss}`}
+    labelClassName="axis-label"
     orientation={orientation}
     rangePadding={rangePadding}
     tickLabelProps={tickLabelProps}
