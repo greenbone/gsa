@@ -44,6 +44,7 @@ const SmbMethodPart = ({
   reportFormats,
   smbCredential,
   smbFilePath,
+  smbMaxProtocol,
   smbReportFormat,
   smbSharePath,
   onChange,
@@ -108,6 +109,14 @@ const SmbMethodPart = ({
           onChange={onChange}
         />
       </FormGroup>
+
+      <FormGroup title={_('Max Protocol')}>
+        <TextField
+          name={prefix + 'smb_max_protocol'}
+          value={smbMaxProtocol}
+          onChange={onChange}
+        />
+      </FormGroup>
     </Layout>
   );
 };
@@ -118,6 +127,7 @@ SmbMethodPart.propTypes = {
   reportFormats: PropTypes.array,
   smbCredential: PropTypes.id,
   smbFilePath: PropTypes.string.isRequired,
+  smbMaxProtocol: PropTypes.string,
   smbReportFormat: PropTypes.id,
   smbSharePath: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,

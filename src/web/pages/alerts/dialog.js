@@ -753,6 +753,7 @@ class AlertDialog extends React.Component {
                   reportFormats={report_formats}
                   smbCredential={values.method_data_smb_credential}
                   smbFilePath={values.method_data_smb_file_path}
+                  smbMaxProtocol={values.method_data_smb_max_protocol}
                   smbSharePath={values.method_data_smb_share_path}
                   smbReportFormat={values.method_data_smb_report_format}
                   onNewCredentialClick={onNewSmbCredentialClick}
