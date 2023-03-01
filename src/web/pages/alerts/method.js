@@ -309,6 +309,12 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                   </TableData>
                 </TableRow>
               )}
+              {isDefined(data.smb_max_protocol?.value) && (
+                <TableRow>
+                  <TableData>{_('Max Protocol')}</TableData>
+                  <TableData>{data.smb_max_protocol.value}</TableData>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>
