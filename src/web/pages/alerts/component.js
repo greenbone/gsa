@@ -111,53 +111,42 @@ class AlertComponent extends React.Component {
     };
 
     this.handleCreateCredential = this.handleCreateCredential.bind(this);
-    this.handleEmailCredentialChange = this.handleEmailCredentialChange.bind(
-      this,
-    );
+    this.handleEmailCredentialChange =
+      this.handleEmailCredentialChange.bind(this);
     this.handleFilterIdChange = this.handleFilterIdChange.bind(this);
     this.handleTestAlert = this.handleTestAlert.bind(this);
-    this.handlePasswordOnlyCredentialChange = this.handlePasswordOnlyCredentialChange.bind(
-      this,
-    );
+    this.handlePasswordOnlyCredentialChange =
+      this.handlePasswordOnlyCredentialChange.bind(this);
     this.handleScpCredentialChange = this.handleScpCredentialChange.bind(this);
     this.handleSaveComposerContent = this.handleSaveComposerContent.bind(this);
     this.handleSmbCredentialChange = this.handleSmbCredentialChange.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
-    this.handleVeriniceCredentialChange = this.handleVeriniceCredentialChange.bind(
-      this,
-    );
-    this.handleTippingPointCredentialChange = this.handleTippingPointCredentialChange.bind(
-      this,
-    );
-    this.handleVfireCredentialChange = this.handleVfireCredentialChange.bind(
-      this,
-    );
+    this.handleVeriniceCredentialChange =
+      this.handleVeriniceCredentialChange.bind(this);
+    this.handleTippingPointCredentialChange =
+      this.handleTippingPointCredentialChange.bind(this);
+    this.handleVfireCredentialChange =
+      this.handleVfireCredentialChange.bind(this);
     this.handleReportFormatsChange = this.handleReportFormatsChange.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.handleCloseAlertDialog = this.handleCloseAlertDialog.bind(this);
-    this.handleOpenContentComposerDialog = this.handleOpenContentComposerDialog.bind(
-      this,
-    );
-    this.closeContentComposerDialog = this.closeContentComposerDialog.bind(
-      this,
-    );
-    this.openPasswordOnlyCredentialDialog = this.openPasswordOnlyCredentialDialog.bind(
-      this,
-    );
+    this.handleOpenContentComposerDialog =
+      this.handleOpenContentComposerDialog.bind(this);
+    this.closeContentComposerDialog =
+      this.closeContentComposerDialog.bind(this);
+    this.openPasswordOnlyCredentialDialog =
+      this.openPasswordOnlyCredentialDialog.bind(this);
     this.openScpCredentialDialog = this.openScpCredentialDialog.bind(this);
     this.openSmbCredentialDialog = this.openSmbCredentialDialog.bind(this);
-    this.openVeriniceCredentialDialog = this.openVeriniceCredentialDialog.bind(
-      this,
-    );
+    this.openVeriniceCredentialDialog =
+      this.openVeriniceCredentialDialog.bind(this);
     this.openVfireCredentialDialog = this.openVfireCredentialDialog.bind(this);
-    this.openTippingPointCredentialDialog = this.openTippingPointCredentialDialog.bind(
-      this,
-    );
+    this.openTippingPointCredentialDialog =
+      this.openTippingPointCredentialDialog.bind(this);
     this.openEmailCredentialDialog = this.openEmailCredentialDialog.bind(this);
-    this.handleCloseCredentialDialog = this.handleCloseCredentialDialog.bind(
-      this,
-    );
+    this.handleCloseCredentialDialog =
+      this.handleCloseCredentialDialog.bind(this);
   }
 
   handleCreateCredential(credentialdata) {
@@ -573,6 +562,10 @@ class AlertComponent extends React.Component {
               method.data.smb_file_path_type,
               '',
             ),
+            method_data_smb_max_protocol: getValue(
+              method.data.smb_max_protocol,
+              '',
+            ),
             method_data_smb_report_format: getValue(
               method.data.smb_report_format,
               '',
@@ -606,10 +599,11 @@ class AlertComponent extends React.Component {
               getValue(method.data.tp_sms_hostname, NO_VALUE),
             ),
 
-            method_data_verinice_server_report_format: select_verinice_report_id(
-              report_formats,
-              getValue(method.data.verinice_server_report_format),
-            ),
+            method_data_verinice_server_report_format:
+              select_verinice_report_id(
+                report_formats,
+                getValue(method.data.verinice_server_report_format),
+              ),
             method_data_verinice_server_url: getValue(
               method.data.verinice_server_url,
             ),
@@ -753,9 +747,8 @@ class AlertComponent extends React.Component {
             method_data_smb_share_path: undefined,
             method_data_smb_file_path: undefined,
             method_data_smb_file_path_type: undefined,
-            method_data_verinice_server_report_format: select_verinice_report_id(
-              report_formats,
-            ),
+            method_data_verinice_server_report_format:
+              select_verinice_report_id(report_formats),
             method_data_pkcs12_credential: UNSET_VALUE,
             method_data_vfire_credential: undefined,
             method_data_vfire_base_url: undefined,
@@ -972,6 +965,7 @@ class AlertComponent extends React.Component {
       method_data_smb_credential,
       method_data_smb_file_path,
       method_data_smb_file_path_type,
+      method_data_smb_max_protocol,
       method_data_smb_report_format,
       method_data_smb_share_path,
       method_data_snmp_agent,
@@ -1092,6 +1086,7 @@ class AlertComponent extends React.Component {
                 method_data_smb_credential={method_data_smb_credential}
                 method_data_smb_file_path={method_data_smb_file_path}
                 method_data_smb_file_path_type={method_data_smb_file_path_type}
+                method_data_smb_max_protocol={method_data_smb_max_protocol}
                 method_data_smb_report_format={method_data_smb_report_format}
                 method_data_smb_share_path={method_data_smb_share_path}
                 method_data_snmp_agent={method_data_snmp_agent}
