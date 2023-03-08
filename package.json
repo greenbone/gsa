@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/core": "7.21.0",
-    "@babel/runtime": "^7.20.13",
+    "@babel/runtime": "^7.21.0",
     "@greenbone/ui-components": "2021.1.2",
     "@sentry/react": "^7.37.2",
     "@vx/axis": "^0.0.199",
