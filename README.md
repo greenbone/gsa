@@ -143,5 +143,5 @@ github](https://github.com/greenbone/gsa/issues) first.
 ## License
 
 Copyright (C) 2009-2022 [Greenbone AG](https://www.greenbone.net/)
-AGPL-3.0
-Licensed under the [GNU Affero General Public License v3.0 or later](LICENSE).
+
+Licensed under the AGPL-3.0 [GNU Affero General Public License v3.0 or later](LICENSE).
