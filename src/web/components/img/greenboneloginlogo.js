@@ -1,4 +1,4 @@
-/* Copyright (C) 2019-2022 Greenbone Networks GmbH
+/* Copyright (C) 2019-2022 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -31,7 +31,7 @@ const Image = styled(Img)`
 
 const LoginLogo = props => {
   return (
-    <Image alt={_('Greenbone Networks GmbH')} src={'greenbonehorizontal.png'} />
+    <Image alt={_('Greenbone AG')} src={'greenbonehorizontal.png'} />
   );
 };
 
