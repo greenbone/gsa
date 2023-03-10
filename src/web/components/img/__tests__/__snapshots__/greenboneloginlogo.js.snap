@@ -10,7 +10,7 @@ exports[`GreenboneLogo tests should render 1`] = `
 }
 
 <img
-  alt="Greenbone Networks GmbH"
+  alt="Greenbone AG"
   class="c0"
   src="/img/greenbonehorizontal.png"
 />

@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2022 Greenbone Networks GmbH
+/* Copyright (C) 2017-2022 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -91,7 +91,7 @@ const About = ({gmp}) => (
               target="_blank"
               rel="noopener noreferrer"
             >
-              Greenbone Networks GmbH
+              Greenbone AG
             </a>
           </DivP>
           <DivP>
