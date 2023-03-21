@@ -34,16 +34,10 @@ jobs:
       with:
         languages: ${{ matrix.language }}
       # build between init and analyze ...
-    - name: Get Yarn cache directory
-      id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
-    - name: Use Yarn cache
-      uses: actions/cache@v3
-      id: yarn-cache
+    - name: Install node
+      uses: actions/setup-node@v3
       with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-      # `--prefer-offline` gives cache priority
+        cache: 'yarn'
     - name: Install dependencies
       run: yarn install --prefer-offline
     - name: Perform CodeQL Analysis
