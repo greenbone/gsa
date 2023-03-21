@@ -26,7 +26,7 @@
     "@babel/core": "7.21.0",
     "@babel/runtime": "^7.20.13",
     "@greenbone/ui-components": "2021.1.2",
-    "@sentry/react": "^7.37.2",
+    "@sentry/react": "^7.39.0",
     "@vx/axis": "^0.0.199",
     "@vx/gradient": "^0.0.199",
     "@vx/shape": "^0.0.199",
