@@ -32,6 +32,7 @@ describe('Ldap dialog component tests', () => {
         authdn="foo"
         enable={true}
         ldaphost="bar"
+        ldapsOnly={true}
         onChange={handleChange}
         onClose={handleClose}
         onSave={handleSave}
@@ -51,6 +52,7 @@ describe('Ldap dialog component tests', () => {
         authdn="foo"
         enable={true}
         ldaphost="bar"
+        ldapsOnly={true}
         onChange={handleValueChange}
         onClose={handleClose}
         onSave={handleSave}
@@ -63,6 +65,7 @@ describe('Ldap dialog component tests', () => {
       authdn: 'foo',
       enable: true,
       ldaphost: 'bar',
+      ldapsOnly: true,
     });
   });
 
@@ -96,6 +99,7 @@ describe('Ldap dialog component tests', () => {
         authdn="foo"
         enable={true}
         ldaphost="bar"
+        ldapsOnly={false}
         onClose={handleClose}
         onSave={handleSave}
       />,
@@ -110,10 +114,14 @@ describe('Ldap dialog component tests', () => {
     const ldapHostTextField = getByTestId('ldaphost-textfield');
     fireEvent.change(ldapHostTextField, {target: {value: 'ipsum'}});
 
+    const ldapsOnlyCheck = getByTestId('ldapsOnly-checkbox');
+    fireEvent.click(ldapsOnlyCheck);
+
     const saveButton = getByTestId('dialog-save-button');
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
+      ldapsOnly: true,
       authdn: 'lorem',
       enable: false,
       ldaphost: 'ipsum',
