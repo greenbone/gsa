@@ -35,6 +35,7 @@ const LdapDialog = ({
   authdn = '',
   enable = false,
   ldaphost = '',
+  ldapsOnly = false,
   onClose,
   onSave,
 }) => {
@@ -42,6 +43,7 @@ const LdapDialog = ({
     authdn,
     enable,
     ldaphost,
+    ldapsOnly,
   };
   return (
     <SaveDialog
@@ -86,6 +88,16 @@ const LdapDialog = ({
               <FileField name="certificate" onChange={onValueChange} />
             </Layout>
           </FormGroup>
+          <FormGroup title={_('Use LDAPS only')}>
+            <CheckBox
+              data-testid="ldapsOnly-checkbox"
+              name="ldapsOnly"
+              checked={values.ldapsOnly}
+              checkedValue={true}
+              unCheckedValue={false}
+              onChange={onValueChange}
+            />
+          </FormGroup>
         </Layout>
       )}
     </SaveDialog>
@@ -96,6 +108,7 @@ LdapDialog.propTypes = {
   authdn: PropTypes.string,
   enable: PropTypes.bool,
   ldaphost: PropTypes.string,
+  ldapsOnly: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
