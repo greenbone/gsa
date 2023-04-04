@@ -26,7 +26,7 @@ import {success, rejection} from './xml';
 const PARSER_OPTIONS = {
   attributeNamePrefix: '_',
   ignoreAttributes: false,
-  ignoreNameSpace: true,
+  removeNSPrefix: true,
   textNodeName: '__text',
   attributeValueProcessor: (name, value, jPath) => parseXmlEncodedString(value),
   tagValueProcessor: (name, value, jPath, hasAttributes, isLeafNode) =>
