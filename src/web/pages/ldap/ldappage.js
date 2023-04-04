@@ -98,15 +98,15 @@ class LdapAuthentication extends React.Component {
       const {data: settings} = response;
       // ldap support is enabled in gvm-libs
       const hasLdapSupport = settings.has('method:ldap_connect');
-      const {authdn, certificateInfo, enabled, ldaphost} = settings.get(
-        'method:ldap_connect',
-      );
+      const {authdn, certificateInfo, enabled, ldaphost, ldapsOnly} =
+        settings.get('method:ldap_connect');
       this.setState({
         hasLdapSupport,
         authdn,
         certificateInfo,
         enabled,
         ldaphost,
+        ldapsOnly,
         loading: false,
         initial: false,
       });
@@ -120,7 +120,7 @@ class LdapAuthentication extends React.Component {
     }
   }
 
-  handleSaveSettings({authdn, certificate, enable, ldaphost}) {
+  handleSaveSettings({authdn, certificate, enable, ldaphost, ldapsOnly}) {
     const {gmp} = this.props;
 
     this.handleInteraction();
@@ -131,6 +131,7 @@ class LdapAuthentication extends React.Component {
         certificate,
         enable,
         ldaphost,
+        ldapsOnly,
       })
       .then(() => {
         this.loadLdapAuthSettings();
@@ -158,6 +159,7 @@ class LdapAuthentication extends React.Component {
       enabled,
       hasLdapSupport,
       ldaphost,
+      ldapsOnly,
     } = this.state;
 
     return (
@@ -206,6 +208,10 @@ class LdapAuthentication extends React.Component {
                   <TableData>{_('Issued by')}</TableData>
                   <TableData>{certificateInfo.issuer}</TableData>
                 </TableRow>
+                <TableRow>
+                  <TableData>{_('Use LDAPS only')}</TableData>
+                  <TableData>{renderYesNo(ldapsOnly)}</TableData>
+                </TableRow>
               </TableBody>
             </Table>
           ) : (
@@ -218,6 +224,7 @@ class LdapAuthentication extends React.Component {
             authdn={authdn}
             enable={enabled}
             ldaphost={ldaphost}
+            ldapsOnly={ldapsOnly}
             onClose={this.closeDialog}
             onSave={this.handleSaveSettings}
           />
@@ -238,10 +245,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    undefined,
-    mapDispatchToProps,
-  ),
+  connect(undefined, mapDispatchToProps),
 )(LdapAuthentication);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -114,6 +114,8 @@ export class UserCommand extends EntityCommand {
           forEach(group.auth_conf_setting, setting => {
             if (setting.key === 'enable') {
               values.enabled = setting.value === true;
+            } else if (setting.key === 'ldaps-only') {
+              values.ldapsOnly = setting.value === true;
             } else {
               values[setting.key] = setting.value;
             }
