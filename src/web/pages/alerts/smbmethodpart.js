@@ -38,6 +38,13 @@ import TextField from 'web/components/form/textfield';
 
 import NewIcon from 'web/components/icon/newicon';
 
+const smbMaxProtocolItems = [
+  {label: _('Default'), value: ''},
+  {label: 'NT1', value: 'NT1'},
+  {label: 'SMB2', value: 'SMB2'},
+  {label: 'SMB3', value: 'SMB3'},
+];
+
 const SmbMethodPart = ({
   prefix,
   credentials = [],
@@ -111,8 +118,9 @@ const SmbMethodPart = ({
       </FormGroup>
 
       <FormGroup title={_('Max Protocol')}>
-        <TextField
+        <Select
           name={prefix + 'smb_max_protocol'}
+          items={smbMaxProtocolItems}
           value={smbMaxProtocol}
           onChange={onChange}
         />
