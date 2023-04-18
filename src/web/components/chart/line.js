@@ -529,25 +529,21 @@ class LineChart extends React.Component {
               <Group>
                 <LinePath
                   data={data}
-                  x={d => xValue(d, timeline)}
-                  y={d => d.y}
+                  x={d => xScale(xValue(d, timeline))}
+                  y={d => yScale(d.y)}
                   stroke={yLine.color}
                   strokeWidth={isDefined(yLine.lineWidth) ? yLine.lineWidth : 1}
                   strokeDasharray={yLine.dashArray}
-                  xScale={xScale}
-                  yScale={yScale}
                 />
                 <LinePath
                   data={data}
-                  x={d => xValue(d, timeline)}
-                  y={d => d.y2}
+                  x={d => xScale(xValue(d, timeline))}
+                  y={d => y2Scale(d.y2)}
                   stroke={y2Line.color}
                   strokeWidth={
                     isDefined(y2Line.lineWidth) ? y2Line.lineWidth : 1
                   }
                   strokeDasharray={y2Line.dashArray}
-                  xScale={xScale}
-                  yScale={y2Scale}
                 />
               </Group>
             )}
