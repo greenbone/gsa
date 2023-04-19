@@ -71,7 +71,7 @@ export const convert_allow = ({addresses, allow}) => {
 };
 
 const UserDetails = ({entity, links = true}) => {
-  const {auth_method, comment, groups = [], hosts = {}, roles = []} = entity;
+  const {authMethod, comment, groups = [], hosts = {}, roles = []} = entity;
   return (
     <Layout grow flex="column">
       <InfoTable>
@@ -129,7 +129,7 @@ const UserDetails = ({entity, links = true}) => {
 
           <TableRow>
             <TableData>{_('Authentication Type')}</TableData>
-            <TableData>{convert_auth_method(auth_method)}</TableData>
+            <TableData>{convert_auth_method(authMethod)}</TableData>
           </TableRow>
         </TableBody>
       </InfoTable>
