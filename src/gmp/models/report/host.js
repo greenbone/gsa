@@ -127,8 +127,10 @@ class Host {
         }
         if (name.startsWith('Auth')) {
           const authArray = name.split('-');
-          copy.authSuccess[authArray[1].toLowerCase()] =
-            authArray[2] === 'Success';
+          if (copy.authSuccess[authArray[1].toLowerCase()] !== true) {
+            copy.authSuccess[authArray[1].toLowerCase()] =
+              authArray[2] === 'Success';
+          }
         }
         copy.details.appsCount = appsCount;
       });
