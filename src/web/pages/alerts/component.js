@@ -408,7 +408,7 @@ class AlertComponent extends React.Component {
             : undefined;
 
           const tp_sms_credential_id = isDefined(method.data.tp_sms_credential)
-            ? getValue(method.data.tp_sms_credential.credential)
+            ? getValue(method.data.tp_sms_credential)
             : undefined;
 
           const recipient_credential_id = isDefined(
