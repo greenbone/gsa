@@ -81,7 +81,7 @@ let ToolBarIcons = ({
   onOperatingSystemDeleteClick,
   onOperatingSystemDownloadClick,
 }) => {
-  const {hosts} = entity;
+  const {allHosts, hosts} = entity;
   return (
     <Divider margin="10px">
       <IconDivider>
@@ -113,12 +113,27 @@ let ToolBarIcons = ({
         />
       </IconDivider>
       <IconDivider>
+        <Badge content={allHosts.length}>
+          <Link
+            to="hosts"
+            filter={'os_id="' + entity.id + '"'}
+            textOnly={!links}
+            title={_('Hosts with Operating System {{- name}}', entity)}
+          >
+            <HostIcon />
+          </Link>
+        </Badge>
+      </IconDivider>
+      <IconDivider>
         <Badge content={hosts.length}>
           <Link
             to="hosts"
-            filter={'os~"' + entity.name + '"'}
+            filter={'best_os_cpe="' + entity.name + '"'}
             textOnly={!links}
-            title={_('Hosts with Operating System {{- name}}', entity)}
+            title={_(
+              'Hosts with Operating System {{- name}} as the best match',
+              entity,
+            )}
           >
             <HostIcon />
           </Link>
