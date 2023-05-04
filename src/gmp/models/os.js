@@ -42,6 +42,9 @@ class OperatingSystem extends Asset {
       ret.hosts = {
         length: ret.os.installs,
       };
+      ret.allHosts = {
+        length: ret.os.all_installs,
+      };
     }
 
     delete ret.os;
