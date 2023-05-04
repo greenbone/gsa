@@ -41,8 +41,12 @@ const SORT_FIELDS = [
     displayName: _l('Severity: Average'),
   },
   {
+    name: 'all_hosts',
+    displayName: _l('Hosts (All)'),
+  },
+  {
     name: 'hosts',
-    displayName: _l('Hosts'),
+    displayName: _l('Hosts (Best OS)'),
   },
   {
     name: 'modified',

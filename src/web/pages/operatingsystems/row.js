@@ -96,7 +96,18 @@ const Row = ({
       <span>
         <Link
           to={'hosts'}
-          filter={'os="' + entity.name + '"'}
+          filter={'os_id="' + entity.id + '"'}
+          textOnly={!links}
+        >
+          {entity.allHosts.length}
+        </Link>
+      </span>
+    </TableData>
+    <TableData>
+      <span>
+        <Link
+          to={'hosts'}
+          filter={'best_os_cpe="' + entity.name + '"'}
           textOnly={!links}
         >
           {entity.hosts.length}
