@@ -20,7 +20,7 @@ import {isDefined, isObject} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {forEach, map} from 'gmp/utils/array';
 
-import {parseYesNo, YES_VALUE} from 'gmp/parser';
+import {parseDate, parseYesNo, YES_VALUE} from 'gmp/parser';
 
 import Model, {parseModelFromElement} from 'gmp/model';
 
@@ -81,6 +81,12 @@ const create_values = data => {
         obj.id = obj._id;
       }
       delete obj._id;
+    }
+    if (key === 'certificate_info') {
+      obj.activationTime = parseDate(obj.activation_time);
+      obj.expirationTime = parseDate(obj.expiration_time);
+      delete obj.activation_time;
+      delete obj.expiration_time;
     }
     values[key] = obj;
   }
