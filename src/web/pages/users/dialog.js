@@ -17,6 +17,10 @@
  */
 
 import React from 'react';
+import {connect} from 'react-redux';
+import {getUsername} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
 
 import _ from 'gmp/locale';
 
@@ -48,6 +52,8 @@ import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 class Dialog extends React.Component {
+  dataToSave = false;
+
   constructor(...args) {
     super(...args);
 
@@ -55,23 +61,44 @@ class Dialog extends React.Component {
 
     this.state = {
       confirmationDialogVisible: false,
+      confirmationDialogVisibleSA: false,
       noRoleConfirmed: false,
       roleIds,
     };
 
     this.closeConfirmationDialog = this.closeConfirmationDialog.bind(this);
+    this.closeConfirmationDialogSA = this.closeConfirmationDialogSA.bind(this);
+    this.openConfirmationDialogSA = this.openConfirmationDialogSA.bind(this);
     this.handleResumeClick = this.handleResumeClick.bind(this);
+    this.handleResumeClickSA = this.handleResumeClickSA.bind(this);
     this.handleRoleIdsChange = this.handleRoleIdsChange.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
+  }
+
+  openConfirmationDialog() {
+    this.setState({confirmationDialogVisible: true});
   }
 
   closeConfirmationDialog() {
     this.setState({confirmationDialogVisible: false});
   }
 
+  openConfirmationDialogSA() {
+    this.setState({confirmationDialogVisibleSA: true});
+  }
+
+  closeConfirmationDialogSA() {
+    this.setState({confirmationDialogVisibleSA: false});
+  }
+
   handleResumeClick() {
     this.setState({noRoleConfirmed: true});
     this.closeConfirmationDialog();
+  }
+
+  handleResumeClickSA(onSave) {
+    this.closeConfirmationDialogSA();
+    return onSave(this.dataToSave);
   }
 
   handleRoleIdsChange(value) {
@@ -81,12 +108,18 @@ class Dialog extends React.Component {
     });
   }
 
-  handleSaveClick(onSave, d) {
+  handleSaveClick(user, onSave, d) {
     const {roleIds, noRoleConfirmed} = this.state;
     if (roleIds.length > 0 || noRoleConfirmed) {
-      return onSave(d);
+      if (this.props.username === user.name) {
+        this.dataToSave = d;
+        this.openConfirmationDialogSA();
+        return;
+      } else {
+        return onSave(d);
+      }
     }
-    this.setState({confirmationDialogVisible: true});
+    this.openConfirmationDialog();
   }
 
   render() {
@@ -108,7 +141,8 @@ class Dialog extends React.Component {
       onSave,
     } = this.props;
 
-    const {confirmationDialogVisible, roleIds} = this.state;
+    const {confirmationDialogVisible, confirmationDialogVisibleSA, roleIds} =
+      this.state;
 
     const isEdit = isDefined(user);
 
@@ -145,13 +179,14 @@ class Dialog extends React.Component {
 
     const hasLdapEnabled = settings.get('method:ldap_connect').enabled;
     const hasRadiusEnabled = settings.get('method:radius_connect').enabled;
+
     return (
       <React.Fragment>
         <SaveDialog
           title={title}
           values={controlledValues}
           onClose={onClose}
-          onSave={d => this.handleSaveClick(onSave, d)}
+          onSave={d => this.handleSaveClick(user, onSave, d)}
           defaultValues={data}
         >
           {({values: state, onValueChange}) => (
@@ -265,7 +300,6 @@ class Dialog extends React.Component {
                     </Divider>
                   </FormGroup>
                 )}
-
                 {capabilities.mayAccess('roles') && (
                   <FormGroup title={_('Roles')}>
                     <MultiSelect
@@ -315,6 +349,20 @@ class Dialog extends React.Component {
                   </Divider>
                 </FormGroup>
               </Layout>
+              {confirmationDialogVisibleSA && (
+                <ConfirmationDialog
+                  content={_(
+                    'Please note: You are about to change your personal user data! ' +
+                      'If you changed your login name the data will not be saved. ' +
+                      'Otherwise, if you click on OK the data will be saved and ' +
+                      'you will be logged out immediately.',
+                  )}
+                  title={_('Save Super Admin User')}
+                  width="400px"
+                  onClose={this.closeConfirmationDialogSA}
+                  onResumeClick={s => this.handleResumeClickSA(onSave)}
+                />
+              )}
               {confirmationDialogVisible && (
                 <ConfirmationDialog
                   content={_(
@@ -362,6 +410,11 @@ Dialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default withCapabilities(Dialog);
+const mapStateToProps = rootState => {
+  const username = getUsername(rootState);
+  return {username};
+};
+
+export default compose(withCapabilities, connect(mapStateToProps))(Dialog);
 
 // vim: set ts=2 sw=2 tw=80:
