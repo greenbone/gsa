@@ -41,8 +41,9 @@ import {
 } from 'gmp/models/alert';
 
 import PropTypes from 'web/utils/proptypes';
-
 import HorizontalSep from 'web/components/layout/horizontalsep';
+
+import CertInfo from 'web/components/certinfo/certinfo';
 
 import DetailsLink from 'web/components/link/detailslink';
 
@@ -626,6 +627,24 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                   </TableData>
                   <TableData>
                     {data.tp_sms_tls_workaround.value === '1' ? 'Yes' : 'No'}
+                  </TableData>
+                </TableRow>
+              )}
+              {isDefined(data.tp_sms_tls_certificate?.value) && (
+                <TableRow>
+                  <TableData>{_('TLS Certificate')}</TableData>
+                  <TableData>
+                    {isDefined(
+                      data.tp_sms_tls_certificate?.certificate_info,
+                    ) ? (
+                      <CertInfo
+                        info={data.tp_sms_tls_certificate.certificate_info}
+                      />
+                    ) : (
+                      _(
+                        'No information available for existing file. File may not be a correct certificate.',
+                      )
+                    )}
                   </TableData>
                 </TableRow>
               )}
