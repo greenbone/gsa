@@ -596,7 +596,7 @@ class AlertComponent extends React.Component {
               '',
             ),
             method_data_tp_sms_tls_workaround: parseYesNo(
-              getValue(method.data.tp_sms_hostname, NO_VALUE),
+              getValue(method.data.tp_sms_tls_workaround, NO_VALUE),
             ),
 
             method_data_verinice_server_report_format:
