@@ -115,9 +115,8 @@ class Dialog extends React.Component {
         this.dataToSave = d;
         this.openConfirmationDialogSA();
         return;
-      } else {
-        return onSave(d);
       }
+      return onSave(d);
     }
     this.openConfirmationDialog();
   }
@@ -406,6 +405,7 @@ Dialog.propTypes = {
   settings: PropTypes.settings.isRequired,
   title: PropTypes.string,
   user: PropTypes.model,
+  username: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
