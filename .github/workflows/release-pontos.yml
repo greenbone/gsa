@@ -6,28 +6,77 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-release:
+  release:
     name: Create a new release with pontos
     # If the event is a workflow_dispatch or the label 'make release' is set and PR is closed because of a merge
     if: (github.event_name == 'workflow_dispatch') || (contains( github.event.pull_request.labels.*.name, 'make release') && github.event.pull_request.merged == true)
     runs-on: "ubuntu-latest"
+    outputs:
+      release-version: ${{ steps.release.outputs.release-version }}
+      git-release-tag: ${{ steps.release.outputs.git-release-tag }}
     steps:
       - name: Setting the Reference
+        id: reference
         run: |
           if [[ "${{ github.event_name }}" = "workflow_dispatch" ]]; then
-            echo "RELEASE_REF=${{ github.ref_name }}" >> $GITHUB_ENV
+            echo "ref=${{ github.ref_name }}" >> $GITHUB_OUTPUT
           else
-            echo "RELEASE_REF=${{ github.base_ref }}" >> $GITHUB_ENV
+            echo "ref=${{ github.base_ref }}" >> $GITHUB_OUTPUT
           fi
       - name: Release with release action
+        id: release
         uses: greenbone/actions/release@v2
         with:
-          conventional-commits: true
           github-user: ${{ secrets.GREENBONE_BOT }}
           github-user-mail: ${{ secrets.GREENBONE_BOT_MAIL }}
           github-user-token: ${{ secrets.GREENBONE_BOT_TOKEN }}
+          release-type: calendar
+          ref: ${{ steps.reference.outputs.ref }}
+          sign-release-files: false
+
+  build-dist:
+    name: Build JavaScript files
+    if: (github.event_name == 'workflow_dispatch') || (contains( github.event.pull_request.labels.*.name, 'make release') && github.event.pull_request.merged == true)
+    runs-on: "ubuntu-latest"
+    needs: release
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.release.outputs.git-release-tag }}
+      - name: Set up node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+      - name: Get Yarn cache directory
+        id: yarn-cache-dir-path
+        run: echo "name=$(yarn cache dir)" >> $GITHUB_OUTPUT
+      - name: Use Yarn cache
+        uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-14.x-${{ hashFiles('**/yarn.lock') }}
+        # `--prefer-offline` gives cache priority
+      - name: Install dependencies
+        run: yarn install --prefer-offline
+      - name: Build dist files
+        run: yarn build
+      - name: Create tarball
+        run: |
+          tar -C build -czvf gsa-dist-${{ needs.release.outputs.release-version }}.tar.gz .
+      - name: Upload dist file to release
+        run: |
+          gh release upload ${{ needs.release.outputs.git-release-tag }} gsa-dist-${{ needs.release.outputs.release-version }}.tar.gz
+
+  sign:
+    runs-on: "ubuntu-latest"
+    needs: [release, build-dist]
+    if: (github.event_name == 'workflow_dispatch') || (contains( github.event.pull_request.labels.*.name, 'make release') && github.event.pull_request.merged == true)
+    steps:
+      - name: Sign release files
+        uses: greenbone/actions/sign-release-files@v2
+        with:
           gpg-key: ${{ secrets.GPG_KEY }}
           gpg-fingerprint: ${{ secrets.GPG_FINGERPRINT }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          strategy: calendar
-          ref: ${{ env.RELEASE_REF }}
+          release-version: ${{ needs.release.outputs.release-version }}
