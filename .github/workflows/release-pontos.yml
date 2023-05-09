@@ -30,7 +30,7 @@ jobs:
           github-user: ${{ secrets.GREENBONE_BOT }}
           github-user-mail: ${{ secrets.GREENBONE_BOT_MAIL }}
           github-user-token: ${{ secrets.GREENBONE_BOT_TOKEN }}
-          release-type: calendar
+          release-type: patch
           ref: ${{ steps.reference.outputs.ref }}
           sign-release-files: false
 
@@ -79,9 +79,4 @@ jobs:
           gpg-key: ${{ secrets.GPG_KEY }}
           gpg-fingerprint: ${{ secrets.GPG_FINGERPRINT }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
-<<<<<<< HEAD
-          strategy: patch
-          ref: ${{ env.RELEASE_REF }}
-=======
           release-version: ${{ needs.release.outputs.release-version }}
->>>>>>> 29bb880df (Add: Upload GSA dist files to GitHub releases)
