@@ -52,8 +52,6 @@ import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 class Dialog extends React.Component {
-  dataToSave = false;
-
   constructor(...args) {
     super(...args);
 
@@ -61,16 +59,20 @@ class Dialog extends React.Component {
 
     this.state = {
       confirmationDialogVisible: false,
-      confirmationDialogVisibleSA: false,
+      confirmationDialogVisibleSuperAdmin: false,
       noRoleConfirmed: false,
       roleIds,
+      superAdminData: {},
     };
 
     this.closeConfirmationDialog = this.closeConfirmationDialog.bind(this);
-    this.closeConfirmationDialogSA = this.closeConfirmationDialogSA.bind(this);
-    this.openConfirmationDialogSA = this.openConfirmationDialogSA.bind(this);
+    this.closeConfirmationDialogSuperAdmin =
+      this.closeConfirmationDialogSuperAdmin.bind(this);
+    this.openConfirmationDialogSuperAdmin =
+      this.openConfirmationDialogSuperAdmin.bind(this);
     this.handleResumeClick = this.handleResumeClick.bind(this);
-    this.handleResumeClickSA = this.handleResumeClickSA.bind(this);
+    this.handleResumeClickSuperAdmin =
+      this.handleResumeClickSuperAdmin.bind(this);
     this.handleRoleIdsChange = this.handleRoleIdsChange.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
   }
@@ -83,12 +85,12 @@ class Dialog extends React.Component {
     this.setState({confirmationDialogVisible: false});
   }
 
-  openConfirmationDialogSA() {
-    this.setState({confirmationDialogVisibleSA: true});
+  openConfirmationDialogSuperAdmin() {
+    this.setState({confirmationDialogVisibleSuperAdmin: true});
   }
 
-  closeConfirmationDialogSA() {
-    this.setState({confirmationDialogVisibleSA: false});
+  closeConfirmationDialogSuperAdmin() {
+    this.setState({confirmationDialogVisibleSuperAdmin: false});
   }
 
   handleResumeClick() {
@@ -96,9 +98,9 @@ class Dialog extends React.Component {
     this.closeConfirmationDialog();
   }
 
-  handleResumeClickSA(onSave) {
-    this.closeConfirmationDialogSA();
-    return onSave(this.dataToSave);
+  handleResumeClickSuperAdmin(onSave) {
+    this.closeConfirmationDialogSuperAdmin();
+    return onSave(this.state.superAdminData);
   }
 
   handleRoleIdsChange(value) {
@@ -108,15 +110,15 @@ class Dialog extends React.Component {
     });
   }
 
-  handleSaveClick(user, onSave, d) {
+  handleSaveClick(onSave, userData) {
     const {roleIds, noRoleConfirmed} = this.state;
     if (roleIds.length > 0 || noRoleConfirmed) {
-      if (this.props.username === user.name) {
-        this.dataToSave = d;
-        this.openConfirmationDialogSA();
+      if (this.props.username === this.props.user.name) {
+        this.setState({superAdminData: userData});
+        this.openConfirmationDialogSuperAdmin();
         return;
       }
-      return onSave(d);
+      return onSave(userData);
     }
     this.openConfirmationDialog();
   }
@@ -140,8 +142,11 @@ class Dialog extends React.Component {
       onSave,
     } = this.props;
 
-    const {confirmationDialogVisible, confirmationDialogVisibleSA, roleIds} =
-      this.state;
+    const {
+      confirmationDialogVisible,
+      confirmationDialogVisibleSuperAdmin,
+      roleIds,
+    } = this.state;
 
     const isEdit = isDefined(user);
 
@@ -185,7 +190,7 @@ class Dialog extends React.Component {
           title={title}
           values={controlledValues}
           onClose={onClose}
-          onSave={d => this.handleSaveClick(user, onSave, d)}
+          onSave={userData => this.handleSaveClick(onSave, userData)}
           defaultValues={data}
         >
           {({values: state, onValueChange}) => (
@@ -348,7 +353,7 @@ class Dialog extends React.Component {
                   </Divider>
                 </FormGroup>
               </Layout>
-              {confirmationDialogVisibleSA && (
+              {confirmationDialogVisibleSuperAdmin && (
                 <ConfirmationDialog
                   content={_(
                     'Please note: You are about to change your personal user data! ' +
@@ -358,8 +363,8 @@ class Dialog extends React.Component {
                   )}
                   title={_('Save Super Admin User')}
                   width="400px"
-                  onClose={this.closeConfirmationDialogSA}
-                  onResumeClick={s => this.handleResumeClickSA(onSave)}
+                  onClose={this.closeConfirmationDialogSuperAdmin}
+                  onResumeClick={s => this.handleResumeClickSuperAdmin(onSave)}
                 />
               )}
               {confirmationDialogVisible && (
