@@ -22,7 +22,7 @@ import HttpCommand from './http';
 import {convertBoolean} from './convert';
 
 export class AuthenticationCommand extends HttpCommand {
-  saveLdap({authdn, certificate, enable, ldaphost}) {
+  saveLdap({authdn, certificate, enable, ldaphost, ldapsOnly}) {
     return this.httpPost({
       cmd: 'save_auth',
       group: 'method:ldap_connect',
@@ -30,6 +30,7 @@ export class AuthenticationCommand extends HttpCommand {
       certificate,
       enable: convertBoolean(enable),
       ldaphost,
+      ldaps_only: convertBoolean(ldapsOnly),
     });
   }
 

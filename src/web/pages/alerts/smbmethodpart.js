@@ -18,6 +18,7 @@
 import React from 'react';
 
 import _ from 'gmp/locale';
+import {_l} from 'gmp/locale/lang';
 
 import {
   SMB_CREDENTIAL_TYPES,
@@ -37,6 +38,13 @@ import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
 import NewIcon from 'web/components/icon/newicon';
+
+const smbMaxProtocolItems = [
+  {label: _l('Default'), value: ''},
+  {label: 'NT1', value: 'NT1'},
+  {label: 'SMB2', value: 'SMB2'},
+  {label: 'SMB3', value: 'SMB3'},
+];
 
 const SmbMethodPart = ({
   prefix,
@@ -111,8 +119,9 @@ const SmbMethodPart = ({
       </FormGroup>
 
       <FormGroup title={_('Max Protocol')}>
-        <TextField
+        <Select
           name={prefix + 'smb_max_protocol'}
+          items={smbMaxProtocolItems}
           value={smbMaxProtocol}
           onChange={onChange}
         />

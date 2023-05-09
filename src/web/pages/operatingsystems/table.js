@@ -44,7 +44,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="29%"
+          width="24%"
           rowSpan="2"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -64,15 +64,9 @@ const Header = ({
         <TableHead width="24%" colSpan="3">
           {_('Severity')}
         </TableHead>
-        <TableHead
-          width="5%"
-          rowSpan="2"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'hosts' : false}
-          onSortChange={onSortChange}
-          title={_('Hosts')}
-        />
+        <TableHead width="10%" colSpan="2">
+          {_('Hosts')}
+        </TableHead>
         <TableHead
           width="15%"
           rowSpan="2"
@@ -115,6 +109,22 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('Average')}
         />
+        <TableHead
+          width="5%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'all_hosts' : false}
+          onSortChange={onSortChange}
+          title={_('All')}
+        />
+        <TableHead
+          width="5%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'hosts' : false}
+          onSortChange={onSortChange}
+          title={_('Best OS')}
+        />
       </TableRow>
     </TableHeader>
   );
@@ -130,7 +140,7 @@ Header.propTypes = {
 };
 
 const Footer = createEntitiesFooter({
-  span: 8,
+  span: 9,
   delete: true,
   download: 'os.xml',
 });

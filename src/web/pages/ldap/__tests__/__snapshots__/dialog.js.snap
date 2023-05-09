@@ -680,6 +680,42 @@ exports[`Ldap dialog component tests should render dialog 1`] = `
                       </div>
                     </div>
                   </div>
+                  <div
+                    class="c9"
+                  >
+                    <label
+                      class="c10"
+                      data-testid="formgroup-title"
+                    >
+                      Use LDAPS only
+                    </label>
+                    <div
+                      class="c11"
+                      data-testid="formgroup-content"
+                      size="10"
+                    >
+                      <label
+                        class="c12"
+                      >
+                        <div
+                          class="c13"
+                        >
+                          <div
+                            class="c14"
+                            margin="5px"
+                          >
+                            <input
+                              checked=""
+                              class="c15 c16"
+                              data-testid="ldapsOnly-checkbox"
+                              name="ldapsOnly"
+                              type="checkbox"
+                            />
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
