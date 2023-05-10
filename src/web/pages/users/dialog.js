@@ -367,7 +367,7 @@ class Dialog extends React.Component {
               {confirmationDialogVisibleSuperAdmin && (
                 <ConfirmationDialog
                   content={_(
-                    'Please note: you are about to change your own personal user data ' +
+                    'Please note: You are about to change your own personal user data ' +
                       'as Super Admin! It is not possible to change the login name. ' +
                       'If you have modified the login name, neither the login name nor ' +
                       'any other changes made will be saved. ' +
