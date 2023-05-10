@@ -1352,6 +1352,8 @@
   "Same": "Gleich",
   "Saturday": "Samstag",
   "Save": "Speichern",
+  "Save Super Admin User": "Super Admin Benutzer speichern",
+  "Please note: you are about to change your own personal user data as Super Admin! It is not possible to change the login name. If you have modified the login name, neither the login name nor any other changes made will be saved. If you have made any modifications other than the login name, the data will be saved when clicking OK, and you will be logged out immediately.": "Bitte beachten Sie: Sie sind dabei ihre eigenen persönlichen Nutzerdaten als Super Administrator zu ändern! Es ist nicht möglich, den Login Namen zu ändern. Wenn Sie den Login Namen modifiziert haben, werden weder der Login Name noch jedwede anderen Änderungen gespeichert. Wenn Sie andere Änderungen vorgenommen haben, werden die Daten beim Klick auf OK gespeichert und Sie werden umgehend ausgeloggt.",
   "Scan": "Scan",
   "Scan Config": "Scan-Konfiguration",
   "Scan Config Default": "Scan-Konfiguration-Standard",

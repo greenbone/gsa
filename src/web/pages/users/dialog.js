@@ -113,7 +113,18 @@ class Dialog extends React.Component {
   handleSaveClick(onSave, userData) {
     const {roleIds, noRoleConfirmed} = this.state;
     if (roleIds.length > 0 || noRoleConfirmed) {
+      /*
+       * You reach this point, if you have at least one role in the user data
+       * or you have already confirmed that you want to save the user data
+       * without any role.
+       */
       if (this.props.username === this.props.user.name) {
+        /*
+         * You reach this point only as a Super Admin, when you try to save your
+         * own personal user data. The confirmation dialog opens. The data can
+         * then be saved from the confirmation dialog, so we have to "return"
+         * after opening the confirmation dialog.
+         */
         this.setState({superAdminData: userData});
         this.openConfirmationDialogSuperAdmin();
         return;
@@ -356,10 +367,13 @@ class Dialog extends React.Component {
               {confirmationDialogVisibleSuperAdmin && (
                 <ConfirmationDialog
                   content={_(
-                    'Please note: You are about to change your personal user data! ' +
-                      'If you changed your login name the data will not be saved. ' +
-                      'Otherwise, if you click on OK the data will be saved and ' +
-                      'you will be logged out immediately.',
+                    'Please note: you are about to change your own personal user data ' +
+                      'as Super Admin! It is not possible to change the login name. ' +
+                      'If you have modified the login name, neither the login name nor ' +
+                      'any other changes made will be saved. ' +
+                      'If you have made any modifications other than the login name, ' +
+                      'the data will be saved when clicking OK, and you will be logged ' +
+                      'out immediately.',
                   )}
                   title={_('Save Super Admin User')}
                   width="400px"
