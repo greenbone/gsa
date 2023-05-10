@@ -25,7 +25,7 @@ jobs:
         # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
       - name: Get Yarn cache directory
         id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - name: Use Yarn cache
         uses: actions/cache@v3
         id: yarn-cache
@@ -66,7 +66,7 @@ jobs:
         # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
       - name: Get Yarn cache directory
         id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - name: Use Yarn cache
         uses: actions/cache@v3
         id: yarn-cache
