@@ -17,6 +17,10 @@
  */
 
 import React from 'react';
+import {connect} from 'react-redux';
+import {getUsername} from 'web/store/usersettings/selectors';
+
+import compose from 'web/utils/compose';
 
 import _ from 'gmp/locale';
 
@@ -55,23 +59,48 @@ class Dialog extends React.Component {
 
     this.state = {
       confirmationDialogVisible: false,
+      confirmationDialogVisibleSuperAdmin: false,
       noRoleConfirmed: false,
       roleIds,
+      superAdminData: {},
     };
 
     this.closeConfirmationDialog = this.closeConfirmationDialog.bind(this);
+    this.closeConfirmationDialogSuperAdmin =
+      this.closeConfirmationDialogSuperAdmin.bind(this);
+    this.openConfirmationDialogSuperAdmin =
+      this.openConfirmationDialogSuperAdmin.bind(this);
     this.handleResumeClick = this.handleResumeClick.bind(this);
+    this.handleResumeClickSuperAdmin =
+      this.handleResumeClickSuperAdmin.bind(this);
     this.handleRoleIdsChange = this.handleRoleIdsChange.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
+  }
+
+  openConfirmationDialog() {
+    this.setState({confirmationDialogVisible: true});
   }
 
   closeConfirmationDialog() {
     this.setState({confirmationDialogVisible: false});
   }
 
+  openConfirmationDialogSuperAdmin() {
+    this.setState({confirmationDialogVisibleSuperAdmin: true});
+  }
+
+  closeConfirmationDialogSuperAdmin() {
+    this.setState({confirmationDialogVisibleSuperAdmin: false});
+  }
+
   handleResumeClick() {
     this.setState({noRoleConfirmed: true});
     this.closeConfirmationDialog();
+  }
+
+  handleResumeClickSuperAdmin(onSave) {
+    this.closeConfirmationDialogSuperAdmin();
+    return onSave(this.state.superAdminData);
   }
 
   handleRoleIdsChange(value) {
@@ -81,12 +110,28 @@ class Dialog extends React.Component {
     });
   }
 
-  handleSaveClick(onSave, d) {
+  handleSaveClick(onSave, userData) {
     const {roleIds, noRoleConfirmed} = this.state;
     if (roleIds.length > 0 || noRoleConfirmed) {
-      return onSave(d);
+      /*
+       * You reach this point, if you have at least one role in the user data
+       * or you have already confirmed that you want to save the user data
+       * without any role.
+       */
+      if (this.props.username === this.props.user.name) {
+        /*
+         * You reach this point only as a Super Admin, when you try to save your
+         * own personal user data. The confirmation dialog opens. The data can
+         * then be saved from the confirmation dialog, so we have to "return"
+         * after opening the confirmation dialog.
+         */
+        this.setState({superAdminData: userData});
+        this.openConfirmationDialogSuperAdmin();
+        return;
+      }
+      return onSave(userData);
     }
-    this.setState({confirmationDialogVisible: true});
+    this.openConfirmationDialog();
   }
 
   render() {
@@ -108,7 +153,11 @@ class Dialog extends React.Component {
       onSave,
     } = this.props;
 
-    const {confirmationDialogVisible, roleIds} = this.state;
+    const {
+      confirmationDialogVisible,
+      confirmationDialogVisibleSuperAdmin,
+      roleIds,
+    } = this.state;
 
     const isEdit = isDefined(user);
 
@@ -145,13 +194,14 @@ class Dialog extends React.Component {
 
     const hasLdapEnabled = settings.get('method:ldap_connect').enabled;
     const hasRadiusEnabled = settings.get('method:radius_connect').enabled;
+
     return (
       <React.Fragment>
         <SaveDialog
           title={title}
           values={controlledValues}
           onClose={onClose}
-          onSave={d => this.handleSaveClick(onSave, d)}
+          onSave={userData => this.handleSaveClick(onSave, userData)}
           defaultValues={data}
         >
           {({values: state, onValueChange}) => (
@@ -265,7 +315,6 @@ class Dialog extends React.Component {
                     </Divider>
                   </FormGroup>
                 )}
-
                 {capabilities.mayAccess('roles') && (
                   <FormGroup title={_('Roles')}>
                     <MultiSelect
@@ -315,6 +364,23 @@ class Dialog extends React.Component {
                   </Divider>
                 </FormGroup>
               </Layout>
+              {confirmationDialogVisibleSuperAdmin && (
+                <ConfirmationDialog
+                  content={_(
+                    'Please note: You are about to change your own personal user data ' +
+                      'as Super Admin! It is not possible to change the login name. ' +
+                      'If you have modified the login name, neither the login name nor ' +
+                      'any other changes made will be saved. ' +
+                      'If you have made any modifications other than the login name, ' +
+                      'the data will be saved when clicking OK, and you will be logged ' +
+                      'out immediately.',
+                  )}
+                  title={_('Save Super Admin User')}
+                  width="400px"
+                  onClose={this.closeConfirmationDialogSuperAdmin}
+                  onResumeClick={s => this.handleResumeClickSuperAdmin(onSave)}
+                />
+              )}
               {confirmationDialogVisible && (
                 <ConfirmationDialog
                   content={_(
@@ -358,10 +424,16 @@ Dialog.propTypes = {
   settings: PropTypes.settings.isRequired,
   title: PropTypes.string,
   user: PropTypes.model,
+  username: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 };
 
-export default withCapabilities(Dialog);
+const mapStateToProps = rootState => {
+  const username = getUsername(rootState);
+  return {username};
+};
+
+export default compose(withCapabilities, connect(mapStateToProps))(Dialog);
 
 // vim: set ts=2 sw=2 tw=80:
