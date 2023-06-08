@@ -33,6 +33,8 @@ import Toolbar from 'web/components/bar/toolbar';
 
 import ErrorMessage from 'web/components/error/errormessage';
 
+import Message from 'web/components/error/message';
+
 import Layout from 'web/components/layout/layout';
 
 import Loading from 'web/components/loading/loading';
@@ -46,6 +48,10 @@ export const Col = styled.col`
 `;
 
 const ErrorContent = styled.div`
+  white-space: pre;
+`;
+
+const MessageContent = styled.div`
   white-space: pre;
 `;
 
@@ -146,14 +152,40 @@ class EntityPage extends React.Component {
             {entity: typeName(entityType)},
           );
 
+          if (entityType === 'cpe') {
+            content = _(
+              '\nThis could have the following reasons:\n' +
+                '1. The CPE might not be included in the official NVD CPE dictionary ' +
+                'yet, and no additional information is available.\n' +
+                '2. You might have followed an incorrect link and the CPE does ' +
+                'not exist.',
+            );
+          }
+
           if (entityType === 'cve') {
             content = _(
               '\nThis could have the following reasons:\n' +
-                '1. You might have followed an incorrect link and the CVE does ' +
-                'not exist\n' +
-                '2. The CVE might not be included in the SCAP database yet. ' +
+                '1. The CVE might not be included in the SCAP database yet. ' +
                 'For new CVEs it can take a month or more until they become ' +
-                'available.',
+                'available.\n' +
+                '2. You might have followed an incorrect link and the CVE does ' +
+                'not exist.',
+            );
+          }
+
+          if (entityType === 'cpe' || entityType === 'cve') {
+            return (
+              <Message
+                flex="column"
+                message={_(
+                  'The {{entity}} you were looking for could not be found.',
+                  {
+                    entity: typeName(entityType),
+                  },
+                )}
+              >
+                <MessageContent>{content}</MessageContent>
+              </Message>
             );
           }
 
@@ -171,6 +203,7 @@ class EntityPage extends React.Component {
             </ErrorMessage>
           );
         }
+
         return <ErrorMessage message={entityError.message} />;
       }
       return null;
