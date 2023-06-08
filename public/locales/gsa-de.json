@@ -1032,6 +1032,7 @@
   "No first result available.": "Kein erstes Ergebnis verfügbar.",
   "No hosts available": "Keine Hosts vorhanden",
   "No information about the Operation System": "Keine Information über das Betriebssystem",
+  "No information available for existing file. File may not be a correct certificate.": "Keine Informationen für vorhandene Datei verfügbar. Datei ist möglicherweise kein korrektes Zertifikat.",
   "No license available": "Keine Lizenz vorhanden",
   "No parameters available": "Keine Parameter vorhanden",
   "No permissions available": "Keine Berechtigungen vorhanden",
