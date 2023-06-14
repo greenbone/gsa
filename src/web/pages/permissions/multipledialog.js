@@ -203,6 +203,8 @@ const MultiplePermissionDialog = withCapabilities(
                     onChange={onChange}
                   />
                 </Divider>
+              </FormGroup>
+              <FormGroup title={_('related resource(s)')} flex="column">
                 {hasRelated && (
                   <ul>
                     {state.related.map(rentity => (
