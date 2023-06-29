@@ -42,8 +42,12 @@ updates:
       - dependency-name: '@vx/shape'
         versions:
           - '> 0.0.179'
+    commit-message:
+      prefix: "Deps"
 
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'weekly'
+    commit-message:
+      prefix: "Deps"
