@@ -88,6 +88,8 @@ jobs:
       - name: Upload dist file to release
         run: |
           gh release upload ${{ needs.release.outputs.git-release-tag }} gsa-dist-${{ needs.release.outputs.release-version }}.tar.gz
+        env:
+          GH_TOKEN: ${{ secrets.GREENBONE_BOT_TOKEN }}
 
   sign:
     runs-on: "ubuntu-latest"
@@ -101,3 +103,4 @@ jobs:
           gpg-fingerprint: ${{ secrets.GPG_FINGERPRINT }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
           release-version: ${{ needs.release.outputs.release-version }}
+          github-token: ${{ secrets.GREENBONE_BOT_TOKEN }}
