@@ -33,6 +33,9 @@ jobs:
           contains(github.event.pull_request.labels.*.name, 'major release')) &&
           github.event.pull_request.merged == true )
     runs-on: 'ubuntu-latest'
+    outputs:
+      git-release-tag: ${{ steps.release.outputs.git-release-tag }}
+      release-version: ${{ steps.release.outputs.release-version }}
     steps:
       - name: Selecting the Release type
         id: release-type
