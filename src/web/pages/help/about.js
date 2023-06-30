@@ -65,24 +65,23 @@ const About = ({gmp}) => (
           <DivP>
             {_(
               'The Greenbone Security Assistant (GSA) is the web-based ' +
-                'user interface of the Greenbone Vulnerability Management (GVM).',
+              'user interface of the Greenbone Community Edition.',
             )}
           </DivP>
           <DivP>
             {_(
-              'GSA connects to GVM via the Greenbone Management Protocol ' +
-                '(GMP) making the extensive feature set of the GVM backend ' +
-                'available, covering vulnerability scanning, vulnerability ' +
-                'management, and related activities.',
+              'GSA uses the Greenbone Management Protocol (GMP) to connect to' +
+              'the database backend gvmd which makes an extensive feature ' +
+              'set available, covering vulnerability scanning, vulnerability ' +
+              'management, and related activities.',
             )}
           </DivP>
           <DivP>
             {_(
               'GSA adds various smart features and forms a powerful tool ' +
-                'to manage and maintain a high resilience level of the IT ' +
-                'infrastructures.',
+              'to manage and maintain a high resilience level of the IT ' +
+              'infrastructures.'
             )}
-            '
           </DivP>
           <DivP>
             Copyright (C) 2017-2023 by&nbsp;
@@ -97,7 +96,7 @@ const About = ({gmp}) => (
           <DivP>
             {_(
               'License: GNU Affero General Public License version 3 or any later' +
-                ' version',
+              ' version',
             )}
             &nbsp;
             <ExternalLink to="https://www.gnu.org/licenses/agpl-3.0.en.html">
@@ -107,10 +106,10 @@ const About = ({gmp}) => (
           <DivP>
             {_(
               'This web application uses cookies to store session information' +
-                '. The cookies are not stored on the server side hard disk ' +
-                'and not submitted anywhere. They are lost when the session ' +
-                'is closed or expired. The cookies are stored temporarily in ' +
-                'your browser as well where you can examine the content.',
+              '. The cookies are not stored on the server side hard disk ' +
+              'and not submitted anywhere. They are lost when the session ' +
+              'is closed or expired. The cookies are stored temporarily in ' +
+              'your browser as well where you can examine the content.'
             )}
           </DivP>
           <DivP>
