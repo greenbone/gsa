@@ -50,7 +50,7 @@ jobs:
           release-version: ${{ inputs.release-version }}
           ref: ${{ steps.release-type.outputs.release-ref }}
           versioning-scheme: "semver"
-          sign-release-files: false
+          sign-release-files: "false"
 
   build-dist:
     name: Build JavaScript files
