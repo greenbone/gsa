@@ -118,7 +118,10 @@ class Dialog extends React.Component {
        * or you have already confirmed that you want to save the user data
        * without any role.
        */
-      if (this.props.username === this.props.user.name) {
+      if (
+        isDefined(this.props.user) &&
+        this.props.username === this.props.user.name
+      ) {
         /*
          * You reach this point only as a Super Admin, when you try to save your
          * own personal user data. The confirmation dialog opens. The data can
