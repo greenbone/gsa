@@ -84,7 +84,30 @@ class Dialog extends React.Component {
   handleSaveClick(onSave, d) {
     const {roleIds, noRoleConfirmed} = this.state;
     if (roleIds.length > 0 || noRoleConfirmed) {
+<<<<<<< HEAD
       return onSave(d);
+=======
+      /*
+       * You reach this point, if you have at least one role in the user data
+       * or you have already confirmed that you want to save the user data
+       * without any role.
+       */
+      if (
+        isDefined(this.props.user) &&
+        this.props.username === this.props.user.name
+      ) {
+        /*
+         * You reach this point only as a Super Admin, when you try to save your
+         * own personal user data. The confirmation dialog opens. The data can
+         * then be saved from the confirmation dialog, so we have to "return"
+         * after opening the confirmation dialog.
+         */
+        this.setState({superAdminData: userData});
+        this.openConfirmationDialogSuperAdmin();
+        return;
+      }
+      return onSave(userData);
+>>>>>>> 38efae317 (Fix: Fix creating a new user with added check)
     }
     this.setState({confirmationDialogVisible: true});
   }
