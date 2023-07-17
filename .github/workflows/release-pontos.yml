@@ -39,12 +39,12 @@ jobs:
     steps:
       - name: Selecting the Release type
         id: release-type
-        uses: greenbone/actions/release-type@v2
+        uses: greenbone/actions/release-type@v3
         with:
           release-type-input: ${{ inputs.release-type }}
       - name: Release with release action
         id: release
-        uses: greenbone/actions/release@v2
+        uses: greenbone/actions/release@v3
         with:
           github-user: ${{ secrets.GREENBONE_BOT }}
           github-user-mail: ${{ secrets.GREENBONE_BOT_MAIL }}
@@ -97,7 +97,7 @@ jobs:
     if: (github.event_name == 'workflow_dispatch') || (contains( github.event.pull_request.labels.*.name, 'make release') && github.event.pull_request.merged == true)
     steps:
       - name: Sign release files
-        uses: greenbone/actions/sign-release-files@v2
+        uses: greenbone/actions/sign-release-files@v3
         with:
           gpg-key: ${{ secrets.GPG_KEY }}
           gpg-fingerprint: ${{ secrets.GPG_FINGERPRINT }}
