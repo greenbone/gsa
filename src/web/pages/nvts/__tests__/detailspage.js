@@ -294,7 +294,7 @@ describe('Nvt Detailspage tests', () => {
     expect(screen.getAllByTitle('Help: NVTs')[0]).toBeInTheDocument();
     expect(links[0]).toHaveAttribute(
       'href',
-      'test/en/managing-secinfo.html#network-vulnerability-tests-nvt',
+      'test/en/managing-secinfo.html#vulnerability-tests-vt',
     );
 
     expect(screen.getAllByTitle('NVT List')[0]).toBeInTheDocument();
@@ -475,7 +475,7 @@ describe('Nvt ToolBarIcons tests', () => {
 
     expect(links[0]).toHaveAttribute(
       'href',
-      'test/en/managing-secinfo.html#network-vulnerability-tests-nvt',
+      'test/en/managing-secinfo.html#vulnerability-tests-vt',
     );
     expect(screen.getAllByTitle('Help: NVTs')[0]).toBeInTheDocument();
 
