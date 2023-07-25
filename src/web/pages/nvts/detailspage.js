@@ -85,7 +85,7 @@ export let ToolBarIcons = ({
       <IconDivider>
         <ManualIcon
           page="managing-secinfo"
-          anchor="network-vulnerability-tests-nvt"
+          anchor="vulnerability-tests-vt"
           title={_('Help: NVTs')}
         />
         <ListIcon title={_('NVT List')} page="nvts" />

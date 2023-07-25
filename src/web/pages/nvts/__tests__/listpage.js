@@ -472,7 +472,7 @@ describe('NvtsPage ToolBarIcons test', () => {
     expect(screen.getAllByTitle('Help: NVTs')[0]).toBeInTheDocument();
     expect(links[0]).toHaveAttribute(
       'href',
-      'test/en/managing-secinfo.html#network-vulnerability-tests-nvt',
+      'test/en/managing-secinfo.html#vulnerability-tests-vt',
     );
   });
 });
