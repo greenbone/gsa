@@ -383,7 +383,7 @@ class Event {
       const start = convertIcalDate(this.event.startDate, this.timezone);
 
       if (start.unix() >= now.unix()) {
-        return convertIcalDate(this.event.startDate, this.timezone);
+        return start;
       }
     }
     return undefined;
