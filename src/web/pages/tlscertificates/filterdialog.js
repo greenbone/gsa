@@ -21,7 +21,11 @@ import {createFilterDialog} from '../../components/powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   {
-    name: 'name',
+    name: 'subject_dn',
+    displayName: _l('Subject DN'),
+  },
+  {
+    name: 'issuer_dn',
     displayName: _l('Issuer DN'),
   },
   {

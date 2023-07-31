@@ -53,6 +53,18 @@ const TlsCertificateDetails = ({entity, links = true}) => {
           <Col width="90%" />
         </colgroup>
         <TableBody>
+          {isDefined(entity.subject_dn) && (
+            <TableRow>
+              <TableData>{_('Subject DN')}</TableData>
+              <TableData>{entity.subject_dn}</TableData>
+            </TableRow>
+          )}
+          {isDefined(entity.issuer_dn) && (
+            <TableRow>
+              <TableData>{_('Issuer DN')}</TableData>
+              <TableData>{entity.issuer_dn}</TableData>
+            </TableRow>
+          )}
           {isDefined(entity.valid) && (
             <TableRow>
               <TableData>{_('Valid')}</TableData>
@@ -111,10 +123,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(TlsCertificateDetails);
 
 // vim: set ts=2 sw=2 tw=80:
