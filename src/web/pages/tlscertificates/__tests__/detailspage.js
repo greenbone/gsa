@@ -49,7 +49,8 @@ const tlsCertificate = TlsCertificate.fromElement({
     __text: 'abcdefg12345',
     _format: 'DER',
   },
-  issuer_dn: 'CN=LoremIpsum C=Dolor',
+  issuer_dn: 'CN=LoremIpsumIssuer C=Dolor',
+  subject_dn: 'CN=LoremIpsumSubject C=Dolor',
   activation_time: '2019-08-10T12:51:27Z',
   creation_time: '2019-07-10T12:51:27Z',
   expiration_time: '2019-09-10T12:51:27Z',
@@ -114,7 +115,9 @@ describe('TLS Certificate Detailspage tests', () => {
       <Detailspage id="1234" />,
     );
 
-    expect(element).toHaveTextContent('TLS Certificate: CN=LoremIpsum C=Dolor');
+    expect(element).toHaveTextContent(
+      'TLS Certificate: CN=LoremIpsumSubject C=Dolor',
+    );
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
@@ -133,7 +136,8 @@ describe('TLS Certificate Detailspage tests', () => {
     expect(element).toHaveTextContent('Tue, Dec 10, 2019 12:51 PM UTC');
     expect(element).toHaveTextContent('admin');
 
-    expect(element).toHaveTextContent('NameCN=LoremIpsum C=Dolor');
+    expect(element).toHaveTextContent('Subject DNCN=LoremIpsumSubject C=Dolor');
+    expect(element).toHaveTextContent('Issuer DNCN=LoremIpsumIssuer C=Dolor');
     expect(element).toHaveTextContent('ValidNo');
     expect(element).toHaveTextContent(
       'ActivatesSat, Aug 10, 2019 12:51 PM UTC',

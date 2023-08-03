@@ -51,8 +51,8 @@ class TlsCertificate extends Model {
       ? element.certificate.__text
       : undefined;
 
-    ret.name = element.issuer_dn;
-    delete ret.issuer_dn;
+    // Use subject DN as name
+    ret.name = ret.subject_dn;
 
     ret.activationTime =
       element.activation_time === 'undefined' ||

@@ -37,17 +37,18 @@ describe('TlsCertificate Model tests', () => {
     expect(tlsCertificate2.certificate).toBeUndefined();
   });
 
-  test('should parse issuer_dn as name', () => {
+  test('should parse issuer_dn and subject_dn', () => {
     const element = {
       certificate: {
         __text: 'CERT123',
       },
-      issuer_dn: 'dn',
+      issuer_dn: 'CN=issuer',
+      subject_dn: 'CN=subject',
     };
     const tlsCertificate = TlsCertificate.fromElement(element);
 
-    expect(tlsCertificate.name).toEqual('dn');
-    expect(tlsCertificate.issuer_dn).toBeUndefined();
+    expect(tlsCertificate.issuer_dn).toEqual('CN=issuer');
+    expect(tlsCertificate.subject_dn).toEqual('CN=subject');
   });
 
   test('should parse activation_time', () => {
