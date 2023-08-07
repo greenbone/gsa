@@ -2,9 +2,11 @@ name: Build and test JavaScript
 
 on:
   push:
-    branches: [ main, stable, oldstable ]
+    branches:
+      - main
   pull_request:
-    branches: [ main, stable, oldstable ]
+    branches:
+      - main
 
 jobs:
   testing:
@@ -14,31 +16,22 @@ jobs:
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
-        # 14.x is recommended by https://nodejs.org/en/
-        node-version: [14.x]
+        node-version:
+          - 18
+          - 20
     steps:
       - uses: actions/checkout@v3
       - name: Set up node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-        # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
-      - name: Get Yarn cache directory
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-      - name: Use Yarn cache
-        uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-        # `--prefer-offline` gives cache priority
+          cache: "npm"
       - name: Install dependencies
-        run: yarn install --prefer-offline
+        run: npm install
       - name: Run JavaScript tests
         env:
           JEST_JUNIT_OUTPUT_DIR: ${{ env.REPORT_DIR }}
-        run: yarn test:coverage --reporters=default --reporters=jest-junit
+        run: npm run test:coverage --reporters=default --reporters=jest-junit
       - name: Load Lint Results
         uses: actions/download-artifact@v3
         with:
@@ -56,28 +49,20 @@ jobs:
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version:
+          - 18
+          - 20
     steps:
       - uses: actions/checkout@v3
       - name: Set up node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-        # See: https://github.com/actions/cache/blob/main/examples.md#node---yarn
-      - name: Get Yarn cache directory
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-      - name: Use Yarn cache
-        uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-        # `--prefer-offline` gives cache priority
+          cache: "npm"
       - name: Install dependencies
-        run: yarn install --prefer-offline
+        run: npm install
       - name: Lint JavaScript files
-        run: yarn lint --format junit -o ${{ env.REPORT_FILE }}
+        run: npm run lint --format junit -o ${{ env.REPORT_FILE }}
       - name: Store Lint Results
         uses: actions/upload-artifact@v3
         with:
