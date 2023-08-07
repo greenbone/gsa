@@ -40,7 +40,8 @@ const tlsCertificate = TlsCertificate.fromElement({
     __text: 'abcdefg12345',
     _format: 'DER',
   },
-  issuer_dn: 'CN=LoremIpsum C=Dolor',
+  issuer_dn: 'CN=LoremIpsumIssuer C=Dolor',
+  subject_dn: 'CN=LoremIpsumSubject C=Dolor',
   activation_time: '2019-08-10T12:51:27Z',
   expiration_time: '2019-09-10T12:51:27Z',
   last_seen: '2019-10-10T12:51:27Z',
@@ -81,7 +82,7 @@ describe('Tls Certificate Row tests', () => {
     );
 
     // Info
-    expect(baseElement).toHaveTextContent('CN=LoremIpsum C=Dolor');
+    expect(baseElement).toHaveTextContent('CN=LoremIpsumSubject C=Dolor');
     expect(baseElement).toHaveTextContent('123');
     expect(baseElement).toHaveTextContent('Sat, Aug 10, 2019 12:51 PM UTC');
     expect(baseElement).toHaveTextContent('Tue, Sep 10, 2019 12:51 PM UTC');

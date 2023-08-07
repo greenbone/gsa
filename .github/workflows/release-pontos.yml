@@ -81,12 +81,13 @@ jobs:
         run: yarn install --prefer-offline
       - name: Build dist files
         run: yarn build
-      - name: Create tarball
+      - name: Create tarballs
         run: |
           tar -C build -czvf gsa-dist-${{ needs.release.outputs.release-version }}.tar.gz .
-      - name: Upload dist file to release
+          XZ_OPT='-T0 -9' tar -acf gsa-node-modules-${{ needs.release.outputs.release-version }}.tar.xz node_modules
+      - name: Upload dist files to release
         run: |
-          gh release upload ${{ needs.release.outputs.git-release-tag }} gsa-dist-${{ needs.release.outputs.release-version }}.tar.gz
+          gh release upload ${{ needs.release.outputs.git-release-tag }} gsa-dist-${{ needs.release.outputs.release-version }}.tar.gz gsa-node-modules-${{ needs.release.outputs.release-version }}.tar.xz
         env:
           GH_TOKEN: ${{ secrets.GREENBONE_BOT_TOKEN }}
 

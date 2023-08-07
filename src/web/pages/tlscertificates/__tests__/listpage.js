@@ -45,7 +45,8 @@ const tlsCertificate = TlsCertificate.fromElement({
     __text: 'abcdefg12345',
     _format: 'DER',
   },
-  issuer_dn: 'CN=LoremIpsum C=Dolor',
+  issuer_dn: 'CN=LoremIpsumIssuer C=Dolor',
+  subject_dn: 'CN=LoremIpsumSubject C=Dolor',
   activation_time: '2019-08-10T12:51:27Z',
   expiration_time: '2019-09-10T12:51:27Z',
   last_seen: '2019-10-10T12:51:27Z',
@@ -192,7 +193,7 @@ describe('TlsCertificatePage tests', () => {
     );
 
     // Table
-    expect(header[0]).toHaveTextContent('Issuer DN');
+    expect(header[0]).toHaveTextContent('Subject DN');
     expect(header[1]).toHaveTextContent('Serial');
     expect(header[2]).toHaveTextContent('Activates');
     expect(header[3]).toHaveTextContent('Expires');
