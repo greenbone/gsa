@@ -12,13 +12,36 @@ jobs:
   testing:
     env:
       REPORT_DIR: reports
-    name: Testing and upload coverage
+    name: Run tests
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:
         node-version:
           - 18
           - 20
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up node ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - name: Install dependencies
+        run: npm install
+      - name: Run JavaScript tests
+        env:
+          JEST_JUNIT_OUTPUT_DIR: ${{ env.REPORT_DIR }}
+        run: npm run test
+
+  coverage:
+    env:
+      REPORT_DIR: reports
+    name: Upload coverage
+    runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        node-version:
+          - 18
     steps:
       - uses: actions/checkout@v3
       - name: Set up node ${{ matrix.node-version }}
