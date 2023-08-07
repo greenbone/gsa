@@ -66,21 +66,10 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
-      - name: Get Yarn cache directory
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-      - name: Use Yarn cache
-        uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-14.x-${{ hashFiles('**/yarn.lock') }}
-        # `--prefer-offline` gives cache priority
-      - name: Install dependencies
-        run: yarn install --prefer-offline
+          node-version: "14"
+          cache: "npm"
       - name: Build dist files
-        run: yarn build
+        run: node run build
       - name: Create tarballs
         run: |
           tar -C build -czvf gsa-dist-${{ needs.release.outputs.release-version }}.tar.gz .
