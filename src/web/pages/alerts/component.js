@@ -541,6 +541,7 @@ class AlertComponent extends React.Component {
               DEFAULT_SCP_PATH,
             ),
             method_data_scp_host: getValue(method.data.scp_host, ''),
+            method_data_scp_port: getValue(method.data.scp_port, 22),
             method_data_scp_known_hosts: getValue(
               method.data.scp_known_hosts,
               '',
@@ -726,6 +727,7 @@ class AlertComponent extends React.Component {
             method_data_scp_path: DEFAULT_SCP_PATH,
             method_data_scp_report_format: report_format_id,
             method_data_scp_host: undefined,
+            method_data_scp_port: 22,
             method_data_scp_known_hosts: undefined,
             method_data_send_port: undefined,
             method_data_send_host: undefined,
@@ -958,6 +960,7 @@ class AlertComponent extends React.Component {
       method_data_scp_report_format,
       method_data_scp_path,
       method_data_scp_host,
+      method_data_scp_port,
       method_data_scp_known_hosts,
       method_data_send_port,
       method_data_send_host,
@@ -1079,6 +1082,7 @@ class AlertComponent extends React.Component {
                 method_data_scp_report_format={method_data_scp_report_format}
                 method_data_scp_path={method_data_scp_path}
                 method_data_scp_host={method_data_scp_host}
+                method_data_scp_port={method_data_scp_port}
                 method_data_scp_known_hosts={method_data_scp_known_hosts}
                 method_data_send_port={method_data_send_port}
                 method_data_send_host={method_data_send_host}

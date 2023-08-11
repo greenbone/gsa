@@ -198,6 +198,13 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                 </TableRow>
               )}
 
+              {isDefined(data.scp_port?.value) && (
+                <TableRow>
+                  <TableData>{_('Port')}</TableData>
+                  <TableData>{data.scp_port.value}</TableData>
+                </TableRow>
+              )}
+
               {isDefined(credential) && isDefined(credential.id) && (
                 <TableRow>
                   <TableData>{_('Credential')}</TableData>

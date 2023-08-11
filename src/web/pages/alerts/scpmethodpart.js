@@ -34,6 +34,7 @@ import withPrefix from '../../utils/withPrefix.js';
 
 import Select from '../../components/form/select.js';
 import FormGroup from '../../components/form/formgroup.js';
+import Spinner from '../../components/form/spinner.js';
 import TextField from '../../components/form/textfield.js';
 import TextArea from '../../components/form/textarea.js';
 
@@ -45,6 +46,7 @@ const ScpMethodPart = ({
   reportFormats,
   scpCredential,
   scpHost,
+  scpPort,
   scpKnownHosts,
   scpPath,
   scpReportFormat,
@@ -80,6 +82,17 @@ const ScpMethodPart = ({
           name={prefix + 'scp_host'}
           value={scpHost}
           onChange={onChange}
+        />
+      </FormGroup>
+
+      <FormGroup title={_('Port')}>
+        <Spinner
+          name={prefix + 'scp_port'}
+          value={scpPort}
+          type="int"
+          onChange={onChange}
+          min={1}
+          max={65535}
         />
       </FormGroup>
 
@@ -122,6 +135,7 @@ ScpMethodPart.propTypes = {
   scpHost: PropTypes.string.isRequired,
   scpKnownHosts: PropTypes.string.isRequired,
   scpPath: PropTypes.string.isRequired,
+  scpPort: PropTypes.number.isRequired,
   scpReportFormat: PropTypes.id,
   onChange: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,

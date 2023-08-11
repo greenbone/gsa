@@ -65,6 +65,7 @@ const method_data_fields = [
   'scp_host',
   'scp_known_hosts',
   'scp_path',
+  'scp_port',
   'scp_report_format',
   'smb_credential',
   'smb_file_path',
