@@ -210,6 +210,7 @@ const DEFAULTS = {
   method_data_notice_report_format: DEFAULT_NOTICE_REPORT_FORMAT,
   method_data_scp_path: DEFAULT_SCP_PATH,
   method_data_scp_host: '',
+  method_data_scp_port: 22,
   method_data_scp_known_hosts: '',
   method_data_send_host: '',
   method_data_send_port: '',
@@ -717,6 +718,7 @@ class AlertDialog extends React.Component {
                   reportFormats={report_formats}
                   scpCredential={values.method_data_scp_credential}
                   scpHost={values.method_data_scp_host}
+                  scpPort={values.method_data_scp_port}
                   scpKnownHosts={values.method_data_scp_known_hosts}
                   scpPath={values.method_data_scp_path}
                   scpReportFormat={values.method_data_scp_report_format}
@@ -905,6 +907,7 @@ AlertDialog.propTypes = {
   method_data_scp_host: PropTypes.string,
   method_data_scp_known_hosts: PropTypes.string,
   method_data_scp_path: PropTypes.string,
+  method_data_scp_port: PropTypes.number,
   method_data_scp_report_format: PropTypes.id,
   method_data_send_host: PropTypes.string,
   method_data_send_port: PropTypes.string,
