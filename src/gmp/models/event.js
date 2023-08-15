@@ -356,7 +356,7 @@ class Event {
       while (true && retries <= 5) {
         try {
           const next = it.next();
-          if (next.toUnixTime() >= now.unix()) {
+          if (convertIcalDate(next, this.timezone).unix() >= now.unix()) {
             return convertIcalDate(next, this.timezone);
           }
           retries = 0;
@@ -380,9 +380,10 @@ class Event {
       // the event is not recurring
       // it should only occur once on its start date
       const now = date();
+      const start = convertIcalDate(this.event.startDate, this.timezone);
 
-      if (this.event.startDate.toUnixTime() >= now.unix()) {
-        return convertIcalDate(this.event.startDate, this.timezone);
+      if (start.unix() >= now.unix()) {
+        return start;
       }
     }
     return undefined;

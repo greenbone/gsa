@@ -20,6 +20,7 @@ import date from '../date';
 import Event from '../event';
 
 const ICAL_FORMAT = 'YYYYMMDD[T]HHmmss[Z]';
+const ICAL_FORMAT_TZ = 'YYYYMMDD[T]HHmmss';
 
 describe('Event model tests', () => {
   test('should parse event start from icalendar without timzeone', () => {
@@ -76,11 +77,7 @@ END:VCALENDAR
   });
 
   test('should calculate start date as next date for daily recurrence', () => {
-    const now = date
-      .tz('utc')
-      .minutes(0)
-      .seconds(0)
-      .milliseconds(0);
+    const now = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
     const startDate = now.clone().add(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -105,11 +102,7 @@ END:VCALENDAR
   });
 
   test('should calculate next day as next day for daily recurrence', () => {
-    const now = date
-      .tz('utc')
-      .minutes(0)
-      .seconds(0)
-      .milliseconds(0);
+    const now = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
     const startDate = now.clone().subtract(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -138,11 +131,7 @@ END:VCALENDAR
   });
 
   test('should calculate start date as next date for no recurrence', () => {
-    const now = date
-      .tz('utc')
-      .minutes(0)
-      .seconds(0)
-      .milliseconds(0);
+    const now = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
     const startDate = now.clone().add(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -166,11 +155,7 @@ END:VCALENDAR
   });
 
   test('should calculate no next date for no recurrence if start date is already over', () => {
-    const startDate = date
-      .tz('utc')
-      .minutes(0)
-      .seconds(0)
-      .milliseconds(0);
+    const startDate = date.tz('utc').minutes(0).seconds(0).milliseconds(0);
     const now = startDate.clone().add(1, 'hour');
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -191,5 +176,39 @@ END:VCALENDAR
 
     // there should be no next event
     expect(nextDate).toBeUndefined();
+  });
+
+  test('should calculate next date for daily recurrence when a timezone is used', () => {
+    const tz = process.env.TZ;
+    process.env.TZ = 'America/New_York'; // UTC-4 or UTC-5
+
+    const now = date
+      .tz('America/New_York')
+      .minutes(0)
+      .seconds(0)
+      .milliseconds(0);
+    // The target date is in 2 hours.  If the recurrence calculation converts the current NY
+    // time directly to UTC (for example 16h00 NY becomes 16h00 UTC) then the test will fail
+    // because UTC is more than 2 hours ahead of NY.
+    const expected = now.clone().add(2, 'hour');
+    const start = expected.clone().subtract(24, 'hour');
+    const icalendar = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
+BEGIN:VEVENT
+UID:c35f82f1-7798-4b84-b2c4-761a33068956
+DTSTART;TZID=/America/New_York:${start.format(ICAL_FORMAT_TZ)}
+RRULE:FREQ=DAILY
+END:VEVENT
+END:VCALENDAR
+`;
+
+    const event = Event.fromIcal(icalendar, 'America/New_York');
+
+    const next = event.nextDate;
+
+    expect(next.isSame(expected)).toEqual(true);
+
+    process.env.TZ = tz;
   });
 });
