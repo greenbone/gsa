@@ -64,6 +64,7 @@ export const TASK_STATUS = {
   interrupted: 'Interrupted',
   container: 'Container',
   uploading: 'Uploading',
+  processing: 'Processing',
   done: 'Done',
 };
 
@@ -82,6 +83,7 @@ const TASK_STATUS_TRANSLATIONS = {
   Uploading: _l('Uploading'),
   Done: _l('Done'),
   Queued: _l('Queued'),
+  Processing: _l('Processing'),
 };
 /* eslint-disable quote-props */
 
@@ -95,7 +97,8 @@ export const isActive = status =>
   status === TASK_STATUS.ultimatedeleterequested ||
   status === TASK_STATUS.resumerequested ||
   status === TASK_STATUS.requested ||
-  status === TASK_STATUS.queued;
+  status === TASK_STATUS.queued ||
+  status === TASK_STATUS.processing;
 
 class Task extends Model {
   static entityType = 'task';
