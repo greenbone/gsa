@@ -273,11 +273,6 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                 )}
               </MenuSection>
             )}
-            {capabilities.mayOp('get_license') && (
-              <MenuSection>
-                <MenuEntry title={_('License')} to="license" />
-              </MenuSection>
-            )}
           </Menu>
           <Menu title={_('Help')}>
             <MenuHelpEntry title={_('User Manual')} />
