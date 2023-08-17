@@ -78,7 +78,10 @@ const StatusBar = ({status = 'Unknown', progress = '0'}) => {
     background = 'low';
   } else if (status === TASK_STATUS.new) {
     background = 'new';
-  } else if (status === TASK_STATUS.running) {
+  } else if (
+    status === TASK_STATUS.processing ||
+    status === TASK_STATUS.running
+  ) {
     background = 'run';
   }
 

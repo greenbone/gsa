@@ -55,6 +55,7 @@ const taskStatusColorScale = scaleOrdinal()
     TASK_STATUS.stoprequested,
     TASK_STATUS.stopped,
     TASK_STATUS.done,
+    TASK_STATUS.processing,
     'N/A',
   ])
   .range([
@@ -68,6 +69,7 @@ const taskStatusColorScale = scaleOrdinal()
     orange(1.0),
     orange(0.0),
     blue(0.5),
+    green(-0.5),
     'silver',
   ]);
 
