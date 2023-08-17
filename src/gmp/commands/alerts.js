@@ -33,6 +33,7 @@ const log = logger.getLogger('gmp.commands.alerts');
 
 const event_data_fields = ['status', 'feed_event', 'secinfo_type'];
 const method_data_fields = [
+  'composer_ignore_pagination',
   'composer_include_notes',
   'composer_include_overrides',
   'details_url',

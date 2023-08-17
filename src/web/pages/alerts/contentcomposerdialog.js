@@ -39,6 +39,7 @@ import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
 import Layout from 'web/components/layout/layout';
+import Divider from 'web/components/layout/divider';
 
 const StyledDiv = styled.div`
   text-align: end;
@@ -47,6 +48,7 @@ const StyledDiv = styled.div`
 const ContentComposerDialog = ({
   filterId = UNSET_VALUE,
   filters = [],
+  ignorePagination = YES_VALUE,
   includeNotes = COMPOSER_CONTENT_DEFAULTS.includeNotes,
   includeOverrides = COMPOSER_CONTENT_DEFAULTS.includeOverrides,
   storeAsDefault,
@@ -60,6 +62,7 @@ const ContentComposerDialog = ({
 
   const controlledValues = {
     filterId,
+    ignorePagination,
     includeNotes,
     includeOverrides,
     storeAsDefault,
@@ -93,6 +96,19 @@ const ContentComposerDialog = ({
             includeOverrides={values.includeOverrides}
             onValueChange={onChange}
           />
+          <FormGroup title={_('Pagination')} titleSize="3">
+            <Divider>
+              <CheckBox
+                data-testid="ignorePagination"
+                name="ignorePagination"
+                checked={values.ignorePagination}
+                checkedValue={YES_VALUE}
+                uncheckedValue={NO_VALUE}
+                title={_('Ignore')}
+                onChange={onChange}
+              />
+            </Divider>
+          </FormGroup>
           <StyledDiv>
             <CheckBox
               name="storeAsDefault"
@@ -117,6 +133,7 @@ ContentComposerDialog.propTypes = {
   filterId: PropTypes.toString,
   filterString: PropTypes.string,
   filters: PropTypes.array,
+  ignorePagination: PropTypes.number,
   includeNotes: PropTypes.number,
   includeOverrides: PropTypes.number,
   reportFormatId: PropTypes.id,

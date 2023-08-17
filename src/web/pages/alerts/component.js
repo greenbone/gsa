@@ -239,11 +239,13 @@ class AlertComponent extends React.Component {
 
   closeContentComposerDialog() {
     const {
+      method_data_composer_ignore_pagination,
       method_data_composer_include_notes,
       method_data_composer_include_overrides,
       filter_id,
     } = this.state;
     this.setState({
+      composerIgnorePagination: method_data_composer_ignore_pagination,
       composerIncludeNotes: method_data_composer_include_notes,
       composerIncludeOverrides: method_data_composer_include_overrides,
       composerFilterId: filter_id,
@@ -253,6 +255,7 @@ class AlertComponent extends React.Component {
   }
 
   handleSaveComposerContent({
+    ignorePagination,
     includeNotes,
     includeOverrides,
     filterId,
@@ -263,6 +266,7 @@ class AlertComponent extends React.Component {
       const defaults = {
         ...reportComposerDefaults,
         reportResultFilterId: filterId === UNSET_VALUE ? undefined : filterId,
+        ignorePagination,
         includeNotes,
         includeOverrides,
       };
@@ -270,6 +274,7 @@ class AlertComponent extends React.Component {
     }
     this.setState({
       filter_id: filterId,
+      method_data_composer_ignore_pagination: ignorePagination,
       method_data_composer_include_notes: includeNotes,
       method_data_composer_include_overrides: includeOverrides,
       composerStoreAsDefault: NO_VALUE,
@@ -437,6 +442,9 @@ class AlertComponent extends React.Component {
             composerFilterId: isDefined(alert.filter)
               ? alert.filter.id
               : undefined,
+            composerIgnorePagination: getValue(
+              method.data.composer_ignore_pagination,
+            ),
             composerIncludeNotes: getValue(method.data.composer_include_notes),
             composerIncludeOverrides: getValue(
               method.data.composer_include_overrides,
@@ -477,6 +485,9 @@ class AlertComponent extends React.Component {
 
             method: alert.method.type,
 
+            method_data_composer_ignore_pagination: getValue(
+              method.data.composer_ignore_pagination,
+            ),
             method_data_composer_include_notes: getValue(
               method.data.composer_include_notes,
             ),
@@ -699,11 +710,13 @@ class AlertComponent extends React.Component {
             filter_id: filterId,
             filters,
             composerFilterId: reportComposerDefaults.reportResultFilterId,
+            composerIgnorePagination: reportComposerDefaults.ignorePagination,
             composerIncludeNotes: reportComposerDefaults.includeNotes,
             composerIncludeOverrides: reportComposerDefaults.includeOverrides,
             composerStoreAsDefault: NO_VALUE,
             id: undefined,
             method: undefined,
+            method_data_composer_ignore_pagination: undefined,
             method_data_composer_include_notes: undefined,
             method_data_composer_include_overrides: undefined,
             method_data_defense_center_ip: undefined,
@@ -780,6 +793,7 @@ class AlertComponent extends React.Component {
 
   handleCloseAlertDialog() {
     this.setState({
+      composerIgnorePagination: undefined,
       composerIncludeNotes: undefined,
       composerIncludeOverrides: undefined,
       composerFilterId: undefined,
@@ -924,6 +938,7 @@ class AlertComponent extends React.Component {
       filters,
       filter_id,
       composerFilterId,
+      composerIgnorePagination,
       composerIncludeNotes,
       composerIncludeOverrides,
       credentials,
@@ -942,6 +957,7 @@ class AlertComponent extends React.Component {
       event_data_feed_event,
       event_data_secinfo_type,
       method,
+      method_data_composer_ignore_pagination,
       method_data_composer_include_notes,
       method_data_composer_include_overrides,
       method_data_defense_center_ip,
@@ -1051,6 +1067,9 @@ class AlertComponent extends React.Component {
                 event_data_feed_event={event_data_feed_event}
                 event_data_secinfo_type={event_data_secinfo_type}
                 method={method}
+                method_data_composer_ignore_pagination={
+                  method_data_composer_ignore_pagination
+                }
                 method_data_composer_include_notes={
                   method_data_composer_include_notes
                 }
@@ -1184,6 +1203,7 @@ class AlertComponent extends React.Component {
             )}
             {contentComposerDialogVisible && (
               <ContentComposerDialog
+                ignorePagination={parseYesNo(composerIgnorePagination)}
                 includeNotes={parseYesNo(composerIncludeNotes)}
                 includeOverrides={parseYesNo(composerIncludeOverrides)}
                 filterId={composerFilterId}
