@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import styled from 'styled-components';
 
@@ -169,11 +169,17 @@ let UserSettingsDialog = ({
   const [error, setError] = useState();
   const [formValues, handleValueChange] = useFormValues(settings);
 
+  const handleSave = useCallback(values => {
+    onSave(values).catch(err => {
+      setError(err.message);
+    })
+  }, [onSave]);
+
   const {hasError, errors, validate} = useFormValidation(
     userSettingsRules,
     formValues,
     {
-      onValidationSuccess: onSave,
+      onValidationSuccess: handleSave,
       onValidationError: setError,
       fieldsToValidate,
     },
