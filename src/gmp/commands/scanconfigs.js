@@ -127,13 +127,21 @@ export class ScanConfigCommand extends EntityCommand {
   }
 
   editScanConfigFamilySettings({id, familyName}) {
-    return this.httpGet({
+    const get = this.httpGet({
       cmd: 'edit_config_family',
       id,
       family: familyName,
-    }).then(response => {
+    });
+    const all = this.httpGet({
+      cmd: 'edit_config_family_all',
+      id,
+      family: familyName,
+    });
+    return Promise.all([get, all]).then(([response, response_all]) => {
       const {data} = response;
+      const data_all = response_all.data;
       const config_resp = data.get_config_family_response;
+      const config_resp_all = data_all.get_config_family_response;
       const settings = {};
 
       const nvts = {};
@@ -142,7 +150,7 @@ export class ScanConfigCommand extends EntityCommand {
         nvts[oid] = true;
       });
 
-      settings.nvts = map(config_resp.all.get_nvts_response.nvt, nvt => {
+      settings.nvts = map(config_resp_all.get_nvts_response.nvt, nvt => {
         nvt.oid = nvt._oid;
         delete nvt._oid;
 
