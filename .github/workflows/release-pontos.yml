@@ -69,7 +69,7 @@ jobs:
           node-version: "14"
           cache: "npm"
       - name: Build dist files
-        run: node run build
+        run: npm run build
       - name: Create tarballs
         run: |
           tar -C build -czvf gsa-dist-${{ needs.release.outputs.release-version }}.tar.gz .
