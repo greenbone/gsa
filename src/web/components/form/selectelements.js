@@ -201,7 +201,15 @@ class MenuComponent extends React.Component {
       return null;
     }
 
-    const rect = target.current.getBoundingClientRect();
+    let rect;
+    if (target.current.closest('.multiselect-scroll') === null) {
+      rect = target.current.getBoundingClientRect();
+    } else {
+      rect = target.current
+        .closest('.multiselect-scroll')
+        .getBoundingClientRect();
+    }
+
     const {height, width, right, left, top} = rect;
 
     return (
