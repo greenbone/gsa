@@ -61,6 +61,7 @@ const transformCvssData = (data = {}) => {
   const cvssData = {
     [NA_VALUE]: 0,
     [LOG_VALUE]: 0,
+    0.1: 0,
     1: 0,
     2: 0,
     3: 0,
@@ -78,7 +79,14 @@ const transformCvssData = (data = {}) => {
 
     const severity = parseSeverity(value);
 
-    const cvss = isDefined(severity) ? Math.floor(severity) : NA_VALUE;
+    let cvss;
+    if (!isDefined(severity)) {
+      cvss = NA_VALUE;
+    } else if (severity >= 0.1 && severity <= 0.9) {
+      cvss = 0.1;
+    } else {
+      cvss = Math.floor(severity);
+    }
 
     count = parseInt(count);
 
@@ -108,12 +116,18 @@ const transformCvssData = (data = {}) => {
           start: value,
         };
         toolTip = `10.0 (${label}): ${perc}% (${count})`;
-      } else if (value > 0) {
+      } else if (value > 1) {
         filterValue = {
           start: format(value - 0.1),
           end: format(value + 1),
         };
         toolTip = `${value}.0 - ${value}.9 (${label}): ${perc}% (${count})`;
+      } else if (value > 0) {
+        filterValue = {
+          start: format(value - 0.1),
+          end: '1.0',
+        };
+        toolTip = `${value} - 0.9 (${label}): ${perc}% (${count})`;
       } else {
         filterValue = {
           start: value,
