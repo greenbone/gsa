@@ -52,7 +52,7 @@ class CvssDisplay extends React.Component {
 
     let statusFilter;
 
-    if (isDefined(start) && start > 0 && end < 10) {
+    if (isDefined(start) && start >= 0 && end < 10) {
       const startTerm = FilterTerm.fromString(`severity>${start}`);
       const endTerm = FilterTerm.fromString(`severity<${end}`);
 
