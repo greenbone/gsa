@@ -255,7 +255,7 @@ class TagDialog extends React.Component {
               )}
               {showResourceSelection && (
                 <FormGroup title={_('Resources')}>
-                  <ScrollableContent>
+                  <ScrollableContent className="multiselect-scroll">
                     <MultiSelect
                       name="resource_ids"
                       items={renderSelectItems(this.state.resourceOptions)}
