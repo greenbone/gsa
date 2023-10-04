@@ -23,7 +23,7 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@babel/core": "7.22.17",
+    "@babel/core": "7.23.0",
     "@babel/runtime": "^7.23.1",
     "@greenbone/ui-components": "2021.1.2",
     "@sentry/react": "^7.73.0",
