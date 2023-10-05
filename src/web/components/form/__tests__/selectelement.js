@@ -261,7 +261,7 @@ describe('Menu tests', () => {
   test('should render with position reference to parent element', () => {
     const {getByTestId} = renderTest({mockBoundingClientRect: true});
     const menu = getByTestId('select-menu');
-    expect(menu).toHaveStyle({top: '120px'});
+    expect(menu).toHaveStyleRule({top: '120px'});
     expect(menu).toMatchSnapshot();
   });
 
