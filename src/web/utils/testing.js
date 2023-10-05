@@ -100,9 +100,9 @@ export const render = ui => {
     getByName: name => getByName(baseElement, name),
     queryByName: name => queryByName(baseElement, name),
     queryAllByName: name => queryAllByName(baseElement, name),
-    rerender: ui =>
+    rerender: component =>
       rerender(
-        <StyleSheetManager enableVendorPrefixes>{ui}</StyleSheetManager>,
+        <StyleSheetManager enableVendorPrefixes>{component}</StyleSheetManager>,
       ),
     ...other,
   };
