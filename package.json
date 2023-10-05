@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "main": "src/index.js",
   "engines": {
@@ -64,7 +64,7 @@
     "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
-    "styled-components": "^4.4.1",
+    "styled-components": "^6.0.8",
     "uuid": "^9.0.1",
     "whatwg-fetch": "^3.6.19"
   },
@@ -89,7 +89,7 @@
     "husky": "^2.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-junit": "^16.0.0",
-    "jest-styled-components": "^6.3.4",
+    "jest-styled-components": "^7.1.1",
     "lint-staged": "^13.1.0",
     "prettier": "^3.0.3"
   },
