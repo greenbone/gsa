@@ -1,7 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ContainerDialog tests should render create dialog 1`] = `
-.c8 {
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -10,13 +49,52 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
   -ms-flex-align: stretch;
   align-items: stretch;
+}
+
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c18 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
 .c1 {
@@ -44,7 +122,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   bottom: 0;
   left: 0;
   margin: 0;
-  background: rgba(102,102,102,0.5);
+  background: rgba(102, 102, 102, 0.5);
   z-index: 600;
   -webkit-transition: opacity 1s ease-in;
   transition: opacity 1s ease-in;
@@ -52,7 +130,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   height: 100%;
 }
 
-.c20 {
+.c25 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -61,13 +139,13 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c19 {
+.c24 {
   position: absolute;
   bottom: 3px;
   right: 3px;
   width: 20px;
   height: 20px;
-  background: repeating-linear-gradient( -45deg, transparent, transparent 2px, #000 2px, #000 3px );
+  background: repeating-linear-gradient(     -45deg,     transparent,     transparent 2px,     #000 2px,     #000 3px   );
 }
 
 .c2 {
@@ -86,7 +164,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   border: 1px solid #7F7F7F;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -103,30 +181,30 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 
-.c4:hover {
+.c5 :hover {
   border: 1px solid #074320;
 }
 
-.c5 {
+.c6 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
 
-.c16 {
+.c21 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -146,12 +224,12 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   z-index: 1;
 }
 
-.c16:focus,
-.c16:hover {
+.c21:focus,
+.c21:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c16:hover {
+.c21:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -159,26 +237,26 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   color: #fff;
 }
 
-.c16[disabled] {
+.c21[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c16 img {
+.c21 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c16:link {
+.c21:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c17 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -187,8 +265,8 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -196,63 +274,32 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   align-items: center;
 }
 
-.c18 {
+.c23 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c18:hover {
+.c23 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c15 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c19 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
+}
+
+.c20 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
   justify-content: space-between;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
@@ -266,17 +313,15 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   align-items: center;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
   justify-content: space-between;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
   cursor: -webkit-grab;
-  cursor: -moz-grab;
   cursor: grab;
 }
 
-.c7 {
+.c9 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -284,31 +329,12 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   max-height: 400px;
 }
 
-.c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
+.c8 {
   overflow: hidden;
   height: 100%;
 }
 
-.c9 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -318,13 +344,13 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   padding-bottom: 10px;
 }
 
-.c10 {
+.c12 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -335,28 +361,13 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   margin-left: 0;
 }
 
-.c11 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c14 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c14 {
+.c17 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -365,7 +376,7 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   display: none;
 }
 
-.c12 {
+.c15 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -379,11 +390,11 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   padding: 1px 8px;
 }
 
-.c12:-webkit-autofill {
+.c15:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c13 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -396,8 +407,8 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -424,14 +435,14 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
             class="c2"
           >
             <div
-              class="c3"
+              class="c3 c4"
               data-testid="dialog-title-bar"
             >
               <span>
                 New Container Task
               </span>
               <div
-                class="c4 c5"
+                class="c5 c6"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -439,38 +450,41 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
               </div>
             </div>
             <div
-              class="c6"
+              class="c7 c8"
             >
               <div
-                class="c7"
+                class="c9"
                 data-testid="save-dialog-content"
+                maxheight="400px"
               >
                 <div
-                  class="c8"
+                  class="c10"
                 >
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
+                      titleoffset="0"
+                      titlesize="2"
                     >
                       Name
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <input
-                        class="c12 c13"
+                        class="c15 c16"
                         name="name"
                         size="30"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c14"
+                        class="c17"
                         data-testid="error-marker"
                       >
                         ×
@@ -478,28 +492,30 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
+                      titleoffset="0"
+                      titlesize="2"
                     >
                       Comment
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <input
-                        class="c12 c13"
+                        class="c15 c16"
                         name="comment"
                         size="30"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c14"
+                        class="c17"
                         data-testid="error-marker"
                       >
                         ×
@@ -510,17 +526,17 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
               </div>
             </div>
             <div
-              class="c15"
+              class="c18 c19 c20"
             >
               <button
-                class="c16 c17 c18"
+                class="c21 c22 c23"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c16 c17 c18"
+                class="c21 c22 c23"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -529,10 +545,10 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
             </div>
           </div>
           <div
-            class="c19"
+            class="c24"
           >
             <div
-              class="c20"
+              class="c25"
             />
           </div>
         </div>
@@ -544,11 +560,46 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
 `;
 
 exports[`ContainerDialog tests should render edit dialog 1`] = `
-<body>
-  <div
-    id="portals"
-  >
-    .c8 {
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -557,8 +608,8 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -566,7 +617,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: stretch;
 }
 
-.c15 {
+.c13 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -575,8 +626,8 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -584,7 +635,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: center;
 }
 
-.c17 {
+.c24 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -592,44 +643,35 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c19 {
   margin-left: -5px;
 }
 
-.c17 > * {
+.c19>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c17 > * {
+.c19>* {
   margin-left: 5px;
 }
 
-.c16 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c18 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -661,7 +703,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   bottom: 0;
   left: 0;
   margin: 0;
-  background: rgba(102,102,102,0.5);
+  background: rgba(102, 102, 102, 0.5);
   z-index: 600;
   -webkit-transition: opacity 1s ease-in;
   transition: opacity 1s ease-in;
@@ -669,7 +711,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   height: 100%;
 }
 
-.c27 {
+.c31 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -678,13 +720,13 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c26 {
+.c30 {
   position: absolute;
   bottom: 3px;
   right: 3px;
   width: 20px;
   height: 20px;
-  background: repeating-linear-gradient( -45deg, transparent, transparent 2px, #000 2px, #000 3px );
+  background: repeating-linear-gradient(     -45deg,     transparent,     transparent 2px,     #000 2px,     #000 3px   );
 }
 
 .c2 {
@@ -703,7 +745,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   border: 1px solid #7F7F7F;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -720,30 +762,30 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 
-.c4:hover {
+.c5 :hover {
   border: 1px solid #074320;
 }
 
-.c5 {
+.c6 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
 
-.c23 {
+.c27 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -763,12 +805,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   z-index: 1;
 }
 
-.c23:focus,
-.c23:hover {
+.c27:focus,
+.c27:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c23:hover {
+.c27:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -776,26 +818,26 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   color: #fff;
 }
 
-.c23[disabled] {
+.c27[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c23 img {
+.c27 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c23:link {
+.c27:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c24 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -804,8 +846,8 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -813,63 +855,32 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: center;
 }
 
-.c25 {
+.c29 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c25:hover {
+.c29 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c22 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c25 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
+}
+
+.c26 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
   justify-content: space-between;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
@@ -883,17 +894,15 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: center;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
   justify-content: space-between;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
   cursor: -webkit-grab;
-  cursor: -moz-grab;
   cursor: grab;
 }
 
-.c7 {
+.c9 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -901,31 +910,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   max-height: 400px;
 }
 
-.c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
+.c8 {
   overflow: hidden;
   height: 100%;
 }
 
-.c9 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -935,13 +925,13 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   padding-bottom: 10px;
 }
 
-.c10 {
+.c12 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -952,28 +942,13 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   margin-left: 0;
 }
 
-.c11 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c14 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c14 {
+.c17 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -982,7 +957,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   display: none;
 }
 
-.c12 {
+.c15 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -996,11 +971,11 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   padding: 1px 8px;
 }
 
-.c12:-webkit-autofill {
+.c15:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c13 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1013,8 +988,8 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -1022,7 +997,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: center;
 }
 
-.c18 {
+.c20 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -1038,7 +1013,7 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   cursor: pointer;
 }
 
-.c19 {
+.c21 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -1049,11 +1024,11 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   height: auto;
 }
 
-.c21 {
+.c23 {
   opacity: 1;
 }
 
-.c20 {
+.c22 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1062,8 +1037,8 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
   justify-content: flex-start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -1071,7 +1046,11 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
   align-items: center;
 }
 
-<div>
+<body>
+  <div
+    id="portals"
+  >
+    <div>
       <div
         class="c0"
       >
@@ -1086,14 +1065,14 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
             class="c2"
           >
             <div
-              class="c3"
+              class="c3 c4"
               data-testid="dialog-title-bar"
             >
               <span>
                 New Container Task
               </span>
               <div
-                class="c4 c5"
+                class="c5 c6"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -1101,38 +1080,41 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
               </div>
             </div>
             <div
-              class="c6"
+              class="c7 c8"
             >
               <div
-                class="c7"
+                class="c9"
                 data-testid="save-dialog-content"
+                maxheight="400px"
               >
                 <div
-                  class="c8"
+                  class="c10"
                 >
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
+                      titleoffset="0"
+                      titlesize="2"
                     >
                       Name
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <input
-                        class="c12 c13"
+                        class="c15 c16"
                         name="name"
                         size="30"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c14"
+                        class="c17"
                         data-testid="error-marker"
                       >
                         ×
@@ -1140,28 +1122,30 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
+                      titleoffset="0"
+                      titlesize="2"
                     >
                       Comment
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <input
-                        class="c12 c13"
+                        class="c15 c16"
                         name="comment"
                         size="30"
                         type="text"
                         value=""
                       />
                       <div
-                        class="c14"
+                        class="c17"
                         data-testid="error-marker"
                       >
                         ×
@@ -1169,49 +1153,51 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
+                      titleoffset="0"
+                      titlesize="2"
                     >
                       Add results to Assets
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <div
-                        class="c15"
+                        class="c13"
                       >
                         <div
-                          class="c16"
+                          class="c13 c18"
                         >
                           <div
-                            class="c17"
+                            class="c13 c19"
                             margin="5px"
                           >
                             <label
-                              class="c18"
+                              class="c20"
                             >
                               <div
-                                class="c16"
+                                class="c13 c18"
                               >
                                 <div
-                                  class="c17"
+                                  class="c13 c19"
                                   margin="5px"
                                 >
                                   <input
                                     checked=""
-                                    class="c19 c20"
+                                    class="c21 c22"
                                     data-testid="radio-input"
                                     name="in_assets"
                                     type="radio"
                                     value="1"
                                   />
                                   <span
-                                    class="c21"
+                                    class="c23"
                                     data-testid="radio-title"
                                   >
                                     Yes
@@ -1220,24 +1206,24 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                               </div>
                             </label>
                             <label
-                              class="c18"
+                              class="c20"
                             >
                               <div
-                                class="c16"
+                                class="c13 c18"
                               >
                                 <div
-                                  class="c17"
+                                  class="c13 c19"
                                   margin="5px"
                                 >
                                   <input
-                                    class="c19 c20"
+                                    class="c21 c22"
                                     data-testid="radio-input"
                                     name="in_assets"
                                     type="radio"
                                     value="0"
                                   />
                                   <span
-                                    class="c21"
+                                    class="c23"
                                     data-testid="radio-title"
                                   >
                                     No
@@ -1254,17 +1240,17 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
               </div>
             </div>
             <div
-              class="c22"
+              class="c24 c25 c26"
             >
               <button
-                class="c23 c24 c25"
+                class="c27 c28 c29"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c23 c24 c25"
+                class="c27 c28 c29"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1273,10 +1259,10 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
             </div>
           </div>
           <div
-            class="c26"
+            class="c30"
           >
             <div
-              class="c27"
+              class="c31"
             />
           </div>
         </div>

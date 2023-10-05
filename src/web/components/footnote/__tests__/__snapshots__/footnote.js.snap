@@ -10,19 +10,22 @@ exports[`Footnote tests should render footnote 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c1 {
   font-size: 10px;
   color: #7F7F7F;
   text-align: left;
 }
 
 <div
-  class="c0"
+  class="c0 c1"
 />
 `;

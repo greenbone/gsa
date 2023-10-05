@@ -17,8 +17,8 @@ exports[`Snackbar tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: space-around;
-  -webkit-justify-content: space-around;
   -ms-flex-pack: space-around;
+  -webkit-justify-content: space-around;
   justify-content: space-around;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -32,8 +32,8 @@ exports[`Snackbar tests should render 1`] = `
   background-color: #4C4C4C;
   color: #fff;
   font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
-  -webkit-animation: hRwsCZ 5s ease-in-out;
-  animation: hRwsCZ 5s ease-in-out;
+  -webkit-animation: dHXyTQ 5s ease-in-out;
+  animation: dHXyTQ 5s ease-in-out;
 }
 
 <span>

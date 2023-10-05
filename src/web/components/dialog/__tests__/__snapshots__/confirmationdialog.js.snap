@@ -1,6 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ConfirmationDialog component tests should render ConfirmationDialog with text and title 1`] = `
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c10 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 .c1 {
   position: relative;
   display: -webkit-box;
@@ -26,7 +86,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   bottom: 0;
   left: 0;
   margin: 0;
-  background: rgba(102,102,102,0.5);
+  background: rgba(102, 102, 102, 0.5);
   z-index: 600;
   -webkit-transition: opacity 1s ease-in;
   transition: opacity 1s ease-in;
@@ -50,7 +110,7 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   border: 1px solid #7F7F7F;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -67,30 +127,30 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 
-.c4:hover {
+.c5 :hover {
   border: 1px solid #074320;
 }
 
-.c5 {
+.c6 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
 
-.c9 {
+.c13 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -110,12 +170,12 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   z-index: 1;
 }
 
-.c9:focus,
-.c9:hover {
+.c13:focus,
+.c13:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c9:hover {
+.c13:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -123,26 +183,26 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   color: #fff;
 }
 
-.c9[disabled] {
+.c13[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c9 img {
+.c13 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c9:link {
+.c13:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c10 {
+.c14 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -151,8 +211,8 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -160,63 +220,32 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   align-items: center;
 }
 
-.c11 {
+.c15 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c11:hover {
+.c15 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c8 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c11 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
+}
+
+.c12 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
   justify-content: space-between;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
@@ -230,43 +259,22 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
   align-items: center;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
   justify-content: space-between;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
   cursor: -webkit-grab;
-  cursor: -moz-grab;
   cursor: grab;
 }
 
-.c7 {
+.c9 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
   height: 100%;
 }
 
-.c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
+.c8 {
   overflow: hidden;
   height: 100%;
 }
@@ -290,14 +298,14 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
             class="c2"
           >
             <div
-              class="c3"
+              class="c3 c4"
               data-testid="dialog-title-bar"
             >
               <span>
                 bar
               </span>
               <div
-                class="c4 c5"
+                class="c5 c6"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -305,27 +313,27 @@ exports[`ConfirmationDialog component tests should render ConfirmationDialog wit
               </div>
             </div>
             <div
-              class="c6"
+              class="c7 c8"
             >
               <div
-                class="c7"
+                class="c9"
                 data-testid="confirmationdialog-content"
               >
                 foo
               </div>
             </div>
             <div
-              class="c8"
+              class="c10 c11 c12"
             >
               <button
-                class="c9 c10 c11"
+                class="c13 c14 c15"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c9 c10 c11"
+                class="c13 c14 c15"
                 data-testid="dialog-save-button"
                 title="OK"
               >

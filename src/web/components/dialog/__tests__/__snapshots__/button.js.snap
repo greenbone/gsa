@@ -62,8 +62,8 @@ exports[`Dialog Button tests should render button 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -77,7 +77,7 @@ exports[`Dialog Button tests should render button 1`] = `
   background: #11ab51;
 }
 
-.c2:hover {
+.c2 :hover {
   color: #074320;
   background: #A1DDBA;
 }
@@ -149,8 +149,8 @@ exports[`Dialog Button tests should render button when loading 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -160,12 +160,12 @@ exports[`Dialog Button tests should render button when loading 1`] = `
 
 .c2 {
   border: 1px solid #7F7F7F;
-  color: rgba(0,0,0,0.0);
+  color: rgba(0, 0, 0, 0.0);
   background: #11ab51 url(/img/loading.gif) center center no-repeat;
 }
 
-.c2:hover {
-  color: rgba(0,0,0,0.0);
+.c2 :hover {
+  color: rgba(0, 0, 0, 0.0);
   background: #11ab51 url(/img/loading.gif) center center no-repeat;
 }
 

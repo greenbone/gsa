@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MinQodGroup tests should render 1`] = `
-.c4 {
+.c2 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -10,43 +10,31 @@ exports[`MinQodGroup tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c5 {
   margin-left: -5px;
 }
 
-.c4 > * {
+.c5>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c4 > * {
+.c5>* {
   margin-left: 5px;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -63,8 +51,8 @@ exports[`MinQodGroup tests should render 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   padding-bottom: 10px;
 }
@@ -80,28 +68,13 @@ exports[`MinQodGroup tests should render 1`] = `
   margin-left: 0;
 }
 
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c3 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c5 {
+.c6 {
   border-radius: 2px;
   border: 1px solid #bfbfbf;
   background-color: #fff;
@@ -113,7 +86,7 @@ exports[`MinQodGroup tests should render 1`] = `
   vertical-align: middle;
 }
 
-.c6 {
+.c7 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -125,46 +98,6 @@ exports[`MinQodGroup tests should render 1`] = `
   vertical-align: middle;
   margin-left: 0.4em;
   margin-right: 22px;
-}
-
-.c7 {
-  background-color: #e5e5e5;
-  color: #7F7F7F;
-  border-left: 1px solid #4C4C4C;
-  width: 16px;
-  height: 50%;
-  font-size: 0.6em;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-  vertical-align: middle;
-  position: absolute;
-  right: 0;
-  cursor: default;
-  display: block;
-  overflow: hidden;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border-top-right-radius: 1px;
-  top: 0;
-}
-
-.c7:hover {
-  background-color: #11ab51;
-  color: #fff;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c7:active {
-  background-color: #fff;
-  color: #074320;
-  -webkit-text-decoration: none;
-  text-decoration: none;
 }
 
 .c8 {
@@ -189,8 +122,6 @@ exports[`MinQodGroup tests should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  border-bottom-right-radius: 1px;
-  bottom: 0;
 }
 
 .c8:hover {
@@ -207,35 +138,47 @@ exports[`MinQodGroup tests should render 1`] = `
   text-decoration: none;
 }
 
+.c9 {
+  border-top-right-radius: 1px;
+  top: 0;
+}
+
+.c10 {
+  border-bottom-right-radius: 1px;
+  bottom: 0;
+}
+
 <div
   class="c0"
 >
   <label
     class="c1"
     data-testid="formgroup-title"
+    titleoffset="0"
+    titlesize="2"
   >
     QoD
   </label>
   <div
-    class="c2"
+    class="c2 c3"
     data-testid="formgroup-content"
     size="10"
   >
     <div
-      class="c3"
+      class="c2 c4"
     >
       <div
-        class="c4"
+        class="c2 c5"
         margin="5px"
       >
         <span>
           must be at least
         </span>
         <span
-          class="c5"
+          class="c6"
         >
           <input
-            class="c6"
+            class="c7"
             data-testid="spinner-input"
             max="100"
             maxlength="5"
@@ -245,13 +188,13 @@ exports[`MinQodGroup tests should render 1`] = `
             value="20"
           />
           <span
-            class="c7"
+            class="c8 c9"
             data-testid="spinner-up"
           >
             ▲
           </span>
           <span
-            class="c8"
+            class="c8 c10"
             data-testid="spinner-down"
           >
             ▼

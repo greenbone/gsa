@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`BooleanFilterGroup tests should render 1`] = `
-.c3 {
+.c2 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -10,8 +10,8 @@ exports[`BooleanFilterGroup tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -20,51 +20,21 @@ exports[`BooleanFilterGroup tests should render 1`] = `
 }
 
 .c5 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
   margin-left: -5px;
 }
 
-.c5 > * {
+.c5>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c5 > * {
+.c5>* {
   margin-left: 5px;
 }
 
 .c4 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -81,8 +51,8 @@ exports[`BooleanFilterGroup tests should render 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   padding-bottom: 10px;
 }
@@ -98,22 +68,7 @@ exports[`BooleanFilterGroup tests should render 1`] = `
   margin-left: 0;
 }
 
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c3 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
@@ -159,8 +114,8 @@ exports[`BooleanFilterGroup tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
   justify-content: flex-start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -174,32 +129,34 @@ exports[`BooleanFilterGroup tests should render 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
+    titleoffset="0"
+    titlesize="2"
   >
     foo
   </label>
   <div
-    class="c2"
+    class="c2 c3"
     data-testid="formgroup-content"
     size="10"
   >
     <div
-      class="c3"
+      class="c2"
     >
       <div
-        class="c4"
+        class="c2 c4"
       >
         <div
-          class="c5"
+          class="c2 c5"
           margin="5px"
         >
           <label
             class="c6"
           >
             <div
-              class="c4"
+              class="c2 c4"
             >
               <div
-                class="c5"
+                class="c2 c5"
                 margin="5px"
               >
                 <input
@@ -222,10 +179,10 @@ exports[`BooleanFilterGroup tests should render 1`] = `
             class="c6"
           >
             <div
-              class="c4"
+              class="c2 c4"
             >
               <div
-                class="c5"
+                class="c2 c5"
                 margin="5px"
               >
                 <input
