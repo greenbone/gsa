@@ -10,8 +10,8 @@ exports[`StartTimeSelection tests should render 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -19,100 +19,73 @@ exports[`StartTimeSelection tests should render 1`] = `
   align-items: stretch;
 }
 
-.c5 {
+.c3 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c6 {
   margin-top: -5px;
 }
 
-.c5 > * {
+.c6>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c5 > * {
+.c6>* {
   margin-top: 5px;
 }
 
-.c9 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c10 {
   margin-left: -20px;
 }
 
-.c9 > * {
+.c10>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c9 > * {
+.c10>* {
   margin-left: 20px;
 }
 
-.c4 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c5 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c7 {
+.c8 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c7 * {
+.c8 * {
   height: inherit;
   width: inherit;
 }
 
-.c15 {
+.c17 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -132,12 +105,12 @@ exports[`StartTimeSelection tests should render 1`] = `
   z-index: 1;
 }
 
-.c15:focus,
-.c15:hover {
+.c17:focus,
+.c17:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c15:hover {
+.c17:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -145,26 +118,26 @@ exports[`StartTimeSelection tests should render 1`] = `
   color: #fff;
 }
 
-.c15[disabled] {
+.c17[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c15 img {
+.c17 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c15:link {
+.c17:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c16 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -173,8 +146,8 @@ exports[`StartTimeSelection tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -192,8 +165,8 @@ exports[`StartTimeSelection tests should render 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   padding-bottom: 10px;
 }
@@ -209,47 +182,17 @@ exports[`StartTimeSelection tests should render 1`] = `
   margin-left: 0;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c14 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c16 {
   margin-left: 33.33333333%;
 }
 
-.c10 {
+.c11 {
   border-radius: 2px;
   border: 1px solid #bfbfbf;
   background-color: #fff;
@@ -261,7 +204,7 @@ exports[`StartTimeSelection tests should render 1`] = `
   vertical-align: middle;
 }
 
-.c11 {
+.c12 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -273,46 +216,6 @@ exports[`StartTimeSelection tests should render 1`] = `
   vertical-align: middle;
   margin-left: 0.4em;
   margin-right: 22px;
-}
-
-.c12 {
-  background-color: #e5e5e5;
-  color: #7F7F7F;
-  border-left: 1px solid #4C4C4C;
-  width: 16px;
-  height: 50%;
-  font-size: 0.6em;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-  vertical-align: middle;
-  position: absolute;
-  right: 0;
-  cursor: default;
-  display: block;
-  overflow: hidden;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border-top-right-radius: 1px;
-  top: 0;
-}
-
-.c12:hover {
-  background-color: #11ab51;
-  color: #fff;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c12:active {
-  background-color: #fff;
-  color: #074320;
-  -webkit-text-decoration: none;
-  text-decoration: none;
 }
 
 .c13 {
@@ -337,8 +240,6 @@ exports[`StartTimeSelection tests should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  border-bottom-right-radius: 1px;
-  bottom: 0;
 }
 
 .c13:hover {
@@ -355,15 +256,25 @@ exports[`StartTimeSelection tests should render 1`] = `
   text-decoration: none;
 }
 
-.c8 {
+.c14 {
+  border-top-right-radius: 1px;
+  top: 0;
+}
+
+.c15 {
+  border-bottom-right-radius: 1px;
+  bottom: 0;
+}
+
+.c9 {
   margin-left: 5px;
 }
 
-.c8:hover {
+.c9 :hover {
   cursor: pointer;
 }
 
-.c6 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -381,11 +292,13 @@ exports[`StartTimeSelection tests should render 1`] = `
     <label
       class="c2"
       data-testid="formgroup-title"
+      titleoffset="0"
+      titlesize="2"
     >
       Timezone
     </label>
     <div
-      class="c3"
+      class="c3 c4"
       data-testid="timezone"
       size="10"
     >
@@ -398,19 +311,21 @@ exports[`StartTimeSelection tests should render 1`] = `
     <label
       class="c2"
       data-testid="formgroup-title"
+      titleoffset="0"
+      titlesize="2"
     >
       Start Time
     </label>
     <div
-      class="c3"
+      class="c3 c4"
       data-testid="formgroup-content"
       size="10"
     >
       <div
-        class="c4"
+        class="c3 c5"
       >
         <div
-          class="c5"
+          class="c0 c6"
           margin="5px"
         >
           <div
@@ -420,12 +335,12 @@ exports[`StartTimeSelection tests should render 1`] = `
               class="react-datepicker__input-container"
             >
               <div
-                class="c6"
+                class="c7"
                 width="auto"
               >
                 01/01/2019
                 <span
-                  class="c7 c8"
+                  class="c8 c9"
                   data-testid="svg-icon"
                 >
                   <svg>
@@ -436,17 +351,17 @@ exports[`StartTimeSelection tests should render 1`] = `
             </div>
           </div>
           <div
-            class="c4"
+            class="c3 c5"
           >
             <div
-              class="c9"
+              class="c3 c10"
               margin="20px"
             >
               <span
-                class="c10"
+                class="c11"
               >
                 <input
-                  class="c11"
+                  class="c12"
                   data-testid="spinner-input"
                   max="23"
                   maxlength="5"
@@ -456,13 +371,13 @@ exports[`StartTimeSelection tests should render 1`] = `
                   value="13"
                 />
                 <span
-                  class="c12"
+                  class="c13 c14"
                   data-testid="spinner-up"
                 >
                   ▲
                 </span>
                 <span
-                  class="c13"
+                  class="c13 c15"
                   data-testid="spinner-down"
                 >
                   ▼
@@ -471,10 +386,10 @@ exports[`StartTimeSelection tests should render 1`] = `
                
               h
               <span
-                class="c10"
+                class="c11"
               >
                 <input
-                  class="c11"
+                  class="c12"
                   data-testid="spinner-input"
                   max="59"
                   maxlength="5"
@@ -484,13 +399,13 @@ exports[`StartTimeSelection tests should render 1`] = `
                   value="0"
                 />
                 <span
-                  class="c12"
+                  class="c13 c14"
                   data-testid="spinner-up"
                 >
                   ▲
                 </span>
                 <span
-                  class="c13"
+                  class="c13 c15"
                   data-testid="spinner-down"
                 >
                   ▼
@@ -510,19 +425,21 @@ exports[`StartTimeSelection tests should render 1`] = `
     <label
       class="c2"
       data-testid="formgroup-title"
+      titleoffset="0"
+      titlesize="2"
     >
       End Time
     </label>
     <div
-      class="c3"
+      class="c3 c4"
       data-testid="formgroup-content"
       size="10"
     >
       <div
-        class="c4"
+        class="c3 c5"
       >
         <div
-          class="c5"
+          class="c0 c6"
           margin="5px"
         >
           <div
@@ -532,12 +449,12 @@ exports[`StartTimeSelection tests should render 1`] = `
               class="react-datepicker__input-container"
             >
               <div
-                class="c6"
+                class="c7"
                 width="auto"
               >
                 01/01/2019
                 <span
-                  class="c7 c8"
+                  class="c8 c9"
                   data-testid="svg-icon"
                 >
                   <svg>
@@ -548,17 +465,17 @@ exports[`StartTimeSelection tests should render 1`] = `
             </div>
           </div>
           <div
-            class="c4"
+            class="c3 c5"
           >
             <div
-              class="c9"
+              class="c3 c10"
               margin="20px"
             >
               <span
-                class="c10"
+                class="c11"
               >
                 <input
-                  class="c11"
+                  class="c12"
                   data-testid="spinner-input"
                   max="23"
                   maxlength="5"
@@ -568,13 +485,13 @@ exports[`StartTimeSelection tests should render 1`] = `
                   value="14"
                 />
                 <span
-                  class="c12"
+                  class="c13 c14"
                   data-testid="spinner-up"
                 >
                   ▲
                 </span>
                 <span
-                  class="c13"
+                  class="c13 c15"
                   data-testid="spinner-down"
                 >
                   ▼
@@ -583,10 +500,10 @@ exports[`StartTimeSelection tests should render 1`] = `
                
               h
               <span
-                class="c10"
+                class="c11"
               >
                 <input
-                  class="c11"
+                  class="c12"
                   data-testid="spinner-input"
                   max="59"
                   maxlength="5"
@@ -596,13 +513,13 @@ exports[`StartTimeSelection tests should render 1`] = `
                   value="0"
                 />
                 <span
-                  class="c12"
+                  class="c13 c14"
                   data-testid="spinner-up"
                 >
                   ▲
                 </span>
                 <span
-                  class="c13"
+                  class="c13 c15"
                   data-testid="spinner-down"
                 >
                   ▼
@@ -620,12 +537,12 @@ exports[`StartTimeSelection tests should render 1`] = `
     class="c1"
   >
     <div
-      class="c14"
+      class="c3 c16"
       data-testid="formgroup-content"
       offset="4"
     >
       <button
-        class="c15 c16"
+        class="c17 c18"
         data-testid="update-button"
       >
         Update

@@ -10,8 +10,8 @@ exports[`withLayout HOC tests should create a new component 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -34,8 +34,8 @@ exports[`withLayout HOC tests should create a new component with align: [center,
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -58,8 +58,8 @@ exports[`withLayout HOC tests should create a new component with align: [start, 
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
   justify-content: flex-start;
   -webkit-align-items: flex-end;
   -webkit-box-align: flex-end;
@@ -82,8 +82,8 @@ exports[`withLayout HOC tests should create a new component with align: start 1`
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
   justify-content: flex-start;
 }
 
@@ -105,8 +105,8 @@ exports[`withLayout HOC tests should create a new component with basis: 20% 1`] 
   -ms-flex-preferred-size: 20%;
   flex-basis: 20%;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -132,8 +132,8 @@ exports[`withLayout HOC tests should create a new component with basis: auto 1`]
   -ms-flex-preferred-size: auto;
   flex-basis: auto;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -156,8 +156,8 @@ exports[`withLayout HOC tests should create a new component with flex 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -180,8 +180,8 @@ exports[`withLayout HOC tests should create a new component with flex: column 1`
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -204,8 +204,8 @@ exports[`withLayout HOC tests should create a new component with flex: column, a
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
   justify-content: flex-start;
   -webkit-align-items: flex-end;
   -webkit-box-align: flex-end;
@@ -228,8 +228,8 @@ exports[`withLayout HOC tests should create a new component with flex: column, a
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
   justify-content: flex-start;
 }
 
@@ -248,8 +248,8 @@ exports[`withLayout HOC tests should create a new component with flex: row 1`] =
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -276,8 +276,8 @@ exports[`withLayout HOC tests should create a new component with grow 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -304,8 +304,8 @@ exports[`withLayout HOC tests should create a new component with grow: 1 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -332,8 +332,8 @@ exports[`withLayout HOC tests should create a new component with grow: 666 1`] =
   -ms-flex-positive: 666;
   flex-grow: 666;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -359,8 +359,8 @@ exports[`withLayout HOC tests should create a new component with shrink 1`] = `
   -ms-flex-negative: 1;
   flex-shrink: 1;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -386,8 +386,8 @@ exports[`withLayout HOC tests should create a new component with shrink: 1 1`] =
   -ms-flex-negative: 1;
   flex-shrink: 1;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -413,8 +413,8 @@ exports[`withLayout HOC tests should create a new component with shrink: 666 1`]
   -ms-flex-negative: 666;
   flex-shrink: 666;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -436,12 +436,13 @@ exports[`withLayout HOC tests should create a new component with wrap 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
+  -webkit-box-flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -463,12 +464,13 @@ exports[`withLayout HOC tests should create a new component with wrap: nowrap 1`
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
+  -webkit-box-flex-wrap: nowrap;
   -webkit-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
   flex-wrap: nowrap;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -490,12 +492,13 @@ exports[`withLayout HOC tests should create a new component with wrap: wrap 1`] 
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
+  -webkit-box-flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;

@@ -14,8 +14,8 @@ exports[`Task Details tests should render full task details 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -32,50 +32,13 @@ exports[`Task Details tests should render full task details 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
   -ms-flex-align: stretch;
   align-items: stretch;
-}
-
-.c2 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-left: -5px;
-}
-
-.c4 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4 > * {
-  margin-left: 5px;
 }
 
 .c3 {
@@ -87,20 +50,45 @@ exports[`Task Details tests should render full task details 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c2 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c6 {
+.c5 {
+  margin-left: -5px;
+}
+
+.c5>* {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5>* {
+  margin-left: 5px;
+}
+
+.c4 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c7 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -109,29 +97,29 @@ exports[`Task Details tests should render full task details 1`] = `
   width: 100%;
 }
 
-.c5 > *:not(:last-child)::after {
+.c6>*:not(:last-child)::after {
   content: '•';
   margin-left: 5px;
 }
 
-.c7 td {
+.c8 td {
   padding: 4px 4px 4px 0;
 }
 
-.c7 tr td:first-child {
+.c8 tr td:first-child {
   padding-right: 5px;
 }
 
-.c8 {
+.c9 {
   width: 10%;
 }
 
-.c9 {
+.c10 {
   width: 90%;
 }
 
 @media print {
-  .c6 {
+  .c7 {
     border-collapse: collapse;
   }
 }
@@ -163,10 +151,10 @@ exports[`Task Details tests should render full task details 1`] = `
     </h2>
     <div>
       <div
-        class="c3"
+        class="c3 c4"
       >
         <div
-          class="c4 c5"
+          class="c3 c5 c6"
           margin="5px"
         >
           <span>
@@ -190,15 +178,15 @@ exports[`Task Details tests should render full task details 1`] = `
     </h2>
     <div>
       <table
-        class="c6 c7"
+        class="c7 c8"
       >
         <colgroup>
           <col
-            class="c8"
+            class="c9"
             width="10%"
           />
           <col
-            class="c9"
+            class="c10"
             width="90%"
           />
         </colgroup>
@@ -257,15 +245,15 @@ exports[`Task Details tests should render full task details 1`] = `
     </h2>
     <div>
       <table
-        class="c6 c7"
+        class="c7 c8"
       >
         <colgroup>
           <col
-            class="c8"
+            class="c9"
             width="10%"
           />
           <col
-            class="c9"
+            class="c10"
             width="90%"
           />
         </colgroup>
@@ -332,15 +320,15 @@ exports[`Task Details tests should render full task details 1`] = `
     </h2>
     <div>
       <table
-        class="c6 c7"
+        class="c7 c8"
       >
         <colgroup>
           <col
-            class="c8"
+            class="c9"
             width="10%"
           />
           <col
-            class="c9"
+            class="c10"
             width="90%"
           />
         </colgroup>

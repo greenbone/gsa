@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CreateNamedFilterGroup tests should render 1`] = `
-.c2 {
+.c0 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -10,50 +10,38 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c3 {
   margin-left: -5px;
 }
 
-.c2 > * {
+.c3>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c2 > * {
+.c3>* {
   margin-left: 5px;
 }
 
-.c1 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c2 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c9 {
+.c10 {
   color: #c12c30;
   font-weight: bold;
   font-size: 19px;
@@ -62,7 +50,7 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   display: none;
 }
 
-.c7 {
+.c8 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -79,11 +67,11 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   opacity: 0.65;
 }
 
-.c7:-webkit-autofill {
+.c8:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
 }
 
-.c8 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -92,8 +80,8 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -101,7 +89,7 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c3 {
+.c4 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -117,7 +105,7 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c4 {
+.c5 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -128,11 +116,11 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   height: auto;
 }
 
-.c6 {
+.c7 {
   opacity: 1;
 }
 
-.c5 {
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -141,8 +129,8 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -150,53 +138,38 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c1 {
   margin-top: 15px;
 }
 
 <div
-  class="c0"
+  class="c0 c1"
 >
   <div
-    class="c1"
+    class="c0 c2"
   >
     <div
-      class="c2"
+      class="c0 c3"
       margin="5px"
     >
       <label
-        class="c3"
+        class="c4"
       >
         <div
-          class="c1"
+          class="c0 c2"
         >
           <div
-            class="c2"
+            class="c0 c3"
             margin="5px"
           >
             <input
-              class="c4 c5"
+              class="c5 c6"
               data-testid="createnamedfiltergroup-checkbox"
               name="saveNamedFilter"
               type="checkbox"
             />
             <span
-              class="c6"
+              class="c7"
               data-testid="checkbox-title"
             >
               Store filter as: 
@@ -205,7 +178,7 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
         </div>
       </label>
       <input
-        class="c7 c8"
+        class="c8 c9"
         data-testid="createnamedfiltergroup-textfield"
         disabled=""
         maxlength="80"
@@ -216,7 +189,7 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
         value=""
       />
       <div
-        class="c9"
+        class="c10"
         data-testid="error-marker"
       >
         ×

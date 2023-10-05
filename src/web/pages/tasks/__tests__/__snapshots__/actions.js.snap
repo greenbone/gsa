@@ -14,47 +14,13 @@ exports[`Task Actions tests should render 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
   -ms-flex-align: stretch;
   align-items: stretch;
-}
-
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-left: -5px;
-}
-
-.c2 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c2 > * {
-  margin-left: 5px;
 }
 
 .c1 {
@@ -70,40 +36,80 @@ exports[`Task Actions tests should render 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c4 {
+  margin-left: -5px;
+}
+
+.c4>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c3 {
+.c4>* {
+  margin-left: 5px;
+}
+
+.c2 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c6 {
   cursor: pointer;
 }
 
-.c5 svg path {
+.c8 svg path {
   fill: #bfbfbf;
 }
 
-.c4 {
+.c7 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c4 * {
+.c7 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c3 {
+  .c5 {
     display: none;
   }
 }
@@ -118,14 +124,14 @@ exports[`Task Actions tests should render 1`] = `
         class="c0"
       >
         <div
-          class="c1"
+          class="c1 c2"
         >
           <div
-            class="c2"
+            class="c3 c4"
             margin="5px"
           >
             <span
-              class="c3 c4"
+              class="c5 c6 c7"
               data-testid="svg-icon"
               title="Start"
             >
@@ -137,7 +143,7 @@ exports[`Task Actions tests should render 1`] = `
             </span>
             <span
               alt="Resume"
-              class="c5 c4"
+              class="c5 c8 c7"
               data-testid="svg-icon"
               title="Task is not stopped"
             >
@@ -148,7 +154,7 @@ exports[`Task Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c3 c4"
+              class="c5 c6 c7"
               data-testid="svg-icon"
               title="Move Task to trashcan"
             >
@@ -159,7 +165,7 @@ exports[`Task Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c3 c4"
+              class="c5 c6 c7"
               data-testid="svg-icon"
               title="Edit Task"
             >
@@ -170,7 +176,7 @@ exports[`Task Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c3 c4"
+              class="c5 c6 c7"
               data-testid="svg-icon"
               title="Clone Task"
             >
@@ -181,7 +187,7 @@ exports[`Task Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c3 c4"
+              class="c5 c6 c7"
               data-testid="svg-icon"
               title="Export Task"
             >

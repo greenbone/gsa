@@ -10,8 +10,8 @@ exports[`Scan Config row tests should render 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -29,11 +29,10 @@ exports[`Scan Config row tests should render 1`] = `
   flex-direction: row;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
   justify-content: space-between;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -46,8 +45,8 @@ exports[`Scan Config row tests should render 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -67,29 +66,17 @@ exports[`Scan Config row tests should render 1`] = `
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-left: -5px;
 }
 
-.c6 > * {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c6 > * {
-  margin-left: 5px;
-}
-
-.c5 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -101,31 +88,49 @@ exports[`Scan Config row tests should render 1`] = `
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c9 {
+  margin-left: -5px;
+}
+
+.c9>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
+.c9>* {
+  margin-left: 5px;
+}
+
 .c7 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c10 {
   cursor: pointer;
 }
 
-.c3 {
+.c4 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c3 * {
+.c4 * {
   height: inherit;
   width: inherit;
 }
@@ -137,14 +142,14 @@ exports[`Scan Config row tests should render 1`] = `
   color: #0a53b8;
 }
 
-.c2:hover {
+.c2 :hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #0a53b8;
 }
 
 @media print {
-  .c7 {
+  .c3 {
     display: none;
   }
 }
@@ -203,7 +208,7 @@ exports[`Scan Config row tests should render 1`] = `
         >
           <span
             alt="Static"
-            class="c3"
+            class="c3 c4"
             data-testid="svg-icon"
             title="The family selection is STATIC. New families will NOT automatically be added and considered."
           >
@@ -228,7 +233,7 @@ exports[`Scan Config row tests should render 1`] = `
         >
           <span
             alt="Dynamic"
-            class="c3"
+            class="c3 c4"
             data-testid="svg-icon"
             title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."
           >
@@ -242,17 +247,17 @@ exports[`Scan Config row tests should render 1`] = `
       </td>
       <td>
         <div
-          class="c4"
+          class="c5"
         >
           <div
-            class="c5"
+            class="c6 c7"
           >
             <div
-              class="c6"
+              class="c8 c9"
               margin="5px"
             >
               <span
-                class="c7 c3"
+                class="c3 c10 c4"
                 data-testid="svg-icon"
                 title="Move Scan Config to trashcan"
               >
@@ -263,7 +268,7 @@ exports[`Scan Config row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c7 c3"
+                class="c3 c10 c4"
                 data-testid="svg-icon"
                 title="Edit Scan Config"
               >
@@ -274,7 +279,7 @@ exports[`Scan Config row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c7 c3"
+                class="c3 c10 c4"
                 data-testid="svg-icon"
                 title="Clone Scan Config"
               >
@@ -285,7 +290,7 @@ exports[`Scan Config row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c7 c3"
+                class="c3 c10 c4"
                 data-testid="svg-icon"
                 title="Export Scan Config"
               >

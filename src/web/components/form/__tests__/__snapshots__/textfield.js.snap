@@ -28,8 +28,8 @@ exports[`TextField tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -40,7 +40,6 @@ exports[`TextField tests should render 1`] = `
 <input
   class="c0 c1"
   type="text"
-  value=""
 />
 `;
 
@@ -75,8 +74,8 @@ exports[`TextField tests should render in disabled state 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -88,6 +87,5 @@ exports[`TextField tests should render in disabled state 1`] = `
   class="c0 c1"
   disabled=""
   type="text"
-  value=""
 />
 `;
