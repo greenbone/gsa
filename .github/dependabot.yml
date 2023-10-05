@@ -6,6 +6,12 @@ updates:
     schedule:
       interval: monthly
       time: '04:00'
+    groups:
+      patch-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
     open-pull-requests-limit: 10
     versioning-strategy: increase
     ignore:
