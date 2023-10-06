@@ -329,6 +329,7 @@ class UserSettings extends React.Component {
       certBundFilter,
       dfnCertFilter,
       autoCacheRebuild = {},
+      deltaReportsVersion,
     } = this.props;
 
     alertsFilter = hasValue(alertsFilter) ? alertsFilter : {};
@@ -454,6 +455,12 @@ class UserSettings extends React.Component {
                                 : _('No')
                               : ''}
                           </TableData>
+                        </TableRow>
+                        <TableRow>
+                          <TableData>
+                            {_('Delta Reports Version (immutable)')}
+                          </TableData>
+                          <TableData>{deltaReportsVersion}</TableData>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -808,6 +815,7 @@ UserSettings.propTypes = {
   defaultSnmpCredential: PropTypes.object,
   defaultSshCredential: PropTypes.object,
   defaultTarget: PropTypes.object,
+  deltaReportsVersion: PropTypes.string,
   detailsExportFileName: PropTypes.object,
   dfnCertFilter: PropTypes.object,
   dynamicSeverity: PropTypes.object,
@@ -971,6 +979,9 @@ const mapStateToProps = rootState => {
   const certBundFilter = userDefaultFilterSelector.getFilter('certbund');
   const dfnCertFilter = userDefaultFilterSelector.getFilter('dfncert');
   const nvtFilter = userDefaultFilterSelector.getFilter('nvt');
+  const deltaReportsVersion = userDefaultsSelector.getValueByName(
+    'deltareportsversion',
+  );
 
   let scanconfigs = scanConfigsSel.getEntities(ALL_FILTER);
   if (isDefined(scanconfigs)) {
@@ -1036,6 +1047,7 @@ const mapStateToProps = rootState => {
     dfnCertFilter,
     nvtFilter,
     autoCacheRebuild,
+    deltaReportsVersion,
   };
 };
 
