@@ -4,7 +4,7 @@
     [
       "i18next-extract",
       {
-        "locales": ["de"],
+        "locales": ["de", "zh_TW", "zh_CN"],
         "pluralSeparator": null,
         "contextSeparator": null,
         "nsSeparator": null,
