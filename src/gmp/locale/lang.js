@@ -54,7 +54,7 @@ const I18N_OPTIONS = {
     loadPath: '/locales/{{ns}}-{{lng}}.json', // e.g. /locales/gsa-en.json
   },
   supportedLngs: whitelist,
-  nonExplicitSupportedLngs: true,
+  nonExplicitSupportedLngs: false,
   interpolation: {
     skipOnVariables: false,
   },
