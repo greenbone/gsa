@@ -28,13 +28,12 @@ and the fingerprint is `8AE4 BE42 9B60 A59B 311C  2E73 9823 FAA6 0ED1 E580`.
 ## Installation
 
 Prerequisites for GSA:
-* node.js >= 14.0
-* yarn >= 1.0
+* node.js >= 18.0
 
-To install nodejs 14 the following commands can be used
+To install nodejs the following commands can be used
 
 ```bash
-export VERSION=node_14.x
+export VERSION=node_18.x
 export KEYRING=/usr/share/keyrings/nodesource.gpg
 export DISTRIBUTION="$(lsb_release -s -c)"
 
@@ -60,8 +59,8 @@ generated JavaScript and CSS files and additionally in the `build/static/media`
 directory SVG files for all icons will be found.
 
 ```bash
-yarn
-yarn build
+npm install
+npm run build
 ```
 
 All content of the production build can be shipped with every web server. For
@@ -88,7 +87,7 @@ to run GSA in a special web development server. The development server can be
 started with:
 
 ```sh
-cd path/to/gsa && yarn run start
+cd path/to/gsa && npm run start
 ```
 
 Afterwards the development web server is set up and a new browser window is
