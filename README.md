@@ -121,14 +121,14 @@ gsad --http-cors="http://127.0.0.1:8080"
 ```
 
 To be able to communicate with gsad, the web application needs to know the
-server URL. This can be accomplished by editing the `path/to/gsa/public/config.js`
-file. The following lines can be used for a local gsad running with HTTP on
-port 9392:
+server URL. This can be accomplished by editing the [`path/to/gsa/public/config.js`
+file](#config-file). The following lines can be used for a local gsad running
+with HTTP on port 9392:
 
 ```javascript
   config = {
-    protocol: 'http',
-    server: '127.0.0.1:9392',
+    apiProtocol: 'http',
+    apiServer: '127.0.0.1:9392',
   };
 ```
 
