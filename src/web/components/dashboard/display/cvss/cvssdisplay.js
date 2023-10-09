@@ -52,7 +52,7 @@ class CvssDisplay extends React.Component {
 
     let statusFilter;
 
-    if (isDefined(start) && start >= 0 && end < 10) {
+    if (isDefined(start) && isDefined(end) && start >= 0) {
       const startTerm = FilterTerm.fromString(`severity>${start}`);
       const endTerm = FilterTerm.fromString(`severity<${end}`);
 
@@ -69,9 +69,7 @@ class CvssDisplay extends React.Component {
       let statusTerm;
 
       if (isDefined(start)) {
-        if (start > 0) {
-          statusTerm = FilterTerm.fromString(`severity>${start}`);
-        } else if (start === NA_VALUE) {
+        if (start === NA_VALUE) {
           statusTerm = FilterTerm.fromString('severity=""');
         } else {
           statusTerm = FilterTerm.fromString(`severity=${start}`);
