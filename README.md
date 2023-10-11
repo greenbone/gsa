@@ -152,7 +152,7 @@ translations can be found at the [public/locales/](./public/locales/) directory.
 
 ### Format
 
-The translations are stored in in the JSON files as key-value pairs with the key
+The translations are stored in the JSON files as key-value pairs with the key
 being the English string and the value the translation of the specific language.
 Not translated strings have an empty string `“”` as the value.
 
