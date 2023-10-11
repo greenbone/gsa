@@ -13,6 +13,10 @@ written in [React](https://reactjs.org/).
 - [Releases](#releases)
 - [Installation](#installation)
 - [Developing](#developing)
+- [Translations](#translations)
+  - [Format](#format)
+  - [Updating](#updating)
+  - [Support a new Language](#support-a-new-language)
 - [Settings](#settings)
   - [Config File](#config-file)
   - [Config Variables](#config-variables)
@@ -136,6 +140,65 @@ For HTTPS only the protocol property must be `'https'` accordingly.
 
 After changing the `config.js` file, the browser window should be reloaded
 manually.
+
+## Translations
+
+For translations and internationalization [i18next](https://www.i18next.com/) is
+used.
+
+With [our configuration of i18next](./src/gmp/locale/lang.js#L45) the
+translations are stored in language specific JSON files. The existing
+translations can be found at the [public/locales/](./public/locales/) directory.
+
+### Format
+
+The translations are stored in in the JSON files as key-value pairs with the key
+being the English string and the value the translation of the specific language.
+Not translated strings have an empty string `“”` as the value.
+
+Example with German translations:
+
+```json
+{
+  "Create a new Tag": "Einen neuen Tag erstellen",
+  "Create a new Target": "Ein neues Ziel erstellen",
+  "Create a new Task": ""
+}
+```
+
+### Updating
+
+To change or extend translations new values can be added to the specific JSON
+file, committed to git and finally uploaded through a pull request to GitHub.
+
+But sometimes the UI changes and new English descriptions are added or existing
+ones have been rephrased. In this case the new keys must be extracted from the
+source code and added to the JSON files. This can be done by running
+
+```
+npm run i18n-extract
+```
+
+New translation strings are added with an empty string `“”` as default value.
+Therefore searching for empty strings will find the to be translated values.
+Keys with a `_plural` suffix can be ignored. They are just added for technical
+reasons and are unused.
+
+If not all strings are translated at once the remaining empty strings would
+cause missing text in web UI. Therefore, the JSON files must be cleaned up
+before adding the changes to git and creating a pull request. To clean up the
+JSON files the following command can be used
+
+```
+npm run clean-up-translations
+```
+
+### Support a new Language
+
+The currently supported languages are listed at [src/gmp/locale/languages.js](./src/gmp/locale/languages.js#L23).
+If a new language should be available in the web UI, it needs an entry in this
+object. Additionally the corresponding language codes must be added to the
+[babel config](./.babelrc) and [cleanup script](./scripts/cleanuptranslations.js).
 
 ## Settings
 
