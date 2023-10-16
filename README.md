@@ -65,6 +65,8 @@ gpg --no-default-keyring --keyring "$KEYRING" --list-keys
 
 echo "deb [signed-by=$KEYRING] https://deb.nodesource.com/$VERSION $DISTRIBUTION main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 echo "deb-src [signed-by=$KEYRING] https://deb.nodesource.com/$VERSION $DISTRIBUTION main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+
+sudo apt-get update && sudo apt-get install nodejs
 ```
 
 Change into the gsa source directory and delete the possible existing build output
