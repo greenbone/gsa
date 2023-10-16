@@ -56,17 +56,16 @@ Prerequisites for GSA:
 To install nodejs the following commands can be used
 
 ```bash
-export VERSION=node_18.x
+export VERSION=18
 export KEYRING=/usr/share/keyrings/nodesource.gpg
-export DISTRIBUTION="$(lsb_release -s -c)"
 
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor | sudo tee "$KEYRING" >/dev/null
 gpg --no-default-keyring --keyring "$KEYRING" --list-keys
 
-echo "deb [signed-by=$KEYRING] https://deb.nodesource.com/$VERSION $DISTRIBUTION main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-echo "deb-src [signed-by=$KEYRING] https://deb.nodesource.com/$VERSION $DISTRIBUTION main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+echo "deb [signed-by=$KEYRING] https://deb.nodesource.com/node_$VERSION.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+echo "deb-src [signed-by=$KEYRING] https://deb.nodesource.com/node_$VERSION.x nodistro main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
 
-sudo apt-get update && sudo apt-get install nodejs
+sudo apt update && sudo apt install nodejs
 ```
 
 Change into the gsa source directory and delete the possible existing build output
