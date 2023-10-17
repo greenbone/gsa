@@ -186,7 +186,7 @@ const ResultDetails = ({className, links = true, entity}) => {
           </div>
           <div>
             <h3>{_('Different Lines')}</h3>
-            {isDefined(result.delta.diff) ? (
+            {isDefined(result.delta.diff) && result.delta.diff.length > 0 ? (
               <Diff>{result.delta.diff}</Diff>
             ) : (
               <DerivedDiff
@@ -288,14 +288,15 @@ const ResultDetails = ({className, links = true, entity}) => {
               <TableRow>
                 <TableData>{_('Details: ')}</TableData>
                 <TableData>
-                  {isDefined(infoId) && infoId.startsWith(DEFAULT_OID_VALUE) && (
-                    <span>
-                      <DetailsLink type="nvt" id={infoId} textOnly={!links}>
-                        {renderNvtName(infoId, information.name)}
-                        {' OID: ' + infoId}
-                      </DetailsLink>
-                    </span>
-                  )}
+                  {isDefined(infoId) &&
+                    infoId.startsWith(DEFAULT_OID_VALUE) && (
+                      <span>
+                        <DetailsLink type="nvt" id={infoId} textOnly={!links}>
+                          {renderNvtName(infoId, information.name)}
+                          {' OID: ' + infoId}
+                        </DetailsLink>
+                      </span>
+                    )}
                   {!isDefined(infoId) &&
                     _('No details available for this method.')}
                 </TableData>
