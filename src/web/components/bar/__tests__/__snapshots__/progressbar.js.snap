@@ -48,13 +48,16 @@ exports[`ProgressBar tests should render 1`] = `
 }
 
 <div
+  boxbackground="#4C4C4C"
   class="c0"
   data-testid="progressbar-box"
   title="Progress"
 >
   <div
+    background="low"
     class="c1"
     data-testid="progress"
+    progress="10"
   />
   <div
     class="c2"

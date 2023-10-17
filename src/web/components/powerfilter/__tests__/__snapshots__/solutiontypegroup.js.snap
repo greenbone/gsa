@@ -1,7 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SolutionTypesFilterGroup tests should render 1`] = `
-.c5 {
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c6 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -10,8 +28,8 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -19,65 +37,35 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   align-items: stretch;
 }
 
-.c8 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c9 {
   margin-left: -5px;
 }
 
-.c8 > * {
+.c9>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c8 > * {
+.c9>* {
   margin-left: 5px;
 }
 
-.c7 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c8 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c11 {
+.c12 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c11 * {
+.c12 * {
   height: inherit;
   width: inherit;
 }
@@ -92,8 +80,8 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   padding-bottom: 10px;
 }
@@ -109,28 +97,13 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   margin-left: 0;
 }
 
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c3 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c4 {
+.c5 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -139,7 +112,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   width: 100%;
 }
 
-.c6 {
+.c7 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -155,7 +128,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   cursor: pointer;
 }
 
-.c9 {
+.c10 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -166,7 +139,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   height: auto;
 }
 
-.c10 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -175,8 +148,8 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
   justify-content: flex-start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -184,22 +157,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   align-items: center;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   -webkit-box-flex: 0;
   -webkit-flex-grow: 0;
   -ms-flex-positive: 0;
@@ -207,7 +165,7 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
 }
 
 @media print {
-  .c4 {
+  .c5 {
     border-collapse: collapse;
   }
 }
@@ -218,19 +176,21 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
+    titleoffset="0"
+    titlesize="2"
   >
     Solution Type
   </label>
   <div
-    class="c2"
+    class="c2 c3"
     data-testid="formgroup-content"
     size="10"
   >
     <div
-      class="c3"
+      class="c2 c4"
     >
       <table
-        class="c4"
+        class="c5"
       >
         <tbody
           class=""
@@ -238,25 +198,24 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
           <tr>
             <td>
               <div
-                class="c5"
+                class="c6"
               >
                 <label
-                  class="c6"
+                  class="c7"
                 >
                   <div
-                    class="c7"
+                    class="c2 c8"
                   >
                     <div
-                      class="c8"
+                      class="c2 c9"
                       margin="5px"
                     >
                       <input
                         checked=""
-                        class="c9 c10"
+                        class="c10 c11"
                         data-testid="radio-input"
                         name="All"
                         type="radio"
-                        value=""
                       />
                       <span>
                         All
@@ -268,28 +227,27 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c5"
+                class="c6"
               >
                 <label
-                  class="c6"
+                  class="c7"
                 >
                   <div
-                    class="c7"
+                    class="c2 c8"
                   >
                     <div
-                      class="c8"
+                      class="c2 c9"
                       margin="5px"
                     >
                       <input
-                        class="c9 c10"
+                        class="c10 c11"
                         data-testid="radio-input"
                         name="Workaround"
                         type="radio"
-                        value=""
                       />
                       <span
                         alt="Workaround"
-                        class="c11"
+                        class="c12"
                         data-testid="svg-icon"
                         title="Workaround"
                       >
@@ -309,28 +267,27 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c5"
+                class="c6"
               >
                 <label
-                  class="c6"
+                  class="c7"
                 >
                   <div
-                    class="c7"
+                    class="c2 c8"
                   >
                     <div
-                      class="c8"
+                      class="c2 c9"
                       margin="5px"
                     >
                       <input
-                        class="c9 c10"
+                        class="c10 c11"
                         data-testid="radio-input"
                         name="Mitigation"
                         type="radio"
-                        value=""
                       />
                       <span
                         alt="Mitigation"
-                        class="c11"
+                        class="c12"
                         data-testid="svg-icon"
                         title="Mitigation"
                       >
@@ -352,28 +309,27 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
           <tr>
             <td>
               <div
-                class="c5"
+                class="c6"
               >
                 <label
-                  class="c6"
+                  class="c7"
                 >
                   <div
-                    class="c7"
+                    class="c2 c8"
                   >
                     <div
-                      class="c8"
+                      class="c2 c9"
                       margin="5px"
                     >
                       <input
-                        class="c9 c10"
+                        class="c10 c11"
                         data-testid="radio-input"
                         name="VendorFix"
                         type="radio"
-                        value=""
                       />
                       <span
                         alt="Vendorfix"
-                        class="c11"
+                        class="c12"
                         data-testid="svg-icon"
                         title="Vendorfix"
                       >
@@ -393,28 +349,27 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c5"
+                class="c6"
               >
                 <label
-                  class="c6"
+                  class="c7"
                 >
                   <div
-                    class="c7"
+                    class="c2 c8"
                   >
                     <div
-                      class="c8"
+                      class="c2 c9"
                       margin="5px"
                     >
                       <input
-                        class="c9 c10"
+                        class="c10 c11"
                         data-testid="radio-input"
                         name="NoneAvailable"
                         type="radio"
-                        value=""
                       />
                       <span
                         alt="None available"
-                        class="c11"
+                        class="c12"
                         data-testid="svg-icon"
                         title="None available"
                       >
@@ -434,28 +389,27 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
             </td>
             <td>
               <div
-                class="c5"
+                class="c6"
               >
                 <label
-                  class="c6"
+                  class="c7"
                 >
                   <div
-                    class="c7"
+                    class="c2 c8"
                   >
                     <div
-                      class="c8"
+                      class="c2 c9"
                       margin="5px"
                     >
                       <input
-                        class="c9 c10"
+                        class="c10 c11"
                         data-testid="radio-input"
                         name="WillNotFix"
                         type="radio"
-                        value=""
                       />
                       <span
                         alt="Will not fix"
-                        class="c11"
+                        class="c12"
                         data-testid="svg-icon"
                         title="Will not fix"
                       >

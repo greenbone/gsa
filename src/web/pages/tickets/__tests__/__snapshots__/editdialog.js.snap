@@ -1,7 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EditTicketDialog component tests should render dialog 1`] = `
-.c8 {
+.c3 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: flex-start;
+  -webkit-box-align: flex-start;
+  -ms-flex-align: flex-start;
+  align-items: flex-start;
+}
+
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -10,8 +49,8 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -19,7 +58,25 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   align-items: stretch;
 }
 
-.c16 {
+.c13 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c20 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -28,9 +85,30 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
@@ -62,7 +140,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   bottom: 0;
   left: 0;
   margin: 0;
-  background: rgba(102,102,102,0.5);
+  background: rgba(102, 102, 102, 0.5);
   z-index: 600;
   -webkit-transition: opacity 1s ease-in;
   transition: opacity 1s ease-in;
@@ -70,7 +148,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c27 {
+.c33 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -79,13 +157,13 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c26 {
+.c32 {
   position: absolute;
   bottom: 3px;
   right: 3px;
   width: 20px;
   height: 20px;
-  background: repeating-linear-gradient( -45deg, transparent, transparent 2px, #000 2px, #000 3px );
+  background: repeating-linear-gradient(     -45deg,     transparent,     transparent 2px,     #000 2px,     #000 3px   );
 }
 
 .c2 {
@@ -104,7 +182,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   border: 1px solid #7F7F7F;
 }
 
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -121,30 +199,30 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 
-.c4:hover {
+.c5 :hover {
   border: 1px solid #074320;
 }
 
-.c5 {
+.c6 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c5 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
 
-.c23 {
+.c29 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -164,12 +242,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c23:focus,
-.c23:hover {
+.c29:focus,
+.c29:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c23:hover {
+.c29:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -177,26 +255,26 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c23[disabled] {
+.c29[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c23 img {
+.c29 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c23:link {
+.c29:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c24 {
+.c30 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -205,8 +283,8 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -214,63 +292,32 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c25 {
+.c31 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c25:hover {
+.c31 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c22 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c27 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
   margin-top: 15px;
   padding: 10px 20px 10px 20px;
+}
+
+.c28 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
   justify-content: space-between;
 }
 
-.c3 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c4 {
   padding: 5px 5px 5px 10px;
   margin-bottom: 15px;
   border-radius: 2px 2px 0 0;
@@ -284,17 +331,15 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   align-items: center;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
   justify-content: space-between;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
   cursor: -webkit-grab;
-  cursor: -moz-grab;
   cursor: grab;
 }
 
-.c7 {
+.c9 {
   overflow: auto;
   padding: 0 15px;
   width: 100%;
@@ -302,31 +347,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   max-height: 400px;
 }
 
-.c6 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: flex-start;
-  -webkit-box-align: flex-start;
-  -ms-flex-align: flex-start;
-  align-items: flex-start;
+.c8 {
   overflow: hidden;
   height: 100%;
 }
 
-.c9 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -336,13 +362,13 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   padding-bottom: 10px;
 }
 
-.c10 {
+.c12 {
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -353,28 +379,13 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   margin-left: 0;
 }
 
-.c11 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c14 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c17 {
+.c21 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -387,8 +398,8 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   outline: none;
   margin: 1px;
@@ -399,18 +410,18 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   cursor: pointer;
 }
 
-.c18 {
+.c22 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c18 * {
+.c22 * {
   height: inherit;
   width: inherit;
 }
 
-.c14 {
+.c17 {
   border: 1px solid #bfbfbf;
   border-radius: 2px;
   display: -webkit-box;
@@ -434,7 +445,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   font-weight: normal;
 }
 
-.c13 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -446,16 +457,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   width: 180px;
 }
 
-.c19 {
-  color: #c12c30;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
-}
-
-.c15 {
+.c18 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -472,17 +474,29 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
+}
+
+.c23 {
+  color: #c12c30;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c19 {
   cursor: default;
 }
 
-.c12 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c20 {
+.c24 {
   display: block;
   height: auto;
   color: #4C4C4C;
@@ -493,7 +507,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   padding: 4px 8px;
 }
 
-.c21 {
+.c25 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -506,8 +520,8 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -534,14 +548,14 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
             class="c2"
           >
             <div
-              class="c3"
+              class="c3 c4"
               data-testid="dialog-title-bar"
             >
               <span>
                 Edit Ticket
               </span>
               <div
-                class="c4 c5"
+                class="c5 c6"
                 data-testid="dialog-title-close-button"
                 title="Close"
               >
@@ -549,26 +563,29 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c6"
+              class="c7 c8"
             >
               <div
-                class="c7"
+                class="c9"
                 data-testid="save-dialog-content"
+                maxheight="400px"
               >
                 <div
-                  class="c8"
+                  class="c10"
                 >
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
+                      titleoffset="0"
+                      titlesize="2"
                     >
                       Status
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
@@ -576,33 +593,33 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="downshift-0-label"
-                        class="c12"
+                        class="c15"
                         role="combobox"
                       >
                         <div
-                          class="c13"
+                          class="c16"
                           width="180px"
                         >
                           <div
                             aria-haspopup="true"
                             aria-label="open menu"
-                            class="c14"
+                            class="c17"
                             data-toggle="true"
                             role="button"
                             type="button"
                           >
                             <div
-                              class="c15"
+                              class="c18 c19"
                               data-testid="select-selected-value"
                               title="Open"
                             >
                               Open
                             </div>
                             <div
-                              class="c16"
+                              class="c20"
                             >
                               <span
-                                class="c17 c18"
+                                class="c21 c22"
                                 data-testid="select-open-button"
                               >
                                 ▼
@@ -611,7 +628,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                           </div>
                         </div>
                         <div
-                          class="c19"
+                          class="c23"
                           data-testid="error-marker"
                         >
                           ×
@@ -620,16 +637,18 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
+                      titleoffset="0"
+                      titlesize="2"
                     >
                       Assigned User
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
@@ -637,33 +656,33 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                         aria-expanded="false"
                         aria-haspopup="listbox"
                         aria-labelledby="downshift-1-label"
-                        class="c12"
+                        class="c15"
                         role="combobox"
                       >
                         <div
-                          class="c13"
+                          class="c16"
                           width="180px"
                         >
                           <div
                             aria-haspopup="true"
                             aria-label="open menu"
-                            class="c14"
+                            class="c17"
                             data-toggle="true"
                             role="button"
                             type="button"
                           >
                             <div
-                              class="c15"
+                              class="c18 c19"
                               data-testid="select-selected-value"
                               title="foo"
                             >
                               foo
                             </div>
                             <div
-                              class="c16"
+                              class="c20"
                             >
                               <span
-                                class="c17 c18"
+                                class="c21 c22"
                                 data-testid="select-open-button"
                               >
                                 ▼
@@ -672,7 +691,7 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                           </div>
                         </div>
                         <div
-                          class="c19"
+                          class="c23"
                           data-testid="error-marker"
                         >
                           ×
@@ -681,26 +700,28 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
+                      titleoffset="0"
+                      titlesize="2"
                     >
                       Note for Open
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <textarea
-                        class="c20 c21"
+                        class="c24 c25"
                         name="openNote"
                         rows="5"
                       />
                       <div
-                        class="c19"
+                        class="c23"
                         data-testid="error-marker"
                       >
                         ×
@@ -708,26 +729,28 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
+                      titleoffset="0"
+                      titlesize="2"
                     >
                       Note for Fixed
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <textarea
-                        class="c20 c21"
+                        class="c24 c25"
                         name="fixedNote"
                         rows="5"
                       />
                       <div
-                        class="c19"
+                        class="c23"
                         data-testid="error-marker"
                       >
                         ×
@@ -735,26 +758,28 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                     </div>
                   </div>
                   <div
-                    class="c9"
+                    class="c11"
                   >
                     <label
-                      class="c10"
+                      class="c12"
                       data-testid="formgroup-title"
+                      titleoffset="0"
+                      titlesize="2"
                     >
                       Note for Closed
                     </label>
                     <div
-                      class="c11"
+                      class="c13 c14"
                       data-testid="formgroup-content"
                       size="10"
                     >
                       <textarea
-                        class="c20 c21"
+                        class="c24 c25"
                         name="closedNote"
                         rows="5"
                       />
                       <div
-                        class="c19"
+                        class="c23"
                         data-testid="error-marker"
                       >
                         ×
@@ -765,17 +790,17 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c22"
+              class="c26 c27 c28"
             >
               <button
-                class="c23 c24 c25"
+                class="c29 c30 c31"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c23 c24 c25"
+                class="c29 c30 c31"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -784,10 +809,10 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c26"
+            class="c32"
           >
             <div
-              class="c27"
+              class="c33"
             />
           </div>
         </div>

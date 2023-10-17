@@ -8,24 +8,15 @@ exports[`Diff component tests should render 1`] = `
 }
 
 .c2 {
-  white-space: pre-wrap;
-  word-wrap: normal;
-  font-family: monospace;
   background-color: #ffeef0;
 }
 
 .c3 {
-  white-space: pre-wrap;
-  word-wrap: normal;
-  font-family: monospace;
   background-color: #e6ffed;
 }
 
 .c1 {
-  white-space: pre-wrap;
-  word-wrap: normal;
-  font-family: monospace;
-  color: rgba(0,0,0,0.3);
+  color: rgba(0, 0, 0, 0.3);
 }
 
 <div>
@@ -33,17 +24,17 @@ exports[`Diff component tests should render 1`] = `
     class="c0"
   />
   <div
-    class="c1"
+    class="c0 c1"
   >
     @@ -1,9 +1,14 @@
   </div>
   <div
-    class="c2"
+    class="c0 c2"
   >
     -Remote SSH server version: SSH-2.0-OpenSSH_7.6p1 Ubuntu-4
   </div>
   <div
-    class="c3"
+    class="c0 c3"
   >
     +Remote SSH server banner: SSH-2.0-OpenSSH_7.6p1 Ubuntu-4ubuntu0.3
   </div>
@@ -53,32 +44,32 @@ exports[`Diff component tests should render 1`] = `
      Remote SSH supported authentication: password,publickey
   </div>
   <div
-    class="c2"
+    class="c0 c2"
   >
     -Remote SSH banner: (not available)
   </div>
   <div
-    class="c3"
+    class="c0 c3"
   >
     +Remote SSH text/login banner: (not available)
   </div>
   <div
-    class="c3"
+    class="c0 c3"
   >
     +
   </div>
   <div
-    class="c3"
+    class="c0 c3"
   >
     +This is probably:
   </div>
   <div
-    class="c3"
+    class="c0 c3"
   >
     +
   </div>
   <div
-    class="c3"
+    class="c0 c3"
   >
     +- OpenSSH
   </div>
@@ -99,27 +90,27 @@ exports[`Diff component tests should render 1`] = `
      Concluded from remote connection attempt with credentials:
   </div>
   <div
-    class="c2"
+    class="c0 c2"
   >
     -  Login: VulnScan
   </div>
   <div
-    class="c2"
+    class="c0 c2"
   >
     -  Password: VulnScan
   </div>
   <div
-    class="c3"
+    class="c0 c3"
   >
     +
   </div>
   <div
-    class="c3"
+    class="c0 c3"
   >
     +Login:    OpenVAS-VT
   </div>
   <div
-    class="c3"
+    class="c0 c3"
   >
     +Password: OpenVAS-VT
   </div>

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Select component tests should render 1`] = `
-.c4 {
+.c5 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -10,8 +10,8 @@ exports[`Select component tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -19,7 +19,7 @@ exports[`Select component tests should render 1`] = `
   align-items: center;
 }
 
-.c5 {
+.c6 {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -32,8 +32,8 @@ exports[`Select component tests should render 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
   -ms-flex-pack: center;
+  -webkit-justify-content: center;
   justify-content: center;
   outline: none;
   margin: 1px;
@@ -44,13 +44,13 @@ exports[`Select component tests should render 1`] = `
   cursor: pointer;
 }
 
-.c6 {
+.c7 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c6 * {
+.c7 * {
   height: inherit;
   width: inherit;
 }
@@ -92,15 +92,6 @@ exports[`Select component tests should render 1`] = `
   width: 180px;
 }
 
-.c7 {
-  color: #c12c30;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
-}
-
 .c3 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -118,6 +109,18 @@ exports[`Select component tests should render 1`] = `
   white-space: nowrap;
   overflow: hidden;
   cursor: default;
+}
+
+.c8 {
+  color: #c12c30;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
+.c4 {
   cursor: default;
 }
 
@@ -149,15 +152,15 @@ exports[`Select component tests should render 1`] = `
       type="button"
     >
       <div
-        class="c3"
+        class="c3 c4"
         data-testid="select-selected-value"
         disabled=""
       />
       <div
-        class="c4"
+        class="c5"
       >
         <span
-          class="c5 c6"
+          class="c6 c7"
           data-testid="select-open-button"
         >
           ▼
@@ -166,7 +169,7 @@ exports[`Select component tests should render 1`] = `
     </div>
   </div>
   <div
-    class="c7"
+    class="c8"
     data-testid="error-marker"
   >
     ×

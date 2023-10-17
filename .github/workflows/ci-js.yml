@@ -20,7 +20,7 @@ jobs:
           - 18
           - 20
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -43,7 +43,7 @@ jobs:
         node-version:
           - 18
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -76,7 +76,7 @@ jobs:
           - 18
           - 20
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:

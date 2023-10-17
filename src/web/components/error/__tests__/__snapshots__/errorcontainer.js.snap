@@ -10,13 +10,16 @@ exports[`ErrorContainer tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c1 {
   padding: 15px;
   margin: 15px 15px 15px 15px;
   border: 1px solid #f4b1b2;
@@ -25,7 +28,7 @@ exports[`ErrorContainer tests should render 1`] = `
 }
 
 <div
-  class="c0"
+  class="c0 c1"
 >
   <span>
     An error

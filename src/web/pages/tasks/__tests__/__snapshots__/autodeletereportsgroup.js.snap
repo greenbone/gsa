@@ -1,6 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
+.c2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
 .c5 {
   display: -webkit-box;
   display: -webkit-flex;
@@ -10,43 +28,31 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+
+.c7 {
   margin-left: -5px;
 }
 
-.c5 > * {
+.c7>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c5 > * {
+.c7>* {
   margin-left: 5px;
 }
 
-.c4 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -webkit-justify-content: start;
-  -ms-flex-pack: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+.c6 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -63,8 +69,8 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -webkit-justify-content: start;
   -ms-flex-pack: start;
+  -webkit-justify-content: start;
   justify-content: start;
   padding-bottom: 10px;
 }
@@ -80,28 +86,13 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   margin-left: 0;
 }
 
-.c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
+.c3 {
   width: 83.33333333%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.c3 {
+.c4 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -117,7 +108,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   cursor: pointer;
 }
 
-.c6 {
+.c8 {
   font-family: inherit;
   font-size: inherit;
   padding: 0;
@@ -128,11 +119,11 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   height: auto;
 }
 
-.c8 {
+.c10 {
   opacity: 1;
 }
 
-.c7 {
+.c9 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -141,8 +132,8 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
   justify-content: flex-start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -150,7 +141,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   align-items: center;
 }
 
-.c9 {
+.c11 {
   border-radius: 2px;
   border: 1px solid #bfbfbf;
   background-color: #fff;
@@ -162,7 +153,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   vertical-align: middle;
 }
 
-.c10 {
+.c12 {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -176,7 +167,7 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   margin-right: 22px;
 }
 
-.c11 {
+.c13 {
   background-color: #e5e5e5;
   color: #7F7F7F;
   border-left: 1px solid #4C4C4C;
@@ -198,62 +189,30 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.c13:hover {
+  background-color: #11ab51;
+  color: #fff;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c13:active {
+  background-color: #fff;
+  color: #074320;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c14 {
   border-top-right-radius: 1px;
   top: 0;
 }
 
-.c11:hover {
-  background-color: #11ab51;
-  color: #fff;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c11:active {
-  background-color: #fff;
-  color: #074320;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c12 {
-  background-color: #e5e5e5;
-  color: #7F7F7F;
-  border-left: 1px solid #4C4C4C;
-  width: 16px;
-  height: 50%;
-  font-size: 0.6em;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-  vertical-align: middle;
-  position: absolute;
-  right: 0;
-  cursor: default;
-  display: block;
-  overflow: hidden;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.c15 {
   border-bottom-right-radius: 1px;
   bottom: 0;
-}
-
-.c12:hover {
-  background-color: #11ab51;
-  color: #fff;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c12:active {
-  background-color: #fff;
-  color: #074320;
-  -webkit-text-decoration: none;
-  text-decoration: none;
 }
 
 <div
@@ -262,33 +221,35 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
+    titleoffset="0"
+    titlesize="2"
   >
     Auto Delete Reports
   </label>
   <div
-    class="c2"
+    class="c2 c3"
     data-testid="formgroup-content"
     size="10"
   >
     <label
-      class="c3"
+      class="c4"
     >
       <div
-        class="c4"
+        class="c5 c6"
       >
         <div
-          class="c5"
+          class="c5 c7"
           margin="5px"
         >
           <input
-            class="c6 c7"
+            class="c8 c9"
             data-testid="radio-input"
             name="auto_delete"
             type="radio"
             value="no"
           />
           <span
-            class="c8"
+            class="c10"
             data-testid="radio-title"
           >
             Do not automatically delete reports
@@ -297,32 +258,32 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
       </div>
     </label>
     <div
-      class="c4"
+      class="c5 c6"
     >
       <div
-        class="c5"
+        class="c5 c7"
         margin="5px"
       >
         <label
-          class="c3"
+          class="c4"
         >
           <div
-            class="c4"
+            class="c5 c6"
           >
             <div
-              class="c5"
+              class="c5 c7"
               margin="5px"
             >
               <input
                 checked=""
-                class="c6 c7"
+                class="c8 c9"
                 data-testid="radio-input"
                 name="auto_delete"
                 type="radio"
                 value="keep"
               />
               <span
-                class="c8"
+                class="c10"
                 data-testid="radio-title"
               >
                 Automatically delete oldest reports but always keep newest
@@ -331,10 +292,10 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
           </div>
         </label>
         <span
-          class="c9"
+          class="c11"
         >
           <input
-            class="c10"
+            class="c12"
             data-testid="spinner-input"
             max="1200"
             maxlength="5"
@@ -344,13 +305,13 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
             value="5"
           />
           <span
-            class="c11"
+            class="c13 c14"
             data-testid="spinner-up"
           >
             ▲
           </span>
           <span
-            class="c12"
+            class="c13 c15"
             data-testid="spinner-down"
           >
             ▼

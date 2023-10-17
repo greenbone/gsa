@@ -67,13 +67,16 @@ exports[`Task Status tests should render 1`] = `
   class="c0 c1"
 >
   <div
+    boxbackground="#4C4C4C"
     class="c2"
     data-testid="progressbar-box"
     title="New"
   >
     <div
+      background="new"
       class="c3"
       data-testid="progress"
+      progress="100"
     />
     <div
       class="c4"

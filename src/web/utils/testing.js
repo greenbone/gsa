@@ -18,7 +18,7 @@
 /* eslint-disable react/prop-types */
 
 import 'jest-styled-components';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 
 import React from 'react';
 
@@ -46,6 +46,7 @@ import LicenseProvider from 'web/components/provider/licenseprovider';
 
 import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
+import {StyleSheetManager} from 'styled-components';
 
 export * from '@testing-library/react';
 
@@ -88,7 +89,9 @@ export const getByName = (container, name) => {
 };
 
 export const render = ui => {
-  const {container, baseElement, ...other} = reactTestingRender(ui);
+  const {container, baseElement, rerender, ...other} = reactTestingRender(
+    <StyleSheetManager enableVendorPrefixes>{ui}</StyleSheetManager>,
+  );
   return {
     baseElement,
     container,
@@ -97,6 +100,10 @@ export const render = ui => {
     getByName: name => getByName(baseElement, name),
     queryByName: name => queryByName(baseElement, name),
     queryAllByName: name => queryAllByName(baseElement, name),
+    rerender: component =>
+      rerender(
+        <StyleSheetManager enableVendorPrefixes>{component}</StyleSheetManager>,
+      ),
     ...other,
   };
 };

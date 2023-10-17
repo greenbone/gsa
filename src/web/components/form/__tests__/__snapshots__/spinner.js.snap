@@ -49,8 +49,6 @@ exports[`Spinner tests should render 1`] = `
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  border-top-right-radius: 1px;
-  top: 0;
 }
 
 .c2:hover {
@@ -68,43 +66,13 @@ exports[`Spinner tests should render 1`] = `
 }
 
 .c3 {
-  background-color: #e5e5e5;
-  color: #7F7F7F;
-  border-left: 1px solid #4C4C4C;
-  width: 16px;
-  height: 50%;
-  font-size: 0.6em;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-  vertical-align: middle;
-  position: absolute;
-  right: 0;
-  cursor: default;
-  display: block;
-  overflow: hidden;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  border-top-right-radius: 1px;
+  top: 0;
+}
+
+.c4 {
   border-bottom-right-radius: 1px;
   bottom: 0;
-}
-
-.c3:hover {
-  background-color: #11ab51;
-  color: #fff;
-  -webkit-text-decoration: none;
-  text-decoration: none;
-}
-
-.c3:active {
-  background-color: #fff;
-  color: #074320;
-  -webkit-text-decoration: none;
-  text-decoration: none;
 }
 
 <span
@@ -118,13 +86,13 @@ exports[`Spinner tests should render 1`] = `
     value="1"
   />
   <span
-    class="c2"
+    class="c2 c3"
     data-testid="spinner-up"
   >
     ▲
   </span>
   <span
-    class="c3"
+    class="c2 c4"
     data-testid="spinner-down"
   >
     ▼

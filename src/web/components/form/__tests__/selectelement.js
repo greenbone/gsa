@@ -21,6 +21,7 @@ import {isFunction} from 'gmp/utils/identity';
 
 import {render} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
+import PropTypes from 'web/utils/proptypes';
 
 import {
   Box,
@@ -207,18 +208,42 @@ class MenuTestComponent extends React.Component {
     super(...args);
 
     this.target = React.createRef();
+    this.mockBoundingClientRect = this.props.mockBoundingClientRect;
   }
 
   render() {
     const hasTarget = this.target.current !== null;
+    if (hasTarget && this.mockBoundingClientRect) {
+      const rect = this.target.current.closest('.multiselect-scroll');
+      if (rect !== null) {
+        jest.spyOn(rect, 'getBoundingClientRect').mockImplementation(() => {
+          return {
+            top: 100,
+            bottom: 50,
+            height: 20,
+            width: 100,
+            right: 10,
+            left: 50,
+          };
+        });
+      }
+    }
     return (
       <div>
-        <div ref={this.target} style={{width: '200px', height: '100px'}} />
+        <div
+          ref={this.target}
+          className={this.mockBoundingClientRect ? 'multiselect-scroll' : ''}
+          style={{width: '200px', height: '100px'}}
+        />
         {hasTarget && <Menu {...this.props} target={this.target} />}
       </div>
     );
   }
 }
+
+MenuTestComponent.propTypes = {
+  mockBoundingClientRect: PropTypes.bool,
+};
 
 describe('Menu tests', () => {
   const renderTest = props => {
@@ -229,9 +254,14 @@ describe('Menu tests', () => {
 
   test('should render', () => {
     const {getByTestId} = renderTest();
-
     const menu = getByTestId('select-menu');
+    expect(menu).toMatchSnapshot();
+  });
 
+  test('should render with position reference to parent element', () => {
+    const {getByTestId} = renderTest({mockBoundingClientRect: true});
+    const menu = getByTestId('select-menu');
+    expect(menu).toHaveStyleRule({top: '120px'});
     expect(menu).toMatchSnapshot();
   });
 

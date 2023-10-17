@@ -20,7 +20,7 @@
 const fs = require('fs');
 
 // all locales that are included in .babelrc
-const languages = ['de'];
+const languages = ['de', 'zh_TW', 'zh_CN'];
 
 for (const lang of languages) {
   const path = './public/locales/gsa-' + lang + '.json';

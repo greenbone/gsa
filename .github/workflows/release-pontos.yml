@@ -60,7 +60,7 @@ jobs:
     runs-on: "ubuntu-latest"
     needs: release
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ needs.release.outputs.git-release-tag }}
       - name: Set up node
@@ -68,8 +68,10 @@ jobs:
         with:
           node-version: "14"
           cache: "npm"
+      - name: Install npm dependencies
+        run: npm install
       - name: Build dist files
-        run: node run build
+        run: npm run build
       - name: Create tarballs
         run: |
           tar -C build -czvf gsa-dist-${{ needs.release.outputs.release-version }}.tar.gz .
