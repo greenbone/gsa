@@ -76,22 +76,15 @@ const credential = Credential.fromElement({
   allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
-  formats: {format: 'pem'},
-  full_type: 'client certificate',
+  full_type: 'username + password',
   in_use: 0,
   login: '',
   modification_time: '2021-03-02T10:28:15Z',
   name: 'credential 1',
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},
-  type: 'cc',
+  type: 'up',
   writable: 1,
-  certificate_info: {
-    activation_time: '2018-10-10T11:41:23.022Z',
-    expiration_time: '2019-10-10T11:41:23.022Z',
-    md5_fingerprint: 'asdf',
-    issuer: 'dn',
-  },
 });
 
 const noPermCredential = Credential.fromElement({
@@ -99,22 +92,15 @@ const noPermCredential = Credential.fromElement({
   allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
-  formats: {format: 'pem'},
-  full_type: 'client certificate',
+  full_type: 'username + password',
   in_use: 0,
   login: '',
   modification_time: '2021-03-02T10:28:15Z',
   name: 'credential 1',
   owner: {name: 'admin'},
   permissions: {permission: {name: 'get_credentials'}},
-  type: 'cc',
+  type: 'up',
   writable: 1,
-  certificate_info: {
-    activation_time: '2018-10-10T11:41:23.022Z',
-    expiration_time: '2019-10-10T11:41:23.022Z',
-    md5_fingerprint: 'asdf',
-    issuer: 'dn',
-  },
 });
 
 const credentialInUse = Credential.fromElement({
@@ -122,22 +108,15 @@ const credentialInUse = Credential.fromElement({
   allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
-  formats: {format: 'pem'},
-  full_type: 'client certificate',
+  full_type: 'username + password',
   in_use: 1,
   login: '',
   modification_time: '2021-03-02T10:28:15Z',
   name: 'credential 1',
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},
-  type: 'cc',
+  type: 'up',
   writable: 1,
-  certificate_info: {
-    activation_time: '2018-10-10T11:41:23.022Z',
-    expiration_time: '2019-10-10T11:41:23.022Z',
-    md5_fingerprint: 'asdf',
-    issuer: 'dn',
-  },
 });
 
 describe('Credential Detailspage tests', () => {
@@ -193,24 +172,10 @@ describe('Credential Detailspage tests', () => {
     expect(element).toHaveTextContent('blah');
 
     expect(element).toHaveTextContent('Type');
-    expect(element).toHaveTextContent('Client Certificate(cc)');
+    expect(element).toHaveTextContent('Username + Password');
 
     expect(element).toHaveTextContent('Allow Insecure Use');
     expect(element).toHaveTextContent('Yes');
-
-    expect(element).toHaveTextContent('Certificate');
-
-    expect(element).toHaveTextContent('Activation');
-    expect(element).toHaveTextContent('Wed, Oct 10, 2018 1:41 PM CEST');
-
-    expect(element).toHaveTextContent('Expiration');
-    expect(element).toHaveTextContent('Thu, Oct 10, 2019 1:41 PM CEST');
-
-    expect(element).toHaveTextContent('MD5 Fingerprint');
-    expect(element).toHaveTextContent('asdf');
-
-    expect(element).toHaveTextContent('Issued By');
-    expect(element).toHaveTextContent('dn');
   });
 
   test('should render user tags tab', () => {
@@ -428,9 +393,6 @@ describe('Credential ToolBarIcons tests', () => {
     const editIcon = screen.getAllByTitle('Edit Credential');
     const deleteIcon = screen.getAllByTitle('Move Credential to trashcan');
     const exportIcon = screen.getAllByTitle('Export Credential as XML');
-    const exportCredentialInstallerIcon = screen.getAllByTitle(
-      'Download Certificate (.pem)',
-    );
 
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
@@ -447,13 +409,6 @@ describe('Credential ToolBarIcons tests', () => {
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
     expect(handleCredentialDownloadClick).toHaveBeenCalledWith(credential);
-
-    expect(exportCredentialInstallerIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportCredentialInstallerIcon[0]);
-    expect(handleCredentialInstallerDownloadClick).toHaveBeenCalledWith(
-      credential,
-      'pem',
-    );
   });
 
   test('should not call click handlers without permission', () => {
