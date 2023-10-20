@@ -42,14 +42,14 @@ const credential = Credential.fromElement({
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
   formats: {format: 'pem'},
-  full_type: 'client certificate',
+  full_type: 'username + password',
   in_use: 0,
   login: '',
   modification_time: '2021-03-02T10:28:15Z',
   name: 'credential 1',
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},
-  type: 'cc',
+  type: 'up',
   writable: 1,
 });
 
@@ -134,7 +134,6 @@ describe('CredentialsDialog component tests', () => {
     expect(commentInput).toHaveAttribute('value', 'blah');
 
     expect(formGroups[2]).toHaveTextContent('Type');
-    expect(selectedValue).toHaveTextContent('Client Certificate');
 
     const allowInsecure = getAllByName('allow_insecure');
     expect(formGroups[3]).toHaveTextContent('Allow insecure use');
@@ -217,8 +216,8 @@ describe('CredentialsDialog component tests', () => {
 
     const selectItems = getAllByTestId('select-item');
 
-    expect(selectItems.length).toBe(7);
-    fireEvent.click(selectItems[6]);
+    expect(selectItems.length).toBe(6);
+    fireEvent.click(selectItems[5]);
 
     expect(selectedValues[0]).toHaveTextContent('Password only');
 
@@ -295,40 +294,6 @@ describe('CredentialsDialog component tests', () => {
 
     const privateKey = getByName('private_key');
     expect(formGroups[7]).toHaveTextContent('Private Key');
-    expect(privateKey).toHaveAttribute('type', 'file');
-  });
-
-  test('should render form fields for Client Certificate', () => {
-    const {render} = rendererWith({
-      capabilities: true,
-    });
-
-    const {getAllByTestId, getByName} = render(
-      <CredentialsDialog
-        credential_type={'cc'}
-        types={ALL_CREDENTIAL_TYPES}
-        onClose={handleClose}
-        onSave={handleSave}
-        onErrorClose={handleErrorClose}
-      />,
-    );
-
-    const selectedValues = getAllByTestId('select-selected-value');
-
-    expect(selectedValues[0]).toHaveTextContent('Client Certificate');
-
-    const formGroups = getAllByTestId('formgroup-title');
-
-    const password = getByName('passphrase');
-    expect(formGroups[4]).toHaveTextContent('Passphrase');
-    expect(password).toHaveAttribute('value', '');
-
-    const certificate = getByName('certificate');
-    expect(formGroups[5]).toHaveTextContent('Certificate');
-    expect(certificate).toHaveAttribute('type', 'file');
-
-    const privateKey = getByName('private_key');
-    expect(formGroups[6]).toHaveTextContent('Private Key');
     expect(privateKey).toHaveAttribute('type', 'file');
   });
 
