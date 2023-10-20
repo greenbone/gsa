@@ -25,8 +25,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {shorten} from 'gmp/utils/string';
 import {hasId} from 'gmp/utils/id';
 
-import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
-
 import {renewSessionTimeout} from 'web/store/usersettings/actions';
 import {loadUserSettingDefaults} from 'web/store/usersettings/defaults/actions';
 import {getUserSettingsDefaults} from 'web/store/usersettings/defaults/selectors';
@@ -134,12 +132,6 @@ class ScannerComponent extends React.Component {
 
   openCredentialsDialog() {
     this.handleInteraction();
-
-    this.setState({
-      base: CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
-      credentialDialogVisible: true,
-      credentialTypes: [CLIENT_CERTIFICATE_CREDENTIAL_TYPE],
-    });
   }
 
   closeCredentialsDialog() {

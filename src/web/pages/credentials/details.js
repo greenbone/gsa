@@ -20,7 +20,6 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import {
-  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
   SNMP_PRIVACY_ALOGRITHM_NONE,
   getCredentialTypeName,
@@ -86,12 +85,10 @@ const CredentialDetails = ({entity}) => {
             </TableData>
           </TableRow>
 
-          {credential_type !== CLIENT_CERTIFICATE_CREDENTIAL_TYPE && (
-            <TableRow>
-              <TableData>{_('Login')}</TableData>
-              <TableData>{login}</TableData>
-            </TableRow>
-          )}
+          <TableRow>
+            - <TableData>{_('Login')}</TableData>-{' '}
+            <TableData>{login}</TableData>-{' '}
+          </TableRow>
           {credential_type === SNMP_CREDENTIAL_TYPE && (
             <TableRow>
               <TableData>{_('Auth Algorithm')}</TableData>

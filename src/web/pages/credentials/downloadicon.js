@@ -22,7 +22,6 @@ import _ from 'gmp/locale';
 import {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
-  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
 } from 'gmp/models/credential';
 
 import IconDivider from 'web/components/layout/icondivider';
@@ -64,13 +63,6 @@ const CredentialDownloadIcon = ({credential, onDownload}) => {
           title={_('Download Windows Executable (.exe)')}
           value={credential}
           onClick={cred => onDownload(cred, 'exe')}
-        />
-      )}
-      {type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE && (
-        <DownloadKeyIcon
-          title={_('Download Certificate (.pem)')}
-          value={credential}
-          onClick={cred => onDownload(cred, 'pem')}
         />
       )}
     </IconDivider>

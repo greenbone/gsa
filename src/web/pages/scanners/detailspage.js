@@ -68,6 +68,8 @@ import PropTypes from 'web/utils/proptypes';
 import ScannerComponent from './component';
 import ScannerDetails from './details';
 
+import useGmp from 'web/utils/useGmp';
+
 const ToolBarIcons = ({
   entity,
   onScannerCertificateDownloadClick,
@@ -79,6 +81,7 @@ const ToolBarIcons = ({
   onScannerEditClick,
   onScannerVerifyClick,
 }) => {
+  const gmp = useGmp();
   return (
     <Divider margin="10px">
       <IconDivider>
@@ -90,7 +93,9 @@ const ToolBarIcons = ({
         <ListIcon title={_('Scanner List')} page="scanners" />
       </IconDivider>
       <IconDivider>
-        <CreateIcon entity={entity} onClick={onScannerCreateClick} />
+        {gmp.settings.enableGreenboneSensor && (
+          <CreateIcon entity={entity} onClick={onScannerCreateClick} />
+        )}
         <CloneIcon
           entity={entity}
           mayClone={entity.scannerType !== CVE_SCANNER_TYPE}
