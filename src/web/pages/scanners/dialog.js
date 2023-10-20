@@ -55,13 +55,7 @@ import {
   scannerTypeName,
 } from 'gmp/models/scanner';
 
-import {CLIENT_CERTIFICATE_CREDENTIAL_TYPE} from 'gmp/models/credential';
-
 const AVAILABLE_SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
-
-const client_cert_credentials_filter = credential => {
-  return credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
-};
 
 const render_certificate_info = (info, tz) => {
   if (!isDefined(info)) {
@@ -125,10 +119,7 @@ const ScannerDialog = ({
   const handleTypeChange = (value, name) => {
     if (onScannerTypeChange) {
       value = parseInt(value);
-      const scan_credentials = filter(
-        credentials,
-        client_cert_credentials_filter,
-      );
+      const scan_credentials = filter(credentials);
 
       onScannerTypeChange(value, name);
       onScannerTypeChange(
@@ -167,15 +158,9 @@ const ScannerDialog = ({
     value: scannerType,
   }));
 
-  const scanner_credentials = filter(
-    credentials,
-    client_cert_credentials_filter,
-  );
+  const scanner_credentials = filter(credentials);
   const isInUse = isDefined(scanner) && scanner.isInUse();
-  const show_cred_info =
-    isDefined(scanner) &&
-    isDefined(scanner.credential) &&
-    scanner.credential.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE;
+  const show_cred_info = isDefined(scanner) && isDefined(scanner.credential);
 
   const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
 

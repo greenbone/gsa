@@ -26,7 +26,6 @@ import {isDefined} from 'gmp/utils/identity';
 import {first, map} from 'gmp/utils/array';
 
 import {
-  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
@@ -332,9 +331,7 @@ class CredentialsDialog extends React.Component {
                 </FormGroup>
               )}
 
-              {(state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-                state.credential_type ===
-                  CLIENT_CERTIFICATE_CREDENTIAL_TYPE) && (
+              {state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
                 <FormGroup title={_('Passphrase')}>
                   <Divider>
                     {is_edit && (
@@ -381,15 +378,7 @@ class CredentialsDialog extends React.Component {
                 </FormGroup>
               )}
 
-              {state.credential_type === CLIENT_CERTIFICATE_CREDENTIAL_TYPE && (
-                <FormGroup title={_('Certificate')}>
-                  <FileField name="certificate" onChange={onValueChange} />
-                </FormGroup>
-              )}
-
-              {(state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
-                state.credential_type ===
-                  CLIENT_CERTIFICATE_CREDENTIAL_TYPE) && (
+              {state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
                 <FormGroup title={_('Private Key')}>
                   <FileField name="private_key" onChange={onValueChange} />
                 </FormGroup>
