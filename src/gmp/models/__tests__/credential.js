@@ -23,7 +23,6 @@ import {setLocale} from 'gmp/locale/lang';
 import Model from 'gmp/model';
 
 import Credential, {
-  CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
   SNMP_CREDENTIAL_TYPE,
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   USERNAME_SSH_KEY_CREDENTIAL_TYPE,
@@ -47,15 +46,11 @@ const USERNAME_PASSWORD_CREDENTIAL = Credential.fromElement({
 const USERNAME_SSH_KEY_CREDENTIAL = Credential.fromElement({
   type: USERNAME_SSH_KEY_CREDENTIAL_TYPE,
 });
-const CLIENT_CERTIFICATE_CREDENTIAL = Credential.fromElement({
-  type: CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
-});
 const SNMP_CREDENTIAL = Credential.fromElement({type: SNMP_CREDENTIAL_TYPE});
 const PGP_CREDENTIAL = Credential.fromElement({type: PGP_CREDENTIAL_TYPE});
 const SMIME_CREDENTIAL = Credential.fromElement({type: SMIME_CREDENTIAL_TYPE});
 
 const createAllCredentials = () => [
-  CLIENT_CERTIFICATE_CREDENTIAL,
   USERNAME_PASSWORD_CREDENTIAL,
   USERNAME_SSH_KEY_CREDENTIAL,
   SNMP_CREDENTIAL,
@@ -151,7 +146,6 @@ describe('Credential Model tests', () => {
 
 describe('Credential model function tests', () => {
   test('ssh_credential_filter should return filter with correct true/false', () => {
-    expect(ssh_credential_filter(CLIENT_CERTIFICATE_CREDENTIAL)).toEqual(false);
     expect(ssh_credential_filter(USERNAME_SSH_KEY_CREDENTIAL)).toEqual(true);
     expect(ssh_credential_filter(USERNAME_PASSWORD_CREDENTIAL)).toEqual(true);
   });
@@ -167,9 +161,6 @@ describe('Credential model function tests', () => {
   });
 
   test('snmp_credential_filter should return filter with correct true/false', () => {
-    expect(snmp_credential_filter(CLIENT_CERTIFICATE_CREDENTIAL)).toEqual(
-      false,
-    );
     expect(snmp_credential_filter(SNMP_CREDENTIAL)).toEqual(true);
   });
 
@@ -230,9 +221,6 @@ describe('getCredentialTypeName tests', () => {
     );
     expect(getCredentialTypeName(USERNAME_SSH_KEY_CREDENTIAL_TYPE)).toEqual(
       'Username + SSH Key',
-    );
-    expect(getCredentialTypeName(CLIENT_CERTIFICATE_CREDENTIAL_TYPE)).toEqual(
-      'Client Certificate',
     );
     expect(getCredentialTypeName(SNMP_CREDENTIAL_TYPE)).toEqual('SNMP');
     expect(getCredentialTypeName(SMIME_CREDENTIAL_TYPE)).toEqual(

@@ -166,7 +166,6 @@ describe('CredentialPage tests', () => {
 
     expect(row[1]).toHaveTextContent('credential 1');
     expect(row[1]).toHaveTextContent('(blah)');
-    expect(row[1]).toHaveTextContent('Client Certificate(cc)');
     expect(row[1]).toHaveTextContent('Yes');
 
     expect(
@@ -175,9 +174,6 @@ describe('CredentialPage tests', () => {
     expect(screen.getAllByTitle('Edit Credential')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Clone Credential')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Export Credential')[0]).toBeInTheDocument();
-    expect(
-      screen.getAllByTitle('Download Certificate (.pem)')[0],
-    ).toBeInTheDocument();
   });
 
   test('should allow to bulk action on page contents', async () => {
