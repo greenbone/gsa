@@ -184,6 +184,7 @@ class MenuComponent extends React.Component {
     if (this.eventTarget !== window) {
       window.addEventListener('scroll', this.handleScroll, {passive: true});
     }
+    this.props.notifyRefAssigned();
   }
 
   componentWillUnmount() {
@@ -195,7 +196,7 @@ class MenuComponent extends React.Component {
   }
 
   render() {
-    const {target, forwardedRef, ...props} = this.props;
+    const {target, forwardedRef, menuHeight, ...props} = this.props;
 
     if (!hasValue(target) || target.current === null) {
       return null;
@@ -207,6 +208,8 @@ class MenuComponent extends React.Component {
 
     const {height, width, right, left, top} = rect;
 
+    const y = top + getScrollY() + height;
+
     return (
       <Portal>
         <MenuContainer
@@ -216,7 +219,11 @@ class MenuComponent extends React.Component {
           right={document.body.clientWidth - right}
           width={width}
           x={left + getScrollX()}
-          y={top + getScrollY() + height}
+          y={
+            hasValue(menuHeight) && window.innerHeight - y < menuHeight
+              ? top + getScrollY() - menuHeight
+              : y
+          }
         />
       </Portal>
     );
@@ -225,6 +232,8 @@ class MenuComponent extends React.Component {
 
 MenuComponent.propTypes = {
   forwardedRef: PropTypes.ref,
+  menuHeight: PropTypes.number,
+  notifyRefAssigned: PropTypes.func,
   target: PropTypes.ref,
 };
 

@@ -108,14 +108,21 @@ class Select extends React.Component {
 
     this.state = {
       search: '',
+      isMenuRefAssigned: false,
     };
 
     this.input = React.createRef();
     this.box = React.createRef();
+    this.menu = React.createRef();
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
+    this.notifyRefAssigned = this.notifyRefAssigned.bind(this);
+  }
+
+  notifyRefAssigned() {
+    this.setState({isMenuRefAssigned: true});
   }
 
   handleChange(value) {
@@ -237,9 +244,13 @@ class Select extends React.Component {
                 </Box>
                 {isOpen && !disabled && (
                   <Menu
-                    {...getMenuProps({})}
+                    {...getMenuProps({ref: this.menu})}
                     position={menuPosition}
                     target={this.box}
+                    menuHeight={
+                      this.menu.current?.getBoundingClientRect().height
+                    }
+                    notifyRefAssigned={this.notifyRefAssigned}
                   >
                     <Input
                       {...getInputProps({
