@@ -209,6 +209,7 @@ class MenuTestComponent extends React.Component {
 
     this.target = React.createRef();
     this.mockBoundingClientRect = this.props.mockBoundingClientRect;
+    this.notifyRefAssigned = jest.fn();
   }
 
   render() {
@@ -235,7 +236,13 @@ class MenuTestComponent extends React.Component {
           className={this.mockBoundingClientRect ? 'multiselect-scroll' : ''}
           style={{width: '200px', height: '100px'}}
         />
-        {hasTarget && <Menu {...this.props} target={this.target} />}
+        {hasTarget && (
+          <Menu
+            {...this.props}
+            notifyRefAssigned={this.notifyRefAssigned}
+            target={this.target}
+          />
+        )}
       </div>
     );
   }
@@ -246,6 +253,7 @@ MenuTestComponent.propTypes = {
 };
 
 describe('Menu tests', () => {
+  window.innerHeight = 180;
   const renderTest = props => {
     const {rerender, ...other} = render(<MenuTestComponent {...props} />);
     rerender(<MenuTestComponent {...props} />);
@@ -282,11 +290,32 @@ describe('Menu tests', () => {
   });
 
   test('should not render without target', () => {
-    const {queryByTestId} = render(<Menu target={null} />);
+    const notifyRefAssigned = jest.fn();
+    const {queryByTestId} = render(
+      <Menu target={null} notifyRefAssigned={notifyRefAssigned} />,
+    );
 
     const menu = queryByTestId('select-menu');
 
     expect(menu).toBeNull();
+  });
+
+  test('should render with open direction upwards', () => {
+    const {getByTestId} = renderTest({
+      mockBoundingClientRect: true,
+      menuHeight: 75,
+    });
+    const menu = getByTestId('select-menu');
+    expect(menu).toMatchSnapshot();
+  });
+
+  test('should render with open direction downwards', () => {
+    const {getByTestId} = renderTest({
+      mockBoundingClientRect: true,
+      menuHeight: 55,
+    });
+    const menu = getByTestId('select-menu');
+    expect(menu).toMatchSnapshot();
   });
 });
 
