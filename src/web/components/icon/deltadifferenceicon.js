@@ -1,4 +1,4 @@
-/* Copyright (C) 2021-2022 Greenbone AG
+/* Copyright (C) 2023 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -15,20 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import withSvgIcon from './withSvgIcon';
 
-const getMajorMinorVersion = () => {
-  // eslint-disable-next-line no-unused-vars
-  let [major, minor, ...rest] = VERSION.split('.');
-  minor = parseInt(minor);
-  if (minor < 10) {
-    // add a leading zero for the links
-    minor = `0${minor}`;
-  }
-  return `${major}.${minor}`;
-};
+import {ReactComponent as Icon} from './svg/delta_second.svg';
 
-export const VERSION = '22.8.1-dev1';
+const DeltaDifferenceIcon = withSvgIcon()(Icon);
 
-export const RELEASE_VERSION = getMajorMinorVersion();
+export default DeltaDifferenceIcon;
 
-export default VERSION;
+// vim: set ts=2 sw=2 tw=80:

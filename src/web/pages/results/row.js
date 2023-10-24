@@ -28,6 +28,7 @@ import SeverityBar from 'web/components/bar/severitybar';
 
 import DateTime from 'web/components/date/datetime';
 
+import DeltaDifferenceIcon from 'web/components/icon/deltadifferenceicon';
 import NoteIcon from 'web/components/icon/noteicon';
 import OverrideIcon from 'web/components/icon/overrideicon';
 import SolutionTypeIcon from 'web/components/icon/solutiontypeicon';
@@ -68,6 +69,9 @@ const Row = ({
   const hasActiveOverrides =
     entity.overrides.filter(override => override.isActive()).length > 0;
   const hasTickets = entity.tickets.length > 0;
+  const deltaSeverity = entity.delta?.result?.severity;
+  const deltaHostname = entity.delta?.result?.host.hostname;
+  const deltaQoD = entity.delta?.result?.qod.value;
   return (
     <TableRow>
       {delta && (
@@ -99,10 +103,27 @@ const Row = ({
         )}
       </TableData>
       <TableData>
-        <SeverityBar severity={entity.severity} />
+        <IconDivider>
+          <SeverityBar severity={entity.severity} />
+          {isDefined(entity.delta?.result) &&
+            entity.severity !== deltaSeverity && (
+              <DeltaDifferenceIcon
+                title={_('Severity is changed from {{deltaSeverity}}.', {
+                  deltaSeverity,
+                })}
+              />
+            )}
+        </IconDivider>
       </TableData>
       <TableData align="end">
-        <Qod value={entity.qod.value} />
+        <IconDivider>
+          <Qod value={entity.qod.value} />
+          {isDefined(entity.delta?.result) && entity.qod.value !== deltaQoD && (
+            <DeltaDifferenceIcon
+              title={_('QoD is changed from {{deltaQoD}}.', {deltaQoD})}
+            />
+          )}
+        </IconDivider>
       </TableData>
       <TableData>
         <span>
@@ -116,9 +137,20 @@ const Row = ({
         </span>
       </TableData>
       <TableData>
-        {host.hostname.length > 0 && (
-          <span title={host.hostname}>{shorten(host.hostname, 40)}</span>
-        )}
+        <IconDivider>
+          {host.hostname.length > 0 && (
+            <span title={host.hostname}>{shorten(host.hostname, 40)}</span>
+          )}
+          {isDefined(entity.delta?.result) &&
+            deltaHostname.length > 0 &&
+            host.hostname !== deltaHostname && (
+              <DeltaDifferenceIcon
+                title={_('Hostname is changed from {{deltaHostname}}.', {
+                  deltaHostname,
+                })}
+              />
+            )}
+        </IconDivider>
       </TableData>
       <TableData>{entity.port}</TableData>
       <TableData>
