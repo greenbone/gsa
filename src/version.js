@@ -27,7 +27,7 @@ const getMajorMinorVersion = () => {
   return `${major}.${minor}`;
 };
 
-export const VERSION = '22.8.1';
+export const VERSION = '22.8.2-dev1';
 
 export const RELEASE_VERSION = getMajorMinorVersion();
 
