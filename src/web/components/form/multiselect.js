@@ -85,15 +85,22 @@ class MultiSelect extends React.Component {
 
     this.state = {
       search: '',
+      isMenuRefAssigned: false,
     };
 
     this.input = React.createRef();
     this.box = React.createRef();
+    this.menu = React.createRef();
 
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.renderItem = this.renderItem.bind(this);
+    this.notifyRefAssigned = this.notifyRefAssigned.bind(this);
+  }
+
+  notifyRefAssigned() {
+    this.setState({isMenuRefAssigned: true});
   }
 
   notifyChange(value) {
@@ -242,9 +249,13 @@ class MultiSelect extends React.Component {
                 </Box>
                 {isOpen && !disabled && (
                   <Menu
-                    {...getMenuProps({})}
+                    {...getMenuProps({ref: this.menu})}
                     position={menuPosition}
                     target={this.box}
+                    menuHeight={
+                      this.menu.current?.getBoundingClientRect().height
+                    }
+                    notifyRefAssigned={this.notifyRefAssigned}
                   >
                     <Input
                       {...getInputProps({
