@@ -43,14 +43,14 @@ const credential = Credential.fromElement({
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
   formats: {format: 'pem'},
-  full_type: 'client certificate',
+  full_type: 'Username + SSH Key',
   in_use: 0,
   login: '',
   modification_time: '2021-03-02T10:28:15Z',
   name: 'credential 1',
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},
-  type: 'cc',
+  type: 'usk',
   writable: 1,
   certificate_info: {
     activation_time: '2018-10-10T11:41:23.022Z',
@@ -174,6 +174,7 @@ describe('CredentialPage tests', () => {
     expect(screen.getAllByTitle('Edit Credential')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Clone Credential')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Export Credential')[0]).toBeInTheDocument();
+    expect(screen.getAllByTitle('Download Public Key')[0]).toBeInTheDocument();
   });
 
   test('should allow to bulk action on page contents', async () => {
