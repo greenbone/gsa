@@ -76,14 +76,14 @@ const credential = Credential.fromElement({
   allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
-  full_type: 'username + password',
+  full_type: 'Username + SSH Key',
   in_use: 0,
   login: '',
   modification_time: '2021-03-02T10:28:15Z',
   name: 'credential 1',
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},
-  type: 'up',
+  type: 'usk',
   writable: 1,
 });
 
@@ -92,14 +92,14 @@ const noPermCredential = Credential.fromElement({
   allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
-  full_type: 'username + password',
+  full_type: 'Username + SSH Key',
   in_use: 0,
   login: '',
   modification_time: '2021-03-02T10:28:15Z',
   name: 'credential 1',
   owner: {name: 'admin'},
   permissions: {permission: {name: 'get_credentials'}},
-  type: 'up',
+  type: 'usk',
   writable: 1,
 });
 
@@ -108,14 +108,14 @@ const credentialInUse = Credential.fromElement({
   allow_insecure: 1,
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
-  full_type: 'username + password',
+  full_type: 'Username + SSH Key',
   in_use: 1,
   login: '',
   modification_time: '2021-03-02T10:28:15Z',
   name: 'credential 1',
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},
-  type: 'up',
+  type: 'usk',
   writable: 1,
 });
 
@@ -165,17 +165,19 @@ describe('Credential Detailspage tests', () => {
     expect(element).toHaveTextContent('Owner:admin');
 
     const spans = baseElement.querySelectorAll('span');
-    expect(spans[10]).toHaveTextContent('User Tags');
-    expect(spans[12]).toHaveTextContent('Permissions');
+    expect(spans[12]).toHaveTextContent('User Tags');
+    expect(spans[14]).toHaveTextContent('Permissions');
 
     expect(element).toHaveTextContent('Comment');
     expect(element).toHaveTextContent('blah');
 
     expect(element).toHaveTextContent('Type');
-    expect(element).toHaveTextContent('Username + Password');
+    expect(element).toHaveTextContent('Username + SSH Key');
 
     expect(element).toHaveTextContent('Allow Insecure Use');
     expect(element).toHaveTextContent('Yes');
+
+    expect(element).toHaveTextContent('Login');
   });
 
   test('should render user tags tab', () => {
@@ -208,9 +210,9 @@ describe('Credential Detailspage tests', () => {
     const {baseElement} = render(<Detailspage id="6575" />);
 
     const spans = baseElement.querySelectorAll('span');
-    expect(spans[10]).toHaveTextContent('User Tags');
+    expect(spans[12]).toHaveTextContent('User Tags');
 
-    fireEvent.click(spans[10]);
+    fireEvent.click(spans[12]);
 
     expect(baseElement).toHaveTextContent('No user tags available');
   });
@@ -245,9 +247,9 @@ describe('Credential Detailspage tests', () => {
     const {baseElement} = render(<Detailspage id="6575" />);
 
     const spans = baseElement.querySelectorAll('span');
-    expect(spans[12]).toHaveTextContent('Permissions');
+    expect(spans[14]).toHaveTextContent('Permissions');
 
-    fireEvent.click(spans[12]);
+    fireEvent.click(spans[14]);
 
     expect(baseElement).toHaveTextContent('No permissions available');
   });
@@ -393,6 +395,7 @@ describe('Credential ToolBarIcons tests', () => {
     const editIcon = screen.getAllByTitle('Edit Credential');
     const deleteIcon = screen.getAllByTitle('Move Credential to trashcan');
     const exportIcon = screen.getAllByTitle('Export Credential as XML');
+    const downloadPublicKeyIcon = screen.getAllByTitle('Download Public Key');
 
     expect(cloneIcon[0]).toBeInTheDocument();
     fireEvent.click(cloneIcon[0]);
@@ -409,6 +412,13 @@ describe('Credential ToolBarIcons tests', () => {
     expect(exportIcon[0]).toBeInTheDocument();
     fireEvent.click(exportIcon[0]);
     expect(handleCredentialDownloadClick).toHaveBeenCalledWith(credential);
+
+    expect(downloadPublicKeyIcon[0]).toBeInTheDocument();
+    fireEvent.click(downloadPublicKeyIcon[0]);
+    expect(handleCredentialInstallerDownloadClick).toHaveBeenCalledWith(
+      credential,
+      'key',
+    );
   });
 
   test('should not call click handlers without permission', () => {

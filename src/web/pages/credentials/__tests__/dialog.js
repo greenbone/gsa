@@ -42,14 +42,14 @@ const credential = Credential.fromElement({
   creation_time: '2020-12-16T15:23:59Z',
   comment: 'blah',
   formats: {format: 'pem'},
-  full_type: 'username + password',
+  full_type: 'Username + SSH Key',
   in_use: 0,
   login: '',
   modification_time: '2021-03-02T10:28:15Z',
   name: 'credential 1',
   owner: {name: 'admin'},
   permissions: {permission: {name: 'Everything'}},
-  type: 'up',
+  type: 'usk',
   writable: 1,
 });
 
