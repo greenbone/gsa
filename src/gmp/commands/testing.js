@@ -72,4 +72,13 @@ export const createHttp = response => ({
   request: jest.fn().mockReturnValue(Promise.resolve(response)),
 });
 
+export const createHttpMany = responses => {
+  let i = 0;
+  return {
+    request: jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(responses[i++])),
+  };
+};
+
 // vim: set ts=2 sw=2 tw=80:
