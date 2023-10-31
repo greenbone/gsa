@@ -36,7 +36,7 @@ import TableRow from 'web/components/table/row';
 import {Col} from 'web/entity/page';
 
 const ScanConfigDetails = ({entity}) => {
-  const {comment, tasks = []} = entity;
+  const {comment, deprecated, tasks = []} = entity;
   return (
     <Layout flex="column" grow>
       <InfoTable>
@@ -45,6 +45,12 @@ const ScanConfigDetails = ({entity}) => {
           <Col width="90%" />
         </colgroup>
         <TableBody>
+          {deprecated && (
+            <TableRow>
+              <TableData>{_('Deprecated')}</TableData>
+              <TableData>{_('yes')}</TableData>
+            </TableRow>
+          )}
           {isDefined(comment) && (
             <TableRow>
               <TableData>{_('Comment')}</TableData>

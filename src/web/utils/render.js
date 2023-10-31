@@ -30,6 +30,13 @@ import {typeName, getEntityType} from 'gmp/utils/entitytype';
 export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';
 
+function selectItemLabel(item) {
+  if (item.deprecated) {
+    return <s>{item.name + ' (' + _('Deprecated') + ')'}</s>;
+  }
+  return item.name;
+}
+
 /**
  * Render a entities list as items array
  *
@@ -45,7 +52,7 @@ export const renderSelectItems = (
   default_item_label = UNSET_LABEL,
 ) => {
   const items = isDefined(list)
-    ? list.map(item => ({label: item.name, value: item.id}))
+    ? list.map(item => ({label: selectItemLabel(item), value: item.id}))
     : undefined;
 
   if (!isDefined(default_item_value)) {

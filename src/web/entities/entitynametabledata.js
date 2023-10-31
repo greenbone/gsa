@@ -55,12 +55,14 @@ const EntityNameTableData = ({
             <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
               {entity.name}
             </RowDetailsToggle>
+            {entity.deprecated && <b> ({_('Deprecated')})</b>}
           </span>
         ) : (
           <span>
             <DetailsLink type={type} id={entity.id} textOnly={!links}>
               {entity.name}
             </DetailsLink>
+            {entity.deprecated && <b> ({_('Deprecated')})</b>}
           </span>
         )}
       </Layout>

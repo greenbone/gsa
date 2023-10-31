@@ -35,6 +35,7 @@ import {Col} from 'web/entity/page';
 const PortListDetails = ({entity, ...props}) => {
   const {
     comment,
+    deprecated,
     port_count = {
       all: 0,
       tcp: 0,
@@ -50,6 +51,13 @@ const PortListDetails = ({entity, ...props}) => {
           <Col width="90%" />
         </colgroup>
         <TableBody>
+          {deprecated && (
+            <TableRow>
+              <TableData>{_('Deprecated')}</TableData>
+              <TableData>{_('yes')}</TableData>
+            </TableRow>
+          )}
+
           <TableRow>
             <TableData>{_('Comment')}</TableData>
             <TableData>{comment}</TableData>

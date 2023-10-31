@@ -40,6 +40,7 @@ import {Col} from 'web/entity/page';
 
 const ReportFormatDetails = ({entity, links = true}) => {
   const {
+    deprecated,
     extension,
     content_type,
     trust = {},
@@ -55,6 +56,13 @@ const ReportFormatDetails = ({entity, links = true}) => {
           <Col width="90%" />
         </colgroup>
         <TableBody>
+          {deprecated && (
+            <TableRow>
+              <TableData>{_('Deprecated')}</TableData>
+              <TableData>{_('yes')}</TableData>
+            </TableRow>
+          )}
+
           <TableRow>
             <TableData>{_('Extension')}</TableData>
             <TableData>{extension}</TableData>
