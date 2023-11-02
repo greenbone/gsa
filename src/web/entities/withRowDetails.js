@@ -57,34 +57,38 @@ const StyledTableRow = styled(TableRow)`
   }
 `;
 
-const withRowDetails = (type, colSpan = '10') => Component => {
-  const RowDetailsWrapper = ({entity, links = true, ...props}) => (
-    <StyledTableRow>
-      <TableData colSpan={colSpan} flex align={['start', 'stretch']}>
-        {links && (
-          <Layout align={['start', 'start']}>
-            <DetailsLink
-              type={isFunction(type) ? type(entity) : type}
-              id={entity.id}
-            >
-              <DetailsIcon size="small" title={_('Open all details')} />
-            </DetailsLink>
+const withRowDetails =
+  (type, colSpan = '10', details = true) =>
+  Component => {
+    const RowDetailsWrapper = ({entity, links = true, ...props}) => (
+      <StyledTableRow>
+        <TableData colSpan={colSpan} flex align={['start', 'stretch']}>
+          {links && (
+            <Layout align={['start', 'start']}>
+              {details && (
+                <DetailsLink
+                  type={isFunction(type) ? type(entity) : type}
+                  id={entity.id}
+                >
+                  <DetailsIcon size="small" title={_('Open all details')} />
+                </DetailsLink>
+              )}
+            </Layout>
+          )}
+          <Indent />
+          <Layout flex="column" grow="1">
+            <Component {...props} links={links} entity={entity} />
           </Layout>
-        )}
-        <Indent />
-        <Layout flex="column" grow="1">
-          <Component {...props} links={links} entity={entity} />
-        </Layout>
-      </TableData>
-    </StyledTableRow>
-  );
+        </TableData>
+      </StyledTableRow>
+    );
 
-  RowDetailsWrapper.propTypes = {
-    entity: PropTypes.model.isRequired,
-    links: PropTypes.bool,
+    RowDetailsWrapper.propTypes = {
+      entity: PropTypes.model.isRequired,
+      links: PropTypes.bool,
+    };
+    return RowDetailsWrapper;
   };
-  return RowDetailsWrapper;
-};
 
 export default withRowDetails;
 

@@ -36,6 +36,10 @@ import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
+import TlsCertificateDetails from '../../tlscertificates/details';
+import withRowDetails from 'web/entities/withRowDetails';
+import {RowDetailsToggle} from 'web/entities/row';
+
 import {createEntitiesTable} from 'web/entities/table';
 
 const Header = ({
@@ -58,7 +62,7 @@ const Header = ({
           {...sortProps}
           sortBy="dn"
           width={actions ? '35%' : '40%'}
-          title={_('Issuer DN')}
+          title={_('Subject DN')}
         />
         <TableHead
           {...sortProps}
@@ -104,6 +108,10 @@ Header.propTypes = {
   onSortChange: PropTypes.func,
 };
 
+const Div = styled.div`
+  word-break: break-all;
+`;
+
 const StyledSpan = styled.span`
   word-break: break-all;
 `;
@@ -113,19 +121,24 @@ const Row = ({
   entity,
   links = true,
   onTlsCertificateDownloadClick,
+  onToggleDetailsClick,
 }) => {
-  const {issuer, serial, notafter, notbefore, hostname, ip, port} = entity;
+  const {serial, activationTime, expirationTime, hostname, ip, port} = entity;
   return (
     <TableRow>
       <TableData>
-        <StyledSpan>{issuer}</StyledSpan>
+        <StyledSpan>
+          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+            <Div>{entity.subject_dn}</Div>
+          </RowDetailsToggle>
+        </StyledSpan>
       </TableData>
       <TableData>{serial}</TableData>
       <TableData>
-        <DateTime format={shortDate} date={notbefore} />
+        <DateTime format={shortDate} date={activationTime} />
       </TableData>
       <TableData>
-        <DateTime format={shortDate} date={notafter} />
+        <DateTime format={shortDate} date={expirationTime} />
       </TableData>
       <TableData>
         <Link
@@ -157,12 +170,14 @@ Row.propTypes = {
   entity: PropTypes.object.isRequired,
   links: PropTypes.bool,
   onTlsCertificateDownloadClick: PropTypes.func,
+  onToggleDetailsClick: PropTypes.func.isRequired,
 };
 
 export default createEntitiesTable({
   header: Header,
   emptyTitle: _l('No TLS Certificates available'),
   row: Row,
+  rowDetails: withRowDetails('tlscertificate', 6, false)(TlsCertificateDetails),
 });
 
 // vim: set ts=2 sw=2 tw=80:

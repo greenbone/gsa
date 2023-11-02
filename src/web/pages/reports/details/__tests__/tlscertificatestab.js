@@ -32,7 +32,7 @@ import TLSCertificatesTab from '../tlscertificatestab';
 setLocale('en');
 
 const filter = Filter.fromString(
-  'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
+  'apply_overrides=0 levels=hml rows=3 min_qod=70 first=1 sort-reverse=severity',
 );
 
 describe('Report TLS Certificates Tab tests', () => {
@@ -81,44 +81,59 @@ describe('Report TLS Certificates Tab tests', () => {
     expect(header[7]).toHaveTextContent('Actions');
 
     // Row 1
-    expect(rows[1]).toHaveTextContent('CN=foo');
-    expect(rows[1]).toHaveTextContent('abcd');
-    expect(rows[1]).toHaveTextContent('Wed, Jan 30, 2019');
-    expect(rows[1]).toHaveTextContent('Thu, Aug 1, 2019');
+    expect(rows[1]).toHaveTextContent('CN=LoremIpsumSubject1 C=Dolor');
+    expect(rows[1]).toHaveTextContent('00B49C541FF5A8E1D9');
+    expect(rows[1]).toHaveTextContent('Sat, Aug 10, 2019');
+    expect(rows[1]).toHaveTextContent('Tue, Sep 10, 2019');
     expect(links[7]).toHaveAttribute(
       'href',
-      '/hosts?filter=name%3D123.456.78.910',
+      '/hosts?filter=name%3D192.168.9.90',
     );
     expect(links[7]).toHaveAttribute(
       'title',
-      'Show all Hosts with IP 123.456.78.910',
+      'Show all Hosts with IP 192.168.9.90',
     );
-    expect(links[7]).toHaveTextContent('123.456.78.910');
+    expect(links[7]).toHaveTextContent('192.168.9.90');
     expect(rows[1]).toHaveTextContent('foo.bar');
-    expect(rows[1]).toHaveTextContent('1234');
+    expect(rows[1]).toHaveTextContent('4021');
     expect(icons[4]).toHaveTextContent('download.svg');
 
     // Row 2
-    expect(rows[2]).toHaveTextContent('CN=bar');
-    expect(rows[2]).toHaveTextContent('dcba');
-    expect(rows[2]).toHaveTextContent('Sat, Mar 30, 2019');
-    expect(rows[2]).toHaveTextContent('Tue, Oct 1, 2019');
+    expect(rows[2]).toHaveTextContent('CN=LoremIpsumSubject1 C=Dolor');
+    expect(rows[2]).toHaveTextContent('00B49C541FF5A8E1D9');
+    expect(rows[2]).toHaveTextContent('Sat, Aug 10, 2019');
+    expect(rows[2]).toHaveTextContent('Tue, Sep 10, 2019');
     expect(links[8]).toHaveAttribute(
       'href',
-      '/hosts?filter=name%3D109.876.54.321',
+      '/hosts?filter=name%3D192.168.9.90',
     );
     expect(links[8]).toHaveAttribute(
       'title',
-      'Show all Hosts with IP 109.876.54.321',
+      'Show all Hosts with IP 192.168.9.90',
     );
-    expect(links[8]).toHaveTextContent('109.876.54.321');
-    expect(rows[2]).toHaveTextContent('lorem.ipsum');
-    expect(rows[2]).toHaveTextContent('5678');
+    expect(links[8]).toHaveTextContent('192.168.9.90');
+    expect(rows[2]).toHaveTextContent('foo.bar');
+    expect(rows[2]).toHaveTextContent('4023');
     expect(icons[5]).toHaveTextContent('download.svg');
+
+    // Row 3
+    expect(rows[3]).toHaveTextContent('CN=LoremIpsumSubject2 C=Dolor');
+    expect(rows[3]).toHaveTextContent('00C387C32CBB861F5C');
+    expect(links[9]).toHaveAttribute(
+      'href',
+      '/hosts?filter=name%3D191.164.9.93',
+    );
+    expect(links[9]).toHaveAttribute(
+      'title',
+      'Show all Hosts with IP 191.164.9.93',
+    );
+    expect(links[9]).toHaveTextContent('191.164.9.93');
+    expect(rows[3]).toHaveTextContent('8445');
+    expect(icons[6]).toHaveTextContent('download.svg');
 
     // Filter
     expect(baseElement).toHaveTextContent(
-      '(Applied filter: apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity)',
+      '(Applied filter: apply_overrides=0 levels=hml rows=3 min_qod=70 first=1 sort-reverse=severity)',
     );
   });
 
