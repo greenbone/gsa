@@ -20,7 +20,7 @@ import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 import {filter as filter_func, forEach, map} from 'gmp/utils/array';
 
-import {parseSeverity, parseDate} from 'gmp/parser';
+import {parseBoolean, parseSeverity, parseDate} from 'gmp/parser';
 
 import {
   parseCollectionList,
@@ -52,89 +52,60 @@ const emptyCollectionList = filter => {
   };
 };
 
-const getTlsCertificate = (certs, fingerprint) => {
-  let cert = certs[fingerprint];
-
-  if (!isDefined(cert)) {
-    cert = ReportTLSCertificate.fromElement({fingerprint});
-    certs[fingerprint] = cert;
-  }
-  return cert;
-};
-
 export const parseTlsCertificates = (report, filter) => {
-  const {host: hosts, ssl_certs, results} = report;
+  const {ssl_certs, tls_certificates, results} = report;
 
-  if (!isDefined(ssl_certs) || !isReportWithDetails(results)) {
+  if (
+    !isDefined(ssl_certs) ||
+    !isDefined(tls_certificates) ||
+    !isReportWithDetails(results)
+  ) {
     return emptyCollectionList(filter);
   }
 
   const {count: full_count} = ssl_certs;
 
-  let certs_array = [];
+  const certs_array = [];
 
-  forEach(hosts, host => {
-    const host_certs = {};
-    let hostname;
+  forEach(tls_certificates.tls_certificate, tls_cert => {
+    const {
+      name,
+      certificate,
+      sha256_fingerprint,
+      md5_fingerprint,
+      valid,
+      activation_time,
+      expiration_time,
+      subject_dn,
+      issuer_dn,
+      serial,
+      host,
+      ports,
+    } = tls_cert;
 
-    forEach(host.detail, detail => {
-      const {name = '', value = ''} = detail;
+    const cert = ReportTLSCertificate.fromElement({fingerprint: name});
+    cert.data = isDefined(certificate) ? certificate.__text : undefined;
+    cert.sha256Fingerprint = sha256_fingerprint;
+    cert.md5Fingerprint = md5_fingerprint;
+    cert.activationTime =
+      activation_time === 'undefined' || activation_time === 'unlimited'
+        ? undefined
+        : parseDate(activation_time);
+    cert.expirationTime =
+      expiration_time === 'undefined' || expiration_time === 'unlimited'
+        ? undefined
+        : parseDate(expiration_time);
+    cert.valid = parseBoolean(valid);
+    cert.subject_dn = subject_dn;
+    cert.issuer_dn = issuer_dn;
+    cert.serial = serial;
+    cert.hostname = isDefined(host) ? host.hostname : '';
+    cert.ip = isDefined(host) ? host.ip : undefined;
 
-      if (name.startsWith('SSLInfo')) {
-        const [port, fingerprint] = value.split('::');
-
-        const cert = getTlsCertificate(host_certs, fingerprint);
-
-        cert.ip = host.ip;
-
-        cert.addPort(port);
-      } else if (name.startsWith('SSLDetails')) {
-        const [, fingerprint] = name.split(':');
-
-        const cert = getTlsCertificate(host_certs, fingerprint);
-
-        value.split('|').reduce((c, v) => {
-          let [key, val] = v.split(':');
-          if (key === 'notAfter' || key === 'notBefore') {
-            val = parseDate(val);
-          }
-          c[key.toLowerCase()] = val;
-          return c;
-        }, cert);
-
-        cert.details = value;
-      } else if (name.startsWith('Cert')) {
-        const [, fingerprint] = name.split(':');
-
-        const cert = getTlsCertificate(host_certs, fingerprint);
-
-        // currently cert data starts with x509:
-        // not sure if there are other types of certs
-        // therefore keep original data
-
-        cert._data = value;
-
-        if (value.includes(':')) {
-          const [, data] = value.split(':');
-          cert.data = data;
-        } else {
-          cert.data = value;
-        }
-      } else if (name === 'hostname') {
-        // collect hostnames
-        hostname = value;
-      }
+    forEach(ports.port, port => {
+      cert.addPort(port);
     });
-
-    const certs = Object.values(host_certs);
-
-    if (isDefined(hostname)) {
-      for (const cert of certs) {
-        cert.hostname = hostname;
-      }
-    }
-
-    certs_array = certs_array.concat(certs);
+    certs_array.push(cert);
   });
 
   // create a cert per port
@@ -367,12 +338,11 @@ export const parseOperatingSystems = (report, filter) => {
         const severity = severities[ip];
 
         if (!isDefined(os)) {
-          os = operating_systems[
-            best_os_cpe
-          ] = ReportOperatingSystem.fromElement({
-            best_os_cpe,
-            best_os_txt,
-          });
+          os = operating_systems[best_os_cpe] =
+            ReportOperatingSystem.fromElement({
+              best_os_cpe,
+              best_os_txt,
+            });
         }
 
         os.addHost(host);

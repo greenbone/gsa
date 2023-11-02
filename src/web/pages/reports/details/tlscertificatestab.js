@@ -31,10 +31,10 @@ import {
 } from 'web/utils/sort';
 
 const tlsCertificatesSortFunctions = {
-  dn: makeCompareString('issuer'),
+  dn: makeCompareString('subject_dn'),
   serial: makeCompareString('serial'),
-  notvalidbefore: makeCompareDate('notbefore'),
-  notvalidafter: makeCompareDate('notafter'),
+  notvalidbefore: makeCompareDate('activationTime'),
+  notvalidafter: makeCompareDate('expirationTime'),
   ip: makeCompareIp('ip'),
   hostname: makeCompareString('hostname'),
   port: makeComparePort('port'),

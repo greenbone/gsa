@@ -236,6 +236,44 @@ const error2 = {
   },
 };
 
+// TLS certificates
+const tlsCertificate1 = {
+  name: '57610B6A3C73866870678E638C7825743145B24',
+  certificate: {
+    __text: '66870678E638C7825743145B247554E0D92C94',
+    _format: 'DER',
+  },
+  data: 'MIIDSzCCAjOgAwIBAgIJALScVB/zqOLZMA0GCSqGSIb3DQ',
+  sha256_fingerprint: '57610B6A3C73866870678E638C78',
+  md5_fingerprint: 'fa:a9:9d:f2:28:cc:2c:c0:80:16',
+  activation_time: '2019-08-10T12:51:27Z',
+  expiration_time: '2019-09-10T12:51:27Z',
+  valid: true,
+  subject_dn: 'CN=LoremIpsumSubject1 C=Dolor',
+  issuer_dn: 'CN=LoremIpsumIssuer1 C=Dolor',
+  serial: '00B49C541FF5A8E1D9',
+  host: {ip: '192.168.9.90', hostname: 'foo.bar'},
+  ports: {port: ['4021', '4023']},
+};
+
+const tlsCertificate2 = {
+  name: 'C137E9D559CC95ED130011FE4012DE56CAE2F8',
+  certificate: {
+    __text: 'MIICGTCCAYICCQDDh8Msu4YfXDANBgkqhkiG9w0B',
+    _format: 'DER',
+  },
+  sha256_fingerprint: 'C137E9D559CC95ED130011FE4012',
+  md5_fingerprint: '63:70:d6:65:17:32:01:66:9e:7d:c4',
+  activation_time: 'unlimited',
+  expiration_time: 'undefined',
+  valid: false,
+  subject_dn: 'CN=LoremIpsumSubject2 C=Dolor',
+  issuer_dn: 'CN=LoremIpsumIssuer2 C=Dolor',
+  serial: '00C387C32CBB861F5C',
+  host: {ip: '191.164.9.93', hostname: ''},
+  ports: {port: ['8445', '5061']},
+};
+
 export const getMockReport = () => {
   const report = {
     _id: '1234',
@@ -255,6 +293,9 @@ export const getMockReport = () => {
     results: {result: [result1, result2, result3]},
     hosts: {count: 2},
     host: [host1, host2],
+    tls_certificates: {
+      tls_certificate: [tlsCertificate1, tlsCertificate2],
+    },
     ports: {
       count: 2,
       port: [port1, port2],

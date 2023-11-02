@@ -499,53 +499,124 @@ describe('report parser tests', () => {
         },
       ],
       ssl_certs: {count: '123'},
+      tls_certificates: {
+        tls_certificate: [
+          {
+            name: '57610B6A3C73866870678E638C7825743145B24',
+            certificate: {
+              __text: '66870678E638C7825743145B247554E0D92C94',
+              _format: 'DER',
+            },
+            sha256_fingerprint: '57610B6A3C73866870678E638C78',
+            md5_fingerprint: 'fa:a9:9d:f2:28:cc:2c:c0:80:16',
+            activation_time: '2019-08-10T12:51:27Z',
+            expiration_time: '2019-09-10T12:51:27Z',
+            valid: true,
+            subject_dn: 'CN=LoremIpsumSubject C=Dolor',
+            issuer_dn: 'CN=LoremIpsumIssuer C=Dolor',
+            serial: '00B49C541FF5A8E1D9',
+            host: {ip: '192.168.9.90', hostname: 'foo.bar'},
+            ports: {port: ['4021', '4023']},
+          },
+          {
+            name: 'C137E9D559CC95ED130011FE4012DE56CAE2F8',
+            certificate: {
+              __text: 'MIICGTCCAYICCQDDh8Msu4YfXDANBgkqhkiG9w0B',
+              _format: 'DER',
+            },
+            sha256_fingerprint: 'C137E9D559CC95ED130011FE4012',
+            md5_fingerprint: '63:70:d6:65:17:32:01:66:9e:7d:c4',
+            activation_time: 'unlimited',
+            expiration_time: 'undefined',
+            valid: false,
+            subject_dn: 'CN=LoremIpsumSubject2 C=Dolor',
+            issuer_dn: 'CN=LoremIpsumIssuer2 C=Dolor',
+            serial: '00C387C32CBB861F5C',
+            host: {ip: '191.164.9.93', hostname: ''},
+            ports: {port: ['8445', '5061']},
+          },
+          {
+            name: 'C137E9D559CC95ED130011FE4012DE56CAE2F8',
+            certificate: {},
+            sha256_fingerprint: 'C137E9D559CC95ED130011FE4012',
+            md5_fingerprint: '63:70:d6:65:17:32:01:66:9e:7d:c4',
+            activation_time: 'unlimited',
+            expiration_time: 'undefined',
+            valid: false,
+            subject_dn: 'CN=LoremIpsumSubject2 C=Dolor',
+            issuer_dn: 'CN=LoremIpsumIssuer2 C=Dolor',
+            serial: '00C387C32CBB861F5C',
+            host: {},
+            ports: {port: ['8441']},
+          },
+        ],
+      },
     };
     const counts = {
       first: 1,
       all: 123,
-      filtered: 4,
-      length: 4,
-      rows: 4,
-      last: 4,
+      filtered: 5,
+      length: 5,
+      rows: 5,
+      last: 5,
     };
     const tlsCerts = parseTlsCertificates(report, filterString);
 
-    expect(tlsCerts.entities.length).toEqual(4);
+    expect(tlsCerts.entities.length).toEqual(5);
     expect(tlsCerts.counts).toEqual(counts);
     expect(tlsCerts.filter).toEqual('foo=bar rows=5');
 
-    const [cert1, cert2, cert3, cert4] = tlsCerts.entities;
+    const [cert1, cert2, cert3, cert4, cert5] = tlsCerts.entities;
 
-    expect(cert1.fingerprint).toEqual('fingerprint1');
+    expect(cert1.fingerprint).toEqual(
+      '57610B6A3C73866870678E638C7825743145B24',
+    );
     expect(cert1.hostname).toEqual('foo.bar');
-    expect(cert1.ip).toEqual('1.1.1.1');
-    expect(cert1.data).toEqual('foobar');
-    expect(cert1._data).toEqual('x509:foobar');
+    expect(cert1.ip).toEqual('192.168.9.90');
+    expect(cert1.data).toEqual('66870678E638C7825743145B247554E0D92C94');
+    expect(cert1.valid).toEqual(true);
     expect(cert1.ports).toBeUndefined();
-    expect(cert1.port).toEqual(123);
+    expect(cert1.port).toEqual(4021);
 
-    expect(cert2.fingerprint).toEqual('fingerprint2');
-    expect(cert2.hostname).toBeUndefined();
-    expect(cert2.ip).toEqual('2.2.2.2');
-    expect(cert2.data).toBeUndefined();
-    expect(cert2._data).toBeUndefined();
+    expect(cert2.fingerprint).toEqual(
+      '57610B6A3C73866870678E638C7825743145B24',
+    );
+    expect(cert2.hostname).toEqual('foo.bar');
+    expect(cert2.ip).toEqual('192.168.9.90');
+    expect(cert2.data).toEqual('66870678E638C7825743145B247554E0D92C94');
+    expect(cert2.valid).toEqual(true);
     expect(cert2.ports).toBeUndefined();
-    expect(cert2.port).toEqual(123);
+    expect(cert2.port).toEqual(4023);
 
-    expect(cert3.fingerprint).toEqual('fingerprint2');
-    expect(cert3.hostname).toBeUndefined();
-    expect(cert3.ip).toEqual('2.2.2.2');
-    expect(cert3.data).toBeUndefined();
-    expect(cert3._data).toBeUndefined();
+    expect(cert3.fingerprint).toEqual('C137E9D559CC95ED130011FE4012DE56CAE2F8');
+    expect(cert3.hostname).toEqual('');
+    expect(cert3.ip).toEqual('191.164.9.93');
+    expect(cert3.data).toEqual('MIICGTCCAYICCQDDh8Msu4YfXDANBgkqhkiG9w0B');
+    expect(cert3.valid).toEqual(false);
+    expect(cert3.activationTime).toBeUndefined();
+    expect(cert3.expirationTime).toBeUndefined();
     expect(cert3.ports).toBeUndefined();
-    expect(cert3.port).toEqual(234);
+    expect(cert3.port).toEqual(8445);
 
-    expect(cert4.fingerprint).toEqual('fingerprint1');
-    expect(cert4.ip).toEqual('2.2.2.2');
-    expect(cert4.data).toBeUndefined();
-    expect(cert4._data).toBeUndefined();
+    expect(cert4.fingerprint).toEqual('C137E9D559CC95ED130011FE4012DE56CAE2F8');
+    expect(cert4.hostname).toEqual('');
+    expect(cert4.ip).toEqual('191.164.9.93');
+    expect(cert4.data).toEqual('MIICGTCCAYICCQDDh8Msu4YfXDANBgkqhkiG9w0B');
+    expect(cert4.valid).toEqual(false);
+    expect(cert4.activationTime).toBeUndefined();
+    expect(cert4.expirationTime).toBeUndefined();
     expect(cert4.ports).toBeUndefined();
-    expect(cert4.port).toEqual(234);
+    expect(cert4.port).toEqual(5061);
+
+    expect(cert5.fingerprint).toEqual('C137E9D559CC95ED130011FE4012DE56CAE2F8');
+    expect(cert5.hostname).toBeUndefined();
+    expect(cert5.ip).toBeUndefined();
+    expect(cert5.data).toBeUndefined();
+    expect(cert5.valid).toEqual(false);
+    expect(cert5.activationTime).toBeUndefined();
+    expect(cert5.expirationTime).toBeUndefined();
+    expect(cert5.ports).toBeUndefined();
+    expect(cert5.port).toEqual(8441);
   });
 
   test('should parse empty tls certificates', () => {
