@@ -81,21 +81,6 @@ const mapStateToProps = rootState => ({
   timezone: getTimezone(rootState),
 });
 
-const CertStatus = connect(mapStateToProps)(({info, timezone}) => {
-  return (
-    <FootNote>
-      <Layout>
-        <KeyIcon />
-      </Layout>
-      <span>{render_certificate_info(info, timezone)}</span>
-    </FootNote>
-  );
-});
-
-CertStatus.propTypes = {
-  info: PropTypes.object.isRequired,
-};
-
 const ScannerDialog = ({
   ca_pub,
   comment = '',
@@ -119,13 +104,8 @@ const ScannerDialog = ({
   const handleTypeChange = (value, name) => {
     if (onScannerTypeChange) {
       value = parseInt(value);
-      const scan_credentials = filter(credentials);
 
       onScannerTypeChange(value, name);
-      onScannerTypeChange(
-        selectSaveId(scan_credentials, credential_id),
-        'credential_id',
-      );
     }
   };
 
@@ -160,7 +140,6 @@ const ScannerDialog = ({
 
   const scanner_credentials = filter(credentials);
   const isInUse = isDefined(scanner) && scanner.isInUse();
-  const show_cred_info = isDefined(scanner) && isDefined(scanner.credential);
 
   const isGreenboneSensorType = type === GREENBONE_SENSOR_SCANNER_TYPE;
 
@@ -235,9 +214,6 @@ const ScannerDialog = ({
                     />
                   </Layout>
                 </Divider>
-                {show_cred_info && (
-                  <CertStatus info={scanner.credential.certificate_info} />
-                )}
               </FormGroup>
             )}
           </Layout>

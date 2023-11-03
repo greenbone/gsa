@@ -108,7 +108,7 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getAllByTestId, getByName, getAllByName} = render(
+    const {getAllByTestId, getByTestId, getByName, getAllByName} = render(
       <CredentialsDialog
         allow_insecure={credential.allow_insecure}
         comment={credential.comment}
@@ -123,6 +123,7 @@ describe('CredentialsDialog component tests', () => {
     );
 
     const formGroups = getAllByTestId('formgroup-title');
+    const selectedValue = getByTestId('select-selected-value');
 
     const nameInput = getByName('name');
     expect(formGroups[0]).toHaveTextContent('Name');
@@ -133,6 +134,7 @@ describe('CredentialsDialog component tests', () => {
     expect(commentInput).toHaveAttribute('value', 'blah');
 
     expect(formGroups[2]).toHaveTextContent('Type');
+    expect(selectedValue).toHaveTextContent('Username + SSH Key');
 
     const allowInsecure = getAllByName('allow_insecure');
     expect(formGroups[3]).toHaveTextContent('Allow insecure use');
