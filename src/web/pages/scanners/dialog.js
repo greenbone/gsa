@@ -18,14 +18,10 @@
 
 import React from 'react';
 
-import {connect} from 'react-redux';
-
 import _ from 'gmp/locale';
-import {longDate} from 'gmp/locale/date';
 
 import {filter, map} from 'gmp/utils/array';
 import {hasValue, isDefined} from 'gmp/utils/identity';
-import {selectSaveId} from 'gmp/utils/id';
 
 import {parseInt} from 'gmp/parser';
 
@@ -36,19 +32,14 @@ import withGmp from 'web/utils/withGmp';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
-import FootNote from 'web/components/footnote/footnote';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 
-import KeyIcon from 'web/components/icon/keyicon';
 import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
-
-import {getTimezone} from 'web/store/usersettings/selectors';
 
 import {
   GREENBONE_SENSOR_SCANNER_TYPE,
@@ -56,30 +47,6 @@ import {
 } from 'gmp/models/scanner';
 
 const AVAILABLE_SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
-
-const render_certificate_info = (info, tz) => {
-  if (!isDefined(info)) {
-    return null;
-  }
-
-  if (info.time_status === 'expired') {
-    return _('Certificate currently in use expired at {{date}}', {
-      date: longDate(info.expirationTime, tz),
-    });
-  }
-  if (info.time_status === 'inactive') {
-    return _('Certificate currently not valid until {{date}}', {
-      date: longDate(info.activationTime, tz),
-    });
-  }
-  return _('Certificate in use will expire at {{date}}', {
-    date: longDate(info.expirationTime, tz),
-  });
-};
-
-const mapStateToProps = rootState => ({
-  timezone: getTimezone(rootState),
-});
 
 const ScannerDialog = ({
   ca_pub,
