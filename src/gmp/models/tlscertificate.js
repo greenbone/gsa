@@ -54,6 +54,12 @@ class TlsCertificate extends Model {
     // Use subject DN as name
     ret.name = ret.subject_dn;
 
+    ret.subjectDn = element.subject_dn;
+    delete ret.subject_dn;
+
+    ret.issuerDn = element.issuer_dn;
+    delete ret.issuer_dn;
+
     ret.activationTime =
       element.activation_time === 'undefined' ||
       element.activation_time === 'unlimited'

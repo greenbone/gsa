@@ -96,8 +96,8 @@ export const parseTlsCertificates = (report, filter) => {
         ? undefined
         : parseDate(expiration_time);
     cert.valid = parseBoolean(valid);
-    cert.subject_dn = subject_dn;
-    cert.issuer_dn = issuer_dn;
+    cert.subjectDn = subject_dn;
+    cert.issuerDn = issuer_dn;
     cert.serial = serial;
     cert.hostname = isDefined(host) ? host.hostname : '';
     cert.ip = isDefined(host) ? host.ip : undefined;

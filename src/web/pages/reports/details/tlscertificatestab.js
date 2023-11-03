@@ -31,7 +31,7 @@ import {
 } from 'web/utils/sort';
 
 const tlsCertificatesSortFunctions = {
-  dn: makeCompareString('subject_dn'),
+  dn: makeCompareString('subjectDn'),
   serial: makeCompareString('serial'),
   notvalidbefore: makeCompareDate('activationTime'),
   notvalidafter: makeCompareDate('expirationTime'),

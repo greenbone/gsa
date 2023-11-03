@@ -543,8 +543,8 @@ describe('report parser tests', () => {
             activation_time: 'unlimited',
             expiration_time: 'undefined',
             valid: false,
-            subject_dn: 'CN=LoremIpsumSubject2 C=Dolor',
-            issuer_dn: 'CN=LoremIpsumIssuer2 C=Dolor',
+            subject_dn: 'CN=LoremIpsumSubject3 C=Dolor',
+            issuer_dn: 'CN=LoremIpsumIssuer3 C=Dolor',
             serial: '00C387C32CBB861F5C',
             host: {},
             ports: {port: ['8441']},
@@ -577,6 +577,8 @@ describe('report parser tests', () => {
     expect(cert1.valid).toEqual(true);
     expect(cert1.ports).toBeUndefined();
     expect(cert1.port).toEqual(4021);
+    expect(cert1.issuerDn).toEqual('CN=LoremIpsumIssuer C=Dolor');
+    expect(cert1.subjectDn).toEqual('CN=LoremIpsumSubject C=Dolor');
 
     expect(cert2.fingerprint).toEqual(
       '57610B6A3C73866870678E638C7825743145B24',
@@ -587,6 +589,8 @@ describe('report parser tests', () => {
     expect(cert2.valid).toEqual(true);
     expect(cert2.ports).toBeUndefined();
     expect(cert2.port).toEqual(4023);
+    expect(cert2.issuerDn).toEqual('CN=LoremIpsumIssuer C=Dolor');
+    expect(cert2.subjectDn).toEqual('CN=LoremIpsumSubject C=Dolor');
 
     expect(cert3.fingerprint).toEqual('C137E9D559CC95ED130011FE4012DE56CAE2F8');
     expect(cert3.hostname).toEqual('');
@@ -597,6 +601,8 @@ describe('report parser tests', () => {
     expect(cert3.expirationTime).toBeUndefined();
     expect(cert3.ports).toBeUndefined();
     expect(cert3.port).toEqual(8445);
+    expect(cert3.issuerDn).toEqual('CN=LoremIpsumIssuer2 C=Dolor');
+    expect(cert3.subjectDn).toEqual('CN=LoremIpsumSubject2 C=Dolor');
 
     expect(cert4.fingerprint).toEqual('C137E9D559CC95ED130011FE4012DE56CAE2F8');
     expect(cert4.hostname).toEqual('');
@@ -607,6 +613,8 @@ describe('report parser tests', () => {
     expect(cert4.expirationTime).toBeUndefined();
     expect(cert4.ports).toBeUndefined();
     expect(cert4.port).toEqual(5061);
+    expect(cert4.issuerDn).toEqual('CN=LoremIpsumIssuer2 C=Dolor');
+    expect(cert4.subjectDn).toEqual('CN=LoremIpsumSubject2 C=Dolor');
 
     expect(cert5.fingerprint).toEqual('C137E9D559CC95ED130011FE4012DE56CAE2F8');
     expect(cert5.hostname).toBeUndefined();
@@ -617,6 +625,8 @@ describe('report parser tests', () => {
     expect(cert5.expirationTime).toBeUndefined();
     expect(cert5.ports).toBeUndefined();
     expect(cert5.port).toEqual(8441);
+    expect(cert5.issuerDn).toEqual('CN=LoremIpsumIssuer3 C=Dolor');
+    expect(cert5.subjectDn).toEqual('CN=LoremIpsumSubject3 C=Dolor');
   });
 
   test('should parse empty tls certificates', () => {

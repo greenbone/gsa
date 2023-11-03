@@ -53,16 +53,16 @@ const TlsCertificateDetails = ({entity, links = true}) => {
           <Col width="90%" />
         </colgroup>
         <TableBody>
-          {isDefined(entity.subject_dn) && (
+          {isDefined(entity.subjectDn) && (
             <TableRow>
               <TableData>{_('Subject DN')}</TableData>
-              <TableData>{entity.subject_dn}</TableData>
+              <TableData>{entity.subjectDn}</TableData>
             </TableRow>
           )}
-          {isDefined(entity.issuer_dn) && (
+          {isDefined(entity.issuerDn) && (
             <TableRow>
               <TableData>{_('Issuer DN')}</TableData>
-              <TableData>{entity.issuer_dn}</TableData>
+              <TableData>{entity.issuerDn}</TableData>
             </TableRow>
           )}
           {isDefined(entity.valid) && (
