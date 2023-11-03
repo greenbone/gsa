@@ -86,7 +86,8 @@ const CredentialDetails = ({entity}) => {
           </TableRow>
 
           <TableRow>
-            <TableData>{_('Login')}</TableData>- <TableData>{login}</TableData>-{' '}
+            <TableData>{_('Login')}</TableData>
+            <TableData>{login}</TableData>
           </TableRow>
           {credential_type === SNMP_CREDENTIAL_TYPE && (
             <TableRow>

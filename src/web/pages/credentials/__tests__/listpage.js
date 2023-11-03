@@ -166,6 +166,7 @@ describe('CredentialPage tests', () => {
 
     expect(row[1]).toHaveTextContent('credential 1');
     expect(row[1]).toHaveTextContent('(blah)');
+    expect(row[1]).toHaveTextContent('Username + SSH Key');
     expect(row[1]).toHaveTextContent('Yes');
 
     expect(
