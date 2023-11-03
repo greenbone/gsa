@@ -47,8 +47,8 @@ describe('TlsCertificate Model tests', () => {
     };
     const tlsCertificate = TlsCertificate.fromElement(element);
 
-    expect(tlsCertificate.issuer_dn).toEqual('CN=issuer');
-    expect(tlsCertificate.subject_dn).toEqual('CN=subject');
+    expect(tlsCertificate.issuerDn).toEqual('CN=issuer');
+    expect(tlsCertificate.subjectDn).toEqual('CN=subject');
   });
 
   test('should parse activation_time', () => {
