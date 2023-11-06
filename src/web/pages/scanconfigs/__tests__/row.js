@@ -97,6 +97,54 @@ describe('Scan Config row tests', () => {
     );
   });
 
+  test('should mark deprecated config', () => {
+    const config = ScanConfig.fromElement({
+      _id: '1234',
+      name: 'foo',
+      comment: 'bar',
+      in_use: '0',
+      writable: '1',
+      deprecated: '1',
+      owner: {
+        name: 'user',
+      },
+      permissions: {permission: [{name: 'everything'}]},
+      family_count: {
+        __text: 2,
+        growing: SCANCONFIG_TREND_STATIC,
+      },
+      nvt_count: {
+        __text: 4,
+        growing: SCANCONFIG_TREND_DYNAMIC,
+      },
+    });
+
+    const handleToggleDetailsClick = jest.fn();
+    const handleScanConfigClone = jest.fn();
+    const handleScanConfigDelete = jest.fn();
+    const handleScanConfigDownload = jest.fn();
+    const handleScanConfigEdit = jest.fn();
+
+    const {render} = rendererWith({
+      gmp,
+      capabilities: caps,
+      store: true,
+    });
+
+    const {baseElement, getAllByTestId} = render(
+      <Row
+        entity={config}
+        onToggleDetailsClick={handleToggleDetailsClick}
+        onScanConfigCloneClick={handleScanConfigClone}
+        onScanConfigDeleteClick={handleScanConfigDelete}
+        onScanConfigDownloadClick={handleScanConfigDownload}
+        onScanConfigEditClick={handleScanConfigEdit}
+      />,
+    );
+
+    expect(baseElement).toHaveTextContent('(Deprecated)');
+  });
+
   test('should render observer icon', () => {
     const config = ScanConfig.fromElement({
       _id: '1234',

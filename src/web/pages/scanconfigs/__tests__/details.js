@@ -59,4 +59,25 @@ describe('Scan Config Details tests', () => {
 
     expect(element).not.toHaveTextContent('scanner');
   });
+
+  test('should mark deprecated', () => {
+    const config = ScanConfig.fromElement({
+      name: 'foo',
+      comment: 'bar',
+      deprecated: '1',
+      scanner: {name: 'scanner1', id: '42', type: OPENVAS_SCANNER_TYPE},
+      tasks: {
+        task: [
+          {id: '1234', name: 'task1'},
+          {id: '5678', name: 'task2'},
+        ],
+      },
+    });
+    const caps = new Capabilities(['everything']);
+
+    const {render} = rendererWith({capabilities: caps, router: true});
+
+    const {element} = render(<Details entity={config} />);
+    expect(element).toHaveTextContent('Deprecatedyes');
+  });
 });

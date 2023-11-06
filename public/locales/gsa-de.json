@@ -450,6 +450,7 @@
   "Deny all": "Alle verweigern",
   "Deny all and allow": "Verweigere alle und erlaube",
   "Deny all and allow from {{addresses}}": "Alle verweigern und von {{addresses}} erlauben",
+  "Deprecated": "Veraltet",
   "Deprecated By": "Veraltet ab",
   "Descending": "Absteigend",
   "Description": "Beschreibung",

@@ -37,6 +37,31 @@ describe('render_select_items test', () => {
     expect(items[1]).toEqual({label: 'B Task', value: '2'});
   });
 
+  test('should mark deprecated items', () => {
+    const entities = [
+      {
+        name: 'A Config',
+        id: '1',
+      },
+      {
+        name: 'B Config',
+        deprecated: '1',
+        id: '2',
+      },
+      {
+        name: 'C Config',
+        id: '3',
+      },
+    ];
+
+    const items = renderSelectItems(entities);
+
+    expect(items.length).toBe(3);
+    expect(items[0]).toEqual({label: 'A Config', value: '1'});
+    expect(items[1]).toEqual({label: <s>B Config (Deprecated)</s>, value: '2'});
+    expect(items[2]).toEqual({label: 'C Config', value: '3'});
+  });
+
   test('should add default item', () => {
     const entities = [
       {
