@@ -94,7 +94,6 @@ exports[`Radio tests should render radio 1`] = `
   >
     <div
       class="c1 c3"
-      margin="5px"
     >
       <input
         class="c4 c5"
@@ -200,7 +199,6 @@ exports[`Radio tests should render radio with children 1`] = `
   >
     <div
       class="c1 c3"
-      margin="5px"
     >
       <input
         class="c4 c5"

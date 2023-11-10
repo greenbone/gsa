@@ -103,15 +103,12 @@ exports[`FormGroup tests should render with title 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
-    titleoffset="0"
-    titlesize="2"
   >
     Foo
   </label>
   <div
     class="c2 c3"
     data-testid="formgroup-content"
-    size="10"
   />
 </div>
 `;

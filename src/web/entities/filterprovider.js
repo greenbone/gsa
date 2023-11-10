@@ -53,12 +53,15 @@ const FilterProvider = ({
 
   let returnedFilter;
 
-  const [defaultSettingFilter, defaultSettingsFilterError] = useSelector(
-    state => {
-      const defaultFilterSel = getUserSettingsDefaultFilter(state, gmpname);
-      return [defaultFilterSel.getFilter(), defaultFilterSel.getError()];
-    },
-  );
+  const defaultSettingFilter = useSelector(state => {
+    const defaultFilterSel = getUserSettingsDefaultFilter(state, gmpname);
+    return defaultFilterSel.getFilter();
+  });
+
+  const defaultSettingsFilterError = useSelector(state => {
+    const defaultFilterSel = getUserSettingsDefaultFilter(state, gmpname);
+    return defaultFilterSel.getError();
+  });
 
   useEffect(() => {
     if (

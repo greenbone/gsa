@@ -185,7 +185,7 @@ const TicketDetails = ({entity, links = true}) => {
 
 TicketDetails.propTypes = {
   entity: PropTypes.model.isRequired,
-  links: PropTypes.bool.isRequired,
+  links: PropTypes.bool,
 };
 
 export default TicketDetails;

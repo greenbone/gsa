@@ -128,7 +128,6 @@ exports[`Task Actions tests should render 1`] = `
         >
           <div
             class="c3 c4"
-            margin="5px"
           >
             <span
               class="c5 c6 c7"

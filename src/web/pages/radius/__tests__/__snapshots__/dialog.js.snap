@@ -518,7 +518,6 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -529,15 +528,12 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Enable
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <label
                         class="c15"
@@ -547,7 +543,6 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
                         >
                           <div
                             class="c13 c17"
-                            margin="5px"
                           >
                             <input
                               checked=""
@@ -567,15 +562,12 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       RADIUS Host
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c20 c21"
@@ -599,15 +591,12 @@ exports[`RADIUS dialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Secret Key
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c20 c21"

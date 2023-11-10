@@ -73,6 +73,12 @@ class Model {
       delete copy.end_time;
     }
 
+    if (isDefined(element.timestamp)) {
+      if (element.timestamp.length > 0) {
+        copy.timestamp = parseDate(element.timestamp);
+      }
+    }
+
     if (isDefined(element.permissions)) {
       // these are the permissions the current user has on the entity
       const caps = map(element.permissions.permission, perm => perm.name);

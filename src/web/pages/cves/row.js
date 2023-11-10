@@ -28,7 +28,6 @@ import DateTime from 'web/components/date/datetime';
 
 import Link from 'web/components/link/link';
 
-import TableBody from 'web/components/table/body';
 import TableRow from 'web/components/table/row';
 import TableData from 'web/components/table/data';
 
@@ -44,31 +43,29 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => (
-  <TableBody>
-    <TableRow>
-      <TableData>
-        <span>
-          <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
-            {entity.name}
-          </RowDetailsToggle>
-        </span>
-        <Comment text={entity.comment} />
-      </TableData>
-      <TableData>{shorten(entity.description, 160)}</TableData>
-      <TableData>
-        <DateTime date={entity.creationTime} />
-      </TableData>
-      <TableData>
-        <Link to="cvsscalculator" query={{cvssVector: entity.cvssBaseVector}}>
-          {entity.cvssBaseVector}
-        </Link>
-      </TableData>
-      <TableData>
-        <SeverityBar severity={entity.severity} />
-      </TableData>
-      <ActionsComponent {...props} entity={entity} />
-    </TableRow>
-  </TableBody>
+  <TableRow>
+    <TableData>
+      <span>
+        <RowDetailsToggle name={entity.id} onClick={onToggleDetailsClick}>
+          {entity.name}
+        </RowDetailsToggle>
+      </span>
+      <Comment text={entity.comment} />
+    </TableData>
+    <TableData>{shorten(entity.description, 160)}</TableData>
+    <TableData>
+      <DateTime date={entity.creationTime} />
+    </TableData>
+    <TableData>
+      <Link to="cvsscalculator" query={{cvssVector: entity.cvssBaseVector}}>
+        {entity.cvssBaseVector}
+      </Link>
+    </TableData>
+    <TableData>
+      <SeverityBar severity={entity.severity} />
+    </TableData>
+    <ActionsComponent {...props} entity={entity} />
+  </TableRow>
 );
 
 Row.propTypes = {

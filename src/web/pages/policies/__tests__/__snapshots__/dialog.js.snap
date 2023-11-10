@@ -455,7 +455,6 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -466,15 +465,12 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Name
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"
@@ -497,15 +493,12 @@ exports[`CreatePolicyDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Comment
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"

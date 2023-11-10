@@ -579,7 +579,6 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -590,22 +589,18 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="4"
                     >
                       Choose Tag
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="8"
                     >
                       <div
                         class="c13 c15"
                       >
                         <div
                           class="c13 c16"
-                          margin="5px"
                         >
                           <div
                             aria-expanded="false"
@@ -672,15 +667,12 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="4"
                     >
                       Value
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="8"
                     />
                   </div>
                   <div
@@ -689,15 +681,12 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="4"
                     >
                       Comment
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="8"
                     />
                   </div>
                 </div>
@@ -1315,7 +1304,6 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -1326,22 +1314,18 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="4"
                     >
                       Choose Tag
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="8"
                     >
                       <div
                         class="c13 c15"
                       >
                         <div
                           class="c13 c16"
-                          margin="5px"
                         >
                           <div
                             aria-expanded="false"
@@ -1406,15 +1390,12 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="4"
                     >
                       Value
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="8"
                     />
                   </div>
                   <div
@@ -1423,15 +1404,12 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="4"
                     >
                       Comment
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="8"
                     />
                   </div>
                 </div>

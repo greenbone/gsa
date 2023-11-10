@@ -67,7 +67,6 @@ exports[`AuditPage ToolBarIcons test should render 1`] = `
 >
   <div
     class="c0 c2"
-    margin="5px"
   >
     <a
       href="test/en/compliance-and-special-scans.html#configuring-and-managing-audits"
@@ -875,7 +874,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   .c44 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -884,7 +883,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   .c46 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -893,7 +892,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   .c47 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -902,7 +901,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
   .c48 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -967,7 +966,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
         >
           <div
             class="c2 c4"
-            margin="5px"
           >
             <a
               href="test/en/compliance-and-special-scans.html#configuring-and-managing-audits"
@@ -977,7 +975,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               <span
                 class="c5 c6"
                 data-testid="svg-icon"
-                iconsize="small"
                 title="Help: Audits"
               >
                 <svg
@@ -990,7 +987,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
             <span
               class="c5 c7 c6"
               data-testid="svg-icon"
-              iconsize="small"
               title="New Audit"
             >
               <svg
@@ -1015,7 +1011,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
               >
                 <div
                   class="c11 c4 c12"
-                  margin="5px"
                 >
                   <div
                     class="c11"
@@ -1047,12 +1042,10 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                   >
                     <div
                       class="c11 c4"
-                      margin="5px"
                     >
                       <span
                         class="c5 c7 c6"
                         data-testid="svg-icon"
-                        iconsize="small"
                         title="Update Filter"
                       >
                         <svg
@@ -1064,7 +1057,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       <span
                         class="c5 c7 c6"
                         data-testid="svg-icon"
-                        iconsize="small"
                         title="Remove Filter"
                       >
                         <svg
@@ -1076,7 +1068,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       <span
                         class="c5 c7 c6"
                         data-testid="svg-icon"
-                        iconsize="small"
                         title="Reset to Default Filter"
                       >
                         <svg
@@ -1093,7 +1084,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                         <span
                           class="c5 c6"
                           data-testid="svg-icon"
-                          iconsize="small"
                           title="Help: Powerfilter"
                         >
                           <svg
@@ -1140,7 +1130,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       <span
                         class="c23 c24"
                         data-testid="select-open-button"
-                        iconsize="small"
                       >
                         ▼
                       </span>
@@ -1217,7 +1206,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 >
                   <div
                     class="c2 c4"
-                    margin="5px"
                   >
                     <span
                       class="c5 c38 c6"
@@ -1253,7 +1241,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 >
                   <div
                     class="c2 c4"
-                    margin="5px"
                   >
                     <span
                       class="c5 c38 c6"
@@ -1369,7 +1356,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                         >
                           <div
                             class="c2 c4"
-                            margin="5px"
                           />
                         </div>
                       </div>
@@ -1392,7 +1378,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                         href="/report/1234"
                       >
                         <div
-                          boxbackground="#4C4C4C"
                           class="c55"
                           data-testid="progressbar-box"
                           title="Done"
@@ -1401,7 +1386,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             background="low"
                             class="c56"
                             data-testid="progress"
-                            progress="100"
                           />
                           <div
                             class="c57"
@@ -1436,7 +1420,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       class="c50"
                     >
                       <div
-                        boxbackground="#c83814"
                         class="c59"
                         data-testid="progressbar-box"
                         title="50%"
@@ -1445,7 +1428,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                           background="#70c000"
                           class="c60"
                           data-testid="progress"
-                          progress="50"
                         />
                         <div
                           class="c57"
@@ -1464,7 +1446,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       >
                         <div
                           class="c62 c4"
-                          margin="5px"
                         >
                           <span
                             class="c5 c7 c6"
@@ -1563,7 +1544,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       >
                         <div
                           class="c2 c4"
-                          margin="5px"
                         >
                           <div
                             aria-expanded="false"
@@ -1615,7 +1595,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                           >
                             <div
                               class="c2 c4"
-                              margin="5px"
                             >
                               <span
                                 class="c5 c7 c6"
@@ -1664,7 +1643,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 >
                   <div
                     class="c2 c4"
-                    margin="5px"
                   >
                     <span
                       class="c5 c38 c6"
@@ -1700,7 +1678,6 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                 >
                   <div
                     class="c2 c4"
-                    margin="5px"
                   >
                     <span
                       class="c5 c38 c6"

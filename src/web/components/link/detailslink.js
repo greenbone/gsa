@@ -20,10 +20,12 @@ import React from 'react';
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
+import {isDefined} from 'gmp/utils/identity';
+
 import Link from './link';
 
 const DetailsLink = ({capabilities, id, type, textOnly = false, ...props}) => {
-  textOnly = textOnly || !capabilities.mayAccess(type);
+  textOnly = textOnly || !capabilities.mayAccess(type) || !isDefined(id);
 
   return (
     <Link
@@ -36,7 +38,7 @@ const DetailsLink = ({capabilities, id, type, textOnly = false, ...props}) => {
 };
 
 DetailsLink.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
+  capabilities: PropTypes.capabilities,
   id: PropTypes.id.isRequired,
   textOnly: PropTypes.bool,
   type: PropTypes.string.isRequired,

@@ -455,7 +455,6 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -466,15 +465,12 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Name
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"
@@ -497,15 +493,12 @@ exports[`ContainerDialog tests should render create dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Comment
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"
@@ -1085,7 +1078,6 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -1096,15 +1088,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Name
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"
@@ -1127,15 +1116,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Comment
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"
@@ -1158,15 +1144,12 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Add results to Assets
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <div
                         class="c13"
@@ -1176,7 +1159,6 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                         >
                           <div
                             class="c13 c19"
-                            margin="5px"
                           >
                             <label
                               class="c20"
@@ -1186,7 +1168,6 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                               >
                                 <div
                                   class="c13 c19"
-                                  margin="5px"
                                 >
                                   <input
                                     checked=""
@@ -1213,7 +1194,6 @@ exports[`ContainerDialog tests should render edit dialog 1`] = `
                               >
                                 <div
                                   class="c13 c19"
-                                  margin="5px"
                                 >
                                   <input
                                     class="c21 c22"

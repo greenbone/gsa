@@ -56,18 +56,15 @@ export const mayRequire = validator => {
   return wrapper;
 };
 
-export const deprecated = (validator, message = '') => (
-  props,
-  prop_name,
-  component_name,
-  ...rest
-) => {
-  warning(
-    isDefined(props[prop_name]),
-    `'${prop_name}' is deprecated on ${component_name}. ${message}`,
-  );
-  return validator(props, prop_name, component_name, ...rest);
-};
+export const deprecated =
+  (validator, message = '') =>
+  (props, prop_name, component_name, ...rest) => {
+    warning(
+      isDefined(props[prop_name]),
+      `'${prop_name}' is deprecated on ${component_name}. ${message}`,
+    );
+    return validator(props, prop_name, component_name, ...rest);
+  };
 
 const component = ReactPropTypes.oneOfType([
   ReactPropTypes.func,
@@ -144,6 +141,8 @@ const gmp =
     : ReactPropTypes.instanceOf(Gmp);
 
 const settings = ReactPropTypes.instanceOf(Settings);
+
+const severityClass = ReactPropTypes.string;
 
 const dateValidator = (props, prop_name, component_name) => {
   const value = props[prop_name];
@@ -258,6 +257,7 @@ const gsaPropTypes = {
   ref,
   set,
   settings,
+  severityClass,
   stringOrFalse,
   timeunit,
   toString,

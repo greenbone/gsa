@@ -21,10 +21,13 @@ import React from 'react';
 import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 
 import Layout from 'web/components/layout/layout';
 
-const ScrollableContent = styled.div`
+const ScrollableContent = styled.div.withConfig(
+  excludePropsConfig(['maxHeight']),
+)`
   overflow: auto;
   padding: 0 15px;
   width: 100%;

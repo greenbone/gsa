@@ -129,15 +129,12 @@ exports[`BooleanFilterGroup tests should render 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
-    titleoffset="0"
-    titlesize="2"
   >
     foo
   </label>
   <div
     class="c2 c3"
     data-testid="formgroup-content"
-    size="10"
   >
     <div
       class="c2"
@@ -147,7 +144,6 @@ exports[`BooleanFilterGroup tests should render 1`] = `
       >
         <div
           class="c2 c5"
-          margin="5px"
         >
           <label
             class="c6"
@@ -157,7 +153,6 @@ exports[`BooleanFilterGroup tests should render 1`] = `
             >
               <div
                 class="c2 c5"
-                margin="5px"
               >
                 <input
                   class="c7 c8"
@@ -183,7 +178,6 @@ exports[`BooleanFilterGroup tests should render 1`] = `
             >
               <div
                 class="c2 c5"
-                margin="5px"
               >
                 <input
                   class="c7 c8"

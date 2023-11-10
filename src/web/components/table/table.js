@@ -21,6 +21,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 
 const Table = ({children, className, footer, header}) => {
   return (
@@ -39,7 +40,7 @@ Table.propTypes = {
   header: PropTypes.element,
 };
 
-export default styled(Table)`
+export default styled(Table).withConfig(excludePropsConfig(['fixed', 'size']))`
   border: 0;
   border-spacing: 0px;
   font-size: 12px;

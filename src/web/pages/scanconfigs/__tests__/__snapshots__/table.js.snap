@@ -483,7 +483,7 @@ exports[`Scan Config table tests should render 1`] = `
   .c18 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -492,7 +492,7 @@ exports[`Scan Config table tests should render 1`] = `
   .c19 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -501,7 +501,7 @@ exports[`Scan Config table tests should render 1`] = `
   .c20 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -510,7 +510,7 @@ exports[`Scan Config table tests should render 1`] = `
   .c22 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -557,7 +557,6 @@ exports[`Scan Config table tests should render 1`] = `
           >
             <div
               class="c9 c11"
-              margin="5px"
             >
               <span
                 class="c3 c12 c5"
@@ -593,7 +592,6 @@ exports[`Scan Config table tests should render 1`] = `
           >
             <div
               class="c9 c11"
-              margin="5px"
             >
               <span
                 class="c3 c12 c5"
@@ -800,7 +798,6 @@ exports[`Scan Config table tests should render 1`] = `
                 >
                   <div
                     class="c27 c11"
-                    margin="5px"
                   >
                     <span
                       class="c3 c4 c5"
@@ -940,7 +937,6 @@ exports[`Scan Config table tests should render 1`] = `
                 >
                   <div
                     class="c27 c11"
-                    margin="5px"
                   >
                     <span
                       class="c3 c4 c5"
@@ -1080,7 +1076,6 @@ exports[`Scan Config table tests should render 1`] = `
                 >
                   <div
                     class="c27 c11"
-                    margin="5px"
                   >
                     <span
                       class="c3 c4 c5"
@@ -1145,7 +1140,6 @@ exports[`Scan Config table tests should render 1`] = `
                 >
                   <div
                     class="c9 c11"
-                    margin="5px"
                   >
                     <div
                       aria-expanded="false"
@@ -1194,7 +1188,6 @@ exports[`Scan Config table tests should render 1`] = `
                     >
                       <div
                         class="c9 c11"
-                        margin="5px"
                       >
                         <span
                           class="c3 c5"
@@ -1245,7 +1238,6 @@ exports[`Scan Config table tests should render 1`] = `
           >
             <div
               class="c9 c11"
-              margin="5px"
             >
               <span
                 class="c3 c12 c5"
@@ -1281,7 +1273,6 @@ exports[`Scan Config table tests should render 1`] = `
           >
             <div
               class="c9 c11"
-              margin="5px"
             >
               <span
                 class="c3 c12 c5"

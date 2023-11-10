@@ -181,22 +181,18 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
-    titleoffset="0"
-    titlesize="2"
   >
     Severity (Class)
   </label>
   <div
     class="c2 c3"
     data-testid="formgroup-content"
-    size="10"
   >
     <div
       class="c2 c4"
     >
       <div
         class="c2 c5"
-        margin="5px"
       >
         <label
           class="c6"
@@ -206,7 +202,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
           >
             <div
               class="c2 c5"
-              margin="5px"
             >
               <input
                 checked=""
@@ -215,8 +210,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
                 type="checkbox"
               />
               <div
-                backgroundcolor="#C83814"
-                bordercolor="#C83814"
                 class="c9"
               >
                 High
@@ -232,7 +225,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
           >
             <div
               class="c2 c5"
-              margin="5px"
             >
               <input
                 class="c7 c8"
@@ -240,8 +232,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
                 type="checkbox"
               />
               <div
-                backgroundcolor="#F0A519"
-                bordercolor="#F0A519"
                 class="c10"
               >
                 Medium
@@ -257,7 +247,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
           >
             <div
               class="c2 c5"
-              margin="5px"
             >
               <input
                 class="c7 c8"
@@ -265,8 +254,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
                 type="checkbox"
               />
               <div
-                backgroundcolor="#4F91C7"
-                bordercolor="#4F91C7"
                 class="c11"
               >
                 Low
@@ -282,7 +269,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
           >
             <div
               class="c2 c5"
-              margin="5px"
             >
               <input
                 class="c7 c8"
@@ -290,8 +276,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
                 type="checkbox"
               />
               <div
-                backgroundcolor="#191919"
-                bordercolor="#191919"
                 class="c12"
               >
                 Log
@@ -307,7 +291,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
           >
             <div
               class="c2 c5"
-              margin="5px"
             >
               <input
                 class="c7 c8"
@@ -315,8 +298,6 @@ exports[`SeverityLevelsFilterGroup tests should render 1`] = `
                 type="checkbox"
               />
               <div
-                backgroundcolor="#191919"
-                bordercolor="#191919"
                 class="c12"
               >
                 False Pos.

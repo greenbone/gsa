@@ -155,7 +155,6 @@ exports[`Task Details tests should render full task details 1`] = `
       >
         <div
           class="c3 c5 c6"
-          margin="5px"
         >
           <span>
             <a

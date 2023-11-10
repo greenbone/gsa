@@ -22,8 +22,11 @@ import {isDefined} from 'gmp/utils/identity';
 import PropTypes from 'web/utils/proptypes';
 
 import Divider from './divider';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 
-const HorizontalSep = styled(Divider)`
+const HorizontalSep = styled(Divider).withConfig(
+  excludePropsConfig('separator', 'spacing', 'wrap'),
+)`
   flex-wrap: ${props => (isDefined(props.wrap) ? props.wrap : null)};
   & > *:not(:last-child)::after {
     content: ${({separator = '•'}) => `'${separator}'`};

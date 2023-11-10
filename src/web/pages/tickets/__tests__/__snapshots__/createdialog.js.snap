@@ -568,7 +568,6 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -579,15 +578,12 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Assign To User
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <div
                         aria-expanded="false"
@@ -642,15 +638,12 @@ exports[`CreateTicketDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Note
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <textarea
                         class="c24 c25"

@@ -852,7 +852,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   .c33 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -861,7 +861,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   .c34 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -870,7 +870,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   .c49 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -879,7 +879,7 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
   .c50 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -923,7 +923,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -934,15 +933,12 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Name
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"
@@ -965,15 +961,12 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Comment
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"
@@ -1025,7 +1018,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                     </div>
                     <div
                       class="c28"
-                      foldstate="UNFOLDED"
                     >
                       <div
                         class="c29"
@@ -1111,7 +1103,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                   >
                                     <div
                                       class="c13 c39"
-                                      margin="5px"
                                     >
                                       <label
                                         class="c40"
@@ -1121,7 +1112,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         >
                                           <div
                                             class="c13 c39"
-                                            margin="5px"
                                           >
                                             <input
                                               checked=""
@@ -1151,7 +1141,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         >
                                           <div
                                             class="c13 c39"
-                                            margin="5px"
                                           >
                                             <input
                                               class="c41 c42"
@@ -1188,7 +1177,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     >
                                       <div
                                         class="c13 c39"
-                                        margin="5px"
                                       >
                                         <input
                                           checked=""
@@ -1243,7 +1231,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                   >
                                     <div
                                       class="c13 c39"
-                                      margin="5px"
                                     >
                                       <label
                                         class="c40"
@@ -1253,7 +1240,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         >
                                           <div
                                             class="c13 c39"
-                                            margin="5px"
                                           >
                                             <input
                                               class="c41 c42"
@@ -1282,7 +1268,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         >
                                           <div
                                             class="c13 c39"
-                                            margin="5px"
                                           >
                                             <input
                                               checked=""
@@ -1320,7 +1305,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     >
                                       <div
                                         class="c13 c39"
-                                        margin="5px"
                                       >
                                         <input
                                           class="c41 c44"
@@ -1374,7 +1358,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                   >
                                     <div
                                       class="c13 c39"
-                                      margin="5px"
                                     >
                                       <label
                                         class="c40"
@@ -1384,7 +1367,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         >
                                           <div
                                             class="c13 c39"
-                                            margin="5px"
                                           >
                                             <input
                                               class="c41 c42"
@@ -1413,7 +1395,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         >
                                           <div
                                             class="c13 c39"
-                                            margin="5px"
                                           >
                                             <input
                                               checked=""
@@ -1451,7 +1432,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     >
                                       <div
                                         class="c13 c39"
-                                        margin="5px"
                                       >
                                         <input
                                           class="c41 c44"
@@ -1505,7 +1485,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                   >
                                     <div
                                       class="c13 c39"
-                                      margin="5px"
                                     >
                                       <label
                                         class="c40"
@@ -1515,7 +1494,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         >
                                           <div
                                             class="c13 c39"
-                                            margin="5px"
                                           >
                                             <input
                                               class="c41 c42"
@@ -1544,7 +1522,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                         >
                                           <div
                                             class="c13 c39"
-                                            margin="5px"
                                           >
                                             <input
                                               checked=""
@@ -1582,7 +1559,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                                     >
                                       <div
                                         class="c13 c39"
-                                        margin="5px"
                                       >
                                         <input
                                           class="c41 c44"
@@ -1652,7 +1628,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                     </div>
                     <div
                       class="c46"
-                      foldstate="FOLDED"
                     >
                       <div
                         class="c29"
@@ -1768,7 +1743,6 @@ exports[`EditScanConfigDialog component tests should render dialog 1`] = `
                     </div>
                     <div
                       class="c46"
-                      foldstate="FOLDED"
                     >
                       <div
                         class="c29"
@@ -2469,7 +2443,6 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -2480,15 +2453,12 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Name
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"
@@ -2511,15 +2481,12 @@ exports[`EditScanConfigDialog component tests should render dialog for config in
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Comment
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"
@@ -3047,7 +3014,6 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -3058,15 +3024,12 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Name
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"
@@ -3089,15 +3052,12 @@ exports[`EditScanConfigDialog component tests should render dialog inline notifi
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Comment
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <input
                         class="c15 c16"

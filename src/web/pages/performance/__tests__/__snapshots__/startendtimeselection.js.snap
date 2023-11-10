@@ -292,15 +292,12 @@ exports[`StartTimeSelection tests should render 1`] = `
     <label
       class="c2"
       data-testid="formgroup-title"
-      titleoffset="0"
-      titlesize="2"
     >
       Timezone
     </label>
     <div
       class="c3 c4"
       data-testid="timezone"
-      size="10"
     >
       CET
     </div>
@@ -311,22 +308,18 @@ exports[`StartTimeSelection tests should render 1`] = `
     <label
       class="c2"
       data-testid="formgroup-title"
-      titleoffset="0"
-      titlesize="2"
     >
       Start Time
     </label>
     <div
       class="c3 c4"
       data-testid="formgroup-content"
-      size="10"
     >
       <div
         class="c3 c5"
       >
         <div
           class="c0 c6"
-          margin="5px"
         >
           <div
             class="react-datepicker-wrapper"
@@ -355,7 +348,6 @@ exports[`StartTimeSelection tests should render 1`] = `
           >
             <div
               class="c3 c10"
-              margin="20px"
             >
               <span
                 class="c11"
@@ -425,22 +417,18 @@ exports[`StartTimeSelection tests should render 1`] = `
     <label
       class="c2"
       data-testid="formgroup-title"
-      titleoffset="0"
-      titlesize="2"
     >
       End Time
     </label>
     <div
       class="c3 c4"
       data-testid="formgroup-content"
-      size="10"
     >
       <div
         class="c3 c5"
       >
         <div
           class="c0 c6"
-          margin="5px"
         >
           <div
             class="react-datepicker-wrapper"
@@ -469,7 +457,6 @@ exports[`StartTimeSelection tests should render 1`] = `
           >
             <div
               class="c3 c10"
-              margin="20px"
             >
               <span
                 class="c11"
@@ -539,7 +526,6 @@ exports[`StartTimeSelection tests should render 1`] = `
     <div
       class="c3 c16"
       data-testid="formgroup-content"
-      offset="4"
     >
       <button
         class="c17 c18"

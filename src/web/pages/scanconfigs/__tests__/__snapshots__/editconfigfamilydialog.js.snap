@@ -665,7 +665,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   .c21 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -734,7 +734,6 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -916,7 +915,6 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                               class="c10"
                             >
                               <div
-                                boxbackground="#4C4C4C"
                                 class="c25"
                                 data-testid="progressbar-box"
                                 title="Low"
@@ -925,7 +923,6 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                                   background="low"
                                   class="c26"
                                   data-testid="progress"
-                                  progress="10"
                                 />
                                 <div
                                   class="c27"
@@ -963,7 +960,6 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                                   >
                                     <div
                                       class="c23 c31"
-                                      margin="5px"
                                     >
                                       <input
                                         class="c32 c33"
@@ -1014,7 +1010,6 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                               class="c10"
                             >
                               <div
-                                boxbackground="#4C4C4C"
                                 class="c25"
                                 data-testid="progressbar-box"
                                 title="High"
@@ -1023,7 +1018,6 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                                   background="error"
                                   class="c38"
                                   data-testid="progress"
-                                  progress="100"
                                 />
                                 <div
                                   class="c27"
@@ -1061,7 +1055,6 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                                   >
                                     <div
                                       class="c23 c31"
-                                      margin="5px"
                                     >
                                       <input
                                         class="c32 c33"
@@ -1505,7 +1498,6 @@ exports[`EditConfigFamilyDialog component tests should render loading indicator 
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10 c11"

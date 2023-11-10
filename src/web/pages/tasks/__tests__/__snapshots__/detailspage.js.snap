@@ -397,6 +397,10 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #11ab51;
 }
 
+.c35 :hover {
+  border-top: 2px solid #fff;
+}
+
 .c35 :first-child {
   border-left: 1px solid #e5e5e5;
 }
@@ -704,14 +708,12 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
     >
       <div
         class="c2 c4"
-        margin="10px"
       >
         <div
           class="c2 c3"
         >
           <div
             class="c5 c6"
-            margin="5px"
           >
             <a
               href="test/en/scanning.html#managing-tasks"
@@ -721,7 +723,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               <span
                 class="c7 c8"
                 data-testid="svg-icon"
-                iconsize="small"
                 title="Help: Tasks"
               >
                 <svg
@@ -738,7 +739,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               <span
                 class="c7 c8"
                 data-testid="svg-icon"
-                iconsize="small"
                 title="Task List"
               >
                 <svg
@@ -751,7 +751,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
             <span
               class="c7 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="This is an Alterable Task. Reports may not relate to current Scan Config or Target!"
             >
               <svg
@@ -767,7 +766,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
         >
           <div
             class="c2 c6"
-            margin="5px"
           >
             <span
               class="c10 c11"
@@ -775,7 +773,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               <span
                 class="c7 c8"
                 data-testid="svg-icon"
-                iconsize="small"
               >
                 <svg>
                   new.svg
@@ -811,7 +808,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
             <span
               class="c7 c16 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Clone Task"
             >
               <svg
@@ -823,7 +819,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
             <span
               class="c7 c16 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Edit Task"
             >
               <svg
@@ -835,7 +830,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
             <span
               class="c7 c16 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Move Task to trashcan"
             >
               <svg
@@ -847,7 +841,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
             <span
               class="c7 c16 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Export Task as XML"
             >
               <svg
@@ -863,12 +856,10 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
         >
           <div
             class="c2 c6"
-            margin="5px"
           >
             <span
               class="c7 c16 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Start"
             >
               <svg
@@ -881,7 +872,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               alt="Resume"
               class="c7 c17 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Task is not stopped"
             >
               <svg
@@ -897,14 +887,12 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
         >
           <div
             class="c2 c4"
-            margin="10px"
           >
             <div
               class="c2 c3"
             >
               <div
                 class="c2 c6"
-                margin="5px"
               >
                 <a
                   class="c9"
@@ -915,7 +903,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                   <span
                     class="c7 c8"
                     data-testid="svg-icon"
-                    iconsize="small"
                   >
                     <svg>
                       report.svg
@@ -929,12 +916,10 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                 >
                   <div
                     class="c18"
-                    margin="0"
                   >
                     <span
                       class="c7 c8"
                       data-testid="svg-icon"
-                      iconsize="small"
                     >
                       <svg>
                         report.svg
@@ -943,7 +928,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                     <span
                       class="c19"
                       data-testid="badge-icon"
-                      margin="0"
                     >
                       1
                     </span>
@@ -958,12 +942,10 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
             >
               <div
                 class="c18"
-                margin="0"
               >
                 <span
                   class="c7 c8"
                   data-testid="svg-icon"
-                  iconsize="small"
                 >
                   <svg>
                     result.svg
@@ -972,7 +954,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                 <span
                   class="c19"
                   data-testid="badge-icon"
-                  margin="0"
                 >
                   1
                 </span>
@@ -983,7 +964,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
             >
               <div
                 class="c2 c6"
-                margin="5px"
               >
                 <a
                   class="c9"
@@ -992,12 +972,10 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                 >
                   <div
                     class="c18"
-                    margin="0"
                   >
                     <span
                       class="c7 c8"
                       data-testid="svg-icon"
-                      iconsize="small"
                     >
                       <svg>
                         note.svg
@@ -1006,7 +984,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                     <span
                       class="c19"
                       data-testid="badge-icon"
-                      margin="0"
                     >
                       0
                     </span>
@@ -1019,12 +996,10 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                 >
                   <div
                     class="c18"
-                    margin="0"
                   >
                     <span
                       class="c7 c8"
                       data-testid="svg-icon"
-                      iconsize="small"
                     >
                       <svg>
                         override.svg
@@ -1033,7 +1008,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                     <span
                       class="c19"
                       data-testid="badge-icon"
-                      margin="0"
                     >
                       0
                     </span>
@@ -1251,7 +1225,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                     href="/report/1234"
                   >
                     <div
-                      boxbackground="#4C4C4C"
                       class="c45"
                       data-testid="progressbar-box"
                       title="Done"
@@ -1260,7 +1233,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
                         background="low"
                         class="c46"
                         data-testid="progress"
-                        progress="100"
                       />
                       <div
                         class="c47"
@@ -1309,7 +1281,6 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
               >
                 <div
                   class="c2 c6 c49"
-                  margin="5px"
                 >
                   <span>
                     <a
@@ -1790,14 +1761,12 @@ exports[`Task ToolBarIcons tests should render 1`] = `
 >
   <div
     class="c0 c2"
-    margin="10px"
   >
     <div
       class="c0 c1"
     >
       <div
         class="c3 c4"
-        margin="5px"
       >
         <a
           href="test/en/scanning.html#managing-tasks"
@@ -1850,7 +1819,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
     >
       <div
         class="c0 c4"
-        margin="5px"
       >
         <span
           class="c8 c9"
@@ -1941,7 +1909,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
     >
       <div
         class="c0 c4"
-        margin="5px"
       >
         <span
           class="c5 c14 c6"
@@ -1973,14 +1940,12 @@ exports[`Task ToolBarIcons tests should render 1`] = `
     >
       <div
         class="c0 c2"
-        margin="10px"
       >
         <div
           class="c0 c1"
         >
           <div
             class="c0 c4"
-            margin="5px"
           >
             <a
               class="c7"
@@ -2004,7 +1969,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
             >
               <div
                 class="c16"
-                margin="0"
               >
                 <span
                   class="c5 c6"
@@ -2017,7 +1981,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
                 <span
                   class="c17"
                   data-testid="badge-icon"
-                  margin="0"
                 >
                   1
                 </span>
@@ -2032,7 +1995,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
         >
           <div
             class="c16"
-            margin="0"
           >
             <span
               class="c5 c6"
@@ -2045,7 +2007,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
             <span
               class="c17"
               data-testid="badge-icon"
-              margin="0"
             >
               1
             </span>
@@ -2056,7 +2017,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
         >
           <div
             class="c0 c4"
-            margin="5px"
           >
             <a
               class="c7"
@@ -2065,7 +2025,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
             >
               <div
                 class="c16"
-                margin="0"
               >
                 <span
                   class="c5 c6"
@@ -2078,7 +2037,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
                 <span
                   class="c17"
                   data-testid="badge-icon"
-                  margin="0"
                 >
                   2
                 </span>
@@ -2091,7 +2049,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
             >
               <div
                 class="c16"
-                margin="0"
               >
                 <span
                   class="c5 c6"
@@ -2104,7 +2061,6 @@ exports[`Task ToolBarIcons tests should render 1`] = `
                 <span
                   class="c17"
                   data-testid="badge-icon"
-                  margin="0"
                 >
                   3
                 </span>

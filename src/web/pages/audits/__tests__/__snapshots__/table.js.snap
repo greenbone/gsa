@@ -554,7 +554,7 @@ exports[`Audits table tests should render 1`] = `
   .c18 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -563,7 +563,7 @@ exports[`Audits table tests should render 1`] = `
   .c19 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -572,7 +572,7 @@ exports[`Audits table tests should render 1`] = `
   .c20 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -581,7 +581,7 @@ exports[`Audits table tests should render 1`] = `
   .c21 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -672,7 +672,6 @@ exports[`Audits table tests should render 1`] = `
           >
             <div
               class="c9 c11"
-              margin="5px"
             >
               <span
                 class="c3 c12 c5"
@@ -708,7 +707,6 @@ exports[`Audits table tests should render 1`] = `
           >
             <div
               class="c9 c11"
-              margin="5px"
             >
               <span
                 class="c3 c12 c5"
@@ -812,7 +810,6 @@ exports[`Audits table tests should render 1`] = `
                   >
                     <div
                       class="c9 c11"
-                      margin="5px"
                     />
                   </div>
                 </div>
@@ -835,7 +832,6 @@ exports[`Audits table tests should render 1`] = `
                   href="/report/1234"
                 >
                   <div
-                    boxbackground="#4C4C4C"
                     class="c28"
                     data-testid="progressbar-box"
                     title="Done"
@@ -844,7 +840,6 @@ exports[`Audits table tests should render 1`] = `
                       background="low"
                       class="c29"
                       data-testid="progress"
-                      progress="100"
                     />
                     <div
                       class="c30"
@@ -879,7 +874,6 @@ exports[`Audits table tests should render 1`] = `
                 class="c23"
               >
                 <div
-                  boxbackground="#c83814"
                   class="c32"
                   data-testid="progressbar-box"
                   title="50%"
@@ -888,7 +882,6 @@ exports[`Audits table tests should render 1`] = `
                     background="#70c000"
                     class="c33"
                     data-testid="progress"
-                    progress="50"
                   />
                   <div
                     class="c30"
@@ -907,7 +900,6 @@ exports[`Audits table tests should render 1`] = `
                 >
                   <div
                     class="c35 c11"
-                    margin="5px"
                   >
                     <span
                       class="c3 c4 c5"
@@ -1011,7 +1003,6 @@ exports[`Audits table tests should render 1`] = `
                   >
                     <div
                       class="c9 c11"
-                      margin="5px"
                     >
                       <span
                         alt="Audit owned by user"
@@ -1045,7 +1036,6 @@ exports[`Audits table tests should render 1`] = `
                   class="c26 c27"
                 >
                   <div
-                    boxbackground="#4C4C4C"
                     class="c28"
                     data-testid="progressbar-box"
                     title="New"
@@ -1054,7 +1044,6 @@ exports[`Audits table tests should render 1`] = `
                       background="new"
                       class="c36"
                       data-testid="progress"
-                      progress="100"
                     />
                     <div
                       class="c30"
@@ -1088,7 +1077,6 @@ exports[`Audits table tests should render 1`] = `
                 >
                   <div
                     class="c35 c11"
-                    margin="5px"
                   >
                     <span
                       class="c3 c4 c5"
@@ -1192,7 +1180,6 @@ exports[`Audits table tests should render 1`] = `
                   >
                     <div
                       class="c9 c11"
-                      margin="5px"
                     >
                       <span
                         alt="Audit owned by user"
@@ -1228,7 +1215,6 @@ exports[`Audits table tests should render 1`] = `
                   href="/report/5678"
                 >
                   <div
-                    boxbackground="#4C4C4C"
                     class="c28"
                     data-testid="progressbar-box"
                     title="Running"
@@ -1237,7 +1223,6 @@ exports[`Audits table tests should render 1`] = `
                       background="run"
                       class="c37"
                       data-testid="progress"
-                      progress="0"
                     />
                     <div
                       class="c30"
@@ -1272,7 +1257,6 @@ exports[`Audits table tests should render 1`] = `
                 class="c23"
               >
                 <div
-                  boxbackground="#c83814"
                   class="c32"
                   data-testid="progressbar-box"
                   title="50%"
@@ -1281,7 +1265,6 @@ exports[`Audits table tests should render 1`] = `
                     background="#70c000"
                     class="c33"
                     data-testid="progress"
-                    progress="50"
                   />
                   <div
                     class="c30"
@@ -1300,7 +1283,6 @@ exports[`Audits table tests should render 1`] = `
                 >
                   <div
                     class="c35 c11"
-                    margin="5px"
                   >
                     <span
                       class="c3 c4 c5"
@@ -1399,7 +1381,6 @@ exports[`Audits table tests should render 1`] = `
                 >
                   <div
                     class="c9 c11"
-                    margin="5px"
                   >
                     <div
                       aria-expanded="false"
@@ -1448,7 +1429,6 @@ exports[`Audits table tests should render 1`] = `
                     >
                       <div
                         class="c9 c11"
-                        margin="5px"
                       >
                         <span
                           class="c3 c5"
@@ -1491,7 +1471,6 @@ exports[`Audits table tests should render 1`] = `
           >
             <div
               class="c9 c11"
-              margin="5px"
             >
               <span
                 class="c3 c12 c5"
@@ -1527,7 +1506,6 @@ exports[`Audits table tests should render 1`] = `
           >
             <div
               class="c9 c11"
-              margin="5px"
             >
               <span
                 class="c3 c12 c5"

@@ -22,13 +22,16 @@ import PropTypes from 'web/utils/proptypes';
 
 import styled from 'styled-components';
 
+import {excludePropsConfig} from 'web/utils/styledConfig';
 import Theme from 'web/utils/theme';
 
 import withLayout from 'web/components/layout/withLayout';
 
 export const DISABLED_OPACITY = 0.65;
 
-const StyledInput = styled.input`
+const StyledInput = styled.input.withConfig(
+  excludePropsConfig(['convert', 'hasError']),
+)`
   /* use font and line settings from parents not from browser default */
   font-family: inherit;
   font-size: inherit;

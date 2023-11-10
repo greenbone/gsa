@@ -173,7 +173,7 @@ const LoginForm = ({
                 grow="1"
                 label={_('Username')}
                 value={username}
-                autoFocus="autofocus"
+                autoFocus={true}
                 tabIndex="1"
                 onChange={e => handleValueChange(e.target.value, e.target.name)}
               />

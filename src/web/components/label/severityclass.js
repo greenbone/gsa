@@ -20,8 +20,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 
-const Label = styled.div`
+const Label = styled.div.withConfig(
+  excludePropsConfig(['backgroundColor', 'borderColor']),
+)`
   text-align: center;
   font-weight: normal;
   font-style: normal;

@@ -47,7 +47,13 @@ describe('Delta reports V2 with changed severity, qod and hostname', () => {
       },
     });
 
-    const {getAllByTestId} = render(<Row entity={entity} />);
+    const {getAllByTestId} = render(
+      <table>
+        <tbody>
+          <Row entity={entity} />
+        </tbody>
+      </table>,
+    );
     const icons = getAllByTestId('svg-icon');
 
     expect(icons.length).toEqual(3);
@@ -83,7 +89,13 @@ describe('Delta reports V2 with same severity, qod and hostname', () => {
       },
     });
 
-    const {queryAllByTestId} = render(<Row entity={entity} />);
+    const {queryAllByTestId} = render(
+      <table>
+        <tbody>
+          <Row entity={entity} />
+        </tbody>
+      </table>,
+    );
     const icons = queryAllByTestId('svg-icon');
 
     expect(icons.length).toBe(0);

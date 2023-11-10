@@ -155,31 +155,26 @@ class DeltaReportDetails extends React.Component {
     this.handleError = this.handleError.bind(this);
     this.handleFilterAddLogLevel = this.handleFilterAddLogLevel.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
-    this.handleFilterDecreaseMinQoD = this.handleFilterDecreaseMinQoD.bind(
-      this,
-    );
+    this.handleFilterDecreaseMinQoD =
+      this.handleFilterDecreaseMinQoD.bind(this);
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
-    this.handleFilterRemoveSeverity = this.handleFilterRemoveSeverity.bind(
-      this,
-    );
+    this.handleFilterRemoveSeverity =
+      this.handleFilterRemoveSeverity.bind(this);
     this.handleFilterRemoveClick = this.handleFilterRemoveClick.bind(this);
     this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
-    this.handleTlsCertificateDownload = this.handleTlsCertificateDownload.bind(
-      this,
-    );
+    this.handleTlsCertificateDownload =
+      this.handleTlsCertificateDownload.bind(this);
     this.handleFilterDialogClose = this.handleFilterDialogClose.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
 
     this.loadTarget = this.loadTarget.bind(this);
-    this.handleOpenDownloadReportDialog = this.handleOpenDownloadReportDialog.bind(
-      this,
-    );
-    this.handleCloseDownloadReportDialog = this.handleCloseDownloadReportDialog.bind(
-      this,
-    );
+    this.handleOpenDownloadReportDialog =
+      this.handleOpenDownloadReportDialog.bind(this);
+    this.handleCloseDownloadReportDialog =
+      this.handleCloseDownloadReportDialog.bind(this);
   }
 
   componentDidMount() {
@@ -324,12 +319,8 @@ class DeltaReportDetails extends React.Component {
       username,
       onDownload,
     } = this.props;
-    const {
-      includeNotes,
-      includeOverrides,
-      reportFormatId,
-      storeAsDefault,
-    } = state;
+    const {includeNotes, includeOverrides, reportFormatId, storeAsDefault} =
+      state;
 
     const newFilter = reportFilter.copy();
     newFilter.set('notes', includeNotes);
@@ -567,7 +558,7 @@ class DeltaReportDetails extends React.Component {
 }
 
 DeltaReportDetails.propTypes = {
-  defaultFilter: PropTypes.filter.isRequired,
+  defaultFilter: PropTypes.filter,
   deltaReportId: PropTypes.id,
   entity: PropTypes.model,
   entityError: PropTypes.object,
@@ -658,38 +649,40 @@ const reloadInterval = report =>
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : NO_RELOAD; // report doesn't change anymore. no need to reload
 
-const load = ({
-  defaultFilter,
-  reportId,
-  deltaReportId,
-  loadReport,
-  loadReportIfNeeded,
-  reportFilter,
-}) => filter => {
-  if (!hasValue(filter)) {
-    // use loaded filter after initial loading
-    filter = reportFilter;
-  }
+const load =
+  ({
+    defaultFilter,
+    reportId,
+    deltaReportId,
+    loadReport,
+    loadReportIfNeeded,
+    reportFilter,
+  }) =>
+  filter => {
+    if (!hasValue(filter)) {
+      // use loaded filter after initial loading
+      filter = reportFilter;
+    }
 
-  if (!hasValue(filter)) {
-    // use filter from user setting
-    filter = defaultFilter;
-  }
+    if (!hasValue(filter)) {
+      // use filter from user setting
+      filter = defaultFilter;
+    }
 
-  if (!hasValue(filter)) {
-    // use fallback filter
-    filter = DEFAULT_FILTER;
-  }
+    if (!hasValue(filter)) {
+      // use fallback filter
+      filter = DEFAULT_FILTER;
+    }
 
-  // to avoid confusion of loaded results with different sort terms and
-  // directions, always load the report with sort=name from gvmd (the user's
-  // sort term will be handled by GSA in the browser)
-  filter.delete('sort-reverse');
-  filter.set('sort', 'name');
-  return loadReportIfNeeded(reportId, deltaReportId, filter).then(() =>
-    loadReport(reportId, deltaReportId, filter),
-  );
-};
+    // to avoid confusion of loaded results with different sort terms and
+    // directions, always load the report with sort=name from gvmd (the user's
+    // sort term will be handled by GSA in the browser)
+    filter.delete('sort-reverse');
+    filter.set('sort', 'name');
+    return loadReportIfNeeded(reportId, deltaReportId, filter).then(() =>
+      loadReport(reportId, deltaReportId, filter),
+    );
+  };
 
 const DeltaReportDetailsWrapper = ({defaultFilter, reportFilter, ...props}) => (
   <Reload

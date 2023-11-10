@@ -47,25 +47,27 @@ const TableHead = ({
   let sortSymbol;
   if (isDefined(sortBy) && currentSortBy === sortBy) {
     if (currentSortDir === Sort.DESC) {
-      sortSymbol = ( // triangle pointing down
-        <span
-          title={_('Sorted In Descending Order By {{sortBy}}', {
-            sortBy: `${title}`,
-          })}
-        >
-          &nbsp;&#9660;
-        </span>
-      );
+      sortSymbol = // triangle pointing down
+        (
+          <span
+            title={_('Sorted In Descending Order By {{sortBy}}', {
+              sortBy: `${title}`,
+            })}
+          >
+            &nbsp;&#9660;
+          </span>
+        );
     } else if (currentSortDir === Sort.ASC) {
-      sortSymbol = ( // triangle pointing up
-        <span
-          title={_('Sorted In Ascending Order By {{sortBy}}', {
-            sortBy: `${title}`,
-          })}
-        >
-          &nbsp;&#9650;
-        </span>
-      );
+      sortSymbol = // triangle pointing up
+        (
+          <span
+            title={_('Sorted In Ascending Order By {{sortBy}}', {
+              sortBy: `${title}`,
+            })}
+          >
+            &nbsp;&#9650;
+          </span>
+        );
     }
   }
   if (isDefined(title) && !isDefined(children)) {
@@ -110,7 +112,7 @@ export default styled(TableHead)`
   @media print {
     color: ${Theme.black};
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 `;

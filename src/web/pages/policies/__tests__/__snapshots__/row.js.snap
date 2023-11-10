@@ -204,7 +204,6 @@ exports[`Row tests should render 1`] = `
           >
             <div
               class="c6 c7"
-              margin="5px"
             >
               <span
                 class="c8 c9 c10"

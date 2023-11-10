@@ -1,4 +1,4 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* Copyright (C) 2023 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -16,31 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-
-import PropTypes from '../../utils/proptypes.js';
-
-import Layout from '../layout/layout.js';
-
-const TabList = ({active = 0, children, onActivateTab, ...props}) => {
-  children = React.Children.map(children, (child, index) => {
-    if (child !== null && child.type !== Layout) {
-      return React.cloneElement(child, {
-        isActive: active === index,
-        onActivate: () => onActivateTab(index),
-      });
-    }
-
-    return child;
-  });
-  return <Layout {...props}>{children}</Layout>;
+export const excludePropsConfig = excludedProps => {
+  return {
+    shouldForwardProp: prop => {
+      return !excludedProps.includes(prop);
+    },
+  };
 };
-
-TabList.propTypes = {
-  active: PropTypes.number,
-  onActivateTab: PropTypes.func,
-};
-
-export default TabList;
-
-// vim: set ts=2 sw=2 tw=80:

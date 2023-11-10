@@ -23,8 +23,9 @@ import styled from 'styled-components';
 import Theme from 'web/utils/theme.js';
 
 import PropTypes from 'web/utils/proptypes.js';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 
-const StyledDiv = styled.div`
+const StyledDiv = styled.div.withConfig(excludePropsConfig(['active']))`
   font-size: 16px;
   display: flex;
   align-items: start;
@@ -48,7 +49,9 @@ const StyledDiv = styled.div`
     props.active ? '2px solid ' + Theme.green : '2px solid ' + Theme.white};
   :hover {
     border-top: ${props =>
-      props.active ? undefined : '2px solid ' + Theme.lightGray};
+      props.active
+        ? '2px solid ' + Theme.white
+        : '2px solid ' + Theme.lightGray};
   }
   :first-child {
     border-left: ${props =>

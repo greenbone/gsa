@@ -67,7 +67,6 @@ exports[`PoliciesPage ToolBarIcons test should render 1`] = `
 >
   <div
     class="c0 c2"
-    margin="5px"
   >
     <a
       href="test/en/compliance-and-special-scans.html#configuring-and-managing-policies"
@@ -811,7 +810,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   .c44 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -820,7 +819,7 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
   .c46 {
     color: #000;
     font-size: 1.2em;
-    background-color: none;
+    background-color: transparent;
     font-weight: bold;
   }
 }
@@ -853,7 +852,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
         >
           <div
             class="c2 c4"
-            margin="5px"
           >
             <a
               href="test/en/compliance-and-special-scans.html#configuring-and-managing-policies"
@@ -863,7 +861,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
               <span
                 class="c5 c6"
                 data-testid="svg-icon"
-                iconsize="small"
                 title="Help: Policies"
               >
                 <svg
@@ -876,7 +873,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
             <span
               class="c5 c7 c6"
               data-testid="svg-icon"
-              iconsize="small"
               title="New Policy"
             >
               <svg
@@ -888,7 +884,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
             <span
               class="c5 c7 c6"
               data-testid="svg-icon"
-              iconsize="small"
               title="Import Policy"
             >
               <svg
@@ -913,7 +908,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
               >
                 <div
                   class="c11 c4 c12"
-                  margin="5px"
                 >
                   <div
                     class="c11"
@@ -945,12 +939,10 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                   >
                     <div
                       class="c11 c4"
-                      margin="5px"
                     >
                       <span
                         class="c5 c7 c6"
                         data-testid="svg-icon"
-                        iconsize="small"
                         title="Update Filter"
                       >
                         <svg
@@ -962,7 +954,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       <span
                         class="c5 c7 c6"
                         data-testid="svg-icon"
-                        iconsize="small"
                         title="Remove Filter"
                       >
                         <svg
@@ -974,7 +965,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       <span
                         class="c5 c7 c6"
                         data-testid="svg-icon"
-                        iconsize="small"
                         title="Reset to Default Filter"
                       >
                         <svg
@@ -991,7 +981,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                         <span
                           class="c5 c6"
                           data-testid="svg-icon"
-                          iconsize="small"
                           title="Help: Powerfilter"
                         >
                           <svg
@@ -1038,7 +1027,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       <span
                         class="c23 c24"
                         data-testid="select-open-button"
-                        iconsize="small"
                       >
                         ▼
                       </span>
@@ -1115,7 +1103,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                 >
                   <div
                     class="c2 c4"
-                    margin="5px"
                   >
                     <span
                       class="c5 c38 c6"
@@ -1151,7 +1138,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                 >
                   <div
                     class="c2 c4"
-                    margin="5px"
                   >
                     <span
                       class="c5 c38 c6"
@@ -1252,7 +1238,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       >
                         <div
                           class="c52 c4"
-                          margin="5px"
                         >
                           <span
                             class="c5 c7 c6"
@@ -1328,7 +1313,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                       >
                         <div
                           class="c2 c4"
-                          margin="5px"
                         >
                           <div
                             aria-expanded="false"
@@ -1380,7 +1364,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                           >
                             <div
                               class="c2 c4"
-                              margin="5px"
                             >
                               <span
                                 class="c5 c7 c6"
@@ -1429,7 +1412,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                 >
                   <div
                     class="c2 c4"
-                    margin="5px"
                   >
                     <span
                       class="c5 c38 c6"
@@ -1465,7 +1447,6 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                 >
                   <div
                     class="c2 c4"
-                    margin="5px"
                   >
                     <span
                       class="c5 c38 c6"

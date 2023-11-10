@@ -52,9 +52,8 @@ class ScannerComponent extends React.Component {
       scannerDialogVisible: false,
     };
 
-    this.handleCloseCredentialsDialog = this.handleCloseCredentialsDialog.bind(
-      this,
-    );
+    this.handleCloseCredentialsDialog =
+      this.handleCloseCredentialsDialog.bind(this);
     this.handleCloseScannerDialog = this.handleCloseScannerDialog.bind(this);
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
     this.openScannerDialog = this.openScannerDialog.bind(this);
@@ -202,19 +201,10 @@ class ScannerComponent extends React.Component {
   }
 
   handleDownloadCertificate(scanner) {
-    const {
-      detailsExportFileName,
-      username,
-      onCertificateDownloaded,
-    } = this.props;
-    const {
-      creationTime,
-      entityType,
-      id,
-      modificationTime,
-      name,
-      ca_pub,
-    } = scanner;
+    const {detailsExportFileName, username, onCertificateDownloaded} =
+      this.props;
+    const {creationTime, entityType, id, modificationTime, name, ca_pub} =
+      scanner;
     const filename = generateFilename({
       creationTime: creationTime,
       extension: 'pem',
@@ -369,7 +359,7 @@ class ScannerComponent extends React.Component {
 
 ScannerComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  detailsExportFileName: PropTypes.object,
+  detailsExportFileName: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
   username: PropTypes.string,
   onCertificateDownloadError: PropTypes.func,

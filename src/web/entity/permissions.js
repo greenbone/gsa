@@ -81,12 +81,10 @@ class Permissions extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleMultipleSave = this.handleMultipleSave.bind(this);
-    this.openMultiplePermissionDialog = this.openMultiplePermissionDialog.bind(
-      this,
-    );
-    this.handleCloseMultiplePermissionDialog = this.handleCloseMultiplePermissionDialog.bind(
-      this,
-    );
+    this.openMultiplePermissionDialog =
+      this.openMultiplePermissionDialog.bind(this);
+    this.handleCloseMultiplePermissionDialog =
+      this.handleCloseMultiplePermissionDialog.bind(this);
     this.openPermissionDialog = this.openPermissionDialog.bind(this);
   }
 
@@ -306,7 +304,7 @@ EntityPermissions.propTypes = {
   permissions: PropTypes.array,
   relatedResourcesLoaders: PropTypes.arrayOf(PropTypes.func),
   onChanged: PropTypes.func.isRequired,
-  onDownloaded: PropTypes.func.isRequired,
+  onDownloaded: PropTypes.func,
   onError: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
 };

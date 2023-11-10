@@ -20,6 +20,7 @@ import React from 'react';
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 import {setLocale} from 'gmp/locale/lang';
+import {parseDate} from 'gmp/parser';
 
 import Filter from 'gmp/models/filter';
 import Cve from 'gmp/models/cve';
@@ -38,7 +39,7 @@ const entity = Cve.fromElement({
   _id: 'CVE-2020-9992',
   name: 'CVE-2020-9992',
   cvss_vector: 'AV:N/AC:M/Au:N/C:C/I:C/A:C',
-  creationTime: '2020-10-22T19:15:00Z',
+  creationTime: parseDate('2020-10-22T19:15:00Z'),
   score: '93',
   description: 'foo bar baz',
   usage_type: 'cve',
@@ -48,7 +49,7 @@ const entity2 = Cve.fromElement({
   _id: 'CVE-2020-9983',
   name: 'CVE-2020-9983',
   cvss_vector: 'AV:N/AC:M/Au:N/C:P/I:P/A:P',
-  creationTime: '2019-06-24T10:12:27Z',
+  creationTime: parseDate('2019-06-24T10:12:27Z'),
   score: '93',
   description: 'foo bar baz',
   usage_type: 'cve',
@@ -58,7 +59,7 @@ const entity3 = Cve.fromElement({
   _id: 'CVE-2020-9976',
   name: 'CVE-2020-9976',
   cvss_vector: 'AV:N/AC:M/Au:N/C:P/I:P/A:P',
-  creationTime: '2020-09-10T12:51:27Z',
+  creationTime: parseDate('2020-09-10T12:51:27Z'),
   score: '93',
   description: 'foo bar baz',
   usage_type: 'cve',
@@ -68,7 +69,7 @@ const entity_v3 = Cve.fromElement({
   _id: 'CVE-2020-9997',
   name: 'CVE-2020-9997',
   cvss_vector: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:H',
-  creationTime: '2020-10-22T19:15:00Z',
+  creationTime: parseDate('2020-10-22T19:15:00Z'),
   score: '71',
   description: 'foo bar baz',
   usage_type: 'cve',

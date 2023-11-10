@@ -80,7 +80,6 @@ exports[`HorizontalSep tests should allow to wrap 1`] = `
 >
   <div
     class="c2 c3 c4"
-    margin="5px"
   />
 </div>
 `;
@@ -136,7 +135,6 @@ exports[`HorizontalSep tests should render 1`] = `
 >
   <div
     class="c0 c2 c3"
-    margin="5px"
   />
 </div>
 `;
@@ -192,8 +190,6 @@ exports[`HorizontalSep tests should render with separator option 1`] = `
 >
   <div
     class="c0 c2 c3"
-    margin="5px"
-    separator="|"
   />
 </div>
 `;
@@ -249,8 +245,6 @@ exports[`HorizontalSep tests should render with spacing 1`] = `
 >
   <div
     class="c0 c2 c3"
-    margin="5px"
-    separator="|"
     spacing="10px"
   />
 </div>

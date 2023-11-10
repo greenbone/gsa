@@ -418,7 +418,7 @@ class Page extends React.Component {
 }
 
 Page.propTypes = {
-  detailsExportFileName: PropTypes.object,
+  detailsExportFileName: PropTypes.string,
   entity: PropTypes.model,
   gmp: PropTypes.gmp.isRequired,
   username: PropTypes.string,

@@ -182,7 +182,6 @@ exports[`MultiStepFooter tests should render 1`] = `
   >
     <div
       class="c6 c8"
-      margin="5px"
     >
       <button
         class="c3 c4 c9"
@@ -404,7 +403,6 @@ exports[`MultiStepFooter tests should render loading and disable cancel button 1
   >
     <div
       class="c6 c8"
-      margin="5px"
     >
       <button
         class="c3 c4 c9"

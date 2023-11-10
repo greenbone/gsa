@@ -26,59 +26,64 @@ import {isArray} from 'gmp/utils/identity';
 import {IconSizeContext} from 'web/components/provider/iconsizeprovider';
 
 import PropTypes from 'web/utils/proptypes';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 
 export const ICON_SIZE_LARGE_PIXELS = '50px';
 export const ICON_SIZE_MEDIUM_PIXELS = '24px';
 export const ICON_SIZE_SMALL_PIXELS = '16px';
 
-const withIconSize = (defaultSize = 'small') => Component => {
-  const IconSize = styled(Component)`
-    ${props => {
-      const {iconSize = defaultSize, size = iconSize} = props;
+const withIconSize =
+  (defaultSize = 'small') =>
+  Component => {
+    const IconSize = styled(Component).withConfig(
+      excludePropsConfig(['iconSize']),
+    )`
+      ${props => {
+        const {iconSize = defaultSize, size = iconSize} = props;
 
-      let width;
-      let height;
+        let width;
+        let height;
 
-      if (size === 'small') {
-        height = width = ICON_SIZE_SMALL_PIXELS;
-      } else if (size === 'medium') {
-        height = width = ICON_SIZE_MEDIUM_PIXELS;
-      } else if (size === 'large') {
-        height = width = ICON_SIZE_LARGE_PIXELS;
-      } else if (size === 'tiny') {
-        height = width = '11px';
-      } else if (isArray(size)) {
-        width = size[0];
-        height = size[1];
-      }
+        if (size === 'small') {
+          height = width = ICON_SIZE_SMALL_PIXELS;
+        } else if (size === 'medium') {
+          height = width = ICON_SIZE_MEDIUM_PIXELS;
+        } else if (size === 'large') {
+          height = width = ICON_SIZE_LARGE_PIXELS;
+        } else if (size === 'tiny') {
+          height = width = '11px';
+        } else if (isArray(size)) {
+          width = size[0];
+          height = size[1];
+        }
 
-      return {
-        height,
-        width,
-        lineHeight: height,
-        '& *': {
-          height: 'inherit',
-          width: 'inherit',
-        },
-      };
-    }}
-  `;
+        return {
+          height,
+          width,
+          lineHeight: height,
+          '& *': {
+            height: 'inherit',
+            width: 'inherit',
+          },
+        };
+      }}
+    `;
 
-  const IconSizeWrapper = props => (
-    <IconSizeContext.Consumer>
-      {iconSize => <IconSize {...props} iconSize={iconSize} />}
-    </IconSizeContext.Consumer>
-  );
+    const IconSizeWrapper = props => (
+      <IconSizeContext.Consumer>
+        {iconSize => <IconSize {...props} iconSize={iconSize} />}
+      </IconSizeContext.Consumer>
+    );
 
-  IconSizeWrapper.displayName = 'withIconSize';
+    IconSizeWrapper.displayName = 'withIconSize';
 
-  IconSizeWrapper.propTypes = {
-    iconSize: PropTypes.iconSize,
-    size: PropTypes.iconSize,
+    IconSizeWrapper.propTypes = {
+      iconSize: PropTypes.iconSize,
+      size: PropTypes.iconSize,
+    };
+
+    return hoistStatics(IconSizeWrapper, Component);
   };
-
-  return hoistStatics(IconSizeWrapper, Component);
-};
 
 export default withIconSize;
 

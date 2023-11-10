@@ -144,9 +144,13 @@ class Cve extends Info {
 
       const products = entry['vulnerable-software-list'];
       if (isDefined(products)) {
-        ret.products = isArray(products.product)
-          ? products.product
-          : [products.product];
+        if (isDefined(products.product)) {
+          ret.products = isArray(products.product)
+            ? products.product
+            : [products.product];
+        } else {
+          ret.products = [];
+        }
       }
 
       delete ret.raw_data;

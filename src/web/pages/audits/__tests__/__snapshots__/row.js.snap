@@ -297,7 +297,6 @@ exports[`Audit Row tests should render 1`] = `
             >
               <div
                 class="c3 c5"
-                margin="5px"
               />
             </div>
           </div>
@@ -320,7 +319,6 @@ exports[`Audit Row tests should render 1`] = `
             href="/report/1234"
           >
             <div
-              boxbackground="#4C4C4C"
               class="c8"
               data-testid="progressbar-box"
               title="Done"
@@ -329,7 +327,6 @@ exports[`Audit Row tests should render 1`] = `
                 background="low"
                 class="c9"
                 data-testid="progress"
-                progress="100"
               />
               <div
                 class="c10"
@@ -364,7 +361,6 @@ exports[`Audit Row tests should render 1`] = `
           class="c0"
         >
           <div
-            boxbackground="#c83814"
             class="c12"
             data-testid="progressbar-box"
             title="50%"
@@ -373,7 +369,6 @@ exports[`Audit Row tests should render 1`] = `
               background="#70c000"
               class="c13"
               data-testid="progress"
-              progress="50"
             />
             <div
               class="c10"
@@ -392,7 +387,6 @@ exports[`Audit Row tests should render 1`] = `
           >
             <div
               class="c16 c5"
-              margin="5px"
             >
               <span
                 class="c17 c18 c19"

@@ -98,7 +98,6 @@ exports[`YesNoRadio tests should render 1`] = `
   >
     <div
       class="c0 c2"
-      margin="5px"
     >
       <label
         class="c3"
@@ -108,7 +107,6 @@ exports[`YesNoRadio tests should render 1`] = `
         >
           <div
             class="c0 c2"
-            margin="5px"
           >
             <input
               class="c4 c5"
@@ -133,7 +131,6 @@ exports[`YesNoRadio tests should render 1`] = `
         >
           <div
             class="c0 c2"
-            margin="5px"
           >
             <input
               class="c4 c5"
