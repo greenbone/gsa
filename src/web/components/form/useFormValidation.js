@@ -24,9 +24,10 @@ import {_, _l} from 'gmp/locale/lang';
 
 import {hasValue, isDefined, isFunction} from 'gmp/utils/identity';
 
+import {excludePropsConfig} from 'web/utils/styledConfig';
 import Theme from 'web/utils/theme';
 
-const StyledMarker = styled.div`
+const StyledMarker = styled.div.withConfig(excludePropsConfig(['isVisible']))`
   color: ${Theme.darkRed};
   color: ${props => props.color};
   font-weight: bold;

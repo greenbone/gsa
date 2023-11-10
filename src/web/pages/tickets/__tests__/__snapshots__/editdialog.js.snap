@@ -568,7 +568,6 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
               <div
                 class="c9"
                 data-testid="save-dialog-content"
-                maxheight="400px"
               >
                 <div
                   class="c10"
@@ -579,15 +578,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Status
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <div
                         aria-expanded="false"
@@ -642,15 +638,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Assigned User
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <div
                         aria-expanded="false"
@@ -705,15 +698,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Note for Open
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <textarea
                         class="c24 c25"
@@ -734,15 +724,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Note for Fixed
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <textarea
                         class="c24 c25"
@@ -763,15 +750,12 @@ exports[`EditTicketDialog component tests should render dialog 1`] = `
                     <label
                       class="c12"
                       data-testid="formgroup-title"
-                      titleoffset="0"
-                      titlesize="2"
                     >
                       Note for Closed
                     </label>
                     <div
                       class="c13 c14"
                       data-testid="formgroup-content"
-                      size="10"
                     >
                       <textarea
                         class="c24 c25"

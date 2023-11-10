@@ -68,9 +68,8 @@ class CredentialsDialog extends React.Component {
 
     this.state = {};
 
-    this.handleCredentialTypeChange = this.handleCredentialTypeChange.bind(
-      this,
-    );
+    this.handleCredentialTypeChange =
+      this.handleCredentialTypeChange.bind(this);
     this.handlePublicKeyChange = this.handlePublicKeyChange.bind(this);
     this.handleErrorClose = this.handleErrorClose.bind(this);
     this.handleError = this.handleError.bind(this);
@@ -83,6 +82,7 @@ class CredentialsDialog extends React.Component {
         error: error,
       };
     }
+    return null;
   }
 
   componentDidMount() {

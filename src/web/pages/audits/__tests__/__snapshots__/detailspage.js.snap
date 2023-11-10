@@ -375,6 +375,10 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #11ab51;
 }
 
+.c29 :hover {
+  border-top: 2px solid #fff;
+}
+
 .c29 :first-child {
   border-left: 1px solid #e5e5e5;
 }
@@ -603,14 +607,12 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
     >
       <div
         class="c2 c4"
-        margin="10px"
       >
         <div
           class="c2 c3"
         >
           <div
             class="c5 c6"
-            margin="5px"
           >
             <a
               href="test/en/compliance-and-special-scans.html#configuring-and-managing-audits"
@@ -620,7 +622,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               <span
                 class="c7 c8"
                 data-testid="svg-icon"
-                iconsize="small"
                 title="Help: Audits"
               >
                 <svg
@@ -637,7 +638,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               <span
                 class="c7 c8"
                 data-testid="svg-icon"
-                iconsize="small"
                 title="Audit List"
               >
                 <svg
@@ -650,7 +650,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             <span
               class="c7 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="This is an Alterable Audit. Reports may not relate to current Policy or Target!"
             >
               <svg
@@ -666,12 +665,10 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
         >
           <div
             class="c2 c6"
-            margin="5px"
           >
             <span
               class="c7 c10 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Clone Audit"
             >
               <svg
@@ -683,7 +680,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             <span
               class="c7 c10 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Edit Audit"
             >
               <svg
@@ -695,7 +691,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             <span
               class="c7 c10 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Move Audit to trashcan"
             >
               <svg
@@ -707,7 +702,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             <span
               class="c7 c10 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Export Audit as XML"
             >
               <svg
@@ -723,12 +717,10 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
         >
           <div
             class="c2 c6"
-            margin="5px"
           >
             <span
               class="c7 c10 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Start"
             >
               <svg
@@ -741,7 +733,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               alt="Resume"
               class="c7 c11 c8"
               data-testid="svg-icon"
-              iconsize="small"
               title="Audit is not stopped"
             >
               <svg
@@ -757,14 +748,12 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
         >
           <div
             class="c2 c4"
-            margin="10px"
           >
             <div
               class="c2 c3"
             >
               <div
                 class="c2 c6"
-                margin="5px"
               >
                 <a
                   class="c9"
@@ -775,7 +764,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                   <span
                     class="c7 c8"
                     data-testid="svg-icon"
-                    iconsize="small"
                   >
                     <svg>
                       report.svg
@@ -789,12 +777,10 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                 >
                   <div
                     class="c12"
-                    margin="0"
                   >
                     <span
                       class="c7 c8"
                       data-testid="svg-icon"
-                      iconsize="small"
                     >
                       <svg>
                         report.svg
@@ -803,7 +789,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                     <span
                       class="c13"
                       data-testid="badge-icon"
-                      margin="0"
                     >
                       1
                     </span>
@@ -818,12 +803,10 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
             >
               <div
                 class="c12"
-                margin="0"
               >
                 <span
                   class="c7 c8"
                   data-testid="svg-icon"
-                  iconsize="small"
                 >
                   <svg>
                     result.svg
@@ -832,7 +815,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                 <span
                   class="c13"
                   data-testid="badge-icon"
-                  margin="0"
                 >
                   1
                 </span>
@@ -1028,7 +1010,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                     href="/report/1234"
                   >
                     <div
-                      boxbackground="#4C4C4C"
                       class="c39"
                       data-testid="progressbar-box"
                       title="Done"
@@ -1037,7 +1018,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
                         background="low"
                         class="c40"
                         data-testid="progress"
-                        progress="100"
                       />
                       <div
                         class="c41"
@@ -1086,7 +1066,6 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
               >
                 <div
                   class="c2 c6 c43"
-                  margin="5px"
                 >
                   <span>
                     <a
@@ -1434,14 +1413,12 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
 >
   <div
     class="c0 c2"
-    margin="10px"
   >
     <div
       class="c0 c1"
     >
       <div
         class="c3 c4"
-        margin="5px"
       >
         <a
           href="test/en/compliance-and-special-scans.html#configuring-and-managing-audits"
@@ -1494,7 +1471,6 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
     >
       <div
         class="c0 c4"
-        margin="5px"
       >
         <span
           class="c5 c8 c6"
@@ -1547,7 +1523,6 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
     >
       <div
         class="c0 c4"
-        margin="5px"
       >
         <span
           class="c5 c8 c6"
@@ -1579,14 +1554,12 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
     >
       <div
         class="c0 c2"
-        margin="10px"
       >
         <div
           class="c0 c1"
         >
           <div
             class="c0 c4"
-            margin="5px"
           >
             <a
               class="c7"
@@ -1610,7 +1583,6 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
             >
               <div
                 class="c10"
-                margin="0"
               >
                 <span
                   class="c5 c6"
@@ -1623,7 +1595,6 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
                 <span
                   class="c11"
                   data-testid="badge-icon"
-                  margin="0"
                 >
                   1
                 </span>
@@ -1638,7 +1609,6 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
         >
           <div
             class="c10"
-            margin="0"
           >
             <span
               class="c5 c6"
@@ -1651,7 +1621,6 @@ exports[`Audit ToolBarIcons tests should render 1`] = `
             <span
               class="c11"
               data-testid="badge-icon"
-              margin="0"
             >
               1
             </span>

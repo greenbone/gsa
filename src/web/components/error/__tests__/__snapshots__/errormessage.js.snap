@@ -101,7 +101,6 @@ exports[`ErrorMessage tests should render 1`] = `
   >
     <div
       class="c3 c4"
-      margin="15px"
     >
       <span
         class="c5"
@@ -119,7 +118,6 @@ exports[`ErrorMessage tests should render 1`] = `
         >
           <div
             class="c0 c6"
-            margin="5px"
           >
             <b
               data-testid="error-message"

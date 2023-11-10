@@ -314,7 +314,6 @@ exports[`Menu tests should render with position adjust 1`] = `
 <div
   class="c0"
   data-testid="select-menu"
-  position="adjust"
   right="0"
   width="0"
   x="0"
@@ -385,7 +384,6 @@ exports[`Menu tests should render with position right 1`] = `
 <div
   class="c0"
   data-testid="select-menu"
-  position="right"
   right="0"
   width="0"
   x="0"

@@ -16,8 +16,6 @@ exports[`SeverityClassLabel tests should render 1`] = `
 }
 
 <div
-  backgroundcolor="#C83814"
-  bordercolor="#C83814"
   class="c0"
 >
   High

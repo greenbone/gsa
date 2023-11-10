@@ -258,15 +258,12 @@ exports[`SortByGroup tests should render 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
-    titleoffset="0"
-    titlesize="2"
   >
     Sort by
   </label>
   <div
     class="c2 c3"
     data-testid="formgroup-content"
-    size="10"
   >
     <div
       aria-expanded="false"
@@ -318,7 +315,6 @@ exports[`SortByGroup tests should render 1`] = `
       >
         <div
           class="c2 c15"
-          margin="5px"
         >
           <input
             checked=""
@@ -345,7 +341,6 @@ exports[`SortByGroup tests should render 1`] = `
       >
         <div
           class="c2 c15"
-          margin="5px"
         >
           <input
             class="c16 c17"

@@ -94,7 +94,6 @@ exports[`CheckBox component tests should render with children 1`] = `
   >
     <div
       class="c1 c3"
-      margin="5px"
     >
       <input
         class="c4 c5"

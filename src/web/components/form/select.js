@@ -44,12 +44,13 @@ import {
 } from './selectelements';
 
 import {Marker} from './useFormValidation';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 
 const SingleSelectedValue = styled(SelectedValue)`
   cursor: default;
 `;
 
-const Div = styled.div`
+const Div = styled.div.withConfig(excludePropsConfig(['hasError']))`
   display: flex;
 `;
 

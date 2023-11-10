@@ -104,7 +104,7 @@ const Row = ({
   let progress;
 
   if (isDefined(task)) {
-    if (task.isContainer()) {
+    if (task.isContainer() && status !== TASK_STATUS.processing) {
       status =
         status === TASK_STATUS.running
           ? TASK_STATUS.uploading

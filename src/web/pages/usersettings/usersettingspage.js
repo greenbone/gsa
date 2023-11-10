@@ -816,7 +816,7 @@ UserSettings.propTypes = {
   defaultSshCredential: PropTypes.object,
   defaultTarget: PropTypes.object,
   deltaReportsVersion: PropTypes.string,
-  detailsExportFileName: PropTypes.object,
+  detailsExportFileName: PropTypes.string,
   dfnCertFilter: PropTypes.object,
   dynamicSeverity: PropTypes.object,
   filters: PropTypes.array,

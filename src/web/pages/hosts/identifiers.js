@@ -40,6 +40,7 @@ import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
 import DetailsBlock from 'web/entity/block';
+import TableFooter from 'web/components/table/footer';
 
 const Action = styled.a`
   cursor: pointer;
@@ -147,15 +148,19 @@ const Identifiers = props => {
 
   const title = latest ? _('Latest Identifiers') : _('All Identifiers');
   const footer = (
-    <TableRow>
-      <TableData flex align={['center', 'center']} colSpan="5">
-        {!stateEqual && (
-          <Action onClick={handleToggleLatest}>
-            {latest ? _('Show all Identifiers') : _('Show latest Identifiers')}
-          </Action>
-        )}
-      </TableData>
-    </TableRow>
+    <TableFooter>
+      <TableRow>
+        <TableData flex align={['center', 'center']} colSpan="5">
+          {!stateEqual && (
+            <Action onClick={handleToggleLatest}>
+              {latest
+                ? _('Show all Identifiers')
+                : _('Show latest Identifiers')}
+            </Action>
+          )}
+        </TableData>
+      </TableRow>
+    </TableFooter>
   );
 
   displayActions = displayActions && isDefined(onDelete);

@@ -21,12 +21,15 @@ import React from 'react';
 import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 
 import Layout from './layout';
 
 const DEFAULT_MARGIN = '5px';
 
-const DividerComponent = styled(Layout)`
+const DividerComponent = styled(Layout).withConfig(
+  excludePropsConfig('margin'),
+)`
   & > * {
     display: inline-flex;
   }

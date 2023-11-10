@@ -48,7 +48,6 @@ exports[`ComplianceStatusBar tests should render 1`] = `
 }
 
 <div
-  boxbackground="#c83814"
   class="c0"
   data-testid="progressbar-box"
   title="75%"
@@ -57,7 +56,6 @@ exports[`ComplianceStatusBar tests should render 1`] = `
     background="#70c000"
     class="c1"
     data-testid="progress"
-    progress="75"
   />
   <div
     class="c2"

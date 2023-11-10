@@ -60,7 +60,6 @@ exports[`Badge tests should render badge 1`] = `
 
 <div
   class="c0"
-  margin="0"
 >
   <span
     class="c1"
@@ -73,7 +72,6 @@ exports[`Badge tests should render badge 1`] = `
   <span
     class="c2"
     data-testid="badge-icon"
-    margin="0"
   >
     1
   </span>

@@ -574,7 +574,7 @@ AuditComponent.propTypes = {
   loadTargets: PropTypes.func.isRequired,
   loadUserSettingsDefaults: PropTypes.func.isRequired,
   policies: PropTypes.arrayOf(PropTypes.model),
-  reportExportFileName: PropTypes.object,
+  reportExportFileName: PropTypes.string,
   reportFormats: PropTypes.array,
   scanners: PropTypes.arrayOf(PropTypes.model),
   schedules: PropTypes.arrayOf(PropTypes.model),

@@ -48,9 +48,8 @@ class CredentialsComponent extends React.Component {
 
     this.state = {dialogVisible: false};
 
-    this.handleCloseCredentialDialog = this.handleCloseCredentialDialog.bind(
-      this,
-    );
+    this.handleCloseCredentialDialog =
+      this.handleCloseCredentialDialog.bind(this);
     this.openCredentialsDialog = this.openCredentialsDialog.bind(this);
     this.handleDownloadInstaller = this.handleDownloadInstaller.bind(this);
   }
@@ -119,13 +118,8 @@ class CredentialsComponent extends React.Component {
     return gmp.credential
       .download(credential, format)
       .then(response => {
-        const {
-          creationTime,
-          entityType,
-          id,
-          modificationTime,
-          name,
-        } = credential;
+        const {creationTime, entityType, id, modificationTime, name} =
+          credential;
         const filename = generateFilename({
           creationTime: creationTime,
           extension: format,
@@ -209,7 +203,7 @@ class CredentialsComponent extends React.Component {
 
 CredentialsComponent.propTypes = {
   children: PropTypes.func.isRequired,
-  detailsExportFileName: PropTypes.object,
+  detailsExportFileName: PropTypes.string,
   gmp: PropTypes.gmp.isRequired,
   username: PropTypes.string,
   onCloneError: PropTypes.func,
@@ -246,10 +240,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(CredentialsComponent);
 
 // vim: set ts=2 sw=2 tw=80:

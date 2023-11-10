@@ -28,12 +28,15 @@ import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
 
 import withIconSize from 'web/components/icon/withIconSize';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 
 const Anchor = styled.a`
   display: flex;
 `;
 
-const Styled = styled.span`
+const Styled = styled.span.withConfig(
+  excludePropsConfig(['active', 'isLoading']),
+)`
   cursor: ${props => (isDefined(props.onClick) ? 'pointer' : undefined)};
 
   @media print {

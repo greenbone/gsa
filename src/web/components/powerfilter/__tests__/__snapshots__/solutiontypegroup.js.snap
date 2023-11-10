@@ -176,15 +176,12 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
-    titleoffset="0"
-    titlesize="2"
   >
     Solution Type
   </label>
   <div
     class="c2 c3"
     data-testid="formgroup-content"
-    size="10"
   >
     <div
       class="c2 c4"
@@ -208,7 +205,6 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                   >
                     <div
                       class="c2 c9"
-                      margin="5px"
                     >
                       <input
                         checked=""
@@ -237,7 +233,6 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                   >
                     <div
                       class="c2 c9"
-                      margin="5px"
                     >
                       <input
                         class="c10 c11"
@@ -277,7 +272,6 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                   >
                     <div
                       class="c2 c9"
-                      margin="5px"
                     >
                       <input
                         class="c10 c11"
@@ -319,7 +313,6 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                   >
                     <div
                       class="c2 c9"
-                      margin="5px"
                     >
                       <input
                         class="c10 c11"
@@ -359,7 +352,6 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                   >
                     <div
                       class="c2 c9"
-                      margin="5px"
                     >
                       <input
                         class="c10 c11"
@@ -399,7 +391,6 @@ exports[`SolutionTypesFilterGroup tests should render 1`] = `
                   >
                     <div
                       class="c2 c9"
-                      margin="5px"
                     >
                       <input
                         class="c10 c11"

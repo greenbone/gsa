@@ -208,7 +208,9 @@ class MenuTestComponent extends React.Component {
     super(...args);
 
     this.target = React.createRef();
-    this.mockBoundingClientRect = this.props.mockBoundingClientRect;
+    const {mockBoundingClientRect, ...otherProps} = this.props;
+    this.mockBoundingClientRect = mockBoundingClientRect;
+    this.otherProps = otherProps;
     this.notifyRefAssigned = jest.fn();
   }
 
@@ -238,7 +240,7 @@ class MenuTestComponent extends React.Component {
         />
         {hasTarget && (
           <Menu
-            {...this.props}
+            {...this.otherProps}
             notifyRefAssigned={this.notifyRefAssigned}
             target={this.target}
           />

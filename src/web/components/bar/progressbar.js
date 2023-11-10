@@ -21,9 +21,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes.js';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 import Theme from 'web/utils/theme.js';
 
-const ProgressBarBox = styled.div`
+const ProgressBarBox = styled.div.withConfig(
+  excludePropsConfig(['boxBackground']),
+)`
   height: 13px;
   box-sizing: content-box; /* height includes border */
   display: inline-block;
@@ -63,7 +66,7 @@ export const adjustProgress = progress => {
   return progress;
 };
 
-const Progress = styled.div`
+const Progress = styled.div.withConfig(excludePropsConfig(['progress']))`
   height: 13px;
 
   @media print {

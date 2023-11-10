@@ -25,13 +25,14 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 
+import {excludePropsConfig} from 'web/utils/styledConfig';
 import Theme from 'web/utils/theme';
 
 import Resizer from './resizer';
 
 const MIN_HEIGHT = 175;
 
-const GridRow = styled.div`
+const GridRow = styled.div.withConfig(excludePropsConfig(['isDraggingOver']))`
   display: flex;
   height: ${props => props.height}px;
   min-height: ${MIN_HEIGHT}px;

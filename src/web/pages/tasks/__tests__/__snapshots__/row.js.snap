@@ -294,7 +294,6 @@ exports[`Task Row tests should render 1`] = `
             >
               <div
                 class="c3 c5"
-                margin="5px"
               />
             </div>
           </div>
@@ -317,7 +316,6 @@ exports[`Task Row tests should render 1`] = `
             href="/report/1234"
           >
             <div
-              boxbackground="#4C4C4C"
               class="c8"
               data-testid="progressbar-box"
               title="Done"
@@ -326,7 +324,6 @@ exports[`Task Row tests should render 1`] = `
                 background="low"
                 class="c9"
                 data-testid="progress"
-                progress="100"
               />
               <div
                 class="c10"
@@ -378,7 +375,6 @@ exports[`Task Row tests should render 1`] = `
           class="c0"
         >
           <div
-            boxbackground="#4C4C4C"
             class="c8"
             data-testid="progressbar-box"
             title="Medium"
@@ -387,7 +383,6 @@ exports[`Task Row tests should render 1`] = `
               background="warn"
               class="c12"
               data-testid="progress"
-              progress="50"
             />
             <div
               class="c10"
@@ -424,7 +419,6 @@ exports[`Task Row tests should render 1`] = `
           >
             <div
               class="c18 c5"
-              margin="5px"
             >
               <span
                 class="c14 c19 c15"

@@ -221,15 +221,12 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
   <label
     class="c1"
     data-testid="formgroup-title"
-    titleoffset="0"
-    titlesize="2"
   >
     Auto Delete Reports
   </label>
   <div
     class="c2 c3"
     data-testid="formgroup-content"
-    size="10"
   >
     <label
       class="c4"
@@ -239,7 +236,6 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
       >
         <div
           class="c5 c7"
-          margin="5px"
         >
           <input
             class="c8 c9"
@@ -262,7 +258,6 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
     >
       <div
         class="c5 c7"
-        margin="5px"
       >
         <label
           class="c4"
@@ -272,7 +267,6 @@ exports[`AutoDeleteReportsGroup tests should render dialog group 1`] = `
           >
             <div
               class="c5 c7"
-              margin="5px"
             >
               <input
                 checked=""

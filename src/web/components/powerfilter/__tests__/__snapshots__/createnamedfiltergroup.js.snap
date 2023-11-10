@@ -150,7 +150,6 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
   >
     <div
       class="c0 c3"
-      margin="5px"
     >
       <label
         class="c4"
@@ -160,7 +159,6 @@ exports[`CreateNamedFilterGroup tests should render 1`] = `
         >
           <div
             class="c0 c3"
-            margin="5px"
           >
             <input
               class="c5 c6"

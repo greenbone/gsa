@@ -20,6 +20,7 @@ import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import {setLocale} from 'gmp/locale/lang';
+import {parseDate} from 'gmp/parser';
 
 import Cve from 'gmp/models/cve';
 
@@ -38,7 +39,7 @@ const entity = Cve.fromElement({
   _id: 'CVE-2020-9992',
   name: 'CVE-2020-9992',
   cvss_vector: 'AV:N/AC:M/Au:N/C:C/I:C/A:C',
-  creationTime: '2020-10-22T19:15:00Z',
+  creationTime: parseDate('2020-10-22T19:15:00Z'),
   severity: '9.3',
   description: 'foo bar baz',
   usage_type: 'cve',

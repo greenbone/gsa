@@ -41,6 +41,7 @@ import StripedTable from 'web/components/table/stripedtable';
 import PropTypes from 'web/utils/proptypes';
 
 import withComponentDefaults from 'web/utils/withComponentDefaults';
+import {excludePropsConfig} from 'web/utils/styledConfig';
 
 const exclude_props = [
   'row',
@@ -51,7 +52,9 @@ const exclude_props = [
   'children',
 ];
 
-const UpdatingStripedTable = styled(StripedTable)`
+const UpdatingStripedTable = styled(StripedTable).withConfig(
+  excludePropsConfig(['isUpdating']),
+)`
   opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
 `;
 
@@ -214,9 +217,7 @@ class EntitiesTable extends React.Component {
     }
 
     const pagination =
-      PaginationComponent === false ? (
-        undefined
-      ) : (
+      PaginationComponent === false ? undefined : (
         <PaginationComponent
           {...other}
           onFirstClick={this.handleFirst}
@@ -228,9 +229,7 @@ class EntitiesTable extends React.Component {
       );
 
     const header =
-      !isDefined(HeaderComponent) || HeaderComponent === false ? (
-        undefined
-      ) : (
+      !isDefined(HeaderComponent) || HeaderComponent === false ? undefined : (
         <HeaderComponent
           currentSortBy={currentSortBy}
           currentSortDir={currentSortDir}
@@ -239,9 +238,7 @@ class EntitiesTable extends React.Component {
       );
 
     const footer =
-      !isDefined(FooterComponent) || FooterComponent === false ? (
-        undefined
-      ) : (
+      !isDefined(FooterComponent) || FooterComponent === false ? undefined : (
         <FooterComponent {...other} />
       );
 

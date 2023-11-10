@@ -158,7 +158,6 @@ exports[`TaskPage ToolBarIcons test should render 1`] = `
 >
   <div
     class="c0 c2"
-    margin="5px"
   >
     <a
       href="test/en/scanning.html#managing-tasks"

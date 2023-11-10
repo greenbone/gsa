@@ -160,7 +160,7 @@ const Details = ({entity}) => {
         <DetailsBlock title={_('Other Links')}>
           <ul>
             {additionalInformation.map(info => (
-              <li key={info.url}>
+              <li key={info.url + '-' + info.issuer}>
                 <Layout flex="column">
                   <b>{info.issuer}</b>
                   <span>

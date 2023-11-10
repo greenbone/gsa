@@ -31,10 +31,11 @@ export const UNSET_VALUE = '0';
 export const UNSET_LABEL = '--';
 
 function selectItemLabel(item) {
+  const itemText = isDefined(item.name) ? item.name : item.id;
   if (item.deprecated) {
-    return <s>{item.name + ' (' + _('Deprecated') + ')'}</s>;
+    return <s>{itemText + ' (' + _('Deprecated') + ')'}</s>;
   }
-  return item.name;
+  return itemText;
 }
 
 /**

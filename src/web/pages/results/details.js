@@ -56,7 +56,7 @@ import Diff, {Added, Removed} from './diff';
 */
 const Pre = styled.pre`
   white-space: pre-wrap;
-  word-wrap: word-break;
+  word-wrap: break-word;
 `;
 
 const GrowDiv = styled.div`
@@ -191,8 +191,12 @@ const ResultDetails = ({className, links = true, entity}) => {
             ) : (
               <DerivedDiff
                 deltaType={deltaType}
-                firstDescription={result1Description}
-                secondDesription={result2Description}
+                firstDescription={
+                  isDefined(result1Description) ? result1Description : ''
+                }
+                secondDesription={
+                  isDefined(result2Description) ? result2Description : ''
+                }
               />
             )}
           </div>
@@ -329,7 +333,9 @@ const ResultDetails = ({className, links = true, entity}) => {
         solutionType={solution?.type}
       />
 
-      <References links={links} nvt={information} />
+      {information.entityType === 'nvt' && (
+        <References links={links} nvt={information} />
+      )}
     </Layout>
   );
 };
