@@ -22,13 +22,14 @@ import styled from 'styled-components';
 import {Droppable} from 'react-beautiful-dnd';
 
 import PropTypes from 'web/utils/proptypes';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
 import Theme from 'web/utils/theme';
 
-const EmptyGridRow = styled.div.withConfig(
-  excludePropsConfig(['active', 'isDraggingOver']),
-)`
+const EmptyGridRow = styledExcludeProps(styled.div, [
+  'active',
+  'isDraggingOver',
+])`
   margin: 8px 0px;
   min-height: 50px;
   display: ${props => (props.active ? 'flex' : 'none')};

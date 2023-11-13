@@ -21,15 +21,13 @@ import React from 'react';
 import styled from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
 import Layout from './layout';
 
 const DEFAULT_MARGIN = '5px';
 
-const DividerComponent = styled(Layout).withConfig(
-  excludePropsConfig('margin'),
-)`
+const DividerComponent = styledExcludeProps(styled(Layout), ['margin'])`
   & > * {
     display: inline-flex;
   }

@@ -22,7 +22,7 @@ import styled from 'styled-components';
 import {Draggable} from 'react-beautiful-dnd';
 
 import PropTypes from 'web/utils/proptypes';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
 export const GRID_ITEM_MARGIN = {
   top: 5,
@@ -31,7 +31,7 @@ export const GRID_ITEM_MARGIN = {
   right: 8,
 };
 
-const GridItem = styled.div.withConfig(excludePropsConfig(['isDragging']))`
+const GridItem = styledExcludeProps(styled.div, ['isDragging'])`
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;

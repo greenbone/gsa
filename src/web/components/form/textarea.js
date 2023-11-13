@@ -28,11 +28,12 @@ import withLayout from 'web/components/layout/withLayout';
 
 import {DISABLED_OPACITY} from './field';
 import {Marker} from './useFormValidation';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
-const StyledTextArea = styled.textarea.withConfig(
-  excludePropsConfig(['convert', 'hasError']),
-)`
+const StyledTextArea = styledExcludeProps(styled.textarea, [
+  'convert',
+  'hasError',
+])`
   display: block;
   height: auto;
   color: ${Theme.darkGray};

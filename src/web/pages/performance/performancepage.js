@@ -61,7 +61,7 @@ import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import withGmp from 'web/utils/withGmp';
 import {renderSelectItems} from 'web/utils/render';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
 import StartEndTimeSelection from './startendtimeselection';
 
@@ -149,9 +149,9 @@ ReportImage.propTypes = {
   startDate: PropTypes.date,
 };
 
-const Selector = withClickHandler()(styled.span.withConfig(
-  excludePropsConfig('duration'),
-)`
+const Selector = withClickHandler()(styledExcludeProps(styled.span, [
+  'duration',
+])`
   ${props => {
     if (props.value !== props.duration) {
       return {

@@ -26,7 +26,7 @@ import {isArray} from 'gmp/utils/identity';
 import {IconSizeContext} from 'web/components/provider/iconsizeprovider';
 
 import PropTypes from 'web/utils/proptypes';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
 export const ICON_SIZE_LARGE_PIXELS = '50px';
 export const ICON_SIZE_MEDIUM_PIXELS = '24px';
@@ -35,9 +35,7 @@ export const ICON_SIZE_SMALL_PIXELS = '16px';
 const withIconSize =
   (defaultSize = 'small') =>
   Component => {
-    const IconSize = styled(Component).withConfig(
-      excludePropsConfig(['iconSize']),
-    )`
+    const IconSize = styledExcludeProps(styled(Component), ['iconSize'])`
       ${props => {
         const {iconSize = defaultSize, size = iconSize} = props;
 

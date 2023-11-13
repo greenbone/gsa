@@ -20,7 +20,7 @@ import React from 'react';
 import styled, {keyframes, css} from 'styled-components';
 
 import PropTypes from 'web/utils/proptypes';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
 /**
  * State used in foldable components
@@ -43,7 +43,7 @@ const foldDelay = keyframes`
   }
 `;
 
-const Div = styled.div.withConfig(excludePropsConfig(['foldState']))`
+const Div = styledExcludeProps(styled.div, ['foldState'])`
   overflow: hidden;
   transition: 0.4s;
 

@@ -24,13 +24,11 @@ import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import Theme from 'web/utils/theme';
 import PropTypes from 'web/utils/proptypes';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
 import Portal from 'web/components/portal/portal';
 
-export const Box = styled.div.withConfig(
-  excludePropsConfig(['hasError', 'isOpen']),
-)`
+export const Box = styledExcludeProps(styled.div, ['hasError', 'isOpen'])`
   border: 1px solid ${Theme.inputBorderGray};
   border-radius: 2px;
   display: flex;
@@ -62,9 +60,7 @@ export const Input = styled.input`
   line-height: inherit;
 `;
 
-export const Item = styled.span.withConfig(
-  excludePropsConfig(['isActive', 'isSelected']),
-)`
+export const Item = styledExcludeProps(styled.span, ['isActive', 'isSelected'])`
   padding: 1px 5px;
   cursor: pointer;
   &:hover {
@@ -89,7 +85,7 @@ export const ItemContainer = styled.div`
   flex-direction: column;
 `;
 
-const MenuContainer = styled.div.withConfig(excludePropsConfig(['position']))`
+const MenuContainer = styledExcludeProps(styled.div, ['position'])`
   outline: 0;
   border-radius: 0 0 4px 4px;
   transition: opacity 0.1s ease;

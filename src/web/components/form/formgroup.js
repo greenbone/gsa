@@ -25,7 +25,7 @@ import {parseInt} from 'gmp/parser';
 
 import Layout from 'web/components/layout/layout';
 import PropTypes from 'web/utils/proptypes';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
 const COLUMNS = [
   '0',
@@ -50,9 +50,7 @@ const FormGroupLayout = styled.div`
   padding-bottom: 10px;
 `;
 
-const Title = styled.label.withConfig(
-  excludePropsConfig(['titleSize', 'titleOffset']),
-)`
+const Title = styledExcludeProps(styled.label, ['titleSize', 'titleOffset'])`
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
@@ -63,9 +61,7 @@ const Title = styled.label.withConfig(
   margin-left: ${props => COLUMNS[props.titleOffset]};
 `;
 
-const FormGroupContent = styled(Layout).withConfig(
-  excludePropsConfig(['size', 'offset']),
-)`
+const FormGroupContent = styledExcludeProps(styled(Layout), ['size', 'offset'])`
   ${props => {
     const ret = {};
     if (isDefined(props.size)) {

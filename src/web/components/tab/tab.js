@@ -23,9 +23,9 @@ import styled from 'styled-components';
 import Theme from 'web/utils/theme.js';
 
 import PropTypes from 'web/utils/proptypes.js';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
-const StyledDiv = styled.div.withConfig(excludePropsConfig(['active']))`
+const StyledDiv = styledExcludeProps(styled.div, ['active'])`
   font-size: 16px;
   display: flex;
   align-items: start;

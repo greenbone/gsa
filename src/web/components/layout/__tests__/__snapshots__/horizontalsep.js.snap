@@ -20,39 +20,17 @@ exports[`HorizontalSep tests should allow to wrap 1`] = `
 }
 
 .c2 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex-wrap: wrap;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c3 {
   margin-left: -5px;
 }
 
-.c3>* {
+.c2>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c3>* {
+.c2>* {
   margin-left: 5px;
 }
 
@@ -63,14 +41,14 @@ exports[`HorizontalSep tests should allow to wrap 1`] = `
   display: inline-flex;
 }
 
-.c4 {
+.c3 {
   -webkit-box-flex-wrap: true;
   -webkit-flex-wrap: true;
   -ms-flex-wrap: true;
   flex-wrap: true;
 }
 
-.c4>*:not(:last-child)::after {
+.c3>*:not(:last-child)::after {
   content: '•';
   margin-left: 5px;
 }
@@ -79,7 +57,7 @@ exports[`HorizontalSep tests should allow to wrap 1`] = `
   class="c0 c1"
 >
   <div
-    class="c2 c3 c4"
+    class="c0 c2 c3"
   />
 </div>
 `;
@@ -245,7 +223,6 @@ exports[`HorizontalSep tests should render with spacing 1`] = `
 >
   <div
     class="c0 c2 c3"
-    spacing="10px"
   />
 </div>
 `;
