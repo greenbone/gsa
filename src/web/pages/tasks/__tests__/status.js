@@ -114,4 +114,46 @@ describe('Task Status tests', () => {
     expect(detailslink).toHaveTextContent('Container');
     expect(detailslink).toHaveAttribute('href', '/report/42');
   });
+
+  test('should render container with status interrupted', () => {
+    const task = Task.fromElement({
+      status: TASK_STATUS.interrupted,
+      permissions: {permission: [{name: 'everything'}]},
+    });
+
+    const {render} = rendererWith({capabilities: caps});
+    const {getByTestId} = render(<Status task={task} />);
+
+    const bar = getByTestId('progressbar-box');
+    expect(bar).toHaveAttribute('title', TASK_STATUS.interrupted);
+    expect(bar).toHaveTextContent(TASK_STATUS.interrupted);
+  });
+
+  test('should render running container task as processing', () => {
+    const task = Task.fromElement({
+      status: TASK_STATUS.running,
+      permissions: {permission: [{name: 'everything'}]},
+    });
+
+    const {render} = rendererWith({capabilities: caps});
+    const {getByTestId} = render(<Status task={task} />);
+
+    const bar = getByTestId('progressbar-box');
+    expect(bar).toHaveAttribute('title', TASK_STATUS.processing);
+    expect(bar).toHaveTextContent(TASK_STATUS.processing);
+  });
+
+  test('should render processing container task as processing', () => {
+    const task = Task.fromElement({
+      status: TASK_STATUS.processing,
+      permissions: {permission: [{name: 'everything'}]},
+    });
+
+    const {render} = rendererWith({capabilities: caps});
+    const {getByTestId} = render(<Status task={task} />);
+
+    const bar = getByTestId('progressbar-box');
+    expect(bar).toHaveAttribute('title', TASK_STATUS.processing);
+    expect(bar).toHaveTextContent(TASK_STATUS.processing);
+  });
 });

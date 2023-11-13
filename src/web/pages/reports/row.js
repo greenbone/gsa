@@ -106,7 +106,9 @@ const Row = ({
   if (isDefined(task)) {
     if (task.isContainer() && status !== TASK_STATUS.processing) {
       status =
-        status === TASK_STATUS.running
+        status === TASK_STATUS.interrupted
+          ? TASK_STATUS.uploadinginterrupted
+          : status === TASK_STATUS.running || status === TASK_STATUS.processing
           ? TASK_STATUS.uploading
           : TASK_STATUS.container;
     }

@@ -64,6 +64,7 @@ export const TASK_STATUS = {
   interrupted: 'Interrupted',
   container: 'Container',
   uploading: 'Uploading',
+  uploadinginterrupted: 'Uploading Interrupted',
   processing: 'Processing',
   done: 'Done',
 };
@@ -84,6 +85,7 @@ const TASK_STATUS_TRANSLATIONS = {
   Done: _l('Done'),
   Queued: _l('Queued'),
   Processing: _l('Processing'),
+  'Uploading Interrupted': _l('Interrupted'),
 };
 /* eslint-disable quote-props */
 
