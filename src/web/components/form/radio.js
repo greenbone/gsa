@@ -23,7 +23,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
 import Divider from 'web/components/layout/divider';
 import withLayout from 'web/components/layout/withLayout';
@@ -37,9 +37,7 @@ export const StyledElement = styled.label`
   ${props => (props.disabled ? {cursor: 'not-allowed'} : undefined)};
 `;
 
-export const StyledInput = styled.input.withConfig(
-  excludePropsConfig(['convert']),
-)`
+export const StyledInput = styledExcludeProps(styled.input, ['convert'])`
   /* use font and line settings from parents not from browser default */
   font-family: inherit;
   font-size: inherit;

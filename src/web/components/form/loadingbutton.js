@@ -20,11 +20,9 @@ import styled from 'styled-components';
 import Button from 'web/components/form/button';
 
 import Theme from 'web/utils/theme';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
-const LoadingButton = styled(Button).withConfig(
-  excludePropsConfig('isLoading'),
-)`
+const LoadingButton = styledExcludeProps(styled(Button), ['isLoading'])`
   color: ${props => (props.isLoading ? 'rgba(0, 0, 0, 0.0)' : Theme.darkGray)};
   background: ${props =>
     props.isLoading

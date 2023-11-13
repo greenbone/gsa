@@ -16,10 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-export const excludePropsConfig = excludedProps => {
+const excludePropsConfig = excludedProps => {
   return {
     shouldForwardProp: prop => {
       return !excludedProps.includes(prop);
     },
   };
 };
+
+export const styledExcludeProps = (styledComponent, excludedProps) =>
+  styledComponent.withConfig(excludePropsConfig(excludedProps));

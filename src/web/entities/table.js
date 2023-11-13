@@ -41,7 +41,7 @@ import StripedTable from 'web/components/table/stripedtable';
 import PropTypes from 'web/utils/proptypes';
 
 import withComponentDefaults from 'web/utils/withComponentDefaults';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
 const exclude_props = [
   'row',
@@ -52,9 +52,9 @@ const exclude_props = [
   'children',
 ];
 
-const UpdatingStripedTable = styled(StripedTable).withConfig(
-  excludePropsConfig(['isUpdating']),
-)`
+const UpdatingStripedTable = styledExcludeProps(styled(StripedTable), [
+  'isUpdating',
+])`
   opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
 `;
 

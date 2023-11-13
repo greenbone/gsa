@@ -24,9 +24,9 @@ import {isDefined, hasValue} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
-const BadgeContainer = styled.div.withConfig(excludePropsConfig('margin'))`
+const BadgeContainer = styledExcludeProps(styled.div, ['margin'])`
   position: relative;
   display: inline-flex;
   margin-right: ${props => props.margin}px;
@@ -34,9 +34,10 @@ const BadgeContainer = styled.div.withConfig(excludePropsConfig('margin'))`
 
 BadgeContainer.displayName = 'BadgeContainer';
 
-const BadgeIcon = styled.span.withConfig(
-  excludePropsConfig(['backgroundColor', 'margin']),
-)`
+const BadgeIcon = styledExcludeProps(styled.span, [
+  'backgroundColor',
+  'margin',
+])`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

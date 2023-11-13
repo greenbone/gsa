@@ -24,7 +24,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import DeleteIcon from 'web/components/icon/deleteicon';
 
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 import PropTypes from 'web/utils/proptypes';
 
 import Theme from 'web/utils/theme';
@@ -33,16 +33,14 @@ import Layout from 'web/components/layout/layout';
 
 import Button from './button';
 
-const Panel = styled(Layout).withConfig(
-  excludePropsConfig(['isWarning', 'noMargin']),
-)`
+const Panel = styledExcludeProps(styled(Layout), ['isWarning', 'noMargin'])`
   background-color: ${Theme.white};
   border: 1px solid
     ${props => (props.isWarning ? Theme.darkRed : Theme.lightBlue)};
   margin-top: ${props => (props.noMargin ? '0px' : '5px')};
 `;
 
-const Heading = styled.div.withConfig(excludePropsConfig(['isWarning']))`
+const Heading = styledExcludeProps(styled.div, ['isWarning'])`
   display: flex;
   justify-content: space-between;
   align-items: center;

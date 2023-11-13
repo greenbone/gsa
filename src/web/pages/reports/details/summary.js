@@ -44,11 +44,9 @@ import TableData from 'web/components/table/data';
 import {Col} from 'web/entity/page';
 
 import PropTypes from 'web/utils/proptypes';
-import {excludePropsConfig} from 'web/utils/styledConfig';
+import {styledExcludeProps} from 'web/utils/styledConfig';
 
-const UpdatingTable = styled(Table).withConfig(
-  excludePropsConfig(['isUpdating']),
-)`
+const UpdatingTable = styledExcludeProps(styled(Table), ['isUpdating'])`
   opacity: ${props => (props.isUpdating ? '0.2' : '1.0')};
 `;
 
