@@ -49,7 +49,16 @@ const TaskStatus = ({task, links = true}) => {
   return (
     <StyledDetailsLink type="report" id={report_id} textOnly={!links}>
       <StatusBar
-        status={task.isContainer() ? TASK_STATUS.container : task.status}
+        status={
+          task.isContainer()
+            ? task.status === TASK_STATUS.interrupted
+              ? TASK_STATUS.uploadinginterrupted
+              : task.status === TASK_STATUS.running ||
+                task.status === TASK_STATUS.processing
+              ? TASK_STATUS.processing
+              : TASK_STATUS.container
+            : task.status
+        }
         progress={task.progress}
       />
     </StyledDetailsLink>
