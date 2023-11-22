@@ -21,6 +21,7 @@ import Capabilities from 'gmp/capabilities/capabilities';
 
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
 import Task, {TASK_STATUS} from 'gmp/models/task';
+import Event from 'gmp/models/event';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
@@ -102,6 +103,50 @@ describe('Task StartIcon component tests', () => {
     expect(element).toHaveAttribute(
       'title',
       'Permission to start audit denied',
+    );
+    expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
+      modifier: `svg path`,
+    });
+  });
+
+  test('should render in inactive state if task is scheduled with a duration limit', () => {
+    const caps = new Capabilities(['everything']);
+    const icalendar = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
+BEGIN:VEVENT
+UID:c35f82f1-7798-4b84-b2c4-761a33068956
+DTSTAMP:20190715T124352Z
+DTSTART:20190716T040000
+DTEND:20190716T050000
+END:VEVENT
+END:VCALENDAR
+`;
+
+    const task = Task.fromElement({
+      status: TASK_STATUS.new,
+      target: {_id: '123'},
+      permissions: {permission: [{name: 'everything'}]},
+      schedule: {
+        _id: 'schedule1',
+        event: Event.fromIcal(icalendar, 'UTC'),
+      },
+    });
+    const clickHandler = jest.fn();
+
+    const {render} = rendererWith({capabilities: caps});
+
+    const {element} = render(<StartIcon task={task} />);
+
+    expect(caps.mayOp('start_task')).toEqual(true);
+    expect(task.userCapabilities.mayOp('start_task')).toEqual(true);
+
+    fireEvent.click(element);
+
+    expect(clickHandler).not.toHaveBeenCalled();
+    expect(element).toHaveAttribute(
+      'title',
+      'Task cannot be started manually because the assigned schedule has a duration limit',
     );
     expect(element).toHaveStyleRule('fill', Theme.inputBorderGray, {
       modifier: `svg path`,
