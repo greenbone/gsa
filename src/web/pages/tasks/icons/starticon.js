@@ -20,6 +20,7 @@ import React from 'react';
 import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
+import {isDefined} from 'gmp/utils/identity';
 import {capitalizeFirstLetter} from 'gmp/utils/string';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -43,6 +44,24 @@ const TaskStartIcon = ({
       <StartIcon
         active={false}
         title={_('Permission to start {{usageType}} denied', {usageType})}
+      />
+    );
+  }
+
+  if (
+    isDefined(task.schedule) &&
+    task.schedule?.event?.event?.duration?.toSeconds() > 0
+  ) {
+    return (
+      <StartIcon
+        active={false}
+        title={_(
+          '{{usageType}} cannot be started manually' +
+            ' because the assigned schedule has a duration limit',
+          {
+            usageType: capitalizeFirstLetter(usageType),
+          },
+        )}
       />
     );
   }

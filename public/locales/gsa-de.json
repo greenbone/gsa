@@ -1918,6 +1918,7 @@
   "{{title}} {{filtered}} of {{all}}": "{{title}} {{filtered}} von {{all}}",
   "{{type}} owned by {{owner}}": "{{type}} gehört {{owner}}",
   "{{type}}:unnamed": "{{type}}:unbenannt",
+  "{{usageType}} cannot be started manually because the assigned schedule has a duration limit": "{{usageType}} kann nicht manuell gestartet werden, da ein Zeitplan mit Laufzeitbegrenzung zugewiesen ist",
   "{{usageType}} is a container": "{{usageType}} ist Container-{{usageType}}",
   "{{usageType}} is already active": "{{usageType}} ist bereits aktiv",
   "{{usageType}} is not stopped": "{{usageType}} ist nicht gestoppt",
