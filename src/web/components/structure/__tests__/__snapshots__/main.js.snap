@@ -16,8 +16,8 @@ exports[`Main tests should render main 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
 }
 

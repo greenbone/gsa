@@ -12,6 +12,10 @@ exports[`SolutionTypeIcon component tests should render correct image 1`] = `
   width: inherit;
 }
 
+@media print {
+
+}
+
 <span
   alt="Workaround"
   class="c0"
@@ -26,7 +30,13 @@ exports[`SolutionTypeIcon component tests should render correct image 1`] = `
 </span>
 `;
 
-exports[`SolutionTypeIcon component tests should render correct image 2`] = `<span />`;
+exports[`SolutionTypeIcon component tests should render correct image 2`] = `
+@media print {
+
+}
+
+<span />
+`;
 
 exports[`SolutionTypeIcon component tests should render correct image 3`] = `
 .c0 {
@@ -38,6 +48,10 @@ exports[`SolutionTypeIcon component tests should render correct image 3`] = `
 .c0 * {
   height: inherit;
   width: inherit;
+}
+
+@media print {
+
 }
 
 <span
@@ -66,6 +80,10 @@ exports[`SolutionTypeIcon component tests should render correct image 4`] = `
   width: inherit;
 }
 
+@media print {
+
+}
+
 <span
   alt="Vendorfix"
   class="c0"
@@ -90,6 +108,10 @@ exports[`SolutionTypeIcon component tests should render correct image 5`] = `
 .c0 * {
   height: inherit;
   width: inherit;
+}
+
+@media print {
+
 }
 
 <span
@@ -118,6 +140,10 @@ exports[`SolutionTypeIcon component tests should render correct image 6`] = `
   width: inherit;
 }
 
+@media print {
+
+}
+
 <span
   alt="Workaround"
   class="c0"
@@ -144,6 +170,10 @@ exports[`SolutionTypeIcon component tests should render correct image 7`] = `
   width: inherit;
 }
 
+@media print {
+
+}
+
 <span
   alt=""
   class="c0"
@@ -158,4 +188,10 @@ exports[`SolutionTypeIcon component tests should render correct image 7`] = `
 </span>
 `;
 
-exports[`SolutionTypeIcon component tests should render correct image 8`] = `<span />`;
+exports[`SolutionTypeIcon component tests should render correct image 8`] = `
+@media print {
+
+}
+
+<span />
+`;

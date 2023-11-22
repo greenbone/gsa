@@ -27,8 +27,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import App from './web/app.js';
 
-import {StyleSheetManager} from 'styled-components';
-
 const config = isDefined(global.config) ? global.config : {};
 const {sentryDSN, sentryEnvironment} = config;
 
@@ -40,11 +38,6 @@ Sentry.init({
   release: GSA_VERSION,
 });
 
-ReactDOM.render(
-  <StyleSheetManager enableVendorPrefixes>
-    <App />
-  </StyleSheetManager>,
-  document.getElementById('app'),
-);
+ReactDOM.render(<App />, document.getElementById('app'));
 
 // vim: set ts=2 sw=2 tw=80:

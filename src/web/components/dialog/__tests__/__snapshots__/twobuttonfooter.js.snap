@@ -13,8 +13,8 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
   -ms-flex-negative: 0;
   flex-shrink: 0;
   -webkit-box-pack: end;
-  -ms-flex-pack: end;
   -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
   justify-content: flex-end;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -83,8 +83,8 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -98,7 +98,7 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
   background: #11ab51;
 }
 
-.c5 :hover {
+.c5:hover {
   color: #074320;
   background: #A1DDBA;
 }
@@ -114,6 +114,7 @@ exports[`DialogTwoButtonFooter tests should render 1`] = `
 .c2 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
 }
 
@@ -150,8 +151,8 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
   -ms-flex-negative: 0;
   flex-shrink: 0;
   -webkit-box-pack: end;
-  -ms-flex-pack: end;
   -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
   justify-content: flex-end;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -220,8 +221,8 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -235,19 +236,19 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
   background: #11ab51;
 }
 
-.c5 :hover {
+.c5:hover {
   color: #074320;
   background: #A1DDBA;
 }
 
 .c6 {
   border: 1px solid #7F7F7F;
-  color: rgba(0, 0, 0, 0.0);
+  color: rgba(0,0,0,0.0);
   background: #11ab51 url(/img/loading.gif) center center no-repeat;
 }
 
-.c6 :hover {
-  color: rgba(0, 0, 0, 0.0);
+.c6:hover {
+  color: rgba(0,0,0,0.0);
   background: #11ab51 url(/img/loading.gif) center center no-repeat;
 }
 
@@ -262,6 +263,7 @@ exports[`DialogTwoButtonFooter tests should render loading and disable cancel bu
 .c2 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
 }
 

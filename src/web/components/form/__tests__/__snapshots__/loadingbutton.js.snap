@@ -62,8 +62,8 @@ exports[`LoadingButton tests should render loading 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -72,12 +72,12 @@ exports[`LoadingButton tests should render loading 1`] = `
 }
 
 .c2 {
-  color: rgba(0, 0, 0, 0.0);
+  color: rgba(0,0,0,0.0);
   background: #A1DDBA url(/img/loading.gif) center center no-repeat;
 }
 
-.c2 :hover {
-  color: rgba(0, 0, 0, 0.0);
+.c2:hover {
+  color: rgba(0,0,0,0.0);
   background: #11ab51 url(/img/loading.gif) center center no-repeat;
 }
 
@@ -148,8 +148,8 @@ exports[`LoadingButton tests should render non loading 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -162,7 +162,7 @@ exports[`LoadingButton tests should render non loading 1`] = `
   background: #fff;
 }
 
-.c2 :hover {
+.c2:hover {
   color: #fff;
   background: #11ab51;
 }

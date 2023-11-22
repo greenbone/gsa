@@ -14,8 +14,8 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
 }
 
@@ -29,6 +29,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   flex-direction: row;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
   -webkit-align-items: flex-start;
   -webkit-box-align: flex-start;
@@ -45,280 +46,31 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-}
-
-.c10 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  justify-content: space-between;
-  -webkit-align-items: flex-end;
-  -webkit-box-align: flex-end;
-  -ms-flex-align: flex-end;
-  align-items: flex-end;
-}
-
-.c14 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: flex-start;
-  justify-content: flex-start;
-  -webkit-align-items: flex-end;
-  -webkit-box-align: flex-end;
-  -ms-flex-align: flex-end;
-  align-items: flex-end;
-}
-
-.c18 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  justify-content: space-between;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c19 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: flex-start;
-  justify-content: flex-start;
-}
-
-.c21 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c22 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: flex-start;
-  justify-content: flex-start;
-  -webkit-align-items: flex-end;
-  -webkit-box-align: flex-end;
-  -ms-flex-align: flex-end;
-  align-items: flex-end;
-}
-
-.c24 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: flex-start;
-  justify-content: flex-start;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c27 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c29 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-}
-
-.c34 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex-wrap: wrap;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c8 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4 {
-  margin-left: -10px;
-}
-
-.c4>* {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c4>* {
-  margin-left: 10px;
-}
-
-.c5 {
-  margin-left: -5px;
-}
-
-.c5>* {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c5>* {
-  margin-left: 5px;
-}
-
-.c3 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
 }
 
 .c9 {
-  cursor: pointer;
-}
-
-.c7 {
-  height: 16px;
-  width: 16px;
-  line-height: 16px;
-}
-
-.c7 * {
-  height: inherit;
-  width: inherit;
-}
-
-.c16 {
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
-}
-
-.c16 * {
-  height: inherit;
-  width: inherit;
-}
-
-.c11 {
-  margin: 10px 0px;
-  padding-bottom: 1px;
-  border-bottom: 2px solid #e5e5e5;
-  position: relative;
-}
-
-.c12 {
-  margin: 0 0 1px 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
 }
 
 .c13 {
@@ -330,8 +82,102 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+}
+
+.c17 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c18 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+}
+
+.c20 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c21 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: flex-end;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+}
+
+.c23 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -339,16 +185,172 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   align-items: stretch;
 }
 
+.c26 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c28 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c33 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: start;
+  -webkit-justify-content: start;
+  -ms-flex-pack: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c7 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 {
+  margin-left: -10px;
+}
+
+.c4 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c4 > * {
+  margin-left: 10px;
+}
+
+.c5 {
+  margin-left: -5px;
+}
+
+.c5 > * {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c5 > * {
+  margin-left: 5px;
+}
+
+.c3 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c8 {
+  cursor: pointer;
+}
+
+.c6 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c6 * {
+  height: inherit;
+  width: inherit;
+}
+
 .c15 {
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+}
+
+.c15 * {
+  height: inherit;
+  width: inherit;
+}
+
+.c10 {
+  margin: 10px 0px;
+  padding-bottom: 1px;
+  border-bottom: 2px solid #e5e5e5;
+  position: relative;
+}
+
+.c11 {
+  margin: 0 0 1px 0;
+}
+
+.c12 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c14 {
   margin-right: 5px;
 }
 
-.c17 {
+.c16 {
   word-break: break-all;
   min-width: 100px;
 }
 
-.c25 {
+.c24 {
   font-size: 16px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -375,15 +377,15 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #11ab51;
 }
 
-.c25 :hover {
+.c24:hover {
   border-top: 2px solid #fff;
 }
 
-.c25 :first-child {
+.c24:first-child {
   border-left: 1px solid #e5e5e5;
 }
 
-.c26 {
+.c25 {
   font-size: 16px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -407,21 +409,21 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #fff;
 }
 
-.c26 :hover {
+.c25:hover {
   border-top: 2px solid #e5e5e5;
 }
 
-.c26 :first-child {
+.c25:first-child {
   border-left: 1px solid #fff;
 }
 
-.c23 {
+.c22 {
   border-bottom: 2px solid #11ab51;
   margin-top: 30px;
   margin-bottom: 15px;
 }
 
-.c30 {
+.c29 {
   border: 0;
   border-spacing: 0px;
   font-size: 12px;
@@ -429,48 +431,52 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   table-layout: auto;
 }
 
-.c31 td {
+.c30 td {
   padding: 4px 4px 4px 0;
 }
 
-.c31 tr td:first-child {
+.c30 tr td:first-child {
   padding-right: 5px;
 }
 
-.c20 {
+.c19 {
   border-spacing: 0px;
   color: #7F7F7F;
   font-size: 10px;
 }
 
-.c20 :nth-child(even) {
+.c19 :nth-child(even) {
   margin-left: 3px;
 }
 
-.c20 :nth-child(odd) {
+.c19 :nth-child(odd) {
   margin-left: 30px;
 }
 
-.c32 {
+.c31 {
   width: 10%;
 }
 
-.c33 {
+.c32 {
   width: 90%;
 }
 
-.c28 {
+.c27 {
   font-size: 0.7em;
 }
 
 @media print {
-  .c6 {
+
+}
+
+@media print {
+  .c8 {
     display: none;
   }
 }
 
 @media print {
-  .c30 {
+  .c29 {
     border-collapse: collapse;
   }
 }
@@ -499,7 +505,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               target="_blank"
             >
               <span
-                class="c6 c7"
+                class="c6"
                 data-testid="svg-icon"
                 title="Help: Policies"
               >
@@ -511,11 +517,11 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               </span>
             </a>
             <a
-              class="c8"
+              class="c7"
               href="/policies"
             >
               <span
-                class="c6 c7"
+                class="c6"
                 data-testid="svg-icon"
                 title="Policies List"
               >
@@ -535,7 +541,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
             class="c2 c5"
           >
             <span
-              class="c6 c9 c7"
+              class="c8 c6"
               data-testid="svg-icon"
               title="Clone Policy"
             >
@@ -546,7 +552,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c6 c9 c7"
+              class="c8 c6"
               data-testid="svg-icon"
               title="Edit Policy"
             >
@@ -557,7 +563,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c6 c9 c7"
+              class="c8 c6"
               data-testid="svg-icon"
               title="Move Policy to trashcan"
             >
@@ -568,7 +574,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               </svg>
             </span>
             <span
-              class="c6 c9 c7"
+              class="c8 c6"
               data-testid="svg-icon"
               title="Export Policy as XML"
             >
@@ -587,16 +593,16 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
     class="entity-section"
   >
     <div
-      class="c10 c11 section-header"
+      class="c9 c10 section-header"
     >
       <h2
-        class="c12 c13"
+        class="c11 c12"
       >
         <div
-          class="c14 c15"
+          class="c13 c14"
         >
           <span
-            class="c6 c16"
+            class="c15"
             data-testid="svg-icon"
           >
             <svg>
@@ -605,19 +611,19 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
           </span>
         </div>
         <div
-          class="c14 c17"
+          class="c13 c16"
         >
           Policy: foo
         </div>
       </h2>
       <div
-        class="c18"
+        class="c17"
       >
         <div
-          class="c19"
+          class="c18"
         >
           <div
-            class="c2 c20"
+            class="c2 c19"
           >
             <div>
               ID:
@@ -648,30 +654,30 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
       </div>
     </div>
     <div
-      class="c21"
+      class="c20"
     >
       <div
-        class="c22 c23"
+        class="c21 c22"
       >
         <div
-          class="c24"
+          class="c23"
         >
           <div
-            class="c25"
+            class="c24"
           >
             Information
           </div>
           <div
-            class="c26"
+            class="c25"
           >
             <div
-              class="c27"
+              class="c26"
             >
               <span>
                 Scanner Preferences
               </span>
               <span
-                class="c28"
+                class="c27"
               >
                 (
                 <i>
@@ -682,16 +688,16 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
             </div>
           </div>
           <div
-            class="c26"
+            class="c25"
           >
             <div
-              class="c27"
+              class="c26"
             >
               <span>
                 NVT Families
               </span>
               <span
-                class="c28"
+                class="c27"
               >
                 (
                 <i>
@@ -702,16 +708,16 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
             </div>
           </div>
           <div
-            class="c26"
+            class="c25"
           >
             <div
-              class="c27"
+              class="c26"
             >
               <span>
                 NVT Preferences
               </span>
               <span
-                class="c28"
+                class="c27"
               >
                 (
                 <i>
@@ -722,16 +728,16 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
             </div>
           </div>
           <div
-            class="c26"
+            class="c25"
           >
             <div
-              class="c27"
+              class="c26"
             >
               <span>
                 Permissions
               </span>
               <span
-                class="c28"
+                class="c27"
               >
                 (
                 <i>
@@ -744,21 +750,21 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
         </div>
       </div>
       <div
-        class="c29"
+        class="c28"
       >
         <div
-          class="c21"
+          class="c20"
         >
           <table
-            class="c30 c31"
+            class="c29 c30"
           >
             <colgroup>
               <col
-                class="c32"
+                class="c31"
                 width="10%"
               />
               <col
-                class="c33"
+                class="c32"
                 width="90%"
               />
             </colgroup>
@@ -768,14 +774,14 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               <tr>
                 <td>
                   <div
-                    class="c29"
+                    class="c28"
                   >
                     Comment
                   </div>
                 </td>
                 <td>
                   <div
-                    class="c29"
+                    class="c28"
                   >
                     bar
                   </div>
@@ -784,23 +790,23 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
               <tr>
                 <td>
                   <div
-                    class="c29"
+                    class="c28"
                   >
                     Audits using this Policy
                   </div>
                 </td>
                 <td>
                   <div
-                    class="c29"
+                    class="c28"
                   >
                     <div
                       class="c2 c3"
                     >
                       <div
-                        class="c34 c5"
+                        class="c33 c5"
                       >
                         <a
-                          class="c8"
+                          class="c7"
                           data-testid="details-link"
                           href="/audit/1234"
                         >
@@ -808,7 +814,7 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
                         </a>
                         ,
                         <a
-                          class="c8"
+                          class="c7"
                           data-testid="details-link"
                           href="/audit/5678"
                         >
@@ -838,8 +844,8 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -847,7 +853,7 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
   align-items: center;
 }
 
-.c6 {
+.c5 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -858,14 +864,14 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
   margin-left: -10px;
 }
 
-.c2>* {
+.c2 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c2>* {
+.c2 > * {
   margin-left: 10px;
 }
 
@@ -873,14 +879,14 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
   margin-left: -5px;
 }
 
-.c3>* {
+.c3 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c3>* {
+.c3 > * {
   margin-left: 5px;
 }
 
@@ -891,23 +897,27 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
   display: inline-flex;
 }
 
-.c7 {
+.c6 {
   cursor: pointer;
 }
 
-.c5 {
+.c4 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c5 * {
+.c4 * {
   height: inherit;
   width: inherit;
 }
 
 @media print {
-  .c4 {
+
+}
+
+@media print {
+  .c6 {
     display: none;
   }
 }
@@ -930,7 +940,7 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           target="_blank"
         >
           <span
-            class="c4 c5"
+            class="c4"
             data-testid="svg-icon"
             title="Help: Policies"
           >
@@ -942,11 +952,11 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           </span>
         </a>
         <a
-          class="c6"
+          class="c5"
           href="/policies"
         >
           <span
-            class="c4 c5"
+            class="c4"
             data-testid="svg-icon"
             title="Policies List"
           >
@@ -966,7 +976,7 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
         class="c0 c3"
       >
         <span
-          class="c4 c7 c5"
+          class="c6 c4"
           data-testid="svg-icon"
           title="Clone Policy"
         >
@@ -977,7 +987,7 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c4 c7 c5"
+          class="c6 c4"
           data-testid="svg-icon"
           title="Edit Policy"
         >
@@ -988,7 +998,7 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c4 c7 c5"
+          class="c6 c4"
           data-testid="svg-icon"
           title="Move Policy to trashcan"
         >
@@ -999,7 +1009,7 @@ exports[`Policy ToolBarIcons tests should render 1`] = `
           </svg>
         </span>
         <span
-          class="c4 c7 c5"
+          class="c6 c4"
           data-testid="svg-icon"
           title="Export Policy as XML"
         >

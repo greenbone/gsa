@@ -10,8 +10,8 @@ exports[`Row tests should render 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -29,6 +29,7 @@ exports[`Row tests should render 1`] = `
   flex-direction: row;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
 }
 
@@ -45,8 +46,8 @@ exports[`Row tests should render 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -67,8 +68,8 @@ exports[`Row tests should render 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -89,8 +90,8 @@ exports[`Row tests should render 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -102,14 +103,14 @@ exports[`Row tests should render 1`] = `
   margin-left: -5px;
 }
 
-.c7>* {
+.c7 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c7>* {
+.c7 > * {
   margin-left: 5px;
 }
 
@@ -120,17 +121,17 @@ exports[`Row tests should render 1`] = `
   display: inline-flex;
 }
 
-.c9 {
+.c8 {
   cursor: pointer;
 }
 
-.c10 {
+.c9 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c10 * {
+.c9 * {
   height: inherit;
   width: inherit;
 }
@@ -142,7 +143,7 @@ exports[`Row tests should render 1`] = `
   color: #0a53b8;
 }
 
-.c2 :hover {
+.c2:hover {
   -webkit-text-decoration: underline;
   text-decoration: underline;
   color: #0a53b8;
@@ -206,7 +207,7 @@ exports[`Row tests should render 1`] = `
               class="c6 c7"
             >
               <span
-                class="c8 c9 c10"
+                class="c8 c9"
                 data-testid="svg-icon"
                 title="Move Policy to trashcan"
               >
@@ -217,7 +218,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9 c10"
+                class="c8 c9"
                 data-testid="svg-icon"
                 title="Edit Policy"
               >
@@ -228,7 +229,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9 c10"
+                class="c8 c9"
                 data-testid="svg-icon"
                 title="Clone Policy"
               >
@@ -239,7 +240,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9 c10"
+                class="c8 c9"
                 data-testid="svg-icon"
                 title="Create Audit from Policy"
               >
@@ -250,7 +251,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9 c10"
+                class="c8 c9"
                 data-testid="svg-icon"
                 title="Export Policy"
               >

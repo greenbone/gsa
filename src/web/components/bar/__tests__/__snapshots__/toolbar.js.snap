@@ -11,6 +11,7 @@ exports[`Toolbar tests should render 1`] = `
   flex-direction: row;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
   -webkit-align-items: flex-start;
   -webkit-box-align: flex-start;

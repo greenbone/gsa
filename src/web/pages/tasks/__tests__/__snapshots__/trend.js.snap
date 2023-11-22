@@ -12,6 +12,10 @@ exports[`Task Trend tests should render 1`] = `
   width: inherit;
 }
 
+@media print {
+
+}
+
 <span
   alt="Severity increased"
   class="c0"

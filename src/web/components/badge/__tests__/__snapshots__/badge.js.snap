@@ -29,13 +29,12 @@ exports[`Badge tests should render badge 1`] = `
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-content: center;
   -ms-flex-line-pack: center;
@@ -56,6 +55,10 @@ exports[`Badge tests should render badge 1`] = `
   color: #fff;
   bottom: -8px;
   right: 0px;
+}
+
+@media print {
+
 }
 
 <div

@@ -11,6 +11,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   flex-direction: row;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -31,8 +32,8 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: flex-start;
   -webkit-box-align: flex-start;
@@ -49,8 +50,8 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -67,8 +68,8 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -85,8 +86,8 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -94,7 +95,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   align-items: center;
 }
 
-.c29 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -106,8 +107,8 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -ms-flex-negative: 0;
   flex-shrink: 0;
   -webkit-box-pack: end;
-  -ms-flex-pack: end;
   -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
   justify-content: flex-end;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -119,14 +120,14 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   margin-left: -5px;
 }
 
-.c16>* {
+.c16 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c16>* {
+.c16 > * {
   margin-left: 5px;
 }
 
@@ -137,17 +138,17 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   display: inline-flex;
 }
 
-.c27 {
+.c26 {
   cursor: pointer;
 }
 
-.c28 {
+.c27 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c28 * {
+.c27 * {
   height: inherit;
   width: inherit;
 }
@@ -177,7 +178,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   bottom: 0;
   left: 0;
   margin: 0;
-  background: rgba(102, 102, 102, 0.5);
+  background: rgba(102,102,102,0.5);
   z-index: 600;
   -webkit-transition: opacity 1s ease-in;
   transition: opacity 1s ease-in;
@@ -185,7 +186,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   height: 100%;
 }
 
-.c36 {
+.c35 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -194,13 +195,13 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   border-top: 20px solid #fff;
 }
 
-.c35 {
+.c34 {
   position: absolute;
   bottom: 3px;
   right: 3px;
   width: 20px;
   height: 20px;
-  background: repeating-linear-gradient(     -45deg,     transparent,     transparent 2px,     #000 2px,     #000 3px   );
+  background: repeating-linear-gradient( -45deg, transparent, transparent 2px, #000 2px, #000 3px );
 }
 
 .c2 {
@@ -236,15 +237,15 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 
-.c5 :hover {
+.c5:hover {
   border: 1px solid #074320;
 }
 
@@ -259,7 +260,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   width: inherit;
 }
 
-.c32 {
+.c31 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -279,12 +280,12 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   z-index: 1;
 }
 
-.c32:focus,
-.c32:hover {
+.c31:focus,
+.c31:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c32:hover {
+.c31:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -292,26 +293,26 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   color: #fff;
 }
 
-.c32[disabled] {
+.c31[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c32 img {
+.c31 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c32:link {
+.c31:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c33 {
+.c32 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -320,8 +321,8 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -329,18 +330,18 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   align-items: center;
 }
 
-.c34 {
+.c33 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c34 :hover {
+.c33:hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c30 {
+.c29 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -348,9 +349,10 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   padding: 10px 20px 10px 20px;
 }
 
-.c31 {
+.c30 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
 }
 
@@ -368,11 +370,13 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   align-items: center;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
   cursor: -webkit-grab;
+  cursor: -moz-grab;
   cursor: grab;
 }
 
@@ -399,8 +403,8 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   padding-bottom: 10px;
 }
@@ -435,8 +439,8 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   outline: none;
   margin: 1px;
@@ -647,7 +651,7 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
                             </div>
                           </div>
                           <span
-                            class="c26 c27 c28"
+                            class="c26 c27"
                             data-testid="svg-icon"
                             title="Create a new Tag"
                           >
@@ -693,17 +697,17 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
               </div>
             </div>
             <div
-              class="c29 c30 c31"
+              class="c28 c29 c30"
             >
               <button
-                class="c32 c33 c34"
+                class="c31 c32 c33"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c32 c33 c34"
+                class="c31 c32 c33"
                 data-testid="dialog-save-button"
                 title="Add Tag"
               >
@@ -712,10 +716,10 @@ exports[`TagsDialog dialog component tests should disable tag selection when no 
             </div>
           </div>
           <div
-            class="c35"
+            class="c34"
           >
             <div
-              class="c36"
+              class="c35"
             />
           </div>
         </div>
@@ -737,6 +741,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   flex-direction: row;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -757,8 +762,8 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   -ms-flex-positive: 1;
   flex-grow: 1;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: flex-start;
   -webkit-box-align: flex-start;
@@ -775,8 +780,8 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -793,8 +798,8 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -811,8 +816,8 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -820,7 +825,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c29 {
+.c28 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -832,8 +837,8 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   -ms-flex-negative: 0;
   flex-shrink: 0;
   -webkit-box-pack: end;
-  -ms-flex-pack: end;
   -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
   justify-content: flex-end;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -845,14 +850,14 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   margin-left: -5px;
 }
 
-.c16>* {
+.c16 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c16>* {
+.c16 > * {
   margin-left: 5px;
 }
 
@@ -863,17 +868,17 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   display: inline-flex;
 }
 
-.c27 {
+.c26 {
   cursor: pointer;
 }
 
-.c28 {
+.c27 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c28 * {
+.c27 * {
   height: inherit;
   width: inherit;
 }
@@ -903,7 +908,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   bottom: 0;
   left: 0;
   margin: 0;
-  background: rgba(102, 102, 102, 0.5);
+  background: rgba(102,102,102,0.5);
   z-index: 600;
   -webkit-transition: opacity 1s ease-in;
   transition: opacity 1s ease-in;
@@ -911,7 +916,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c36 {
+.c35 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -920,13 +925,13 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c35 {
+.c34 {
   position: absolute;
   bottom: 3px;
   right: 3px;
   width: 20px;
   height: 20px;
-  background: repeating-linear-gradient(     -45deg,     transparent,     transparent 2px,     #000 2px,     #000 3px   );
+  background: repeating-linear-gradient( -45deg, transparent, transparent 2px, #000 2px, #000 3px );
 }
 
 .c2 {
@@ -962,15 +967,15 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
 }
 
-.c5 :hover {
+.c5:hover {
   border: 1px solid #074320;
 }
 
@@ -985,7 +990,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c32 {
+.c31 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -1005,12 +1010,12 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c32:focus,
-.c32:hover {
+.c31:focus,
+.c31:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c32:hover {
+.c31:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -1018,26 +1023,26 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c32[disabled] {
+.c31[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c32 img {
+.c31 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c32:link {
+.c31:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c33 {
+.c32 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1046,8 +1051,8 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -1055,18 +1060,18 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c34 {
+.c33 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c34 :hover {
+.c33:hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c30 {
+.c29 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -1074,9 +1079,10 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   padding: 10px 20px 10px 20px;
 }
 
-.c31 {
+.c30 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
 }
 
@@ -1094,11 +1100,13 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   align-items: center;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
   cursor: -webkit-grab;
+  cursor: -moz-grab;
   cursor: grab;
 }
 
@@ -1125,8 +1133,8 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   padding-bottom: 10px;
 }
@@ -1161,8 +1169,8 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   outline: none;
   margin: 1px;
@@ -1370,7 +1378,7 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
                             </div>
                           </div>
                           <span
-                            class="c26 c27 c28"
+                            class="c26 c27"
                             data-testid="svg-icon"
                             title="Create a new Tag"
                           >
@@ -1416,17 +1424,17 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c29 c30 c31"
+              class="c28 c29 c30"
             >
               <button
-                class="c32 c33 c34"
+                class="c31 c32 c33"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c32 c33 c34"
+                class="c31 c32 c33"
                 data-testid="dialog-save-button"
                 title="Add Tag"
               >
@@ -1435,10 +1443,10 @@ exports[`TagsDialog dialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c35"
+            class="c34"
           >
             <div
-              class="c36"
+              class="c35"
             />
           </div>
         </div>

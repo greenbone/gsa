@@ -28,8 +28,8 @@ exports[`Field tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -39,6 +39,7 @@ exports[`Field tests should render 1`] = `
 
 <input
   class="c0 c1"
+  value=""
 />
 `;
 
@@ -73,8 +74,8 @@ exports[`Field tests should render in disabled state 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -85,5 +86,6 @@ exports[`Field tests should render in disabled state 1`] = `
 <input
   class="c0 c1"
   disabled=""
+  value=""
 />
 `;

@@ -10,8 +10,8 @@ exports[`StartTimeSelection tests should render 1`] = `
   -ms-flex-direction: column;
   flex-direction: column;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: stretch;
   -webkit-box-align: stretch;
@@ -28,8 +28,8 @@ exports[`StartTimeSelection tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -41,14 +41,14 @@ exports[`StartTimeSelection tests should render 1`] = `
   margin-top: -5px;
 }
 
-.c6>* {
+.c6 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c6>* {
+.c6 > * {
   margin-top: 5px;
 }
 
@@ -56,14 +56,14 @@ exports[`StartTimeSelection tests should render 1`] = `
   margin-left: -20px;
 }
 
-.c10>* {
+.c10 > * {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c10>* {
+.c10 > * {
   margin-left: 20px;
 }
 
@@ -146,8 +146,8 @@ exports[`StartTimeSelection tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
   -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -165,8 +165,8 @@ exports[`StartTimeSelection tests should render 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   padding-bottom: 10px;
 }
@@ -270,7 +270,7 @@ exports[`StartTimeSelection tests should render 1`] = `
   margin-left: 5px;
 }
 
-.c9 :hover {
+.c9:hover {
   cursor: pointer;
 }
 
@@ -281,6 +281,10 @@ exports[`StartTimeSelection tests should render 1`] = `
   display: flex;
   margin-right: 5px;
   width: auto;
+}
+
+@media print {
+
 }
 
 <div

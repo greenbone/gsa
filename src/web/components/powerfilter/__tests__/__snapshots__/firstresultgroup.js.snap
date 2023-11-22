@@ -10,8 +10,8 @@ exports[`FirstresultGroup tests should render 1`] = `
   -ms-flex-direction: row;
   flex-direction: row;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -29,8 +29,8 @@ exports[`FirstresultGroup tests should render 1`] = `
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: start;
-  -ms-flex-pack: start;
   -webkit-justify-content: start;
+  -ms-flex-pack: start;
   justify-content: start;
   padding-bottom: 10px;
 }

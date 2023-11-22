@@ -16,7 +16,7 @@ exports[`Diff component tests should render 1`] = `
 }
 
 .c1 {
-  color: rgba(0, 0, 0, 0.3);
+  color: rgba(0,0,0,0.3);
 }
 
 <div>
