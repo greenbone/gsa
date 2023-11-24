@@ -47,13 +47,13 @@ const StyledDiv = styledExcludeProps(styled.div, ['active'])`
   margin-bottom: ${props => (props.active ? '-2px' : undefined)};
   border-top: ${props =>
     props.active ? '2px solid ' + Theme.green : '2px solid ' + Theme.white};
-  :hover {
+  &:hover {
     border-top: ${props =>
       props.active
-        ? '2px solid ' + Theme.white
+        ? '2px solid ' + Theme.green
         : '2px solid ' + Theme.lightGray};
   }
-  :first-child {
+  &:first-child {
     border-left: ${props =>
       props.active
         ? '1px solid ' + Theme.lightGray
