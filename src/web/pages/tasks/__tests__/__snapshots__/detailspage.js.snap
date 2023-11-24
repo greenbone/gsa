@@ -397,11 +397,11 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #11ab51;
 }
 
-.c35 :hover {
-  border-top: 2px solid #fff;
+.c35:hover {
+  border-top: 2px solid #11ab51;
 }
 
-.c35 :first-child {
+.c35:first-child {
   border-left: 1px solid #e5e5e5;
 }
 
@@ -429,11 +429,11 @@ exports[`Task Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #fff;
 }
 
-.c36 :hover {
+.c36:hover {
   border-top: 2px solid #e5e5e5;
 }
 
-.c36 :first-child {
+.c36:first-child {
   border-left: 1px solid #fff;
 }
 

@@ -375,11 +375,11 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #11ab51;
 }
 
-.c25 :hover {
-  border-top: 2px solid #fff;
+.c25:hover {
+  border-top: 2px solid #11ab51;
 }
 
-.c25 :first-child {
+.c25:first-child {
   border-left: 1px solid #e5e5e5;
 }
 
@@ -407,11 +407,11 @@ exports[`Policy Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #fff;
 }
 
-.c26 :hover {
+.c26:hover {
   border-top: 2px solid #e5e5e5;
 }
 
-.c26 :first-child {
+.c26:first-child {
   border-left: 1px solid #fff;
 }
 

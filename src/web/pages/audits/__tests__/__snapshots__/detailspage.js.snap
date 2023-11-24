@@ -375,11 +375,11 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #11ab51;
 }
 
-.c29 :hover {
-  border-top: 2px solid #fff;
+.c29:hover {
+  border-top: 2px solid #11ab51;
 }
 
-.c29 :first-child {
+.c29:first-child {
   border-left: 1px solid #e5e5e5;
 }
 
@@ -407,11 +407,11 @@ exports[`Audit Detailspage tests should render full Detailspage 1`] = `
   border-top: 2px solid #fff;
 }
 
-.c30 :hover {
+.c30:hover {
   border-top: 2px solid #e5e5e5;
 }
 
-.c30 :first-child {
+.c30:first-child {
   border-left: 1px solid #fff;
 }
 
