@@ -22,8 +22,6 @@ import {isDefined} from 'gmp/utils/identity';
 import FilterTerm from 'gmp/models/filter/filterterm';
 import Filter from 'gmp/models/filter';
 
-import {NA_VALUE} from 'web/utils/severity';
-
 import PropTypes from 'web/utils/proptypes';
 
 import DonutChart from 'web/components/chart/donut';
@@ -67,8 +65,6 @@ class SeverityClassDisplay extends React.Component {
       let severityTerm;
       if (start > 0) {
         severityTerm = FilterTerm.fromString(`severity>${start}`);
-      } else if (start === NA_VALUE) {
-        severityTerm = FilterTerm.fromString('severity=""');
       } else {
         severityTerm = FilterTerm.fromString(`severity=${start}`);
       }
