@@ -116,7 +116,7 @@ const transformCvssData = (data = {}) => {
           start: value,
         };
         toolTip = `10.0 (${label}): ${perc}% (${count})`;
-      } else if (value > 1) {
+      } else if (value >= 1) {
         filterValue = {
           start: format(value - 0.1),
           end: format(value + 1),
