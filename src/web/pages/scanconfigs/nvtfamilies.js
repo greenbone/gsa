@@ -52,8 +52,8 @@ import Trend from './trend';
 
 const WHOLE_SELECTION_FAMILIES = [
   'AIX Local Security Checks',
-  'AlmaLinux Security Checks',
-  'Amazon Linux Security Checks',
+  'AlmaLinux Local Security Checks',
+  'Amazon Linux Local Security Checks',
   'CentOS Local Security Checks',
   'Debian Local Security Checks',
   'Fedora Local Security Checks',
