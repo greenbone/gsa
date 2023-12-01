@@ -22,7 +22,7 @@ import {connect} from 'react-redux';
 
 import _ from 'gmp/locale';
 
-import {USERS_FILTER_FILTER, ALL_FILTER} from 'gmp/models/filter';
+import {USERS_FILTER_FILTER} from 'gmp/models/filter';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -47,6 +47,7 @@ import {createFilterDialog} from 'web/components/powerfilter/dialog';
 
 import {
   loadEntities,
+  loadAllEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/users';
 
@@ -255,12 +256,12 @@ UsersPage.propTypes = {
 const mapStateToProps = state => {
   const selector = entitiesSelector(state);
   return {
-    allUsers: selector.getEntities(ALL_FILTER),
+    allUsers: selector.getAllEntities(),
   };
 };
 
 const mapDispatchToProps = (dispatch, {gmp}) => ({
-  loadAll: () => dispatch(loadEntities({gmp, filter: ALL_FILTER})),
+  loadAll: () => dispatch(loadAllEntities(gmp)()),
 });
 
 export default compose(
