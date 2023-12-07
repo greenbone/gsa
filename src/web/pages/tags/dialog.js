@@ -25,7 +25,6 @@ import _ from 'gmp/locale';
 import {isDefined} from 'gmp/utils/identity';
 import {map} from 'gmp/utils/array';
 import {isEmpty} from 'gmp/utils/string';
-import {pluralizeType, normalizeType} from 'gmp/utils/entitytype';
 
 import {YES_VALUE} from 'gmp/parser';
 
@@ -54,11 +53,30 @@ const ScrollableContent = styled.div`
   overflow: auto;
 `;
 
+const types = {
+  operatingsystem: 'os',
+  certbund: 'cert_bund_adv',
+  dfncert: 'dfn_cert_adv',
+  portlist: 'port_list',
+  reportformat: 'report_format',
+  scanconfig: 'config',
+  tlscertificate: 'tls_certificate',
+};
+
+const convertType = type => {
+  const ctype = types[type];
+  if (isDefined(ctype)) {
+    return ctype;
+  }
+  return type;
+};
+
 class TagDialog extends React.Component {
   constructor(...args) {
     super(...args);
 
     const {resource_ids = []} = this.props;
+    this.isLoading = false;
 
     this.state = {
       resourceIdText: '',
@@ -81,24 +99,27 @@ class TagDialog extends React.Component {
       return;
     }
     const {gmp} = this.props;
-    const plType = pluralizeType(normalizeType(type));
-    gmp[plType].getAll().then(response => {
-      const {data} = response;
-      let id = this.state.resourceIdText;
-      const idPresent = data.includes(res => res.id === id);
-      if (!idPresent && !isEmpty(id)) {
-        data.push({
-          name: '----',
-          id: id,
+    this.isLoading = true;
+    gmp.resourcenames
+      .getAll({resource_type: convertType(type)})
+      .then(response => {
+        const {data} = response;
+        let id = this.state.resourceIdText;
+        const idPresent = data.includes(res => res.id === id);
+        if (!idPresent && !isEmpty(id)) {
+          data.push({
+            name: '----',
+            id: id,
+          });
+        }
+        if (isEmpty(id)) {
+          id = undefined;
+        }
+        this.isLoading = false;
+        this.setState({
+          resourceOptions: data,
         });
-      }
-      if (isEmpty(id)) {
-        id = undefined;
-      }
-      this.setState({
-        resourceOptions: data,
       });
-    });
   }
 
   handleResourceTypeChange(type, onValueChange) {
@@ -107,6 +128,7 @@ class TagDialog extends React.Component {
     this.loadResourcesByType(type);
     this.setState({
       resourceIdsSelected: [],
+      resourceOptions: [],
       resourceType: type,
     });
   }
@@ -123,8 +145,8 @@ class TagDialog extends React.Component {
     const {gmp} = this.props;
     const {resourceIdsSelected, resourceType} = this.state;
 
-    gmp[pluralizeType(normalizeType(resourceType))]
-      .get({filter: 'uuid=' + id})
+    gmp.resourcenames
+      .get({resource_type: convertType(resourceType), filter: 'uuid=' + id})
       .then(response => {
         const ids = isDefined(resourceIdsSelected) ? resourceIdsSelected : [];
         if (response.data.length === 0) {
@@ -264,6 +286,10 @@ class TagDialog extends React.Component {
                         !typeIsChosen ||
                         fixed ||
                         resourceTypesOptions.length === 0
+                      }
+                      isLoading={
+                        this.isLoading &&
+                        this.state.resourceOptions.length === 0
                       }
                       onChange={ids => this.handleIdChange(ids, onValueChange)}
                     />
