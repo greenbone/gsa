@@ -37,6 +37,13 @@ export function parseInfoEntities(response, name, modelclass, filter_func) {
     .map(info => modelclass.fromElement(info));
 }
 
+export function parseResourceNamesEntities(response, name, modelclass) {
+  const type = isDefined(response.type) ? response.type : '';
+  return map(parseElements(response, name), element =>
+    modelclass.fromElement(element, type),
+  );
+}
+
 export function parseInfoCounts(response) {
   // this is really ugly and more of a kind of a hack
   //  we depend on the order of the array to be able to parse the counts

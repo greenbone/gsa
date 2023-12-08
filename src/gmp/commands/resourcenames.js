@@ -21,6 +21,11 @@ import registerCommand from 'gmp/command';
 import ResourceName from 'gmp/models/resourcename';
 import EntitiesCommand from './entities';
 
+import {
+  parseCollectionList,
+  parseResourceNamesEntities,
+} from 'gmp/collection/parser';
+
 export class ResourceNamesCommand extends EntitiesCommand {
   constructor(http) {
     super(http, 'resource_name', ResourceName);
@@ -29,6 +34,18 @@ export class ResourceNamesCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_resource_names.get_resource_names_response;
+  }
+
+  parseResourceNamesEntities(response, name, modelclass) {
+    return parseResourceNamesEntities(response, name, modelclass);
+  }
+
+  getCollectionListFromRoot(root, meta) {
+    const response = this.getEntitiesResponse(root);
+    const res = parseCollectionList(response, this.name, this.clazz, {
+      entities_parse_func: this.parseResourceNamesEntities,
+    });
+    return res;
   }
 
   export(entities) {
