@@ -18,17 +18,19 @@
 import {isDefined} from 'gmp/utils/identity';
 
 export class ResourceName {
-  constructor({id, name}) {
+  constructor({id, name, type}) {
     this.id = id;
     this.name = name;
+    this.type = type;
   }
 
-  static fromElement(element) {
+  static fromElement(element, type) {
     const {_id, name} = element;
 
     return new ResourceName({
       id: isDefined(_id) ? _id : '',
       name: isDefined(name) ? name : '',
+      type: type,
     });
   }
 }
