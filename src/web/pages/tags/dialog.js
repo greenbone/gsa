@@ -119,6 +119,10 @@ class TagDialog extends React.Component {
         this.setState({
           resourceOptions: data,
         });
+      })
+      .catch(err => {
+        this.isLoading = false;
+        throw err;
       });
   }
 
