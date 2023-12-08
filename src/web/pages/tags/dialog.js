@@ -76,13 +76,13 @@ class TagDialog extends React.Component {
     super(...args);
 
     const {resource_ids = []} = this.props;
-    this.isLoading = false;
 
     this.state = {
       resourceIdText: '',
       resourceIdsSelected: resource_ids,
       resourceOptions: [],
       resourceType: this.props.resource_type,
+      isLoading: false,
     };
   }
 
@@ -99,7 +99,9 @@ class TagDialog extends React.Component {
       return;
     }
     const {gmp} = this.props;
-    this.isLoading = true;
+    this.setState({
+      isLoading: true,
+    });
     gmp.resourcenames
       .getAll({resource_type: convertType(type)})
       .then(response => {
@@ -115,13 +117,15 @@ class TagDialog extends React.Component {
         if (isEmpty(id)) {
           id = undefined;
         }
-        this.isLoading = false;
         this.setState({
           resourceOptions: data,
+          isLoading: false,
         });
       })
       .catch(err => {
-        this.isLoading = false;
+        this.setState({
+          isLoading: false,
+        });
         throw err;
       });
   }
@@ -292,7 +296,7 @@ class TagDialog extends React.Component {
                         resourceTypesOptions.length === 0
                       }
                       isLoading={
-                        this.isLoading &&
+                        this.state.isLoading &&
                         this.state.resourceOptions.length === 0
                       }
                       onChange={ids => this.handleIdChange(ids, onValueChange)}
