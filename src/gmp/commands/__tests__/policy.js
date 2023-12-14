@@ -27,6 +27,7 @@ import {
   createActionResultResponse,
   createEntityResponse,
   createHttp,
+  createHttpMany,
   createResponse,
 } from '../testing';
 
@@ -215,27 +216,30 @@ describe('PolicyCommand tests', () => {
             },
           ],
         },
-        all: {
-          get_nvts_response: {
-            nvt: [
-              {
-                _oid: 1,
-                cvss_base: 1.1,
-              },
-              {
-                _oid: 2,
-                cvss_base: 2.2,
-              },
-              {
-                _oid: 3,
-                cvss_base: 3.3,
-              },
-            ],
-          },
+      },
+    });
+    const responseAll = createResponse({
+      get_config_family_response: {
+        get_nvts_response: {
+          nvt: [
+            {
+              _oid: 1,
+              cvss_base: 1.1,
+            },
+            {
+              _oid: 2,
+              cvss_base: 2.2,
+            },
+            {
+              _oid: 3,
+              cvss_base: 3.3,
+            },
+          ],
         },
       },
     });
-    const fakeHttp = createHttp(response);
+    const responses = [response, responseAll];
+    const fakeHttp = createHttpMany(responses);
 
     expect.hasAssertions();
 

@@ -93,13 +93,21 @@ export class PolicyCommand extends EntityCommand {
   }
 
   editPolicyFamilySettings({id, familyName}) {
-    return this.httpGet({
+    const get = this.httpGet({
       cmd: 'edit_config_family',
       id,
       family: familyName,
-    }).then(response => {
+    });
+    const all = this.httpGet({
+      cmd: 'edit_config_family_all',
+      id,
+      family: familyName,
+    });
+    return Promise.all([get, all]).then(([response, response_all]) => {
       const {data} = response;
+      const data_all = response_all.data;
       const policy_resp = data.get_config_family_response;
+      const policy_resp_all = data_all.get_config_family_response;
       const settings = {};
 
       const nvts = {};
@@ -108,7 +116,7 @@ export class PolicyCommand extends EntityCommand {
         nvts[oid] = true;
       });
 
-      settings.nvts = map(policy_resp.all.get_nvts_response.nvt, nvt => {
+      settings.nvts = map(policy_resp_all.get_nvts_response.nvt, nvt => {
         nvt.oid = nvt._oid;
         delete nvt._oid;
 
