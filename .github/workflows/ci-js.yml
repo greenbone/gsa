@@ -56,7 +56,7 @@ jobs:
           JEST_JUNIT_OUTPUT_DIR: ${{ env.REPORT_DIR }}
         run: npm run test:coverage -- --reporters=default --reporters=jest-junit
       - name: Load Lint Results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linting-report
           path: ${{ env.REPORT_DIR }}
