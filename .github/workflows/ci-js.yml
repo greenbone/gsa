@@ -58,7 +58,7 @@ jobs:
       - name: Load Lint Results
         uses: actions/download-artifact@v4
         with:
-          name: linting-report
+          name: linting-report-${{ matrix.node-version }}
           path: ${{ env.REPORT_DIR }}
       - name: Submit test coverage to codecov.io
         uses: codecov/codecov-action@v3
@@ -89,5 +89,5 @@ jobs:
       - name: Store Lint Results
         uses: actions/upload-artifact@v4
         with:
-          name: linting-report
+          name: linting-report-${{ matrix.node-version }}
           path: ${{ env.REPORT_FILE }}
