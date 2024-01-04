@@ -66,107 +66,178 @@ class Trashcan extends HttpCommand {
   }
 
   get() {
+    const alerts = this.httpGet({cmd: 'get_trash_alerts'});
+    const configs = this.httpGet({cmd: 'get_trash_configs'});
+    const credentials = this.httpGet({cmd: 'get_trash_credentials'});
+    const filters = this.httpGet({cmd: 'get_trash_filters'});
+    const groups = this.httpGet({cmd: 'get_trash_groups'});
+    const notes = this.httpGet({cmd: 'get_trash_notes'});
+    const overrides = this.httpGet({cmd: 'get_trash_overrides'});
+    const permissions = this.httpGet({cmd: 'get_trash_permissions'});
+    const port_lists = this.httpGet({cmd: 'get_trash_port_lists'});
+    const report_formats = this.httpGet({cmd: 'get_trash_report_formats'});
+    const roles = this.httpGet({cmd: 'get_trash_roles'});
+    const scanners = this.httpGet({cmd: 'get_trash_scanners'});
+    const schedules = this.httpGet({cmd: 'get_trash_schedules'});
+    const tags = this.httpGet({cmd: 'get_trash_tags'});
     const targets = this.httpGet({cmd: 'get_trash_targets'});
-    const rest = this.httpGet({cmd: 'get_trash'});
-    return Promise.all([targets, rest]).then(([response_targets, response]) => {
-      const targets_data = response_targets.data.get_trash;
-      const trash_data = response.data.get_trash;
-      const data = {};
-      if (isDefined(trash_data.get_alerts_response)) {
-        data.alert_list = map(trash_data.get_alerts_response.alert, model =>
-          Alert.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_configs_response)) {
-        data.config_list = map(trash_data.get_configs_response.config, model =>
-          Scanconfig.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_credentials_response)) {
-        data.credential_list = map(
-          trash_data.get_credentials_response.credential,
-          model => Credential.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_filters_response)) {
-        data.filter_list = map(trash_data.get_filters_response.filter, model =>
-          Filter.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_groups_response)) {
-        data.group_list = map(trash_data.get_groups_response.group, model =>
-          Group.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_notes_response)) {
-        data.note_list = map(trash_data.get_notes_response.note, model =>
-          Note.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_overrides_response)) {
-        data.override_list = map(
-          trash_data.get_overrides_response.override,
-          model => Override.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_permissions_response)) {
-        data.permission_list = map(
-          trash_data.get_permissions_response.permission,
-          model => Permission.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_port_lists_response)) {
-        data.port_list_list = map(
-          trash_data.get_port_lists_response.port_list,
-          model => PortList.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_report_formats_response)) {
-        data.report_format_list = map(
-          trash_data.get_report_formats_response.report_format,
-          model => ReportFormat.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_roles_response)) {
-        data.role_list = map(trash_data.get_roles_response.role, model =>
-          Role.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_scanners_response)) {
-        data.scanner_list = map(
-          trash_data.get_scanners_response.scanner,
-          model => Scanner.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_schedules_response)) {
-        data.schedule_list = map(
-          trash_data.get_schedules_response.schedule,
-          model => Schedule.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_tags_response)) {
-        data.tag_list = map(trash_data.get_tags_response.tag, model =>
-          Tag.fromElement(model),
-        );
-      }
-      if (isDefined(targets_data.get_targets_response)) {
-        data.target_list = map(
-          targets_data.get_targets_response.target,
-          model => Target.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_tasks_response)) {
-        data.task_list = map(trash_data.get_tasks_response.task, model =>
-          Task.fromElement(model),
-        );
-      }
-      if (isDefined(trash_data.get_tickets_response)) {
-        data.ticket_list = map(trash_data.get_tickets_response.ticket, model =>
-          Ticket.fromElement(model),
-        );
-      }
-      return response.setData(data);
-    });
+    const tasks = this.httpGet({cmd: 'get_trash_tasks'});
+    const tickets = this.httpGet({cmd: 'get_trash_tickets'});
+    return Promise.all([
+      alerts,
+      configs,
+      credentials,
+      filters,
+      groups,
+      notes,
+      overrides,
+      permissions,
+      port_lists,
+      report_formats,
+      roles,
+      scanners,
+      schedules,
+      tags,
+      targets,
+      tasks,
+      tickets,
+    ]).then(
+      ([
+        response_alerts,
+        response_configs,
+        response_credentials,
+        response_filters,
+        response_groups,
+        response_notes,
+        response_overrides,
+        response_permissions,
+        response_port_lists,
+        response_report_formats,
+        response_roles,
+        response_scanners,
+        response_schedules,
+        response_tags,
+        response_targets,
+        response_tasks,
+        response_tickets,
+      ]) => {
+        const alerts_data = response_alerts.data.get_trash;
+        const configs_data = response_configs.data.get_trash;
+        const credentials_data = response_credentials.data.get_trash;
+        const filters_data = response_filters.data.get_trash;
+        const groups_data = response_groups.data.get_trash;
+        const notes_data = response_notes.data.get_trash;
+        const overrides_data = response_overrides.data.get_trash;
+        const permissions_data = response_permissions.data.get_trash;
+        const port_lists_data = response_port_lists.data.get_trash;
+        const report_formats_data = response_report_formats.data.get_trash;
+        const roles_data = response_roles.data.get_trash;
+        const scanners_data = response_scanners.data.get_trash;
+        const schedules_data = response_schedules.data.get_trash;
+        const tags_data = response_tags.data.get_trash;
+        const targets_data = response_targets.data.get_trash;
+        const tasks_data = response_tasks.data.get_trash;
+        const tickets_data = response_tickets.data.get_trash;
+        const data = {};
+        if (isDefined(alerts_data.get_alerts_response)) {
+          data.alert_list = map(alerts_data.get_alerts_response.alert, model =>
+            Alert.fromElement(model),
+          );
+        }
+        if (isDefined(configs_data.get_configs_response)) {
+          data.config_list = map(
+            configs_data.get_configs_response.config,
+            model => Scanconfig.fromElement(model),
+          );
+        }
+        if (isDefined(credentials_data.get_credentials_response)) {
+          data.credential_list = map(
+            credentials_data.get_credentials_response.credential,
+            model => Credential.fromElement(model),
+          );
+        }
+        if (isDefined(filters_data.get_filters_response)) {
+          data.filter_list = map(
+            filters_data.get_filters_response.filter,
+            model => Filter.fromElement(model),
+          );
+        }
+        if (isDefined(groups_data.get_groups_response)) {
+          data.group_list = map(groups_data.get_groups_response.group, model =>
+            Group.fromElement(model),
+          );
+        }
+        if (isDefined(notes_data.get_notes_response)) {
+          data.note_list = map(notes_data.get_notes_response.note, model =>
+            Note.fromElement(model),
+          );
+        }
+        if (isDefined(overrides_data.get_overrides_response)) {
+          data.override_list = map(
+            overrides_data.get_overrides_response.override,
+            model => Override.fromElement(model),
+          );
+        }
+        if (isDefined(permissions_data.get_permissions_response)) {
+          data.permission_list = map(
+            permissions_data.get_permissions_response.permission,
+            model => Permission.fromElement(model),
+          );
+        }
+        if (isDefined(port_lists_data.get_port_lists_response)) {
+          data.port_list_list = map(
+            port_lists_data.get_port_lists_response.port_list,
+            model => PortList.fromElement(model),
+          );
+        }
+        if (isDefined(report_formats_data.get_report_formats_response)) {
+          data.report_format_list = map(
+            report_formats_data.get_report_formats_response.report_format,
+            model => ReportFormat.fromElement(model),
+          );
+        }
+        if (isDefined(roles_data.get_roles_response)) {
+          data.role_list = map(roles_data.get_roles_response.role, model =>
+            Role.fromElement(model),
+          );
+        }
+        if (isDefined(scanners_data.get_scanners_response)) {
+          data.scanner_list = map(
+            scanners_data.get_scanners_response.scanner,
+            model => Scanner.fromElement(model),
+          );
+        }
+        if (isDefined(schedules_data.get_schedules_response)) {
+          data.schedule_list = map(
+            schedules_data.get_schedules_response.schedule,
+            model => Schedule.fromElement(model),
+          );
+        }
+        if (isDefined(tags_data.get_tags_response)) {
+          data.tag_list = map(tags_data.get_tags_response.tag, model =>
+            Tag.fromElement(model),
+          );
+        }
+        if (isDefined(targets_data.get_targets_response)) {
+          data.target_list = map(
+            targets_data.get_targets_response.target,
+            model => Target.fromElement(model),
+          );
+        }
+        if (isDefined(tasks_data.get_tasks_response)) {
+          data.task_list = map(tasks_data.get_tasks_response.task, model =>
+            Task.fromElement(model),
+          );
+        }
+        if (isDefined(tickets_data.get_tickets_response)) {
+          data.ticket_list = map(
+            tickets_data.get_tickets_response.ticket,
+            model => Ticket.fromElement(model),
+          );
+        }
+        return response_targets.setData(data);
+      },
+    );
   }
 }
 
