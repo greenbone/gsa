@@ -66,7 +66,10 @@ class Trashcan extends HttpCommand {
   }
 
   get() {
-    return this.httpGet({cmd: 'get_trash'}).then(response => {
+    const targets = this.httpGet({cmd: 'get_trash_targets'});
+    const rest = this.httpGet({cmd: 'get_trash'});
+    return Promise.all([targets, rest]).then(([response_targets, response]) => {
+      const targets_data = response_targets.data.get_trash;
       const trash_data = response.data.get_trash;
       const data = {};
       if (isDefined(trash_data.get_alerts_response)) {
@@ -146,9 +149,10 @@ class Trashcan extends HttpCommand {
           Tag.fromElement(model),
         );
       }
-      if (isDefined(trash_data.get_targets_response)) {
-        data.target_list = map(trash_data.get_targets_response.target, model =>
-          Target.fromElement(model),
+      if (isDefined(targets_data.get_targets_response)) {
+        data.target_list = map(
+          targets_data.get_targets_response.target,
+          model => Target.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_tasks_response)) {
