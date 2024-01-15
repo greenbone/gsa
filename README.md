@@ -99,9 +99,9 @@ cp -r build/* $INSTALL_PREFIX/share/gvm/gsad/web/
 ```
 
 If you are not familiar or comfortable building from source code, we recommend
-that you use the Greenbone Security Manager TRIAL (GSM TRIAL), a prepared virtual
-machine with a readily available setup. Information regarding the virtual machine
-is available at <https://www.greenbone.net/en/testnow>.
+that you use the Greenbone Enterprise TRIAL, a prepared virtual machine with a
+readily available setup. Information regarding the virtual machine is
+available at <https://www.greenbone.net/en/testnow>.
 
 ## Developing
 
