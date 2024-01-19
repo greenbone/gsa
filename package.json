@@ -23,8 +23,8 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@babel/core": "7.23.5",
-    "@babel/runtime": "^7.23.5",
+    "@babel/core": "7.23.7",
+    "@babel/runtime": "^7.23.8",
     "@greenbone/ui-components": "2021.1.2",
     "@sentry/react": "^7.93.0",
     "@vx/axis": "^0.0.199",
@@ -45,12 +45,12 @@
     "fast-xml-parser": "^4.2.5",
     "history": "^4.10.1",
     "hoist-non-react-statics": "^3.3.2",
-    "i18next": "^23.7.7",
+    "i18next": "^23.7.16",
     "i18next-xhr-backend": "3.2.2",
     "ical.js": "^1.5.0",
     "memoize-one": "^6.0.0",
     "moment": "^2.30.1",
-    "moment-timezone": "^0.5.43",
+    "moment-timezone": "^0.5.44",
     "prop-types": "^15.8.1",
     "qhistory": "^1.1.0",
     "qs": "^6.11.2",
@@ -64,9 +64,9 @@
     "redux": "^4.2.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
-    "styled-components": "^6.1.1",
+    "styled-components": "^6.1.8",
     "uuid": "^9.0.1",
-    "whatwg-fetch": "^3.6.19"
+    "whatwg-fetch": "^3.6.20"
   },
   "scripts": {
     "test": "react-scripts test --env=jest-environment-jsdom",
@@ -83,7 +83,7 @@
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^29.5.10",
+    "@types/jest": "^29.5.11",
     "babel-plugin-i18next-extract": "^0.10.0",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^2.7.0",
