@@ -128,7 +128,7 @@ class ReportFormatComponent extends React.Component {
   render() {
     const {children, onDeleted, onDeleteError, onInteraction} = this.props;
 
-    const {dialogVisible, reportformat, title} = this.state;
+    const {dialogVisible, reportformat, title, preferences} = this.state;
 
     return (
       <EntityComponent
@@ -147,6 +147,7 @@ class ReportFormatComponent extends React.Component {
             {dialogVisible && (
               <ReportFormatDialog
                 reportformat={reportformat}
+                preferences={preferences}
                 title={title}
                 onClose={this.handleCloseReportFormatDialog}
                 onSave={this.handleSave}
