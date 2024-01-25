@@ -23,6 +23,8 @@ import AboutPage from './pages/help/about';
 import AlertsPage from './pages/alerts/listpage';
 import AlertDetailsPage from './pages/alerts/detailspage';
 import AuditsPage from './pages/audits/listpage';
+import AuditReportDetailsPage from './pages/reports/auditdetailspage';
+import AuditReportsPage from './pages/reports/auditreportslistpage';
 import AuditsDetailsPage from './pages/audits/detailspage';
 import CertBundsPage from './pages/certbund/listpage';
 import CertBundDetailsPage from './pages/certbund/detailspage';
@@ -66,6 +68,7 @@ import ReportFormatsPage from './pages/reportformats/listpage';
 import ReportFormatDetailsPage from './pages/reportformats/detailspage';
 import ReportsPage from './pages/reports/listpage';
 import ReportDetailsPage from './pages/reports/detailspage';
+import DeltaAuditReportDetailsPage from './pages/reports/auditdeltadetailspage';
 import DeltaReportDetailsPage from './pages/reports/deltadetailspage';
 import ResultsPage from './pages/results/listpage';
 import ResultDetailsPage from './pages/results/detailspage';
@@ -121,6 +124,15 @@ const Routes = () => (
               <Route path="/about" component={AboutPage} />
               <Route path="/alerts" component={AlertsPage} />
               <Route path="/audits" component={AuditsPage} />
+              <Route path="/auditreports" component={AuditReportsPage} />
+              <Route
+                path="/auditreport/delta/:id/:deltaid"
+                component={DeltaAuditReportDetailsPage}
+              />
+              <Route
+                path="/auditreport/:id"
+                component={AuditReportDetailsPage}
+              />
               <Route path="/certbunds" component={CertBundsPage} />
               <Route path="/cpes" component={CpesPage} />
               <Route path="/credentials" component={CredentialsPage} />

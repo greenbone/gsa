@@ -32,6 +32,7 @@ describe('ReportsCommand tests', () => {
           cmd: 'get_reports',
           details: 0,
           filter: ALL_FILTER.toFilterString(),
+          usage_type: 'scan',
         },
       });
       const {data} = resp;
@@ -59,6 +60,7 @@ describe('ReportsCommand tests', () => {
         args: {
           cmd: 'get_reports',
           details: 0,
+          usage_type: 'scan',
         },
       });
       const {data} = resp;

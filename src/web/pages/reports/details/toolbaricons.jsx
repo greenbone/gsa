@@ -33,6 +33,7 @@ import PropTypes from 'web/utils/proptypes';
 import AlertActions from './alertactions';
 
 const ToolBarIcons = ({
+  audit = false,
   delta = false,
   filter,
   isLoading,
@@ -56,7 +57,11 @@ const ToolBarIcons = ({
         anchor="reading-a-report"
         title={_('Help: Reading Reports')}
       />
-      <ListIcon title={_('Reports List')} page="reports" />
+      {audit ? (
+        <ListIcon title={_('Audit Reports List')} page="auditreports" />
+      ) : (
+        <ListIcon title={_('Reports List')} page="reports" />
+      )}
     </IconDivider>
     {!isLoading && (
       <React.Fragment>
@@ -86,13 +91,15 @@ const ToolBarIcons = ({
           >
             <ResultIcon />
           </Link>
-          <Link
-            to="vulnerabilities"
-            filter={'report_id=' + reportId}
-            title={_('Corresponding Vulnerabilities')}
-          >
-            <VulnerabilityIcon />
-          </Link>
+          {!audit && (
+            <Link
+              to="vulnerabilities"
+              filter={'report_id=' + reportId}
+              title={_('Corresponding Vulnerabilities')}
+            >
+              <VulnerabilityIcon />
+            </Link>
+          )}
           {!delta && (
             <Link
               to="tlscertificates"
@@ -144,6 +151,7 @@ const ToolBarIcons = ({
 );
 
 ToolBarIcons.propTypes = {
+  audit: PropTypes.bool,
   delta: PropTypes.bool,
   filter: PropTypes.filter,
   isLoading: PropTypes.bool,

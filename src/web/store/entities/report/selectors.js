@@ -78,5 +78,8 @@ class DeltaReportSelector {
 export const reportSelector = rootState =>
   new ReportSelector(rootState.entities.report);
 
+export const auditReportSelector = rootState =>
+  new ReportSelector(rootState.entities.auditreport);
+
 export const deltaReportSelector = rootState =>
   new DeltaReportSelector(rootState.entities.deltaReport);

@@ -61,6 +61,7 @@ export const normalizeType = type => {
 const ENTITY_TYPES = {
   alert: _l('Alert'),
   asset: _l('Asset'),
+  auditreport: _l('Audit Report'),
   certbund: _l('CERT-Bund Advisory'),
   cpe: _l('CPE'),
   credential: _l('Credential'),
@@ -108,6 +109,7 @@ export const typeName = type => {
 };
 
 const CMD_TYPES = {
+  auditreport: 'audit_report',
   scanconfig: 'config',
   certbund: 'cert_bund_adv',
   dfncert: 'dfn_cert_adv',
