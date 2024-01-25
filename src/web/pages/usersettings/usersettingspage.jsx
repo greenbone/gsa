@@ -288,6 +288,7 @@ class UserSettings extends React.Component {
       defaultSchedule = {},
       defaultTarget = {},
       alertsFilter,
+      auditReportsFilter,
       configsFilter,
       credentialsFilter,
       filtersFilter,
@@ -321,6 +322,7 @@ class UserSettings extends React.Component {
     } = this.props;
 
     alertsFilter = hasValue(alertsFilter) ? alertsFilter : {};
+    auditReportsFilter = hasValue(auditReportsFilter) ? auditReportsFilter : {};
     configsFilter = hasValue(configsFilter) ? configsFilter : {};
     credentialsFilter = hasValue(credentialsFilter) ? credentialsFilter : {};
     filtersFilter = hasValue(filtersFilter) ? filtersFilter : {};
@@ -564,6 +566,11 @@ class UserSettings extends React.Component {
                             type="filter"
                           />
                           <SettingTableRow
+                            setting={auditReportsFilter}
+                            title={_('Audit Reports Filter')}
+                            type="filter"
+                          />
+                          <SettingTableRow
                             setting={configsFilter}
                             title={_('Configs Filter')}
                             type="filter"
@@ -742,6 +749,7 @@ class UserSettings extends React.Component {
               defaultSchedule={defaultSchedule.id}
               defaultTarget={defaultTarget.id}
               alertsFilter={alertsFilter.id}
+              auditReportsFilter={auditReportsFilter.id}
               configsFilter={configsFilter.id}
               credentialsFilter={credentialsFilter.id}
               filtersFilter={filtersFilter.id}
@@ -784,6 +792,7 @@ class UserSettings extends React.Component {
 UserSettings.propTypes = {
   alerts: PropTypes.array,
   alertsFilter: PropTypes.object,
+  auditReportsFilter: PropTypes.object,
   autoCacheRebuild: PropTypes.object,
   capabilities: PropTypes.capabilities.isRequired,
   certBundFilter: PropTypes.object,
@@ -935,6 +944,7 @@ const mapStateToProps = rootState => {
   const defaultSchedule = schedulesSel.getEntity(defaultScheduleId);
   const defaultTarget = targetsSel.getEntity(defaultTargetId);
   const alertsFilter = userDefaultFilterSelector.getFilter('alert');
+  const auditReportsFilter = userDefaultFilterSelector.getFilter('auditreport');
   const configsFilter = userDefaultFilterSelector.getFilter('scanconfig');
   const credentialsFilter = userDefaultFilterSelector.getFilter('credential');
   const filtersFilter = userDefaultFilterSelector.getFilter('filter');
@@ -1006,6 +1016,7 @@ const mapStateToProps = rootState => {
     defaultSchedule,
     defaultTarget,
     alertsFilter,
+    auditReportsFilter,
     configsFilter,
     credentialsFilter,
     filtersFilter,
@@ -1046,6 +1057,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => ({
   loadFilterDefaults: () =>
     Promise.all([
       dispatch(loadUserSettingsDefaultFilter(gmp)('alert')),
+      dispatch(loadUserSettingsDefaultFilter(gmp)('auditreport')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('scanconfig')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('credential')),
       dispatch(loadUserSettingsDefaultFilter(gmp)('filter')),

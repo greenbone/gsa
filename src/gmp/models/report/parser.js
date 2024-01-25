@@ -306,7 +306,7 @@ export const parseOperatingSystems = (report, filter) => {
   const severities = parseHostSeverities(results);
 
   forEach(hosts, host => {
-    const {detail: details, ip} = host;
+    const {detail: details, ip, host_compliance} = host;
 
     let best_os_cpe;
     let best_os_txt;
@@ -335,6 +335,7 @@ export const parseOperatingSystems = (report, filter) => {
 
         os.addHost(host);
         os.setSeverity(severity);
+        os.addHostCompliance(host, host_compliance);
       }
     }
   });
@@ -398,7 +399,7 @@ export const parseHosts = (report, filter) => {
 
 const parse_report_report_counts = elem => {
   const es = isDefined(elem.results) ? elem.results : {};
-  const ec = elem.result_count;
+  const ec = elem.result_count ? elem.result_count : elem.compliance_count;
 
   const length = isDefined(es.result) ? es.result.length : 0;
 
@@ -413,9 +414,13 @@ const parse_report_report_counts = elem => {
 };
 
 export const parseResults = (report, filter) => {
-  const {results, result_count} = report;
+  const {results, result_count, compliance_count} = report;
 
-  if (!isDefined(results) && !isDefined(result_count)) {
+  if (
+    !isDefined(results) &&
+    !isDefined(result_count) &&
+    !isDefined(compliance_count)
+  ) {
     return undefined;
     // instead of returning empty_collection_list(filter) we return an undefined
     // in order to query if results have been loaded and make a difference to

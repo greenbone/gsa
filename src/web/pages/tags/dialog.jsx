@@ -42,6 +42,7 @@ const ScrollableContent = styled.div`
 `;
 
 const types = {
+  auditreport: 'audit_report',
   operatingsystem: 'os',
   certbund: 'cert_bund_adv',
   dfncert: 'dfn_cert_adv',
