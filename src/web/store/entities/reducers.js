@@ -19,6 +19,7 @@ import {combineReducers} from 'redux';
 
 import {reducer as alert} from './alerts';
 import {reducer as audit} from './audits';
+import {reducer as auditreport} from './auditreports';
 import {reducer as certbund} from './certbund';
 import {reducer as cpe} from './cpes';
 import {reducer as credential} from './credentials';
@@ -53,6 +54,7 @@ import {reducer as vuln} from './vulns';
 const entitiesReducer = combineReducers({
   alert,
   audit,
+  auditreport,
   certbund,
   cpe,
   credential,

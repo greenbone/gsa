@@ -32,6 +32,7 @@ const filterFilters = (filters, type) =>
 
 const FilterPart = ({
   alertsFilter,
+  auditReportsFilter,
   configsFilter,
   credentialsFilter,
   filtersFilter,
@@ -71,6 +72,17 @@ const FilterPart = ({
           value={alertsFilter}
           items={renderSelectItems(
             filterFilters(filters, 'alert'),
+            UNSET_VALUE,
+          )}
+          onChange={onChange}
+        />
+      </FormGroup>
+      <FormGroup title={_('Audit Reports Filter')} titleSize="3">
+        <Select
+          name="auditReportsFilter"
+          value={auditReportsFilter}
+          items={renderSelectItems(
+            filterFilters(filters, 'audit_report'),
             UNSET_VALUE,
           )}
           onChange={onChange}
@@ -351,6 +363,7 @@ const FilterPart = ({
 
 FilterPart.propTypes = {
   alertsFilter: PropTypes.string,
+  auditReportsFilter: PropTypes.string,
   certBundFilter: PropTypes.string,
   configsFilter: PropTypes.string,
   cpeFilter: PropTypes.string,

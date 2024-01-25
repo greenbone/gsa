@@ -180,6 +180,12 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                 {capabilities.mayAccess('audits') && (
                   <MenuEntry title={_('Compliance Audits')} to="audits" />
                 )}
+                {capabilities.mayAccess('audits') && (
+                  <MenuEntry
+                    title={_('Compliance Reports')}
+                    to="auditreports"
+                  />
+                )}
               </MenuSection>
             </Menu>
           )}

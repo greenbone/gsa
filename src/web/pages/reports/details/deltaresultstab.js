@@ -44,9 +44,11 @@ const resultsSortFunctions = {
   severity: makeCompareSeverity(),
   solution_type: makeCompareString(entity => entity.nvt.solution?.type),
   vulnerability: makeCompareString('vulnerability'),
+  // TODO: Add filter for compliant
 };
 
 const ResultsTab = ({
+  audit = false,
   counts,
   delta = false,
   filter,
@@ -111,6 +113,7 @@ const ResultsTab = ({
         onPreviousClick,
       }) => (
         <ResultsTable
+          audit={audit}
           delta={delta}
           entities={entities}
           entitiesCounts={entitiesCounts}
@@ -133,6 +136,7 @@ const ResultsTab = ({
 };
 
 ResultsTab.propTypes = {
+  audit: PropTypes.bool,
   counts: PropTypes.oneOfType([PropTypes.counts, PropTypes.object]).isRequired,
   delta: PropTypes.bool,
   filter: PropTypes.filter.isRequired,

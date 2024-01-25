@@ -19,12 +19,14 @@ import React from 'react';
 
 import {_, _l} from 'gmp/locale/lang';
 
+import ComplianceBar from 'web/components/bar/compliancebar';
 import PropTypes from 'web/utils/proptypes';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
 import OsIcon from 'web/components/icon/osicon';
 
+import {isDefined} from 'gmp/utils/identity';
 import IconDivider from 'web/components/layout/icondivider';
 
 import Link from 'web/components/link/link';
@@ -36,7 +38,13 @@ import TableRow from 'web/components/table/row';
 
 import {createEntitiesTable} from 'web/entities/table';
 
-const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
+const Header = ({
+  audit = false,
+  currentSortDir,
+  currentSortBy,
+  sort = true,
+  onSortChange,
+}) => (
   <TableHeader>
     <TableRow>
       <TableHead
@@ -61,27 +69,39 @@ const Header = ({currentSortDir, currentSortBy, sort = true, onSortChange}) => (
         onSortChange={onSortChange}
         title={_('Hosts')}
       />
-      <TableHead
-        currentSortDir={currentSortDir}
-        currentSortBy={currentSortBy}
-        sortBy={sort ? 'severity' : false}
-        width="10%"
-        onSortChange={onSortChange}
-        title={_('Severity')}
-      />
+      {audit ? (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'compliant' : false}
+          width="10%"
+          onSortChange={onSortChange}
+          title={_('Compliant')}
+        />
+      ) : (
+        <TableHead
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'severity' : false}
+          width="10%"
+          onSortChange={onSortChange}
+          title={_('Severity')}
+        />
+      )}
     </TableRow>
   </TableHeader>
 );
 
 Header.propTypes = {
+  audit: PropTypes.bool,
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
   sort: PropTypes.bool,
   onSortChange: PropTypes.func,
 };
 
-const Row = ({entity, links = true}) => {
-  const {name, cpe, hosts, severity} = entity;
+const Row = ({audit = false, entity, links = true}) => {
+  const {name, cpe, hosts, severity, compliance} = entity;
   return (
     <TableRow>
       <TableData>
@@ -98,14 +118,21 @@ const Row = ({entity, links = true}) => {
         </Link>
       </TableData>
       <TableData>{hosts.count}</TableData>
-      <TableData>
-        <SeverityBar severity={severity} />
-      </TableData>
+      {audit && isDefined(compliance) ? (
+        <TableData>
+          <ComplianceBar compliance={compliance} />
+        </TableData>
+      ) : (
+        <TableData>
+          <SeverityBar severity={severity} />
+        </TableData>
+      )}
     </TableRow>
   );
 };
 
 Row.propTypes = {
+  audit: PropTypes.bool,
   entity: PropTypes.object.isRequired,
   links: PropTypes.bool,
 };

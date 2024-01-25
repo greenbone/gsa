@@ -49,9 +49,17 @@ const hostsSortFunctions = {
   start: makeCompareDate(entity => entity.start),
   end: makeCompareDate(entity => entity.end),
   total: makeCompareNumber(entity => entity.result_counts.total),
+  compliance_yes: makeCompareNumber(entity => entity.compliance_counts.yes),
+  compliance_no: makeCompareNumber(entity => entity.compliance_counts.no),
+  compliance_incomplete: makeCompareNumber(
+    entity => entity.compliance_counts.incomplete,
+  ),
+  compliance_total: makeCompareNumber(entity => entity.compliance_counts.total),
+  // TODO Add filter for compliant
 };
 
 const HostsTab = ({
+  audit = false,
   counts,
   hosts,
   filter,
@@ -81,6 +89,7 @@ const HostsTab = ({
       onPreviousClick,
     }) => (
       <HostsTable
+        audit={audit}
         entities={entities}
         entitiesCounts={entitiesCounts}
         filter={filter}
@@ -99,6 +108,7 @@ const HostsTab = ({
 );
 
 HostsTab.propTypes = {
+  audit: PropTypes.bool,
   counts: PropTypes.object,
   filter: PropTypes.filter.isRequired,
   hosts: PropTypes.array,

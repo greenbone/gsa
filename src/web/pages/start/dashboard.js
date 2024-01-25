@@ -43,6 +43,7 @@ import {TICKETS_DISPLAYS} from '../tickets/dashboard';
 import {DEFAULT_DISPLAYS} from './newdashboarddialog';
 
 const ALL_DISPLAYS = [
+  // TODO: Add audit reports display
   ...TASKS_DISPLAYS,
   ...REPORTS_DISPLAYS,
   ...RESULTS_DISPLAYS,

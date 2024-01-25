@@ -23,6 +23,8 @@ import {pluralizeType} from 'gmp/utils/entitytype';
 const types = {
   audit: 'task',
   audits: 'task',
+  auditreport: 'report',
+  auditreports: 'report',
   host: 'asset',
   hosts: 'asset',
   os: 'asset',

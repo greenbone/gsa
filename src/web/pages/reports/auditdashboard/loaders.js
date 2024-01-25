@@ -1,4 +1,4 @@
-/* Copyright (C) 2016-2022 Greenbone AG
+/* Copyright (C) 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
@@ -15,23 +15,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import React from 'react';
 
-export const EXTRA_KEYWORDS = [
-  'apply_overrides',
-  'compliance_levels',
-  'delta_states',
-  'first',
-  'levels',
-  'min_qod',
-  'notes',
-  'overrides',
-  'report_compliance_levels',
-  'result_hosts_only',
-  'rows',
-  'solution_type',
-  'sort',
-  'sort-reverse',
-  'timezone',
-];
+import Loader, {
+  loadFunc,
+  loaderPropTypes,
+} from 'web/store/dashboard/data/loader';
+
+export const REPORTS_COMPLIANCE = 'reports-compliance';
+
+export const reportComplianceLoader = loadFunc(
+  ({gmp, filter}) =>
+    gmp.auditreports.getComplianceAggregates({filter}).then(r => r.data),
+  REPORTS_COMPLIANCE,
+);
+
+export const ReportCompianceLoader = ({children, filter}) => (
+  <Loader
+    dataId={REPORTS_COMPLIANCE}
+    filter={filter}
+    load={reportComplianceLoader}
+    subscriptions={['reports.timer', 'reports.changed']}
+  >
+    {children}
+  </Loader>
+);
+
+ReportCompianceLoader.propTypes = loaderPropTypes;
 
 // vim: set ts=2 sw=2 tw=80:

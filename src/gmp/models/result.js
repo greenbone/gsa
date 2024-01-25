@@ -54,6 +54,7 @@ class Result extends Model {
     const copy = super.parseElement(element);
 
     const {
+      compliance,
       description,
       detection,
       host = {},
@@ -98,6 +99,10 @@ class Result extends Model {
 
     if (isDefined(description)) {
       copy.description = description;
+    }
+
+    if (isDefined(compliance)) {
+      copy.compliance = compliance;
     }
 
     if (isDefined(severity)) {
