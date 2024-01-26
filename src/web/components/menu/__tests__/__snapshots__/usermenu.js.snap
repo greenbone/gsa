@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`UserMenu component tests should render UserMenu 1`] = `
-.c8 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -19,57 +19,57 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   align-items: center;
 }
 
-.c13 {
+.c12 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
-}
-
-.c10 {
-  margin-left: -5px;
-}
-
-.c10>* {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.c10>* {
-  margin-left: 5px;
 }
 
 .c9 {
+  margin-left: -5px;
+}
+
+.c9>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c12 {
+.c9>* {
+  margin-left: 5px;
+}
+
+.c8 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c11 {
   cursor: pointer;
 }
 
-.c3 {
+.c2 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c3 * {
+.c2 * {
   height: inherit;
   width: inherit;
 }
 
-.c11 {
+.c10 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c11 * {
+.c10 * {
   height: inherit;
   width: inherit;
 }
@@ -84,18 +84,18 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   flex-direction: column;
 }
 
-.c5 {
+.c4 {
   position: relative;
   display: none;
   -webkit-animation: bNcXmX 0.1s ease-in;
   animation: bNcXmX 0.1s ease-in;
 }
 
-.c0:hover .c5 {
+.c0:hover .c4 {
   display: block;
 }
 
-.c6 {
+.c5 {
   position: absolute;
   margin: 0;
   padding: 0;
@@ -107,7 +107,7 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   width: 300px;
 }
 
-.c7 {
+.c6 {
   height: 30px;
   width: 300px;
   border-left: 1px solid #7F7F7F;
@@ -124,55 +124,55 @@ exports[`UserMenu component tests should render UserMenu 1`] = `
   padding-left: 12px;
 }
 
-.c7:hover {
+.c6:hover {
   background: #11ab51;
   color: #fff;
   cursor: pointer;
 }
 
-.c7:first-child {
+.c6:first-child {
   border-top: 1px solid #7F7F7F;
   cursor: default;
 }
 
-background-color:#f3f3f3 .c7:first-child:hover {
+background-color:#f3f3f3 .c6:first-child:hover {
   color: #000;
 }
 
-.c7:nth-child(2) {
+.c6:nth-child(2) {
   cursor: default;
 }
 
-background-color:#f3f3f3 .c7:nth-child(2):hover {
+background-color:#f3f3f3 .c6:nth-child(2):hover {
   color: #000;
 }
 
-.c7:last-child {
+.c6:last-child {
   border-top: 1px solid #7F7F7F;
   border-bottom: 1px solid #7F7F7F;
 }
 
-.c4 {
+.c3 {
   margin-right: 10px;
 }
 
-.c14 {
+.c13 {
   width: 100%;
   height: 100%;
 }
 
-.c14:link,
-.c14:hover,
-.c14:active,
-.c14:visited,
-.c14:hover {
+.c13:link,
+.c13:hover,
+.c13:active,
+.c13:visited,
+.c13:hover {
   color: inherit;
   -webkit-text-decoration: none;
   text-decoration: none;
 }
 
 @media print {
-  .c2 {
+  .c11 {
     display: none;
   }
 }
@@ -182,7 +182,7 @@ background-color:#f3f3f3 .c7:nth-child(2):hover {
   data-testid="usermenu"
 >
   <span
-    class="c2 c3 c4"
+    class="c2 c3"
     data-testid="svg-icon"
   >
     <svg>
@@ -190,23 +190,23 @@ background-color:#f3f3f3 .c7:nth-child(2):hover {
     </svg>
   </span>
   <div
-    class="c5"
+    class="c4"
   >
     <ul
-      class="c6"
+      class="c5"
     >
       <li
-        class="c7"
+        class="c6"
         title="Logged in as: "
       >
         <div
-          class="c8 c9"
+          class="c7 c8"
         >
           <div
-            class="c8 c10"
+            class="c7 c9"
           >
             <span
-              class="c2 c11"
+              class="c10"
               data-testid="svg-icon"
             >
               <svg>
@@ -218,16 +218,16 @@ background-color:#f3f3f3 .c7:nth-child(2):hover {
         </div>
       </li>
       <li
-        class="c7"
+        class="c6"
       >
         <div
-          class="c8 c9"
+          class="c7 c8"
         >
           <div
-            class="c8 c10"
+            class="c7 c9"
           >
             <span
-              class="c2 c11"
+              class="c10"
               data-testid="svg-icon"
             >
               <svg>
@@ -238,7 +238,7 @@ background-color:#f3f3f3 .c7:nth-child(2):hover {
               Session timeout: 
             </span>
             <span
-              class="c2 c12 c11"
+              class="c11 c10"
               data-testid="svg-icon"
               title="Renew session timeout"
             >
@@ -252,21 +252,21 @@ background-color:#f3f3f3 .c7:nth-child(2):hover {
         </div>
       </li>
       <li
-        class="c7"
+        class="c6"
       >
         <a
-          class="c13 c14"
+          class="c12 c13"
           data-testid="usermenu-settings"
           href="/usersettings"
         >
           <div
-            class="c8 c9"
+            class="c7 c8"
           >
             <div
-              class="c8 c10"
+              class="c7 c9"
             >
               <span
-                class="c2 c11"
+                class="c10"
                 data-testid="svg-icon"
               >
                 <svg>
@@ -281,17 +281,17 @@ background-color:#f3f3f3 .c7:nth-child(2):hover {
         </a>
       </li>
       <li
-        class="c7"
+        class="c6"
         data-testid="usermenu-logout"
       >
         <div
-          class="c8 c9"
+          class="c7 c8"
         >
           <div
-            class="c8 c10"
+            class="c7 c9"
           >
             <span
-              class="c2 c11"
+              class="c10"
               data-testid="svg-icon"
             >
               <svg>

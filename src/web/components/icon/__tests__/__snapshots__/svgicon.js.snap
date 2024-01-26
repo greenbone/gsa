@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SVG icon component tests should render icon 1`] = `
-.c1 {
+.c0 {
   cursor: pointer;
 }
 
-.c2 {
+.c1 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c2 * {
+.c1 * {
   height: inherit;
   width: inherit;
 }
@@ -23,7 +23,7 @@ exports[`SVG icon component tests should render icon 1`] = `
 }
 
 <span
-  class="c0 c1 c2"
+  class="c0 c1"
   data-testid="svg-icon"
   title="Clone Entity"
 >

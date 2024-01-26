@@ -89,21 +89,21 @@ exports[`Audit Actions tests should render 1`] = `
   display: inline-flex;
 }
 
-.c6 {
+.c5 {
   cursor: pointer;
 }
 
-.c8 svg path {
+.c7 svg path {
   fill: #bfbfbf;
 }
 
-.c7 {
+.c6 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c7 * {
+.c6 * {
   height: inherit;
   width: inherit;
 }
@@ -130,7 +130,7 @@ exports[`Audit Actions tests should render 1`] = `
             class="c3 c4"
           >
             <span
-              class="c5 c6 c7"
+              class="c5 c6"
               data-testid="svg-icon"
               title="Start"
             >
@@ -142,7 +142,7 @@ exports[`Audit Actions tests should render 1`] = `
             </span>
             <span
               alt="Resume"
-              class="c5 c8 c7"
+              class="c7 c6"
               data-testid="svg-icon"
               title="Audit is not stopped"
             >
@@ -153,7 +153,7 @@ exports[`Audit Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6 c7"
+              class="c5 c6"
               data-testid="svg-icon"
               title="Move Audit to trashcan"
             >
@@ -164,7 +164,7 @@ exports[`Audit Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6 c7"
+              class="c5 c6"
               data-testid="svg-icon"
               title="Edit Audit"
             >
@@ -175,7 +175,7 @@ exports[`Audit Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6 c7"
+              class="c5 c6"
               data-testid="svg-icon"
               title="Clone Audit"
             >
@@ -186,7 +186,7 @@ exports[`Audit Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6 c7"
+              class="c5 c6"
               data-testid="svg-icon"
               title="Export Audit"
             >
@@ -197,7 +197,7 @@ exports[`Audit Actions tests should render 1`] = `
               </svg>
             </span>
             <span
-              class="c5 c6 c7"
+              class="c5 c6"
               data-testid="svg-icon"
               title="Download Greenbone Compliance Report"
             >
