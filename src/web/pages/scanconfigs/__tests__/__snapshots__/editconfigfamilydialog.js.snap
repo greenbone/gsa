@@ -157,7 +157,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c39 {
+.c38 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -200,17 +200,17 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   display: inline-flex;
 }
 
-.c36 {
+.c35 {
   cursor: pointer;
 }
 
-.c37 {
+.c36 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c37 * {
+.c36 * {
   height: inherit;
   width: inherit;
 }
@@ -282,7 +282,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   height: 100%;
 }
 
-.c46 {
+.c45 {
   width: 0;
   height: 0;
   cursor: nwse-resize;
@@ -291,7 +291,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   border-top: 20px solid #fff;
 }
 
-.c45 {
+.c44 {
   position: absolute;
   bottom: 3px;
   right: 3px;
@@ -356,7 +356,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   width: inherit;
 }
 
-.c42 {
+.c41 {
   display: inline-block;
   padding: 0 15px;
   color: #4C4C4C;
@@ -376,12 +376,12 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   z-index: 1;
 }
 
-.c42:focus,
-.c42:hover {
+.c41:focus,
+.c41:hover {
   border: 1px solid #4C4C4C;
 }
 
-.c42:hover {
+.c41:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
   background: #11ab51;
@@ -389,26 +389,26 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   color: #fff;
 }
 
-.c42[disabled] {
+.c41[disabled] {
   cursor: not-allowed;
   opacity: 0.65;
   box-shadow: none;
 }
 
-.c42 img {
+.c41 img {
   height: 32px;
   width: 32px;
   margin-top: 5px 10px 5px -10px;
   vertical-align: middle;
 }
 
-.c42:link {
+.c41:link {
   -webkit-text-decoration: none;
   text-decoration: none;
   color: #4C4C4C;
 }
 
-.c43 {
+.c42 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -426,18 +426,18 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   align-items: center;
 }
 
-.c44 {
+.c43 {
   border: 1px solid #7F7F7F;
   color: #fff;
   background: #11ab51;
 }
 
-.c44 :hover {
+.c43 :hover {
   color: #074320;
   background: #A1DDBA;
 }
 
-.c40 {
+.c39 {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #e5e5e5;
@@ -445,7 +445,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   padding: 10px 20px 10px 20px;
 }
 
-.c41 {
+.c40 {
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
   justify-content: space-between;
@@ -612,7 +612,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
   background: #4f91c7;
 }
 
-.c38 {
+.c37 {
   height: 13px;
   width: 100%;
   background: #c83814;
@@ -690,7 +690,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
 }
 
 @media print {
-  .c38 {
+  .c37 {
     background: none;
   }
 }
@@ -977,7 +977,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                               class="c34"
                             >
                               <span
-                                class="c35 c36 c37"
+                                class="c35 c36"
                                 data-testid="svg-icon"
                                 title="Select and edit NVT details"
                               >
@@ -1016,7 +1016,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                               >
                                 <div
                                   background="error"
-                                  class="c38"
+                                  class="c37"
                                   data-testid="progress"
                                 />
                                 <div
@@ -1072,7 +1072,7 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                               class="c34"
                             >
                               <span
-                                class="c35 c36 c37"
+                                class="c35 c36"
                                 data-testid="svg-icon"
                                 title="Select and edit NVT details"
                               >
@@ -1092,17 +1092,17 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
               </div>
             </div>
             <div
-              class="c39 c40 c41"
+              class="c38 c39 c40"
             >
               <button
-                class="c42 c43 c44"
+                class="c41 c42 c43"
                 data-testid="dialog-close-button"
                 title="Cancel"
               >
                 Cancel
               </button>
               <button
-                class="c42 c43 c44"
+                class="c41 c42 c43"
                 data-testid="dialog-save-button"
                 title="Save"
               >
@@ -1111,10 +1111,10 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
             </div>
           </div>
           <div
-            class="c45"
+            class="c44"
           >
             <div
-              class="c46"
+              class="c45"
             />
           </div>
         </div>
