@@ -27,11 +27,12 @@ import {CVES_DISPLAYS} from '../cves/dashboard';
 import {CPES_DISPLAYS} from '../cpes/dashboard';
 import {DFNCERT_DISPLAYS} from '../dfncert/dashboard';
 import {TICKETS_DISPLAYS} from '../tickets/dashboard';
+import {AUDIT_REPORTS_DISPLAYS} from '../reports/auditdashboard';
 
 import {DEFAULT_DISPLAYS} from './newdashboarddialog';
 
 const ALL_DISPLAYS = [
-  // TODO: Add audit reports display
+  ...AUDIT_REPORTS_DISPLAYS,
   ...TASKS_DISPLAYS,
   ...REPORTS_DISPLAYS,
   ...RESULTS_DISPLAYS,

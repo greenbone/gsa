@@ -34,6 +34,7 @@ export const pluralizeType = type => {
   return type + 's';
 };
 const TYPES = {
+  audit_report: 'auditreport',
   config: 'scanconfig',
   cert_bund_adv: 'certbund',
   dfn_cert_adv: 'dfncert',
