@@ -136,7 +136,7 @@ class Page extends React.Component {
     const {filter, onFilterChanged, onInteraction} = this.props;
     return (
       <React.Fragment>
-        <PageTitle title={_('Audit Reports')} />
+        <PageTitle title={_('Compliance Reports')} />
         <EntitiesPage
           {...this.props}
           {...this.state}
@@ -157,7 +157,7 @@ class Page extends React.Component {
           filterEditDialog={AuditFilterDialog}
           table={AuditReportsTable}
           toolBarIcons={ToolBarIcons}
-          title={_('Audit Reports')}
+          title={_('Compliance Reports')}
           sectionIcon={<ReportIcon size="large" />}
           onInteraction={onInteraction}
           onReportDeltaSelect={this.handleReportDeltaSelect}
@@ -184,14 +184,14 @@ const reportsReloadInterval = ({entities = []}) =>
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : USE_DEFAULT_RELOAD_INTERVAL;
 
-const FALLBACK_REPORT_LIST_FILTER = Filter.fromString(
+const FALLBACK_AUDIT_REPORT_LIST_FILTER = Filter.fromString(
   'sort-reverse=date first=1',
 );
 
 export default compose(
   withGmp,
   withEntitiesContainer('auditreport', {
-    fallbackFilter: FALLBACK_REPORT_LIST_FILTER,
+    fallbackFilter: FALLBACK_AUDIT_REPORT_LIST_FILTER,
     entitiesSelector,
     loadEntities,
     reloadInterval: reportsReloadInterval,

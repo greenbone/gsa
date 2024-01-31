@@ -73,7 +73,9 @@ export const ReportComplianceDisplay = createDisplay({
   filterTerm: 'compliant',
   displayId: 'report-by-compliance',
   title: ({data: tdata}) =>
-    _('Reports by Compliance (Total: {{count}})', {count: tdata.total}),
+    _('Compliance Reports by Compliance (Total: {{count}})', {
+      count: tdata.total,
+    }),
   filtersFilter: AUDIT_REPORTS_FILTER_FILTER,
   loaderComponent: ReportCompianceLoader,
 });
@@ -86,21 +88,23 @@ export const ReportComplianceTableDisplay = createDisplay({
   dataTitles: [_l('Status'), _l('# of Reports')],
   dataRow: row => [row.label, row.value],
   title: ({data: tdata}) =>
-    _('Reports by Compliance (Total: {{count}})', {count: tdata.total}),
+    _('Compliance Reports by Compliance (Total: {{count}})', {
+      count: tdata.total,
+    }),
   displayId: 'report-by-compliance-table',
   displayName: 'ReportComplianceTableDisplay',
   filtersFilter: AUDIT_REPORTS_FILTER_FILTER,
 });
 
 registerDisplay(ReportComplianceDisplay.displayId, ReportComplianceDisplay, {
-  title: _l('Chart: Reports by Compliance'),
+  title: _l('Chart: Compliance Reports by Compliance'),
 });
 
 registerDisplay(
   ReportComplianceTableDisplay.displayId,
   ReportComplianceTableDisplay,
   {
-    title: _l('Table: Reports by Compliance'),
+    title: _l('Table: Compliance Reports by Compliance'),
   },
 );
 
