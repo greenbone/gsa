@@ -774,7 +774,7 @@ exports[`Audits table tests should render 1`] = `
               <div
                 class="c8"
               >
-                Compliance Status
+                Compliance Percent
               </div>
             </th>
             <th
@@ -829,7 +829,7 @@ exports[`Audits table tests should render 1`] = `
                 <a
                   class="c25 c26"
                   data-testid="details-link"
-                  href="/report/1234"
+                  href="/auditreport/1234"
                 >
                   <div
                     class="c27"
@@ -862,7 +862,7 @@ exports[`Audits table tests should render 1`] = `
                   <a
                     class="c25"
                     data-testid="details-link"
-                    href="/report/1234"
+                    href="/auditreport/1234"
                   >
                     Sat, Aug 10, 2019 2:51 PM CEST
                   </a>
@@ -1212,7 +1212,7 @@ exports[`Audits table tests should render 1`] = `
                 <a
                   class="c25 c26"
                   data-testid="details-link"
-                  href="/report/5678"
+                  href="/auditreport/5678"
                 >
                   <div
                     class="c27"
@@ -1245,7 +1245,7 @@ exports[`Audits table tests should render 1`] = `
                   <a
                     class="c25"
                     data-testid="details-link"
-                    href="/report/1234"
+                    href="/auditreport/1234"
                   >
                     Wed, Jul 10, 2019 2:51 PM CEST
                   </a>
