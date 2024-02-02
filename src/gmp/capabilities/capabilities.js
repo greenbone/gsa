@@ -21,10 +21,8 @@ import {map} from 'gmp/utils/array';
 import {pluralizeType} from 'gmp/utils/entitytype';
 
 const types = {
-  audit: 'task',
-  audits: 'task',
-  auditreport: 'report',
-  auditreports: 'report',
+  auditreport: 'audit_report',
+  auditreports: 'audit_reports',
   host: 'asset',
   hosts: 'asset',
   os: 'asset',
@@ -56,12 +54,19 @@ const types = {
   tlscertificates: 'tls_certificate',
 };
 
+const subtypes = {
+  audit: 'task',
+  audits: 'task',
+  audit_report: 'report',
+  audit_reports: 'reports',
+};
+
 const convertType = type => {
   const ctype = types[type];
   if (isDefined(ctype)) {
-    return ctype;
+    type = ctype;
   }
-  return type;
+  return subtypes[type] ? subtypes[type] : type;
 };
 
 class Capabilities {

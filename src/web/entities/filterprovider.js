@@ -78,7 +78,7 @@ const FilterProvider = ({
     gmpname,
   ]);
 
-  let [rowsPerPage, rowsPerPageError] = useSelector(state => {
+  let rowsPerPage = useSelector(state => {
     const userSettingDefaultSel = getUserSettingsDefaults(state);
     return [
       userSettingDefaultSel.getValueByName('rowsperpage'),

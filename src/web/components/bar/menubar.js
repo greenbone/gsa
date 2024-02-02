@@ -182,7 +182,7 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                 )}
                 {capabilities.mayAccess('audits') && (
                   <MenuEntry
-                    title={_('Compliance Reports')}
+                    title={_('Compliance Audit Reports')}
                     to="auditreports"
                   />
                 )}

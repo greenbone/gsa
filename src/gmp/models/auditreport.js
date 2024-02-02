@@ -25,7 +25,7 @@ import Model, {parseModelFromElement} from 'gmp/model';
 
 import AuditReportReport from './report/auditreport';
 
-const COMPLIANCE_STATE_TRANSLATIONS = {
+export const COMPLIANCE_STATES = {
   yes: _l('Yes'),
   no: _l('No'),
   incomplete: _l('Incomplete'),
@@ -34,7 +34,7 @@ const COMPLIANCE_STATE_TRANSLATIONS = {
 /* eslint-disable quote-props */
 
 export const getTranslatableReportCompliance = compliance =>
-  `${COMPLIANCE_STATE_TRANSLATIONS[compliance]}`;
+  `${COMPLIANCE_STATES[compliance]}`;
 
 class AuditReport extends Model {
   static entityType = 'auditreport';

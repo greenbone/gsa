@@ -30,13 +30,13 @@ const ComplianceBar = ({compliance, toolTip}) => {
 
   let background;
   if (compliance === 'no') {
-    background = Theme.errorRed;
+    background = Theme.compliance_no;
   } else if (compliance === 'incomplete') {
-    background = Theme.severityWarnYellow;
+    background = Theme.compliance_incomplete;
   } else if (compliance === 'yes') {
-    background = Theme.statusRunGreen;
+    background = Theme.compliance_yes;
   } else {
-    background = 'gray';
+    background = Theme.compliance_undefined;
   }
 
   const toolTipText = isDefined(toolTip) ? toolTip : title;
