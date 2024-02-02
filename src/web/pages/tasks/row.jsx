@@ -42,13 +42,13 @@ import Trend from './trend';
 
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
-export const renderReport = (report, links) => {
+const renderReport = (report, links) => {
   if (!isDefined(report)) {
     return null;
   }
   return (
     <span>
-      <DetailsLink type="auditreport" id={report.id} textOnly={!links}>
+      <DetailsLink type="report" id={report.id} textOnly={!links}>
         <DateTime date={report.timestamp} />
       </DetailsLink>
     </span>
