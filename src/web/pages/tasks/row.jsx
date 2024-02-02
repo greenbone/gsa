@@ -48,7 +48,7 @@ export const renderReport = (report, links) => {
   }
   return (
     <span>
-      <DetailsLink type="report" id={report.id} textOnly={!links}>
+      <DetailsLink type="auditreport" id={report.id} textOnly={!links}>
         <DateTime date={report.timestamp} />
       </DetailsLink>
     </span>

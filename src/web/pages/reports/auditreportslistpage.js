@@ -136,7 +136,7 @@ class Page extends React.Component {
     const {filter, onFilterChanged, onInteraction} = this.props;
     return (
       <React.Fragment>
-        <PageTitle title={_('Compliance Reports')} />
+        <PageTitle title={_('Audit Reports')} />
         <EntitiesPage
           {...this.props}
           {...this.state}
@@ -157,7 +157,7 @@ class Page extends React.Component {
           filterEditDialog={AuditFilterDialog}
           table={AuditReportsTable}
           toolBarIcons={ToolBarIcons}
-          title={_('Compliance Reports')}
+          title={_('Audit Reports')}
           sectionIcon={<ReportIcon size="large" />}
           onInteraction={onInteraction}
           onReportDeltaSelect={this.handleReportDeltaSelect}

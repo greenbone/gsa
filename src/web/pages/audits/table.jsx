@@ -51,7 +51,7 @@ const Header = ({
           width="24%"
           title={_('Report')}
         />
-        <TableHead width="8%" title={_('Compliance Status')} />
+        <TableHead width="8%" title={_('Compliance Percent')} />
         {actionsColumn}
       </TableRow>
     </TableHeader>

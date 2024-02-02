@@ -159,7 +159,7 @@ const PageContent = ({
 
   const header_title = (
     <Divider>
-      <span>{_('Compliance Report:')}</span>
+      <span>{_('Audit Report:')}</span>
       {showIsLoading ? (
         <span>{_('Loading')}</span>
       ) : (
