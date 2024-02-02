@@ -16,17 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {scaleOrdinal} from 'd3-scale';
-
-import {interpolateHcl} from 'd3-interpolate';
-
 import {_, _l} from 'gmp/locale/lang';
 
 import {AUDIT_REPORTS_FILTER_FILTER} from 'gmp/models/filter';
 import {getTranslatableReportCompliance} from 'gmp/models/auditreport';
 
 import {registerDisplay} from 'web/components/dashboard/registry';
-import {totalCount, percent} from 'web/components/dashboard/display/utils';
+import {
+  complianceColorScale,
+  totalCount,
+  percent,
+} from 'web/components/dashboard/display/utils';
 
 import createDisplay from 'web/components/dashboard/display/createDisplay';
 import DataTable from 'web/components/dashboard/display/datatable';
@@ -35,14 +35,6 @@ import DataTableDisplay from 'web/components/dashboard/display/datatabledisplay'
 import StatusDisplay from 'web/components/dashboard/display/status/statusdisplay'; // eslint-disable-line max-len
 
 import {ReportCompianceLoader} from './loaders';
-
-const red = interpolateHcl('#d62728', '#ff9896');
-const green = interpolateHcl('#2ca02c', '#98df8a');
-const orange = interpolateHcl('#ff7f0e', '#ffbb78');
-
-const ComplianceStatusColorScale = scaleOrdinal()
-  .domain(['yes', 'no', 'incomplete', 'undefined'])
-  .range([green(0.25), red(0), orange(0.5), 'silver']);
 
 const transformStatusData = (data = {}) => {
   const {groups = []} = data;
@@ -57,7 +49,7 @@ const transformStatusData = (data = {}) => {
       value: count,
       label: translatableValue,
       toolTip: `${translatableValue}: ${perc}% (${count})`,
-      color: ComplianceStatusColorScale(value),
+      color: complianceColorScale(value),
       filterValue: value,
     };
   });
@@ -73,7 +65,7 @@ export const ReportComplianceDisplay = createDisplay({
   filterTerm: 'compliant',
   displayId: 'report-by-compliance',
   title: ({data: tdata}) =>
-    _('Compliance Reports by Compliance (Total: {{count}})', {
+    _('Audit Reports by Compliance (Total: {{count}})', {
       count: tdata.total,
     }),
   filtersFilter: AUDIT_REPORTS_FILTER_FILTER,
@@ -88,7 +80,7 @@ export const ReportComplianceTableDisplay = createDisplay({
   dataTitles: [_l('Status'), _l('# of Reports')],
   dataRow: row => [row.label, row.value],
   title: ({data: tdata}) =>
-    _('Compliance Reports by Compliance (Total: {{count}})', {
+    _('Audit Reports by Compliance (Total: {{count}})', {
       count: tdata.total,
     }),
   displayId: 'report-by-compliance-table',
@@ -97,14 +89,14 @@ export const ReportComplianceTableDisplay = createDisplay({
 });
 
 registerDisplay(ReportComplianceDisplay.displayId, ReportComplianceDisplay, {
-  title: _l('Chart: Compliance Reports by Compliance'),
+  title: _l('Chart: Audit Reports by Compliance'),
 });
 
 registerDisplay(
   ReportComplianceTableDisplay.displayId,
   ReportComplianceTableDisplay,
   {
-    title: _l('Table: Compliance Reports by Compliance'),
+    title: _l('Table: Audit Reports by Compliance'),
   },
 );
 

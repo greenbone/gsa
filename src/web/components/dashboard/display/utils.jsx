@@ -10,6 +10,8 @@ import {scaleOrdinal, scaleLinear} from 'd3-scale';
 
 import {parseInt} from 'gmp/parser';
 
+import {COMPLIANCE_STATES} from 'gmp/models/auditreport';
+
 import {
   ERROR,
   DEBUG,
@@ -148,5 +150,9 @@ export const secInfoTypeColorScale = scaleOrdinal()
     '#98df8a', // DFN-CERT Advisories
     '#80c674', // Nvts
   ]);
+
+export const complianceColorScale = scaleOrdinal()
+  .domain(Object.keys(COMPLIANCE_STATES))
+  .range(['#4cb045', '#D80000', 'orange', 'silver']);
 
 // vim: set ts=2 sw=2 tw=80:
