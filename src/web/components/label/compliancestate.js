@@ -21,6 +21,7 @@ import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {styledExcludeProps} from 'web/utils/styledConfig';
+import Theme from 'web/utils/theme.js';
 
 const Label = styledExcludeProps(styled.div, [
   'backgroundColor',
@@ -41,7 +42,11 @@ const Label = styledExcludeProps(styled.div, [
 
 const YesLabel = props => {
   return (
-    <Label {...props} backgroundColor="#91c74f" borderColor="#4F91C7">
+    <Label
+      {...props}
+      backgroundColor={Theme.compliance_yes}
+      borderColor={Theme.compliance_yes}
+    >
       {_('Yes')}
     </Label>
   );
@@ -49,7 +54,11 @@ const YesLabel = props => {
 
 const NoLabel = props => {
   return (
-    <Label {...props} backgroundColor="#C83814" borderColor="#C83814">
+    <Label
+      {...props}
+      backgroundColor={Theme.compliance_no}
+      borderColor={Theme.compliance_no}
+    >
       {_('No')}
     </Label>
   );
@@ -57,7 +66,11 @@ const NoLabel = props => {
 
 const IncompleteLabel = props => {
   return (
-    <Label {...props} backgroundColor="#F0A519" borderColor="#F0A519">
+    <Label
+      {...props}
+      backgroundColor={Theme.compliance_incomplete}
+      borderColor={Theme.compliance_incomplete}
+    >
       {_('Incomplete')}
     </Label>
   );
@@ -65,7 +78,11 @@ const IncompleteLabel = props => {
 
 const UndefinedLabel = props => {
   return (
-    <Label {...props} backgroundColor="#191919" borderColor="#191919">
+    <Label
+      {...props}
+      backgroundColor={Theme.compliance_undefined}
+      borderColor={Theme.compliance_undefined}
+    >
       {_('Undefined')}
     </Label>
   );
