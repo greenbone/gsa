@@ -61,7 +61,7 @@ jobs:
           name: linting-report-${{ matrix.node-version }}
           path: ${{ env.REPORT_DIR }}
       - name: Submit test coverage to codecov.io
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: false
 
