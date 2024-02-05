@@ -1368,6 +1368,17 @@ exports[`PoliciesPage tests should render full PoliciesPage 1`] = `
                               <span
                                 class="c6 c5"
                                 data-testid="svg-icon"
+                                title="Add tag to page contents"
+                              >
+                                <svg
+                                  title="Add tag to page contents"
+                                >
+                                  tags.svg
+                                </svg>
+                              </span>
+                              <span
+                                class="c6 c5"
+                                data-testid="svg-icon"
                                 title="Move page contents to trashcan"
                               >
                                 <svg

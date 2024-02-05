@@ -1435,6 +1435,14 @@ exports[`Audits table tests should render 1`] = `
                           data-testid="svg-icon"
                         >
                           <svg>
+                            tags.svg
+                          </svg>
+                        </span>
+                        <span
+                          class="c4"
+                          data-testid="svg-icon"
+                        >
+                          <svg>
                             trashcan.svg
                           </svg>
                         </span>
