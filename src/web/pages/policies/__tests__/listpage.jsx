@@ -178,15 +178,15 @@ describe('PoliciesPage tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     await act(async () => {
-      expect(icons[18]).toHaveAttribute(
+      expect(icons[19]).toHaveAttribute(
         'title',
         'Move page contents to trashcan',
       );
-      fireEvent.click(icons[18]);
+      fireEvent.click(icons[19]);
       expect(deleteByFilter).toHaveBeenCalled();
 
-      expect(icons[19]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[19]);
+      expect(icons[20]).toHaveAttribute('title', 'Export page contents');
+      fireEvent.click(icons[20]);
       expect(exportByFilter).toHaveBeenCalled();
     });
   });
