@@ -89,11 +89,11 @@ import getPage from 'web/store/pages/selectors';
 const log = logger.getLogger('web.pages.auditreport.detailspage');
 
 const DEFAULT_FILTER = Filter.fromString(
-  'levels=hmlg rows=100 min_qod=70 first=1 sort-reverse=compliant',
+  'levels=hmlg rows=100 min_qod=70 first=1 sort=compliant',
 );
 
-export const REPORT_RESET_FILTER = RESET_FILTER.copy()
-  .setSortOrder('sort-reverse')
+export const AUDIT_REPORT_RESET_FILTER = RESET_FILTER.copy()
+  .setSortOrder('sort')
   .setSortBy('compliant');
 
 const REPORT_FORMATS_FILTER = Filter.fromString('active=1 and trust=1 rows=-1');
@@ -291,7 +291,7 @@ class ReportDetails extends React.Component {
   }
 
   handleFilterRemoveClick() {
-    this.handleFilterChange(REPORT_RESET_FILTER);
+    this.handleFilterChange(AUDIT_REPORT_RESET_FILTER);
   }
 
   handleFilterResetClick() {
@@ -571,7 +571,7 @@ class ReportDetails extends React.Component {
               reportError={reportError}
               reportFilter={reportFilter}
               reportId={reportId}
-              resetFilter={REPORT_RESET_FILTER}
+              resetFilter={AUDIT_REPORT_RESET_FILTER}
               resultsCounts={resultsCounts}
               sorting={sorting}
               task={isDefined(report) ? report.task : undefined}

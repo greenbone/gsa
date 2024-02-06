@@ -32,7 +32,7 @@ const resultsSortFunctions = {
   severity: makeCompareSeverity(),
   solution_type: makeCompareString(entity => entity.nvt.solution?.type),
   vulnerability: makeCompareString('vulnerability'),
-  // TODO: Add filter for compliant
+  compliant: makeCompareString('compliance'),
 };
 
 const ResultsTab = ({

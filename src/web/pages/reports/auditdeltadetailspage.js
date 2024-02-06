@@ -51,7 +51,7 @@ import {
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
-import {loadDeltaReport} from 'web/store/entities/report/actions';
+import {loadDeltaAuditReport} from 'web/store/entities/report/actions';
 
 import {deltaReportSelector} from 'web/store/entities/report/selectors';
 
@@ -575,9 +575,9 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
     loadReportFormats: () =>
       dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
     loadReport: (id, deltaId, filter) =>
-      dispatch(loadDeltaReport(gmp)(id, deltaId, filter)),
+      dispatch(loadDeltaAuditReport(gmp)(id, deltaId, filter)),
     loadReportIfNeeded: (id, deltaId, filter) =>
-      dispatch(loadDeltaReport(gmp)(id, deltaId, filter)),
+      dispatch(loadDeltaAuditReport(gmp)(id, deltaId, filter)),
     loadReportComposerDefaults: () =>
       dispatch(loadReportComposerDefaults(gmp)()),
     loadUserSettingDefaultFilter: () =>
