@@ -43,7 +43,7 @@ const hostsSortFunctions = {
     entity => entity.compliance_counts.incomplete,
   ),
   compliance_total: makeCompareNumber(entity => entity.compliance_counts.total),
-  // TODO Add filter for compliant
+  compliant: makeCompareString('host_compliance'),
 };
 
 const HostsTab = ({
