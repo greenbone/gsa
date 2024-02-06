@@ -14,26 +14,50 @@ import {
   auditReportSelector,
   reportSelector,
   deltaReportSelector,
+  deltaAuditReportSelector,
   deltaReportIdentifier,
 } from './selectors';
 
 export const reportActions = {
-  request: (id, filter, entityType = 'report') => ({
+  request: (id, filter) => ({
     type: types.ENTITY_LOADING_REQUEST,
-    entityType,
+    entityType: 'report',
     filter,
     id,
   }),
-  success: (id, data, filter, entityType = 'report') => ({
+  success: (id, data, filter) => ({
     type: types.ENTITY_LOADING_SUCCESS,
-    entityType,
+    entityType: 'report',
     data,
     filter,
     id,
   }),
-  error: (id, error, filter, entityType = 'report') => ({
+  error: (id, error, filter) => ({
     type: types.ENTITY_LOADING_ERROR,
-    entityType,
+    entityType: 'report',
+    error,
+    filter,
+    id,
+  }),
+};
+
+export const auditReportActions = {
+  request: (id, filter) => ({
+    type: types.ENTITY_LOADING_REQUEST,
+    entityType: 'auditreport',
+    filter,
+    id,
+  }),
+  success: (id, data, filter) => ({
+    type: types.ENTITY_LOADING_SUCCESS,
+    entityType: 'auditreport',
+    data,
+    filter,
+    id,
+  }),
+  error: (id, error, filter) => ({
+    type: types.ENTITY_LOADING_ERROR,
+    entityType: 'auditreport',
     error,
     filter,
     id,
@@ -161,19 +185,19 @@ export const loadAuditReport =
       return Promise.resolve();
     }
 
-    dispatch(reportActions.request(id, filter, 'auditreport'));
+    dispatch(auditReportActions.request(id, filter));
 
     return gmp.auditreport
       .get({id}, {filter, details})
       .then(
         response => response.data,
         error => {
-          dispatch(reportActions.error(id, error, filter, 'auditreport'));
+          dispatch(auditReportActions.error(id, error, filter));
           return Promise.reject(error);
         },
       )
       .then(data => {
-        dispatch(reportActions.success(id, data, filter, 'auditreport'));
+        dispatch(auditReportActions.success(id, data, filter));
 
         return data;
       });
@@ -190,7 +214,7 @@ export const loadAuditReportWithThreshold =
       return Promise.resolve();
     }
 
-    dispatch(reportActions.request(id, filter, 'auditreport'));
+    dispatch(auditReportActions.request(id, filter));
 
     const {reportResultsThreshold: threshold} = gmp.settings;
     return gmp.auditreport
@@ -198,7 +222,7 @@ export const loadAuditReportWithThreshold =
       .then(
         response => response.data,
         error => {
-          dispatch(reportActions.error(id, error, filter, 'auditreport'));
+          dispatch(auditReportActions.error(id, error, filter));
           return Promise.reject(error);
         },
       )
@@ -209,7 +233,7 @@ export const loadAuditReportWithThreshold =
           isDefined(report.report.results) &&
           report.report.results.counts.filtered < threshold;
 
-        dispatch(reportActions.success(id, report, filter, 'auditreport'));
+        dispatch(auditReportActions.success(id, report, filter));
         if (fullReport) {
           return loadAuditReport(gmp)(id, {filter, details: true, force: true})(
             dispatch,
@@ -232,10 +256,13 @@ export const loadAuditReportIfNeeded =
     return loadAuditReport(gmp)(id, {filter, details})(dispatch, getState);
   };
 
+export const deltaAuditReportActions =
+  createEntityLoadingActions('deltaAuditReport');
+
 export const loadDeltaAuditReport =
   gmp => (id, deltaId, filter) => (dispatch, getState) => {
     const rootState = getState();
-    const state = deltaReportSelector(rootState);
+    const state = deltaAuditReportSelector(rootState);
 
     if (state.isLoading(id, deltaId)) {
       return Promise.resolve();
@@ -243,11 +270,11 @@ export const loadDeltaAuditReport =
 
     const identifier = deltaReportIdentifier(id, deltaId);
 
-    dispatch(deltaReportActions.request(identifier));
+    dispatch(deltaAuditReportActions.request(identifier));
 
     return gmp.auditreport.getDelta({id}, {id: deltaId}, {filter}).then(
       response =>
-        dispatch(deltaReportActions.success(identifier, response.data)),
-      error => dispatch(deltaReportActions.error(identifier, error)),
+        dispatch(deltaAuditReportActions.success(identifier, response.data)),
+      error => dispatch(deltaAuditReportActions.error(identifier, error)),
     );
   };

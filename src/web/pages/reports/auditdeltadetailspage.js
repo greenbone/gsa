@@ -53,7 +53,7 @@ import {
 
 import {loadDeltaAuditReport} from 'web/store/entities/report/actions';
 
-import {deltaReportSelector} from 'web/store/entities/report/selectors';
+import {deltaAuditReportSelector} from 'web/store/entities/report/selectors';
 
 import {
   loadReportComposerDefaults,
@@ -590,7 +590,7 @@ const mapDispatchToProps = (dispatch, {gmp}) => {
 const mapStateToProps = (rootState, {match}) => {
   const {id, deltaid} = match.params;
   const filterSel = filterSelector(rootState);
-  const deltaSel = deltaReportSelector(rootState);
+  const deltaSel = deltaAuditReportSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const userDefaultFilterSel = getUserSettingsDefaultFilter(

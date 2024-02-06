@@ -62,10 +62,10 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-const deltaReducer = createReducer('deltaReport');
+const deltaAuditReducer = createReducer('deltaAuditReport');
 
 export {
-  deltaReducer,
+  deltaAuditReducer,
   loadAllEntities,
   loadEntities,
   reducer,
