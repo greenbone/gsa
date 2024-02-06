@@ -83,3 +83,6 @@ export const auditReportSelector = rootState =>
 
 export const deltaReportSelector = rootState =>
   new DeltaReportSelector(rootState.entities.deltaReport);
+
+export const deltaAuditReportSelector = rootState =>
+  new DeltaReportSelector(rootState.entities.deltaAuditReport);
