@@ -18,7 +18,7 @@ const operatingssystemsSortFunctions = {
   cpe: makeCompareString('id'),
   hosts: makeCompareNumber(entity => entity.hosts.count),
   severity: makeCompareNumber('severity', 0),
-  // TODO Add filter for compliant
+  compliant: makeCompareString('compliance'),
 };
 
 const OperatingSystemsTab = ({
