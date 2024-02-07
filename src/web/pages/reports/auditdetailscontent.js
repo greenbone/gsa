@@ -64,7 +64,7 @@ import OperatingSystemsTab from './details/operatingsystemstab';
 import ResultsTab from './details/resultstab';
 import Summary from './details/summary';
 import TabTitle from './details/tabtitle';
-import ThresholdPanel from './details/thresholdpanel';
+import AuditThresholdPanel from './details/auditthresholdpanel';
 import TLSCertificatesTab from './details/tlscertificatestab';
 import ToolBarIcons from './details/toolbaricons';
 
@@ -300,7 +300,7 @@ const PageContent = ({
                     {showInitialLoading ? (
                       <Loading />
                     ) : showThresholdMessage ? (
-                      <ThresholdPanel
+                      <AuditThresholdPanel
                         entityType={_('Hosts')}
                         filter={reportFilter}
                         isUpdating={isUpdating}
@@ -328,7 +328,7 @@ const PageContent = ({
                     {showInitialLoading ? (
                       <Loading />
                     ) : showThresholdMessage ? (
-                      <ThresholdPanel
+                      <AuditThresholdPanel
                         entityType={_('Operating Systems')}
                         filter={reportFilter}
                         isUpdating={isUpdating}
@@ -356,7 +356,7 @@ const PageContent = ({
                     {showInitialLoading ? (
                       <Loading />
                     ) : showThresholdMessage ? (
-                      <ThresholdPanel
+                      <AuditThresholdPanel
                         entityType={_('TLS Certificates')}
                         filter={reportFilter}
                         isUpdating={isUpdating}
