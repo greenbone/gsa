@@ -185,7 +185,7 @@ const reportsReloadInterval = ({entities = []}) =>
     : USE_DEFAULT_RELOAD_INTERVAL;
 
 const FALLBACK_AUDIT_REPORT_LIST_FILTER = Filter.fromString(
-  'sort-reverse=date first=1',
+  'report_compliance_levels=yniu sort-reverse=date first=1',
 );
 
 export default compose(
