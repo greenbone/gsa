@@ -120,6 +120,7 @@ class Host {
     copy.end = parseDate(element.end);
 
     delete copy.result_count;
+    delete copy.compliance_count;
 
     copy.authSuccess = {};
     copy.details = {};
