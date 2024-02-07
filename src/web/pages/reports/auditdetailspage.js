@@ -89,7 +89,7 @@ import getPage from 'web/store/pages/selectors';
 const log = logger.getLogger('web.pages.auditreport.detailspage');
 
 const DEFAULT_FILTER = Filter.fromString(
-  'levels=hmlg rows=100 min_qod=70 first=1 sort=compliant',
+  'levels=hmlg rows=100 min_qod=70 first=1 compliance_levels=yniu sort=compliant',
 );
 
 export const AUDIT_REPORT_RESET_FILTER = RESET_FILTER.copy()
