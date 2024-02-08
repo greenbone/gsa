@@ -18,7 +18,7 @@
 
 import React, {useEffect, useState} from 'react';
 
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
 
@@ -84,7 +84,7 @@ const FilterProvider = ({
       userSettingDefaultSel.getValueByName('rowsperpage'),
       userSettingDefaultSel.getError(),
     ];
-  });
+  }, shallowEqual);
 
   useEffect(() => {
     if (!isDefined(rowsPerPage)) {
