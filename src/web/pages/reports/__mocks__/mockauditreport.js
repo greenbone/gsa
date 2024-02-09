@@ -338,7 +338,15 @@ export const getMockAuditReport = () => {
     os: {count: 2},
     ssl_certs: {count: 2},
     compliance: {filtered: 'no', full: 'no'},
-    compliance_count: {__text: 3, full: 3, filtered: 2},
+    compliance_count: {
+      __text: 3,
+      full: 3,
+      filtered: 2,
+      yes: {full: 5, filtered: 3},
+      no: {full: 3, filtered: 2},
+      incomplete: {full: 2, filtered: 1},
+      undefined: {full: 0, filtered: 0},
+    },
     results: {result: [result1, result2, result3]},
     hosts: {count: 3},
     host: [host1, host2, host3],
@@ -362,6 +370,7 @@ export const getMockAuditReport = () => {
     name: '2019-06-03T11:00:22Z',
     owner: {name: 'admin'},
     _id: '1234',
+    task: task1,
   });
 
   return {
