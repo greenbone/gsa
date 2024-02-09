@@ -250,4 +250,39 @@ describe('Audit reports with compliance', () => {
     expect(bars[0]).toHaveAttribute('title', 'Undefined');
     expect(bars[0]).toHaveTextContent('Undefined');
   });
+
+  test('Delta audit report with changed compliance', () => {
+    const entity = Result.fromElement({
+      _id: '101',
+      name: 'Result 1',
+      host: {__text: '123.456.78.910', hostname: 'foo'},
+      port: '80/tcp',
+      severity: 10.0,
+      qod: {value: 80},
+      notes: [],
+      overrides: [],
+      tickets: [],
+      compliance: 'undefined',
+      delta: {
+        delta_type: 'changed',
+        result: {
+          compliance: 'yes',
+        },
+      },
+    });
+
+    const {getAllByTestId} = render(
+      <table>
+        <tbody>
+          <Row entity={entity} audit={true} />
+        </tbody>
+      </table>,
+    );
+    const icons = getAllByTestId('svg-icon');
+    expect(icons.length).toEqual(1);
+    expect(icons[0]).toHaveAttribute(
+      'title',
+      'Compliance is changed from yes.',
+    );
+  });
 });
