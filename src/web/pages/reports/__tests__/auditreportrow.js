@@ -19,20 +19,23 @@
 import React from 'react';
 import {rendererWith} from 'web/utils/testing';
 import AuditRow from '../auditreportrow';
+import {setTimezone} from 'web/store/usersettings/actions';
 
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
 
 describe('Audit report row', () => {
-  const {render} = rendererWith({
-    capabilities: true,
-    store: true,
-    router: true,
-  });
-
   test('should render row for Audit report', () => {
     const {entity} = getMockAuditReport();
     const onReportDeleteClick = jest.fn();
     const onReportDeltaSelect = jest.fn();
+
+    const {render, store} = rendererWith({
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
 
     const {baseElement, getAllByTestId} = render(
       <table>
@@ -49,16 +52,17 @@ describe('Audit report row', () => {
     const icons = baseElement.querySelectorAll('svg');
     const bars = getAllByTestId('progressbar-box');
     const links = baseElement.querySelectorAll('a');
+    const rows = baseElement.querySelectorAll('tr');
 
     expect(links[0]).toHaveAttribute('href', '/auditreport/1234');
-    expect(baseElement).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM');
+    expect(rows[0]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM');
     expect(bars[0]).toHaveAttribute('title', 'Done');
     expect(bars[0]).toHaveTextContent('Done');
-    expect(baseElement).toHaveTextContent('foo');
+    expect(rows[0]).toHaveTextContent('foo');
     expect(links[1]).toHaveAttribute('href', '/task/314');
     expect(bars[1]).toHaveAttribute('title', 'No');
     expect(bars[1]).toHaveTextContent('No');
-    expect(baseElement).toHaveTextContent('321'); // yes: 3, no: 2, incomplete: 1
+    expect(rows[0]).toHaveTextContent('321'); // yes: 3, no: 2, incomplete: 1
     expect(icons[0]).toHaveTextContent('delta.svg');
     expect(icons[1]).toHaveTextContent('delete.svg');
   });
