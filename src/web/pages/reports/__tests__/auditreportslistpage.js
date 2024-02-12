@@ -1,0 +1,284 @@
+/* Copyright (C) 2024 Greenbone AG
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+import React from 'react';
+import {act} from 'react-dom/test-utils';
+
+import {setLocale} from 'gmp/locale/lang';
+
+import CollectionCounts from 'gmp/collection/collectioncounts';
+
+import Filter from 'gmp/models/filter';
+
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
+import {entitiesActions} from 'web/store/entities/auditreports';
+import {loadingActions} from 'web/store/usersettings/defaults/actions';
+import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
+
+import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
+import AuditReportsPage from '../auditreportslistpage';
+
+setLocale('en');
+
+window.URL.createObjectURL = jest.fn();
+
+const {entity} = getMockAuditReport();
+
+const reloadInterval = 1;
+const manualUrl = 'test/';
+
+const currentSettings = jest.fn().mockResolvedValue({
+  foo: 'bar',
+});
+
+const getFilters = jest.fn().mockReturnValue(
+  Promise.resolve({
+    data: [],
+    meta: {
+      filter: Filter.fromString(),
+      counts: new CollectionCounts(),
+    },
+  }),
+);
+
+const getDashboardSetting = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const getUserSetting = jest.fn().mockResolvedValue({
+  filter: null,
+});
+
+const getComplianceAggregates = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const getReports = jest.fn().mockResolvedValue({
+  data: [entity],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const getAll = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+const getReportFormats = jest.fn().mockResolvedValue({
+  data: [],
+  meta: {
+    filter: Filter.fromString(),
+    counts: new CollectionCounts(),
+  },
+});
+
+describe('AuditReportsPage tests', () => {
+  test('should render full AuditReports Page', async () => {
+    const gmp = {
+      auditreports: {
+        get: getReports,
+        getComplianceAggregates: getComplianceAggregates,
+      },
+      filters: {
+        get: getFilters,
+      },
+      reportformats: {
+        get: getReportFormats,
+      },
+      dashboard: {
+        getSetting: getDashboardSetting,
+      },
+      reloadInterval,
+      settings: {manualUrl},
+      user: {currentSettings, getSetting: getUserSetting},
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('auditreport', defaultSettingfilter),
+    );
+
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesActions.success([entity], filter, loadedFilter, counts),
+    );
+
+    const {baseElement, getAllByTestId} = render(<AuditReportsPage />);
+
+    await waitFor(() => baseElement.querySelectorAll('table'));
+
+    const display = getAllByTestId('grid-item');
+    const icons = getAllByTestId('svg-icon');
+    const inputs = baseElement.querySelectorAll('input');
+    const header = baseElement.querySelectorAll('th');
+    const row = baseElement.querySelectorAll('tr');
+    const selects = getAllByTestId('select-selected-value');
+
+    // Toolbar Icons
+    expect(icons[0]).toHaveAttribute('title', 'Help: Reports');
+
+    // Powerfilter
+    expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
+    expect(icons[1]).toHaveAttribute('title', 'Update Filter');
+    expect(icons[2]).toHaveAttribute('title', 'Remove Filter');
+    expect(icons[3]).toHaveAttribute('title', 'Reset to Default Filter');
+    expect(icons[4]).toHaveAttribute('title', 'Help: Powerfilter');
+    expect(icons[5]).toHaveAttribute('title', 'Edit Filter');
+    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
+    expect(selects[0]).toHaveTextContent('--');
+
+    // // Dashboard
+    expect(icons[7]).toHaveAttribute('title', 'Add new Dashboard Display');
+    expect(icons[8]).toHaveAttribute('title', 'Reset to Defaults');
+    expect(display[0]).toHaveTextContent(
+      'Audit Reports by Compliance (Total: 0)',
+    );
+    expect(display[1]).toHaveTextContent(
+      'Audit Reports by Compliance (Total: 0)',
+    );
+
+    // Table
+    expect(header[0]).toHaveTextContent('Date');
+    expect(header[1]).toHaveTextContent('Status');
+    expect(header[2]).toHaveTextContent('Task');
+    expect(header[3]).toHaveTextContent('Compliant');
+    expect(header[4]).toHaveTextContent('Yes');
+    expect(header[5]).toHaveTextContent('No');
+    expect(header[6]).toHaveTextContent('Incomplete');
+    expect(header[7]).toHaveTextContent('Actions');
+
+    expect(row[1]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM');
+    expect(row[1]).toHaveTextContent('Done');
+    expect(row[1]).toHaveTextContent('foo');
+    expect(row[1]).toHaveTextContent('No');
+    expect(row[1]).toHaveTextContent('321'); // yes: 3, no: 2, incomplete: 1
+    expect(icons[17]).toHaveTextContent('delta.svg');
+    expect(icons[18]).toHaveTextContent('delete.svg');
+  });
+
+  test('should call commands for bulk actions', async () => {
+    const deleteByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const exportByFilter = jest.fn().mockResolvedValue({
+      foo: 'bar',
+    });
+
+    const gmp = {
+      auditreports: {
+        get: getReports,
+        getComplianceAggregates: getComplianceAggregates,
+        deleteByFilter,
+        exportByFilter,
+      },
+      filters: {
+        get: getFilters,
+      },
+      reportformats: {
+        get: getReportFormats,
+      },
+      dashboard: {
+        getSetting: getDashboardSetting,
+      },
+      tags: {
+        getAll: getAll,
+      },
+      reloadInterval,
+      settings: {manualUrl},
+      user: {currentSettings, getSetting: getUserSetting},
+    };
+
+    const {render, store} = rendererWith({
+      gmp,
+      capabilities: true,
+      store: true,
+      router: true,
+    });
+
+    store.dispatch(setTimezone('CET'));
+    store.dispatch(setUsername('admin'));
+
+    const defaultSettingfilter = Filter.fromString('foo=bar');
+    store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
+    store.dispatch(
+      defaultFilterLoadingActions.success('auditreport', defaultSettingfilter),
+    );
+
+    const counts = new CollectionCounts({
+      first: 1,
+      all: 1,
+      filtered: 1,
+      length: 1,
+      rows: 10,
+    });
+    const filter = Filter.fromString('first=1 rows=10');
+    const loadedFilter = Filter.fromString('first=1 rows=10');
+    store.dispatch(
+      entitiesActions.success([entity], filter, loadedFilter, counts),
+    );
+
+    const {baseElement, getAllByTestId} = render(<AuditReportsPage />);
+
+    await waitFor(() => baseElement.querySelectorAll('table'));
+
+    const icons = getAllByTestId('svg-icon');
+
+    await act(async () => {
+      expect(icons[19]).toHaveAttribute('title', 'Add tag to page contents');
+      fireEvent.click(icons[19]);
+      expect(getAll).toHaveBeenCalled();
+
+      expect(icons[20]).toHaveAttribute('title', 'Delete page contents');
+      fireEvent.click(icons[20]);
+      expect(deleteByFilter).toHaveBeenCalled();
+    });
+  });
+});
