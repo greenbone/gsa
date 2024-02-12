@@ -118,50 +118,50 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   display: inline-flex;
 }
 
-.c15 {
+.c14 {
   margin-left: -5px;
 }
 
-.c15>* {
+.c14>* {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c15>* {
+.c14>* {
   margin-left: 5px;
 }
 
-.c14 {
+.c13 {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
 
-.c17 {
+.c16 {
   cursor: pointer;
 }
 
-.c9 {
+.c8 {
   height: 24px;
   width: 24px;
   line-height: 24px;
 }
 
-.c9 * {
+.c8 * {
   height: inherit;
   width: inherit;
 }
 
-.c16 {
+.c15 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c16 * {
+.c15 * {
   height: inherit;
   width: inherit;
 }
@@ -176,18 +176,18 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   flex-direction: column;
 }
 
-.c11 {
+.c10 {
   position: relative;
   display: none;
   -webkit-animation: bNcXmX 0.1s ease-in;
   animation: bNcXmX 0.1s ease-in;
 }
 
-.c6:hover .c11 {
+.c6:hover .c10 {
   display: block;
 }
 
-.c12 {
+.c11 {
   position: absolute;
   margin: 0;
   padding: 0;
@@ -199,7 +199,7 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   width: 300px;
 }
 
-.c13 {
+.c12 {
   height: 30px;
   width: 300px;
   border-left: 1px solid #7F7F7F;
@@ -216,48 +216,48 @@ exports[`Titlebar tests should render content if user is logged in 1`] = `
   padding-left: 12px;
 }
 
-.c13:hover {
+.c12:hover {
   background: #11ab51;
   color: #fff;
   cursor: pointer;
 }
 
-.c13:first-child {
+.c12:first-child {
   border-top: 1px solid #7F7F7F;
   cursor: default;
 }
 
-background-color:#f3f3f3 .c13:first-child:hover {
+background-color:#f3f3f3 .c12:first-child:hover {
   color: #000;
 }
 
-.c13:nth-child(2) {
+.c12:nth-child(2) {
   cursor: default;
 }
 
-background-color:#f3f3f3 .c13:nth-child(2):hover {
+background-color:#f3f3f3 .c12:nth-child(2):hover {
   color: #000;
 }
 
-.c13:last-child {
+.c12:last-child {
   border-top: 1px solid #7F7F7F;
   border-bottom: 1px solid #7F7F7F;
 }
 
-.c10 {
+.c9 {
   margin-right: 10px;
 }
 
-.c18 {
+.c17 {
   width: 100%;
   height: 100%;
 }
 
-.c18:link,
-.c18:hover,
-.c18:active,
-.c18:visited,
-.c18:hover {
+.c17:link,
+.c17:hover,
+.c17:active,
+.c17:visited,
+.c17:hover {
   color: inherit;
   -webkit-text-decoration: none;
   text-decoration: none;
@@ -304,7 +304,7 @@ background-color:#f3f3f3 .c13:nth-child(2):hover {
 }
 
 @media print {
-  .c8 {
+  .c16 {
     display: none;
   }
 }
@@ -345,7 +345,7 @@ background-color:#f3f3f3 .c13:nth-child(2):hover {
         data-testid="usermenu"
       >
         <span
-          class="c8 c9 c10"
+          class="c8 c9"
           data-testid="svg-icon"
         >
           <svg>
@@ -353,23 +353,23 @@ background-color:#f3f3f3 .c13:nth-child(2):hover {
           </svg>
         </span>
         <div
-          class="c11"
+          class="c10"
         >
           <ul
-            class="c12"
+            class="c11"
           >
             <li
-              class="c13"
+              class="c12"
               title="Logged in as: username"
             >
               <div
-                class="c3 c14"
+                class="c3 c13"
               >
                 <div
-                  class="c3 c15"
+                  class="c3 c14"
                 >
                   <span
-                    class="c8 c16"
+                    class="c15"
                     data-testid="svg-icon"
                   >
                     <svg>
@@ -383,16 +383,16 @@ background-color:#f3f3f3 .c13:nth-child(2):hover {
               </div>
             </li>
             <li
-              class="c13"
+              class="c12"
             >
               <div
-                class="c3 c14"
+                class="c3 c13"
               >
                 <div
-                  class="c3 c15"
+                  class="c3 c14"
                 >
                   <span
-                    class="c8 c16"
+                    class="c15"
                     data-testid="svg-icon"
                   >
                     <svg>
@@ -403,7 +403,7 @@ background-color:#f3f3f3 .c13:nth-child(2):hover {
                     Session timeout: 
                   </span>
                   <span
-                    class="c8 c17 c16"
+                    class="c16 c15"
                     data-testid="svg-icon"
                     title="Renew session timeout"
                   >
@@ -417,21 +417,21 @@ background-color:#f3f3f3 .c13:nth-child(2):hover {
               </div>
             </li>
             <li
-              class="c13"
+              class="c12"
             >
               <a
-                class="c2 c18"
+                class="c2 c17"
                 data-testid="usermenu-settings"
                 href="/usersettings"
               >
                 <div
-                  class="c3 c14"
+                  class="c3 c13"
                 >
                   <div
-                    class="c3 c15"
+                    class="c3 c14"
                   >
                     <span
-                      class="c8 c16"
+                      class="c15"
                       data-testid="svg-icon"
                     >
                       <svg>
@@ -446,17 +446,17 @@ background-color:#f3f3f3 .c13:nth-child(2):hover {
               </a>
             </li>
             <li
-              class="c13"
+              class="c12"
               data-testid="usermenu-logout"
             >
               <div
-                class="c3 c14"
+                class="c3 c13"
               >
                 <div
-                  class="c3 c15"
+                  class="c3 c14"
                 >
                   <span
-                    class="c8 c16"
+                    class="c15"
                     data-testid="svg-icon"
                   >
                     <svg>

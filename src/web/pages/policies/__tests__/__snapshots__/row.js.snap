@@ -120,17 +120,17 @@ exports[`Row tests should render 1`] = `
   display: inline-flex;
 }
 
-.c9 {
+.c8 {
   cursor: pointer;
 }
 
-.c10 {
+.c9 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c10 * {
+.c9 * {
   height: inherit;
   width: inherit;
 }
@@ -206,7 +206,7 @@ exports[`Row tests should render 1`] = `
               class="c6 c7"
             >
               <span
-                class="c8 c9 c10"
+                class="c8 c9"
                 data-testid="svg-icon"
                 title="Move Policy to trashcan"
               >
@@ -217,7 +217,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9 c10"
+                class="c8 c9"
                 data-testid="svg-icon"
                 title="Edit Policy"
               >
@@ -228,7 +228,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9 c10"
+                class="c8 c9"
                 data-testid="svg-icon"
                 title="Clone Policy"
               >
@@ -239,7 +239,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9 c10"
+                class="c8 c9"
                 data-testid="svg-icon"
                 title="Create Audit from Policy"
               >
@@ -250,7 +250,7 @@ exports[`Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c8 c9 c10"
+                class="c8 c9"
                 data-testid="svg-icon"
                 title="Export Policy"
               >

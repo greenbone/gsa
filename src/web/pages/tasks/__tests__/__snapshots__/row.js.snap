@@ -64,7 +64,7 @@ exports[`Task Row tests should render 1`] = `
   justify-content: center;
 }
 
-.c16 {
+.c15 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -86,7 +86,7 @@ exports[`Task Row tests should render 1`] = `
   align-items: stretch;
 }
 
-.c17 {
+.c16 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -108,7 +108,7 @@ exports[`Task Row tests should render 1`] = `
   align-items: center;
 }
 
-.c18 {
+.c17 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -159,21 +159,21 @@ exports[`Task Row tests should render 1`] = `
   display: inline-flex;
 }
 
-.c19 {
+.c18 {
   cursor: pointer;
 }
 
-.c20 svg path {
+.c19 svg path {
   fill: #bfbfbf;
 }
 
-.c15 {
+.c14 {
   height: 16px;
   width: 16px;
   line-height: 16px;
 }
 
-.c15 * {
+.c14 * {
   height: inherit;
   width: inherit;
 }
@@ -234,7 +234,7 @@ exports[`Task Row tests should render 1`] = `
 }
 
 @media print {
-  .c14 {
+  .c18 {
     display: none;
   }
 }
@@ -398,7 +398,7 @@ exports[`Task Row tests should render 1`] = `
         >
           <span
             alt="Severity increased"
-            class="c14 c15"
+            class="c14"
             data-testid="svg-icon"
             title="Severity increased"
           >
@@ -412,16 +412,16 @@ exports[`Task Row tests should render 1`] = `
       </td>
       <td>
         <div
-          class="c16"
+          class="c15"
         >
           <div
-            class="c17 c4"
+            class="c16 c4"
           >
             <div
-              class="c18 c5"
+              class="c17 c5"
             >
               <span
-                class="c14 c19 c15"
+                class="c18 c14"
                 data-testid="svg-icon"
                 title="Start"
               >
@@ -433,7 +433,7 @@ exports[`Task Row tests should render 1`] = `
               </span>
               <span
                 alt="Resume"
-                class="c14 c20 c15"
+                class="c19 c14"
                 data-testid="svg-icon"
                 title="Task is not stopped"
               >
@@ -444,7 +444,7 @@ exports[`Task Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c14 c19 c15"
+                class="c18 c14"
                 data-testid="svg-icon"
                 title="Move Task to trashcan"
               >
@@ -455,7 +455,7 @@ exports[`Task Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c14 c19 c15"
+                class="c18 c14"
                 data-testid="svg-icon"
                 title="Edit Task"
               >
@@ -466,7 +466,7 @@ exports[`Task Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c14 c19 c15"
+                class="c18 c14"
                 data-testid="svg-icon"
                 title="Clone Task"
               >
@@ -477,7 +477,7 @@ exports[`Task Row tests should render 1`] = `
                 </svg>
               </span>
               <span
-                class="c14 c19 c15"
+                class="c18 c14"
                 data-testid="svg-icon"
                 title="Export Task"
               >
