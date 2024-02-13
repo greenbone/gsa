@@ -76,7 +76,7 @@ class ComplianceLevelsFilterGroup extends React.Component {
       compliance_levels = '';
     }
     return (
-      <FormGroup title={_('Compliance (Status)')}>
+      <FormGroup title={_('Compliance')}>
         <IconDivider>
           <Checkbox
             checked={compliance_levels.includes('y')}
