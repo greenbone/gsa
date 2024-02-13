@@ -71,7 +71,7 @@ describe('Details Filter Dialog for Audit report', () => {
       'Only show hosts that have results',
     );
     expect(formgroups[2]).toHaveTextContent('QoD');
-    expect(formgroups[3]).toHaveTextContent('Compliance (Status)');
+    expect(formgroups[3]).toHaveTextContent('Compliance');
     expect(content[3]).toHaveTextContent('YesNoIncompleteUndefined');
     expect(formgroups[4]).toHaveTextContent('Solution Type');
     expect(formgroups[5]).toHaveTextContent('Vulnerability');

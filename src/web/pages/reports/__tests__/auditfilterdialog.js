@@ -67,7 +67,7 @@ describe('Filter Dialog for Audit report', () => {
     const radioTitles = getAllByTestId('radio-title');
 
     expect(formgroups[0]).toHaveTextContent('Filter');
-    expect(formgroups[1]).toHaveTextContent('Compliance (Status)');
+    expect(formgroups[1]).toHaveTextContent('Compliance');
     expect(content[1]).toHaveTextContent('YesNoIncompleteUndefined');
     expect(formgroups[2]).toHaveTextContent('QoD');
     expect(formgroups[3]).toHaveTextContent('From Task (name)');
