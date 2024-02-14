@@ -46,6 +46,7 @@ import 'gmp/commands/performance';
 import 'gmp/commands/permissions';
 import 'gmp/commands/policies';
 import 'gmp/commands/portlists';
+import 'gmp/commands/reportconfigs';
 import 'gmp/commands/reportformats';
 import 'gmp/commands/reports';
 import 'gmp/commands/results';

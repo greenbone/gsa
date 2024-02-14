@@ -66,6 +66,7 @@ import OverridesTable from '../overrides/table';
 import PermissionsTable from '../permissions/table';
 import PoliciesTable from '../policies/table';
 import PortListsTable from '../portlists/table';
+import ReportConfigsTable from '../reportconfigs/table';
 import ReportFormatsTable from '../reportformats/table';
 import RolesTable from '../roles/table';
 import ScannersTable from '../scanners/table';
@@ -237,6 +238,7 @@ class Trashcan extends React.Component {
     const render_overrides = isDefined(trash.override_list);
     const render_permissions = isDefined(trash.permission_list);
     const render_port_lists = isDefined(trash.port_list_list);
+    const render_report_configs = isDefined(trash.report_config_list);
     const render_report_formats = isDefined(trash.report_format_list);
     const render_roles = isDefined(trash.role_list);
     const render_scanners = isDefined(trash.scanner_list);
@@ -298,6 +300,12 @@ class Trashcan extends React.Component {
             'port_list',
             _('Port Lists'),
             trash.port_list_list.length,
+          )}
+        {render_report_configs &&
+          this.createContentRow(
+            'report_config',
+            _('Report Configs'),
+            trash.report_config_list.length,
           )}
         {render_report_formats &&
           this.createContentRow(
@@ -477,6 +485,16 @@ class Trashcan extends React.Component {
               <h1>{_('Port Lists')}</h1>
               <PortListsTable
                 entities={trash.port_list_list}
+                {...table_props}
+              />
+            </span>
+          )}
+          {isDefined(trash.report_config_list) && (
+            <span>
+              <LinkTarget id="report_config" />
+              <h1>{_('Report Configs')}</h1>
+              <ReportConfigsTable
+                entities={trash.report_config_list}
                 {...table_props}
               />
             </span>

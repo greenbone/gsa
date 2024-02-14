@@ -44,6 +44,8 @@ const types = {
   policies: 'config',
   portlist: 'port_list',
   portlists: 'port_list',
+  reportconfig: 'report_config',
+  reportconfigs: 'report_config',
   reportformat: 'report_format',
   reportformats: 'report_format',
   scanconfig: 'config',

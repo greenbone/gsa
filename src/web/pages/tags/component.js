@@ -56,6 +56,7 @@ const TYPES = [
   'permission',
   'portlist',
   'report',
+  'reportconfig',
   'reportformat',
   'result',
   'role',

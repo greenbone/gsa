@@ -87,6 +87,7 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
     'scan_configs',
     'alerts',
     'schedules',
+    'report_configs',
     'report_formats',
     'scanners',
     'filters',
@@ -212,6 +213,9 @@ const MenuBar = ({isLoggedIn, capabilities}) => {
                   )}
                   {capabilities.mayAccess('schedules') && (
                     <MenuEntry title={_('Schedules')} to="schedules" />
+                  )}
+                  {capabilities.mayAccess('report_configs') && (
+                    <MenuEntry title={_('Report Configs')} to="reportconfigs" />
                   )}
                   {capabilities.mayAccess('report_formats') && (
                     <MenuEntry title={_('Report Formats')} to="reportformats" />

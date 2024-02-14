@@ -72,6 +72,8 @@ import PoliciesDetailsPage from './pages/policies/detailspage';
 import PortListsPage from './pages/portlists/listpage';
 import PortListDetailsPage from './pages/portlists/detailspage';
 import RadiusPage from './pages/radius/radiuspage';
+import ReportConfigsPage from './pages/reportconfigs/listpage';
+import ReportConfigDetailsPage from './pages/reportconfigs/detailspage';
 import ReportFormatsPage from './pages/reportformats/listpage';
 import ReportFormatDetailsPage from './pages/reportformats/detailspage';
 import ReportsPage from './pages/reports/listpage';
@@ -155,6 +157,7 @@ const Routes = () => (
               <Route path="/portlists" component={PortListsPage} />
               <Route path="/radius" component={RadiusPage} />
               <Route path="/reports" component={ReportsPage} />
+              <Route path="/reportconfigs" component={ReportConfigsPage} />
               <Route path="/reportformats" component={ReportFormatsPage} />
               <Route path="/results" component={ResultsPage} />
               <Route path="/roles" component={RolesPage} />
@@ -199,6 +202,10 @@ const Routes = () => (
                 component={DeltaReportDetailsPage}
               />
               <Route path="/report/:id" component={ReportDetailsPage} />
+              <Route
+                path="/reportconfig/:id"
+                component={ReportConfigDetailsPage}
+              />
               <Route
                 path="/reportformat/:id"
                 component={ReportFormatDetailsPage}

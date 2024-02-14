@@ -50,6 +50,7 @@ describe('entities reducer tests', () => {
       permission: initState,
       policy: initState,
       portlist: initState,
+      reportconfig: initState,
       reportformat: initState,
       report: initState,
       result: initState,
