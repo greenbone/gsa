@@ -179,6 +179,8 @@ const getPermissionTypeName = type => {
       return _('Preferences');
     case 'reports':
       return _('Reports');
+    case 'report_configs':
+      return _('Report Configs');
     case 'report_formats':
       return _('Report Formats');
     case 'results':

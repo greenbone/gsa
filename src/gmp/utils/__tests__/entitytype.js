@@ -85,6 +85,7 @@ describe('normalizeType function tests', () => {
     expect(normalizeType('dfn_cert_adv')).toEqual('dfncert');
     expect(normalizeType('port_list')).toEqual('portlist');
     expect(normalizeType('port_range')).toEqual('portrange');
+    expect(normalizeType('report_config')).toEqual('reportconfig');
     expect(normalizeType('report_format')).toEqual('reportformat');
     expect(normalizeType('config')).toEqual('scanconfig');
     expect(normalizeType('vuln')).toEqual('vulnerability');
@@ -109,6 +110,7 @@ describe('apiType function tests', () => {
     expect(apiType('dfncert')).toEqual('dfn_cert_adv');
     expect(apiType('portlist')).toEqual('port_list');
     expect(apiType('portrange')).toEqual('port_range');
+    expect(apiType('reportconfig')).toEqual('report_config');
     expect(apiType('reportformat')).toEqual('report_format');
     expect(apiType('scanconfig')).toEqual('config');
     expect(apiType('vulnerability')).toEqual('vuln');
@@ -139,6 +141,7 @@ describe('typeName function tests', () => {
     expect(typeName('dfncert')).toEqual('DFN-CERT Advisory');
     expect(typeName('portlist')).toEqual('Port List');
     expect(typeName('portrange')).toEqual('Port Range');
+    expect(typeName('reportconfig')).toEqual('Report Config');
     expect(typeName('scanconfig')).toEqual('Scan Config');
     expect(typeName('config')).toEqual('Scan Config');
     expect(typeName('vulnerability')).toEqual('Vulnerability');

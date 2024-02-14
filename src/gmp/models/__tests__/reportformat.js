@@ -64,6 +64,16 @@ describe('ReportFormat model tests', () => {
     expect(reportFormat2.active).toEqual(YES_VALUE);
   });
 
+  test('should parse configurable as boolean correctly', () => {
+    const reportFormat = ReportFormat.fromElement({configurable: '0'});
+    const reportFormat2 = ReportFormat.fromElement({configurable: '1'});
+    const reportFormat3 = ReportFormat.fromElement({});
+
+    expect(reportFormat.configurable).toEqual(false);
+    expect(reportFormat2.configurable).toEqual(true);
+    expect(reportFormat3.configurable).toEqual(false);
+  });
+
   test('should parse predefined as boolean correctly', () => {
     const reportFormat = ReportFormat.fromElement({predefined: '0'});
     const reportFormat2 = ReportFormat.fromElement({predefined: '1'});
@@ -89,6 +99,15 @@ describe('ReportFormat model tests', () => {
     const reportFormat = ReportFormat.fromElement({});
 
     expect(reportFormat.alerts).toEqual([]);
+  });
+
+  test('should parse invisible alerts count', () => {
+    const elem = {
+      invisible_alerts: '3',
+    };
+    const reportFormat = ReportFormat.fromElement(elem);
+
+    expect(reportFormat.invisible_alerts).toEqual(3);
   });
 
   describe('params tests', () => {
@@ -141,12 +160,12 @@ describe('ReportFormat model tests', () => {
       const elem = {
         param: [
           {
+            options: {
+              option: ['opt1', 'opt2'],
+            },
             type: {
               max: '1',
               min: '0',
-              options: {
-                option: ['opt1', 'opt2'],
-              },
             },
           },
         ],

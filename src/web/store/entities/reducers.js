@@ -34,6 +34,7 @@ import {reducer as override} from './overrides';
 import {reducer as permission} from './permissions';
 import {reducer as policy} from './policies';
 import {reducer as portlist} from './portlists';
+import {reducer as reportconfig} from './reportconfigs';
 import {reducer as reportformat} from './reportformats';
 import {reducer as report, deltaReducer as deltaReport} from './reports';
 import {reducer as result} from './results';
@@ -68,6 +69,7 @@ const entitiesReducer = combineReducers({
   permission,
   policy,
   portlist,
+  reportconfig,
   reportformat,
   report,
   result,

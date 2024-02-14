@@ -66,6 +66,7 @@ export const DEFAULT_FILTER_SETTINGS = {
   portlist: '7d52d575-baeb-4d98-bb68-e1730dbc6236',
   report: '48ae588e-9085-41bc-abcb-3d6389cf7237',
   reportformat: '249c7a55-065c-47fb-b453-78e11a665565',
+  reportconfig: 'eca9738b-4339-4a3d-bd13-3c61173236ab',
   result: '739ab810-163d-11e3-9af6-406186ea4fc5',
   role: 'f38e673a-bcd1-11e2-a19a-406186ea4fc5',
   scanconfig: '1a9fbd91-0182-44cd-bc88-a13a9b3b1bef',

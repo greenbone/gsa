@@ -30,6 +30,7 @@ import Note from 'gmp/models/note';
 import Override from 'gmp/models/override';
 import Permission from 'gmp/models/permission';
 import PortList from 'gmp/models/portlist';
+import ReportConfig from 'gmp/models/reportconfig';
 import ReportFormat from 'gmp/models/reportformat';
 import Role from 'gmp/models/role';
 import Scanner from 'gmp/models/scanner';
@@ -116,6 +117,12 @@ class Trashcan extends HttpCommand {
         data.port_list_list = map(
           trash_data.get_port_lists_response.port_list,
           model => PortList.fromElement(model),
+        );
+      }
+      if (isDefined(trash_data.get_report_configs_response)) {
+        data.report_config_list = map(
+          trash_data.get_report_configs_response.report_config,
+          model => ReportConfig.fromElement(model),
         );
       }
       if (isDefined(trash_data.get_report_formats_response)) {
