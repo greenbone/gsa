@@ -337,7 +337,7 @@ class Dialog extends React.Component {
               </FormGroup>
 
               {isDefined(originalParamInfo) && originalParamInfo.length > 0 && (
-                <h2>Parameters</h2>
+                <h2>{_('Parameters')}</h2>
               )}
               {isDefined(originalParamInfo) && originalParamInfo.length > 0 && (
                 <Table>
