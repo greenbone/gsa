@@ -30,6 +30,7 @@ import Note from 'gmp/models/note';
 import Override from 'gmp/models/override';
 import Permission from 'gmp/models/permission';
 import PortList from 'gmp/models/portlist';
+import ReportConfig from 'gmp/models/reportconfig';
 import ReportFormat from 'gmp/models/reportformat';
 import Role from 'gmp/models/role';
 import Scanner from 'gmp/models/scanner';
@@ -75,6 +76,7 @@ class Trashcan extends HttpCommand {
     const overrides = this.httpGet({cmd: 'get_trash_overrides'});
     const permissions = this.httpGet({cmd: 'get_trash_permissions'});
     const port_lists = this.httpGet({cmd: 'get_trash_port_lists'});
+    const report_configs = this.httpGet({cmd: 'get_trash_report_configs'});
     const report_formats = this.httpGet({cmd: 'get_trash_report_formats'});
     const roles = this.httpGet({cmd: 'get_trash_roles'});
     const scanners = this.httpGet({cmd: 'get_trash_scanners'});
@@ -93,6 +95,7 @@ class Trashcan extends HttpCommand {
       overrides,
       permissions,
       port_lists,
+      report_configs,
       report_formats,
       roles,
       scanners,
@@ -112,6 +115,7 @@ class Trashcan extends HttpCommand {
         response_overrides,
         response_permissions,
         response_port_lists,
+        response_report_configs,
         response_report_formats,
         response_roles,
         response_scanners,
@@ -130,6 +134,7 @@ class Trashcan extends HttpCommand {
         const overrides_data = response_overrides.data.get_trash;
         const permissions_data = response_permissions.data.get_trash;
         const port_lists_data = response_port_lists.data.get_trash;
+        const report_configs_data = response_report_configs.data.get_trash;
         const report_formats_data = response_report_formats.data.get_trash;
         const roles_data = response_roles.data.get_trash;
         const scanners_data = response_scanners.data.get_trash;
@@ -188,6 +193,12 @@ class Trashcan extends HttpCommand {
           data.port_list_list = map(
             port_lists_data.get_port_lists_response.port_list,
             model => PortList.fromElement(model),
+          );
+        }
+        if (isDefined(report_configs_data.get_report_configs_response)) {
+          data.report_config_list = map(
+            report_configs_data.get_report_configs_response.report_config,
+            model => ReportConfig.fromElement(model),
           );
         }
         if (isDefined(report_formats_data.get_report_formats_response)) {

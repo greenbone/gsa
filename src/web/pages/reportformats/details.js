@@ -40,6 +40,7 @@ import {Col} from 'web/entity/page';
 
 const ReportFormatDetails = ({entity, links = true}) => {
   const {
+    configurable,
     deprecated,
     extension,
     content_type,
@@ -47,7 +48,11 @@ const ReportFormatDetails = ({entity, links = true}) => {
     summary,
     description,
     alerts = [],
+    invisible_alerts = 0,
+    report_configs = [],
+    invisible_report_configs = 0,
   } = entity;
+
   return (
     <Layout grow flex="column">
       <InfoTable>
@@ -95,7 +100,12 @@ const ReportFormatDetails = ({entity, links = true}) => {
             <TableData>{summary}</TableData>
           </TableRow>
 
-          {alerts.length > 0 && (
+          <TableRow>
+            <TableData>{_('Configurable')}</TableData>
+            <TableData>{renderYesNo(configurable)}</TableData>
+          </TableRow>
+
+          {(alerts.length > 0 || invisible_alerts > 0) && (
             <TableRow>
               <TableDataAlignTop>
                 {_('Alerts using this Report Format')}
@@ -108,6 +118,38 @@ const ReportFormatDetails = ({entity, links = true}) => {
                     </DetailsLink>
                   </span>
                 ))}
+                {invisible_alerts > 0 && (
+                  <span>
+                    {_('{{count}} alert(s) only visible to other users', {
+                      count: invisible_alerts,
+                    })}
+                  </span>
+                )}
+              </TableData>
+            </TableRow>
+          )}
+
+          {(report_configs.length > 0 || invisible_report_configs > 0) && (
+            <TableRow>
+              <TableDataAlignTop>
+                {_('Report Configs using this Report Format')}
+              </TableDataAlignTop>
+              <TableData>
+                {report_configs.map(report_config => (
+                  <span key={report_config.id}>
+                    <DetailsLink id={report_config.id} type="reportconfig">
+                      {report_config.name}
+                    </DetailsLink>
+                  </span>
+                ))}
+                {invisible_report_configs > 0 && (
+                  <span>
+                    {_(
+                      '{{count}} report config(s) only visible to other users',
+                      {count: invisible_report_configs},
+                    )}
+                  </span>
+                )}
               </TableData>
             </TableRow>
           )}

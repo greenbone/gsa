@@ -58,6 +58,7 @@ const types = {
   certbund: 'cert_bund_adv',
   dfncert: 'dfn_cert_adv',
   portlist: 'port_list',
+  reportconfig: 'report_config',
   reportformat: 'report_format',
   scanconfig: 'config',
   tlscertificate: 'tls_certificate',
