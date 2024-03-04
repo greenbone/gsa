@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {createHttp, createEntityResponse} from '../testing';
-import {AuditReportCommand} from '../auditreports';
+import {createHttp, createEntityResponse} from 'gmp/commands/testing';
+import {AuditReportCommand} from 'gmp/commands/auditreports';
 
-describe('ReportCommand tests', () => {
-  test('should request single report', () => {
+describe('AuditReportCommand tests', () => {
+  test('should request single audit report', () => {
     const response = createEntityResponse('report', {_id: 'foo'});
     const fakeHttp = createHttp(response);
 

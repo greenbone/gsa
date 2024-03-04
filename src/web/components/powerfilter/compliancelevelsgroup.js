@@ -22,24 +22,18 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
+import PropTypes from 'web/utils/proptypes';
 
-import Checkbox from '../form/checkbox.js';
-import FormGroup from '../form/formgroup.js';
+import Checkbox from 'web/components/form/checkbox';
+import FormGroup from 'web/components/form/formgroup';
 
-import IconDivider from '../layout/icondivider.js';
+import IconDivider from 'web/components/layout/icondivider';
 
-import ComplianceStateLabels from '../label/compliancestate.js';
+import ComplianceStateLabels from 'web/components/label/compliancestate';
 
-class ComplianceLevelsFilterGroup extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.handleComplianceChange = this.handleComplianceChange.bind(this);
-  }
-
-  handleComplianceChange(value, level) {
-    const {filter, onChange, onRemove, isResult = false} = this.props;
+const ComplianceLevelsFilterGroup = props => {
+  const handleComplianceChange = (value, level) => {
+    const {filter, onChange, onRemove, isResult = false} = props;
 
     const filter_name = isResult
       ? 'compliance_levels'
@@ -63,54 +57,52 @@ class ComplianceLevelsFilterGroup extends React.Component {
         onChange(compliance, filter_name);
       }
     }
+  };
+
+  const {filter, isResult} = props;
+
+  let compliance_levels = filter.get(
+    isResult ? 'compliance_levels' : 'report_compliance_levels',
+  );
+
+  if (!isDefined(compliance_levels)) {
+    compliance_levels = '';
   }
-
-  render() {
-    const {filter, isResult} = this.props;
-
-    let compliance_levels = filter.get(
-      isResult ? 'compliance_levels' : 'report_compliance_levels',
-    );
-
-    if (!isDefined(compliance_levels)) {
-      compliance_levels = '';
-    }
-    return (
-      <FormGroup title={_('Compliance')}>
-        <IconDivider>
-          <Checkbox
-            checked={compliance_levels.includes('y')}
-            name="y"
-            onChange={this.handleComplianceChange}
-          >
-            <ComplianceStateLabels.Yes />
-          </Checkbox>
-          <Checkbox
-            checked={compliance_levels.includes('n')}
-            name="n"
-            onChange={this.handleComplianceChange}
-          >
-            <ComplianceStateLabels.No />
-          </Checkbox>
-          <Checkbox
-            checked={compliance_levels.includes('i')}
-            name="i"
-            onChange={this.handleComplianceChange}
-          >
-            <ComplianceStateLabels.Incomplete />
-          </Checkbox>
-          <Checkbox
-            checked={compliance_levels.includes('u')}
-            name="u"
-            onChange={this.handleComplianceChange}
-          >
-            <ComplianceStateLabels.Undefined />
-          </Checkbox>
-        </IconDivider>
-      </FormGroup>
-    );
-  }
-}
+  return (
+    <FormGroup title={_('Compliance')}>
+      <IconDivider>
+        <Checkbox
+          checked={compliance_levels.includes('y')}
+          name="y"
+          onChange={handleComplianceChange}
+        >
+          <ComplianceStateLabels.Yes />
+        </Checkbox>
+        <Checkbox
+          checked={compliance_levels.includes('n')}
+          name="n"
+          onChange={handleComplianceChange}
+        >
+          <ComplianceStateLabels.No />
+        </Checkbox>
+        <Checkbox
+          checked={compliance_levels.includes('i')}
+          name="i"
+          onChange={handleComplianceChange}
+        >
+          <ComplianceStateLabels.Incomplete />
+        </Checkbox>
+        <Checkbox
+          checked={compliance_levels.includes('u')}
+          name="u"
+          onChange={handleComplianceChange}
+        >
+          <ComplianceStateLabels.Undefined />
+        </Checkbox>
+      </IconDivider>
+    </FormGroup>
+  );
+};
 
 ComplianceLevelsFilterGroup.propTypes = {
   filter: PropTypes.filter.isRequired,

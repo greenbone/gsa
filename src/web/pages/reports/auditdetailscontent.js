@@ -56,7 +56,7 @@ import EntityInfo from 'web/entity/info';
 import EntityTags from 'web/entity/tags';
 
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 
 import ErrorsTab from './details/errorstab';
 import HostsTab from './details/hoststab';
@@ -77,7 +77,6 @@ const PageContent = ({
   entity,
   errorsCounts,
   filters,
-  gmp,
   hostsCounts,
   isLoading = true,
   isLoadingFilters = true,
@@ -99,12 +98,10 @@ const PageContent = ({
   onAddToAssetsClick,
   onTlsCertificateDownloadClick,
   onError,
-  onFilterAddLogLevelClick,
   onFilterChanged,
   onFilterCreated,
   onFilterDecreaseMinQoDClick,
   onFilterEditClick,
-  onFilterRemoveSeverityClick,
   onFilterRemoveClick,
   onFilterResetClick,
   onInteraction,
@@ -120,11 +117,12 @@ const PageContent = ({
 
   const userTags = hasReport ? report.userTags : undefined;
   const userTagsCount = isDefined(userTags) ? userTags.length : 0;
+  const gmp = useGmp();
 
   const {
     errors = {},
     hosts = {},
-    operatingsystems = {},
+    operatingSystems = {},
     results = {},
     tlsCertificates = {},
     timestamp,
@@ -284,9 +282,7 @@ const PageContent = ({
                       reportResultsCounts={resultsCounts}
                       sortField={sorting.results.sortField}
                       sortReverse={sorting.results.sortReverse}
-                      onFilterAddLogLevelClick={onFilterAddLogLevelClick}
                       onFilterDecreaseMinQoDClick={onFilterDecreaseMinQoDClick}
-                      onFilterRemoveSeverityClick={onFilterRemoveSeverityClick}
                       onFilterEditClick={onFilterEditClick}
                       onFilterRemoveClick={onFilterRemoveClick}
                       onInteraction={onInteraction}
@@ -339,8 +335,8 @@ const PageContent = ({
                     ) : (
                       <OperatingSystemsTab
                         audit={true}
-                        counts={operatingsystems.counts}
-                        operatingsystems={operatingsystems.entities}
+                        counts={operatingSystems.counts}
+                        operatingsystems={operatingSystems.entities}
                         filter={reportFilter}
                         sortField={sorting.os.sortField}
                         sortReverse={sorting.os.sortReverse}
@@ -424,7 +420,6 @@ PageContent.propTypes = {
   entity: PropTypes.model,
   errorsCounts: PropTypes.counts,
   filters: PropTypes.array,
-  gmp: PropTypes.gmp.isRequired,
   hostsCounts: PropTypes.counts,
   isLoading: PropTypes.bool,
   isLoadingFilters: PropTypes.bool,
@@ -446,13 +441,11 @@ PageContent.propTypes = {
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onFilterAddLogLevelClick: PropTypes.func.isRequired,
   onFilterChanged: PropTypes.func.isRequired,
   onFilterCreated: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveClick: PropTypes.func.isRequired,
-  onFilterRemoveSeverityClick: PropTypes.func.isRequired,
   onFilterResetClick: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
@@ -463,6 +456,6 @@ PageContent.propTypes = {
   onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
-export default withGmp(PageContent);
+export default PageContent;
 
 // vim: set ts=2 sw=2 tw=80:

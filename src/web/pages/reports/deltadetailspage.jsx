@@ -67,7 +67,6 @@ import {
   getUsername,
 } from 'web/store/usersettings/selectors';
 
-import {create_pem_certificate} from 'web/utils/cert';
 import compose from 'web/utils/compose';
 import {generateFilename} from 'web/utils/render';
 import PropTypes from 'web/utils/proptypes';
@@ -161,8 +160,6 @@ class DeltaReportDetails extends React.Component {
     this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
-    this.handleTlsCertificateDownload =
-      this.handleTlsCertificateDownload.bind(this);
     this.handleFilterDialogClose = this.handleFilterDialogClose.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
 
@@ -375,19 +372,6 @@ class DeltaReportDetails extends React.Component {
       }, this.handleError);
   }
 
-  handleTlsCertificateDownload(cert) {
-    const {onDownload} = this.props;
-
-    const {data, serial} = cert;
-
-    this.handleInteraction();
-
-    onDownload({
-      filename: 'tls-cert-' + serial + '.pem',
-      data: create_pem_certificate(data),
-    });
-  }
-
   handleFilterCreated(filter) {
     this.handleInteraction();
     this.load(filter);
@@ -528,7 +512,6 @@ class DeltaReportDetails extends React.Component {
               onTargetEditClick={() =>
                 this.loadTarget().then(response => edit(response.data))
               }
-              onTlsCertificateDownloadClick={this.handleTlsCertificateDownload}
               showError={showError}
               showErrorMessage={showErrorMessage}
               showSuccessMessage={showSuccessMessage}

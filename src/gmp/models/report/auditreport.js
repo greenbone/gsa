@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {isDefined} from '../../utils/identity';
-import {isEmpty} from '../../utils/string';
+import {isDefined} from 'gmp/utils/identity';
+import {isEmpty} from 'gmp/utils/string';
 
-import {parseDate} from '../../parser';
+import {parseDate} from 'gmp/parser';
 
-import {parseFilter} from '../../collection/parser';
+import {parseFilter} from 'gmp/collection/parser';
 
-import Model from '../../model';
+import Model from 'gmp/model';
 
 import ReportTask from './task';
 
@@ -44,14 +44,24 @@ class AuditReportReport extends Model {
   static parseElement(element) {
     const copy = super.parseElement(element);
 
-    const {delta, compliance, scan_start, scan_end, task, scan, timestamp} =
-      element;
+    const {
+      delta,
+      compliance,
+      compliance_count,
+      scan_start,
+      scan_end,
+      task,
+      scan,
+      timestamp,
+    } = element;
 
     const filter = parseFilter(element);
 
     copy.filter = filter;
 
-    copy.report_type = element._type;
+    copy.reportType = element._type;
+
+    // copy.scanRunStatus = element.scan_run_status;
 
     delete copy.filters;
 
@@ -61,6 +71,31 @@ class AuditReportReport extends Model {
         full: compliance.full,
       };
     }
+
+    if (isDefined(compliance_count)) {
+      copy.complianceCounts = {
+        filtered: parseInt(compliance_count.filtered),
+        full: parseInt(compliance_count.full),
+        incomplete: {
+          filtered: parseInt(compliance_count.incomplete.filtered),
+          full: parseInt(compliance_count.incomplete.full),
+        },
+        no: {
+          filtered: parseInt(compliance_count.no.filtered),
+          full: parseInt(compliance_count.no.full),
+        },
+        undefined: {
+          filtered: parseInt(compliance_count.undefined.filtered),
+          full: parseInt(compliance_count.undefined.full),
+        },
+        yes: {
+          filtered: parseInt(compliance_count.yes.filtered),
+          full: parseInt(compliance_count.yes.full),
+        },
+      };
+    }
+
+    delete copy.compliance_count;
 
     copy.task = ReportTask.fromElement(task);
 
@@ -72,7 +107,7 @@ class AuditReportReport extends Model {
 
     delete copy.host;
 
-    copy.operatingsystems = parseOperatingSystems(element, filter);
+    copy.operatingSystems = parseOperatingSystems(element, filter);
 
     copy.errors = parse_errors(element, filter);
 
@@ -112,7 +147,7 @@ class AuditReportReport extends Model {
   }
 
   isDeltaReport() {
-    return this.report_type === 'delta';
+    return this.reportType === 'delta';
   }
 }
 

@@ -378,7 +378,7 @@ export const getMockAuditReport = () => {
     report: entity.report,
     results: entity.report.results,
     hosts: entity.report.hosts,
-    operatingsystems: entity.report.operatingsystems,
+    operatingsystems: entity.report.operatingSystems,
     tlsCertificates: entity.report.tlsCertificates,
     errors: entity.report.errors,
     task: entity.report.task,

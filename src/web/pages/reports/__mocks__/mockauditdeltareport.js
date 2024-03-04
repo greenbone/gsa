@@ -350,7 +350,26 @@ export const getMockAuditDeltaReport = () => {
     os: {count: 2},
     ssl_certs: {count: 2},
     compliance: {filtered: 'no', full: 'no'},
-    compliance_count: {__text: 3, full: 3, filtered: 2},
+    compliance_count: {
+      full: 3,
+      filtered: 2,
+      incomplete: {
+        full: 5,
+        filtered: 1,
+      },
+      yes: {
+        full: 2,
+        filtered: 3,
+      },
+      no: {
+        full: 1,
+        filtered: 2,
+      },
+      undefined: {
+        full: 2,
+        filtered: 0,
+      },
+    },
     results: {result: [result1, result2, result3]},
     hosts: {count: 3},
     host: [host1, host2, host3],

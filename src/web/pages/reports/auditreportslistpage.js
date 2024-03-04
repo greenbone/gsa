@@ -16,7 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+
+import {useHistory} from 'react-router-dom';
 
 import _ from 'gmp/locale';
 
@@ -68,46 +70,36 @@ const ToolBarIcons = () => (
   </IconDivider>
 );
 
-class Page extends React.Component {
-  constructor(...args) {
-    super(...args);
+const AuditReportsPage = props => {
+  const [selectedDeltaReport, setSelectedDeltaReport] = useState(undefined);
+  const [beforeSelectFilter, setBeforeSelectFilter] = useState(undefined);
+  const history = useHistory();
 
-    this.state = {};
-
-    this.handleReportDeltaSelect = this.handleReportDeltaSelect.bind(this);
-    this.handleReportDeleteClick = this.handleReportDeleteClick.bind(this);
-    this.handleTaskChange = this.handleTaskChange.bind(this);
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    const {filter} = props;
-    const {selectedDeltaReport} = state;
-
+  useEffect(() => {
     if (
       isDefined(selectedDeltaReport) &&
-      (!isDefined(filter) ||
-        filter.get('task_id') !== selectedDeltaReport.task.id)
+      (!isDefined(props.filter) ||
+        props.filter.get('task_id') !== selectedDeltaReport.task.id)
     ) {
       // filter has changed. reset delta report selection
-      return {selectedDeltaReport: undefined};
+      setSelectedDeltaReport(undefined);
     }
-    return null;
-  }
+  }, [props.filter, selectedDeltaReport]);
 
-  handleReportDeltaSelect(report) {
-    const {onFilterChanged} = this.props;
-    const {selectedDeltaReport, beforeSelectFilter} = this.state;
+  const handleReportDeleteClick = report => {
+    const {onDelete} = props;
+    return onDelete(report);
+  };
 
+  const handleReportDeltaSelect = report => {
     if (isDefined(selectedDeltaReport)) {
-      const {history} = this.props;
-
       onFilterChanged(beforeSelectFilter);
 
       history.push(
         '/auditreport/delta/' + selectedDeltaReport.id + '/' + report.id,
       );
     } else {
-      const {filter = new Filter()} = this.props;
+      const {filter = new Filter()} = props;
 
       onFilterChanged(
         filter
@@ -115,60 +107,46 @@ class Page extends React.Component {
           .set('first', 1) // reset to first page
           .set('task_id', report.task.id),
       );
-
-      this.setState({
-        beforeSelectFilter: filter,
-        selectedDeltaReport: report,
-      });
+      setSelectedDeltaReport(report);
+      setBeforeSelectFilter(filter);
     }
-  }
+  };
 
-  handleReportDeleteClick(report) {
-    const {onDelete} = this.props;
-    return onDelete(report);
-  }
+  const {filter, onFilterChanged, onInteraction} = props;
+  return (
+    <React.Fragment>
+      <PageTitle title={_('Audit Reports')} />
+      <EntitiesPage
+        {...props}
+        selectedDeltaReport={selectedDeltaReport}
+        dashboard={() => (
+          <AuditReportsDashboard
+            filter={filter}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+          />
+        )}
+        dashboardControls={() => (
+          <DashboardControls
+            dashboardId={AUDIT_REPORTS_DASHBOARD_ID}
+            onInteraction={onInteraction}
+          />
+        )}
+        filtersFilter={AUDIT_REPORTS_FILTER_FILTER}
+        filterEditDialog={AuditFilterDialog}
+        table={AuditReportsTable}
+        toolBarIcons={ToolBarIcons}
+        title={_('Audit Reports')}
+        sectionIcon={<ReportIcon size="large" />}
+        onInteraction={onInteraction}
+        onReportDeltaSelect={handleReportDeltaSelect}
+        onReportDeleteClick={handleReportDeleteClick}
+      />
+    </React.Fragment>
+  );
+};
 
-  handleTaskChange(task_id) {
-    this.setState({task_id});
-  }
-
-  render() {
-    const {filter, onFilterChanged, onInteraction} = this.props;
-    return (
-      <React.Fragment>
-        <PageTitle title={_('Audit Reports')} />
-        <EntitiesPage
-          {...this.props}
-          {...this.state}
-          dashboard={() => (
-            <AuditReportsDashboard
-              filter={filter}
-              onFilterChanged={onFilterChanged}
-              onInteraction={onInteraction}
-            />
-          )}
-          dashboardControls={() => (
-            <DashboardControls
-              dashboardId={AUDIT_REPORTS_DASHBOARD_ID}
-              onInteraction={onInteraction}
-            />
-          )}
-          filtersFilter={AUDIT_REPORTS_FILTER_FILTER}
-          filterEditDialog={AuditFilterDialog}
-          table={AuditReportsTable}
-          toolBarIcons={ToolBarIcons}
-          title={_('Audit Reports')}
-          sectionIcon={<ReportIcon size="large" />}
-          onInteraction={onInteraction}
-          onReportDeltaSelect={this.handleReportDeltaSelect}
-          onReportDeleteClick={this.handleReportDeleteClick}
-        />
-      </React.Fragment>
-    );
-  }
-}
-
-Page.propTypes = {
+AuditReportsPage.propTypes = {
   filter: PropTypes.filter,
   gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
@@ -196,6 +174,6 @@ export default compose(
     loadEntities,
     reloadInterval: reportsReloadInterval,
   }),
-)(Page);
+)(AuditReportsPage);
 
 // vim: set ts=2 sw=2 tw=80:

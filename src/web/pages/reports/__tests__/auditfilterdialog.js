@@ -24,7 +24,7 @@ import Filter from 'gmp/models/filter';
 
 import {rendererWith} from 'web/utils/testing';
 
-import AuditReportFilter from '../auditfilterdialog';
+import AuditReportFilter from 'web/pages/reports/auditfilterdialog';
 
 setLocale('en');
 

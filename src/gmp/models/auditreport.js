@@ -57,11 +57,11 @@ class AuditReport extends Model {
       copy.report = AuditReportReport.fromElement(report);
     }
 
-    copy.report_format = parseModelFromElement(report_format, 'reportformat');
+    copy.reportFormat = parseModelFromElement(report_format, 'reportformat');
     copy.task = parseModelFromElement(task, 'task');
 
-    copy.report_type = type;
-    copy.content_type = content_type;
+    copy.reportType = type;
+    copy.contentType = content_type; // revert ?
 
     copy.scan_start = parseDate(scan_start);
     copy.timestamp = parseDate(timestamp);

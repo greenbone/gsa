@@ -22,7 +22,7 @@ import {
   createEntitiesResponse,
   createAggregatesResponse,
 } from '../testing';
-import {AuditReportsCommand} from '../auditreports';
+import {AuditReportsCommand} from 'gmp/commands/auditreports';
 
 describe('AuditReportsCommand tests', () => {
   test('should return all audit reports', () => {

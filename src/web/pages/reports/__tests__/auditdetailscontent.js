@@ -28,7 +28,7 @@ import {rendererWith} from 'web/utils/testing';
 
 import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
 
-import DetailsContent from '../auditdetailscontent';
+import DetailsContent from 'web/pages/reports/auditdetailscontent';
 
 setLocale('en');
 

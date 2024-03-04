@@ -28,10 +28,10 @@ const Theme = {
   darkRed: '#c12c30', // used by: dialog errors font
   errorRed: '#c83814', // used by: progressbar
 
-  compliance_yes: '#4cb045',
-  compliance_no: '#D80000',
-  compliance_incomplete: 'orange',
-  compliance_undefined: 'silver',
+  complianceYes: '#4cb045',
+  complianceNo: '#D80000',
+  complianceIncomplete: 'orange',
+  complianceUndefined: 'silver',
 
   lightBlue: '#d6e6fd', // used by InfoPanel and dashboard hovering
   mediumBlue: '#77acf7', // used by active/hovered items in Select

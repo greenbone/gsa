@@ -24,7 +24,7 @@ import Filter from 'gmp/models/filter';
 
 import {rendererWith} from 'web/utils/testing';
 
-import FilterDialog from '../detailsfilterdialog';
+import FilterDialog from 'web/pages/reports/detailsfilterdialog';
 
 setLocale('en');
 

@@ -261,11 +261,11 @@ ResultsTab.propTypes = {
   resultsError: PropTypes.error,
   resultsFilter: PropTypes.filter,
   status: PropTypes.string.isRequired,
-  onFilterAddLogLevelClick: PropTypes.func.isRequired,
+  onFilterAddLogLevelClick: PropTypes.func,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveClick: PropTypes.func.isRequired,
-  onFilterRemoveSeverityClick: PropTypes.func.isRequired,
+  onFilterRemoveSeverityClick: PropTypes.func,
   onTargetEditClick: PropTypes.func.isRequired,
 };
 

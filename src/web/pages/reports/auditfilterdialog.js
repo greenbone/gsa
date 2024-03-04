@@ -22,7 +22,7 @@ import {_l, _} from 'gmp/locale/lang';
 import Layout from 'web/components/layout/layout';
 
 import compose from 'web/utils/compose';
-import withCapabilities from 'web/utils/withCapabilities';
+import useCapabilities from 'web/utils/useCapabilities';
 
 /* eslint-disable max-len */
 
@@ -71,7 +71,6 @@ const SORT_FIELDS = [
 ];
 
 const AuditReportFilterDialogComponent = ({
-  capabilities,
   filter,
   filterName,
   filterstring,
@@ -86,6 +85,8 @@ const AuditReportFilterDialogComponent = ({
 }) => {
   const handleRemoveCompliance = () =>
     onFilterChange(filter.delete('report_compliance_levels'));
+
+  const capabilities = useCapabilities();
 
   if (!filter) {
     return null;
@@ -144,9 +145,6 @@ const AuditReportFilterDialogComponent = ({
 
 AuditReportFilterDialogComponent.propTypes = FilterDialogPropTypes;
 
-export default compose(
-  withCapabilities,
-  withFilterDialog(),
-)(AuditReportFilterDialogComponent);
+export default compose(withFilterDialog())(AuditReportFilterDialogComponent);
 
 // vim: set ts=2 sw=2 tw=80:
