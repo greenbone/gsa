@@ -83,7 +83,6 @@ const PageContent = ({
   task,
   onActivateTab,
   onAddToAssetsClick,
-  onTlsCertificateDownloadClick,
   onError,
   onFilterAddLogLevelClick,
   onFilterChanged,
@@ -107,7 +106,7 @@ const PageContent = ({
 
   const {
     results = {},
-    compliance_count = {},
+    complianceCounts = {},
     result_count = {},
     timestamp,
     scan_run_status,
@@ -145,7 +144,7 @@ const PageContent = ({
     </SectionHeader>
   );
 
-  const {filtered} = audit ? compliance_count : result_count;
+  const {filtered} = audit ? complianceCounts : result_count;
 
   return (
     <Layout grow flex="column" align={['start', 'stretch']}>
@@ -276,13 +275,13 @@ PageContent.propTypes = {
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onFilterAddLogLevelClick: PropTypes.func.isRequired,
+  onFilterAddLogLevelClick: PropTypes.func,
   onFilterChanged: PropTypes.func.isRequired,
   onFilterCreated: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveClick: PropTypes.func.isRequired,
-  onFilterRemoveSeverityClick: PropTypes.func.isRequired,
+  onFilterRemoveSeverityClick: PropTypes.func,
   onFilterResetClick: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
@@ -290,7 +289,6 @@ PageContent.propTypes = {
   onSortChange: PropTypes.func.isRequired,
   onTagSuccess: PropTypes.func.isRequired,
   onTargetEditClick: PropTypes.func.isRequired,
-  onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
 export default PageContent;

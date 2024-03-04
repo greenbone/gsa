@@ -50,7 +50,7 @@ class Host {
       warning: 0,
       total: 0,
     };
-    this.compliance_counts = {
+    this.complianceCounts = {
       yes: 0,
       no: 0,
       incomplete: 0,
@@ -77,9 +77,11 @@ class Host {
       host_compliance,
     } = element;
 
-    copy.host_compliance = isDefined(host_compliance)
+    copy.hostCompliance = isDefined(host_compliance)
       ? host_compliance
       : 'undefined';
+
+    delete copy.host_compliance;
 
     if (isEmpty(asset._asset_id)) {
       delete copy.asset;
@@ -111,7 +113,7 @@ class Host {
     }
 
     if (isDefined(compliance_count)) {
-      copy.compliance_counts = {
+      copy.complianceCounts = {
         yes: parse_page_count(compliance_count.yes),
         no: parse_page_count(compliance_count.no),
         incomplete: parse_page_count(compliance_count.incomplete),
@@ -119,7 +121,7 @@ class Host {
         total: parse_page_count(compliance_count),
       };
     } else {
-      copy.compliance_counts = {
+      copy.complianceCounts = {
         yes: 0,
         no: 0,
         incomplete: 0,
