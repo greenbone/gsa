@@ -19,10 +19,10 @@ import React from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from '../../utils/proptypes.js';
-import Theme from 'web/utils/theme.js';
+import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
-import ProgressBar from './progressbar.js';
+import ProgressBar from './progressbar';
 import {getTranslatableReportCompliance} from 'gmp/models/auditreport';
 
 const ComplianceBar = ({compliance, toolTip}) => {
@@ -30,13 +30,13 @@ const ComplianceBar = ({compliance, toolTip}) => {
 
   let background;
   if (compliance === 'no') {
-    background = Theme.compliance_no;
+    background = Theme.complianceNo;
   } else if (compliance === 'incomplete') {
-    background = Theme.compliance_incomplete;
+    background = Theme.complianceIncomplete;
   } else if (compliance === 'yes') {
-    background = Theme.compliance_yes;
+    background = Theme.complianceYes;
   } else {
-    background = Theme.compliance_undefined;
+    background = Theme.complianceUndefined;
   }
 
   const toolTipText = isDefined(toolTip) ? toolTip : title;

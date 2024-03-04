@@ -42,7 +42,7 @@ import Trend from './trend';
 
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 
-const renderReport = (report, links) => {
+export const renderReport = (report, links) => {
   if (!isDefined(report)) {
     return null;
   }

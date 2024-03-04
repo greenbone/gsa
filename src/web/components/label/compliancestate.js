@@ -15,13 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
 import styled from 'styled-components';
 
 import _ from 'gmp/locale';
 import {styledExcludeProps} from 'web/utils/styledConfig';
-import Theme from 'web/utils/theme.js';
+import Theme from 'web/utils/theme';
 
 const Label = styledExcludeProps(styled.div, [
   'backgroundColor',
@@ -40,53 +38,45 @@ const Label = styledExcludeProps(styled.div, [
   border-color: ${props => props.borderColor};
 `;
 
-const YesLabel = props => {
-  return (
-    <Label
-      {...props}
-      backgroundColor={Theme.compliance_yes}
-      borderColor={Theme.compliance_yes}
-    >
-      {_('Yes')}
-    </Label>
-  );
-};
+const YesLabel = props => (
+  <Label
+    {...props}
+    backgroundColor={Theme.complianceYes}
+    borderColor={Theme.complianceYes}
+  >
+    {_('Yes')}
+  </Label>
+);
 
-const NoLabel = props => {
-  return (
-    <Label
-      {...props}
-      backgroundColor={Theme.compliance_no}
-      borderColor={Theme.compliance_no}
-    >
-      {_('No')}
-    </Label>
-  );
-};
+const NoLabel = props => (
+  <Label
+    {...props}
+    backgroundColor={Theme.complianceNo}
+    borderColor={Theme.complianceNo}
+  >
+    {_('No')}
+  </Label>
+);
 
-const IncompleteLabel = props => {
-  return (
-    <Label
-      {...props}
-      backgroundColor={Theme.compliance_incomplete}
-      borderColor={Theme.compliance_incomplete}
-    >
-      {_('Incomplete')}
-    </Label>
-  );
-};
+const IncompleteLabel = props => (
+  <Label
+    {...props}
+    backgroundColor={Theme.complianceIncomplete}
+    borderColor={Theme.complianceIncomplete}
+  >
+    {_('Incomplete')}
+  </Label>
+);
 
-const UndefinedLabel = props => {
-  return (
-    <Label
-      {...props}
-      backgroundColor={Theme.compliance_undefined}
-      borderColor={Theme.compliance_undefined}
-    >
-      {_('Undefined')}
-    </Label>
-  );
-};
+const UndefinedLabel = props => (
+  <Label
+    {...props}
+    backgroundColor={Theme.complianceUndefined}
+    borderColor={Theme.complianceUndefined}
+  >
+    {_('Undefined')}
+  </Label>
+);
 
 export const ComplianceStateLabels = {
   Yes: YesLabel,
