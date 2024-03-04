@@ -37,13 +37,13 @@ const hostsSortFunctions = {
   start: makeCompareDate(entity => entity.start),
   end: makeCompareDate(entity => entity.end),
   total: makeCompareNumber(entity => entity.result_counts.total),
-  compliance_yes: makeCompareNumber(entity => entity.compliance_counts.yes),
-  compliance_no: makeCompareNumber(entity => entity.compliance_counts.no),
-  compliance_incomplete: makeCompareNumber(
-    entity => entity.compliance_counts.incomplete,
+  complianceYes: makeCompareNumber(entity => entity.complianceCounts.yes),
+  complianceNo: makeCompareNumber(entity => entity.complianceCounts.no),
+  complianceIncomplete: makeCompareNumber(
+    entity => entity.complianceCounts.incomplete,
   ),
-  compliance_total: makeCompareNumber(entity => entity.compliance_counts.total),
-  compliant: makeCompareString('host_compliance'),
+  complianceTotal: makeCompareNumber(entity => entity.complianceCounts.total),
+  compliant: makeCompareString('hostCompliance'),
 };
 
 const HostsTab = ({

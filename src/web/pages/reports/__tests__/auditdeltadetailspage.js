@@ -28,7 +28,7 @@ import {rendererWith} from 'web/utils/testing';
 
 import {getMockAuditDeltaReport} from 'web/pages/reports/__mocks__/mockauditdeltareport';
 
-import DeltaDetailsContent from '../deltadetailscontent';
+import DeltaDetailsContent from 'web/pages/reports/deltadetailscontent';
 
 setLocale('en');
 

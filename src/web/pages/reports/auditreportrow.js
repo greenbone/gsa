@@ -139,10 +139,10 @@ const AuditRow = ({
       <TableData>
         <ComplianceBar compliance={report.compliance.filtered} />
       </TableData>
-      <TableData align="end">{report.compliance_count.yes.filtered}</TableData>
-      <TableData align="end">{report.compliance_count.no.filtered}</TableData>
+      <TableData align="end">{report.complianceCounts.yes.filtered}</TableData>
+      <TableData align="end">{report.complianceCounts.no.filtered}</TableData>
       <TableData align="end">
-        {report.compliance_count.incomplete.filtered}
+        {report.complianceCounts.incomplete.filtered}
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>

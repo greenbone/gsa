@@ -110,7 +110,7 @@ const Header = ({
         <TableHead
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'compliance_yes' : false}
+          sortBy={sort ? 'complianceYes' : false}
           width="4.5%"
           onSortChange={onSortChange}
           title={_('Yes')}
@@ -129,7 +129,7 @@ const Header = ({
         <TableHead
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'compliance_no' : false}
+          sortBy={sort ? 'complianceNo' : false}
           width="4.5%"
           onSortChange={onSortChange}
           title={_('No')}
@@ -148,7 +148,7 @@ const Header = ({
         <TableHead
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'compliance_incomplete' : false}
+          sortBy={sort ? 'complianceIncomplete' : false}
           width="4.5%"
           onSortChange={onSortChange}
           title={_('Incomplete')}
@@ -187,7 +187,7 @@ const Header = ({
         <TableHead
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
-          sortBy={sort ? 'compliance_total' : false}
+          sortBy={sort ? 'complianceTotal' : false}
           width="4.5%"
           onSortChange={onSortChange}
           title={_('Total')}
@@ -279,10 +279,10 @@ const Row = ({entity, links = true, audit = false}) => {
     authSuccess,
     details = {},
     end,
-    host_compliance,
+    hostCompliance,
     ip,
     result_counts = {},
-    compliance_counts = {},
+    complianceCounts = {},
     severity,
     start,
     portsCount,
@@ -321,30 +321,30 @@ const Row = ({entity, links = true, audit = false}) => {
         <DateTime date={end} />
       </TableData>
       {audit ? (
-        <TableData>{compliance_counts.yes}</TableData>
+        <TableData>{complianceCounts.yes}</TableData>
       ) : (
         <TableData>{result_counts.high}</TableData>
       )}
       {audit ? (
-        <TableData>{compliance_counts.no}</TableData>
+        <TableData>{complianceCounts.no}</TableData>
       ) : (
         <TableData>{result_counts.warning}</TableData>
       )}
       {audit ? (
-        <TableData>{compliance_counts.incomplete}</TableData>
+        <TableData>{complianceCounts.incomplete}</TableData>
       ) : (
         <TableData>{result_counts.info}</TableData>
       )}
       {!audit && <TableData>{result_counts.log}</TableData>}
       {!audit && <TableData>{result_counts.false_positive}</TableData>}
       {audit ? (
-        <TableData>{compliance_counts.total}</TableData>
+        <TableData>{complianceCounts.total}</TableData>
       ) : (
         <TableData>{result_counts.total}</TableData>
       )}
       {audit ? (
         <TableData>
-          <ComplianceBar compliance={host_compliance} />
+          <ComplianceBar compliance={hostCompliance} />
         </TableData>
       ) : (
         <TableData>
