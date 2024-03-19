@@ -22,6 +22,7 @@ const Theme = {
   green: '#11ab51',
 
   lightGray: '#e5e5e5', // used by: disabled inputs
+  mediumDarkGray: '#c2c2c2',
   mediumGray: '#7F7F7F',
   darkGray: '#4C4C4C',
 
@@ -30,6 +31,8 @@ const Theme = {
   dialogGray: '#f3f3f3', // used by: dialog and dashboard display backgrounds
   inputBorderGray: '#bfbfbf', // used by: form field, (Multi-)Select, ProgressBar
   black: '#000',
+  loginButtonGray: '#4c4c4d', // used by: login button
+  loginButtonHover: '#212121', // used by: login button at hover
 
   lightRed: '#fbddde', // used by: dialog errors background
   mediumLightRed: '#f4b1b2', // used by: dialog errors border
