@@ -61,12 +61,18 @@ const Title = styledExcludeProps(styled.label, ['titleSize', 'titleOffset'])`
   margin-left: ${props => COLUMNS[props.titleOffset]};
 `;
 
-const FormGroupContent = styledExcludeProps(styled(Layout), ['size', 'offset'])`
+const FormGroupContent = styledExcludeProps(styled(Layout), [
+  'size',
+  'offset',
+  'paddingLeft',
+])`
   ${props => {
     const ret = {};
     if (isDefined(props.size)) {
       ret.width = COLUMNS[parseInt(props.size)];
-      ret.paddingLeft = '10px';
+      ret.paddingLeft = isDefined(props.paddingLeft)
+        ? props.paddingLeft
+        : '10px';
       ret.paddingRight = '10px';
     }
     if (isDefined(props.offset)) {
@@ -84,6 +90,7 @@ const FormGroup = ({
   title,
   titleOffset = 0,
   titleSize = 2,
+  paddingLeft,
   ...other
 }) => {
   titleOffset = parseInt(titleOffset);
@@ -108,6 +115,7 @@ const FormGroup = ({
         {...other}
         offset={offset}
         size={size}
+        paddingLeft={paddingLeft}
       >
         {children}
       </FormGroupContent>
@@ -118,6 +126,7 @@ const FormGroup = ({
 FormGroup.propTypes = {
   className: PropTypes.string,
   offset: PropTypes.numberOrNumberString,
+  paddingLeft: PropTypes.numberOrNumberString,
   size: PropTypes.numberOrNumberString,
   title: PropTypes.string,
   titleOffset: PropTypes.numberOrNumberString,

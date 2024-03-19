@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/greenbone/gsa/"
   },
-  "author": "Bj\u00f6rn Ricks <bjoern.ricks@greenbone.net>",
+  "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
   "main": "src/index.js",
   "engines": {
@@ -25,7 +25,6 @@
   "dependencies": {
     "@babel/core": "7.24.0",
     "@babel/runtime": "^7.24.0",
-    "@greenbone/ui-components": "2021.1.2",
     "@sentry/react": "^7.105.0",
     "@vx/axis": "^0.0.199",
     "@vx/gradient": "^0.0.199",
