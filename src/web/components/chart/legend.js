@@ -19,7 +19,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import {Line as VxLine} from '@vx/shape';
+import {Line as VxLine} from '@visx/shape';
 
 import {isDefined} from 'gmp/utils/identity';
 

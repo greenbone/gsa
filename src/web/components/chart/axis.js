@@ -17,7 +17,7 @@
  */
 import React from 'react';
 
-import {Axis as VxAxis} from '@vx/axis';
+import {Axis as VxAxis} from '@visx/axis';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
