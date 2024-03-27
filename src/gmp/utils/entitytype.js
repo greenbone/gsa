@@ -46,6 +46,7 @@ export const pluralizeType = type => {
   return type + 's';
 };
 const TYPES = {
+  audit_report: 'auditreport',
   config: 'scanconfig',
   cert_bund_adv: 'certbund',
   dfn_cert_adv: 'dfncert',
@@ -73,6 +74,8 @@ export const normalizeType = type => {
 const ENTITY_TYPES = {
   alert: _l('Alert'),
   asset: _l('Asset'),
+  audit: _l('Audit'),
+  auditreport: _l('Audit Report'),
   certbund: _l('CERT-Bund Advisory'),
   cpe: _l('CPE'),
   credential: _l('Credential'),
@@ -87,6 +90,7 @@ const ENTITY_TYPES = {
   note: _l('Note'),
   nvt: _l('NVT'),
   permission: _l('Permission'),
+  policy: _l('Policy'),
   portlist: _l('Port List'),
   portrange: _l('Port Range'),
   report: _l('Report'),
@@ -120,6 +124,7 @@ export const typeName = type => {
 };
 
 const CMD_TYPES = {
+  auditreport: 'audit_report',
   scanconfig: 'config',
   certbund: 'cert_bund_adv',
   dfncert: 'dfn_cert_adv',

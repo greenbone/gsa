@@ -1320,7 +1320,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                     <div
                       class="c2"
                     >
-                      Compliance Status
+                      Compliance Percent
                     </div>
                   </th>
                   <th
@@ -1375,7 +1375,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                       <a
                         class="c52 c53"
                         data-testid="details-link"
-                        href="/report/1234"
+                        href="/auditreport/1234"
                       >
                         <div
                           class="c54"
@@ -1408,7 +1408,7 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                         <a
                           class="c52"
                           data-testid="details-link"
-                          href="/report/1234"
+                          href="/auditreport/1234"
                         >
                           Wed, Jul 10, 2019 2:51 PM CEST
                         </a>
@@ -1596,6 +1596,17 @@ exports[`AuditPage tests should render full AuditPage 1`] = `
                             <div
                               class="c2 c4"
                             >
+                              <span
+                                class="c6 c5"
+                                data-testid="svg-icon"
+                                title="Add tag to page contents"
+                              >
+                                <svg
+                                  title="Add tag to page contents"
+                                >
+                                  tags.svg
+                                </svg>
+                              </span>
                               <span
                                 class="c6 c5"
                                 data-testid="svg-icon"

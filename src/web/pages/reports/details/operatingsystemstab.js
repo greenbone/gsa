@@ -30,9 +30,11 @@ const operatingssystemsSortFunctions = {
   cpe: makeCompareString('id'),
   hosts: makeCompareNumber(entity => entity.hosts.count),
   severity: makeCompareNumber('severity', 0),
+  compliant: makeCompareString('compliance'),
 };
 
 const OperatingSystemsTab = ({
+  audit = false,
   counts,
   filter,
   operatingsystems,
@@ -62,6 +64,7 @@ const OperatingSystemsTab = ({
       onPreviousClick,
     }) => (
       <OperatingSystemsTable
+        audit={audit}
         entities={entities}
         entitiesCounts={entitiesCounts}
         filter={filter}
@@ -80,6 +83,7 @@ const OperatingSystemsTab = ({
 );
 
 OperatingSystemsTab.propTypes = {
+  audit: PropTypes.bool,
   counts: PropTypes.object,
   filter: PropTypes.filter.isRequired,
   isUpdating: PropTypes.bool,

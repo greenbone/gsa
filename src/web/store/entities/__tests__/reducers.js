@@ -34,10 +34,12 @@ describe('entities reducer tests', () => {
     expect(entitiesReducer(undefined, {})).toEqual({
       alert: initState,
       audit: initState,
+      auditreport: initState,
       certbund: initState,
       cpe: initState,
       credential: initState,
       cve: initState,
+      deltaAuditReport: initState,
       deltaReport: initState,
       dfncert: initState,
       filter: initState,

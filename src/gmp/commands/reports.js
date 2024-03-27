@@ -64,6 +64,7 @@ export class ReportsCommand extends EntitiesCommand {
       {
         details: 0, // ensure to request no details by default
         ...params,
+        usage_type: 'scan',
       },
       options,
     );

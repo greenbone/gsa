@@ -316,7 +316,7 @@ exports[`Audit Row tests should render 1`] = `
           <a
             class="c6 c7"
             data-testid="details-link"
-            href="/report/1234"
+            href="/auditreport/1234"
           >
             <div
               class="c8"
@@ -349,7 +349,7 @@ exports[`Audit Row tests should render 1`] = `
             <a
               class="c6"
               data-testid="details-link"
-              href="/report/1234"
+              href="/auditreport/1234"
             >
               Wed, Jul 10, 2019 2:51 PM CEST
             </a>

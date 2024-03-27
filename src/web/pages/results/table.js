@@ -41,6 +41,7 @@ import ResultDetails from './details';
 
 const Header = ({
   actionsColumn,
+  audit = false,
   delta = false,
   links = true,
   sort = true,
@@ -82,15 +83,27 @@ const Header = ({
             )}
           </Layout>
         </TableHead>
-        <TableHead
-          width="8%"
-          rowSpan="2"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'severity' : false}
-          onSortChange={onSortChange}
-          title={_('Severity')}
-        />
+        {audit ? (
+          <TableHead
+            width="8%"
+            rowSpan="2"
+            currentSortDir={currentSortDir}
+            currentSortBy={currentSortBy}
+            sortBy={sort ? 'compliant' : false}
+            onSortChange={onSortChange}
+            title={_('Compliant')}
+          />
+        ) : (
+          <TableHead
+            width="8%"
+            rowSpan="2"
+            currentSortDir={currentSortDir}
+            currentSortBy={currentSortBy}
+            sortBy={sort ? 'severity' : false}
+            onSortChange={onSortChange}
+            title={_('Severity')}
+          />
+        )}
         <TableHead
           width="3%"
           rowSpan="2"
@@ -145,6 +158,7 @@ const Header = ({
 
 Header.propTypes = {
   actionsColumn: PropTypes.element,
+  audit: PropTypes.bool,
   currentSortBy: PropTypes.string,
   currentSortDir: PropTypes.string,
   delta: PropTypes.bool,

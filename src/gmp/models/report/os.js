@@ -23,6 +23,7 @@ class OperatingSystem {
   constructor() {
     this.hosts = {
       hostsByIp: {},
+      complianceByIp: {},
       count: 0,
     };
   }
@@ -31,6 +32,31 @@ class OperatingSystem {
     if (!(host.ip in this.hosts.hostsByIp)) {
       this.hosts.hostsByIp[host.ip] = host;
       this.hosts.count++;
+    }
+  }
+
+  addHostCompliance(host, compliance) {
+    if (!(host.ip in this.hosts.complianceByIp)) {
+      this.hosts.complianceByIp[host.ip] = compliance;
+    }
+    const isNoInCompliance = Object.values(this.hosts.complianceByIp).some(
+      value => value === 'no',
+    );
+    const isIncompleteInCompliance = Object.values(
+      this.hosts.complianceByIp,
+    ).some(value => value === 'incomplete');
+    const isYesInCompliance = Object.values(this.hosts.complianceByIp).some(
+      value => value === 'yes',
+    );
+
+    if (isNoInCompliance) {
+      this.compliance = 'no';
+    } else if (isIncompleteInCompliance) {
+      this.compliance = 'incomplete';
+    } else if (isYesInCompliance) {
+      this.compliance = 'yes';
+    } else {
+      this.compliance = 'undefined';
     }
   }
 

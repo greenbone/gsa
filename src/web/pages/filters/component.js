@@ -32,6 +32,7 @@ import FilterDialog from 'web/pages/filters/dialog';
 
 const FILTER_OPTIONS = [
   ['alert', _l('Alert')],
+  ['audit_report', _l('Audit Report')],
   ['credential', _l('Credential')],
   ['filter', _l('Filter')],
   ['group', _l('Group')],

@@ -68,6 +68,7 @@ const Span = styled.span`
 
 const PageContent = ({
   activeTab,
+  audit = false,
   entity,
   entityError,
   filter,
@@ -82,7 +83,6 @@ const PageContent = ({
   task,
   onActivateTab,
   onAddToAssetsClick,
-  onTlsCertificateDownloadClick,
   onError,
   onFilterAddLogLevelClick,
   onFilterChanged,
@@ -104,7 +104,13 @@ const PageContent = ({
   const {userTags = {}} = report;
   const userTagsCount = userTags.length;
 
-  const {results = {}, result_count = {}, timestamp, scan_run_status} = report;
+  const {
+    results = {},
+    complianceCounts = {},
+    result_count = {},
+    timestamp,
+    scan_run_status,
+  } = report;
 
   const hasReport = isDefined(entity);
 
@@ -138,12 +144,13 @@ const PageContent = ({
     </SectionHeader>
   );
 
-  const {filtered} = result_count;
+  const {filtered} = audit ? complianceCounts : result_count;
 
   return (
     <Layout grow flex="column" align={['start', 'stretch']}>
       <ToolBar>
         <ToolBarIcons
+          audit={audit}
           delta={true}
           filter={filter}
           isLoading={isLoading}
@@ -207,6 +214,7 @@ const PageContent = ({
                   </TabPanel>
                   <TabPanel>
                     <DeltaResultsTab
+                      audit={audit}
                       counts={isDefined(results.counts) ? results.counts : {}}
                       delta={true}
                       filter={filter}
@@ -251,6 +259,7 @@ const PageContent = ({
 
 PageContent.propTypes = {
   activeTab: PropTypes.number,
+  audit: PropTypes.bool,
   entity: PropTypes.model,
   entityError: PropTypes.object,
   filter: PropTypes.filter,
@@ -266,13 +275,13 @@ PageContent.propTypes = {
   onActivateTab: PropTypes.func.isRequired,
   onAddToAssetsClick: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onFilterAddLogLevelClick: PropTypes.func.isRequired,
+  onFilterAddLogLevelClick: PropTypes.func,
   onFilterChanged: PropTypes.func.isRequired,
   onFilterCreated: PropTypes.func.isRequired,
   onFilterDecreaseMinQoDClick: PropTypes.func.isRequired,
   onFilterEditClick: PropTypes.func.isRequired,
   onFilterRemoveClick: PropTypes.func.isRequired,
-  onFilterRemoveSeverityClick: PropTypes.func.isRequired,
+  onFilterRemoveSeverityClick: PropTypes.func,
   onFilterResetClick: PropTypes.func.isRequired,
   onInteraction: PropTypes.func.isRequired,
   onRemoveFromAssetsClick: PropTypes.func.isRequired,
@@ -280,7 +289,6 @@ PageContent.propTypes = {
   onSortChange: PropTypes.func.isRequired,
   onTagSuccess: PropTypes.func.isRequired,
   onTargetEditClick: PropTypes.func.isRequired,
-  onTlsCertificateDownloadClick: PropTypes.func.isRequired,
 };
 
 export default PageContent;
