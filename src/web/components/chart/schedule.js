@@ -17,7 +17,7 @@
  */
 import React from 'react';
 
-import {LinearGradient} from '@vx/gradient';
+import {LinearGradient} from '@visx/gradient';
 
 import {scaleBand, scaleUtc} from 'd3-scale';
 

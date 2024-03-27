@@ -24,7 +24,7 @@ import styled from 'styled-components';
 
 import {scaleLinear, scaleUtc} from 'd3-scale';
 
-import {Line, LinePath} from '@vx/shape';
+import {Line, LinePath} from '@visx/shape';
 
 import {isDefined} from 'gmp/utils/identity';
 
