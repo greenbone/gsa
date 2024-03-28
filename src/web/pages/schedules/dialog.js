@@ -435,6 +435,7 @@ class ScheduleDialog extends React.Component {
 
             <FormGroup title={_('First Run')}>
               <DatePicker
+                timezone={timezone}
                 name="startDate"
                 value={startDate}
                 onChange={this.handleValueChange}

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import styled from 'styled-components';
 
@@ -73,32 +73,34 @@ InputField.propTypes = {
   onClick: PropTypes.func,
 };
 
-const DatePickerComponent = props => {
-  const handleChange = value => {
-    const {name, onChange} = props;
-
-    if (isDefined(onChange)) {
-      onChange(value, name);
-    }
-  };
-
-  const {
-    disabled,
-    minDate = date(),
-    name,
-    width,
-    value = date(),
-    ...restProps
-  } = props;
-
+const DatePickerComponent = ({
+  disabled,
+  timezone,
+  minDate = date().tz(timezone),
+  name,
+  width,
+  value = date().tz(timezone),
+  onChange,
+  ...restProps
+}) => {
+  const handleChange = useCallback(
+    newValue => {
+      if (isDefined(onChange)) {
+        onChange(date(newValue).tz(timezone), name);
+      }
+    },
+    [name, onChange, timezone],
+  );
   return (
     <DatePicker
       {...restProps}
       disabled={disabled}
       customInput={<InputField width={width} disabled={disabled} />}
-      minDate={minDate === false ? undefined : minDate}
-      maxDate={date().add(3, 'years')}
-      selected={value}
+      minDate={
+        minDate === false || !isDefined(minDate) ? undefined : minDate.toDate()
+      }
+      maxDate={date().add(3, 'years').toDate()}
+      selected={value.toDate()}
       todayButton={_('Today')}
       locale={getLocale()}
       onChange={handleChange}
@@ -110,6 +112,7 @@ DatePickerComponent.propTypes = {
   disabled: PropTypes.bool,
   minDate: PropTypes.oneOfType([PropTypes.date, PropTypes.oneOf([false])]),
   name: PropTypes.string,
+  timezone: PropTypes.string.isRequired,
   value: PropTypes.date.isRequired,
   width: PropTypes.string,
   onChange: PropTypes.func,
