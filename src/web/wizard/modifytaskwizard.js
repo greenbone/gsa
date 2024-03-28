@@ -152,6 +152,7 @@ const ModifyTaskWizard = ({
                   <FormGroup offset="1">
                     <Datepicker
                       name="start_date"
+                      timezone={state.start_timezone}
                       value={state.start_date}
                       onChange={onValueChange}
                     />

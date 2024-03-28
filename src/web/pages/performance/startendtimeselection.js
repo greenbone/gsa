@@ -118,6 +118,7 @@ class StartTimeSelection extends React.Component {
             <Datepicker
               value={startDate}
               name="startDate"
+              timezone={timezone}
               minDate={false}
               onChange={this.handleValueChange}
             />
@@ -149,6 +150,7 @@ class StartTimeSelection extends React.Component {
             <Datepicker
               value={endDate}
               name="endDate"
+              timezone={timezone}
               minDate={false}
               onChange={this.handleValueChange}
             />

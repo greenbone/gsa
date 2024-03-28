@@ -239,6 +239,7 @@ const AdvancedTaskWizard = ({
                       <Datepicker
                         name="start_date"
                         value={state.start_date}
+                        timezone={state.start_timezone}
                         onChange={onValueChange}
                       />
                     </FormGroup>
