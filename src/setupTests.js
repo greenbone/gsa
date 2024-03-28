@@ -18,10 +18,15 @@
 
 import {initLocale} from 'gmp/locale/lang';
 
+// Avoid "Error: Not implemented: navigation (except hash changes)"
+// It is caused by clicking on <a> elements in tests
+// https://stackoverflow.com/a/68038982/11044073
+HTMLAnchorElement.prototype.click = jest.fn();
+
 class FakeBackend {
   read(language, namespace, callback) {
     if (language.startsWith('en') || language.startsWith('de')) {
-      // change language by calling the callback functioon
+      // change language by calling the callback function
       return callback();
     }
     // change language and pass error message
