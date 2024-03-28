@@ -18,17 +18,22 @@
 
 import React from 'react';
 
+import date from 'gmp/models/date';
+
 import {render} from 'web/utils/testing';
 
 import Footer from '../footer';
 
 describe('Footer tests', () => {
   test('should render footer with copyright', () => {
+    const currentYear = date().year();
     const {element} = render(<Footer />);
 
     expect(element).toMatchSnapshot();
     expect(element).toHaveTextContent(
-      'Greenbone Security Assistant (GSA) Copyright (C) 2009-2023 by Greenbone AG, www.greenbone.net',
+      'Copyright © 2009-' +
+        currentYear +
+        ' by Greenbone AG, www.greenbone.net',
     );
   });
 });
