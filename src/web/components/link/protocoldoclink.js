@@ -18,11 +18,13 @@
 import React from 'react';
 
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+
+import useGmp from 'web/utils/useGmp';
 
 import BlankLink from './blanklink';
 
-const ProtocolDocLink = ({gmp, title}) => {
+const ProtocolDocLink = ({title}) => {
+  const gmp = useGmp();
   const {protocolDocUrl} = gmp.settings;
 
   return (
@@ -33,10 +35,7 @@ const ProtocolDocLink = ({gmp, title}) => {
 };
 
 ProtocolDocLink.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
   title: PropTypes.string.isRequired,
 };
 
-export default withGmp(ProtocolDocLink);
-
-// vim: set ts=2 sw=2 tw=80:
+export default ProtocolDocLink;
