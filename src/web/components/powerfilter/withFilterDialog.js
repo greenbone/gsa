@@ -19,11 +19,16 @@ import React from 'react';
 
 import FilterDialog from './filterdialog';
 
-const withFilterDialog = (options = {}) => FilterDialogComponent => props => (
-  <FilterDialog {...props}>
-    {dialogProps => <FilterDialogComponent {...options} {...dialogProps} />}
-  </FilterDialog>
-);
+const withFilterDialog =
+  ({createFilterType, ...options} = {}) =>
+  FilterDialogComponent =>
+  (
+    {createFilterType: createFilterTypeProp = createFilterType, ...props}, // eslint-disable-line react/prop-types
+  ) => (
+    <FilterDialog {...props} createFilterType={createFilterTypeProp}>
+      {dialogProps => <FilterDialogComponent {...options} {...dialogProps} />}
+    </FilterDialog>
+  );
 
 export default withFilterDialog;
 
