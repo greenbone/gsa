@@ -937,7 +937,6 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                               class="c10"
                             >
                               default
-                              
                             </div>
                           </td>
                           <td>
@@ -1032,7 +1031,6 @@ exports[`EditConfigFamilyDialog component tests should render dialog 1`] = `
                               class="c10"
                             >
                               1
-                              
                             </div>
                           </td>
                           <td>
