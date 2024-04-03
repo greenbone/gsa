@@ -15,65 +15,36 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {connect} from 'react-redux';
+import React, {useEffect, useState} from 'react';
 
 import {onLanguageChange} from 'gmp/locale/lang';
 
 import {isDefined} from 'gmp/utils/identity';
 
-import PropTypes from 'web/utils/proptypes';
+import useLocale from 'web/hooks/useLocale';
 
-import {setLocale} from 'web/store/usersettings/actions';
+/**
+ * A component that observes the locale, puts it into the redux store and
+ * re-renders its children whenever the locale changed
+ */
+const LocaleObserver = ({children}) => {
+  const [locale, setLocaleState] = useState();
+  const [, setLocale] = useLocale();
 
-class LocaleObserver extends React.Component {
-  constructor(...args) {
-    super(...args);
+  useEffect(() => {
+    const unsubscribeFromLanguageChange = onLanguageChange(newLocale => {
+      setLocaleState(newLocale);
+      setLocale(newLocale);
+    });
+    return unsubscribeFromLanguageChange;
+  }, [setLocale, setLocaleState]);
 
-    this.state = {};
-
-    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+  if (!isDefined(locale)) {
+    // don't render if no locale has been detected yet
+    return null;
   }
 
-  componentDidMount() {
-    this.unsubscribeFromLanguageChange = onLanguageChange(
-      this.handleLanguageChange,
-    );
-  }
-
-  componentWillUnmount() {
-    if (isDefined(this.unsubscribeFromLanguageChange)) {
-      this.unsubscribeFromLanguageChange();
-    }
-  }
-
-  handleLanguageChange(locale) {
-    this.props.setLocale(locale);
-
-    this.setState({locale});
-  }
-
-  render() {
-    const {children} = this.props;
-    const {locale} = this.state;
-
-    if (!isDefined(locale)) {
-      // don't render if no locale has been detected yet
-      return null;
-    }
-
-    return <React.Fragment key={locale}>{children}</React.Fragment>;
-  }
-}
-
-LocaleObserver.propTypes = {
-  setLocale: PropTypes.func.isRequired,
+  return <React.Fragment key={locale}>{children}</React.Fragment>;
 };
 
-export default connect(
-  undefined,
-  {
-    setLocale,
-  },
-)(LocaleObserver);
+export default LocaleObserver;
