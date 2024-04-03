@@ -17,7 +17,7 @@
  */
 import React from 'react';
 
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 
 import * as Sentry from '@sentry/react';
 
@@ -40,11 +40,11 @@ Sentry.init({
   release: GSA_VERSION,
 });
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('app'));
+root.render(
   <StyleSheetManager enableVendorPrefixes>
     <App />
   </StyleSheetManager>,
-  document.getElementById('app'),
 );
 
 // vim: set ts=2 sw=2 tw=80:
