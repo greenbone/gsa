@@ -31,10 +31,13 @@ import IconDivider from 'web/components/layout/icondivider';
 
 import ComplianceStateLabels from 'web/components/label/compliancestate';
 
-const ComplianceLevelsFilterGroup = props => {
+const ComplianceLevelsFilterGroup = ({
+  filter,
+  onChange,
+  onRemove,
+  isResult = false,
+}) => {
   const handleComplianceChange = (value, level) => {
-    const {filter, onChange, onRemove, isResult = false} = props;
-
     const filter_name = isResult
       ? 'compliance_levels'
       : 'report_compliance_levels';
@@ -58,8 +61,6 @@ const ComplianceLevelsFilterGroup = props => {
       }
     }
   };
-
-  const {filter, isResult} = props;
 
   let compliance_levels = filter.get(
     isResult ? 'compliance_levels' : 'report_compliance_levels',
