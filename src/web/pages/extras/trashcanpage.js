@@ -91,13 +91,13 @@ const ToolBarIcons = () => (
 );
 
 const EmptyTrashButton = withCapabilities(
-  ({onClick, capabilities, loading}) => {
+  ({onClick, capabilities, isLoading}) => {
     if (!capabilities.mayOp('empty_trashcan')) {
       return null;
     }
     return (
       <Layout align="end">
-        <LoadingButton onClick={onClick} isLoading={loading}>
+        <LoadingButton onClick={onClick} isLoading={isLoading}>
           {_('Empty Trash')}
         </LoadingButton>
       </Layout>
@@ -125,7 +125,7 @@ class Trashcan extends React.Component {
     super(...args);
     this.state = {
       trash: undefined,
-      loading: false,
+      isLoading: false,
     };
 
     this.createContentRow = this.createContentRow.bind(this);
@@ -143,16 +143,18 @@ class Trashcan extends React.Component {
 
   getTrash() {
     const {gmp} = this.props;
-    const data = gmp.trashcan.get().then(
+
+    this.setState({isLoading: true});
+
+    return gmp.trashcan.get().then(
       response => {
         const trash = response.data;
-        this.setState({trash});
+        this.setState({trash, isLoading: false});
       },
       error => {
-        this.setState({error});
+        this.setState({error, isLoading: false});
       },
     );
-    return data;
   }
 
   handleInteraction() {
@@ -172,7 +174,7 @@ class Trashcan extends React.Component {
       .then(this.getTrash)
       .catch(error => {
         this.setState({
-          error: error,
+          error,
         });
       });
   }
@@ -187,27 +189,22 @@ class Trashcan extends React.Component {
       .then(this.getTrash)
       .catch(error => {
         this.setState({
-          error: error,
+          error,
         });
       });
   }
 
   handleEmpty() {
     const {gmp} = this.props;
-    this.handleInteraction();
 
-    this.setState({loading: true});
+    this.handleInteraction();
 
     gmp.trashcan
       .empty()
-      .then(() => {
-        this.getTrash();
-        this.setState({loading: false});
-      })
+      .then(this.getTrash)
       .catch(error => {
         this.setState({
-          error: error,
-          loading: false,
+          error,
         });
       });
   }
@@ -349,12 +346,12 @@ class Trashcan extends React.Component {
   }
 
   render() {
-    const {error, loading} = this.state;
+    const {error, isLoading} = this.state;
     let {trash} = this.state;
 
-    if (!isDefined(trash) && !isDefined(error)) {
+    if (isLoading && !isDefined(trash) && !isDefined(error)) {
       return <Loading />;
-    } else if (!isDefined(trash) && isDefined(error)) {
+    } else if (!isDefined(trash)) {
       trash = {};
     }
 
@@ -393,7 +390,7 @@ class Trashcan extends React.Component {
             />
           )}
           <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
-          <EmptyTrashButton onClick={this.handleEmpty} loading={loading} />
+          <EmptyTrashButton onClick={this.handleEmpty} isLoading={isLoading} />
           <LinkTarget id="Contents" />
           <h1>{_('Contents')}</h1>
           <Table>
