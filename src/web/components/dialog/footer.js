@@ -36,8 +36,17 @@ export const DialogFooterLayout = styled(Layout)`
   padding: 10px 20px 10px 20px;
 `;
 
-const DialogFooter = ({title, onClick, loading = false}) => (
-  <DialogFooterLayout align={['end', 'center']} shrink="0">
+const DialogFooter = ({
+  title,
+  onClick,
+  loading = false,
+  'data-testid': dataTestId,
+}) => (
+  <DialogFooterLayout
+    align={['end', 'center']}
+    shrink="0"
+    data-testid={dataTestId}
+  >
     <Button onClick={onClick} title={title} loading={loading}>
       {title}
     </Button>
@@ -45,6 +54,7 @@ const DialogFooter = ({title, onClick, loading = false}) => (
 );
 
 DialogFooter.propTypes = {
+  'data-testid': PropTypes.string,
   loading: PropTypes.bool,
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func,
