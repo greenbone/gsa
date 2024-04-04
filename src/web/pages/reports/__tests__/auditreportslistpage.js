@@ -162,7 +162,7 @@ describe('AuditReportsPage tests', () => {
     const selects = getAllByTestId('select-selected-value');
 
     // Toolbar Icons
-    expect(icons[0]).toHaveAttribute('title', 'Help: Reports');
+    expect(icons[0]).toHaveAttribute('title', 'Help: Audit Reports');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');

@@ -51,7 +51,6 @@ import {
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
 
 import AuditFilterDialog from './auditfilterdialog';
 import AuditReportsTable from './auditreportstable';
@@ -64,32 +63,35 @@ const ToolBarIcons = () => (
   <IconDivider>
     <ManualIcon
       page="reports"
-      anchor="using-and-managing-reports"
-      title={_('Help: Reports')}
+      anchor="using-and-managing-audit-reports"
+      title={_('Help: Audit Reports')}
     />
   </IconDivider>
 );
 
-const AuditReportsPage = props => {
-  const [selectedDeltaReport, setSelectedDeltaReport] = useState(undefined);
-  const [beforeSelectFilter, setBeforeSelectFilter] = useState(undefined);
+const AuditReportsPage = ({
+  filter,
+  onFilterChanged,
+  onInteraction,
+  onDelete,
+  ...props
+}) => {
+  const [selectedDeltaReport, setSelectedDeltaReport] = useState();
+  const [beforeSelectFilter, setBeforeSelectFilter] = useState();
   const history = useHistory();
 
   useEffect(() => {
     if (
       isDefined(selectedDeltaReport) &&
-      (!isDefined(props.filter) ||
-        props.filter.get('task_id') !== selectedDeltaReport.task.id)
+      (!isDefined(filter) ||
+        filter.get('task_id') !== selectedDeltaReport.task.id)
     ) {
       // filter has changed. reset delta report selection
-      setSelectedDeltaReport(undefined);
+      setSelectedDeltaReport();
     }
-  }, [props.filter, selectedDeltaReport]);
+  }, [filter, selectedDeltaReport]);
 
-  const handleReportDeleteClick = report => {
-    const {onDelete} = props;
-    return onDelete(report);
-  };
+  const handleReportDeleteClick = onDelete;
 
   const handleReportDeltaSelect = report => {
     if (isDefined(selectedDeltaReport)) {
@@ -99,7 +101,9 @@ const AuditReportsPage = props => {
         '/auditreport/delta/' + selectedDeltaReport.id + '/' + report.id,
       );
     } else {
-      const {filter = new Filter()} = props;
+      if (!isDefined(filter)) {
+        filter = new Filter();
+      }
 
       onFilterChanged(
         filter
@@ -112,7 +116,6 @@ const AuditReportsPage = props => {
     }
   };
 
-  const {filter, onFilterChanged, onInteraction} = props;
   return (
     <React.Fragment>
       <PageTitle title={_('Audit Reports')} />
@@ -138,6 +141,8 @@ const AuditReportsPage = props => {
         toolBarIcons={ToolBarIcons}
         title={_('Audit Reports')}
         sectionIcon={<ReportIcon size="large" />}
+        filter={filter}
+        onFilterChanged={onFilterChanged}
         onInteraction={onInteraction}
         onReportDeltaSelect={handleReportDeltaSelect}
         onReportDeleteClick={handleReportDeleteClick}
@@ -148,7 +153,6 @@ const AuditReportsPage = props => {
 
 AuditReportsPage.propTypes = {
   filter: PropTypes.filter,
-  gmp: PropTypes.gmp.isRequired,
   history: PropTypes.object.isRequired,
   onChanged: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
@@ -167,7 +171,6 @@ const FALLBACK_AUDIT_REPORT_LIST_FILTER = Filter.fromString(
 );
 
 export default compose(
-  withGmp,
   withEntitiesContainer('auditreport', {
     fallbackFilter: FALLBACK_AUDIT_REPORT_LIST_FILTER,
     entitiesSelector,
