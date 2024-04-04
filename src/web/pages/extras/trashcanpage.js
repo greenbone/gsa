@@ -53,8 +53,8 @@ import {renewSessionTimeout} from 'web/store/usersettings/actions';
 
 import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import AlertsTable from '../alerts/table';
 import ScanConfigsTable from '../scanconfigs/table';
@@ -90,20 +90,25 @@ const ToolBarIcons = () => (
   />
 );
 
-const EmptyTrashButton = withCapabilities(
-  ({onClick, capabilities, isLoading}) => {
-    if (!capabilities.mayOp('empty_trashcan')) {
-      return null;
-    }
-    return (
-      <Layout align="end">
-        <LoadingButton onClick={onClick} isLoading={isLoading}>
-          {_('Empty Trash')}
-        </LoadingButton>
-      </Layout>
-    );
-  },
-);
+const EmptyTrashButton = ({onClick, isLoading}) => {
+  const capabilities = useCapabilities();
+
+  if (!capabilities.mayOp('empty_trashcan')) {
+    return null;
+  }
+  return (
+    <Layout align="end">
+      <LoadingButton onClick={onClick} isLoading={isLoading}>
+        {_('Empty Trash')}
+      </LoadingButton>
+    </Layout>
+  );
+};
+
+EmptyTrashButton.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
 
 const separateByUsageType = inputList => {
   const scan = [];
