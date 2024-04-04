@@ -18,13 +18,10 @@
 
 import React from 'react';
 
-import withCapabilities from 'web/utils/withCapabilities';
-
 import Layout from 'web/components/layout/layout';
 
 import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
-
-import compose from 'web/utils/compose';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import CreateNamedFilterGroup from './createnamedfiltergroup';
 import FilterStringGroup from './filterstringgroup';
@@ -35,7 +32,6 @@ import SortByGroup from './sortbygroup';
 import DefaultFilterDialogPropTypes from './dialogproptypes';
 
 export const DefaultFilterDialog = ({
-  capabilities,
   createFilterType,
   filter,
   filterName,
@@ -49,39 +45,41 @@ export const DefaultFilterDialog = ({
   onSortByChange,
   onSortOrderChange,
   onValueChange,
-}) => (
-  <Layout flex="column">
-    <FilterStringGroup filter={filterstring} onChange={onFilterStringChange} />
-    <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
-    <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
-    <SortByGroup
-      fields={sortFields}
-      filter={filter}
-      onSortByChange={onSortByChange}
-      onSortOrderChange={onSortOrderChange}
-    />
-    {capabilities.mayCreate('filter') && (
-      <CreateNamedFilterGroup
-        filter={filter}
-        filterName={filterName}
-        saveNamedFilter={saveNamedFilter}
-        onValueChange={onValueChange}
+}) => {
+  const capabilities = useCapabilities();
+  return (
+    <Layout flex="column">
+      <FilterStringGroup
+        filter={filterstring}
+        onChange={onFilterStringChange}
       />
-    )}
-  </Layout>
-);
+      <FirstResultGroup filter={filter} onChange={onFilterValueChange} />
+      <ResultsPerPageGroup filter={filter} onChange={onFilterValueChange} />
+      <SortByGroup
+        fields={sortFields}
+        filter={filter}
+        onSortByChange={onSortByChange}
+        onSortOrderChange={onSortOrderChange}
+      />
+      {capabilities.mayCreate('filter') && (
+        <CreateNamedFilterGroup
+          filter={filter}
+          filterName={filterName}
+          saveNamedFilter={saveNamedFilter}
+          onValueChange={onValueChange}
+        />
+      )}
+    </Layout>
+  );
+};
 
 DefaultFilterDialog.propTypes = DefaultFilterDialogPropTypes;
 
-export const createFilterDialog = options => {
-  return compose(
-    withCapabilities,
-    withFilterDialog(options),
-  )(DefaultFilterDialog);
-};
+export const createFilterDialog = options =>
+  withFilterDialog(options)(DefaultFilterDialog);
 
 export {DefaultFilterDialogPropTypes};
 
-export default withCapabilities(DefaultFilterDialog);
+export default DefaultFilterDialog;
 
 // vim: set ts=2 sw=2 tw=80:
