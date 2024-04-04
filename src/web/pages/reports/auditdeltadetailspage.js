@@ -96,21 +96,16 @@ const getTarget = (entity = {}) => {
   return task.target;
 };
 
-const getFilter = (entity = {}) => {
-  const {report = {}} = entity;
-  return report.filter;
-};
-
 const DeltaAuditReportDetails = props => {
   const [activeTab, setActiveTab] = useState(0);
   const [showFilterDialog, setShowFilterDialog] = useState(false);
   const [showDownloadReportDialog, setShowDownloadReportDialog] =
     useState(false);
-  const [reportFormatId, setReportFormatId] = useState(undefined);
+  const [reportFormatId, setReportFormatId] = useState();
   const [isUpdating, setIsUpdating] = useState(false);
   // storeAsDefault is set in SaveDialogContent
   // eslint-disable-next-line no-unused-vars
-  const [storeAsDefault, setStoreAsDefault] = useState(undefined);
+  const [storeAsDefault, setStoreAsDefault] = useState();
 
   const [sorting, setSorting] = useState({
     results: {
@@ -181,10 +176,10 @@ const DeltaAuditReportDetails = props => {
         // instead of just showing x is undefined JS stacktrace
         const noReportFormatError = _(
           'The report cannot be displayed because' +
-            ' no Greenbone Vulnerability Manager report format is available.' +
+            ' no report format is available.' +
             ' This could be due to a missing gvmd data feed. Please update' +
-            ' the gvmd data feed, check the "feed import owner" setting, or' +
-            ' contact your system administrator.',
+            ' the gvmd data feed, check the "feed import owner" setting, the' +
+            ' feed status page, or contact your system administrator.',
         );
         throw new Error(noReportFormatError);
       }
@@ -521,7 +516,7 @@ const DeltaAuditReportDetailsWrapper = ({defaultFilter, ...props}) => {
   const {id: reportId, deltaid: deltaReportId} = match.params;
   const deltaSel = useSelector(deltaAuditReportSelector, shallowEqual);
   const entity = deltaSel.getEntity(reportId, deltaReportId);
-  const reportFilter = getFilter(entity);
+  const reportFilter = entity?.report?.filter;
 
   return (
     <Reload

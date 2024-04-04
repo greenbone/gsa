@@ -109,11 +109,6 @@ const getTarget = (entity = {}) => {
   return task.target;
 };
 
-const getFilter = (entity = {}) => {
-  const {report = {}} = entity;
-  return report.filter;
-};
-
 const ReportDetails = props => {
   const [activeTab, setActiveTab] = useState(0);
   const [showFilterDialog, setShowFilterDialog] = useState(false);
@@ -142,19 +137,18 @@ const ReportDetails = props => {
     },
   });
 
-  const [entity, setEntity] = useState(undefined);
-  const [resultsCounts, setResultsCounts] = useState(undefined);
-  const [hostsCounts, setHostsCounts] = useState(undefined);
-  const [operatingSystemsCounts, setOperatingSystemsCounts] =
-    useState(undefined);
-  const [tlsCertificatesCounts, setTlsCertificatesCounts] = useState(undefined);
-  const [reportFormatId, setReportFormatId] = useState(undefined);
-  const [errorsCounts, setErrorsCounts] = useState(undefined);
-  const [reportFilter, setReportFilter] = useState(undefined);
+  const [entity, setEntity] = useState();
+  const [resultsCounts, setResultsCounts] = useState();
+  const [hostsCounts, setHostsCounts] = useState();
+  const [operatingSystemsCounts, setOperatingSystemsCounts] = useState();
+  const [tlsCertificatesCounts, setTlsCertificatesCounts] = useState();
+  const [reportFormatId, setReportFormatId] = useState();
+  const [errorsCounts, setErrorsCounts] = useState();
+  const [reportFilter, setReportFilter] = useState();
   const [isUpdating, setIsUpdating] = useState(false);
   // storeAsDefault is set in SaveDialogContent
   // eslint-disable-next-line no-unused-vars
-  const [storeAsDefault, setStoreAsDefault] = useState(undefined);
+  const [storeAsDefault, setStoreAsDefault] = useState();
 
   const gmp = useGmp();
   const dispatch = useDispatch();
@@ -240,10 +234,10 @@ const ReportDetails = props => {
         // instead of just showing x is undefined JS stacktrace
         const noReportFormatError = _(
           'The report cannot be displayed because' +
-            ' no Greenbone Vulnerability Manager report format is available.' +
+            ' no report format is available.' +
             ' This could be due to a missing gvmd data feed. Please update' +
-            ' the gvmd data feed, check the "feed import owner" setting, or' +
-            ' contact your system administrator.',
+            ' the gvmd data feed, check the "feed import owner" setting, the' +
+            ' feed status page, or contact your system administrator.',
         );
         throw new Error(noReportFormatError);
       }
@@ -657,7 +651,7 @@ const ReportDetailsWrapper = props => {
 
   const pageFilter = pSelector.getFilter(getReportPageName(reportId));
   const entity = reportSel.getEntity(reportId, pageFilter);
-  const reportFilter = getFilter(entity);
+  const reportFilter = entity?.report?.filter;
 
   return (
     <FilterProvider
