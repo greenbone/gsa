@@ -24,7 +24,11 @@ import _ from 'gmp/locale';
 
 import logger from 'gmp/log';
 
-import Filter, {RESET_FILTER, RESULTS_FILTER_FILTER} from 'gmp/models/filter';
+import Filter, {
+  ALL_FILTER,
+  RESET_FILTER,
+  RESULTS_FILTER_FILTER,
+} from 'gmp/models/filter';
 import {isActive} from 'gmp/models/task';
 
 import {first} from 'gmp/utils/array';
@@ -47,6 +51,11 @@ import {
   loadAllEntities as loadFilters,
   selector as filterSelector,
 } from 'web/store/entities/filters';
+
+import {
+  loadAllEntities as loadReportConfigs,
+  selector as reportConfigsSelector,
+} from 'web/store/entities/reportconfigs';
 
 import {
   loadAllEntities as loadReportFormats,
@@ -162,31 +171,26 @@ class ReportDetails extends React.Component {
     this.handleError = this.handleError.bind(this);
     this.handleFilterAddLogLevel = this.handleFilterAddLogLevel.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
-    this.handleFilterDecreaseMinQoD = this.handleFilterDecreaseMinQoD.bind(
-      this,
-    );
+    this.handleFilterDecreaseMinQoD =
+      this.handleFilterDecreaseMinQoD.bind(this);
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
-    this.handleFilterRemoveSeverity = this.handleFilterRemoveSeverity.bind(
-      this,
-    );
+    this.handleFilterRemoveSeverity =
+      this.handleFilterRemoveSeverity.bind(this);
     this.handleFilterRemoveClick = this.handleFilterRemoveClick.bind(this);
     this.handleFilterResetClick = this.handleFilterResetClick.bind(this);
     this.handleRemoveFromAssets = this.handleRemoveFromAssets.bind(this);
     this.handleReportDownload = this.handleReportDownload.bind(this);
-    this.handleTlsCertificateDownload = this.handleTlsCertificateDownload.bind(
-      this,
-    );
+    this.handleTlsCertificateDownload =
+      this.handleTlsCertificateDownload.bind(this);
     this.handleFilterDialogClose = this.handleFilterDialogClose.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
 
     this.loadTarget = this.loadTarget.bind(this);
-    this.handleOpenDownloadReportDialog = this.handleOpenDownloadReportDialog.bind(
-      this,
-    );
-    this.handleCloseDownloadReportDialog = this.handleCloseDownloadReportDialog.bind(
-      this,
-    );
+    this.handleOpenDownloadReportDialog =
+      this.handleOpenDownloadReportDialog.bind(this);
+    this.handleCloseDownloadReportDialog =
+      this.handleCloseDownloadReportDialog.bind(this);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -243,6 +247,7 @@ class ReportDetails extends React.Component {
   componentDidMount() {
     this.props.loadSettings();
     this.props.loadFilters();
+    this.props.loadReportConfigs();
     this.props.loadReportFormats();
     this.props.loadReportComposerDefaults();
   }
@@ -401,6 +406,7 @@ class ReportDetails extends React.Component {
     const {
       includeNotes,
       includeOverrides,
+      reportConfigId,
       reportFormatId,
       storeAsDefault,
     } = state;
@@ -412,6 +418,7 @@ class ReportDetails extends React.Component {
     if (storeAsDefault) {
       const defaults = {
         ...reportComposerDefaults,
+        defaultReportConfigId: reportConfigId,
         defaultReportFormatId: reportFormatId,
         includeNotes,
         includeOverrides,
@@ -431,6 +438,7 @@ class ReportDetails extends React.Component {
 
     return gmp.report
       .download(entity, {
+        reportConfigId,
         reportFormatId,
         filter: newFilter,
       })
@@ -551,6 +559,7 @@ class ReportDetails extends React.Component {
       isLoading,
       isLoadingFilters,
       pageFilter,
+      reportConfigs,
       reportError,
       reportFormats,
       reportId,
@@ -655,10 +664,12 @@ class ReportDetails extends React.Component {
         )}
         {showDownloadReportDialog && (
           <DownloadReportDialog
+            defaultReportConfigId={reportComposerDefaults.defaultReportConfigId}
             defaultReportFormatId={reportComposerDefaults.defaultReportFormatId}
             filter={reportFilter}
             includeNotes={reportComposerDefaults.includeNotes}
             includeOverrides={reportComposerDefaults.includeOverrides}
+            reportConfigs={reportConfigs}
             reportFormats={reportFormats}
             showThresholdMessage={showThresholdMessage}
             storeAsDefault={storeAsDefault}
@@ -681,6 +692,7 @@ ReportDetails.propTypes = {
   isLoadingFilters: PropTypes.bool,
   loadFilters: PropTypes.func.isRequired,
   loadReportComposerDefaults: PropTypes.func.isRequired,
+  loadReportConfigs: PropTypes.func.isRequired,
   loadReportFormats: PropTypes.func.isRequired,
   loadSettings: PropTypes.func.isRequired,
   loadTarget: PropTypes.func.isRequired,
@@ -689,6 +701,7 @@ ReportDetails.propTypes = {
   pageFilter: PropTypes.filter,
   reload: PropTypes.func.isRequired,
   reportComposerDefaults: PropTypes.object,
+  reportConfigs: PropTypes.array,
   reportError: PropTypes.error,
   reportExportFileName: PropTypes.string,
   reportFilter: PropTypes.filter,
@@ -710,38 +723,40 @@ const reloadInterval = report =>
     ? USE_DEFAULT_RELOAD_INTERVAL_ACTIVE
     : NO_RELOAD; // report doesn't change anymore. no need to reload
 
-const load = ({
-  defaultFilter,
-  reportId,
-  // eslint-disable-next-line no-shadow
-  loadReportWithThreshold,
-  pageFilter,
-  reportFilter,
-  updateFilter,
-}) => filter => {
-  if (!hasValue(filter)) {
-    // use loaded filter after initial loading
-    filter = reportFilter;
-  }
+const load =
+  ({
+    defaultFilter,
+    reportId,
+    // eslint-disable-next-line no-shadow
+    loadReportWithThreshold,
+    pageFilter,
+    reportFilter,
+    updateFilter,
+  }) =>
+  filter => {
+    if (!hasValue(filter)) {
+      // use loaded filter after initial loading
+      filter = reportFilter;
+    }
 
-  if (!hasValue(filter)) {
-    // use filter from store
-    filter = pageFilter;
-  }
+    if (!hasValue(filter)) {
+      // use filter from store
+      filter = pageFilter;
+    }
 
-  if (!hasValue(filter)) {
-    // use filter from user setting
-    filter = defaultFilter;
-  }
+    if (!hasValue(filter)) {
+      // use filter from user setting
+      filter = defaultFilter;
+    }
 
-  if (!hasValue(filter)) {
-    // use fallback filter
-    filter = DEFAULT_FILTER;
-  }
+    if (!hasValue(filter)) {
+      // use fallback filter
+      filter = DEFAULT_FILTER;
+    }
 
-  updateFilter(filter);
-  return loadReportWithThreshold(reportId, {filter});
-};
+    updateFilter(filter);
+    return loadReportWithThreshold(reportId, {filter});
+  };
 
 const ReportDetailsWrapper = ({reportFilter, ...props}) => (
   <FilterProvider
@@ -783,6 +798,7 @@ const mapDispatchToProps = (dispatch, {gmp, match}) => ({
   loadFilters: () => dispatch(loadFilters(gmp)(RESULTS_FILTER_FILTER)),
   loadSettings: () => dispatch(loadUserSettingDefaults(gmp)()),
   loadTarget: targetId => gmp.target.get({id: targetId}),
+  loadReportConfigs: () => dispatch(loadReportConfigs(gmp)(ALL_FILTER)),
   loadReportFormats: () =>
     dispatch(loadReportFormats(gmp)(REPORT_FORMATS_FILTER)),
   loadReportWithThreshold: (id, options) =>
@@ -798,6 +814,7 @@ const mapStateToProps = (rootState, {match}) => {
   const {id} = match.params;
   const filterSel = filterSelector(rootState);
   const reportSel = reportSelector(rootState);
+  const reportConfigsSel = reportConfigsSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
   const userDefaultsSelector = getUserSettingsDefaults(rootState);
   const userDefaultFilterSel = getUserSettingsDefaultFilter(
@@ -829,6 +846,7 @@ const mapStateToProps = (rootState, {match}) => {
       'reportexportfilename',
     ),
     reportFilter: getFilter(entity),
+    reportConfigs: reportConfigsSel.getAllEntities(ALL_FILTER),
     reportFormats: reportFormatsSel.getAllEntities(REPORT_FORMATS_FILTER),
     reportId: id,
     reportComposerDefaults: getReportComposerDefaults(rootState),
