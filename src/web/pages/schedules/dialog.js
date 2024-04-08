@@ -141,10 +141,7 @@ class ScheduleDialog extends React.Component {
     const {
       duration,
       timezone = 'UTC',
-      startDate = date()
-        .tz(timezone)
-        .startOf('hour')
-        .add(1, 'hour'),
+      startDate = date().tz(timezone).startOf('hour').add(1, 'hour'),
     } = props;
     let {freq, interval = 1, weekdays, monthdays} = this.props;
 
@@ -469,6 +466,7 @@ class ScheduleDialog extends React.Component {
             <FormGroup title={_('Run Until')}>
               <DatePicker
                 disabled={state.endOpen}
+                timezone={timezone}
                 name="endDate"
                 value={state.endDate}
                 onChange={this.handleValueChange}
