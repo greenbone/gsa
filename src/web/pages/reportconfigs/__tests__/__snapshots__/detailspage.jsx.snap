@@ -876,7 +876,9 @@ exports[`Report Config Details Page tests > should render full Details page with
                           class=""
                         >
                           <tr>
-                            <td>
+                            <td
+                              class="c34"
+                            >
                               <div
                                 class="c29"
                               >
@@ -892,7 +894,9 @@ exports[`Report Config Details Page tests > should render full Details page with
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              class="c34"
+                            >
                               <div
                                 class="c29"
                               >
@@ -910,7 +914,9 @@ exports[`Report Config Details Page tests > should render full Details page with
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              class="c34"
+                            >
                               <div
                                 class="c29"
                               >
@@ -926,7 +932,9 @@ exports[`Report Config Details Page tests > should render full Details page with
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              class="c34"
+                            >
                               <div
                                 class="c29"
                               >
@@ -942,7 +950,9 @@ exports[`Report Config Details Page tests > should render full Details page with
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              class="c34"
+                            >
                               <div
                                 class="c29"
                               >
@@ -958,7 +968,9 @@ exports[`Report Config Details Page tests > should render full Details page with
                             </td>
                           </tr>
                           <tr>
-                            <td>
+                            <td
+                              class="c34"
+                            >
                               <div
                                 class="c29"
                               >

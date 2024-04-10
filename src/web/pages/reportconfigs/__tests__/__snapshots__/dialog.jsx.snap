@@ -1354,11 +1354,12 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                                         class="c13 c34"
                                       >
                                         <input
+                                          checked=""
                                           class="c35 c44"
                                           data-testid="radio-input"
                                           name="BooleanParam"
                                           type="radio"
-                                          value="1"
+                                          value="true"
                                         />
                                         <span
                                           class="c45"
@@ -1383,7 +1384,7 @@ exports[`Edit Report Config Dialog component tests > should render dialog with d
                                           data-testid="radio-input"
                                           name="BooleanParam"
                                           type="radio"
-                                          value="0"
+                                          value="false"
                                         />
                                         <span
                                           class="c45"

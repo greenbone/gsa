@@ -134,6 +134,9 @@ describe('Report Config Component tests', () => {
       entityType: 'reportconfig',
       id: 'rc123',
       name: 'test report config',
+      param_types: {
+        'test param': 'string',
+      },
       params: {
         'test param': 'ABC',
       },
@@ -224,6 +227,9 @@ describe('Report Config Component tests', () => {
     expect(createReportConfig).toHaveBeenCalledWith({
       name: 'Unnamed',
       comment: '',
+      param_types: {
+        'test param': 'string',
+      },
       params: {
         'test param': 'ABC',
       },
