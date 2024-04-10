@@ -48,6 +48,9 @@ class Param {
 
     if (this.type === 'report_format_list') {
       this.value = map(value.report_format, format => format._id);
+    } else if (this.type === 'multi_selection') {
+      this.value = JSON.parse(get_value(value));
+      this.default = JSON.parse(get_value(other.default));
     } else {
       this.value = get_value(value);
     }

@@ -167,7 +167,9 @@ exports[`Report Config Details tests > should render full Details 1`] = `
                   class=""
                 >
                   <tr>
-                    <td>
+                    <td
+                      class="c7"
+                    >
                       <div
                         class="c5"
                       >
@@ -183,7 +185,9 @@ exports[`Report Config Details tests > should render full Details 1`] = `
                     </td>
                   </tr>
                   <tr>
-                    <td>
+                    <td
+                      class="c7"
+                    >
                       <div
                         class="c5"
                       >
@@ -201,7 +205,9 @@ exports[`Report Config Details tests > should render full Details 1`] = `
                     </td>
                   </tr>
                   <tr>
-                    <td>
+                    <td
+                      class="c7"
+                    >
                       <div
                         class="c5"
                       >
@@ -217,7 +223,9 @@ exports[`Report Config Details tests > should render full Details 1`] = `
                     </td>
                   </tr>
                   <tr>
-                    <td>
+                    <td
+                      class="c7"
+                    >
                       <div
                         class="c5"
                       >
@@ -233,7 +241,9 @@ exports[`Report Config Details tests > should render full Details 1`] = `
                     </td>
                   </tr>
                   <tr>
-                    <td>
+                    <td
+                      class="c7"
+                    >
                       <div
                         class="c5"
                       >
@@ -249,7 +259,9 @@ exports[`Report Config Details tests > should render full Details 1`] = `
                     </td>
                   </tr>
                   <tr>
-                    <td>
+                    <td
+                      class="c7"
+                    >
                       <div
                         class="c5"
                       >
