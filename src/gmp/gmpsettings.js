@@ -71,7 +71,7 @@ class GmpSettings {
       reloadIntervalActive = DEFAULT_RELOAD_INTERVAL_ACTIVE,
       reloadIntervalInactive = DEFAULT_RELOAD_INTERVAL_INACTIVE,
       reportResultsThreshold = DEFAULT_REPORT_RESULTS_THRESHOLD,
-      server = DEFAULT_API_SERVER,
+      server,
       timeout = DEFAULT_TIMEOUT,
       vendorVersion,
       vendorLabel,
@@ -109,7 +109,7 @@ class GmpSettings {
       apiProtocol = global.location.protocol;
     }
     if (!isDefined(apiServer)) {
-      apiServer = global.location.host;
+      apiServer = DEFAULT_API_SERVER;
     }
 
     this.logLevel = logLevel;
