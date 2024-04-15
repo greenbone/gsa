@@ -23,7 +23,7 @@ import {getLocale} from 'gmp/locale/lang';
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 
 import BlankLink from './blanklink';
 
@@ -47,7 +47,8 @@ const getLanguagePath = (
   return isDefined(path) ? path : DEFAULT_LANGUAGE_PATH;
 };
 
-const ManualLink = ({anchor, gmp, page, searchTerm, lang, ...props}) => {
+const ManualLink = ({anchor, page, searchTerm, lang, ...props}) => {
+  const gmp = useGmp();
   const {manualUrl, manualLanguageMapping} = gmp.settings;
 
   let url = manualUrl;
@@ -67,12 +68,11 @@ const ManualLink = ({anchor, gmp, page, searchTerm, lang, ...props}) => {
 
 ManualLink.propTypes = {
   anchor: PropTypes.string,
-  gmp: PropTypes.gmp.isRequired,
   lang: PropTypes.string,
   page: PropTypes.string.isRequired,
   searchTerm: PropTypes.string,
 };
 
-export default withGmp(ManualLink);
+export default ManualLink;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -46,8 +46,6 @@ describe('Empty Report tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-
     // Should include
     expect(baseElement).toHaveTextContent(
       'The Report is empty. This can happen for the following reasons:',
@@ -56,7 +54,6 @@ describe('Empty Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'The scan did not collect any results',
     );
-    expect(icons[0]).toHaveTextContent('task.svg');
     expect(baseElement).toHaveTextContent(
       'If the scan got interrupted you can try to re-start the task.',
     );
@@ -64,7 +61,6 @@ describe('Empty Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'The target hosts could be regarded dead',
     );
-    expect(icons[1]).toHaveTextContent('target.svg');
     expect(baseElement).toHaveTextContent(
       'You should change the Alive Test Method of the target for the next scan. However, if the target hosts are indeed dead, the scan duration might increase significantly.',
     );
@@ -98,11 +94,11 @@ describe('Empty Report tests', () => {
     );
 
     const icons = baseElement.querySelectorAll('svg');
+    expect(icons.length).toEqual(1);
 
     expect(baseElement).toHaveTextContent(
       'The scan just started and no results have arrived yet',
     );
-    expect(icons[0]).toHaveTextContent('refresh.svg');
     expect(baseElement).toHaveTextContent('Just wait for results to arrive.');
   });
 
@@ -122,12 +118,9 @@ describe('Empty Report tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-
     expect(baseElement).toHaveTextContent(
       'The scan is still running and no results have arrived yet',
     );
-    expect(icons[0]).toHaveTextContent('refresh.svg');
     expect(baseElement).toHaveTextContent('Just wait for results to arrive.');
   });
 
@@ -149,7 +142,6 @@ describe('Empty Report tests', () => {
 
     const icons = baseElement.querySelectorAll('svg');
 
-    expect(icons[1]).toHaveTextContent('target.svg');
     fireEvent.click(icons[1]);
     expect(onTargetEditClick).toHaveBeenCalled();
   });
@@ -172,7 +164,6 @@ describe('Empty Report tests', () => {
 
     const icons = baseElement.querySelectorAll('svg');
 
-    expect(icons[1]).toHaveTextContent('target.svg');
     fireEvent.click(icons[1]);
     expect(onTargetEditClick).not.toHaveBeenCalled();
   });

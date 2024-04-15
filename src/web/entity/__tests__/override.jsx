@@ -61,7 +61,6 @@ describe('OverrideBox component tests', () => {
     );
     expect(link).toBeDefined();
     expect(link.getAttribute('href')).toEqual('/override/123');
-    expect(element).toHaveTextContent('details.svg');
     expect(element).toHaveTextContent('ModifiedSat, Feb 2, 2019 1:00 PM CET');
     expect(element).toHaveTextContent(
       'Active untilTue, Jan 1, 2019 1:00 PM CET',

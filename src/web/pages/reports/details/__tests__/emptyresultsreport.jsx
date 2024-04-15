@@ -51,8 +51,6 @@ describe('Empty Results Report tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-
     // Should include
     expect(baseElement).toHaveTextContent(
       'The report is empty. The filter does not match any of the 100 results.',
@@ -64,7 +62,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your filter settings may be too refined.',
     );
-    expect(icons[0]).toHaveTextContent('edit.svg');
     expect(baseElement).toHaveTextContent(
       'Adjust and update your filter settings.',
     );
@@ -72,7 +69,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your last filter change may be too restrictive.',
     );
-    expect(icons[1]).toHaveTextContent('delete.svg');
     expect(baseElement).toHaveTextContent('Remove all filter settings.');
 
     // Should not include
@@ -110,8 +106,6 @@ describe('Empty Results Report tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-
     // Should include
     expect(baseElement).toHaveTextContent(
       'The report is empty. The filter does not match any of the 100 results.',
@@ -123,7 +117,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'Log messages are currently excluded.',
     );
-    expect(icons[0]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent(
       'Include log messages in your filter settings.',
     );
@@ -131,7 +124,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your filter settings may be too refined.',
     );
-    expect(icons[1]).toHaveTextContent('edit.svg');
     expect(baseElement).toHaveTextContent(
       'Adjust and update your filter settings.',
     );
@@ -139,7 +131,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your last filter change may be too restrictive.',
     );
-    expect(icons[2]).toHaveTextContent('delete.svg');
     expect(baseElement).toHaveTextContent('Remove all filter settings.');
 
     // Should not include
@@ -174,8 +165,6 @@ describe('Empty Results Report tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-
     // Should include
     expect(baseElement).toHaveTextContent(
       'The report is empty. The filter does not match any of the 100 results.',
@@ -187,7 +176,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'You are using keywords setting a minimum limit on severity.',
     );
-    expect(icons[0]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent(
       'Remove the severity limit from your filter settings.',
     );
@@ -195,7 +183,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your filter settings may be too refined.',
     );
-    expect(icons[1]).toHaveTextContent('edit.svg');
     expect(baseElement).toHaveTextContent(
       'Adjust and update your filter settings.',
     );
@@ -203,7 +190,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your last filter change may be too restrictive.',
     );
-    expect(icons[2]).toHaveTextContent('delete.svg');
     expect(baseElement).toHaveTextContent('Remove all filter settings.');
 
     // Should not include
@@ -238,8 +224,6 @@ describe('Empty Results Report tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-
     // Should include
     expect(baseElement).toHaveTextContent(
       'The report is empty. The filter does not match any of the 100 results.',
@@ -251,7 +235,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'There may be results below the currently selected Quality of Detection (QoD).',
     );
-    expect(icons[0]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent(
       'Decrease the minimum QoD in the filter settings to 30 percent to see those results.',
     );
@@ -259,7 +242,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your filter settings may be too refined.',
     );
-    expect(icons[1]).toHaveTextContent('edit.svg');
     expect(baseElement).toHaveTextContent(
       'Adjust and update your filter settings.',
     );
@@ -267,7 +249,6 @@ describe('Empty Results Report tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your last filter change may be too restrictive.',
     );
-    expect(icons[2]).toHaveTextContent('delete.svg');
     expect(baseElement).toHaveTextContent('Remove all filter settings.');
 
     // Should not include
@@ -303,23 +284,18 @@ describe('Empty Results Report tests', () => {
 
     const icons = baseElement.querySelectorAll('svg');
 
-    expect(icons[0]).toHaveTextContent('filter.svg');
     fireEvent.click(icons[0]);
     expect(onFilterAddLogLevelClick).toHaveBeenCalled();
 
-    expect(icons[1]).toHaveTextContent('filter.svg');
     fireEvent.click(icons[1]);
     expect(onFilterRemoveSeverityClick).toHaveBeenCalled();
 
-    expect(icons[2]).toHaveTextContent('filter.svg');
     fireEvent.click(icons[2]);
     expect(onFilterDecreaseMinQoDClick).toHaveBeenCalled();
 
-    expect(icons[3]).toHaveTextContent('edit.svg');
     fireEvent.click(icons[3]);
     expect(onFilterEditClick).toHaveBeenCalled();
 
-    expect(icons[4]).toHaveTextContent('delete.svg');
     fireEvent.click(icons[4]);
     expect(onFilterRemoveClick).toHaveBeenCalled();
   });

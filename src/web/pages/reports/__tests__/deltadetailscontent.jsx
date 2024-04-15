@@ -152,29 +152,14 @@ describe('Delta Report Details Content tests', () => {
     const selects = getAllByTestId('select-selected-value');
     const bars = getAllByTestId('progressbar-box');
 
-    // Toolbar Icons
-    expect(icons[0]).toHaveTextContent('help.svg');
-    expect(icons[1]).toHaveTextContent('list.svg');
-    expect(icons[2]).toHaveTextContent('add_to_assets.svg');
-    expect(icons[3]).toHaveTextContent('remove_from_assets.svg');
-    expect(icons[4]).toHaveTextContent('task.svg');
-    expect(icons[5]).toHaveTextContent('result.svg');
-    expect(icons[6]).toHaveTextContent('vulnerability.svg');
-    expect(icons[7]).toHaveTextContent('performance.svg');
-    expect(icons[8]).toHaveTextContent('download.svg');
+    expect(icons.length).toEqual(15)
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[9]).toHaveTextContent('refresh.svg');
-    expect(icons[10]).toHaveTextContent('delete.svg');
-    expect(icons[11]).toHaveTextContent('reset.svg');
-    expect(icons[12]).toHaveTextContent('help.svg');
-    expect(icons[13]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
     expect(selects[0]).toHaveTextContent('foo');
 
     // Header
-    expect(icons[14]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
@@ -340,28 +325,14 @@ describe('Delta Report Details Content tests', () => {
     const bars = getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons[0]).toHaveTextContent('help.svg');
-    expect(icons[1]).toHaveTextContent('list.svg');
-    expect(icons[2]).toHaveTextContent('add_to_assets.svg');
-    expect(icons[3]).toHaveTextContent('remove_from_assets.svg');
-    expect(icons[4]).toHaveTextContent('task.svg');
-    expect(icons[5]).toHaveTextContent('result.svg');
-    expect(icons[6]).toHaveTextContent('vulnerability.svg');
-    expect(icons[7]).toHaveTextContent('performance.svg');
-    expect(icons[8]).toHaveTextContent('download.svg');
+    expect(icons.length).toEqual(26)
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[9]).toHaveTextContent('refresh.svg');
-    expect(icons[10]).toHaveTextContent('delete.svg');
-    expect(icons[11]).toHaveTextContent('reset.svg');
-    expect(icons[12]).toHaveTextContent('help.svg');
-    expect(icons[13]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
     expect(selects[0]).toHaveTextContent('--');
 
     // Header
-    expect(icons[14]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
@@ -385,7 +356,6 @@ describe('Delta Report Details Content tests', () => {
     // Headings
     expect(header[0]).toHaveTextContent('Delta');
     expect(header[1]).toHaveTextContent('Vulnerability');
-    expect(header[2]).toHaveTextContent('solution_type.svg');
     expect(header[3]).toHaveTextContent('Severity');
     expect(header[4]).toHaveTextContent('QoD');
     expect(header[5]).toHaveTextContent('Host');
@@ -397,7 +367,6 @@ describe('Delta Report Details Content tests', () => {
     // Row 1
     expect(rows[2]).toHaveTextContent('[ = ]');
     expect(rows[2]).toHaveTextContent('Result 1');
-    expect(rows[2]).toHaveTextContent('st_mitigate.svg');
     expect(bars[1]).toHaveAttribute('title', 'High');
     expect(bars[1]).toHaveTextContent('10.0 (High)');
     expect(rows[2]).toHaveTextContent('80 %');
@@ -408,7 +377,6 @@ describe('Delta Report Details Content tests', () => {
     // Row 2
     expect(rows[3]).toHaveTextContent('[ = ]');
     expect(rows[3]).toHaveTextContent('Result 2');
-    expect(rows[3]).toHaveTextContent('st_vendorfix.svg');
     expect(bars[2]).toHaveAttribute('title', 'Medium');
     expect(bars[2]).toHaveTextContent('5.0 (Medium)');
     expect(rows[3]).toHaveTextContent('70 %');

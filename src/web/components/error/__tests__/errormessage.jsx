@@ -43,7 +43,6 @@ describe('ErrorMessage tests', () => {
     const icon = element.querySelector('svg');
 
     expect(icon).not.toBeNull();
-    expect(icon).toHaveTextContent('st_nonavailable.svg');
 
     expect(getByTestId('error-message')).toHaveTextContent(message);
     expect(getByTestId('error-details')).toHaveTextContent(details);

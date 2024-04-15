@@ -148,7 +148,6 @@ describe('Task Row tests', () => {
     const icons = getAllByTestId('svg-icon');
 
     expect(icons[0]).toHaveAttribute('title', 'Severity increased');
-    expect(icons[0]).toHaveTextContent('trend_up.svg');
 
     // Actions
 

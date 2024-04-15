@@ -47,8 +47,6 @@ describe('Report Threshold Panel tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-
     // Should include
     expect(baseElement).toHaveTextContent(
       "The Hosts cannot be displayed in order to maintain the performance within the browser's capabilities.",
@@ -60,13 +58,11 @@ describe('Report Threshold Panel tests', () => {
     expect(baseElement).toHaveTextContent(
       "Results aren't filtered by severity.",
     );
-    expect(icons[0]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent('Apply a minimum severity of 7.0.');
 
     expect(baseElement).toHaveTextContent(
       'Your filter settings may be too unrefined.',
     );
-    expect(icons[1]).toHaveTextContent('edit.svg');
     expect(baseElement).toHaveTextContent(
       'Adjust and update your filter settings.',
     );
@@ -106,8 +102,6 @@ describe('Report Threshold Panel tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-
     expect(baseElement).toHaveTextContent(
       "The Hosts cannot be displayed in order to maintain the performance within the browser's capabilities.",
     );
@@ -118,13 +112,11 @@ describe('Report Threshold Panel tests', () => {
     expect(baseElement).toHaveTextContent(
       'Results with log messages are currently included.',
     );
-    expect(icons[0]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent('Filter out log message results.');
 
     expect(baseElement).toHaveTextContent(
       'Results with the severity "Low" are currently included.',
     );
-    expect(icons[1]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent(
       'Filter out results with the severity "Low".',
     );
@@ -132,7 +124,6 @@ describe('Report Threshold Panel tests', () => {
     expect(baseElement).toHaveTextContent(
       'Results with the severity "Medium" are currently included.',
     );
-    expect(icons[2]).toHaveTextContent('filter.svg');
     expect(baseElement).toHaveTextContent(
       'Filter out results with the severity "Medium".',
     );
@@ -140,7 +131,6 @@ describe('Report Threshold Panel tests', () => {
     expect(baseElement).toHaveTextContent(
       'Your filter settings may be too unrefined.',
     );
-    expect(icons[3]).toHaveTextContent('edit.svg');
     expect(baseElement).toHaveTextContent(
       'Adjust and update your filter settings.',
     );
@@ -177,11 +167,9 @@ describe('Report Threshold Panel tests', () => {
 
     const icons = baseElement.querySelectorAll('svg');
 
-    expect(icons[0]).toHaveTextContent('filter.svg');
     fireEvent.click(icons[0]);
     expect(onFilterChanged).toHaveBeenCalledWith(filterMinSeverity);
 
-    expect(icons[1]).toHaveTextContent('edit.svg');
     fireEvent.click(icons[1]);
     expect(onFilterEditClick).toHaveBeenCalled();
   });
@@ -219,15 +207,12 @@ describe('Report Threshold Panel tests', () => {
 
     const icons = baseElement.querySelectorAll('svg');
 
-    expect(icons[0]).toHaveTextContent('filter.svg');
     fireEvent.click(icons[0]);
     expect(onFilterChanged).toHaveBeenCalledWith(filterLog);
 
-    expect(icons[1]).toHaveTextContent('filter.svg');
     fireEvent.click(icons[1]);
     expect(onFilterChanged).toHaveBeenCalledWith(filterLow);
 
-    expect(icons[2]).toHaveTextContent('filter.svg');
     fireEvent.click(icons[2]);
     expect(onFilterChanged).toHaveBeenCalledWith(filterMedium);
   });

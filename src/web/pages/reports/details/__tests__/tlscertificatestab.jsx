@@ -65,7 +65,6 @@ describe('Report TLS Certificates Tab tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
     const links = baseElement.querySelectorAll('a');
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
@@ -96,7 +95,6 @@ describe('Report TLS Certificates Tab tests', () => {
     expect(links[7]).toHaveTextContent('192.168.9.90');
     expect(rows[1]).toHaveTextContent('foo.bar');
     expect(rows[1]).toHaveTextContent('4021');
-    expect(icons[4]).toHaveTextContent('download.svg');
 
     // Row 2
     expect(rows[2]).toHaveTextContent('CN=LoremIpsumSubject1 C=Dolor');
@@ -114,7 +112,6 @@ describe('Report TLS Certificates Tab tests', () => {
     expect(links[8]).toHaveTextContent('192.168.9.90');
     expect(rows[2]).toHaveTextContent('foo.bar');
     expect(rows[2]).toHaveTextContent('4023');
-    expect(icons[5]).toHaveTextContent('download.svg');
 
     // Row 3
     expect(rows[3]).toHaveTextContent('CN=LoremIpsumSubject2 C=Dolor');
@@ -129,7 +126,6 @@ describe('Report TLS Certificates Tab tests', () => {
     );
     expect(links[9]).toHaveTextContent('191.164.9.93');
     expect(rows[3]).toHaveTextContent('8445');
-    expect(icons[6]).toHaveTextContent('download.svg');
 
     // Filter
     expect(baseElement).toHaveTextContent(
@@ -168,13 +164,11 @@ describe('Report TLS Certificates Tab tests', () => {
 
     const icons = baseElement.querySelectorAll('svg');
 
-    expect(icons[4]).toHaveTextContent('download.svg');
     fireEvent.click(icons[4]);
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
       tlsCertificates.entities[0],
     );
 
-    expect(icons[5]).toHaveTextContent('download.svg');
     fireEvent.click(icons[5]);
     expect(onTlsCertificateDownloadClick).toHaveBeenCalledWith(
       tlsCertificates.entities[1],

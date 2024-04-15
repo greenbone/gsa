@@ -88,7 +88,6 @@ describe('NVT row tests', () => {
 
     const bars = getAllByTestId('progressbar-box');
     const links = baseElement.querySelectorAll('a');
-    const icons = baseElement.querySelectorAll('svg');
 
     expect(baseElement).toHaveTextContent('foo');
 
@@ -103,8 +102,6 @@ describe('NVT row tests', () => {
 
     expect(links[2]).toHaveAttribute('href', '/cve/CVE-2020-5678');
     expect(links[2]).toHaveTextContent('CVE-2020-5678');
-
-    expect(icons[0]).toHaveTextContent('st_vendorfix.svg');
 
     expect(bars[0]).toHaveAttribute('title', 'Medium');
     expect(bars[0]).toHaveTextContent('5.0 (Medium)');
