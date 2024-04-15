@@ -45,6 +45,7 @@ class Task extends React.Component {
 
 Task.propTypes = {
   gmp: PropTypes.gmp.isRequired,
+  params: PropTypes.object,
 };
 
 export default withGmp(Task);

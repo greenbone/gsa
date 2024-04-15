@@ -1,18 +1,45 @@
 module.exports = {
-  root: true,
-  env: { browser: true, es2020: true },
+  ignorePatterns: ['build', '.eslintrc.cjs'],
   extends: [
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:vitest-globals/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
-  rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
+  plugins: ['react', 'react-hooks'],
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
-}
+  parserOptions: {
+    ecmaVersion: 2022,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+  env: {
+    browser: true,
+    es2020: true,
+    'vitest-globals/env': true,
+  },
+  rules: {
+    'react/react-in-jsx-scope': 'off',
+    'react/display-name': 'off',
+    'react/prop-types': [
+      'warn',
+      {ignore: ['children', 'className', 'location']},
+    ],
+    'no-case-declarations': 'off',
+    'no-unused-vars': [
+      'warn',
+      {
+        args: 'none',
+        ignoreRestSiblings: true,
+      },
+    ],
+    'no-class-assign': 'off',
+    'no-prototype-builtins': 'off',
+  },
+};

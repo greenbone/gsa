@@ -395,6 +395,7 @@ class Event {
       const it = this.event.iterator();
       const dates = [];
 
+      // eslint-disable-next-line no-constant-condition
       while (true) {
         const next = it.next();
 

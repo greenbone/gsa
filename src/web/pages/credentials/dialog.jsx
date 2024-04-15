@@ -476,6 +476,7 @@ CredentialsDialog.propTypes = {
   credential: PropTypes.model,
   credential_login: PropTypes.string,
   credential_type: pwtypes,
+  error: PropTypes.string,
   name: PropTypes.string,
   passphrase: PropTypes.string,
   password: PropTypes.string,
