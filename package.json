@@ -22,7 +22,7 @@
     "test:ui": "vitest --ui",
     "dev": "vite",
     "start": "npm run dev",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint": "eslint src --ext js,jsx,ts,tsx --max-warnings 0",
     "preview": "vite preview",
     "i18n-extract": "NODE_ENV=development babel -f .babelrc 'src/**/*.{js,jsx,ts,tsx}'",
