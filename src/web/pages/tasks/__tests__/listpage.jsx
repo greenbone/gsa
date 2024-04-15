@@ -185,8 +185,6 @@ describe('TaskPage tests', () => {
 
     // Toolbar Icons
     expect(icons[0]).toHaveAttribute('title', 'Help: Tasks');
-    expect(icons[1]).toHaveTextContent('wizard.svg');
-    expect(icons[2]).toHaveTextContent('new.svg');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');

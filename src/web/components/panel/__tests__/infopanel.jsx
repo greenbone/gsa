@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import userEvent from '@testing-library/user-event';
 
-import {render} from 'web/utils/testing';
+import {render, userEvent} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
 
 import InfoPanel from '../infopanel';

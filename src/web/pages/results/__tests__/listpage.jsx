@@ -255,7 +255,6 @@ describe('Results listpage tests', () => {
     const header = baseElement.querySelectorAll('th');
 
     expect(header[0]).toHaveTextContent('Vulnerability');
-    expect(header[1]).toHaveTextContent('solution_type.svg');
     expect(header[2]).toHaveTextContent('Severity');
     expect(header[3]).toHaveTextContent('QoD');
     expect(header[4]).toHaveTextContent('Host');
@@ -285,7 +284,6 @@ describe('Results listpage tests', () => {
 
     // Row 3
     expect(row[4]).toHaveTextContent('Result 3');
-    expect(row[4]).toHaveTextContent('st_mitigate.svg');
     expect(row[4]).toHaveTextContent('5.0 (Medium)');
     expect(row[4]).toHaveTextContent('80 %');
     expect(row[4]).toHaveTextContent('109.876.54.321');

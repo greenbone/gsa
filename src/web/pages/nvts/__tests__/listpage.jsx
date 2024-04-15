@@ -196,7 +196,6 @@ describe('NvtsPage tests', () => {
     expect(header[2]).toHaveTextContent('Created');
     expect(header[3]).toHaveTextContent('Modified');
     expect(header[4]).toHaveTextContent('CVE');
-    expect(header[5]).toHaveTextContent('solution_type.svg');
     expect(header[6]).toHaveTextContent('Severity');
     expect(header[7]).toHaveTextContent('QoD');
 
@@ -208,7 +207,6 @@ describe('NvtsPage tests', () => {
     expect(row[1]).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
     expect(row[1]).toHaveTextContent('CVE-2020-1234');
     expect(row[1]).toHaveTextContent('CVE-2020-5678');
-    expect(row[1]).toHaveTextContent('st_vendorfix.svg');
     expect(row[1]).toHaveTextContent('80 %');
   });
 

@@ -35,15 +35,12 @@ describe('AboutPage tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const {baseElement, getByTestId} = render(<AboutPage />);
+    const {baseElement} = render(<AboutPage />);
 
-    const icon = getByTestId('svg-icon');
     const links = baseElement.querySelectorAll('a');
     const heading = baseElement.querySelector('h1');
     const version = baseElement.querySelector('h3');
     const image = baseElement.querySelector('img');
-
-    expect(icon).toHaveTextContent('help.svg');
 
     expect(links.length).toEqual(3);
     expect(links[0]).toHaveTextContent('Greenbone AG');

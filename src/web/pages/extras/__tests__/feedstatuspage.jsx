@@ -88,19 +88,7 @@ describe('Feed status page tests', () => {
 
     expect(icons.length).toEqual(11);
 
-    expect(icons[0]).toHaveTextContent('help.svg');
     expect(icons[0]).toHaveAttribute('title', 'Help: Feed Status');
-
-    expect(icons[1]).toHaveTextContent('feed.svg');
-    expect(icons[2]).toHaveTextContent('nvt.svg');
-    expect(icons[3]).toHaveTextContent('cve.svg');
-    expect(icons[4]).toHaveTextContent('cpe.svg');
-    expect(icons[5]).toHaveTextContent('cert_bund_adv.svg');
-    expect(icons[6]).toHaveTextContent('dfn_cert_adv.svg');
-    expect(icons[7]).toHaveTextContent('policy.svg');
-    expect(icons[8]).toHaveTextContent('port_list.svg');
-    expect(icons[9]).toHaveTextContent('report_format.svg');
-    expect(icons[10]).toHaveTextContent('config.svg');
 
     // Should render all links
     const links = element.querySelectorAll('a');

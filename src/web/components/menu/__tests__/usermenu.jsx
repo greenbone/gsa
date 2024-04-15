@@ -22,7 +22,7 @@ import {longDate} from 'gmp/locale/date';
 
 import {setSessionTimeout, setUsername} from 'web/store/usersettings/actions';
 
-import {fireEvent, rendererWith} from 'web/utils/testing';
+import {fireEvent, rendererWith, screen, act} from 'web/utils/testing';
 
 import UserMenu from '../usermenu';
 
@@ -48,7 +48,7 @@ describe('UserMenu component tests', () => {
     expect(element).toHaveTextContent('foo');
   });
 
-  test('should route to usersettings on click', () => {
+  test('should route to usersettings on click',() => {
     const {render, history} = rendererWith({
       gmp: {},
       store: true,
@@ -63,22 +63,24 @@ describe('UserMenu component tests', () => {
     expect(history.location.pathname).toMatch('usersettings');
   });
 
-  test('should logout user on click', () => {
+  test('should logout user on click', async () => {
     const doLogout = vi.fn().mockResolvedValue();
     const gmp = {
       doLogout,
     };
     const {render} = rendererWith({gmp, store: true, router: true});
 
-    const {getByTestId} = render(<UserMenu />);
-    const userSettingsElement = getByTestId('usermenu-logout');
+    render(<UserMenu />);
+    const userSettingsElement = screen.getByTestId('usermenu-logout');
 
-    fireEvent.click(userSettingsElement);
+    await act(async () => {
+      fireEvent.click(userSettingsElement);
+    });
 
     expect(gmp.doLogout).toHaveBeenCalled();
   });
 
-  test('should renew session timeout on click', () => {
+  test('should renew session timeout on click', async () => {
     const renewSession = vi
       .fn()
       .mockResolvedValue({data: '2019-10-10T12:00:00Z'});
@@ -92,7 +94,9 @@ describe('UserMenu component tests', () => {
     const {getAllByTestId} = render(<UserMenu />);
     const icons = getAllByTestId('svg-icon');
 
-    fireEvent.click(icons[3]);
+    await act(async () => {
+      fireEvent.click(icons[3]);
+    });
 
     expect(gmp.user.renewSession).toHaveBeenCalled();
   });

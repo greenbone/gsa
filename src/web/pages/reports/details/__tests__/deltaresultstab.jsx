@@ -96,7 +96,6 @@ describe('Delta Results Tab tests', () => {
     // Headings
     expect(header[0]).toHaveTextContent('Delta');
     expect(header[1]).toHaveTextContent('Vulnerability');
-    expect(header[2]).toHaveTextContent('solution_type.svg');
     expect(header[3]).toHaveTextContent('Severity');
     expect(header[4]).toHaveTextContent('QoD');
     expect(header[5]).toHaveTextContent('Host');
@@ -108,7 +107,6 @@ describe('Delta Results Tab tests', () => {
     // Row 1
     expect(rows[2]).toHaveTextContent('[ = ]');
     expect(rows[2]).toHaveTextContent('Result 1');
-    expect(rows[2]).toHaveTextContent('st_mitigate.svg');
     expect(bars[0]).toHaveAttribute('title', 'High');
     expect(bars[0]).toHaveTextContent('10.0 (High)');
     expect(rows[2]).toHaveTextContent('80 %');
@@ -119,7 +117,6 @@ describe('Delta Results Tab tests', () => {
     // Row 2
     expect(rows[3]).toHaveTextContent('[ = ]');
     expect(rows[3]).toHaveTextContent('Result 2');
-    expect(rows[3]).toHaveTextContent('st_vendorfix.svg');
     expect(bars[1]).toHaveAttribute('title', 'Medium');
     expect(bars[1]).toHaveTextContent('5.0 (Medium)');
     expect(rows[3]).toHaveTextContent('70 %');

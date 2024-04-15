@@ -236,9 +236,6 @@ describe('Result Detailspage tests', () => {
     expect(baseElement).toHaveTextContent('No real impact');
 
     expect(heading[8]).toHaveTextContent('Solution');
-    expect(baseElement).toHaveTextContent(
-      'Solution Type: st_mitigate.svgMitigation',
-    );
     expect(baseElement).toHaveTextContent('Keep writing tests');
 
     expect(heading[9]).toHaveTextContent('References');

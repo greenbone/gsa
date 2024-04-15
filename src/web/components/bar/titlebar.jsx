@@ -35,10 +35,9 @@ import UserMenu from 'web/components/menu/usermenu';
 
 import {isLoggedIn} from 'web/store/usersettings/selectors';
 
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-import withGmp from 'web/utils/withGmp';
+import useGmp from 'web/utils/useGmp';
 
 const TITLE_BAR_HEIGHT = '42px';
 
@@ -81,29 +80,31 @@ const TitlebarPlaceholder = styled.div`
   height: ${TITLE_BAR_HEIGHT};
 `;
 
-const Titlebar = ({gmp, loggedIn}) => (
-  <React.Fragment>
-    <TitlebarPlaceholder />
-    <TitlebarLayout>
-      {loggedIn ? (
-        <React.Fragment>
-          <Link to="/" title={_('Dashboard')}>
+const Titlebar = ({loggedIn}) => {
+  const gmp = useGmp();
+  return (
+    <React.Fragment>
+      <TitlebarPlaceholder />
+      <TitlebarLayout>
+        {loggedIn ? (
+          <React.Fragment>
+            <Link to="/" title={_('Dashboard')}>
+              <Greenbone />
+            </Link>
+            <UserMenu />
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
             <Greenbone />
-          </Link>
-          <UserMenu />
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          <Greenbone />
-          <div>{gmp.settings.vendorVersion}</div>
-        </React.Fragment>
-      )}
-    </TitlebarLayout>
-  </React.Fragment>
-);
+            <div>{gmp.settings.vendorVersion}</div>
+          </React.Fragment>
+        )}
+      </TitlebarLayout>
+    </React.Fragment>
+  );
+}
 
 Titlebar.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
   loggedIn: PropTypes.bool.isRequired,
 };
 
@@ -111,9 +112,6 @@ const mapStateToProps = rootState => ({
   loggedIn: isLoggedIn(rootState),
 });
 
-export default compose(
-  withGmp,
-  connect(mapStateToProps),
-)(Titlebar);
+export default connect(mapStateToProps)(Titlebar);
 
 // vim: set ts=2 sw=2 tw=80:

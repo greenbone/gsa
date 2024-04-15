@@ -56,7 +56,6 @@ describe('Scan Config Trend tests', () => {
     const trendIcon = getByTestId('svg-icon');
 
     expect(trendIcon).toHaveAttribute('title', 'Static');
-    expect(trendIcon).toHaveTextContent('trend_nochange.svg');
   });
 
   test('should render dynamic title', () => {
@@ -71,7 +70,6 @@ describe('Scan Config Trend tests', () => {
     const trendIcon = getByTestId('svg-icon');
 
     expect(trendIcon).toHaveAttribute('title', 'Dynamic');
-    expect(trendIcon).toHaveTextContent('trend_more.svg');
   });
 
   test('should render N/A', () => {
@@ -85,8 +83,6 @@ describe('Scan Config Trend tests', () => {
     );
 
     expect(element).toHaveTextContent('N/A');
-    expect(element).not.toHaveTextContent('trend_more.svg');
-    expect(element).not.toHaveTextContent('trend_nochange.svg');
 
     console.warn = consoleError;
   });

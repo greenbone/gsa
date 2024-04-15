@@ -32,8 +32,7 @@ const TestComponent = ({reload, id, reloadOptions}) => (
 );
 
 const runTimers = async () => {
-  await Promise.resolve(); // required for firing the timer https://github.com/facebook/jest/issues/7151
-  act(() => {
+  await act(async () => {
     vi.runAllTimers();
   });
 };
@@ -123,6 +122,7 @@ describe('Reload component tests', () => {
     renderFunc.mockClear();
 
     await runTimers();
+    await runTimers();
 
     expect(loadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
@@ -166,6 +166,7 @@ describe('Reload component tests', () => {
     renderFunc.mockClear();
 
     await runTimers();
+    await runTimers();
 
     expect(loadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
@@ -208,6 +209,7 @@ describe('Reload component tests', () => {
     loadFunc.mockClear();
     renderFunc.mockClear();
 
+    await runTimers();
     await runTimers();
 
     expect(loadFunc).not.toHaveBeenCalled();
@@ -304,6 +306,7 @@ describe('Reload component tests', () => {
     renderFunc.mockClear();
 
     await runTimers();
+    await runTimers();
 
     expect(loadFunc).not.toHaveBeenCalled();
     expect(renderFunc).not.toHaveBeenCalled();
@@ -363,6 +366,7 @@ describe('Reload component tests', () => {
     renderFunc.mockClear();
 
     await runTimers();
+    await runTimers();
 
     expect(loadFunc).not.toHaveBeenCalled();
     expect(reloadFunc).toHaveBeenCalled();
@@ -414,6 +418,7 @@ describe('Reload component tests', () => {
     loadFunc.mockClear();
     renderFunc.mockClear();
 
+    await runTimers();
     await runTimers();
 
     expect(loadFunc).not.toHaveBeenCalled();
@@ -473,6 +478,7 @@ describe('Reload component tests', () => {
       renderFunc.mockClear();
 
       await runTimers();
+      await runTimers();
 
       expect(loadFunc).not.toHaveBeenCalled();
       expect(reloadFunc).not.toHaveBeenCalled();
@@ -531,6 +537,7 @@ describe('Reload component tests', () => {
       loadFunc.mockClear();
       renderFunc.mockClear();
 
+      await runTimers();
       await runTimers();
 
       expect(loadFunc).not.toHaveBeenCalled();

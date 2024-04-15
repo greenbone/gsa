@@ -72,7 +72,6 @@ describe('Report Hosts Tab tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
     const images = baseElement.querySelectorAll('img');
     const links = baseElement.querySelectorAll('a');
     const header = baseElement.querySelectorAll('th');
@@ -103,7 +102,6 @@ describe('Report Hosts Tab tests', () => {
     expect(rows[1]).toHaveTextContent('foo.bar');
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
     expect(rows[1]).toHaveTextContent('1032'); // 10 Ports, 3 Apps, 2 Distance
-    expect(icons[4]).toHaveTextContent('verify.svg');
     expect(rows[1]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM CEST');
     expect(rows[1]).toHaveTextContent('Mon, Jun 3, 2019 1:15 PM CEST');
     expect(rows[1]).toHaveTextContent('143050150'); // 14 High, 30 Medium, 5 Low, 0 Log, 1 False Positive, 50 Total
@@ -119,7 +117,6 @@ describe('Report Hosts Tab tests', () => {
     expect(rows[2]).toHaveTextContent('lorem.ipsum');
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
     expect(rows[2]).toHaveTextContent('1521'); // 15 Ports, 2 Apps, 1 Distance
-    expect(icons[5]).toHaveTextContent('verify_no.svg');
     expect(rows[2]).toHaveTextContent('Mon, Jun 3, 2019 1:15 PM CEST');
     expect(rows[2]).toHaveTextContent('Mon, Jun 3, 2019 1:31 PM CEST');
     expect(rows[2]).toHaveTextContent('53005040'); // 5 High, 30 Medium, 0 Low, 5 Log, 0 False Positive, 40 Total

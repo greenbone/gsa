@@ -19,7 +19,7 @@ import React from 'react';
 
 import {render} from 'web/utils/testing';
 
-import Theme from 'web/utils/theme.js';
+import Theme from 'web/utils/theme';
 
 import SeverityBar from '../severitybar';
 

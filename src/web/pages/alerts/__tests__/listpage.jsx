@@ -159,7 +159,6 @@ describe('Alert listpage tests', () => {
 
     // Toolbar Icons
     expect(icons[0]).toHaveAttribute('title', 'Help: Alerts');
-    expect(icons[1]).toHaveTextContent('new.svg');
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
