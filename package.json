@@ -15,21 +15,27 @@
   },
   "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "AGPL-3.0+",
-  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest test --env=jest-environment-jsdom",
+    "test:coverage": "jest --env=jest-environment-jsdom --coverage --maxWorkers 4 --silent",
+    "dev": "vite",
+    "start": "npm run dev",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext js,ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "i18n-extract": "NODE_ENV=development babel -f .babelrc 'src/**/*.{js,jsx,ts,tsx}'",
+    "clean-up-translations": "node scripts/cleanuptranslations"
+  },
   "engines": {
     "node": ">=18.0"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "dependencies": {
-    "@babel/core": "7.24.3",
-    "@babel/runtime": "^7.24.1",
     "@sentry/react": "^7.109.0",
     "@visx/axis": "^3.10.1",
     "@visx/gradient": "^3.3.0",
     "@visx/shape": "^3.5.0",
-    "babel-loader": "9.1.3",
+    "babel-preset-react-app": "^10.0.1",
     "core-js": "^3.36.1",
     "d3-cloud": "^1.2.7",
     "d3-color": "^3.1.0",
@@ -53,13 +59,12 @@
     "prop-types": "^15.8.1",
     "qhistory": "^1.1.0",
     "qs": "^6.12.0",
-    "react": "^18.0.0",
+    "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-datepicker": "^6.0.0",
-    "react-dom": "^18.0.0",
+    "react-dom": "^18.2.0",
     "react-redux": "^8.1.3",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^5.0.1",
     "redux": "^5.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^3.1.0",
@@ -67,30 +72,33 @@
     "uuid": "^9.0.1",
     "whatwg-fetch": "^3.6.20"
   },
-  "scripts": {
-    "test": "react-scripts test --env=jest-environment-jsdom",
-    "test:coverage": "react-scripts test --env=jest-environment-jsdom --coverage --maxWorkers 4 --silent",
-    "lint": "NODE_ENV=development BABEL_ENV=development eslint --max-warnings 0 src",
-    "start": "react-scripts start",
-    "build": "INLINE_RUNTIME_CHUNK=false react-scripts build && rm -f build/*.js*",
-    "eject": "react-scripts eject",
-    "i18n-extract": "NODE_ENV=development babel -f .babelrc 'src/**/*.{js,jsx,ts,tsx}'",
-    "clean-up-translations": "node scripts/cleanuptranslations"
-  },
   "devDependencies": {
     "@babel/cli": "^7.24.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^29.5.12",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-legacy": "^5.3.2",
+    "@vitejs/plugin-react": "^4.2.1",
     "babel-plugin-i18next-extract": "^0.10.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
     "husky": "^2.7.0",
+    "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-junit": "^16.0.0",
     "jest-styled-components": "^7.2.0",
     "lint-staged": "^13.1.0",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vite-plugin-svgr": "^4.2.0"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -105,22 +113,13 @@
       "<rootDir>/node_modules/(?!d3)/"
     ]
   },
-  "browserslist": [
-    ">0.5%",
-    "last 3 version",
-    "not dead",
-    "not ie <= 11",
-    "not edge <=18",
-    "not op_mini all",
-    "ff ESR"
-  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
-    "*.{js,json}": [
+    "*.{ts,tsx,js,json}": [
       "prettier --write"
     ]
   }
