@@ -29,6 +29,7 @@ import {
   queryAllByAttribute,
   getElementError,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import {Router} from 'react-router-dom';
 
@@ -49,6 +50,7 @@ import configureStore from 'web/store';
 import {StyleSheetManager} from 'styled-components';
 
 export * from '@testing-library/react';
+export {userEvent};
 
 afterEach(cleanup);
 
