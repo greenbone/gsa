@@ -4,6 +4,7 @@ import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 import legacy from '@vitejs/plugin-legacy';
 import svgrPlugin from 'vite-plugin-svgr';
+import eslintPlugin from 'vite-plugin-eslint';
 
 const projectRootDir = path.resolve(__dirname);
 
@@ -20,6 +21,7 @@ export default defineConfig({
       },
       include: ['**/*.svg?react', '**/*.svg'],
     }),
+    eslintPlugin(),
   ],
   resolve: {
     alias: [
