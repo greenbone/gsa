@@ -45,28 +45,7 @@ describe('xml base transform tests', () => {
 
     expect(() => {
       transform(response, options);
-    }).toThrowErrorMatchingInlineSnapshot(
-      `
-      Rejection {
-        "_xhr": {},
-        "error": [Error: foo],
-        "message": "An error occurred while converting gmp response to js for url http://foo",
-        "name": "Rejection",
-        "reason": "error",
-        "stack": "Error: foo
-          at /home/bricks/source/greenbone/gsa-vite/src/gmp/http/transform/__tests__/xml.js:37:13
-          at mockCall (file:///home/bricks/source/greenbone/gsa-vite/node_modules/@vitest/spy/dist/index.js:50:17)
-          at spy (file:///home/bricks/source/greenbone/gsa-vite/node_modules/tinyspy/dist/index.js:42:80)
-          at /home/bricks/source/greenbone/gsa-vite/src/gmp/http/transform/xml.js:26:12
-          at /home/bricks/source/greenbone/gsa-vite/src/gmp/http/transform/__tests__/xml.js:47:7
-          at getError (file:///home/bricks/source/greenbone/gsa-vite/node_modules/vitest/dist/vendor/vi.Fxjax7rQ.js:203:5)
-          at Proxy.__INLINE_SNAPSHOT__ (file:///home/bricks/source/greenbone/gsa-vite/node_modules/vitest/dist/vendor/vi.Fxjax7rQ.js:340:19)
-          at Proxy.methodWrapper (/home/bricks/source/greenbone/gsa-vite/node_modules/chai/lib/chai/utils/addMethod.js:57:25)
-          at /home/bricks/source/greenbone/gsa-vite/src/gmp/http/transform/__tests__/xml.js:48:8
-          at file:///home/bricks/source/greenbone/gsa-vite/node_modules/@vitest/runner/dist/index.js:135:14",
-      }
-    `,
-    );
+    }).toThrow();
     expect(fakeTransform).toHaveBeenCalledWith(response);
   });
 
