@@ -45,14 +45,14 @@ const gmp = {
 
 describe('Delta Results Tab tests', () => {
   test('should render Delta Results Tab', () => {
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
-    const onInteraction = jest.fn();
-    const onSortChange = jest.fn();
-    const onTargetEditClick = jest.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
+    const onInteraction = vi.fn();
+    const onSortChange = vi.fn();
+    const onTargetEditClick = vi.fn();
 
     const {report, results, task} = getMockDeltaReport();
 

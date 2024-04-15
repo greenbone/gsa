@@ -23,7 +23,7 @@ import CheckBox from '../checkbox';
 
 describe('CheckBox component tests', () => {
   test('should call change handler', () => {
-    const change = jest.fn();
+    const change = vi.fn();
     const {element} = render(
       <CheckBox name="foo" checked={false} onChange={change} />,
     );
@@ -36,7 +36,7 @@ describe('CheckBox component tests', () => {
   });
 
   test('should use checkedValue', () => {
-    const change = jest.fn();
+    const change = vi.fn();
     const {element} = render(
       <CheckBox
         name="foo"
@@ -55,7 +55,7 @@ describe('CheckBox component tests', () => {
   });
 
   test('should use unCheckedValue', () => {
-    const change = jest.fn();
+    const change = vi.fn();
     const {element} = render(
       <CheckBox
         name="foo"
@@ -74,7 +74,7 @@ describe('CheckBox component tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const change = jest.fn();
+    const change = vi.fn();
     const {element} = render(
       <CheckBox
         name="foo"

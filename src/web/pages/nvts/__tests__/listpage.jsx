@@ -36,7 +36,7 @@ import NvtsPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const nvt = NVT.fromElement({
   _oid: '1.3.6.1.4.1.25623.1.0',
@@ -62,15 +62,15 @@ const nvt = NVT.fromElement({
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getSetting = jest.fn().mockResolvedValue({
+const getSetting = vi.fn().mockResolvedValue({
   filter: null,
 });
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
+const getDashboardSetting = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -78,7 +78,7 @@ const getDashboardSetting = jest.fn().mockResolvedValue({
   },
 });
 
-const getAggregates = jest.fn().mockResolvedValue({
+const getAggregates = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -86,7 +86,7 @@ const getAggregates = jest.fn().mockResolvedValue({
   },
 });
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -96,7 +96,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getNvts = jest.fn().mockResolvedValue({
+const getNvts = vi.fn().mockResolvedValue({
   data: [nvt],
   meta: {
     filter: Filter.fromString(),
@@ -104,7 +104,7 @@ const getNvts = jest.fn().mockResolvedValue({
   },
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -213,11 +213,11 @@ describe('NvtsPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -285,11 +285,11 @@ describe('NvtsPage tests', () => {
   });
 
   test('should allow to bulk action on selected nvts', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
+    const deleteByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -372,11 +372,11 @@ describe('NvtsPage tests', () => {
   });
 
   test('should allow to bulk action on filtered nvts', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 

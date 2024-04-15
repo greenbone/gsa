@@ -37,7 +37,7 @@ import SchedulePage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const schedule = Schedule.fromElement({
   comment: 'hello world',
@@ -60,15 +60,15 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getSetting = jest.fn().mockResolvedValue({
+const getSetting = vi.fn().mockResolvedValue({
   filter: null,
 });
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -78,7 +78,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getSchedules = jest.fn().mockResolvedValue({
+const getSchedules = vi.fn().mockResolvedValue({
   data: [schedule],
   meta: {
     filter: Filter.fromString(),
@@ -86,7 +86,7 @@ const getSchedules = jest.fn().mockResolvedValue({
   },
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -181,11 +181,11 @@ describe('SchedulePage tests', () => {
     expect(screen.getAllByTitle('Export Schedule')[0]).toBeInTheDocument();
   });
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -257,11 +257,11 @@ describe('SchedulePage tests', () => {
   });
 
   test('should allow to bulk action on selected schedules', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
+    const deleteByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -348,11 +348,11 @@ describe('SchedulePage tests', () => {
   });
 
   test('should allow to bulk action on filtered schedules', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -437,7 +437,7 @@ describe('SchedulePage tests', () => {
 
 describe('SchedulePage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleScheduleCreateClick = jest.fn();
+    const handleScheduleCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -463,7 +463,7 @@ describe('SchedulePage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleScheduleCreateClick = jest.fn();
+    const handleScheduleCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -486,7 +486,7 @@ describe('SchedulePage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleScheduleCreateClick = jest.fn();
+    const handleScheduleCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},

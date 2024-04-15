@@ -23,7 +23,7 @@ import Button from '../button';
 
 describe('Button tests', () => {
   test('should call click handler', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const {element} = render(<Button onClick={handler} />);
 
@@ -33,7 +33,7 @@ describe('Button tests', () => {
   });
 
   test('should call click handler with value', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const {element} = render(<Button onClick={handler} value="bar" />);
 
@@ -43,7 +43,7 @@ describe('Button tests', () => {
   });
 
   test('should call click handler with value and name', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const {element} = render(
       <Button name="foo" value="bar" onClick={handler} />,

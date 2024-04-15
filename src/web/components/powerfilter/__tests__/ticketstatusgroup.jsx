@@ -31,7 +31,7 @@ import Filter from 'gmp/models/filter';
 describe('TicketStatusGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('status=Closed');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <TicketStatusGroup
         filter={filter}
@@ -45,7 +45,7 @@ describe('TicketStatusGroup tests', () => {
 
   test('should render value from filter and change it', () => {
     const filter = Filter.fromString('status=Closed');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     // eslint-disable-next-line no-shadow
     const {baseElement, element, getByTestId} = render(
@@ -70,7 +70,7 @@ describe('TicketStatusGroup tests', () => {
   });
   test('should process title', () => {
     const filter = Filter.fromString('status=Open');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <TicketStatusGroup
         filter={filter}

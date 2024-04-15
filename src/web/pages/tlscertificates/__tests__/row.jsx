@@ -58,10 +58,10 @@ describe('Tls Certificate Row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleTlsCertificateDelete = jest.fn();
-    const handleTlsCertificateDownload = jest.fn();
-    const handleTlsCertificateExport = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleTlsCertificateDelete = vi.fn();
+    const handleTlsCertificateDownload = vi.fn();
+    const handleTlsCertificateExport = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -94,11 +94,11 @@ describe('Tls Certificate Row tests', () => {
   });
 
   test('should render icons', () => {
-    const handleReportImport = jest.fn();
-    const handleTlsCertificateDelete = jest.fn();
-    const handleTlsCertificateDownload = jest.fn();
-    const handleTlsCertificateExport = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTlsCertificateDelete = vi.fn();
+    const handleTlsCertificateDownload = vi.fn();
+    const handleTlsCertificateExport = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({gmp, store: true});
 
@@ -123,10 +123,10 @@ describe('Tls Certificate Row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleTlsCertificateDelete = jest.fn();
-    const handleTlsCertificateDownload = jest.fn();
-    const handleTlsCertificateExport = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleTlsCertificateDelete = vi.fn();
+    const handleTlsCertificateDownload = vi.fn();
+    const handleTlsCertificateExport = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,

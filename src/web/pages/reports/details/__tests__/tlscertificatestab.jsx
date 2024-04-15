@@ -39,9 +39,9 @@ describe('Report TLS Certificates Tab tests', () => {
   test('should render Report TLS Certificates Tab', () => {
     const {tlsCertificates} = getMockReport();
 
-    const onSortChange = jest.fn();
-    const onInteraction = jest.fn();
-    const onTlsCertificateDownloadClick = jest.fn();
+    const onSortChange = vi.fn();
+    const onInteraction = vi.fn();
+    const onTlsCertificateDownloadClick = vi.fn();
 
     const {render, store} = rendererWith({
       router: true,
@@ -140,9 +140,9 @@ describe('Report TLS Certificates Tab tests', () => {
   test('should call click handler', () => {
     const {tlsCertificates} = getMockReport();
 
-    const onSortChange = jest.fn();
-    const onInteraction = jest.fn();
-    const onTlsCertificateDownloadClick = jest.fn();
+    const onSortChange = vi.fn();
+    const onInteraction = vi.fn();
+    const onTlsCertificateDownloadClick = vi.fn();
 
     const {render, store} = rendererWith({
       router: true,

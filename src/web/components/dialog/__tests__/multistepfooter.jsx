@@ -100,10 +100,10 @@ describe('MultiStepFooter tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handler1 = jest.fn();
-    const handler2 = jest.fn();
-    const handler3 = jest.fn();
-    const handler4 = jest.fn();
+    const handler1 = vi.fn();
+    const handler2 = vi.fn();
+    const handler3 = vi.fn();
+    const handler4 = vi.fn();
 
     const {element} = render(
       <MultiStepFooter

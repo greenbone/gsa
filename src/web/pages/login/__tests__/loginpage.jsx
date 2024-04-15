@@ -27,8 +27,8 @@ Logger.setDefaultLevel('silent');
 
 describe('LoginPage tests', () => {
   test('should render Loginpage', () => {
-    const isLoggedIn = jest.fn().mockReturnValue(false);
-    const clearToken = jest.fn();
+    const isLoggedIn = vi.fn().mockReturnValue(false);
+    const clearToken = vi.fn();
     const gmp = {isLoggedIn, clearToken, settings: {}};
 
     const {render} = rendererWith({gmp, router: true, store: true});
@@ -37,16 +37,16 @@ describe('LoginPage tests', () => {
   });
 
   test('should allow to login with username and password', () => {
-    const login = jest.fn().mockResolvedValue({
+    const login = vi.fn().mockResolvedValue({
       locale: 'locale',
       username: 'username',
       token: 'token',
       timezone: 'timezone',
     });
-    const isLoggedIn = jest.fn().mockReturnValue(false);
-    const clearToken = jest.fn();
-    const setLocale = jest.fn();
-    const setTimezone = jest.fn();
+    const isLoggedIn = vi.fn().mockReturnValue(false);
+    const clearToken = vi.fn();
+    const setLocale = vi.fn();
+    const setTimezone = vi.fn();
     const gmp = {
       setTimezone,
       setLocale,
@@ -72,8 +72,8 @@ describe('LoginPage tests', () => {
   });
 
   test('should not display guest login by default', () => {
-    const isLoggedIn = jest.fn().mockReturnValue(false);
-    const clearToken = jest.fn();
+    const isLoggedIn = vi.fn().mockReturnValue(false);
+    const clearToken = vi.fn();
     const gmp = {
       isLoggedIn,
       clearToken,
@@ -88,16 +88,16 @@ describe('LoginPage tests', () => {
   });
 
   test('should allow to login as guest', () => {
-    const login = jest.fn().mockResolvedValue({
+    const login = vi.fn().mockResolvedValue({
       locale: 'locale',
       username: 'username',
       token: 'token',
       timezone: 'timezone',
     });
-    const isLoggedIn = jest.fn().mockReturnValue(false);
-    const clearToken = jest.fn();
-    const setLocale = jest.fn();
-    const setTimezone = jest.fn();
+    const isLoggedIn = vi.fn().mockReturnValue(false);
+    const clearToken = vi.fn();
+    const setLocale = vi.fn();
+    const setTimezone = vi.fn();
     const gmp = {
       setTimezone,
       setLocale,
@@ -117,11 +117,11 @@ describe('LoginPage tests', () => {
   });
 
   test('should display error message', async () => {
-    const login = jest.fn().mockRejectedValue({message: 'Just a test'});
-    const isLoggedIn = jest.fn().mockReturnValue(false);
-    const clearToken = jest.fn();
-    const setLocale = jest.fn();
-    const setTimezone = jest.fn();
+    const login = vi.fn().mockRejectedValue({message: 'Just a test'});
+    const isLoggedIn = vi.fn().mockReturnValue(false);
+    const clearToken = vi.fn();
+    const setLocale = vi.fn();
+    const setTimezone = vi.fn();
     const gmp = {
       setTimezone,
       setLocale,
@@ -149,16 +149,16 @@ describe('LoginPage tests', () => {
   });
 
   test('should redirect to main page if already logged in', () => {
-    const login = jest.fn().mockResolvedValue({
+    const login = vi.fn().mockResolvedValue({
       locale: 'locale',
       username: 'username',
       token: 'token',
       timezone: 'timezone',
     });
-    const isLoggedIn = jest.fn().mockReturnValue(true);
-    const clearToken = jest.fn();
-    const setLocale = jest.fn();
-    const setTimezone = jest.fn();
+    const isLoggedIn = vi.fn().mockReturnValue(true);
+    const clearToken = vi.fn();
+    const setLocale = vi.fn();
+    const setTimezone = vi.fn();
     const gmp = {
       setTimezone,
       setLocale,

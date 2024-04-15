@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: 'npm'
       - name: Install dependencies
         run: npm install
       - name: Run JavaScript tests
@@ -48,13 +48,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: 'npm'
       - name: Install dependencies
         run: npm install
       - name: Run JavaScript tests
-        env:
-          JEST_JUNIT_OUTPUT_DIR: ${{ env.REPORT_DIR }}
-        run: npm run test:coverage -- --reporters=default --reporters=jest-junit
+        run: npm run test:coverage -- --reporter=default --reporter=junit --outputFile=${{ env.REPORT_DIR }}/test-report.xml
       - name: Load Lint Results
         uses: actions/download-artifact@v4
         with:
@@ -81,7 +79,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: 'npm'
       - name: Install dependencies
         run: npm install
       - name: Lint JavaScript files

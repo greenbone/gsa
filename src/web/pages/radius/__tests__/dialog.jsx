@@ -23,8 +23,8 @@ import Dialog from '../dialog';
 
 describe('RADIUS dialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {baseElement} = render(
       <Dialog
@@ -39,8 +39,8 @@ describe('RADIUS dialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <Dialog
@@ -61,8 +61,8 @@ describe('RADIUS dialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <Dialog
@@ -81,8 +81,8 @@ describe('RADIUS dialog component tests', () => {
   });
 
   test('should allow to change data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <Dialog

@@ -26,8 +26,8 @@ import Filter from 'gmp/models/filter';
 describe('SortByGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('sort');
-    const handleSortByChange = jest.fn();
-    const handleSortOrderChange = jest.fn();
+    const handleSortByChange = vi.fn();
+    const handleSortOrderChange = vi.fn();
     const {element} = render(
       <SortByGroup
         by=""
@@ -44,8 +44,8 @@ describe('SortByGroup tests', () => {
 
   test('should render fields', () => {
     const filter1 = Filter.fromString('sort=severity');
-    const handleSortByChange = jest.fn();
-    const handleSortOrderChange = jest.fn();
+    const handleSortByChange = vi.fn();
+    const handleSortOrderChange = vi.fn();
     const {baseElement, getByTestId} = render(
       <SortByGroup
         by="solution"
@@ -73,8 +73,8 @@ describe('SortByGroup tests', () => {
   test('should use filter by default', () => {
     const filter1 = Filter.fromString('sort=severity');
     const filter2 = Filter.fromString('sort-reverse=severity');
-    const handleSortByChange = jest.fn();
-    const handleSortOrderChange = jest.fn();
+    const handleSortByChange = vi.fn();
+    const handleSortOrderChange = vi.fn();
     const {rerender, getAllByTestId, getByTestId} = render(
       <SortByGroup
         by="solution"
@@ -119,8 +119,8 @@ describe('SortByGroup tests', () => {
   });
 
   test('should use by and order', () => {
-    const handleSortByChange = jest.fn();
-    const handleSortOrderChange = jest.fn();
+    const handleSortByChange = vi.fn();
+    const handleSortOrderChange = vi.fn();
     const {getAllByTestId, getByTestId} = render(
       <SortByGroup
         by="solution_type"
@@ -146,8 +146,8 @@ describe('SortByGroup tests', () => {
 
   test('should call change handler of select', () => {
     const filter = Filter.fromString('sort');
-    const handleSortByChange = jest.fn();
-    const handleSortOrderChange = jest.fn();
+    const handleSortByChange = vi.fn();
+    const handleSortOrderChange = vi.fn();
     const {baseElement, getByTestId} = render(
       <SortByGroup
         by=""
@@ -175,8 +175,8 @@ describe('SortByGroup tests', () => {
 
   test('should call change handler of radio button', () => {
     const filter = Filter.fromString('sort');
-    const handleSortByChange = jest.fn();
-    const handleSortOrderChange = jest.fn();
+    const handleSortByChange = vi.fn();
+    const handleSortOrderChange = vi.fn();
     const {getAllByTestId} = render(
       <SortByGroup
         by=""

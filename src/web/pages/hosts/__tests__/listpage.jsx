@@ -39,7 +39,7 @@ import HostPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const capabilities = new Capabilities(['everything']);
 const wrongCapabilities = new Capabilities(['get_host']);
@@ -100,7 +100,7 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getHosts = jest.fn().mockResolvedValue({
+  getHosts = vi.fn().mockResolvedValue({
     data: [host],
     meta: {
       filter: Filter.fromString(),
@@ -108,7 +108,7 @@ beforeEach(() => {
     },
   });
 
-  getFilters = jest.fn().mockReturnValue(
+  getFilters = vi.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -118,7 +118,7 @@ beforeEach(() => {
     }),
   );
 
-  getDashboardSetting = jest.fn().mockResolvedValue({
+  getDashboardSetting = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -126,7 +126,7 @@ beforeEach(() => {
     },
   });
 
-  getAggregates = jest.fn().mockResolvedValue({
+  getAggregates = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -134,15 +134,15 @@ beforeEach(() => {
     },
   });
 
-  getSetting = jest.fn().mockResolvedValue({
+  getSetting = vi.fn().mockResolvedValue({
     filter: null,
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -273,11 +273,11 @@ describe('Host listpage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -348,11 +348,11 @@ describe('Host listpage tests', () => {
   });
 
   test('should allow to bulk action on selected hosts', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
+    const deleteByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -440,11 +440,11 @@ describe('Host listpage tests', () => {
   });
 
   test('should allow to bulk action on filtered hosts', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -530,7 +530,7 @@ describe('Host listpage tests', () => {
 
 describe('Host listpage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleCreateHostClick = jest.fn();
+    const handleCreateHostClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -561,7 +561,7 @@ describe('Host listpage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleCreateHostClick = jest.fn();
+    const handleCreateHostClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -580,7 +580,7 @@ describe('Host listpage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleCreateHostClick = jest.fn();
+    const handleCreateHostClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},

@@ -134,10 +134,10 @@ const scannerPreferences = [
 
 describe('EditScanConfigDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditConfigFamilyDialog = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditConfigFamilyDialog = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true});
 
@@ -182,10 +182,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should render dialog for config in use', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditConfigFamilyDialog = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditConfigFamilyDialog = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {baseElement, getByTestId} = render(
@@ -236,10 +236,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should render dialog inline notification for policy in use', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditConfigFamilyDialog = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditConfigFamilyDialog = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {baseElement, getByTestId} = render(
@@ -288,10 +288,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditConfigFamilyDialog = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditConfigFamilyDialog = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId} = render(
@@ -335,10 +335,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditConfigFamilyDialog = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditConfigFamilyDialog = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId} = render(
@@ -374,10 +374,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should allow to change name and comment', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditConfigFamilyDialog = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditConfigFamilyDialog = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId} = render(
@@ -427,10 +427,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should allow to edit nvt families for openvas configs', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditConfigFamilyDialog = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditConfigFamilyDialog = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId, queryAllByName} = render(
@@ -496,10 +496,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should call click handlers for edit families and edit nvt details', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditConfigFamilyDialog = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditConfigFamilyDialog = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId} = render(

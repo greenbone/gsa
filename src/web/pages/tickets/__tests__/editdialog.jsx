@@ -37,8 +37,8 @@ const users = [u1, u2];
 
 describe('EditTicketDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {baseElement} = render(
       <EditTicketDialog
@@ -55,8 +55,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should display notes', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {baseElement} = render(
       <EditTicketDialog
@@ -84,8 +84,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <EditTicketDialog
@@ -116,8 +116,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should allow to change status', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {baseElement, getByTestId} = render(
       <EditTicketDialog
@@ -154,8 +154,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should allow to change user', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {baseElement, getByTestId} = render(
       <EditTicketDialog
@@ -192,8 +192,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should not save invalid form states and render error bubble', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <EditTicketDialog
@@ -214,8 +214,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     // eslint-disable-next-line no-shadow
     const {getByTestId} = render(

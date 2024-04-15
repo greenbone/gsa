@@ -47,7 +47,7 @@ describe('TimezoneSelect tests', () => {
   });
 
   test('should call onChange handler', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {getByTestId, getAllByTestId} = render(
       <TimezoneSelect onChange={handler} />,
     );
@@ -62,7 +62,7 @@ describe('TimezoneSelect tests', () => {
   });
 
   test('should call onChange handler with name', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {getByTestId, getAllByTestId} = render(
       <TimezoneSelect name="foo" onChange={handler} />,
     );

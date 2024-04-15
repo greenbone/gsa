@@ -47,7 +47,7 @@ describe('setLocale tests', () => {
   });
 
   test('should notify language change listeners', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     setLocale('en');
     expect(getLocale()).toEqual('en');
@@ -61,7 +61,7 @@ describe('setLocale tests', () => {
   });
 
   test('should not be notify when unsubscribed', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     setLocale('en');
     expect(getLocale()).toEqual('en');

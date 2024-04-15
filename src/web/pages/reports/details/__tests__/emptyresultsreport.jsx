@@ -29,11 +29,11 @@ setLocale('en');
 
 describe('Empty Results Report tests', () => {
   test('should render empty results report', () => {
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=2 first=1 sort-reverse=severity',
@@ -88,11 +88,11 @@ describe('Empty Results Report tests', () => {
   });
 
   test('should render empty results report with log messages filter', () => {
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hml rows=2 first=1 sort-reverse=severity',
@@ -152,11 +152,11 @@ describe('Empty Results Report tests', () => {
   });
 
   test('should render empty results report with severity filter', () => {
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg severity>50 rows=2 first=1 sort-reverse=severity',
@@ -216,11 +216,11 @@ describe('Empty Results Report tests', () => {
   });
 
   test('should render empty results report with min qod filter', () => {
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg min_qod>70 rows=2 first=1 sort-reverse=severity',
@@ -279,11 +279,11 @@ describe('Empty Results Report tests', () => {
     );
   });
   test('should call click handlers', () => {
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hml rows=2 severity>50 min_qod=70 first=1 sort-reverse=severity',

@@ -33,7 +33,7 @@ describe('StartTimeSelection tests', () => {
     const startDate = Date('2019-01-01T12:00Z').tz(timezone);
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
 
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {element} = render(
       <StartTimeSelection
@@ -52,7 +52,7 @@ describe('StartTimeSelection tests', () => {
     const startDate = Date('2019-01-01T12:00Z').tz(timezone);
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
 
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {getByTestId} = render(
       <StartTimeSelection
@@ -74,7 +74,7 @@ describe('StartTimeSelection tests', () => {
     const newStartDate = Date('2019-01-01T01:00Z').tz(timezone);
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
 
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {getByName, getByTestId} = render(
       <StartTimeSelection
@@ -105,7 +105,7 @@ describe('StartTimeSelection tests', () => {
     const newStartDate = Date('2019-01-01T12:10Z').tz(timezone);
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
 
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {getByName, getByTestId} = render(
       <StartTimeSelection
@@ -136,7 +136,7 @@ describe('StartTimeSelection tests', () => {
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
     const newEndDate = Date('2019-01-01T14:00Z').tz(timezone);
 
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {getByName, getByTestId} = render(
       <StartTimeSelection
@@ -167,7 +167,7 @@ describe('StartTimeSelection tests', () => {
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
     const newEndDate = Date('2019-01-01T13:15Z').tz(timezone);
 
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {getByName, getByTestId} = render(
       <StartTimeSelection

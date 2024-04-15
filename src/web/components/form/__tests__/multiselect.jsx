@@ -116,7 +116,7 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element, baseElement} = render(
       <MultiSelect items={items} onChange={onChange} />,
@@ -145,7 +145,7 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element, baseElement} = render(
       <MultiSelect name="abc" items={items} onChange={onChange} />,
@@ -244,7 +244,7 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {getAllByTestId} = render(
       <MultiSelect items={items} value={['bar', 'foo']} onChange={onChange} />,

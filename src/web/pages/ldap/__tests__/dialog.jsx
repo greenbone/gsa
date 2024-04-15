@@ -23,9 +23,9 @@ import Dialog from '../dialog';
 
 describe('Ldap dialog component tests', () => {
   test('should render dialog', () => {
-    const handleChange = jest.fn();
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleChange = vi.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {baseElement} = render(
       <Dialog
@@ -43,9 +43,9 @@ describe('Ldap dialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleValueChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleValueChange = vi.fn();
 
     const {getByTestId} = render(
       <Dialog
@@ -70,8 +70,8 @@ describe('Ldap dialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <Dialog
@@ -91,8 +91,8 @@ describe('Ldap dialog component tests', () => {
   });
 
   test('should allow to change data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <Dialog

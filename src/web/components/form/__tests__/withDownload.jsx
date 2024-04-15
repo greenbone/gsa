@@ -25,9 +25,9 @@ const TestComponent = withDownload(({onDownload, filename, data}) => (
   <button data-testid="button" onClick={() => onDownload({filename, data})} />
 ));
 
-const createObjectURL = jest.fn().mockReturnValue('foo://bar');
+const createObjectURL = vi.fn().mockReturnValue('foo://bar');
 window.URL.createObjectURL = createObjectURL;
-window.URL.revokeObjectURL = jest.fn();
+window.URL.revokeObjectURL = vi.fn();
 
 describe('withDownload tests', () => {
   test('should render', () => {

@@ -46,11 +46,11 @@ describe('loadReport function tests', () => {
         [id]: false,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const get = jest.fn().mockResolvedValue({
+    const get = vi.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -90,11 +90,11 @@ describe('loadReport function tests', () => {
         [id]: false,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const get = jest.fn().mockResolvedValue({
+    const get = vi.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -139,11 +139,11 @@ describe('loadReport function tests', () => {
       },
     });
 
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
+    const get = vi.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       report: {
@@ -168,11 +168,11 @@ describe('loadReport function tests', () => {
       },
     });
 
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const get = jest.fn().mockRejectedValue('An Error');
+    const get = vi.fn().mockRejectedValue('An Error');
 
     const gmp = {
       report: {
@@ -209,11 +209,11 @@ describe('report loadReportIfNeeded function tests', () => {
         [id]: false,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const get = jest.fn().mockResolvedValue({data: {foo: 'bar'}});
+    const get = vi.fn().mockResolvedValue({data: {foo: 'bar'}});
 
     const gmp = {
       report: {
@@ -255,11 +255,11 @@ describe('report loadReportIfNeeded function tests', () => {
       },
     });
 
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
+    const get = vi.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       report: {
@@ -283,11 +283,11 @@ describe('report loadReportIfNeeded function tests', () => {
         [id]: false,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const get = jest.fn().mockResolvedValue({data: {foo: 'bar'}});
+    const get = vi.fn().mockResolvedValue({data: {foo: 'bar'}});
 
     const gmp = {
       report: {
@@ -332,11 +332,11 @@ describe('report loadReportIfNeeded function tests', () => {
       },
     });
 
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const get = jest.fn().mockResolvedValue([{id: 'foo'}]);
+    const get = vi.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       report: {
@@ -361,11 +361,11 @@ describe('report loadReportIfNeeded function tests', () => {
       },
     });
 
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const get = jest.fn().mockRejectedValue('An Error');
+    const get = vi.fn().mockRejectedValue('An Error');
 
     const gmp = {
       report: {
@@ -406,9 +406,9 @@ describe('loadReportWithThreshold tests', () => {
         [id]: false,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
     const report = {
       report: {
@@ -420,7 +420,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = jest.fn().mockResolvedValue({
+    const get = vi.fn().mockResolvedValue({
       data: report,
     });
 
@@ -463,9 +463,9 @@ describe('loadReportWithThreshold tests', () => {
         [id]: false,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
     const report = {
       report: {
@@ -477,7 +477,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = jest.fn().mockResolvedValue({
+    const get = vi.fn().mockResolvedValue({
       data: report,
     });
 
@@ -542,9 +542,9 @@ describe('loadReportWithThreshold tests', () => {
         [reportIdentifier(id, filter)]: false,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
     const report = {
       report: {
@@ -556,7 +556,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = jest.fn().mockResolvedValue({
+    const get = vi.fn().mockResolvedValue({
       data: report,
     });
 
@@ -604,9 +604,9 @@ describe('loadReportWithThreshold tests', () => {
         [reportIdentifier(id, filter)]: false,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
     const report = {
       report: {
@@ -618,7 +618,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = jest.fn().mockResolvedValue({
+    const get = vi.fn().mockResolvedValue({
       data: report,
     });
 
@@ -680,9 +680,9 @@ describe('loadReportWithThreshold tests', () => {
         [id]: true,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
     const report = {
       report: {
@@ -694,7 +694,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = jest.fn().mockResolvedValue({
+    const get = vi.fn().mockResolvedValue({
       data: report,
     });
 
@@ -727,9 +727,9 @@ describe('loadReportWithThreshold tests', () => {
         [reportIdentifier(id, filter)]: true,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
     const report = {
       report: {
@@ -741,7 +741,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = jest.fn().mockResolvedValue({
+    const get = vi.fn().mockResolvedValue({
       data: report,
     });
 
@@ -780,11 +780,11 @@ describe('loadDeltaReport function tests', () => {
         [identifier]: false,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const getDelta = jest.fn().mockResolvedValue({
+    const getDelta = vi.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -829,11 +829,11 @@ describe('loadDeltaReport function tests', () => {
         [identifier]: false,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const getDelta = jest.fn().mockResolvedValue({
+    const getDelta = vi.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -848,28 +848,30 @@ describe('loadDeltaReport function tests', () => {
     expect(loadDeltaReport).toBeDefined();
     expect(isFunction(loadDeltaReport)).toBe(true);
 
-    return loadDeltaReport(gmp)(id, deltaId, filter)(dispatch, getState).then(
-      () => {
-        expect(getState).toBeCalled();
-        expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
-        expect(dispatch).toHaveBeenCalledTimes(2);
-        expect(dispatch.mock.calls[0]).toEqual([
-          {
-            type: types.ENTITY_LOADING_REQUEST,
-            entityType: 'deltaReport',
-            id: identifier,
-          },
-        ]);
-        expect(dispatch.mock.calls[1]).toEqual([
-          {
-            type: types.ENTITY_LOADING_SUCCESS,
-            entityType: 'deltaReport',
-            data: {foo: 'bar'},
-            id: identifier,
-          },
-        ]);
-      },
-    );
+    return loadDeltaReport(gmp)(
+      id,
+      deltaId,
+      filter,
+    )(dispatch, getState).then(() => {
+      expect(getState).toBeCalled();
+      expect(getDelta).toBeCalledWith({id}, {id: deltaId}, {filter});
+      expect(dispatch).toHaveBeenCalledTimes(2);
+      expect(dispatch.mock.calls[0]).toEqual([
+        {
+          type: types.ENTITY_LOADING_REQUEST,
+          entityType: 'deltaReport',
+          id: identifier,
+        },
+      ]);
+      expect(dispatch.mock.calls[1]).toEqual([
+        {
+          type: types.ENTITY_LOADING_SUCCESS,
+          entityType: 'deltaReport',
+          data: {foo: 'bar'},
+          id: identifier,
+        },
+      ]);
+    });
   });
 
   test('should not load delta report if isLoading is true', () => {
@@ -882,11 +884,11 @@ describe('loadDeltaReport function tests', () => {
       },
     });
 
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const getDelta = jest.fn().mockResolvedValue([{id: 'foo'}]);
+    const getDelta = vi.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       report: {
@@ -911,11 +913,11 @@ describe('loadDeltaReport function tests', () => {
       },
     });
 
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
 
-    const getDelta = jest.fn().mockRejectedValue('An Error');
+    const getDelta = vi.fn().mockRejectedValue('An Error');
 
     const gmp = {
       report: {

@@ -39,7 +39,7 @@ setLocale('en');
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -111,11 +111,11 @@ const noPermNote = Note.fromElement({
   writable: 1,
 });
 
-const getNote = jest.fn().mockResolvedValue({
+const getNote = vi.fn().mockResolvedValue({
   data: note,
 });
 
-const getEntities = jest.fn().mockResolvedValue({
+const getEntities = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -123,11 +123,11 @@ const getEntities = jest.fn().mockResolvedValue({
   },
 });
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -309,15 +309,15 @@ describe('Note detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const clone = jest.fn().mockResolvedValue({
+    const clone = vi.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = jest.fn().mockResolvedValue({
+    const deleteFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = jest.fn().mockResolvedValue({
+    const exportFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -390,11 +390,11 @@ describe('Note detailspage tests', () => {
 
 describe('Note ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleNoteCloneClick = jest.fn();
-    const handleNoteDeleteClick = jest.fn();
-    const handleNoteDownloadClick = jest.fn();
-    const handleNoteEditClick = jest.fn();
-    const handleNoteCreateClick = jest.fn();
+    const handleNoteCloneClick = vi.fn();
+    const handleNoteDeleteClick = vi.fn();
+    const handleNoteDownloadClick = vi.fn();
+    const handleNoteEditClick = vi.fn();
+    const handleNoteCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -428,11 +428,11 @@ describe('Note ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleNoteCloneClick = jest.fn();
-    const handleNoteDeleteClick = jest.fn();
-    const handleNoteDownloadClick = jest.fn();
-    const handleNoteEditClick = jest.fn();
-    const handleNoteCreateClick = jest.fn();
+    const handleNoteCloneClick = vi.fn();
+    const handleNoteDeleteClick = vi.fn();
+    const handleNoteDownloadClick = vi.fn();
+    const handleNoteEditClick = vi.fn();
+    const handleNoteCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -476,11 +476,11 @@ describe('Note ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleNoteCloneClick = jest.fn();
-    const handleNoteDeleteClick = jest.fn();
-    const handleNoteDownloadClick = jest.fn();
-    const handleNoteEditClick = jest.fn();
-    const handleNoteCreateClick = jest.fn();
+    const handleNoteCloneClick = vi.fn();
+    const handleNoteDeleteClick = vi.fn();
+    const handleNoteDownloadClick = vi.fn();
+    const handleNoteEditClick = vi.fn();
+    const handleNoteCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -530,11 +530,11 @@ describe('Note ToolBarIcons tests', () => {
   });
 
   test('should call correct click handlers for note in use', () => {
-    const handleNoteCloneClick = jest.fn();
-    const handleNoteDeleteClick = jest.fn();
-    const handleNoteDownloadClick = jest.fn();
-    const handleNoteEditClick = jest.fn();
-    const handleNoteCreateClick = jest.fn();
+    const handleNoteCloneClick = vi.fn();
+    const handleNoteDeleteClick = vi.fn();
+    const handleNoteDownloadClick = vi.fn();
+    const handleNoteEditClick = vi.fn();
+    const handleNoteCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

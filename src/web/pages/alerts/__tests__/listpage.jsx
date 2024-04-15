@@ -37,7 +37,7 @@ import AlertPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
@@ -76,7 +76,7 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getAlerts = jest.fn().mockResolvedValue({
+  getAlerts = vi.fn().mockResolvedValue({
     data: [alert],
     meta: {
       filter: Filter.fromString(),
@@ -84,7 +84,7 @@ beforeEach(() => {
     },
   });
 
-  getFilters = jest.fn().mockReturnValue(
+  getFilters = vi.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -94,15 +94,15 @@ beforeEach(() => {
     }),
   );
 
-  getSetting = jest.fn().mockResolvedValue({
+  getSetting = vi.fn().mockResolvedValue({
     filter: null,
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -200,11 +200,11 @@ describe('Alert listpage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -277,11 +277,11 @@ describe('Alert listpage tests', () => {
   });
 
   test('should allow to bulk action on selected alerts', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
+    const deleteByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -366,11 +366,11 @@ describe('Alert listpage tests', () => {
   });
 
   test('should allow to bulk action on filtered alerts', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -453,7 +453,7 @@ describe('Alert listpage tests', () => {
 
 describe('Alert listpage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleAlertCreateClick = jest.fn();
+    const handleAlertCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -484,7 +484,7 @@ describe('Alert listpage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleAlertCreateClick = jest.fn();
+    const handleAlertCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -506,7 +506,7 @@ describe('Alert listpage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleAlertCreateClick = jest.fn();
+    const handleAlertCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},

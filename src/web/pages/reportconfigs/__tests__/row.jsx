@@ -63,11 +63,11 @@ describe('Report Config row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleReportConfigClone = jest.fn();
-    const handleReportConfigDelete = jest.fn();
-    const handleReportConfigDownload = jest.fn();
-    const handleReportConfigEdit = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleReportConfigClone = vi.fn();
+    const handleReportConfigDelete = vi.fn();
+    const handleReportConfigDownload = vi.fn();
+    const handleReportConfigEdit = vi.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -94,11 +94,11 @@ describe('Report Config row tests', () => {
   });
 
   test('should render orphan', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleReportConfigClone = jest.fn();
-    const handleReportConfigDelete = jest.fn();
-    const handleReportConfigDownload = jest.fn();
-    const handleReportConfigEdit = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleReportConfigClone = vi.fn();
+    const handleReportConfigDelete = vi.fn();
+    const handleReportConfigDownload = vi.fn();
+    const handleReportConfigEdit = vi.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -142,11 +142,11 @@ describe('Report Config row tests', () => {
       },
     });
 
-    const handleToggleDetailsClick = jest.fn();
-    const handleReportConfigClone = jest.fn();
-    const handleReportConfigDelete = jest.fn();
-    const handleReportConfigDownload = jest.fn();
-    const handleReportConfigEdit = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleReportConfigClone = vi.fn();
+    const handleReportConfigDelete = vi.fn();
+    const handleReportConfigDownload = vi.fn();
+    const handleReportConfigEdit = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -173,11 +173,11 @@ describe('Report Config row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleReportConfigClone = jest.fn();
-    const handleReportConfigDelete = jest.fn();
-    const handleReportConfigDownload = jest.fn();
-    const handleReportConfigEdit = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleReportConfigClone = vi.fn();
+    const handleReportConfigDelete = vi.fn();
+    const handleReportConfigDownload = vi.fn();
+    const handleReportConfigEdit = vi.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -221,11 +221,11 @@ describe('Report Config row tests', () => {
   });
 
   test('should not call click handlers without permissions', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleReportConfigClone = jest.fn();
-    const handleReportConfigDelete = jest.fn();
-    const handleReportConfigDownload = jest.fn();
-    const handleReportConfigEdit = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleReportConfigClone = vi.fn();
+    const handleReportConfigDelete = vi.fn();
+    const handleReportConfigDownload = vi.fn();
+    const handleReportConfigEdit = vi.fn();
 
     const config = ReportConfig.fromElement({
       _id: '1234',
@@ -290,11 +290,11 @@ describe('Report Config row tests', () => {
   });
 
   test('should (not) call click handlers if scan config is in use', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleReportConfigClone = jest.fn();
-    const handleReportConfigDelete = jest.fn();
-    const handleReportConfigDownload = jest.fn();
-    const handleReportConfigEdit = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleReportConfigClone = vi.fn();
+    const handleReportConfigDelete = vi.fn();
+    const handleReportConfigDownload = vi.fn();
+    const handleReportConfigEdit = vi.fn();
 
     const config = ReportConfig.fromElement({
       _id: '1234',
@@ -351,11 +351,11 @@ describe('Report Config row tests', () => {
   });
 
   test('should (not) call click handlers if scan config is not writable', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleReportConfigClone = jest.fn();
-    const handleReportConfigDelete = jest.fn();
-    const handleReportConfigDownload = jest.fn();
-    const handleReportConfigEdit = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleReportConfigClone = vi.fn();
+    const handleReportConfigDelete = vi.fn();
+    const handleReportConfigDownload = vi.fn();
+    const handleReportConfigEdit = vi.fn();
 
     const config = ReportConfig.fromElement({
       _id: '1234',

@@ -29,8 +29,8 @@ import GmpSettings, {
 const createStorage = state => {
   const store = {
     ...state,
-    setItem: jest.fn((name, value) => (store[name] = '' + value)),
-    removeItem: jest.fn(name => delete store[name]),
+    setItem: vi.fn((name, value) => (store[name] = '' + value)),
+    removeItem: vi.fn(name => delete store[name]),
   };
   return store;
 };
@@ -41,7 +41,7 @@ describe('GmpSettings tests', () => {
     const settings = new GmpSettings(storage);
 
     expect(settings.apiProtocol).toEqual('http:');
-    expect(settings.apiServer).toEqual('localhost');
+    expect(settings.apiServer).toEqual('localhost:9392');
     expect(settings.disableLoginForm).toEqual(false);
     expect(settings.enableStoreDebugLog).toBeUndefined();
     expect(settings.guestUsername).toBeUndefined();

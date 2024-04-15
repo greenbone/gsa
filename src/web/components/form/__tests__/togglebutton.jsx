@@ -50,7 +50,7 @@ describe('ToggleButton tests', () => {
   });
 
   test('should call onToggle handler', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(<ToggleButton onToggle={handler} />);
 
     fireEvent.click(element);
@@ -59,7 +59,7 @@ describe('ToggleButton tests', () => {
   });
 
   test('should call onToggle handler with name', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(<ToggleButton name="foo" onToggle={handler} />);
 
     fireEvent.click(element);
@@ -68,7 +68,7 @@ describe('ToggleButton tests', () => {
   });
 
   test('should toggle checked state', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(
       <ToggleButton name="foo" checked={true} onToggle={handler} />,
     );
@@ -79,7 +79,7 @@ describe('ToggleButton tests', () => {
   });
 
   test('should not call handler if disabled', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(
       <ToggleButton disabled={true} onToggle={handler} />,
     );

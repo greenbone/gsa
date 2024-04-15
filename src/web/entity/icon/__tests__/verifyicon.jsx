@@ -33,7 +33,7 @@ describe('Entity VerifyIcon component tests', () => {
     const entity = ReportFormat.fromElement({
       permissions: {permission: [{name: 'verify_report_format'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -56,7 +56,7 @@ describe('Entity VerifyIcon component tests', () => {
     const entity = ReportFormat.fromElement({
       permissions: {permission: [{name: 'verify_report_format'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -83,7 +83,7 @@ describe('Entity VerifyIcon component tests', () => {
     const entity = ReportFormat.fromElement({
       permissions: {permission: [{name: 'verify_report_format'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -105,7 +105,7 @@ describe('Entity VerifyIcon component tests', () => {
     const entity = ReportFormat.fromElement({
       permissions: {permission: [{name: 'verify_scanner'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 

@@ -23,8 +23,8 @@ import CreatePolicyDialog from '../dialog';
 
 describe('CreatePolicyDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {baseElement} = render(
       <CreatePolicyDialog
@@ -38,8 +38,8 @@ describe('CreatePolicyDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <CreatePolicyDialog
@@ -57,8 +57,8 @@ describe('CreatePolicyDialog component tests', () => {
   });
 
   test('should allow to cancel the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <CreatePolicyDialog
@@ -76,8 +76,8 @@ describe('CreatePolicyDialog component tests', () => {
   });
 
   test('should allow to save the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByName, getByTestId} = render(
       <CreatePolicyDialog

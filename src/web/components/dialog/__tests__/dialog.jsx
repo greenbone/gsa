@@ -25,8 +25,8 @@ import {KeyCode} from 'gmp/utils/event';
 
 describe('Dialog component tests', () => {
   test('should render a Dialog', () => {
-    const handleClose = jest.fn();
-    const renderFunc = jest.fn().mockReturnValue(<div />);
+    const handleClose = vi.fn();
+    const renderFunc = vi.fn().mockReturnValue(<div />);
 
     const {baseElement} = render(
       <Dialog onClose={handleClose}>{renderFunc}</Dialog>,
@@ -46,8 +46,8 @@ describe('Dialog component tests', () => {
   });
 
   test('should close Dialog', () => {
-    const handleClose = jest.fn();
-    const renderFunc = jest.fn().mockReturnValue(<div />);
+    const handleClose = vi.fn();
+    const renderFunc = vi.fn().mockReturnValue(<div />);
 
     render(<Dialog onClose={handleClose}>{renderFunc}</Dialog>);
 
@@ -62,8 +62,8 @@ describe('Dialog component tests', () => {
   });
 
   test('should close Dialog on escape key', () => {
-    const handleClose = jest.fn();
-    const renderFunc = jest.fn().mockReturnValue(<div />);
+    const handleClose = vi.fn();
+    const renderFunc = vi.fn().mockReturnValue(<div />);
 
     const {getByRole} = render(
       <Dialog onClose={handleClose}>{renderFunc}</Dialog>,

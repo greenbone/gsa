@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Portal component tests > should render portal 1`] = `
+<body>
+  <div
+    id="portals"
+  >
+    <div />
+  </div>
+  <div />
+</body>
+`;

@@ -38,7 +38,7 @@ import PoliciesPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const policy = Policy.fromElement({
   _id: '12345',
@@ -66,11 +66,11 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
+const currentSettings = vi.fn().mockResolvedValue({foo: 'bar'});
 
-const getSetting = jest.fn().mockResolvedValue({filter: null});
+const getSetting = vi.fn().mockResolvedValue({filter: null});
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -80,7 +80,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getPolicies = jest.fn().mockResolvedValue({
+const getPolicies = vi.fn().mockResolvedValue({
   data: [policy],
   meta: {
     filter: Filter.fromString(),
@@ -138,15 +138,15 @@ describe('PoliciesPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const renewSession = jest.fn().mockResolvedValue({data: {}});
+    const renewSession = vi.fn().mockResolvedValue({data: {}});
 
     const gmp = {
       policies: {
@@ -213,9 +213,9 @@ describe('PoliciesPage tests', () => {
 
 describe('PoliciesPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handlePolicyCreateClick = jest.fn();
-    const handlePolicyImportClick = jest.fn();
-    const renewSession = jest.fn().mockResolvedValue({data: {}});
+    const handlePolicyCreateClick = vi.fn();
+    const handlePolicyImportClick = vi.fn();
+    const renewSession = vi.fn().mockResolvedValue({data: {}});
 
     const gmp = {settings: {manualUrl}, user: {renewSession}};
 
@@ -244,10 +244,10 @@ describe('PoliciesPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handlePolicyCreateClick = jest.fn();
-    const handlePolicyImportClick = jest.fn();
+    const handlePolicyCreateClick = vi.fn();
+    const handlePolicyImportClick = vi.fn();
 
-    const renewSession = jest.fn().mockResolvedValue({data: {}});
+    const renewSession = vi.fn().mockResolvedValue({data: {}});
 
     const gmp = {settings: {manualUrl}, user: {renewSession}};
 
@@ -276,8 +276,8 @@ describe('PoliciesPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handlePolicyCreateClick = jest.fn();
-    const handlePolicyImportClick = jest.fn();
+    const handlePolicyCreateClick = vi.fn();
+    const handlePolicyImportClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

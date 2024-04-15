@@ -33,12 +33,12 @@ const createState = state => ({
 
 describe('loadFunc tests', () => {
   test('should request dashboard data successfully', () => {
-    const dispatch = jest.fn();
-    const getState = jest.fn();
+    const dispatch = vi.fn();
+    const getState = vi.fn();
     const data = {
       foo: 'bar',
     };
-    const func = jest.fn().mockResolvedValue(data);
+    const func = vi.fn().mockResolvedValue(data);
 
     const id = 'a1';
     const filter = Filter.fromString('foo=bar');
@@ -46,7 +46,10 @@ describe('loadFunc tests', () => {
       filter,
     };
 
-    return loadFunc(func, id)(props)(dispatch, getState).then(() => {
+    return loadFunc(
+      func,
+      id,
+    )(props)(dispatch, getState).then(() => {
       expect(getState).toHaveBeenCalled();
       expect(func).toHaveBeenCalledWith(props);
       expect(dispatch).toHaveBeenNthCalledWith(1, {
@@ -74,18 +77,21 @@ describe('loadFunc tests', () => {
         },
       },
     });
-    const dispatch = jest.fn();
-    const getState = jest.fn().mockReturnValue(state);
+    const dispatch = vi.fn();
+    const getState = vi.fn().mockReturnValue(state);
     const data = {
       foo: 'bar',
     };
-    const func = jest.fn().mockResolvedValue(data);
+    const func = vi.fn().mockResolvedValue(data);
 
     const props = {
       filter,
     };
 
-    return loadFunc(func, id)(props)(dispatch, getState).then(() => {
+    return loadFunc(
+      func,
+      id,
+    )(props)(dispatch, getState).then(() => {
       expect(getState).toHaveBeenCalled();
       expect(func).not.toHaveBeenCalled();
       expect(dispatch).not.toHaveBeenCalled();
@@ -95,15 +101,18 @@ describe('loadFunc tests', () => {
   test('should fail loading dashboard data', () => {
     const id = 'a1';
     const filter = Filter.fromString('foo=bar');
-    const dispatch = jest.fn();
-    const getState = jest.fn();
-    const func = jest.fn().mockRejectedValue('An error');
+    const dispatch = vi.fn();
+    const getState = vi.fn();
+    const func = vi.fn().mockRejectedValue('An error');
 
     const props = {
       filter,
     };
 
-    return loadFunc(func, id)(props)(dispatch, getState).then(() => {
+    return loadFunc(
+      func,
+      id,
+    )(props)(dispatch, getState).then(() => {
       expect(getState).toHaveBeenCalled();
       expect(func).toHaveBeenCalledWith(props);
       expect(dispatch).toHaveBeenNthCalledWith(1, {

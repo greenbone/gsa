@@ -22,7 +22,7 @@ import {fireEvent, rendererWith, waitFor, wait} from 'web/utils/testing';
 
 import CvssCalculator from 'web/pages/extras/cvsscalculatorpage';
 
-const calculateScoreFromVector = jest.fn().mockReturnValue(
+const calculateScoreFromVector = vi.fn().mockReturnValue(
   Promise.resolve({
     data: 7.5,
   }),
@@ -36,7 +36,7 @@ const gmp = {
     manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
   },
   user: {
-    renewSession: jest.fn().mockReturnValue(
+    renewSession: vi.fn().mockReturnValue(
       Promise.resolve({
         data: 'foo',
       }),

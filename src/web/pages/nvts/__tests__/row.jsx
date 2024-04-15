@@ -65,8 +65,8 @@ describe('NVT row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleFilterChanged = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleFilterChanged = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -113,8 +113,8 @@ describe('NVT row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleFilterChanged = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleFilterChanged = vi.fn();
 
     const filter = Filter.fromString('family="bar"');
 

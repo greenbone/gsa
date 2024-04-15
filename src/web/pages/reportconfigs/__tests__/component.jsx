@@ -63,24 +63,24 @@ describe('Report Config Component tests', () => {
 
   test('should open edit dialog and call GMP save', async () => {
     let editClick;
-    const children = jest.fn(({edit}) => {
+    const children = vi.fn(({edit}) => {
       editClick = edit;
     });
 
-    const handleInteraction = jest.fn();
-    const getReportConfig = jest.fn().mockResolvedValue({
+    const handleInteraction = vi.fn();
+    const getReportConfig = vi.fn().mockResolvedValue({
       data: mockReportConfig,
     });
-    const getAllReportFormats = jest.fn().mockResolvedValue({
+    const getAllReportFormats = vi.fn().mockResolvedValue({
       data: [mockReportFormat],
     });
-    const saveReportConfig = jest.fn().mockResolvedValue({
+    const saveReportConfig = vi.fn().mockResolvedValue({
       data: {},
     });
 
     const gmp = {
       user: {
-        currentSettings: jest.fn().mockResolvedValue({
+        currentSettings: vi.fn().mockResolvedValue({
           data: {},
         }),
       },
@@ -144,23 +144,23 @@ describe('Report Config Component tests', () => {
 
   test('should open create dialog and call GMP create', async () => {
     let createClick;
-    const children = jest.fn(({edit, create}) => {
+    const children = vi.fn(({edit, create}) => {
       createClick = create;
     });
-    const handleInteraction = jest.fn();
-    const getAllReportFormats = jest.fn().mockResolvedValue({
+    const handleInteraction = vi.fn();
+    const getAllReportFormats = vi.fn().mockResolvedValue({
       data: [mockReportFormat],
     });
-    const getReportFormat = jest.fn().mockResolvedValue({
+    const getReportFormat = vi.fn().mockResolvedValue({
       data: mockReportFormat,
     });
-    const createReportConfig = jest.fn().mockResolvedValue({
+    const createReportConfig = vi.fn().mockResolvedValue({
       data: {},
     });
 
     const gmp = {
       user: {
-        currentSettings: jest.fn().mockResolvedValue({
+        currentSettings: vi.fn().mockResolvedValue({
           data: {},
         }),
       },
@@ -231,17 +231,17 @@ describe('Report Config Component tests', () => {
 
   test('should open and close create dialog', async () => {
     let createClick;
-    const children = jest.fn(({edit, create}) => {
+    const children = vi.fn(({edit, create}) => {
       createClick = create;
     });
-    const handleInteraction = jest.fn();
-    const getAllReportFormats = jest.fn().mockResolvedValue({
+    const handleInteraction = vi.fn();
+    const getAllReportFormats = vi.fn().mockResolvedValue({
       data: [mockReportFormat],
     });
 
     const gmp = {
       user: {
-        currentSettings: jest.fn().mockResolvedValue({
+        currentSettings: vi.fn().mockResolvedValue({
           data: {},
         }),
       },

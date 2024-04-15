@@ -25,8 +25,8 @@ const gmp = {settings: {}};
 
 describe('LoginForm tests', () => {
   test('should render full LoginForm', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -46,8 +46,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should display error', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -63,8 +63,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should not display error by default', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -76,8 +76,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should display insecure protocol message', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -93,8 +93,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should not display insecure protocol message by default', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -106,8 +106,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should display IE11 message', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -123,8 +123,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should not display IE11 message by default', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -136,8 +136,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should display login fields by default', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -150,8 +150,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should allow to disable login fields', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -168,8 +168,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should allow to login with username and password', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -190,8 +190,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should not display guest login by default', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -204,8 +204,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should allow to display guest login', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -222,8 +222,8 @@ describe('LoginForm tests', () => {
   });
 
   test('should allow to login as guest', () => {
-    const handleSubmit = jest.fn();
-    const handleClick = jest.fn();
+    const handleSubmit = vi.fn();
+    const handleClick = vi.fn();
 
     const {render} = rendererWith({gmp});
 

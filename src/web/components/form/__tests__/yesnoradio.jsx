@@ -39,7 +39,7 @@ describe('YesNoRadio tests', () => {
   });
 
   test('should call change handler', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {getAllByTestId} = render(<YesNoRadio onChange={onChange} />);
 
     const inputs = getAllByTestId('radio-input');
@@ -55,7 +55,7 @@ describe('YesNoRadio tests', () => {
   });
 
   test('should call change handler with name', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {getAllByTestId} = render(
       <YesNoRadio name="foo" onChange={onChange} />,
     );
@@ -69,7 +69,7 @@ describe('YesNoRadio tests', () => {
   });
 
   test('should allow to set values for yes and no state', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {getAllByTestId} = render(
       <YesNoRadio
         convert={v => v}
@@ -93,7 +93,7 @@ describe('YesNoRadio tests', () => {
   });
 
   test('should call change handler only if checked state changes', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {getAllByTestId} = render(
       <YesNoRadio value={YES_VALUE} onChange={onChange} />,
     );
@@ -111,7 +111,7 @@ describe('YesNoRadio tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {getAllByTestId} = render(
       <YesNoRadio disabled={true} value={YES_VALUE} onChange={onChange} />,
     );

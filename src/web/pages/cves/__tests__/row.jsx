@@ -52,7 +52,7 @@ describe('CVEv2 Row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleToggleDetailsClick = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -96,7 +96,7 @@ describe('CVEv2 Row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleToggleDetailsClick = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -140,7 +140,7 @@ describe('CVEv3 Row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleToggleDetailsClick = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -186,7 +186,7 @@ describe('CVEv3 Row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleToggleDetailsClick = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render} = rendererWith({
       gmp,

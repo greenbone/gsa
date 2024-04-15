@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Scan Config Trend tests > should render 1`] = `
+.c0 {
+  height: 16px;
+  width: 16px;
+  line-height: 16px;
+}
+
+.c0 * {
+  height: inherit;
+  width: inherit;
+}
+
+<span
+  alt="Dynamic"
+  class="c0"
+  data-testid="svg-icon"
+  title="Dynamic"
+>
+  <svg
+    height="1em"
+    title="Dynamic"
+    viewBox="0 0 67.733 67.733"
+    width="1em"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g
+      transform="translate(0 -229.27)"
+    >
+      <g
+        transform="matrix(2.0878 0 0 2.2337 41.673 -337.41)"
+      >
+        <g
+          transform="matrix(.70711 .66092 -.75652 .70711 207.77 81.238)"
+        >
+          <path
+            class="gui_icon_class"
+            d="m192 32 25.848 25.848-73.424 73.422-31.984-31.984-112.36 111.88 12.281 12.326 99.191-98.756 32.008 32.006 86.586-86.586 25.85 25.85v-64h-64z"
+            transform="matrix(.089611 -.083759 .089611 .083759 -30.561 272.46)"
+          />
+        </g>
+      </g>
+    </g>
+  </svg>
+</span>
+`;

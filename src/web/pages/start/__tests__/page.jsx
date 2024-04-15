@@ -31,11 +31,11 @@ import StartPage from '../page';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const manualUrl = 'test/';
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -45,7 +45,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
+const getDashboardSetting = vi.fn().mockResolvedValue({
   data: {defaults: {foo: 'bar'}},
   meta: {
     filter: Filter.fromString(),
@@ -53,9 +53,9 @@ const getDashboardSetting = jest.fn().mockResolvedValue({
   },
 });
 
-const saveDashboardSetting = jest.fn().mockResolvedValue({foo: 'bar'});
+const saveDashboardSetting = vi.fn().mockResolvedValue({foo: 'bar'});
 
-const getAggregates = jest.fn().mockResolvedValue({
+const getAggregates = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),

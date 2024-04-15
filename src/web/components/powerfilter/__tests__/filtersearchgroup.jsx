@@ -26,7 +26,7 @@ import Filter from 'gmp/models/filter';
 describe('FilterSearchGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('location=tcp');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FilterSearchGroup
         filter={filter}
@@ -40,7 +40,7 @@ describe('FilterSearchGroup tests', () => {
 
   test('should render value from filter', () => {
     const filter = Filter.fromString('location=tcp');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FilterSearchGroup
         filter={filter}
@@ -54,7 +54,7 @@ describe('FilterSearchGroup tests', () => {
   });
   test('should call change handler', () => {
     const filter = Filter.fromString('location=tcp');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FilterSearchGroup
         filter={filter}

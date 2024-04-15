@@ -33,7 +33,7 @@ describe('Entity EditIcon component tests', () => {
     const entity = Task.fromElement({
       permissions: {permission: [{name: 'modify_task'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -56,7 +56,7 @@ describe('Entity EditIcon component tests', () => {
     const entity = Task.fromElement({
       permissions: {permission: [{name: 'modify_task'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -78,7 +78,7 @@ describe('Entity EditIcon component tests', () => {
     const entity = Task.fromElement({
       permissions: {permission: [{name: 'modify_schedule'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -101,7 +101,7 @@ describe('Entity EditIcon component tests', () => {
     const entity = Task.fromElement({
       permissions: {permission: [{name: 'modify_schedule'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 

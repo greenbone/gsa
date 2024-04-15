@@ -37,7 +37,7 @@ import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const config = ScanConfig.fromElement({
   _id: '12345',
@@ -73,9 +73,9 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({foo: 'bar'});
+const currentSettings = vi.fn().mockResolvedValue({foo: 'bar'});
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -85,7 +85,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getConfigs = jest.fn().mockResolvedValue({
+const getConfigs = vi.fn().mockResolvedValue({
   data: [config],
   meta: {
     filter: Filter.fromString(),
@@ -93,7 +93,7 @@ const getConfigs = jest.fn().mockResolvedValue({
   },
 });
 
-const getSetting = jest.fn().mockResolvedValue({filter: null});
+const getSetting = vi.fn().mockResolvedValue({filter: null});
 
 describe('ScanConfigsPage tests', () => {
   test('should render full ScanConfigsPage', async () => {
@@ -145,15 +145,15 @@ describe('ScanConfigsPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const renewSession = jest.fn().mockResolvedValue({data: {}});
+    const renewSession = vi.fn().mockResolvedValue({data: {}});
 
     const gmp = {
       scanconfigs: {
@@ -220,8 +220,8 @@ describe('ScanConfigsPage tests', () => {
 
 describe('ScanConfigsPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleScanConfigCreateClick = jest.fn();
-    const handleScanConfigImportClick = jest.fn();
+    const handleScanConfigCreateClick = vi.fn();
+    const handleScanConfigImportClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -252,8 +252,8 @@ describe('ScanConfigsPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleScanConfigCreateClick = jest.fn();
-    const handleScanConfigImportClick = jest.fn();
+    const handleScanConfigCreateClick = vi.fn();
+    const handleScanConfigImportClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -284,8 +284,8 @@ describe('ScanConfigsPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleScanConfigCreateClick = jest.fn();
-    const handleScanConfigImportClick = jest.fn();
+    const handleScanConfigCreateClick = vi.fn();
+    const handleScanConfigImportClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

@@ -23,7 +23,7 @@ setLocale('en');
 
 describe('xml base transform tests', () => {
   test('should call transform function', () => {
-    const fakeTransform = jest.fn().mockReturnValue('foo');
+    const fakeTransform = vi.fn().mockReturnValue('foo');
     const response = {};
     const options = {};
 
@@ -33,7 +33,7 @@ describe('xml base transform tests', () => {
   });
 
   test('should throw rejection in case of success transform errors', () => {
-    const fakeTransform = jest.fn(() => {
+    const fakeTransform = vi.fn(() => {
       throw new Error('foo');
     });
     const xhr = {};
@@ -46,15 +46,34 @@ describe('xml base transform tests', () => {
     expect(() => {
       transform(response, options);
     }).toThrowErrorMatchingInlineSnapshot(
-      `"An error occurred while converting gmp response to js for url http://foo"`,
+      `
+      Rejection {
+        "_xhr": {},
+        "error": [Error: foo],
+        "message": "An error occurred while converting gmp response to js for url http://foo",
+        "name": "Rejection",
+        "reason": "error",
+        "stack": "Error: foo
+          at /home/bricks/source/greenbone/gsa-vite/src/gmp/http/transform/__tests__/xml.js:37:13
+          at mockCall (file:///home/bricks/source/greenbone/gsa-vite/node_modules/@vitest/spy/dist/index.js:50:17)
+          at spy (file:///home/bricks/source/greenbone/gsa-vite/node_modules/tinyspy/dist/index.js:42:80)
+          at /home/bricks/source/greenbone/gsa-vite/src/gmp/http/transform/xml.js:26:12
+          at /home/bricks/source/greenbone/gsa-vite/src/gmp/http/transform/__tests__/xml.js:47:7
+          at getError (file:///home/bricks/source/greenbone/gsa-vite/node_modules/vitest/dist/vendor/vi.Fxjax7rQ.js:203:5)
+          at Proxy.__INLINE_SNAPSHOT__ (file:///home/bricks/source/greenbone/gsa-vite/node_modules/vitest/dist/vendor/vi.Fxjax7rQ.js:340:19)
+          at Proxy.methodWrapper (/home/bricks/source/greenbone/gsa-vite/node_modules/chai/lib/chai/utils/addMethod.js:57:25)
+          at /home/bricks/source/greenbone/gsa-vite/src/gmp/http/transform/__tests__/xml.js:48:8
+          at file:///home/bricks/source/greenbone/gsa-vite/node_modules/@vitest/runner/dist/index.js:135:14",
+      }
+    `,
     );
     expect(fakeTransform).toHaveBeenCalledWith(response);
   });
 
   test('should not call rejection function for non error rejection', () => {
-    const fakeTransform = jest.fn().mockReturnValue('foo');
+    const fakeTransform = vi.fn().mockReturnValue('foo');
     const transform = rejection(fakeTransform);
-    const isError = jest.fn().mockReturnValue(false);
+    const isError = vi.fn().mockReturnValue(false);
     const errorRejection = {
       isError,
     };
@@ -65,7 +84,7 @@ describe('xml base transform tests', () => {
   });
 
   test('should transform rejection with action_result', () => {
-    const fakeTransform = jest.fn().mockReturnValue({
+    const fakeTransform = vi.fn().mockReturnValue({
       envelope: {
         action_result: {
           message: 'foo',
@@ -73,8 +92,8 @@ describe('xml base transform tests', () => {
       },
     });
     const transform = rejection(fakeTransform);
-    const isError = jest.fn().mockReturnValue(true);
-    const setMessage = jest.fn(() => errorRejection);
+    const isError = vi.fn().mockReturnValue(true);
+    const setMessage = vi.fn(() => errorRejection);
     const errorRejection = {
       isError,
       setMessage,
@@ -87,7 +106,7 @@ describe('xml base transform tests', () => {
   });
 
   test('should transform rejection with gsad_response', () => {
-    const fakeTransform = jest.fn().mockReturnValue({
+    const fakeTransform = vi.fn().mockReturnValue({
       envelope: {
         action_result: {
           message: 'foo',
@@ -98,8 +117,8 @@ describe('xml base transform tests', () => {
       },
     });
     const transform = rejection(fakeTransform);
-    const isError = jest.fn().mockReturnValue(true);
-    const setMessage = jest.fn(() => errorRejection);
+    const isError = vi.fn().mockReturnValue(true);
+    const setMessage = vi.fn(() => errorRejection);
     const errorRejection = {
       isError,
       setMessage,
@@ -112,11 +131,11 @@ describe('xml base transform tests', () => {
   });
 
   test('should transform rejection with unknown error', () => {
-    const fakeTransform = jest.fn().mockReturnValue({
+    const fakeTransform = vi.fn().mockReturnValue({
       envelope: {},
     });
     const transform = rejection(fakeTransform);
-    const isError = jest.fn().mockReturnValue(true);
+    const isError = vi.fn().mockReturnValue(true);
     const errorRejection = {
       isError,
     };

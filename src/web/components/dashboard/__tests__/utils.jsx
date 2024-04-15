@@ -77,7 +77,7 @@ describe('convertDefaultDisplays test', () => {
 
   test('should convert array to rows', () => {
     let i = 1;
-    const uuid = jest.fn().mockImplementation(() => i++);
+    const uuid = vi.fn().mockImplementation(() => i++);
 
     const rows = [['foo', 'bar'], ['lorem']];
 

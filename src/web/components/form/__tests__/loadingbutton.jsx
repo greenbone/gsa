@@ -36,7 +36,7 @@ describe('LoadingButton tests', () => {
   });
 
   test('should call click handler', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const {element} = render(<LoadingButton onClick={handler} />);
 
@@ -46,7 +46,7 @@ describe('LoadingButton tests', () => {
   });
 
   test('should call click handler with value', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const {element} = render(<LoadingButton onClick={handler} value="bar" />);
 
@@ -56,7 +56,7 @@ describe('LoadingButton tests', () => {
   });
 
   test('should call click handler with value and name', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const {element} = render(
       <LoadingButton name="foo" value="bar" onClick={handler} />,

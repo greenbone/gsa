@@ -39,7 +39,7 @@ setLocale('en');
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -52,11 +52,11 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getTarget = jest.fn().mockResolvedValue({
+  getTarget = vi.fn().mockResolvedValue({
     data: target,
   });
 
-  getEntities = jest.fn().mockResolvedValue({
+  getEntities = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -64,11 +64,11 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -342,15 +342,15 @@ describe('Target Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const clone = jest.fn().mockResolvedValue({
+    const clone = vi.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = jest.fn().mockResolvedValue({
+    const deleteFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = jest.fn().mockResolvedValue({
+    const exportFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -415,11 +415,11 @@ describe('Target Detailspage tests', () => {
 
 describe('Target ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleTargetCloneClick = jest.fn();
-    const handleTargetDeleteClick = jest.fn();
-    const handleTargetDownloadClick = jest.fn();
-    const handleTargetEditClick = jest.fn();
-    const handleTargetCreateClick = jest.fn();
+    const handleTargetCloneClick = vi.fn();
+    const handleTargetDeleteClick = vi.fn();
+    const handleTargetDownloadClick = vi.fn();
+    const handleTargetEditClick = vi.fn();
+    const handleTargetCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -453,11 +453,11 @@ describe('Target ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleTargetCloneClick = jest.fn();
-    const handleTargetDeleteClick = jest.fn();
-    const handleTargetDownloadClick = jest.fn();
-    const handleTargetEditClick = jest.fn();
-    const handleTargetCreateClick = jest.fn();
+    const handleTargetCloneClick = vi.fn();
+    const handleTargetDeleteClick = vi.fn();
+    const handleTargetDownloadClick = vi.fn();
+    const handleTargetEditClick = vi.fn();
+    const handleTargetCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -501,11 +501,11 @@ describe('Target ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleTargetCloneClick = jest.fn();
-    const handleTargetDeleteClick = jest.fn();
-    const handleTargetDownloadClick = jest.fn();
-    const handleTargetEditClick = jest.fn();
-    const handleTargetCreateClick = jest.fn();
+    const handleTargetCloneClick = vi.fn();
+    const handleTargetDeleteClick = vi.fn();
+    const handleTargetDownloadClick = vi.fn();
+    const handleTargetEditClick = vi.fn();
+    const handleTargetCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -555,11 +555,11 @@ describe('Target ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers for target in use', () => {
-    const handleTargetCloneClick = jest.fn();
-    const handleTargetDeleteClick = jest.fn();
-    const handleTargetDownloadClick = jest.fn();
-    const handleTargetEditClick = jest.fn();
-    const handleTargetCreateClick = jest.fn();
+    const handleTargetCloneClick = vi.fn();
+    const handleTargetDeleteClick = vi.fn();
+    const handleTargetDownloadClick = vi.fn();
+    const handleTargetEditClick = vi.fn();
+    const handleTargetCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

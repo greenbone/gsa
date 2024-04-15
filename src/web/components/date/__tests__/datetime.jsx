@@ -55,7 +55,7 @@ describe('DateTime render tests', () => {
   });
 
   test('should call formatter', () => {
-    const formatter = jest.fn().mockReturnValue('foo');
+    const formatter = vi.fn().mockReturnValue('foo');
     const {render, store} = rendererWith({store: true});
 
     const date = Date('2019-01-01T12:00:00Z');

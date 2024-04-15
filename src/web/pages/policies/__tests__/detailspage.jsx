@@ -38,7 +38,7 @@ import Detailspage, {ToolBarIcons} from '../detailspage';
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 setLocale('en');
 
@@ -216,15 +216,15 @@ const entityType = 'policy';
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getPermissions = jest.fn().mockResolvedValue({
+const getPermissions = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -234,7 +234,7 @@ const getPermissions = jest.fn().mockResolvedValue({
 
 describe('Policy Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getPolicy = jest.fn().mockResolvedValue({
+    const getPolicy = vi.fn().mockResolvedValue({
       data: policy,
     });
 
@@ -300,7 +300,7 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should render nvt families tab', () => {
-    const getPolicy = jest.fn().mockResolvedValue({
+    const getPolicy = vi.fn().mockResolvedValue({
       data: policy,
     });
 
@@ -386,7 +386,7 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should render nvt preferences tab', () => {
-    const getPolicy = jest.fn().mockResolvedValue({
+    const getPolicy = vi.fn().mockResolvedValue({
       data: policy,
     });
 
@@ -443,7 +443,7 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getPolicy = jest.fn().mockResolvedValue({
+    const getPolicy = vi.fn().mockResolvedValue({
       data: policy,
     });
 
@@ -483,32 +483,32 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const getPolicy = jest.fn().mockReturnValue(
+    const getPolicy = vi.fn().mockReturnValue(
       Promise.resolve({
         data: policy,
       }),
     );
-    const clone = jest.fn().mockReturnValue(
+    const clone = vi.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = jest.fn().mockReturnValue(
+    const getNvtFamilies = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = jest.fn().mockReturnValue(
+    const getAllScanners = vi.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
+    const deleteFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = jest.fn().mockReturnValue(
+    const exportFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -576,33 +576,33 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should not call commands without permission', async () => {
-    const getPolicy = jest.fn().mockReturnValue(
+    const getPolicy = vi.fn().mockReturnValue(
       Promise.resolve({
         data: policy2,
       }),
     );
 
-    const clone = jest.fn().mockReturnValue(
+    const clone = vi.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = jest.fn().mockReturnValue(
+    const getNvtFamilies = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = jest.fn().mockReturnValue(
+    const getAllScanners = vi.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
+    const deleteFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = jest.fn().mockReturnValue(
+    const exportFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -679,33 +679,33 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should (not) call commands if policy is in use', async () => {
-    const getPolicy = jest.fn().mockReturnValue(
+    const getPolicy = vi.fn().mockReturnValue(
       Promise.resolve({
         data: policy3,
       }),
     );
 
-    const clone = jest.fn().mockReturnValue(
+    const clone = vi.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = jest.fn().mockReturnValue(
+    const getNvtFamilies = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = jest.fn().mockReturnValue(
+    const getAllScanners = vi.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
+    const deleteFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = jest.fn().mockReturnValue(
+    const exportFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -773,33 +773,33 @@ describe('Policy Detailspage tests', () => {
   });
 
   test('should (not) call commands if policy is not writable', async () => {
-    const getPolicy = jest.fn().mockReturnValue(
+    const getPolicy = vi.fn().mockReturnValue(
       Promise.resolve({
         data: policy4,
       }),
     );
 
-    const clone = jest.fn().mockReturnValue(
+    const clone = vi.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = jest.fn().mockReturnValue(
+    const getNvtFamilies = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = jest.fn().mockReturnValue(
+    const getAllScanners = vi.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
+    const deleteFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = jest.fn().mockReturnValue(
+    const exportFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -871,10 +871,10 @@ describe('Policy Detailspage tests', () => {
 
 describe('Policy ToolBarIcons tests', () => {
   test('should render', () => {
-    const handlePolicyCloneClick = jest.fn();
-    const handlePolicyDeleteClick = jest.fn();
-    const handlePolicyDownloadClick = jest.fn();
-    const handlePolicyEditClick = jest.fn();
+    const handlePolicyCloneClick = vi.fn();
+    const handlePolicyDeleteClick = vi.fn();
+    const handlePolicyDownloadClick = vi.fn();
+    const handlePolicyEditClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -910,10 +910,10 @@ describe('Policy ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handlePolicyCloneClick = jest.fn();
-    const handlePolicyDeleteClick = jest.fn();
-    const handlePolicyDownloadClick = jest.fn();
-    const handlePolicyEditClick = jest.fn();
+    const handlePolicyCloneClick = vi.fn();
+    const handlePolicyDeleteClick = vi.fn();
+    const handlePolicyDownloadClick = vi.fn();
+    const handlePolicyEditClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -953,10 +953,10 @@ describe('Policy ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handlePolicyCloneClick = jest.fn();
-    const handlePolicyDeleteClick = jest.fn();
-    const handlePolicyDownloadClick = jest.fn();
-    const handlePolicyEditClick = jest.fn();
+    const handlePolicyCloneClick = vi.fn();
+    const handlePolicyDeleteClick = vi.fn();
+    const handlePolicyDownloadClick = vi.fn();
+    const handlePolicyEditClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -1005,10 +1005,10 @@ describe('Policy ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers if policy is in use', () => {
-    const handlePolicyCloneClick = jest.fn();
-    const handlePolicyDeleteClick = jest.fn();
-    const handlePolicyDownloadClick = jest.fn();
-    const handlePolicyEditClick = jest.fn();
+    const handlePolicyCloneClick = vi.fn();
+    const handlePolicyDeleteClick = vi.fn();
+    const handlePolicyDownloadClick = vi.fn();
+    const handlePolicyEditClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -1048,10 +1048,10 @@ describe('Policy ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers if policy is not writable', () => {
-    const handlePolicyCloneClick = jest.fn();
-    const handlePolicyDeleteClick = jest.fn();
-    const handlePolicyDownloadClick = jest.fn();
-    const handlePolicyEditClick = jest.fn();
+    const handlePolicyCloneClick = vi.fn();
+    const handlePolicyDeleteClick = vi.fn();
+    const handlePolicyDownloadClick = vi.fn();
+    const handlePolicyEditClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

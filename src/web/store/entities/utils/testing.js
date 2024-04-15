@@ -226,11 +226,11 @@ export const testLoadEntities = (entityType, loadEntities) => {
           [filterIdentifier(filter)]: false,
         },
       });
-      const getState = jest.fn().mockReturnValue(rootState);
+      const getState = vi.fn().mockReturnValue(rootState);
 
-      const dispatch = jest.fn();
+      const dispatch = vi.fn();
 
-      const get = jest.fn().mockReturnValue(
+      const get = vi.fn().mockReturnValue(
         Promise.resolve({
           data: 'foo',
           meta: {
@@ -281,11 +281,11 @@ export const testLoadEntities = (entityType, loadEntities) => {
         },
       });
 
-      const getState = jest.fn().mockReturnValue(rootState);
+      const getState = vi.fn().mockReturnValue(rootState);
 
-      const dispatch = jest.fn();
+      const dispatch = vi.fn();
 
-      const get = jest.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
+      const get = vi.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
 
       const gmp = {
         [pluralizeType(entityType)]: {
@@ -308,11 +308,11 @@ export const testLoadEntities = (entityType, loadEntities) => {
         },
       });
 
-      const getState = jest.fn().mockReturnValue(rootState);
+      const getState = vi.fn().mockReturnValue(rootState);
 
-      const dispatch = jest.fn();
+      const dispatch = vi.fn();
 
-      const get = jest.fn().mockReturnValue(Promise.reject('AnError'));
+      const get = vi.fn().mockReturnValue(Promise.reject('AnError'));
 
       const gmp = {
         [pluralizeType(entityType)]: {
@@ -456,11 +456,11 @@ export const testLoadEntity = (entityType, loadEntity) => {
           [id]: false,
         },
       });
-      const getState = jest.fn().mockReturnValue(rootState);
+      const getState = vi.fn().mockReturnValue(rootState);
 
-      const dispatch = jest.fn();
+      const dispatch = vi.fn();
 
-      const get = jest.fn().mockReturnValue(
+      const get = vi.fn().mockReturnValue(
         Promise.resolve({
           data: {foo: 'bar'},
         }),
@@ -505,11 +505,11 @@ export const testLoadEntity = (entityType, loadEntity) => {
         },
       });
 
-      const getState = jest.fn().mockReturnValue(rootState);
+      const getState = vi.fn().mockReturnValue(rootState);
 
-      const dispatch = jest.fn();
+      const dispatch = vi.fn();
 
-      const get = jest.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
+      const get = vi.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
 
       const gmp = {
         [entityType]: {
@@ -532,11 +532,11 @@ export const testLoadEntity = (entityType, loadEntity) => {
         },
       });
 
-      const getState = jest.fn().mockReturnValue(rootState);
+      const getState = vi.fn().mockReturnValue(rootState);
 
-      const dispatch = jest.fn();
+      const dispatch = vi.fn();
 
-      const get = jest.fn().mockReturnValue(Promise.reject('An Error'));
+      const get = vi.fn().mockReturnValue(Promise.reject('An Error'));
 
       const gmp = {
         [entityType]: {

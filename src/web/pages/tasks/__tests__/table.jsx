@@ -108,15 +108,15 @@ const filter = Filter.fromString('rows=2');
 
 describe('Tasks table tests', () => {
   test('should render', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const gmp = {
       settings: {},
@@ -161,15 +161,15 @@ describe('Tasks table tests', () => {
   });
 
   test('should unfold all details', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const gmp = {
       settings: {},
@@ -212,15 +212,15 @@ describe('Tasks table tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const gmp = {
       settings: {},

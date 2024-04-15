@@ -26,8 +26,8 @@ import Filter from 'gmp/models/filter';
 describe('SeverityLevelsFilterGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('levels=h');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <SeverityLevelsFilterGroup
         filter={filter}
@@ -41,8 +41,8 @@ describe('SeverityLevelsFilterGroup tests', () => {
 
   test('should call change handler', () => {
     const filter = Filter.fromString('levels=');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <SeverityLevelsFilterGroup
         filter={filter}
@@ -60,8 +60,8 @@ describe('SeverityLevelsFilterGroup tests', () => {
 
   test('should check checkbox', () => {
     const filter = Filter.fromString('levels=hm');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <SeverityLevelsFilterGroup
         filter={filter}
@@ -79,8 +79,8 @@ describe('SeverityLevelsFilterGroup tests', () => {
   test('should uncheck checkbox', () => {
     const filter1 = Filter.fromString('levels=hm');
     const filter2 = Filter.fromString('levels=m');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element, rerender} = render(
       <SeverityLevelsFilterGroup
         filter={filter1}
@@ -108,8 +108,8 @@ describe('SeverityLevelsFilterGroup tests', () => {
 
   test('should be unchecked by default', () => {
     const filter = Filter.fromString();
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <SeverityLevelsFilterGroup
         filter={filter}
@@ -129,8 +129,8 @@ describe('SeverityLevelsFilterGroup tests', () => {
 
   test('should call remove handler', () => {
     const filter = Filter.fromString('levels=h');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <SeverityLevelsFilterGroup
         filter={filter}

@@ -24,8 +24,8 @@ import {KeyCode} from 'gmp/utils/event';
 
 describe('ConfirmationDialog component tests', () => {
   test('should render ConfirmationDialog with text and title', () => {
-    const handleClose = jest.fn();
-    const handleResumeClick = jest.fn();
+    const handleClose = vi.fn();
+    const handleResumeClick = vi.fn();
 
     const {baseElement, getByTestId} = render(
       <ConfirmationDialog
@@ -44,8 +44,8 @@ describe('ConfirmationDialog component tests', () => {
   });
 
   test('should render ConfirmationDialog with element content and title', () => {
-    const handleClose = jest.fn();
-    const handleResumeClick = jest.fn();
+    const handleClose = vi.fn();
+    const handleResumeClick = vi.fn();
 
     const {getByTestId} = render(
       <ConfirmationDialog
@@ -63,8 +63,8 @@ describe('ConfirmationDialog component tests', () => {
   });
 
   test('should close ConfirmationDialog with close button', () => {
-    const handleClose = jest.fn();
-    const handleResumeClick = jest.fn();
+    const handleClose = vi.fn();
+    const handleResumeClick = vi.fn();
 
     const {getByTestId} = render(
       <ConfirmationDialog
@@ -80,8 +80,8 @@ describe('ConfirmationDialog component tests', () => {
   });
 
   test('should close ConfirmationDialog with cancel button', () => {
-    const handleClose = jest.fn();
-    const handleResumeClick = jest.fn();
+    const handleClose = vi.fn();
+    const handleResumeClick = vi.fn();
 
     const {baseElement} = render(
       <ConfirmationDialog
@@ -97,8 +97,8 @@ describe('ConfirmationDialog component tests', () => {
   });
 
   test('should resume ConfirmationDialog with resume button', () => {
-    const handleClose = jest.fn();
-    const handleResumeClick = jest.fn();
+    const handleClose = vi.fn();
+    const handleResumeClick = vi.fn();
 
     const {baseElement} = render(
       <ConfirmationDialog
@@ -114,8 +114,8 @@ describe('ConfirmationDialog component tests', () => {
   });
 
   test('should close ConfirmationDialog on escape key', () => {
-    const handleClose = jest.fn();
-    const handleResumeClick = jest.fn();
+    const handleClose = vi.fn();
+    const handleResumeClick = vi.fn();
 
     const {getByRole} = render(
       <ConfirmationDialog

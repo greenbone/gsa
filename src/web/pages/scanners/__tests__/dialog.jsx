@@ -68,10 +68,10 @@ describe('ScannerDialog component tests', () => {
   test('should render', () => {
     const elem = {_id: 'foo', type: GREENBONE_SENSOR_SCANNER_TYPE};
     const scanner = Scanner.fromElement(elem);
-    const handleClose = jest.fn();
-    const handleCredentialChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleScannerTypeChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleCredentialChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleScannerTypeChange = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -94,10 +94,10 @@ describe('ScannerDialog component tests', () => {
   test('should display default info', () => {
     const scanner = Scanner.fromElement(sensorScanner);
 
-    const handleClose = jest.fn();
-    const handleCredentialChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleScannerTypeChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleCredentialChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleScannerTypeChange = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -133,10 +133,10 @@ describe('ScannerDialog component tests', () => {
   test('should display value from props', () => {
     const scanner = Scanner.fromElement(sensorScanner);
 
-    const handleClose = jest.fn();
-    const handleCredentialChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleScannerTypeChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleCredentialChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleScannerTypeChange = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -174,10 +174,10 @@ describe('ScannerDialog component tests', () => {
 
   test('should save valid form state', () => {
     const scanner = Scanner.fromElement(sensorScanner);
-    const handleClose = jest.fn();
-    const handleCredentialChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleScannerTypeChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleCredentialChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleScannerTypeChange = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -218,10 +218,10 @@ describe('ScannerDialog component tests', () => {
   test('should change fields in create dialog', () => {
     const scanner = Scanner.fromElement(sensorScanner);
 
-    const handleClose = jest.fn();
-    const handleCredentialChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleScannerTypeChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleCredentialChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleScannerTypeChange = vi.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -272,10 +272,10 @@ describe('ScannerDialog component tests', () => {
   test('should allow to close the dialog', () => {
     const elem = {_id: 'foo', type: GREENBONE_SENSOR_SCANNER_TYPE};
     const scanner = Scanner.fromElement(elem);
-    const handleClose = jest.fn();
-    const handleCredentialChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleScannerTypeChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleCredentialChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleScannerTypeChange = vi.fn();
 
     const {render} = rendererWith({gmp});
 

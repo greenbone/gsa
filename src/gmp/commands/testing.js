@@ -69,15 +69,13 @@ export const createAggregatesResponse = (data = {}) =>
   });
 
 export const createHttp = response => ({
-  request: jest.fn().mockReturnValue(Promise.resolve(response)),
+  request: vi.fn().mockReturnValue(Promise.resolve(response)),
 });
 
 export const createHttpMany = responses => {
   let i = 0;
   return {
-    request: jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(responses[i++])),
+    request: vi.fn().mockImplementation(() => Promise.resolve(responses[i++])),
   };
 };
 

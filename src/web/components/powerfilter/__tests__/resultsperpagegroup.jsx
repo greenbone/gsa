@@ -26,7 +26,7 @@ import Filter from 'gmp/models/filter';
 describe('ResultsPerPageGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('rows=10');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <ResultsPerPageGroup
         filter={filter}
@@ -41,7 +41,7 @@ describe('ResultsPerPageGroup tests', () => {
 
   test('should render value from filter by default', () => {
     const filter = Filter.fromString('rows=10');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <ResultsPerPageGroup
         filter={filter}
@@ -57,7 +57,7 @@ describe('ResultsPerPageGroup tests', () => {
   });
 
   test('should render value from rows', () => {
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <ResultsPerPageGroup name="name" rows={20} onChange={handleChange} />,
     );
@@ -69,7 +69,7 @@ describe('ResultsPerPageGroup tests', () => {
 
   test('should call change handler', () => {
     const filter = Filter.fromString('rows=10');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <ResultsPerPageGroup
         filter={filter}

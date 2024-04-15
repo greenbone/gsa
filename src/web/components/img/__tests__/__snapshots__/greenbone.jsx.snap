@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GreenboneLogo tests > should render 1`] = `
+<img
+  alt="Greenbone Security Assistant"
+  src="/src/web/components/icon/svg/greenbone.svg"
+/>
+`;

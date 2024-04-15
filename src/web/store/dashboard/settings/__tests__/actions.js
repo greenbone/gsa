@@ -189,15 +189,15 @@ describe('resetDashboardSettingsError tests', () => {
 describe('loadSettings tests', () => {
   test('should load settings successfully', () => {
     const id = 'a1';
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const rootState = createRootState();
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
     const data = {
       foo: 'bar',
     };
 
-    const getSetting = jest.fn().mockReturnValue(Promise.resolve({data}));
+    const getSetting = vi.fn().mockReturnValue(Promise.resolve({data}));
 
     const gmp = {
       dashboard: {
@@ -234,19 +234,19 @@ describe('loadSettings tests', () => {
 
   test('should not load settings if isLoading is true', () => {
     const id = 'a1';
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const rootState = createRootState({
       isLoading: {
         [id]: true,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
     const data = {
       foo: 'bar',
     };
 
-    const getSetting = jest.fn().mockReturnValue(Promise.resolve({data}));
+    const getSetting = vi.fn().mockReturnValue(Promise.resolve({data}));
 
     const gmp = {
       dashboard: {
@@ -267,13 +267,13 @@ describe('loadSettings tests', () => {
 
   test('should fail loading settings with an error', () => {
     const id = 'a1';
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const rootState = createRootState();
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
     const error = 'An error';
 
-    const getSetting = jest.fn().mockReturnValue(Promise.reject(error));
+    const getSetting = vi.fn().mockReturnValue(Promise.reject(error));
 
     const gmp = {
       dashboard: {
@@ -309,15 +309,15 @@ describe('loadSettings tests', () => {
 describe('saveSettings tests', () => {
   test('should save settings successfully', () => {
     const id = 'a1';
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const rootState = createRootState();
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
     const settings = {
       foo: 'bar',
     };
 
-    const saveSettingsPromise = jest.fn().mockReturnValue(Promise.resolve());
+    const saveSettingsPromise = vi.fn().mockReturnValue(Promise.resolve());
 
     const gmp = {
       dashboard: {
@@ -344,18 +344,16 @@ describe('saveSettings tests', () => {
 
   test('should fail saving settings', () => {
     const id = 'a1';
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const rootState = createRootState();
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
     const settings = {
       foo: 'bar',
     };
 
     const error = 'An error';
-    const saveSettingsPromise = jest
-      .fn()
-      .mockReturnValue(Promise.reject(error));
+    const saveSettingsPromise = vi.fn().mockReturnValue(Promise.reject(error));
 
     const gmp = {
       dashboard: {
@@ -389,15 +387,15 @@ describe('resetSettings tests', () => {
       foo: 'bar',
     };
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const rootState = createRootState({
       defaults: {
         [id]: settings,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
-    const saveSettingsPromise = jest.fn().mockReturnValue(Promise.resolve());
+    const saveSettingsPromise = vi.fn().mockReturnValue(Promise.resolve());
 
     const gmp = {
       dashboard: {
@@ -428,18 +426,16 @@ describe('resetSettings tests', () => {
       foo: 'bar',
     };
 
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const rootState = createRootState({
       defaults: {
         [id]: settings,
       },
     });
-    const getState = jest.fn().mockReturnValue(rootState);
+    const getState = vi.fn().mockReturnValue(rootState);
 
     const error = 'An error';
-    const saveSettingsPromise = jest
-      .fn()
-      .mockReturnValue(Promise.reject(error));
+    const saveSettingsPromise = vi.fn().mockReturnValue(Promise.reject(error));
 
     const gmp = {
       dashboard: {

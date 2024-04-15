@@ -31,7 +31,7 @@ const wrongCaps = new Capabilities(['get_reports']);
 
 describe('Empty Report tests', () => {
   test('should render empty report', () => {
-    const onTargetEditClick = jest.fn();
+    const onTargetEditClick = vi.fn();
 
     const {render} = rendererWith({
       capabilities: caps,
@@ -82,7 +82,7 @@ describe('Empty Report tests', () => {
   });
 
   test('should render report for newly started task', () => {
-    const onTargetEditClick = jest.fn();
+    const onTargetEditClick = vi.fn();
 
     const {render} = rendererWith({
       capabilities: caps,
@@ -107,7 +107,7 @@ describe('Empty Report tests', () => {
   });
 
   test('should render report for running task', () => {
-    const onTargetEditClick = jest.fn();
+    const onTargetEditClick = vi.fn();
 
     const {render} = rendererWith({
       capabilities: caps,
@@ -132,7 +132,7 @@ describe('Empty Report tests', () => {
   });
 
   test('should call click handler', () => {
-    const onTargetEditClick = jest.fn();
+    const onTargetEditClick = vi.fn();
 
     const {render} = rendererWith({
       capabilities: caps,
@@ -155,7 +155,7 @@ describe('Empty Report tests', () => {
   });
 
   test('should not call click handler with wrong capabilities', () => {
-    const onTargetEditClick = jest.fn();
+    const onTargetEditClick = vi.fn();
 
     const {render} = rendererWith({
       capabilities: wrongCaps,

@@ -34,7 +34,7 @@ const TestComponent = ({reload, id, reloadOptions}) => (
 const runTimers = async () => {
   await Promise.resolve(); // required for firing the timer https://github.com/facebook/jest/issues/7151
   act(() => {
-    jest.runAllTimers();
+    vi.runAllTimers();
   });
 };
 
@@ -48,9 +48,9 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const renderFunc = jest.fn().mockReturnValue(<div data-testid="foo" />);
-    const loadFunc = jest.fn().mockResolvedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
+    const renderFunc = vi.fn().mockReturnValue(<div data-testid="foo" />);
+    const loadFunc = vi.fn().mockResolvedValue();
+    const reloadFunc = vi.fn().mockResolvedValue();
 
     const {getByTestId} = render(
       <Reload load={loadFunc} reload={reloadFunc} name="foo">
@@ -74,8 +74,8 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const renderFunc = jest.fn().mockReturnValue(<div data-testid="foo" />);
-    const reloadFunc = jest.fn().mockResolvedValue();
+    const renderFunc = vi.fn().mockReturnValue(<div data-testid="foo" />);
+    const reloadFunc = vi.fn().mockResolvedValue();
 
     const {getByTestId} = render(
       <Reload reload={reloadFunc} name="foo">
@@ -90,7 +90,7 @@ describe('Reload component tests', () => {
   });
 
   test('should reload when timer fires', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     const gmp = {
       settings: {
@@ -100,12 +100,12 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = jest.fn().mockResolvedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
+    const loadFunc = vi.fn().mockResolvedValue();
+    const reloadFunc = vi.fn().mockResolvedValue();
 
     const {queryByTestId} = render(
       <Reload load={loadFunc} reload={reloadFunc} name="foo">
@@ -133,7 +133,7 @@ describe('Reload component tests', () => {
   });
 
   test('should not reload when initial loading fails', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     const gmp = {
       settings: {
@@ -143,12 +143,12 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = jest.fn().mockRejectedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
+    const loadFunc = vi.fn().mockRejectedValue();
+    const reloadFunc = vi.fn().mockResolvedValue();
 
     const {queryByTestId} = render(
       <Reload load={loadFunc} reload={reloadFunc} name="foo">
@@ -176,7 +176,7 @@ describe('Reload component tests', () => {
   });
 
   test('should not reload when reloading fails', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
     const gmp = {
       settings: {
@@ -186,12 +186,12 @@ describe('Reload component tests', () => {
 
     const {render} = rendererWith({gmp});
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = jest.fn().mockResolvedValue();
-    const reloadFunc = jest.fn().mockRejectedValue();
+    const loadFunc = vi.fn().mockResolvedValue();
+    const reloadFunc = vi.fn().mockRejectedValue();
 
     const {queryByTestId} = render(
       <Reload load={loadFunc} reload={reloadFunc} name="foo">
@@ -227,15 +227,15 @@ describe('Reload component tests', () => {
   });
 
   test('should reload on demand after failed loading', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockImplementationOnce(({reload}) => (
         <TestComponent reload={reload} id="one" />
       ));
-    const loadFunc = jest.fn().mockRejectedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
+    const loadFunc = vi.fn().mockRejectedValue();
+    const reloadFunc = vi.fn().mockResolvedValue();
 
     const gmp = {
       settings: {
@@ -270,15 +270,15 @@ describe('Reload component tests', () => {
   });
 
   test('should allow to reload on demand', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockImplementationOnce(({reload}) => (
         <TestComponent reload={reload} id="one" />
       ));
-    const loadFunc = jest.fn().mockResolvedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
+    const loadFunc = vi.fn().mockResolvedValue();
+    const reloadFunc = vi.fn().mockResolvedValue();
 
     const gmp = {
       settings: {
@@ -322,16 +322,16 @@ describe('Reload component tests', () => {
   });
 
   test('should allow to calculate reload timer', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = jest.fn().mockResolvedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
+    const loadFunc = vi.fn().mockResolvedValue();
+    const reloadFunc = vi.fn().mockResolvedValue();
 
-    const reloadInterval = jest.fn().mockReturnValue(1000);
+    const reloadInterval = vi.fn().mockReturnValue(1000);
 
     const gmp = {
       settings: {
@@ -374,16 +374,16 @@ describe('Reload component tests', () => {
   });
 
   test('should not start reload timer if reloadInterval returns equal or less then zero', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = jest.fn().mockResolvedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
+    const loadFunc = vi.fn().mockResolvedValue();
+    const reloadFunc = vi.fn().mockResolvedValue();
 
-    const reloadInterval = jest.fn().mockReturnValue(0);
+    const reloadInterval = vi.fn().mockReturnValue(0);
 
     const gmp = {
       settings: {
@@ -429,16 +429,16 @@ describe('Reload component tests', () => {
     'should fall back to defaultReloadInterval if reloadInterval returns ' +
       'USE_DEFAULT_RELOAD_INTERVAL',
     async () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
 
-      const renderFunc = jest
+      const renderFunc = vi
         .fn()
         .mockReturnValueOnce(<div data-testid="one" />)
         .mockReturnValueOnce(<div data-testid="two" />);
-      const loadFunc = jest.fn().mockResolvedValue();
-      const reloadFunc = jest.fn().mockResolvedValue();
+      const loadFunc = vi.fn().mockResolvedValue();
+      const reloadFunc = vi.fn().mockResolvedValue();
 
-      const reloadInterval = jest
+      const reloadInterval = vi
         .fn()
         .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL);
 
@@ -488,16 +488,16 @@ describe('Reload component tests', () => {
     'should fall back to defaultReloadIntervalActive if reloadInterval ' +
       'returns USE_DEFAULT_RELOAD_INTERVAL_ACTIVE',
     async () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
 
-      const renderFunc = jest
+      const renderFunc = vi
         .fn()
         .mockReturnValueOnce(<div data-testid="one" />)
         .mockReturnValueOnce(<div data-testid="two" />);
-      const loadFunc = jest.fn().mockResolvedValue();
-      const reloadFunc = jest.fn().mockResolvedValue();
+      const loadFunc = vi.fn().mockResolvedValue();
+      const reloadFunc = vi.fn().mockResolvedValue();
 
-      const reloadInterval = jest
+      const reloadInterval = vi
         .fn()
         .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL_ACTIVE);
 
@@ -547,16 +547,16 @@ describe('Reload component tests', () => {
     'should fall back to defaultReloadIntervalInactive if reloadInterval ' +
       'returns USE_DEFAULT_RELOAD_INTERVAL_INACTIVE',
     async () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
 
-      const renderFunc = jest
+      const renderFunc = vi
         .fn()
         .mockReturnValueOnce(<div data-testid="one" />)
         .mockReturnValueOnce(<div data-testid="two" />);
-      const loadFunc = jest.fn().mockResolvedValue();
-      const reloadFunc = jest.fn().mockResolvedValue();
+      const loadFunc = vi.fn().mockResolvedValue();
+      const reloadFunc = vi.fn().mockResolvedValue();
 
-      const reloadInterval = jest
+      const reloadInterval = vi
         .fn()
         .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL_INACTIVE);
 
@@ -603,14 +603,14 @@ describe('Reload component tests', () => {
   );
 
   test('should use reloadInterval from settings', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = jest.fn().mockResolvedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
+    const loadFunc = vi.fn().mockResolvedValue();
+    const reloadFunc = vi.fn().mockResolvedValue();
 
     const gmp = {
       settings: {
@@ -646,15 +646,15 @@ describe('Reload component tests', () => {
   });
 
   test('should use reloadIntervalActive from settings', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = jest.fn().mockResolvedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
-    const reloadIntervalFunc = jest
+    const loadFunc = vi.fn().mockResolvedValue();
+    const reloadFunc = vi.fn().mockResolvedValue();
+    const reloadIntervalFunc = vi
       .fn()
       .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL_ACTIVE);
 
@@ -699,15 +699,15 @@ describe('Reload component tests', () => {
   });
 
   test('should use reloadIntervalInactive from settings', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValueOnce(<div data-testid="one" />)
       .mockReturnValueOnce(<div data-testid="two" />);
-    const loadFunc = jest.fn().mockResolvedValue();
-    const reloadFunc = jest.fn().mockResolvedValue();
-    const reloadIntervalFunc = jest
+    const loadFunc = vi.fn().mockResolvedValue();
+    const reloadFunc = vi.fn().mockResolvedValue();
+    const reloadIntervalFunc = vi
       .fn()
       .mockReturnValue(USE_DEFAULT_RELOAD_INTERVAL_INACTIVE);
 

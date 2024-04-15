@@ -78,7 +78,7 @@ describe('Radio tests', () => {
   });
 
   test('should call change handler', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(<Radio onChange={onChange} />);
 
@@ -88,7 +88,7 @@ describe('Radio tests', () => {
   });
 
   test('should call change handler with value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(<Radio value="foo" onChange={onChange} />);
 
@@ -98,7 +98,7 @@ describe('Radio tests', () => {
   });
 
   test('should call change handler with value and name', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(
       <Radio name="bar" value="foo" onChange={onChange} />,
@@ -110,7 +110,7 @@ describe('Radio tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(<Radio disabled={true} onChange={onChange} />);
 
@@ -127,7 +127,7 @@ describe('Radio tests', () => {
   });
 
   test('should not call change handler if already checked', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(
       <Radio checked={true} value="foo" onChange={onChange} />,

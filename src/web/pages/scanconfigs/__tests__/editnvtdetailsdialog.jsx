@@ -39,8 +39,8 @@ const modified = date('2019-09-09T12:00:00Z');
 
 describe('EditNvtDetailsDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -81,8 +81,8 @@ describe('EditNvtDetailsDialog component tests', () => {
   });
 
   test('should render loading indicator', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -123,8 +123,8 @@ describe('EditNvtDetailsDialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -182,8 +182,8 @@ describe('EditNvtDetailsDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -220,8 +220,8 @@ describe('EditNvtDetailsDialog component tests', () => {
   });
 
   test('should allow to change data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -276,8 +276,8 @@ describe('EditNvtDetailsDialog component tests', () => {
   });
 
   test('should handle changing timeout', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,

@@ -42,7 +42,7 @@ setLocale('en');
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -117,11 +117,11 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getResult = jest.fn().mockResolvedValue({
+  getResult = vi.fn().mockResolvedValue({
     data: result,
   });
 
-  getPermissions = jest.fn().mockResolvedValue({
+  getPermissions = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -129,11 +129,11 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -297,11 +297,11 @@ describe('Result Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const exportFunc = jest.fn().mockResolvedValue({
+    const exportFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const getUsers = jest.fn().mockResolvedValue({
+    const getUsers = vi.fn().mockResolvedValue({
       data: [],
       meta: {
         filter: Filter.fromString(),
@@ -360,10 +360,10 @@ describe('Result Detailspage tests', () => {
 
 describe('Result ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleNoteCreateClick = jest.fn();
-    const handleOverrideCreateClick = jest.fn();
-    const handleResultDownloadClick = jest.fn();
-    const handleTicketCreateClick = jest.fn();
+    const handleNoteCreateClick = vi.fn();
+    const handleOverrideCreateClick = vi.fn();
+    const handleResultDownloadClick = vi.fn();
+    const handleTicketCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -411,10 +411,10 @@ describe('Result ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleNoteCreateClick = jest.fn();
-    const handleOverrideCreateClick = jest.fn();
-    const handleResultDownloadClick = jest.fn();
-    const handleTicketCreateClick = jest.fn();
+    const handleNoteCreateClick = vi.fn();
+    const handleOverrideCreateClick = vi.fn();
+    const handleResultDownloadClick = vi.fn();
+    const handleTicketCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -450,10 +450,10 @@ describe('Result ToolBarIcons tests', () => {
   test('should not show icons without permission', () => {
     const wrongCapabilities = new Capabilities(['get_results']);
 
-    const handleNoteCreateClick = jest.fn();
-    const handleOverrideCreateClick = jest.fn();
-    const handleResultDownloadClick = jest.fn();
-    const handleTicketCreateClick = jest.fn();
+    const handleNoteCreateClick = vi.fn();
+    const handleOverrideCreateClick = vi.fn();
+    const handleResultDownloadClick = vi.fn();
+    const handleTicketCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

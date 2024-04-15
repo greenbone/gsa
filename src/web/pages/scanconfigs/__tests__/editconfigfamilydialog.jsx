@@ -55,9 +55,9 @@ const selected = {
 
 describe('EditConfigFamilyDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {baseElement} = render(
@@ -83,9 +83,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should render loading indicator', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {baseElement, getByTestId} = render(
@@ -113,9 +113,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {getByTestId} = render(
@@ -145,9 +145,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {getByTestId} = render(
@@ -175,9 +175,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should allow to change data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {baseElement, getByTestId} = render(
@@ -215,9 +215,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should call click handler', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {getAllByTestId} = render(
@@ -243,9 +243,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should sort table', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleOpenEditNvtDetailsDialog = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleOpenEditNvtDetailsDialog = vi.fn();
 
     const newSelected = {
       1234: 0,

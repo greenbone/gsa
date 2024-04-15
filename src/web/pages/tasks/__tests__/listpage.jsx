@@ -37,7 +37,7 @@ import TaskPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const lastReport = {
   report: {
@@ -66,11 +66,11 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -80,7 +80,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
+const getDashboardSetting = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -88,11 +88,11 @@ const getDashboardSetting = jest.fn().mockResolvedValue({
   },
 });
 
-const getUserSetting = jest.fn().mockResolvedValue({
+const getUserSetting = vi.fn().mockResolvedValue({
   filter: null,
 });
 
-const getAggregates = jest.fn().mockResolvedValue({
+const getAggregates = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -100,7 +100,7 @@ const getAggregates = jest.fn().mockResolvedValue({
   },
 });
 
-const getTasks = jest.fn().mockResolvedValue({
+const getTasks = vi.fn().mockResolvedValue({
   data: [task],
   meta: {
     filter: Filter.fromString(),
@@ -108,7 +108,7 @@ const getTasks = jest.fn().mockResolvedValue({
   },
 });
 
-const getReportFormats = jest.fn().mockResolvedValue({
+const getReportFormats = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -116,7 +116,7 @@ const getReportFormats = jest.fn().mockResolvedValue({
   },
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -231,11 +231,11 @@ describe('TaskPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -314,11 +314,11 @@ describe('TaskPage tests', () => {
 
 describe('TaskPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleAdvancedTaskWizardClick = jest.fn();
-    const handleModifyTaskWizardClick = jest.fn();
-    const handleContainerTaskCreateClick = jest.fn();
-    const handleTaskCreateClick = jest.fn();
-    const handleTaskWizardClick = jest.fn();
+    const handleAdvancedTaskWizardClick = vi.fn();
+    const handleModifyTaskWizardClick = vi.fn();
+    const handleContainerTaskCreateClick = vi.fn();
+    const handleTaskCreateClick = vi.fn();
+    const handleTaskWizardClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -352,11 +352,11 @@ describe('TaskPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleAdvancedTaskWizardClick = jest.fn();
-    const handleModifyTaskWizardClick = jest.fn();
-    const handleContainerTaskCreateClick = jest.fn();
-    const handleTaskCreateClick = jest.fn();
-    const handleTaskWizardClick = jest.fn();
+    const handleAdvancedTaskWizardClick = vi.fn();
+    const handleModifyTaskWizardClick = vi.fn();
+    const handleContainerTaskCreateClick = vi.fn();
+    const handleTaskCreateClick = vi.fn();
+    const handleTaskWizardClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -402,11 +402,11 @@ describe('TaskPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleAdvancedTaskWizardClick = jest.fn();
-    const handleModifyTaskWizardClick = jest.fn();
-    const handleContainerTaskCreateClick = jest.fn();
-    const handleTaskCreateClick = jest.fn();
-    const handleTaskWizardClick = jest.fn();
+    const handleAdvancedTaskWizardClick = vi.fn();
+    const handleModifyTaskWizardClick = vi.fn();
+    const handleContainerTaskCreateClick = vi.fn();
+    const handleTaskCreateClick = vi.fn();
+    const handleTaskWizardClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},

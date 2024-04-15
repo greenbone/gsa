@@ -46,8 +46,8 @@ describe('Report Hosts Tab tests', () => {
   test('should render Report Hosts Tab', () => {
     const {hosts} = getMockReport();
 
-    const onSortChange = jest.fn();
-    const onInteraction = jest.fn();
+    const onSortChange = vi.fn();
+    const onInteraction = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,

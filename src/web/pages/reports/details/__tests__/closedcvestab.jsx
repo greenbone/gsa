@@ -41,8 +41,8 @@ const filter = Filter.fromString(
 describe('Report Closed CVEs Tab tests', () => {
   test('should render Report Closed CVEs Tab', () => {
     const {closedCves} = getMockReport();
-    const onSortChange = jest.fn();
-    const onInteraction = jest.fn();
+    const onSortChange = vi.fn();
+    const onInteraction = vi.fn();
 
     const {render, store} = rendererWith({
       capabilities: caps,

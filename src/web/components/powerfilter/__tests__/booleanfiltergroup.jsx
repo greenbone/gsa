@@ -28,7 +28,7 @@ describe('BooleanFilterGroup tests', () => {
     const filter = Filter.fromString();
     const title = 'foo';
     const name = 'active';
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <BooleanFilterGroup
         filter={filter}
@@ -45,7 +45,7 @@ describe('BooleanFilterGroup tests', () => {
     const filter = Filter.fromString('active=0');
     const title = 'foo';
     const name = 'active';
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {getAllByTestId} = render(
       <BooleanFilterGroup
         filter={filter}
@@ -65,7 +65,7 @@ describe('BooleanFilterGroup tests', () => {
     const filter = Filter.fromString('apply_overrides=0');
     const title = 'foo';
     const name = 'apply_overrides';
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {getAllByTestId} = render(
       <BooleanFilterGroup
         filter={filter}
@@ -85,7 +85,7 @@ describe('BooleanFilterGroup tests', () => {
     const name = 'apply_overrides';
     const filter1 = Filter.fromString('apply_overrides=1');
     const filter2 = Filter.fromString('apply_overrides=0');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {getAllByTestId, rerender} = render(
       <BooleanFilterGroup
         filter={filter1}
@@ -117,7 +117,7 @@ describe('BooleanFilterGroup tests', () => {
     const title = 'foo';
     const name = 'apply_overrides';
     const filter = Filter.fromString('apply_overrides=1');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {getAllByTestId} = render(
       <BooleanFilterGroup
         filter={filter}
@@ -136,7 +136,7 @@ describe('BooleanFilterGroup tests', () => {
     const title = 'foo';
     const name = 'apply_overrides';
     const filter = Filter.fromString('apply_overrides=1');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <BooleanFilterGroup
         name={name}

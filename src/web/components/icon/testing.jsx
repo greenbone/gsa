@@ -33,7 +33,7 @@ export const testIcon = Icon => {
   });
 
   test('should handle click', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(<Icon onClick={handler} value="1" />);
 
     fireEvent.click(element);
@@ -58,7 +58,7 @@ export const testIcon = Icon => {
   });
 
   test('should not call clickhandler when disabled', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(<Icon disabled={true} onClick={handler} />);
 
     fireEvent.click(element);
@@ -72,7 +72,7 @@ export const testIcon = Icon => {
       resolve = res;
     });
 
-    const handler = jest.fn().mockReturnValue(promise);
+    const handler = vi.fn().mockReturnValue(promise);
 
     const {element} = render(
       <Icon title="foo" loadingTitle="bar" onClick={handler} />,

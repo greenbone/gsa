@@ -39,11 +39,11 @@ const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getReportComposerDefaults = jest.fn().mockResolvedValue({
+const getReportComposerDefaults = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -54,13 +54,13 @@ const gmp = {
 
 describe('Report Details ToolBarIcons tests', () => {
   test('should render ToolBarIcons', () => {
-    const showError = jest.fn();
-    const showSuccessMessage = jest.fn();
-    const showErrorMessage = jest.fn();
-    const onAddToAssetsClick = jest.fn();
-    const onInteraction = jest.fn();
-    const onRemoveFromAssetsClick = jest.fn();
-    const onReportDownloadClick = jest.fn();
+    const showError = vi.fn();
+    const showSuccessMessage = vi.fn();
+    const showErrorMessage = vi.fn();
+    const onAddToAssetsClick = vi.fn();
+    const onInteraction = vi.fn();
+    const onRemoveFromAssetsClick = vi.fn();
+    const onReportDownloadClick = vi.fn();
 
     const {report} = getMockReport();
 
@@ -153,13 +153,13 @@ describe('Report Details ToolBarIcons tests', () => {
   });
 
   test('should call click handler', () => {
-    const showError = jest.fn();
-    const showSuccessMessage = jest.fn();
-    const showErrorMessage = jest.fn();
-    const onAddToAssetsClick = jest.fn();
-    const onInteraction = jest.fn();
-    const onRemoveFromAssetsClick = jest.fn();
-    const onReportDownloadClick = jest.fn();
+    const showError = vi.fn();
+    const showSuccessMessage = vi.fn();
+    const showErrorMessage = vi.fn();
+    const onAddToAssetsClick = vi.fn();
+    const onInteraction = vi.fn();
+    const onRemoveFromAssetsClick = vi.fn();
+    const onReportDownloadClick = vi.fn();
 
     const {report} = getMockReport();
 
