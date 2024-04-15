@@ -30,7 +30,7 @@ import RelationSelector from 'web/components/powerfilter/relationselector';
 
 describe('Relation Selector Tests', () => {
   test('should render', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element} = render(
       <RelationSelector relation="<" onChange={onChange} />,
     );
@@ -39,7 +39,7 @@ describe('Relation Selector Tests', () => {
   });
 
   test('should return items', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element, baseElement} = render(
       <RelationSelector relation="<" onChange={onChange} />,
     );
@@ -60,7 +60,7 @@ describe('Relation Selector Tests', () => {
   });
 
   test('should call onChange handler', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element, baseElement} = render(
       <RelationSelector relation="<" onChange={onChange} />,
@@ -76,7 +76,7 @@ describe('Relation Selector Tests', () => {
     expect(onChange).toBeCalledWith('=', undefined);
   });
   test('should change value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     // eslint-disable-next-line no-shadow
     const {baseElement, element, getByTestId} = render(
@@ -97,7 +97,7 @@ describe('Relation Selector Tests', () => {
   });
 
   test('should filter items', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element, baseElement} = render(
       <RelationSelector relation="=" onChange={onChange} />,
     );

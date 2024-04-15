@@ -30,8 +30,8 @@ let handleSave;
 let handleClose;
 
 beforeEach(() => {
-  handleSave = jest.fn();
-  handleClose = jest.fn();
+  handleSave = vi.fn();
+  handleClose = vi.fn();
 });
 
 const schedule = Schedule.fromElement({

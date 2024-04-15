@@ -22,8 +22,8 @@ import {combineReducers, filterIdentifier} from 'web/store/utils';
 describe('store utils module tests', () => {
   describe('combineReducer tests', () => {
     test('should create a combined reducer', () => {
-      const foo = jest.fn();
-      const bar = jest.fn();
+      const foo = vi.fn();
+      const bar = vi.fn();
       const action = {type: 'ipsum'};
 
       const reducer = combineReducers({
@@ -37,8 +37,8 @@ describe('store utils module tests', () => {
     });
 
     test('should pass state[reducerName] to reducers', () => {
-      const foo = jest.fn();
-      const bar = jest.fn();
+      const foo = vi.fn();
+      const bar = vi.fn();
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,
@@ -56,8 +56,8 @@ describe('store utils module tests', () => {
     });
 
     test('should combine state from reducers', () => {
-      const foo = jest.fn().mockReturnValue(99);
-      const bar = jest.fn().mockReturnValue(100);
+      const foo = vi.fn().mockReturnValue(99);
+      const bar = vi.fn().mockReturnValue(100);
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,
@@ -78,8 +78,8 @@ describe('store utils module tests', () => {
     });
 
     test('should drop unknown props from state', () => {
-      const foo = jest.fn().mockReturnValue(99);
-      const bar = jest.fn().mockReturnValue(100);
+      const foo = vi.fn().mockReturnValue(99);
+      const bar = vi.fn().mockReturnValue(100);
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,
@@ -101,8 +101,8 @@ describe('store utils module tests', () => {
     });
 
     test('should allow to return undefined from reducers', () => {
-      const foo = jest.fn().mockReturnValue(undefined);
-      const bar = jest.fn().mockReturnValue(undefined);
+      const foo = vi.fn().mockReturnValue(undefined);
+      const bar = vi.fn().mockReturnValue(undefined);
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,

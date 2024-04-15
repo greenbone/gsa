@@ -28,7 +28,7 @@ const TestUseGmp = () => {
 
 describe('useGmp tests', () => {
   test('should return the current gmp object', () => {
-    const foo = jest.fn().mockReturnValue('foo');
+    const foo = vi.fn().mockReturnValue('foo');
     const gmp = {foo};
 
     const {render} = rendererWith({gmp});

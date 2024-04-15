@@ -28,7 +28,7 @@ const entity = {name: 'entity'};
 
 describe('SVG icon component tests', () => {
   test('should render icon', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
 
     const {element} = render(
       <CloneIcon
@@ -48,7 +48,7 @@ describe('SVG icon component tests', () => {
       res = resolve;
     });
 
-    const handleClick = jest.fn().mockReturnValue(promise);
+    const handleClick = vi.fn().mockReturnValue(promise);
 
     const {element} = render(
       <CloneIcon
@@ -94,7 +94,7 @@ describe('useStateWithMountCheck() hook tests', () => {
 });
 describe('useIsMountedRef() hook tests', () => {
   test('should return false after component is unmounted', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     const MockComponent = () => {
       const isMountedRef = useIsMountedRef();
@@ -113,7 +113,7 @@ describe('useIsMountedRef() hook tests', () => {
   });
 
   test('should return true if component is mounted', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     const MockComponent = () => {
       const isMountedRef = useIsMountedRef();

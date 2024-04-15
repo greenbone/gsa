@@ -16,12 +16,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {expect, afterEach} from 'vitest';
+import {cleanup} from '@testing-library/react';
+import * as matchers from '@testing-library/jest-dom/matchers';
+
 import {initLocale} from 'gmp/locale/lang';
+
+// Extend Vitest's expect method with methods from react-testing-library
+expect.extend(matchers);
+
+// Run cleanup after each test case (e.g., clearing jsdom)
+afterEach(() => {
+  cleanup();
+});
 
 // Avoid "Error: Not implemented: navigation (except hash changes)"
 // It is caused by clicking on <a> elements in tests
 // https://stackoverflow.com/a/68038982/11044073
-HTMLAnchorElement.prototype.click = jest.fn();
+HTMLAnchorElement.prototype.click = vi.fn();
 
 class FakeBackend {
   read(language, namespace, callback) {

@@ -72,8 +72,8 @@ const startTimezone = 'UTC';
 
 describe('AdvancedTaskWizard component tests', () => {
   test('should render full advanced wizard', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -131,8 +131,8 @@ describe('AdvancedTaskWizard component tests', () => {
   });
 
   test('should not render schedule without permission', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: alertCapabilities,
@@ -188,8 +188,8 @@ describe('AdvancedTaskWizard component tests', () => {
   });
 
   test('should not render alert without permission', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: scheduleCapabilities,
@@ -248,8 +248,8 @@ describe('AdvancedTaskWizard component tests', () => {
   });
 
   test('should allow to close the advanced wizard', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -282,8 +282,8 @@ describe('AdvancedTaskWizard component tests', () => {
   });
 
   test('should allow to cancel the advanced wizard', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -316,8 +316,8 @@ describe('AdvancedTaskWizard component tests', () => {
   });
 
   test('should allow to save the advanced wizard', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,

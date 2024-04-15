@@ -35,9 +35,9 @@ const users = [u1, u2];
 
 describe('CreateTicketDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleUserIdChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleUserIdChange = vi.fn();
 
     const {baseElement} = render(
       <CreateTicketDialog
@@ -54,9 +54,9 @@ describe('CreateTicketDialog component tests', () => {
   });
 
   test('should allow to select user', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleUserIdChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleUserIdChange = vi.fn();
 
     const {getByTestId, baseElement} = render(
       <CreateTicketDialog
@@ -81,9 +81,9 @@ describe('CreateTicketDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleUserIdChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleUserIdChange = vi.fn();
 
     const {getByTestId} = render(
       <CreateTicketDialog
@@ -104,9 +104,9 @@ describe('CreateTicketDialog component tests', () => {
   });
 
   test('should allow to save the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleUserIdChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleUserIdChange = vi.fn();
 
     const {getByTestId, baseElement} = render(
       <CreateTicketDialog
@@ -134,9 +134,9 @@ describe('CreateTicketDialog component tests', () => {
   });
 
   test('should not save invalid form states', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleUserIdChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleUserIdChange = vi.fn();
 
     const {getByTestId, baseElement} = render(
       <CreateTicketDialog

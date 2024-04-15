@@ -39,8 +39,8 @@ describe('Report Ports Tab tests', () => {
   test('should render Report Ports Tab', () => {
     const {ports} = getMockReport();
 
-    const onSortChange = jest.fn();
-    const onInteraction = jest.fn();
+    const onSortChange = vi.fn();
+    const onInteraction = vi.fn();
 
     const {render, store} = rendererWith({
       router: true,

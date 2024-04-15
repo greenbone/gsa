@@ -1,0 +1,101 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Spinner tests > should render 1`] = `
+.c0 {
+  border-radius: 2px;
+  border: 1px solid #bfbfbf;
+  background-color: #fff;
+  font-size: 1.1em;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.c1 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+  margin: 0.2em 0;
+  vertical-align: middle;
+  margin-left: 0.4em;
+  margin-right: 22px;
+}
+
+.c2 {
+  background-color: #e5e5e5;
+  color: #7F7F7F;
+  border-left: 1px solid #4C4C4C;
+  width: 16px;
+  height: 50%;
+  font-size: 0.6em;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  right: 0;
+  cursor: default;
+  display: block;
+  overflow: hidden;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.c2:hover {
+  background-color: #11ab51;
+  color: #fff;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c2:active {
+  background-color: #fff;
+  color: #074320;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c3 {
+  border-top-right-radius: 1px;
+  top: 0;
+}
+
+.c4 {
+  border-bottom-right-radius: 1px;
+  bottom: 0;
+}
+
+<span
+  class="c0"
+>
+  <input
+    class="c1"
+    data-testid="spinner-input"
+    maxlength="5"
+    size="4"
+    value="1"
+  />
+  <span
+    class="c2 c3"
+    data-testid="spinner-up"
+  >
+    ▲
+  </span>
+  <span
+    class="c2 c4"
+    data-testid="spinner-down"
+  >
+    ▼
+  </span>
+</span>
+`;

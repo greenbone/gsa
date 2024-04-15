@@ -64,7 +64,7 @@ describe('Schedule model tests', () => {
   test('should handle invalid ical data safely', () => {
     /* eslint-disable no-console */
     const consoleError = console.log;
-    const errorLog = jest.fn();
+    const errorLog = vi.fn();
 
     console.error = errorLog;
 

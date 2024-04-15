@@ -39,7 +39,7 @@ setLocale('en');
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -95,11 +95,11 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getAlert = jest.fn().mockResolvedValue({
+  getAlert = vi.fn().mockResolvedValue({
     data: alert,
   });
 
-  getEntities = jest.fn().mockResolvedValue({
+  getEntities = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -107,11 +107,11 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -264,15 +264,15 @@ describe('Alert Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const clone = jest.fn().mockResolvedValue({
+    const clone = vi.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = jest.fn().mockResolvedValue({
+    const deleteFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = jest.fn().mockResolvedValue({
+    const exportFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -337,11 +337,11 @@ describe('Alert Detailspage tests', () => {
 
 describe('Alert ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleAlertCloneClick = jest.fn();
-    const handleAlertDeleteClick = jest.fn();
-    const handleAlertDownloadClick = jest.fn();
-    const handleAlertEditClick = jest.fn();
-    const handleAlertCreateClick = jest.fn();
+    const handleAlertCloneClick = vi.fn();
+    const handleAlertDeleteClick = vi.fn();
+    const handleAlertDownloadClick = vi.fn();
+    const handleAlertEditClick = vi.fn();
+    const handleAlertCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -376,11 +376,11 @@ describe('Alert ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleAlertCloneClick = jest.fn();
-    const handleAlertDeleteClick = jest.fn();
-    const handleAlertDownloadClick = jest.fn();
-    const handleAlertEditClick = jest.fn();
-    const handleAlertCreateClick = jest.fn();
+    const handleAlertCloneClick = vi.fn();
+    const handleAlertDeleteClick = vi.fn();
+    const handleAlertDownloadClick = vi.fn();
+    const handleAlertEditClick = vi.fn();
+    const handleAlertCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -421,11 +421,11 @@ describe('Alert ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleAlertCloneClick = jest.fn();
-    const handleAlertDeleteClick = jest.fn();
-    const handleAlertDownloadClick = jest.fn();
-    const handleAlertEditClick = jest.fn();
-    const handleAlertCreateClick = jest.fn();
+    const handleAlertCloneClick = vi.fn();
+    const handleAlertDeleteClick = vi.fn();
+    const handleAlertDownloadClick = vi.fn();
+    const handleAlertEditClick = vi.fn();
+    const handleAlertCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -473,11 +473,11 @@ describe('Alert ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers for alert in use', () => {
-    const handleAlertCloneClick = jest.fn();
-    const handleAlertDeleteClick = jest.fn();
-    const handleAlertDownloadClick = jest.fn();
-    const handleAlertEditClick = jest.fn();
-    const handleAlertCreateClick = jest.fn();
+    const handleAlertCloneClick = vi.fn();
+    const handleAlertDeleteClick = vi.fn();
+    const handleAlertDownloadClick = vi.fn();
+    const handleAlertEditClick = vi.fn();
+    const handleAlertCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

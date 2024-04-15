@@ -8,7 +8,6 @@
   },
   "exclude": ["build", "coverage", "node_modules"],
   "typeAcquisition": {
-    "enable": true,
-    "include": ["jest"]
+    "enable": true
   }
 }

@@ -40,7 +40,7 @@ import Detailspage, {ToolBarIcons} from '../detailspage';
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 setLocale('en');
 
@@ -279,23 +279,23 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getConfig = jest.fn().mockResolvedValue({
+const getConfig = vi.fn().mockResolvedValue({
   data: config,
 });
 
-const getSchedule = jest.fn().mockResolvedValue({
+const getSchedule = vi.fn().mockResolvedValue({
   data: schedule,
 });
 
-const getEntities = jest.fn().mockResolvedValue({
+const getEntities = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -305,7 +305,7 @@ const getEntities = jest.fn().mockResolvedValue({
 
 describe('Task Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getTask = jest.fn().mockResolvedValue({
+    const getTask = vi.fn().mockResolvedValue({
       data: task,
     });
 
@@ -406,11 +406,11 @@ describe('Task Detailspage tests', () => {
   });
 
   test('should render user tags tab', () => {
-    const getTask = jest.fn().mockResolvedValue({
+    const getTask = vi.fn().mockResolvedValue({
       data: task2,
     });
 
-    const getTags = jest.fn().mockResolvedValue({
+    const getTags = vi.fn().mockResolvedValue({
       data: [],
       meta: {
         filter: Filter.fromString(),
@@ -471,7 +471,7 @@ describe('Task Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getTask = jest.fn().mockResolvedValue({
+    const getTask = vi.fn().mockResolvedValue({
       data: task2,
     });
 
@@ -525,27 +525,27 @@ describe('Task Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const getTask = jest.fn().mockResolvedValue({
+    const getTask = vi.fn().mockResolvedValue({
       data: task5,
     });
 
-    const clone = jest.fn().mockResolvedValue({
+    const clone = vi.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = jest.fn().mockResolvedValue({
+    const deleteFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = jest.fn().mockResolvedValue({
+    const exportFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const start = jest.fn().mockResolvedValue({
+    const start = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const resume = jest.fn().mockResolvedValue({
+    const resume = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -626,16 +626,16 @@ describe('Task Detailspage tests', () => {
 
 describe('Task ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskCreate = jest.fn();
-    const handleContainerTaskCreate = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskCreate = vi.fn();
+    const handleContainerTaskCreate = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -681,16 +681,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for new task', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskCreate = jest.fn();
-    const handleContainerTaskCreate = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskCreate = vi.fn();
+    const handleContainerTaskCreate = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -776,16 +776,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for running task', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskCreate = jest.fn();
-    const handleContainerTaskCreate = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskCreate = vi.fn();
+    const handleContainerTaskCreate = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -878,16 +878,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for stopped task', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskCreate = jest.fn();
-    const handleContainerTaskCreate = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskCreate = vi.fn();
+    const handleContainerTaskCreate = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -979,16 +979,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for finished task', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskCreate = jest.fn();
-    const handleContainerTaskCreate = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskCreate = vi.fn();
+    const handleContainerTaskCreate = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -1082,16 +1082,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskCreate = jest.fn();
-    const handleContainerTaskCreate = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskCreate = vi.fn();
+    const handleContainerTaskCreate = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -1189,16 +1189,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should render schedule icon if task is scheduled', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskCreate = jest.fn();
-    const handleContainerTaskCreate = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskCreate = vi.fn();
+    const handleContainerTaskCreate = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -1246,16 +1246,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for container task', () => {
-    const handleReportImport = jest.fn();
-    const handleTaskCreate = jest.fn();
-    const handleContainerTaskCreate = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskCreate = vi.fn();
+    const handleContainerTaskCreate = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
 
     const gmp = {
       settings: {manualUrl},

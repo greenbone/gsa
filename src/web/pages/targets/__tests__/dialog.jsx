@@ -61,10 +61,10 @@ const gmp = {settings: {enableGreenboneSensor: true}};
 
 describe('TargetDialog component tests', () => {
   test('should render with default values', () => {
-    const handleClose = jest.fn();
-    const handleChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleCreate = jest.fn();
+    const handleClose = vi.fn();
+    const handleChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleCreate = vi.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -199,10 +199,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('should display value from props', () => {
-    const handleClose = jest.fn();
-    const handleChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleCreate = jest.fn();
+    const handleClose = vi.fn();
+    const handleChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleCreate = vi.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -347,10 +347,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('should allow to change values and save the dialog', () => {
-    const handleClose = jest.fn();
-    const handleChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleCreate = jest.fn();
+    const handleClose = vi.fn();
+    const handleChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleCreate = vi.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -428,10 +428,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('should render elevate privilege option if ssh credential is defined', () => {
-    const handleClose = jest.fn();
-    const handleChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleCreate = jest.fn();
+    const handleClose = vi.fn();
+    const handleChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleCreate = vi.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -476,10 +476,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('ssh elevate credential dropdown should only allow username + password options and remove ssh credential from list', () => {
-    const handleClose = jest.fn();
-    const handleChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleCreate = jest.fn();
+    const handleClose = vi.fn();
+    const handleChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleCreate = vi.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -532,10 +532,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('ssh credential dropdown should remove ssh elevate credential from list', () => {
-    const handleClose = jest.fn();
-    const handleChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleCreate = jest.fn();
+    const handleClose = vi.fn();
+    const handleChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleCreate = vi.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -589,10 +589,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('should disable editing certain fields if target is in use', () => {
-    const handleClose = jest.fn();
-    const handleChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleCreate = jest.fn();
+    const handleClose = vi.fn();
+    const handleChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleCreate = vi.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -653,10 +653,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleChange = jest.fn();
-    const handleSave = jest.fn();
-    const handleCreate = jest.fn();
+    const handleClose = vi.fn();
+    const handleChange = vi.fn();
+    const handleSave = vi.fn();
+    const handleCreate = vi.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 

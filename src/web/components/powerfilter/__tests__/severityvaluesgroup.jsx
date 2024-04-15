@@ -33,7 +33,7 @@ describe('Severity Values Group Tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('severity>3');
     const name = 'severity';
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(
       <SeverityValuesGroup
@@ -48,7 +48,7 @@ describe('Severity Values Group Tests', () => {
   });
 
   test('arguments are processed correctly', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const filter = Filter.fromString('severity=3');
     const name = 'severity';
 
@@ -70,7 +70,7 @@ describe('Severity Values Group Tests', () => {
   });
 
   test('should initialize value with 0 in case no filter value is given', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const filter = Filter.fromString('rows=10');
     const name = 'severity';
 
@@ -90,7 +90,7 @@ describe('Severity Values Group Tests', () => {
   });
 
   test('should change value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const filter = Filter.fromString('severity=3');
     const name = 'severity';
 
@@ -111,7 +111,7 @@ describe('Severity Values Group Tests', () => {
   });
 
   test('should change relationship', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const filter = Filter.fromString('severity=3');
     const name = 'severity';
 

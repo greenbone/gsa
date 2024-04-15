@@ -38,7 +38,7 @@ import ResultsPage from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -123,7 +123,7 @@ let renewSession;
 beforeEach(() => {
   // mock gmp commands
 
-  getResults = jest.fn().mockResolvedValue({
+  getResults = vi.fn().mockResolvedValue({
     data: results,
     meta: {
       filter: Filter.fromString(),
@@ -131,7 +131,7 @@ beforeEach(() => {
     },
   });
 
-  getFilters = jest.fn().mockReturnValue(
+  getFilters = vi.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -141,7 +141,7 @@ beforeEach(() => {
     }),
   );
 
-  getDashboardSetting = jest.fn().mockResolvedValue({
+  getDashboardSetting = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -149,7 +149,7 @@ beforeEach(() => {
     },
   });
 
-  getAggregates = jest.fn().mockResolvedValue({
+  getAggregates = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -157,15 +157,15 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  getSetting = jest.fn().mockResolvedValue({
+  getSetting = vi.fn().mockResolvedValue({
     filter: null,
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -301,7 +301,7 @@ describe('Results listpage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -363,7 +363,7 @@ describe('Results listpage tests', () => {
   });
 
   test('should allow to bulk action on selected results', async () => {
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -443,7 +443,7 @@ describe('Results listpage tests', () => {
   });
 
   test('should allow to bulk action on filtered results', async () => {
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 

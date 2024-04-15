@@ -40,7 +40,7 @@ import Detailspage, {ToolBarIcons} from '../detailspage';
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 setLocale('en');
 
@@ -259,23 +259,23 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getPolicy = jest.fn().mockResolvedValue({
+const getPolicy = vi.fn().mockResolvedValue({
   data: policy,
 });
 
-const getSchedule = jest.fn().mockResolvedValue({
+const getSchedule = vi.fn().mockResolvedValue({
   data: schedule,
 });
 
-const getEntities = jest.fn().mockResolvedValue({
+const getEntities = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -285,7 +285,7 @@ const getEntities = jest.fn().mockResolvedValue({
 
 describe('Audit Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getAudit = jest.fn().mockResolvedValue({
+    const getAudit = vi.fn().mockResolvedValue({
       data: audit,
     });
 
@@ -380,7 +380,7 @@ describe('Audit Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getAudit = jest.fn().mockResolvedValue({
+    const getAudit = vi.fn().mockResolvedValue({
       data: audit2,
     });
 
@@ -428,27 +428,27 @@ describe('Audit Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const getAudit = jest.fn().mockResolvedValue({
+    const getAudit = vi.fn().mockResolvedValue({
       data: audit5,
     });
 
-    const clone = jest.fn().mockResolvedValue({
+    const clone = vi.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = jest.fn().mockResolvedValue({
+    const deleteFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = jest.fn().mockResolvedValue({
+    const exportFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const start = jest.fn().mockResolvedValue({
+    const start = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const resume = jest.fn().mockResolvedValue({
+    const resume = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -523,13 +523,13 @@ describe('Audit Detailspage tests', () => {
 
 describe('Audit ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleAuditCloneClick = jest.fn();
-    const handleAuditDeleteClick = jest.fn();
-    const handleAuditDownloadClick = jest.fn();
-    const handleAuditEditClick = jest.fn();
-    const handleAuditResumeClick = jest.fn();
-    const handleAuditStartClick = jest.fn();
-    const handleAuditStopClick = jest.fn();
+    const handleAuditCloneClick = vi.fn();
+    const handleAuditDeleteClick = vi.fn();
+    const handleAuditDownloadClick = vi.fn();
+    const handleAuditEditClick = vi.fn();
+    const handleAuditResumeClick = vi.fn();
+    const handleAuditStartClick = vi.fn();
+    const handleAuditStopClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -568,13 +568,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for new audit', () => {
-    const handleAuditCloneClick = jest.fn();
-    const handleAuditDeleteClick = jest.fn();
-    const handleAuditDownloadClick = jest.fn();
-    const handleAuditEditClick = jest.fn();
-    const handleAuditResumeClick = jest.fn();
-    const handleAuditStartClick = jest.fn();
-    const handleAuditStopClick = jest.fn();
+    const handleAuditCloneClick = vi.fn();
+    const handleAuditDeleteClick = vi.fn();
+    const handleAuditDownloadClick = vi.fn();
+    const handleAuditEditClick = vi.fn();
+    const handleAuditResumeClick = vi.fn();
+    const handleAuditStartClick = vi.fn();
+    const handleAuditStopClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -635,13 +635,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for running audit', () => {
-    const handleAuditCloneClick = jest.fn();
-    const handleAuditDeleteClick = jest.fn();
-    const handleAuditDownloadClick = jest.fn();
-    const handleAuditEditClick = jest.fn();
-    const handleAuditResumeClick = jest.fn();
-    const handleAuditStartClick = jest.fn();
-    const handleAuditStopClick = jest.fn();
+    const handleAuditCloneClick = vi.fn();
+    const handleAuditDeleteClick = vi.fn();
+    const handleAuditDownloadClick = vi.fn();
+    const handleAuditEditClick = vi.fn();
+    const handleAuditResumeClick = vi.fn();
+    const handleAuditStartClick = vi.fn();
+    const handleAuditStopClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -709,13 +709,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for stopped audit', () => {
-    const handleAuditCloneClick = jest.fn();
-    const handleAuditDeleteClick = jest.fn();
-    const handleAuditDownloadClick = jest.fn();
-    const handleAuditEditClick = jest.fn();
-    const handleAuditResumeClick = jest.fn();
-    const handleAuditStartClick = jest.fn();
-    const handleAuditStopClick = jest.fn();
+    const handleAuditCloneClick = vi.fn();
+    const handleAuditDeleteClick = vi.fn();
+    const handleAuditDownloadClick = vi.fn();
+    const handleAuditEditClick = vi.fn();
+    const handleAuditResumeClick = vi.fn();
+    const handleAuditStartClick = vi.fn();
+    const handleAuditStopClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -782,13 +782,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for finished audit', () => {
-    const handleAuditCloneClick = jest.fn();
-    const handleAuditDeleteClick = jest.fn();
-    const handleAuditDownloadClick = jest.fn();
-    const handleAuditEditClick = jest.fn();
-    const handleAuditResumeClick = jest.fn();
-    const handleAuditStartClick = jest.fn();
-    const handleAuditStopClick = jest.fn();
+    const handleAuditCloneClick = vi.fn();
+    const handleAuditDeleteClick = vi.fn();
+    const handleAuditDownloadClick = vi.fn();
+    const handleAuditEditClick = vi.fn();
+    const handleAuditResumeClick = vi.fn();
+    const handleAuditStartClick = vi.fn();
+    const handleAuditStopClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -855,13 +855,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleAuditCloneClick = jest.fn();
-    const handleAuditDeleteClick = jest.fn();
-    const handleAuditDownloadClick = jest.fn();
-    const handleAuditEditClick = jest.fn();
-    const handleAuditResumeClick = jest.fn();
-    const handleAuditStartClick = jest.fn();
-    const handleAuditStopClick = jest.fn();
+    const handleAuditCloneClick = vi.fn();
+    const handleAuditDeleteClick = vi.fn();
+    const handleAuditDownloadClick = vi.fn();
+    const handleAuditEditClick = vi.fn();
+    const handleAuditResumeClick = vi.fn();
+    const handleAuditStartClick = vi.fn();
+    const handleAuditStopClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -937,13 +937,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should render schedule icon if audit is scheduled', () => {
-    const handleAuditCloneClick = jest.fn();
-    const handleAuditDeleteClick = jest.fn();
-    const handleAuditDownloadClick = jest.fn();
-    const handleAuditEditClick = jest.fn();
-    const handleAuditResumeClick = jest.fn();
-    const handleAuditStartClick = jest.fn();
-    const handleAuditStopClick = jest.fn();
+    const handleAuditCloneClick = vi.fn();
+    const handleAuditDeleteClick = vi.fn();
+    const handleAuditDownloadClick = vi.fn();
+    const handleAuditEditClick = vi.fn();
+    const handleAuditResumeClick = vi.fn();
+    const handleAuditStartClick = vi.fn();
+    const handleAuditStopClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

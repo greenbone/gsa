@@ -27,11 +27,11 @@ describe('log tests', () => {
   beforeEach(() => {
     origConsole = global.console;
     testConsole = {
-      error: jest.fn(),
-      warn: jest.fn(),
-      info: jest.fn(),
-      debug: jest.fn(),
-      trace: jest.fn(),
+      error: vi.fn(),
+      warn: vi.fn(),
+      info: vi.fn(),
+      debug: vi.fn(),
+      trace: vi.fn(),
     };
 
     global.console = testConsole;

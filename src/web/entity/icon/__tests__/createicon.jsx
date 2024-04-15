@@ -31,7 +31,7 @@ describe('Entity CreateIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
     const entity = Task.fromElement({});
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 

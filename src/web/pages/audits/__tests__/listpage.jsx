@@ -38,7 +38,7 @@ import AuditPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const lastReport = {
   report: {
@@ -66,15 +66,15 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getSetting = jest.fn().mockResolvedValue({
+const getSetting = vi.fn().mockResolvedValue({
   filter: null,
 });
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -84,7 +84,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getAudits = jest.fn().mockResolvedValue({
+const getAudits = vi.fn().mockResolvedValue({
   data: [audit],
   meta: {
     filter: Filter.fromString(),
@@ -92,7 +92,7 @@ const getAudits = jest.fn().mockResolvedValue({
   },
 });
 
-const getReportFormats = jest.fn().mockResolvedValue({
+const getReportFormats = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -100,7 +100,7 @@ const getReportFormats = jest.fn().mockResolvedValue({
   },
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -158,11 +158,11 @@ describe('AuditPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -235,7 +235,7 @@ describe('AuditPage tests', () => {
 
 describe('AuditPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleAuditCreateClick = jest.fn();
+    const handleAuditCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -263,7 +263,7 @@ describe('AuditPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleAuditCreateClick = jest.fn();
+    const handleAuditCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -287,7 +287,7 @@ describe('AuditPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleAuditCreateClick = jest.fn();
+    const handleAuditCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},

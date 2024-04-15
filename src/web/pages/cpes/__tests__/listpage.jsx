@@ -36,7 +36,7 @@ import CpesPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -70,7 +70,7 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getCpes = jest.fn().mockResolvedValue({
+  getCpes = vi.fn().mockResolvedValue({
     data: [cpe],
     meta: {
       filter: Filter.fromString(),
@@ -78,7 +78,7 @@ beforeEach(() => {
     },
   });
 
-  getFilters = jest.fn().mockReturnValue(
+  getFilters = vi.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -88,7 +88,7 @@ beforeEach(() => {
     }),
   );
 
-  getDashboardSetting = jest.fn().mockResolvedValue({
+  getDashboardSetting = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -96,7 +96,7 @@ beforeEach(() => {
     },
   });
 
-  getAggregates = jest.fn().mockResolvedValue({
+  getAggregates = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -104,15 +104,15 @@ beforeEach(() => {
     },
   });
 
-  getSetting = jest.fn().mockResolvedValue({
+  getSetting = vi.fn().mockResolvedValue({
     filter: null,
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -215,11 +215,11 @@ describe('CpesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -287,11 +287,11 @@ describe('CpesPage tests', () => {
   });
 
   test('should allow to bulk action on selected cpes', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
+    const deleteByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -374,11 +374,11 @@ describe('CpesPage tests', () => {
   });
 
   test('should allow to bulk action on filtered cpes', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 

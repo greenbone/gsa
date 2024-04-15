@@ -1,0 +1,462 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Box tests > should render 1`] = `
+.c0 {
+  border: 1px solid #bfbfbf;
+  border-radius: 2px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 1px 5px;
+  background-color: #fff;
+  color: #000;
+  font-weight: normal;
+}
+
+<div
+  class="c0"
+/>
+`;
+
+exports[`Box tests > should render disabled 1`] = `
+.c0 {
+  border: 1px solid #bfbfbf;
+  border-radius: 2px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 1px 5px;
+  background-color: #fff;
+  color: #000;
+  font-weight: normal;
+  background-color: #f3f3f3;
+}
+
+<div
+  class="c0"
+  disabled=""
+/>
+`;
+
+exports[`Box tests > should render opened 1`] = `
+.c0 {
+  border: 1px solid #bfbfbf;
+  border-radius: 2px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 1px 5px;
+  background-color: #fff;
+  color: #000;
+  font-weight: normal;
+  border-radius: 2px 2px 0 0;
+}
+
+<div
+  class="c0"
+/>
+`;
+
+exports[`Input tests > should render 1`] = `
+.c0 {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 1px;
+  margin: 5px;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+<input
+  class="c0"
+/>
+`;
+
+exports[`Item tests > should render 1`] = `
+.c0 {
+  padding: 1px 5px;
+  cursor: pointer;
+}
+
+.c0:hover {
+  background-color: #77acf7;
+  color: #fff;
+}
+
+<span
+  class="c0"
+/>
+`;
+
+exports[`Item tests > should render active 1`] = `
+.c0 {
+  padding: 1px 5px;
+  cursor: pointer;
+  background-color: #77acf7;
+  color: #fff;
+}
+
+.c0:hover {
+  background-color: #77acf7;
+  color: #fff;
+}
+
+<span
+  class="c0"
+/>
+`;
+
+exports[`Item tests > should render selected 1`] = `
+.c0 {
+  padding: 1px 5px;
+  cursor: pointer;
+  background-color: #e5e5e5;
+}
+
+.c0:hover {
+  background-color: #77acf7;
+  color: #fff;
+}
+
+<span
+  class="c0"
+/>
+`;
+
+exports[`ItemContainer tests > should render 1`] = `
+.c0 {
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+<div
+  class="c0"
+/>
+`;
+
+exports[`Menu tests > should render 1`] = `
+.c0 {
+  outline: 0;
+  border-radius: 0 0 4px 4px;
+  -webkit-transition: opacity 0.1s ease;
+  transition: opacity 0.1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+  border: 1px solid #bfbfbf;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: absolute;
+  z-index: 600;
+  margin-top: -1px;
+  box-sizing: border-box;
+  top: 0px;
+  left: 0px;
+  white-space: nowrap;
+}
+
+<div
+  class="c0"
+  data-testid="select-menu"
+  right="0"
+  width="0"
+  x="0"
+  y="0"
+/>
+`;
+
+exports[`Menu tests > should render with open direction downwards 1`] = `
+.c0 {
+  outline: 0;
+  border-radius: 0 0 4px 4px;
+  -webkit-transition: opacity 0.1s ease;
+  transition: opacity 0.1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+  border: 1px solid #bfbfbf;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: absolute;
+  z-index: 600;
+  margin-top: -1px;
+  box-sizing: border-box;
+  top: 120px;
+  left: 50px;
+  white-space: nowrap;
+}
+
+<div
+  class="c0"
+  data-testid="select-menu"
+  right="-10"
+  width="100"
+  x="50"
+  y="120"
+/>
+`;
+
+exports[`Menu tests > should render with open direction upwards 1`] = `
+.c0 {
+  outline: 0;
+  border-radius: 0 0 4px 4px;
+  -webkit-transition: opacity 0.1s ease;
+  transition: opacity 0.1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+  border: 1px solid #bfbfbf;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: absolute;
+  z-index: 600;
+  margin-top: -1px;
+  box-sizing: border-box;
+  top: 25px;
+  left: 50px;
+  white-space: nowrap;
+}
+
+<div
+  class="c0"
+  data-testid="select-menu"
+  right="-10"
+  width="100"
+  x="50"
+  y="25"
+/>
+`;
+
+exports[`Menu tests > should render with position adjust 1`] = `
+.c0 {
+  outline: 0;
+  border-radius: 0 0 4px 4px;
+  -webkit-transition: opacity 0.1s ease;
+  transition: opacity 0.1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+  border: 1px solid #bfbfbf;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: absolute;
+  z-index: 600;
+  margin-top: -1px;
+  box-sizing: border-box;
+  top: 0px;
+  left: 0px;
+  width: 0px;
+}
+
+<div
+  class="c0"
+  data-testid="select-menu"
+  right="0"
+  width="0"
+  x="0"
+  y="0"
+/>
+`;
+
+exports[`Menu tests > should render with position reference to parent element 1`] = `
+.c0 {
+  outline: 0;
+  border-radius: 0 0 4px 4px;
+  -webkit-transition: opacity 0.1s ease;
+  transition: opacity 0.1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+  border: 1px solid #bfbfbf;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: absolute;
+  z-index: 600;
+  margin-top: -1px;
+  box-sizing: border-box;
+  top: 120px;
+  left: 50px;
+  white-space: nowrap;
+}
+
+<div
+  class="c0"
+  data-testid="select-menu"
+  right="-10"
+  width="100"
+  x="50"
+  y="120"
+/>
+`;
+
+exports[`Menu tests > should render with position right 1`] = `
+.c0 {
+  outline: 0;
+  border-radius: 0 0 4px 4px;
+  -webkit-transition: opacity 0.1s ease;
+  transition: opacity 0.1s ease;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+  border: 1px solid #bfbfbf;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: absolute;
+  z-index: 600;
+  margin-top: -1px;
+  box-sizing: border-box;
+  top: 0px;
+  right: 0px;
+  white-space: nowrap;
+}
+
+<div
+  class="c0"
+  data-testid="select-menu"
+  right="0"
+  width="0"
+  x="0"
+  y="0"
+/>
+`;
+
+exports[`SelectContainer tests > should render 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: relative;
+  width: 100px;
+}
+
+<div
+  class="c0"
+  width="100px"
+/>
+`;
+
+exports[`SelectValue tests > should render 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+<div
+  class="c0"
+/>
+`;
+
+exports[`SelectValue tests > should render disabled 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: default;
+}
+
+<div
+  class="c0"
+  disabled=""
+/>
+`;

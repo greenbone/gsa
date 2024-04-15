@@ -42,7 +42,7 @@ describe('InfoPanel tests', () => {
   });
 
   test('should show close button if handler is defined', () => {
-    const handleCloseClick = jest.fn();
+    const handleCloseClick = vi.fn();
     const {element, queryByRole} = render(
       <InfoPanel
         heading="heading text"
@@ -59,7 +59,7 @@ describe('InfoPanel tests', () => {
   });
 
   test('should render blue if info', () => {
-    const handleCloseClick = jest.fn();
+    const handleCloseClick = vi.fn();
     const {element, queryByRole, getByTestId} = render(
       <InfoPanel
         heading="heading text"
@@ -78,7 +78,7 @@ describe('InfoPanel tests', () => {
   });
 
   test('should render red if warning', () => {
-    const handleCloseClick = jest.fn();
+    const handleCloseClick = vi.fn();
     const {element, queryByRole, getByTestId} = render(
       <InfoPanel
         isWarning={true}
@@ -98,7 +98,7 @@ describe('InfoPanel tests', () => {
   });
 
   test('should call click handler', () => {
-    const handleCloseClick = jest.fn();
+    const handleCloseClick = vi.fn();
     const {queryByRole} = render(
       <InfoPanel
         heading="heading text"

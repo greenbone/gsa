@@ -34,8 +34,8 @@ setLocale('en');
 const config = ReportConfig.fromElement(mockReportConfig);
 describe('Edit Report Config Dialog component tests', () => {
   test('should render dialog with disabled report format selection', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -67,8 +67,8 @@ describe('Edit Report Config Dialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -111,8 +111,8 @@ describe('Edit Report Config Dialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -137,9 +137,9 @@ describe('Edit Report Config Dialog component tests', () => {
   });
 
   test('should allow to change name, comment and params', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleValueChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleValueChange = vi.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -227,9 +227,9 @@ describe('Edit Report Config Dialog component tests', () => {
   });
 
   test('should be able to toggle which params use default value', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
-    const handleValueChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
+    const handleValueChange = vi.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -299,8 +299,8 @@ describe('Edit Report Config Dialog component tests', () => {
 
 describe('New Report Config Dialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -325,8 +325,8 @@ describe('New Report Config Dialog component tests', () => {
   });
 
   test('should allow to change name, comment, report_format and params', async () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
     const mockReportFormatDetails = ReportFormat.fromElement({
       _id: '1234567',
       name: 'example-configurable-2',
@@ -362,7 +362,7 @@ describe('New Report Config Dialog component tests', () => {
       ],
     });
 
-    const getReportFormat = jest.fn().mockResolvedValue({
+    const getReportFormat = vi.fn().mockResolvedValue({
       data: mockReportFormatDetails,
     });
 
@@ -375,7 +375,7 @@ describe('New Report Config Dialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true, gmp});
 
-    const handleValueChange = jest.fn();
+    const handleValueChange = vi.fn();
 
     const {baseElement} = render(
       <ReportConfigDialog

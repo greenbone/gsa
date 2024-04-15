@@ -36,7 +36,7 @@ describe('Task ResumeIcon component tests', () => {
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -61,7 +61,7 @@ describe('Task ResumeIcon component tests', () => {
       target: {_id: '123'},
       permissions: {permission: [{name: 'get_task'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -89,7 +89,7 @@ describe('Task ResumeIcon component tests', () => {
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -115,7 +115,7 @@ describe('Task ResumeIcon component tests', () => {
       permissions: {permission: [{name: 'get_task'}]},
       usage_type: 'audit',
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -147,7 +147,7 @@ describe('Task ResumeIcon component tests', () => {
       permissions: {permission: [{name: 'everything'}]},
     };
     const task = Task.fromElement(elem);
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -172,7 +172,7 @@ describe('Task ResumeIcon component tests', () => {
       permissions: {permission: [{name: 'everything'}]},
     };
     const task = Task.fromElement(elem);
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 

@@ -76,10 +76,10 @@ const filter = Filter.fromString('rows=2');
 
 describe('Scan Config table tests', () => {
   test('should render', () => {
-    const handleReportConfigClone = jest.fn();
-    const handleReportConfigDelete = jest.fn();
-    const handleReportConfigDownload = jest.fn();
-    const handleReportConfigEdit = jest.fn();
+    const handleReportConfigClone = vi.fn();
+    const handleReportConfigDelete = vi.fn();
+    const handleReportConfigDownload = vi.fn();
+    const handleReportConfigEdit = vi.fn();
 
     const gmp = {
       settings: {},
@@ -114,10 +114,10 @@ describe('Scan Config table tests', () => {
   });
 
   test('should unfold all details', () => {
-    const handleReportConfigClone = jest.fn();
-    const handleReportConfigDelete = jest.fn();
-    const handleReportConfigDownload = jest.fn();
-    const handleReportConfigEdit = jest.fn();
+    const handleReportConfigClone = vi.fn();
+    const handleReportConfigDelete = vi.fn();
+    const handleReportConfigDownload = vi.fn();
+    const handleReportConfigEdit = vi.fn();
 
     const gmp = {
       settings: {},
@@ -153,10 +153,10 @@ describe('Scan Config table tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleReportConfigClone = jest.fn();
-    const handleReportConfigDelete = jest.fn();
-    const handleReportConfigDownload = jest.fn();
-    const handleReportConfigEdit = jest.fn();
+    const handleReportConfigClone = vi.fn();
+    const handleReportConfigDelete = vi.fn();
+    const handleReportConfigDownload = vi.fn();
+    const handleReportConfigEdit = vi.fn();
 
     const gmp = {
       settings: {},

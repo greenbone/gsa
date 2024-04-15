@@ -40,7 +40,7 @@ setLocale('en');
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -71,18 +71,18 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
 
 describe('CPE Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getCpe = jest.fn().mockResolvedValue({
+    const getCpe = vi.fn().mockResolvedValue({
       data: cpe,
     });
 
@@ -164,11 +164,11 @@ describe('CPE Detailspage tests', () => {
   });
 
   test('should render user tags tab', async () => {
-    const getCpe = jest.fn().mockResolvedValue({
+    const getCpe = vi.fn().mockResolvedValue({
       data: cpe,
     });
 
-    const getTags = jest.fn().mockResolvedValue({
+    const getTags = vi.fn().mockResolvedValue({
       data: [],
       meta: {
         filter: Filter.fromString(),
@@ -212,11 +212,11 @@ describe('CPE Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const exportFunc = jest.fn().mockResolvedValue({
+    const exportFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const getCpe = jest.fn().mockReturnValue(
+    const getCpe = vi.fn().mockReturnValue(
       Promise.resolve({
         data: cpe,
       }),
@@ -262,7 +262,7 @@ describe('CPE Detailspage tests', () => {
 
 describe('CPEs ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleCpeDownload = jest.fn();
+    const handleCpeDownload = vi.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},
@@ -288,7 +288,7 @@ describe('CPEs ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleCpeDownload = jest.fn();
+    const handleCpeDownload = vi.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},

@@ -37,7 +37,7 @@ import CvesPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const cve = Cve.fromElement({
   _id: 'CVE-2020-9992',
@@ -61,7 +61,7 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getCves = jest.fn().mockResolvedValue({
+  getCves = vi.fn().mockResolvedValue({
     data: [cve],
     meta: {
       filter: Filter.fromString(),
@@ -69,7 +69,7 @@ beforeEach(() => {
     },
   });
 
-  getFilters = jest.fn().mockReturnValue(
+  getFilters = vi.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -79,7 +79,7 @@ beforeEach(() => {
     }),
   );
 
-  getDashboardSetting = jest.fn().mockResolvedValue({
+  getDashboardSetting = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -87,7 +87,7 @@ beforeEach(() => {
     },
   });
 
-  getAggregates = jest.fn().mockResolvedValue({
+  getAggregates = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -95,15 +95,15 @@ beforeEach(() => {
     },
   });
 
-  getSetting = jest.fn().mockResolvedValue({
+  getSetting = vi.fn().mockResolvedValue({
     filter: null,
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -206,11 +206,11 @@ describe('CvesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -278,11 +278,11 @@ describe('CvesPage tests', () => {
   });
 
   test('should allow to bulk action on selected cves', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
+    const deleteByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -365,11 +365,11 @@ describe('CvesPage tests', () => {
   });
 
   test('should allow to bulk action on filtered cves', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 

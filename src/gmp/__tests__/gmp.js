@@ -42,7 +42,7 @@ describe('Gmp tests', () => {
 
   describe('login tests', () => {
     test('should login user', () => {
-      const request = jest.fn().mockResolvedValue({
+      const request = vi.fn().mockResolvedValue({
         data: {
           token: 'foo',
         },
@@ -68,7 +68,7 @@ describe('Gmp tests', () => {
     });
 
     test('should not login if request fails', () => {
-      const request = jest.fn().mockRejectedValue({
+      const request = vi.fn().mockRejectedValue({
         message: 'An error',
       });
       const settings = {};
@@ -123,7 +123,7 @@ describe('Gmp tests', () => {
     test('should call logout handlers if logged in', () => {
       const settings = {token: 'foo'};
       const gmp = new Gmp(settings);
-      const handler = jest.fn();
+      const handler = vi.fn();
       const unsub = gmp.subscribeToLogout(handler);
 
       expect(gmp.isLoggedIn()).toEqual(true);
@@ -139,7 +139,7 @@ describe('Gmp tests', () => {
     test('should call logout handlers if logged out', () => {
       const settings = {};
       const gmp = new Gmp(settings);
-      const handler = jest.fn();
+      const handler = vi.fn();
       const unsub = gmp.subscribeToLogout(handler);
 
       expect(gmp.isLoggedIn()).toEqual(false);
@@ -155,7 +155,7 @@ describe('Gmp tests', () => {
 
   describe('doLogout tests', () => {
     test('should logout user', () => {
-      const request = jest.fn().mockResolvedValue({
+      const request = vi.fn().mockResolvedValue({
         data: {
           token: 'foo',
         },
@@ -184,7 +184,7 @@ describe('Gmp tests', () => {
     });
 
     test('should notify handler on logout success', () => {
-      const request = jest.fn().mockResolvedValue({
+      const request = vi.fn().mockResolvedValue({
         data: {},
       });
       const settings = {token: 'foo', apiServer: 'localhost'};
@@ -193,7 +193,7 @@ describe('Gmp tests', () => {
         request,
       };
 
-      const handler = jest.fn();
+      const handler = vi.fn();
 
       const gmp = new Gmp(settings, http);
 
@@ -209,7 +209,7 @@ describe('Gmp tests', () => {
     });
 
     test('should ignore logout api call failure', () => {
-      const request = jest.fn().mockRejectedValue({
+      const request = vi.fn().mockRejectedValue({
         message: 'foo',
       });
       const settings = {
@@ -222,7 +222,7 @@ describe('Gmp tests', () => {
         request,
       };
 
-      const handler = jest.fn();
+      const handler = vi.fn();
 
       const gmp = new Gmp(settings, http);
 
@@ -238,7 +238,7 @@ describe('Gmp tests', () => {
     });
 
     test('should not do logout if not logged int', () => {
-      const request = jest.fn().mockResolvedValue({
+      const request = vi.fn().mockResolvedValue({
         data: {},
       });
       const settings = {apiServer: 'localhost'};
@@ -247,7 +247,7 @@ describe('Gmp tests', () => {
         request,
       };
 
-      const handler = jest.fn();
+      const handler = vi.fn();
 
       const gmp = new Gmp(settings, http);
 

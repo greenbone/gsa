@@ -65,9 +65,9 @@ const filter = Filter.fromString('rows=2');
 
 describe('TlsCertificates table tests', () => {
   test('should render', () => {
-    const handleTlsCertificateDelete = jest.fn();
-    const handleTlsCertificateDownload = jest.fn();
-    const handleTlsCertificateExport = jest.fn();
+    const handleTlsCertificateDelete = vi.fn();
+    const handleTlsCertificateDownload = vi.fn();
+    const handleTlsCertificateExport = vi.fn();
 
     const gmp = {
       settings: {},
@@ -103,10 +103,10 @@ describe('TlsCertificates table tests', () => {
   });
 
   test('should unfold all details', () => {
-    const handleTlsCertificateDelete = jest.fn();
-    const handleTlsCertificateDownload = jest.fn();
-    const handleTlsCertificateExport = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleTlsCertificateDelete = vi.fn();
+    const handleTlsCertificateDownload = vi.fn();
+    const handleTlsCertificateExport = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const gmp = {
       settings: {},
@@ -146,10 +146,10 @@ describe('TlsCertificates table tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleTlsCertificateDelete = jest.fn();
-    const handleTlsCertificateDownload = jest.fn();
-    const handleTlsCertificateExport = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleTlsCertificateDelete = vi.fn();
+    const handleTlsCertificateDownload = vi.fn();
+    const handleTlsCertificateExport = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const gmp = {
       settings: {},

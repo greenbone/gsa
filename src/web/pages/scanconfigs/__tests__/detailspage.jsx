@@ -38,7 +38,7 @@ import Detailspage, {ToolBarIcons} from '../detailspage';
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 setLocale('en');
 
@@ -217,15 +217,15 @@ const entityType = 'scanconfig';
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getPermissions = jest.fn().mockResolvedValue({
+const getPermissions = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -235,7 +235,7 @@ const getPermissions = jest.fn().mockResolvedValue({
 
 describe('Scan Config Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getConfig = jest.fn().mockResolvedValue({
+    const getConfig = vi.fn().mockResolvedValue({
       data: config,
     });
 
@@ -302,7 +302,7 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render nvt families tab', () => {
-    const getConfig = jest.fn().mockResolvedValue({
+    const getConfig = vi.fn().mockResolvedValue({
       data: config,
     });
 
@@ -386,7 +386,7 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render nvt preferences tab', () => {
-    const getConfig = jest.fn().mockResolvedValue({
+    const getConfig = vi.fn().mockResolvedValue({
       data: config,
     });
 
@@ -443,11 +443,11 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render user tags tab', () => {
-    const getConfig = jest.fn().mockResolvedValue({
+    const getConfig = vi.fn().mockResolvedValue({
       data: config,
     });
 
-    const getTags = jest.fn().mockResolvedValue({
+    const getTags = vi.fn().mockResolvedValue({
       data: [],
       meta: {
         filter: Filter.fromString(),
@@ -494,7 +494,7 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getConfig = jest.fn().mockResolvedValue({
+    const getConfig = vi.fn().mockResolvedValue({
       data: config,
     });
 
@@ -534,32 +534,32 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const getConfig = jest.fn().mockReturnValue(
+    const getConfig = vi.fn().mockReturnValue(
       Promise.resolve({
         data: config,
       }),
     );
-    const clone = jest.fn().mockReturnValue(
+    const clone = vi.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = jest.fn().mockReturnValue(
+    const getNvtFamilies = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = jest.fn().mockReturnValue(
+    const getAllScanners = vi.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
+    const deleteFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = jest.fn().mockReturnValue(
+    const exportFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -631,33 +631,33 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should not call commands without permission', async () => {
-    const getConfig = jest.fn().mockReturnValue(
+    const getConfig = vi.fn().mockReturnValue(
       Promise.resolve({
         data: config2,
       }),
     );
 
-    const clone = jest.fn().mockReturnValue(
+    const clone = vi.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = jest.fn().mockReturnValue(
+    const getNvtFamilies = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = jest.fn().mockReturnValue(
+    const getAllScanners = vi.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
+    const deleteFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = jest.fn().mockReturnValue(
+    const exportFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -739,33 +739,33 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should (not) call commands if config is in use', async () => {
-    const getConfig = jest.fn().mockReturnValue(
+    const getConfig = vi.fn().mockReturnValue(
       Promise.resolve({
         data: config3,
       }),
     );
 
-    const clone = jest.fn().mockReturnValue(
+    const clone = vi.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = jest.fn().mockReturnValue(
+    const getNvtFamilies = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = jest.fn().mockReturnValue(
+    const getAllScanners = vi.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
+    const deleteFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = jest.fn().mockReturnValue(
+    const exportFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -838,33 +838,33 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should (not) call commands if config is not writable', async () => {
-    const getConfig = jest.fn().mockReturnValue(
+    const getConfig = vi.fn().mockReturnValue(
       Promise.resolve({
         data: config4,
       }),
     );
 
-    const clone = jest.fn().mockReturnValue(
+    const clone = vi.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = jest.fn().mockReturnValue(
+    const getNvtFamilies = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = jest.fn().mockReturnValue(
+    const getAllScanners = vi.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = jest.fn().mockReturnValue(
+    const deleteFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = jest.fn().mockReturnValue(
+    const exportFunc = vi.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -941,12 +941,12 @@ describe('Scan Config Detailspage tests', () => {
 
 describe('Scan Config ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleScanConfigCreate = jest.fn();
-    const handleScanConfigClone = jest.fn();
-    const handleScanConfigDelete = jest.fn();
-    const handleScanConfigDownload = jest.fn();
-    const handleScanConfigEdit = jest.fn();
-    const handleScanConfigImport = jest.fn();
+    const handleScanConfigCreate = vi.fn();
+    const handleScanConfigClone = vi.fn();
+    const handleScanConfigDelete = vi.fn();
+    const handleScanConfigDownload = vi.fn();
+    const handleScanConfigEdit = vi.fn();
+    const handleScanConfigImport = vi.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},
@@ -982,12 +982,12 @@ describe('Scan Config ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleScanConfigCreate = jest.fn();
-    const handleScanConfigClone = jest.fn();
-    const handleScanConfigDelete = jest.fn();
-    const handleScanConfigDownload = jest.fn();
-    const handleScanConfigEdit = jest.fn();
-    const handleScanConfigImport = jest.fn();
+    const handleScanConfigCreate = vi.fn();
+    const handleScanConfigClone = vi.fn();
+    const handleScanConfigDelete = vi.fn();
+    const handleScanConfigDownload = vi.fn();
+    const handleScanConfigEdit = vi.fn();
+    const handleScanConfigImport = vi.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},
@@ -1038,12 +1038,12 @@ describe('Scan Config ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleScanConfigCreate = jest.fn();
-    const handleScanConfigClone = jest.fn();
-    const handleScanConfigDelete = jest.fn();
-    const handleScanConfigDownload = jest.fn();
-    const handleScanConfigEdit = jest.fn();
-    const handleScanConfigImport = jest.fn();
+    const handleScanConfigCreate = vi.fn();
+    const handleScanConfigClone = vi.fn();
+    const handleScanConfigDelete = vi.fn();
+    const handleScanConfigDownload = vi.fn();
+    const handleScanConfigEdit = vi.fn();
+    const handleScanConfigImport = vi.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},
@@ -1098,12 +1098,12 @@ describe('Scan Config ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers if config is in use', () => {
-    const handleScanConfigCreate = jest.fn();
-    const handleScanConfigClone = jest.fn();
-    const handleScanConfigDelete = jest.fn();
-    const handleScanConfigDownload = jest.fn();
-    const handleScanConfigEdit = jest.fn();
-    const handleScanConfigImport = jest.fn();
+    const handleScanConfigCreate = vi.fn();
+    const handleScanConfigClone = vi.fn();
+    const handleScanConfigDelete = vi.fn();
+    const handleScanConfigDownload = vi.fn();
+    const handleScanConfigEdit = vi.fn();
+    const handleScanConfigImport = vi.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},
@@ -1154,12 +1154,12 @@ describe('Scan Config ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers if config is not writable', () => {
-    const handleScanConfigCreate = jest.fn();
-    const handleScanConfigClone = jest.fn();
-    const handleScanConfigDelete = jest.fn();
-    const handleScanConfigDownload = jest.fn();
-    const handleScanConfigEdit = jest.fn();
-    const handleScanConfigImport = jest.fn();
+    const handleScanConfigCreate = vi.fn();
+    const handleScanConfigClone = vi.fn();
+    const handleScanConfigDelete = vi.fn();
+    const handleScanConfigDownload = vi.fn();
+    const handleScanConfigEdit = vi.fn();
+    const handleScanConfigImport = vi.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},

@@ -33,7 +33,7 @@ describe('FileField tests', () => {
   });
 
   test('should call change handler with file', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(<FileField onChange={onChange} />);
 
@@ -43,7 +43,7 @@ describe('FileField tests', () => {
   });
 
   test('should call change handler with file and name', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(<FileField name="foo" onChange={onChange} />);
 
@@ -53,7 +53,7 @@ describe('FileField tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(<FileField disabled={true} onChange={onChange} />);
 

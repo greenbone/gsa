@@ -70,15 +70,15 @@ describe('Audit Row tests', () => {
       usage_type: 'audit',
     });
 
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleAuditClone = vi.fn();
+    const handleAuditDelete = vi.fn();
+    const handleAuditDownload = vi.fn();
+    const handleAuditEdit = vi.fn();
+    const handleAuditResume = vi.fn();
+    const handleAuditStart = vi.fn();
+    const handleAuditStop = vi.fn();
+    const handleReportDownload = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -170,15 +170,15 @@ describe('Audit Row tests', () => {
       },
     });
 
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleAuditClone = vi.fn();
+    const handleAuditDelete = vi.fn();
+    const handleAuditDownload = vi.fn();
+    const handleAuditEdit = vi.fn();
+    const handleAuditResume = vi.fn();
+    const handleAuditStart = vi.fn();
+    const handleAuditStop = vi.fn();
+    const handleReportDownload = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -233,15 +233,15 @@ describe('Audit Row tests', () => {
       usage_type: 'audit',
     });
 
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleAuditClone = vi.fn();
+    const handleAuditDelete = vi.fn();
+    const handleAuditDownload = vi.fn();
+    const handleAuditEdit = vi.fn();
+    const handleAuditResume = vi.fn();
+    const handleAuditStart = vi.fn();
+    const handleAuditStop = vi.fn();
+    const handleReportDownload = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -336,15 +336,15 @@ describe('Audit Row tests', () => {
       usage_type: 'audit',
     });
 
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleAuditClone = vi.fn();
+    const handleAuditDelete = vi.fn();
+    const handleAuditDownload = vi.fn();
+    const handleAuditEdit = vi.fn();
+    const handleAuditResume = vi.fn();
+    const handleAuditStart = vi.fn();
+    const handleAuditStop = vi.fn();
+    const handleReportDownload = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -444,15 +444,15 @@ describe('Audit Row tests', () => {
       usage_type: 'audit',
     });
 
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleAuditClone = vi.fn();
+    const handleAuditDelete = vi.fn();
+    const handleAuditDownload = vi.fn();
+    const handleAuditEdit = vi.fn();
+    const handleAuditResume = vi.fn();
+    const handleAuditStart = vi.fn();
+    const handleAuditStop = vi.fn();
+    const handleReportDownload = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -554,15 +554,15 @@ describe('Audit Row tests', () => {
       usage_type: 'audit',
     });
 
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleAuditClone = vi.fn();
+    const handleAuditDelete = vi.fn();
+    const handleAuditDownload = vi.fn();
+    const handleAuditEdit = vi.fn();
+    const handleAuditResume = vi.fn();
+    const handleAuditStart = vi.fn();
+    const handleAuditStop = vi.fn();
+    const handleReportDownload = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -664,15 +664,15 @@ describe('Audit Row tests', () => {
       usage_type: 'audit',
     });
 
-    const handleAuditClone = jest.fn();
-    const handleAuditDelete = jest.fn();
-    const handleAuditDownload = jest.fn();
-    const handleAuditEdit = jest.fn();
-    const handleAuditResume = jest.fn();
-    const handleAuditStart = jest.fn();
-    const handleAuditStop = jest.fn();
-    const handleReportDownload = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleAuditClone = vi.fn();
+    const handleAuditDelete = vi.fn();
+    const handleAuditDownload = vi.fn();
+    const handleAuditEdit = vi.fn();
+    const handleAuditResume = vi.fn();
+    const handleAuditStart = vi.fn();
+    const handleAuditStop = vi.fn();
+    const handleReportDownload = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,

@@ -76,7 +76,7 @@ const UseFormValidationTestComponent = ({onSave}) => {
 describe('useFormValidation tests', () => {
   test('should validate form value successfully', async () => {
     const {render} = rendererWith();
-    const handleSave = jest.fn();
+    const handleSave = vi.fn();
 
     render(<UseFormValidationTestComponent onSave={handleSave} />);
 
@@ -90,7 +90,7 @@ describe('useFormValidation tests', () => {
 
   test('should show error if validation fails', async () => {
     const {render} = rendererWith();
-    const handleSave = jest.fn();
+    const handleSave = vi.fn();
 
     render(<UseFormValidationTestComponent onSave={handleSave} />);
 

@@ -29,8 +29,8 @@ setLocale('en');
 
 describe('Report Threshold Panel tests', () => {
   test('should render threshold panel', () => {
-    const onFilterEditClick = jest.fn();
-    const onFilterChanged = jest.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterChanged = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 rows=2 first=1 sort-reverse=severity',
@@ -88,8 +88,8 @@ describe('Report Threshold Panel tests', () => {
   });
 
   test('should render threshold panel with different severities included', () => {
-    const onFilterEditClick = jest.fn();
-    const onFilterChanged = jest.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterChanged = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=2 first=1 sort-reverse=severity',
@@ -151,8 +151,8 @@ describe('Report Threshold Panel tests', () => {
   });
 
   test('should call click handler', () => {
-    const onFilterEditClick = jest.fn();
-    const onFilterChanged = jest.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterChanged = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 rows=2 first=1 sort-reverse=severity',
@@ -187,8 +187,8 @@ describe('Report Threshold Panel tests', () => {
   });
 
   test('should call click handler for different severity levels', () => {
-    const onFilterEditClick = jest.fn();
-    const onFilterChanged = jest.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterChanged = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=2 first=1 sort-reverse=severity',

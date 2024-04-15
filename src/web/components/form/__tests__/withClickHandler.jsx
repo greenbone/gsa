@@ -29,7 +29,7 @@ describe('withClickHandler tests', () => {
   test('should call click handler with value', () => {
     const Component = withClickHandler()(TestInput);
 
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const {element} = render(<Component value="foo" onClick={onClick} />);
 
     fireEvent.click(element);
@@ -40,7 +40,7 @@ describe('withClickHandler tests', () => {
   test('should call click handler with value and name', () => {
     const Component = withClickHandler()(TestInput);
 
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const {element} = render(
       <Component name="bar" value="foo" onClick={onClick} />,
     );
@@ -53,7 +53,7 @@ describe('withClickHandler tests', () => {
   test('should call click handler with converted value', () => {
     const Component = withClickHandler()(TestInput);
 
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const {element} = render(
       <Component convert={v => v * 2} value={21} onClick={onClick} />,
     );
@@ -68,7 +68,7 @@ describe('withClickHandler tests', () => {
       convert_func: v => v * 2,
     })(TestInput);
 
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const {element} = render(<Component value={21} onClick={onClick} />);
 
     fireEvent.click(element);
@@ -81,7 +81,7 @@ describe('withClickHandler tests', () => {
       value_func: (event, props) => props.foo,
     })(TestInput);
 
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const {element} = render(
       <Component foo="bar" value={21} onClick={onClick} />,
     );

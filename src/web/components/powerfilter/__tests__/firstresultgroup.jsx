@@ -26,7 +26,7 @@ import Filter from 'gmp/models/filter';
 describe('FirstresultGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('first=1');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FirstResultGroup
         filter={filter}
@@ -41,7 +41,7 @@ describe('FirstresultGroup tests', () => {
 
   test('should render value from filter by default', () => {
     const filter = Filter.fromString('first=1');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FirstResultGroup
         filter={filter}
@@ -57,7 +57,7 @@ describe('FirstresultGroup tests', () => {
   });
 
   test('should render value from first', () => {
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FirstResultGroup first={2} name="name" onChange={handleChange} />,
     );
@@ -69,7 +69,7 @@ describe('FirstresultGroup tests', () => {
 
   test('should call change handler', () => {
     const filter = Filter.fromString('first=1');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FirstResultGroup
         filter={filter}

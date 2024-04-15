@@ -64,11 +64,11 @@ const filter = Filter.fromString('rows=2');
 
 describe('Policies table tests', () => {
   test('should render', () => {
-    const handlePolicyCloneClick = jest.fn();
-    const handleCreateAuditClick = jest.fn();
-    const handlePolicyDeleteClick = jest.fn();
-    const handlePolicyDownloadClick = jest.fn();
-    const handlePolicyEditClick = jest.fn();
+    const handlePolicyCloneClick = vi.fn();
+    const handleCreateAuditClick = vi.fn();
+    const handlePolicyDeleteClick = vi.fn();
+    const handlePolicyDownloadClick = vi.fn();
+    const handlePolicyEditClick = vi.fn();
 
     const gmp = {
       settings: {},
@@ -102,11 +102,11 @@ describe('Policies table tests', () => {
   });
 
   test('should unfold all details', () => {
-    const handlePolicyCloneClick = jest.fn();
-    const handleCreateAuditClick = jest.fn();
-    const handlePolicyDeleteClick = jest.fn();
-    const handlePolicyDownloadClick = jest.fn();
-    const handlePolicyEditClick = jest.fn();
+    const handlePolicyCloneClick = vi.fn();
+    const handleCreateAuditClick = vi.fn();
+    const handlePolicyDeleteClick = vi.fn();
+    const handlePolicyDownloadClick = vi.fn();
+    const handlePolicyEditClick = vi.fn();
 
     const gmp = {
       settings: {},
@@ -143,11 +143,11 @@ describe('Policies table tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handlePolicyCloneClick = jest.fn();
-    const handleCreateAuditClick = jest.fn();
-    const handlePolicyDeleteClick = jest.fn();
-    const handlePolicyDownloadClick = jest.fn();
-    const handlePolicyEditClick = jest.fn();
+    const handlePolicyCloneClick = vi.fn();
+    const handleCreateAuditClick = vi.fn();
+    const handlePolicyDeleteClick = vi.fn();
+    const handlePolicyDownloadClick = vi.fn();
+    const handlePolicyEditClick = vi.fn();
 
     const gmp = {
       settings: {},

@@ -33,7 +33,7 @@ describe('Entity TrashIcon component tests', () => {
     const entity = Task.fromElement({
       permissions: {permission: [{name: 'delete_task'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -57,7 +57,7 @@ describe('Entity TrashIcon component tests', () => {
     const entity = Task.fromElement({
       permissions: {permission: [{name: 'delete_task'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -80,7 +80,7 @@ describe('Entity TrashIcon component tests', () => {
     const entity = Task.fromElement({
       permissions: {permission: [{name: 'delete_schedule'}]},
     });
-    const clickHandler = jest.fn();
+    const clickHandler = vi.fn();
 
     const {render} = rendererWith({capabilities: caps});
 

@@ -28,7 +28,7 @@ import {
 
 describe('AutoDeleteReportsGroup tests', () => {
   test('should render dialog group', () => {
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {element} = render(
       <AutoDeleteReportsGroup
@@ -42,7 +42,7 @@ describe('AutoDeleteReportsGroup tests', () => {
   });
 
   test('should allow to change auto delete no', () => {
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {queryAllByTestId} = render(
       <AutoDeleteReportsGroup
@@ -60,7 +60,7 @@ describe('AutoDeleteReportsGroup tests', () => {
   });
 
   test('should allow to change auto delete keep', () => {
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {queryAllByTestId} = render(
       <AutoDeleteReportsGroup
@@ -78,7 +78,7 @@ describe('AutoDeleteReportsGroup tests', () => {
   });
 
   test('should allow to change auto delete keep value', () => {
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup
@@ -96,7 +96,7 @@ describe('AutoDeleteReportsGroup tests', () => {
   });
 
   test('should keep auto delete keep value in range 2-1200', () => {
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup
@@ -122,7 +122,7 @@ describe('AutoDeleteReportsGroup tests', () => {
   });
 
   test('should not allow to change auto delete keep value', () => {
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup

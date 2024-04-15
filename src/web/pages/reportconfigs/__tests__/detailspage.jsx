@@ -38,15 +38,15 @@ const entityType = 'reportconfig';
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getPermissions = jest.fn().mockResolvedValue({
+const getPermissions = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -57,7 +57,7 @@ const getPermissions = jest.fn().mockResolvedValue({
 const config = ReportConfig.fromElement(mockReportConfig);
 describe('Report Config Details Page tests', () => {
   test('should render full Details page with param details', () => {
-    const getReportConfig = jest.fn().mockResolvedValue({
+    const getReportConfig = vi.fn().mockResolvedValue({
       data: config,
     });
 

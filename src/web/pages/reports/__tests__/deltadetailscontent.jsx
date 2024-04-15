@@ -47,37 +47,37 @@ const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getReportComposerDefaults = jest.fn().mockResolvedValue({
+const getReportComposerDefaults = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
 describe('Delta Report Details Content tests', () => {
   test('should render Delta Report Details Content', () => {
-    const onActivateTab = jest.fn();
-    const onAddToAssetsClick = jest.fn();
-    const onError = jest.fn();
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterChanged = jest.fn();
-    const onFilterCreated = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
-    const onFilterResetClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onInteraction = jest.fn();
-    const onRemoveFromAssetsClick = jest.fn();
-    const onReportDownloadClick = jest.fn();
-    const showError = jest.fn();
-    const showErrorMessage = jest.fn();
-    const showSuccessMessage = jest.fn();
-    const onSortChange = jest.fn();
-    const onTagSuccess = jest.fn();
-    const onTargetEditClick = jest.fn();
-    const onTlsCertificateDownloadClick = jest.fn();
+    const onActivateTab = vi.fn();
+    const onAddToAssetsClick = vi.fn();
+    const onError = vi.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterChanged = vi.fn();
+    const onFilterCreated = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
+    const onFilterResetClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onInteraction = vi.fn();
+    const onRemoveFromAssetsClick = vi.fn();
+    const onReportDownloadClick = vi.fn();
+    const showError = vi.fn();
+    const showErrorMessage = vi.fn();
+    const showSuccessMessage = vi.fn();
+    const onSortChange = vi.fn();
+    const onTagSuccess = vi.fn();
+    const onTargetEditClick = vi.fn();
+    const onTlsCertificateDownloadClick = vi.fn();
 
     const sorting = {
       apps: {sortField: 'severity', sortReverse: true},
@@ -244,27 +244,27 @@ describe('Delta Report Details Content tests', () => {
   });
 
   test('should render results tab', () => {
-    const onActivateTab = jest.fn();
-    const onAddToAssetsClick = jest.fn();
-    const onError = jest.fn();
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterChanged = jest.fn();
-    const onFilterCreated = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
-    const onFilterResetClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onInteraction = jest.fn();
-    const onRemoveFromAssetsClick = jest.fn();
-    const onReportDownloadClick = jest.fn();
-    const showError = jest.fn();
-    const showErrorMessage = jest.fn();
-    const showSuccessMessage = jest.fn();
-    const onSortChange = jest.fn();
-    const onTagSuccess = jest.fn();
-    const onTargetEditClick = jest.fn();
-    const onTlsCertificateDownloadClick = jest.fn();
+    const onActivateTab = vi.fn();
+    const onAddToAssetsClick = vi.fn();
+    const onError = vi.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterChanged = vi.fn();
+    const onFilterCreated = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
+    const onFilterResetClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onInteraction = vi.fn();
+    const onRemoveFromAssetsClick = vi.fn();
+    const onReportDownloadClick = vi.fn();
+    const showError = vi.fn();
+    const showErrorMessage = vi.fn();
+    const showSuccessMessage = vi.fn();
+    const onSortChange = vi.fn();
+    const onTagSuccess = vi.fn();
+    const onTargetEditClick = vi.fn();
+    const onTlsCertificateDownloadClick = vi.fn();
 
     const sorting = {
       apps: {sortField: 'severity', sortReverse: true},

@@ -137,7 +137,7 @@ describe('for_each function tests', () => {
   });
 
   test('should iterate over array', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     forEach([1, 2, 3], callback);
 
     expect(callback).toBeCalled();
@@ -148,7 +148,7 @@ describe('for_each function tests', () => {
   });
 
   test('should iterate over single item', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     forEach(2, callback);
 
     expect(callback).toBeCalled();
@@ -157,7 +157,7 @@ describe('for_each function tests', () => {
   });
 
   test('should iterate over Set', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     forEach(new Set([1, 2, 3]), callback);
 
     expect(callback).toBeCalled();

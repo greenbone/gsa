@@ -37,7 +37,7 @@ import NotesPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const note = Note.fromElement({
   _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
@@ -64,15 +64,15 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getSetting = jest.fn().mockResolvedValue({
+const getSetting = vi.fn().mockResolvedValue({
   filter: null,
 });
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
+const getDashboardSetting = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -80,7 +80,7 @@ const getDashboardSetting = jest.fn().mockResolvedValue({
   },
 });
 
-const getAggregates = jest.fn().mockResolvedValue({
+const getAggregates = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -88,7 +88,7 @@ const getAggregates = jest.fn().mockResolvedValue({
   },
 });
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -98,7 +98,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getNotes = jest.fn().mockResolvedValue({
+const getNotes = vi.fn().mockResolvedValue({
   data: [note],
   meta: {
     filter: Filter.fromString(),
@@ -106,7 +106,7 @@ const getNotes = jest.fn().mockResolvedValue({
   },
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -218,11 +218,11 @@ describe('NotesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -300,11 +300,11 @@ describe('NotesPage tests', () => {
   });
 
   test('should allow to bulk action on selected notes', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
+    const deleteByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -397,11 +397,11 @@ describe('NotesPage tests', () => {
   });
 
   test('should allow to bulk action on filtered notes', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -492,7 +492,7 @@ describe('NotesPage tests', () => {
 
 describe('NotesPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleNoteCreateClick = jest.fn();
+    const handleNoteCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -518,7 +518,7 @@ describe('NotesPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleNoteCreateClick = jest.fn();
+    const handleNoteCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -541,7 +541,7 @@ describe('NotesPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleNoteCreateClick = jest.fn();
+    const handleNoteCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},

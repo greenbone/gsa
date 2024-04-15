@@ -35,7 +35,7 @@ import CredentialPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const credential = Credential.fromElement({
   _id: '6575',
@@ -73,13 +73,13 @@ let getCredentials;
 let renewSession;
 
 beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
-  getSetting = jest.fn().mockResolvedValue({
+  getSetting = vi.fn().mockResolvedValue({
     filter: null,
   });
-  getFilters = jest.fn().mockReturnValue(
+  getFilters = vi.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -89,14 +89,14 @@ beforeEach(() => {
     }),
   );
 
-  getCredentials = jest.fn().mockResolvedValue({
+  getCredentials = vi.fn().mockResolvedValue({
     data: [credential],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   });
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -179,11 +179,11 @@ describe('CredentialPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -243,11 +243,11 @@ describe('CredentialPage tests', () => {
 
   test('should allow to bulk action on selected credentials', async () => {
     // mock cache issues will cause these tests to randomly fail. Will fix later.
-    const deleteByIds = jest.fn().mockResolvedValue({
+    const deleteByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -326,11 +326,11 @@ describe('CredentialPage tests', () => {
 
   test('should allow to bulk action on filtered credentials', async () => {
     // mock cache issues will cause these tests to randomly fail. Will fix later.
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -404,7 +404,7 @@ describe('CredentialPage tests', () => {
 
 describe('CredentialPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleCredentialCreateClick = jest.fn();
+    const handleCredentialCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -430,7 +430,7 @@ describe('CredentialPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleCredentialCreateClick = jest.fn();
+    const handleCredentialCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -455,7 +455,7 @@ describe('CredentialPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleCredentialCreateClick = jest.fn();
+    const handleCredentialCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},

@@ -71,15 +71,15 @@ describe('Task Row tests', () => {
       target: {_id: '5678', name: 'target'},
     });
 
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -184,15 +184,15 @@ describe('Task Row tests', () => {
       },
     });
 
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -246,15 +246,15 @@ describe('Task Row tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -340,15 +340,15 @@ describe('Task Row tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -455,15 +455,15 @@ describe('Task Row tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -569,15 +569,15 @@ describe('Task Row tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -683,15 +683,15 @@ describe('Task Row tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -801,15 +801,15 @@ describe('Task Row tests', () => {
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const handleReportImport = jest.fn();
-    const handleTaskClone = jest.fn();
-    const handleTaskDelete = jest.fn();
-    const handleTaskDownload = jest.fn();
-    const handleTaskEdit = jest.fn();
-    const handleTaskResume = jest.fn();
-    const handleTaskStart = jest.fn();
-    const handleTaskStop = jest.fn();
-    const handleToggleDetailsClick = jest.fn();
+    const handleReportImport = vi.fn();
+    const handleTaskClone = vi.fn();
+    const handleTaskDelete = vi.fn();
+    const handleTaskDownload = vi.fn();
+    const handleTaskEdit = vi.fn();
+    const handleTaskResume = vi.fn();
+    const handleTaskStart = vi.fn();
+    const handleTaskStop = vi.fn();
+    const handleToggleDetailsClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,

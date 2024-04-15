@@ -43,20 +43,20 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getCredential = jest.fn().mockResolvedValue({
+  getCredential = vi.fn().mockResolvedValue({
     data: credential,
   });
-  getEntities = jest.fn().mockResolvedValue({
+  getEntities = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   });
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -64,7 +64,7 @@ beforeEach(() => {
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -255,15 +255,15 @@ describe('Credential Detailspage tests', () => {
   });
 
   test('should call commands', () => {
-    const clone = jest.fn().mockResolvedValue({
+    const clone = vi.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = jest.fn().mockResolvedValue({
+    const deleteFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = jest.fn().mockResolvedValue({
+    const exportFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -320,12 +320,12 @@ describe('Credential Detailspage tests', () => {
 
 describe('Credential ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleCredentialCloneClick = jest.fn();
-    const handleCredentialDeleteClick = jest.fn();
-    const handleCredentialDownloadClick = jest.fn();
-    const handleCredentialEditClick = jest.fn();
-    const handleCredentialCreateClick = jest.fn();
-    const handleCredentialInstallerDownloadClick = jest.fn();
+    const handleCredentialCloneClick = vi.fn();
+    const handleCredentialDeleteClick = vi.fn();
+    const handleCredentialDownloadClick = vi.fn();
+    const handleCredentialEditClick = vi.fn();
+    const handleCredentialCreateClick = vi.fn();
+    const handleCredentialInstallerDownloadClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -362,12 +362,12 @@ describe('Credential ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleCredentialCloneClick = jest.fn();
-    const handleCredentialDeleteClick = jest.fn();
-    const handleCredentialDownloadClick = jest.fn();
-    const handleCredentialEditClick = jest.fn();
-    const handleCredentialCreateClick = jest.fn();
-    const handleCredentialInstallerDownloadClick = jest.fn();
+    const handleCredentialCloneClick = vi.fn();
+    const handleCredentialDeleteClick = vi.fn();
+    const handleCredentialDownloadClick = vi.fn();
+    const handleCredentialEditClick = vi.fn();
+    const handleCredentialCreateClick = vi.fn();
+    const handleCredentialInstallerDownloadClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -422,12 +422,12 @@ describe('Credential ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleCredentialCloneClick = jest.fn();
-    const handleCredentialDeleteClick = jest.fn();
-    const handleCredentialDownloadClick = jest.fn();
-    const handleCredentialEditClick = jest.fn();
-    const handleCredentialCreateClick = jest.fn();
-    const handleCredentialInstallerDownloadClick = jest.fn();
+    const handleCredentialCloneClick = vi.fn();
+    const handleCredentialDeleteClick = vi.fn();
+    const handleCredentialDownloadClick = vi.fn();
+    const handleCredentialEditClick = vi.fn();
+    const handleCredentialCreateClick = vi.fn();
+    const handleCredentialInstallerDownloadClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -484,12 +484,12 @@ describe('Credential ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers for credential in use', () => {
-    const handleCredentialCloneClick = jest.fn();
-    const handleCredentialDeleteClick = jest.fn();
-    const handleCredentialDownloadClick = jest.fn();
-    const handleCredentialEditClick = jest.fn();
-    const handleCredentialCreateClick = jest.fn();
-    const handleCredentialInstallerDownloadClick = jest.fn();
+    const handleCredentialCloneClick = vi.fn();
+    const handleCredentialDeleteClick = vi.fn();
+    const handleCredentialDownloadClick = vi.fn();
+    const handleCredentialEditClick = vi.fn();
+    const handleCredentialCreateClick = vi.fn();
+    const handleCredentialInstallerDownloadClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

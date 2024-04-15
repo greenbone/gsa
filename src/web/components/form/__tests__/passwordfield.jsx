@@ -37,7 +37,7 @@ describe('PasswordField tests', () => {
   });
 
   test('should call change handler with value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(<PasswordField value="foo" onChange={onChange} />);
 
@@ -47,7 +47,7 @@ describe('PasswordField tests', () => {
   });
 
   test('should call change handler with value and name', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(
       <PasswordField name="foo" value="ipsum" onChange={onChange} />,
@@ -59,7 +59,7 @@ describe('PasswordField tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(
       <PasswordField disabled={true} value="foo" onChange={onChange} />,

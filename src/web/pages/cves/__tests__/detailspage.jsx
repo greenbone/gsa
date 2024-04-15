@@ -35,7 +35,7 @@ import CvePage from '../detailspage';
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 setLocale('en');
 
@@ -136,11 +136,11 @@ const entity_v2 = Cve.fromElement({
 
 const caps = new Capabilities(['everything']);
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -149,7 +149,7 @@ const manualUrl = 'test/';
 
 describe('CVE Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getCve = jest.fn().mockResolvedValue({
+    const getCve = vi.fn().mockResolvedValue({
       data: entity_v2,
     });
 

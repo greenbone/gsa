@@ -39,7 +39,7 @@ setLocale('en');
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -91,11 +91,11 @@ const noPermSchedule = Schedule.fromElement({
   _id: '23456',
 });
 
-const getSchedule = jest.fn().mockResolvedValue({
+const getSchedule = vi.fn().mockResolvedValue({
   data: schedule,
 });
 
-const getEntities = jest.fn().mockResolvedValue({
+const getEntities = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -103,11 +103,11 @@ const getEntities = jest.fn().mockResolvedValue({
   },
 });
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -254,15 +254,15 @@ describe('Schedule Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const clone = jest.fn().mockResolvedValue({
+    const clone = vi.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = jest.fn().mockResolvedValue({
+    const deleteFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = jest.fn().mockResolvedValue({
+    const exportFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -327,11 +327,11 @@ describe('Schedule Detailspage tests', () => {
 
 describe('Schedule ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleScheduleCloneClick = jest.fn();
-    const handleScheduleDeleteClick = jest.fn();
-    const handleScheduleDownloadClick = jest.fn();
-    const handleScheduleEditClick = jest.fn();
-    const handleScheduleCreateClick = jest.fn();
+    const handleScheduleCloneClick = vi.fn();
+    const handleScheduleDeleteClick = vi.fn();
+    const handleScheduleDownloadClick = vi.fn();
+    const handleScheduleEditClick = vi.fn();
+    const handleScheduleCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -365,11 +365,11 @@ describe('Schedule ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleScheduleCloneClick = jest.fn();
-    const handleScheduleDeleteClick = jest.fn();
-    const handleScheduleDownloadClick = jest.fn();
-    const handleScheduleEditClick = jest.fn();
-    const handleScheduleCreateClick = jest.fn();
+    const handleScheduleCloneClick = vi.fn();
+    const handleScheduleDeleteClick = vi.fn();
+    const handleScheduleDownloadClick = vi.fn();
+    const handleScheduleEditClick = vi.fn();
+    const handleScheduleCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -413,11 +413,11 @@ describe('Schedule ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleScheduleCloneClick = jest.fn();
-    const handleScheduleDeleteClick = jest.fn();
-    const handleScheduleDownloadClick = jest.fn();
-    const handleScheduleEditClick = jest.fn();
-    const handleScheduleCreateClick = jest.fn();
+    const handleScheduleCloneClick = vi.fn();
+    const handleScheduleDeleteClick = vi.fn();
+    const handleScheduleDownloadClick = vi.fn();
+    const handleScheduleEditClick = vi.fn();
+    const handleScheduleCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -467,11 +467,11 @@ describe('Schedule ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers for schedule in use', () => {
-    const handleScheduleCloneClick = jest.fn();
-    const handleScheduleDeleteClick = jest.fn();
-    const handleScheduleDownloadClick = jest.fn();
-    const handleScheduleEditClick = jest.fn();
-    const handleScheduleCreateClick = jest.fn();
+    const handleScheduleCloneClick = vi.fn();
+    const handleScheduleDeleteClick = vi.fn();
+    const handleScheduleDownloadClick = vi.fn();
+    const handleScheduleEditClick = vi.fn();
+    const handleScheduleCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

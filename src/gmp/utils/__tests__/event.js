@@ -18,17 +18,17 @@
 import {debounce, throttleAnimation} from '../event';
 
 describe('debounce function tests', () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 
   test('should debounce function', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const func = debounce(callback);
 
     func(1);
     func(2);
     func(3);
 
-    jest.runAllTimers();
+    vi.runAllTimers();
 
     expect(callback).toBeCalled();
     expect(callback.mock.calls.length).toBe(1);
@@ -36,7 +36,7 @@ describe('debounce function tests', () => {
   });
 
   test('should run callback immediately', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const func = debounce(callback, 10000, true);
 
     func(1);
@@ -47,7 +47,7 @@ describe('debounce function tests', () => {
     expect(callback.mock.calls.length).toBe(1);
     expect(callback.mock.calls[0][0]).toBe(1);
 
-    jest.runAllTimers();
+    vi.runAllTimers();
 
     expect(callback.mock.calls.length).toBe(2);
     expect(callback.mock.calls[1][0]).toBe(3);
@@ -55,19 +55,19 @@ describe('debounce function tests', () => {
 });
 
 describe('throttleAnimation function tests', () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 
   test('should throttle running callback', () => {
     global.requestAnimationFrame = cb => setTimeout(cb, 0);
 
-    const callback = jest.fn();
+    const callback = vi.fn();
     const func = throttleAnimation(callback);
 
     func(1);
     func(2);
     func(3);
 
-    jest.runAllTimers();
+    vi.runAllTimers();
 
     expect(callback).toBeCalled();
     expect(callback.mock.calls.length).toBe(1);

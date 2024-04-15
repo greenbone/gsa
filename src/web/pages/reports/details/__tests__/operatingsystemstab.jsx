@@ -39,8 +39,8 @@ describe('Report Operating Systems Tab tests', () => {
   test('should render Report Operating Systems Tab', () => {
     const {operatingsystems} = getMockReport();
 
-    const onSortChange = jest.fn();
-    const onInteraction = jest.fn();
+    const onSortChange = vi.fn();
+    const onInteraction = vi.fn();
 
     const {render, store} = rendererWith({
       router: true,

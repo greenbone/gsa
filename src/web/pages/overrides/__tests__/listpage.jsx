@@ -37,7 +37,7 @@ import OverridesPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const override = Override.fromElement({
   _id: '6d00d22f-551b-4fbe-8215-d8615eff73ea',
@@ -66,15 +66,15 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getSetting = jest.fn().mockResolvedValue({
+const getSetting = vi.fn().mockResolvedValue({
   filter: null,
 });
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
+const getDashboardSetting = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -82,7 +82,7 @@ const getDashboardSetting = jest.fn().mockResolvedValue({
   },
 });
 
-const getAggregates = jest.fn().mockResolvedValue({
+const getAggregates = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -90,7 +90,7 @@ const getAggregates = jest.fn().mockResolvedValue({
   },
 });
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -100,7 +100,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getOverrides = jest.fn().mockResolvedValue({
+const getOverrides = vi.fn().mockResolvedValue({
   data: [override],
   meta: {
     filter: Filter.fromString(),
@@ -108,7 +108,7 @@ const getOverrides = jest.fn().mockResolvedValue({
   },
 });
 
-const renewSession = jest.fn().mockResolvedValue({
+const renewSession = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -224,11 +224,11 @@ describe('OverridesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -306,11 +306,11 @@ describe('OverridesPage tests', () => {
   });
 
   test('should allow to bulk action on selected overrides', async () => {
-    const deleteByIds = jest.fn().mockResolvedValue({
+    const deleteByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -403,11 +403,11 @@ describe('OverridesPage tests', () => {
   });
 
   test('should allow to bulk action on filtered overrides', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -498,7 +498,7 @@ describe('OverridesPage tests', () => {
 
 describe('OverridesPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleOverrideCreateClick = jest.fn();
+    const handleOverrideCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -524,7 +524,7 @@ describe('OverridesPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleOverrideCreateClick = jest.fn();
+    const handleOverrideCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -547,7 +547,7 @@ describe('OverridesPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleOverrideCreateClick = jest.fn();
+    const handleOverrideCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},

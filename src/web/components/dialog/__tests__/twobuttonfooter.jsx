@@ -79,8 +79,8 @@ describe('DialogTwoButtonFooter tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handler1 = jest.fn();
-    const handler2 = jest.fn();
+    const handler1 = vi.fn();
+    const handler2 = vi.fn();
 
     const {element} = render(
       <DialogTwoButtonFooter

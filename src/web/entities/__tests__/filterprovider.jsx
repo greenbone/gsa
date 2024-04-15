@@ -35,7 +35,7 @@ describe('FilterProvider component tests', () => {
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
 
-    const getSetting = jest.fn().mockResolvedValue({});
+    const getSetting = vi.fn().mockResolvedValue({});
     const gmp = {
       user: {
         getSetting,
@@ -53,7 +53,7 @@ describe('FilterProvider component tests', () => {
       defaultFilterLoadingActions.success('task', defaultSettingFilter),
     );
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -77,7 +77,7 @@ describe('FilterProvider component tests', () => {
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
 
-    const getSetting = jest.fn().mockResolvedValue({});
+    const getSetting = vi.fn().mockResolvedValue({});
     const gmp = {
       user: {
         getSetting,
@@ -96,7 +96,7 @@ describe('FilterProvider component tests', () => {
     );
     store.dispatch(pageFilter('task', pFilter));
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -119,7 +119,7 @@ describe('FilterProvider component tests', () => {
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
 
-    const getSetting = jest.fn().mockResolvedValue({});
+    const getSetting = vi.fn().mockResolvedValue({});
     const gmp = {
       user: {
         getSetting,
@@ -138,7 +138,7 @@ describe('FilterProvider component tests', () => {
     );
     store.dispatch(pageFilter(pageName, pFilter));
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -161,7 +161,7 @@ describe('FilterProvider component tests', () => {
 
     const emptyFilter = Filter.fromString('rows=42');
 
-    const getSetting = jest.fn().mockResolvedValue({});
+    const getSetting = vi.fn().mockResolvedValue({});
     const gmp = {
       user: {
         getSetting,
@@ -179,7 +179,7 @@ describe('FilterProvider component tests', () => {
       defaultFilterLoadingActions.success('task', defaultSettingFilter),
     );
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -198,7 +198,7 @@ describe('FilterProvider component tests', () => {
 
     const emptyFilter = Filter.fromString('rows=42');
 
-    const getSetting = jest.fn().mockResolvedValue({});
+    const getSetting = vi.fn().mockResolvedValue({});
     const gmp = {
       user: {
         getSetting,
@@ -216,7 +216,7 @@ describe('FilterProvider component tests', () => {
       defaultFilterLoadingActions.error('task', new Error('an error')),
     );
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -238,8 +238,8 @@ describe('FilterProvider component tests', () => {
 
     const fallbackFilter = Filter.fromString('fall=back');
 
-    const getSetting = jest.fn().mockResolvedValue({});
-    const subscribe = jest.fn();
+    const getSetting = vi.fn().mockResolvedValue({});
+    const subscribe = vi.fn();
     const gmp = {
       user: {
         getSetting,
@@ -256,7 +256,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -274,8 +274,8 @@ describe('FilterProvider component tests', () => {
   test('should use default fallbackFilter as last resort', async () => {
     const resultingFilter = DEFAULT_FALLBACK_FILTER.copy().set('rows', 42);
 
-    const getSetting = jest.fn().mockResolvedValue({});
-    const subscribe = jest.fn();
+    const getSetting = vi.fn().mockResolvedValue({});
+    const subscribe = vi.fn();
     const gmp = {
       user: {
         getSetting,
@@ -292,7 +292,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -310,8 +310,8 @@ describe('FilterProvider component tests', () => {
     // use fallbackFilter as sample
     const fallbackFilter = Filter.fromString('fall=back rows=21');
 
-    const getSetting = jest.fn().mockResolvedValue({});
-    const subscribe = jest.fn();
+    const getSetting = vi.fn().mockResolvedValue({});
+    const subscribe = vi.fn();
     const gmp = {
       user: {
         getSetting,
@@ -328,7 +328,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -347,7 +347,7 @@ describe('FilterProvider component tests', () => {
     const resultingFilter = Filter.fromString('fall=back rows=50');
     const fallbackFilter = Filter.fromString('fall=back');
 
-    const getSetting = jest.fn().mockRejectedValue(new Error('an error'));
+    const getSetting = vi.fn().mockRejectedValue(new Error('an error'));
     const gmp = {
       user: {
         getSetting,
@@ -362,7 +362,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.error(new Error('an error')));
 
-    const renderFunc = jest
+    const renderFunc = vi
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 

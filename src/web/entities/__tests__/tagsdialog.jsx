@@ -23,10 +23,10 @@ import Dialog from '../tagsdialog';
 
 describe('TagsDialog dialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = jest.fn();
-    const handleNewTagClick = jest.fn();
-    const handleSave = jest.fn();
-    const handleTagChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleNewTagClick = vi.fn();
+    const handleSave = vi.fn();
+    const handleTagChange = vi.fn();
 
     const {baseElement} = render(
       <Dialog
@@ -43,10 +43,10 @@ describe('TagsDialog dialog component tests', () => {
   });
 
   test('should disable tag selection when no options available', () => {
-    const handleClose = jest.fn();
-    const handleNewTagClick = jest.fn();
-    const handleSave = jest.fn();
-    const handleTagChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleNewTagClick = vi.fn();
+    const handleSave = vi.fn();
+    const handleTagChange = vi.fn();
 
     const {baseElement} = render(
       <Dialog
@@ -62,10 +62,10 @@ describe('TagsDialog dialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = jest.fn();
-    const handleNewTagClick = jest.fn();
-    const handleSave = jest.fn();
-    const handleTagChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleNewTagClick = vi.fn();
+    const handleSave = vi.fn();
+    const handleTagChange = vi.fn();
 
     const {getByTestId} = render(
       <Dialog
@@ -93,10 +93,10 @@ describe('TagsDialog dialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleNewTagClick = jest.fn();
-    const handleSave = jest.fn();
-    const handleTagChange = jest.fn();
+    const handleClose = vi.fn();
+    const handleNewTagClick = vi.fn();
+    const handleSave = vi.fn();
+    const handleTagChange = vi.fn();
 
     const {getByTestId} = render(
       <Dialog

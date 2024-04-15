@@ -26,7 +26,7 @@ import Filter from 'gmp/models/filter';
 describe('MinQodGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('min_qod=10');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <MinQodGroup
         filter={filter}
@@ -41,7 +41,7 @@ describe('MinQodGroup tests', () => {
 
   test('should render value from filter', () => {
     const filter = Filter.fromString('min_qod=10');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <MinQodGroup filter={filter} name="name" onChange={handleChange} />,
     );
@@ -53,7 +53,7 @@ describe('MinQodGroup tests', () => {
 
   test('should render value from qod by default', () => {
     const filter = Filter.fromString('min_qod=10');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <MinQodGroup
         filter={filter}
@@ -70,7 +70,7 @@ describe('MinQodGroup tests', () => {
 
   test('should call change handler', () => {
     const filter = Filter.fromString('min_qod=10');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <MinQodGroup
         filter={filter}

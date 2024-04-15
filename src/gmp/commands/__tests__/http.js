@@ -45,7 +45,7 @@ describe('HttpCommand tests', () => {
   test('should create http get request', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http);
@@ -58,7 +58,7 @@ describe('HttpCommand tests', () => {
   test('should create http get request with default params', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http, {bar: 1});
@@ -75,7 +75,7 @@ describe('HttpCommand tests', () => {
   test('should create http get request with overriding default params', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http, {bar: 1});
@@ -94,7 +94,7 @@ describe('HttpCommand tests', () => {
   test('should create http get request with extra params', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http, {bar: 1});
@@ -111,7 +111,7 @@ describe('HttpCommand tests', () => {
   test('should create http get request with extra params taking precedence', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http, {bar: 1, a: 1});
@@ -131,7 +131,7 @@ describe('HttpCommand tests', () => {
   test('should create http get request with ignoring default params', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http, {bar: 1});
@@ -156,7 +156,7 @@ describe('HttpCommand tests', () => {
   test('should create http post request with default params', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http, {bar: 1});
@@ -173,7 +173,7 @@ describe('HttpCommand tests', () => {
   test('should create http post request with overriding default params', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http, {bar: 1});
@@ -192,7 +192,7 @@ describe('HttpCommand tests', () => {
   test('should create http post request with extra params', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http, {bar: 1});
@@ -209,7 +209,7 @@ describe('HttpCommand tests', () => {
   test('should create http post request with extra params taking precedence', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http, {bar: 1, a: 1});
@@ -229,7 +229,7 @@ describe('HttpCommand tests', () => {
   test('should create http post request with ignoring default params', () => {
     const retval = {};
     const http = {
-      request: jest.fn().mockReturnValue(retval),
+      request: vi.fn().mockReturnValue(retval),
     };
 
     const cmd = new HttpCommand(http, {bar: 1});

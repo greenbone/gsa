@@ -128,15 +128,15 @@ const capsAdmin = new Capabilities(['everything']);
 const capsUser = new Capabilities(['get_license']);
 
 beforeEach(() => {
-  jest.spyOn(global.Date, 'now').mockImplementation(() => mockDate);
+  vi.spyOn(global.Date, 'now').mockImplementation(() => mockDate);
 });
 
 describe('LicenseNotification tests', () => {
   test('should render if <=30 days active for Admin user', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataLessThan30days,
           }),
@@ -170,10 +170,10 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should render if <=30 days active for User user', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataLessThan30days,
           }),
@@ -204,10 +204,10 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should render if <=30 days active for Admin user Trial', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataLessThan30daysTrial,
           }),
@@ -241,10 +241,10 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should render if <=30 days active for User user Trial', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataLessThan30daysTrial,
           }),
@@ -275,11 +275,11 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should not render if >30 days and active for Admin user', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataMoreThan30days,
           }),
@@ -303,11 +303,11 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should not render if >30 days and active for User user', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataMoreThan30days,
           }),
@@ -331,11 +331,11 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should render warning if expired for Admin user', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataExpired,
           }),
@@ -371,11 +371,11 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should render warning if expired for User user', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataExpired,
           }),
@@ -407,11 +407,11 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should render warning if corrupt for Admin user', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataCorrupt,
           }),
@@ -450,11 +450,11 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should render warning if corrupt for User user', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataCorrupt,
           }),
@@ -487,11 +487,11 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should not render if status is no_license for Admin user', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataNoLicense,
           }),
@@ -515,11 +515,11 @@ describe('LicenseNotification tests', () => {
   });
 
   test('should not render if status is no_license for User user', async () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const gmp = {
       license: {
-        getLicenseInformation: jest.fn().mockReturnValue(
+        getLicenseInformation: vi.fn().mockReturnValue(
           Promise.resolve({
             data: dataNoLicense,
           }),

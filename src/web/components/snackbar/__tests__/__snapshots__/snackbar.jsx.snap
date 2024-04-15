@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Snackbar tests > should render 1`] = `
+.c0 {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 100px;
+  margin: 5px 50px;
+  padding: 10px 50px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: space-around;
+  -ms-flex-pack: space-around;
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  z-index: 600;
+  box-shadow: 5px 5px 10px #7F7F7F;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #11ab51;
+  background-color: #4C4C4C;
+  color: #fff;
+  font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+  -webkit-animation: dHXyTQ 5s ease-in-out;
+  animation: dHXyTQ 5s ease-in-out;
+}
+
+<span>
+  <div
+    class="c0"
+    data-testid="snackbar-container"
+  >
+    foo
+  </div>
+</span>
+`;

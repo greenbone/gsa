@@ -35,7 +35,7 @@ import TlsCertificatePage from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',
@@ -59,11 +59,11 @@ const tlsCertificate = TlsCertificate.fromElement({
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -73,7 +73,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
+const getDashboardSetting = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -81,11 +81,11 @@ const getDashboardSetting = jest.fn().mockResolvedValue({
   },
 });
 
-const getUserSetting = jest.fn().mockResolvedValue({
+const getUserSetting = vi.fn().mockResolvedValue({
   filter: null,
 });
 
-const getAggregates = jest.fn().mockResolvedValue({
+const getAggregates = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -93,7 +93,7 @@ const getAggregates = jest.fn().mockResolvedValue({
   },
 });
 
-const getTlsCertificates = jest.fn().mockResolvedValue({
+const getTlsCertificates = vi.fn().mockResolvedValue({
   data: [tlsCertificate],
   meta: {
     filter: Filter.fromString(),

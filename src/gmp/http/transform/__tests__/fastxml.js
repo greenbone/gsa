@@ -44,8 +44,8 @@ describe('fastxml transform tests', () => {
     const xmlStr = createEnvelopedXml(
       '<foo>foo&quot;&lt;&gt;&amp;&apos;&#x2F;&#x5C;</foo>',
     );
-    const plainData = jest.fn().mockReturnValue(xmlStr);
-    const setData = jest.fn().mockReturnValue('foo');
+    const plainData = vi.fn().mockReturnValue(xmlStr);
+    const setData = vi.fn().mockReturnValue('foo');
     const response = {
       plainData,
       set: setData,
@@ -65,8 +65,8 @@ describe('fastxml transform tests', () => {
     const xmlStr = createEnvelopedXml(
       '<foo bar="foo&quot;&lt;&gt;&amp;&apos;&#x2F;&#x5C;"></foo>',
     );
-    const plainData = jest.fn().mockReturnValue(xmlStr);
-    const setData = jest.fn().mockReturnValue('foo');
+    const plainData = vi.fn().mockReturnValue(xmlStr);
+    const setData = vi.fn().mockReturnValue('foo');
     const response = {
       plainData,
       set: setData,
@@ -85,8 +85,8 @@ describe('fastxml transform tests', () => {
   });
 
   test('should create a rejection on parser errors', () => {
-    const plainData = jest.fn().mockReturnValue({foo: 'bar'});
-    const setData = jest.fn().mockReturnValue('foo');
+    const plainData = vi.fn().mockReturnValue({foo: 'bar'});
+    const setData = vi.fn().mockReturnValue('foo');
     const response = {
       plainData,
       set: setData,
@@ -100,9 +100,9 @@ describe('fastxml transform tests', () => {
   test('should transform rejection with action_result', () => {
     const xmlStr =
       '<envelope><action_result><message>foo</message></action_result></envelope>';
-    const isError = jest.fn().mockReturnValue(true);
-    const setMessage = jest.fn(() => errorRejection);
-    const plainData = jest.fn().mockReturnValue(xmlStr);
+    const isError = vi.fn().mockReturnValue(true);
+    const setMessage = vi.fn(() => errorRejection);
+    const plainData = vi.fn().mockReturnValue(xmlStr);
     const errorRejection = {
       isError,
       setMessage,
@@ -119,9 +119,9 @@ describe('fastxml transform tests', () => {
     const xmlStr =
       '<envelope><action_result><message>foo</message></action_result>' +
       '<gsad_response><message>bar</message></gsad_response></envelope>';
-    const isError = jest.fn().mockReturnValue(true);
-    const setMessage = jest.fn(() => errorRejection);
-    const plainData = jest.fn().mockReturnValue(xmlStr);
+    const isError = vi.fn().mockReturnValue(true);
+    const setMessage = vi.fn(() => errorRejection);
+    const plainData = vi.fn().mockReturnValue(xmlStr);
     const errorRejection = {
       isError,
       setMessage,

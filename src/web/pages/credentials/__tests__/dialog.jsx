@@ -31,9 +31,9 @@ let handleClose;
 let handleErrorClose;
 
 beforeEach(() => {
-  handleSave = jest.fn();
-  handleClose = jest.fn();
-  handleErrorClose = jest.fn();
+  handleSave = vi.fn();
+  handleClose = vi.fn();
+  handleErrorClose = vi.fn();
 });
 
 const credential = Credential.fromElement({

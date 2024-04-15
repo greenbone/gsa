@@ -40,7 +40,7 @@ setLocale('en');
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -175,11 +175,11 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getHost = jest.fn().mockResolvedValue({
+  getHost = vi.fn().mockResolvedValue({
     data: host,
   });
 
-  getPermissions = jest.fn().mockResolvedValue({
+  getPermissions = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -187,11 +187,11 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -384,13 +384,13 @@ describe('Host Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const deleteIdentifier = jest.fn().mockResolvedValue({
+    const deleteIdentifier = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
-    const deleteFunc = jest.fn().mockResolvedValue({
+    const deleteFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
-    const exportFunc = jest.fn().mockResolvedValue({
+    const exportFunc = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -455,10 +455,10 @@ describe('Host Detailspage tests', () => {
 
 describe('Host ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleHostCreateClick = jest.fn();
-    const handleHostDeleteClick = jest.fn();
-    const handleHostDownloadClick = jest.fn();
-    const handleHostEditClick = jest.fn();
+    const handleHostCreateClick = vi.fn();
+    const handleHostDeleteClick = vi.fn();
+    const handleHostDownloadClick = vi.fn();
+    const handleHostEditClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -505,10 +505,10 @@ describe('Host ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleHostCreateClick = jest.fn();
-    const handleHostDeleteClick = jest.fn();
-    const handleHostDownloadClick = jest.fn();
-    const handleHostEditClick = jest.fn();
+    const handleHostCreateClick = vi.fn();
+    const handleHostDeleteClick = vi.fn();
+    const handleHostDownloadClick = vi.fn();
+    const handleHostEditClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -542,10 +542,10 @@ describe('Host ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleHostCreateClick = jest.fn();
-    const handleHostDeleteClick = jest.fn();
-    const handleHostDownloadClick = jest.fn();
-    const handleHostEditClick = jest.fn();
+    const handleHostCreateClick = vi.fn();
+    const handleHostDeleteClick = vi.fn();
+    const handleHostDownloadClick = vi.fn();
+    const handleHostEditClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

@@ -127,7 +127,7 @@ describe('Select component tests', () => {
       },
     ];
 
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element, baseElement} = render(
       <Select items={items} onChange={onChange} />,
@@ -157,7 +157,7 @@ describe('Select component tests', () => {
       },
     ];
 
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element, baseElement} = render(
       <Select name="abc" items={items} onChange={onChange} />,
@@ -185,7 +185,7 @@ describe('Select component tests', () => {
       },
     ];
 
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     // eslint-disable-next-line no-shadow
     const {baseElement, element, getByTestId} = render(

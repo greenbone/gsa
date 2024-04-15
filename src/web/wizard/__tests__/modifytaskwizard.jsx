@@ -48,8 +48,8 @@ const startTimezone = 'UTC';
 
 describe('ModifyTaskWizard component tests', () => {
   test('should render full modify wizard', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -91,8 +91,8 @@ describe('ModifyTaskWizard component tests', () => {
   });
 
   test('should not render schedule without permission', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: alertCapabilities,
@@ -128,8 +128,8 @@ describe('ModifyTaskWizard component tests', () => {
   });
 
   test('should not render alert without permission', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: scheduleCapabilities,
@@ -172,8 +172,8 @@ describe('ModifyTaskWizard component tests', () => {
   });
 
   test('should allow to close the modify wizard', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -201,8 +201,8 @@ describe('ModifyTaskWizard component tests', () => {
   });
 
   test('should allow to cancel the modify wizard', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -230,8 +230,8 @@ describe('ModifyTaskWizard component tests', () => {
   });
 
   test('should allow to save the modify wizard', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {render} = rendererWith({
       capabilities: true,

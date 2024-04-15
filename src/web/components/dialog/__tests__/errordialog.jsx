@@ -24,7 +24,7 @@ import {KeyCode} from 'gmp/utils/event';
 
 describe('ErrorDialog component tests', () => {
   test('should render ErrorDialog with text and title', () => {
-    const handleClose = jest.fn();
+    const handleClose = vi.fn();
 
     const {baseElement, getByTestId} = render(
       <ErrorDialog text="foo" title="bar" onClose={handleClose} />,
@@ -38,7 +38,7 @@ describe('ErrorDialog component tests', () => {
   });
 
   test('should close ErrorDialog with close button', () => {
-    const handleClose = jest.fn();
+    const handleClose = vi.fn();
 
     const {getByTestId} = render(
       <ErrorDialog title="bar" onClose={handleClose} />,
@@ -50,7 +50,7 @@ describe('ErrorDialog component tests', () => {
   });
 
   test('should close ErrorDialog with resume button', () => {
-    const handleClose = jest.fn();
+    const handleClose = vi.fn();
 
     const {baseElement} = render(
       <ErrorDialog title="bar" onClose={handleClose} />,
@@ -62,7 +62,7 @@ describe('ErrorDialog component tests', () => {
   });
 
   test('should close ErrorDialog on escape key', () => {
-    const handleClose = jest.fn();
+    const handleClose = vi.fn();
 
     const {getByRole} = render(
       <ErrorDialog title="bar" onClose={handleClose} />,

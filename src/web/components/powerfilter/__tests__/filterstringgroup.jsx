@@ -26,7 +26,7 @@ import Filter from 'gmp/models/filter';
 describe('FilterStringGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FilterStringGroup filter={filter} name="name" onChange={handleChange} />,
     );
@@ -36,7 +36,7 @@ describe('FilterStringGroup tests', () => {
 
   test('should render filterstring from string', () => {
     const filter = 'Test';
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FilterStringGroup
         filter={filter}
@@ -52,7 +52,7 @@ describe('FilterStringGroup tests', () => {
 
   test('should render filterstring from filter', () => {
     const filter = Filter.fromString('Test');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FilterStringGroup filter={filter} name="name" onChange={handleChange} />,
     );
@@ -64,7 +64,7 @@ describe('FilterStringGroup tests', () => {
 
   test('should return correct keyword name', () => {
     const filter = 'Test';
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FilterStringGroup
         filter={filter}
@@ -80,7 +80,7 @@ describe('FilterStringGroup tests', () => {
 
   test('should call change handler', () => {
     const filter = Filter.fromString('');
-    const handleChange = jest.fn();
+    const handleChange = vi.fn();
     const {element} = render(
       <FilterStringGroup filter={filter} name="name" onChange={handleChange} />,
     );

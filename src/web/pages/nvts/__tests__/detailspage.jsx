@@ -41,7 +41,7 @@ setLocale('en');
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -217,11 +217,11 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getNvt = jest.fn().mockResolvedValue({
+  getNvt = vi.fn().mockResolvedValue({
     data: nvt,
   });
 
-  getNotes = jest.fn().mockResolvedValue({
+  getNotes = vi.fn().mockResolvedValue({
     data: [note1],
     meta: {
       filter: Filter.fromString(),
@@ -229,7 +229,7 @@ beforeEach(() => {
     },
   });
 
-  getOverrides = jest.fn().mockResolvedValue({
+  getOverrides = vi.fn().mockResolvedValue({
     data: [override1, override2],
     meta: {
       filter: Filter.fromString(),
@@ -237,7 +237,7 @@ beforeEach(() => {
     },
   });
 
-  getEntities = jest.fn().mockResolvedValue({
+  getEntities = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -245,11 +245,11 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -450,9 +450,9 @@ describe('Nvt Detailspage tests', () => {
 
 describe('Nvt ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleNvtDownloadClick = jest.fn();
-    const handleOnNoteCreateClick = jest.fn();
-    const handleOnOverrideCreateClick = jest.fn();
+    const handleNvtDownloadClick = vi.fn();
+    const handleOnNoteCreateClick = vi.fn();
+    const handleOnOverrideCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -497,9 +497,9 @@ describe('Nvt ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleNvtDownloadClick = jest.fn();
-    const handleOnNoteCreateClick = jest.fn();
-    const handleOnOverrideCreateClick = jest.fn();
+    const handleNvtDownloadClick = vi.fn();
+    const handleOnNoteCreateClick = vi.fn();
+    const handleOnOverrideCreateClick = vi.fn();
 
     const gmp = {settings: {manualUrl}};
 

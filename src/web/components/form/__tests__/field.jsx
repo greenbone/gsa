@@ -44,7 +44,7 @@ describe('Field tests', () => {
   });
 
   test('should call change handler with value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(<Field value="foo" onChange={onChange} />);
 
@@ -54,7 +54,7 @@ describe('Field tests', () => {
   });
 
   test('should call change handler with value and name', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(
       <Field name="foo" value="ipsum" onChange={onChange} />,
@@ -66,7 +66,7 @@ describe('Field tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(
       <Field disabled={true} value="foo" onChange={onChange} />,

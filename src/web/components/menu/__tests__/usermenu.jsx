@@ -64,7 +64,7 @@ describe('UserMenu component tests', () => {
   });
 
   test('should logout user on click', () => {
-    const doLogout = jest.fn().mockResolvedValue();
+    const doLogout = vi.fn().mockResolvedValue();
     const gmp = {
       doLogout,
     };
@@ -79,7 +79,7 @@ describe('UserMenu component tests', () => {
   });
 
   test('should renew session timeout on click', () => {
-    const renewSession = jest
+    const renewSession = vi
       .fn()
       .mockResolvedValue({data: '2019-10-10T12:00:00Z'});
     const gmp = {

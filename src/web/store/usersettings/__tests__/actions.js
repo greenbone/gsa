@@ -92,9 +92,9 @@ describe('settings actions tests', () => {
   });
 
   test('should update timezone', () => {
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const gmp = {
-      setTimezone: jest.fn(),
+      setTimezone: vi.fn(),
     };
     return updateTimezone(gmp)('cet')(dispatch).then(() => {
       expect(dispatch).toBeCalledWith({
@@ -106,10 +106,10 @@ describe('settings actions tests', () => {
   });
 
   test('should renew the session timeout', () => {
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const sessionTimeout = moment().add(1, 'day');
 
-    const renewSession = jest.fn().mockReturnValue(
+    const renewSession = vi.fn().mockReturnValue(
       Promise.resolve({
         data: sessionTimeout,
       }),
@@ -131,10 +131,10 @@ describe('settings actions tests', () => {
 
   describe('loadReportComposerDefaults tests', () => {
     test('should dispatch success actions', () => {
-      const dispatch = jest.fn();
+      const dispatch = vi.fn();
 
       const data = {foo: 'bar'};
-      const getReportComposerDefaults = jest
+      const getReportComposerDefaults = vi
         .fn()
         .mockReturnValue(Promise.resolve({data}));
 
@@ -158,10 +158,10 @@ describe('settings actions tests', () => {
 
   describe('saveReportComposerDefaults tests', () => {
     test('should dispatch success actions', () => {
-      const dispatch = jest.fn();
+      const dispatch = vi.fn();
 
       const data = {foo: 'bar'};
-      const saveReportComposerDefaultsMock = jest
+      const saveReportComposerDefaultsMock = vi
         .fn()
         .mockReturnValue(Promise.resolve({data}));
 

@@ -211,7 +211,7 @@ class MenuTestComponent extends React.Component {
     const {mockBoundingClientRect, ...otherProps} = this.props;
     this.mockBoundingClientRect = mockBoundingClientRect;
     this.otherProps = otherProps;
-    this.notifyRefAssigned = jest.fn();
+    this.notifyRefAssigned = vi.fn();
   }
 
   render() {
@@ -219,7 +219,7 @@ class MenuTestComponent extends React.Component {
     if (hasTarget && this.mockBoundingClientRect) {
       const rect = this.target.current.closest('.multiselect-scroll');
       if (rect !== null) {
-        jest.spyOn(rect, 'getBoundingClientRect').mockImplementation(() => {
+        vi.spyOn(rect, 'getBoundingClientRect').mockImplementation(() => {
           return {
             top: 100,
             bottom: 50,
@@ -292,7 +292,7 @@ describe('Menu tests', () => {
   });
 
   test('should not render without target', () => {
-    const notifyRefAssigned = jest.fn();
+    const notifyRefAssigned = vi.fn();
     const {queryByTestId} = render(
       <Menu target={null} notifyRefAssigned={notifyRefAssigned} />,
     );

@@ -189,11 +189,11 @@ describe('Target row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleTargetCloneClick = jest.fn();
-    const handleTargetDeleteClick = jest.fn();
-    const handleTargetDownloadClick = jest.fn();
-    const handleTargetEditClick = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleTargetCloneClick = vi.fn();
+    const handleTargetDeleteClick = vi.fn();
+    const handleTargetDownloadClick = vi.fn();
+    const handleTargetEditClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -242,11 +242,11 @@ describe('Target row tests', () => {
   });
 
   test('should render ssh elevate credential', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleTargetCloneClick = jest.fn();
-    const handleTargetDeleteClick = jest.fn();
-    const handleTargetDownloadClick = jest.fn();
-    const handleTargetEditClick = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleTargetCloneClick = vi.fn();
+    const handleTargetDeleteClick = vi.fn();
+    const handleTargetDownloadClick = vi.fn();
+    const handleTargetEditClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -292,11 +292,11 @@ describe('Target row tests', () => {
   });
 
   test('should render with undefined portlist', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleTargetCloneClick = jest.fn();
-    const handleTargetDeleteClick = jest.fn();
-    const handleTargetDownloadClick = jest.fn();
-    const handleTargetEditClick = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleTargetCloneClick = vi.fn();
+    const handleTargetDeleteClick = vi.fn();
+    const handleTargetDownloadClick = vi.fn();
+    const handleTargetEditClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -330,11 +330,11 @@ describe('Target row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleToggleDetailsClick = jest.fn();
-    const handleTargetCloneClick = jest.fn();
-    const handleTargetDeleteClick = jest.fn();
-    const handleTargetDownloadClick = jest.fn();
-    const handleTargetEditClick = jest.fn();
+    const handleToggleDetailsClick = vi.fn();
+    const handleTargetCloneClick = vi.fn();
+    const handleTargetDeleteClick = vi.fn();
+    const handleTargetDownloadClick = vi.fn();
+    const handleTargetEditClick = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,

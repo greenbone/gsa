@@ -25,7 +25,7 @@ import {setUsername} from 'web/store/usersettings/actions';
 
 describe('Header tests', () => {
   test('should render header', () => {
-    const isLoggedIn = jest.fn().mockReturnValue(true);
+    const isLoggedIn = vi.fn().mockReturnValue(true);
     const gmp = {isLoggedIn, settings: {vendorVersion: ''}};
     const {render, store} = rendererWith({gmp, router: true, store: true});
     store.dispatch(setUsername('username'));

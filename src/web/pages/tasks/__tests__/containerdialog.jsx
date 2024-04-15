@@ -24,8 +24,8 @@ import Task from 'gmp/models/task';
 
 describe('ContainerDialog tests', () => {
   test('should render create dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {baseElement} = render(
       <ContainerDialog onClose={handleClose} onSave={handleSave} />,
@@ -36,8 +36,8 @@ describe('ContainerDialog tests', () => {
 
   test('should render edit dialog', () => {
     const task = Task.fromElement({name: 'foo', _id: 't1'});
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {baseElement} = render(
       <ContainerDialog task={task} onClose={handleClose} onSave={handleSave} />,
@@ -47,8 +47,8 @@ describe('ContainerDialog tests', () => {
   });
 
   test('should change fields in create dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByName, getByTestId} = render(
       <ContainerDialog
@@ -78,8 +78,8 @@ describe('ContainerDialog tests', () => {
 
   test('should change fields in edit dialog', () => {
     const task = Task.fromElement({name: 'foo', _id: 't1'});
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByName, queryAllByName, getByTestId} = render(
       <ContainerDialog
@@ -112,8 +112,8 @@ describe('ContainerDialog tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <ContainerDialog

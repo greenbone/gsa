@@ -37,7 +37,7 @@ import Detailspage from '../detailspage';
 if (!isDefined(window.URL)) {
   window.URL = {};
 }
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 setLocale('en');
 
@@ -67,11 +67,11 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getEntities = jest.fn().mockResolvedValue({
+const getEntities = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -81,7 +81,7 @@ const getEntities = jest.fn().mockResolvedValue({
 
 describe('TLS Certificate Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getTlsCertificate = jest.fn().mockResolvedValue({
+    const getTlsCertificate = vi.fn().mockResolvedValue({
       data: tlsCertificate,
     });
 

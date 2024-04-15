@@ -105,14 +105,14 @@ const filter = Filter.fromString('rows=2');
 
 describe('Audits table tests', () => {
   test('should render', () => {
-    const handleAuditCloneClick = jest.fn();
-    const handleAuditDeleteClick = jest.fn();
-    const handleAuditDownloadClick = jest.fn();
-    const handleAuditEditClick = jest.fn();
-    const handleAuditStartClick = jest.fn();
-    const handleAuditStopClick = jest.fn();
-    const handleAuditResumeClick = jest.fn();
-    const handleReportDownloadClick = jest.fn();
+    const handleAuditCloneClick = vi.fn();
+    const handleAuditDeleteClick = vi.fn();
+    const handleAuditDownloadClick = vi.fn();
+    const handleAuditEditClick = vi.fn();
+    const handleAuditStartClick = vi.fn();
+    const handleAuditStopClick = vi.fn();
+    const handleAuditResumeClick = vi.fn();
+    const handleReportDownloadClick = vi.fn();
 
     const gmp = {
       settings: {},
@@ -154,14 +154,14 @@ describe('Audits table tests', () => {
   });
 
   test('should unfold all details', () => {
-    const handleAuditCloneClick = jest.fn();
-    const handleAuditDeleteClick = jest.fn();
-    const handleAuditDownloadClick = jest.fn();
-    const handleAuditEditClick = jest.fn();
-    const handleAuditStartClick = jest.fn();
-    const handleAuditStopClick = jest.fn();
-    const handleAuditResumeClick = jest.fn();
-    const handleReportDownloadClick = jest.fn();
+    const handleAuditCloneClick = vi.fn();
+    const handleAuditDeleteClick = vi.fn();
+    const handleAuditDownloadClick = vi.fn();
+    const handleAuditEditClick = vi.fn();
+    const handleAuditStartClick = vi.fn();
+    const handleAuditStopClick = vi.fn();
+    const handleAuditResumeClick = vi.fn();
+    const handleReportDownloadClick = vi.fn();
 
     const gmp = {
       settings: {},
@@ -203,14 +203,14 @@ describe('Audits table tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleAuditCloneClick = jest.fn();
-    const handleAuditDeleteClick = jest.fn();
-    const handleAuditDownloadClick = jest.fn();
-    const handleAuditEditClick = jest.fn();
-    const handleAuditStartClick = jest.fn();
-    const handleAuditStopClick = jest.fn();
-    const handleAuditResumeClick = jest.fn();
-    const handleReportDownloadClick = jest.fn();
+    const handleAuditCloneClick = vi.fn();
+    const handleAuditDeleteClick = vi.fn();
+    const handleAuditDownloadClick = vi.fn();
+    const handleAuditEditClick = vi.fn();
+    const handleAuditStartClick = vi.fn();
+    const handleAuditStopClick = vi.fn();
+    const handleAuditResumeClick = vi.fn();
+    const handleReportDownloadClick = vi.fn();
 
     const gmp = {
       settings: {},

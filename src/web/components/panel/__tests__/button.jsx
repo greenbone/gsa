@@ -29,7 +29,7 @@ describe('InfoPanel button tests', () => {
   });
 
   test('should call click handler', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const {element} = render(<Button onClick={handler} />);
 

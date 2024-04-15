@@ -29,7 +29,7 @@ import {
 
 describe('Task Trend Selector Tests', () => {
   test('should render', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const filter = Filter.fromString('trend=down');
     const {element} = render(
       <TaskTrendGroup filter={filter} onChange={onChange} />,
@@ -39,7 +39,7 @@ describe('Task Trend Selector Tests', () => {
   });
 
   test('should return items', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const filter = Filter.fromString('trend=down');
     const {element, baseElement} = render(
       <TaskTrendGroup filter={filter} onChange={onChange} />,
@@ -60,7 +60,7 @@ describe('Task Trend Selector Tests', () => {
   });
 
   test('should parse filter', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const filter = Filter.fromString('trend=same');
     // eslint-disable-next-line no-shadow
     const {getByTestId} = render(
@@ -72,7 +72,7 @@ describe('Task Trend Selector Tests', () => {
   });
 
   test('should call onChange handler', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const filter = Filter.fromString('trend=down');
     const {element, baseElement} = render(
       <TaskTrendGroup filter={filter} onChange={onChange} />,
@@ -88,7 +88,7 @@ describe('Task Trend Selector Tests', () => {
     expect(onChange).toBeCalledWith('up', 'trend');
   });
   test('should change value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const filter = Filter.fromString('trend=down');
 
     // eslint-disable-next-line no-shadow

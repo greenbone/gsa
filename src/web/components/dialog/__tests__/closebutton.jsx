@@ -41,7 +41,7 @@ describe('Dialog CloseButton tests', () => {
   });
 
   test('should call close handler', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     const {element} = render(<CloseButton onClick={handler} />);
 

@@ -65,7 +65,7 @@ describe('ExternalLink tests', () => {
   test('should close confirmation dialog on resume click', () => {
     const oldOpen = window.open;
 
-    window.open = jest.fn();
+    window.open = vi.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {element, baseElement, getByTestId} = render(
@@ -96,7 +96,7 @@ describe('ExternalLink tests', () => {
   test('should open url in new window', () => {
     const oldOpen = window.open;
 
-    window.open = jest.fn();
+    window.open = vi.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {element, baseElement} = render(

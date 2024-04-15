@@ -53,8 +53,8 @@ describe('UserSettings Defaults action tests', () => {
 
   describe('loadUserSettingDefaults tests', () => {
     test('should not dispatch an action if isLoading is true', () => {
-      const dispatch = jest.fn();
-      const getState = jest.fn().mockReturnValue({
+      const dispatch = vi.fn();
+      const getState = vi.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: true,
@@ -62,7 +62,7 @@ describe('UserSettings Defaults action tests', () => {
         },
       });
 
-      const currentSettings = jest.fn().mockReturnValue(
+      const currentSettings = vi.fn().mockReturnValue(
         Promise.resolve({
           foo: 'bar',
         }),
@@ -83,8 +83,8 @@ describe('UserSettings Defaults action tests', () => {
     });
 
     test('should dispatch request and success actions', () => {
-      const dispatch = jest.fn();
-      const getState = jest.fn().mockReturnValue({
+      const dispatch = vi.fn();
+      const getState = vi.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: false,
@@ -93,9 +93,7 @@ describe('UserSettings Defaults action tests', () => {
       });
 
       const data = {foo: 'bar'};
-      const currentSettings = jest
-        .fn()
-        .mockReturnValue(Promise.resolve({data}));
+      const currentSettings = vi.fn().mockReturnValue(Promise.resolve({data}));
 
       const gmp = {
         user: {
@@ -124,8 +122,8 @@ describe('UserSettings Defaults action tests', () => {
     });
 
     test('should dispatch request and error actions', () => {
-      const dispatch = jest.fn();
-      const getState = jest.fn().mockReturnValue({
+      const dispatch = vi.fn();
+      const getState = vi.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: false,
@@ -133,7 +131,7 @@ describe('UserSettings Defaults action tests', () => {
         },
       });
 
-      const currentSettings = jest
+      const currentSettings = vi
         .fn()
         .mockReturnValue(Promise.reject('An Error'));
 
@@ -166,8 +164,8 @@ describe('UserSettings Defaults action tests', () => {
 
   describe('loadUserSettingDefault tests', () => {
     test('should not dispatch an action if isLoading is true', () => {
-      const dispatch = jest.fn();
-      const getState = jest.fn().mockReturnValue({
+      const dispatch = vi.fn();
+      const getState = vi.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: true,
@@ -175,7 +173,7 @@ describe('UserSettings Defaults action tests', () => {
         },
       });
 
-      const getSetting = jest.fn().mockReturnValue(
+      const getSetting = vi.fn().mockReturnValue(
         Promise.resolve({
           id: '42',
           name: 'Rows Per Page',
@@ -197,8 +195,8 @@ describe('UserSettings Defaults action tests', () => {
     });
 
     test('should dispatch request and success actions', () => {
-      const dispatch = jest.fn();
-      const getState = jest.fn().mockReturnValue({
+      const dispatch = vi.fn();
+      const getState = vi.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: false,
@@ -207,7 +205,7 @@ describe('UserSettings Defaults action tests', () => {
       });
 
       const data = {_id: '123', name: 'Rows Per Page', value: 42};
-      const getSetting = jest.fn().mockReturnValue(Promise.resolve({data}));
+      const getSetting = vi.fn().mockReturnValue(Promise.resolve({data}));
 
       const gmp = {
         user: {
@@ -235,8 +233,8 @@ describe('UserSettings Defaults action tests', () => {
     });
 
     test('should dispatch request and error actions', () => {
-      const dispatch = jest.fn();
-      const getState = jest.fn().mockReturnValue({
+      const dispatch = vi.fn();
+      const getState = vi.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: false,
@@ -244,7 +242,7 @@ describe('UserSettings Defaults action tests', () => {
         },
       });
 
-      const getSetting = jest.fn().mockReturnValue(Promise.reject('An Error'));
+      const getSetting = vi.fn().mockReturnValue(Promise.reject('An Error'));
 
       const gmp = {
         user: {

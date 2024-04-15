@@ -37,7 +37,7 @@ import TargetPage, {ToolBarIcons} from '../listpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 let currentSettings;
 let getSetting;
@@ -46,15 +46,15 @@ let getTargets;
 let renewSession;
 
 beforeEach(() => {
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  getSetting = jest.fn().mockResolvedValue({
+  getSetting = vi.fn().mockResolvedValue({
     filter: null,
   });
 
-  getFilters = jest.fn().mockReturnValue(
+  getFilters = vi.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -64,7 +64,7 @@ beforeEach(() => {
     }),
   );
 
-  getTargets = jest.fn().mockResolvedValue({
+  getTargets = vi.fn().mockResolvedValue({
     data: [target],
     meta: {
       filter: Filter.fromString(),
@@ -72,7 +72,7 @@ beforeEach(() => {
     },
   });
 
-  renewSession = jest.fn().mockResolvedValue({
+  renewSession = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -212,11 +212,11 @@ describe('TargetPage tests', () => {
     expect(screen.getAllByTitle('Export Target')[0]).toBeInTheDocument();
   });
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -289,11 +289,11 @@ describe('TargetPage tests', () => {
 
   test('should allow to bulk action on selected targets', async () => {
     // mock cache issues will cause these tests to randomly fail. Will fix later.
-    const deleteByIds = jest.fn().mockResolvedValue({
+    const deleteByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = jest.fn().mockResolvedValue({
+    const exportByIds = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -381,11 +381,11 @@ describe('TargetPage tests', () => {
 
   test('should allow to bulk action on filtered targets', async () => {
     // mock cache issues will cause these tests to randomly fail. Will fix later.
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -470,7 +470,7 @@ describe('TargetPage tests', () => {
 
 describe('TargetPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleTargetCreateClick = jest.fn();
+    const handleTargetCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -496,7 +496,7 @@ describe('TargetPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleTargetCreateClick = jest.fn();
+    const handleTargetCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -519,7 +519,7 @@ describe('TargetPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleTargetCreateClick = jest.fn();
+    const handleTargetCreateClick = vi.fn();
 
     const gmp = {
       settings: {manualUrl},

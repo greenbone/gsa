@@ -30,7 +30,7 @@ describe('RADIUS page renders', () => {
     });
     const gmp = {
       user: {
-        currentAuthSettings: jest.fn().mockReturnValue(
+        currentAuthSettings: vi.fn().mockReturnValue(
           Promise.resolve({
             data: settings,
           }),
@@ -58,7 +58,7 @@ describe('RADIUS page renders', () => {
     });
     const gmp = {
       user: {
-        currentAuthSettings: jest.fn().mockReturnValue(
+        currentAuthSettings: vi.fn().mockReturnValue(
           Promise.resolve({
             data: settings,
           }),

@@ -23,8 +23,8 @@ import CreateScanConfigDialog from '../dialog';
 
 describe('CreateScanConfigDialog component tests', () => {
   test('should render dialog with base config as default', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getAllByTestId} = render(
       <CreateScanConfigDialog
@@ -67,8 +67,8 @@ describe('CreateScanConfigDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <CreateScanConfigDialog
@@ -86,8 +86,8 @@ describe('CreateScanConfigDialog component tests', () => {
   });
 
   test('should allow to cancel the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByTestId} = render(
       <CreateScanConfigDialog
@@ -105,8 +105,8 @@ describe('CreateScanConfigDialog component tests', () => {
   });
 
   test('should allow to save the dialog', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByName, getByTestId} = render(
       <CreateScanConfigDialog
@@ -134,8 +134,8 @@ describe('CreateScanConfigDialog component tests', () => {
   });
 
   test('should allow to change the base', () => {
-    const handleClose = jest.fn();
-    const handleSave = jest.fn();
+    const handleClose = vi.fn();
+    const handleSave = vi.fn();
 
     const {getByName, getByTestId, getAllByTestId} = render(
       <CreateScanConfigDialog

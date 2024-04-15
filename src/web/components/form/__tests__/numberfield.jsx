@@ -32,7 +32,7 @@ describe('NumberField tests', () => {
   });
 
   test('should call change handler', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element} = render(<NumberField value={1} onChange={onChange} />);
 
     fireEvent.change(element, {target: {value: '2'}});
@@ -42,7 +42,7 @@ describe('NumberField tests', () => {
   });
 
   test('should call change handler with value and name', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element} = render(
       <NumberField name="foo" value={1} onChange={onChange} />,
     );
@@ -54,7 +54,7 @@ describe('NumberField tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element} = render(
       <NumberField disabled={true} value={1} onChange={onChange} />,
     );
@@ -66,7 +66,7 @@ describe('NumberField tests', () => {
   });
 
   test('should update value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element, rerender} = render(
       <NumberField value={1} onChange={onChange} />,
     );
@@ -86,7 +86,7 @@ describe('NumberField tests', () => {
   });
 
   test('should not call change handler if value > max', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element} = render(
       <NumberField value={1} max={2} onChange={onChange} />,
     );
@@ -99,7 +99,7 @@ describe('NumberField tests', () => {
   });
 
   test('should reset to max', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element} = render(
       <NumberField value={1} max={2} onChange={onChange} />,
     );
@@ -115,7 +115,7 @@ describe('NumberField tests', () => {
   });
 
   test('should not call change handler if value < min', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element} = render(
       <NumberField value={1} min={1} onChange={onChange} />,
     );
@@ -128,7 +128,7 @@ describe('NumberField tests', () => {
   });
 
   test('should reset to min', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element} = render(
       <NumberField value={2} min={1} onChange={onChange} />,
     );
@@ -146,7 +146,7 @@ describe('NumberField tests', () => {
   });
 
   test('should reset to last valid value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const {element} = render(
       <NumberField value={2} min={1} onChange={onChange} />,
     );
@@ -164,7 +164,7 @@ describe('NumberField tests', () => {
   });
 
   test('should not allow to add letters', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(<NumberField value={1} onKeyDown={handler} />);
 
     fireEvent.keyDown(element, {key: 'a', keyCode: 65});
@@ -173,7 +173,7 @@ describe('NumberField tests', () => {
   });
 
   test('should allow to add numbers', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(<NumberField value={1} onKeyDown={handler} />);
 
     fireEvent.keyDown(element, {key: '1', keyCode: 49});
@@ -183,7 +183,7 @@ describe('NumberField tests', () => {
   });
 
   test('should allow point key for float numbers', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(
       <NumberField value={1} type="float" onKeyDown={handler} />,
     );
@@ -195,7 +195,7 @@ describe('NumberField tests', () => {
   });
 
   test('should not allow point key for int numbers', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(
       <NumberField value={1} type="int" onKeyDown={handler} />,
     );
@@ -207,7 +207,7 @@ describe('NumberField tests', () => {
   });
 
   test('should call onDownKeyPressed handler', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(
       <NumberField value={1} onDownKeyPressed={handler} />,
     );
@@ -222,7 +222,7 @@ describe('NumberField tests', () => {
   });
 
   test('should call onUpKeyPressed handler', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(
       <NumberField value={1} onUpKeyPressed={handler} />,
     );

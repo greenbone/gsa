@@ -31,11 +31,11 @@ describe('LanguageDetector tests', () => {
 
   test('should detect language from store', () => {
     const languageUtils = {
-      formatLanguageCode: jest.fn().mockReturnValue('foo'),
-      isSupportedCode: jest.fn().mockReturnValue(true),
+      formatLanguageCode: vi.fn().mockReturnValue('foo'),
+      isSupportedCode: vi.fn().mockReturnValue(true),
     };
     const storage = {};
-    const locale = jest.fn().mockReturnValue('foo');
+    const locale = vi.fn().mockReturnValue('foo');
     Object.defineProperty(storage, 'locale', {
       get: locale,
     });
@@ -52,11 +52,11 @@ describe('LanguageDetector tests', () => {
 
   test('should return fallback language', () => {
     const languageUtils = {
-      formatLanguageCode: jest.fn().mockReturnValue('foo'),
-      isSupportedCode: jest.fn().mockReturnValue(false),
+      formatLanguageCode: vi.fn().mockReturnValue('foo'),
+      isSupportedCode: vi.fn().mockReturnValue(false),
     };
     const storage = {};
-    const locale = jest.fn().mockReturnValue('foo');
+    const locale = vi.fn().mockReturnValue('foo');
     Object.defineProperty(storage, 'locale', {
       get: locale,
     });
@@ -74,8 +74,8 @@ describe('LanguageDetector tests', () => {
   test('should return language from navigator', () => {
     const storage = {};
     const languageUtils = {
-      formatLanguageCode: jest.fn().mockImplementation(l => l),
-      isSupportedCode: jest.fn().mockReturnValue(true),
+      formatLanguageCode: vi.fn().mockImplementation(l => l),
+      isSupportedCode: vi.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
@@ -95,14 +95,14 @@ describe('LanguageDetector tests', () => {
   test('should return languages from fake navigator', () => {
     const storage = {};
     const languageUtils = {
-      formatLanguageCode: jest.fn().mockImplementation(l => l),
-      isSupportedCode: jest.fn().mockReturnValue(true),
+      formatLanguageCode: vi.fn().mockImplementation(l => l),
+      isSupportedCode: vi.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
 
     const navigator = {};
-    const languages = jest.fn().mockReturnValue(['lorem', 'ipsum']);
+    const languages = vi.fn().mockReturnValue(['lorem', 'ipsum']);
     Object.defineProperty(navigator, 'languages', {
       get: languages,
     });
@@ -120,14 +120,14 @@ describe('LanguageDetector tests', () => {
   test('should return language from fake navigator', () => {
     const storage = {};
     const languageUtils = {
-      formatLanguageCode: jest.fn().mockImplementation(l => l),
-      isSupportedCode: jest.fn().mockReturnValue(true),
+      formatLanguageCode: vi.fn().mockImplementation(l => l),
+      isSupportedCode: vi.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
 
     const navigator = {};
-    const language = jest.fn().mockReturnValue('lorem');
+    const language = vi.fn().mockReturnValue('lorem');
     Object.defineProperty(navigator, 'language', {
       get: language,
     });
@@ -145,14 +145,14 @@ describe('LanguageDetector tests', () => {
   test('should return userLanguage from fake navigator', () => {
     const storage = {};
     const languageUtils = {
-      formatLanguageCode: jest.fn().mockImplementation(l => l),
-      isSupportedCode: jest.fn().mockReturnValue(true),
+      formatLanguageCode: vi.fn().mockImplementation(l => l),
+      isSupportedCode: vi.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
 
     const navigator = {};
-    const userLanguage = jest.fn().mockReturnValue('lorem');
+    const userLanguage = vi.fn().mockReturnValue('lorem');
     Object.defineProperty(navigator, 'userLanguage', {
       get: userLanguage,
     });
@@ -170,8 +170,8 @@ describe('LanguageDetector tests', () => {
   test('should return fallback when navigator is not available', () => {
     const storage = {};
     const languageUtils = {
-      formatLanguageCode: jest.fn().mockImplementation(l => l),
-      isSupportedCode: jest.fn().mockReturnValue(true),
+      formatLanguageCode: vi.fn().mockImplementation(l => l),
+      isSupportedCode: vi.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();

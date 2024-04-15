@@ -30,7 +30,7 @@ const mockDate = new Date(1595660400000); // Saturday July 25 090000
 const _now = global.Date.now;
 
 // set mockDate so the feed ages don't keep changing
-global.Date.now = jest.fn(() => mockDate);
+global.Date.now = vi.fn(() => mockDate);
 
 const nvtFeed = new Feed({
   name: 'Greenbone Community Feed',
@@ -69,7 +69,7 @@ const response = new Response(xhr, data);
 
 const gmp = {
   feedstatus: {
-    readFeedInformation: jest.fn(() => Promise.resolve(response)),
+    readFeedInformation: vi.fn(() => Promise.resolve(response)),
   },
   settings: {
     manualUrl: 'http://foo.bar',

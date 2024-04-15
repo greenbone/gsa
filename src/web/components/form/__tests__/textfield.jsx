@@ -39,7 +39,7 @@ describe('TextField tests', () => {
   });
 
   test('should call change handler with value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(<TextField value="foo" onChange={onChange} />);
 
@@ -49,7 +49,7 @@ describe('TextField tests', () => {
   });
 
   test('should call change handler with value and name', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(
       <TextField name="foo" value="ipsum" onChange={onChange} />,
@@ -61,7 +61,7 @@ describe('TextField tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
 
     const {element} = render(
       <TextField disabled={true} value="foo" onChange={onChange} />,

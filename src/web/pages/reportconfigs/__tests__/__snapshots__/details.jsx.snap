@@ -1,0 +1,497 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Report Config Details tests > should render full Details 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c6 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.c1 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+}
+
+.c7 {
+  vertical-align: top;
+}
+
+.c2 td {
+  padding: 4px 4px 4px 0;
+}
+
+.c2 tr td:first-child {
+  padding-right: 5px;
+}
+
+.c3 {
+  width: 10%;
+}
+
+.c4 {
+  width: 90%;
+}
+
+@media print {
+  .c1 {
+    border-collapse: collapse;
+  }
+}
+
+<div
+  class="c0"
+>
+  <table
+    class="c1 c2"
+  >
+    <colgroup>
+      <col
+        class="c3"
+        width="10%"
+      />
+      <col
+        class="c4"
+        width="90%"
+      />
+    </colgroup>
+    <tbody
+      class=""
+    >
+      <tr>
+        <td>
+          <div
+            class="c5"
+          >
+            Report Format
+          </div>
+        </td>
+        <td>
+          <div
+            class="c5"
+          >
+            <span>
+              <a
+                class="c6"
+                data-testid="details-link"
+                href="/reportformat/123456"
+              >
+                example-configurable-1
+              </a>
+            </span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td
+          class="c7"
+        >
+          <div
+            class="c5"
+          >
+            Parameters
+          </div>
+        </td>
+        <td>
+          <div
+            class="c5"
+          >
+            <div
+              class="c8"
+            >
+              <table
+                class="c1 c2"
+              >
+                <tbody
+                  class=""
+                >
+                  <tr>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        StringParam
+                      </div>
+                    </td>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        StringValue
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        TextParam
+                      </div>
+                    </td>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        <pre>
+                          TextValue
+                        </pre>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        IntegerParam
+                      </div>
+                    </td>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        12
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        BooleanParam
+                      </div>
+                    </td>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        Yes
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        SelectionParam
+                      </div>
+                    </td>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        OptionB
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        ReportFormatListParam
+                      </div>
+                    </td>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        <a
+                          class="c6"
+                          data-testid="details-link"
+                          href="/reportformat/654321"
+                        >
+                          non-configurable-1
+                        </a>
+                        <a
+                          class="c6"
+                          data-testid="details-link"
+                          href="/reportformat/7654321"
+                        >
+                          non-configurable-2
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td
+          class="c7"
+        >
+          <div
+            class="c5"
+          >
+            Alerts using this Report Config
+          </div>
+        </td>
+        <td>
+          <div
+            class="c5"
+          >
+            <span>
+              <a
+                class="c6"
+                data-testid="details-link"
+                href="/alert/321"
+              >
+                ABC
+              </a>
+            </span>
+            <span>
+              <a
+                class="c6"
+                data-testid="details-link"
+                href="/alert/789"
+              >
+                XYZ
+              </a>
+            </span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;
+
+exports[`Report Config Details tests > should render orphaned config details 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c5 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c1 {
+  border: 0;
+  border-spacing: 0px;
+  font-size: 12px;
+  text-align: left;
+  table-layout: auto;
+}
+
+.c6 {
+  vertical-align: top;
+}
+
+.c2 td {
+  padding: 4px 4px 4px 0;
+}
+
+.c2 tr td:first-child {
+  padding-right: 5px;
+}
+
+.c3 {
+  width: 10%;
+}
+
+.c4 {
+  width: 90%;
+}
+
+@media print {
+  .c1 {
+    border-collapse: collapse;
+  }
+}
+
+<div
+  class="c0"
+>
+  <table
+    class="c1 c2"
+  >
+    <colgroup>
+      <col
+        class="c3"
+        width="10%"
+      />
+      <col
+        class="c4"
+        width="90%"
+      />
+    </colgroup>
+    <tbody
+      class=""
+    >
+      <tr>
+        <td>
+          <div
+            class="c5"
+          >
+            Report Format
+          </div>
+        </td>
+        <td>
+          <div
+            class="c5"
+          >
+            <span />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td
+          class="c6"
+        >
+          <div
+            class="c5"
+          >
+            Parameters
+          </div>
+        </td>
+        <td>
+          <div
+            class="c5"
+          >
+            <div
+              class="c7"
+            >
+              <table
+                class="c1 c2"
+              >
+                <tbody
+                  class=""
+                >
+                  <tr>
+                    <td>
+                      <div
+                        class="c5"
+                      >
+                        <i>
+                          not available for orphaned report configs
+                        </i>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+`;

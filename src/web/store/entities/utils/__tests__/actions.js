@@ -187,18 +187,18 @@ describe('entities loading actions tests', () => {
     test('test isLoading true', () => {
       const actions = createEntitiesLoadingActions('foo');
 
-      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+      const getState = vi.fn().mockReturnValue({foo: 'bar'});
 
-      const dispatch = jest.fn();
-      const isLoadingEntities = jest.fn().mockReturnValue(true);
-      const get = jest.fn();
+      const dispatch = vi.fn();
+      const isLoadingEntities = vi.fn().mockReturnValue(true);
+      const get = vi.fn();
       const gmp = {
         foos: {
           get,
         },
       };
 
-      const selector = jest.fn(() => ({
+      const selector = vi.fn(() => ({
         isLoadingEntities,
       }));
 
@@ -222,17 +222,17 @@ describe('entities loading actions tests', () => {
 
     test('test loading success', () => {
       const actions = {
-        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
-        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
-        error: jest.fn(),
+        request: vi.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: vi.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: vi.fn(),
       };
 
-      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+      const getState = vi.fn().mockReturnValue({foo: 'bar'});
 
       const loadedFilter = Filter.fromString('name=abc');
       const counts = {first: 1};
-      const dispatch = jest.fn();
-      const get = jest.fn().mockReturnValue(
+      const dispatch = vi.fn();
+      const get = vi.fn().mockReturnValue(
         Promise.resolve({
           data: 'foo',
           meta: {
@@ -246,9 +246,9 @@ describe('entities loading actions tests', () => {
           get,
         },
       };
-      const isLoadingEntities = jest.fn().mockReturnValue(false);
+      const isLoadingEntities = vi.fn().mockReturnValue(false);
 
-      const selector = jest.fn(() => ({
+      const selector = vi.fn(() => ({
         isLoadingEntities,
       }));
 
@@ -306,23 +306,23 @@ describe('entities loading actions tests', () => {
 
     test('test loading error', () => {
       const actions = {
-        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
-        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
-        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+        request: vi.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: vi.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: vi.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
       };
 
-      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+      const getState = vi.fn().mockReturnValue({foo: 'bar'});
 
-      const dispatch = jest.fn();
-      const get = jest.fn().mockReturnValue(Promise.reject('AnError'));
+      const dispatch = vi.fn();
+      const get = vi.fn().mockReturnValue(Promise.reject('AnError'));
       const gmp = {
         foos: {
           get,
         },
       };
-      const isLoadingEntities = jest.fn().mockReturnValue(false);
+      const isLoadingEntities = vi.fn().mockReturnValue(false);
 
-      const selector = jest.fn(() => ({
+      const selector = vi.fn(() => ({
         isLoadingEntities,
       }));
 
@@ -379,18 +379,18 @@ describe('entities loading actions tests', () => {
     test('test isLoading true', () => {
       const actions = createEntitiesLoadingActions('foo');
 
-      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+      const getState = vi.fn().mockReturnValue({foo: 'bar'});
 
-      const dispatch = jest.fn();
-      const isLoadingEntities = jest.fn().mockReturnValue(true);
-      const get = jest.fn();
+      const dispatch = vi.fn();
+      const isLoadingEntities = vi.fn().mockReturnValue(true);
+      const get = vi.fn();
       const gmp = {
         foos: {
           get,
         },
       };
 
-      const selector = jest.fn(() => ({
+      const selector = vi.fn(() => ({
         isLoadingEntities,
       }));
 
@@ -414,17 +414,17 @@ describe('entities loading actions tests', () => {
 
     test('test loading success', () => {
       const actions = {
-        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
-        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
-        error: jest.fn(),
+        request: vi.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: vi.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: vi.fn(),
       };
 
-      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+      const getState = vi.fn().mockReturnValue({foo: 'bar'});
 
       const loadedFilter = Filter.fromString('name=abc');
       const counts = {first: 1};
-      const dispatch = jest.fn();
-      const get = jest.fn().mockReturnValue(
+      const dispatch = vi.fn();
+      const get = vi.fn().mockReturnValue(
         Promise.resolve({
           data: 'foo',
           meta: {
@@ -438,9 +438,9 @@ describe('entities loading actions tests', () => {
           get,
         },
       };
-      const isLoadingEntities = jest.fn().mockReturnValue(false);
+      const isLoadingEntities = vi.fn().mockReturnValue(false);
 
-      const selector = jest.fn(() => ({
+      const selector = vi.fn(() => ({
         isLoadingEntities,
       }));
 
@@ -476,23 +476,23 @@ describe('entities loading actions tests', () => {
 
     test('test loading error', () => {
       const actions = {
-        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
-        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
-        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+        request: vi.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: vi.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: vi.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
       };
 
-      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+      const getState = vi.fn().mockReturnValue({foo: 'bar'});
 
-      const dispatch = jest.fn();
-      const get = jest.fn().mockReturnValue(Promise.reject('AnError'));
+      const dispatch = vi.fn();
+      const get = vi.fn().mockReturnValue(Promise.reject('AnError'));
       const gmp = {
         foos: {
           get,
         },
       };
-      const isLoadingEntities = jest.fn().mockReturnValue(false);
+      const isLoadingEntities = vi.fn().mockReturnValue(false);
 
-      const selector = jest.fn(() => ({
+      const selector = vi.fn(() => ({
         isLoadingEntities,
       }));
 
@@ -526,23 +526,23 @@ describe('entities loading actions tests', () => {
     test('test isLoading true', () => {
       const id = 'a1';
       const actions = {
-        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
-        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
-        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+        request: vi.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: vi.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: vi.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
       };
 
-      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+      const getState = vi.fn().mockReturnValue({foo: 'bar'});
 
-      const dispatch = jest.fn();
-      const isLoadingEntity = jest.fn().mockReturnValue(true);
-      const get = jest.fn().mockReturnValue(Promise.resolve({id: 'foo'}));
+      const dispatch = vi.fn();
+      const isLoadingEntity = vi.fn().mockReturnValue(true);
+      const get = vi.fn().mockReturnValue(Promise.resolve({id: 'foo'}));
       const gmp = {
         foo: {
           get,
         },
       };
 
-      const selector = jest.fn(() => ({
+      const selector = vi.fn(() => ({
         isLoadingEntity,
       }));
 
@@ -570,16 +570,16 @@ describe('entities loading actions tests', () => {
     test('test loading success', () => {
       const id = 'a1';
       const actions = {
-        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
-        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
-        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+        request: vi.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: vi.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: vi.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
       };
 
-      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+      const getState = vi.fn().mockReturnValue({foo: 'bar'});
 
-      const dispatch = jest.fn();
-      const isLoadingEntity = jest.fn().mockReturnValue(false);
-      const get = jest
+      const dispatch = vi.fn();
+      const isLoadingEntity = vi.fn().mockReturnValue(false);
+      const get = vi
         .fn()
         .mockReturnValue(Promise.resolve({data: {id, name: 'foo'}}));
       const gmp = {
@@ -588,7 +588,7 @@ describe('entities loading actions tests', () => {
         },
       };
 
-      const selector = jest.fn(() => ({
+      const selector = vi.fn(() => ({
         isLoadingEntity,
       }));
 
@@ -618,23 +618,23 @@ describe('entities loading actions tests', () => {
     test('test loading error', () => {
       const id = 'a1';
       const actions = {
-        request: jest.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
-        success: jest.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
-        error: jest.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
+        request: vi.fn().mockReturnValue({type: 'MY_REQUEST_ACTION'}),
+        success: vi.fn().mockReturnValue({type: 'MY_SUCCESS_ACTION'}),
+        error: vi.fn().mockReturnValue({type: 'MY_ERROR_ACTION'}),
       };
 
-      const getState = jest.fn().mockReturnValue({foo: 'bar'});
+      const getState = vi.fn().mockReturnValue({foo: 'bar'});
 
-      const dispatch = jest.fn();
-      const isLoadingEntity = jest.fn().mockReturnValue(false);
-      const get = jest.fn().mockReturnValue(Promise.reject('An error'));
+      const dispatch = vi.fn();
+      const isLoadingEntity = vi.fn().mockReturnValue(false);
+      const get = vi.fn().mockReturnValue(Promise.reject('An error'));
       const gmp = {
         foo: {
           get,
         },
       };
 
-      const selector = jest.fn(() => ({
+      const selector = vi.fn(() => ({
         isLoadingEntity,
       }));
 
@@ -668,10 +668,10 @@ describe('createDeleteEntity tests', () => {
     const id = 'id1';
     const gmp = {
       foo: {
-        delete: jest.fn().mockResolvedValue({data: 'bar'}),
+        delete: vi.fn().mockResolvedValue({data: 'bar'}),
       },
     };
-    const dispatch = jest.fn();
+    const dispatch = vi.fn();
     const deleteFunc = createDeleteEntity({entityType: 'foo'});
 
     expect(deleteFunc).toBeDefined();

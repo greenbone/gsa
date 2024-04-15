@@ -46,7 +46,7 @@ describe('ArrowIcon component tests', () => {
   });
 
   test('should handle click', () => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const {element} = render(<ArrowIcon onClick={handler} />);
 
     fireEvent.click(element);

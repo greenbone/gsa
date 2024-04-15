@@ -88,13 +88,13 @@ const preferences = {
 
 const schedule = Schedule.fromElement({_id: '121314', name: 'schedule1'});
 
-const getConfig = jest.fn().mockReturnValue(
+const getConfig = vi.fn().mockReturnValue(
   Promise.resolve({
     data: config,
   }),
 );
 
-const getSchedule = jest.fn().mockReturnValue(
+const getSchedule = vi.fn().mockReturnValue(
   Promise.resolve({
     data: schedule,
   }),
