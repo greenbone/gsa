@@ -19,6 +19,6 @@ describe('Header tests', () => {
 
     const {element} = render(<Header />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 });

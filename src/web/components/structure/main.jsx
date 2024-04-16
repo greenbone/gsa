@@ -5,19 +5,17 @@
 
 import styled from 'styled-components';
 
-import withLayout from 'web/components/layout/withLayout';
-
 const Main = styled.main`
-  padding: 5px 10px;
-  height: 100%;
+  padding: 15px;
+  height: calc(-48px + 100vh);
   padding-bottom: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-basis: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
 `;
 
 Main.displayName = 'Main';
 
-export default withLayout({
-  flex: 'column',
-  align: 'start',
-})(Main);
-
-// vim: set ts=2 sw=2 tw=80:
+export default Main;
