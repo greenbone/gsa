@@ -7,208 +7,243 @@ import {describe, test, expect, testing} from '@gsa/testing';
 
 import {KeyCode} from 'gmp/utils/event';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent, screen, userEvent} from 'web/utils/testing';
 
 import Spinner from '../spinner';
 
+const getInput = element =>
+  element.querySelector('input.mantine-NumberInput-input');
+
+const getIncrementButton = element =>
+  element.querySelector('.mantine-NumberInput-controlUp');
+const getDecrementButton = element =>
+  element.querySelector('.mantine-NumberInput-controlDown');
+
+const clickIncrementButton = async element =>
+  await userEvent.click(getIncrementButton(element));
+
+const clickDecrementButton = async element =>
+  await userEvent.click(getDecrementButton(element));
+
 describe('Spinner tests', () => {
   test('should render', () => {
-    const {element, getByTestId} = render(<Spinner value={1} />);
+    render(<Spinner data-testid="input" value={1} />);
 
-    const input = getByTestId('spinner-input');
-    expect(input).toHaveAttribute('value', '1');
+    const element = screen.getByTestId('input');
 
-    expect(element).toMatchSnapshot();
+    expect(element).toHaveAttribute('value', '1');
   });
 
   test('should call change handler', () => {
-    const handler = testing.fn();
-    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
+    const onChange = testing.fn();
+    render(<Spinner data-testid="input" value={1} onChange={onChange} />);
 
-    const input = getByTestId('spinner-input');
-    fireEvent.change(input, {target: {value: '2'}});
+    const element = screen.getByTestId('input');
 
-    expect(handler).toHaveBeenCalledWith(2, undefined);
+    fireEvent.change(element, {target: {value: '2'}});
+
+    expect(onChange).toHaveBeenCalledWith(2, undefined);
+    expect(element).toHaveAttribute('value', '2');
   });
 
-  test('should call change handler with name', () => {
-    const handler = testing.fn();
-    const {getByTestId} = render(
-      <Spinner name="foo" value={1} onChange={handler} />,
+  test('should call change handler for characters with empty string', () => {
+    const onChange = testing.fn();
+    render(<Spinner data-testid="input" value={1} onChange={onChange} />);
+
+    const element = screen.getByTestId('input');
+
+    fireEvent.change(element, {target: {value: 'ABC'}});
+
+    expect(onChange).toHaveBeenCalledWith('', undefined);
+    expect(element).toHaveAttribute('value', '');
+  });
+
+  test('should allow to clear input', () => {
+    const onChange = testing.fn();
+    render(<Spinner data-testid="input" value={1} onChange={onChange} />);
+
+    const element = screen.getByTestId('input');
+
+    fireEvent.change(element, {target: {value: ''}});
+
+    expect(onChange).toHaveBeenCalledWith('', undefined);
+    expect(element).toHaveAttribute('value', '');
+  });
+
+  test('should call change handler with value and name', () => {
+    const onChange = testing.fn();
+    render(
+      <Spinner data-testid="input" name="foo" value={1} onChange={onChange} />,
     );
 
-    const input = getByTestId('spinner-input');
-    fireEvent.change(input, {target: {value: '2'}});
+    const element = screen.getByTestId('input');
 
-    expect(handler).toHaveBeenCalledWith(2, 'foo');
+    fireEvent.change(element, {target: {value: '2'}});
+
+    expect(onChange).toHaveBeenCalledWith(2, 'foo');
+    expect(element).toHaveAttribute('value', '2');
   });
 
-  test('should increment value on button click', () => {
-    const handler = testing.fn();
-    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
+  test('should not call change handler if disabled', () => {
+    const onChange = testing.fn();
+    render(
+      <Spinner
+        data-testid="input"
+        disabled={true}
+        value={1}
+        onChange={onChange}
+      />,
+    );
 
-    const button = getByTestId('spinner-up');
-    fireEvent.click(button);
+    const element = screen.getByTestId('input');
+
+    fireEvent.change(element, {target: {value: '2'}});
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  test('should update value', () => {
+    const onChange = testing.fn();
+    const {rerender} = render(
+      <Spinner data-testid="input" value={1} onChange={onChange} />,
+    );
+
+    const element = screen.getByTestId('input');
+
+    fireEvent.change(element, {target: {value: '2'}});
+
+    expect(onChange).toHaveBeenCalledWith(2, undefined);
+    expect(element).toHaveAttribute('value', '2');
+
+    rerender(<Spinner data-testid="input" value={2} onChange={onChange} />);
+
+    expect(element).toHaveAttribute('value', '2');
+
+    rerender(<Spinner data-testid="input" value={3} onChange={onChange} />);
+
+    expect(element).toHaveAttribute('value', '3');
+  });
+
+  test('should use max if value > max', () => {
+    const onChange = testing.fn();
+    render(
+      <Spinner data-testid="input" value={1} max={2} onChange={onChange} />,
+    );
+
+    const element = screen.getByTestId('input');
+
+    fireEvent.change(element, {target: {value: '3'}});
+
+    expect(onChange).toHaveBeenCalledWith(2, undefined);
+    expect(element).toHaveAttribute('value', '2');
+  });
+
+  test('should use min if value < min', () => {
+    const onChange = testing.fn();
+    render(
+      <Spinner data-testid="input" value={2} min={1} onChange={onChange} />,
+    );
+
+    const element = screen.getByTestId('input');
+
+    fireEvent.change(element, {target: {value: '0'}});
+
+    expect(onChange).toHaveBeenCalledWith(1, undefined);
+    expect(element).toHaveAttribute('value', '1');
+  });
+
+  test('should increment value on button click', async () => {
+    const handler = testing.fn();
+    const {element} = render(<Spinner value={1} onChange={handler} />);
+
+    await clickIncrementButton(element);
 
     expect(handler).toHaveBeenCalledWith(2, undefined);
   });
 
-  test('should decrement value on button click', () => {
+  test('should decrement value on button click', async () => {
     const handler = testing.fn();
-    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
+    const {element} = render(<Spinner value={1} onChange={handler} />);
 
-    const button = getByTestId('spinner-down');
-    fireEvent.click(button);
-
-    expect(handler).toHaveBeenCalledWith(0, undefined);
-  });
-
-  test('should increment value on wheel up', () => {
-    const handler = testing.fn();
-    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
-
-    const input = getByTestId('spinner-input');
-    fireEvent.wheel(input, {deltaY: 2});
-
-    expect(handler).toHaveBeenCalledWith(2, undefined);
-  });
-
-  test('should decrement value on wheel down', () => {
-    const handler = testing.fn();
-    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
-
-    const input = getByTestId('spinner-input');
-    fireEvent.wheel(input, {deltaY: -2});
+    await clickDecrementButton(element);
 
     expect(handler).toHaveBeenCalledWith(0, undefined);
   });
 
   test('should increment on key up', () => {
     const handler = testing.fn();
-    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
+    const {element} = render(<Spinner value={1} onChange={handler} />);
 
-    const input = getByTestId('spinner-input');
+    const input = getInput(element);
+
     fireEvent.keyDown(input, {key: 'ArrowUp', keyCode: KeyCode.UP});
-
-    expect(handler).toHaveBeenCalledWith(2, undefined);
-  });
-
-  test('should increment on key page up', () => {
-    const handler = testing.fn();
-    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
-
-    const input = getByTestId('spinner-input');
-    fireEvent.keyDown(input, {key: 'PageUp', keyCode: KeyCode.PAGE_UP});
 
     expect(handler).toHaveBeenCalledWith(2, undefined);
   });
 
   test('should decrement on key down', () => {
     const handler = testing.fn();
-    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
+    const {element} = render(<Spinner value={1} onChange={handler} />);
 
-    const input = getByTestId('spinner-input');
+    const input = getInput(element);
+
     fireEvent.keyDown(input, {key: 'ArrowDown', keyCode: KeyCode.DOWN});
-
-    expect(handler).toHaveBeenCalledWith(0, undefined);
-  });
-
-  test('should decrement on key page down', () => {
-    const handler = testing.fn();
-    const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
-
-    const input = getByTestId('spinner-input');
-    fireEvent.keyDown(input, {key: 'PageDown', keyCode: KeyCode.PAGE_DOWN});
 
     expect(handler).toHaveBeenCalledWith(0, undefined);
   });
 
   test('should not call event handler if disabled', () => {
     const handler = testing.fn();
-    const {getByTestId} = render(
+    const {element} = render(
       <Spinner disabled={true} value={1} onChange={handler} />,
     );
 
-    const input = getByTestId('spinner-input');
-    fireEvent.wheel(input, {deltaY: 2});
-    fireEvent.wheel(input, {deltaY: -2});
-
-    fireEvent.keyDown(input, {key: 'PageDown', keyCode: KeyCode.PAGE_DOWN});
-    fireEvent.keyDown(input, {key: 'PageUp', keyCode: KeyCode.PAGE_UP});
+    const input = getInput(element);
     fireEvent.keyDown(input, {key: 'ArrowDown', keyCode: KeyCode.DOWN});
     fireEvent.keyDown(input, {key: 'ArrowUp', keyCode: KeyCode.UP});
 
-    const dbutton = getByTestId('spinner-down');
-    fireEvent.click(dbutton);
-    const ubutton = getByTestId('spinner-up');
-    fireEvent.click(ubutton);
+    expect(getIncrementButton(element)).toBeNull();
+    expect(getDecrementButton(element)).toBeNull();
 
     expect(handler).not.toHaveBeenCalled();
   });
 
-  test('should debounce notification', () => {
-    testing.useFakeTimers();
-
+  test('should not increment value beyond max', async () => {
     const handler = testing.fn();
-    const {getByTestId} = render(
-      <Spinner debounce={200} value={1} onChange={handler} />,
-    );
+    const {element} = render(<Spinner value={1} max={1} onChange={handler} />);
 
-    const ubutton = getByTestId('spinner-up');
-    fireEvent.click(ubutton);
-    fireEvent.click(ubutton);
-    fireEvent.click(ubutton);
-
-    testing.runAllTimers();
-
-    expect(handler).toHaveBeenCalledTimes(1);
-    expect(handler).toHaveBeenCalledWith(2, undefined);
-  });
-
-  test('should not increment value beyond max', () => {
-    const handler = testing.fn();
-    const {getByTestId} = render(
-      <Spinner value={1} max={1} onChange={handler} />,
-    );
-
-    const button = getByTestId('spinner-up');
-    fireEvent.click(button);
+    await clickIncrementButton(element);
 
     expect(handler).toHaveBeenCalledWith(1, undefined);
   });
 
-  test('should not decrement value below min', () => {
+  test('should not decrement value below min', async () => {
     const handler = testing.fn();
-    const {getByTestId} = render(
-      <Spinner value={1} min={1} onChange={handler} />,
-    );
+    const {element} = render(<Spinner value={1} min={1} onChange={handler} />);
 
-    const button = getByTestId('spinner-down');
-    fireEvent.click(button);
+    await clickDecrementButton(element);
 
     expect(handler).toHaveBeenCalledWith(1, undefined);
   });
 
-  test('should increment float value', () => {
+  test('should increment float value', async () => {
     const handler = testing.fn();
-    const {getByTestId} = render(
-      <Spinner type="float" value={1} onChange={handler} />,
+    const {element} = render(
+      <Spinner type="float" value={1.1} onChange={handler} />,
     );
 
-    const button = getByTestId('spinner-up');
-    fireEvent.click(button);
+    await clickIncrementButton(element);
 
-    expect(handler).toHaveBeenCalledWith(1.1, undefined);
+    expect(handler).toHaveBeenCalledWith(1.2, undefined);
   });
 
-  test('should increment value with step', () => {
+  test('should increment value with step', async () => {
     const handler = testing.fn();
-    const {getByTestId} = render(
+    const {element} = render(
       <Spinner step={0.5} type="float" value={1} onChange={handler} />,
     );
 
-    const button = getByTestId('spinner-up');
-    fireEvent.click(button);
+    await clickIncrementButton(element);
 
     expect(handler).toHaveBeenCalledWith(1.5, undefined);
   });

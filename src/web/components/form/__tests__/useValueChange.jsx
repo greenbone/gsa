@@ -2,11 +2,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, screen, fireEvent} from 'web/utils/testing';
 
 import useValueChange from '../useValueChange';
 
+// eslint-disable-next-line react/prop-types
 const TestComponent = ({value, onChange, name, disabled}) => {
   const handleChange = useValueChange({onChange, name, disabled});
 
@@ -17,7 +19,7 @@ const TestComponent = ({value, onChange, name, disabled}) => {
 
 describe('onValueChange Tests', () => {
   test('should call onChange when value changes', () => {
-    const onChange = jest.fn();
+    const onChange = testing.fn();
 
     render(<TestComponent value="test" onChange={onChange} name="test" />);
 
@@ -30,9 +32,16 @@ describe('onValueChange Tests', () => {
   });
 
   test('should not call onChange when disabled', () => {
-    const onChange = jest.fn();
+    const onChange = testing.fn();
 
-    render(<TestComponent value="test" onChange={onChange} name="test" disabled={true}/>);
+    render(
+      <TestComponent
+        value="test"
+        onChange={onChange}
+        name="test"
+        disabled={true}
+      />,
+    );
 
     const input = screen.getByRole('textbox');
 

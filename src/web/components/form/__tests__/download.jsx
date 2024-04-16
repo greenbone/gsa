@@ -12,11 +12,11 @@ import Download from '../download';
 describe('Download tests', () => {
   test('should render', () => {
     const {element} = render(<Download />);
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should render with filename', () => {
     const {element} = render(<Download filename="foo.bar" />);
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 });

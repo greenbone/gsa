@@ -5,28 +5,39 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent, screen, userEvent} from 'web/utils/testing';
 
 import MultiSelect from '../multiselect';
 
-const openInputElement = element => {
-  const button = element.querySelector('[type="button"]');
-  fireEvent.click(button);
+const openSelectElement = async select => {
+  select = select || getSelectElement();
+  await userEvent.click(select);
 };
 
-const getItemElements = baseElement => {
-  const portal = baseElement.querySelector('#portals');
-  return portal.querySelectorAll('span');
+const getItemElements = () => {
+  return screen.queryAllByRole('option');
 };
 
-describe('MultiSelect component tests', () => {
+const getSelectElement = () => {
+  const select = screen.queryByRole('searchbox');
+  if (select) {
+    return select;
+  }
+  return screen.getByRole('textbox');
+};
+
+const getSelectedItems = element => {
+  return element.querySelectorAll('.mantine-MultiSelect-value');
+};
+
+describe('MultiSelect tests', () => {
   test('should render', () => {
     const {element} = render(<MultiSelect />);
 
     expect(element).toBeVisible();
   });
 
-  test('should render with items', () => {
+  test('should render with items', async () => {
     const items = [
       {
         value: 'bar',
@@ -38,20 +49,19 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const {element, baseElement} = render(<MultiSelect items={items} />);
+    render(<MultiSelect items={items} />);
 
-    let domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(0);
+    expect(getItemElements().length).toEqual(0);
 
-    openInputElement(element);
+    await openSelectElement();
 
-    domItems = getItemElements(baseElement);
+    const domItems = getItemElements();
     expect(domItems.length).toEqual(2);
     expect(domItems[0]).toHaveTextContent('Bar');
     expect(domItems[1]).toHaveTextContent('Foo');
   });
 
-  test('should render loading', () => {
+  test('should render loading', async () => {
     const items = [
       {
         value: '0',
@@ -59,22 +69,20 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const {element, baseElement} = render(
-      <MultiSelect items={items} isLoading={true} />,
-    );
+    render(<MultiSelect items={items} isLoading={true} />);
 
-    expect(element).toHaveTextContent('Loading...');
+    const element = getSelectElement();
 
-    let domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(0);
+    expect(element).toHaveAttribute('placeholder', 'Loading...');
 
-    openInputElement(element);
+    expect(getItemElements().length).toEqual(0);
 
-    domItems = getItemElements(baseElement);
-    expect(domItems.length).toEqual(0);
+    await openSelectElement(element);
+
+    expect(getItemElements().length).toEqual(0);
   });
 
-  test('should render invalid state', () => {
+  test('should render error', () => {
     const items = [
       {
         value: '0',
@@ -82,13 +90,14 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const {element} = render(<MultiSelect hsaError={true} items={items} />);
+    render(<MultiSelect errorContent={'Some Error'} items={items} />);
 
-    expect(element).toHaveTextContent('×');
-    expect(element).toHaveStyleRule('background-color: #f2dede');
+    getSelectElement();
+
+    expect(screen.getByText('Some Error')).toBeVisible();
   });
 
-  test('should call onChange handler', () => {
+  test('should call onChange handler', async () => {
     const items = [
       {
         value: 'bar',
@@ -102,22 +111,19 @@ describe('MultiSelect component tests', () => {
 
     const onChange = testing.fn();
 
-    const {element, baseElement} = render(
-      <MultiSelect items={items} onChange={onChange} />,
-    );
+    render(<MultiSelect items={items} onChange={onChange} />);
 
-    openInputElement(element);
+    await openSelectElement();
 
-    const domItems = getItemElements(baseElement);
+    const domItems = getItemElements();
     expect(domItems.length).toEqual(2);
 
-    fireEvent.click(domItems[1]);
+    await userEvent.click(domItems[1]);
 
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith(['foo'], undefined);
+    expect(onChange).toHaveBeenCalledWith(['foo'], undefined);
   });
 
-  test('should call onChange handler with name', () => {
+  test('should call onChange handler with name', async () => {
     const items = [
       {
         value: 'bar',
@@ -131,22 +137,19 @@ describe('MultiSelect component tests', () => {
 
     const onChange = testing.fn();
 
-    const {element, baseElement} = render(
-      <MultiSelect name="abc" items={items} onChange={onChange} />,
-    );
+    render(<MultiSelect name="abc" items={items} onChange={onChange} />);
 
-    openInputElement(element);
+    await openSelectElement();
 
-    const domItems = getItemElements(baseElement);
+    const domItems = getItemElements();
     expect(domItems.length).toEqual(2);
 
-    fireEvent.click(domItems[0]);
+    await userEvent.click(domItems[0]);
 
-    expect(onChange).toBeCalled();
-    expect(onChange).toBeCalledWith(['bar'], 'abc');
+    expect(onChange).toHaveBeenCalledWith(['bar'], 'abc');
   });
 
-  test('should change displayed values', () => {
+  test('should change displayed values', async () => {
     const items = [
       {
         value: 'bar',
@@ -158,29 +161,29 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const {rerender, getAllByTestId} = render(
+    const {element, rerender} = render(
       <MultiSelect items={items} value={['bar']} />,
     );
 
-    let displayedItems = getAllByTestId('multiselect-selected-label');
+    let displayedItems = getSelectedItems(element);
     expect(displayedItems.length).toEqual(1);
     expect(displayedItems[0]).toHaveTextContent('Bar');
 
     rerender(<MultiSelect items={items} value={['foo']} />);
 
-    displayedItems = getAllByTestId('multiselect-selected-label');
+    displayedItems = getSelectedItems(element);
     expect(displayedItems.length).toEqual(1);
     expect(displayedItems[0]).toHaveTextContent('Foo');
 
     rerender(<MultiSelect items={items} value={['foo', 'bar']} />);
 
-    displayedItems = getAllByTestId('multiselect-selected-label');
+    displayedItems = getSelectedItems(element);
     expect(displayedItems.length).toEqual(2);
     expect(displayedItems[0]).toHaveTextContent('Foo');
     expect(displayedItems[1]).toHaveTextContent('Bar');
   });
 
-  test('should filter items', () => {
+  test('should filter items', async () => {
     const items = [
       {
         value: 'bar',
@@ -196,27 +199,21 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const {element, getByTestId, getAllByTestId} = render(
-      <MultiSelect items={items} value={[]} />,
-    );
+    render(<MultiSelect items={items} value={[]} />);
 
-    openInputElement(element);
+    const input = getSelectElement();
 
-    let domItems = getAllByTestId('multiselect-item-label');
-    expect(domItems.length).toEqual(3);
-
-    const input = getByTestId('multiselect-input');
+    await openSelectElement(input);
+    expect(getItemElements().length).toEqual(3);
 
     fireEvent.change(input, {target: {value: 'ba'}});
-    domItems = getAllByTestId('multiselect-item-label');
-    expect(domItems.length).toEqual(2);
+    expect(getItemElements().length).toEqual(2);
 
     fireEvent.change(input, {target: {value: 'F'}});
-    domItems = getAllByTestId('multiselect-item-label');
-    expect(domItems.length).toEqual(1);
+    expect(getItemElements().length).toEqual(1);
   });
 
-  test('should call onChange handler to remove selected item', () => {
+  test('should call onChange handler to remove selected item', async () => {
     const items = [
       {
         value: 'bar',
@@ -230,19 +227,16 @@ describe('MultiSelect component tests', () => {
 
     const onChange = testing.fn();
 
-    const {getAllByTestId} = render(
+    const {element} = render(
       <MultiSelect items={items} value={['bar', 'foo']} onChange={onChange} />,
     );
 
-    const selectedItems = getAllByTestId('multiselect-selected-label');
+    const selectedItems = getSelectedItems(element);
     expect(selectedItems.length).toEqual(2);
 
-    const deleteIcons = getAllByTestId('multiselect-selected-delete');
-    expect(deleteIcons.length).toEqual(2);
-    fireEvent.click(deleteIcons[0]);
+    const deleteIcon = selectedItems[0].querySelector('button');
+    await userEvent.click(deleteIcon);
 
     expect(onChange).toHaveBeenCalledWith(['foo'], undefined);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:
