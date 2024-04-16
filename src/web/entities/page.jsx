@@ -77,9 +77,8 @@ class EntitiesPage extends React.Component {
 
     this.handleFilterCreated = this.handleFilterCreated.bind(this);
     this.handleFilterEditClick = this.handleFilterEditClick.bind(this);
-    this.handleFilterDialogCloseClick = this.handleFilterDialogCloseClick.bind(
-      this,
-    );
+    this.handleFilterDialogCloseClick =
+      this.handleFilterDialogCloseClick.bind(this);
   }
 
   componentDidMount() {
@@ -110,13 +109,8 @@ class EntitiesPage extends React.Component {
   }
 
   renderSection() {
-    const {
-      entities,
-      isLoading,
-      sectionIcon,
-      dashboard,
-      dashboardControls,
-    } = this.props;
+    const {entities, isLoading, sectionIcon, dashboard, dashboardControls} =
+      this.props;
 
     let {section: SectionComponent} = this.props;
 
@@ -271,7 +265,7 @@ class EntitiesPage extends React.Component {
 
   render() {
     return (
-      <Layout grow="1" flex="column">
+      <Layout grow="1" flex="column" align="start">
         {this.renderToolbar()}
         {this.renderSection()}
         {this.renderDialogs()}
@@ -338,10 +332,7 @@ const mapDispatchToProps = (dispatch, {gmp, filtersFilter}) => ({
 
 export default compose(
   withGmp,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 )(EntitiesPage);
 
 // vim: set ts=2 sw=2 tw=80:
