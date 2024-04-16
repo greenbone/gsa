@@ -5,8 +5,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -32,6 +30,8 @@ import {ResultsSeverityDisplay} from 'web/pages/results/dashboard/severityclassd
 import {TasksSeverityDisplay} from 'web/pages/tasks/dashboard/severityclassdisplay';
 import {TasksStatusDisplay} from 'web/pages/tasks/dashboard/statusdisplay';
 /* eslint-enable max-len */
+
+import useTranslation from 'web/hooks/useTranslation';
 
 export const MAX_TITLE_LENGTH = 50;
 
@@ -70,6 +70,7 @@ const SECINFO_DEFAULT_DISPLAYS = [
 const EMPTY_DISPLAYS = [];
 
 const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
+  const [_] = useTranslation();
   const defaultDisplayChoices = [
     {
       label: _('Default'),
@@ -102,9 +103,6 @@ const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
     <SaveDialog
       buttonTitle={_('Add')}
       title={_('Add new Dashboard')}
-      width="550px"
-      minHeight={165}
-      minWidth={340}
       defaultValues={{
         title: _('Unnamed'),
         defaultDisplays: DEFAULT_DISPLAYS,
@@ -114,16 +112,15 @@ const NewDashboardDialog = ({additionalDisplayChoices, onClose, onSave}) => {
     >
       {({values, onValueChange}) => (
         <React.Fragment>
-          <FormGroup title={_('Dashboard Title')} titleSize={4}>
+          <FormGroup title={_('Dashboard Title')}>
             <TextField
-              grow
               name="title"
               maxLength={MAX_TITLE_LENGTH}
               value={values.title}
               onChange={onValueChange}
             />
           </FormGroup>
-          <FormGroup title={_('Initial Displays')} titleSize={4}>
+          <FormGroup title={_('Initial Displays')}>
             <Select
               name="defaultDisplays"
               items={defaultDisplayChoices}

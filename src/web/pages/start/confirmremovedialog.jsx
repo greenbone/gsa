@@ -7,14 +7,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
-import DialogTitle from 'web/components/dialog/title';
 import DialogTwoButtonFooter from 'web/components/dialog/twobuttonfooter';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const Content = styled.div`
   padding: 5px 15px;
@@ -25,15 +24,14 @@ const ConfirmRemoveDialog = ({
   dashboardId,
   onConfirm,
   onDeny,
-}) => (
-  <Dialog width="450px" minHeight={100} minWidth={200} onClose={onDeny}>
-    {({moveProps}) => (
+}) => {
+  const [_] = useTranslation();
+  return (
+    <Dialog
+      onClose={onDeny}
+      title={_('Remove Dashboard {{name}}', {name: dashboardTitle})}
+    >
       <DialogContent>
-        <DialogTitle
-          title={_('Remove Dashboard {{name}}', {name: dashboardTitle})}
-          onCloseClick={onDeny}
-          {...moveProps}
-        />
         <Content>
           {_(
             'Do you really want to remove the Dashboard {{name}} and its ' +
@@ -47,9 +45,9 @@ const ConfirmRemoveDialog = ({
           onRightButtonClick={() => onConfirm(dashboardId)}
         />
       </DialogContent>
-    )}
-  </Dialog>
-);
+    </Dialog>
+  );
+};
 
 ConfirmRemoveDialog.propTypes = {
   dashboardId: PropTypes.string.isRequired,
