@@ -17,26 +17,19 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
-import ScrollableContent from 'web/components/dialog/scrollablecontent';
-import DialogTitle from 'web/components/dialog/title';
 import DialogFooter from 'web/components/dialog/footer';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
 
-const ErrorDialogContent = ({moveprops, text, title, buttonTitle, close}) => {
+const ErrorDialogContent = ({children, buttonTitle, onClose}) => {
   return (
     <DialogContent>
-      <DialogTitle title={title} onCloseClick={close} {...moveprops} />
-      <ScrollableContent data-testid="errordialog-content">
-        {text}
-      </ScrollableContent>
-      <DialogFooter title={buttonTitle} onClick={close} />
+      {children}
+      <DialogFooter title={buttonTitle} onClick={onClose} />
     </DialogContent>
   );
 };
@@ -53,20 +46,16 @@ const ErrorDialog = ({
   width = DEFAULT_DIALOG_WIDTH,
   text,
   title,
-  buttonTitle = _('OK'),
+  buttonTitle,
   onClose,
 }) => {
+  const [_] = useTranslation();
+  buttonTitle = buttonTitle || _('OK');
   return (
-    <Dialog width={width} onClose={onClose} resizable={false}>
-      {({close, moveProps}) => (
-        <ErrorDialogContent
-          close={close}
-          moveprops={moveProps}
-          text={text}
-          title={title}
-          buttonTitle={buttonTitle}
-        />
-      )}
+    <Dialog width={width} title={title} onClose={onClose}>
+      <ErrorDialogContent onClose={onClose} buttonTitle={buttonTitle}>
+        {text}
+      </ErrorDialogContent>
     </Dialog>
   );
 };

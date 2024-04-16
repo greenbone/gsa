@@ -17,32 +17,31 @@
  */
 import React, {useState, useEffect} from 'react';
 
-import _ from 'gmp/locale';
-
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isFunction} from 'gmp/utils/identity';
 
 import State from 'web/utils/state';
 import PropTypes from 'web/utils/proptypes';
 
 import ErrorBoundary from 'web/components/error/errorboundary';
 
-import Dialog from 'web/components/dialog/dialog';
-import DialogContent from 'web/components/dialog/content';
-import DialogError from 'web/components/dialog/error';
-import DialogFooter from 'web/components/dialog/twobuttonfooter';
-import DialogTitle from 'web/components/dialog/title';
-import MultiStepFooter from 'web/components/dialog/multistepfooter';
-import ScrollableContent from 'web/components/dialog/scrollablecontent';
+import useTranslation from 'web/hooks/useTranslation';
+
+import Dialog from './dialog';
+import DialogContent from './content';
+import DialogError from './error';
+import DialogFooter from './twobuttonfooter';
+import MultiStepFooter from './multistepfooter';
 
 const SaveDialogContent = ({
-  onSave,
   error,
   multiStep = 0,
   onError,
-  onErrorClose = undefined,
+  onErrorClose,
+  onSave,
   ...props
 }) => {
-  const [loading, setLoading] = useState(false);
+  const [_] = useTranslation();
+  const [isLoading, setLoading] = useState(false);
   const [stateError, setStateError] = useState(undefined);
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -76,12 +75,12 @@ const SaveDialogContent = ({
   };
 
   const handleSaveClick = state => {
-    if (onSave && !loading) {
+    if (onSave && !isLoading) {
       const promise = onSave(state);
       if (isDefined(promise)) {
         setLoading(true);
         // eslint-disable-next-line no-shadow
-        promise.catch(error => setError(error));
+        return promise.catch(error => setError(error));
       }
     }
   };
@@ -94,16 +93,7 @@ const SaveDialogContent = ({
     }
   };
 
-  const {
-    buttonTitle,
-    children,
-    close,
-    defaultValues,
-    moveProps,
-    heightProps,
-    title,
-    values,
-  } = props;
+  const {buttonTitle, children, close, defaultValues, values} = props;
 
   return (
     <State {...defaultValues}>
@@ -111,26 +101,22 @@ const SaveDialogContent = ({
         const childValues = {...state, ...values};
         return (
           <DialogContent>
-            <DialogTitle title={title} onCloseClick={close} {...moveProps} />
             {stateError && (
               <DialogError error={stateError} onCloseClick={handleErrorClose} />
             )}
             <ErrorBoundary message={_('An error occurred in this dialog.')}>
-              <ScrollableContent
-                data-testid="save-dialog-content"
-                {...heightProps}
-              >
-                {children({
-                  currentStep,
-                  values: childValues,
-                  onStepChange: handleStepChange,
-                  onValueChange,
-                })}
-              </ScrollableContent>
+              {isFunction(children)
+                ? children({
+                    currentStep,
+                    values: childValues,
+                    onStepChange: handleStepChange,
+                    onValueChange,
+                  })
+                : children}
             </ErrorBoundary>
             {multiStep > 0 ? (
               <MultiStepFooter
-                loading={loading}
+                loading={isLoading}
                 prevDisabled={prevDisabled}
                 nextDisabled={nextDisabled}
                 rightButtonTitle={buttonTitle}
@@ -149,7 +135,7 @@ const SaveDialogContent = ({
               />
             ) : (
               <DialogFooter
-                loading={loading}
+                isLoading={isLoading}
                 rightButtonTitle={buttonTitle}
                 onLeftButtonClick={close}
                 onRightButtonClick={() => handleSaveClick(childValues)}
@@ -164,15 +150,13 @@ const SaveDialogContent = ({
 
 SaveDialogContent.propTypes = {
   buttonTitle: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   close: PropTypes.func.isRequired,
   defaultValues: PropTypes.object,
   error: PropTypes.string,
-  heightProps: PropTypes.object,
-  moveProps: PropTypes.object,
   multiStep: PropTypes.number,
   nextDisabled: PropTypes.bool,
   prevDisabled: PropTypes.bool,
-  title: PropTypes.string.isRequired,
   values: PropTypes.object,
   onError: PropTypes.func,
   onErrorClose: PropTypes.func,
@@ -181,59 +165,45 @@ SaveDialogContent.propTypes = {
 };
 
 const SaveDialog = ({
-  buttonTitle = _('Save'),
+  buttonTitle,
   children,
   defaultValues,
   error,
-  initialHeight,
-  minHeight,
-  minWidth,
   multiStep = 0,
   title,
   values,
-  width,
+  width = 'lg',
   onClose,
   onError,
   onErrorClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
+  buttonTitle = buttonTitle || _('Save');
   return (
-    <Dialog
-      height={initialHeight}
-      width={width}
-      minHeight={minHeight}
-      minWidth={minWidth}
-      onClose={onClose}
-    >
-      {({close, moveProps, heightProps}) => (
-        <SaveDialogContent
-          buttonTitle={buttonTitle}
-          close={close}
-          defaultValues={defaultValues}
-          error={error}
-          moveProps={moveProps}
-          multiStep={multiStep}
-          heightProps={heightProps}
-          title={title}
-          values={values}
-          onErrorClose={onErrorClose}
-          onError={onError}
-          onSave={onSave}
-        >
-          {children}
-        </SaveDialogContent>
-      )}
+    <Dialog width={width} title={title} onClose={onClose}>
+      <SaveDialogContent
+        buttonTitle={buttonTitle}
+        close={onClose}
+        defaultValues={defaultValues}
+        error={error}
+        multiStep={multiStep}
+        values={values}
+        onErrorClose={onErrorClose}
+        onError={onError}
+        onSave={onSave}
+      >
+        {children}
+      </SaveDialogContent>
     </Dialog>
   );
 };
 
 SaveDialog.propTypes = {
   buttonTitle: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   defaultValues: PropTypes.object, // default values for uncontrolled values
   error: PropTypes.string, // for errors controlled from parent (onErrorClose must be used if set)
-  initialHeight: PropTypes.string,
-  minHeight: PropTypes.numberOrNumberString,
-  minWidth: PropTypes.numberOrNumberString,
   multiStep: PropTypes.number,
   title: PropTypes.string.isRequired,
   values: PropTypes.object, // should be used for controlled values
