@@ -95,6 +95,9 @@ import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
+import useCapabilities from 'web/utils/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+
 import SettingsDialog from './dialog';
 
 const FIRST_COL_WIDTH = '250px';
@@ -128,7 +131,10 @@ SettingTableRow.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-const ToolBarIcons = ({capabilities, disableEditIcon, onEditSettingsClick}) => {
+const ToolBarIcons = ({disableEditIcon, onEditSettingsClick}) => {
+  const capabilities = useCapabilities();
+  // eslint-disable-next-line no-shadow
+  const [_] = useTranslation();
   const mayEdit = capabilities.mayEdit('setting');
   const editIconTitle = mayEdit
     ? _('Edit My Settings')
@@ -155,7 +161,6 @@ const ToolBarIcons = ({capabilities, disableEditIcon, onEditSettingsClick}) => {
 };
 
 ToolBarIcons.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   disableEditIcon: PropTypes.bool.isRequired,
   onEditSettingsClick: PropTypes.func.isRequired,
 };
@@ -365,7 +370,6 @@ class UserSettings extends React.Component {
         <PageTitle title={_('My Settings')} />
         <Layout flex="column">
           <ToolBarIcons
-            capabilities={capabilities}
             disableEditIcon={disableEditIcon}
             onEditSettingsClick={this.openDialog}
           />

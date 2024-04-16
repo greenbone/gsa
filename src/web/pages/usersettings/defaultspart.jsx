@@ -6,14 +6,14 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
+
+import useCapabilities from 'web/utils/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 const DefaultsPart = ({
   alerts,
@@ -33,9 +33,10 @@ const DefaultsPart = ({
   defaultSshCredential,
   defaultSchedule,
   defaultTarget,
-  capabilities,
   onChange,
 }) => {
+  const capabilities = useCapabilities();
+  const [_] = useTranslation();
   return (
     <React.Fragment>
       {capabilities.mayAccess('alert') && (
@@ -164,6 +165,6 @@ DefaultsPart.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default withCapabilities(DefaultsPart);
+export default DefaultsPart;
 
 // vim: set ts=2 sw=2 tw=80:
