@@ -6,8 +6,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -15,15 +13,14 @@ import SaveDialog from 'web/components/dialog/savedialog';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
-import Layout from 'web/components/layout/layout';
+import useTranslation from 'web/hooks/useTranslation';
 
-const CreatePolicyDialog = ({
-  comment = '',
-  name = _('Unnamed'),
-  title = _('New Policy'),
-  onClose,
-  onSave,
-}) => {
+const CreatePolicyDialog = ({comment = '', name, title, onClose, onSave}) => {
+  const [_] = useTranslation();
+
+  title = title || _('New Policy');
+  name = name || _('Unnamed');
+
   const data = {
     comment,
     name,
@@ -37,13 +34,11 @@ const CreatePolicyDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
-                grow="1"
                 value={state.name}
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -52,12 +47,10 @@ const CreatePolicyDialog = ({
               <TextField
                 name="comment"
                 value={state.comment}
-                grow="1"
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

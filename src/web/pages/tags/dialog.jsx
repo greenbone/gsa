@@ -28,8 +28,6 @@ import MultiSelect from 'web/components/form/multiselect';
 import Select from 'web/components/form/select';
 import YesNoRadio from 'web/components/form/yesnoradio';
 
-import Layout from 'web/components/layout/layout';
-
 import {SELECT_MAX_RESOURCES} from 'web/pages/tags/component';
 
 const Divider = styled.div`
@@ -230,13 +228,11 @@ class TagDialog extends React.Component {
       >
         {({values: state, onValueChange}) => {
           return (
-            <Layout flex="column">
+            <>
               <FormGroup title={_('Name')}>
                 <TextField
                   name="name"
-                  grow="1"
                   value={state.name}
-                  size="30"
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -245,8 +241,6 @@ class TagDialog extends React.Component {
                 <TextField
                   name="comment"
                   value={state.comment}
-                  grow="1"
-                  size="30"
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -255,7 +249,6 @@ class TagDialog extends React.Component {
                 <TextField
                   name="value"
                   value={state.value}
-                  grow="1"
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -296,7 +289,6 @@ class TagDialog extends React.Component {
                   <TextField
                     name="resource_id_text"
                     value={this.state.resourceIdText}
-                    grow="1"
                     disabled={!typeIsChosen || fixed}
                     onChange={id =>
                       this.handleIdChangeByText(id, onValueChange)
@@ -316,7 +308,7 @@ class TagDialog extends React.Component {
                   onChange={onValueChange}
                 />
               </FormGroup>
-            </Layout>
+            </>
           );
         }}
       </SaveDialog>

@@ -5,8 +5,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import {YES_VALUE} from 'gmp/parser';
@@ -18,7 +16,7 @@ import SaveDialog from 'web/components/dialog/savedialog';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
-import Layout from 'web/components/layout/layout';
+import useTranslation from 'web/hooks/useTranslation';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 
@@ -27,11 +25,14 @@ const ContainerTaskDialog = ({
   in_assets = YES_VALUE,
   name = '',
   task,
-  title = _('New Container Task'),
+  title,
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
   const isEdit = isDefined(task);
+
+  title = title || _('New Container Task');
 
   const data = {
     comment,
@@ -49,13 +50,11 @@ const ContainerTaskDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
-                grow="1"
                 value={state.name}
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -63,8 +62,6 @@ const ContainerTaskDialog = ({
               <TextField
                 name="comment"
                 value={state.comment}
-                grow="1"
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -75,7 +72,7 @@ const ContainerTaskDialog = ({
                 onChange={onValueChange}
               />
             )}
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

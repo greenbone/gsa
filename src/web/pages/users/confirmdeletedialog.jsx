@@ -6,8 +6,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
@@ -16,7 +14,7 @@ import SaveDialog from 'web/components/dialog/savedialog';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
-import Layout from 'web/components/layout/layout';
+import useTranslation from 'web/hooks/useTranslation';
 
 const ConfirmDeleteDialog = ({
   deleteUsers = [],
@@ -26,6 +24,7 @@ const ConfirmDeleteDialog = ({
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
   let headline;
   if (deleteUsers.length === 1) {
     headline = _('User {{name}} will be deleted.', {name: deleteUsers[0].name});
@@ -64,7 +63,7 @@ const ConfirmDeleteDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <h2>{headline}</h2>
             <p>
               {_(
@@ -80,7 +79,7 @@ const ConfirmDeleteDialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>
@@ -99,4 +98,3 @@ ConfirmDeleteDialog.propTypes = {
 export default ConfirmDeleteDialog;
 
 // vim: set ts=2 sw=2 tw=80:
-

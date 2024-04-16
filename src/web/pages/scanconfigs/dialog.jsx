@@ -6,8 +6,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
@@ -18,8 +16,7 @@ import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+import Row from 'web/components/layout/row';
 
 import {
   FULL_AND_FAST_SCAN_CONFIG_ID,
@@ -27,16 +24,21 @@ import {
   BASE_SCAN_CONFIG_ID,
 } from 'gmp/models/scanconfig';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const CreateScanConfigDialog = ({
   baseScanConfig = BASE_SCAN_CONFIG_ID,
   comment = '',
-  name = _('Unnamed'),
+  name,
   scannerId,
   scanners = [],
-  title = _('New Scan Config'),
+  title,
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
+  name = name || _('Unnamed');
+  title = title || _('New Scan Config');
   const defaultValues = {
     baseScanConfig,
     comment,
@@ -45,6 +47,7 @@ const CreateScanConfigDialog = ({
   };
   return (
     <SaveDialog
+      width="auto"
       title={title}
       onClose={onClose}
       onSave={onSave}
@@ -52,13 +55,11 @@ const CreateScanConfigDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
-                grow="1"
                 value={state.name}
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -67,56 +68,51 @@ const CreateScanConfigDialog = ({
               <TextField
                 name="comment"
                 value={state.comment}
-                grow="1"
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
 
-            <FormGroup title={_('Base')} flex="column">
-              <Divider flex="column">
-                <Radio
-                  name="baseScanConfig"
-                  value={BASE_SCAN_CONFIG_ID}
-                  checked={state.baseScanConfig === BASE_SCAN_CONFIG_ID}
-                  title={_('Base with a minimum set of NVTs')}
-                  onChange={onValueChange}
-                />
-                <Radio
-                  name="baseScanConfig"
-                  value={EMPTY_SCAN_CONFIG_ID}
-                  checked={state.baseScanConfig === EMPTY_SCAN_CONFIG_ID}
-                  title={_('Empty, static and fast')}
-                  onChange={onValueChange}
-                />
-                <Radio
-                  name="baseScanConfig"
-                  value={FULL_AND_FAST_SCAN_CONFIG_ID}
-                  checked={
-                    state.baseScanConfig === FULL_AND_FAST_SCAN_CONFIG_ID
-                  }
-                  title={_('Full and fast')}
-                  onChange={onValueChange}
-                />
-                {scanners.length > 0 && (
-                  <Divider>
-                    <Radio
-                      name="baseScanConfig"
-                      value="0"
-                      checked={state.baseScanConfig === '0'}
-                      onChange={onValueChange}
-                    />
-                    <Select
-                      value={state.scannerId}
-                      name="scannerId"
-                      items={renderSelectItems(scanners)}
-                      onChange={onValueChange}
-                    />
-                  </Divider>
-                )}
-              </Divider>
+            <FormGroup title={_('Base')}>
+              <Radio
+                name="baseScanConfig"
+                value={BASE_SCAN_CONFIG_ID}
+                checked={state.baseScanConfig === BASE_SCAN_CONFIG_ID}
+                title={_('Base with a minimum set of NVTs')}
+                onChange={onValueChange}
+              />
+              <Radio
+                name="baseScanConfig"
+                value={EMPTY_SCAN_CONFIG_ID}
+                checked={state.baseScanConfig === EMPTY_SCAN_CONFIG_ID}
+                title={_('Empty, static and fast')}
+                onChange={onValueChange}
+              />
+              <Radio
+                name="baseScanConfig"
+                value={FULL_AND_FAST_SCAN_CONFIG_ID}
+                checked={state.baseScanConfig === FULL_AND_FAST_SCAN_CONFIG_ID}
+                title={_('Full and fast')}
+                onChange={onValueChange}
+              />
+              {scanners.length > 0 && (
+                <Row>
+                  <Radio
+                    name="baseScanConfig"
+                    value="0"
+                    checked={state.baseScanConfig === '0'}
+                    onChange={onValueChange}
+                  />
+                  <Select
+                    grow="1"
+                    value={state.scannerId}
+                    name="scannerId"
+                    items={renderSelectItems(scanners)}
+                    onChange={onValueChange}
+                  />
+                </Row>
+              )}
             </FormGroup>
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

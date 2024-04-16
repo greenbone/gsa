@@ -6,8 +6,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -17,7 +15,7 @@ import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
-import Layout from 'web/components/layout/layout';
+import useTranslation from 'web/hooks/useTranslation';
 
 const LdapDialog = ({
   authdn = '',
@@ -27,6 +25,7 @@ const LdapDialog = ({
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
   const uncontrolledValues = {
     authdn,
     enable,
@@ -42,17 +41,16 @@ const LdapDialog = ({
       onSave={onSave}
     >
       {({values, onValueChange}) => (
-        <Layout flex="column">
-          <FormGroup title={_('Enable')}>
-            <CheckBox
-              data-testid="enable-checkbox"
-              name="enable"
-              checked={values.enable}
-              checkedValue={true}
-              unCheckedValue={false}
-              onChange={onValueChange}
-            />
-          </FormGroup>
+        <>
+          <CheckBox
+            title={_('Enable')}
+            data-testid="enable-checkbox"
+            name="enable"
+            checked={values.enable}
+            checkedValue={true}
+            unCheckedValue={false}
+            onChange={onValueChange}
+          />
           <FormGroup title={_('LDAP Host')}>
             <TextField
               data-testid="ldaphost-textfield"
@@ -72,21 +70,18 @@ const LdapDialog = ({
             />
           </FormGroup>
           <FormGroup title={_('CA Certificate')}>
-            <Layout flex="column">
-              <FileField name="certificate" onChange={onValueChange} />
-            </Layout>
+            <FileField name="certificate" onChange={onValueChange} />
           </FormGroup>
-          <FormGroup title={_('Use LDAPS only')}>
-            <CheckBox
-              data-testid="ldapsOnly-checkbox"
-              name="ldapsOnly"
-              checked={values.ldapsOnly}
-              checkedValue={true}
-              unCheckedValue={false}
-              onChange={onValueChange}
-            />
-          </FormGroup>
-        </Layout>
+          <CheckBox
+            title={_('Use LDAPS only')}
+            data-testid="ldapsOnly-checkbox"
+            name="ldapsOnly"
+            checked={values.ldapsOnly}
+            checkedValue={true}
+            unCheckedValue={false}
+            onChange={onValueChange}
+          />
+        </>
       )}
     </SaveDialog>
   );

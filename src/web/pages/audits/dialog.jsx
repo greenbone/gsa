@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import styled from 'styled-components';
 
 import {isDefined} from 'gmp/utils/identity';
 import {selectSaveId} from 'gmp/utils/id';
@@ -27,7 +27,6 @@ import {
 } from 'gmp/models/scanner';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -42,11 +41,15 @@ import TextField from 'web/components/form/textfield';
 
 import NewIcon from 'web/components/icon/newicon';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
 import AddResultsToAssetsGroup from 'web/pages/tasks/addresultstoassetsgroup';
 import AutoDeleteReportsGroup from 'web/pages/tasks/autodeletereportsgroup';
+
+import useTranslation from 'web/hooks/useTranslation';
+import useCapabilities from 'web/utils/useCapabilities';
+
+const Title = styled.div`
+  flex-grow: 1;
+`;
 
 const getScanner = (scanners, scanner_id) => {
   if (!isDefined(scanners)) {
@@ -58,9 +61,14 @@ const getScanner = (scanners, scanner_id) => {
   });
 };
 
-const ScannerSelect = props => {
-  const {changeAudit, isLoading, scannerId, scanners, onChange} = props;
-
+const ScannerSelect = ({
+  changeAudit,
+  isLoading,
+  scannerId,
+  scanners,
+  onChange,
+}) => {
+  const [_] = useTranslation();
   return (
     <FormGroup title={_('Scanner')}>
       <Select
@@ -92,7 +100,6 @@ const AuditDialog = ({
   alterable = NO_VALUE,
   auto_delete = AUTO_DELETE_NO,
   auto_delete_data = AUTO_DELETE_KEEP_DEFAULT_VALUE,
-  capabilities,
   comment = '',
   fromPolicy = false,
   hostsOrdering = HOSTS_ORDERING_SEQUENTIAL,
@@ -100,7 +107,7 @@ const AuditDialog = ({
   isLoadingScanners = false,
   maxChecks = DEFAULT_MAX_CHECKS,
   maxHosts = DEFAULT_MAX_HOSTS,
-  name = _('Unnamed'),
+  name,
   policies = [],
   policyId,
   scannerId = OPENVAS_DEFAULT_SCANNER_ID,
@@ -116,7 +123,7 @@ const AuditDialog = ({
   targetId,
   targets,
   audit,
-  title = _('New Audit'),
+  title,
   onClose,
   onNewAlertClick,
   onNewScheduleClick,
@@ -126,6 +133,12 @@ const AuditDialog = ({
   onChange,
   ...data
 }) => {
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+
+  title = title || _('New Audit');
+  name = name || _('Unnamed');
+
   const targetItems = renderSelectItems(targets);
 
   const scheduleItems = renderSelectItems(schedules, UNSET_VALUE);
@@ -179,12 +192,10 @@ const AuditDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
-                grow="1"
-                size="30"
                 value={state.name}
                 onChange={onValueChange}
               />
@@ -193,76 +204,62 @@ const AuditDialog = ({
             <FormGroup title={_('Comment')}>
               <TextField
                 name="comment"
-                grow="1"
-                size="30"
                 value={state.comment}
                 onChange={onValueChange}
               />
             </FormGroup>
 
-            <FormGroup title={_('Scan Targets')}>
-              <Divider>
-                <Select
-                  name="targetId"
-                  disabled={!changeAudit}
-                  items={targetItems}
-                  value={state.targetId}
-                  onChange={onChange}
+            <FormGroup title={_('Scan Targets')} direction="row">
+              <Select
+                name="targetId"
+                disabled={!changeAudit}
+                items={targetItems}
+                value={state.targetId}
+                onChange={onChange}
+              />
+              {changeAudit && (
+                <NewIcon
+                  title={_('Create a new target')}
+                  onClick={onNewTargetClick}
                 />
-                {changeAudit && (
-                  <Layout>
-                    <NewIcon
-                      title={_('Create a new target')}
-                      onClick={onNewTargetClick}
-                    />
-                  </Layout>
-                )}
-              </Divider>
+              )}
             </FormGroup>
 
             {capabilities.mayOp('get_alerts') && (
-              <FormGroup title={_('Alerts')}>
-                <Divider>
-                  <MultiSelect
-                    name="alertIds"
-                    items={alertItems}
-                    value={state.alertIds}
-                    onChange={onChange}
-                  />
-                  <Layout>
-                    <NewIcon
-                      title={_('Create a new alert')}
-                      onClick={onNewAlertClick}
-                    />
-                  </Layout>
-                </Divider>
+              <FormGroup title={_('Alerts')} direction="row">
+                <MultiSelect
+                  name="alertIds"
+                  items={alertItems}
+                  value={state.alertIds}
+                  onChange={onChange}
+                />
+                <NewIcon
+                  title={_('Create a new alert')}
+                  onClick={onNewAlertClick}
+                />
               </FormGroup>
             )}
 
             {capabilities.mayOp('get_schedules') && (
-              <FormGroup title={_('Schedule')}>
-                <Divider>
-                  <Select
-                    name="scheduleId"
-                    value={state.scheduleId}
-                    items={scheduleItems}
-                    onChange={onChange}
-                  />
-                  <Checkbox
-                    name="schedulePeriods"
-                    checked={state.schedulePeriods === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    unCheckedValue={NO_VALUE}
-                    title={_('Once')}
-                    onChange={onValueChange}
-                  />
-                  <Layout>
-                    <NewIcon
-                      title={_('Create a new schedule')}
-                      onClick={onNewScheduleClick}
-                    />
-                  </Layout>
-                </Divider>
+              <FormGroup title={_('Schedule')} direction="row">
+                <Select
+                  name="scheduleId"
+                  value={state.scheduleId}
+                  items={scheduleItems}
+                  onChange={onChange}
+                />
+                <Checkbox
+                  name="schedulePeriods"
+                  checked={state.schedulePeriods === YES_VALUE}
+                  checkedValue={YES_VALUE}
+                  unCheckedValue={NO_VALUE}
+                  title={_('Once')}
+                  onChange={onValueChange}
+                />
+                <NewIcon
+                  title={_('Create a new schedule')}
+                  onClick={onNewScheduleClick}
+                />
               </FormGroup>
             )}
 
@@ -288,7 +285,7 @@ const AuditDialog = ({
               onChange={onValueChange}
             />
 
-            <div
+            <Title
               title={
                 changeAudit
                   ? null
@@ -304,68 +301,58 @@ const AuditDialog = ({
                 isLoading={isLoadingScanners}
                 onChange={onScannerChange}
               />
-            </div>
+            </Title>
 
-            <Layout flex="column" grow="1">
-              <FormGroup titleSize="2" title={_('Policy')}>
-                <Select
-                  name="policyId"
-                  disabled={!changeAudit || hasAudit || fromPolicy}
-                  items={policyItems}
-                  value={policyId}
-                  onChange={onChange}
-                />
-              </FormGroup>
-              <FormGroup titleSize="4" title={_('Order for target hosts')}>
-                <Select
-                  name="hostsOrdering"
-                  items={[
-                    {
-                      value: 'sequential',
-                      label: _('Sequential'),
-                    },
-                    {
-                      value: 'random',
-                      label: _('Random'),
-                    },
-                    {
-                      value: 'reverse',
-                      label: _('Reverse'),
-                    },
-                  ]}
-                  value={state.hostsOrdering}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-              <FormGroup
-                titleSize="4"
-                title={_('Maximum concurrently executed NVTs per host')}
-              >
-                <Spinner
-                  name="maxChecks"
-                  size="10"
-                  min="0"
-                  maxLength="10"
-                  value={state.maxChecks}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-              <FormGroup
-                titleSize="4"
-                title={_('Maximum concurrently scanned hosts')}
-              >
-                <Spinner
-                  name="maxHosts"
-                  type="int"
-                  min="0"
-                  size="10"
-                  maxLength="10"
-                  value={state.maxHosts}
-                  onChange={onValueChange}
-                />
-              </FormGroup>
-            </Layout>
-          </Layout>
+            <FormGroup title={_('Policy')}>
+              <Select
+                name="policyId"
+                disabled={!changeAudit || hasAudit || fromPolicy}
+                items={policyItems}
+                value={policyId}
+                onChange={onChange}
+              />
+            </FormGroup>
+
+            <FormGroup titleSize="4" title={_('Order for target hosts')}>
+              <Select
+                name="hostsOrdering"
+                items={[
+                  {
+                    value: 'sequential',
+                    label: _('Sequential'),
+                  },
+                  {
+                    value: 'random',
+                    label: _('Random'),
+                  },
+                  {
+                    value: 'reverse',
+                    label: _('Reverse'),
+                  },
+                ]}
+                value={state.hostsOrdering}
+                onChange={onValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Maximum concurrently executed NVTs per host')}>
+              <Spinner
+                name="maxChecks"
+                type="int"
+                min="0"
+                value={state.maxChecks}
+                onChange={onValueChange}
+              />
+            </FormGroup>
+            <FormGroup title={_('Maximum concurrently scanned hosts')}>
+              <Spinner
+                name="maxHosts"
+                type="int"
+                min="0"
+                value={state.maxHosts}
+                onChange={onValueChange}
+              />
+            </FormGroup>
+          </>
         );
       }}
     </SaveDialog>
@@ -379,7 +366,6 @@ AuditDialog.propTypes = {
   audit: PropTypes.model,
   auto_delete: PropTypes.oneOf(['keep', 'no']),
   auto_delete_data: PropTypes.number,
-  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   fromPolicy: PropTypes.bool,
   hostsOrdering: PropTypes.oneOf(['sequential', 'random', 'reverse']),
@@ -407,6 +393,6 @@ AuditDialog.propTypes = {
   onScannerChange: PropTypes.func.isRequired,
 };
 
-export default withCapabilities(AuditDialog);
+export default AuditDialog;
 
 // vim: set ts=2 sw=2 tw=80:

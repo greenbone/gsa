@@ -6,13 +6,13 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import Model from 'gmp/model';
 
 import {isDefined} from 'gmp/utils/identity';
+import {split} from 'gmp/utils/string';
 
 import PropTypes from 'web/utils/proptypes';
 import {permissionDescription, renderSelectItems} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -21,11 +21,10 @@ import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-import Model from 'gmp/model';
+import Row from 'web/components/layout/row';
 
-import {split} from 'gmp/utils/string';
+import useCapabilities from 'web/utils/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 const NEED_RESOURCE_ID = [
   'Super',
@@ -106,7 +105,6 @@ const NEED_RESOURCE_ID = [
 ];
 
 const PermissionDialog = ({
-  capabilities,
   comment = '',
   fixedResource = false,
   groupId,
@@ -120,12 +118,16 @@ const PermissionDialog = ({
   roleId,
   roles = [],
   subjectType,
-  title = _('New Permission'),
+  title,
   userId,
   users = [],
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+
+  title = title || _('New Permission');
   const permItems = [
     {
       value: 'Super',
@@ -198,13 +200,13 @@ const PermissionDialog = ({
         }
 
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <Select
+                grow="1"
                 name="name"
                 value={state.name}
                 items={permItems}
-                width="300"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -214,71 +216,72 @@ const PermissionDialog = ({
                 name="comment"
                 value={state.comment}
                 grow="1"
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
 
-            <FormGroup title={_('Subject')} flex="column">
-              <Divider flex="column">
-                {capabilities.mayAccess('users') && (
-                  <Divider>
-                    <Radio
-                      name="subjectType"
-                      checked={state.subjectType === 'user'}
-                      title={_('User')}
-                      value="user"
-                      onChange={onValueChange}
-                    />
-                    <Select
-                      name="userId"
-                      items={renderSelectItems(users)}
-                      value={state.userId}
-                      onChange={onValueChange}
-                    />
-                  </Divider>
-                )}
-                {capabilities.mayAccess('roles') && (
-                  <Divider>
-                    <Radio
-                      name="subjectType"
-                      checked={state.subjectType === 'role'}
-                      title={_('Role')}
-                      value="role"
-                      onChange={onValueChange}
-                    />
-                    <Select
-                      name="roleId"
-                      items={renderSelectItems(roles)}
-                      value={state.roleId}
-                      onChange={onValueChange}
-                    />
-                  </Divider>
-                )}
-                {capabilities.mayAccess('groups') && (
-                  <Divider>
-                    <Radio
-                      name="subjectType"
-                      checked={state.subjectType === 'group'}
-                      disabled={groups.length === 0}
-                      title={_('Group')}
-                      value="group"
-                      onChange={onValueChange}
-                    />
-                    <Select
-                      name="groupId"
-                      items={renderSelectItems(groups)}
-                      value={state.groupId}
-                      onChange={onValueChange}
-                    />
-                  </Divider>
-                )}
-              </Divider>
+            <FormGroup title={_('Subject')}>
+              {capabilities.mayAccess('users') && (
+                <Row>
+                  <Radio
+                    name="subjectType"
+                    checked={state.subjectType === 'user'}
+                    title={_('User')}
+                    value="user"
+                    onChange={onValueChange}
+                  />
+                  <Select
+                    grow="1"
+                    name="userId"
+                    items={renderSelectItems(users)}
+                    value={state.userId}
+                    onChange={onValueChange}
+                  />
+                </Row>
+              )}
+              {capabilities.mayAccess('roles') && (
+                <Row>
+                  <Radio
+                    name="subjectType"
+                    checked={state.subjectType === 'role'}
+                    title={_('Role')}
+                    value="role"
+                    onChange={onValueChange}
+                  />
+                  <Select
+                    grow="1"
+                    name="roleId"
+                    items={renderSelectItems(roles)}
+                    value={state.roleId}
+                    onChange={onValueChange}
+                  />
+                </Row>
+              )}
+              {capabilities.mayAccess('groups') && (
+                <Row>
+                  <Radio
+                    name="subjectType"
+                    checked={state.subjectType === 'group'}
+                    disabled={groups.length === 0}
+                    title={_('Group')}
+                    value="group"
+                    onChange={onValueChange}
+                  />
+                  <Select
+                    grow="1"
+                    name="groupId"
+                    items={renderSelectItems(groups)}
+                    value={state.groupId}
+                    onChange={onValueChange}
+                  />
+                </Row>
+              )}
             </FormGroup>
 
             {state.name === 'Super' && (
               <FormGroup title={_('Resource Type')}>
                 <Select
+                  grow="1"
                   items={[
                     {
                       value: '',
@@ -306,10 +309,10 @@ const PermissionDialog = ({
             {showResourceId && (
               <FormGroup title={resourceIdTitle}>
                 <TextField
+                  grow="1"
                   name="resourceId"
                   value={state.resourceId}
                   disabled={fixedResource}
-                  size="50"
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -317,7 +320,7 @@ const PermissionDialog = ({
             <FormGroup title={_('Description')}>
               {permissionDescription(state.name, resource, subject)}
             </FormGroup>
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>
@@ -325,7 +328,6 @@ const PermissionDialog = ({
 };
 
 PermissionDialog.propTypes = {
-  capabilities: PropTypes.capabilities.isRequired,
   comment: PropTypes.string,
   fixedResource: PropTypes.bool,
   groupId: PropTypes.id,
@@ -346,6 +348,6 @@ PermissionDialog.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default withCapabilities(PermissionDialog);
+export default PermissionDialog;
 
 // vim: set ts=2 sw=2 tw=80:

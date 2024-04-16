@@ -5,11 +5,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
-
-import Layout from 'web/components/layout/layout';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -18,9 +14,13 @@ import PropTypes from 'web/utils/proptypes';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const DEFAULTS = {name: '127.0.0.1', comment: ''};
 
-const HostsDialog = ({host, title = _('New Host'), onClose, onSave}) => {
+const HostsDialog = ({host, title, onClose, onSave}) => {
+  const [_] = useTranslation();
+  title = title || _('New Host');
   return (
     <SaveDialog
       title={title}
@@ -30,13 +30,11 @@ const HostsDialog = ({host, title = _('New Host'), onClose, onSave}) => {
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('IP Address')}>
               <TextField
                 name="name"
-                grow="1"
                 value={state.name}
-                size="30"
                 disabled={isDefined(host)}
                 onChange={onValueChange}
               />
@@ -46,12 +44,10 @@ const HostsDialog = ({host, title = _('New Host'), onClose, onSave}) => {
               <TextField
                 name="comment"
                 value={state.comment}
-                grow="1"
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

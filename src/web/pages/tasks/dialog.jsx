@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import styled from 'styled-components';
 
 import {first} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
@@ -46,12 +46,17 @@ import TextField from 'web/components/form/textfield';
 import NewIcon from 'web/components/icon/newicon';
 
 import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 import AddResultsToAssetsGroup from './addresultstoassetsgroup';
 import AutoDeleteReportsGroup from './autodeletereportsgroup';
 
-const get_scanner = (scanners, scanner_id) => {
+const Title = styled.div`
+  flex-grow: 1;
+`;
+
+const getScanner = (scanners, scanner_id) => {
   if (!isDefined(scanners)) {
     return undefined;
   }
@@ -61,9 +66,14 @@ const get_scanner = (scanners, scanner_id) => {
   });
 };
 
-const ScannerSelect = props => {
-  const {changeTask, isLoading, scannerId, scanners, onChange} = props;
-
+const ScannerSelect = ({
+  changeTask,
+  isLoading,
+  scannerId,
+  scanners,
+  onChange,
+}) => {
+  const [_] = useTranslation();
   return (
     <FormGroup title={_('Scanner')}>
       <Select
@@ -111,7 +121,7 @@ const TaskDialog = ({
   max_checks = DEFAULT_MAX_CHECKS,
   max_hosts = DEFAULT_MAX_HOSTS,
   min_qod = DEFAULT_MIN_QOD,
-  name = _('Unnamed'),
+  name,
   scan_configs = [],
   scanner_id = OPENVAS_DEFAULT_SCANNER_ID,
   scanners = [
@@ -127,7 +137,7 @@ const TaskDialog = ({
   target_id,
   targets,
   task,
-  title = _('New Task'),
+  title,
   onAlertsChange,
   onClose,
   onNewAlertClick,
@@ -140,27 +150,32 @@ const TaskDialog = ({
   onTargetChange,
   ...data
 }) => {
-  const scanner = get_scanner(scanners, scanner_id);
-  const scanner_type = isDefined(scanner) ? scanner.scannerType : undefined;
+  const [_] = useTranslation();
 
-  const tag_items = renderSelectItems(tags);
+  name = name || _('Unnamed');
+  title = title || _('New Task');
 
-  const target_items = renderSelectItems(targets);
+  const scanner = getScanner(scanners, scanner_id);
+  const scannerType = isDefined(scanner) ? scanner.scannerType : undefined;
 
-  const schedule_items = renderSelectItems(schedules, UNSET_VALUE);
+  const tagItems = renderSelectItems(tags);
 
-  const openvas_scan_config_items = renderSelectItems(scan_configs);
+  const targetItems = renderSelectItems(targets);
 
-  const alert_items = renderSelectItems(alerts);
+  const scheduleItems = renderSelectItems(schedules, UNSET_VALUE);
+
+  const openvasScanConfigItems = renderSelectItems(scan_configs);
+
+  const alertItems = renderSelectItems(alerts);
 
   // having a task means we are editing a task
   const hasTask = isDefined(task);
 
-  const change_task = hasTask ? task.isChangeable() : true;
+  const changeTask = hasTask ? task.isChangeable() : true;
 
   const showTagSelection = !hasTask && tags.length > 0;
 
-  const tag_id = showTagSelection ? first(tags).id : undefined;
+  const tagId = showTagSelection ? first(tags).id : undefined;
 
   const uncontrolledData = {
     ...data,
@@ -177,10 +192,10 @@ const TaskDialog = ({
     max_hosts,
     min_qod,
     name,
-    scanner_type,
+    scanner_type: scannerType,
     scanner_id,
     schedule_periods,
-    tag_id,
+    tag_id: tagId,
     tags,
     task,
   };
@@ -190,7 +205,7 @@ const TaskDialog = ({
     config_id,
     schedule_id,
     scanner_id,
-    scanner_type,
+    scanner_type: scannerType,
     target_id,
   };
 
@@ -203,19 +218,17 @@ const TaskDialog = ({
       values={controlledData}
     >
       {({values: state, onValueChange}) => {
-        const openvas_config_id = selectSaveId(scan_configs, state.config_id);
+        const openvasConfigId = selectSaveId(scan_configs, state.config_id);
 
-        const use_openvas_scan_config =
+        const useOpenvasScanConfig =
           state.scanner_type === OPENVAS_SCANNER_TYPE ||
           state.scanner_type === GREENBONE_SENSOR_SCANNER_TYPE;
 
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
-                grow="1"
-                size="30"
                 value={state.name}
                 onChange={onValueChange}
               />
@@ -224,92 +237,77 @@ const TaskDialog = ({
             <FormGroup title={_('Comment')}>
               <TextField
                 name="comment"
-                grow="1"
-                size="30"
                 value={state.comment}
                 onChange={onValueChange}
               />
             </FormGroup>
 
-            <FormGroup title={_('Scan Targets')}>
-              <Divider>
-                <div
-                  title={
-                    change_task
-                      ? null
-                      : _(
-                          'This setting is not alterable once task has been run at least once.',
-                        )
-                  }
-                >
-                  <Select
-                    name="target_id"
-                    disabled={!change_task}
-                    items={target_items}
-                    isLoading={isLoadingTargets}
-                    value={state.target_id}
-                    width="260px"
-                    onChange={onTargetChange}
-                  />
-                </div>
-                {change_task && (
-                  <Layout>
-                    <NewIcon
-                      title={_('Create a new target')}
-                      onClick={onNewTargetClick}
-                    />
-                  </Layout>
-                )}
-              </Divider>
+            <FormGroup title={_('Scan Targets')} direction="row">
+              <Title
+                title={
+                  changeTask
+                    ? null
+                    : _(
+                        'This setting is not alterable once task has been run at least once.',
+                      )
+                }
+              >
+                <Select
+                  name="target_id"
+                  disabled={!changeTask}
+                  items={targetItems}
+                  isLoading={isLoadingTargets}
+                  value={state.target_id}
+                  onChange={onTargetChange}
+                />
+              </Title>
+              {changeTask && (
+                <NewIcon
+                  title={_('Create a new target')}
+                  onClick={onNewTargetClick}
+                />
+              )}
             </FormGroup>
 
             {capabilities.mayOp('get_alerts') && (
-              <FormGroup title={_('Alerts')}>
-                <Divider>
-                  <MultiSelect
-                    name="alert_ids"
-                    items={alert_items}
-                    isLoading={isLoadingAlerts}
-                    value={state.alert_ids}
-                    width="260px"
-                    onChange={onAlertsChange}
-                  />
-                  <Layout>
-                    <NewIcon
-                      title={_('Create a new alert')}
-                      onClick={onNewAlertClick}
-                    />
-                  </Layout>
-                </Divider>
+              <FormGroup title={_('Alerts')} direction="row">
+                <MultiSelect
+                  grow="1"
+                  name="alert_ids"
+                  items={alertItems}
+                  isLoading={isLoadingAlerts}
+                  value={state.alert_ids}
+                  onChange={onAlertsChange}
+                />
+                <NewIcon
+                  title={_('Create a new alert')}
+                  onClick={onNewAlertClick}
+                />
               </FormGroup>
             )}
 
             {capabilities.mayOp('get_schedules') && (
-              <FormGroup title={_('Schedule')}>
-                <Divider>
-                  <Select
-                    name="schedule_id"
-                    value={state.schedule_id}
-                    items={schedule_items}
-                    isLoading={isLoadingSchedules}
-                    width="201px"
-                    onChange={onScheduleChange}
-                  />
-                  <Checkbox
-                    name="schedule_periods"
-                    checked={state.schedule_periods === YES_VALUE}
-                    checkedValue={YES_VALUE}
-                    unCheckedValue={NO_VALUE}
-                    title={_('Once')}
-                    onChange={onValueChange}
-                  />
-                  <Layout>
-                    <NewIcon
-                      title={_('Create a new schedule')}
-                      onClick={onNewScheduleClick}
-                    />
-                  </Layout>
-                </Divider>
+              <FormGroup title={_('Schedule')} direction="row">
+                <Select
+                  grow="1"
+                  name="schedule_id"
+                  value={state.schedule_id}
+                  items={scheduleItems}
+                  isLoading={isLoadingSchedules}
+                  onChange={onScheduleChange}
+                />
+                <Checkbox
+                  name="schedule_periods"
+                  checked={state.schedule_periods === YES_VALUE}
+                  checkedValue={YES_VALUE}
+                  unCheckedValue={NO_VALUE}
+                  title={_('Once')}
+                  onChange={onValueChange}
+                />
+                <NewIcon
+                  title={_('Create a new schedule')}
+                  onClick={onNewScheduleClick}
+                />
               </FormGroup>
             )}
 
@@ -330,18 +328,17 @@ const TaskDialog = ({
             <FormGroup title={_('Min QoD')}>
               <Spinner
                 name="min_qod"
-                size="4"
                 disabled={state.in_assets !== YES_VALUE}
                 type="int"
                 min="0"
                 max="100"
+                postfix="%"
                 value={state.min_qod}
                 onChange={onValueChange}
               />
-              <Layout>%</Layout>
             </FormGroup>
 
-            {change_task && (
+            {changeTask && (
               <FormGroup title={_('Alterable Task')}>
                 <YesNoRadio
                   name="alterable"
@@ -357,9 +354,10 @@ const TaskDialog = ({
               autoDeleteData={state.auto_delete_data}
               onChange={onValueChange}
             />
-            <div
+
+            <Title
               title={
-                change_task
+                changeTask
                   ? null
                   : _(
                       'This setting is not alterable once task has been run at least once.',
@@ -369,17 +367,17 @@ const TaskDialog = ({
               <ScannerSelect
                 scanners={scanners}
                 scannerId={state.scanner_id}
-                changeTask={change_task}
+                changeTask={changeTask}
                 isLoading={isLoadingScanners}
                 onChange={onScannerChange}
               />
-            </div>
-            {use_openvas_scan_config && (
-              <Layout flex="column" grow="1">
-                <FormGroup titleSize="2" title={_('Scan Config')}>
-                  <div
+            </Title>
+            {useOpenvasScanConfig && (
+              <>
+                <FormGroup title={_('Scan Config')}>
+                  <Title
                     title={
-                      change_task
+                      changeTask
                         ? null
                         : _(
                             'This setting is not alterable once task has been run at least once.',
@@ -388,17 +386,17 @@ const TaskDialog = ({
                   >
                     <Select
                       name="config_id"
-                      disabled={!change_task}
-                      items={openvas_scan_config_items}
+                      disabled={!changeTask}
+                      items={openvasScanConfigItems}
                       isLoading={isLoadingConfigs}
-                      value={openvas_config_id}
+                      value={openvasConfigId}
                       onChange={value => {
                         onScanConfigChange(value);
                       }}
                     />
-                  </div>
+                  </Title>
                 </FormGroup>
-                <FormGroup titleSize="4" title={_('Order for target hosts')}>
+                <FormGroup title={_('Order for target hosts')}>
                   <Select
                     name="hosts_ordering"
                     items={[
@@ -420,62 +418,53 @@ const TaskDialog = ({
                   />
                 </FormGroup>
                 <FormGroup
-                  titleSize="4"
                   title={_('Maximum concurrently executed NVTs per host')}
                 >
                   <Spinner
                     name="max_checks"
-                    size="10"
                     min="0"
-                    maxLength="10"
                     value={state.max_checks}
                     onChange={onValueChange}
                   />
                 </FormGroup>
-                <FormGroup
-                  titleSize="4"
-                  title={_('Maximum concurrently scanned hosts')}
-                >
+                <FormGroup title={_('Maximum concurrently scanned hosts')}>
                   <Spinner
                     name="max_hosts"
                     type="int"
                     min="0"
-                    size="10"
-                    maxLength="10"
                     value={state.max_hosts}
                     onChange={onValueChange}
                   />
                 </FormGroup>
-              </Layout>
+              </>
             )}
 
             {capabilities.mayAccess('tags') &&
               capabilities.mayCreate('tag') &&
               showTagSelection && (
-                <React.Fragment>
-                  <FormGroup title={_('Tag')}>
-                    <Divider>
-                      <Checkbox
-                        title={_('Add:')}
-                        name="add_tag"
-                        checkedValue={YES_VALUE}
-                        unCheckedValue={NO_VALUE}
-                        checked={state.add_tag === YES_VALUE}
-                        onChange={onValueChange}
-                      />
-                      <Select
-                        disabled={state.add_tag !== YES_VALUE}
-                        name="tag_id"
-                        items={tag_items}
-                        isLoading={isLoadingTags}
-                        value={state.tag_id}
-                        onChange={onValueChange}
-                      />
-                    </Divider>
-                  </FormGroup>
-                </React.Fragment>
+                <FormGroup title={_('Tag')}>
+                  <Divider>
+                    <Checkbox
+                      title={_('Add:')}
+                      name="add_tag"
+                      checkedValue={YES_VALUE}
+                      unCheckedValue={NO_VALUE}
+                      checked={state.add_tag === YES_VALUE}
+                      onChange={onValueChange}
+                    />
+                    <Select
+                      grow="1"
+                      disabled={state.add_tag !== YES_VALUE}
+                      name="tag_id"
+                      items={tagItems}
+                      isLoading={isLoadingTags}
+                      value={state.tag_id}
+                      onChange={onValueChange}
+                    />
+                  </Divider>
+                </FormGroup>
               )}
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>
