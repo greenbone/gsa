@@ -88,6 +88,7 @@ export const render = ui => {
     <StyleSheetManager enableVendorPrefixes>{ui}</StyleSheetManager>,
   );
   return {
+    userEvent: userEvent.setup(),
     baseElement,
     container,
     element: hasValue(container) ? container.firstChild : undefined,
