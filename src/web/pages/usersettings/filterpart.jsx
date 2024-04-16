@@ -18,14 +18,13 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const filterFilters = (filters, type) =>
   filters.filter(filter => filter.filter_type === type);
@@ -63,6 +62,7 @@ const FilterPart = ({
   filters = [],
   onChange,
 }) => {
+  const [_] = useTranslation();
   return (
     <React.Fragment>
       <FormGroup title={_('Alerts Filter')} titleSize="3">
@@ -383,6 +383,6 @@ FilterPart.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default withCapabilities(FilterPart);
+export default FilterPart;
 
 // vim: set ts=2 sw=2 tw=80:
