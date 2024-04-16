@@ -8,26 +8,24 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import {DialogFooterLayout} from 'web/components/dialog/footer';
 
-import Button from './button';
-import LoadingButton from 'web/components/form/loadingbutton';
+import Button from 'web/components/form/button';
 
 import Divider from 'web/components/layout/divider';
+import useTranslation from 'web/hooks/useTranslation';
 
 const StyledLayout = styled(DialogFooterLayout)`
   justify-content: space-between;
 `;
 
 const MultiStepFooter = ({
-  leftButtonTitle = _('Cancel'),
+  leftButtonTitle,
   nextButtonTitle = '🠮',
   previousButtonTitle = '🠬',
-  rightButtonTitle = _('Save'),
+  rightButtonTitle,
   onLeftButtonClick,
   onNextButtonClick,
   onPreviousButtonClick,
@@ -35,44 +33,49 @@ const MultiStepFooter = ({
   prevDisabled = false,
   nextDisabled = false,
   loading = false,
-}) => (
-  <StyledLayout align={['end', 'center']} shrink="0">
-    <Button
-      data-testid="dialog-close-button"
-      disabled={loading}
-      onClick={onLeftButtonClick}
-      title={leftButtonTitle}
-    >
-      {leftButtonTitle}
-    </Button>
-    <Divider>
-      <LoadingButton
-        data-testid="dialog-previous-button"
-        disabled={prevDisabled}
-        onClick={onPreviousButtonClick}
-        title={previousButtonTitle}
-      >
-        {previousButtonTitle}
-      </LoadingButton>
-      <LoadingButton
-        data-testid="dialog-next-button"
-        disabled={nextDisabled}
-        onClick={onNextButtonClick}
-        title={nextButtonTitle}
-      >
-        {nextButtonTitle}
-      </LoadingButton>
+}) => {
+  const [_] = useTranslation();
+  leftButtonTitle = leftButtonTitle || _('Cancel');
+  rightButtonTitle = rightButtonTitle || _('Save');
+  return (
+    <StyledLayout align={['end', 'center']} shrink="0">
       <Button
-        data-testid="dialog-save-button"
-        onClick={onRightButtonClick}
-        title={rightButtonTitle}
-        loading={loading}
+        data-testid="dialog-close-button"
+        disabled={loading}
+        onClick={onLeftButtonClick}
+        title={leftButtonTitle}
       >
-        {rightButtonTitle}
+        {leftButtonTitle}
       </Button>
-    </Divider>
-  </StyledLayout>
-);
+      <Divider>
+        <Button
+          data-testid="dialog-previous-button"
+          disabled={prevDisabled}
+          onClick={onPreviousButtonClick}
+          title={previousButtonTitle}
+        >
+          {previousButtonTitle}
+        </Button>
+        <Button
+          data-testid="dialog-next-button"
+          disabled={nextDisabled}
+          onClick={onNextButtonClick}
+          title={nextButtonTitle}
+        >
+          {nextButtonTitle}
+        </Button>
+        <Button
+          data-testid="dialog-save-button"
+          onClick={onRightButtonClick}
+          title={rightButtonTitle}
+          loading={loading}
+        >
+          {rightButtonTitle}
+        </Button>
+      </Divider>
+    </StyledLayout>
+  );
+};
 
 MultiStepFooter.propTypes = {
   leftButtonTitle: PropTypes.string,

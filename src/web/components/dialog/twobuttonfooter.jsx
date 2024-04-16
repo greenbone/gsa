@@ -6,19 +6,13 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
-
 import _ from 'gmp/locale';
 
 import PropTypes from 'web/utils/proptypes';
 
 import {DialogFooterLayout} from 'web/components/dialog/footer';
 
-import Button from './button';
-
-const StyledLayout = styled(DialogFooterLayout)`
-  justify-content: space-between;
-`;
+import Button from 'web/components/form/button';
 
 const DialogTwoButtonFooter = ({
   leftButtonTitle = _('Cancel'),
@@ -26,28 +20,29 @@ const DialogTwoButtonFooter = ({
   onLeftButtonClick,
   onRightButtonClick,
   loading = false,
+  isLoading = loading,
 }) => (
-  <StyledLayout align={['end', 'center']} shrink="0">
+  <DialogFooterLayout align={['end', 'center']} shrink="0" gap="10px">
     <Button
       data-testid="dialog-close-button"
-      disabled={loading}
+      disabled={isLoading}
+      variant="outline"
       onClick={onLeftButtonClick}
-      title={leftButtonTitle}
     >
       {leftButtonTitle}
     </Button>
     <Button
       data-testid="dialog-save-button"
       onClick={onRightButtonClick}
-      title={rightButtonTitle}
-      loading={loading}
+      isLoading={isLoading}
     >
       {rightButtonTitle}
     </Button>
-  </StyledLayout>
+  </DialogFooterLayout>
 );
 
 DialogTwoButtonFooter.propTypes = {
+  isLoading: PropTypes.bool,
   leftButtonTitle: PropTypes.string,
   loading: PropTypes.bool,
   rightButtonTitle: PropTypes.string.isRequired,

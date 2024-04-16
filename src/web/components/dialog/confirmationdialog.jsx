@@ -3,40 +3,36 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import React from 'react';
-
-import _ from 'gmp/locale';
+import React, {useCallback} from 'react';
 
 import PropTypes from 'web/utils/proptypes';
 
 import Dialog from 'web/components/dialog/dialog';
 import DialogContent from 'web/components/dialog/content';
-import ScrollableContent from 'web/components/dialog/scrollablecontent';
-import DialogTitle from 'web/components/dialog/title';
 import DialogTwoButtonFooter from 'web/components/dialog/twobuttonfooter';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const DEFAULT_DIALOG_WIDTH = '400px';
 
-const ConfirmationDialogContent = props => {
-  const handleResume = () => {
-    const {onResumeClick} = props;
-
+const ConfirmationDialogContent = ({
+  content,
+  close,
+  rightButtonTitle,
+  onResumeClick,
+}) => {
+  const handleResume = useCallback(() => {
     if (onResumeClick) {
       onResumeClick();
     }
-  };
-
-  const {content, moveprops, title, rightButtonTitle} = props;
+  }, [onResumeClick]);
 
   return (
     <DialogContent>
-      <DialogTitle title={title} onCloseClick={props.close} {...moveprops} />
-      <ScrollableContent data-testid="confirmationdialog-content">
-        {content}
-      </ScrollableContent>
+      {content}
       <DialogTwoButtonFooter
         rightButtonTitle={rightButtonTitle}
-        onLeftButtonClick={props.close}
+        onLeftButtonClick={close}
         onRightButtonClick={handleResume}
       />
     </DialogContent>
@@ -46,7 +42,6 @@ const ConfirmationDialogContent = props => {
 ConfirmationDialogContent.propTypes = {
   close: PropTypes.func.isRequired,
   content: PropTypes.elementOrString,
-  moveprops: PropTypes.object,
   rightButtonTitle: PropTypes.string,
   title: PropTypes.string.isRequired,
   onResumeClick: PropTypes.func.isRequired,
@@ -56,18 +51,19 @@ const ConfirmationDialog = ({
   width = DEFAULT_DIALOG_WIDTH,
   content,
   title,
-  rightButtonTitle = _('OK'),
+  rightButtonTitle,
   onClose,
   onResumeClick,
 }) => {
+  const [_] = useTranslation();
+
+  rightButtonTitle = rightButtonTitle || _('OK');
   return (
-    <Dialog width={width} onClose={onClose} resizable={false}>
-      {({close, moveProps}) => (
+    <Dialog width={width} onClose={onClose} title={title}>
+      {({close}) => (
         <ConfirmationDialogContent
           close={close}
-          moveprops={moveProps}
           content={content}
-          title={title}
           rightButtonTitle={rightButtonTitle}
           onResumeClick={onResumeClick}
         />
@@ -86,5 +82,3 @@ ConfirmationDialog.propTypes = {
 };
 
 export default ConfirmationDialog;
-
-// vim: set ts=2 sw=2 tw=80:
