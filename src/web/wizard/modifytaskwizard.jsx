@@ -5,8 +5,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {parseYesNo, NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
@@ -21,17 +19,19 @@ import TextField from 'web/components/form/textfield';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
 import Datepicker from 'web/components/form/datepicker';
 
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+import Column from 'web/components/layout/column';
+import Row from 'web/components/layout/row';
 
 import {renderSelectItems} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
+
+import useTranslation from 'web/hooks/useTranslation';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import {WizardContent, WizardIcon} from './taskwizard';
 
 const ModifyTaskWizard = ({
   alert_email = '',
-  capabilities,
   reschedule,
   start_date,
   start_hour,
@@ -42,6 +42,8 @@ const ModifyTaskWizard = ({
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
   const data = {
     alert_email,
     start_date,
@@ -104,8 +106,8 @@ const ModifyTaskWizard = ({
               </div>
             </WizardContent>
           </Layout>
-          <Layout basis="0" grow="1" flex="column">
-            <FormGroup title={_('Task')} titleSize="3">
+          <Column>
+            <FormGroup title={_('Task')}>
               <Select
                 name="task_id"
                 value={state.task_id}
@@ -116,85 +118,72 @@ const ModifyTaskWizard = ({
 
             {capabilities.mayCreate('schedule') &&
               capabilities.mayAccess('schedules') && (
-                <FormGroup title={_('Start Time')} titleSize="3" flex="column">
-                  <FormGroup>
-                    <Radio
-                      title={_('Do not change')}
-                      value={NO_VALUE}
-                      checked={state.reschedule === NO_VALUE}
-                      convert={parseYesNo}
-                      name="reschedule"
+                <FormGroup title={_('Start Time')}>
+                  <Radio
+                    title={_('Do not change')}
+                    value={NO_VALUE}
+                    checked={state.reschedule === NO_VALUE}
+                    convert={parseYesNo}
+                    name="reschedule"
+                    onChange={onValueChange}
+                  />
+                  <Radio
+                    title={_('Create Schedule')}
+                    value={YES_VALUE}
+                    checked={state.reschedule === YES_VALUE}
+                    convert={parseYesNo}
+                    name="reschedule"
+                    onChange={onValueChange}
+                  />
+                  <Datepicker
+                    name="start_date"
+                    timezone={state.start_timezone}
+                    value={state.start_date}
+                    onChange={onValueChange}
+                  />
+                  <Row>
+                    <span>{_('at')}</span>
+                    <Spinner
+                      type="int"
+                      min="0"
+                      max="23"
+                      name="start_hour"
+                      value={state.start_hour}
                       onChange={onValueChange}
                     />
-                  </FormGroup>
-                  <FormGroup>
-                    <Radio
-                      title={_('Create Schedule')}
-                      value={YES_VALUE}
-                      checked={state.reschedule === YES_VALUE}
-                      convert={parseYesNo}
-                      name="reschedule"
+                    <span>{_('h')}</span>
+                    <Spinner
+                      type="int"
+                      min="0"
+                      max="59"
+                      name="start_minute"
+                      value={state.start_minute}
                       onChange={onValueChange}
+                      i
                     />
-                  </FormGroup>
-                  <FormGroup offset="1">
-                    <Datepicker
-                      name="start_date"
-                      timezone={state.start_timezone}
-                      value={state.start_date}
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
-                  <FormGroup offset="1">
-                    <Divider>
-                      <span>{_('at')}</span>
-                      <Spinner
-                        type="int"
-                        min="0"
-                        max="23"
-                        size="2"
-                        name="start_hour"
-                        value={state.start_hour}
-                        onChange={onValueChange}
-                      />
-                      <span>{_('h')}</span>
-                      <Spinner
-                        type="int"
-                        min="0"
-                        max="59"
-                        size="2"
-                        name="start_minute"
-                        value={state.start_minute}
-                        onChange={onValueChange}
-                        i
-                      />
-                      <span>{_('m')}</span>
-                    </Divider>
-                  </FormGroup>
-                  <FormGroup offset="1">
-                    <TimeZoneSelect
-                      name="start_timezone"
-                      value={state.start_timezone}
-                      onChange={onValueChange}
-                    />
-                  </FormGroup>
+                    <span>{_('m')}</span>
+                  </Row>
+                  <TimeZoneSelect
+                    name="start_timezone"
+                    value={state.start_timezone}
+                    onChange={onValueChange}
+                  />
                 </FormGroup>
               )}
 
             {capabilities.mayCreate('alert') &&
               capabilities.mayAccess('alerts') && (
-                <FormGroup title={_('Email report to')} titleSize="3">
+                <FormGroup title={_('Email report to')}>
                   <TextField
                     grow="1"
                     name="alert_email"
                     value={state.alert_email}
-                    size="30"
                     maxLength="80"
                     onChange={onValueChange}
                   />
                 </FormGroup>
               )}
-          </Layout>
+          </Column>
         </Layout>
       )}
     </SaveDialog>
@@ -203,7 +192,6 @@ const ModifyTaskWizard = ({
 
 ModifyTaskWizard.propTypes = {
   alert_email: PropTypes.string,
-  capabilities: PropTypes.capabilities.isRequired,
   reschedule: PropTypes.oneOf([NO_VALUE, YES_VALUE]),
   start_date: PropTypes.date,
   start_hour: PropTypes.number,
@@ -216,6 +204,6 @@ ModifyTaskWizard.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default withCapabilities(ModifyTaskWizard);
+export default ModifyTaskWizard;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -6,8 +6,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {
   esxi_credential_filter,
   smb_credential_filter,
@@ -16,11 +14,8 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
-import withCapabilities from 'web/utils/withCapabilities';
 
 import SaveDialog from 'web/components/dialog/savedialog';
-
-import Divider from 'web/components/layout/divider';
 
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
@@ -30,7 +25,12 @@ import Radio from 'web/components/form/radio';
 import Datepicker from 'web/components/form/datepicker';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
 
+import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
+import Column from 'web/components/layout/column';
+
+import useTranslation from 'web/hooks/useTranslation';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import {WizardContent, WizardIcon} from './taskwizard';
 
@@ -48,7 +48,6 @@ const DEFAULTS = {
 const AdvancedTaskWizard = ({
   alert_email,
   auto_start,
-  capabilities,
   config_id,
   credentials = [],
   start_date,
@@ -65,6 +64,8 @@ const AdvancedTaskWizard = ({
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
   const configItems = renderSelectItems(scan_configs);
   const sshCredentialItems = renderSelectItems(
     credentials.filter(ssh_credential_filter),
@@ -169,19 +170,18 @@ const AdvancedTaskWizard = ({
               </p>
             </WizardContent>
           </Layout>
-          <Layout grow="1" basis="0" flex="column">
-            <FormGroup title={_('Task Name')} titleSize="3">
+          <Column>
+            <FormGroup title={_('Task Name')}>
               <TextField
                 name="task_name"
                 grow="1"
                 onChange={onValueChange}
                 value={state.task_name}
-                size="30"
                 maxLength="80"
               />
             </FormGroup>
 
-            <FormGroup title={_('Scan Config')} titleSize="3">
+            <FormGroup title={_('Scan Config')}>
               <Select
                 name="config_id"
                 value={state.config_id}
@@ -190,7 +190,7 @@ const AdvancedTaskWizard = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Target Host(s)')} titleSize="3">
+            <FormGroup title={_('Target Host(s)')}>
               <TextField
                 name="target_hosts"
                 grow="1"
@@ -200,21 +200,19 @@ const AdvancedTaskWizard = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Start Time')} titleSize="3" flex="column">
-              <FormGroup>
-                <Radio
-                  title={_('Start immediately')}
-                  value={IMMEDIATELY_START_VALUE}
-                  checked={state.auto_start === IMMEDIATELY_START_VALUE}
-                  name="auto_start"
-                  onChange={onValueChange}
-                />
-              </FormGroup>
+            <FormGroup title={_('Start Time')}>
+              <Radio
+                title={_('Start immediately')}
+                value={IMMEDIATELY_START_VALUE}
+                checked={state.auto_start === IMMEDIATELY_START_VALUE}
+                name="auto_start"
+                onChange={onValueChange}
+              />
 
               {capabilities.mayCreate('schedule') &&
                 capabilities.mayAccess('schedules') && (
-                  <span>
-                    <FormGroup>
+                  <>
+                    <Column>
                       <Radio
                         title={_('Create Schedule:')}
                         value={SCHEDULE_START_VALUE}
@@ -222,23 +220,18 @@ const AdvancedTaskWizard = ({
                         name="auto_start"
                         onChange={onValueChange}
                       />
-                    </FormGroup>
-                    <FormGroup offset="1">
                       <Datepicker
                         name="start_date"
                         value={state.start_date}
                         timezone={state.start_timezone}
                         onChange={onValueChange}
                       />
-                    </FormGroup>
-                    <FormGroup offset="1">
                       <Divider>
                         <span>{_('at')}</span>
                         <Spinner
                           type="int"
                           min="0"
                           max="23"
-                          size="2"
                           name="start_hour"
                           value={state.start_hour}
                           onChange={onValueChange}
@@ -248,22 +241,19 @@ const AdvancedTaskWizard = ({
                           type="int"
                           min="0"
                           max="59"
-                          size="2"
                           name="start_minute"
                           value={state.start_minute}
                           onChange={onValueChange}
                         />
                         <span>{_('m')}</span>
                       </Divider>
-                    </FormGroup>
-                    <FormGroup offset="1">
-                      <TimeZoneSelect
-                        name="start_timezone"
-                        value={state.start_timezone}
-                        onChange={onValueChange}
-                      />
-                    </FormGroup>
-                  </span>
+                    </Column>
+                    <TimeZoneSelect
+                      name="start_timezone"
+                      value={state.start_timezone}
+                      onChange={onValueChange}
+                    />
+                  </>
                 )}
 
               <Radio
@@ -275,26 +265,24 @@ const AdvancedTaskWizard = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('SSH Credential')} titleSize="3">
-              <Divider>
-                <Select
-                  value={state.ssh_credential}
-                  name="ssh_credential"
-                  items={sshCredentialItems}
-                  onChange={onValueChange}
-                />
-                <span>{_(' on port ')}</span>
-                <Spinner
-                  min="0"
-                  max="65535"
-                  size="5"
-                  value={state.ssh_port}
-                  onChange={onValueChange}
-                />
-              </Divider>
+            <FormGroup title={_('SSH Credential')} direction="row">
+              <Select
+                value={state.ssh_credential}
+                name="ssh_credential"
+                items={sshCredentialItems}
+                onChange={onValueChange}
+              />
+              <span>{_(' on port ')}</span>
+              <Spinner
+                min="0"
+                max="65535"
+                type="int"
+                value={state.ssh_port}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
-            <FormGroup title={_('SMB Credential')} titleSize="3">
+            <FormGroup title={_('SMB Credential')}>
               <Select
                 value={state.smb_credential}
                 name="smb_credential"
@@ -303,7 +291,7 @@ const AdvancedTaskWizard = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('ESXi Credential')} titleSize="3">
+            <FormGroup title={_('ESXi Credential')}>
               <Select
                 value={state.esxi_credential}
                 name="esxi_credential"
@@ -314,18 +302,17 @@ const AdvancedTaskWizard = ({
 
             {capabilities.mayCreate('alert') &&
               capabilities.mayAccess('alerts') && (
-                <FormGroup title={_('Email report to')} titleSize="3">
+                <FormGroup title={_('Email report to')}>
                   <TextField
                     name="alert_email"
                     grow="1"
                     value={state.alert_email}
-                    size="30"
                     maxLength="80"
                     onChange={onValueChange}
                   />
                 </FormGroup>
               )}
-          </Layout>
+          </Column>
         </Layout>
       )}
     </SaveDialog>
@@ -339,7 +326,6 @@ AdvancedTaskWizard.propTypes = {
     SCHEDULE_START_VALUE,
     DONT_START_VALUE,
   ]),
-  capabilities: PropTypes.capabilities.isRequired,
   config_id: PropTypes.idOrZero,
   credentials: PropTypes.arrayOf(PropTypes.model),
   esxi_credential: PropTypes.idOrZero,
@@ -358,6 +344,6 @@ AdvancedTaskWizard.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
-export default withCapabilities(AdvancedTaskWizard);
+export default AdvancedTaskWizard;
 
 // vim: set ts=2 sw=2 tw=80:
