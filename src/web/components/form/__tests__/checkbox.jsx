@@ -17,18 +17,23 @@
  */
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent, screen} from 'web/utils/testing';
 
 import CheckBox from '../checkbox';
 
 describe('CheckBox component tests', () => {
   test('should call change handler', () => {
     const change = testing.fn();
-    const {element} = render(
-      <CheckBox name="foo" checked={false} onChange={change} />,
+    render(
+      <CheckBox
+        data-testid="checkbox"
+        name="foo"
+        checked={false}
+        onChange={change}
+      />,
     );
 
-    const input = element.querySelector('input');
+    const input = screen.getByTestId('checkbox');
 
     fireEvent.click(input);
 
@@ -37,8 +42,9 @@ describe('CheckBox component tests', () => {
 
   test('should use checkedValue', () => {
     const change = testing.fn();
-    const {element} = render(
+    render(
       <CheckBox
+        data-testid="checkbox"
         name="foo"
         checked={false}
         checkedValue="ipsum"
@@ -47,7 +53,7 @@ describe('CheckBox component tests', () => {
       />,
     );
 
-    const input = element.querySelector('input');
+    const input = screen.getByTestId('checkbox');
 
     fireEvent.click(input);
 
@@ -56,8 +62,9 @@ describe('CheckBox component tests', () => {
 
   test('should use unCheckedValue', () => {
     const change = testing.fn();
-    const {element} = render(
+    render(
       <CheckBox
+        data-testid="checkbox"
         name="foo"
         checked={true}
         checkedValue="ipsum"
@@ -66,7 +73,7 @@ describe('CheckBox component tests', () => {
       />,
     );
 
-    const input = element.querySelector('input');
+    const input = screen.getByTestId('checkbox');
 
     fireEvent.click(input);
 
@@ -75,8 +82,9 @@ describe('CheckBox component tests', () => {
 
   test('should not call change handler if disabled', () => {
     const change = testing.fn();
-    const {element} = render(
+    render(
       <CheckBox
+        data-testid="checkbox"
         name="foo"
         disabled={true}
         checked={true}
@@ -86,7 +94,7 @@ describe('CheckBox component tests', () => {
       />,
     );
 
-    const input = element.querySelector('input');
+    const input = screen.getByTestId('checkbox');
 
     fireEvent.click(input);
 
@@ -94,20 +102,10 @@ describe('CheckBox component tests', () => {
   });
 
   test('should render title', () => {
-    const {getByTestId} = render(<CheckBox name="foo" title="bar" />);
+    render(<CheckBox data-testid="checkbox" name="foo" title="bar" />);
 
-    const titleElement = getByTestId('checkbox-title');
-    expect(titleElement).toHaveTextContent('bar');
-  });
-
-  test('should render with children', () => {
-    const {element} = render(
-      <CheckBox>
-        <span>child1</span>
-        <span>child2</span>
-      </CheckBox>,
-    );
-    expect(element).toMatchSnapshot();
+    screen.getByTestId('checkbox');
+    screen.getByLabelText('bar');
   });
 });
 

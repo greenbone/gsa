@@ -18,29 +18,56 @@
 
 import React from 'react';
 
+import {Input} from '@greenbone/opensight-ui-components';
+
+import {isDefined} from 'gmp/utils/identity';
+
 import PropTypes from 'web/utils/proptypes';
 
-import Field from './field';
-import {Marker} from './useFormValidation';
+import useValueChange from './useValueChange';
 
-const TextField = ({hasError = false, errorContent, title, ...props}) => {
+const TextField = ({
+  autoComplete,
+  disabled,
+  errorContent,
+  grow,
+  name,
+  placeholder,
+  title,
+  value,
+  onChange,
+  onKeyDown,
+  ...props
+}) => {
+  const handleChange = useValueChange({onChange, disabled, name});
   return (
-    <React.Fragment>
-      <Field
-        {...props}
-        hasError={hasError}
-        title={hasError ? `${errorContent}` : title}
-        type="text"
-      />
-      <Marker isVisible={hasError}>×</Marker>
-    </React.Fragment>
+    <Input
+      {...props}
+      styles={{root: {flexGrow: grow}}}
+      autoComplete={autoComplete}
+      disabled={disabled}
+      error={isDefined(errorContent) && `${errorContent}`}
+      label={title}
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      onChange={handleChange}
+      onKeyDown={onKeyDown}
+    />
   );
 };
 
 TextField.propTypes = {
+  autoComplete: PropTypes.string,
+  disabled: PropTypes.bool,
   errorContent: PropTypes.toString,
-  hasError: PropTypes.bool,
+  grow: PropTypes.numberOrNumberString,
+  name: PropTypes.string,
+  placeholder: PropTypes.string,
   title: PropTypes.string,
+  value: PropTypes.any,
+  onChange: PropTypes.func,
+  onKeyDown: PropTypes.func,
 };
 
 export default TextField;

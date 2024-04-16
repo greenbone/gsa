@@ -23,8 +23,7 @@ import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+import Row from 'web/components/layout/row';
 
 import Radio from './radio';
 
@@ -36,30 +35,27 @@ const YesNoRadio = ({
   yesValue = YES_VALUE,
   noValue = NO_VALUE,
   onChange,
-  ...other
 }) => (
-  <Layout {...other}>
-    <Divider>
-      <Radio
-        title={_('Yes')}
-        value={yesValue}
-        name={name}
-        checked={value === yesValue}
-        convert={convert}
-        onChange={onChange}
-        disabled={disabled}
-      />
-      <Radio
-        title={_('No')}
-        value={noValue}
-        name={name}
-        checked={value === noValue}
-        convert={convert}
-        onChange={onChange}
-        disabled={disabled}
-      />
-    </Divider>
-  </Layout>
+  <Row>
+    <Radio
+      title={_('Yes')}
+      value={yesValue}
+      name={name}
+      checked={value === yesValue}
+      convert={convert}
+      onChange={onChange}
+      disabled={disabled}
+    />
+    <Radio
+      title={_('No')}
+      value={noValue}
+      name={name}
+      checked={value === noValue}
+      convert={convert}
+      onChange={onChange}
+      disabled={disabled}
+    />
+  </Row>
 );
 
 YesNoRadio.propTypes = {

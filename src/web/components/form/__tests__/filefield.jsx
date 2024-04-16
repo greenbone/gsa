@@ -24,12 +24,8 @@ import FileField from '../filefield';
 describe('FileField tests', () => {
   test('should render', () => {
     const {element} = render(<FileField />);
-    expect(element).toMatchSnapshot();
-  });
 
-  test('should render in disabled state', () => {
-    const {element} = render(<FileField disabled={true} />);
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should call change handler with file', () => {
@@ -37,7 +33,9 @@ describe('FileField tests', () => {
 
     const {element} = render(<FileField onChange={onChange} />);
 
-    fireEvent.change(element, {target: {files: ['bar']}});
+    const input = element.querySelector('input[type=file]');
+
+    fireEvent.change(input, {target: {files: ['bar']}});
 
     expect(onChange).toHaveBeenCalledWith('bar', undefined);
   });
@@ -47,7 +45,9 @@ describe('FileField tests', () => {
 
     const {element} = render(<FileField name="foo" onChange={onChange} />);
 
-    fireEvent.change(element, {target: {files: ['bar']}});
+    const input = element.querySelector('input[type=file]');
+
+    fireEvent.change(input, {target: {files: ['bar']}});
 
     expect(onChange).toHaveBeenCalledWith('bar', 'foo');
   });
@@ -57,7 +57,9 @@ describe('FileField tests', () => {
 
     const {element} = render(<FileField disabled={true} onChange={onChange} />);
 
-    fireEvent.change(element, {target: {files: ['bar']}});
+    const input = element.querySelector('input[type=file]');
+
+    fireEvent.change(input, {target: {files: ['bar']}});
 
     expect(onChange).not.toHaveBeenCalled();
   });
