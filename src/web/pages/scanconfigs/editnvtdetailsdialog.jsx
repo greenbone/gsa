@@ -17,8 +17,6 @@
  */
 import React, {useEffect, useReducer, useState} from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -50,6 +48,7 @@ import TableRow from 'web/components/table/row';
 
 import NvtPreference from '../nvts/nvtpreference';
 import Preformatted from '../nvts/preformatted';
+import useTranslation from 'web/hooks/useTranslation';
 
 const createPrefValues = (preferences = []) => {
   const preferenceValues = {};
@@ -117,6 +116,7 @@ const EditNvtDetailsDialog = ({
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
   const [preferenceValues, dispatch] = useReducer(
     reducer,
     createPrefValues(preferences),

@@ -17,19 +17,18 @@
  */
 import React, {useState} from 'react';
 
-import _ from 'gmp/locale';
-
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 import TextArea from 'web/components/form/textarea';
-import Layout from 'web/components/layout/layout';
 import useFormValidation from 'web/components/form/useFormValidation';
 import useFormValues from 'web/components/form/useFormValues';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 import {createTicketRules as validationRules} from './validationrules';
 
@@ -37,25 +36,24 @@ const fieldsToValidate = ['note'];
 
 const CreateTicketDialog = ({
   resultId,
-  title = _('Create new Ticket for Result'),
+  title,
   userId,
   users,
   onClose,
   onSave,
   onUserIdChange,
 }) => {
+  const [_] = useTranslation();
   const [error, setError] = useState();
 
   const [formValues, handleValueChange] = useFormValues({note: ''});
-  const {hasError, errors, validate} = useFormValidation(
-    validationRules,
-    formValues,
-    {
-      onValidationSuccess: onSave,
-      onValidationError: setError,
-      fieldsToValidate,
-    },
-  );
+  const {errors, validate} = useFormValidation(validationRules, formValues, {
+    onValidationSuccess: onSave,
+    onValidationError: setError,
+    fieldsToValidate,
+  });
+
+  title = title || _('Create new Ticket for Result');
 
   return (
     <SaveDialog
@@ -71,7 +69,7 @@ const CreateTicketDialog = ({
       }}
     >
       {({values}) => (
-        <Layout flex="column">
+        <>
           <FormGroup title={_('Assign To User')}>
             <Select
               name="userId"
@@ -82,16 +80,14 @@ const CreateTicketDialog = ({
           </FormGroup>
           <FormGroup title={_('Note')}>
             <TextArea
-              hasError={hasError && !!errors.note} // default false if undefined (if we don't want to do validation on this textarea)
               errorContent={errors.note}
               name="note"
-              grow="1"
-              rows="5"
+              minRows="5"
               value={values.note}
               onChange={handleValueChange}
             />
           </FormGroup>
-        </Layout>
+        </>
       )}
     </SaveDialog>
   );

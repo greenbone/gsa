@@ -18,10 +18,6 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
-
-import _ from 'gmp/locale';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {selectSaveId} from 'gmp/utils/id';
@@ -41,12 +37,7 @@ import Select from 'web/components/form/select';
 
 import NewIcon from 'web/components/icon/newicon';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
-const StyledDiv = styled.div`
-  text-align: end;
-`;
+import useTranslation from 'web/hooks/useTranslation';
 
 const TriggerAlertDialog = ({
   alertId,
@@ -64,6 +55,7 @@ const TriggerAlertDialog = ({
   onNewAlertClick,
   onSave,
 }) => {
+  const [_] = useTranslation();
   const filterString = isString(filter)
     ? filter
     : filter.simple().toFilterString();
@@ -93,7 +85,7 @@ const TriggerAlertDialog = ({
       onSave={onSave}
     >
       {({values, onValueChange}) => (
-        <Layout flex="column">
+        <>
           <ComposerContent
             applyOverrides={values.applyOverrides}
             filterString={filterString}
@@ -101,32 +93,29 @@ const TriggerAlertDialog = ({
             includeOverrides={values.includeOverrides}
             onValueChange={onValueChange}
           />
-          <FormGroup title={_('Alert')} titleSize="3">
-            <Divider>
-              <Select
-                name="alertId"
-                value={values.alertId}
-                items={renderSelectItems(alerts)}
-                onChange={onAlertChange}
-              />
-              <NewIcon onClick={onNewAlertClick} />
-            </Divider>
-          </FormGroup>
-          <StyledDiv>
-            <CheckBox
-              name="storeAsDefault"
-              checked={storeAsDefault}
-              checkedValue={YES_VALUE}
-              unCheckedValue={NO_VALUE}
-              toolTipTitle={_(
-                'Store indicated settings (without filter) as default',
-              )}
-              title={_('Store as default')}
-              onChange={onValueChange}
+          <FormGroup title={_('Alert')} direction="row">
+            <Select
+              grow="1"
+              name="alertId"
+              value={values.alertId}
+              items={renderSelectItems(alerts)}
+              onChange={onAlertChange}
             />
-          </StyledDiv>
+            <NewIcon onClick={onNewAlertClick} />
+          </FormGroup>
+          <CheckBox
+            name="storeAsDefault"
+            checked={storeAsDefault}
+            checkedValue={YES_VALUE}
+            unCheckedValue={NO_VALUE}
+            toolTipTitle={_(
+              'Store indicated settings (without filter) as default',
+            )}
+            title={_('Store as default')}
+            onChange={onValueChange}
+          />
           {showThresholdMessage && <ThresholdMessage threshold={threshold} />}
-        </Layout>
+        </>
       )}
     </SaveDialog>
   );

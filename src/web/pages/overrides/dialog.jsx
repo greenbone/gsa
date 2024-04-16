@@ -18,8 +18,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import {parseFloat, parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -40,9 +38,6 @@ import {
 } from 'gmp/models/override';
 
 import DateTime from 'web/components/date/datetime';
-
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 import {
@@ -73,6 +68,10 @@ import TextArea from 'web/components/form/textarea';
 import TextField from 'web/components/form/textfield';
 import Select from 'web/components/form/select';
 
+import Row from 'web/components/layout/row';
+
+import useTranslation from 'web/hooks/useTranslation';
+
 const OverrideDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
   custom_severity = NO_VALUE,
@@ -97,11 +96,14 @@ const OverrideDialog = ({
   tasks,
   task_uuid,
   text = '',
-  title = _('New Override'),
+  title,
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
   const is_edit = isDefined(override);
+
+  title = title || _('New Override');
 
   const data = {
     active,
@@ -167,7 +169,7 @@ const OverrideDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             {fixed && isDefined(oid) && (
               <FormGroup title={_('NVT')} flex="column">
                 <span>{renderNvtName(oid, nvt_name)}</span>
@@ -179,7 +181,7 @@ const OverrideDialog = ({
               </FormGroup>
             )}
             {is_edit && !fixed && (
-              <FormGroup title={_('NVT')} flex="column">
+              <FormGroup title={_('NVT')}>
                 <Radio
                   name="oid"
                   title={renderNvtName(oid, nvt_name)}
@@ -187,7 +189,7 @@ const OverrideDialog = ({
                   value={oid}
                   onChange={onValueChange}
                 />
-                <Divider>
+                <Row>
                   <Radio
                     name="oid"
                     checked={state.oid !== oid}
@@ -200,12 +202,13 @@ const OverrideDialog = ({
                     value={state.oid === oid ? DEFAULT_OID_VALUE : state.oid}
                     onChange={onValueChange}
                   />
-                </Divider>
+                </Row>
               </FormGroup>
             )}
             {!is_edit && !fixed && (
               <FormGroup title={_('NVT OID')}>
                 <TextField
+                  grow="1"
                   name="oid"
                   value={state.oid}
                   onChange={onValueChange}
@@ -213,7 +216,7 @@ const OverrideDialog = ({
               </FormGroup>
             )}
 
-            <FormGroup title={_('Active')} flex="column">
+            <FormGroup title={_('Active')}>
               <Radio
                 name="active"
                 value={ACTIVE_YES_ALWAYS_VALUE}
@@ -221,9 +224,10 @@ const OverrideDialog = ({
                 title={_('yes, always')}
                 onChange={onValueChange}
               />
-              {is_edit && override.isActive() && isDefined(override.endTime) && (
-                <Layout>
-                  <Divider>
+              {is_edit &&
+                override.isActive() &&
+                isDefined(override.endTime) && (
+                  <Row>
                     <Radio
                       name="active"
                       value={ACTIVE_YES_UNTIL_VALUE}
@@ -232,10 +236,9 @@ const OverrideDialog = ({
                       onChange={onValueChange}
                     />
                     <DateTime date={override.endTime} />
-                  </Divider>
-                </Layout>
-              )}
-              <Divider>
+                  </Row>
+                )}
+              <Row>
                 <Radio
                   name="active"
                   checked={state.active === ACTIVE_YES_FOR_NEXT_VALUE}
@@ -245,7 +248,6 @@ const OverrideDialog = ({
                 />
                 <Spinner
                   name="days"
-                  size="4"
                   disabled={state.active !== ACTIVE_YES_FOR_NEXT_VALUE}
                   type="int"
                   min="1"
@@ -253,7 +255,7 @@ const OverrideDialog = ({
                   onChange={onValueChange}
                 />
                 <span>{_('days')}</span>
-              </Divider>
+              </Row>
               <Radio
                 name="active"
                 checked={state.active === ACTIVE_NO_VALUE}
@@ -263,7 +265,7 @@ const OverrideDialog = ({
               />
             </FormGroup>
 
-            <FormGroup title={_('Hosts')}>
+            <FormGroup title={_('Hosts')} direction="row">
               <Radio
                 name="hosts"
                 title={_('Any')}
@@ -271,23 +273,22 @@ const OverrideDialog = ({
                 value={ANY}
                 onChange={onValueChange}
               />
-              <Divider>
-                <Radio
-                  name="hosts"
-                  checked={state.hosts === MANUAL}
-                  value={MANUAL}
-                  onChange={onValueChange}
-                />
-                <TextField
-                  name="hosts_manual"
-                  value={state.hosts_manual}
-                  disabled={state.hosts !== MANUAL}
-                  onChange={onValueChange}
-                />
-              </Divider>
+              <Radio
+                name="hosts"
+                checked={state.hosts === MANUAL}
+                value={MANUAL}
+                onChange={onValueChange}
+              />
+              <TextField
+                grow="1"
+                name="hosts_manual"
+                value={state.hosts_manual}
+                disabled={state.hosts !== MANUAL}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
-            <FormGroup title={_('Location')}>
+            <FormGroup title={_('Location')} direction="row">
               <Radio
                 name="port"
                 title={_('Any')}
@@ -295,20 +296,19 @@ const OverrideDialog = ({
                 value={ANY}
                 onChange={onValueChange}
               />
-              <Divider>
-                <Radio
-                  name="port"
-                  checked={state.port === MANUAL}
-                  value={MANUAL}
-                  onChange={onValueChange}
-                />
-                <TextField
-                  name="port_manual"
-                  disabled={state.port !== MANUAL}
-                  value={state.port_manual}
-                  onChange={onValueChange}
-                />
-              </Divider>
+              <Radio
+                name="port"
+                checked={state.port === MANUAL}
+                value={MANUAL}
+                onChange={onValueChange}
+              />
+              <TextField
+                grow="1"
+                name="port_manual"
+                disabled={state.port !== MANUAL}
+                value={state.port_manual}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Severity')}>
@@ -319,31 +319,27 @@ const OverrideDialog = ({
                 value=""
                 onChange={onValueChange}
               />
-              {isDefined(severity) && (
-                <Layout>
-                  {severity > 0 ? (
-                    <Radio
-                      name="severity"
-                      title={' > ' + severityFormat(severity - 0.1)}
-                      checked={true}
-                      convert={parseFloat}
-                      value={severity}
-                      onChange={onValueChange}
-                    />
-                  ) : (
-                    <Radio
-                      name="severity"
-                      title={translatedResultSeverityRiskFactor(severity)}
-                      checked={state.severity === severity}
-                      convert={parseFloat}
-                      value={severity}
-                      onChange={onValueChange}
-                    />
-                  )}
-                </Layout>
+              {isDefined(severity) && severity > 0 ? (
+                <Radio
+                  name="severity"
+                  title={' > ' + severityFormat(severity - 0.1)}
+                  checked={true}
+                  convert={parseFloat}
+                  value={severity}
+                  onChange={onValueChange}
+                />
+              ) : (
+                <Radio
+                  name="severity"
+                  title={translatedResultSeverityRiskFactor(severity)}
+                  checked={state.severity === severity}
+                  convert={parseFloat}
+                  value={severity}
+                  onChange={onValueChange}
+                />
               )}
               {!isDefined(severity) && (
-                <Layout>
+                <Row>
                   <Radio
                     name="severity"
                     title={_('> 0.0')}
@@ -360,43 +356,41 @@ const OverrideDialog = ({
                     convert={parseFloat}
                     onChange={onValueChange}
                   />
-                </Layout>
+                </Row>
               )}
             </FormGroup>
 
-            <FormGroup title={_('New Severity')}>
-              <Divider>
-                <Radio
-                  name="custom_severity"
-                  checked={state.custom_severity === NO_VALUE}
-                  convert={parseYesNo}
-                  value={NO_VALUE}
-                  onChange={onValueChange}
-                />
-                <Select
-                  name="new_severity_from_list"
-                  disabled={state.custom_severity === YES_VALUE}
-                  convert={parseFloat}
-                  items={severity_from_list_items}
-                  value={state.new_severity_from_list}
-                  onChange={onValueChange}
-                />
-                <Radio
-                  name="custom_severity"
-                  title={_('Other')}
-                  checked={state.custom_severity === YES_VALUE}
-                  convert={parseYesNo}
-                  value={YES_VALUE}
-                  onChange={onValueChange}
-                />
-                <TextField
-                  name="newSeverity"
-                  disabled={state.custom_severity === NO_VALUE}
-                  convert={parseFloat}
-                  value={state.newSeverity}
-                  onChange={onValueChange}
-                />
-              </Divider>
+            <FormGroup title={_('New Severity')} direction="row">
+              <Radio
+                name="custom_severity"
+                checked={state.custom_severity === NO_VALUE}
+                convert={parseYesNo}
+                value={NO_VALUE}
+                onChange={onValueChange}
+              />
+              <Select
+                name="new_severity_from_list"
+                disabled={state.custom_severity === YES_VALUE}
+                convert={parseFloat}
+                items={severity_from_list_items}
+                value={state.new_severity_from_list}
+                onChange={onValueChange}
+              />
+              <Radio
+                name="custom_severity"
+                title={_('Other')}
+                checked={state.custom_severity === YES_VALUE}
+                convert={parseYesNo}
+                value={YES_VALUE}
+                onChange={onValueChange}
+              />
+              <TextField
+                name="newSeverity"
+                disabled={state.custom_severity === NO_VALUE}
+                convert={parseFloat}
+                value={state.newSeverity}
+                onChange={onValueChange}
+              />
             </FormGroup>
 
             <FormGroup title={_('Task')}>
@@ -407,7 +401,7 @@ const OverrideDialog = ({
                 value={TASK_ANY}
                 onChange={onValueChange}
               />
-              <Divider>
+              <Row>
                 <Radio
                   name="task_id"
                   checked={state.task_id === TASK_SELECTED}
@@ -417,12 +411,13 @@ const OverrideDialog = ({
 
                 <Select
                   name="task_uuid"
+                  grow="1"
                   disabled={state.task_id !== TASK_SELECTED}
                   items={renderSelectItems(tasks)}
                   value={state.task_uuid}
                   onChange={onValueChange}
                 />
-              </Divider>
+              </Row>
             </FormGroup>
 
             <FormGroup title={_('Result')}>
@@ -433,7 +428,7 @@ const OverrideDialog = ({
                 value={RESULT_ANY}
                 onChange={onValueChange}
               />
-              <Divider>
+              <Row>
                 <Radio
                   name="result_id"
                   title={
@@ -451,26 +446,25 @@ const OverrideDialog = ({
                   !fixed && (
                     <TextField
                       name="result_uuid"
-                      size="34"
+                      grow="1"
                       disabled={state.result_id !== RESULT_UUID}
                       value={state.result_uuid}
                       onChange={onValueChange}
                     />
                   )}
-              </Divider>
+              </Row>
             </FormGroup>
 
             <FormGroup title={_('Text')}>
               <TextArea
                 name="text"
-                grow="1"
-                rows="10"
-                cols="60"
+                minRows="4"
+                autosize={true}
                 value={state.text}
                 onChange={onValueChange}
               />
             </FormGroup>
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

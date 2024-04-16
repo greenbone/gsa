@@ -42,9 +42,6 @@ import {
   getCredentialTypeName,
 } from 'gmp/models/credential';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
 
@@ -145,12 +142,12 @@ class CredentialsDialog extends React.Component {
       credential,
       title = _('New Credential'),
       types = [],
-      allow_insecure = NO_VALUE,
+      allow_insecure,
       auth_algorithm = SNMP_AUTH_ALGORITHM_SHA1,
-      change_community = NO_VALUE,
-      change_passphrase = NO_VALUE,
-      change_password = NO_VALUE,
-      change_privacy_password = NO_VALUE,
+      change_community,
+      change_passphrase,
+      change_password,
+      change_privacy_password,
       comment = '',
       community = '',
       credential_login = '',
@@ -215,12 +212,10 @@ class CredentialsDialog extends React.Component {
       >
         {({values: state, onValueChange}) => {
           return (
-            <Layout flex="column">
+            <>
               <FormGroup title={_('Name')}>
                 <TextField
                   name="name"
-                  grow="1"
-                  size="30"
                   value={state.name}
                   onChange={onValueChange}
                 />
@@ -229,8 +224,6 @@ class CredentialsDialog extends React.Component {
               <FormGroup title={_('Comment')}>
                 <TextField
                   name="comment"
-                  grow="1"
-                  size="30"
                   value={state.comment}
                   onChange={onValueChange}
                 />
@@ -273,7 +266,7 @@ class CredentialsDialog extends React.Component {
                 )}
 
               {state.credential_type === SNMP_CREDENTIAL_TYPE && (
-                <FormGroup title={_('SNMP Community')}>
+                <FormGroup title={_('SNMP Community')} direction="row">
                   {is_edit && (
                     <Checkbox
                       name="change_community"
@@ -285,7 +278,9 @@ class CredentialsDialog extends React.Component {
                     />
                   )}
                   <PasswordField
+                    grow="1"
                     name="community"
+                    disabled={state.change_community === NO_VALUE}
                     value={state.community}
                     onChange={onValueChange}
                   />
@@ -295,7 +290,7 @@ class CredentialsDialog extends React.Component {
               {(state.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE ||
                 state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE ||
                 state.credential_type === SNMP_CREDENTIAL_TYPE) && (
-                <FormGroup title={_('Username')} flex>
+                <FormGroup title={_('Username')}>
                   <TextField
                     name="credential_login"
                     value={state.credential_login}
@@ -308,73 +303,77 @@ class CredentialsDialog extends React.Component {
                 state.credential_type === SNMP_CREDENTIAL_TYPE ||
                 state.credential_type === VFIRE_CREDENTIAL_TYPES ||
                 state.credential_type === PASSWORD_ONLY_CREDENTIAL_TYPE) && (
-                <FormGroup title={_('Password')}>
-                  <Divider>
-                    {is_edit && (
-                      <Checkbox
-                        name="change_password"
-                        checked={state.change_password === YES_VALUE}
-                        checkedValue={YES_VALUE}
-                        unCheckedValue={NO_VALUE}
-                        title={_('Replace existing password with')}
-                        onChange={onValueChange}
-                      />
-                    )}
-                    <PasswordField
-                      name="password"
-                      autoComplete="new-password"
-                      disabled={state.autogenerate === YES_VALUE}
-                      value={state.password}
+                <FormGroup title={_('Password')} direction="row">
+                  {is_edit && (
+                    <Checkbox
+                      name="change_password"
+                      checked={state.change_password === YES_VALUE}
+                      checkedValue={YES_VALUE}
+                      unCheckedValue={NO_VALUE}
+                      title={_('Replace existing password with')}
                       onChange={onValueChange}
                     />
-                  </Divider>
+                  )}
+                  <PasswordField
+                    grow="1"
+                    name="password"
+                    autoComplete="new-password"
+                    disabled={
+                      state.autogenerate === YES_VALUE ||
+                      state.change_password === NO_VALUE
+                    }
+                    value={state.password}
+                    onChange={onValueChange}
+                  />
                 </FormGroup>
               )}
 
               {state.credential_type === USERNAME_SSH_KEY_CREDENTIAL_TYPE && (
-                <FormGroup title={_('Passphrase')}>
-                  <Divider>
-                    {is_edit && (
-                      <Checkbox
-                        name="change_passphrase"
-                        checked={state.change_passphrase === YES_VALUE}
-                        checkedValue={YES_VALUE}
-                        unCheckedValue={NO_VALUE}
-                        title={_('Replace existing passphrase with')}
-                        onChange={onValueChange}
-                      />
-                    )}
-                    <PasswordField
-                      name="passphrase"
-                      autoComplete="new-password"
-                      disabled={state.autogenerate === YES_VALUE}
-                      value={state.passphrase}
+                <FormGroup title={_('Passphrase')} direction="row">
+                  {is_edit && (
+                    <Checkbox
+                      name="change_passphrase"
+                      checked={state.change_passphrase === YES_VALUE}
+                      checkedValue={YES_VALUE}
+                      unCheckedValue={NO_VALUE}
+                      title={_('Replace existing passphrase with')}
                       onChange={onValueChange}
                     />
-                  </Divider>
+                  )}
+                  <PasswordField
+                    grow="1"
+                    name="passphrase"
+                    autoComplete="new-password"
+                    disabled={
+                      state.autogenerate === YES_VALUE ||
+                      state.change_passphrase === NO_VALUE
+                    }
+                    value={state.passphrase}
+                    onChange={onValueChange}
+                  />
                 </FormGroup>
               )}
 
               {state.credential_type === SNMP_CREDENTIAL_TYPE && (
-                <FormGroup title={_('Privacy Password')}>
-                  <Divider>
-                    {is_edit && (
-                      <Checkbox
-                        name="change_privacy_password"
-                        checked={state.change_privacy_password === YES_VALUE}
-                        checkedValue={YES_VALUE}
-                        unCheckedValue={NO_VALUE}
-                        title={_('Replace existing privacy password with')}
-                        onChange={onValueChange}
-                      />
-                    )}
-                    <PasswordField
-                      name="privacy_password"
-                      autoComplete="new-password"
-                      value={state.privacy_password}
+                <FormGroup title={_('Privacy Password')} direction="row">
+                  {is_edit && (
+                    <Checkbox
+                      name="change_privacy_password"
+                      checked={state.change_privacy_password === YES_VALUE}
+                      checkedValue={YES_VALUE}
+                      unCheckedValue={NO_VALUE}
+                      title={_('Replace existing privacy password with')}
                       onChange={onValueChange}
                     />
-                  </Divider>
+                  )}
+                  <PasswordField
+                    grow="1"
+                    name="privacy_password"
+                    autoComplete="new-password"
+                    disabled={state.change_privacy_password === NO_VALUE}
+                    value={state.privacy_password}
+                    onChange={onValueChange}
+                  />
                 </FormGroup>
               )}
 
@@ -385,7 +384,7 @@ class CredentialsDialog extends React.Component {
               )}
 
               {state.credential_type === SNMP_CREDENTIAL_TYPE && (
-                <FormGroup title={_('Auth Algorithm')}>
+                <FormGroup title={_('Auth Algorithm')} direction="row">
                   <Radio
                     title="MD5"
                     checked={state.auth_algorithm === SNMP_AUTH_ALGORITHM_MD5}
@@ -404,7 +403,7 @@ class CredentialsDialog extends React.Component {
               )}
 
               {state.credential_type === SNMP_CREDENTIAL_TYPE && (
-                <FormGroup title={_('Privacy Algorithm')}>
+                <FormGroup title={_('Privacy Algorithm')} direction="row">
                   <Radio
                     title="AES"
                     checked={
@@ -449,7 +448,7 @@ class CredentialsDialog extends React.Component {
                   <FileField name="certificate" onChange={onValueChange} />
                 </FormGroup>
               )}
-            </Layout>
+            </>
           );
         }}
       </SaveDialog>

@@ -18,8 +18,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -28,10 +26,10 @@ import {permissionDescription} from 'web/utils/render';
 import SaveDialog from 'web/components/dialog/savedialog';
 
 import FormGroup from 'web/components/form/formgroup';
-import LoadingButton from 'web/components/form/loadingbutton';
 import MultiSelect from 'web/components/form/multiselect';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
+import Button from 'web/components/form/button';
 
 import TrashIcon from 'web/components/icon/trashicon';
 
@@ -46,6 +44,8 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const Dialog = ({
   allGroups = [],
   allPermissions = [],
@@ -57,7 +57,7 @@ const Dialog = ({
   isLoadingPermissions = false,
   permissions = [],
   role,
-  title = _('New Role'),
+  title,
   onClose,
   onCreatePermission,
   onCreateSuperPermission,
@@ -65,6 +65,8 @@ const Dialog = ({
   onErrorClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
+  title = title || _('New Role');
   const DEFAULTS = {name: _('Unnamed')};
 
   const isEdit = isDefined(role);
@@ -99,7 +101,6 @@ const Dialog = ({
     <SaveDialog
       defaultValues={defaultValues}
       error={error}
-      initialHeight={isEdit ? '600px' : undefined}
       title={title}
       onClose={onClose}
       onErrorClose={onErrorClose}
@@ -107,13 +108,11 @@ const Dialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
-                grow="1"
                 value={state.name}
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -122,7 +121,6 @@ const Dialog = ({
               <TextField
                 name="comment"
                 value={state.comment}
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -140,17 +138,15 @@ const Dialog = ({
               <Layout flex="column">
                 <h2>{_('New Permission')}</h2>
 
-                <FormGroup
-                  title={_('Name')}
-                  align={['space-between', 'center']}
-                >
+                <FormGroup title={_('Name')} direction="row">
                   <Select
+                    grow="1"
                     name="permissionName"
                     items={permissionsOptions}
                     value={state.permissionName}
                     onChange={onValueChange}
                   />
-                  <LoadingButton
+                  <Button
                     title={_('Create Permission')}
                     disabled={
                       isInUse ||
@@ -165,17 +161,15 @@ const Dialog = ({
 
                 <h2>{_('New Super Permission')}</h2>
 
-                <FormGroup
-                  title={_('Group')}
-                  align={['space-between', 'center']}
-                >
+                <FormGroup title={_('Group')} direction="row">
                   <Select
+                    grow="1"
                     name="groupId"
                     items={groupOptions}
                     value={state.groupId}
                     onChange={onValueChange}
                   />
-                  <LoadingButton
+                  <Button
                     title={_('Create Permission')}
                     disabled={!hasGroups || !isDefined(state.groupId)}
                     isLoading={isCreatingSuperPermission}
@@ -225,7 +219,7 @@ const Dialog = ({
                 )}
               </Layout>
             )}
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

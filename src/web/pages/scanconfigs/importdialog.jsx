@@ -17,8 +17,6 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -26,9 +24,10 @@ import SaveDialog from 'web/components/dialog/savedialog';
 import FileField from 'web/components/form/filefield';
 import FormGroup from 'web/components/form/formgroup';
 
-import Layout from 'web/components/layout/layout';
+import useTranslation from 'web/hooks/useTranslation';
 
 const ImportDialog = ({title, text, onClose, onSave}) => {
+  const [_] = useTranslation();
   return (
     <SaveDialog
       buttonTitle={_('Import')}
@@ -37,15 +36,11 @@ const ImportDialog = ({title, text, onClose, onSave}) => {
       onClose={onClose}
       onSave={onSave}
     >
-      {({onValueChange}) => {
-        return (
-          <Layout flex="column">
-            <FormGroup title={text} titleSize="4">
-              <FileField name="xml_file" onChange={onValueChange} />
-            </FormGroup>
-          </Layout>
-        );
-      }}
+      {({onValueChange}) => (
+        <FormGroup title={text}>
+          <FileField grow="1" name="xml_file" onChange={onValueChange} />
+        </FormGroup>
+      )}
     </SaveDialog>
   );
 };

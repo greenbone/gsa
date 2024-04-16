@@ -18,8 +18,6 @@
 
 import React, {useReducer, useState, useEffect} from 'react';
 
-import _ from 'gmp/locale';
-
 import {SCANCONFIG_TREND_STATIC} from 'gmp/models/scanconfig';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
@@ -35,13 +33,12 @@ import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 import Loading from 'web/components/loading/loading';
 
-import Layout from 'web/components/layout/layout';
-
 import NvtFamilies from './nvtfamilies';
 import NvtPreferences, {NvtPreferencePropType} from './nvtpreferences';
 import ScannerPreferences, {
   ScannerPreferencePropType,
 } from './scannerpreferences';
+import useTranslation from 'web/hooks/useTranslation';
 
 const createTrendAndSelect = (scanConfigFamilies = {}, allFamilies = []) => {
   const trend = {};
@@ -116,6 +113,7 @@ const EditScanConfigDialog = ({
   onEditNvtDetailsClick,
   onSave,
 }) => {
+  const [_] = useTranslation();
   const [scannerPreferenceValues, dispatch] = useReducer(
     reducer,
     createScannerPreferenceValues(scannerPreferences),
@@ -169,13 +167,11 @@ const EditScanConfigDialog = ({
       values={controlledData}
     >
       {({values: state, onValueChange}) => (
-        <Layout flex="column">
+        <>
           <FormGroup title={_('Name')}>
             <TextField
               name="name"
-              grow="1"
               value={state.name}
-              size="30"
               onChange={onValueChange}
             />
           </FormGroup>
@@ -184,8 +180,6 @@ const EditScanConfigDialog = ({
             <TextField
               name="comment"
               value={state.comment}
-              grow="1"
-              size="30"
               onChange={onValueChange}
             />
           </FormGroup>
@@ -230,7 +224,7 @@ const EditScanConfigDialog = ({
               )}
             </React.Fragment>
           )}
-        </Layout>
+        </>
       )}
     </SaveDialog>
   );

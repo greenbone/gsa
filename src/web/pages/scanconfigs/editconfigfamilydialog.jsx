@@ -18,14 +18,13 @@
 
 import React, {useState, useEffect} from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
+import {makeCompareSeverity, makeCompareString} from 'web/utils/sort';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -36,8 +35,6 @@ import Checkbox from 'web/components/form/checkbox';
 import EditIcon from 'web/components/icon/editicon';
 
 import Loading from 'web/components/loading/loading';
-
-import Layout from 'web/components/layout/layout';
 
 import Section from 'web/components/section/section';
 
@@ -51,19 +48,15 @@ import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
 
-import {makeCompareSeverity, makeCompareString} from 'web/utils/sort';
+import useTranslation from 'web/hooks/useTranslation';
 
-class Nvt extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return (
-      this.props.selected !== nextProps.selected ||
-      this.props.nvt !== nextProps.nvt
-    );
-  }
+const shouldNvtComponentUpdate = (props, nextProps) => {
+  return props.selected !== nextProps.selected || props.nvt !== nextProps.nvt;
+};
 
-  render() {
-    const {nvt, selected, onSelectedChange, onEditNvtDetailsClick} = this.props;
-
+const Nvt = React.memo(
+  ({nvt, selected, onSelectedChange, onEditNvtDetailsClick}) => {
+    const [_] = useTranslation();
     let pref_count = nvt.preference_count;
     if (pref_count === '0') {
       pref_count = '';
@@ -103,8 +96,9 @@ class Nvt extends React.Component {
         </TableData>
       </TableRow>
     );
-  }
-}
+  },
+  shouldNvtComponentUpdate,
+);
 
 Nvt.propTypes = {
   nvt: PropTypes.object.isRequired,
@@ -168,6 +162,7 @@ const EditScanConfigFamilyDialog = ({
   onEditNvtDetailsClick,
   onSave,
 }) => {
+  const [_] = useTranslation();
   const [sortBy, setSortby] = useState('name');
   const [sortReverse, setSortReverse] = useState(false);
   const [selectedNvts, setSelectedNvts] = useState(selected);
@@ -199,12 +194,18 @@ const EditScanConfigFamilyDialog = ({
   const sortedNvts = sortNvts(nvts, sortBy, sortReverse, selectedNvts);
 
   return (
-    <SaveDialog title={title} onClose={onClose} onSave={onSave} values={data}>
+    <SaveDialog
+      width="auto"
+      title={title}
+      onClose={onClose}
+      onSave={onSave}
+      values={data}
+    >
       {() =>
         isLoadingFamily || !isDefined(selectedNvts) ? (
           <Loading />
         ) : (
-          <Layout flex="column">
+          <>
             <SimpleTable>
               <TableBody>
                 <TableRow>
@@ -278,7 +279,7 @@ const EditScanConfigFamilyDialog = ({
                 </TableBody>
               </Table>
             </Section>
-          </Layout>
+          </>
         )
       }
     </SaveDialog>

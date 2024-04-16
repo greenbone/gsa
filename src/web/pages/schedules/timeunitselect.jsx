@@ -17,21 +17,24 @@
  */
 import React from 'react';
 
-import {_l} from 'gmp/locale/lang';
-
 import {ReccurenceFrequency} from 'gmp/models/event';
 
 import Select from 'web/components/form/select';
 
-const TIME_UNIT_ITEMS = [
-  {value: ReccurenceFrequency.HOURLY, label: _l('hour(s)')},
-  {value: ReccurenceFrequency.DAILY, label: _l('day(s)')},
-  {value: ReccurenceFrequency.WEEKLY, label: _l('week(s)')},
-  {value: ReccurenceFrequency.MONTHLY, label: _l('month(s)')},
-  {value: ReccurenceFrequency.YEARLY, label: _l('year(s)')},
-];
+import useTranslation from 'web/hooks/useTranslation';
 
-const TimeUnitSelect = props => <Select {...props} items={TIME_UNIT_ITEMS} />;
+const TimeUnitSelect = props => {
+  const [_] = useTranslation();
+  const TIME_UNIT_ITEMS = [
+    {value: ReccurenceFrequency.HOURLY, label: _('hour(s)')},
+    {value: ReccurenceFrequency.DAILY, label: _('day(s)')},
+    {value: ReccurenceFrequency.WEEKLY, label: _('week(s)')},
+    {value: ReccurenceFrequency.MONTHLY, label: _('month(s)')},
+    {value: ReccurenceFrequency.YEARLY, label: _('year(s)')},
+  ];
+
+  return <Select {...props} items={TIME_UNIT_ITEMS} />;
+};
 
 export default TimeUnitSelect;
 

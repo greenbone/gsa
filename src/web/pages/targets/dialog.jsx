@@ -17,9 +17,18 @@
  */
 import React from 'react';
 
-import {_, _l} from 'gmp/locale/lang';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
+
+import {
+  snmp_credential_filter,
+  ssh_credential_filter,
+  ESXI_CREDENTIAL_TYPES,
+  SMB_CREDENTIAL_TYPES,
+  SNMP_CREDENTIAL_TYPES,
+  SSH_CREDENTIAL_TYPES,
+  USERNAME_PASSWORD_CREDENTIAL_TYPE,
+  SSH_ELEVATE_CREDENTIAL_TYPES,
+} from 'gmp/models/credential';
 
 import PropTypes from 'web/utils/proptypes';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -37,19 +46,9 @@ import YesNoRadio from 'web/components/form/yesnoradio';
 import InfoIcon from 'web/components/icon/infoicon';
 import NewIcon from 'web/components/icon/newicon';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+import Row from 'web/components/layout/row';
 
-import {
-  snmp_credential_filter,
-  ssh_credential_filter,
-  ESXI_CREDENTIAL_TYPES,
-  SMB_CREDENTIAL_TYPES,
-  SNMP_CREDENTIAL_TYPES,
-  SSH_CREDENTIAL_TYPES,
-  USERNAME_PASSWORD_CREDENTIAL_TYPE,
-  SSH_ELEVATE_CREDENTIAL_TYPES,
-} from 'gmp/models/credential';
+import useTranslation from 'web/hooks/useTranslation';
 
 const DEFAULT_PORT = 22;
 
@@ -77,44 +76,6 @@ const ALIVE_TESTS = [
   'Consider Alive',
 ];
 
-const ALIVE_TESTS_ITEMS = [
-  {
-    value: ALIVE_TESTS_DEFAULT,
-    label: _l(ALIVE_TESTS_DEFAULT),
-  },
-  ...ALIVE_TESTS.map(value => ({value, label: value})),
-];
-
-const NEW_SSH = {
-  id_field: 'ssh_credential_id',
-  types: SSH_CREDENTIAL_TYPES,
-  title: _l('Create new SSH credential'),
-};
-
-const NEW_SSH_ELEVATE = {
-  id_field: 'ssh_elevate_credential_id',
-  types: SSH_ELEVATE_CREDENTIAL_TYPES,
-  title: _l('Create new SSH elevate credential'),
-};
-
-const NEW_SMB = {
-  id_field: 'smb_credential_id',
-  title: _l('Create new SMB credential'),
-  types: SMB_CREDENTIAL_TYPES,
-};
-
-const NEW_ESXI = {
-  id_field: 'esxi_credential_id',
-  title: _l('Create new ESXi credential'),
-  types: ESXI_CREDENTIAL_TYPES,
-};
-
-const NEW_SNMP = {
-  id_field: 'snmp_credential_id',
-  title: _l('Create new SNMP credential'),
-  types: SNMP_CREDENTIAL_TYPES,
-};
-
 const TargetDialog = ({
   alive_tests = ALIVE_TESTS_DEFAULT,
   allowSimultaneousIPs = YES_VALUE,
@@ -126,7 +87,7 @@ const TargetDialog = ({
   hosts = '',
   hosts_count,
   in_use = false,
-  name = _('Unnamed'),
+  name,
   port = DEFAULT_PORT,
   port_list_id = DEFAULT_PORT_LIST_ID,
   port_lists = DEFAULT_PORT_LISTS,
@@ -138,7 +99,7 @@ const TargetDialog = ({
   ssh_elevate_credential_id = UNSET_VALUE,
   target_source = 'manual',
   target_exclude_source = 'manual',
-  title = _('New Target'),
+  title,
   onClose,
   onNewCredentialsClick,
   onNewPortListClick,
@@ -151,6 +112,49 @@ const TargetDialog = ({
   onSshElevateCredentialChange,
   ...initial
 }) => {
+  const [_] = useTranslation();
+
+  name = name || _('Unnamed');
+  title = title || _('New Target');
+
+  const ALIVE_TESTS_ITEMS = [
+    {
+      value: ALIVE_TESTS_DEFAULT,
+      label: _(ALIVE_TESTS_DEFAULT),
+    },
+    ...ALIVE_TESTS.map(value => ({value, label: value})),
+  ];
+
+  const NEW_SSH = {
+    id_field: 'ssh_credential_id',
+    types: SSH_CREDENTIAL_TYPES,
+    title: _('Create new SSH credential'),
+  };
+
+  const NEW_SSH_ELEVATE = {
+    id_field: 'ssh_elevate_credential_id',
+    types: SSH_ELEVATE_CREDENTIAL_TYPES,
+    title: _('Create new SSH elevate credential'),
+  };
+
+  const NEW_SMB = {
+    id_field: 'smb_credential_id',
+    title: _('Create new SMB credential'),
+    types: SMB_CREDENTIAL_TYPES,
+  };
+
+  const NEW_ESXI = {
+    id_field: 'esxi_credential_id',
+    title: _('Create new ESXi credential'),
+    types: ESXI_CREDENTIAL_TYPES,
+  };
+
+  const NEW_SNMP = {
+    id_field: 'snmp_credential_id',
+    title: _('Create new SNMP credential'),
+    types: SNMP_CREDENTIAL_TYPES,
+  };
+
   const ssh_credentials = credentials.filter(
     value =>
       ssh_credential_filter(value) && value.id !== ssh_elevate_credential_id,
@@ -199,65 +203,59 @@ const TargetDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
                 grow="1"
-                size="30"
                 value={state.name}
                 onChange={onValueChange}
               />
             </FormGroup>
 
-            <FormGroup title={_('Comment')} flex="column">
+            <FormGroup title={_('Comment')}>
               <TextField
                 name="comment"
-                size="30"
                 value={state.comment}
                 onChange={onValueChange}
               />
             </FormGroup>
 
-            <FormGroup title={_('Hosts')} flex="column">
-              <Divider flex="column">
-                <Divider>
-                  <Radio
-                    title={_('Manual')}
-                    name="target_source"
-                    disabled={in_use}
-                    checked={state.target_source === 'manual'}
-                    value="manual"
-                    onChange={onValueChange}
-                  />
-                  <TextField
-                    grow="1"
-                    disabled={in_use || state.target_source !== 'manual'}
-                    name="hosts"
-                    value={state.hosts}
-                    onChange={onValueChange}
-                  />
-                </Divider>
+            <FormGroup title={_('Hosts')}>
+              <Row>
+                <Radio
+                  title={_('Manual')}
+                  name="target_source"
+                  disabled={in_use}
+                  checked={state.target_source === 'manual'}
+                  value="manual"
+                  onChange={onValueChange}
+                />
+                <TextField
+                  grow="1"
+                  disabled={in_use || state.target_source !== 'manual'}
+                  name="hosts"
+                  value={state.hosts}
+                  onChange={onValueChange}
+                />
+              </Row>
+              <Row>
+                <Radio
+                  title={_('From file')}
+                  name="target_source"
+                  disabled={in_use}
+                  checked={state.target_source === 'file'}
+                  value="file"
+                  onChange={onValueChange}
+                />
+                <FileField
+                  grow="1"
+                  name="file"
+                  disabled={in_use || state.target_source !== 'file'}
+                  onChange={onValueChange}
+                />
 
-                <Divider>
-                  <Radio
-                    title={_('From file')}
-                    name="target_source"
-                    disabled={in_use}
-                    checked={state.target_source === 'file'}
-                    value="file"
-                    onChange={onValueChange}
-                  />
-                  <FileField
-                    name="file"
-                    disabled={in_use || state.target_source !== 'file'}
-                    onChange={onValueChange}
-                  />
-                </Divider>
-              </Divider>
-
-              {state.hosts_count && (
-                <Layout>
+                {state.hosts_count && (
                   <Radio
                     title={_('From host assets ({{count}} hosts)', {
                       count: state.hosts_count,
@@ -268,53 +266,48 @@ const TargetDialog = ({
                     value="asset_hosts"
                     onChange={onValueChange}
                   />
-                </Layout>
-              )}
+                )}
+              </Row>
             </FormGroup>
 
-            <FormGroup title={_('Exclude Hosts')} flex="column">
-              <Divider flex="column">
-                <Divider>
-                  <Radio
-                    title={_('Manual')}
-                    name="target_exclude_source"
-                    disabled={in_use}
-                    checked={state.target_exclude_source === 'manual'}
-                    value="manual"
-                    onChange={onValueChange}
-                  />
-                  <TextField
-                    grow="1"
-                    disabled={
-                      in_use || state.target_exclude_source !== 'manual'
-                    }
-                    name="exclude_hosts"
-                    value={state.exclude_hosts}
-                    onChange={onValueChange}
-                  />
-                </Divider>
-
-                <Divider>
-                  <Radio
-                    title={_('From file')}
-                    name="target_exclude_source"
-                    disabled={in_use}
-                    checked={state.target_exclude_source === 'file'}
-                    value="file"
-                    onChange={onValueChange}
-                  />
-                  <FileField
-                    name="exclude_file"
-                    disabled={in_use || state.target_exclude_source !== 'file'}
-                    onChange={onValueChange}
-                  />
-                </Divider>
-              </Divider>
+            <FormGroup title={_('Exclude Hosts')}>
+              <Row>
+                <Radio
+                  title={_('Manual')}
+                  name="target_exclude_source"
+                  disabled={in_use}
+                  checked={state.target_exclude_source === 'manual'}
+                  value="manual"
+                  onChange={onValueChange}
+                />
+                <TextField
+                  grow="1"
+                  disabled={in_use || state.target_exclude_source !== 'manual'}
+                  name="exclude_hosts"
+                  value={state.exclude_hosts}
+                  onChange={onValueChange}
+                />
+              </Row>
+              <Row>
+                <Radio
+                  title={_('From file')}
+                  name="target_exclude_source"
+                  disabled={in_use}
+                  checked={state.target_exclude_source === 'file'}
+                  value="file"
+                  onChange={onValueChange}
+                />
+                <FileField
+                  grow="1"
+                  name="exclude_file"
+                  disabled={in_use || state.target_exclude_source !== 'file'}
+                  onChange={onValueChange}
+                />
+              </Row>
             </FormGroup>
 
             <FormGroup
               title={_('Allow simultaneous scanning via multiple IPs')}
-              flex="column"
             >
               <YesNoRadio
                 name="allowSimultaneousIPs"
@@ -324,24 +317,21 @@ const TargetDialog = ({
             </FormGroup>
 
             {capabilities.mayOp('get_port_lists') && (
-              <FormGroup title={_('Port List')}>
-                <Divider>
-                  <Select
-                    name="port_list_id"
-                    disabled={in_use}
-                    items={renderSelectItems(port_lists)}
-                    value={state.port_list_id}
-                    onChange={onPortListChange}
+              <FormGroup title={_('Port List')} direction="row">
+                <Select
+                  grow="1"
+                  name="port_list_id"
+                  disabled={in_use}
+                  items={renderSelectItems(port_lists)}
+                  value={state.port_list_id}
+                  onChange={onPortListChange}
+                />
+                {!in_use && (
+                  <NewIcon
+                    title={_('Create a new port list')}
+                    onClick={onNewPortListClick}
                   />
-                  {!in_use && (
-                    <Layout>
-                      <NewIcon
-                        title={_('Create a new port list')}
-                        onClick={onNewPortListClick}
-                      />
-                    </Layout>
-                  )}
-                </Divider>
+                )}
               </FormGroup>
             )}
 
@@ -359,140 +349,120 @@ const TargetDialog = ({
             )}
 
             {capabilities.mayOp('get_credentials') && (
-              <React.Fragment>
-                <FormGroup title={_('SSH')}>
-                  <Divider>
-                    <Select
-                      name="ssh_credential_id"
-                      disabled={in_use}
-                      items={renderSelectItems(ssh_credentials, UNSET_VALUE)}
-                      value={state.ssh_credential_id}
-                      onChange={onSshCredentialChange}
+              <FormGroup title={_('SSH')}>
+                <Row>
+                  <Select
+                    grow="1"
+                    name="ssh_credential_id"
+                    disabled={in_use}
+                    items={renderSelectItems(ssh_credentials, UNSET_VALUE)}
+                    value={state.ssh_credential_id}
+                    onChange={onSshCredentialChange}
+                  />
+                  {_('on port')}
+                  <TextField
+                    name="port"
+                    disabled={in_use}
+                    value={state.port}
+                    onChange={onValueChange}
+                  />
+                  {!in_use && (
+                    <NewIcon
+                      title={_('Create a new credential')}
+                      value={NEW_SSH}
+                      onClick={onNewCredentialsClick}
                     />
-                    <Layout>{_('on port')}</Layout>
-                    <TextField
-                      size="6"
-                      name="port"
+                  )}
+                </Row>
+                {state.ssh_credential_id !== UNSET_VALUE && (
+                  <Row>
+                    <InfoIcon
+                      title={_(
+                        'This feature is experimental and may ' +
+                          'not work reliable under all circumstances.',
+                      )}
+                    />
+                    <span>{_('Elevate privileges')}</span>
+                    <Select
+                      grow="1"
+                      name="ssh_elevate_credential_id"
                       disabled={in_use}
-                      value={state.port}
-                      onChange={onValueChange}
+                      items={renderSelectItems(
+                        elevateUpCredentials,
+                        UNSET_VALUE,
+                      )}
+                      value={state.ssh_elevate_credential_id}
+                      onChange={onSshElevateCredentialChange}
                     />
                     {!in_use && (
-                      <Layout>
-                        <NewIcon
-                          title={_('Create a new credential')}
-                          value={NEW_SSH}
-                          onClick={onNewCredentialsClick}
-                        />
-                      </Layout>
+                      <NewIcon
+                        title={_('Create a new credential')}
+                        value={NEW_SSH_ELEVATE}
+                        onClick={onNewCredentialsClick}
+                      />
                     )}
-                  </Divider>
-                </FormGroup>
-                {state.ssh_credential_id !== UNSET_VALUE && (
-                  <FormGroup title={' '}>
-                    <Divider>
-                      <Layout>
-                        <Divider>
-                          <InfoIcon
-                            title={_(
-                              'This feature is experimental and may ' +
-                                'not work reliable under all circumstances.',
-                            )}
-                          />
-                          <span>{_('Elevate privileges')}</span>
-                        </Divider>
-                      </Layout>
-                      <Select
-                        name="ssh_elevate_credential_id"
-                        disabled={in_use}
-                        items={renderSelectItems(
-                          elevateUpCredentials,
-                          UNSET_VALUE,
-                        )}
-                        value={state.ssh_elevate_credential_id}
-                        onChange={onSshElevateCredentialChange}
-                      />
-                      {!in_use && (
-                        <Layout>
-                          <NewIcon
-                            title={_('Create a new credential')}
-                            value={NEW_SSH_ELEVATE}
-                            onClick={onNewCredentialsClick}
-                          />
-                        </Layout>
-                      )}
-                    </Divider>
-                  </FormGroup>
+                  </Row>
                 )}
-              </React.Fragment>
-            )}
-
-            {capabilities.mayOp('get_credentials') && (
-              <FormGroup title={_('SMB')}>
-                <Divider>
-                  <Select
-                    name="smb_credential_id"
-                    disabled={in_use}
-                    items={renderSelectItems(up_credentials, UNSET_VALUE)}
-                    value={state.smb_credential_id}
-                    onChange={onSmbCredentialChange}
-                  />
-                  {!in_use && (
-                    <Layout>
-                      <NewIcon
-                        title={_('Create a new credential')}
-                        value={NEW_SMB}
-                        onClick={onNewCredentialsClick}
-                      />
-                    </Layout>
-                  )}
-                </Divider>
               </FormGroup>
             )}
 
             {capabilities.mayOp('get_credentials') && (
-              <FormGroup title={_('ESXi')}>
-                <Divider>
-                  <Select
-                    disabled={in_use}
-                    name="esxi_credential_id"
-                    items={renderSelectItems(up_credentials, UNSET_VALUE)}
-                    value={state.esxi_credential_id}
-                    onChange={onEsxiCredentialChange}
+              <FormGroup title={_('SMB')} direction="row">
+                <Select
+                  grow="1"
+                  name="smb_credential_id"
+                  disabled={in_use}
+                  items={renderSelectItems(up_credentials, UNSET_VALUE)}
+                  value={state.smb_credential_id}
+                  onChange={onSmbCredentialChange}
+                />
+                {!in_use && (
+                  <NewIcon
+                    title={_('Create a new credential')}
+                    value={NEW_SMB}
+                    onClick={onNewCredentialsClick}
                   />
-                  {!in_use && (
-                    <Layout>
-                      <NewIcon
-                        title={_('Create a new credential')}
-                        value={NEW_ESXI}
-                        onClick={onNewCredentialsClick}
-                      />
-                    </Layout>
-                  )}
-                </Divider>
+                )}
               </FormGroup>
             )}
 
             {capabilities.mayOp('get_credentials') && (
-              <FormGroup title={_('SNMP')}>
-                <Divider>
-                  <Select
-                    disabled={in_use}
-                    name="snmp_credential_id"
-                    items={renderSelectItems(snmp_credentials, UNSET_VALUE)}
-                    value={state.snmp_credential_id}
-                    onChange={onSnmpCredentialChange}
+              <FormGroup title={_('ESXi')} direction="row">
+                <Select
+                  grow="1"
+                  disabled={in_use}
+                  name="esxi_credential_id"
+                  items={renderSelectItems(up_credentials, UNSET_VALUE)}
+                  value={state.esxi_credential_id}
+                  onChange={onEsxiCredentialChange}
+                />
+                {!in_use && (
+                  <NewIcon
+                    title={_('Create a new credential')}
+                    value={NEW_ESXI}
+                    onClick={onNewCredentialsClick}
                   />
-                  {!in_use && (
-                    <Layout>
-                      <NewIcon
-                        title={_('Create a new credential')}
-                        value={NEW_SNMP}
-                        onClick={onNewCredentialsClick}
-                      />
-                    </Layout>
-                  )}
-                </Divider>
+                )}
+              </FormGroup>
+            )}
+
+            {capabilities.mayOp('get_credentials') && (
+              <FormGroup title={_('SNMP')} direction="row">
+                <Select
+                  grow="1"
+                  disabled={in_use}
+                  name="snmp_credential_id"
+                  items={renderSelectItems(snmp_credentials, UNSET_VALUE)}
+                  value={state.snmp_credential_id}
+                  onChange={onSnmpCredentialChange}
+                />
+                {!in_use && (
+                  <NewIcon
+                    title={_('Create a new credential')}
+                    value={NEW_SNMP}
+                    onClick={onNewCredentialsClick}
+                  />
+                )}
               </FormGroup>
             )}
 
@@ -513,7 +483,7 @@ const TargetDialog = ({
                 onChange={onValueChange}
               />
             </FormGroup>
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

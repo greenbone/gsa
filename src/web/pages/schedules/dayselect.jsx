@@ -17,49 +17,50 @@
  */
 import React from 'react';
 
-import {_l} from 'gmp/locale/lang';
-
-import PropTyes from 'web/utils/proptypes';
+import PropTypes from 'web/utils/proptypes';
 
 import Select from 'web/components/form/select';
 
-const DAY_SELECT_ITEMS = [
-  {
-    label: _l('Monday'),
-    value: 'monday',
-  },
-  {
-    label: _l('Tuesday'),
-    value: 'tuesday',
-  },
-  {
-    label: _l('Wednesday'),
-    value: 'wednesday',
-  },
-  {
-    label: _l('Thursday'),
-    value: 'thursday',
-  },
-  {
-    label: _l('Friday'),
-    value: 'friday',
-  },
-  {
-    label: _l('Saturday'),
-    value: 'saturday',
-  },
-  {
-    label: _l('Sunday'),
-    value: 'sunday',
-  },
-];
+import useTranslation from 'web/hooks/useTranslation';
 
-const DaySelect = ({value, ...props}) => (
-  <Select {...props} value={value} items={DAY_SELECT_ITEMS} />
-);
+const DaySelect = ({value, ...props}) => {
+  const [_] = useTranslation();
+
+  const DAY_SELECT_ITEMS = [
+    {
+      label: _('Monday'),
+      value: 'monday',
+    },
+    {
+      label: _('Tuesday'),
+      value: 'tuesday',
+    },
+    {
+      label: _('Wednesday'),
+      value: 'wednesday',
+    },
+    {
+      label: _('Thursday'),
+      value: 'thursday',
+    },
+    {
+      label: _('Friday'),
+      value: 'friday',
+    },
+    {
+      label: _('Saturday'),
+      value: 'saturday',
+    },
+    {
+      label: _('Sunday'),
+      value: 'sunday',
+    },
+  ];
+  return <Select {...props} value={value} items={DAY_SELECT_ITEMS} />;
+};
 
 DaySelect.propTypes = {
-  value: PropTyes.oneOf([
+  value: PropTypes.oneOf([
     'monday',
     'tuesday',
     'wednesday',

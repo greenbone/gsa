@@ -16,19 +16,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-
-import _ from 'gmp/locale';
+import React, {useCallback} from 'react';
 
 import {filter, map} from 'gmp/utils/array';
 import {hasValue, isDefined} from 'gmp/utils/identity';
 
 import {parseInt} from 'gmp/parser';
 
+import {
+  GREENBONE_SENSOR_SCANNER_TYPE,
+  scannerTypeName,
+} from 'gmp/models/scanner';
+
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
-
-import withGmp from 'web/utils/withGmp';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
@@ -38,13 +39,8 @@ import TextField from 'web/components/form/textfield';
 
 import NewIcon from 'web/components/icon/newicon';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
-import {
-  GREENBONE_SENSOR_SCANNER_TYPE,
-  scannerTypeName,
-} from 'gmp/models/scanner';
+import useTranslation from 'web/hooks/useTranslation';
+import useGmp from 'web/utils/useGmp';
 
 const AVAILABLE_SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
 
@@ -53,11 +49,12 @@ const ScannerDialog = ({
   comment = '',
   scanner,
   credentials,
+  credential_id,
   host = 'localhost',
   id,
-  name = _('Unnamed'),
+  name,
   port = '22',
-  title = _('New Scanner'),
+  title,
   type,
   which_cert,
   onClose,
@@ -65,16 +62,24 @@ const ScannerDialog = ({
   onNewCredentialClick,
   onSave,
   onScannerTypeChange,
-  ...props
 }) => {
-  // eslint-disable-next-line no-shadow
-  const handleTypeChange = (value, name) => {
-    if (onScannerTypeChange) {
-      value = parseInt(value);
+  const [_] = useTranslation();
+  const gmp = useGmp();
 
-      onScannerTypeChange(value, name);
-    }
-  };
+  name = name || _('Unnamed');
+  title = title || _('New Scanner');
+
+  const handleTypeChange = useCallback(
+    // eslint-disable-next-line no-shadow
+    (value, name) => {
+      if (onScannerTypeChange) {
+        value = parseInt(value);
+
+        onScannerTypeChange(value, name);
+      }
+    },
+    [onScannerTypeChange],
+  );
 
   const data = {
     ca_pub,
@@ -88,8 +93,6 @@ const ScannerDialog = ({
 
   let SCANNER_TYPES = [];
 
-  const {gmp} = props;
-
   if (gmp.settings.enableGreenboneSensor) {
     type = hasValue(type) ? type : GREENBONE_SENSOR_SCANNER_TYPE;
     SCANNER_TYPES = [GREENBONE_SENSOR_SCANNER_TYPE];
@@ -97,8 +100,6 @@ const ScannerDialog = ({
     type = hasValue(type) ? type : undefined;
     SCANNER_TYPES = [];
   }
-
-  let {credential_id} = props;
 
   const scannerTypesOptions = map(SCANNER_TYPES, scannerType => ({
     label: scannerTypeName(scannerType),
@@ -127,11 +128,10 @@ const ScannerDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
-                grow="1"
                 value={state.name}
                 onChange={onValueChange}
               />
@@ -141,7 +141,6 @@ const ScannerDialog = ({
               <TextField
                 name="comment"
                 value={state.comment}
-                grow="1"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -159,31 +158,27 @@ const ScannerDialog = ({
                 name="host"
                 value={state.host}
                 disabled={isInUse}
-                grow="1"
                 onChange={onValueChange}
               />
             </FormGroup>
 
             {!isGreenboneSensorType && (
-              <FormGroup title={_('Credential')} flex="column">
-                <Divider>
-                  <Select
-                    name="credential_id"
-                    items={renderSelectItems(scanner_credentials)}
-                    value={credential_id}
-                    onChange={onCredentialChange}
-                  />
-                  <Layout>
-                    <NewIcon
-                      value={type}
-                      title={_('Create a new Credential')}
-                      onClick={onNewCredentialClick}
-                    />
-                  </Layout>
-                </Divider>
+              <FormGroup title={_('Credential')} direction="row">
+                <Select
+                  grow="1"
+                  name="credential_id"
+                  items={renderSelectItems(scanner_credentials)}
+                  value={credential_id}
+                  onChange={onCredentialChange}
+                />
+                <NewIcon
+                  value={type}
+                  title={_('Create a new Credential')}
+                  onClick={onNewCredentialClick}
+                />
               </FormGroup>
             )}
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>
@@ -195,7 +190,6 @@ ScannerDialog.propTypes = {
   comment: PropTypes.string,
   credential_id: PropTypes.id,
   credentials: PropTypes.array,
-  gmp: PropTypes.gmp,
   host: PropTypes.string,
   id: PropTypes.string,
   name: PropTypes.string,
@@ -212,6 +206,6 @@ ScannerDialog.propTypes = {
   onValueChange: PropTypes.func,
 };
 
-export default withGmp(ScannerDialog);
+export default ScannerDialog;
 
 // vim: set ts=2 sw=2 tw=80:
