@@ -22,6 +22,7 @@ export const DialogFooterLayout = styled(Layout)`
   border-color: ${Theme.lightGray};
   margin-top: 15px;
   padding: 10px 0px 0px 0px;
+  gap: 10px;
 `;
 
 const DialogFooter = ({
