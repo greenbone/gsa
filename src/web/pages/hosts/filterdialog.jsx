@@ -3,39 +3,79 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {_l} from 'gmp/locale/lang';
+import PropTypes from 'web/utils/proptypes';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
+import DefaultFilterDialog from 'web/components/powerfilter/dialog';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Name'),
-  },
-  {
-    name: 'hostname',
-    displayName: _l('Hostname'),
-  },
-  {
-    name: 'ip',
-    displayName: _l('IP Address'),
-  },
-  {
-    name: 'os',
-    displayName: _l('Operating System'),
-  },
-  {
-    name: 'severity',
-    displayName: _l('Severity'),
-  },
-  {
-    name: 'modified',
-    displayName: _l('Modified'),
-  },
-];
+import useTranslation from 'web/hooks/useTranslation';
 
-export default createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
+const GroupsFilterDialog = ({
+  filter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
+  ...props
+}) => {
+  const [_] = useTranslation();
+  const filterDialogProps = useFilterDialog(filter);
+  const [handleSave] = useFilterDialogSave(
+    'host',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
 
-// vim: set ts=2 sw=2 tw=80:
+  const SORT_FIELDS = [
+    {
+      name: 'name',
+      displayName: _('Name'),
+    },
+    {
+      name: 'hostname',
+      displayName: _('Hostname'),
+    },
+    {
+      name: 'ip',
+      displayName: _('IP Address'),
+    },
+    {
+      name: 'os',
+      displayName: _('Operating System'),
+    },
+    {
+      name: 'severity',
+      displayName: _('Severity'),
+    },
+    {
+      name: 'modified',
+      displayName: _('Modified'),
+    },
+  ];
+
+  return (
+    <FilterDialog onClose={onClose} onSave={handleSave}>
+      <DefaultFilterDialog
+        {...props}
+        {...filterDialogProps}
+        sortFields={SORT_FIELDS}
+      />
+    </FilterDialog>
+  );
+};
+
+GroupsFilterDialog.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
+
+export default GroupsFilterDialog;

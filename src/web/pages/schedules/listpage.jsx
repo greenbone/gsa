@@ -5,12 +5,9 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {SCHEDULES_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -22,18 +19,22 @@ import ScheduleIcon from 'web/components/icon/scheduleicon';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/schedules';
 
-import ScheduleComponent from './component';
-import SchedulesTable, {SORT_FIELDS} from './table';
+import useCapabilities from 'web/utils/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
-export const ToolBarIcons = withCapabilities(
-  ({capabilities, onScheduleCreateClick}) => (
+import ScheduleComponent from './component';
+import SchedulesTable from './table';
+import SchedulesFilterDialog from './filterdialog';
+
+export const ToolBarIcons = ({onScheduleCreateClick}) => {
+  const capabilities = useCapabilities();
+  const [_] = useTranslation();
+  return (
     <IconDivider>
       <ManualIcon
         page="scanning"
@@ -44,16 +45,12 @@ export const ToolBarIcons = withCapabilities(
         <NewIcon title={_('New Schedule')} onClick={onScheduleCreateClick} />
       )}
     </IconDivider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
   onScheduleCreateClick: PropTypes.func.isRequired,
 };
-
-const ScheduleFilterDialog = createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
 
 const SchedulesPage = ({
   onChanged,
@@ -61,44 +58,47 @@ const SchedulesPage = ({
   onError,
   onInteraction,
   ...props
-}) => (
-  <ScheduleComponent
-    onCreated={onChanged}
-    onSaved={onChanged}
-    onCloned={onChanged}
-    onCloneError={onError}
-    onDeleted={onChanged}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-  >
-    {({clone, create, delete: delete_func, download, edit, save}) => (
-      <React.Fragment>
-        <PageTitle title={_('Schedules')} />
-        <EntitiesPage
-          {...props}
-          filterEditDialog={ScheduleFilterDialog}
-          filtersFilter={SCHEDULES_FILTER_FILTER}
-          sectionIcon={<ScheduleIcon size="large" />}
-          table={SchedulesTable}
-          title={_('Schedules')}
-          toolBarIcons={ToolBarIcons}
-          onChanged={onChanged}
-          onDownloaded={onDownloaded}
-          onError={onError}
-          onInteraction={onInteraction}
-          onScheduleCloneClick={clone}
-          onScheduleCreateClick={create}
-          onScheduleDeleteClick={delete_func}
-          onScheduleDownloadClick={download}
-          onScheduleEditClick={edit}
-          onScheduleSaveClick={save}
-        />
-      </React.Fragment>
-    )}
-  </ScheduleComponent>
-);
+}) => {
+  const [_] = useTranslation();
+  return (
+    <ScheduleComponent
+      onCreated={onChanged}
+      onSaved={onChanged}
+      onCloned={onChanged}
+      onCloneError={onError}
+      onDeleted={onChanged}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+    >
+      {({clone, create, delete: delete_func, download, edit, save}) => (
+        <React.Fragment>
+          <PageTitle title={_('Schedules')} />
+          <EntitiesPage
+            {...props}
+            filterEditDialog={SchedulesFilterDialog}
+            filtersFilter={SCHEDULES_FILTER_FILTER}
+            sectionIcon={<ScheduleIcon size="large" />}
+            table={SchedulesTable}
+            title={_('Schedules')}
+            toolBarIcons={ToolBarIcons}
+            onChanged={onChanged}
+            onDownloaded={onDownloaded}
+            onError={onError}
+            onInteraction={onInteraction}
+            onScheduleCloneClick={clone}
+            onScheduleCreateClick={create}
+            onScheduleDeleteClick={delete_func}
+            onScheduleDownloadClick={download}
+            onScheduleEditClick={edit}
+            onScheduleSaveClick={save}
+          />
+        </React.Fragment>
+      )}
+    </ScheduleComponent>
+  );
+};
 
 SchedulesPage.propTypes = {
   onChanged: PropTypes.func.isRequired,

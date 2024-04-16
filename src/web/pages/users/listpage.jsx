@@ -16,7 +16,6 @@ import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
 import compose from 'web/utils/compose';
-import withCapabilities from 'web/utils/withCapabilities';
 import withGmp from 'web/utils/withGmp';
 
 import SelectionType from 'web/utils/selectiontype';
@@ -31,38 +30,40 @@ import UserIcon from 'web/components/icon/usericon';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
-
 import {
   loadEntities,
   loadAllEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/users';
 
+import useCapabilities from 'web/utils/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+
 import ConfirmDeleteDialog from './confirmdeletedialog';
 import UserComponent from './component';
-import UsersTable, {SORT_FIELDS} from './table';
+import UsersTable from './table';
+import UsersFilterDialog from './filterdialog';
 
-const ToolBarIcons = withCapabilities(({capabilities, onUserCreateClick}) => (
-  <IconDivider>
-    <ManualIcon
-      page="web-interface-access"
-      anchor="managing-users"
-      title={_('Help: Users')}
-    />
-    {capabilities.mayCreate('user') && (
-      <NewIcon title={_('New User')} onClick={onUserCreateClick} />
-    )}
-  </IconDivider>
-));
+const ToolBarIcons = ({onUserCreateClick}) => {
+  const capabilities = useCapabilities();
+  const [_] = useTranslation(); // eslint-disable-line no-shadow
+  return (
+    <IconDivider>
+      <ManualIcon
+        page="web-interface-access"
+        anchor="managing-users"
+        title={_('Help: Users')}
+      />
+      {capabilities.mayCreate('user') && (
+        <NewIcon title={_('New User')} onClick={onUserCreateClick} />
+      )}
+    </IconDivider>
+  );
+};
 
 ToolBarIcons.propTypes = {
   onUserCreateClick: PropTypes.func.isRequired,
 };
-
-const UsersFilterDialog = createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
 
 class UsersPage extends React.Component {
   constructor(...args) {
@@ -72,9 +73,8 @@ class UsersPage extends React.Component {
 
     this.handleDeleteUser = this.handleDeleteUser.bind(this);
 
-    this.handleCloseConfirmDeleteDialog = this.handleCloseConfirmDeleteDialog.bind(
-      this,
-    );
+    this.handleCloseConfirmDeleteDialog =
+      this.handleCloseConfirmDeleteDialog.bind(this);
     this.openConfirmDeleteDialog = this.openConfirmDeleteDialog.bind(this);
   }
 

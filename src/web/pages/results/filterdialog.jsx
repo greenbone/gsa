@@ -5,14 +5,7 @@
 
 import React from 'react';
 
-import {_, _l} from 'gmp/locale/lang';
-
-import Layout from 'web/components/layout/layout';
-
-import compose from 'web/utils/compose';
-import withCapabilities from 'web/utils/withCapabilities';
-
-/* eslint-disable max-len */
+import PropTypes from 'web/utils/proptypes';
 
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
@@ -23,81 +16,104 @@ import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup'
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
 import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup';
 import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
-import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
-import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
 
-/* eslint-enable */
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Vulnerability'),
-  },
-  {
-    name: 'solution_type',
-    displayName: _l('Solution type'),
-  },
-  {
-    name: 'severity',
-    displayName: _l('Severity'),
-  },
-  {
-    name: 'qod',
-    displayName: _l('QoD'),
-  },
-  {
-    name: 'host',
-    displayName: _l('Host (IP)'),
-  },
-  {
-    name: 'hostname',
-    displayName: _l('Host (Name)'),
-  },
-  {
-    name: 'location',
-    displayName: _l('Location'),
-  },
-  {
-    name: 'created',
-    displayName: _l('Created'),
-  },
-  {
-    name: 'modified',
-    displayName: _l('Modified'),
-  },
-  {
-    name: 'epss_score',
-    displayName: _l('EPSS Score'),
-  },
-  {
-    name: 'epss_percentile',
-    displayName: _l('EPSS Percentile'),
-  },
-];
+import useTranslation from 'web/hooks/useTranslation';
+import useCapabilities from 'web/utils/useCapabilities';
 
-const ResultsFilterDialogComponent = ({
-  capabilities,
-  filter,
-  filterName,
-  filterNameValid,
-  filterstring,
-  saveNamedFilter,
-  onFilterChange,
-  onFilterStringChange,
-  onFilterValueChange,
-  onSearchTermChange,
-  onSortByChange,
-  onSortOrderChange,
-  onValueChange,
+const ResultsFilterDialog = ({
+  filter: initialFilter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
 }) => {
-  const handleRemoveLevels = () => onFilterChange(filter.delete('levels'));
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+  const filterDialogProps = useFilterDialog(initialFilter);
+  const [handleSave] = useFilterDialogSave(
+    'result',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
+
+  const SORT_FIELDS = [
+    {
+      name: 'name',
+      displayName: _('Vulnerability'),
+    },
+    {
+      name: 'solution_type',
+      displayName: _('Solution type'),
+    },
+    {
+      name: 'severity',
+      displayName: _('Severity'),
+    },
+    {
+      name: 'qod',
+      displayName: _('QoD'),
+    },
+    {
+      name: 'host',
+      displayName: _('Host (IP)'),
+    },
+    {
+      name: 'hostname',
+      displayName: _('Host (Name)'),
+    },
+    {
+      name: 'location',
+      displayName: _('Location'),
+    },
+    {
+      name: 'created',
+      displayName: _('Created'),
+    },
+    {
+      name: 'modified',
+      displayName: _('Modified'),
+    },
+    {
+      name: 'epss_score',
+      displayName: _('EPSS Score'),
+    },
+    {
+      name: 'epss_percentile',
+      displayName: _('EPSS Percentile'),
+    },
+  ];
+
+  const {
+    filter,
+    filterName,
+    filterString,
+    saveNamedFilter,
+    onFilterChange,
+    onFilterValueChange,
+    onFilterStringChange,
+    onSearchTermChange,
+    onSortByChange,
+    onSortOrderChange,
+    onValueChange,
+  } = filterDialogProps;
+
+  const handleRemoveLevels = () =>
+    onFilterChange(filter.copy().delete('levels'));
   return (
-    <Layout flex="column">
+    <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
         name="filterstring"
-        filter={filterstring}
+        filter={filterString}
         onChange={onFilterStringChange}
       />
 
@@ -176,15 +192,18 @@ const ResultsFilterDialogComponent = ({
           onValueChange={onValueChange}
         />
       )}
-    </Layout>
+    </FilterDialog>
   );
 };
 
-ResultsFilterDialogComponent.propTypes = FilterDialogPropTypes;
+ResultsFilterDialog.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
 
-export default compose(
-  withCapabilities,
-  withFilterDialog(),
-)(ResultsFilterDialogComponent);
+export default ResultsFilterDialog;
 
 // vim: set ts=2 sw=2 tw=80:

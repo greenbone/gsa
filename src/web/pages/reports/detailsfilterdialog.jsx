@@ -6,55 +6,69 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
+import PropTypes from 'web/utils/proptypes';
 
-import FormGroup from 'web/components/form/formgroup';
 import Checkbox from 'web/components/form/checkbox';
 
-import Layout from 'web/components/layout/layout';
-
-/* eslint-disable max-len */
-
+import FilterDialog from 'web/components/powerfilter/filterdialog';
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
 import SolutionTypeGroup from 'web/components/powerfilter/solutiontypegroup';
-import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
-import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import SeverityLevelsGroup from 'web/components/powerfilter/severitylevelsgroup';
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
 import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 
-/* eslint-enable */
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
+
+import useTranslation from 'web/hooks/useTranslation';
+import useCapabilities from 'web/utils/useCapabilities';
 
 import DeltaResultsFilterGroup from './deltaresultsfiltergroup';
 
-import compose from 'web/utils/compose';
-import withCapabilities from 'web/utils/withCapabilities';
-
-const FilterDialog = ({
+const ReportDetailsFilterDialog = ({
   delta = false,
-  filter,
-  filterstring,
-  onFilterChange,
-  onFilterStringChange,
-  onFilterValueChange,
-  onSearchTermChange,
-  capabilities,
-  filterName,
-  saveNamedFilter,
-  onValueChange,
+  filter: initialFilter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
 }) => {
-  const result_hosts_only = filter.get('result_hosts_only');
-  const handleRemoveLevels = () => onFilterChange(filter.delete('levels'));
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+  const filterDialogProps = useFilterDialog(initialFilter);
+  const [handleSave] = useFilterDialogSave(
+    'result',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
+  const {
+    filter,
+    filterName,
+    filterString,
+    saveNamedFilter,
+    onFilterChange,
+    onFilterValueChange,
+    onFilterStringChange,
+    onSearchTermChange,
+    onValueChange,
+  } = filterDialogProps;
+  const resultHostsOnly = filter.get('result_hosts_only');
+  const handleRemoveLevels = () =>
+    onFilterChange(filter.copy().delete('levels'));
   return (
-    <Layout flex="column">
+    <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
         name="filterstring"
-        filter={filterstring}
+        filter={filterString}
         onChange={onFilterStringChange}
       />
 
@@ -72,15 +86,14 @@ const FilterDialog = ({
         onChange={onFilterValueChange}
       />
 
-      <FormGroup title={_('Only show hosts that have results')}>
-        <Checkbox
-          name="result_hosts_only"
-          checkedValue={1}
-          unCheckedValue={0}
-          checked={result_hosts_only === 1}
-          onChange={onFilterValueChange}
-        />
-      </FormGroup>
+      <Checkbox
+        title={_('Only show hosts that have results')}
+        name="result_hosts_only"
+        checkedValue={1}
+        unCheckedValue={0}
+        checked={resultHostsOnly === 1}
+        onChange={onFilterValueChange}
+      />
 
       <MinQodGroup
         name="min_qod"
@@ -136,12 +149,19 @@ const FilterDialog = ({
           onValueChange={onValueChange}
         />
       )}
-    </Layout>
+    </FilterDialog>
   );
 };
 
-FilterDialog.propTypes = FilterDialogPropTypes;
+ReportDetailsFilterDialog.propTypes = {
+  delta: PropTypes.bool,
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
 
-export default compose(withCapabilities, withFilterDialog())(FilterDialog);
+export default ReportDetailsFilterDialog;
 
 // vim: set ts=2 sw=2 tw=80:

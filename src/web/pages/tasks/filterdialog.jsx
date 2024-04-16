@@ -5,14 +5,7 @@
 
 import React from 'react';
 
-import {_l, _} from 'gmp/locale/lang';
-
-import Layout from 'web/components/layout/layout';
-
-import compose from 'web/utils/compose';
-import withCapabilities from 'web/utils/withCapabilities';
-
-/* eslint-disable max-len */
+import PropTypes from 'web/utils/proptypes';
 
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
@@ -21,71 +14,89 @@ import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
-import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
-import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
 
-/* eslint-enable */
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Name'),
-  },
-  {
-    name: 'status',
-    displayName: _l('Status'),
-  },
-  {
-    name: 'total',
-    displayName: _l('Reports: Total'),
-  },
-  {
-    name: 'last',
-    displayName: _l('Reports: Last'),
-  },
-  {
-    name: 'severity',
-    displayName: _l('Severity'),
-  },
-  {
-    name: 'trend',
-    displayName: _l('Trend'),
-  },
-  {
-    name: 'false_positive',
-    displayName: _l('False Positive'),
-  },
-  {
-    name: 'hosts',
-    displayName: _l('Number of Hosts'),
-  },
-];
+import useTranslation from 'web/hooks/useTranslation';
+import useCapabilities from 'web/utils/useCapabilities';
 
-const TaskFilterDialogComponent = ({
-  capabilities,
-  filter,
-  filterName,
-  filterstring,
-  saveNamedFilter,
-  onFilterStringChange,
-  onFilterValueChange,
-  onSearchTermChange,
-  onSortOrderChange,
-  onSortByChange,
-  onValueChange,
+const TaskFilterDialog = ({
+  filter: initialFilter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
 }) => {
-  if (!filter) {
-    return null;
-  }
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+  const filterDialogProps = useFilterDialog(initialFilter);
+  const [handleSave] = useFilterDialogSave(
+    'task',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
 
+  const SORT_FIELDS = [
+    {
+      name: 'name',
+      displayName: _('Name'),
+    },
+    {
+      name: 'status',
+      displayName: _('Status'),
+    },
+    {
+      name: 'total',
+      displayName: _('Reports: Total'),
+    },
+    {
+      name: 'last',
+      displayName: _('Reports: Last'),
+    },
+    {
+      name: 'severity',
+      displayName: _('Severity'),
+    },
+    {
+      name: 'trend',
+      displayName: _('Trend'),
+    },
+    {
+      name: 'false_positive',
+      displayName: _('False Positive'),
+    },
+    {
+      name: 'hosts',
+      displayName: _('Number of Hosts'),
+    },
+  ];
+
+  const {
+    filter,
+    filterString,
+    filterName,
+    saveNamedFilter,
+    onFilterStringChange,
+    onFilterValueChange,
+    onSearchTermChange,
+    onSortByChange,
+    onSortOrderChange,
+    onValueChange,
+  } = filterDialogProps;
   return (
-    <Layout flex="column">
+    <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
         name="filterstring"
-        filter={filterstring}
+        filter={filterString}
         onChange={onFilterStringChange}
       />
 
@@ -151,15 +162,18 @@ const TaskFilterDialogComponent = ({
           onValueChange={onValueChange}
         />
       )}
-    </Layout>
+    </FilterDialog>
   );
 };
 
-TaskFilterDialogComponent.propTypes = FilterDialogPropTypes;
+TaskFilterDialog.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
 
-export default compose(
-  withCapabilities,
-  withFilterDialog(),
-)(TaskFilterDialogComponent);
+export default TaskFilterDialog;
 
 // vim: set ts=2 sw=2 tw=80:

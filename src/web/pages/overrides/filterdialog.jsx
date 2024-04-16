@@ -5,77 +5,92 @@
 
 import React from 'react';
 
-import {_l, _} from 'gmp/locale/lang';
-import Layout from 'web/components/layout/layout';
-
-import compose from 'web/utils/compose';
-import withCapabilities from 'web/utils/withCapabilities';
-
-/* eslint-disable max-len */
+import PropTypes from 'web/utils/proptypes';
 
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
 import FilterStringGroup from 'web/components/powerfilter/filterstringgroup';
 import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
-import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
-import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
 import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 
-const SORT_FIELDS = [
-  {
-    name: 'text',
-    displayName: _l('Text'),
-  },
-  {
-    name: 'nvt',
-    displayName: _l('Nvt'),
-  },
-  {
-    name: 'hosts',
-    displayName: _l('Hosts'),
-  },
-  {
-    name: 'port',
-    displayName: _l('Location'),
-  },
-  {
-    name: 'severity',
-    displayName: _l('From'),
-  },
-  {
-    name: 'newSeverity',
-    displayName: _l('To'),
-  },
-  {
-    name: 'active',
-    displayName: _l('Active'),
-  },
-];
+import useTranslation from 'web/hooks/useTranslation';
+import useCapabilities from 'web/utils/useCapabilities';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
 const OverridesFilterDialogComponent = ({
-  capabilities,
-  filter,
-  filterName,
-  filterstring,
-  saveNamedFilter,
-  onFilterStringChange,
-  onFilterValueChange,
-  onSearchTermChange,
-  onSortOrderChange,
-  onSortByChange,
-  onValueChange,
+  filter: initialFilter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
 }) => {
-  if (!filter) {
-    return null;
-  }
+  const [_] = useTranslation();
+  const capabilities = useCapabilities();
+  const filterDialogProps = useFilterDialog(initialFilter);
+  const [handleSave] = useFilterDialogSave(
+    'override',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
+
+  const SORT_FIELDS = [
+    {
+      name: 'text',
+      displayName: _('Text'),
+    },
+    {
+      name: 'nvt',
+      displayName: _('Nvt'),
+    },
+    {
+      name: 'hosts',
+      displayName: _('Hosts'),
+    },
+    {
+      name: 'port',
+      displayName: _('Location'),
+    },
+    {
+      name: 'severity',
+      displayName: _('From'),
+    },
+    {
+      name: 'newSeverity',
+      displayName: _('To'),
+    },
+    {
+      name: 'active',
+      displayName: _('Active'),
+    },
+  ];
+
+  const {
+    filterString,
+    filter,
+    filterName,
+    saveNamedFilter,
+    onFilterStringChange,
+    onFilterValueChange,
+    onSearchTermChange,
+    onSortByChange,
+    onSortOrderChange,
+    onValueChange,
+  } = filterDialogProps;
 
   return (
-    <Layout flex="column">
+    <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
         name="filterstring"
-        filter={filterstring}
+        filter={filterString}
         onChange={onFilterStringChange}
       />
 
@@ -119,15 +134,18 @@ const OverridesFilterDialogComponent = ({
           onValueChange={onValueChange}
         />
       )}
-    </Layout>
+    </FilterDialog>
   );
 };
 
-OverridesFilterDialogComponent.propTypes = FilterDialogPropTypes;
+OverridesFilterDialogComponent.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
 
-export default compose(
-  withCapabilities,
-  withFilterDialog(),
-)(OverridesFilterDialogComponent);
+export default OverridesFilterDialogComponent;
 
 // vim: set ts=2 sw=2 tw=80:

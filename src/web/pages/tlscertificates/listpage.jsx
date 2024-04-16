@@ -5,8 +5,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {TLS_CERTIFICATES_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
@@ -27,22 +25,27 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/tlscertificates';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 import TlsCertificatesDashboard, {
   TLS_CERTIFICATES_DASHBOARD_ID,
 } from './dashboard';
-import TlsCertificateFilterDialog from './filterdialog';
+import TlsCertificatesFilterDialog from './filterdialog';
 import TlsCertificateTable from './table';
 import TlsCertificateComponent from './component';
 
-const ToolBarIcons = () => (
-  <Layout>
-    <ManualIcon
-      page="managing-assets"
-      anchor="managing-tls-certificates"
-      title={_('Help: TLS Certificate Assets')}
-    />
-  </Layout>
-);
+const ToolBarIcons = () => {
+  const [_] = useTranslation();
+  return (
+    <Layout>
+      <ManualIcon
+        page="managing-assets"
+        anchor="managing-tls-certificates"
+        title={_('Help: TLS Certificate Assets')}
+      />
+    </Layout>
+  );
+};
 
 const Page = ({
   filter,
@@ -52,50 +55,53 @@ const Page = ({
   onFilterChanged,
   onInteraction,
   ...props
-}) => (
-  <TlsCertificateComponent
-    onDeleted={onChanged}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-  >
-    {({clone, create, delete: delete_func, download, edit, exportFunc}) => (
-      <React.Fragment>
-        <PageTitle title={_('TLS Certificates')} />
-        <EntitiesPage
-          {...props}
-          dashboard={() => (
-            <TlsCertificatesDashboard
-              filter={filter}
-              onFilterChanged={onFilterChanged}
-              onInteraction={onInteraction}
-            />
-          )}
-          dashboardControls={() => (
-            <DashboardControls
-              dashboardId={TLS_CERTIFICATES_DASHBOARD_ID}
-              onInteraction={onInteraction}
-            />
-          )}
-          filter={filter}
-          filtersFilter={TLS_CERTIFICATES_FILTER_FILTER}
-          filterEditDialog={TlsCertificateFilterDialog}
-          sectionIcon={<TlsCertificateIcon size="large" />}
-          table={TlsCertificateTable}
-          title={_('TLS Certificates')}
-          toolBarIcons={ToolBarIcons}
-          onError={onError}
-          onFilterChanged={onFilterChanged}
-          onInteraction={onInteraction}
-          onTlsCertificateDeleteClick={delete_func}
-          onTlsCertificateDownloadClick={download}
-          onTlsCertificateExportClick={exportFunc}
-        />
-      </React.Fragment>
-    )}
-  </TlsCertificateComponent>
-);
+}) => {
+  const [_] = useTranslation();
+  return (
+    <TlsCertificateComponent
+      onDeleted={onChanged}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+    >
+      {({delete: delete_func, download, exportFunc}) => (
+        <React.Fragment>
+          <PageTitle title={_('TLS Certificates')} />
+          <EntitiesPage
+            {...props}
+            dashboard={() => (
+              <TlsCertificatesDashboard
+                filter={filter}
+                onFilterChanged={onFilterChanged}
+                onInteraction={onInteraction}
+              />
+            )}
+            dashboardControls={() => (
+              <DashboardControls
+                dashboardId={TLS_CERTIFICATES_DASHBOARD_ID}
+                onInteraction={onInteraction}
+              />
+            )}
+            filter={filter}
+            filtersFilter={TLS_CERTIFICATES_FILTER_FILTER}
+            filterEditDialog={TlsCertificatesFilterDialog}
+            sectionIcon={<TlsCertificateIcon size="large" />}
+            table={TlsCertificateTable}
+            title={_('TLS Certificates')}
+            toolBarIcons={ToolBarIcons}
+            onError={onError}
+            onFilterChanged={onFilterChanged}
+            onInteraction={onInteraction}
+            onTlsCertificateDeleteClick={delete_func}
+            onTlsCertificateDownloadClick={download}
+            onTlsCertificateExportClick={exportFunc}
+          />
+        </React.Fragment>
+      )}
+    </TlsCertificateComponent>
+  );
+};
 
 Page.propTypes = {
   filter: PropTypes.filter,

@@ -2,7 +2,6 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-
 import PropTypes from 'web/utils/proptypes';
 
 import DefaultFilterDialog from 'web/components/powerfilter/dialog';
@@ -12,7 +11,7 @@ import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave'
 
 import useTranslation from 'web/hooks/useTranslation';
 
-const NvtsFilterDialog = ({
+const FiltersFilterDialog = ({
   filter,
   onCloseClick,
   onClose = onCloseClick,
@@ -23,7 +22,7 @@ const NvtsFilterDialog = ({
   const [_] = useTranslation();
   const filterDialogProps = useFilterDialog(filter);
   const [handleSave] = useFilterDialogSave(
-    'info',
+    'filter',
     {
       onClose,
       onFilterChanged,
@@ -38,47 +37,14 @@ const NvtsFilterDialog = ({
       displayName: _('Name'),
     },
     {
-      name: 'family',
-      displayName: _('Family'),
+      name: 'term',
+      displayName: _('Term'),
     },
     {
-      name: 'created',
-      displayName: _('Created'),
-    },
-    {
-      name: 'modified',
-      displayName: _('Modified'),
-    },
-    {
-      name: 'version',
-      displayName: _('Version'),
-    },
-    {
-      name: 'cve',
-      displayName: _('CVE'),
-    },
-    {
-      name: 'solution_type',
-      displayName: _('Solution Type'),
-    },
-    {
-      name: 'severity',
-      displayName: _('Severity'),
-    },
-    {
-      name: 'qod',
-      displayName: _('QoD'),
-    },
-    {
-      name: 'epss_score',
-      displayName: _('EPSS Score'),
-    },
-    {
-      name: 'epss_percentile',
-      displayName: _('EPSS Percentile'),
+      name: 'type',
+      displayName: _('Type'),
     },
   ];
-
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <DefaultFilterDialog
@@ -90,7 +56,7 @@ const NvtsFilterDialog = ({
   );
 };
 
-NvtsFilterDialog.propTypes = {
+FiltersFilterDialog.propTypes = {
   filter: PropTypes.filter,
   onClose: PropTypes.func,
   onCloseClick: PropTypes.func, // should be removed in future
@@ -98,4 +64,4 @@ NvtsFilterDialog.propTypes = {
   onFilterCreated: PropTypes.func,
 };
 
-export default NvtsFilterDialog;
+export default FiltersFilterDialog;

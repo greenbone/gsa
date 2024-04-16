@@ -5,14 +5,7 @@
 
 import React from 'react';
 
-import {_l, _} from 'gmp/locale/lang';
-
-import Layout from 'web/components/layout/layout';
-
-import compose from 'web/utils/compose';
-import withCapabilities from 'web/utils/withCapabilities';
-
-/* eslint-disable max-len */
+import PropTypes from 'web/utils/proptypes';
 
 import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
 import CreateNamedFilterGroup from 'web/components/powerfilter/createnamedfiltergroup';
@@ -21,75 +14,92 @@ import FirstResultGroup from 'web/components/powerfilter/firstresultgroup';
 import MinQodGroup from 'web/components/powerfilter/minqodgroup';
 import ResultsPerPageGroup from 'web/components/powerfilter/resultsperpagegroup';
 import SortByGroup from 'web/components/powerfilter/sortbygroup';
-import withFilterDialog from 'web/components/powerfilter/withFilterDialog';
-import FilterDialogPropTypes from 'web/components/powerfilter/dialogproptypes';
 import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
 import FilterSearchGroup from 'web/components/powerfilter/filtersearchgroup';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
 
-/* eslint-enable */
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-const SORT_FIELDS = [
-  {
-    name: 'date',
-    displayName: _l('Date'),
-  },
-  {
-    name: 'status',
-    displayName: _l('Status'),
-  },
-  {
-    name: 'task',
-    displayName: _l('Task'),
-  },
-  {
-    name: 'severity',
-    displayName: _l('Severity'),
-  },
-  {
-    name: 'high',
-    displayName: _l('Scan Results: High'),
-  },
-  {
-    name: 'medium',
-    displayName: _l('Scan Results: Medium'),
-  },
-  {
-    name: 'low',
-    displayName: _l('Scan Results: Low'),
-  },
-  {
-    name: 'log',
-    displayName: _l('Scan Results: Log'),
-  },
-  {
-    name: 'false_positive',
-    displayName: _l('Scan Results: False Positive'),
-  },
-];
+import useCapabilities from 'web/utils/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 const ReportFilterDialogComponent = ({
-  capabilities,
-  filter,
-  filterName,
-  filterNameValid,
-  filterstring,
-  saveNamedFilter,
-  onFilterStringChange,
-  onFilterValueChange,
-  onSearchTermChange,
-  onSortByChange,
-  onSortOrderChange,
-  onValueChange,
+  filter: initialFilter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
 }) => {
-  if (!filter) {
-    return null;
-  }
+  const capabilities = useCapabilities();
+  const [_] = useTranslation();
+  const filterDialogProps = useFilterDialog(initialFilter);
+  const [handleSave] = useFilterDialogSave(
+    'report',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
 
+  const SORT_FIELDS = [
+    {
+      name: 'date',
+      displayName: _('Date'),
+    },
+    {
+      name: 'status',
+      displayName: _('Status'),
+    },
+    {
+      name: 'task',
+      displayName: _('Task'),
+    },
+    {
+      name: 'severity',
+      displayName: _('Severity'),
+    },
+    {
+      name: 'high',
+      displayName: _('Scan Results: High'),
+    },
+    {
+      name: 'medium',
+      displayName: _('Scan Results: Medium'),
+    },
+    {
+      name: 'low',
+      displayName: _('Scan Results: Low'),
+    },
+    {
+      name: 'log',
+      displayName: _('Scan Results: Log'),
+    },
+    {
+      name: 'false_positive',
+      displayName: _('Scan Results: False Positive'),
+    },
+  ];
+
+  const {
+    filter,
+    filterName,
+    filterString,
+    saveNamedFilter,
+    onFilterStringChange,
+    onFilterValueChange,
+    onSearchTermChange,
+    onSortByChange,
+    onSortOrderChange,
+    onValueChange,
+  } = filterDialogProps;
   return (
-    <Layout flex="column">
+    <FilterDialog onClose={onClose} onSave={handleSave}>
       <FilterStringGroup
         name="filterstring"
-        filter={filterstring}
+        filter={filterString}
         onChange={onFilterStringChange}
       />
 
@@ -139,15 +149,18 @@ const ReportFilterDialogComponent = ({
           onValueChange={onValueChange}
         />
       )}
-    </Layout>
+    </FilterDialog>
   );
 };
 
-ReportFilterDialogComponent.propTypes = FilterDialogPropTypes;
+ReportFilterDialogComponent.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
 
-export default compose(
-  withCapabilities,
-  withFilterDialog(),
-)(ReportFilterDialogComponent);
+export default ReportFilterDialogComponent;
 
 // vim: set ts=2 sw=2 tw=80:

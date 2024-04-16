@@ -12,7 +12,7 @@ import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave'
 
 import useTranslation from 'web/hooks/useTranslation';
 
-const NvtsFilterDialog = ({
+const PermissionsFilterDialog = ({
   filter,
   onCloseClick,
   onClose = onCloseClick,
@@ -23,7 +23,7 @@ const NvtsFilterDialog = ({
   const [_] = useTranslation();
   const filterDialogProps = useFilterDialog(filter);
   const [handleSave] = useFilterDialogSave(
-    'info',
+    'permission',
     {
       onClose,
       onFilterChanged,
@@ -38,44 +38,24 @@ const NvtsFilterDialog = ({
       displayName: _('Name'),
     },
     {
-      name: 'family',
-      displayName: _('Family'),
+      name: 'description',
+      displayName: _('Description'),
     },
     {
-      name: 'created',
-      displayName: _('Created'),
+      name: 'type',
+      displayName: _('Resource Type'),
     },
     {
-      name: 'modified',
-      displayName: _('Modified'),
+      name: '_resource',
+      displayName: _('Resource'),
     },
     {
-      name: 'version',
-      displayName: _('Version'),
+      name: 'subject_type',
+      displayName: _('Subject Type'),
     },
     {
-      name: 'cve',
-      displayName: _('CVE'),
-    },
-    {
-      name: 'solution_type',
-      displayName: _('Solution Type'),
-    },
-    {
-      name: 'severity',
-      displayName: _('Severity'),
-    },
-    {
-      name: 'qod',
-      displayName: _('QoD'),
-    },
-    {
-      name: 'epss_score',
-      displayName: _('EPSS Score'),
-    },
-    {
-      name: 'epss_percentile',
-      displayName: _('EPSS Percentile'),
+      name: '_subject',
+      displayName: _('Subject'),
     },
   ];
 
@@ -90,7 +70,7 @@ const NvtsFilterDialog = ({
   );
 };
 
-NvtsFilterDialog.propTypes = {
+PermissionsFilterDialog.propTypes = {
   filter: PropTypes.filter,
   onClose: PropTypes.func,
   onCloseClick: PropTypes.func, // should be removed in future
@@ -98,4 +78,4 @@ NvtsFilterDialog.propTypes = {
   onFilterCreated: PropTypes.func,
 };
 
-export default NvtsFilterDialog;
+export default PermissionsFilterDialog;

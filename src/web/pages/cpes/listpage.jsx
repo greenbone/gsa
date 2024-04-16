@@ -40,7 +40,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
     <PageTitle title={_('CPEs')} />
     <EntitiesPage
       {...props}
-      createFilterType="info"
       dashboard={() => (
         <CpesDashboard
           filter={filter}
