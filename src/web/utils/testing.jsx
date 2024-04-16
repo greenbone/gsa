@@ -34,6 +34,8 @@ import {
 } from '@testing-library/react/pure';
 import userEvent from '@testing-library/user-event';
 
+import {ThemeProvider, theme} from '@greenbone/opensight-ui-components';
+
 import {Router} from 'react-router-dom';
 
 import {Provider} from 'react-redux';
@@ -93,9 +95,17 @@ export const getByName = (container, name) => {
   return elements[0];
 };
 
+const Main = ({children}) => {
+  return (
+    <ThemeProvider theme={{...theme, colorScheme: 'light'}}>
+      <StyleSheetManager enableVendorPrefixes>{children}</StyleSheetManager>
+    </ThemeProvider>
+  );
+};
+
 export const render = ui => {
   const {container, baseElement, rerender, ...other} = reactTestingRender(
-    <StyleSheetManager enableVendorPrefixes>{ui}</StyleSheetManager>,
+    <Main>{ui}</Main>,
   );
   return {
     userEvent: userEvent.setup(),
@@ -106,10 +116,7 @@ export const render = ui => {
     getByName: name => getByName(baseElement, name),
     queryByName: name => queryByName(baseElement, name),
     queryAllByName: name => queryAllByName(baseElement, name),
-    rerender: component =>
-      rerender(
-        <StyleSheetManager enableVendorPrefixes>{component}</StyleSheetManager>,
-      ),
+    rerender: component => rerender(<Main>{component}</Main>),
     ...other,
   };
 };
