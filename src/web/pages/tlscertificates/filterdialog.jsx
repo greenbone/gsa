@@ -15,39 +15,79 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {_l} from 'gmp/locale/lang';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
+import PropTypes from 'web/utils/proptypes';
 
-const SORT_FIELDS = [
-  {
-    name: 'subject_dn',
-    displayName: _l('Subject DN'),
-  },
-  {
-    name: 'issuer_dn',
-    displayName: _l('Issuer DN'),
-  },
-  {
-    name: 'serial',
-    displayName: _l('Serial'),
-  },
-  {
-    name: 'activates',
-    displayName: _l('Activates'),
-  },
-  {
-    name: 'expires',
-    displayName: _l('Expires'),
-  },
-  {
-    name: 'lastSeen',
-    displayName: _l('Last Seen'),
-  },
-];
+import DefaultFilterDialog from 'web/components/powerfilter/dialog';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-export default createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
+import useTranslation from 'web/hooks/useTranslation';
 
-// vim: set ts=2 sw=2 tw=80:
+const TlsCertificatesFilterDialog = ({
+  filter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
+  ...props
+}) => {
+  const [_] = useTranslation();
+  const filterDialogProps = useFilterDialog(filter);
+  const [handleSave] = useFilterDialogSave(
+    'tlscertificate',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
+  const SORT_FIELDS = [
+    {
+      name: 'subject_dn',
+      displayName: _('Subject DN'),
+    },
+    {
+      name: 'issuer_dn',
+      displayName: _('Issuer DN'),
+    },
+    {
+      name: 'serial',
+      displayName: _('Serial'),
+    },
+    {
+      name: 'activates',
+      displayName: _('Activates'),
+    },
+    {
+      name: 'expires',
+      displayName: _('Expires'),
+    },
+    {
+      name: 'lastSeen',
+      displayName: _('Last Seen'),
+    },
+  ];
+
+  return (
+    <FilterDialog onClose={onClose} onSave={handleSave}>
+      <DefaultFilterDialog
+        {...props}
+        {...filterDialogProps}
+        sortFields={SORT_FIELDS}
+      />
+    </FilterDialog>
+  );
+};
+
+TlsCertificatesFilterDialog.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
+
+export default TlsCertificatesFilterDialog;

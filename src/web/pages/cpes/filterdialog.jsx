@@ -15,35 +15,75 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {_l} from 'gmp/locale/lang';
+import PropTypes from 'web/utils/proptypes';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
+import DefaultFilterDialog from 'web/components/powerfilter/dialog';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Name'),
-  },
-  {
-    name: 'title',
-    displayName: _l('Title'),
-  },
-  {
-    name: 'modified',
-    displayName: _l('Modified'),
-  },
-  {
-    name: 'cves',
-    displayName: _l('CVEs'),
-  },
-  {
-    name: 'severity',
-    displayName: _l('Severity'),
-  },
-];
+import useTranslation from 'web/hooks/useTranslation';
 
-export default createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
+const CpesFilterDialog = ({
+  filter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
+  ...props
+}) => {
+  const [_] = useTranslation();
+  const filterDialogProps = useFilterDialog(filter);
+  const [handleSave] = useFilterDialogSave(
+    'info',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
 
-// vim: set ts=2 sw=2 tw=80:
+  const SORT_FIELDS = [
+    {
+      name: 'name',
+      displayName: _('Name'),
+    },
+    {
+      name: 'title',
+      displayName: _('Title'),
+    },
+    {
+      name: 'modified',
+      displayName: _('Modified'),
+    },
+    {
+      name: 'cves',
+      displayName: _('CVEs'),
+    },
+    {
+      name: 'severity',
+      displayName: _('Severity'),
+    },
+  ];
+
+  return (
+    <FilterDialog onClose={onClose} onSave={handleSave}>
+      <DefaultFilterDialog
+        {...props}
+        {...filterDialogProps}
+        sortFields={SORT_FIELDS}
+      />
+    </FilterDialog>
+  );
+};
+
+CpesFilterDialog.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
+
+export default CpesFilterDialog;

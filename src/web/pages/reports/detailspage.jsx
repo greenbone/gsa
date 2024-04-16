@@ -90,7 +90,7 @@ import TargetComponent from '../targets/component';
 import PageTitle from 'web/components/layout/pagetitle';
 
 import Page from './detailscontent';
-import FilterDialog from './detailsfilterdialog';
+import ReportDetailsFilterDialog from './detailsfilterdialog';
 import {pageFilter as setPageFilter} from 'web/store/pages/actions';
 import getPage from 'web/store/pages/selectors';
 
@@ -653,12 +653,11 @@ class ReportDetails extends React.Component {
           )}
         </TargetComponent>
         {showFilterDialog && (
-          <FilterDialog
+          <ReportDetailsFilterDialog
             filter={reportFilter}
             delta={false}
             onFilterChanged={this.handleFilterChange}
-            onCloseClick={this.handleFilterDialogClose}
-            createFilterType="result"
+            onClose={this.handleFilterDialogClose}
             onFilterCreated={this.handleFilterCreated}
           />
         )}

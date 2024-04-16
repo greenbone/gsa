@@ -1,19 +1,6 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import PropTypes from 'web/utils/proptypes';
@@ -25,7 +12,7 @@ import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave'
 
 import useTranslation from 'web/hooks/useTranslation';
 
-const PortListsFilterDialog = ({
+const SchedulesFilterDialog = ({
   filter,
   onCloseClick,
   onClose = onCloseClick,
@@ -36,7 +23,7 @@ const PortListsFilterDialog = ({
   const [_] = useTranslation();
   const filterDialogProps = useFilterDialog(filter);
   const [handleSave] = useFilterDialogSave(
-    'portlist',
+    'schedule',
     {
       onClose,
       onFilterChanged,
@@ -44,23 +31,26 @@ const PortListsFilterDialog = ({
     },
     filterDialogProps,
   );
-
   const SORT_FIELDS = [
     {
       name: 'name',
       displayName: _('Name'),
     },
     {
-      name: 'total',
-      displayName: _('Port Counts: Total'),
+      name: 'first_run',
+      displayName: _('First Run'),
     },
     {
-      name: 'tcp',
-      displayName: _('Port Counts: TCP'),
+      name: 'next_run',
+      displayName: _('Next Run'),
     },
     {
-      name: 'udp',
-      displayName: _('Port Counts: UDP'),
+      name: 'period',
+      displayName: _('Recurrence'),
+    },
+    {
+      name: 'duration',
+      displayName: _('Duration'),
     },
   ];
   return (
@@ -74,7 +64,7 @@ const PortListsFilterDialog = ({
   );
 };
 
-PortListsFilterDialog.propTypes = {
+SchedulesFilterDialog.propTypes = {
   filter: PropTypes.filter,
   onClose: PropTypes.func,
   onCloseClick: PropTypes.func, // should be removed in future
@@ -82,4 +72,4 @@ PortListsFilterDialog.propTypes = {
   onFilterCreated: PropTypes.func,
 };
 
-export default PortListsFilterDialog;
+export default SchedulesFilterDialog;

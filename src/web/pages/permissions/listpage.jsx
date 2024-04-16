@@ -17,12 +17,9 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {PERMISSIONS_FILTER_FILTER} from 'gmp/models/filter';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -34,19 +31,22 @@ import PermissionIcon from 'web/components/icon/permissionicon';
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
-
 import {
   loadEntities,
   selector as entitiesSelector,
 } from 'web/store/entities/permissions';
 
-import Table, {SORT_FIELDS} from './table';
+import useCapabilities from 'web/utils/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
+import Table from './table';
 import PermissionComponent from './component';
+import FilterDialog from '../filters/dialog';
 
-const ToolBarIcons = withCapabilities(
-  ({capabilities, onPermissionCreateClick}) => (
+const ToolBarIcons = ({onPermissionCreateClick}) => {
+  const capabilities = useCapabilities();
+  const [_] = useTranslation();
+  return (
     <IconDivider>
       <ManualIcon
         page="web-interface-access"
@@ -60,52 +60,51 @@ const ToolBarIcons = withCapabilities(
         />
       )}
     </IconDivider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
   onPermissionCreateClick: PropTypes.func,
 };
 
-const FilterDialog = createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
-
-const Page = ({onChanged, onDownloaded, onError, onInteraction, ...props}) => (
-  <PermissionComponent
-    onCloned={onChanged}
-    onCloneError={onError}
-    onDeleted={onChanged}
-    onDeleteError={onError}
-    onSaved={onChanged}
-    onSaveError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onInteraction={onInteraction}
-  >
-    {({clone, create, delete: delete_func, download, edit}) => (
-      <React.Fragment>
-        <PageTitle title={_('Permissions')} />
-        <EntitiesPage
-          {...props}
-          sectionIcon={<PermissionIcon size="large" />}
-          table={Table}
-          filterEditDialog={FilterDialog}
-          filtersFilter={PERMISSIONS_FILTER_FILTER}
-          title={_('Permissions')}
-          toolBarIcons={ToolBarIcons}
-          onError={onError}
-          onInteraction={onInteraction}
-          onPermissionCloneClick={clone}
-          onPermissionCreateClick={create}
-          onPermissionDeleteClick={delete_func}
-          onPermissionDownloadClick={download}
-          onPermissionEditClick={edit}
-        />
-      </React.Fragment>
-    )}
-  </PermissionComponent>
-);
+const Page = ({onChanged, onDownloaded, onError, onInteraction, ...props}) => {
+  const [_] = useTranslation();
+  return (
+    <PermissionComponent
+      onCloned={onChanged}
+      onCloneError={onError}
+      onDeleted={onChanged}
+      onDeleteError={onError}
+      onSaved={onChanged}
+      onSaveError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onInteraction={onInteraction}
+    >
+      {({clone, create, delete: delete_func, download, edit}) => (
+        <React.Fragment>
+          <PageTitle title={_('Permissions')} />
+          <EntitiesPage
+            {...props}
+            sectionIcon={<PermissionIcon size="large" />}
+            table={Table}
+            filterEditDialog={FilterDialog}
+            filtersFilter={PERMISSIONS_FILTER_FILTER}
+            title={_('Permissions')}
+            toolBarIcons={ToolBarIcons}
+            onError={onError}
+            onInteraction={onInteraction}
+            onPermissionCloneClick={clone}
+            onPermissionCreateClick={create}
+            onPermissionDeleteClick={delete_func}
+            onPermissionDownloadClick={download}
+            onPermissionEditClick={edit}
+          />
+        </React.Fragment>
+      )}
+    </PermissionComponent>
+  );
+};
 
 Page.propTypes = {
   onChanged: PropTypes.func.isRequired,

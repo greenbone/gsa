@@ -1,19 +1,6 @@
-/* Copyright (C) 2017-2022 Greenbone AG
+/* SPDX-FileCopyrightText: 2024 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 import PropTypes from 'web/utils/proptypes';
@@ -25,7 +12,7 @@ import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave'
 
 import useTranslation from 'web/hooks/useTranslation';
 
-const PortListsFilterDialog = ({
+const PermissionsFilterDialog = ({
   filter,
   onCloseClick,
   onClose = onCloseClick,
@@ -36,7 +23,7 @@ const PortListsFilterDialog = ({
   const [_] = useTranslation();
   const filterDialogProps = useFilterDialog(filter);
   const [handleSave] = useFilterDialogSave(
-    'portlist',
+    'permission',
     {
       onClose,
       onFilterChanged,
@@ -51,18 +38,27 @@ const PortListsFilterDialog = ({
       displayName: _('Name'),
     },
     {
-      name: 'total',
-      displayName: _('Port Counts: Total'),
+      name: 'description',
+      displayName: _('Description'),
     },
     {
-      name: 'tcp',
-      displayName: _('Port Counts: TCP'),
+      name: 'type',
+      displayName: _('Resource Type'),
     },
     {
-      name: 'udp',
-      displayName: _('Port Counts: UDP'),
+      name: '_resource',
+      displayName: _('Resource'),
+    },
+    {
+      name: 'subject_type',
+      displayName: _('Subject Type'),
+    },
+    {
+      name: '_subject',
+      displayName: _('Subject'),
     },
   ];
+
   return (
     <FilterDialog onClose={onClose} onSave={handleSave}>
       <DefaultFilterDialog
@@ -74,7 +70,7 @@ const PortListsFilterDialog = ({
   );
 };
 
-PortListsFilterDialog.propTypes = {
+PermissionsFilterDialog.propTypes = {
   filter: PropTypes.filter,
   onClose: PropTypes.func,
   onCloseClick: PropTypes.func, // should be removed in future
@@ -82,4 +78,4 @@ PortListsFilterDialog.propTypes = {
   onFilterCreated: PropTypes.func,
 };
 
-export default PortListsFilterDialog;
+export default PermissionsFilterDialog;
