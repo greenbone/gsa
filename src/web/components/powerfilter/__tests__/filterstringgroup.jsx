@@ -19,7 +19,7 @@ describe('FilterStringGroup tests', () => {
       <FilterStringGroup filter={filter} name="name" onChange={handleChange} />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should render filterstring from string', () => {

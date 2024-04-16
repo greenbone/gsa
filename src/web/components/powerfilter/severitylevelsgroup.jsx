@@ -3,10 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-import React from 'react';
-
-import _ from 'gmp/locale';
+import React, {useCallback} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -19,86 +16,77 @@ import IconDivider from 'web/components/layout/icondivider';
 
 import SeverityClassLabel from 'web/components/label/severityclass';
 
-class SeverityLevelsFilterGroup extends React.Component {
-  constructor(...args) {
-    super(...args);
+import useTranslation from 'web/hooks/useTranslation';
 
-    this.handleLevelChange = this.handleLevelChange.bind(this);
-  }
+const SeverityLevelsFilterGroup = ({filter, onChange, onRemove}) => {
+  const [_] = useTranslation();
 
-  handleLevelChange(value, level) {
-    const {filter, onChange, onRemove} = this.props;
-    let levels = filter.get('levels');
+  const handleLevelChange = useCallback(
+    (value, level) => {
+      let levels = filter.get('levels');
 
-    if (!levels) {
-      levels = '';
-    }
-
-    if (value && !levels.includes(level)) {
-      levels += level;
-      onChange(levels, 'levels');
-    } else if (!value && levels.includes(level)) {
-      levels = levels.replace(level, '');
-
-      if (levels.trim().length === 0) {
-        onRemove();
-      } else {
-        onChange(levels, 'levels');
+      if (!isDefined(levels)) {
+        levels = '';
       }
-    }
+
+      if (value && !levels.includes(level)) {
+        levels += level;
+        onChange(levels, 'levels');
+      } else if (!value && levels.includes(level)) {
+        levels = levels.replace(level, '');
+
+        if (levels.trim().length === 0) {
+          onRemove();
+        } else {
+          onChange(levels, 'levels');
+        }
+      }
+    },
+    [filter, onChange, onRemove],
+  );
+
+  let levels = filter.get('levels');
+
+  if (!isDefined(levels)) {
+    levels = '';
   }
-
-  render() {
-    const {filter} = this.props;
-
-    let levels = filter.get('levels');
-
-    if (!isDefined(levels)) {
-      levels = '';
-    }
-    return (
-      <FormGroup title={_('Severity (Class)')}>
-        <IconDivider>
-          <Checkbox
-            checked={levels.includes('h')}
-            name="h"
-            onChange={this.handleLevelChange}
-          >
-            <SeverityClassLabel.High />
-          </Checkbox>
-          <Checkbox
-            checked={levels.includes('m')}
-            name="m"
-            onChange={this.handleLevelChange}
-          >
-            <SeverityClassLabel.Medium />
-          </Checkbox>
-          <Checkbox
-            checked={levels.includes('l')}
-            name="l"
-            onChange={this.handleLevelChange}
-          >
-            <SeverityClassLabel.Low />
-          </Checkbox>
-          <Checkbox
-            checked={levels.includes('g')}
-            name="g"
-            onChange={this.handleLevelChange}
-          >
-            <SeverityClassLabel.Log />
-          </Checkbox>
-          <Checkbox
-            checked={levels.includes('f')}
-            name="f"
-            onChange={this.handleLevelChange}
-          >
-            <SeverityClassLabel.FalsePositive />
-          </Checkbox>
-        </IconDivider>
-      </FormGroup>
-    );
-  }
-}
+  return (
+    <FormGroup title={_('Severity (Class)')}>
+      <IconDivider>
+        <Checkbox
+          checked={levels.includes('h')}
+          name="h"
+          onChange={handleLevelChange}
+        />
+        <SeverityClassLabel.High />
+        <Checkbox
+          checked={levels.includes('m')}
+          name="m"
+          onChange={handleLevelChange}
+        />
+        <SeverityClassLabel.Medium />
+        <Checkbox
+          checked={levels.includes('l')}
+          name="l"
+          onChange={handleLevelChange}
+        />
+        <SeverityClassLabel.Low />
+        <Checkbox
+          checked={levels.includes('g')}
+          name="g"
+          onChange={handleLevelChange}
+        />
+        <SeverityClassLabel.Log />
+        <Checkbox
+          checked={levels.includes('f')}
+          name="f"
+          onChange={handleLevelChange}
+        />
+        <SeverityClassLabel.FalsePositive />
+      </IconDivider>
+    </FormGroup>
+  );
+};
 
 SeverityLevelsFilterGroup.propTypes = {
   filter: PropTypes.filter.isRequired,

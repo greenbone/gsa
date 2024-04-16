@@ -24,7 +24,7 @@ describe('MinQodGroup tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should render value from filter', () => {

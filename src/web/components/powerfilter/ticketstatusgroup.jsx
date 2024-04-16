@@ -6,8 +6,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -15,12 +13,16 @@ import PropTypes from 'web/utils/proptypes';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const TicketStatusFilterGroup = ({
   status,
   filter,
   name = 'status',
   onChange,
 }) => {
+  const [_] = useTranslation();
+
   if (isDefined(filter)) {
     status = filter.get('status');
   }

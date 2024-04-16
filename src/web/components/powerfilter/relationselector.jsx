@@ -7,14 +7,15 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
-import _ from 'gmp/locale';
+import Select from 'web/components/form/select';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 import PropTypes from 'web/utils/proptypes';
 import {UNSET_LABEL, UNSET_VALUE} from 'web/utils/render';
 
-import Select from 'web/components/form/select';
-
 const RelationSelector = ({relation, onChange}) => {
+  const [_] = useTranslation();
   return (
     <Select
       value={relation}
