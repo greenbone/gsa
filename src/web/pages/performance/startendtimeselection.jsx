@@ -9,15 +9,15 @@ import _ from 'gmp/locale';
 
 import {isDefined} from 'gmp/utils/identity';
 
+import PropTypes from 'web/utils/proptypes';
+
 import Button from 'web/components/form/button';
 import Datepicker from 'web/components/form/datepicker';
 import FormGroup from 'web/components/form/formgroup';
 import Spinner from 'web/components/form/spinner';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
-import PropTypes from 'web/utils/proptypes';
+import Column from 'web/components/layout/column';
+import Row from 'web/components/layout/row';
 
 class StartTimeSelection extends React.Component {
   constructor(...args) {
@@ -65,112 +65,86 @@ class StartTimeSelection extends React.Component {
 
   handleUpdate() {
     const {onChanged} = this.props;
-    const {
-      startDate,
-      endDate,
-      startHour,
-      startMinute,
-      endHour,
-      endMinute,
-    } = this.state;
+    const {startDate, endDate, startHour, startMinute, endHour, endMinute} =
+      this.state;
 
     onChanged({
-      startDate: startDate
-        .clone()
-        .hour(startHour)
-        .minute(startMinute),
-      endDate: endDate
-        .clone()
-        .hour(endHour)
-        .minute(endMinute),
+      startDate: startDate.clone().hour(startHour).minute(startMinute),
+      endDate: endDate.clone().hour(endHour).minute(endMinute),
     });
   }
 
   render() {
     const {timezone} = this.props;
-    const {
-      endDate,
-      startDate,
-      startHour,
-      startMinute,
-      endHour,
-      endMinute,
-    } = this.state;
+    const {endDate, startDate, startHour, startMinute, endHour, endMinute} =
+      this.state;
     return (
-      <Layout flex="column">
+      <Column>
         <FormGroup data-testid="timezone" title={_('Timezone')}>
           {timezone}
         </FormGroup>
-        <FormGroup title={_('Start Time')}>
-          <Divider flex="column">
-            <Datepicker
-              value={startDate}
-              name="startDate"
-              timezone={timezone}
-              minDate={false}
-              onChange={this.handleValueChange}
-            />
-            <Divider margin="20px">
-              <Spinner
-                name="startHour"
-                value={startHour}
-                min="0"
-                max="23"
-                type="int"
-                onChange={this.handleValueChange}
-              />{' '}
-              h
-              <Spinner
-                name="startMinute"
-                value={startMinute}
-                min="0"
-                max="59"
-                type="int"
-                onChange={this.handleValueChange}
-              />{' '}
-              m
-            </Divider>
-          </Divider>
+        <FormGroup title={_('Start Time')} direction="row">
+          <Datepicker
+            value={startDate}
+            name="startDate"
+            timezone={timezone}
+            minDate={false}
+            onChange={this.handleValueChange}
+          />
+          <Spinner
+            name="startHour"
+            value={startHour}
+            min="0"
+            max="23"
+            type="int"
+            onChange={this.handleValueChange}
+          />{' '}
+          h
+          <Spinner
+            name="startMinute"
+            value={startMinute}
+            min="0"
+            max="59"
+            type="int"
+            onChange={this.handleValueChange}
+          />{' '}
+          m
         </FormGroup>
 
-        <FormGroup title={_('End Time')}>
-          <Divider flex="column">
-            <Datepicker
-              value={endDate}
-              name="endDate"
-              timezone={timezone}
-              minDate={false}
-              onChange={this.handleValueChange}
-            />
-            <Divider margin="20px">
-              <Spinner
-                name="endHour"
-                value={endHour}
-                min="0"
-                max="23"
-                type="int"
-                onChange={this.handleValueChange}
-              />{' '}
-              h
-              <Spinner
-                name="endMinute"
-                value={endMinute}
-                min="0"
-                max="59"
-                type="int"
-                onChange={this.handleValueChange}
-              />{' '}
-              m
-            </Divider>
-          </Divider>
+        <FormGroup title={_('End Time')} direction="row">
+          <Datepicker
+            value={endDate}
+            name="endDate"
+            timezone={timezone}
+            minDate={false}
+            onChange={this.handleValueChange}
+          />
+          <Spinner
+            name="endHour"
+            value={endHour}
+            min="0"
+            max="23"
+            type="int"
+            onChange={this.handleValueChange}
+          />{' '}
+          h
+          <Spinner
+            name="endMinute"
+            value={endMinute}
+            min="0"
+            max="59"
+            type="int"
+            onChange={this.handleValueChange}
+          />{' '}
+          m
         </FormGroup>
 
-        <FormGroup offset="4">
+        <Row>
           <Button data-testid="update-button" onClick={this.handleUpdate}>
             {_('Update')}
           </Button>
-        </FormGroup>
-      </Layout>
+        </Row>
+      </Column>
     );
   }
 }
