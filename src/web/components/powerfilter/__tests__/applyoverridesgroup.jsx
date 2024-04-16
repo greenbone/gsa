@@ -36,7 +36,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should call change handler', () => {

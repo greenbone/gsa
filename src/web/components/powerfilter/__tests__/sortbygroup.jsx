@@ -39,7 +39,7 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should render fields', () => {

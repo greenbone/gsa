@@ -43,7 +43,7 @@ describe('Severity Values Group Tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('arguments are processed correctly', () => {

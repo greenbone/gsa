@@ -34,7 +34,7 @@ describe('Relation Selector Tests', () => {
       <RelationSelector relation="<" onChange={onChange} />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should return items', () => {

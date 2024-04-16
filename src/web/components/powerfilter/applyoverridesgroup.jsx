@@ -17,13 +17,13 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import {parseInt} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 import FormGroup from 'web/components/form/formgroup';
 import YesNoRadio from 'web/components/form/yesnoradio';
@@ -34,6 +34,8 @@ const ApplyOverridesGroup = ({
   overrides,
   onChange,
 }) => {
+  const [_] = useTranslation();
+
   if (isDefined(filter)) {
     overrides = filter.get('apply_overrides');
   }

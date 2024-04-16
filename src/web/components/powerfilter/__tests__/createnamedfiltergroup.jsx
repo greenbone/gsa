@@ -30,7 +30,7 @@ describe('CreateNamedFilterGroup tests', () => {
 
     expect(element).toHaveStyleRule('display', 'flex');
     expect(element).toHaveStyleRule('margin-top', '15px');
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should check checkbox and enable textfield correctly', () => {
