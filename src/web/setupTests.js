@@ -23,6 +23,8 @@ import '../setupTests';
 // setup additional matchers for vitest
 import '@testing-library/jest-dom/vitest';
 
+import * as ResizeObserverModule from 'resize-observer-polyfill';
+
 global.beforeEach = beforeEach;
 global.expect = expect;
 
@@ -33,3 +35,5 @@ HTMLAnchorElement.prototype.click = testing.fn();
 
 // createObjectURL is not implemented in JSDOM and required for the Download component
 window.URL.createObjectURL = testing.fn();
+
+global.ResizeObserver = ResizeObserverModule.default;
