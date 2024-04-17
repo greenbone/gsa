@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-    tags: ["v*"]
+    tags: ['v*']
   pull_request:
     branches:
       - main
@@ -12,11 +12,14 @@ on:
     inputs:
       ref-name:
         type: string
-        description: "The ref to build a container image from. For example a tag v23.0.0."
+        description: 'The ref to build a container image from. For example a tag v23.0.0.'
         required: true
 
 jobs:
   images:
+    permissions:
+      contents: read
+      packages: write
     name: Build and upload container images
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +37,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ github.repository }}
+          images: |
+            name=${{ github.repository }},enable=${{ github.event_name != 'pull_request' }}
+            name=${{ vars.IMAGE_REGISTRY }}/${{ github.repository }}
           context: git
           labels: |
             org.opencontainers.image.vendor=Greenbone
@@ -50,7 +55,7 @@ jobs:
             type=edge
 
             # set label for non-published pull request builds
-            type=ref,event=pr
+            type=raw,value=${{ github.event.pull_request.head.ref }},enable=${{ github.event_name == 'pull_request' }}
 
             # when a new git tag is created set stable and a latest tags
             type=raw,value=latest,enable=${{ steps.latest.outputs.is-latest-tag == 'true' }}
@@ -69,6 +74,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.action }}
+          password: ${{ github.token }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -77,7 +88,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' && (github.ref_type == 'tag' || github.ref_name == 'main') }}
+          push: true
           build-args: |
             VERSION=${{ steps.container-opts.outputs.version }}
           file: .docker/prod.Dockerfile
