@@ -20,6 +20,14 @@ import DefaultTransform from '../http/transform/default';
 import Gmp from '../gmp';
 
 describe('Gmp tests', () => {
+  beforeAll(() => {
+    global.window = {location: {protocol: 'http:'}};
+  });
+
+  afterAll(() => {
+    global.window = undefined;
+  });
+
   describe('isLoggedIn tests', () => {
     test('should return false if user has no token', () => {
       const gmp = new Gmp();

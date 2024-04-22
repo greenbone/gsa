@@ -73,15 +73,14 @@ describe('LanguageDetector tests', () => {
 
   test('should return language from navigator', () => {
     const storage = {};
+    global.navigator = {language: 'en-US'};
+
     const languageUtils = {
       formatLanguageCode: vi.fn().mockImplementation(l => l),
       isSupportedCode: vi.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
-
-    // JSDom returns ['en-US', 'en'] for navigatior.languages
-    // navigator and navigator.languages has been freezed
 
     detector.init({languageUtils}, {storage}, {fallbackLng: 'bar'});
 
@@ -90,6 +89,8 @@ describe('LanguageDetector tests', () => {
     expect(languageUtils.formatLanguageCode).toHaveBeenCalledWith('en-US');
     expect(languageUtils.isSupportedCode).toHaveBeenCalledTimes(1);
     expect(languageUtils.isSupportedCode).toHaveBeenCalledWith('en-US');
+
+    global.navigator = undefined;
   });
 
   test('should return languages from fake navigator', () => {

@@ -36,6 +36,14 @@ const createStorage = state => {
 };
 
 describe('GmpSettings tests', () => {
+  beforeAll(() => {
+    global.location = {protocol: 'http:'};
+  });
+
+  afterAll(() => {
+    global.location = undefined;
+  });
+
   test('should init with defaults', () => {
     const storage = createStorage();
     const settings = new GmpSettings(storage);
