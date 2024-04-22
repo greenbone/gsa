@@ -12,6 +12,11 @@ export default defineWorkspace([
         'src/web/**/__tests__/*.?(c|m)[jt]s?(x)',
       ],
       exclude: ['src/web/store/**'],
+      server: {
+        deps: {
+          inline: ['@greenbone/opensight-ui-components'],
+        },
+      },
     },
   },
   {
