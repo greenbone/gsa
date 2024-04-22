@@ -97,6 +97,7 @@
     "eslint-plugin-vitest-globals": "^1.5.0",
     "husky": "^2.7.0",
     "jest-styled-components": "^7.2.0",
+    "jsdom": "^24.0.0",
     "lint-staged": "^13.1.0",
     "prettier": "^3.2.5",
     "resize-observer-polyfill": "^1.5.1",
