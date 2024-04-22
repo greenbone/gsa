@@ -17,6 +17,8 @@
  */
 import {debounce, throttleAnimation} from '../event';
 
+// @vitest-environment jsdom
+
 describe('debounce function tests', () => {
   vi.useFakeTimers();
 
