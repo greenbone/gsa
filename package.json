@@ -100,6 +100,7 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-eslint2": "^4.4.0",
     "vite-plugin-svgr": "^4.2.0",
     "vitest": "^1.5.0"
   },

@@ -4,7 +4,7 @@ import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 import legacy from '@vitejs/plugin-legacy';
 import svgrPlugin from 'vite-plugin-svgr';
-import eslintPlugin from 'vite-plugin-eslint';
+import eslintPlugin from 'vite-plugin-eslint2';
 
 const projectRootDir = path.resolve(__dirname);
 
