@@ -45,13 +45,4 @@ export default defineConfig({
   build: {
     outDir: 'build',
   },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.js',
-    include: [
-      'src/**/*.{test,spec}.?(c|m)[jt]s?(x)',
-      'src/**/__tests__/*.?(c|m)[jt]s?(x)',
-    ],
-  },
 });
