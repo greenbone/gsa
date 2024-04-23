@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -29,7 +28,7 @@ import {
 
 describe('Task Trend Selector Tests', () => {
   test('should render', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const filter = Filter.fromString('trend=down');
     const {element} = render(
       <TaskTrendGroup filter={filter} onChange={onChange} />,
@@ -39,7 +38,7 @@ describe('Task Trend Selector Tests', () => {
   });
 
   test('should return items', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const filter = Filter.fromString('trend=down');
     const {element, baseElement} = render(
       <TaskTrendGroup filter={filter} onChange={onChange} />,
@@ -60,7 +59,7 @@ describe('Task Trend Selector Tests', () => {
   });
 
   test('should parse filter', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const filter = Filter.fromString('trend=same');
     // eslint-disable-next-line no-shadow
     const {getByTestId} = render(
@@ -72,7 +71,7 @@ describe('Task Trend Selector Tests', () => {
   });
 
   test('should call onChange handler', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const filter = Filter.fromString('trend=down');
     const {element, baseElement} = render(
       <TaskTrendGroup filter={filter} onChange={onChange} />,
@@ -88,7 +87,7 @@ describe('Task Trend Selector Tests', () => {
     expect(onChange).toBeCalledWith('up', 'trend');
   });
   test('should change value', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const filter = Filter.fromString('trend=down');
 
     // eslint-disable-next-line no-shadow

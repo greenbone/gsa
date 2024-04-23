@@ -18,7 +18,7 @@
 
 /* eslint-disable no-console */
 
-import React from 'react';
+import {describe, test, expect} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 import ErrorBoundary from '../errorboundary';

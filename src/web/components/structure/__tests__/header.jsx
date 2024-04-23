@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {rendererWith} from 'web/utils/testing';
 
@@ -25,7 +24,7 @@ import {setUsername} from 'web/store/usersettings/actions';
 
 describe('Header tests', () => {
   test('should render header', () => {
-    const isLoggedIn = vi.fn().mockReturnValue(true);
+    const isLoggedIn = testing.fn().mockReturnValue(true);
     const gmp = {isLoggedIn, settings: {vendorVersion: ''}};
     const {render, store} = rendererWith({gmp, router: true, store: true});
     store.dispatch(setUsername('username'));

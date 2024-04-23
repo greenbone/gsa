@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {
   fireEvent,
@@ -28,8 +26,6 @@ import {
 } from 'web/utils/testing';
 
 import ExternalLink from '../externallink';
-
-setLocale('en');
 
 describe('ExternalLink tests', () => {
   test('should render ExternalLink', () => {
@@ -65,7 +61,7 @@ describe('ExternalLink tests', () => {
   test('should close confirmation dialog on resume click', () => {
     const oldOpen = window.open;
 
-    window.open = vi.fn();
+    window.open = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {element, baseElement, getByTestId} = render(
@@ -96,7 +92,7 @@ describe('ExternalLink tests', () => {
   test('should open url in new window', () => {
     const oldOpen = window.open;
 
-    window.open = vi.fn();
+    window.open = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {element, baseElement} = render(
@@ -120,5 +116,3 @@ describe('ExternalLink tests', () => {
     window.open = oldOpen;
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

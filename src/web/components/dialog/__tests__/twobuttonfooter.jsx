@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
@@ -79,8 +79,8 @@ describe('DialogTwoButtonFooter tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handler1 = vi.fn();
-    const handler2 = vi.fn();
+    const handler1 = testing.fn();
+    const handler2 = testing.fn();
 
     const {element} = render(
       <DialogTwoButtonFooter

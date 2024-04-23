@@ -19,6 +19,8 @@
 
 /* eslint-disable react/prop-types */
 
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import React, {useState} from 'react';
 
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
@@ -76,7 +78,7 @@ const UseFormValidationTestComponent = ({onSave}) => {
 describe('useFormValidation tests', () => {
   test('should validate form value successfully', async () => {
     const {render} = rendererWith();
-    const handleSave = vi.fn();
+    const handleSave = testing.fn();
 
     render(<UseFormValidationTestComponent onSave={handleSave} />);
 
@@ -90,7 +92,7 @@ describe('useFormValidation tests', () => {
 
   test('should show error if validation fails', async () => {
     const {render} = rendererWith();
-    const handleSave = vi.fn();
+    const handleSave = testing.fn();
 
     render(<UseFormValidationTestComponent onSave={handleSave} />);
 

@@ -18,15 +18,11 @@
 
 /* eslint-disable no-console */
 
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
 import ErrorPanel from '../errorpanel';
-
-setLocale('en');
 
 describe('ErrorPanel tests', () => {
   test('should render message', () => {

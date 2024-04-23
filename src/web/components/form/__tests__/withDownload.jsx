@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -25,9 +25,9 @@ const TestComponent = withDownload(({onDownload, filename, data}) => (
   <button data-testid="button" onClick={() => onDownload({filename, data})} />
 ));
 
-const createObjectURL = vi.fn().mockReturnValue('foo://bar');
+const createObjectURL = testing.fn().mockReturnValue('foo://bar');
 window.URL.createObjectURL = createObjectURL;
-window.URL.revokeObjectURL = vi.fn();
+window.URL.revokeObjectURL = testing.fn();
 
 describe('withDownload tests', () => {
   test('should render', () => {

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -26,7 +26,7 @@ import Filter from 'gmp/models/filter';
 describe('ApplyOverridesGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString();
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {element} = render(
       <ApplyOverridesGroup
         filter={filter}
@@ -41,7 +41,7 @@ describe('ApplyOverridesGroup tests', () => {
 
   test('should call change handler', () => {
     const filter = Filter.fromString('apply_overrides=1');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId} = render(
       <ApplyOverridesGroup
         filter={filter}
@@ -59,7 +59,7 @@ describe('ApplyOverridesGroup tests', () => {
 
   test('should check radio', () => {
     const filter = Filter.fromString('apply_overrides=1');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId} = render(
       <ApplyOverridesGroup
         filter={filter}
@@ -77,7 +77,7 @@ describe('ApplyOverridesGroup tests', () => {
   test('should uncheck radio of previous choice', () => {
     const filter1 = Filter.fromString('apply_overrides=1');
     const filter2 = Filter.fromString('apply_overrides=0');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId, rerender} = render(
       <ApplyOverridesGroup
         filter={filter1}
@@ -107,7 +107,7 @@ describe('ApplyOverridesGroup tests', () => {
 
   test('should use filter value by default', () => {
     const filter = Filter.fromString('apply_overrides=1');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId} = render(
       <ApplyOverridesGroup
         filter={filter}
@@ -123,7 +123,7 @@ describe('ApplyOverridesGroup tests', () => {
   });
 
   test('should use overrides', () => {
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId} = render(
       <ApplyOverridesGroup
         name="applyOverrides"

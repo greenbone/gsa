@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -23,7 +23,7 @@ import CreateNamedFilterGroup from '../createnamedfiltergroup';
 
 describe('CreateNamedFilterGroup tests', () => {
   test('should render', () => {
-    const handleChangeMock = vi.fn();
+    const handleChangeMock = testing.fn();
     const {element} = render(
       <CreateNamedFilterGroup onValueChange={handleChangeMock} />,
     );
@@ -34,7 +34,7 @@ describe('CreateNamedFilterGroup tests', () => {
   });
 
   test('should check checkbox and enable textfield correctly', () => {
-    const handleChangeMock = vi.fn();
+    const handleChangeMock = testing.fn();
     const {getByTestId} = render(
       <CreateNamedFilterGroup
         saveNamedFilter={true}
@@ -49,7 +49,7 @@ describe('CreateNamedFilterGroup tests', () => {
   });
 
   test('should uncheck checkbox and disable textfield correctly', () => {
-    const handleChangeMock = vi.fn();
+    const handleChangeMock = testing.fn();
     const {getByTestId} = render(
       <CreateNamedFilterGroup
         saveNamedFilter={false}
@@ -64,7 +64,7 @@ describe('CreateNamedFilterGroup tests', () => {
   });
 
   test('should uncheck checkbox if saveNamedFilter is undefined', () => {
-    const handleChangeMock = vi.fn();
+    const handleChangeMock = testing.fn();
     const {getByTestId} = render(
       <CreateNamedFilterGroup onValueChange={handleChangeMock} />,
     );
@@ -73,7 +73,7 @@ describe('CreateNamedFilterGroup tests', () => {
   });
 
   test('should call change handler of checkbox for "unchecking"', () => {
-    const handleChangeMock = vi.fn();
+    const handleChangeMock = testing.fn();
     const {getByTestId} = render(
       <CreateNamedFilterGroup
         saveNamedFilter={true}
@@ -88,7 +88,7 @@ describe('CreateNamedFilterGroup tests', () => {
   });
 
   test('should call change handler of checkbox for "checking"', () => {
-    const handleChangeMock = vi.fn();
+    const handleChangeMock = testing.fn();
     const {getByTestId} = render(
       <CreateNamedFilterGroup
         saveNamedFilter={false}
@@ -103,7 +103,7 @@ describe('CreateNamedFilterGroup tests', () => {
   });
 
   test('should call change handler of textfield with value and name', () => {
-    const handleChangeMock = vi.fn();
+    const handleChangeMock = testing.fn();
 
     const {getByTestId} = render(
       <CreateNamedFilterGroup
@@ -120,7 +120,7 @@ describe('CreateNamedFilterGroup tests', () => {
   });
 
   test('textfield should not change value when disabled', () => {
-    const handleChangeMock = vi.fn();
+    const handleChangeMock = testing.fn();
 
     const {getByTestId} = render(
       <CreateNamedFilterGroup

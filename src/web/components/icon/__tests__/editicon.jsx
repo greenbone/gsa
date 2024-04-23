@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {describe} from '@gsa/testing';
+
 import {testIcon} from 'web/components/icon/testing';
 
 import EditIcon from '../editicon';

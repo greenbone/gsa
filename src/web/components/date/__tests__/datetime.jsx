@@ -16,16 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable no-console */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
-import Date, {setLocale} from 'gmp/models/date';
+import Date from 'gmp/models/date';
 
 import {rendererWith} from 'web/utils/testing';
 
-import DateTime from '../datetime';
 import {setTimezone} from 'web/store/usersettings/actions';
 
-setLocale('en');
+import DateTime from '../datetime';
 
 describe('DateTime render tests', () => {
   test('should render nothing if date is undefined', () => {
@@ -55,7 +54,7 @@ describe('DateTime render tests', () => {
   });
 
   test('should call formatter', () => {
-    const formatter = vi.fn().mockReturnValue('foo');
+    const formatter = testing.fn().mockReturnValue('foo');
     const {render, store} = rendererWith({store: true});
 
     const date = Date('2019-01-01T12:00:00Z');

@@ -15,18 +15,19 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
+
+import {isFunction} from 'gmp/utils/identity';
+import {KeyCode} from 'gmp/utils/event';
 
 import {render, fireEvent} from 'web/utils/testing';
 
 import Dialog from '../dialog';
-import {isFunction} from 'gmp/utils/identity';
-import {KeyCode} from 'gmp/utils/event';
 
 describe('Dialog component tests', () => {
   test('should render a Dialog', () => {
-    const handleClose = vi.fn();
-    const renderFunc = vi.fn().mockReturnValue(<div />);
+    const handleClose = testing.fn();
+    const renderFunc = testing.fn().mockReturnValue(<div />);
 
     const {baseElement} = render(
       <Dialog onClose={handleClose}>{renderFunc}</Dialog>,
@@ -46,8 +47,8 @@ describe('Dialog component tests', () => {
   });
 
   test('should close Dialog', () => {
-    const handleClose = vi.fn();
-    const renderFunc = vi.fn().mockReturnValue(<div />);
+    const handleClose = testing.fn();
+    const renderFunc = testing.fn().mockReturnValue(<div />);
 
     render(<Dialog onClose={handleClose}>{renderFunc}</Dialog>);
 
@@ -62,8 +63,8 @@ describe('Dialog component tests', () => {
   });
 
   test('should close Dialog on escape key', () => {
-    const handleClose = vi.fn();
-    const renderFunc = vi.fn().mockReturnValue(<div />);
+    const handleClose = testing.fn();
+    const renderFunc = testing.fn().mockReturnValue(<div />);
 
     const {getByRole} = render(
       <Dialog onClose={handleClose}>{renderFunc}</Dialog>,

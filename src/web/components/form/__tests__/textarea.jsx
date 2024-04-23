@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Theme from 'web/utils/theme';
 import {render, fireEvent} from 'web/utils/testing';
@@ -51,7 +51,7 @@ describe('TextArea tests', () => {
   });
 
   test('should call change handler with value', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(<TextArea value="foo" onChange={onChange} />);
 
@@ -61,7 +61,7 @@ describe('TextArea tests', () => {
   });
 
   test('should call change handler with value and name', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(
       <TextArea name="foo" value="ipsum" onChange={onChange} />,
@@ -73,7 +73,7 @@ describe('TextArea tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(
       <TextArea disabled={true} value="foo" onChange={onChange} />,

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {setLocale} from 'gmp/locale/lang';
 import timezones from 'gmp/timezones';
@@ -47,7 +47,7 @@ describe('TimezoneSelect tests', () => {
   });
 
   test('should call onChange handler', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId, getAllByTestId} = render(
       <TimezoneSelect onChange={handler} />,
     );
@@ -62,7 +62,7 @@ describe('TimezoneSelect tests', () => {
   });
 
   test('should call onChange handler with name', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId, getAllByTestId} = render(
       <TimezoneSelect name="foo" onChange={handler} />,
     );

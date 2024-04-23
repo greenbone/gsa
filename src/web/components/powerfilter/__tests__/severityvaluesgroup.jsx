@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -33,7 +32,7 @@ describe('Severity Values Group Tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('severity>3');
     const name = 'severity';
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(
       <SeverityValuesGroup
@@ -48,7 +47,7 @@ describe('Severity Values Group Tests', () => {
   });
 
   test('arguments are processed correctly', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const filter = Filter.fromString('severity=3');
     const name = 'severity';
 
@@ -70,7 +69,7 @@ describe('Severity Values Group Tests', () => {
   });
 
   test('should initialize value with 0 in case no filter value is given', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const filter = Filter.fromString('rows=10');
     const name = 'severity';
 
@@ -90,7 +89,7 @@ describe('Severity Values Group Tests', () => {
   });
 
   test('should change value', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const filter = Filter.fromString('severity=3');
     const name = 'severity';
 
@@ -111,7 +110,7 @@ describe('Severity Values Group Tests', () => {
   });
 
   test('should change relationship', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const filter = Filter.fromString('severity=3');
     const name = 'severity';
 

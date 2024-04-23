@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -33,7 +33,7 @@ describe('FileField tests', () => {
   });
 
   test('should call change handler with file', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(<FileField onChange={onChange} />);
 
@@ -43,7 +43,7 @@ describe('FileField tests', () => {
   });
 
   test('should call change handler with file and name', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(<FileField name="foo" onChange={onChange} />);
 
@@ -53,7 +53,7 @@ describe('FileField tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(<FileField disabled={true} onChange={onChange} />);
 

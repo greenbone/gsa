@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -26,7 +26,7 @@ import Filter from 'gmp/models/filter';
 describe('FilterSearchGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('location=tcp');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {element} = render(
       <FilterSearchGroup
         filter={filter}
@@ -40,7 +40,7 @@ describe('FilterSearchGroup tests', () => {
 
   test('should render value from filter', () => {
     const filter = Filter.fromString('location=tcp');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {element} = render(
       <FilterSearchGroup
         filter={filter}
@@ -54,7 +54,7 @@ describe('FilterSearchGroup tests', () => {
   });
   test('should call change handler', () => {
     const filter = Filter.fromString('location=tcp');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {element} = render(
       <FilterSearchGroup
         filter={filter}

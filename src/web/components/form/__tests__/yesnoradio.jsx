@@ -15,16 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
 import YesNoRadio from '../yesnoradio';
 import {YES_VALUE, NO_VALUE} from 'gmp/parser';
-
-setLocale('en');
 
 describe('YesNoRadio tests', () => {
   test('should render', () => {
@@ -39,7 +35,7 @@ describe('YesNoRadio tests', () => {
   });
 
   test('should call change handler', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {getAllByTestId} = render(<YesNoRadio onChange={onChange} />);
 
     const inputs = getAllByTestId('radio-input');
@@ -55,7 +51,7 @@ describe('YesNoRadio tests', () => {
   });
 
   test('should call change handler with name', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {getAllByTestId} = render(
       <YesNoRadio name="foo" onChange={onChange} />,
     );
@@ -69,7 +65,7 @@ describe('YesNoRadio tests', () => {
   });
 
   test('should allow to set values for yes and no state', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {getAllByTestId} = render(
       <YesNoRadio
         convert={v => v}
@@ -93,7 +89,7 @@ describe('YesNoRadio tests', () => {
   });
 
   test('should call change handler only if checked state changes', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {getAllByTestId} = render(
       <YesNoRadio value={YES_VALUE} onChange={onChange} />,
     );
@@ -111,7 +107,7 @@ describe('YesNoRadio tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {getAllByTestId} = render(
       <YesNoRadio disabled={true} value={YES_VALUE} onChange={onChange} />,
     );

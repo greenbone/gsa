@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -23,7 +23,7 @@ import CheckBox from '../checkbox';
 
 describe('CheckBox component tests', () => {
   test('should call change handler', () => {
-    const change = vi.fn();
+    const change = testing.fn();
     const {element} = render(
       <CheckBox name="foo" checked={false} onChange={change} />,
     );
@@ -36,7 +36,7 @@ describe('CheckBox component tests', () => {
   });
 
   test('should use checkedValue', () => {
-    const change = vi.fn();
+    const change = testing.fn();
     const {element} = render(
       <CheckBox
         name="foo"
@@ -55,7 +55,7 @@ describe('CheckBox component tests', () => {
   });
 
   test('should use unCheckedValue', () => {
-    const change = vi.fn();
+    const change = testing.fn();
     const {element} = render(
       <CheckBox
         name="foo"
@@ -74,7 +74,7 @@ describe('CheckBox component tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const change = vi.fn();
+    const change = testing.fn();
     const {element} = render(
       <CheckBox
         name="foo"
