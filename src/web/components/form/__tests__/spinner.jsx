@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {KeyCode} from 'gmp/utils/event';
 
@@ -34,7 +34,7 @@ describe('Spinner tests', () => {
   });
 
   test('should call change handler', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
@@ -44,7 +44,7 @@ describe('Spinner tests', () => {
   });
 
   test('should call change handler with name', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(
       <Spinner name="foo" value={1} onChange={handler} />,
     );
@@ -56,7 +56,7 @@ describe('Spinner tests', () => {
   });
 
   test('should increment value on button click', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const button = getByTestId('spinner-up');
@@ -66,7 +66,7 @@ describe('Spinner tests', () => {
   });
 
   test('should decrement value on button click', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const button = getByTestId('spinner-down');
@@ -76,7 +76,7 @@ describe('Spinner tests', () => {
   });
 
   test('should increment value on wheel up', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
@@ -86,7 +86,7 @@ describe('Spinner tests', () => {
   });
 
   test('should decrement value on wheel down', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
@@ -96,7 +96,7 @@ describe('Spinner tests', () => {
   });
 
   test('should increment on key up', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
@@ -106,7 +106,7 @@ describe('Spinner tests', () => {
   });
 
   test('should increment on key page up', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
@@ -116,7 +116,7 @@ describe('Spinner tests', () => {
   });
 
   test('should decrement on key down', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
@@ -126,7 +126,7 @@ describe('Spinner tests', () => {
   });
 
   test('should decrement on key page down', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(<Spinner value={1} onChange={handler} />);
 
     const input = getByTestId('spinner-input');
@@ -136,7 +136,7 @@ describe('Spinner tests', () => {
   });
 
   test('should not call event handler if disabled', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(
       <Spinner disabled={true} value={1} onChange={handler} />,
     );
@@ -159,9 +159,9 @@ describe('Spinner tests', () => {
   });
 
   test('should debounce notification', () => {
-    vi.useFakeTimers();
+    testing.useFakeTimers();
 
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(
       <Spinner debounce={200} value={1} onChange={handler} />,
     );
@@ -171,14 +171,14 @@ describe('Spinner tests', () => {
     fireEvent.click(ubutton);
     fireEvent.click(ubutton);
 
-    vi.runAllTimers();
+    testing.runAllTimers();
 
     expect(handler).toHaveBeenCalledTimes(1);
     expect(handler).toHaveBeenCalledWith(2, undefined);
   });
 
   test('should not increment value beyond max', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(
       <Spinner value={1} max={1} onChange={handler} />,
     );
@@ -190,7 +190,7 @@ describe('Spinner tests', () => {
   });
 
   test('should not decrement value below min', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(
       <Spinner value={1} min={1} onChange={handler} />,
     );
@@ -202,7 +202,7 @@ describe('Spinner tests', () => {
   });
 
   test('should increment float value', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(
       <Spinner type="float" value={1} onChange={handler} />,
     );
@@ -214,7 +214,7 @@ describe('Spinner tests', () => {
   });
 
   test('should increment value with step', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {getByTestId} = render(
       <Spinner step={0.5} type="float" value={1} onChange={handler} />,
     );

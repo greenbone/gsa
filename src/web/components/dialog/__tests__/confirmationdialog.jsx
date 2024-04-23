@@ -15,17 +15,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
+
+import {KeyCode} from 'gmp/utils/event';
 
 import {render, fireEvent} from 'web/utils/testing';
 
 import ConfirmationDialog from '../confirmationdialog';
-import {KeyCode} from 'gmp/utils/event';
 
 describe('ConfirmationDialog component tests', () => {
   test('should render ConfirmationDialog with text and title', () => {
-    const handleClose = vi.fn();
-    const handleResumeClick = vi.fn();
+    const handleClose = testing.fn();
+    const handleResumeClick = testing.fn();
 
     const {baseElement, getByTestId} = render(
       <ConfirmationDialog
@@ -44,8 +45,8 @@ describe('ConfirmationDialog component tests', () => {
   });
 
   test('should render ConfirmationDialog with element content and title', () => {
-    const handleClose = vi.fn();
-    const handleResumeClick = vi.fn();
+    const handleClose = testing.fn();
+    const handleResumeClick = testing.fn();
 
     const {getByTestId} = render(
       <ConfirmationDialog
@@ -63,8 +64,8 @@ describe('ConfirmationDialog component tests', () => {
   });
 
   test('should close ConfirmationDialog with close button', () => {
-    const handleClose = vi.fn();
-    const handleResumeClick = vi.fn();
+    const handleClose = testing.fn();
+    const handleResumeClick = testing.fn();
 
     const {getByTestId} = render(
       <ConfirmationDialog
@@ -80,8 +81,8 @@ describe('ConfirmationDialog component tests', () => {
   });
 
   test('should close ConfirmationDialog with cancel button', () => {
-    const handleClose = vi.fn();
-    const handleResumeClick = vi.fn();
+    const handleClose = testing.fn();
+    const handleResumeClick = testing.fn();
 
     const {baseElement} = render(
       <ConfirmationDialog
@@ -97,8 +98,8 @@ describe('ConfirmationDialog component tests', () => {
   });
 
   test('should resume ConfirmationDialog with resume button', () => {
-    const handleClose = vi.fn();
-    const handleResumeClick = vi.fn();
+    const handleClose = testing.fn();
+    const handleResumeClick = testing.fn();
 
     const {baseElement} = render(
       <ConfirmationDialog
@@ -114,8 +115,8 @@ describe('ConfirmationDialog component tests', () => {
   });
 
   test('should close ConfirmationDialog on escape key', () => {
-    const handleClose = vi.fn();
-    const handleResumeClick = vi.fn();
+    const handleClose = testing.fn();
+    const handleResumeClick = testing.fn();
 
     const {getByRole} = render(
       <ConfirmationDialog

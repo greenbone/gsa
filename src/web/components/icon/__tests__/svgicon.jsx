@@ -16,9 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React, {useEffect} from 'react';
-import {act} from 'react-dom/test-utils';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {describe, test, expect, testing} from '@gsa/testing';
+
+import {render, fireEvent, act} from 'web/utils/testing';
 
 import CloneIcon from '../cloneicon';
 
@@ -28,7 +29,7 @@ const entity = {name: 'entity'};
 
 describe('SVG icon component tests', () => {
   test('should render icon', () => {
-    const handleClick = vi.fn();
+    const handleClick = testing.fn();
 
     const {element} = render(
       <CloneIcon
@@ -48,7 +49,7 @@ describe('SVG icon component tests', () => {
       res = resolve;
     });
 
-    const handleClick = vi.fn().mockReturnValue(promise);
+    const handleClick = testing.fn().mockReturnValue(promise);
 
     const {element} = render(
       <CloneIcon
@@ -94,7 +95,7 @@ describe('useStateWithMountCheck() hook tests', () => {
 });
 describe('useIsMountedRef() hook tests', () => {
   test('should return false after component is unmounted', () => {
-    const callback = vi.fn();
+    const callback = testing.fn();
 
     const MockComponent = () => {
       const isMountedRef = useIsMountedRef();
@@ -113,7 +114,7 @@ describe('useIsMountedRef() hook tests', () => {
   });
 
   test('should return true if component is mounted', () => {
-    const callback = vi.fn();
+    const callback = testing.fn();
 
     const MockComponent = () => {
       const isMountedRef = useIsMountedRef();

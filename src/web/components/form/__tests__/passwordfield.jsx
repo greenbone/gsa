@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -37,7 +37,7 @@ describe('PasswordField tests', () => {
   });
 
   test('should call change handler with value', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(<PasswordField value="foo" onChange={onChange} />);
 
@@ -47,7 +47,7 @@ describe('PasswordField tests', () => {
   });
 
   test('should call change handler with value and name', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(
       <PasswordField name="foo" value="ipsum" onChange={onChange} />,
@@ -59,7 +59,7 @@ describe('PasswordField tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(
       <PasswordField disabled={true} value="foo" onChange={onChange} />,

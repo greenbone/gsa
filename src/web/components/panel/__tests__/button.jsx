@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -29,7 +29,7 @@ describe('InfoPanel button tests', () => {
   });
 
   test('should call click handler', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
 
     const {element} = render(<Button onClick={handler} />);
 

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import date from 'gmp/models/date';
 import {longDate} from 'gmp/locale/date';
@@ -48,7 +48,7 @@ describe('UserMenu component tests', () => {
     expect(element).toHaveTextContent('foo');
   });
 
-  test('should route to usersettings on click',() => {
+  test('should route to usersettings on click', () => {
     const {render, history} = rendererWith({
       gmp: {},
       store: true,
@@ -64,7 +64,7 @@ describe('UserMenu component tests', () => {
   });
 
   test('should logout user on click', async () => {
-    const doLogout = vi.fn().mockResolvedValue();
+    const doLogout = testing.fn().mockResolvedValue();
     const gmp = {
       doLogout,
     };
@@ -81,7 +81,7 @@ describe('UserMenu component tests', () => {
   });
 
   test('should renew session timeout on click', async () => {
-    const renewSession = vi
+    const renewSession = testing
       .fn()
       .mockResolvedValue({data: '2019-10-10T12:00:00Z'});
     const gmp = {
@@ -101,5 +101,3 @@ describe('UserMenu component tests', () => {
     expect(gmp.user.renewSession).toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

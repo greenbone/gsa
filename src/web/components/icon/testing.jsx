@@ -16,8 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable max-len */
-import React from 'react';
+import {test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent, act} from 'web/utils/testing';
 import Theme from 'web/utils/theme';
@@ -33,7 +32,7 @@ export const testIcon = Icon => {
   });
 
   test('should handle click', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {element} = render(<Icon onClick={handler} value="1" />);
 
     fireEvent.click(element);
@@ -58,7 +57,7 @@ export const testIcon = Icon => {
   });
 
   test('should not call clickhandler when disabled', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {element} = render(<Icon disabled={true} onClick={handler} />);
 
     fireEvent.click(element);
@@ -72,7 +71,7 @@ export const testIcon = Icon => {
       resolve = res;
     });
 
-    const handler = vi.fn().mockReturnValue(promise);
+    const handler = testing.fn().mockReturnValue(promise);
 
     const {element} = render(
       <Icon title="foo" loadingTitle="bar" onClick={handler} />,

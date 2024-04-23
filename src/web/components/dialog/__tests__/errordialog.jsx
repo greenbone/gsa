@@ -15,16 +15,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
+
+import {KeyCode} from 'gmp/utils/event';
 
 import {render, fireEvent} from 'web/utils/testing';
 
 import ErrorDialog from '../errordialog';
-import {KeyCode} from 'gmp/utils/event';
 
 describe('ErrorDialog component tests', () => {
   test('should render ErrorDialog with text and title', () => {
-    const handleClose = vi.fn();
+    const handleClose = testing.fn();
 
     const {baseElement, getByTestId} = render(
       <ErrorDialog text="foo" title="bar" onClose={handleClose} />,
@@ -38,7 +39,7 @@ describe('ErrorDialog component tests', () => {
   });
 
   test('should close ErrorDialog with close button', () => {
-    const handleClose = vi.fn();
+    const handleClose = testing.fn();
 
     const {getByTestId} = render(
       <ErrorDialog title="bar" onClose={handleClose} />,
@@ -50,7 +51,7 @@ describe('ErrorDialog component tests', () => {
   });
 
   test('should close ErrorDialog with resume button', () => {
-    const handleClose = vi.fn();
+    const handleClose = testing.fn();
 
     const {baseElement} = render(
       <ErrorDialog title="bar" onClose={handleClose} />,
@@ -62,7 +63,7 @@ describe('ErrorDialog component tests', () => {
   });
 
   test('should close ErrorDialog on escape key', () => {
-    const handleClose = vi.fn();
+    const handleClose = testing.fn();
 
     const {getByRole} = render(
       <ErrorDialog title="bar" onClose={handleClose} />,

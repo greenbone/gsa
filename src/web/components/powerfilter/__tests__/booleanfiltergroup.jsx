@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -28,7 +28,7 @@ describe('BooleanFilterGroup tests', () => {
     const filter = Filter.fromString();
     const title = 'foo';
     const name = 'active';
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {element} = render(
       <BooleanFilterGroup
         filter={filter}
@@ -45,7 +45,7 @@ describe('BooleanFilterGroup tests', () => {
     const filter = Filter.fromString('active=0');
     const title = 'foo';
     const name = 'active';
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId} = render(
       <BooleanFilterGroup
         filter={filter}
@@ -65,7 +65,7 @@ describe('BooleanFilterGroup tests', () => {
     const filter = Filter.fromString('apply_overrides=0');
     const title = 'foo';
     const name = 'apply_overrides';
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId} = render(
       <BooleanFilterGroup
         filter={filter}
@@ -85,7 +85,7 @@ describe('BooleanFilterGroup tests', () => {
     const name = 'apply_overrides';
     const filter1 = Filter.fromString('apply_overrides=1');
     const filter2 = Filter.fromString('apply_overrides=0');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId, rerender} = render(
       <BooleanFilterGroup
         filter={filter1}
@@ -117,7 +117,7 @@ describe('BooleanFilterGroup tests', () => {
     const title = 'foo';
     const name = 'apply_overrides';
     const filter = Filter.fromString('apply_overrides=1');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId} = render(
       <BooleanFilterGroup
         filter={filter}
@@ -136,7 +136,7 @@ describe('BooleanFilterGroup tests', () => {
     const title = 'foo';
     const name = 'apply_overrides';
     const filter = Filter.fromString('apply_overrides=1');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {element} = render(
       <BooleanFilterGroup
         name={name}

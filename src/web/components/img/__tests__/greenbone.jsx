@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import {describe, test, expect} from '@gsa/testing';
 
 import {render} from 'web/utils/testing';
 

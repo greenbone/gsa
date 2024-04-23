@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -26,7 +26,7 @@ import Filter from 'gmp/models/filter';
 describe('SolutionTypesFilterGroup tests', () => {
   test('should render', () => {
     const filter = Filter.fromString('solution_type=All');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {element} = render(
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
@@ -36,7 +36,7 @@ describe('SolutionTypesFilterGroup tests', () => {
 
   test('should call change handler', () => {
     const filter = Filter.fromString('solution_type=Mitigation');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId} = render(
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
@@ -52,7 +52,7 @@ describe('SolutionTypesFilterGroup tests', () => {
 
   test('should check radio', () => {
     const filter = Filter.fromString('solution_type=Workaround');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId} = render(
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );
@@ -65,7 +65,7 @@ describe('SolutionTypesFilterGroup tests', () => {
   test('should uncheck radio of previous choice', () => {
     const filter1 = Filter.fromString('solution_type=Workaround');
     const filter2 = Filter.fromString('solution_type=Mitigation');
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId, rerender} = render(
       <SolutionTypesFilterGroup filter={filter1} onChange={handleChange} />,
     );
@@ -85,7 +85,7 @@ describe('SolutionTypesFilterGroup tests', () => {
 
   test('should check "All" by default', () => {
     const filter = Filter.fromString();
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
     const {getAllByTestId} = render(
       <SolutionTypesFilterGroup filter={filter} onChange={handleChange} />,
     );

@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import React from 'react';
 
 import {isFunction} from 'gmp/utils/identity';
@@ -211,7 +213,7 @@ class MenuTestComponent extends React.Component {
     const {mockBoundingClientRect, ...otherProps} = this.props;
     this.mockBoundingClientRect = mockBoundingClientRect;
     this.otherProps = otherProps;
-    this.notifyRefAssigned = vi.fn();
+    this.notifyRefAssigned = testing.fn();
   }
 
   render() {
@@ -219,7 +221,7 @@ class MenuTestComponent extends React.Component {
     if (hasTarget && this.mockBoundingClientRect) {
       const rect = this.target.current.closest('.multiselect-scroll');
       if (rect !== null) {
-        vi.spyOn(rect, 'getBoundingClientRect').mockImplementation(() => {
+        testing.spyOn(rect, 'getBoundingClientRect').mockImplementation(() => {
           return {
             top: 100,
             bottom: 50,
@@ -292,7 +294,7 @@ describe('Menu tests', () => {
   });
 
   test('should not render without target', () => {
-    const notifyRefAssigned = vi.fn();
+    const notifyRefAssigned = testing.fn();
     const {queryByTestId} = render(
       <Menu target={null} notifyRefAssigned={notifyRefAssigned} />,
     );
@@ -320,5 +322,3 @@ describe('Menu tests', () => {
     expect(menu).toMatchSnapshot();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -46,7 +46,7 @@ describe('ArrowIcon component tests', () => {
   });
 
   test('should handle click', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {element} = render(<ArrowIcon onClick={handler} />);
 
     fireEvent.click(element);

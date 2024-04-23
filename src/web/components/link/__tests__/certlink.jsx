@@ -15,15 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect} from '@gsa/testing';
 
 import {fireEvent, rendererWith} from 'web/utils/testing';
 
 import CertLink from '../certlink';
-
-setLocale('en');
 
 describe('CertLink tests', () => {
   test('should render CertLink', () => {

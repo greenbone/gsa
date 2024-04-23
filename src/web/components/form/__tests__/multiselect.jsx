@@ -15,15 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
 
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
 import MultiSelect from '../multiselect';
-
-setLocale('en');
 
 const openInputElement = element => {
   const button = element.querySelector('[type="button"]');
@@ -116,7 +113,7 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element, baseElement} = render(
       <MultiSelect items={items} onChange={onChange} />,
@@ -145,7 +142,7 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element, baseElement} = render(
       <MultiSelect name="abc" items={items} onChange={onChange} />,
@@ -244,7 +241,7 @@ describe('MultiSelect component tests', () => {
       },
     ];
 
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {getAllByTestId} = render(
       <MultiSelect items={items} value={['bar', 'foo']} onChange={onChange} />,

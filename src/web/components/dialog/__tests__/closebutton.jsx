@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -27,8 +25,6 @@ import {
 } from 'web/components/icon/withIconSize';
 
 import CloseButton from '../closebutton';
-
-setLocale('en');
 
 describe('Dialog CloseButton tests', () => {
   test('should render', () => {
@@ -41,7 +37,7 @@ describe('Dialog CloseButton tests', () => {
   });
 
   test('should call close handler', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
 
     const {element} = render(<CloseButton onClick={handler} />);
 

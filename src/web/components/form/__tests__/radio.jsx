@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -78,7 +78,7 @@ describe('Radio tests', () => {
   });
 
   test('should call change handler', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(<Radio onChange={onChange} />);
 
@@ -88,7 +88,7 @@ describe('Radio tests', () => {
   });
 
   test('should call change handler with value', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(<Radio value="foo" onChange={onChange} />);
 
@@ -98,7 +98,7 @@ describe('Radio tests', () => {
   });
 
   test('should call change handler with value and name', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(
       <Radio name="bar" value="foo" onChange={onChange} />,
@@ -110,7 +110,7 @@ describe('Radio tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(<Radio disabled={true} onChange={onChange} />);
 
@@ -127,7 +127,7 @@ describe('Radio tests', () => {
   });
 
   test('should not call change handler if already checked', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element} = render(
       <Radio checked={true} value="foo" onChange={onChange} />,

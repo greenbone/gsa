@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import {DEFAULT_ROW_HEIGHT} from 'gmp/commands/dashboards';
 
 import {
@@ -77,7 +79,7 @@ describe('convertDefaultDisplays test', () => {
 
   test('should convert array to rows', () => {
     let i = 1;
-    const uuid = vi.fn().mockImplementation(() => i++);
+    const uuid = testing.fn().mockImplementation(() => i++);
 
     const rows = [['foo', 'bar'], ['lorem']];
 

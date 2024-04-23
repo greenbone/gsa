@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {
   render,
@@ -27,8 +25,6 @@ import {
 } from 'web/utils/testing';
 
 import Select from '../select';
-
-setLocale('en');
 
 export const openSelectElement = element => {
   const openButton = getByTestId(element, 'select-open-button');
@@ -127,7 +123,7 @@ describe('Select component tests', () => {
       },
     ];
 
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element, baseElement} = render(
       <Select items={items} onChange={onChange} />,
@@ -157,7 +153,7 @@ describe('Select component tests', () => {
       },
     ];
 
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     const {element, baseElement} = render(
       <Select name="abc" items={items} onChange={onChange} />,
@@ -185,7 +181,7 @@ describe('Select component tests', () => {
       },
     ];
 
-    const onChange = vi.fn();
+    const onChange = testing.fn();
 
     // eslint-disable-next-line no-shadow
     const {baseElement, element, getByTestId} = render(

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {KeyCode} from 'gmp/utils/event';
 
@@ -32,7 +32,7 @@ describe('NumberField tests', () => {
   });
 
   test('should call change handler', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {element} = render(<NumberField value={1} onChange={onChange} />);
 
     fireEvent.change(element, {target: {value: '2'}});
@@ -42,7 +42,7 @@ describe('NumberField tests', () => {
   });
 
   test('should call change handler with value and name', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {element} = render(
       <NumberField name="foo" value={1} onChange={onChange} />,
     );
@@ -54,7 +54,7 @@ describe('NumberField tests', () => {
   });
 
   test('should not call change handler if disabled', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {element} = render(
       <NumberField disabled={true} value={1} onChange={onChange} />,
     );
@@ -66,7 +66,7 @@ describe('NumberField tests', () => {
   });
 
   test('should update value', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {element, rerender} = render(
       <NumberField value={1} onChange={onChange} />,
     );
@@ -86,7 +86,7 @@ describe('NumberField tests', () => {
   });
 
   test('should not call change handler if value > max', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {element} = render(
       <NumberField value={1} max={2} onChange={onChange} />,
     );
@@ -99,7 +99,7 @@ describe('NumberField tests', () => {
   });
 
   test('should reset to max', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {element} = render(
       <NumberField value={1} max={2} onChange={onChange} />,
     );
@@ -115,7 +115,7 @@ describe('NumberField tests', () => {
   });
 
   test('should not call change handler if value < min', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {element} = render(
       <NumberField value={1} min={1} onChange={onChange} />,
     );
@@ -128,7 +128,7 @@ describe('NumberField tests', () => {
   });
 
   test('should reset to min', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {element} = render(
       <NumberField value={2} min={1} onChange={onChange} />,
     );
@@ -146,7 +146,7 @@ describe('NumberField tests', () => {
   });
 
   test('should reset to last valid value', () => {
-    const onChange = vi.fn();
+    const onChange = testing.fn();
     const {element} = render(
       <NumberField value={2} min={1} onChange={onChange} />,
     );
@@ -164,7 +164,7 @@ describe('NumberField tests', () => {
   });
 
   test('should not allow to add letters', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {element} = render(<NumberField value={1} onKeyDown={handler} />);
 
     fireEvent.keyDown(element, {key: 'a', keyCode: 65});
@@ -173,7 +173,7 @@ describe('NumberField tests', () => {
   });
 
   test('should allow to add numbers', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {element} = render(<NumberField value={1} onKeyDown={handler} />);
 
     fireEvent.keyDown(element, {key: '1', keyCode: 49});
@@ -183,7 +183,7 @@ describe('NumberField tests', () => {
   });
 
   test('should allow point key for float numbers', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {element} = render(
       <NumberField value={1} type="float" onKeyDown={handler} />,
     );
@@ -195,7 +195,7 @@ describe('NumberField tests', () => {
   });
 
   test('should not allow point key for int numbers', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {element} = render(
       <NumberField value={1} type="int" onKeyDown={handler} />,
     );
@@ -207,7 +207,7 @@ describe('NumberField tests', () => {
   });
 
   test('should call onDownKeyPressed handler', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {element} = render(
       <NumberField value={1} onDownKeyPressed={handler} />,
     );
@@ -222,7 +222,7 @@ describe('NumberField tests', () => {
   });
 
   test('should call onUpKeyPressed handler', () => {
-    const handler = vi.fn();
+    const handler = testing.fn();
     const {element} = render(
       <NumberField value={1} onUpKeyPressed={handler} />,
     );
