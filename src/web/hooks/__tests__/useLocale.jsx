@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {describe, test, expect} from '@gsa/testing';
+
 import {setLocale} from 'web/store/usersettings/actions';
 
 import {rendererWith, screen, fireEvent} from 'web/utils/testing';

@@ -1,6 +1,3 @@
-import {getUserSettingsDefaultFilter} from '../selectors';
-import Filter from 'gmp/models/filter';
-
 /* Copyright (C) 2019-2022 Greenbone AG
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -18,6 +15,11 @@ import Filter from 'gmp/models/filter';
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect} from '@gsa/testing';
+
+import Filter from 'gmp/models/filter';
+
+import {getUserSettingsDefaultFilter} from '../selectors';
 
 describe('getUserSettingsDefaultFilter selector tests', () => {
   test('should return defaults', () => {

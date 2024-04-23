@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import Filter from 'gmp/models/filter';
 
 import {loadFunc} from '../loader';
@@ -33,12 +35,12 @@ const createState = state => ({
 
 describe('loadFunc tests', () => {
   test('should request dashboard data successfully', () => {
-    const dispatch = vi.fn();
-    const getState = vi.fn();
+    const dispatch = testing.fn();
+    const getState = testing.fn();
     const data = {
       foo: 'bar',
     };
-    const func = vi.fn().mockResolvedValue(data);
+    const func = testing.fn().mockResolvedValue(data);
 
     const id = 'a1';
     const filter = Filter.fromString('foo=bar');
@@ -77,12 +79,12 @@ describe('loadFunc tests', () => {
         },
       },
     });
-    const dispatch = vi.fn();
-    const getState = vi.fn().mockReturnValue(state);
+    const dispatch = testing.fn();
+    const getState = testing.fn().mockReturnValue(state);
     const data = {
       foo: 'bar',
     };
-    const func = vi.fn().mockResolvedValue(data);
+    const func = testing.fn().mockResolvedValue(data);
 
     const props = {
       filter,
@@ -101,9 +103,9 @@ describe('loadFunc tests', () => {
   test('should fail loading dashboard data', () => {
     const id = 'a1';
     const filter = Filter.fromString('foo=bar');
-    const dispatch = vi.fn();
-    const getState = vi.fn();
-    const func = vi.fn().mockRejectedValue('An error');
+    const dispatch = testing.fn();
+    const getState = testing.fn();
+    const func = testing.fn().mockRejectedValue('An error');
 
     const props = {
       filter,

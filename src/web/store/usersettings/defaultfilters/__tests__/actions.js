@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import {DEFAULT_FILTER_SETTINGS} from 'gmp/commands/users';
 
 import Filter from 'gmp/models/filter';
@@ -72,8 +74,8 @@ const createState = (type, state) => ({
 
 describe('loadUserSettingsDefaultFilter tests', () => {
   test('should resolve if default is loaded already', () => {
-    const getSetting = vi.fn();
-    const getFilter = vi.fn();
+    const getSetting = testing.fn();
+    const getFilter = testing.fn();
     const gmp = {
       user: {
         getSetting,
@@ -86,8 +88,8 @@ describe('loadUserSettingsDefaultFilter tests', () => {
       isLoading: true,
     });
 
-    const dispatch = vi.fn();
-    const getState = vi.fn().mockReturnValue(state);
+    const dispatch = testing.fn();
+    const getState = testing.fn().mockReturnValue(state);
 
     return loadUserSettingsDefaultFilter(gmp)('foo')(dispatch, getState).then(
       () => {
@@ -101,10 +103,10 @@ describe('loadUserSettingsDefaultFilter tests', () => {
 
   test('should dispatch success if setting is not available', () => {
     const entityType = 'task';
-    const getSetting = vi.fn().mockResolvedValue({
+    const getSetting = testing.fn().mockResolvedValue({
       data: {},
     });
-    const getFilter = vi.fn();
+    const getFilter = testing.fn();
     const gmp = {
       user: {
         getSetting,
@@ -117,8 +119,8 @@ describe('loadUserSettingsDefaultFilter tests', () => {
       isLoading: false,
     });
 
-    const dispatch = vi.fn();
-    const getState = vi.fn().mockReturnValue(state);
+    const dispatch = testing.fn();
+    const getState = testing.fn().mockReturnValue(state);
 
     return loadUserSettingsDefaultFilter(gmp)(entityType)(
       dispatch,
@@ -143,8 +145,8 @@ describe('loadUserSettingsDefaultFilter tests', () => {
 
   test('should dispatch error if loading the setting errors', () => {
     const entityType = 'task';
-    const getSetting = vi.fn().mockRejectedValue('An error');
-    const getFilter = vi.fn();
+    const getSetting = testing.fn().mockRejectedValue('An error');
+    const getFilter = testing.fn();
     const gmp = {
       user: {
         getSetting,
@@ -157,8 +159,8 @@ describe('loadUserSettingsDefaultFilter tests', () => {
       isLoading: false,
     });
 
-    const dispatch = vi.fn();
-    const getState = vi.fn().mockReturnValue(state);
+    const dispatch = testing.fn();
+    const getState = testing.fn().mockReturnValue(state);
 
     return loadUserSettingsDefaultFilter(gmp)(entityType)(
       dispatch,
@@ -184,12 +186,12 @@ describe('loadUserSettingsDefaultFilter tests', () => {
   test('should dispatch success', () => {
     const filter = Filter.fromString('foo=bar');
     const entityType = 'task';
-    const getSetting = vi.fn().mockResolvedValue({
+    const getSetting = testing.fn().mockResolvedValue({
       data: {
         value: 'foo',
       },
     });
-    const getFilter = vi.fn().mockResolvedValue({data: filter});
+    const getFilter = testing.fn().mockResolvedValue({data: filter});
     const gmp = {
       user: {
         getSetting,
@@ -202,8 +204,8 @@ describe('loadUserSettingsDefaultFilter tests', () => {
       isLoading: false,
     });
 
-    const dispatch = vi.fn();
-    const getState = vi.fn().mockReturnValue(state);
+    const dispatch = testing.fn();
+    const getState = testing.fn().mockReturnValue(state);
 
     return loadUserSettingsDefaultFilter(gmp)(entityType)(
       dispatch,
@@ -228,12 +230,12 @@ describe('loadUserSettingsDefaultFilter tests', () => {
 
   test('should dispatch error if getFilter fails', () => {
     const entityType = 'task';
-    const getSetting = vi.fn().mockResolvedValue({
+    const getSetting = testing.fn().mockResolvedValue({
       data: {
         value: 'foo',
       },
     });
-    const getFilter = vi.fn().mockRejectedValue('An error');
+    const getFilter = testing.fn().mockRejectedValue('An error');
     const gmp = {
       user: {
         getSetting,
@@ -246,8 +248,8 @@ describe('loadUserSettingsDefaultFilter tests', () => {
       isLoading: false,
     });
 
-    const dispatch = vi.fn();
-    const getState = vi.fn().mockReturnValue(state);
+    const dispatch = testing.fn();
+    const getState = testing.fn().mockReturnValue(state);
 
     return loadUserSettingsDefaultFilter(gmp)(entityType)(
       dispatch,
