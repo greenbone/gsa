@@ -15,6 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {
+  describe,
+  test,
+  expect,
+  beforeAll,
+  afterAll,
+  testing,
+} from '@gsa/testing';
+
 import DefaultTransform from '../http/transform/default';
 
 import Gmp from '../gmp';
@@ -50,7 +59,7 @@ describe('Gmp tests', () => {
 
   describe('login tests', () => {
     test('should login user', () => {
-      const request = vi.fn().mockResolvedValue({
+      const request = testing.fn().mockResolvedValue({
         data: {
           token: 'foo',
         },
@@ -76,7 +85,7 @@ describe('Gmp tests', () => {
     });
 
     test('should not login if request fails', () => {
-      const request = vi.fn().mockRejectedValue({
+      const request = testing.fn().mockRejectedValue({
         message: 'An error',
       });
       const settings = {};
@@ -131,7 +140,7 @@ describe('Gmp tests', () => {
     test('should call logout handlers if logged in', () => {
       const settings = {token: 'foo'};
       const gmp = new Gmp(settings);
-      const handler = vi.fn();
+      const handler = testing.fn();
       const unsub = gmp.subscribeToLogout(handler);
 
       expect(gmp.isLoggedIn()).toEqual(true);
@@ -147,7 +156,7 @@ describe('Gmp tests', () => {
     test('should call logout handlers if logged out', () => {
       const settings = {};
       const gmp = new Gmp(settings);
-      const handler = vi.fn();
+      const handler = testing.fn();
       const unsub = gmp.subscribeToLogout(handler);
 
       expect(gmp.isLoggedIn()).toEqual(false);
@@ -163,7 +172,7 @@ describe('Gmp tests', () => {
 
   describe('doLogout tests', () => {
     test('should logout user', () => {
-      const request = vi.fn().mockResolvedValue({
+      const request = testing.fn().mockResolvedValue({
         data: {
           token: 'foo',
         },
@@ -192,7 +201,7 @@ describe('Gmp tests', () => {
     });
 
     test('should notify handler on logout success', () => {
-      const request = vi.fn().mockResolvedValue({
+      const request = testing.fn().mockResolvedValue({
         data: {},
       });
       const settings = {token: 'foo', apiServer: 'localhost'};
@@ -201,7 +210,7 @@ describe('Gmp tests', () => {
         request,
       };
 
-      const handler = vi.fn();
+      const handler = testing.fn();
 
       const gmp = new Gmp(settings, http);
 
@@ -217,7 +226,7 @@ describe('Gmp tests', () => {
     });
 
     test('should ignore logout api call failure', () => {
-      const request = vi.fn().mockRejectedValue({
+      const request = testing.fn().mockRejectedValue({
         message: 'foo',
       });
       const settings = {
@@ -230,7 +239,7 @@ describe('Gmp tests', () => {
         request,
       };
 
-      const handler = vi.fn();
+      const handler = testing.fn();
 
       const gmp = new Gmp(settings, http);
 
@@ -246,7 +255,7 @@ describe('Gmp tests', () => {
     });
 
     test('should not do logout if not logged int', () => {
-      const request = vi.fn().mockResolvedValue({
+      const request = testing.fn().mockResolvedValue({
         data: {},
       });
       const settings = {apiServer: 'localhost'};
@@ -255,7 +264,7 @@ describe('Gmp tests', () => {
         request,
       };
 
-      const handler = vi.fn();
+      const handler = testing.fn();
 
       const gmp = new Gmp(settings, http);
 

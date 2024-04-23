@@ -15,14 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect} from '@gsa/testing';
 
 import Asset from 'gmp/models/asset';
 import Host from 'gmp/models/host';
 import {testModel} from 'gmp/models/testing';
 
 import {parseDate} from 'gmp/parser';
-
-/* eslint-disable max-len */
 
 testModel(Host, 'host');
 

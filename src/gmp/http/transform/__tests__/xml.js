@@ -15,15 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {success, rejection} from '../xml';
 
-setLocale('en');
-
 describe('xml base transform tests', () => {
   test('should call transform function', () => {
-    const fakeTransform = vi.fn().mockReturnValue('foo');
+    const fakeTransform = testing.fn().mockReturnValue('foo');
     const response = {};
     const options = {};
 
@@ -33,7 +31,7 @@ describe('xml base transform tests', () => {
   });
 
   test('should throw rejection in case of success transform errors', () => {
-    const fakeTransform = vi.fn(() => {
+    const fakeTransform = testing.fn(() => {
       throw new Error('foo');
     });
     const xhr = {};
@@ -50,9 +48,9 @@ describe('xml base transform tests', () => {
   });
 
   test('should not call rejection function for non error rejection', () => {
-    const fakeTransform = vi.fn().mockReturnValue('foo');
+    const fakeTransform = testing.fn().mockReturnValue('foo');
     const transform = rejection(fakeTransform);
-    const isError = vi.fn().mockReturnValue(false);
+    const isError = testing.fn().mockReturnValue(false);
     const errorRejection = {
       isError,
     };
@@ -63,7 +61,7 @@ describe('xml base transform tests', () => {
   });
 
   test('should transform rejection with action_result', () => {
-    const fakeTransform = vi.fn().mockReturnValue({
+    const fakeTransform = testing.fn().mockReturnValue({
       envelope: {
         action_result: {
           message: 'foo',
@@ -71,8 +69,8 @@ describe('xml base transform tests', () => {
       },
     });
     const transform = rejection(fakeTransform);
-    const isError = vi.fn().mockReturnValue(true);
-    const setMessage = vi.fn(() => errorRejection);
+    const isError = testing.fn().mockReturnValue(true);
+    const setMessage = testing.fn(() => errorRejection);
     const errorRejection = {
       isError,
       setMessage,
@@ -85,7 +83,7 @@ describe('xml base transform tests', () => {
   });
 
   test('should transform rejection with gsad_response', () => {
-    const fakeTransform = vi.fn().mockReturnValue({
+    const fakeTransform = testing.fn().mockReturnValue({
       envelope: {
         action_result: {
           message: 'foo',
@@ -96,8 +94,8 @@ describe('xml base transform tests', () => {
       },
     });
     const transform = rejection(fakeTransform);
-    const isError = vi.fn().mockReturnValue(true);
-    const setMessage = vi.fn(() => errorRejection);
+    const isError = testing.fn().mockReturnValue(true);
+    const setMessage = testing.fn(() => errorRejection);
     const errorRejection = {
       isError,
       setMessage,
@@ -110,11 +108,11 @@ describe('xml base transform tests', () => {
   });
 
   test('should transform rejection with unknown error', () => {
-    const fakeTransform = vi.fn().mockReturnValue({
+    const fakeTransform = testing.fn().mockReturnValue({
       envelope: {},
     });
     const transform = rejection(fakeTransform);
-    const isError = vi.fn().mockReturnValue(true);
+    const isError = testing.fn().mockReturnValue(true);
     const errorRejection = {
       isError,
     };

@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable max-len */
+import {describe, test, expect} from '@gsa/testing';
 
 import CertBundAdv from 'gmp/models/certbund';
 import Info from 'gmp/models/info';

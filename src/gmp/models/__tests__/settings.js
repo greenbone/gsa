@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect} from '@gsa/testing';
 
 import Settings from 'gmp/models/settings';
 
@@ -34,7 +35,10 @@ describe('Settings model tests', () => {
     settings.set('foo', 'bar');
     settings.set('lorem', 'ipsum');
 
-    expect(settings.getEntries()).toEqual([['foo', 'bar'], ['lorem', 'ipsum']]);
+    expect(settings.getEntries()).toEqual([
+      ['foo', 'bar'],
+      ['lorem', 'ipsum'],
+    ]);
   });
 
   test('should not have non existing key', () => {

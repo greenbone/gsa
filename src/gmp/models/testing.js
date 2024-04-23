@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable max-len */
+import {test, expect} from '@gsa/testing';
 
 import {isDate} from 'gmp/models/date';
 import {parseDate, NO_VALUE, YES_VALUE} from 'gmp/parser';

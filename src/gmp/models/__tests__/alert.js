@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {describe, test, expect} from '@gsa/testing';
+
 import Model from 'gmp/model';
 import Alert, {
   EVENT_TYPE_TASK_RUN_STATUS_CHANGED,

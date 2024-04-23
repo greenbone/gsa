@@ -15,11 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import {DEFAULT_ROW_HEIGHT, createDisplay, createRow} from '../dashboards';
 
 describe('createRow tests', () => {
   test('should create row with default height', () => {
-    const uuid = vi.fn().mockReturnValue(1);
+    const uuid = testing.fn().mockReturnValue(1);
     expect(createRow(['foo', 'bar'], undefined, uuid)).toEqual({
       id: 1,
       items: ['foo', 'bar'],
@@ -29,7 +31,7 @@ describe('createRow tests', () => {
   });
 
   test('should create row with height', () => {
-    const uuid = vi.fn().mockReturnValue(1);
+    const uuid = testing.fn().mockReturnValue(1);
     expect(createRow(['foo', 'bar'], 100, uuid)).toEqual({
       id: 1,
       items: ['foo', 'bar'],
@@ -41,7 +43,7 @@ describe('createRow tests', () => {
 
 describe('createDisplay tests', () => {
   test('should create a new item with empty props', () => {
-    const uuid = vi.fn().mockReturnValue(1);
+    const uuid = testing.fn().mockReturnValue(1);
     expect(createDisplay('foo1', undefined, uuid)).toEqual({
       id: 1,
       displayId: 'foo1',
@@ -50,7 +52,7 @@ describe('createDisplay tests', () => {
   });
 
   test('should create a new item with props', () => {
-    const uuid = vi.fn().mockReturnValue(1);
+    const uuid = testing.fn().mockReturnValue(1);
     expect(createDisplay('foo1', {foo: 'bar'}, uuid)).toEqual({
       id: 1,
       displayId: 'foo1',

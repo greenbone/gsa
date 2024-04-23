@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* eslint-disable max-len */
+import {describe, test, expect} from '@gsa/testing';
 
 import Model from 'gmp/model';
 import Permission from 'gmp/models/permission';

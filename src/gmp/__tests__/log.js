@@ -15,6 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {
+  describe,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+  testing,
+} from '@gsa/testing';
+
 import {RootLogger, DEFAULT_LOG_LEVEL, LogLevels} from '../log.js';
 import {isFunction} from 'util';
 
@@ -27,11 +36,11 @@ describe('log tests', () => {
   beforeEach(() => {
     origConsole = global.console;
     testConsole = {
-      error: vi.fn(),
-      warn: vi.fn(),
-      info: vi.fn(),
-      debug: vi.fn(),
-      trace: vi.fn(),
+      error: testing.fn(),
+      warn: testing.fn(),
+      info: testing.fn(),
+      debug: testing.fn(),
+      trace: testing.fn(),
     };
 
     global.console = testConsole;

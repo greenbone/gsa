@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import {isFunction} from 'gmp/utils/identity';
 
 import {getLocale as getDateLocale} from '../date';
@@ -47,7 +49,7 @@ describe('setLocale tests', () => {
   });
 
   test('should notify language change listeners', () => {
-    const callback = vi.fn();
+    const callback = testing.fn();
 
     setLocale('en');
     expect(getLocale()).toEqual('en');
@@ -61,7 +63,7 @@ describe('setLocale tests', () => {
   });
 
   test('should not be notify when unsubscribed', () => {
-    const callback = vi.fn();
+    const callback = testing.fn();
 
     setLocale('en');
     expect(getLocale()).toEqual('en');

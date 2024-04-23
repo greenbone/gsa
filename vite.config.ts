@@ -37,6 +37,10 @@ export default defineConfig({
         find: 'version',
         replacement: path.resolve(projectRootDir, 'src', 'version.js'),
       },
+      {
+        find: '@gsa/testing',
+        replacement: path.resolve(projectRootDir, 'src', 'testing.js'),
+      },
     ],
   },
   server: {

@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+import {testing} from '@gsa/testing';
+
 import Response from 'gmp/http/response';
 
 const entitiesRange = {
@@ -69,13 +72,15 @@ export const createAggregatesResponse = (data = {}) =>
   });
 
 export const createHttp = response => ({
-  request: vi.fn().mockReturnValue(Promise.resolve(response)),
+  request: testing.fn().mockReturnValue(Promise.resolve(response)),
 });
 
 export const createHttpMany = responses => {
   let i = 0;
   return {
-    request: vi.fn().mockImplementation(() => Promise.resolve(responses[i++])),
+    request: testing
+      .fn()
+      .mockImplementation(() => Promise.resolve(responses[i++])),
   };
 };
 

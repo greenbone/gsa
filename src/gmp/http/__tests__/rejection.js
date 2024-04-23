@@ -15,11 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect} from '@gsa/testing';
 
 import Rejection from '../rejection';
-
-setLocale('en');
 
 describe('Rejection tests', () => {
   test('should create error rejection by default', () => {

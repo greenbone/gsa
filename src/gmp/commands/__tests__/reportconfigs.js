@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect} from '@gsa/testing';
+
 import {createHttp, createEntitiesResponse} from '../testing';
 import {ReportConfigsCommand} from '../reportconfigs';
 import {ALL_FILTER} from 'gmp/models/filter';

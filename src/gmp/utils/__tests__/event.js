@@ -15,22 +15,24 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import {debounce, throttleAnimation} from '../event';
 
 // @vitest-environment jsdom
 
 describe('debounce function tests', () => {
-  vi.useFakeTimers();
+  testing.useFakeTimers();
 
   test('should debounce function', () => {
-    const callback = vi.fn();
+    const callback = testing.fn();
     const func = debounce(callback);
 
     func(1);
     func(2);
     func(3);
 
-    vi.runAllTimers();
+    testing.runAllTimers();
 
     expect(callback).toBeCalled();
     expect(callback.mock.calls.length).toBe(1);
@@ -38,7 +40,7 @@ describe('debounce function tests', () => {
   });
 
   test('should run callback immediately', () => {
-    const callback = vi.fn();
+    const callback = testing.fn();
     const func = debounce(callback, 10000, true);
 
     func(1);
@@ -49,7 +51,7 @@ describe('debounce function tests', () => {
     expect(callback.mock.calls.length).toBe(1);
     expect(callback.mock.calls[0][0]).toBe(1);
 
-    vi.runAllTimers();
+    testing.runAllTimers();
 
     expect(callback.mock.calls.length).toBe(2);
     expect(callback.mock.calls[1][0]).toBe(3);
@@ -57,24 +59,22 @@ describe('debounce function tests', () => {
 });
 
 describe('throttleAnimation function tests', () => {
-  vi.useFakeTimers();
+  testing.useFakeTimers();
 
   test('should throttle running callback', () => {
     global.requestAnimationFrame = cb => setTimeout(cb, 0);
 
-    const callback = vi.fn();
+    const callback = testing.fn();
     const func = throttleAnimation(callback);
 
     func(1);
     func(2);
     func(3);
 
-    vi.runAllTimers();
+    testing.runAllTimers();
 
     expect(callback).toBeCalled();
     expect(callback.mock.calls.length).toBe(1);
     expect(callback.mock.calls[0][0]).toBe(1);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:
