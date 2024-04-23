@@ -16,14 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {testing, beforeEach, expect} from '@gsa/testing';
+
 import '../setupTests';
 
-// register cleanup handlers. requires globals to be set in vitest config
-import '@testing-library/react';
 // setup additional matchers for vitest
 import '@testing-library/jest-dom/vitest';
+
+global.beforeEach = beforeEach;
+global.expect = expect;
 
 // Avoid "Error: Not implemented: navigation (except hash changes)"
 // It is caused by clicking on <a> elements in tests
 // https://stackoverflow.com/a/68038982/11044073
-HTMLAnchorElement.prototype.click = vi.fn();
+HTMLAnchorElement.prototype.click = testing.fn();
