@@ -4,7 +4,7 @@ export default defineWorkspace([
   {
     extends: './vite.config.ts',
     test: {
-      name: 'jsdom',
+      name: 'web',
       environment: 'jsdom',
       globals: true,
       setupFiles: './src/web/setupTests.js',
@@ -17,7 +17,7 @@ export default defineWorkspace([
   {
     extends: './vite.config.ts',
     test: {
-      name: 'node',
+      name: 'gmp',
       environment: 'node',
       setupFiles: './src/gmp/setupTests.js',
       include: [
