@@ -15,6 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {
+  describe,
+  test,
+  expect,
+  beforeAll,
+  afterAll,
+  testing,
+} from '@gsa/testing';
+
 import GmpSettings, {
   DEFAULT_MANUAL_URL,
   DEFAULT_RELOAD_INTERVAL,
@@ -29,8 +38,8 @@ import GmpSettings, {
 const createStorage = state => {
   const store = {
     ...state,
-    setItem: vi.fn((name, value) => (store[name] = '' + value)),
-    removeItem: vi.fn(name => delete store[name]),
+    setItem: testing.fn((name, value) => (store[name] = '' + value)),
+    removeItem: testing.fn(name => delete store[name]),
   };
   return store;
 };

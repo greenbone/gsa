@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import {isFunction} from '../../utils/identity';
 
 import LanguageDetector from '../detector';
@@ -31,11 +33,11 @@ describe('LanguageDetector tests', () => {
 
   test('should detect language from store', () => {
     const languageUtils = {
-      formatLanguageCode: vi.fn().mockReturnValue('foo'),
-      isSupportedCode: vi.fn().mockReturnValue(true),
+      formatLanguageCode: testing.fn().mockReturnValue('foo'),
+      isSupportedCode: testing.fn().mockReturnValue(true),
     };
     const storage = {};
-    const locale = vi.fn().mockReturnValue('foo');
+    const locale = testing.fn().mockReturnValue('foo');
     Object.defineProperty(storage, 'locale', {
       get: locale,
     });
@@ -52,11 +54,11 @@ describe('LanguageDetector tests', () => {
 
   test('should return fallback language', () => {
     const languageUtils = {
-      formatLanguageCode: vi.fn().mockReturnValue('foo'),
-      isSupportedCode: vi.fn().mockReturnValue(false),
+      formatLanguageCode: testing.fn().mockReturnValue('foo'),
+      isSupportedCode: testing.fn().mockReturnValue(false),
     };
     const storage = {};
-    const locale = vi.fn().mockReturnValue('foo');
+    const locale = testing.fn().mockReturnValue('foo');
     Object.defineProperty(storage, 'locale', {
       get: locale,
     });
@@ -76,8 +78,8 @@ describe('LanguageDetector tests', () => {
     global.navigator = {language: 'en-US'};
 
     const languageUtils = {
-      formatLanguageCode: vi.fn().mockImplementation(l => l),
-      isSupportedCode: vi.fn().mockReturnValue(true),
+      formatLanguageCode: testing.fn().mockImplementation(l => l),
+      isSupportedCode: testing.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
@@ -96,14 +98,14 @@ describe('LanguageDetector tests', () => {
   test('should return languages from fake navigator', () => {
     const storage = {};
     const languageUtils = {
-      formatLanguageCode: vi.fn().mockImplementation(l => l),
-      isSupportedCode: vi.fn().mockReturnValue(true),
+      formatLanguageCode: testing.fn().mockImplementation(l => l),
+      isSupportedCode: testing.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
 
     const navigator = {};
-    const languages = vi.fn().mockReturnValue(['lorem', 'ipsum']);
+    const languages = testing.fn().mockReturnValue(['lorem', 'ipsum']);
     Object.defineProperty(navigator, 'languages', {
       get: languages,
     });
@@ -121,14 +123,14 @@ describe('LanguageDetector tests', () => {
   test('should return language from fake navigator', () => {
     const storage = {};
     const languageUtils = {
-      formatLanguageCode: vi.fn().mockImplementation(l => l),
-      isSupportedCode: vi.fn().mockReturnValue(true),
+      formatLanguageCode: testing.fn().mockImplementation(l => l),
+      isSupportedCode: testing.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
 
     const navigator = {};
-    const language = vi.fn().mockReturnValue('lorem');
+    const language = testing.fn().mockReturnValue('lorem');
     Object.defineProperty(navigator, 'language', {
       get: language,
     });
@@ -146,14 +148,14 @@ describe('LanguageDetector tests', () => {
   test('should return userLanguage from fake navigator', () => {
     const storage = {};
     const languageUtils = {
-      formatLanguageCode: vi.fn().mockImplementation(l => l),
-      isSupportedCode: vi.fn().mockReturnValue(true),
+      formatLanguageCode: testing.fn().mockImplementation(l => l),
+      isSupportedCode: testing.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();
 
     const navigator = {};
-    const userLanguage = vi.fn().mockReturnValue('lorem');
+    const userLanguage = testing.fn().mockReturnValue('lorem');
     Object.defineProperty(navigator, 'userLanguage', {
       get: userLanguage,
     });
@@ -171,8 +173,8 @@ describe('LanguageDetector tests', () => {
   test('should return fallback when navigator is not available', () => {
     const storage = {};
     const languageUtils = {
-      formatLanguageCode: vi.fn().mockImplementation(l => l),
-      isSupportedCode: vi.fn().mockReturnValue(true),
+      formatLanguageCode: testing.fn().mockImplementation(l => l),
+      isSupportedCode: testing.fn().mockReturnValue(true),
     };
 
     const detector = new LanguageDetector();

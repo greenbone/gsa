@@ -15,9 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect} from '@gsa/testing';
+
 import {UserCommand, transformSettingName} from '../users';
 
 import {createResponse, createHttp} from '../testing';
+
 describe('UserCommand tests', () => {
   test('should parse auth settinngs in currentAuthSettings', () => {
     const response = createResponse({

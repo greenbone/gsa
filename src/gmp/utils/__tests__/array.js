@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import {arraysEqual, map, forEach, filter, first} from '../array';
 
 describe('arrayEquals function test', () => {
@@ -137,7 +139,7 @@ describe('for_each function tests', () => {
   });
 
   test('should iterate over array', () => {
-    const callback = vi.fn();
+    const callback = testing.fn();
     forEach([1, 2, 3], callback);
 
     expect(callback).toBeCalled();
@@ -148,7 +150,7 @@ describe('for_each function tests', () => {
   });
 
   test('should iterate over single item', () => {
-    const callback = vi.fn();
+    const callback = testing.fn();
     forEach(2, callback);
 
     expect(callback).toBeCalled();
@@ -157,7 +159,7 @@ describe('for_each function tests', () => {
   });
 
   test('should iterate over Set', () => {
-    const callback = vi.fn();
+    const callback = testing.fn();
     forEach(new Set([1, 2, 3]), callback);
 
     expect(callback).toBeCalled();

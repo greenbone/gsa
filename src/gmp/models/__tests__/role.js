@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {describe, test, expect} from '@gsa/testing';
+
 import Role from '../role';
 import {testModel} from 'gmp/models/testing';
 

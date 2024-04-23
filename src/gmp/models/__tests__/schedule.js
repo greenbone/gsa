@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable max-len */
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Model from 'gmp/model';
 import Schedule from 'gmp/models/schedule';
@@ -64,7 +64,7 @@ describe('Schedule model tests', () => {
   test('should handle invalid ical data safely', () => {
     /* eslint-disable no-console */
     const consoleError = console.log;
-    const errorLog = vi.fn();
+    const errorLog = testing.fn();
 
     console.error = errorLog;
 

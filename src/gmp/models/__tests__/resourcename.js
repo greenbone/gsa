@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import {describe, test, expect} from '@gsa/testing';
+
 import {ResourceName} from '../resourcename';
 
 describe('ResourceName tests', () => {

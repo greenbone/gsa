@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import transform from '../fastxml';
 
 const createEnvelopedXml = xmlStr =>
@@ -44,8 +46,8 @@ describe('fastxml transform tests', () => {
     const xmlStr = createEnvelopedXml(
       '<foo>foo&quot;&lt;&gt;&amp;&apos;&#x2F;&#x5C;</foo>',
     );
-    const plainData = vi.fn().mockReturnValue(xmlStr);
-    const setData = vi.fn().mockReturnValue('foo');
+    const plainData = testing.fn().mockReturnValue(xmlStr);
+    const setData = testing.fn().mockReturnValue('foo');
     const response = {
       plainData,
       set: setData,
@@ -65,8 +67,8 @@ describe('fastxml transform tests', () => {
     const xmlStr = createEnvelopedXml(
       '<foo bar="foo&quot;&lt;&gt;&amp;&apos;&#x2F;&#x5C;"></foo>',
     );
-    const plainData = vi.fn().mockReturnValue(xmlStr);
-    const setData = vi.fn().mockReturnValue('foo');
+    const plainData = testing.fn().mockReturnValue(xmlStr);
+    const setData = testing.fn().mockReturnValue('foo');
     const response = {
       plainData,
       set: setData,
@@ -85,8 +87,8 @@ describe('fastxml transform tests', () => {
   });
 
   test('should create a rejection on parser errors', () => {
-    const plainData = vi.fn().mockReturnValue({foo: 'bar'});
-    const setData = vi.fn().mockReturnValue('foo');
+    const plainData = testing.fn().mockReturnValue({foo: 'bar'});
+    const setData = testing.fn().mockReturnValue('foo');
     const response = {
       plainData,
       set: setData,
@@ -100,9 +102,9 @@ describe('fastxml transform tests', () => {
   test('should transform rejection with action_result', () => {
     const xmlStr =
       '<envelope><action_result><message>foo</message></action_result></envelope>';
-    const isError = vi.fn().mockReturnValue(true);
-    const setMessage = vi.fn(() => errorRejection);
-    const plainData = vi.fn().mockReturnValue(xmlStr);
+    const isError = testing.fn().mockReturnValue(true);
+    const setMessage = testing.fn(() => errorRejection);
+    const plainData = testing.fn().mockReturnValue(xmlStr);
     const errorRejection = {
       isError,
       setMessage,
@@ -119,9 +121,9 @@ describe('fastxml transform tests', () => {
     const xmlStr =
       '<envelope><action_result><message>foo</message></action_result>' +
       '<gsad_response><message>bar</message></gsad_response></envelope>';
-    const isError = vi.fn().mockReturnValue(true);
-    const setMessage = vi.fn(() => errorRejection);
-    const plainData = vi.fn().mockReturnValue(xmlStr);
+    const isError = testing.fn().mockReturnValue(true);
+    const setMessage = testing.fn(() => errorRejection);
+    const plainData = testing.fn().mockReturnValue(xmlStr);
     const errorRejection = {
       isError,
       setMessage,
