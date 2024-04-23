@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import {
   loadingActions,
   USER_SETTINGS_DEFAULTS_LOADING_REQUEST,
@@ -53,8 +55,8 @@ describe('UserSettings Defaults action tests', () => {
 
   describe('loadUserSettingDefaults tests', () => {
     test('should not dispatch an action if isLoading is true', () => {
-      const dispatch = vi.fn();
-      const getState = vi.fn().mockReturnValue({
+      const dispatch = testing.fn();
+      const getState = testing.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: true,
@@ -62,7 +64,7 @@ describe('UserSettings Defaults action tests', () => {
         },
       });
 
-      const currentSettings = vi.fn().mockReturnValue(
+      const currentSettings = testing.fn().mockReturnValue(
         Promise.resolve({
           foo: 'bar',
         }),
@@ -83,8 +85,8 @@ describe('UserSettings Defaults action tests', () => {
     });
 
     test('should dispatch request and success actions', () => {
-      const dispatch = vi.fn();
-      const getState = vi.fn().mockReturnValue({
+      const dispatch = testing.fn();
+      const getState = testing.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: false,
@@ -93,7 +95,9 @@ describe('UserSettings Defaults action tests', () => {
       });
 
       const data = {foo: 'bar'};
-      const currentSettings = vi.fn().mockReturnValue(Promise.resolve({data}));
+      const currentSettings = testing
+        .fn()
+        .mockReturnValue(Promise.resolve({data}));
 
       const gmp = {
         user: {
@@ -122,8 +126,8 @@ describe('UserSettings Defaults action tests', () => {
     });
 
     test('should dispatch request and error actions', () => {
-      const dispatch = vi.fn();
-      const getState = vi.fn().mockReturnValue({
+      const dispatch = testing.fn();
+      const getState = testing.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: false,
@@ -131,7 +135,7 @@ describe('UserSettings Defaults action tests', () => {
         },
       });
 
-      const currentSettings = vi
+      const currentSettings = testing
         .fn()
         .mockReturnValue(Promise.reject('An Error'));
 
@@ -164,8 +168,8 @@ describe('UserSettings Defaults action tests', () => {
 
   describe('loadUserSettingDefault tests', () => {
     test('should not dispatch an action if isLoading is true', () => {
-      const dispatch = vi.fn();
-      const getState = vi.fn().mockReturnValue({
+      const dispatch = testing.fn();
+      const getState = testing.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: true,
@@ -173,7 +177,7 @@ describe('UserSettings Defaults action tests', () => {
         },
       });
 
-      const getSetting = vi.fn().mockReturnValue(
+      const getSetting = testing.fn().mockReturnValue(
         Promise.resolve({
           id: '42',
           name: 'Rows Per Page',
@@ -195,8 +199,8 @@ describe('UserSettings Defaults action tests', () => {
     });
 
     test('should dispatch request and success actions', () => {
-      const dispatch = vi.fn();
-      const getState = vi.fn().mockReturnValue({
+      const dispatch = testing.fn();
+      const getState = testing.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: false,
@@ -205,7 +209,7 @@ describe('UserSettings Defaults action tests', () => {
       });
 
       const data = {_id: '123', name: 'Rows Per Page', value: 42};
-      const getSetting = vi.fn().mockReturnValue(Promise.resolve({data}));
+      const getSetting = testing.fn().mockReturnValue(Promise.resolve({data}));
 
       const gmp = {
         user: {
@@ -233,8 +237,8 @@ describe('UserSettings Defaults action tests', () => {
     });
 
     test('should dispatch request and error actions', () => {
-      const dispatch = vi.fn();
-      const getState = vi.fn().mockReturnValue({
+      const dispatch = testing.fn();
+      const getState = testing.fn().mockReturnValue({
         userSettings: {
           defaults: {
             isLoading: false,
@@ -242,7 +246,9 @@ describe('UserSettings Defaults action tests', () => {
         },
       });
 
-      const getSetting = vi.fn().mockReturnValue(Promise.reject('An Error'));
+      const getSetting = testing
+        .fn()
+        .mockReturnValue(Promise.reject('An Error'));
 
       const gmp = {
         user: {
@@ -271,5 +277,3 @@ describe('UserSettings Defaults action tests', () => {
     });
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

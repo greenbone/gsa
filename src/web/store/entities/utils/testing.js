@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import {isFunction} from 'gmp/utils/identity';
 import {pluralizeType} from 'gmp/utils/entitytype';
 
@@ -226,11 +228,11 @@ export const testLoadEntities = (entityType, loadEntities) => {
           [filterIdentifier(filter)]: false,
         },
       });
-      const getState = vi.fn().mockReturnValue(rootState);
+      const getState = testing.fn().mockReturnValue(rootState);
 
-      const dispatch = vi.fn();
+      const dispatch = testing.fn();
 
-      const get = vi.fn().mockReturnValue(
+      const get = testing.fn().mockReturnValue(
         Promise.resolve({
           data: 'foo',
           meta: {
@@ -281,11 +283,11 @@ export const testLoadEntities = (entityType, loadEntities) => {
         },
       });
 
-      const getState = vi.fn().mockReturnValue(rootState);
+      const getState = testing.fn().mockReturnValue(rootState);
 
-      const dispatch = vi.fn();
+      const dispatch = testing.fn();
 
-      const get = vi.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
+      const get = testing.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
 
       const gmp = {
         [pluralizeType(entityType)]: {
@@ -308,11 +310,11 @@ export const testLoadEntities = (entityType, loadEntities) => {
         },
       });
 
-      const getState = vi.fn().mockReturnValue(rootState);
+      const getState = testing.fn().mockReturnValue(rootState);
 
-      const dispatch = vi.fn();
+      const dispatch = testing.fn();
 
-      const get = vi.fn().mockReturnValue(Promise.reject('AnError'));
+      const get = testing.fn().mockReturnValue(Promise.reject('AnError'));
 
       const gmp = {
         [pluralizeType(entityType)]: {
@@ -456,11 +458,11 @@ export const testLoadEntity = (entityType, loadEntity) => {
           [id]: false,
         },
       });
-      const getState = vi.fn().mockReturnValue(rootState);
+      const getState = testing.fn().mockReturnValue(rootState);
 
-      const dispatch = vi.fn();
+      const dispatch = testing.fn();
 
-      const get = vi.fn().mockReturnValue(
+      const get = testing.fn().mockReturnValue(
         Promise.resolve({
           data: {foo: 'bar'},
         }),
@@ -505,11 +507,11 @@ export const testLoadEntity = (entityType, loadEntity) => {
         },
       });
 
-      const getState = vi.fn().mockReturnValue(rootState);
+      const getState = testing.fn().mockReturnValue(rootState);
 
-      const dispatch = vi.fn();
+      const dispatch = testing.fn();
 
-      const get = vi.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
+      const get = testing.fn().mockReturnValue(Promise.resolve([{id: 'foo'}]));
 
       const gmp = {
         [entityType]: {
@@ -532,11 +534,11 @@ export const testLoadEntity = (entityType, loadEntity) => {
         },
       });
 
-      const getState = vi.fn().mockReturnValue(rootState);
+      const getState = testing.fn().mockReturnValue(rootState);
 
-      const dispatch = vi.fn();
+      const dispatch = testing.fn();
 
-      const get = vi.fn().mockReturnValue(Promise.reject('An Error'));
+      const get = testing.fn().mockReturnValue(Promise.reject('An Error'));
 
       const gmp = {
         [entityType]: {

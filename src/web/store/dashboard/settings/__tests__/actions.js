@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* eslint-disable max-len */
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {isFunction} from 'gmp/utils/identity';
 
@@ -189,15 +188,15 @@ describe('resetDashboardSettingsError tests', () => {
 describe('loadSettings tests', () => {
   test('should load settings successfully', () => {
     const id = 'a1';
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
     const rootState = createRootState();
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
     const data = {
       foo: 'bar',
     };
 
-    const getSetting = vi.fn().mockReturnValue(Promise.resolve({data}));
+    const getSetting = testing.fn().mockReturnValue(Promise.resolve({data}));
 
     const gmp = {
       dashboard: {
@@ -234,19 +233,19 @@ describe('loadSettings tests', () => {
 
   test('should not load settings if isLoading is true', () => {
     const id = 'a1';
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
     const rootState = createRootState({
       isLoading: {
         [id]: true,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
     const data = {
       foo: 'bar',
     };
 
-    const getSetting = vi.fn().mockReturnValue(Promise.resolve({data}));
+    const getSetting = testing.fn().mockReturnValue(Promise.resolve({data}));
 
     const gmp = {
       dashboard: {
@@ -267,13 +266,13 @@ describe('loadSettings tests', () => {
 
   test('should fail loading settings with an error', () => {
     const id = 'a1';
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
     const rootState = createRootState();
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
     const error = 'An error';
 
-    const getSetting = vi.fn().mockReturnValue(Promise.reject(error));
+    const getSetting = testing.fn().mockReturnValue(Promise.reject(error));
 
     const gmp = {
       dashboard: {
@@ -309,15 +308,15 @@ describe('loadSettings tests', () => {
 describe('saveSettings tests', () => {
   test('should save settings successfully', () => {
     const id = 'a1';
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
     const rootState = createRootState();
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
     const settings = {
       foo: 'bar',
     };
 
-    const saveSettingsPromise = vi.fn().mockReturnValue(Promise.resolve());
+    const saveSettingsPromise = testing.fn().mockReturnValue(Promise.resolve());
 
     const gmp = {
       dashboard: {
@@ -344,16 +343,18 @@ describe('saveSettings tests', () => {
 
   test('should fail saving settings', () => {
     const id = 'a1';
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
     const rootState = createRootState();
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
     const settings = {
       foo: 'bar',
     };
 
     const error = 'An error';
-    const saveSettingsPromise = vi.fn().mockReturnValue(Promise.reject(error));
+    const saveSettingsPromise = testing
+      .fn()
+      .mockReturnValue(Promise.reject(error));
 
     const gmp = {
       dashboard: {
@@ -387,15 +388,15 @@ describe('resetSettings tests', () => {
       foo: 'bar',
     };
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
     const rootState = createRootState({
       defaults: {
         [id]: settings,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const saveSettingsPromise = vi.fn().mockReturnValue(Promise.resolve());
+    const saveSettingsPromise = testing.fn().mockReturnValue(Promise.resolve());
 
     const gmp = {
       dashboard: {
@@ -426,16 +427,18 @@ describe('resetSettings tests', () => {
       foo: 'bar',
     };
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
     const rootState = createRootState({
       defaults: {
         [id]: settings,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
     const error = 'An error';
-    const saveSettingsPromise = vi.fn().mockReturnValue(Promise.reject(error));
+    const saveSettingsPromise = testing
+      .fn()
+      .mockReturnValue(Promise.reject(error));
 
     const gmp = {
       dashboard: {

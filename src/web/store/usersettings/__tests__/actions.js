@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import moment from 'gmp/models/date';
 
@@ -92,9 +93,9 @@ describe('settings actions tests', () => {
   });
 
   test('should update timezone', () => {
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
     const gmp = {
-      setTimezone: vi.fn(),
+      setTimezone: testing.fn(),
     };
     return updateTimezone(gmp)('cet')(dispatch).then(() => {
       expect(dispatch).toBeCalledWith({
@@ -106,10 +107,10 @@ describe('settings actions tests', () => {
   });
 
   test('should renew the session timeout', () => {
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
     const sessionTimeout = moment().add(1, 'day');
 
-    const renewSession = vi.fn().mockReturnValue(
+    const renewSession = testing.fn().mockReturnValue(
       Promise.resolve({
         data: sessionTimeout,
       }),
@@ -131,10 +132,10 @@ describe('settings actions tests', () => {
 
   describe('loadReportComposerDefaults tests', () => {
     test('should dispatch success actions', () => {
-      const dispatch = vi.fn();
+      const dispatch = testing.fn();
 
       const data = {foo: 'bar'};
-      const getReportComposerDefaults = vi
+      const getReportComposerDefaults = testing
         .fn()
         .mockReturnValue(Promise.resolve({data}));
 
@@ -158,10 +159,10 @@ describe('settings actions tests', () => {
 
   describe('saveReportComposerDefaults tests', () => {
     test('should dispatch success actions', () => {
-      const dispatch = vi.fn();
+      const dispatch = testing.fn();
 
       const data = {foo: 'bar'};
-      const saveReportComposerDefaultsMock = vi
+      const saveReportComposerDefaultsMock = testing
         .fn()
         .mockReturnValue(Promise.resolve({data}));
 
@@ -185,5 +186,3 @@ describe('settings actions tests', () => {
     });
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

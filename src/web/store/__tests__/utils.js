@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import Filter from 'gmp/models/filter';
 
 import {combineReducers, filterIdentifier} from 'web/store/utils';
@@ -22,8 +24,8 @@ import {combineReducers, filterIdentifier} from 'web/store/utils';
 describe('store utils module tests', () => {
   describe('combineReducer tests', () => {
     test('should create a combined reducer', () => {
-      const foo = vi.fn();
-      const bar = vi.fn();
+      const foo = testing.fn();
+      const bar = testing.fn();
       const action = {type: 'ipsum'};
 
       const reducer = combineReducers({
@@ -37,8 +39,8 @@ describe('store utils module tests', () => {
     });
 
     test('should pass state[reducerName] to reducers', () => {
-      const foo = vi.fn();
-      const bar = vi.fn();
+      const foo = testing.fn();
+      const bar = testing.fn();
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,
@@ -56,8 +58,8 @@ describe('store utils module tests', () => {
     });
 
     test('should combine state from reducers', () => {
-      const foo = vi.fn().mockReturnValue(99);
-      const bar = vi.fn().mockReturnValue(100);
+      const foo = testing.fn().mockReturnValue(99);
+      const bar = testing.fn().mockReturnValue(100);
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,
@@ -78,8 +80,8 @@ describe('store utils module tests', () => {
     });
 
     test('should drop unknown props from state', () => {
-      const foo = vi.fn().mockReturnValue(99);
-      const bar = vi.fn().mockReturnValue(100);
+      const foo = testing.fn().mockReturnValue(99);
+      const bar = testing.fn().mockReturnValue(100);
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,
@@ -101,8 +103,8 @@ describe('store utils module tests', () => {
     });
 
     test('should allow to return undefined from reducers', () => {
-      const foo = vi.fn().mockReturnValue(undefined);
-      const bar = vi.fn().mockReturnValue(undefined);
+      const foo = testing.fn().mockReturnValue(undefined);
+      const bar = testing.fn().mockReturnValue(undefined);
       const action = {type: 'ipsum'};
       const state = {
         foo: 1,
@@ -135,5 +137,3 @@ describe('store utils module tests', () => {
     });
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

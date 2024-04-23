@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Filter from 'gmp/models/filter';
 
@@ -46,11 +47,11 @@ describe('loadReport function tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -90,11 +91,11 @@ describe('loadReport function tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -139,11 +140,11 @@ describe('loadReport function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue([{id: 'foo'}]);
+    const get = testing.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       report: {
@@ -168,11 +169,11 @@ describe('loadReport function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockRejectedValue('An Error');
+    const get = testing.fn().mockRejectedValue('An Error');
 
     const gmp = {
       report: {
@@ -209,11 +210,11 @@ describe('report loadReportIfNeeded function tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue({data: {foo: 'bar'}});
+    const get = testing.fn().mockResolvedValue({data: {foo: 'bar'}});
 
     const gmp = {
       report: {
@@ -255,11 +256,11 @@ describe('report loadReportIfNeeded function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue([{id: 'foo'}]);
+    const get = testing.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       report: {
@@ -283,11 +284,11 @@ describe('report loadReportIfNeeded function tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue({data: {foo: 'bar'}});
+    const get = testing.fn().mockResolvedValue({data: {foo: 'bar'}});
 
     const gmp = {
       report: {
@@ -332,11 +333,11 @@ describe('report loadReportIfNeeded function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue([{id: 'foo'}]);
+    const get = testing.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       report: {
@@ -361,11 +362,11 @@ describe('report loadReportIfNeeded function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockRejectedValue('An Error');
+    const get = testing.fn().mockRejectedValue('An Error');
 
     const gmp = {
       report: {
@@ -406,9 +407,9 @@ describe('loadReportWithThreshold tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const report = {
       report: {
@@ -420,7 +421,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: report,
     });
 
@@ -463,9 +464,9 @@ describe('loadReportWithThreshold tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const report = {
       report: {
@@ -477,7 +478,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: report,
     });
 
@@ -542,9 +543,9 @@ describe('loadReportWithThreshold tests', () => {
         [reportIdentifier(id, filter)]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const report = {
       report: {
@@ -556,7 +557,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: report,
     });
 
@@ -604,9 +605,9 @@ describe('loadReportWithThreshold tests', () => {
         [reportIdentifier(id, filter)]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const report = {
       report: {
@@ -618,7 +619,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: report,
     });
 
@@ -680,9 +681,9 @@ describe('loadReportWithThreshold tests', () => {
         [id]: true,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const report = {
       report: {
@@ -694,7 +695,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: report,
     });
 
@@ -727,9 +728,9 @@ describe('loadReportWithThreshold tests', () => {
         [reportIdentifier(id, filter)]: true,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const report = {
       report: {
@@ -741,7 +742,7 @@ describe('loadReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: report,
     });
 
@@ -780,11 +781,11 @@ describe('loadDeltaReport function tests', () => {
         [identifier]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const getDelta = vi.fn().mockResolvedValue({
+    const getDelta = testing.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -829,11 +830,11 @@ describe('loadDeltaReport function tests', () => {
         [identifier]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const getDelta = vi.fn().mockResolvedValue({
+    const getDelta = testing.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -884,11 +885,11 @@ describe('loadDeltaReport function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const getDelta = vi.fn().mockResolvedValue([{id: 'foo'}]);
+    const getDelta = testing.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       report: {
@@ -913,11 +914,11 @@ describe('loadDeltaReport function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const getDelta = vi.fn().mockRejectedValue('An Error');
+    const getDelta = testing.fn().mockRejectedValue('An Error');
 
     const gmp = {
       report: {
