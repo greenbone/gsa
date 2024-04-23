@@ -17,8 +17,11 @@
  */
 /* eslint-disable react/prop-types */
 
+import {afterEach} from '@gsa/testing';
+
+// jest-styled-components provides expect.toHaveStyleRule and snapshots for styled-components
+// it requires global.beforeEach and expect
 import 'jest-styled-components';
-import '@testing-library/jest-dom';
 
 import React from 'react';
 
@@ -28,7 +31,7 @@ import {
   cleanup,
   queryAllByAttribute,
   getElementError,
-} from '@testing-library/react';
+} from '@testing-library/react/pure';
 import userEvent from '@testing-library/user-event';
 
 import {Router} from 'react-router-dom';
@@ -49,7 +52,7 @@ import {createQueryHistory} from 'web/routes';
 import configureStore from 'web/store';
 import {StyleSheetManager} from 'styled-components';
 
-export * from '@testing-library/react';
+export * from '@testing-library/react/pure';
 export {userEvent};
 
 afterEach(cleanup);
