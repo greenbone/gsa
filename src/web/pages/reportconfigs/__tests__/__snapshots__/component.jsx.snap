@@ -385,55 +385,6 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   padding-right: 10px;
 }
 
-.c15 {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  display: block;
-  height: 22px;
-  color: #4C4C4C;
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #bfbfbf;
-  border-radius: 2px;
-  padding: 1px 8px;
-}
-
-.c15:-webkit-autofill {
-  box-shadow: 0 0 0 1000px white inset;
-}
-
-.c16 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c17 {
-  color: #c12c30;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
-}
-
 .c24 {
   background-color: transparent;
   border: none;
@@ -525,6 +476,15 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   cursor: pointer;
 }
 
+.c17 {
+  color: #c12c30;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c22 {
   cursor: default;
 }
@@ -534,6 +494,46 @@ exports[`Report Config Component tests > should open create dialog and call GMP 
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+}
+
+.c15 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: #4C4C4C;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #bfbfbf;
+  border-radius: 2px;
+  padding: 1px 8px;
+}
+
+.c15:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset;
+}
+
+.c16 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
 <body>
@@ -1134,73 +1134,6 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   padding-right: 10px;
 }
 
-.c15 {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  display: block;
-  height: 22px;
-  color: #4C4C4C;
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #bfbfbf;
-  border-radius: 2px;
-  padding: 1px 8px;
-}
-
-.c15:-webkit-autofill {
-  box-shadow: 0 0 0 1000px white inset;
-}
-
-.c16 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c31 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  -webkit-justify-content: start;
-  justify-content: start;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.c17 {
-  color: #c12c30;
-  font-weight: bold;
-  font-size: 19px;
-  padding-bottom: 1px;
-  padding-left: 4px;
-  display: none;
-}
-
 .c24 {
   background-color: transparent;
   border: none;
@@ -1293,6 +1226,15 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   cursor: default;
 }
 
+.c17 {
+  color: #c12c30;
+  font-weight: bold;
+  font-size: 19px;
+  padding-bottom: 1px;
+  padding-left: 4px;
+  display: none;
+}
+
 .c22 {
   cursor: default;
 }
@@ -1302,33 +1244,6 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-}
-
-.c32 {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  font-weight: normal;
-  cursor: pointer;
-}
-
-.c35 {
-  font-family: inherit;
-  font-size: inherit;
-  padding: 0;
-  margin: 0;
-  margin-left: 10px;
-  line-height: normal;
-  width: auto;
-  height: auto;
 }
 
 .c26 {
@@ -1374,6 +1289,91 @@ exports[`Report Config Component tests > should open edit dialog and call GMP sa
   border-top: 1px solid #e5e5e5;
   font-weight: bold;
   width: 10%;
+}
+
+.c15 {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  display: block;
+  height: 22px;
+  color: #4C4C4C;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #bfbfbf;
+  border-radius: 2px;
+  padding: 1px 8px;
+}
+
+.c15:-webkit-autofill {
+  box-shadow: 0 0 0 1000px white inset;
+}
+
+.c16 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c31 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: start;
+  justify-content: start;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c32 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.c35 {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  margin-left: 10px;
+  line-height: normal;
+  width: auto;
+  height: auto;
 }
 
 .c36 {
