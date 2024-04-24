@@ -95,3 +95,17 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  deployment:
+    name: Deploy with Docker Compose
+    needs: images
+    runs-on: self-hosted-persist-gsa01
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Docker compose
+        working-directory: ./.docker
+        run: |
+          docker compose pull
+          docker compose down --remove-orphans
+          docker compose up -d
