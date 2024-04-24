@@ -17,10 +17,9 @@
  */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 
 import Target from 'gmp/models/target';
 
@@ -29,8 +28,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import Row from '../row';
-
-setLocale('en');
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -189,11 +186,11 @@ describe('Target row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handleTargetCloneClick = vi.fn();
-    const handleTargetDeleteClick = vi.fn();
-    const handleTargetDownloadClick = vi.fn();
-    const handleTargetEditClick = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleTargetCloneClick = testing.fn();
+    const handleTargetDeleteClick = testing.fn();
+    const handleTargetDownloadClick = testing.fn();
+    const handleTargetEditClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -242,11 +239,11 @@ describe('Target row tests', () => {
   });
 
   test('should render ssh elevate credential', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handleTargetCloneClick = vi.fn();
-    const handleTargetDeleteClick = vi.fn();
-    const handleTargetDownloadClick = vi.fn();
-    const handleTargetEditClick = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleTargetCloneClick = testing.fn();
+    const handleTargetDeleteClick = testing.fn();
+    const handleTargetDownloadClick = testing.fn();
+    const handleTargetEditClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -292,11 +289,11 @@ describe('Target row tests', () => {
   });
 
   test('should render with undefined portlist', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handleTargetCloneClick = vi.fn();
-    const handleTargetDeleteClick = vi.fn();
-    const handleTargetDownloadClick = vi.fn();
-    const handleTargetEditClick = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleTargetCloneClick = testing.fn();
+    const handleTargetDeleteClick = testing.fn();
+    const handleTargetDownloadClick = testing.fn();
+    const handleTargetEditClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -330,11 +327,11 @@ describe('Target row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handleTargetCloneClick = vi.fn();
-    const handleTargetDeleteClick = vi.fn();
-    const handleTargetDownloadClick = vi.fn();
-    const handleTargetEditClick = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleTargetCloneClick = testing.fn();
+    const handleTargetDeleteClick = testing.fn();
+    const handleTargetDownloadClick = testing.fn();
+    const handleTargetEditClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,

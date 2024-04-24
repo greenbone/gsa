@@ -15,16 +15,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import Filter from 'gmp/models/filter';
 import Host from 'gmp/models/host';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import {entityLoadingActions} from 'web/store/entities/hosts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -34,13 +30,6 @@ import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
 // setup
-
-setLocale('en');
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -175,11 +164,11 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getHost = vi.fn().mockResolvedValue({
+  getHost = testing.fn().mockResolvedValue({
     data: host,
   });
 
-  getPermissions = vi.fn().mockResolvedValue({
+  getPermissions = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -187,11 +176,11 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -384,13 +373,13 @@ describe('Host Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const deleteIdentifier = vi.fn().mockResolvedValue({
+    const deleteIdentifier = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
-    const deleteFunc = vi.fn().mockResolvedValue({
+    const deleteFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
-    const exportFunc = vi.fn().mockResolvedValue({
+    const exportFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -455,10 +444,10 @@ describe('Host Detailspage tests', () => {
 
 describe('Host ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleHostCreateClick = vi.fn();
-    const handleHostDeleteClick = vi.fn();
-    const handleHostDownloadClick = vi.fn();
-    const handleHostEditClick = vi.fn();
+    const handleHostCreateClick = testing.fn();
+    const handleHostDeleteClick = testing.fn();
+    const handleHostDownloadClick = testing.fn();
+    const handleHostEditClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -505,10 +494,10 @@ describe('Host ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleHostCreateClick = vi.fn();
-    const handleHostDeleteClick = vi.fn();
-    const handleHostDownloadClick = vi.fn();
-    const handleHostEditClick = vi.fn();
+    const handleHostCreateClick = testing.fn();
+    const handleHostDeleteClick = testing.fn();
+    const handleHostDownloadClick = testing.fn();
+    const handleHostEditClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -542,10 +531,10 @@ describe('Host ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleHostCreateClick = vi.fn();
-    const handleHostDeleteClick = vi.fn();
-    const handleHostDownloadClick = vi.fn();
-    const handleHostEditClick = vi.fn();
+    const handleHostCreateClick = testing.fn();
+    const handleHostDeleteClick = testing.fn();
+    const handleHostDownloadClick = testing.fn();
+    const handleHostEditClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 

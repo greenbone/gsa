@@ -15,12 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import {setLocale} from 'gmp/locale/lang';
 
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
@@ -32,10 +30,6 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import CredentialPage, {ToolBarIcons} from '../listpage';
-
-setLocale('en');
-
-window.URL.createObjectURL = vi.fn();
 
 const credential = Credential.fromElement({
   _id: '6575',
@@ -73,13 +67,13 @@ let getCredentials;
 let renewSession;
 
 beforeEach(() => {
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
-  getSetting = vi.fn().mockResolvedValue({
+  getSetting = testing.fn().mockResolvedValue({
     filter: null,
   });
-  getFilters = vi.fn().mockReturnValue(
+  getFilters = testing.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -89,14 +83,14 @@ beforeEach(() => {
     }),
   );
 
-  getCredentials = vi.fn().mockResolvedValue({
+  getCredentials = testing.fn().mockResolvedValue({
     data: [credential],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   });
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -179,11 +173,11 @@ describe('CredentialPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -243,11 +237,11 @@ describe('CredentialPage tests', () => {
 
   test('should allow to bulk action on selected credentials', async () => {
     // mock cache issues will cause these tests to randomly fail. Will fix later.
-    const deleteByIds = vi.fn().mockResolvedValue({
+    const deleteByIds = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = vi.fn().mockResolvedValue({
+    const exportByIds = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -326,11 +320,11 @@ describe('CredentialPage tests', () => {
 
   test('should allow to bulk action on filtered credentials', async () => {
     // mock cache issues will cause these tests to randomly fail. Will fix later.
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -404,7 +398,7 @@ describe('CredentialPage tests', () => {
 
 describe('CredentialPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleCredentialCreateClick = vi.fn();
+    const handleCredentialCreateClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -430,7 +424,7 @@ describe('CredentialPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleCredentialCreateClick = vi.fn();
+    const handleCredentialCreateClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -455,7 +449,7 @@ describe('CredentialPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleCredentialCreateClick = vi.fn();
+    const handleCredentialCreateClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},

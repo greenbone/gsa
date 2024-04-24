@@ -15,10 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
 
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
@@ -28,8 +26,6 @@ import Credential, {
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import TargetDialog from 'web/pages/targets/dialog';
-
-setLocale('en');
 
 const cred1 = Credential.fromElement({
   _id: '5678',
@@ -61,10 +57,10 @@ const gmp = {settings: {enableGreenboneSensor: true}};
 
 describe('TargetDialog component tests', () => {
   test('should render with default values', () => {
-    const handleClose = vi.fn();
-    const handleChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleCreate = vi.fn();
+    const handleClose = testing.fn();
+    const handleChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleCreate = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -199,10 +195,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('should display value from props', () => {
-    const handleClose = vi.fn();
-    const handleChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleCreate = vi.fn();
+    const handleClose = testing.fn();
+    const handleChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleCreate = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -347,10 +343,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('should allow to change values and save the dialog', () => {
-    const handleClose = vi.fn();
-    const handleChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleCreate = vi.fn();
+    const handleClose = testing.fn();
+    const handleChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleCreate = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -428,10 +424,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('should render elevate privilege option if ssh credential is defined', () => {
-    const handleClose = vi.fn();
-    const handleChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleCreate = vi.fn();
+    const handleClose = testing.fn();
+    const handleChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleCreate = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -476,10 +472,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('ssh elevate credential dropdown should only allow username + password options and remove ssh credential from list', () => {
-    const handleClose = vi.fn();
-    const handleChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleCreate = vi.fn();
+    const handleClose = testing.fn();
+    const handleChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleCreate = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -532,10 +528,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('ssh credential dropdown should remove ssh elevate credential from list', () => {
-    const handleClose = vi.fn();
-    const handleChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleCreate = vi.fn();
+    const handleClose = testing.fn();
+    const handleChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleCreate = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -589,10 +585,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('should disable editing certain fields if target is in use', () => {
-    const handleClose = vi.fn();
-    const handleChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleCreate = vi.fn();
+    const handleClose = testing.fn();
+    const handleChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleCreate = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 
@@ -653,10 +649,10 @@ describe('TargetDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleCreate = vi.fn();
+    const handleClose = testing.fn();
+    const handleChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleCreate = testing.fn();
 
     const {render} = rendererWith({gmp, capabilities: true});
 

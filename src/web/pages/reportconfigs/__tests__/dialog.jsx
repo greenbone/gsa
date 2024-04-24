@@ -15,27 +15,32 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
-import {setLocale} from 'gmp/locale/lang';
 import ReportConfig from 'gmp/models/reportconfig';
+import ReportFormat from 'gmp/models/reportformat';
 
-import {rendererWith, fireEvent, getAllByTestId, wait} from 'web/utils/testing';
-
-import ReportConfigDialog from '../dialog';
+import {
+  rendererWith,
+  fireEvent,
+  getAllByTestId,
+  wait,
+  getAllByRole,
+  getByRole,
+  getByTestId,
+} from 'web/utils/testing';
 
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/mockreportconfig';
 import {mockReportFormats} from '../__mocks__/mockreportformats';
-import {getAllByRole, getByRole, getByTestId} from '@testing-library/react';
-import ReportFormat from 'gmp/models/reportformat';
 
-setLocale('en');
+import ReportConfigDialog from '../dialog';
 
 const config = ReportConfig.fromElement(mockReportConfig);
+
 describe('Edit Report Config Dialog component tests', () => {
   test('should render dialog with disabled report format selection', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -67,8 +72,8 @@ describe('Edit Report Config Dialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -111,8 +116,8 @@ describe('Edit Report Config Dialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -137,9 +142,9 @@ describe('Edit Report Config Dialog component tests', () => {
   });
 
   test('should allow to change name, comment and params', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleValueChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleValueChange = testing.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -227,9 +232,9 @@ describe('Edit Report Config Dialog component tests', () => {
   });
 
   test('should be able to toggle which params use default value', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleValueChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleValueChange = testing.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -299,8 +304,8 @@ describe('Edit Report Config Dialog component tests', () => {
 
 describe('New Report Config Dialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const gmp = {};
     const formats = mockReportFormats;
@@ -325,8 +330,8 @@ describe('New Report Config Dialog component tests', () => {
   });
 
   test('should allow to change name, comment, report_format and params', async () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
     const mockReportFormatDetails = ReportFormat.fromElement({
       _id: '1234567',
       name: 'example-configurable-2',
@@ -362,7 +367,7 @@ describe('New Report Config Dialog component tests', () => {
       ],
     });
 
-    const getReportFormat = vi.fn().mockResolvedValue({
+    const getReportFormat = testing.fn().mockResolvedValue({
       data: mockReportFormatDetails,
     });
 
@@ -375,7 +380,7 @@ describe('New Report Config Dialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true, gmp});
 
-    const handleValueChange = vi.fn();
+    const handleValueChange = testing.fn();
 
     const {baseElement} = render(
       <ReportConfigDialog

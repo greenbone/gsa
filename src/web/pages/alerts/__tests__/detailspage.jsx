@@ -15,11 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -33,13 +29,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-
-setLocale('en');
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -95,11 +84,11 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getAlert = vi.fn().mockResolvedValue({
+  getAlert = testing.fn().mockResolvedValue({
     data: alert,
   });
 
-  getEntities = vi.fn().mockResolvedValue({
+  getEntities = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -107,11 +96,11 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -264,15 +253,15 @@ describe('Alert Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const clone = vi.fn().mockResolvedValue({
+    const clone = testing.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = vi.fn().mockResolvedValue({
+    const deleteFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = vi.fn().mockResolvedValue({
+    const exportFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -337,11 +326,11 @@ describe('Alert Detailspage tests', () => {
 
 describe('Alert ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleAlertCloneClick = vi.fn();
-    const handleAlertDeleteClick = vi.fn();
-    const handleAlertDownloadClick = vi.fn();
-    const handleAlertEditClick = vi.fn();
-    const handleAlertCreateClick = vi.fn();
+    const handleAlertCloneClick = testing.fn();
+    const handleAlertDeleteClick = testing.fn();
+    const handleAlertDownloadClick = testing.fn();
+    const handleAlertEditClick = testing.fn();
+    const handleAlertCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -376,11 +365,11 @@ describe('Alert ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleAlertCloneClick = vi.fn();
-    const handleAlertDeleteClick = vi.fn();
-    const handleAlertDownloadClick = vi.fn();
-    const handleAlertEditClick = vi.fn();
-    const handleAlertCreateClick = vi.fn();
+    const handleAlertCloneClick = testing.fn();
+    const handleAlertDeleteClick = testing.fn();
+    const handleAlertDownloadClick = testing.fn();
+    const handleAlertEditClick = testing.fn();
+    const handleAlertCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -421,11 +410,11 @@ describe('Alert ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleAlertCloneClick = vi.fn();
-    const handleAlertDeleteClick = vi.fn();
-    const handleAlertDownloadClick = vi.fn();
-    const handleAlertEditClick = vi.fn();
-    const handleAlertCreateClick = vi.fn();
+    const handleAlertCloneClick = testing.fn();
+    const handleAlertDeleteClick = testing.fn();
+    const handleAlertDownloadClick = testing.fn();
+    const handleAlertEditClick = testing.fn();
+    const handleAlertCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -473,11 +462,11 @@ describe('Alert ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers for alert in use', () => {
-    const handleAlertCloneClick = vi.fn();
-    const handleAlertDeleteClick = vi.fn();
-    const handleAlertDownloadClick = vi.fn();
-    const handleAlertEditClick = vi.fn();
-    const handleAlertCreateClick = vi.fn();
+    const handleAlertCloneClick = testing.fn();
+    const handleAlertDeleteClick = testing.fn();
+    const handleAlertDownloadClick = testing.fn();
+    const handleAlertEditClick = testing.fn();
+    const handleAlertCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 

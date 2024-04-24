@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-import userEvent from '@testing-library/user-event';
-import {render, fireEvent} from 'web/utils/testing';
+import {describe, test, expect, testing} from '@gsa/testing';
+
+import {render, fireEvent, userEvent} from 'web/utils/testing';
 
 import Dialog from '../dialog';
 
 describe('RADIUS dialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {baseElement} = render(
       <Dialog
@@ -39,8 +39,8 @@ describe('RADIUS dialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <Dialog
@@ -61,8 +61,8 @@ describe('RADIUS dialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <Dialog
@@ -81,8 +81,8 @@ describe('RADIUS dialog component tests', () => {
   });
 
   test('should allow to change data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <Dialog

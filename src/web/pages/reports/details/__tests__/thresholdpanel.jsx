@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Filter from 'gmp/models/filter';
 
@@ -25,12 +23,10 @@ import {render, fireEvent} from 'web/utils/testing';
 
 import Thresholdpanel from '../thresholdpanel';
 
-setLocale('en');
-
 describe('Report Threshold Panel tests', () => {
   test('should render threshold panel', () => {
-    const onFilterEditClick = vi.fn();
-    const onFilterChanged = vi.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterChanged = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 rows=2 first=1 sort-reverse=severity',
@@ -84,8 +80,8 @@ describe('Report Threshold Panel tests', () => {
   });
 
   test('should render threshold panel with different severities included', () => {
-    const onFilterEditClick = vi.fn();
-    const onFilterChanged = vi.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterChanged = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=2 first=1 sort-reverse=severity',
@@ -141,8 +137,8 @@ describe('Report Threshold Panel tests', () => {
   });
 
   test('should call click handler', () => {
-    const onFilterEditClick = vi.fn();
-    const onFilterChanged = vi.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterChanged = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 rows=2 first=1 sort-reverse=severity',
@@ -175,8 +171,8 @@ describe('Report Threshold Panel tests', () => {
   });
 
   test('should call click handler for different severity levels', () => {
-    const onFilterEditClick = vi.fn();
-    const onFilterChanged = vi.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterChanged = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=2 first=1 sort-reverse=severity',

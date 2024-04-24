@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Filter from 'gmp/models/filter';
 
@@ -25,15 +23,13 @@ import {render, fireEvent} from 'web/utils/testing';
 
 import EmptyResultsReport from '../emptyresultsreport';
 
-setLocale('en');
-
 describe('Empty Results Report tests', () => {
   test('should render empty results report', () => {
-    const onFilterAddLogLevelClick = vi.fn();
-    const onFilterDecreaseMinQoDClick = vi.fn();
-    const onFilterEditClick = vi.fn();
-    const onFilterRemoveClick = vi.fn();
-    const onFilterRemoveSeverityClick = vi.fn();
+    const onFilterAddLogLevelClick = testing.fn();
+    const onFilterDecreaseMinQoDClick = testing.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterRemoveClick = testing.fn();
+    const onFilterRemoveSeverityClick = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=2 first=1 sort-reverse=severity',
@@ -84,11 +80,11 @@ describe('Empty Results Report tests', () => {
   });
 
   test('should render empty results report with log messages filter', () => {
-    const onFilterAddLogLevelClick = vi.fn();
-    const onFilterDecreaseMinQoDClick = vi.fn();
-    const onFilterEditClick = vi.fn();
-    const onFilterRemoveClick = vi.fn();
-    const onFilterRemoveSeverityClick = vi.fn();
+    const onFilterAddLogLevelClick = testing.fn();
+    const onFilterDecreaseMinQoDClick = testing.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterRemoveClick = testing.fn();
+    const onFilterRemoveSeverityClick = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hml rows=2 first=1 sort-reverse=severity',
@@ -143,11 +139,11 @@ describe('Empty Results Report tests', () => {
   });
 
   test('should render empty results report with severity filter', () => {
-    const onFilterAddLogLevelClick = vi.fn();
-    const onFilterDecreaseMinQoDClick = vi.fn();
-    const onFilterEditClick = vi.fn();
-    const onFilterRemoveClick = vi.fn();
-    const onFilterRemoveSeverityClick = vi.fn();
+    const onFilterAddLogLevelClick = testing.fn();
+    const onFilterDecreaseMinQoDClick = testing.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterRemoveClick = testing.fn();
+    const onFilterRemoveSeverityClick = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg severity>50 rows=2 first=1 sort-reverse=severity',
@@ -202,11 +198,11 @@ describe('Empty Results Report tests', () => {
   });
 
   test('should render empty results report with min qod filter', () => {
-    const onFilterAddLogLevelClick = vi.fn();
-    const onFilterDecreaseMinQoDClick = vi.fn();
-    const onFilterEditClick = vi.fn();
-    const onFilterRemoveClick = vi.fn();
-    const onFilterRemoveSeverityClick = vi.fn();
+    const onFilterAddLogLevelClick = testing.fn();
+    const onFilterDecreaseMinQoDClick = testing.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterRemoveClick = testing.fn();
+    const onFilterRemoveSeverityClick = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg min_qod>70 rows=2 first=1 sort-reverse=severity',
@@ -260,11 +256,11 @@ describe('Empty Results Report tests', () => {
     );
   });
   test('should call click handlers', () => {
-    const onFilterAddLogLevelClick = vi.fn();
-    const onFilterDecreaseMinQoDClick = vi.fn();
-    const onFilterEditClick = vi.fn();
-    const onFilterRemoveClick = vi.fn();
-    const onFilterRemoveSeverityClick = vi.fn();
+    const onFilterAddLogLevelClick = testing.fn();
+    const onFilterDecreaseMinQoDClick = testing.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterRemoveClick = testing.fn();
+    const onFilterRemoveSeverityClick = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hml rows=2 severity>50 min_qod=70 first=1 sort-reverse=severity',

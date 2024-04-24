@@ -15,17 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import Filter from 'gmp/models/filter';
 import Schedule from 'gmp/models/schedule';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import {entityLoadingActions} from 'web/store/entities/schedules';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -33,13 +29,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-
-setLocale('en');
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -91,11 +80,11 @@ const noPermSchedule = Schedule.fromElement({
   _id: '23456',
 });
 
-const getSchedule = vi.fn().mockResolvedValue({
+const getSchedule = testing.fn().mockResolvedValue({
   data: schedule,
 });
 
-const getEntities = vi.fn().mockResolvedValue({
+const getEntities = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -103,11 +92,11 @@ const getEntities = vi.fn().mockResolvedValue({
   },
 });
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = vi.fn().mockResolvedValue({
+const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -254,15 +243,15 @@ describe('Schedule Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const clone = vi.fn().mockResolvedValue({
+    const clone = testing.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = vi.fn().mockResolvedValue({
+    const deleteFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = vi.fn().mockResolvedValue({
+    const exportFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -327,11 +316,11 @@ describe('Schedule Detailspage tests', () => {
 
 describe('Schedule ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleScheduleCloneClick = vi.fn();
-    const handleScheduleDeleteClick = vi.fn();
-    const handleScheduleDownloadClick = vi.fn();
-    const handleScheduleEditClick = vi.fn();
-    const handleScheduleCreateClick = vi.fn();
+    const handleScheduleCloneClick = testing.fn();
+    const handleScheduleDeleteClick = testing.fn();
+    const handleScheduleDownloadClick = testing.fn();
+    const handleScheduleEditClick = testing.fn();
+    const handleScheduleCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -365,11 +354,11 @@ describe('Schedule ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleScheduleCloneClick = vi.fn();
-    const handleScheduleDeleteClick = vi.fn();
-    const handleScheduleDownloadClick = vi.fn();
-    const handleScheduleEditClick = vi.fn();
-    const handleScheduleCreateClick = vi.fn();
+    const handleScheduleCloneClick = testing.fn();
+    const handleScheduleDeleteClick = testing.fn();
+    const handleScheduleDownloadClick = testing.fn();
+    const handleScheduleEditClick = testing.fn();
+    const handleScheduleCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -413,11 +402,11 @@ describe('Schedule ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleScheduleCloneClick = vi.fn();
-    const handleScheduleDeleteClick = vi.fn();
-    const handleScheduleDownloadClick = vi.fn();
-    const handleScheduleEditClick = vi.fn();
-    const handleScheduleCreateClick = vi.fn();
+    const handleScheduleCloneClick = testing.fn();
+    const handleScheduleDeleteClick = testing.fn();
+    const handleScheduleDownloadClick = testing.fn();
+    const handleScheduleEditClick = testing.fn();
+    const handleScheduleCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -467,11 +456,11 @@ describe('Schedule ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers for schedule in use', () => {
-    const handleScheduleCloneClick = vi.fn();
-    const handleScheduleDeleteClick = vi.fn();
-    const handleScheduleDownloadClick = vi.fn();
-    const handleScheduleEditClick = vi.fn();
-    const handleScheduleCreateClick = vi.fn();
+    const handleScheduleCloneClick = testing.fn();
+    const handleScheduleDeleteClick = testing.fn();
+    const handleScheduleDownloadClick = testing.fn();
+    const handleScheduleEditClick = testing.fn();
+    const handleScheduleCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 

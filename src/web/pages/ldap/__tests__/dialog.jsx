@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -23,9 +23,9 @@ import Dialog from '../dialog';
 
 describe('Ldap dialog component tests', () => {
   test('should render dialog', () => {
-    const handleChange = vi.fn();
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleChange = testing.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {baseElement} = render(
       <Dialog
@@ -43,9 +43,9 @@ describe('Ldap dialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleValueChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleValueChange = testing.fn();
 
     const {getByTestId} = render(
       <Dialog
@@ -70,8 +70,8 @@ describe('Ldap dialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <Dialog
@@ -91,8 +91,8 @@ describe('Ldap dialog component tests', () => {
   });
 
   test('should allow to change data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <Dialog

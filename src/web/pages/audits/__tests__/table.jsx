@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -105,14 +105,14 @@ const filter = Filter.fromString('rows=2');
 
 describe('Audits table tests', () => {
   test('should render', () => {
-    const handleAuditCloneClick = vi.fn();
-    const handleAuditDeleteClick = vi.fn();
-    const handleAuditDownloadClick = vi.fn();
-    const handleAuditEditClick = vi.fn();
-    const handleAuditStartClick = vi.fn();
-    const handleAuditStopClick = vi.fn();
-    const handleAuditResumeClick = vi.fn();
-    const handleReportDownloadClick = vi.fn();
+    const handleAuditCloneClick = testing.fn();
+    const handleAuditDeleteClick = testing.fn();
+    const handleAuditDownloadClick = testing.fn();
+    const handleAuditEditClick = testing.fn();
+    const handleAuditStartClick = testing.fn();
+    const handleAuditStopClick = testing.fn();
+    const handleAuditResumeClick = testing.fn();
+    const handleReportDownloadClick = testing.fn();
 
     const gmp = {
       settings: {},
@@ -154,14 +154,14 @@ describe('Audits table tests', () => {
   });
 
   test('should unfold all details', () => {
-    const handleAuditCloneClick = vi.fn();
-    const handleAuditDeleteClick = vi.fn();
-    const handleAuditDownloadClick = vi.fn();
-    const handleAuditEditClick = vi.fn();
-    const handleAuditStartClick = vi.fn();
-    const handleAuditStopClick = vi.fn();
-    const handleAuditResumeClick = vi.fn();
-    const handleReportDownloadClick = vi.fn();
+    const handleAuditCloneClick = testing.fn();
+    const handleAuditDeleteClick = testing.fn();
+    const handleAuditDownloadClick = testing.fn();
+    const handleAuditEditClick = testing.fn();
+    const handleAuditStartClick = testing.fn();
+    const handleAuditStopClick = testing.fn();
+    const handleAuditResumeClick = testing.fn();
+    const handleReportDownloadClick = testing.fn();
 
     const gmp = {
       settings: {},
@@ -203,14 +203,14 @@ describe('Audits table tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleAuditCloneClick = vi.fn();
-    const handleAuditDeleteClick = vi.fn();
-    const handleAuditDownloadClick = vi.fn();
-    const handleAuditEditClick = vi.fn();
-    const handleAuditStartClick = vi.fn();
-    const handleAuditStopClick = vi.fn();
-    const handleAuditResumeClick = vi.fn();
-    const handleReportDownloadClick = vi.fn();
+    const handleAuditCloneClick = testing.fn();
+    const handleAuditDeleteClick = testing.fn();
+    const handleAuditDownloadClick = testing.fn();
+    const handleAuditEditClick = testing.fn();
+    const handleAuditStartClick = testing.fn();
+    const handleAuditStopClick = testing.fn();
+    const handleAuditResumeClick = testing.fn();
+    const handleReportDownloadClick = testing.fn();
 
     const gmp = {
       settings: {},

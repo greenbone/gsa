@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -29,13 +27,9 @@ import {rendererWith, screen} from 'web/utils/testing';
 
 import StartPage from '../page';
 
-setLocale('en');
-
-window.URL.createObjectURL = vi.fn();
-
 const manualUrl = 'test/';
 
-const getFilters = vi.fn().mockReturnValue(
+const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -45,7 +39,7 @@ const getFilters = vi.fn().mockReturnValue(
   }),
 );
 
-const getDashboardSetting = vi.fn().mockResolvedValue({
+const getDashboardSetting = testing.fn().mockResolvedValue({
   data: {defaults: {foo: 'bar'}},
   meta: {
     filter: Filter.fromString(),
@@ -53,9 +47,9 @@ const getDashboardSetting = vi.fn().mockResolvedValue({
   },
 });
 
-const saveDashboardSetting = vi.fn().mockResolvedValue({foo: 'bar'});
+const saveDashboardSetting = testing.fn().mockResolvedValue({foo: 'bar'});
 
-const getAggregates = vi.fn().mockResolvedValue({
+const getAggregates = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),

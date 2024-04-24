@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Filter, {DEFAULT_FALLBACK_FILTER} from 'gmp/models/filter';
 
@@ -35,7 +35,7 @@ describe('FilterProvider component tests', () => {
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
 
-    const getSetting = vi.fn().mockResolvedValue({});
+    const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
       user: {
         getSetting,
@@ -53,7 +53,7 @@ describe('FilterProvider component tests', () => {
       defaultFilterLoadingActions.success('task', defaultSettingFilter),
     );
 
-    const renderFunc = vi
+    const renderFunc = testing
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -77,7 +77,7 @@ describe('FilterProvider component tests', () => {
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
 
-    const getSetting = vi.fn().mockResolvedValue({});
+    const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
       user: {
         getSetting,
@@ -96,7 +96,7 @@ describe('FilterProvider component tests', () => {
     );
     store.dispatch(pageFilter('task', pFilter));
 
-    const renderFunc = vi
+    const renderFunc = testing
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -119,7 +119,7 @@ describe('FilterProvider component tests', () => {
 
     const defaultSettingFilter = Filter.fromString('foo=bar');
 
-    const getSetting = vi.fn().mockResolvedValue({});
+    const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
       user: {
         getSetting,
@@ -138,7 +138,7 @@ describe('FilterProvider component tests', () => {
     );
     store.dispatch(pageFilter(pageName, pFilter));
 
-    const renderFunc = vi
+    const renderFunc = testing
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -161,7 +161,7 @@ describe('FilterProvider component tests', () => {
 
     const emptyFilter = Filter.fromString('rows=42');
 
-    const getSetting = vi.fn().mockResolvedValue({});
+    const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
       user: {
         getSetting,
@@ -179,7 +179,7 @@ describe('FilterProvider component tests', () => {
       defaultFilterLoadingActions.success('task', defaultSettingFilter),
     );
 
-    const renderFunc = vi
+    const renderFunc = testing
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -198,7 +198,7 @@ describe('FilterProvider component tests', () => {
 
     const emptyFilter = Filter.fromString('rows=42');
 
-    const getSetting = vi.fn().mockResolvedValue({});
+    const getSetting = testing.fn().mockResolvedValue({});
     const gmp = {
       user: {
         getSetting,
@@ -216,7 +216,7 @@ describe('FilterProvider component tests', () => {
       defaultFilterLoadingActions.error('task', new Error('an error')),
     );
 
-    const renderFunc = vi
+    const renderFunc = testing
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -238,8 +238,8 @@ describe('FilterProvider component tests', () => {
 
     const fallbackFilter = Filter.fromString('fall=back');
 
-    const getSetting = vi.fn().mockResolvedValue({});
-    const subscribe = vi.fn();
+    const getSetting = testing.fn().mockResolvedValue({});
+    const subscribe = testing.fn();
     const gmp = {
       user: {
         getSetting,
@@ -256,7 +256,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
 
-    const renderFunc = vi
+    const renderFunc = testing
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -274,8 +274,8 @@ describe('FilterProvider component tests', () => {
   test('should use default fallbackFilter as last resort', async () => {
     const resultingFilter = DEFAULT_FALLBACK_FILTER.copy().set('rows', 42);
 
-    const getSetting = vi.fn().mockResolvedValue({});
-    const subscribe = vi.fn();
+    const getSetting = testing.fn().mockResolvedValue({});
+    const subscribe = testing.fn();
     const gmp = {
       user: {
         getSetting,
@@ -292,7 +292,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
 
-    const renderFunc = vi
+    const renderFunc = testing
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -310,8 +310,8 @@ describe('FilterProvider component tests', () => {
     // use fallbackFilter as sample
     const fallbackFilter = Filter.fromString('fall=back rows=21');
 
-    const getSetting = vi.fn().mockResolvedValue({});
-    const subscribe = vi.fn();
+    const getSetting = testing.fn().mockResolvedValue({});
+    const subscribe = testing.fn();
     const gmp = {
       user: {
         getSetting,
@@ -328,7 +328,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.success({rowsperpage: {value: '42'}}));
 
-    const renderFunc = vi
+    const renderFunc = testing
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 
@@ -347,7 +347,7 @@ describe('FilterProvider component tests', () => {
     const resultingFilter = Filter.fromString('fall=back rows=50');
     const fallbackFilter = Filter.fromString('fall=back');
 
-    const getSetting = vi.fn().mockRejectedValue(new Error('an error'));
+    const getSetting = testing.fn().mockRejectedValue(new Error('an error'));
     const gmp = {
       user: {
         getSetting,
@@ -362,7 +362,7 @@ describe('FilterProvider component tests', () => {
 
     store.dispatch(loadingActions.error(new Error('an error')));
 
-    const renderFunc = vi
+    const renderFunc = testing
       .fn()
       .mockReturnValue(<span data-testid="awaiting-span" />);
 

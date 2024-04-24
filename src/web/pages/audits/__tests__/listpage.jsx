@@ -15,10 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-import {act} from 'react-dom/test-utils';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -32,13 +29,9 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent, act} from 'web/utils/testing';
 
 import AuditPage, {ToolBarIcons} from '../listpage';
-
-setLocale('en');
-
-window.URL.createObjectURL = vi.fn();
 
 const lastReport = {
   report: {
@@ -66,15 +59,15 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getSetting = vi.fn().mockResolvedValue({
+const getSetting = testing.fn().mockResolvedValue({
   filter: null,
 });
 
-const getFilters = vi.fn().mockReturnValue(
+const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -84,7 +77,7 @@ const getFilters = vi.fn().mockReturnValue(
   }),
 );
 
-const getAudits = vi.fn().mockResolvedValue({
+const getAudits = testing.fn().mockResolvedValue({
   data: [audit],
   meta: {
     filter: Filter.fromString(),
@@ -92,7 +85,7 @@ const getAudits = vi.fn().mockResolvedValue({
   },
 });
 
-const getReportFormats = vi.fn().mockResolvedValue({
+const getReportFormats = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -100,7 +93,7 @@ const getReportFormats = vi.fn().mockResolvedValue({
   },
 });
 
-const renewSession = vi.fn().mockResolvedValue({
+const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -158,11 +151,11 @@ describe('AuditPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -235,7 +228,7 @@ describe('AuditPage tests', () => {
 
 describe('AuditPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleAuditCreateClick = vi.fn();
+    const handleAuditCreateClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -263,7 +256,7 @@ describe('AuditPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleAuditCreateClick = vi.fn();
+    const handleAuditCreateClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -287,7 +280,7 @@ describe('AuditPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleAuditCreateClick = vi.fn();
+    const handleAuditCreateClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},

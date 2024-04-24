@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import date from 'gmp/models/date';
 
@@ -26,8 +24,6 @@ import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import EditNvtDetailsDialog from '../editnvtdetailsdialog';
-
-setLocale('en');
 
 const preferences = [
   {name: 'pref 1', value: 'no', id: '1', type: 'checkbox'},
@@ -39,8 +35,8 @@ const modified = date('2019-09-09T12:00:00Z');
 
 describe('EditNvtDetailsDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -81,8 +77,8 @@ describe('EditNvtDetailsDialog component tests', () => {
   });
 
   test('should render loading indicator', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -123,8 +119,8 @@ describe('EditNvtDetailsDialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -182,8 +178,8 @@ describe('EditNvtDetailsDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -220,8 +216,8 @@ describe('EditNvtDetailsDialog component tests', () => {
   });
 
   test('should allow to change data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -276,8 +272,8 @@ describe('EditNvtDetailsDialog component tests', () => {
   });
 
   test('should handle changing timeout', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,

@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect} from '@gsa/testing';
+
 import moment from 'gmp/models/date';
 
 import {
@@ -76,24 +78,47 @@ describe('getProperty tests', () => {
 describe('getValue tests', () => {
   test('should return value for property', () => {
     expect(getValue(v => v, {foo: 'bar'}, 'foo')).toEqual('bar');
-    expect(getValue(v => v, {foo: 'bar'}, obj => obj.foo)).toEqual('bar');
+    expect(
+      getValue(
+        v => v,
+        {foo: 'bar'},
+        obj => obj.foo,
+      ),
+    ).toEqual('bar');
   });
 
   test('should return string for property', () => {
     expect(getValue(v => '' + v, {a: 1}, 'a')).toEqual('1');
-    expect(getValue(v => '' + v, {a: 1}, obj => obj.a)).toEqual('1');
+    expect(
+      getValue(
+        v => '' + v,
+        {a: 1},
+        obj => obj.a,
+      ),
+    ).toEqual('1');
   });
 
   test('should return undefined for unknown property', () => {
     expect(getValue(v => v, {foo: 'bar'}, 'bar')).toBeUndefined();
-    expect(getValue(v => v, {foo: 'bar'}, obj => obj.bar)).toBeUndefined();
+    expect(
+      getValue(
+        v => v,
+        {foo: 'bar'},
+        obj => obj.bar,
+      ),
+    ).toBeUndefined();
   });
 
   test('should return default for unknown property', () => {
     expect(getValue(v => v, {foo: 'bar'}, 'bar', 'ipsum')).toEqual('ipsum');
-    expect(getValue(v => v, {foo: 'bar'}, obj => obj.bar, 'ipsum')).toEqual(
-      'ipsum',
-    );
+    expect(
+      getValue(
+        v => v,
+        {foo: 'bar'},
+        obj => obj.bar,
+        'ipsum',
+      ),
+    ).toEqual('ipsum');
   });
 });
 

@@ -15,11 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-import {setLocale} from 'gmp/locale/lang';
 import {parseDate} from 'gmp/parser';
 
 import Filter from 'gmp/models/filter';
@@ -30,8 +29,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import CveTable from '../table';
-
-setLocale('en');
 
 const caps = new Capabilities(['everything']);
 

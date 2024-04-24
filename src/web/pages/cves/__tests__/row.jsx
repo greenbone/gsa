@@ -16,10 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable no-console */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 import {parseDate} from 'gmp/parser';
 
 import Cve from 'gmp/models/cve';
@@ -29,8 +28,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import CveRow from '../row';
-
-setLocale('en');
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -52,7 +49,7 @@ describe('CVEv2 Row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleToggleDetailsClick = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -96,7 +93,7 @@ describe('CVEv2 Row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleToggleDetailsClick = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -140,7 +137,7 @@ describe('CVEv3 Row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleToggleDetailsClick = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -186,7 +183,7 @@ describe('CVEv3 Row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleToggleDetailsClick = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render} = rendererWith({
       gmp,

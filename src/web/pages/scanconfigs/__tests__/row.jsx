@@ -17,7 +17,7 @@
  */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
@@ -59,11 +59,11 @@ describe('Scan Config row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -119,11 +119,11 @@ describe('Scan Config row tests', () => {
       },
     });
 
-    const handleToggleDetailsClick = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -166,11 +166,11 @@ describe('Scan Config row tests', () => {
       },
     });
 
-    const handleToggleDetailsClick = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -196,11 +196,11 @@ describe('Scan Config row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
 
     const {render} = rendererWith({
       gmp,
@@ -243,11 +243,11 @@ describe('Scan Config row tests', () => {
   });
 
   test('should not call click handlers without permissions', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
 
     const config = ScanConfig.fromElement({
       _id: '1234',
@@ -315,11 +315,11 @@ describe('Scan Config row tests', () => {
   });
 
   test('should (not) call click handlers if scan config is in use', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
 
     const config = ScanConfig.fromElement({
       _id: '1234',
@@ -379,11 +379,11 @@ describe('Scan Config row tests', () => {
   });
 
   test('should (not) call click handlers if scan config is not writable', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
 
     const config = ScanConfig.fromElement({
       _id: '1234',

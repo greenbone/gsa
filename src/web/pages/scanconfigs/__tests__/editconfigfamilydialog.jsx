@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Nvt from 'gmp/models/nvt';
 
@@ -55,9 +55,9 @@ const selected = {
 
 describe('EditConfigFamilyDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {baseElement} = render(
@@ -83,9 +83,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should render loading indicator', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {baseElement, getByTestId} = render(
@@ -113,9 +113,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {getByTestId} = render(
@@ -145,9 +145,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {getByTestId} = render(
@@ -175,9 +175,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should allow to change data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {baseElement, getByTestId} = render(
@@ -215,9 +215,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should call click handler', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {getAllByTestId} = render(
@@ -243,9 +243,9 @@ describe('EditConfigFamilyDialog component tests', () => {
   });
 
   test('should sort table', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const newSelected = {
       1234: 0,

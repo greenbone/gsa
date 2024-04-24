@@ -16,10 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable no-console */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 
 import Task, {TASK_STATUS} from 'gmp/models/task';
 import {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
@@ -29,8 +28,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
-
-setLocale('en');
 
 const gmp = {settings: {}};
 const caps = new Capabilities(['everything']);
@@ -71,15 +68,15 @@ describe('Task Row tests', () => {
       target: {_id: '5678', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -183,15 +180,15 @@ describe('Task Row tests', () => {
       },
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -245,15 +242,15 @@ describe('Task Row tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -339,15 +336,15 @@ describe('Task Row tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -454,15 +451,15 @@ describe('Task Row tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -568,15 +565,15 @@ describe('Task Row tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -682,15 +679,15 @@ describe('Task Row tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -800,15 +797,15 @@ describe('Task Row tests', () => {
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,

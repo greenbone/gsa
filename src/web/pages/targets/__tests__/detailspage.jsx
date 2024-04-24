@@ -15,17 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import Filter from 'gmp/models/filter';
 import Target from 'gmp/models/target';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import {entityLoadingActions} from 'web/store/entities/targets';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -33,13 +29,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-
-setLocale('en');
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -52,11 +41,11 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getTarget = vi.fn().mockResolvedValue({
+  getTarget = testing.fn().mockResolvedValue({
     data: target,
   });
 
-  getEntities = vi.fn().mockResolvedValue({
+  getEntities = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -64,11 +53,11 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -342,15 +331,15 @@ describe('Target Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const clone = vi.fn().mockResolvedValue({
+    const clone = testing.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = vi.fn().mockResolvedValue({
+    const deleteFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = vi.fn().mockResolvedValue({
+    const exportFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -415,11 +404,11 @@ describe('Target Detailspage tests', () => {
 
 describe('Target ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleTargetCloneClick = vi.fn();
-    const handleTargetDeleteClick = vi.fn();
-    const handleTargetDownloadClick = vi.fn();
-    const handleTargetEditClick = vi.fn();
-    const handleTargetCreateClick = vi.fn();
+    const handleTargetCloneClick = testing.fn();
+    const handleTargetDeleteClick = testing.fn();
+    const handleTargetDownloadClick = testing.fn();
+    const handleTargetEditClick = testing.fn();
+    const handleTargetCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -453,11 +442,11 @@ describe('Target ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleTargetCloneClick = vi.fn();
-    const handleTargetDeleteClick = vi.fn();
-    const handleTargetDownloadClick = vi.fn();
-    const handleTargetEditClick = vi.fn();
-    const handleTargetCreateClick = vi.fn();
+    const handleTargetCloneClick = testing.fn();
+    const handleTargetDeleteClick = testing.fn();
+    const handleTargetDownloadClick = testing.fn();
+    const handleTargetEditClick = testing.fn();
+    const handleTargetCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -501,11 +490,11 @@ describe('Target ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleTargetCloneClick = vi.fn();
-    const handleTargetDeleteClick = vi.fn();
-    const handleTargetDownloadClick = vi.fn();
-    const handleTargetEditClick = vi.fn();
-    const handleTargetCreateClick = vi.fn();
+    const handleTargetCloneClick = testing.fn();
+    const handleTargetDeleteClick = testing.fn();
+    const handleTargetDownloadClick = testing.fn();
+    const handleTargetEditClick = testing.fn();
+    const handleTargetCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -555,11 +544,11 @@ describe('Target ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers for target in use', () => {
-    const handleTargetCloneClick = vi.fn();
-    const handleTargetDeleteClick = vi.fn();
-    const handleTargetDownloadClick = vi.fn();
-    const handleTargetEditClick = vi.fn();
-    const handleTargetCreateClick = vi.fn();
+    const handleTargetCloneClick = testing.fn();
+    const handleTargetDeleteClick = testing.fn();
+    const handleTargetDownloadClick = testing.fn();
+    const handleTargetEditClick = testing.fn();
+    const handleTargetCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 

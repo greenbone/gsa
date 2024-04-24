@@ -15,8 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import Settings from 'gmp/models/settings';
+
 import {rendererWith, wait} from 'web/utils/testing';
 
 import RadiusAuthentication from '../radiuspage';
@@ -30,7 +32,7 @@ describe('RADIUS page renders', () => {
     });
     const gmp = {
       user: {
-        currentAuthSettings: vi.fn().mockReturnValue(
+        currentAuthSettings: testing.fn().mockReturnValue(
           Promise.resolve({
             data: settings,
           }),
@@ -58,7 +60,7 @@ describe('RADIUS page renders', () => {
     });
     const gmp = {
       user: {
-        currentAuthSettings: vi.fn().mockReturnValue(
+        currentAuthSettings: testing.fn().mockReturnValue(
           Promise.resolve({
             data: settings,
           }),

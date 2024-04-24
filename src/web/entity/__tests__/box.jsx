@@ -15,16 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect} from '@gsa/testing';
 
-import Date, {setLocale} from 'gmp/models/date';
+import Date from 'gmp/models/date';
 
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/testing';
 
 import EntityBox from '../box';
-
-setLocale('en');
 
 const date1 = Date('2019-01-01T12:00:00Z');
 const date2 = Date('2019-02-02T12:00:00Z');
@@ -71,5 +69,3 @@ describe('EntityBox component tests', () => {
     expect(element).toHaveStyleRule('width', '400px');
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

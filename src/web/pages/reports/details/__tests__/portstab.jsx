@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Filter from 'gmp/models/filter';
 
@@ -29,8 +27,6 @@ import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 
 import PortsTab from '../portstab';
 
-setLocale('en');
-
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
@@ -39,8 +35,8 @@ describe('Report Ports Tab tests', () => {
   test('should render Report Ports Tab', () => {
     const {ports} = getMockReport();
 
-    const onSortChange = vi.fn();
-    const onInteraction = vi.fn();
+    const onSortChange = testing.fn();
+    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       router: true,

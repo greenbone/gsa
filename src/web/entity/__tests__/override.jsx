@@ -15,18 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/models/date';
 import Override from 'gmp/models/override';
 
 import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/testing';
 
 import OverrideBox from '../override';
-
-setLocale('en');
 
 const caps = new Capabilities(['everything']);
 
@@ -91,5 +88,3 @@ describe('OverrideBox component tests', () => {
     );
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

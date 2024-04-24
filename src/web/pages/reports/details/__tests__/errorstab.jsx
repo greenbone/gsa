@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 
@@ -30,8 +29,6 @@ import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 
 import ErrorsTab from '../errorstab';
 
-setLocale('en');
-
 const caps = new Capabilities(['everything']);
 
 const filter = Filter.fromString(
@@ -42,8 +39,8 @@ describe('Report Errors Tab tests', () => {
   test('should render Report Errors Tab', () => {
     const {errors} = getMockReport();
 
-    const onSortChange = vi.fn();
-    const onInteraction = vi.fn();
+    const onSortChange = testing.fn();
+    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       capabilities: caps,

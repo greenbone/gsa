@@ -16,16 +16,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import ReportFormatComponent from '../component';
-import {rendererWith, wait} from 'web/utils/testing';
+import {describe, test, expect, testing} from '@gsa/testing';
+
 import ReportConfig from 'gmp/models/reportconfig';
+import Capabilities from 'gmp/capabilities/capabilities';
+
 import {
   fireEvent,
   getAllByRole,
   getAllByTestId,
   getByTestId,
-} from '@testing-library/react';
-import Capabilities from 'gmp/capabilities/capabilities';
+  rendererWith,
+  wait,
+} from 'web/utils/testing';
+
+import ReportFormatComponent from '../component';
 
 describe('Report Config Component tests', () => {
   const mockReportConfig = ReportConfig.fromElement({
@@ -63,24 +68,24 @@ describe('Report Config Component tests', () => {
 
   test('should open edit dialog and call GMP save', async () => {
     let editClick;
-    const children = vi.fn(({edit}) => {
+    const children = testing.fn(({edit}) => {
       editClick = edit;
     });
 
-    const handleInteraction = vi.fn();
-    const getReportConfig = vi.fn().mockResolvedValue({
+    const handleInteraction = testing.fn();
+    const getReportConfig = testing.fn().mockResolvedValue({
       data: mockReportConfig,
     });
-    const getAllReportFormats = vi.fn().mockResolvedValue({
+    const getAllReportFormats = testing.fn().mockResolvedValue({
       data: [mockReportFormat],
     });
-    const saveReportConfig = vi.fn().mockResolvedValue({
+    const saveReportConfig = testing.fn().mockResolvedValue({
       data: {},
     });
 
     const gmp = {
       user: {
-        currentSettings: vi.fn().mockResolvedValue({
+        currentSettings: testing.fn().mockResolvedValue({
           data: {},
         }),
       },
@@ -144,23 +149,23 @@ describe('Report Config Component tests', () => {
 
   test('should open create dialog and call GMP create', async () => {
     let createClick;
-    const children = vi.fn(({edit, create}) => {
+    const children = testing.fn(({edit, create}) => {
       createClick = create;
     });
-    const handleInteraction = vi.fn();
-    const getAllReportFormats = vi.fn().mockResolvedValue({
+    const handleInteraction = testing.fn();
+    const getAllReportFormats = testing.fn().mockResolvedValue({
       data: [mockReportFormat],
     });
-    const getReportFormat = vi.fn().mockResolvedValue({
+    const getReportFormat = testing.fn().mockResolvedValue({
       data: mockReportFormat,
     });
-    const createReportConfig = vi.fn().mockResolvedValue({
+    const createReportConfig = testing.fn().mockResolvedValue({
       data: {},
     });
 
     const gmp = {
       user: {
-        currentSettings: vi.fn().mockResolvedValue({
+        currentSettings: testing.fn().mockResolvedValue({
           data: {},
         }),
       },
@@ -231,17 +236,17 @@ describe('Report Config Component tests', () => {
 
   test('should open and close create dialog', async () => {
     let createClick;
-    const children = vi.fn(({edit, create}) => {
+    const children = testing.fn(({edit, create}) => {
       createClick = create;
     });
-    const handleInteraction = vi.fn();
-    const getAllReportFormats = vi.fn().mockResolvedValue({
+    const handleInteraction = testing.fn();
+    const getAllReportFormats = testing.fn().mockResolvedValue({
       data: [mockReportFormat],
     });
 
     const gmp = {
       user: {
-        currentSettings: vi.fn().mockResolvedValue({
+        currentSettings: testing.fn().mockResolvedValue({
           data: {},
         }),
       },

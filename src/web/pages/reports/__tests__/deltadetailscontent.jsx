@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 
@@ -30,15 +29,12 @@ import {getMockDeltaReport} from 'web/pages/reports/__mocks__/mockdeltareport';
 
 import DeltaDetailsContent from '../deltadetailscontent';
 
-setLocale('en');
-
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
 );
 
 const filterWithName = Filter.fromElement({
-  term:
-    'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
+  term: 'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',
   name: 'foo',
   id: '123',
 });
@@ -47,37 +43,37 @@ const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getReportComposerDefaults = vi.fn().mockResolvedValue({
+const getReportComposerDefaults = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
 describe('Delta Report Details Content tests', () => {
   test('should render Delta Report Details Content', () => {
-    const onActivateTab = vi.fn();
-    const onAddToAssetsClick = vi.fn();
-    const onError = vi.fn();
-    const onFilterAddLogLevelClick = vi.fn();
-    const onFilterDecreaseMinQoDClick = vi.fn();
-    const onFilterChanged = vi.fn();
-    const onFilterCreated = vi.fn();
-    const onFilterEditClick = vi.fn();
-    const onFilterRemoveSeverityClick = vi.fn();
-    const onFilterResetClick = vi.fn();
-    const onFilterRemoveClick = vi.fn();
-    const onInteraction = vi.fn();
-    const onRemoveFromAssetsClick = vi.fn();
-    const onReportDownloadClick = vi.fn();
-    const showError = vi.fn();
-    const showErrorMessage = vi.fn();
-    const showSuccessMessage = vi.fn();
-    const onSortChange = vi.fn();
-    const onTagSuccess = vi.fn();
-    const onTargetEditClick = vi.fn();
-    const onTlsCertificateDownloadClick = vi.fn();
+    const onActivateTab = testing.fn();
+    const onAddToAssetsClick = testing.fn();
+    const onError = testing.fn();
+    const onFilterAddLogLevelClick = testing.fn();
+    const onFilterDecreaseMinQoDClick = testing.fn();
+    const onFilterChanged = testing.fn();
+    const onFilterCreated = testing.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterRemoveSeverityClick = testing.fn();
+    const onFilterResetClick = testing.fn();
+    const onFilterRemoveClick = testing.fn();
+    const onInteraction = testing.fn();
+    const onRemoveFromAssetsClick = testing.fn();
+    const onReportDownloadClick = testing.fn();
+    const showError = testing.fn();
+    const showErrorMessage = testing.fn();
+    const showSuccessMessage = testing.fn();
+    const onSortChange = testing.fn();
+    const onTagSuccess = testing.fn();
+    const onTargetEditClick = testing.fn();
+    const onTlsCertificateDownloadClick = testing.fn();
 
     const sorting = {
       apps: {sortField: 'severity', sortReverse: true},
@@ -152,7 +148,7 @@ describe('Delta Report Details Content tests', () => {
     const selects = getAllByTestId('select-selected-value');
     const bars = getAllByTestId('progressbar-box');
 
-    expect(icons.length).toEqual(15)
+    expect(icons.length).toEqual(15);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
@@ -229,27 +225,27 @@ describe('Delta Report Details Content tests', () => {
   });
 
   test('should render results tab', () => {
-    const onActivateTab = vi.fn();
-    const onAddToAssetsClick = vi.fn();
-    const onError = vi.fn();
-    const onFilterAddLogLevelClick = vi.fn();
-    const onFilterDecreaseMinQoDClick = vi.fn();
-    const onFilterChanged = vi.fn();
-    const onFilterCreated = vi.fn();
-    const onFilterEditClick = vi.fn();
-    const onFilterRemoveSeverityClick = vi.fn();
-    const onFilterResetClick = vi.fn();
-    const onFilterRemoveClick = vi.fn();
-    const onInteraction = vi.fn();
-    const onRemoveFromAssetsClick = vi.fn();
-    const onReportDownloadClick = vi.fn();
-    const showError = vi.fn();
-    const showErrorMessage = vi.fn();
-    const showSuccessMessage = vi.fn();
-    const onSortChange = vi.fn();
-    const onTagSuccess = vi.fn();
-    const onTargetEditClick = vi.fn();
-    const onTlsCertificateDownloadClick = vi.fn();
+    const onActivateTab = testing.fn();
+    const onAddToAssetsClick = testing.fn();
+    const onError = testing.fn();
+    const onFilterAddLogLevelClick = testing.fn();
+    const onFilterDecreaseMinQoDClick = testing.fn();
+    const onFilterChanged = testing.fn();
+    const onFilterCreated = testing.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterRemoveSeverityClick = testing.fn();
+    const onFilterResetClick = testing.fn();
+    const onFilterRemoveClick = testing.fn();
+    const onInteraction = testing.fn();
+    const onRemoveFromAssetsClick = testing.fn();
+    const onReportDownloadClick = testing.fn();
+    const showError = testing.fn();
+    const showErrorMessage = testing.fn();
+    const showSuccessMessage = testing.fn();
+    const onSortChange = testing.fn();
+    const onTagSuccess = testing.fn();
+    const onTargetEditClick = testing.fn();
+    const onTlsCertificateDownloadClick = testing.fn();
 
     const sorting = {
       apps: {sortField: 'severity', sortReverse: true},
@@ -325,7 +321,7 @@ describe('Delta Report Details Content tests', () => {
     const bars = getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons.length).toEqual(26)
+    expect(icons.length).toEqual(26);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');

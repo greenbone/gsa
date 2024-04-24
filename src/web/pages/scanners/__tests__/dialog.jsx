@@ -16,10 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
 
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
   CLIENT_CERTIFICATE_CREDENTIAL_TYPE,
@@ -29,8 +27,6 @@ import Scanner, {GREENBONE_SENSOR_SCANNER_TYPE} from 'gmp/models/scanner';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import ScannerDialog from 'web/pages/scanners/dialog';
-
-setLocale('en');
 
 const sensorScanner = {
   _id: '1234',
@@ -68,10 +64,10 @@ describe('ScannerDialog component tests', () => {
   test('should render', () => {
     const elem = {_id: 'foo', type: GREENBONE_SENSOR_SCANNER_TYPE};
     const scanner = Scanner.fromElement(elem);
-    const handleClose = vi.fn();
-    const handleCredentialChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleScannerTypeChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleCredentialChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -94,10 +90,10 @@ describe('ScannerDialog component tests', () => {
   test('should display default info', () => {
     const scanner = Scanner.fromElement(sensorScanner);
 
-    const handleClose = vi.fn();
-    const handleCredentialChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleScannerTypeChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleCredentialChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -133,10 +129,10 @@ describe('ScannerDialog component tests', () => {
   test('should display value from props', () => {
     const scanner = Scanner.fromElement(sensorScanner);
 
-    const handleClose = vi.fn();
-    const handleCredentialChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleScannerTypeChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleCredentialChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -174,10 +170,10 @@ describe('ScannerDialog component tests', () => {
 
   test('should save valid form state', () => {
     const scanner = Scanner.fromElement(sensorScanner);
-    const handleClose = vi.fn();
-    const handleCredentialChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleScannerTypeChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleCredentialChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -218,10 +214,10 @@ describe('ScannerDialog component tests', () => {
   test('should change fields in create dialog', () => {
     const scanner = Scanner.fromElement(sensorScanner);
 
-    const handleClose = vi.fn();
-    const handleCredentialChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleScannerTypeChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleCredentialChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({gmp});
 
@@ -272,10 +268,10 @@ describe('ScannerDialog component tests', () => {
   test('should allow to close the dialog', () => {
     const elem = {_id: 'foo', type: GREENBONE_SENSOR_SCANNER_TYPE};
     const scanner = Scanner.fromElement(elem);
-    const handleClose = vi.fn();
-    const handleCredentialChange = vi.fn();
-    const handleSave = vi.fn();
-    const handleScannerTypeChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleCredentialChange = testing.fn();
+    const handleSave = testing.fn();
+    const handleScannerTypeChange = testing.fn();
 
     const {render} = rendererWith({gmp});
 

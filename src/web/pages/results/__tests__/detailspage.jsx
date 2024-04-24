@@ -15,18 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import {entityLoadingActions} from 'web/store/entities/results';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -36,13 +32,6 @@ import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
 // setup
-
-setLocale('en');
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -117,11 +106,11 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getResult = vi.fn().mockResolvedValue({
+  getResult = testing.fn().mockResolvedValue({
     data: result,
   });
 
-  getPermissions = vi.fn().mockResolvedValue({
+  getPermissions = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -129,11 +118,11 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -294,11 +283,11 @@ describe('Result Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const exportFunc = vi.fn().mockResolvedValue({
+    const exportFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const getUsers = vi.fn().mockResolvedValue({
+    const getUsers = testing.fn().mockResolvedValue({
       data: [],
       meta: {
         filter: Filter.fromString(),
@@ -357,10 +346,10 @@ describe('Result Detailspage tests', () => {
 
 describe('Result ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleNoteCreateClick = vi.fn();
-    const handleOverrideCreateClick = vi.fn();
-    const handleResultDownloadClick = vi.fn();
-    const handleTicketCreateClick = vi.fn();
+    const handleNoteCreateClick = testing.fn();
+    const handleOverrideCreateClick = testing.fn();
+    const handleResultDownloadClick = testing.fn();
+    const handleTicketCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -408,10 +397,10 @@ describe('Result ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleNoteCreateClick = vi.fn();
-    const handleOverrideCreateClick = vi.fn();
-    const handleResultDownloadClick = vi.fn();
-    const handleTicketCreateClick = vi.fn();
+    const handleNoteCreateClick = testing.fn();
+    const handleOverrideCreateClick = testing.fn();
+    const handleResultDownloadClick = testing.fn();
+    const handleTicketCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -447,10 +436,10 @@ describe('Result ToolBarIcons tests', () => {
   test('should not show icons without permission', () => {
     const wrongCapabilities = new Capabilities(['get_results']);
 
-    const handleNoteCreateClick = vi.fn();
-    const handleOverrideCreateClick = vi.fn();
-    const handleResultDownloadClick = vi.fn();
-    const handleTicketCreateClick = vi.fn();
+    const handleNoteCreateClick = testing.fn();
+    const handleOverrideCreateClick = testing.fn();
+    const handleResultDownloadClick = testing.fn();
+    const handleTicketCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 

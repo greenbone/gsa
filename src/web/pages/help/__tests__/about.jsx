@@ -15,15 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect} from '@gsa/testing';
 
 import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
 
 import AboutPage from '../about';
-
-setLocale('en');
 
 describe('AboutPage tests', () => {
   test('should render about page', async () => {

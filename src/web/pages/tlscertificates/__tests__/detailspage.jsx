@@ -15,11 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -33,13 +29,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/testing';
 
 import Detailspage from '../detailspage';
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
-
-setLocale('en');
 
 const tlsCertificate = TlsCertificate.fromElement({
   _id: '1234',
@@ -67,11 +56,11 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getEntities = vi.fn().mockResolvedValue({
+const getEntities = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -81,7 +70,7 @@ const getEntities = vi.fn().mockResolvedValue({
 
 describe('TLS Certificate Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getTlsCertificate = vi.fn().mockResolvedValue({
+    const getTlsCertificate = testing.fn().mockResolvedValue({
       data: tlsCertificate,
     });
 

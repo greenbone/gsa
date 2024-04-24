@@ -15,11 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
@@ -31,13 +27,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith} from 'web/utils/testing';
 
 import CvePage from '../detailspage';
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
-
-setLocale('en');
 
 const entity_v2 = Cve.fromElement({
   _id: 'CVE-2020-9997',
@@ -136,11 +125,11 @@ const entity_v2 = Cve.fromElement({
 
 const caps = new Capabilities(['everything']);
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = vi.fn().mockResolvedValue({
+const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -149,7 +138,7 @@ const manualUrl = 'test/';
 
 describe('CVE Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getCve = vi.fn().mockResolvedValue({
+    const getCve = testing.fn().mockResolvedValue({
       data: entity_v2,
     });
 

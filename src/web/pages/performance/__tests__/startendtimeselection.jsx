@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/date';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Date from 'gmp/models/date';
 
@@ -25,15 +23,13 @@ import {render, fireEvent} from 'web/utils/testing';
 
 import StartTimeSelection from '../startendtimeselection';
 
-setLocale('en');
-
 describe('StartTimeSelection tests', () => {
   test('should render', () => {
     const timezone = 'CET';
     const startDate = Date('2019-01-01T12:00Z').tz(timezone);
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
 
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {element} = render(
       <StartTimeSelection
@@ -52,7 +48,7 @@ describe('StartTimeSelection tests', () => {
     const startDate = Date('2019-01-01T12:00Z').tz(timezone);
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
 
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {getByTestId} = render(
       <StartTimeSelection
@@ -74,7 +70,7 @@ describe('StartTimeSelection tests', () => {
     const newStartDate = Date('2019-01-01T01:00Z').tz(timezone);
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
 
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {getByName, getByTestId} = render(
       <StartTimeSelection
@@ -105,7 +101,7 @@ describe('StartTimeSelection tests', () => {
     const newStartDate = Date('2019-01-01T12:10Z').tz(timezone);
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
 
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {getByName, getByTestId} = render(
       <StartTimeSelection
@@ -136,7 +132,7 @@ describe('StartTimeSelection tests', () => {
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
     const newEndDate = Date('2019-01-01T14:00Z').tz(timezone);
 
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {getByName, getByTestId} = render(
       <StartTimeSelection
@@ -167,7 +163,7 @@ describe('StartTimeSelection tests', () => {
     const endDate = Date('2019-01-01T13:00Z').tz(timezone);
     const newEndDate = Date('2019-01-01T13:15Z').tz(timezone);
 
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {getByName, getByTestId} = render(
       <StartTimeSelection

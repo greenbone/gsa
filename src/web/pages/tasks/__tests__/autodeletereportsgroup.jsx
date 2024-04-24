@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -28,7 +28,7 @@ import {
 
 describe('AutoDeleteReportsGroup tests', () => {
   test('should render dialog group', () => {
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {element} = render(
       <AutoDeleteReportsGroup
@@ -42,7 +42,7 @@ describe('AutoDeleteReportsGroup tests', () => {
   });
 
   test('should allow to change auto delete no', () => {
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {queryAllByTestId} = render(
       <AutoDeleteReportsGroup
@@ -60,7 +60,7 @@ describe('AutoDeleteReportsGroup tests', () => {
   });
 
   test('should allow to change auto delete keep', () => {
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {queryAllByTestId} = render(
       <AutoDeleteReportsGroup
@@ -78,7 +78,7 @@ describe('AutoDeleteReportsGroup tests', () => {
   });
 
   test('should allow to change auto delete keep value', () => {
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup
@@ -96,7 +96,7 @@ describe('AutoDeleteReportsGroup tests', () => {
   });
 
   test('should keep auto delete keep value in range 2-1200', () => {
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup
@@ -122,7 +122,7 @@ describe('AutoDeleteReportsGroup tests', () => {
   });
 
   test('should not allow to change auto delete keep value', () => {
-    const handleChange = vi.fn();
+    const handleChange = testing.fn();
 
     const {getByTestId} = render(
       <AutoDeleteReportsGroup

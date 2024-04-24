@@ -15,12 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-import {act} from 'react-dom/test-utils';
-
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -31,16 +26,9 @@ import ScanConfig from 'gmp/models/scanconfig';
 import {entityLoadingActions} from 'web/store/entities/scanconfigs';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, act} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
-
-setLocale('en');
 
 const families = [
   {
@@ -217,15 +205,15 @@ const entityType = 'scanconfig';
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = vi.fn().mockResolvedValue({
+const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getPermissions = vi.fn().mockResolvedValue({
+const getPermissions = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -235,7 +223,7 @@ const getPermissions = vi.fn().mockResolvedValue({
 
 describe('Scan Config Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getConfig = vi.fn().mockResolvedValue({
+    const getConfig = testing.fn().mockResolvedValue({
       data: config,
     });
 
@@ -302,7 +290,7 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render nvt families tab', () => {
-    const getConfig = vi.fn().mockResolvedValue({
+    const getConfig = testing.fn().mockResolvedValue({
       data: config,
     });
 
@@ -386,7 +374,7 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render nvt preferences tab', () => {
-    const getConfig = vi.fn().mockResolvedValue({
+    const getConfig = testing.fn().mockResolvedValue({
       data: config,
     });
 
@@ -443,11 +431,11 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render user tags tab', () => {
-    const getConfig = vi.fn().mockResolvedValue({
+    const getConfig = testing.fn().mockResolvedValue({
       data: config,
     });
 
-    const getTags = vi.fn().mockResolvedValue({
+    const getTags = testing.fn().mockResolvedValue({
       data: [],
       meta: {
         filter: Filter.fromString(),
@@ -494,7 +482,7 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getConfig = vi.fn().mockResolvedValue({
+    const getConfig = testing.fn().mockResolvedValue({
       data: config,
     });
 
@@ -534,32 +522,32 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const getConfig = vi.fn().mockReturnValue(
+    const getConfig = testing.fn().mockReturnValue(
       Promise.resolve({
         data: config,
       }),
     );
-    const clone = vi.fn().mockReturnValue(
+    const clone = testing.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = vi.fn().mockReturnValue(
+    const getNvtFamilies = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = vi.fn().mockReturnValue(
+    const getAllScanners = testing.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = vi.fn().mockReturnValue(
+    const deleteFunc = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = vi.fn().mockReturnValue(
+    const exportFunc = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -631,33 +619,33 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should not call commands without permission', async () => {
-    const getConfig = vi.fn().mockReturnValue(
+    const getConfig = testing.fn().mockReturnValue(
       Promise.resolve({
         data: config2,
       }),
     );
 
-    const clone = vi.fn().mockReturnValue(
+    const clone = testing.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = vi.fn().mockReturnValue(
+    const getNvtFamilies = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = vi.fn().mockReturnValue(
+    const getAllScanners = testing.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = vi.fn().mockReturnValue(
+    const deleteFunc = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = vi.fn().mockReturnValue(
+    const exportFunc = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -739,33 +727,33 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should (not) call commands if config is in use', async () => {
-    const getConfig = vi.fn().mockReturnValue(
+    const getConfig = testing.fn().mockReturnValue(
       Promise.resolve({
         data: config3,
       }),
     );
 
-    const clone = vi.fn().mockReturnValue(
+    const clone = testing.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = vi.fn().mockReturnValue(
+    const getNvtFamilies = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = vi.fn().mockReturnValue(
+    const getAllScanners = testing.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = vi.fn().mockReturnValue(
+    const deleteFunc = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = vi.fn().mockReturnValue(
+    const exportFunc = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -838,33 +826,33 @@ describe('Scan Config Detailspage tests', () => {
   });
 
   test('should (not) call commands if config is not writable', async () => {
-    const getConfig = vi.fn().mockReturnValue(
+    const getConfig = testing.fn().mockReturnValue(
       Promise.resolve({
         data: config4,
       }),
     );
 
-    const clone = vi.fn().mockReturnValue(
+    const clone = testing.fn().mockReturnValue(
       Promise.resolve({
         data: {id: 'foo'},
       }),
     );
-    const getNvtFamilies = vi.fn().mockReturnValue(
+    const getNvtFamilies = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const getAllScanners = vi.fn().mockReturnValue(
+    const getAllScanners = testing.fn().mockReturnValue(
       Promise.resolve({
         data: scanners,
       }),
     );
-    const deleteFunc = vi.fn().mockReturnValue(
+    const deleteFunc = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
     );
-    const exportFunc = vi.fn().mockReturnValue(
+    const exportFunc = testing.fn().mockReturnValue(
       Promise.resolve({
         foo: 'bar',
       }),
@@ -941,12 +929,12 @@ describe('Scan Config Detailspage tests', () => {
 
 describe('Scan Config ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleScanConfigCreate = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
-    const handleScanConfigImport = vi.fn();
+    const handleScanConfigCreate = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
+    const handleScanConfigImport = testing.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},
@@ -982,12 +970,12 @@ describe('Scan Config ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleScanConfigCreate = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
-    const handleScanConfigImport = vi.fn();
+    const handleScanConfigCreate = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
+    const handleScanConfigImport = testing.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},
@@ -1038,12 +1026,12 @@ describe('Scan Config ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleScanConfigCreate = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
-    const handleScanConfigImport = vi.fn();
+    const handleScanConfigCreate = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
+    const handleScanConfigImport = testing.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},
@@ -1098,12 +1086,12 @@ describe('Scan Config ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers if config is in use', () => {
-    const handleScanConfigCreate = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
-    const handleScanConfigImport = vi.fn();
+    const handleScanConfigCreate = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
+    const handleScanConfigImport = testing.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},
@@ -1154,12 +1142,12 @@ describe('Scan Config ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers if config is not writable', () => {
-    const handleScanConfigCreate = vi.fn();
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
-    const handleScanConfigImport = vi.fn();
+    const handleScanConfigCreate = testing.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
+    const handleScanConfigImport = testing.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},

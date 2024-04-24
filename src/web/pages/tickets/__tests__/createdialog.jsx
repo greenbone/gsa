@@ -15,12 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
+
+import User from 'gmp/models/user';
 
 import {render, fireEvent, queryAllByTestId} from 'web/utils/testing';
 
 import CreateTicketDialog from '../createdialog';
-import User from 'gmp/models/user';
 
 const u1 = User.fromElement({
   _id: 'u1',
@@ -35,9 +36,9 @@ const users = [u1, u2];
 
 describe('CreateTicketDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleUserIdChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleUserIdChange = testing.fn();
 
     const {baseElement} = render(
       <CreateTicketDialog
@@ -54,9 +55,9 @@ describe('CreateTicketDialog component tests', () => {
   });
 
   test('should allow to select user', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleUserIdChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleUserIdChange = testing.fn();
 
     const {getByTestId, baseElement} = render(
       <CreateTicketDialog
@@ -81,9 +82,9 @@ describe('CreateTicketDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleUserIdChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleUserIdChange = testing.fn();
 
     const {getByTestId} = render(
       <CreateTicketDialog
@@ -104,9 +105,9 @@ describe('CreateTicketDialog component tests', () => {
   });
 
   test('should allow to save the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleUserIdChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleUserIdChange = testing.fn();
 
     const {getByTestId, baseElement} = render(
       <CreateTicketDialog
@@ -134,9 +135,9 @@ describe('CreateTicketDialog component tests', () => {
   });
 
   test('should not save invalid form states', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleUserIdChange = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleUserIdChange = testing.fn();
 
     const {getByTestId, baseElement} = render(
       <CreateTicketDialog
