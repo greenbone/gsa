@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -34,10 +32,6 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import AlertPage, {ToolBarIcons} from '../listpage';
-
-setLocale('en');
-
-window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_config']);
@@ -76,7 +70,7 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getAlerts = vi.fn().mockResolvedValue({
+  getAlerts = testing.fn().mockResolvedValue({
     data: [alert],
     meta: {
       filter: Filter.fromString(),
@@ -84,7 +78,7 @@ beforeEach(() => {
     },
   });
 
-  getFilters = vi.fn().mockReturnValue(
+  getFilters = testing.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -94,15 +88,15 @@ beforeEach(() => {
     }),
   );
 
-  getSetting = vi.fn().mockResolvedValue({
+  getSetting = testing.fn().mockResolvedValue({
     filter: null,
   });
 
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -199,11 +193,11 @@ describe('Alert listpage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -276,11 +270,11 @@ describe('Alert listpage tests', () => {
   });
 
   test('should allow to bulk action on selected alerts', async () => {
-    const deleteByIds = vi.fn().mockResolvedValue({
+    const deleteByIds = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = vi.fn().mockResolvedValue({
+    const exportByIds = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -365,11 +359,11 @@ describe('Alert listpage tests', () => {
   });
 
   test('should allow to bulk action on filtered alerts', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -452,7 +446,7 @@ describe('Alert listpage tests', () => {
 
 describe('Alert listpage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleAlertCreateClick = vi.fn();
+    const handleAlertCreateClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -483,7 +477,7 @@ describe('Alert listpage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleAlertCreateClick = vi.fn();
+    const handleAlertCreateClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -505,7 +499,7 @@ describe('Alert listpage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleAlertCreateClick = vi.fn();
+    const handleAlertCreateClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},

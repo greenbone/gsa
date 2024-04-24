@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-import {act} from 'react-dom/test-utils';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -30,11 +29,9 @@ import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent, act} from 'web/utils/testing';
 
 import ReportConfigsPage, {ToolBarIcons} from '../listpage';
-
-window.URL.createObjectURL = vi.fn();
 
 const config = ReportConfig.fromElement({
   _id: '12345',
@@ -57,9 +54,9 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({foo: 'bar'});
+const currentSettings = testing.fn().mockResolvedValue({foo: 'bar'});
 
-const getFilters = vi.fn().mockReturnValue(
+const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -69,7 +66,7 @@ const getFilters = vi.fn().mockReturnValue(
   }),
 );
 
-const getReportConfigs = vi.fn().mockResolvedValue({
+const getReportConfigs = testing.fn().mockResolvedValue({
   data: [config],
   meta: {
     filter: Filter.fromString(),
@@ -77,7 +74,7 @@ const getReportConfigs = vi.fn().mockResolvedValue({
   },
 });
 
-const getSetting = vi.fn().mockResolvedValue({filter: null});
+const getSetting = testing.fn().mockResolvedValue({filter: null});
 
 describe('ReportConfigsPage tests', () => {
   test('should render full ReportConfigsPage', async () => {
@@ -129,15 +126,15 @@ describe('ReportConfigsPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const addTagByFilter = vi.fn().mockResolvedValue({
+    const addTagByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const renewSession = vi.fn().mockResolvedValue({data: {}});
+    const renewSession = testing.fn().mockResolvedValue({data: {}});
 
     const gmp = {
       reportconfigs: {
@@ -201,7 +198,7 @@ describe('ReportConfigsPage tests', () => {
 
   describe('ReportConfigsPage ToolBarIcons test', () => {
     test('should render', () => {
-      const handleReportConfigCreateClick = vi.fn();
+      const handleReportConfigCreateClick = testing.fn();
 
       const gmp = {
         settings: {manualUrl},
@@ -231,7 +228,7 @@ describe('ReportConfigsPage tests', () => {
     });
 
     test('should call click handlers', () => {
-      const handleReportConfigCreateClick = vi.fn();
+      const handleReportConfigCreateClick = testing.fn();
 
       const gmp = {
         settings: {manualUrl},
@@ -257,7 +254,7 @@ describe('ReportConfigsPage tests', () => {
     });
 
     test('should not show icons if user does not have the right permissions', () => {
-      const handleReportConfigCreateClick = vi.fn();
+      const handleReportConfigCreateClick = testing.fn();
 
       const gmp = {settings: {manualUrl}};
 

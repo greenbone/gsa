@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
@@ -33,7 +33,7 @@ describe('Entity CloneIcon component tests', () => {
     const entity = Task.fromElement({
       permissions: {permission: [{name: 'get_tasks'}]},
     });
-    const clickHandler = vi.fn();
+    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -56,7 +56,7 @@ describe('Entity CloneIcon component tests', () => {
     const entity = Task.fromElement({
       permissions: {permission: [{name: 'get_tasks'}]},
     });
-    const clickHandler = vi.fn();
+    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -78,7 +78,7 @@ describe('Entity CloneIcon component tests', () => {
     const entity = Task.fromElement({
       permissions: {permission: [{name: 'get_schedule'}]},
     });
-    const clickHandler = vi.fn();
+    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -96,5 +96,3 @@ describe('Entity CloneIcon component tests', () => {
     });
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import Date, {setLocale} from 'gmp/models/date';
+import Date from 'gmp/models/date';
 
 import Credential, {
   USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -30,8 +30,6 @@ import ScanConfig from 'gmp/models/scanconfig';
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import AdvancedTaskWizard from '../advancedtaskwizard';
-
-setLocale('en');
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
 const scheduleCapabilities = new Capabilities([
@@ -72,8 +70,8 @@ const startTimezone = 'UTC';
 
 describe('AdvancedTaskWizard component tests', () => {
   test('should render full advanced wizard', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -131,8 +129,8 @@ describe('AdvancedTaskWizard component tests', () => {
   });
 
   test('should not render schedule without permission', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: alertCapabilities,
@@ -188,8 +186,8 @@ describe('AdvancedTaskWizard component tests', () => {
   });
 
   test('should not render alert without permission', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: scheduleCapabilities,
@@ -248,8 +246,8 @@ describe('AdvancedTaskWizard component tests', () => {
   });
 
   test('should allow to close the advanced wizard', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -282,8 +280,8 @@ describe('AdvancedTaskWizard component tests', () => {
   });
 
   test('should allow to cancel the advanced wizard', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -316,8 +314,8 @@ describe('AdvancedTaskWizard component tests', () => {
   });
 
   test('should allow to save the advanced wizard', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,

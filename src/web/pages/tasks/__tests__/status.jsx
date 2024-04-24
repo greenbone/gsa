@@ -15,18 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 
 import {rendererWith} from 'web/utils/testing';
 
 import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import Status from '../status';
-
-setLocale('en');
 
 const caps = new Capabilities(['everything']);
 

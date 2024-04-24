@@ -17,7 +17,7 @@
  */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
@@ -48,12 +48,12 @@ describe('Row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handlePolicyClone = vi.fn();
-    const handlePolicyDelete = vi.fn();
-    const handlePolicyDownload = vi.fn();
-    const handlePolicyEdit = vi.fn();
-    const handleCreateAudit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handlePolicyClone = testing.fn();
+    const handlePolicyDelete = testing.fn();
+    const handlePolicyDownload = testing.fn();
+    const handlePolicyEdit = testing.fn();
+    const handleCreateAudit = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -89,12 +89,12 @@ describe('Row tests', () => {
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const handleToggleDetailsClick = vi.fn();
-    const handlePolicyClone = vi.fn();
-    const handlePolicyDelete = vi.fn();
-    const handlePolicyDownload = vi.fn();
-    const handlePolicyEdit = vi.fn();
-    const handleCreateAudit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handlePolicyClone = testing.fn();
+    const handlePolicyDelete = testing.fn();
+    const handlePolicyDownload = testing.fn();
+    const handlePolicyEdit = testing.fn();
+    const handleCreateAudit = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -121,12 +121,12 @@ describe('Row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handlePolicyClone = vi.fn();
-    const handlePolicyDelete = vi.fn();
-    const handlePolicyDownload = vi.fn();
-    const handlePolicyEdit = vi.fn();
-    const handleCreateAudit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handlePolicyClone = testing.fn();
+    const handlePolicyDelete = testing.fn();
+    const handlePolicyDownload = testing.fn();
+    const handlePolicyEdit = testing.fn();
+    const handleCreateAudit = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -174,12 +174,12 @@ describe('Row tests', () => {
   });
 
   test('should not call click handlers without permissions', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handlePolicyClone = vi.fn();
-    const handlePolicyDelete = vi.fn();
-    const handlePolicyDownload = vi.fn();
-    const handlePolicyEdit = vi.fn();
-    const handleCreateAudit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handlePolicyClone = testing.fn();
+    const handlePolicyDelete = testing.fn();
+    const handlePolicyDownload = testing.fn();
+    const handlePolicyEdit = testing.fn();
+    const handleCreateAudit = testing.fn();
 
     const policy = Policy.fromElement({
       _id: '1234',
@@ -245,12 +245,12 @@ describe('Row tests', () => {
   });
 
   test('should (not) call click handlers if policy is in use', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handlePolicyClone = vi.fn();
-    const handlePolicyDelete = vi.fn();
-    const handlePolicyDownload = vi.fn();
-    const handlePolicyEdit = vi.fn();
-    const handleCreateAudit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handlePolicyClone = testing.fn();
+    const handlePolicyDelete = testing.fn();
+    const handlePolicyDownload = testing.fn();
+    const handlePolicyEdit = testing.fn();
+    const handleCreateAudit = testing.fn();
 
     const policy = Policy.fromElement({
       _id: '1234',
@@ -307,12 +307,12 @@ describe('Row tests', () => {
   });
 
   test('should (not) call click handlers if policy is not writable', () => {
-    const handleToggleDetailsClick = vi.fn();
-    const handlePolicyClone = vi.fn();
-    const handlePolicyDelete = vi.fn();
-    const handlePolicyDownload = vi.fn();
-    const handlePolicyEdit = vi.fn();
-    const handleCreateAudit = vi.fn();
+    const handleToggleDetailsClick = testing.fn();
+    const handlePolicyClone = testing.fn();
+    const handlePolicyDelete = testing.fn();
+    const handlePolicyDownload = testing.fn();
+    const handlePolicyEdit = testing.fn();
+    const handleCreateAudit = testing.fn();
 
     const policy = Policy.fromElement({
       _id: '1234',

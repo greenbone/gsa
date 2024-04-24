@@ -15,19 +15,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
-import Date, {setLocale} from 'gmp/models/date';
+import Date from 'gmp/models/date';
 
 import Task from 'gmp/models/task';
 
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
 import ModifyTaskWizard from '../modifytaskwizard';
-
-setLocale('en');
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
 const scheduleCapabilities = new Capabilities([
@@ -48,8 +46,8 @@ const startTimezone = 'UTC';
 
 describe('ModifyTaskWizard component tests', () => {
   test('should render full modify wizard', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -91,8 +89,8 @@ describe('ModifyTaskWizard component tests', () => {
   });
 
   test('should not render schedule without permission', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: alertCapabilities,
@@ -128,8 +126,8 @@ describe('ModifyTaskWizard component tests', () => {
   });
 
   test('should not render alert without permission', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: scheduleCapabilities,
@@ -172,8 +170,8 @@ describe('ModifyTaskWizard component tests', () => {
   });
 
   test('should allow to close the modify wizard', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -201,8 +199,8 @@ describe('ModifyTaskWizard component tests', () => {
   });
 
   test('should allow to cancel the modify wizard', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,
@@ -230,8 +228,8 @@ describe('ModifyTaskWizard component tests', () => {
   });
 
   test('should allow to save the modify wizard', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {render} = rendererWith({
       capabilities: true,

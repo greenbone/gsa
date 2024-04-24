@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {
   SCANCONFIG_TREND_STATIC,
@@ -27,8 +25,6 @@ import {
 import {rendererWith, fireEvent, getAllByTestId} from 'web/utils/testing';
 
 import EditScanConfigDialog from '../editdialog';
-
-setLocale('en');
 
 const families = [
   {
@@ -134,10 +130,10 @@ const scannerPreferences = [
 
 describe('EditScanConfigDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditConfigFamilyDialog = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditConfigFamilyDialog = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
 
@@ -182,10 +178,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should render dialog for config in use', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditConfigFamilyDialog = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditConfigFamilyDialog = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {baseElement, getByTestId} = render(
@@ -236,10 +232,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should render dialog inline notification for policy in use', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditConfigFamilyDialog = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditConfigFamilyDialog = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
     const {baseElement, getByTestId} = render(
@@ -288,10 +284,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditConfigFamilyDialog = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditConfigFamilyDialog = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId} = render(
@@ -335,10 +331,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditConfigFamilyDialog = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditConfigFamilyDialog = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId} = render(
@@ -374,10 +370,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should allow to change name and comment', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditConfigFamilyDialog = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditConfigFamilyDialog = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId} = render(
@@ -427,10 +423,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should allow to edit nvt families for openvas configs', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditConfigFamilyDialog = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditConfigFamilyDialog = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId, queryAllByName} = render(
@@ -496,10 +492,10 @@ describe('EditScanConfigDialog component tests', () => {
   });
 
   test('should call click handlers for edit families and edit nvt details', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
-    const handleOpenEditConfigFamilyDialog = vi.fn();
-    const handleOpenEditNvtDetailsDialog = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
+    const handleOpenEditConfigFamilyDialog = testing.fn();
+    const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
     const {getByTestId} = render(

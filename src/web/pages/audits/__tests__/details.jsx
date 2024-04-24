@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
@@ -31,8 +29,6 @@ import {entityLoadingActions as scheduleActions} from 'web/store/entities/schedu
 import {rendererWith} from 'web/utils/testing';
 
 import Details from '../details';
-
-setLocale('en');
 
 const policy = Policy.fromElement({
   _id: '314',
@@ -74,13 +70,13 @@ const preferences = {
 
 const schedule = Schedule.fromElement({_id: '121314', name: 'schedule1'});
 
-const getPolicy = vi.fn().mockReturnValue(
+const getPolicy = testing.fn().mockReturnValue(
   Promise.resolve({
     data: policy,
   }),
 );
 
-const getSchedule = vi.fn().mockReturnValue(
+const getSchedule = testing.fn().mockReturnValue(
   Promise.resolve({
     data: schedule,
   }),

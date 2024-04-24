@@ -16,17 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable no-console */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
+import Task, {TASK_STATUS} from 'gmp/models/task';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Actions from '../actions';
-import Task, {TASK_STATUS} from 'gmp/models/task';
-
-setLocale('en');
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_task']);
@@ -45,14 +42,14 @@ describe('Task Actions tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
     const {baseElement} = render(
@@ -82,14 +79,14 @@ describe('Task Actions tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
     const {getAllByTestId} = render(
@@ -143,14 +140,14 @@ describe('Task Actions tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
     const {getAllByTestId} = render(
@@ -213,14 +210,14 @@ describe('Task Actions tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
     const {getAllByTestId} = render(
@@ -286,14 +283,14 @@ describe('Task Actions tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const {render} = rendererWith({capabilities: wrongCaps});
     const {getAllByTestId} = render(
@@ -353,14 +350,14 @@ describe('Task Actions tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
     const {getAllByTestId} = render(
@@ -414,14 +411,14 @@ describe('Task Actions tests', () => {
       target: {_id: 'id', name: 'target'},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
     const {getAllByTestId} = render(
@@ -480,14 +477,14 @@ describe('Task Actions tests', () => {
       },
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const {render} = rendererWith({
       capabilities: caps,
@@ -529,14 +526,14 @@ describe('Task Actions tests', () => {
       permissions: {permission: [{name: 'everything'}]},
     });
 
-    const handleReportImport = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
     const {getAllByTestId} = render(

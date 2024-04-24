@@ -16,13 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {fireEvent, rendererWith, waitFor, wait} from 'web/utils/testing';
 
 import CvssCalculator from 'web/pages/extras/cvsscalculatorpage';
 
-const calculateScoreFromVector = vi.fn().mockReturnValue(
+const calculateScoreFromVector = testing.fn().mockReturnValue(
   Promise.resolve({
     data: 7.5,
   }),
@@ -36,7 +36,7 @@ const gmp = {
     manualUrl: 'http://docs.greenbone.net/GSM-Manual/gos-5/',
   },
   user: {
-    renewSession: vi.fn().mockReturnValue(
+    renewSession: testing.fn().mockReturnValue(
       Promise.resolve({
         data: 'foo',
       }),

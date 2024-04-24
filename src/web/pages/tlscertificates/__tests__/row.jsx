@@ -16,9 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable no-console */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import TlsCertificate from 'gmp/models/tlscertificate';
 
@@ -27,8 +25,6 @@ import {setTimezone} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Row from '../row';
-
-setLocale('en');
 
 const gmp = {settings: {}};
 
@@ -58,10 +54,10 @@ describe('Tls Certificate Row tests', () => {
   console.error = () => {};
 
   test('should render', () => {
-    const handleTlsCertificateDelete = vi.fn();
-    const handleTlsCertificateDownload = vi.fn();
-    const handleTlsCertificateExport = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleTlsCertificateDelete = testing.fn();
+    const handleTlsCertificateDownload = testing.fn();
+    const handleTlsCertificateExport = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -94,11 +90,11 @@ describe('Tls Certificate Row tests', () => {
   });
 
   test('should render icons', () => {
-    const handleReportImport = vi.fn();
-    const handleTlsCertificateDelete = vi.fn();
-    const handleTlsCertificateDownload = vi.fn();
-    const handleTlsCertificateExport = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTlsCertificateDelete = testing.fn();
+    const handleTlsCertificateDownload = testing.fn();
+    const handleTlsCertificateExport = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({gmp, store: true});
 
@@ -123,10 +119,10 @@ describe('Tls Certificate Row tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleTlsCertificateDelete = vi.fn();
-    const handleTlsCertificateDownload = vi.fn();
-    const handleTlsCertificateExport = vi.fn();
-    const handleToggleDetailsClick = vi.fn();
+    const handleTlsCertificateDelete = testing.fn();
+    const handleTlsCertificateDownload = testing.fn();
+    const handleTlsCertificateExport = testing.fn();
+    const handleToggleDetailsClick = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Logger from 'gmp/log';
 
@@ -27,8 +27,8 @@ Logger.setDefaultLevel('silent');
 
 describe('LoginPage tests', () => {
   test('should render Loginpage', () => {
-    const isLoggedIn = vi.fn().mockReturnValue(false);
-    const clearToken = vi.fn();
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const clearToken = testing.fn();
     const gmp = {isLoggedIn, clearToken, settings: {}};
 
     const {render} = rendererWith({gmp, router: true, store: true});
@@ -37,16 +37,16 @@ describe('LoginPage tests', () => {
   });
 
   test('should allow to login with username and password', () => {
-    const login = vi.fn().mockResolvedValue({
+    const login = testing.fn().mockResolvedValue({
       locale: 'locale',
       username: 'username',
       token: 'token',
       timezone: 'timezone',
     });
-    const isLoggedIn = vi.fn().mockReturnValue(false);
-    const clearToken = vi.fn();
-    const setLocale = vi.fn();
-    const setTimezone = vi.fn();
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const clearToken = testing.fn();
+    const setLocale = testing.fn();
+    const setTimezone = testing.fn();
     const gmp = {
       setTimezone,
       setLocale,
@@ -72,8 +72,8 @@ describe('LoginPage tests', () => {
   });
 
   test('should not display guest login by default', () => {
-    const isLoggedIn = vi.fn().mockReturnValue(false);
-    const clearToken = vi.fn();
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const clearToken = testing.fn();
     const gmp = {
       isLoggedIn,
       clearToken,
@@ -88,16 +88,16 @@ describe('LoginPage tests', () => {
   });
 
   test('should allow to login as guest', () => {
-    const login = vi.fn().mockResolvedValue({
+    const login = testing.fn().mockResolvedValue({
       locale: 'locale',
       username: 'username',
       token: 'token',
       timezone: 'timezone',
     });
-    const isLoggedIn = vi.fn().mockReturnValue(false);
-    const clearToken = vi.fn();
-    const setLocale = vi.fn();
-    const setTimezone = vi.fn();
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const clearToken = testing.fn();
+    const setLocale = testing.fn();
+    const setTimezone = testing.fn();
     const gmp = {
       setTimezone,
       setLocale,
@@ -117,11 +117,11 @@ describe('LoginPage tests', () => {
   });
 
   test('should display error message', async () => {
-    const login = vi.fn().mockRejectedValue({message: 'Just a test'});
-    const isLoggedIn = vi.fn().mockReturnValue(false);
-    const clearToken = vi.fn();
-    const setLocale = vi.fn();
-    const setTimezone = vi.fn();
+    const login = testing.fn().mockRejectedValue({message: 'Just a test'});
+    const isLoggedIn = testing.fn().mockReturnValue(false);
+    const clearToken = testing.fn();
+    const setLocale = testing.fn();
+    const setTimezone = testing.fn();
     const gmp = {
       setTimezone,
       setLocale,
@@ -149,16 +149,16 @@ describe('LoginPage tests', () => {
   });
 
   test('should redirect to main page if already logged in', () => {
-    const login = vi.fn().mockResolvedValue({
+    const login = testing.fn().mockResolvedValue({
       locale: 'locale',
       username: 'username',
       token: 'token',
       timezone: 'timezone',
     });
-    const isLoggedIn = vi.fn().mockReturnValue(true);
-    const clearToken = vi.fn();
-    const setLocale = vi.fn();
-    const setTimezone = vi.fn();
+    const isLoggedIn = testing.fn().mockReturnValue(true);
+    const clearToken = testing.fn();
+    const setLocale = testing.fn();
+    const setTimezone = testing.fn();
     const gmp = {
       setTimezone,
       setLocale,

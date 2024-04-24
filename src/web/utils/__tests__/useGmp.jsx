@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {rendererWith} from '../testing';
 
@@ -28,7 +28,7 @@ const TestUseGmp = () => {
 
 describe('useGmp tests', () => {
   test('should return the current gmp object', () => {
-    const foo = vi.fn().mockReturnValue('foo');
+    const foo = testing.fn().mockReturnValue('foo');
     const gmp = {foo};
 
     const {render} = rendererWith({gmp});

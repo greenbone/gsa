@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -23,8 +23,8 @@ import CreatePolicyDialog from '../dialog';
 
 describe('CreatePolicyDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {baseElement} = render(
       <CreatePolicyDialog
@@ -38,8 +38,8 @@ describe('CreatePolicyDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <CreatePolicyDialog
@@ -57,8 +57,8 @@ describe('CreatePolicyDialog component tests', () => {
   });
 
   test('should allow to cancel the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <CreatePolicyDialog
@@ -76,8 +76,8 @@ describe('CreatePolicyDialog component tests', () => {
   });
 
   test('should allow to save the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByName, getByTestId} = render(
       <CreatePolicyDialog

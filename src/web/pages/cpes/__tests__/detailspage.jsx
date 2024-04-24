@@ -15,11 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
@@ -34,13 +30,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, wait, fireEvent} from 'web/utils/testing';
 
 import CpePage, {ToolBarIcons} from '../detailspage';
-
-setLocale('en');
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -71,18 +60,18 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
 
 describe('CPE Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getCpe = vi.fn().mockResolvedValue({
+    const getCpe = testing.fn().mockResolvedValue({
       data: cpe,
     });
 
@@ -164,11 +153,11 @@ describe('CPE Detailspage tests', () => {
   });
 
   test('should render user tags tab', async () => {
-    const getCpe = vi.fn().mockResolvedValue({
+    const getCpe = testing.fn().mockResolvedValue({
       data: cpe,
     });
 
-    const getTags = vi.fn().mockResolvedValue({
+    const getTags = testing.fn().mockResolvedValue({
       data: [],
       meta: {
         filter: Filter.fromString(),
@@ -212,11 +201,11 @@ describe('CPE Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const exportFunc = vi.fn().mockResolvedValue({
+    const exportFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const getCpe = vi.fn().mockReturnValue(
+    const getCpe = testing.fn().mockReturnValue(
       Promise.resolve({
         data: cpe,
       }),
@@ -262,7 +251,7 @@ describe('CPE Detailspage tests', () => {
 
 describe('CPEs ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleCpeDownload = vi.fn();
+    const handleCpeDownload = testing.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},
@@ -288,7 +277,7 @@ describe('CPEs ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleCpeDownload = vi.fn();
+    const handleCpeDownload = testing.fn();
 
     const {render} = rendererWith({
       gmp: {settings: {manualUrl}},

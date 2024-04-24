@@ -15,19 +15,15 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 import NVT from 'gmp/models/nvt';
 import Note from 'gmp/models/note';
 import Override from 'gmp/models/override';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import {entityLoadingActions} from 'web/store/entities/nvts';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -35,13 +31,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-
-setLocale('en');
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -73,8 +62,7 @@ const nvt = NVT.fromElement({
       value: 80,
       type: 'remote_banner',
     },
-    tags:
-      'cvss_base_vector=AV:N/AC:M/Au:S/C:P/I:N/A:P|summary=This is a description|solution_type=VendorFix|insight=Foo|impact=Bar|vuldetect=Baz|affected=foo',
+    tags: 'cvss_base_vector=AV:N/AC:M/Au:S/C:P/I:N/A:P|summary=This is a description|solution_type=VendorFix|insight=Foo|impact=Bar|vuldetect=Baz|affected=foo',
     solution: {
       _type: 'VendorFix',
       __text: 'This is a description',
@@ -217,11 +205,11 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getNvt = vi.fn().mockResolvedValue({
+  getNvt = testing.fn().mockResolvedValue({
     data: nvt,
   });
 
-  getNotes = vi.fn().mockResolvedValue({
+  getNotes = testing.fn().mockResolvedValue({
     data: [note1],
     meta: {
       filter: Filter.fromString(),
@@ -229,7 +217,7 @@ beforeEach(() => {
     },
   });
 
-  getOverrides = vi.fn().mockResolvedValue({
+  getOverrides = testing.fn().mockResolvedValue({
     data: [override1, override2],
     meta: {
       filter: Filter.fromString(),
@@ -237,7 +225,7 @@ beforeEach(() => {
     },
   });
 
-  getEntities = vi.fn().mockResolvedValue({
+  getEntities = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -245,11 +233,11 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -450,9 +438,9 @@ describe('Nvt Detailspage tests', () => {
 
 describe('Nvt ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleNvtDownloadClick = vi.fn();
-    const handleOnNoteCreateClick = vi.fn();
-    const handleOnOverrideCreateClick = vi.fn();
+    const handleNvtDownloadClick = testing.fn();
+    const handleOnNoteCreateClick = testing.fn();
+    const handleOnOverrideCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -497,9 +485,9 @@ describe('Nvt ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleNvtDownloadClick = vi.fn();
-    const handleOnNoteCreateClick = vi.fn();
-    const handleOnOverrideCreateClick = vi.fn();
+    const handleNvtDownloadClick = testing.fn();
+    const handleOnNoteCreateClick = testing.fn();
+    const handleOnOverrideCreateClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 

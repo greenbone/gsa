@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
@@ -31,7 +31,7 @@ describe('Entity CreateIcon component tests', () => {
   test('should render in active state with correct permissions', () => {
     const caps = new Capabilities(['everything']);
     const entity = Task.fromElement({});
-    const clickHandler = vi.fn();
+    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -61,5 +61,3 @@ describe('Entity CreateIcon component tests', () => {
     expect(caps.mayCreate('task')).toEqual(false);
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

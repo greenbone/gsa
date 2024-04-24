@@ -15,11 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 import NVT from 'gmp/models/nvt';
@@ -33,10 +31,6 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import NvtsPage, {ToolBarIcons} from '../listpage';
-
-setLocale('en');
-
-window.URL.createObjectURL = vi.fn();
 
 const nvt = NVT.fromElement({
   _oid: '1.3.6.1.4.1.25623.1.0',
@@ -62,15 +56,15 @@ const nvt = NVT.fromElement({
 const reloadInterval = -1;
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getSetting = vi.fn().mockResolvedValue({
+const getSetting = testing.fn().mockResolvedValue({
   filter: null,
 });
 
-const getDashboardSetting = vi.fn().mockResolvedValue({
+const getDashboardSetting = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -78,7 +72,7 @@ const getDashboardSetting = vi.fn().mockResolvedValue({
   },
 });
 
-const getAggregates = vi.fn().mockResolvedValue({
+const getAggregates = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -86,7 +80,7 @@ const getAggregates = vi.fn().mockResolvedValue({
   },
 });
 
-const getFilters = vi.fn().mockReturnValue(
+const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -96,7 +90,7 @@ const getFilters = vi.fn().mockReturnValue(
   }),
 );
 
-const getNvts = vi.fn().mockResolvedValue({
+const getNvts = testing.fn().mockResolvedValue({
   data: [nvt],
   meta: {
     filter: Filter.fromString(),
@@ -104,7 +98,7 @@ const getNvts = vi.fn().mockResolvedValue({
   },
 });
 
-const renewSession = vi.fn().mockResolvedValue({
+const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -211,11 +205,11 @@ describe('NvtsPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -283,11 +277,11 @@ describe('NvtsPage tests', () => {
   });
 
   test('should allow to bulk action on selected nvts', async () => {
-    const deleteByIds = vi.fn().mockResolvedValue({
+    const deleteByIds = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = vi.fn().mockResolvedValue({
+    const exportByIds = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -370,11 +364,11 @@ describe('NvtsPage tests', () => {
   });
 
   test('should allow to bulk action on filtered nvts', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 

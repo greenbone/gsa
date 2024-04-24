@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
@@ -31,8 +29,6 @@ import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 import {getMockDeltaReport} from 'web/pages/reports/__mocks__/mockdeltareport';
 
 import Summary from '../summary';
-
-setLocale('en');
 
 const filter = Filter.fromString(
   'apply_overrides=0 levels=hml rows=2 min_qod=70 first=1 sort-reverse=severity',

@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 /* eslint-disable no-console */
-import React from 'react';
+import {describe, test, expect} from '@gsa/testing';
 
 import {
   SCANCONFIG_TREND_DYNAMIC,
@@ -26,10 +26,6 @@ import {
 import {render} from 'web/utils/testing';
 
 import Trend from '../trend';
-
-import {setLocale} from 'gmp/locale/lang';
-
-setLocale('en');
 
 describe('Scan Config Trend tests', () => {
   test('should render', () => {

@@ -15,23 +15,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
-import {setLocale} from 'gmp/locale/lang';
 import Schedule from 'gmp/models/schedule';
 
 import {render, fireEvent, screen} from 'web/utils/testing';
 
 import ScheduleDialog from '../dialog';
 
-setLocale('en');
-
 let handleSave;
 let handleClose;
 
 beforeEach(() => {
-  handleSave = vi.fn();
-  handleClose = vi.fn();
+  handleSave = testing.fn();
+  handleClose = testing.fn();
 });
 
 const schedule = Schedule.fromElement({

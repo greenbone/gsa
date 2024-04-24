@@ -15,12 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-import {act} from 'react-dom/test-utils';
-
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -33,16 +28,9 @@ import ScanConfig from 'gmp/models/scanconfig';
 import {entityLoadingActions} from 'web/store/entities/tasks';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, act} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
-
-setLocale('en');
 
 const config = ScanConfig.fromElement({
   _id: '314',
@@ -279,23 +267,23 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = vi.fn().mockResolvedValue({
+const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getConfig = vi.fn().mockResolvedValue({
+const getConfig = testing.fn().mockResolvedValue({
   data: config,
 });
 
-const getSchedule = vi.fn().mockResolvedValue({
+const getSchedule = testing.fn().mockResolvedValue({
   data: schedule,
 });
 
-const getEntities = vi.fn().mockResolvedValue({
+const getEntities = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -305,7 +293,7 @@ const getEntities = vi.fn().mockResolvedValue({
 
 describe('Task Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getTask = vi.fn().mockResolvedValue({
+    const getTask = testing.fn().mockResolvedValue({
       data: task,
     });
 
@@ -406,11 +394,11 @@ describe('Task Detailspage tests', () => {
   });
 
   test('should render user tags tab', () => {
-    const getTask = vi.fn().mockResolvedValue({
+    const getTask = testing.fn().mockResolvedValue({
       data: task2,
     });
 
-    const getTags = vi.fn().mockResolvedValue({
+    const getTags = testing.fn().mockResolvedValue({
       data: [],
       meta: {
         filter: Filter.fromString(),
@@ -471,7 +459,7 @@ describe('Task Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getTask = vi.fn().mockResolvedValue({
+    const getTask = testing.fn().mockResolvedValue({
       data: task2,
     });
 
@@ -525,27 +513,27 @@ describe('Task Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const getTask = vi.fn().mockResolvedValue({
+    const getTask = testing.fn().mockResolvedValue({
       data: task5,
     });
 
-    const clone = vi.fn().mockResolvedValue({
+    const clone = testing.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = vi.fn().mockResolvedValue({
+    const deleteFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = vi.fn().mockResolvedValue({
+    const exportFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const start = vi.fn().mockResolvedValue({
+    const start = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const resume = vi.fn().mockResolvedValue({
+    const resume = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -626,16 +614,16 @@ describe('Task Detailspage tests', () => {
 
 describe('Task ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleReportImport = vi.fn();
-    const handleTaskCreate = vi.fn();
-    const handleContainerTaskCreate = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskCreate = testing.fn();
+    const handleContainerTaskCreate = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -681,16 +669,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for new task', () => {
-    const handleReportImport = vi.fn();
-    const handleTaskCreate = vi.fn();
-    const handleContainerTaskCreate = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskCreate = testing.fn();
+    const handleContainerTaskCreate = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -776,16 +764,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for running task', () => {
-    const handleReportImport = vi.fn();
-    const handleTaskCreate = vi.fn();
-    const handleContainerTaskCreate = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskCreate = testing.fn();
+    const handleContainerTaskCreate = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -878,16 +866,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for stopped task', () => {
-    const handleReportImport = vi.fn();
-    const handleTaskCreate = vi.fn();
-    const handleContainerTaskCreate = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskCreate = testing.fn();
+    const handleContainerTaskCreate = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -979,16 +967,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for finished task', () => {
-    const handleReportImport = vi.fn();
-    const handleTaskCreate = vi.fn();
-    const handleContainerTaskCreate = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskCreate = testing.fn();
+    const handleContainerTaskCreate = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -1082,16 +1070,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleReportImport = vi.fn();
-    const handleTaskCreate = vi.fn();
-    const handleContainerTaskCreate = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskCreate = testing.fn();
+    const handleContainerTaskCreate = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -1189,16 +1177,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should render schedule icon if task is scheduled', () => {
-    const handleReportImport = vi.fn();
-    const handleTaskCreate = vi.fn();
-    const handleContainerTaskCreate = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskCreate = testing.fn();
+    const handleContainerTaskCreate = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -1246,16 +1234,16 @@ describe('Task ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for container task', () => {
-    const handleReportImport = vi.fn();
-    const handleTaskCreate = vi.fn();
-    const handleContainerTaskCreate = vi.fn();
-    const handleTaskClone = vi.fn();
-    const handleTaskDelete = vi.fn();
-    const handleTaskDownload = vi.fn();
-    const handleTaskEdit = vi.fn();
-    const handleTaskResume = vi.fn();
-    const handleTaskStart = vi.fn();
-    const handleTaskStop = vi.fn();
+    const handleReportImport = testing.fn();
+    const handleTaskCreate = testing.fn();
+    const handleContainerTaskCreate = testing.fn();
+    const handleTaskClone = testing.fn();
+    const handleTaskDelete = testing.fn();
+    const handleTaskDownload = testing.fn();
+    const handleTaskEdit = testing.fn();
+    const handleTaskResume = testing.fn();
+    const handleTaskStart = testing.fn();
+    const handleTaskStop = testing.fn();
 
     const gmp = {
       settings: {manualUrl},

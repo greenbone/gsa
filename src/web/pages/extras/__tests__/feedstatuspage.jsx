@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {rendererWith, waitFor} from 'web/utils/testing';
 
@@ -30,7 +30,7 @@ const mockDate = new Date(1595660400000); // Saturday July 25 090000
 const _now = global.Date.now;
 
 // set mockDate so the feed ages don't keep changing
-global.Date.now = vi.fn(() => mockDate);
+global.Date.now = testing.fn(() => mockDate);
 
 const nvtFeed = new Feed({
   name: 'Greenbone Community Feed',
@@ -69,7 +69,7 @@ const response = new Response(xhr, data);
 
 const gmp = {
   feedstatus: {
-    readFeedInformation: vi.fn(() => Promise.resolve(response)),
+    readFeedInformation: testing.fn(() => Promise.resolve(response)),
   },
   settings: {
     manualUrl: 'http://foo.bar',

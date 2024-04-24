@@ -16,10 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 
@@ -31,8 +30,6 @@ import {getMockReport} from 'web/pages/reports/__mocks__/mockreport';
 
 import CvesTab from '../cvestab';
 
-setLocale('en');
-
 const caps = new Capabilities(['everything']);
 
 const filter = Filter.fromString(
@@ -42,8 +39,8 @@ const filter = Filter.fromString(
 describe('Report CVEs Tab tests', () => {
   test('should render Report CVEs Tab', () => {
     const {cves} = getMockReport();
-    const onSortChange = vi.fn();
-    const onInteraction = vi.fn();
+    const onSortChange = testing.fn();
+    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       capabilities: caps,

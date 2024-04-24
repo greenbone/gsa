@@ -15,11 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect} from '@gsa/testing';
 
-import React from 'react';
-import {rendererWith} from 'web/utils/testing';
-import Row from '../row';
 import Result from 'gmp/models/result';
+
+import {rendererWith} from 'web/utils/testing';
+
+import Row from '../row';
 
 describe('Delta reports V2 with changed severity, qod and hostname', () => {
   const {render} = rendererWith();

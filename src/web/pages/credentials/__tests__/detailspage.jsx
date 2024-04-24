@@ -15,18 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import {setLocale} from 'gmp/locale/lang';
-
 import Credential from 'gmp/models/credential';
 import Filter from 'gmp/models/filter';
-
-import {isDefined} from 'gmp/utils/identity';
 
 import {entityLoadingActions} from 'web/store/entities/credentials';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
@@ -35,36 +30,29 @@ import {rendererWith, screen, fireEvent} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
 
-setLocale('en');
-
 let getCredential;
 let getEntities;
 let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getCredential = vi.fn().mockResolvedValue({
+  getCredential = testing.fn().mockResolvedValue({
     data: credential,
   });
-  getEntities = vi.fn().mockResolvedValue({
+  getEntities = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
       counts: new CollectionCounts(),
     },
   });
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
 
 const caps = new Capabilities(['everything']);
 
@@ -255,15 +243,15 @@ describe('Credential Detailspage tests', () => {
   });
 
   test('should call commands', () => {
-    const clone = vi.fn().mockResolvedValue({
+    const clone = testing.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = vi.fn().mockResolvedValue({
+    const deleteFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = vi.fn().mockResolvedValue({
+    const exportFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -320,12 +308,12 @@ describe('Credential Detailspage tests', () => {
 
 describe('Credential ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleCredentialCloneClick = vi.fn();
-    const handleCredentialDeleteClick = vi.fn();
-    const handleCredentialDownloadClick = vi.fn();
-    const handleCredentialEditClick = vi.fn();
-    const handleCredentialCreateClick = vi.fn();
-    const handleCredentialInstallerDownloadClick = vi.fn();
+    const handleCredentialCloneClick = testing.fn();
+    const handleCredentialDeleteClick = testing.fn();
+    const handleCredentialDownloadClick = testing.fn();
+    const handleCredentialEditClick = testing.fn();
+    const handleCredentialCreateClick = testing.fn();
+    const handleCredentialInstallerDownloadClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -362,12 +350,12 @@ describe('Credential ToolBarIcons tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleCredentialCloneClick = vi.fn();
-    const handleCredentialDeleteClick = vi.fn();
-    const handleCredentialDownloadClick = vi.fn();
-    const handleCredentialEditClick = vi.fn();
-    const handleCredentialCreateClick = vi.fn();
-    const handleCredentialInstallerDownloadClick = vi.fn();
+    const handleCredentialCloneClick = testing.fn();
+    const handleCredentialDeleteClick = testing.fn();
+    const handleCredentialDownloadClick = testing.fn();
+    const handleCredentialEditClick = testing.fn();
+    const handleCredentialCreateClick = testing.fn();
+    const handleCredentialInstallerDownloadClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -422,12 +410,12 @@ describe('Credential ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleCredentialCloneClick = vi.fn();
-    const handleCredentialDeleteClick = vi.fn();
-    const handleCredentialDownloadClick = vi.fn();
-    const handleCredentialEditClick = vi.fn();
-    const handleCredentialCreateClick = vi.fn();
-    const handleCredentialInstallerDownloadClick = vi.fn();
+    const handleCredentialCloneClick = testing.fn();
+    const handleCredentialDeleteClick = testing.fn();
+    const handleCredentialDownloadClick = testing.fn();
+    const handleCredentialEditClick = testing.fn();
+    const handleCredentialCreateClick = testing.fn();
+    const handleCredentialInstallerDownloadClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -484,12 +472,12 @@ describe('Credential ToolBarIcons tests', () => {
   });
 
   test('should (not) call click handlers for credential in use', () => {
-    const handleCredentialCloneClick = vi.fn();
-    const handleCredentialDeleteClick = vi.fn();
-    const handleCredentialDownloadClick = vi.fn();
-    const handleCredentialEditClick = vi.fn();
-    const handleCredentialCreateClick = vi.fn();
-    const handleCredentialInstallerDownloadClick = vi.fn();
+    const handleCredentialCloneClick = testing.fn();
+    const handleCredentialDeleteClick = testing.fn();
+    const handleCredentialDownloadClick = testing.fn();
+    const handleCredentialEditClick = testing.fn();
+    const handleCredentialCreateClick = testing.fn();
+    const handleCredentialInstallerDownloadClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 

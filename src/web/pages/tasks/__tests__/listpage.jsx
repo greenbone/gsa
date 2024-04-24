@@ -15,10 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-import {act} from 'react-dom/test-utils';
-
-import {setLocale} from 'gmp/locale/lang';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -31,13 +28,9 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {rendererWith, waitFor, fireEvent, act} from 'web/utils/testing';
 
 import TaskPage, {ToolBarIcons} from '../listpage';
-
-setLocale('en');
-
-window.URL.createObjectURL = vi.fn();
 
 const lastReport = {
   report: {
@@ -66,11 +59,11 @@ const wrongCaps = new Capabilities(['get_config']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getFilters = vi.fn().mockReturnValue(
+const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -80,7 +73,7 @@ const getFilters = vi.fn().mockReturnValue(
   }),
 );
 
-const getDashboardSetting = vi.fn().mockResolvedValue({
+const getDashboardSetting = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -88,11 +81,11 @@ const getDashboardSetting = vi.fn().mockResolvedValue({
   },
 });
 
-const getUserSetting = vi.fn().mockResolvedValue({
+const getUserSetting = testing.fn().mockResolvedValue({
   filter: null,
 });
 
-const getAggregates = vi.fn().mockResolvedValue({
+const getAggregates = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -100,7 +93,7 @@ const getAggregates = vi.fn().mockResolvedValue({
   },
 });
 
-const getTasks = vi.fn().mockResolvedValue({
+const getTasks = testing.fn().mockResolvedValue({
   data: [task],
   meta: {
     filter: Filter.fromString(),
@@ -108,7 +101,7 @@ const getTasks = vi.fn().mockResolvedValue({
   },
 });
 
-const getReportFormats = vi.fn().mockResolvedValue({
+const getReportFormats = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -116,7 +109,7 @@ const getReportFormats = vi.fn().mockResolvedValue({
   },
 });
 
-const renewSession = vi.fn().mockResolvedValue({
+const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
@@ -229,11 +222,11 @@ describe('TaskPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -312,11 +305,11 @@ describe('TaskPage tests', () => {
 
 describe('TaskPage ToolBarIcons test', () => {
   test('should render', () => {
-    const handleAdvancedTaskWizardClick = vi.fn();
-    const handleModifyTaskWizardClick = vi.fn();
-    const handleContainerTaskCreateClick = vi.fn();
-    const handleTaskCreateClick = vi.fn();
-    const handleTaskWizardClick = vi.fn();
+    const handleAdvancedTaskWizardClick = testing.fn();
+    const handleModifyTaskWizardClick = testing.fn();
+    const handleContainerTaskCreateClick = testing.fn();
+    const handleTaskCreateClick = testing.fn();
+    const handleTaskWizardClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -350,11 +343,11 @@ describe('TaskPage ToolBarIcons test', () => {
   });
 
   test('should call click handlers', () => {
-    const handleAdvancedTaskWizardClick = vi.fn();
-    const handleModifyTaskWizardClick = vi.fn();
-    const handleContainerTaskCreateClick = vi.fn();
-    const handleTaskCreateClick = vi.fn();
-    const handleTaskWizardClick = vi.fn();
+    const handleAdvancedTaskWizardClick = testing.fn();
+    const handleModifyTaskWizardClick = testing.fn();
+    const handleContainerTaskCreateClick = testing.fn();
+    const handleTaskCreateClick = testing.fn();
+    const handleTaskWizardClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},
@@ -400,11 +393,11 @@ describe('TaskPage ToolBarIcons test', () => {
   });
 
   test('should not show icons if user does not have the right permissions', () => {
-    const handleAdvancedTaskWizardClick = vi.fn();
-    const handleModifyTaskWizardClick = vi.fn();
-    const handleContainerTaskCreateClick = vi.fn();
-    const handleTaskCreateClick = vi.fn();
-    const handleTaskWizardClick = vi.fn();
+    const handleAdvancedTaskWizardClick = testing.fn();
+    const handleModifyTaskWizardClick = testing.fn();
+    const handleContainerTaskCreateClick = testing.fn();
+    const handleTaskCreateClick = testing.fn();
+    const handleTaskWizardClick = testing.fn();
 
     const gmp = {
       settings: {manualUrl},

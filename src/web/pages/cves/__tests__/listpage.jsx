@@ -15,11 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
-import {setLocale} from 'gmp/locale/lang';
 import {parseDate} from 'gmp/parser';
 
 import Filter from 'gmp/models/filter';
@@ -34,10 +33,6 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
 import CvesPage, {ToolBarIcons} from '../listpage';
-
-setLocale('en');
-
-window.URL.createObjectURL = vi.fn();
 
 const cve = Cve.fromElement({
   _id: 'CVE-2020-9992',
@@ -61,7 +56,7 @@ let currentSettings;
 let renewSession;
 
 beforeEach(() => {
-  getCves = vi.fn().mockResolvedValue({
+  getCves = testing.fn().mockResolvedValue({
     data: [cve],
     meta: {
       filter: Filter.fromString(),
@@ -69,7 +64,7 @@ beforeEach(() => {
     },
   });
 
-  getFilters = vi.fn().mockReturnValue(
+  getFilters = testing.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -79,7 +74,7 @@ beforeEach(() => {
     }),
   );
 
-  getDashboardSetting = vi.fn().mockResolvedValue({
+  getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -87,7 +82,7 @@ beforeEach(() => {
     },
   });
 
-  getAggregates = vi.fn().mockResolvedValue({
+  getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -95,15 +90,15 @@ beforeEach(() => {
     },
   });
 
-  getSetting = vi.fn().mockResolvedValue({
+  getSetting = testing.fn().mockResolvedValue({
     filter: null,
   });
 
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -206,11 +201,11 @@ describe('CvesPage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -278,11 +273,11 @@ describe('CvesPage tests', () => {
   });
 
   test('should allow to bulk action on selected cves', async () => {
-    const deleteByIds = vi.fn().mockResolvedValue({
+    const deleteByIds = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByIds = vi.fn().mockResolvedValue({
+    const exportByIds = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -365,11 +360,11 @@ describe('CvesPage tests', () => {
   });
 
   test('should allow to bulk action on filtered cves', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 

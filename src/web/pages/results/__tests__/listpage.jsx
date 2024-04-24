@@ -15,11 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
-
-import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 import Result from 'gmp/models/result';
@@ -35,10 +33,6 @@ import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 import ResultsPage from '../listpage';
 
 // setup
-
-setLocale('en');
-
-window.URL.createObjectURL = vi.fn();
 
 const reloadInterval = -1;
 const manualUrl = 'test/';
@@ -123,7 +117,7 @@ let renewSession;
 beforeEach(() => {
   // mock gmp commands
 
-  getResults = vi.fn().mockResolvedValue({
+  getResults = testing.fn().mockResolvedValue({
     data: results,
     meta: {
       filter: Filter.fromString(),
@@ -131,7 +125,7 @@ beforeEach(() => {
     },
   });
 
-  getFilters = vi.fn().mockReturnValue(
+  getFilters = testing.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -141,7 +135,7 @@ beforeEach(() => {
     }),
   );
 
-  getDashboardSetting = vi.fn().mockResolvedValue({
+  getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -149,7 +143,7 @@ beforeEach(() => {
     },
   });
 
-  getAggregates = vi.fn().mockResolvedValue({
+  getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -157,15 +151,15 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 
-  getSetting = vi.fn().mockResolvedValue({
+  getSetting = testing.fn().mockResolvedValue({
     filter: null,
   });
 
-  renewSession = vi.fn().mockResolvedValue({
+  renewSession = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
@@ -299,7 +293,7 @@ describe('Results listpage tests', () => {
   });
 
   test('should allow to bulk action on page contents', async () => {
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -361,7 +355,7 @@ describe('Results listpage tests', () => {
   });
 
   test('should allow to bulk action on selected results', async () => {
-    const exportByIds = vi.fn().mockResolvedValue({
+    const exportByIds = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -441,7 +435,7 @@ describe('Results listpage tests', () => {
   });
 
   test('should allow to bulk action on filtered results', async () => {
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 

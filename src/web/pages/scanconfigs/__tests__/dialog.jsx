@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
@@ -23,8 +23,8 @@ import CreateScanConfigDialog from '../dialog';
 
 describe('CreateScanConfigDialog component tests', () => {
   test('should render dialog with base config as default', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getAllByTestId} = render(
       <CreateScanConfigDialog
@@ -67,8 +67,8 @@ describe('CreateScanConfigDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <CreateScanConfigDialog
@@ -86,8 +86,8 @@ describe('CreateScanConfigDialog component tests', () => {
   });
 
   test('should allow to cancel the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <CreateScanConfigDialog
@@ -105,8 +105,8 @@ describe('CreateScanConfigDialog component tests', () => {
   });
 
   test('should allow to save the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByName, getByTestId} = render(
       <CreateScanConfigDialog
@@ -134,8 +134,8 @@ describe('CreateScanConfigDialog component tests', () => {
   });
 
   test('should allow to change the base', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByName, getByTestId, getAllByTestId} = render(
       <CreateScanConfigDialog

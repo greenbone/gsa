@@ -15,25 +15,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
-import {setLocale} from 'gmp/locale/lang';
 import Credential, {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import CredentialsDialog from '../dialog';
 
-setLocale('en');
-
 let handleSave;
 let handleClose;
 let handleErrorClose;
 
 beforeEach(() => {
-  handleSave = vi.fn();
-  handleClose = vi.fn();
-  handleErrorClose = vi.fn();
+  handleSave = testing.fn();
+  handleClose = testing.fn();
+  handleErrorClose = testing.fn();
 });
 
 const credential = Credential.fromElement({

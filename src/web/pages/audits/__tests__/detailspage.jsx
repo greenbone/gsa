@@ -15,12 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-import {act} from 'react-dom/test-utils';
-
-import {setLocale} from 'gmp/locale/lang';
-
-import {isDefined} from 'gmp/utils/identity';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
@@ -33,16 +28,9 @@ import Schedule from 'gmp/models/schedule';
 import {entityLoadingActions} from 'web/store/entities/audits';
 import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
-import {rendererWith, fireEvent} from 'web/utils/testing';
+import {rendererWith, fireEvent, act} from 'web/utils/testing';
 
 import Detailspage, {ToolBarIcons} from '../detailspage';
-
-if (!isDefined(window.URL)) {
-  window.URL = {};
-}
-window.URL.createObjectURL = vi.fn();
-
-setLocale('en');
 
 const policy = Policy.fromElement({
   _id: '314',
@@ -259,23 +247,23 @@ const caps = new Capabilities(['everything']);
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = vi.fn().mockResolvedValue({
+const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getPolicy = vi.fn().mockResolvedValue({
+const getPolicy = testing.fn().mockResolvedValue({
   data: policy,
 });
 
-const getSchedule = vi.fn().mockResolvedValue({
+const getSchedule = testing.fn().mockResolvedValue({
   data: schedule,
 });
 
-const getEntities = vi.fn().mockResolvedValue({
+const getEntities = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -285,7 +273,7 @@ const getEntities = vi.fn().mockResolvedValue({
 
 describe('Audit Detailspage tests', () => {
   test('should render full Detailspage', () => {
-    const getAudit = vi.fn().mockResolvedValue({
+    const getAudit = testing.fn().mockResolvedValue({
       data: audit,
     });
 
@@ -380,7 +368,7 @@ describe('Audit Detailspage tests', () => {
   });
 
   test('should render permissions tab', () => {
-    const getAudit = vi.fn().mockResolvedValue({
+    const getAudit = testing.fn().mockResolvedValue({
       data: audit2,
     });
 
@@ -428,27 +416,27 @@ describe('Audit Detailspage tests', () => {
   });
 
   test('should call commands', async () => {
-    const getAudit = vi.fn().mockResolvedValue({
+    const getAudit = testing.fn().mockResolvedValue({
       data: audit5,
     });
 
-    const clone = vi.fn().mockResolvedValue({
+    const clone = testing.fn().mockResolvedValue({
       data: {id: 'foo'},
     });
 
-    const deleteFunc = vi.fn().mockResolvedValue({
+    const deleteFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportFunc = vi.fn().mockResolvedValue({
+    const exportFunc = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const start = vi.fn().mockResolvedValue({
+    const start = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const resume = vi.fn().mockResolvedValue({
+    const resume = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
@@ -523,13 +511,13 @@ describe('Audit Detailspage tests', () => {
 
 describe('Audit ToolBarIcons tests', () => {
   test('should render', () => {
-    const handleAuditCloneClick = vi.fn();
-    const handleAuditDeleteClick = vi.fn();
-    const handleAuditDownloadClick = vi.fn();
-    const handleAuditEditClick = vi.fn();
-    const handleAuditResumeClick = vi.fn();
-    const handleAuditStartClick = vi.fn();
-    const handleAuditStopClick = vi.fn();
+    const handleAuditCloneClick = testing.fn();
+    const handleAuditDeleteClick = testing.fn();
+    const handleAuditDownloadClick = testing.fn();
+    const handleAuditEditClick = testing.fn();
+    const handleAuditResumeClick = testing.fn();
+    const handleAuditStartClick = testing.fn();
+    const handleAuditStopClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -568,13 +556,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for new audit', () => {
-    const handleAuditCloneClick = vi.fn();
-    const handleAuditDeleteClick = vi.fn();
-    const handleAuditDownloadClick = vi.fn();
-    const handleAuditEditClick = vi.fn();
-    const handleAuditResumeClick = vi.fn();
-    const handleAuditStartClick = vi.fn();
-    const handleAuditStopClick = vi.fn();
+    const handleAuditCloneClick = testing.fn();
+    const handleAuditDeleteClick = testing.fn();
+    const handleAuditDownloadClick = testing.fn();
+    const handleAuditEditClick = testing.fn();
+    const handleAuditResumeClick = testing.fn();
+    const handleAuditStartClick = testing.fn();
+    const handleAuditStopClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -635,13 +623,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for running audit', () => {
-    const handleAuditCloneClick = vi.fn();
-    const handleAuditDeleteClick = vi.fn();
-    const handleAuditDownloadClick = vi.fn();
-    const handleAuditEditClick = vi.fn();
-    const handleAuditResumeClick = vi.fn();
-    const handleAuditStartClick = vi.fn();
-    const handleAuditStopClick = vi.fn();
+    const handleAuditCloneClick = testing.fn();
+    const handleAuditDeleteClick = testing.fn();
+    const handleAuditDownloadClick = testing.fn();
+    const handleAuditEditClick = testing.fn();
+    const handleAuditResumeClick = testing.fn();
+    const handleAuditStartClick = testing.fn();
+    const handleAuditStopClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -709,13 +697,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for stopped audit', () => {
-    const handleAuditCloneClick = vi.fn();
-    const handleAuditDeleteClick = vi.fn();
-    const handleAuditDownloadClick = vi.fn();
-    const handleAuditEditClick = vi.fn();
-    const handleAuditResumeClick = vi.fn();
-    const handleAuditStartClick = vi.fn();
-    const handleAuditStopClick = vi.fn();
+    const handleAuditCloneClick = testing.fn();
+    const handleAuditDeleteClick = testing.fn();
+    const handleAuditDownloadClick = testing.fn();
+    const handleAuditEditClick = testing.fn();
+    const handleAuditResumeClick = testing.fn();
+    const handleAuditStartClick = testing.fn();
+    const handleAuditStopClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -782,13 +770,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should call click handlers for finished audit', () => {
-    const handleAuditCloneClick = vi.fn();
-    const handleAuditDeleteClick = vi.fn();
-    const handleAuditDownloadClick = vi.fn();
-    const handleAuditEditClick = vi.fn();
-    const handleAuditResumeClick = vi.fn();
-    const handleAuditStartClick = vi.fn();
-    const handleAuditStopClick = vi.fn();
+    const handleAuditCloneClick = testing.fn();
+    const handleAuditDeleteClick = testing.fn();
+    const handleAuditDownloadClick = testing.fn();
+    const handleAuditEditClick = testing.fn();
+    const handleAuditResumeClick = testing.fn();
+    const handleAuditStartClick = testing.fn();
+    const handleAuditStopClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -855,13 +843,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should not call click handlers without permission', () => {
-    const handleAuditCloneClick = vi.fn();
-    const handleAuditDeleteClick = vi.fn();
-    const handleAuditDownloadClick = vi.fn();
-    const handleAuditEditClick = vi.fn();
-    const handleAuditResumeClick = vi.fn();
-    const handleAuditStartClick = vi.fn();
-    const handleAuditStopClick = vi.fn();
+    const handleAuditCloneClick = testing.fn();
+    const handleAuditDeleteClick = testing.fn();
+    const handleAuditDownloadClick = testing.fn();
+    const handleAuditEditClick = testing.fn();
+    const handleAuditResumeClick = testing.fn();
+    const handleAuditStartClick = testing.fn();
+    const handleAuditStopClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 
@@ -937,13 +925,13 @@ describe('Audit ToolBarIcons tests', () => {
   });
 
   test('should render schedule icon if audit is scheduled', () => {
-    const handleAuditCloneClick = vi.fn();
-    const handleAuditDeleteClick = vi.fn();
-    const handleAuditDownloadClick = vi.fn();
-    const handleAuditEditClick = vi.fn();
-    const handleAuditResumeClick = vi.fn();
-    const handleAuditStartClick = vi.fn();
-    const handleAuditStopClick = vi.fn();
+    const handleAuditCloneClick = testing.fn();
+    const handleAuditDeleteClick = testing.fn();
+    const handleAuditDownloadClick = testing.fn();
+    const handleAuditEditClick = testing.fn();
+    const handleAuditResumeClick = testing.fn();
+    const handleAuditStartClick = testing.fn();
+    const handleAuditStopClick = testing.fn();
 
     const gmp = {settings: {manualUrl}};
 

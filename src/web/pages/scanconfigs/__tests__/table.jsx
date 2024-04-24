@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import CollectionCounts from 'gmp/collection/collectioncounts';
 
@@ -91,10 +91,10 @@ const filter = Filter.fromString('rows=2');
 
 describe('Scan Config table tests', () => {
   test('should render', () => {
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
 
     const gmp = {
       settings: {},
@@ -133,10 +133,10 @@ describe('Scan Config table tests', () => {
   });
 
   test('should unfold all details', () => {
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
 
     const gmp = {
       settings: {},
@@ -172,10 +172,10 @@ describe('Scan Config table tests', () => {
   });
 
   test('should call click handlers', () => {
-    const handleScanConfigClone = vi.fn();
-    const handleScanConfigDelete = vi.fn();
-    const handleScanConfigDownload = vi.fn();
-    const handleScanConfigEdit = vi.fn();
+    const handleScanConfigClone = testing.fn();
+    const handleScanConfigDelete = testing.fn();
+    const handleScanConfigDownload = testing.fn();
+    const handleScanConfigEdit = testing.fn();
 
     const gmp = {
       settings: {},

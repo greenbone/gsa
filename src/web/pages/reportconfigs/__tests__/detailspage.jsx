@@ -15,38 +15,35 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import ReportConfig from 'gmp/models/reportconfig';
+
+import Filter from 'gmp/models/filter';
+import CollectionCounts from 'gmp/collection/collectioncounts';
+import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 
 import {entityLoadingActions} from 'web/store/entities/reportconfigs';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import DetailsPage from '../detailspage';
-import Filter from 'gmp/models/filter';
-import CollectionCounts from 'gmp/collection/collectioncounts';
-import {setTimezone, setUsername} from 'web/store/usersettings/actions';
-import {setLocale} from 'gmp/locale/date';
-
 import {mockReportConfig} from '../__mocks__/mockreportconfig';
-
-setLocale('en');
 
 const entityType = 'reportconfig';
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const renewSession = vi.fn().mockResolvedValue({
+const renewSession = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getPermissions = vi.fn().mockResolvedValue({
+const getPermissions = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -57,7 +54,7 @@ const getPermissions = vi.fn().mockResolvedValue({
 const config = ReportConfig.fromElement(mockReportConfig);
 describe('Report Config Details Page tests', () => {
   test('should render full Details page with param details', () => {
-    const getReportConfig = vi.fn().mockResolvedValue({
+    const getReportConfig = testing.fn().mockResolvedValue({
       data: config,
     });
 

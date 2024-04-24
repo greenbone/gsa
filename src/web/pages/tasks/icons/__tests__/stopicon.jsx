@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 
@@ -36,7 +36,7 @@ describe('Task StopIcon component tests', () => {
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
     });
-    const clickHandler = vi.fn();
+    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -61,7 +61,7 @@ describe('Task StopIcon component tests', () => {
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
     });
-    const clickHandler = vi.fn();
+    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -86,7 +86,7 @@ describe('Task StopIcon component tests', () => {
       target: {_id: '123'},
       permissions: {permission: [{name: 'get_task'}]},
     });
-    const clickHandler = vi.fn();
+    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -110,7 +110,7 @@ describe('Task StopIcon component tests', () => {
       target: {_id: '123'},
       permissions: {permission: [{name: 'get_task'}]},
     });
-    const clickHandler = vi.fn();
+    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -136,7 +136,7 @@ describe('Task StopIcon component tests', () => {
       target: {_id: '123'},
       permissions: {permission: [{name: 'everything'}]},
     });
-    const clickHandler = vi.fn();
+    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 
@@ -154,7 +154,7 @@ describe('Task StopIcon component tests', () => {
       status: TASK_STATUS.running,
       permissions: {permission: [{name: 'everything'}]},
     });
-    const clickHandler = vi.fn();
+    const clickHandler = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
 

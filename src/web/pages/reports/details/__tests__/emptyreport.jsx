@@ -15,23 +15,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
-import {setLocale} from 'gmp/locale/lang';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import EmptyReport from '../emptyreport';
-
-setLocale('en');
 
 const caps = new Capabilities(['everything']);
 const wrongCaps = new Capabilities(['get_reports']);
 
 describe('Empty Report tests', () => {
   test('should render empty report', () => {
-    const onTargetEditClick = vi.fn();
+    const onTargetEditClick = testing.fn();
 
     const {render} = rendererWith({
       capabilities: caps,
@@ -78,7 +75,7 @@ describe('Empty Report tests', () => {
   });
 
   test('should render report for newly started task', () => {
-    const onTargetEditClick = vi.fn();
+    const onTargetEditClick = testing.fn();
 
     const {render} = rendererWith({
       capabilities: caps,
@@ -103,7 +100,7 @@ describe('Empty Report tests', () => {
   });
 
   test('should render report for running task', () => {
-    const onTargetEditClick = vi.fn();
+    const onTargetEditClick = testing.fn();
 
     const {render} = rendererWith({
       capabilities: caps,
@@ -125,7 +122,7 @@ describe('Empty Report tests', () => {
   });
 
   test('should call click handler', () => {
-    const onTargetEditClick = vi.fn();
+    const onTargetEditClick = testing.fn();
 
     const {render} = rendererWith({
       capabilities: caps,
@@ -147,7 +144,7 @@ describe('Empty Report tests', () => {
   });
 
   test('should not call click handler with wrong capabilities', () => {
-    const onTargetEditClick = vi.fn();
+    const onTargetEditClick = testing.fn();
 
     const {render} = rendererWith({
       capabilities: wrongCaps,

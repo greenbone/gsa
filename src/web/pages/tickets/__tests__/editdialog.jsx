@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent, queryAllByTestId} from 'web/utils/testing';
 
@@ -37,8 +37,8 @@ const users = [u1, u2];
 
 describe('EditTicketDialog component tests', () => {
   test('should render dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {baseElement} = render(
       <EditTicketDialog
@@ -55,8 +55,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should display notes', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {baseElement} = render(
       <EditTicketDialog
@@ -84,8 +84,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should save data', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <EditTicketDialog
@@ -116,8 +116,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should allow to change status', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {baseElement, getByTestId} = render(
       <EditTicketDialog
@@ -154,8 +154,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should allow to change user', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {baseElement, getByTestId} = render(
       <EditTicketDialog
@@ -192,8 +192,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should not save invalid form states and render error bubble', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     const {getByTestId} = render(
       <EditTicketDialog
@@ -214,8 +214,8 @@ describe('EditTicketDialog component tests', () => {
   });
 
   test('should allow to close the dialog', () => {
-    const handleClose = vi.fn();
-    const handleSave = vi.fn();
+    const handleClose = testing.fn();
+    const handleSave = testing.fn();
 
     // eslint-disable-next-line no-shadow
     const {getByTestId} = render(
