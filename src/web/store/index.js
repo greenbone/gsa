@@ -16,23 +16,40 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {createStore, applyMiddleware} from 'redux';
+import {
+  configureStore as reduxConfigureStore,
+  isImmutableDefault,
+} from '@reduxjs/toolkit';
 
-import {thunk} from 'redux-thunk';
+import logger from 'redux-logger';
 
-import {createLogger} from 'redux-logger';
+import {isDate} from 'gmp/models/date';
 
 import rootReducer from './reducers';
 
-const configureStore = (debug = false) => {
-  const middlewares = [thunk];
+const isImmutable = value => isDate(value) || isImmutableDefault(value);
 
-  if (debug) {
-    middlewares.push(createLogger());
-  }
-
-  return createStore(rootReducer, applyMiddleware(...middlewares));
+const configureStore = ({debug = false, testing = false}) => {
+  return reduxConfigureStore({
+    reducer: rootReducer,
+    middleware: getDefaultMiddleware => {
+      // in production getDefaultMiddleware only creates the redux thunk middleware
+      const middlewares = getDefaultMiddleware({
+        serializableCheck: false,
+        // enable immutable check only in development. not in testing and production
+        immutableCheck: testing
+          ? false
+          : {
+              isImmutable,
+              warnAfter: 100,
+            },
+      });
+      if (debug) {
+        middlewares.concat(logger);
+      }
+      return middlewares;
+    },
+  });
 };
 
 export default configureStore;
-// vim: set ts=2 sw=2 tw=80:
