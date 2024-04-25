@@ -16,23 +16,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {createStore, applyMiddleware} from 'redux';
+import {configureStore as reduxConfigureStore} from '@reduxjs/toolkit';
 
-import {thunk} from 'redux-thunk';
-
-import {createLogger} from 'redux-logger';
+import logger from 'redux-logger';
 
 import rootReducer from './reducers';
 
-const configureStore = (debug = false) => {
-  const middlewares = [thunk];
-
-  if (debug) {
-    middlewares.push(createLogger());
-  }
-
-  return createStore(rootReducer, applyMiddleware(...middlewares));
+const configureStore = ({debug = false, testing = false}) => {
+  return reduxConfigureStore({
+    reducer: rootReducer,
+    middleware: getDefaultMiddleware => {
+      const middlewares = getDefaultMiddleware({
+        serializableCheck: false,
+        immutableCheck: !testing,
+      });
+      if (debug) {
+        middlewares.concat(logger);
+      }
+      return middlewares;
+    },
+  });
 };
 
 export default configureStore;
-// vim: set ts=2 sw=2 tw=80:

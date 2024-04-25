@@ -139,7 +139,7 @@ export const rendererWith = (
   },
 ) => {
   if (store === true) {
-    store = configureStore();
+    store = configureStore({testing: true});
   }
 
   let history;

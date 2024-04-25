@@ -53,11 +53,11 @@ initLocale();
 const settings = new GmpSettings(global.localStorage, global.config);
 const gmp = new Gmp(settings);
 
-const store = configureStore(
-  isDefined(settings.enableStoreDebugLog)
+const store = configureStore({
+  debug: isDefined(settings.enableStoreDebugLog)
     ? settings.enableStoreDebugLog
     : settings.logLevel === LOG_LEVEL_DEBUG,
-);
+});
 
 window.gmp = gmp;
 
