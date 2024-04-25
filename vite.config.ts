@@ -48,5 +48,12 @@ export default defineConfig({
   },
   build: {
     outDir: 'build',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'opensight-ui': ['@greenbone/opensight-ui-components'],
+        },
+      },
+    },
   },
 });
