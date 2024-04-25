@@ -6,6 +6,7 @@
 
 import i18next from 'i18next';
 import HttpBackend from 'i18next-http-backend';
+import {initReactI18next} from 'react-i18next';
 
 import logger from 'gmp/log';
 
@@ -64,7 +65,8 @@ export const initLocale = ({
   backend = HttpBackend,
   detector = Detector,
   options = I18N_OPTIONS,
-} = {}) => i18next.use(backend).use(detector).init(options);
+} = {}) =>
+  i18next.use(backend).use(detector).use(initReactI18next).init(options);
 
 /**
  * Subscribe to get notified about locale changes
