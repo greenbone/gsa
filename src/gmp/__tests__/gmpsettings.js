@@ -37,7 +37,7 @@ const createStorage = state => {
 
 describe('GmpSettings tests', () => {
   beforeAll(() => {
-    global.location = {protocol: 'http:'};
+    global.location = {protocol: 'http:', host: 'localhost:9392'};
   });
 
   afterAll(() => {
