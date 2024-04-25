@@ -26,7 +26,6 @@ export const DEFAULT_PROTOCOLDOC_URL = `https://docs.greenbone.net/API/GMP/gmp-2
 export const DEFAULT_REPORT_RESULTS_THRESHOLD = 25000;
 export const DEFAULT_LOG_LEVEL = 'warn';
 export const DEFAULT_TIMEOUT = 300000; // 5 minutes
-export const DEFAULT_API_SERVER = 'localhost:9392';
 
 const set = (storage, name, value) => {
   if (isDefined(value)) {
@@ -109,7 +108,7 @@ class GmpSettings {
       apiProtocol = global.location.protocol;
     }
     if (!isDefined(apiServer)) {
-      apiServer = DEFAULT_API_SERVER;
+      apiServer = global.location.host;
     }
 
     this.logLevel = logLevel;
