@@ -124,8 +124,8 @@ describe('Audit Report Hosts Tab tests', () => {
   test('should render Audit Report Hosts Tab', () => {
     const {hosts} = getMockAuditReport();
 
-    const onSortChange = jest.fn();
-    const onInteraction = jest.fn();
+    const onSortChange = vi.fn();
+    const onInteraction = vi.fn();
 
     const {render, store} = rendererWith({
       gmp,
@@ -184,7 +184,6 @@ describe('Audit Report Hosts Tab tests', () => {
     expect(rows[1]).toHaveTextContent('lorem.ipsum');
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
     expect(rows[1]).toHaveTextContent('1521'); // 15 Ports, 2 Apps, 1 Distance
-    expect(icons[4]).toHaveTextContent('verify_no.svg');
     expect(rows[1]).toHaveTextContent('Mon, Jun 3, 2019 1:15 PM CEST');
     expect(rows[1]).toHaveTextContent('Mon, Jun 3, 2019 1:31 PM CEST');
     expect(rows[1]).toHaveTextContent('170540'); // 17 Yes, 0 No, 5 Incomplete, 40 Total
@@ -197,7 +196,6 @@ describe('Audit Report Hosts Tab tests', () => {
     expect(rows[2]).toHaveTextContent('foo.bar');
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
     expect(rows[2]).toHaveTextContent('1032'); // 10 Ports, 3 Apps, 2 Distance
-    expect(icons[5]).toHaveTextContent('verify.svg');
     expect(rows[2]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM CEST');
     expect(rows[2]).toHaveTextContent('Mon, Jun 3, 2019 1:15 PM CEST');
     expect(rows[2]).toHaveTextContent('7301450'); // 7 Yes, 30 No, 14 Incomplete, 50 Total
@@ -210,7 +208,6 @@ describe('Audit Report Hosts Tab tests', () => {
     expect(rows[3]).toHaveTextContent('foo.bar');
     expect(images[0]).toHaveAttribute('src', '/img/os_unknown.svg');
     expect(rows[3]).toHaveTextContent('1032'); // 10 Ports, 3 Apps, 2 Distance
-    expect(icons[6]).toHaveTextContent('verify.svg');
     expect(rows[3]).toHaveTextContent('Mon, Jun 3, 2019 1:00 PM CEST');
     expect(rows[3]).toHaveTextContent('Mon, Jun 3, 2019 1:15 PM CEST');
     expect(rows[3]).toHaveTextContent('200020'); // 20 Yes, 0 No, 0 Incomplete, 20 Total

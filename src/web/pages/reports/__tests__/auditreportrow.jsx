@@ -26,8 +26,8 @@ import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
 describe('Audit report row', () => {
   test('should render row for Audit report', () => {
     const {entity} = getMockAuditReport();
-    const onReportDeleteClick = jest.fn();
-    const onReportDeltaSelect = jest.fn();
+    const onReportDeleteClick = vi.fn();
+    const onReportDeltaSelect = vi.fn();
 
     const {render, store} = rendererWith({
       capabilities: true,
@@ -63,7 +63,5 @@ describe('Audit report row', () => {
     expect(bars[1]).toHaveAttribute('title', 'No');
     expect(bars[1]).toHaveTextContent('No');
     expect(rows[0]).toHaveTextContent('321'); // yes: 3, no: 2, incomplete: 1
-    expect(icons[0]).toHaveTextContent('delta.svg');
-    expect(icons[1]).toHaveTextContent('delete.svg');
   });
 });

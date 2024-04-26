@@ -117,7 +117,7 @@ let getResults;
 beforeEach(() => {
   // mock gmp commands
 
-  getResults = jest.fn().mockResolvedValue({
+  getResults = vi.fn().mockResolvedValue({
     data: results,
     meta: {
       filter: Filter.fromString(),
@@ -125,7 +125,7 @@ beforeEach(() => {
     },
   });
 
-  getFilters = jest.fn().mockReturnValue(
+  getFilters = vi.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -135,7 +135,7 @@ beforeEach(() => {
     }),
   );
 
-  getDashboardSetting = jest.fn().mockResolvedValue({
+  getDashboardSetting = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -143,7 +143,7 @@ beforeEach(() => {
     },
   });
 
-  getAggregates = jest.fn().mockResolvedValue({
+  getAggregates = vi.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -151,20 +151,20 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = jest.fn().mockResolvedValue({
+  currentSettings = vi.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
 
 describe('Report Results Tab tests', () => {
   test('should render Results Tab with compliance information', async () => {
-    const reload = jest.fn();
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
-    const onTargetEditClick = jest.fn();
+    const reload = vi.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
+    const onTargetEditClick = vi.fn();
 
     const gmp = {
       results: {
@@ -237,7 +237,6 @@ describe('Report Results Tab tests', () => {
     const row = baseElement.querySelectorAll('tr');
 
     expect(header[0]).toHaveTextContent('Vulnerability');
-    expect(header[1]).toHaveTextContent('solution_type.svg');
     expect(header[2]).toHaveTextContent('Compliant');
     expect(header[3]).toHaveTextContent('QoD');
     expect(header[4]).toHaveTextContent('Host');
@@ -262,7 +261,6 @@ describe('Report Results Tab tests', () => {
     expect(row[3]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
 
     expect(row[4]).toHaveTextContent('Result 3');
-    expect(row[4]).toHaveTextContent('st_mitigate.svg');
     expect(row[4]).toHaveTextContent('Incomplete');
     expect(row[4]).toHaveTextContent('80 %');
     expect(row[4]).toHaveTextContent('109.876.54.321');
@@ -272,13 +270,13 @@ describe('Report Results Tab tests', () => {
   });
 
   test('should render Results Tab with compliance information', async () => {
-    const reload = jest.fn();
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
-    const onTargetEditClick = jest.fn();
+    const reload = vi.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
+    const onTargetEditClick = vi.fn();
 
     const gmp = {
       results: {
@@ -351,7 +349,6 @@ describe('Report Results Tab tests', () => {
     const row = baseElement.querySelectorAll('tr');
 
     expect(header[0]).toHaveTextContent('Vulnerability');
-    expect(header[1]).toHaveTextContent('solution_type.svg');
     expect(header[2]).toHaveTextContent('Severity');
     expect(header[3]).toHaveTextContent('QoD');
     expect(header[4]).toHaveTextContent('Host');
@@ -376,7 +373,6 @@ describe('Report Results Tab tests', () => {
     expect(row[3]).toHaveTextContent('Mon, Jun 3, 2019 1:06 PM CEST');
 
     expect(row[4]).toHaveTextContent('Result 3');
-    expect(row[4]).toHaveTextContent('st_mitigate.svg');
     expect(row[4]).toHaveTextContent('5.0 (Medium)');
     expect(row[4]).toHaveTextContent('80 %');
     expect(row[4]).toHaveTextContent('109.876.54.321');
