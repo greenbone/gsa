@@ -37,3 +37,17 @@ HTMLAnchorElement.prototype.click = testing.fn();
 window.URL.createObjectURL = testing.fn();
 
 global.ResizeObserver = ResizeObserverModule.default;
+
+// avoid TypeError: window.matchMedia is not a function for @mantine/core/Select
+window.matchMedia = testing.fn().mockImplementation(query => {
+  return {
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: testing.fn(), // deprecated
+    removeListener: testing.fn(), // deprecated
+    addEventListener: testing.fn(),
+    removeEventListener: testing.fn(),
+    dispatchEvent: testing.fn(),
+  };
+});
