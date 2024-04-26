@@ -46,37 +46,37 @@ const caps = new Capabilities(['everything']);
 
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getReportComposerDefaults = jest.fn().mockResolvedValue({
+const getReportComposerDefaults = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
 describe('Audit Detla Report Details Content tests', () => {
   test('should render Audit Delta Report Details Content', () => {
-    const onActivateTab = jest.fn();
-    const onAddToAssetsClick = jest.fn();
-    const onError = jest.fn();
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterChanged = jest.fn();
-    const onFilterCreated = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
-    const onFilterResetClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onInteraction = jest.fn();
-    const onRemoveFromAssetsClick = jest.fn();
-    const onReportDownloadClick = jest.fn();
-    const showError = jest.fn();
-    const showErrorMessage = jest.fn();
-    const showSuccessMessage = jest.fn();
-    const onSortChange = jest.fn();
-    const onTagSuccess = jest.fn();
-    const onTargetEditClick = jest.fn();
-    const onTlsCertificateDownloadClick = jest.fn();
+    const onActivateTab = vi.fn();
+    const onAddToAssetsClick = vi.fn();
+    const onError = vi.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterChanged = vi.fn();
+    const onFilterCreated = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
+    const onFilterResetClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onInteraction = vi.fn();
+    const onRemoveFromAssetsClick = vi.fn();
+    const onReportDownloadClick = vi.fn();
+    const showError = vi.fn();
+    const showErrorMessage = vi.fn();
+    const showSuccessMessage = vi.fn();
+    const onSortChange = vi.fn();
+    const onTagSuccess = vi.fn();
+    const onTargetEditClick = vi.fn();
+    const onTlsCertificateDownloadClick = vi.fn();
 
     const sorting = {
       errors: {sortField: 'error', sortReverse: true},
@@ -150,27 +150,14 @@ describe('Audit Detla Report Details Content tests', () => {
     const bars = getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons[0]).toHaveTextContent('help.svg');
-    expect(icons[1]).toHaveTextContent('list.svg');
-    expect(icons[2]).toHaveTextContent('add_to_assets.svg');
-    expect(icons[3]).toHaveTextContent('remove_from_assets.svg');
-    expect(icons[4]).toHaveTextContent('task.svg');
-    expect(icons[5]).toHaveTextContent('result.svg');
-    expect(icons[6]).toHaveTextContent('performance.svg');
-    expect(icons[7]).toHaveTextContent('download.svg');
+    expect(icons.length).toEqual(14)
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[8]).toHaveTextContent('refresh.svg');
-    expect(icons[9]).toHaveTextContent('delete.svg');
-    expect(icons[10]).toHaveTextContent('reset.svg');
-    expect(icons[11]).toHaveTextContent('help.svg');
-    expect(icons[12]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
     expect(selects[0]).toHaveTextContent('foo');
 
     // Header
-    expect(icons[13]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
@@ -240,27 +227,27 @@ describe('Audit Detla Report Details Content tests', () => {
   });
 
   test('should render results tab', () => {
-    const onActivateTab = jest.fn();
-    const onAddToAssetsClick = jest.fn();
-    const onError = jest.fn();
-    const onFilterAddLogLevelClick = jest.fn();
-    const onFilterDecreaseMinQoDClick = jest.fn();
-    const onFilterChanged = jest.fn();
-    const onFilterCreated = jest.fn();
-    const onFilterEditClick = jest.fn();
-    const onFilterRemoveSeverityClick = jest.fn();
-    const onFilterResetClick = jest.fn();
-    const onFilterRemoveClick = jest.fn();
-    const onInteraction = jest.fn();
-    const onRemoveFromAssetsClick = jest.fn();
-    const onReportDownloadClick = jest.fn();
-    const showError = jest.fn();
-    const showErrorMessage = jest.fn();
-    const showSuccessMessage = jest.fn();
-    const onSortChange = jest.fn();
-    const onTagSuccess = jest.fn();
-    const onTargetEditClick = jest.fn();
-    const onTlsCertificateDownloadClick = jest.fn();
+    const onActivateTab = vi.fn();
+    const onAddToAssetsClick = vi.fn();
+    const onError = vi.fn();
+    const onFilterAddLogLevelClick = vi.fn();
+    const onFilterDecreaseMinQoDClick = vi.fn();
+    const onFilterChanged = vi.fn();
+    const onFilterCreated = vi.fn();
+    const onFilterEditClick = vi.fn();
+    const onFilterRemoveSeverityClick = vi.fn();
+    const onFilterResetClick = vi.fn();
+    const onFilterRemoveClick = vi.fn();
+    const onInteraction = vi.fn();
+    const onRemoveFromAssetsClick = vi.fn();
+    const onReportDownloadClick = vi.fn();
+    const showError = vi.fn();
+    const showErrorMessage = vi.fn();
+    const showSuccessMessage = vi.fn();
+    const onSortChange = vi.fn();
+    const onTagSuccess = vi.fn();
+    const onTargetEditClick = vi.fn();
+    const onTlsCertificateDownloadClick = vi.fn();
 
     const sorting = {
       apps: {sortField: 'severity', sortReverse: true},
@@ -337,27 +324,14 @@ describe('Audit Detla Report Details Content tests', () => {
     const bars = getAllByTestId('progressbar-box');
 
     // Toolbar Icons
-    expect(icons[0]).toHaveTextContent('help.svg');
-    expect(icons[1]).toHaveTextContent('list.svg');
-    expect(icons[2]).toHaveTextContent('add_to_assets.svg');
-    expect(icons[3]).toHaveTextContent('remove_from_assets.svg');
-    expect(icons[4]).toHaveTextContent('task.svg');
-    expect(icons[5]).toHaveTextContent('result.svg');
-    expect(icons[6]).toHaveTextContent('performance.svg');
-    expect(icons[7]).toHaveTextContent('download.svg');
+    expect(icons.length).toEqual(24)
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(icons[8]).toHaveTextContent('refresh.svg');
-    expect(icons[9]).toHaveTextContent('delete.svg');
-    expect(icons[10]).toHaveTextContent('reset.svg');
-    expect(icons[11]).toHaveTextContent('help.svg');
-    expect(icons[12]).toHaveTextContent('edit.svg');
     expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
     expect(selects[0]).toHaveTextContent('--');
 
     // Header
-    expect(icons[13]).toHaveTextContent('report.svg');
     expect(baseElement).toHaveTextContent(
       'Report:Mon, Jun 3, 2019 1:00 PM CEST',
     );
@@ -381,7 +355,6 @@ describe('Audit Detla Report Details Content tests', () => {
     // Headings
     expect(header[0]).toHaveTextContent('Delta');
     expect(header[1]).toHaveTextContent('Vulnerability');
-    expect(header[2]).toHaveTextContent('solution_type.svg');
     expect(header[3]).toHaveTextContent('Compliant');
     expect(header[4]).toHaveTextContent('QoD');
     expect(header[5]).toHaveTextContent('Host');

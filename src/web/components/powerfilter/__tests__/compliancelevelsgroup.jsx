@@ -24,8 +24,8 @@ import Filter from 'gmp/models/filter';
 describe('ComplianceLevelsFilterGroup audit reports tests', () => {
   test('should call change handler', () => {
     const filter = Filter.fromString('report_compliance_levels=');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -43,8 +43,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
 
   test('should check checkbox', () => {
     const filter = Filter.fromString('report_compliance_levels=yn');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -62,8 +62,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
   test('should uncheck checkbox', () => {
     const filter1 = Filter.fromString('report_compliance_levels=yni');
     const filter2 = Filter.fromString('report_compliance_levels=yn');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element, rerender} = render(
       <ComplianceLevelsFilterGroup
         filter={filter1}
@@ -93,8 +93,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
 
   test('should be unchecked by default', () => {
     const filter = Filter.fromString();
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -113,8 +113,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
 
   test('should call remove handler', () => {
     const filter = Filter.fromString('report_compliance_levels=y');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -135,8 +135,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
 describe('ComplianceLevelsFilterGroup audit results tests', () => {
   test('should call change handler', () => {
     const filter = Filter.fromString('compliance_levels=');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -155,8 +155,8 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
 
   test('should check checkbox', () => {
     const filter = Filter.fromString('compliance_levels=yn');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -175,8 +175,8 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
   test('should uncheck checkbox', () => {
     const filter1 = Filter.fromString('compliance_levels=yni');
     const filter2 = Filter.fromString('compliance_levels=yn');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element, rerender} = render(
       <ComplianceLevelsFilterGroup
         filter={filter1}
@@ -208,8 +208,8 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
 
   test('should be unchecked by default', () => {
     const filter = Filter.fromString();
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -229,8 +229,8 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
 
   test('should call remove handler', () => {
     const filter = Filter.fromString('compliance_levels=y');
-    const handleChange = jest.fn();
-    const handleRemove = jest.fn();
+    const handleChange = vi.fn();
+    const handleRemove = vi.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
