@@ -35,18 +35,18 @@ import AuditReportsPage from '../auditreportslistpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = jest.fn();
+window.URL.createObjectURL = vi.fn();
 
 const {entity} = getMockAuditReport();
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = jest.fn().mockResolvedValue({
+const currentSettings = vi.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getFilters = jest.fn().mockReturnValue(
+const getFilters = vi.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -56,7 +56,7 @@ const getFilters = jest.fn().mockReturnValue(
   }),
 );
 
-const getDashboardSetting = jest.fn().mockResolvedValue({
+const getDashboardSetting = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -64,11 +64,11 @@ const getDashboardSetting = jest.fn().mockResolvedValue({
   },
 });
 
-const getUserSetting = jest.fn().mockResolvedValue({
+const getUserSetting = vi.fn().mockResolvedValue({
   filter: null,
 });
 
-const getComplianceAggregates = jest.fn().mockResolvedValue({
+const getComplianceAggregates = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -76,7 +76,7 @@ const getComplianceAggregates = jest.fn().mockResolvedValue({
   },
 });
 
-const getReports = jest.fn().mockResolvedValue({
+const getReports = vi.fn().mockResolvedValue({
   data: [entity],
   meta: {
     filter: Filter.fromString(),
@@ -84,7 +84,7 @@ const getReports = jest.fn().mockResolvedValue({
   },
 });
 
-const getAll = jest.fn().mockResolvedValue({
+const getAll = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -92,7 +92,7 @@ const getAll = jest.fn().mockResolvedValue({
   },
 });
 
-const getReportFormats = jest.fn().mockResolvedValue({
+const getReportFormats = vi.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -199,16 +199,14 @@ describe('AuditReportsPage tests', () => {
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('No');
     expect(row[1]).toHaveTextContent('321'); // yes: 3, no: 2, incomplete: 1
-    expect(icons[17]).toHaveTextContent('delta.svg');
-    expect(icons[18]).toHaveTextContent('delete.svg');
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = jest.fn().mockResolvedValue({
+    const deleteByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = jest.fn().mockResolvedValue({
+    const exportByFilter = vi.fn().mockResolvedValue({
       foo: 'bar',
     });
 

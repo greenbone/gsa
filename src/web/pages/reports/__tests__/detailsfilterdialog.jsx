@@ -34,9 +34,9 @@ const manualUrl = 'test/';
 
 describe('Details Filter Dialog for Audit report', () => {
   test('should render compliance levels filter group', () => {
-    const onFilterChanged = jest.fn();
-    const onFilterCreated = jest.fn();
-    const onCloseClick = jest.fn();
+    const onFilterChanged = vi.fn();
+    const onFilterCreated = vi.fn();
+    const onCloseClick = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=100 min_qod=70 first=1 sort=compliant',
@@ -82,9 +82,9 @@ describe('Details Filter Dialog for Audit report', () => {
   });
 
   test('should render severity levels filter group', () => {
-    const onFilterChanged = jest.fn();
-    const onFilterCreated = jest.fn();
-    const onCloseClick = jest.fn();
+    const onFilterChanged = vi.fn();
+    const onFilterCreated = vi.fn();
+    const onCloseClick = vi.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=100 min_qod=70 first=1 sort=severity',
