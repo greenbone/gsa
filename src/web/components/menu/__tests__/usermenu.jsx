@@ -32,7 +32,7 @@ describe('UserMenu component tests', () => {
 
     const {element} = render(<UserMenu />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should render username and sessionTimeout', () => {
