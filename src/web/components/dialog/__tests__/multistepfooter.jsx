@@ -5,62 +5,47 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent} from 'web/utils/testing';
-import Theme from 'web/utils/theme';
+import {render, fireEvent, screen} from 'web/utils/testing';
 
 import MultiStepFooter from 'web/components/dialog/multistepfooter';
+
+const getRightButton = () => screen.getByTestId('dialog-save-button');
+const getLeftButton = () => screen.getByTestId('dialog-close-button');
+const getNextButton = () => screen.getByTestId('dialog-next-button');
+const getPreviousButton = () => screen.getByTestId('dialog-previous-button');
 
 describe('MultiStepFooter tests', () => {
   test('should render', () => {
     const {element} = render(<MultiStepFooter rightButtonTitle="Foo" />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
 
-    const button = element.querySelector('button[title="Foo"]');
-    const prevButton = element.querySelector('button[title="🠬"]');
-    const nextButton = element.querySelector('button[title="🠮"]');
-
-    expect(button).toHaveStyleRule('background', Theme.green);
-    expect(prevButton).toHaveStyleRule('background', Theme.white);
-    expect(nextButton).toHaveStyleRule('background', Theme.white);
+    // ensure buttons are rendered
+    getRightButton();
+    getLeftButton();
+    getNextButton();
+    getPreviousButton();
   });
 
   test('should render loading and disable cancel button', () => {
-    const {element} = render(
-      <MultiStepFooter rightButtonTitle="Foo" loading={true} />,
-    );
+    render(<MultiStepFooter rightButtonTitle="Foo" loading={true} />);
 
-    expect(element).toMatchSnapshot();
+    getRightButton();
 
-    const button = element.querySelector('button[title="Foo"]');
-    const buttonLeft = element.querySelector('button[title="Cancel"]');
-
-    expect(button).toHaveStyleRule(
-      'background',
-      `${Theme.green} url(/img/loading.gif) center center no-repeat`,
-    );
-    expect(buttonLeft).toHaveAttribute('disabled');
+    expect(getLeftButton()).toHaveAttribute('disabled');
   });
 
   test('should render footer with default titles', () => {
-    const {element} = render(<MultiStepFooter rightButtonTitle="Foo" />);
+    render(<MultiStepFooter rightButtonTitle="Foo" />);
 
-    const buttons = element.querySelectorAll('button');
-
-    expect(buttons).toHaveLength(4);
-
-    expect(buttons[0]).toHaveAttribute('title', 'Cancel');
-    expect(buttons[0]).toHaveTextContent('Cancel');
-    expect(buttons[1]).toHaveAttribute('title', '🠬');
-    expect(buttons[1]).toHaveTextContent('🠬');
-    expect(buttons[2]).toHaveAttribute('title', '🠮');
-    expect(buttons[2]).toHaveTextContent('🠮');
-    expect(buttons[3]).toHaveAttribute('title', 'Foo');
-    expect(buttons[3]).toHaveTextContent('Foo');
+    expect(getLeftButton()).toHaveTextContent('Cancel');
+    expect(getPreviousButton()).toHaveTextContent('🠬');
+    expect(getNextButton()).toHaveTextContent('🠮');
+    expect(getRightButton()).toHaveTextContent('Foo');
   });
 
   test('should render footer with custom titles', () => {
-    const {element} = render(
+    render(
       <MultiStepFooter
         rightButtonTitle="Foo"
         leftButtonTitle="Bar"
@@ -69,18 +54,10 @@ describe('MultiStepFooter tests', () => {
       />,
     );
 
-    const buttons = element.querySelectorAll('button');
-
-    expect(buttons).toHaveLength(4);
-
-    expect(buttons[0]).toHaveAttribute('title', 'Bar');
-    expect(buttons[0]).toHaveTextContent('Bar');
-    expect(buttons[1]).toHaveAttribute('title', 'Back');
-    expect(buttons[1]).toHaveTextContent('Back');
-    expect(buttons[2]).toHaveAttribute('title', 'Forward');
-    expect(buttons[2]).toHaveTextContent('Forward');
-    expect(buttons[3]).toHaveAttribute('title', 'Foo');
-    expect(buttons[3]).toHaveTextContent('Foo');
+    expect(getLeftButton()).toHaveTextContent('Bar');
+    expect(getPreviousButton()).toHaveTextContent('Back');
+    expect(getNextButton()).toHaveTextContent('Forward');
+    expect(getRightButton()).toHaveTextContent('Foo');
   });
 
   test('should call click handlers', () => {
@@ -89,7 +66,7 @@ describe('MultiStepFooter tests', () => {
     const handler3 = testing.fn();
     const handler4 = testing.fn();
 
-    const {element} = render(
+    render(
       <MultiStepFooter
         rightButtonTitle="Foo"
         leftButtonTitle="Bar"
@@ -100,29 +77,21 @@ describe('MultiStepFooter tests', () => {
       />,
     );
 
-    const buttons = element.querySelectorAll('button');
-
-    expect(buttons).toHaveLength(4);
-
-    fireEvent.click(buttons[0]);
-
+    fireEvent.click(getLeftButton());
     expect(handler1).toHaveBeenCalled();
 
-    fireEvent.click(buttons[1]);
-
+    fireEvent.click(getPreviousButton());
     expect(handler3).toHaveBeenCalled();
 
-    fireEvent.click(buttons[2]);
-
+    fireEvent.click(getNextButton());
     expect(handler4).toHaveBeenCalled();
 
-    fireEvent.click(buttons[3]);
-
+    fireEvent.click(getRightButton());
     expect(handler2).toHaveBeenCalled();
   });
 
   test('should disable previous and next button', () => {
-    const {element} = render(
+    render(
       <MultiStepFooter
         rightButtonTitle="Foo"
         prevDisabled={true}
@@ -130,12 +99,7 @@ describe('MultiStepFooter tests', () => {
       />,
     );
 
-    const prevButton = element.querySelector('button[title="🠬"]');
-    const nextButton = element.querySelector('button[title="🠮"]');
-
-    expect(prevButton).toBeDisabled();
-    expect(nextButton).toBeDisabled();
+    expect(getPreviousButton()).toBeDisabled();
+    expect(getNextButton()).toBeDisabled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

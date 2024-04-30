@@ -43,7 +43,6 @@ ConfirmationDialogContent.propTypes = {
   close: PropTypes.func.isRequired,
   content: PropTypes.elementOrString,
   rightButtonTitle: PropTypes.string,
-  title: PropTypes.string.isRequired,
   onResumeClick: PropTypes.func.isRequired,
 };
 
