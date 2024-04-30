@@ -159,7 +159,6 @@ const ModifyTaskWizard = ({
                       name="start_minute"
                       value={state.start_minute}
                       onChange={onValueChange}
-                      i
                     />
                     <span>{_('m')}</span>
                   </Row>

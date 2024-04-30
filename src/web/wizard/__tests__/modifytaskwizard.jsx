@@ -8,10 +8,15 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import Capabilities from 'gmp/capabilities/capabilities';
 
 import Date from 'gmp/models/date';
-
 import Task from 'gmp/models/task';
 
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
+
+import {
+  closeDialog,
+  getElementOrDocument,
+  getRadioInputs,
+} from 'web/components/testing';
 
 import ModifyTaskWizard from '../modifytaskwizard';
 
@@ -31,6 +36,16 @@ const startDate = Date('2020-01-01T12:10:00Z');
 const startMinute = 10;
 const startHour = 12;
 const startTimezone = 'UTC';
+
+const getFormGroupTitles = element => {
+  element = getElementOrDocument(element);
+  return element.querySelectorAll('.mantine-Text-root');
+};
+
+const getRadioTitles = element => {
+  element = getElementOrDocument(element);
+  return element.querySelectorAll('.mantine-Radio-label');
+};
 
 describe('ModifyTaskWizard component tests', () => {
   test('should render full modify wizard', () => {
@@ -55,16 +70,16 @@ describe('ModifyTaskWizard component tests', () => {
       />,
     );
 
-    const formgroups = screen.getAllByTestId('formgroup-title');
-    const radioInputs = screen.getAllByTestId('radio-input');
-    const radioTitles = screen.getAllByTestId('radio-title');
+    const formGroups = getFormGroupTitles();
+    const radioInputs = getRadioInputs();
+    const radioTitles = getRadioTitles();
 
     expect(baseElement).toHaveTextContent('Setting a start time');
     expect(baseElement).toHaveTextContent('Setting an email Address');
 
-    expect(formgroups[0]).toHaveTextContent('Task');
+    expect(formGroups[0]).toHaveTextContent('Task');
 
-    expect(formgroups[1]).toHaveTextContent('Start Time');
+    expect(formGroups[1]).toHaveTextContent('Start Time');
     expect(radioInputs[0]).toHaveAttribute('value', '0');
     expect(radioInputs[0].checked).toEqual(true);
     expect(radioTitles[0]).toHaveTextContent('Do not change');
@@ -73,7 +88,7 @@ describe('ModifyTaskWizard component tests', () => {
     expect(radioInputs[1].checked).toEqual(false);
     expect(radioTitles[1]).toHaveTextContent('Create Schedule');
 
-    expect(formgroups[2]).toHaveTextContent('Email report to');
+    expect(formGroups[2]).toHaveTextContent('Email report to');
   });
 
   test('should not render schedule without permission', () => {
@@ -98,19 +113,19 @@ describe('ModifyTaskWizard component tests', () => {
       />,
     );
 
-    const formgroups = screen.getAllByTestId('formgroup-title');
+    const formGroups = getFormGroupTitles();
 
     expect(baseElement).not.toHaveTextContent('Setting a start time');
     expect(baseElement).toHaveTextContent('Setting an email Address');
 
-    expect(formgroups[0]).toHaveTextContent('Task');
+    expect(formGroups[0]).toHaveTextContent('Task');
 
-    expect(formgroups.length).toBe(2);
+    expect(formGroups.length).toBe(2);
     expect(baseElement).not.toHaveTextContent('Start Time');
     expect(baseElement).not.toHaveTextContent('Create Schedule');
     expect(baseElement).not.toHaveTextContent('Do not change');
 
-    expect(formgroups[1]).toHaveTextContent('Email report to');
+    expect(formGroups[1]).toHaveTextContent('Email report to');
   });
 
   test('should not render alert without permission', () => {
@@ -135,16 +150,16 @@ describe('ModifyTaskWizard component tests', () => {
       />,
     );
 
-    const formgroups = screen.getAllByTestId('formgroup-title');
-    const radioInputs = screen.getAllByTestId('radio-input');
-    const radioTitles = screen.getAllByTestId('radio-title');
+    const formGroups = getFormGroupTitles();
+    const radioInputs = getRadioInputs();
+    const radioTitles = getRadioTitles();
 
     expect(baseElement).toHaveTextContent('Setting a start time');
     expect(baseElement).not.toHaveTextContent('Setting an email Address');
 
-    expect(formgroups[0]).toHaveTextContent('Task');
+    expect(formGroups[0]).toHaveTextContent('Task');
 
-    expect(formgroups[1]).toHaveTextContent('Start Time');
+    expect(formGroups[1]).toHaveTextContent('Start Time');
     expect(radioInputs[0]).toHaveAttribute('value', '0');
     expect(radioInputs[0].checked).toEqual(true);
     expect(radioTitles[0]).toHaveTextContent('Do not change');
@@ -153,7 +168,7 @@ describe('ModifyTaskWizard component tests', () => {
     expect(radioInputs[1].checked).toEqual(false);
     expect(radioTitles[1]).toHaveTextContent('Create Schedule');
 
-    expect(formgroups.length).toBe(2);
+    expect(formGroups.length).toBe(2);
     expect(baseElement).not.toHaveTextContent('Email report to');
   });
 
@@ -179,9 +194,7 @@ describe('ModifyTaskWizard component tests', () => {
       />,
     );
 
-    const closeButton = screen.getByTestId('dialog-title-close-button');
-
-    fireEvent.click(closeButton);
+    closeDialog();
 
     expect(handleClose).toHaveBeenCalled();
   });

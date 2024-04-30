@@ -211,7 +211,6 @@ const CvssV2Calculator = props => {
           ]}
           name="accessVector"
           value={accessVector}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -233,7 +232,6 @@ const CvssV2Calculator = props => {
           ]}
           name="accessComplexity"
           value={accessComplexity}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -255,7 +253,6 @@ const CvssV2Calculator = props => {
           ]}
           name="authentication"
           value={authentication}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -298,7 +295,6 @@ const CvssV2Calculator = props => {
           ]}
           name="integrityImpact"
           value={integrityImpact}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -320,7 +316,6 @@ const CvssV2Calculator = props => {
           ]}
           name="availabilityImpact"
           value={availabilityImpact}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -527,7 +522,6 @@ const CvssV3Calculator = props => {
           ]}
           name="attackVector"
           value={attackVector}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -545,7 +539,6 @@ const CvssV3Calculator = props => {
           ]}
           name="attackComplexity"
           value={attackComplexity}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -567,7 +560,6 @@ const CvssV3Calculator = props => {
           ]}
           name="privilegesRequired"
           value={privilegesRequired}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -585,7 +577,6 @@ const CvssV3Calculator = props => {
           ]}
           name="userInteraction"
           value={userInteraction}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -603,7 +594,6 @@ const CvssV3Calculator = props => {
           ]}
           name="scope"
           value={scope}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -646,7 +636,6 @@ const CvssV3Calculator = props => {
           ]}
           name="integrityImpact"
           value={integrityImpact}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>
@@ -668,7 +657,6 @@ const CvssV3Calculator = props => {
           ]}
           name="availabilityImpact"
           value={availabilityImpact}
-          menuPosition="adjust"
           onChange={handleMetricsChange}
         />
       </FormGroup>

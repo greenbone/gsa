@@ -17,6 +17,12 @@ import ScanConfig from 'gmp/models/scanconfig';
 
 import {rendererWith, fireEvent, screen} from 'web/utils/testing';
 
+import {
+  closeDialog,
+  getElementOrDocument,
+  getRadioInputs,
+} from 'web/components/testing';
+
 import AdvancedTaskWizard from '../advancedtaskwizard';
 
 const alertCapabilities = new Capabilities(['create_alert', 'get_alerts']);
@@ -56,6 +62,16 @@ const startMinute = 10;
 const startHour = 12;
 const startTimezone = 'UTC';
 
+const getFormGroupTitles = element => {
+  element = getElementOrDocument(element);
+  return element.querySelectorAll('.mantine-Text-root');
+};
+
+const getRadioTitles = element => {
+  element = getElementOrDocument(element);
+  return element.querySelectorAll('.mantine-Radio-label');
+};
+
 describe('AdvancedTaskWizard component tests', () => {
   test('should render full advanced wizard', () => {
     const handleClose = testing.fn();
@@ -84,19 +100,19 @@ describe('AdvancedTaskWizard component tests', () => {
       />,
     );
 
-    const formgroups = screen.getAllByTestId('formgroup-title');
-    const radioInputs = screen.getAllByTestId('radio-input');
-    const radioTitles = screen.getAllByTestId('radio-title');
+    const formGroups = getFormGroupTitles();
+    const radioInputs = getRadioInputs();
+    const radioTitles = getRadioTitles();
 
-    expect(formgroups[0]).toHaveTextContent('Task Name');
+    expect(formGroups[0]).toHaveTextContent('Task Name');
 
-    expect(formgroups[1]).toHaveTextContent('Scan Config');
+    expect(formGroups[1]).toHaveTextContent('Scan Config');
 
-    expect(formgroups[2]).toHaveTextContent('Target Host(s)');
+    expect(formGroups[2]).toHaveTextContent('Target Host(s)');
     const targetHostsInput = getByName('target_hosts');
     expect(targetHostsInput).toHaveAttribute('value', targetHosts);
 
-    expect(formgroups[3]).toHaveTextContent('Start Time');
+    expect(formGroups[3]).toHaveTextContent('Start Time');
     expect(radioInputs[0]).toHaveAttribute('value', '2');
     expect(radioInputs[0].checked).toEqual(true);
     expect(radioTitles[0]).toHaveTextContent('Start immediately');
@@ -109,11 +125,11 @@ describe('AdvancedTaskWizard component tests', () => {
     expect(radioInputs[2].checked).toEqual(false);
     expect(radioTitles[2]).toHaveTextContent('Do not start automatically');
 
-    expect(formgroups[4]).toHaveTextContent('SSH Credential');
-    expect(formgroups[5]).toHaveTextContent('SMB Credential');
-    expect(formgroups[6]).toHaveTextContent('ESXi Credential');
+    expect(formGroups[4]).toHaveTextContent('SSH Credential');
+    expect(formGroups[5]).toHaveTextContent('SMB Credential');
+    expect(formGroups[6]).toHaveTextContent('ESXi Credential');
 
-    expect(formgroups[7]).toHaveTextContent('Email report to');
+    expect(formGroups[7]).toHaveTextContent('Email report to');
   });
 
   test('should not render schedule without permission', () => {
@@ -143,17 +159,17 @@ describe('AdvancedTaskWizard component tests', () => {
       />,
     );
 
-    const formgroups = screen.getAllByTestId('formgroup-title');
-    const radioInputs = screen.getAllByTestId('radio-input');
-    const radioTitles = screen.getAllByTestId('radio-title');
+    const formGroups = getFormGroupTitles();
+    const radioInputs = getRadioInputs();
+    const radioTitles = getRadioTitles();
 
-    expect(formgroups[0]).toHaveTextContent('Task Name');
+    expect(formGroups[0]).toHaveTextContent('Task Name');
 
-    expect(formgroups[1]).toHaveTextContent('Scan Config');
+    expect(formGroups[1]).toHaveTextContent('Scan Config');
 
-    expect(formgroups[2]).toHaveTextContent('Target Host(s)');
+    expect(formGroups[2]).toHaveTextContent('Target Host(s)');
 
-    expect(formgroups[3]).toHaveTextContent('Start Time');
+    expect(formGroups[3]).toHaveTextContent('Start Time');
 
     expect(radioInputs.length).toBe(2);
     expect(baseElement).not.toHaveTextContent('Create Schedule:');
@@ -166,11 +182,11 @@ describe('AdvancedTaskWizard component tests', () => {
     expect(radioInputs[1].checked).toEqual(false);
     expect(radioTitles[1]).toHaveTextContent('Do not start automatically');
 
-    expect(formgroups[4]).toHaveTextContent('SSH Credential');
-    expect(formgroups[5]).toHaveTextContent('SMB Credential');
-    expect(formgroups[6]).toHaveTextContent('ESXi Credential');
+    expect(formGroups[4]).toHaveTextContent('SSH Credential');
+    expect(formGroups[5]).toHaveTextContent('SMB Credential');
+    expect(formGroups[6]).toHaveTextContent('ESXi Credential');
 
-    expect(formgroups[7]).toHaveTextContent('Email report to');
+    expect(formGroups[7]).toHaveTextContent('Email report to');
   });
 
   test('should not render alert without permission', () => {
@@ -200,19 +216,19 @@ describe('AdvancedTaskWizard component tests', () => {
       />,
     );
 
-    const formgroups = screen.getAllByTestId('formgroup-title');
-    const radioInputs = screen.getAllByTestId('radio-input');
-    const radioTitles = screen.getAllByTestId('radio-title');
+    const formGroups = getFormGroupTitles();
+    const radioInputs = getRadioInputs();
+    const radioTitles = getRadioTitles();
 
-    expect(formgroups[0]).toHaveTextContent('Task Name');
+    expect(formGroups[0]).toHaveTextContent('Task Name');
 
-    expect(formgroups[1]).toHaveTextContent('Scan Config');
+    expect(formGroups[1]).toHaveTextContent('Scan Config');
 
-    expect(formgroups[2]).toHaveTextContent('Target Host(s)');
+    expect(formGroups[2]).toHaveTextContent('Target Host(s)');
     const targetHostsInput = getByName('target_hosts');
     expect(targetHostsInput).toHaveAttribute('value', targetHosts);
 
-    expect(formgroups[3]).toHaveTextContent('Start Time');
+    expect(formGroups[3]).toHaveTextContent('Start Time');
     expect(radioInputs[0]).toHaveAttribute('value', '2');
     expect(radioInputs[0].checked).toEqual(true);
     expect(radioTitles[0]).toHaveTextContent('Start immediately');
@@ -225,11 +241,11 @@ describe('AdvancedTaskWizard component tests', () => {
     expect(radioInputs[2].checked).toEqual(false);
     expect(radioTitles[2]).toHaveTextContent('Do not start automatically');
 
-    expect(formgroups[4]).toHaveTextContent('SSH Credential');
-    expect(formgroups[5]).toHaveTextContent('SMB Credential');
-    expect(formgroups[6]).toHaveTextContent('ESXi Credential');
+    expect(formGroups[4]).toHaveTextContent('SSH Credential');
+    expect(formGroups[5]).toHaveTextContent('SMB Credential');
+    expect(formGroups[6]).toHaveTextContent('ESXi Credential');
 
-    expect(formgroups.length).toBe(7);
+    expect(formGroups.length).toBe(7);
     expect(baseElement).not.toHaveTextContent('Email report to');
   });
 
@@ -260,9 +276,7 @@ describe('AdvancedTaskWizard component tests', () => {
       />,
     );
 
-    const closeButton = screen.getByTestId('dialog-title-close-button');
-
-    fireEvent.click(closeButton);
+    closeDialog();
 
     expect(handleClose).toHaveBeenCalled();
   });
