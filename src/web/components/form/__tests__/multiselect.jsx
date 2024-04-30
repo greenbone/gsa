@@ -7,28 +7,15 @@ import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent, screen, userEvent} from 'web/utils/testing';
 
+import {
+  changeSelectInput,
+  getSelectElement,
+  getSelectItemElements,
+  getSelectedItems,
+  openSelectElement,
+} from 'web/components/testing';
+
 import MultiSelect from '../multiselect';
-
-const openSelectElement = async select => {
-  select = select || getSelectElement();
-  await userEvent.click(select);
-};
-
-const getItemElements = () => {
-  return screen.queryAllByRole('option');
-};
-
-const getSelectElement = () => {
-  const select = screen.queryByRole('searchbox');
-  if (select) {
-    return select;
-  }
-  return screen.getByRole('textbox');
-};
-
-const getSelectedItems = element => {
-  return element.querySelectorAll('.mantine-MultiSelect-value');
-};
 
 describe('MultiSelect tests', () => {
   test('should render', () => {
@@ -51,11 +38,11 @@ describe('MultiSelect tests', () => {
 
     render(<MultiSelect items={items} />);
 
-    expect(getItemElements().length).toEqual(0);
+    expect(getSelectItemElements().length).toEqual(0);
 
     await openSelectElement();
 
-    const domItems = getItemElements();
+    const domItems = getSelectItemElements();
     expect(domItems.length).toEqual(2);
     expect(domItems[0]).toHaveTextContent('Bar');
     expect(domItems[1]).toHaveTextContent('Foo');
@@ -75,11 +62,11 @@ describe('MultiSelect tests', () => {
 
     expect(element).toHaveAttribute('placeholder', 'Loading...');
 
-    expect(getItemElements().length).toEqual(0);
+    expect(getSelectItemElements().length).toEqual(0);
 
     await openSelectElement(element);
 
-    expect(getItemElements().length).toEqual(0);
+    expect(getSelectItemElements().length).toEqual(0);
   });
 
   test('should render error', () => {
@@ -115,7 +102,7 @@ describe('MultiSelect tests', () => {
 
     await openSelectElement();
 
-    const domItems = getItemElements();
+    const domItems = getSelectItemElements();
     expect(domItems.length).toEqual(2);
 
     await userEvent.click(domItems[1]);
@@ -141,7 +128,7 @@ describe('MultiSelect tests', () => {
 
     await openSelectElement();
 
-    const domItems = getItemElements();
+    const domItems = getSelectItemElements();
     expect(domItems.length).toEqual(2);
 
     await userEvent.click(domItems[0]);
@@ -204,13 +191,13 @@ describe('MultiSelect tests', () => {
     const input = getSelectElement();
 
     await openSelectElement(input);
-    expect(getItemElements().length).toEqual(3);
+    expect(getSelectItemElements().length).toEqual(3);
 
-    fireEvent.change(input, {target: {value: 'ba'}});
-    expect(getItemElements().length).toEqual(2);
+    changeSelectInput('ba');
+    expect(getSelectItemElements().length).toEqual(2);
 
-    fireEvent.change(input, {target: {value: 'F'}});
-    expect(getItemElements().length).toEqual(1);
+    changeSelectInput('F');
+    expect(getSelectItemElements().length).toEqual(1);
   });
 
   test('should call onChange handler to remove selected item', async () => {

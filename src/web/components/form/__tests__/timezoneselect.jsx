@@ -9,9 +9,13 @@ import timezones from 'gmp/timezones';
 
 import {render, userEvent} from 'web/utils/testing';
 
-import TimezoneSelect from '../timezoneselect';
+import {
+  openSelectElement,
+  getSelectItemElements,
+  getSelectElement,
+} from 'web/components/testing';
 
-import {openSelectElement, getItemElements, getSelectElement} from './select';
+import TimezoneSelect from '../timezoneselect';
 
 describe('TimezoneSelect tests', () => {
   test('should render', () => {
@@ -25,7 +29,7 @@ describe('TimezoneSelect tests', () => {
 
     await openSelectElement();
 
-    expect(getItemElements().length).toEqual(timezones.length + 1);
+    expect(getSelectItemElements().length).toEqual(timezones.length + 1);
   });
 
   test('should call onChange handler', async () => {
@@ -34,7 +38,7 @@ describe('TimezoneSelect tests', () => {
 
     await openSelectElement();
 
-    const items = getItemElements();
+    const items = getSelectItemElements();
     await userEvent.click(items[1]);
 
     expect(handler).toHaveBeenCalledWith(timezones[0].name, undefined);
@@ -46,7 +50,7 @@ describe('TimezoneSelect tests', () => {
 
     await openSelectElement();
 
-    const items = getItemElements();
+    const items = getSelectItemElements();
     await userEvent.click(items[1]);
 
     expect(handler).toHaveBeenCalledWith(timezones[0].name, 'foo');
