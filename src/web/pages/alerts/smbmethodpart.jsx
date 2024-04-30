@@ -6,16 +6,10 @@
 import React, {useState} from 'react';
 import {selectSaveId} from 'gmp/utils/id';
 
-import _ from 'gmp/locale';
-import {_l} from 'gmp/locale/lang';
-
 import {
   SMB_CREDENTIAL_TYPES,
   smb_credential_filter,
 } from 'gmp/models/credential';
-
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
@@ -29,12 +23,7 @@ import TextField from 'web/components/form/textfield';
 
 import NewIcon from 'web/components/icon/newicon';
 
-const smbMaxProtocolItems = [
-  {label: _l('Default'), value: ''},
-  {label: 'NT1', value: 'NT1'},
-  {label: 'SMB2', value: 'SMB2'},
-  {label: 'SMB3', value: 'SMB3'},
-];
+import useTranslation from 'web/hooks/useTranslation';
 
 const SmbMethodPart = ({
   prefix,
@@ -75,8 +64,16 @@ const SmbMethodPart = ({
     onChange(value, name);
   };
   credentials = credentials.filter(smb_credential_filter);
+  const [_] = useTranslation();
+  const smbMaxProtocolItems = [
+    {label: _('Default'), value: ''},
+    {label: 'NT1', value: 'NT1'},
+    {label: 'SMB2', value: 'SMB2'},
+    {label: 'SMB3', value: 'SMB3'},
+  ];
+
   return (
-    <Layout flex="column" grow="1">
+    <>
       <FormGroup title=" ">
         <span>
           {_(
@@ -87,23 +84,20 @@ const SmbMethodPart = ({
         </span>
       </FormGroup>
 
-      <FormGroup title={_('Credential')}>
-        <Divider>
-          <Select
-            name={prefix + 'smb_credential'}
-            items={renderSelectItems(credentials)}
-            value={smbCredential}
-            onChange={onCredentialChange}
-          />
-          <Layout>
-            <NewIcon
-              size="small"
-              value={SMB_CREDENTIAL_TYPES}
-              title={_('Create a credential')}
-              onClick={onNewCredentialClick}
-            />
-          </Layout>
-        </Divider>
+      <FormGroup title={_('Credential')} direction="row">
+        <Select
+          grow="1"
+          name={prefix + 'smb_credential'}
+          items={renderSelectItems(credentials)}
+          value={smbCredential}
+          onChange={onCredentialChange}
+        />
+        <NewIcon
+          size="small"
+          value={SMB_CREDENTIAL_TYPES}
+          title={_('Create a credential')}
+          onClick={onNewCredentialClick}
+        />
       </FormGroup>
 
       <FormGroup title={_('Share path')}>
@@ -154,7 +148,7 @@ const SmbMethodPart = ({
           onChange={onChange}
         />
       </FormGroup>
-    </Layout>
+    </>
   );
 };
 

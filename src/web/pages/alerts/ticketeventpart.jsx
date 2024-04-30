@@ -5,8 +5,6 @@
 
 import React from 'react';
 
-import {_} from 'gmp/locale/lang';
-
 import {
   EVENT_TYPE_TICKET_RECEIVED,
   EVENT_TYPE_OWNED_TICKET_CHANGED,
@@ -15,34 +13,39 @@ import {
 
 import Radio from 'web/components/form/radio';
 
-import PropTypes from 'web/utils/proptypes';
-import Divider from 'web/components/layout/divider';
+import Row from 'web/components/layout/row';
 
-const TicketEventPart = ({event, onEventChange}) => (
-  <Divider>
-    <Radio
-      title={_('Ticket Received')}
-      name="event"
-      value={EVENT_TYPE_TICKET_RECEIVED}
-      checked={event === EVENT_TYPE_TICKET_RECEIVED}
-      onChange={onEventChange}
-    />
-    <Radio
-      title={_('Assigned Ticket Changed')}
-      name="event"
-      value={EVENT_TYPE_ASSIGNED_TICKET_CHANGED}
-      checked={event === EVENT_TYPE_ASSIGNED_TICKET_CHANGED}
-      onChange={onEventChange}
-    />
-    <Radio
-      title={_('Owned Ticket Changed')}
-      name="event"
-      value={EVENT_TYPE_OWNED_TICKET_CHANGED}
-      checked={event === EVENT_TYPE_OWNED_TICKET_CHANGED}
-      onChange={onEventChange}
-    />
-  </Divider>
-);
+import PropTypes from 'web/utils/proptypes';
+import useTranslation from 'web/hooks/useTranslation';
+
+const TicketEventPart = ({event, onEventChange}) => {
+  const [_] = useTranslation();
+  return (
+    <Row>
+      <Radio
+        title={_('Ticket Received')}
+        name="event"
+        value={EVENT_TYPE_TICKET_RECEIVED}
+        checked={event === EVENT_TYPE_TICKET_RECEIVED}
+        onChange={onEventChange}
+      />
+      <Radio
+        title={_('Assigned Ticket Changed')}
+        name="event"
+        value={EVENT_TYPE_ASSIGNED_TICKET_CHANGED}
+        checked={event === EVENT_TYPE_ASSIGNED_TICKET_CHANGED}
+        onChange={onEventChange}
+      />
+      <Radio
+        title={_('Owned Ticket Changed')}
+        name="event"
+        value={EVENT_TYPE_OWNED_TICKET_CHANGED}
+        checked={event === EVENT_TYPE_OWNED_TICKET_CHANGED}
+        onChange={onEventChange}
+      />
+    </Row>
+  );
+};
 
 TicketEventPart.propTypes = {
   event: PropTypes.string.isRequired,

@@ -3,12 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 import React, {useState} from 'react';
 
 import {selectSaveId} from 'gmp/utils/id';
-
-import _ from 'gmp/locale';
 
 import {
   isTaskEvent,
@@ -30,15 +27,14 @@ import Radio from 'web/components/form/radio';
 
 import NewIcon from 'web/components/icon/newicon';
 
-import Divider from 'web/components/layout/divider';
-import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
-
-import useCapabilities from "web/hooks/useCapabilities";
+import Row from 'web/components/layout/row';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
+
+import useTranslation from 'web/hooks/useTranslation';
+import useCapabilities from 'web/utils/useCapabilities';
 
 const EmailMethodPart = ({
   credentials = [],
@@ -61,6 +57,7 @@ const EmailMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
   const taskEvent = isTaskEvent(event);
   const secinfoEvent = isSecinfoEvent(event);
@@ -117,7 +114,7 @@ const EmailMethodPart = ({
   };
   credentials = credentials.filter(email_credential_filter);
   return (
-    <Layout flex="column" grow="1">
+    <>
       <FormGroup title={_('To Address')}>
         <TextField
           grow="1"
@@ -148,148 +145,143 @@ const EmailMethodPart = ({
         </FormGroup>
       )}
 
-      <FormGroup title={_('Email Encryption')}>
-        <IconDivider>
-          <Select
-            name={prefix + 'recipient_credential'}
-            value={recipientCredential}
-            items={renderSelectItems(credentials, UNSET_VALUE)}
-            onChange={onCredentialChange}
-          />
-          <NewIcon
-            size="small"
-            value={EMAIL_CREDENTIAL_TYPES}
-            title={_('Create a credential')}
-            onClick={onNewCredentialClick}
-          />
-        </IconDivider>
+      <FormGroup title={_('Email Encryption')} direction="row">
+        <Select
+          grow="1"
+          name={prefix + 'recipient_credential'}
+          value={recipientCredential}
+          items={renderSelectItems(credentials, UNSET_VALUE)}
+          onChange={onCredentialChange}
+        />
+        <NewIcon
+          size="small"
+          value={EMAIL_CREDENTIAL_TYPES}
+          title={_('Create a credential')}
+          onClick={onNewCredentialClick}
+        />
       </FormGroup>
 
       {(taskEvent || secinfoEvent) && (
-        <FormGroup title={_('Content')} flex="column">
-          <Divider flex="column" grow="1">
-            <Radio
-              title={_('Simple Notice')}
-              name={prefix + 'notice'}
-              checked={notice === EMAIL_NOTICE_SIMPLE}
-              value="1"
-              onChange={onChange}
-            />
+        <FormGroup title={_('Content')}>
+          <Radio
+            title={_('Simple Notice')}
+            name={prefix + 'notice'}
+            checked={notice === EMAIL_NOTICE_SIMPLE}
+            value="1"
+            onChange={onChange}
+          />
 
-            {capabilities.mayOp('get_report_formats') && (
-              <Layout flex="column">
-                <Divider>
-                  <Radio
-                    name={prefix + 'notice'}
-                    title={
-                      taskEvent
-                        ? _('Include report')
-                        : _('Include list of resources with message:')
-                    }
-                    checked={notice === EMAIL_NOTICE_INCLUDE}
-                    value="0"
-                    onChange={onChange}
+          {capabilities.mayOp('get_report_formats') && (
+            <>
+              <Row>
+                <Radio
+                  name={prefix + 'notice'}
+                  title={
+                    taskEvent
+                      ? _('Include report')
+                      : _('Include list of resources with message:')
+                  }
+                  checked={notice === EMAIL_NOTICE_INCLUDE}
+                  value="0"
+                  onChange={onChange}
+                />
+                {taskEvent && (
+                  <Select
+                    grow="1"
+                    disabled={notice !== EMAIL_NOTICE_INCLUDE}
+                    name={prefix + 'notice_report_format'}
+                    value={reportFormatIdInState}
+                    items={textReportFormatItems}
+                    onChange={handleReportFormatIdChange}
                   />
-                  {taskEvent && (
+                )}
+
+                {capabilities.mayOp('get_report_configs') && (
+                  <>
+                    <label htmlFor="report-config-select">Report Config</label>
                     <Select
                       disabled={notice !== EMAIL_NOTICE_INCLUDE}
-                      name={prefix + 'notice_report_format'}
-                      value={reportFormatIdInState}
-                      items={textReportFormatItems}
-                      onChange={handleReportFormatIdChange}
+                      name={prefix + 'notice_report_config'}
+                      id="report-config-select"
+                      value={reportConfigIdInState}
+                      items={reportConfigItems}
+                      onChange={handleReportConfigIdChange}
                     />
-                  )}
-                  {
-                    capabilities.mayOp("get_report_configs") &&
-                    <>
-                      <label htmlFor="report-config-select">Report Config</label>
-                      <Select
-                        disabled={notice !== EMAIL_NOTICE_INCLUDE}
-                        name={prefix + 'notice_report_config'}
-                        id="report-config-select"
-                        value={reportConfigIdInState}
-                        items={reportConfigItems}
-                        onChange={handleReportConfigIdChange}
-                      />
-                    </>
-                  }
-                </Divider>
+                  </>
+                )}
+              </Row>
+              <TextArea
+                disabled={notice !== EMAIL_NOTICE_INCLUDE}
+                name={prefix + 'message'}
+                rows="8"
+                cols="50"
+                title={
+                  notice === EMAIL_NOTICE_INCLUDE
+                    ? undefined
+                    : _('Activate the "include" option to make changes here.')
+                }
+                value={message}
+                onChange={onChange}
+              />
+            </>
+          )}
 
-                <TextArea
-                  disabled={notice !== EMAIL_NOTICE_INCLUDE}
-                  name={prefix + 'message'}
-                  rows="8"
-                  cols="50"
+          {capabilities.mayOp('get_report_formats') && (
+            <>
+              <Row>
+                <Radio
+                  name={prefix + 'notice'}
                   title={
-                    notice === EMAIL_NOTICE_INCLUDE
-                      ? undefined
-                      : _('Activate the "include" option to make changes here.')
+                    taskEvent
+                      ? _('Attach report')
+                      : _('Attach list of resources with message:')
                   }
-                  value={message}
+                  checked={notice === EMAIL_NOTICE_ATTACH}
+                  value="2"
                   onChange={onChange}
                 />
-              </Layout>
-            )}
-
-            {capabilities.mayOp('get_report_formats') && (
-              <Layout flex="column">
-                <Layout>
-                  <Divider>
-                    <Radio
-                      name={prefix + 'notice'}
-                      title={
-                        taskEvent
-                          ? _('Attach report')
-                          : _('Attach list of resources with message:')
-                      }
-                      checked={notice === EMAIL_NOTICE_ATTACH}
-                      value="2"
-                      onChange={onChange}
+                {taskEvent && (
+                  <Select
+                    grow="1"
+                    disabled={notice !== EMAIL_NOTICE_ATTACH}
+                    name={prefix + 'notice_attach_format'}
+                    value={attachFormatIdInState}
+                    items={reportFormatItems}
+                    onChange={handleAttachFormatIdChange}
+                  />
+                )}
+                {capabilities.mayOp('get_report_configs') && (
+                  <>
+                    <label htmlFor="attach-config-select">Report Config</label>
+                    <Select
+                      disabled={notice !== EMAIL_NOTICE_ATTACH}
+                      name={prefix + 'notice_attach_config'}
+                      id="attach-config-select"
+                      value={attachConfigIdInState}
+                      items={attachConfigItems}
+                      onChange={handleAttachConfigIdChange}
                     />
-                    {taskEvent && (
-                      <Select
-                        disabled={notice !== EMAIL_NOTICE_ATTACH}
-                        name={prefix + 'notice_attach_format'}
-                        value={attachFormatIdInState}
-                        items={reportFormatItems}
-                        onChange={handleAttachFormatIdChange}
-                      />
-                    )}
-                    {
-                      capabilities.mayOp('get_report_configs') &&
-                      <>
-                        <label htmlFor="attach-config-select">Report Config</label>
-                        <Select
-                          disabled={notice !== EMAIL_NOTICE_ATTACH}
-                          name={prefix + 'notice_attach_config'}
-                          id="attach-config-select"
-                          value={attachConfigIdInState}
-                          items={attachConfigItems}
-                          onChange={handleAttachConfigIdChange}
-                        />
-                      </>
-                    }
-                  </Divider>
-                </Layout>
-                <TextArea
-                  disabled={notice !== EMAIL_NOTICE_ATTACH}
-                  name={prefix + 'message_attach'}
-                  rows="8"
-                  cols="50"
-                  title={
-                    notice === EMAIL_NOTICE_ATTACH
-                      ? undefined
-                      : _('Activate the "attach" option to allow changes here.')
-                  }
-                  value={messageAttach}
-                  onChange={onChange}
-                />
-              </Layout>
-            )}
-          </Divider>
+                  </>
+                )}
+              </Row>
+              <TextArea
+                disabled={notice !== EMAIL_NOTICE_ATTACH}
+                name={prefix + 'message_attach'}
+                rows="8"
+                cols="50"
+                title={
+                  notice === EMAIL_NOTICE_ATTACH
+                    ? undefined
+                    : _('Activate the "attach" option to allow changes here.')
+                }
+                value={messageAttach}
+                onChange={onChange}
+              />
+            </>
+          )}
         </FormGroup>
       )}
-    </Layout>
+    </>
   );
 };
 

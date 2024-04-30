@@ -5,15 +5,13 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
 
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const SnmpMethodPart = ({
   prefix,
@@ -22,11 +20,11 @@ const SnmpMethodPart = ({
   snmpMessage,
   onChange,
 }) => {
+  const [_] = useTranslation();
   return (
-    <Layout flex="column" grow="1">
+    <>
       <FormGroup title={_('Community')}>
         <TextField
-          size="30"
           name={prefix + 'snmp_community'}
           value={snmpCommunity}
           onChange={onChange}
@@ -35,7 +33,6 @@ const SnmpMethodPart = ({
 
       <FormGroup title={_('Agent')}>
         <TextField
-          size="30"
           name={prefix + 'snmp_agent'}
           value={snmpAgent}
           onChange={onChange}
@@ -44,13 +41,12 @@ const SnmpMethodPart = ({
 
       <FormGroup title={_('Message')}>
         <TextField
-          size="30"
           name={prefix + 'snmp_message'}
           value={snmpMessage}
           onChange={onChange}
         />
       </FormGroup>
-    </Layout>
+    </>
   );
 };
 

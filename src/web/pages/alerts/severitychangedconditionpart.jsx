@@ -5,15 +5,15 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
-import Divider from 'web/components/layout/divider';
+import Row from 'web/components/layout/row';
 
 import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
 import Radio from 'web/components/form/radio';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const VALUE = 'Severity changed';
 
@@ -23,8 +23,9 @@ const SeverityChangedConditionPart = ({
   prefix,
   onChange,
 }) => {
+  const [_] = useTranslation();
   return (
-    <Divider>
+    <Row>
       <Radio
         title={_('Severity Level')}
         value={VALUE}
@@ -33,6 +34,7 @@ const SeverityChangedConditionPart = ({
         onChange={onChange}
       />
       <Select
+        grow="1"
         items={[
           {
             value: 'changed',
@@ -51,7 +53,7 @@ const SeverityChangedConditionPart = ({
         name={prefix + 'direction'}
         onChange={onChange}
       />
-    </Divider>
+    </Row>
   );
 };
 
