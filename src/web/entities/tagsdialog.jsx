@@ -32,7 +32,6 @@ import Select from 'web/components/form/select';
 
 import NewIcon from 'web/components/icon/newicon';
 
-import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 const ENTITIES_THRESHOLD = 50000;
@@ -67,41 +66,30 @@ const TagsDialog = ({
     onClose={onClose}
     onSave={onSave}
   >
-    {() => (
-      <Layout flex="column">
-        <FormGroup title={_('Choose Tag')} titleSize="4">
-          <Divider>
-            <Select
-              menuPosition="adjust"
-              name="name"
-              value={id}
-              width="230px"
-              items={renderSelectItems(tags)}
-              onChange={onTagChanged}
-            />
-            <NewIcon
-              value={'tag'}
-              title={_('Create a new Tag')}
-              onClick={onNewTagClick}
-            />
-          </Divider>
-        </FormGroup>
-        <FormGroup title={_('Value')} titleSize="4">
-          {value}
-        </FormGroup>
-        <FormGroup title={_('Comment')} titleSize="4">
-          {comment}
-        </FormGroup>
-        {entitiesCount >= ENTITIES_THRESHOLD && (
-          <Notification>
-            {_(
-              'Please note that assigning a tag to {{count}} ' +
-                'items may take several minutes.',
-              {count: entitiesCount},
-            )}
-          </Notification>
+    <FormGroup title={_('Choose Tag')} direction="row">
+      <Select
+        grow="1"
+        name="name"
+        value={id}
+        items={renderSelectItems(tags)}
+        onChange={onTagChanged}
+      />
+      <NewIcon
+        value={'tag'}
+        title={_('Create a new Tag')}
+        onClick={onNewTagClick}
+      />
+    </FormGroup>
+    <FormGroup title={_('Value')}>{value}</FormGroup>
+    <FormGroup title={_('Comment')}>{comment}</FormGroup>
+    {entitiesCount >= ENTITIES_THRESHOLD && (
+      <Notification>
+        {_(
+          'Please note that assigning a tag to {{count}} ' +
+            'items may take several minutes.',
+          {count: entitiesCount},
         )}
-      </Layout>
+      </Notification>
     )}
   </SaveDialog>
 );
@@ -122,5 +110,3 @@ TagsDialog.propTypes = {
 };
 
 export default TagsDialog;
-
-// vim: set ts=2 sw=2 tw=80:
