@@ -21,11 +21,11 @@ import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {render, fireEvent} from 'web/utils/testing';
 
+import {getRadioInputs} from 'web/components/testing';
+
 import YesNoRadio from '../yesnoradio';
 
 const getLabels = element => element.querySelectorAll('label');
-const getRadioInputs = element =>
-  element.querySelectorAll('.mantine-Radio-radio');
 
 describe('YesNoRadio tests', () => {
   test('should render', () => {

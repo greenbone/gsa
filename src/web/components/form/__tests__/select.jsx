@@ -17,34 +17,16 @@
  */
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent, screen, userEvent, act} from 'web/utils/testing';
+import {render, fireEvent, screen} from 'web/utils/testing';
+
+import {
+  getSelectElement,
+  getSelectItemElements,
+  openSelectElement,
+  clickItem,
+} from 'web/components/testing';
 
 import Select from '../select';
-
-export const openSelectElement = async select => {
-  await act(async () => {
-    select = select || getSelectElement();
-    await userEvent.click(select);
-  });
-};
-
-export const getItemElements = () => {
-  return screen.queryAllByRole('option');
-};
-
-export const getSelectElement = () => {
-  const select = screen.queryByRole('searchbox');
-  if (select) {
-    return select;
-  }
-  return screen.getByRole('textbox');
-};
-
-export const clickItem = async item => {
-  await act(async () => {
-    await userEvent.click(item);
-  });
-};
 
 describe('Select component tests', () => {
   test('should render', () => {
@@ -68,11 +50,11 @@ describe('Select component tests', () => {
 
     const element = getSelectElement();
 
-    expect(getItemElements().length).toEqual(0);
+    expect(getSelectItemElements().length).toEqual(0);
 
     await openSelectElement(element);
 
-    const domItems = getItemElements();
+    const domItems = getSelectItemElements();
 
     expect(domItems.length).toEqual(2);
     expect(domItems[0]).toHaveTextContent('Bar');
@@ -93,11 +75,11 @@ describe('Select component tests', () => {
 
     expect(element).toHaveAttribute('placeholder', 'Loading...');
 
-    expect(getItemElements().length).toEqual(0);
+    expect(getSelectItemElements().length).toEqual(0);
 
     await openSelectElement(element);
 
-    expect(getItemElements().length).toEqual(0);
+    expect(getSelectItemElements().length).toEqual(0);
   });
 
   test('should render error', () => {
@@ -133,7 +115,7 @@ describe('Select component tests', () => {
 
     await openSelectElement();
 
-    const domItems = getItemElements();
+    const domItems = getSelectItemElements();
 
     expect(domItems.length).toEqual(2);
 
@@ -160,7 +142,7 @@ describe('Select component tests', () => {
 
     await openSelectElement();
 
-    const domItems = getItemElements();
+    const domItems = getSelectItemElements();
 
     await clickItem(domItems[0]);
 
@@ -208,7 +190,7 @@ describe('Select component tests', () => {
 
     await openSelectElement(input);
 
-    const domItems = getItemElements();
+    const domItems = getSelectItemElements();
 
     await clickItem(domItems[1]);
 
@@ -235,17 +217,17 @@ describe('Select component tests', () => {
 
     await openSelectElement();
 
-    expect(getItemElements().length).toEqual(3);
+    expect(getSelectItemElements().length).toEqual(3);
 
     const input = getSelectElement();
 
     fireEvent.change(input, {target: {value: 'ba'}});
 
-    expect(getItemElements().length).toEqual(2);
+    expect(getSelectItemElements().length).toEqual(2);
 
     fireEvent.change(input, {target: {value: 'F'}});
 
-    expect(getItemElements().length).toEqual(1);
+    expect(getSelectItemElements().length).toEqual(1);
   });
 });
 
