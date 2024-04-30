@@ -5,13 +5,15 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render} from 'web/utils/testing';
 
 import {
   openSelectElement,
-  getItemElements,
-  getInputBox,
-} from 'web/components/form/__tests__/select';
+  getSelectItemElements,
+  clickItem,
+  getSelectElement,
+  changeSelectInput,
+} from 'web/components/testing';
 
 import RelationSelector from 'web/components/powerfilter/relationselector';
 
@@ -25,19 +27,16 @@ describe('Relation Selector Tests', () => {
     expect(element).toBeVisible();
   });
 
-  test('should return items', () => {
+  test('should return items', async () => {
     const onChange = testing.fn();
-    const {element, baseElement} = render(
-      <RelationSelector relation="<" onChange={onChange} />,
-    );
+    render(<RelationSelector relation="<" onChange={onChange} />);
 
-    let domItems = getItemElements(baseElement);
-
+    let domItems = getSelectItemElements();
     expect(domItems.length).toEqual(0);
 
-    openSelectElement(element);
+    await openSelectElement();
 
-    domItems = getItemElements(baseElement);
+    domItems = getSelectItemElements();
 
     expect(domItems.length).toEqual(4);
     expect(domItems[0]).toHaveTextContent('--');
@@ -46,63 +45,56 @@ describe('Relation Selector Tests', () => {
     expect(domItems[3]).toHaveTextContent('is less than');
   });
 
-  test('should call onChange handler', () => {
+  test('should call onChange handler', async () => {
     const onChange = testing.fn();
 
-    const {element, baseElement} = render(
-      <RelationSelector relation="<" onChange={onChange} />,
-    );
+    render(<RelationSelector relation="<" onChange={onChange} />);
 
-    openSelectElement(element);
+    await openSelectElement();
 
-    const domItems = getItemElements(baseElement);
+    const domItems = getSelectItemElements();
 
-    fireEvent.click(domItems[1]);
+    await clickItem(domItems[1]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('=', undefined);
   });
-  test('should change value', () => {
+
+  test('should change value', async () => {
     const onChange = testing.fn();
 
-    // eslint-disable-next-line no-shadow
-    const {baseElement, element, getByTestId} = render(
-      <RelationSelector relation="=" onChange={onChange} />,
-    );
+    render(<RelationSelector relation="=" onChange={onChange} />);
 
-    const displayedValue = getByTestId('select-selected-value');
-    expect(displayedValue).toHaveTextContent('is equal to');
+    const displayedValue = getSelectElement();
+    expect(displayedValue).toHaveValue('is equal to');
 
-    openSelectElement(element);
+    await openSelectElement();
 
-    const domItems = getItemElements(baseElement);
+    const domItems = getSelectItemElements();
 
-    fireEvent.click(domItems[3]);
+    await clickItem(domItems[3]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('<', undefined);
   });
 
-  test('should filter items', () => {
+  test('should filter items', async () => {
     const onChange = testing.fn();
-    const {element, baseElement} = render(
-      <RelationSelector relation="=" onChange={onChange} />,
-    );
-    openSelectElement(element);
+    render(<RelationSelector relation="=" onChange={onChange} />);
 
-    let domItems = getItemElements(baseElement);
+    await openSelectElement();
+
+    let domItems = getSelectItemElements();
     expect(domItems.length).toEqual(4);
 
-    const input = getInputBox(baseElement);
+    changeSelectInput('than');
 
-    fireEvent.change(input, {target: {value: 'than'}});
-
-    domItems = getItemElements(baseElement);
+    domItems = getSelectItemElements();
     expect(domItems.length).toEqual(2);
 
-    fireEvent.change(input, {target: {value: 'to'}});
+    changeSelectInput('to');
 
-    domItems = getItemElements(baseElement);
+    domItems = getSelectItemElements();
     expect(domItems.length).toEqual(1);
   });
 });

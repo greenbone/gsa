@@ -5,11 +5,19 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent, queryAllByTestId} from 'web/utils/testing';
+import Filter from 'gmp/models/filter';
+
+import {render, fireEvent} from 'web/utils/testing';
+
+import {
+  clickItem,
+  getRadioInputs,
+  getSelectElement,
+  getSelectItemElements,
+  openSelectElement,
+} from 'web/components/testing';
 
 import SortByGroup from '../sortbygroup';
-
-import Filter from 'gmp/models/filter';
 
 describe('SortByGroup tests', () => {
   test('should render', () => {
@@ -30,11 +38,12 @@ describe('SortByGroup tests', () => {
     expect(element).toBeVisible();
   });
 
-  test('should render fields', () => {
+  test('should render fields', async () => {
     const filter1 = Filter.fromString('sort=severity');
     const handleSortByChange = testing.fn();
     const handleSortOrderChange = testing.fn();
-    const {baseElement, getByTestId} = render(
+
+    render(
       <SortByGroup
         by="solution"
         fields={[
@@ -48,10 +57,9 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    const selectButton = getByTestId('select-open-button');
-    fireEvent.click(selectButton);
+    await openSelectElement();
 
-    const selectElements = queryAllByTestId(baseElement, 'select-item');
+    const selectElements = getSelectItemElements();
     expect(selectElements.length).toEqual(2);
 
     expect(selectElements[0]).toHaveTextContent('Severity');
@@ -63,7 +71,8 @@ describe('SortByGroup tests', () => {
     const filter2 = Filter.fromString('sort-reverse=severity');
     const handleSortByChange = testing.fn();
     const handleSortOrderChange = testing.fn();
-    const {rerender, getAllByTestId, getByTestId} = render(
+
+    const {rerender} = render(
       <SortByGroup
         by="solution"
         fields={[
@@ -77,14 +86,13 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
 
     expect(radio[0].checked).toEqual(true);
     expect(radio[1].checked).toEqual(false);
 
-    const selectedValue = getByTestId('select-selected-value');
-
-    expect(selectedValue).toHaveTextContent('Severity');
+    const selectedValue = getSelectElement();
+    expect(selectedValue).toHaveValue('Severity');
 
     rerender(
       <SortByGroup
@@ -103,13 +111,13 @@ describe('SortByGroup tests', () => {
     expect(radio[0].checked).toEqual(false);
     expect(radio[1].checked).toEqual(true);
 
-    expect(selectedValue).toHaveTextContent('Severity');
+    expect(selectedValue).toHaveValue('Severity');
   });
 
   test('should use by and order', () => {
     const handleSortByChange = testing.fn();
     const handleSortOrderChange = testing.fn();
-    const {getAllByTestId, getByTestId} = render(
+    render(
       <SortByGroup
         by="solution_type"
         fields={[
@@ -122,21 +130,22 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
 
     expect(radio[0].checked).toEqual(false);
     expect(radio[1].checked).toEqual(true);
 
-    const selectedValue = getByTestId('select-selected-value');
+    const selectedValue = getSelectElement();
 
-    expect(selectedValue).toHaveTextContent('Solution Type');
+    expect(selectedValue).toHaveValue('Solution Type');
   });
 
-  test('should call change handler of select', () => {
+  test('should call change handler of select', async () => {
     const filter = Filter.fromString('sort');
     const handleSortByChange = testing.fn();
     const handleSortOrderChange = testing.fn();
-    const {baseElement, getByTestId} = render(
+
+    render(
       <SortByGroup
         by=""
         fields={[
@@ -150,13 +159,12 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    const selectButton = getByTestId('select-open-button');
-    fireEvent.click(selectButton);
+    await openSelectElement();
 
-    const selectElements = queryAllByTestId(baseElement, 'select-item');
+    const selectElements = getSelectItemElements();
     expect(selectElements.length).toEqual(2);
 
-    fireEvent.click(selectElements[1]);
+    await clickItem(selectElements[1]);
 
     expect(handleSortByChange).toHaveBeenCalledWith('solution_type', 'sort_by');
   });
@@ -165,7 +173,8 @@ describe('SortByGroup tests', () => {
     const filter = Filter.fromString('sort');
     const handleSortByChange = testing.fn();
     const handleSortOrderChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <SortByGroup
         by=""
         fields={[
@@ -179,7 +188,7 @@ describe('SortByGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
     fireEvent.click(radio[1]);
 
     expect(handleSortOrderChange).toHaveBeenCalledWith(

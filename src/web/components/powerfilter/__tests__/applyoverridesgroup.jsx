@@ -5,11 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
+import Filter from 'gmp/models/filter';
+
 import {render, fireEvent} from 'web/utils/testing';
 
-import ApplyOverridesGroup from '../applyoverridesgroup';
+import {getRadioInputs} from 'web/components/testing';
 
-import Filter from 'gmp/models/filter';
+import ApplyOverridesGroup from '../applyoverridesgroup';
 
 describe('ApplyOverridesGroup tests', () => {
   test('should render', () => {
@@ -30,7 +32,8 @@ describe('ApplyOverridesGroup tests', () => {
   test('should call change handler', () => {
     const filter = Filter.fromString('apply_overrides=1');
     const handleChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <ApplyOverridesGroup
         filter={filter}
         name="applyOverrides"
@@ -39,7 +42,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
     fireEvent.click(radio[1]);
 
     expect(handleChange).toHaveBeenCalledWith(0, 'applyOverrides');
@@ -48,7 +51,8 @@ describe('ApplyOverridesGroup tests', () => {
   test('should check radio', () => {
     const filter = Filter.fromString('apply_overrides=1');
     const handleChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <ApplyOverridesGroup
         filter={filter}
         name="applyOverrides"
@@ -57,7 +61,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
 
     expect(radio[0].checked).toEqual(true);
   });
@@ -66,7 +70,8 @@ describe('ApplyOverridesGroup tests', () => {
     const filter1 = Filter.fromString('apply_overrides=1');
     const filter2 = Filter.fromString('apply_overrides=0');
     const handleChange = testing.fn();
-    const {getAllByTestId, rerender} = render(
+
+    const {rerender} = render(
       <ApplyOverridesGroup
         filter={filter1}
         name="applyOverrides"
@@ -75,7 +80,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
 
     expect(radio[0].checked).toEqual(true);
     expect(radio[1].checked).toEqual(false);
@@ -96,7 +101,8 @@ describe('ApplyOverridesGroup tests', () => {
   test('should use filter value by default', () => {
     const filter = Filter.fromString('apply_overrides=1');
     const handleChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <ApplyOverridesGroup
         filter={filter}
         name="applyOverrides"
@@ -105,14 +111,15 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
     expect(radio[0].checked).toEqual(true);
     expect(radio[1].checked).toEqual(false);
   });
 
   test('should use overrides', () => {
     const handleChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <ApplyOverridesGroup
         name="applyOverrides"
         overrides={1}
@@ -120,7 +127,7 @@ describe('ApplyOverridesGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
     expect(radio[0].checked).toEqual(true);
   });
 });

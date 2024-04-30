@@ -7,7 +7,7 @@ import {isDefined} from 'gmp/utils/identity';
 
 import {screen, userEvent, act, fireEvent} from 'web/utils/testing';
 
-const getElementOrDocument = element =>
+export const getElementOrDocument = element =>
   isDefined(element) ? element : document.body;
 
 /**

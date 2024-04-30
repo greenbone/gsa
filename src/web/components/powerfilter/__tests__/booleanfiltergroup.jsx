@@ -5,11 +5,13 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
+import Filter from 'gmp/models/filter';
+
 import {render, fireEvent} from 'web/utils/testing';
 
-import BooleanFilterGroup from 'web/components/powerfilter/booleanfiltergroup';
+import {getRadioInputs} from 'web/components/testing';
 
-import Filter from 'gmp/models/filter';
+import BooleanFilterGroup from '../booleanfiltergroup';
 
 describe('BooleanFilterGroup tests', () => {
   test('should render', () => {
@@ -17,6 +19,7 @@ describe('BooleanFilterGroup tests', () => {
     const title = 'foo';
     const name = 'active';
     const handleChange = testing.fn();
+
     const {element} = render(
       <BooleanFilterGroup
         filter={filter}
@@ -34,7 +37,8 @@ describe('BooleanFilterGroup tests', () => {
     const title = 'foo';
     const name = 'active';
     const handleChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <BooleanFilterGroup
         filter={filter}
         name={name}
@@ -43,7 +47,7 @@ describe('BooleanFilterGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
     fireEvent.click(radio[0]);
 
     expect(handleChange).toHaveBeenCalledWith(1, 'active');
@@ -54,7 +58,8 @@ describe('BooleanFilterGroup tests', () => {
     const title = 'foo';
     const name = 'apply_overrides';
     const handleChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <BooleanFilterGroup
         filter={filter}
         name={name}
@@ -63,7 +68,7 @@ describe('BooleanFilterGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
 
     expect(radio[1].checked).toEqual(true);
   });
@@ -74,7 +79,8 @@ describe('BooleanFilterGroup tests', () => {
     const filter1 = Filter.fromString('apply_overrides=1');
     const filter2 = Filter.fromString('apply_overrides=0');
     const handleChange = testing.fn();
-    const {getAllByTestId, rerender} = render(
+
+    const {rerender} = render(
       <BooleanFilterGroup
         filter={filter1}
         name={name}
@@ -83,7 +89,7 @@ describe('BooleanFilterGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
 
     expect(radio[0].checked).toEqual(true);
     expect(radio[1].checked).toEqual(false);
@@ -106,7 +112,8 @@ describe('BooleanFilterGroup tests', () => {
     const name = 'apply_overrides';
     const filter = Filter.fromString('apply_overrides=1');
     const handleChange = testing.fn();
-    const {getAllByTestId} = render(
+
+    render(
       <BooleanFilterGroup
         filter={filter}
         name={name}
@@ -115,16 +122,17 @@ describe('BooleanFilterGroup tests', () => {
       />,
     );
 
-    const radio = getAllByTestId('radio-input');
+    const radio = getRadioInputs();
     expect(radio[0].checked).toEqual(true);
     expect(radio[1].checked).toEqual(false);
   });
 
-  test('should return title', () => {
+  test('should render title', () => {
     const title = 'foo';
     const name = 'apply_overrides';
     const filter = Filter.fromString('apply_overrides=1');
     const handleChange = testing.fn();
+
     const {element} = render(
       <BooleanFilterGroup
         name={name}
@@ -134,8 +142,8 @@ describe('BooleanFilterGroup tests', () => {
       />,
     );
 
-    const input = element.querySelectorAll('label');
+    const titleElement = element.querySelector('.mantine-Text-root');
 
-    expect(input[0]).toHaveTextContent('foo');
+    expect(titleElement).toHaveTextContent('foo');
   });
 });
