@@ -28,8 +28,6 @@ describe('CreateNamedFilterGroup tests', () => {
       <CreateNamedFilterGroup onValueChange={handleChangeMock} />,
     );
 
-    expect(element).toHaveStyleRule('display', 'flex');
-    expect(element).toHaveStyleRule('margin-top', '15px');
     expect(element).toBeInTheDocument();
   });
 

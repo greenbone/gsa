@@ -17,16 +17,28 @@
  */
 import {describe, test, expect, testing} from '@gsa/testing';
 
+import Filter from 'gmp/models/filter';
+
 import {render, fireEvent} from 'web/utils/testing';
 
 import {
+  clickItem,
+  getElementOrDocument,
+  getSelectItemElements,
   openSelectElement,
-  getItemElements,
-} from 'web/components/form/__tests__/select';
+} from 'web/components/testing';
 
-import SeverityValuesGroup from 'web/components/powerfilter/severityvaluesgroup';
+import SeverityValuesGroup from '../severityvaluesgroup';
 
-import Filter from 'gmp/models/filter';
+const getTitle = element => {
+  element = getElementOrDocument(element);
+  return element.querySelector('.mantine-Text-root');
+};
+
+const getSeverityInput = element => {
+  element = getElementOrDocument(element);
+  return element.querySelector('.mantine-NumberInput-input');
+};
 
 describe('Severity Values Group Tests', () => {
   test('should render', () => {
@@ -51,7 +63,7 @@ describe('Severity Values Group Tests', () => {
     const filter = Filter.fromString('severity=3');
     const name = 'severity';
 
-    const {element} = render(
+    const {debug} = render(
       <SeverityValuesGroup
         filter={filter}
         name={name}
@@ -60,12 +72,13 @@ describe('Severity Values Group Tests', () => {
       />,
     );
 
-    const formTitle = element.querySelectorAll('label');
-    const numField = element.querySelectorAll('input');
+    debug();
 
-    expect(formTitle[0]).toHaveTextContent('foo');
-    expect(numField[0]).toHaveAttribute('name', 'severity');
-    expect(numField[0]).toHaveAttribute('value', '3');
+    const numField = getSeverityInput();
+
+    expect(getTitle()).toHaveTextContent('foo');
+    expect(numField).toHaveAttribute('name', 'severity');
+    expect(numField).toHaveAttribute('value', '3');
   });
 
   test('should initialize value with 0 in case no filter value is given', () => {
@@ -73,7 +86,7 @@ describe('Severity Values Group Tests', () => {
     const filter = Filter.fromString('rows=10');
     const name = 'severity';
 
-    const {element} = render(
+    render(
       <SeverityValuesGroup
         filter={filter}
         name={name}
@@ -82,10 +95,10 @@ describe('Severity Values Group Tests', () => {
       />,
     );
 
-    const numField = element.querySelectorAll('input');
+    const numField = getSeverityInput();
 
-    expect(numField[0]).toHaveAttribute('name', 'severity');
-    expect(numField[0]).toHaveAttribute('value', '0');
+    expect(numField).toHaveAttribute('name', 'severity');
+    expect(numField).toHaveAttribute('value', '0');
   });
 
   test('should change value', () => {
@@ -93,7 +106,7 @@ describe('Severity Values Group Tests', () => {
     const filter = Filter.fromString('severity=3');
     const name = 'severity';
 
-    const {element} = render(
+    render(
       <SeverityValuesGroup
         filter={filter}
         name={name}
@@ -102,19 +115,19 @@ describe('Severity Values Group Tests', () => {
       />,
     );
 
-    const numField = element.querySelectorAll('input');
+    const numField = getSeverityInput();
 
-    fireEvent.change(numField[0], {target: {value: '9'}});
+    fireEvent.change(numField, {target: {value: '9'}});
 
     expect(onChange).toHaveBeenCalledWith(9, 'severity', '=');
   });
 
-  test('should change relationship', () => {
+  test('should change relationship', async () => {
     const onChange = testing.fn();
     const filter = Filter.fromString('severity=3');
     const name = 'severity';
 
-    const {element, baseElement} = render(
+    render(
       <SeverityValuesGroup
         filter={filter}
         name={name}
@@ -123,11 +136,11 @@ describe('Severity Values Group Tests', () => {
       />,
     );
 
-    openSelectElement(element);
+    await openSelectElement();
 
-    const domItems = getItemElements(baseElement);
+    const domItems = getSelectItemElements();
 
-    fireEvent.click(domItems[3]);
+    await clickItem(domItems[3]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith(3, 'severity', '<');

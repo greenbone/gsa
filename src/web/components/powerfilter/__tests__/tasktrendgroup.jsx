@@ -17,14 +17,16 @@
  */
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render} from 'web/utils/testing';
 
 import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
 import Filter from 'gmp/models/filter';
 import {
+  clickItem,
+  getSelectElement,
+  getSelectItemElements,
   openSelectElement,
-  getItemElements,
-} from 'web/components/form/__tests__/select';
+} from 'web/components/testing';
 
 describe('Task Trend Selector Tests', () => {
   test('should render', () => {
@@ -37,20 +39,19 @@ describe('Task Trend Selector Tests', () => {
     expect(element).toBeInTheDocument();
   });
 
-  test('should return items', () => {
+  test('should return items', async () => {
     const onChange = testing.fn();
     const filter = Filter.fromString('trend=down');
-    const {element, baseElement} = render(
-      <TaskTrendGroup filter={filter} onChange={onChange} />,
-    );
 
-    let domItems = getItemElements(baseElement);
+    render(<TaskTrendGroup filter={filter} onChange={onChange} />);
+
+    let domItems = getSelectItemElements();
 
     expect(domItems.length).toEqual(0);
 
-    openSelectElement(element);
+    await openSelectElement();
 
-    domItems = getItemElements(baseElement);
+    domItems = getSelectItemElements();
 
     expect(domItems.length).toEqual(5);
     expect(domItems[0]).toHaveTextContent('Severity increased');
@@ -61,48 +62,41 @@ describe('Task Trend Selector Tests', () => {
   test('should parse filter', () => {
     const onChange = testing.fn();
     const filter = Filter.fromString('trend=same');
-    // eslint-disable-next-line no-shadow
-    const {getByTestId} = render(
-      <TaskTrendGroup filter={filter} onChange={onChange} />,
-    );
 
-    const displayedValue = getByTestId('select-selected-value');
-    expect(displayedValue).toHaveTextContent('Vulnerabilities did not change');
+    render(<TaskTrendGroup filter={filter} onChange={onChange} />);
+
+    const select = getSelectElement();
+    expect(select).toHaveValue('Vulnerabilities did not change');
   });
 
-  test('should call onChange handler', () => {
+  test('should call onChange handler', async () => {
     const onChange = testing.fn();
     const filter = Filter.fromString('trend=down');
-    const {element, baseElement} = render(
-      <TaskTrendGroup filter={filter} onChange={onChange} />,
-    );
 
-    openSelectElement(element);
+    render(<TaskTrendGroup filter={filter} onChange={onChange} />);
 
-    const domItems = getItemElements(baseElement);
+    await openSelectElement();
 
-    fireEvent.click(domItems[0]);
+    const domItems = getSelectItemElements();
+    await clickItem(domItems[0]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('up', 'trend');
   });
-  test('should change value', () => {
+
+  test('should change value', async () => {
     const onChange = testing.fn();
     const filter = Filter.fromString('trend=down');
 
-    // eslint-disable-next-line no-shadow
-    const {baseElement, element, getByTestId} = render(
-      <TaskTrendGroup trend="up" filter={filter} onChange={onChange} />,
-    );
+    render(<TaskTrendGroup trend="up" filter={filter} onChange={onChange} />);
 
-    const displayedValue = getByTestId('select-selected-value');
-    expect(displayedValue).toHaveTextContent('Severity increased');
+    const select = getSelectElement();
+    expect(select).toHaveValue('Severity increased');
 
-    openSelectElement(element);
+    await openSelectElement();
 
-    const domItems = getItemElements(baseElement);
-
-    fireEvent.click(domItems[2]);
+    const domItems = getSelectItemElements();
+    await clickItem(domItems[2]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('more', 'trend');
