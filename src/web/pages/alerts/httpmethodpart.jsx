@@ -17,8 +17,6 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 
 import withPrefix from 'web/utils/withPrefix';
@@ -26,7 +24,10 @@ import withPrefix from 'web/utils/withPrefix';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const HttpMethodPart = ({prefix, URL, onChange}) => {
+  const [_] = useTranslation();
   return (
     <FormGroup title={_('HTTP Get URL')}>
       <TextField

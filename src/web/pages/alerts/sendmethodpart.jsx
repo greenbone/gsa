@@ -19,17 +19,14 @@ import React, {useState} from 'react';
 import {selectSaveId} from 'gmp/utils/id';
 import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
 
-import _ from 'gmp/locale';
-
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const SendMethodPart = ({
   prefix,
@@ -41,6 +38,8 @@ const SendMethodPart = ({
   sendReportFormat,
   onChange,
 }) => {
+  const [_] = useTranslation();
+
   const [reportFormatIdInState, setReportFormatId] = useState(
     selectSaveId(reportFormats, sendReportFormat),
   );
@@ -64,24 +63,22 @@ const SendMethodPart = ({
     onChange(value, name);
   };
   return (
-    <Layout flex="column" grow="1">
-      <FormGroup title={_('Send to host')}>
-        <Divider>
-          <TextField
-            name={prefix + 'send_host'}
-            value={sendHost}
-            size="30"
-            onChange={onChange}
-          />
-          <Layout>{_('on port')}</Layout>
-          <TextField
-            name={prefix + 'send_port'}
-            value={sendPort}
-            maxLength="6"
-            size="6"
-            onChange={onChange}
-          />
-        </Divider>
+    <>
+      <FormGroup title={_('Send to host')} direction="row">
+        <TextField
+          grow="1"
+          name={prefix + 'send_host'}
+          value={sendHost}
+          onChange={onChange}
+        />
+        {_('on port')}
+        <TextField
+          name={prefix + 'send_port'}
+          value={sendPort}
+          maxLength="6"
+          size="6"
+          onChange={onChange}
+        />
       </FormGroup>
 
       <FormGroup title={_('Report')}>
@@ -91,7 +88,9 @@ const SendMethodPart = ({
           items={renderSelectItems(reportFormats)}
           onChange={handleReportFormatIdChange}
         />
-        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+        <label htmlFor="report-config-select">
+          &nbsp; Report Config &nbsp;{' '}
+        </label>
         <Select
           name={prefix + 'send_report_config'}
           id="report-config-select"
@@ -100,7 +99,7 @@ const SendMethodPart = ({
           onChange={handleReportConfigIdChange}
         />
       </FormGroup>
-    </Layout>
+    </>
   );
 };
 

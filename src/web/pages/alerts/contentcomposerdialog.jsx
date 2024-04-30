@@ -18,10 +18,6 @@
 
 import React from 'react';
 
-import styled from 'styled-components';
-
-import _ from 'gmp/locale';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {isDefined} from 'gmp/utils/identity';
@@ -38,12 +34,7 @@ import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
-import Layout from 'web/components/layout/layout';
-import Divider from 'web/components/layout/divider';
-
-const StyledDiv = styled.div`
-  text-align: end;
-`;
+import useTranslation from 'web/hooks/useTranslation';
 
 const ContentComposerDialog = ({
   filterId = UNSET_VALUE,
@@ -57,6 +48,7 @@ const ContentComposerDialog = ({
   onSave,
   onChange,
 }) => {
+  const [_] = useTranslation();
   const filter =
     filterId === UNSET_VALUE ? undefined : filters.find(f => f.id === filterId);
 
@@ -76,54 +68,42 @@ const ContentComposerDialog = ({
       onClose={onClose}
       onSave={onSave}
     >
-      {({values, onValueChange}) => (
-        <Layout flex="column">
-          <FormGroup title={_('Report Result Filter')} titleSize="3">
-            <Select
-              name="filterId"
-              value={filterId}
-              items={renderSelectItems(filters, UNSET_VALUE)}
-              onChange={onFilterIdChange}
-            />
-          </FormGroup>
-          <ComposerContent
-            filterFieldTitle={_(
-              'To change the filter, please select a filter' +
-                ' from the dropdown menu.',
-            )}
-            filterString={isDefined(filter) ? filter.toFilterString() : ''}
-            includeNotes={values.includeNotes}
-            includeOverrides={values.includeOverrides}
-            onValueChange={onChange}
-          />
-          <FormGroup title={_('Pagination')} titleSize="3">
-            <Divider>
-              <CheckBox
-                data-testid="ignorePagination"
-                name="ignorePagination"
-                checked={values.ignorePagination}
-                checkedValue={YES_VALUE}
-                uncheckedValue={NO_VALUE}
-                title={_('Ignore')}
-                onChange={onChange}
-              />
-            </Divider>
-          </FormGroup>
-          <StyledDiv>
-            <CheckBox
-              name="storeAsDefault"
-              checked={values.storeAsDefault}
-              checkedValue={YES_VALUE}
-              unCheckedValue={NO_VALUE}
-              toolTipTitle={_(
-                'Store indicated settings (without filter) as default',
-              )}
-              title={_('Store as default')}
-              onChange={onChange}
-            />
-          </StyledDiv>
-        </Layout>
-      )}
+      <FormGroup title={_('Report Result Filter')}>
+        <Select
+          name="filterId"
+          value={filterId}
+          items={renderSelectItems(filters, UNSET_VALUE)}
+          onChange={onFilterIdChange}
+        />
+      </FormGroup>
+      <ComposerContent
+        filterFieldTitle={_(
+          'To change the filter, please select a filter' +
+            ' from the dropdown menu.',
+        )}
+        filterString={isDefined(filter) ? filter.toFilterString() : ''}
+        includeNotes={includeNotes}
+        includeOverrides={includeOverrides}
+        onValueChange={onChange}
+      />
+      <CheckBox
+        data-testid="ignorePagination"
+        name="ignorePagination"
+        checked={ignorePagination}
+        checkedValue={YES_VALUE}
+        uncheckedValue={NO_VALUE}
+        title={_('Ignore Pagination')}
+        onChange={onChange}
+      />
+      <CheckBox
+        name="storeAsDefault"
+        checked={storeAsDefault}
+        checkedValue={YES_VALUE}
+        unCheckedValue={NO_VALUE}
+        toolTipTitle={_('Store indicated settings (without filter) as default')}
+        title={_('Store as default')}
+        onChange={onChange}
+      />
     </SaveDialog>
   );
 };

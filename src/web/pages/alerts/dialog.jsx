@@ -62,7 +62,7 @@ import YesNoRadio from 'web/components/form/yesnoradio';
 import ReportIcon from 'web/components/icon/reporticon';
 
 import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+import Row from 'web/components/layout/row';
 
 import {UNSET_VALUE} from 'web/utils/render';
 import withCapabilities from 'web/utils/withCapabilities';
@@ -516,13 +516,12 @@ class AlertDialog extends React.Component {
       >
         {({values, onValueChange}) => {
           return (
-            <Layout flex="column">
+            <>
               <FormGroup title={_('Name')}>
                 <TextField
                   name="name"
                   grow="1"
                   value={values.name}
-                  size="30"
                   onChange={onValueChange}
                 />
               </FormGroup>
@@ -532,92 +531,88 @@ class AlertDialog extends React.Component {
                   name="comment"
                   value={values.comment}
                   grow="1"
-                  size="30"
                   onChange={onValueChange}
                 />
               </FormGroup>
 
-              <FormGroup title={_('Event')} flex="column">
-                <Divider flex="column">
-                  <TaskEventPart
-                    prefix="event_data"
-                    event={values.event}
-                    status={values.event_data_status}
-                    onEventChange={value =>
-                      this.handleEventChange(value, onValueChange)
-                    }
-                    onChange={onValueChange}
-                  />
+              <FormGroup title={_('Event')}>
+                <TaskEventPart
+                  prefix="event_data"
+                  event={values.event}
+                  status={values.event_data_status}
+                  onEventChange={value =>
+                    this.handleEventChange(value, onValueChange)
+                  }
+                  onChange={onValueChange}
+                />
 
-                  <SecInfoEventPart
-                    prefix="event_data"
-                    event={values.event}
-                    secinfoType={values.event_data_secinfo_type}
-                    feedEvent={values.event_data_feed_event}
-                    onEventChange={value =>
-                      this.handleEventChange(value, onValueChange)
-                    }
-                    onChange={onValueChange}
-                  />
-                  <TicketEventPart
-                    event={values.event}
-                    onEventChange={value =>
-                      this.handleEventChange(value, onValueChange)
-                    }
-                  />
-                </Divider>
+                <SecInfoEventPart
+                  prefix="event_data"
+                  event={values.event}
+                  secinfoType={values.event_data_secinfo_type}
+                  feedEvent={values.event_data_feed_event}
+                  onEventChange={value =>
+                    this.handleEventChange(value, onValueChange)
+                  }
+                  onChange={onValueChange}
+                />
+
+                <TicketEventPart
+                  event={values.event}
+                  onEventChange={value =>
+                    this.handleEventChange(value, onValueChange)
+                  }
+                />
               </FormGroup>
 
-              <FormGroup title={_('Condition')} flex="column">
-                <Divider flex="column">
-                  <Radio
-                    title={_('Always')}
-                    name="condition"
-                    value={CONDITION_TYPE_ALWAYS}
-                    checked={values.condition === CONDITION_TYPE_ALWAYS}
+              <FormGroup title={_('Condition')}>
+                <Radio
+                  title={_('Always')}
+                  name="condition"
+                  value={CONDITION_TYPE_ALWAYS}
+                  checked={values.condition === CONDITION_TYPE_ALWAYS}
+                  onChange={onValueChange}
+                />
+
+                {taskEvent && (
+                  <SeverityLeastConditionPart
+                    prefix="condition_data"
+                    condition={values.condition}
+                    severity={values.condition_data_severity}
                     onChange={onValueChange}
                   />
+                )}
 
-                  {taskEvent && (
-                    <SeverityLeastConditionPart
-                      prefix="condition_data"
-                      condition={values.condition}
-                      severity={values.condition_data_severity}
-                      onChange={onValueChange}
-                    />
-                  )}
+                {taskEvent && (
+                  <SeverityChangedConditionPart
+                    prefix="condition_data"
+                    condition={values.condition}
+                    direction={values.condition_data_direction}
+                    onChange={onValueChange}
+                  />
+                )}
 
-                  {taskEvent && (
-                    <SeverityChangedConditionPart
-                      prefix="condition_data"
-                      condition={values.condition}
-                      direction={values.condition_data_direction}
-                      onChange={onValueChange}
-                    />
-                  )}
+                {(secinfoEvent || taskEvent) && (
+                  <FilterCountLeastConditionPart
+                    prefix="condition_data"
+                    condition={values.condition}
+                    atLeastFilterId={values.condition_data_at_least_filter_id}
+                    atLeastCount={values.condition_data_at_least_count}
+                    filters={values.condition_data_filters}
+                    onChange={onValueChange}
+                  />
+                )}
 
-                  {(secinfoEvent || taskEvent) && (
-                    <FilterCountLeastConditionPart
-                      prefix="condition_data"
-                      condition={values.condition}
-                      atLeastFilterId={values.condition_data_at_least_filter_id}
-                      atLeastCount={values.condition_data_at_least_count}
-                      filters={values.condition_data_filters}
-                      onChange={onValueChange}
-                    />
-                  )}
-
-                  {taskEvent && (
-                    <FilterCountChangedConditionPart
-                      prefix="condition_data"
-                      condition={values.condition}
-                      filterId={values.condition_data_filter_id}
-                      count={values.condition_data_count}
-                      filters={values.condition_data_filters}
-                      onChange={onValueChange}
-                    />
-                  )}
-                </Divider>
+                {taskEvent && (
+                  <FilterCountChangedConditionPart
+                    prefix="condition_data"
+                    condition={values.condition}
+                    filterId={values.condition_data_filter_id}
+                    count={values.condition_data_count}
+                    filters={values.condition_data_filters}
+                    onChange={onValueChange}
+                  />
+                )}
               </FormGroup>
 
               {secinfoEvent && (
@@ -641,46 +636,42 @@ class AlertDialog extends React.Component {
               )}
 
               {taskEvent && (
-                <FormGroup title={_('Delta Report')} flex="column">
-                  <Divider flex="column">
+                <FormGroup title={_('Delta Report')}>
+                  <Radio
+                    title={_('None')}
+                    name="method_data_delta_type"
+                    value={DELTA_TYPE_NONE}
+                    checked={values.method_data_delta_type === DELTA_TYPE_NONE}
+                    onChange={onValueChange}
+                  />
+
+                  <Radio
+                    title={_('Previous completed report of the same task')}
+                    name="method_data_delta_type"
+                    value={DELTA_TYPE_PREVIOUS}
+                    checked={
+                      values.method_data_delta_type === DELTA_TYPE_PREVIOUS
+                    }
+                    onChange={onValueChange}
+                  />
+
+                  <Row>
                     <Radio
-                      title={_('None')}
+                      title={_('Report with ID')}
                       name="method_data_delta_type"
-                      value={DELTA_TYPE_NONE}
+                      value={DELTA_TYPE_REPORT}
                       checked={
-                        values.method_data_delta_type === DELTA_TYPE_NONE
+                        values.method_data_delta_type === DELTA_TYPE_REPORT
                       }
                       onChange={onValueChange}
                     />
-
-                    <Radio
-                      title={_('Previous completed report of the same task')}
-                      name="method_data_delta_type"
-                      value={DELTA_TYPE_PREVIOUS}
-                      checked={
-                        values.method_data_delta_type === DELTA_TYPE_PREVIOUS
-                      }
+                    <TextField
+                      grow="1"
+                      name="method_data_delta_report_id"
+                      value={values.method_data_delta_report_id}
                       onChange={onValueChange}
                     />
-
-                    <Divider>
-                      <Radio
-                        title={_('Report with ID')}
-                        name="method_data_delta_type"
-                        value={DELTA_TYPE_REPORT}
-                        checked={
-                          values.method_data_delta_type === DELTA_TYPE_REPORT
-                        }
-                        onChange={onValueChange}
-                      />
-                      <TextField
-                        grow="1"
-                        name="method_data_delta_report_id"
-                        value={values.method_data_delta_report_id}
-                        onChange={onValueChange}
-                      />
-                    </Divider>
-                  </Divider>
+                  </Row>
                 </FormGroup>
               )}
 
@@ -886,7 +877,7 @@ class AlertDialog extends React.Component {
                   onChange={onValueChange}
                 />
               </FormGroup>
-            </Layout>
+            </>
           );
         }}
       </SaveDialog>

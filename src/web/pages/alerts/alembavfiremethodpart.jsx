@@ -17,12 +17,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
-
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
@@ -38,6 +33,8 @@ import TextField from 'web/components/form/textfield';
 import NewIcon from 'web/components/icon/newicon';
 
 import {VFIRE_CALL_DESCRIPTION} from 'web/pages/alerts/dialog';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const VFIRE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
@@ -64,8 +61,9 @@ const AlembaVfireMethodPart = ({
   credentials = credentials.filter(
     cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
   );
+  const [_] = useTranslation();
   return (
-    <Layout flex="column" grow="1">
+    <>
       <FormGroup title={_('Report Formats')}>
         <MultiSelect
           name={'report_format_ids'}
@@ -84,26 +82,23 @@ const AlembaVfireMethodPart = ({
         />
       </FormGroup>
 
-      <FormGroup title={_('Credential')}>
-        <Divider>
-          <Select
-            name={prefix + 'vfire_credential'}
-            items={renderSelectItems(credentials)}
-            value={vFireCredential}
-            onChange={onCredentialChange}
-          />
-          <Layout>
-            <NewIcon
-              size="small"
-              title={_('Create a credential')}
-              value={VFIRE_CREDENTIAL_TYPES}
-              onClick={onNewVfireCredentialClick}
-            />
-          </Layout>
-        </Divider>
+      <FormGroup title={_('Credential')} direction="row">
+        <Select
+          grow="1"
+          name={prefix + 'vfire_credential'}
+          items={renderSelectItems(credentials)}
+          value={vFireCredential}
+          onChange={onCredentialChange}
+        />
+        <NewIcon
+          size="small"
+          title={_('Create a credential')}
+          value={VFIRE_CREDENTIAL_TYPES}
+          onClick={onNewVfireCredentialClick}
+        />
       </FormGroup>
 
-      <FormGroup title={_('Session Type')}>
+      <FormGroup title={_('Session Type')} direction="row">
         <Radio
           title={_('Analyst')}
           name={prefix + 'vfire_session_type'}
@@ -183,7 +178,7 @@ const AlembaVfireMethodPart = ({
           onChange={onChange}
         />
       </FormGroup>
-    </Layout>
+    </>
   );
 };
 
