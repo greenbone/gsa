@@ -172,7 +172,11 @@ class PowerFilter extends React.Component {
       onResetClick,
     } = this.props;
     return (
-      <Layout flex="column" align={['start', 'stetch']} className="powerfilter">
+      <Layout
+        flex="column"
+        align={['start', 'stretch']}
+        className="powerfilter"
+      >
         <Layout align={['space-between', 'center']}>
           <LeftDivider align={['start', 'center']}>
             <Layout align={['start', 'center']}>
