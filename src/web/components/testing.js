@@ -47,11 +47,11 @@ export const openSelectElement = async select => {
 };
 
 /**
- * Click on an item/node
+ * Click on an element/item/node
  */
-export const clickItem = async item => {
+export const clickElement = async element => {
   await act(async () => {
-    await userEvent.click(item);
+    await userEvent.click(element);
   });
 };
 

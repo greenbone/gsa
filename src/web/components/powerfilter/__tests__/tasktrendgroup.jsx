@@ -10,7 +10,7 @@ import {render} from 'web/utils/testing';
 import TaskTrendGroup from 'web/components/powerfilter/tasktrendgroup';
 import Filter from 'gmp/models/filter';
 import {
-  clickItem,
+  clickElement,
   getSelectElement,
   getSelectItemElements,
   openSelectElement,
@@ -66,7 +66,7 @@ describe('Task Trend Selector Tests', () => {
     await openSelectElement();
 
     const domItems = getSelectItemElements();
-    await clickItem(domItems[0]);
+    await clickElement(domItems[0]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('up', 'trend');
@@ -84,7 +84,7 @@ describe('Task Trend Selector Tests', () => {
     await openSelectElement();
 
     const domItems = getSelectItemElements();
-    await clickItem(domItems[2]);
+    await clickElement(domItems[2]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('more', 'trend');
