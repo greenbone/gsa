@@ -12,6 +12,7 @@ import {
   queryAllByRole,
   queryByRole,
   getByRole,
+  getAllByTestId,
 } from 'web/utils/testing';
 
 export const getElementOrDocument = element =>
@@ -137,4 +138,60 @@ export const closeDialog = dialog => {
   dialog = isDefined(dialog) ? dialog : getDialog();
   const closeButton = dialog.querySelector('.mantine-CloseButton-root');
   fireEvent.click(closeButton);
+};
+
+/**
+ * Get the element containing the powerfilter
+ */
+export const getPowerFilter = element => {
+  element = getElementOrDocument(element);
+  return element.querySelector('.powerfilter');
+};
+
+/**
+ * Get text inputs
+ */
+export const getTextInputs = element => {
+  element = getElementOrDocument(element);
+  return element.querySelectorAll('.mantine-TextInput-input');
+};
+
+/**
+ * Get the table element
+ */
+export const getTable = element => {
+  element = getElementOrDocument(element);
+  return element.querySelector('table');
+};
+
+/**
+ * Get the table body element
+ */
+export const getTableBody = element => {
+  element = getElementOrDocument(element);
+  return element.querySelector('tbody');
+};
+
+/**
+ * Get the table footer element
+ */
+export const getTableFooter = element => {
+  element = getElementOrDocument(element);
+  return element.querySelector('tfoot');
+};
+
+/**
+ * Get the bulk action items of a page
+ */
+export const getBulkActionItems = element => {
+  const tableFooter = getTableFooter(element);
+  return getAllByTestId(tableFooter, 'svg-icon');
+};
+
+/**
+ * Get the check boxes
+ */
+export const getCheckBoxes = element => {
+  element = getElementOrDocument(element);
+  return element.querySelectorAll('.mantine-Checkbox-input');
 };
