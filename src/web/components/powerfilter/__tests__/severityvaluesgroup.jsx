@@ -22,7 +22,7 @@ import Filter from 'gmp/models/filter';
 import {render, fireEvent} from 'web/utils/testing';
 
 import {
-  clickItem,
+  clickElement,
   getElementOrDocument,
   getSelectItemElements,
   openSelectElement,
@@ -140,7 +140,7 @@ describe('Severity Values Group Tests', () => {
 
     const domItems = getSelectItemElements();
 
-    await clickItem(domItems[3]);
+    await clickElement(domItems[3]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith(3, 'severity', '<');

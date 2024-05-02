@@ -22,7 +22,7 @@ import {render} from 'web/utils/testing';
 import {
   openSelectElement,
   getSelectItemElements,
-  clickItem,
+  clickElement,
   getSelectElement,
   changeSelectInput,
 } from 'web/components/testing';
@@ -66,7 +66,7 @@ describe('Relation Selector Tests', () => {
 
     const domItems = getSelectItemElements();
 
-    await clickItem(domItems[1]);
+    await clickElement(domItems[1]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('=', undefined);
@@ -84,7 +84,7 @@ describe('Relation Selector Tests', () => {
 
     const domItems = getSelectItemElements();
 
-    await clickItem(domItems[3]);
+    await clickElement(domItems[3]);
 
     expect(onChange).toBeCalled();
     expect(onChange).toBeCalledWith('<', undefined);

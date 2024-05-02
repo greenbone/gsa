@@ -22,7 +22,7 @@ import Filter from 'gmp/models/filter';
 import {render, fireEvent} from 'web/utils/testing';
 
 import {
-  clickItem,
+  clickElement,
   getRadioInputs,
   getSelectElement,
   getSelectItemElements,
@@ -176,7 +176,7 @@ describe('SortByGroup tests', () => {
     const selectElements = getSelectItemElements();
     expect(selectElements.length).toEqual(2);
 
-    await clickItem(selectElements[1]);
+    await clickElement(selectElements[1]);
 
     expect(handleSortByChange).toHaveBeenCalledWith('solution_type', 'sort_by');
   });

@@ -22,7 +22,7 @@ import Filter from 'gmp/models/filter';
 import {render} from 'web/utils/testing';
 
 import {
-  clickItem,
+  clickElement,
   getElementOrDocument,
   getSelectElement,
   getSelectItemElements,
@@ -70,7 +70,7 @@ describe('TicketStatusGroup tests', () => {
     await openSelectElement();
 
     const domItems = getSelectItemElements();
-    await clickItem(domItems[2]);
+    await clickElement(domItems[2]);
 
     expect(handleChange).toBeCalled();
     expect(handleChange).toBeCalledWith('"Fix Verified"', 'status');
