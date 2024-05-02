@@ -181,11 +181,19 @@ export const getTableFooter = element => {
 };
 
 /**
+ * Get action items
+ */
+export const getActionItems = element => {
+  element = getElementOrDocument(element);
+  return getAllByTestId(element, 'svg-icon');
+};
+
+/**
  * Get the bulk action items of a page
  */
 export const getBulkActionItems = element => {
   const tableFooter = getTableFooter(element);
-  return getAllByTestId(tableFooter, 'svg-icon');
+  return getActionItems(tableFooter);
 };
 
 /**
