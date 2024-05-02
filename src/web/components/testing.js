@@ -5,7 +5,14 @@
 
 import {isDefined} from 'gmp/utils/identity';
 
-import {screen, userEvent, act, fireEvent} from 'web/utils/testing';
+import {
+  userEvent,
+  act,
+  fireEvent,
+  queryAllByRole,
+  queryByRole,
+  getByRole,
+} from 'web/utils/testing';
 
 export const getElementOrDocument = element =>
   isDefined(element) ? element : document.body;
@@ -21,19 +28,37 @@ export const getRadioInputs = element => {
 /**
  * Get all the items of a Select component
  */
-export const getSelectItemElements = () => {
-  return screen.queryAllByRole('option');
+export const getSelectItemElements = element => {
+  element = getElementOrDocument(element);
+  return queryAllByRole(element, 'option');
+};
+
+export const getSelectItemElementsForSelect = async element => {
+  element = isDefined(element) ? element : getSelectElement();
+  await openSelectElement(element);
+  const selectItemsId = element.getAttribute('aria-controls');
+  const itemsContainer = document.body.querySelector('#' + selectItemsId);
+  return getSelectItemElements(itemsContainer);
 };
 
 /**
  * Get the input box of a Select component
  */
-export const getSelectElement = () => {
-  const select = screen.queryByRole('searchbox');
+export const getSelectElement = element => {
+  element = getElementOrDocument(element);
+  const select = queryByRole(element, 'searchbox');
   if (select) {
     return select;
   }
-  return screen.getByRole('textbox');
+  return getByRole(element, 'textbox');
+};
+
+/**
+ * Get all select components
+ */
+export const getSelectElements = element => {
+  element = getElementOrDocument(element);
+  return queryAllByRole(element, 'searchbox');
 };
 
 /**
@@ -76,31 +101,40 @@ export const changeSelectInput = (value, input) => {
 /**
  * Query if a dialog is present
  */
-export const queryDialog = () => screen.queryByRole('dialog');
+export const queryDialog = element => {
+  element = getElementOrDocument(element);
+  return queryByRole(element, 'dialog');
+};
 
 /**
  * Get a dialog
  */
-export const getDialog = () => screen.getByRole('dialog');
+export const getDialog = element => {
+  element = getElementOrDocument(element);
+  return getByRole(element, 'dialog');
+};
 
 /**
  * Get the dialog content
  */
-export const getDialogContent = () => {
-  const dialog = getDialog();
+export const getDialogContent = dialog => {
+  dialog = isDefined(dialog) ? dialog : getDialog();
   return dialog.querySelector('.mantine-Modal-body');
 };
 
 /**
  * Get the dialog title
  */
-export const getDialogTitle = () => {
-  const dialog = getDialog();
+export const getDialogTitle = dialog => {
+  dialog = isDefined(dialog) ? dialog : getDialog();
   return dialog.querySelector('.mantine-Modal-title');
 };
 
-export const closeDialog = () => {
-  const dialog = getDialog();
+/**
+ * Close a dialog
+ */
+export const closeDialog = dialog => {
+  dialog = isDefined(dialog) ? dialog : getDialog();
   const closeButton = dialog.querySelector('.mantine-CloseButton-root');
   fireEvent.click(closeButton);
 };
