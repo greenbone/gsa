@@ -19,6 +19,15 @@ import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
+import {
+  clickElement,
+  getPowerFilter,
+  getSelectElement,
+  getSelectItemElementsForSelect,
+  getTableFooter,
+  getTextInputs,
+} from 'web/components/testing';
+
 import HostPage, {ToolBarIcons} from '../listpage';
 
 // setup
@@ -157,10 +166,10 @@ describe('Host listpage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('host', defaultSettingfilter),
+      defaultFilterLoadingActions.success('host', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -180,8 +189,9 @@ describe('Host listpage tests', () => {
 
     await wait();
 
-    const inputs = baseElement.querySelectorAll('input');
-    const selects = screen.getAllByTestId('select-selected-value');
+    const powerFilter = getPowerFilter();
+    const select = getSelectElement(powerFilter);
+    const inputs = getTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Hosts')[0]).toBeInTheDocument();
@@ -196,8 +206,8 @@ describe('Host listpage tests', () => {
     ).toBeInTheDocument();
     expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(select).toHaveAttribute('title', 'Loaded filter');
+    expect(select).toHaveValue('--');
 
     // Dashboard
     expect(
@@ -291,10 +301,10 @@ describe('Host listpage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('host', defaultSettingfilter),
+      defaultFilterLoadingActions.success('host', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -366,10 +376,10 @@ describe('Host listpage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('host', defaultSettingfilter),
+      defaultFilterLoadingActions.success('host', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -385,39 +395,22 @@ describe('Host listpage tests', () => {
       entitiesLoadingActions.success([host], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<HostPage />);
+    render(<HostPage />);
 
     await wait();
 
-    // open drop down menu
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    // select option "Apply to selection"
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[1]);
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to selection');
-
-    // select a host
-    const inputs = element.querySelectorAll('input');
-
-    fireEvent.click(inputs[1]);
-    await wait();
+    // change to apply to selection
+    const tableFooter = getTableFooter();
+    const select = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(select);
+    await clickElement(selectItems[1]);
 
     // export selected host
-    fireEvent.click(screen.getAllByTitle('Export selection')[0]);
-
-    await wait();
-
+    await clickElement(screen.getAllByTitle('Export selection')[0]);
     expect(exportByIds).toHaveBeenCalled();
 
     // delete selected host
-    fireEvent.click(screen.getAllByTitle('Delete selection')[0]);
-
-    await wait();
-
+    await clickElement(screen.getAllByTitle('Delete selection')[0]);
     expect(deleteByIds).toHaveBeenCalled();
   });
 
@@ -458,10 +451,10 @@ describe('Host listpage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('host', defaultSettingfilter),
+      defaultFilterLoadingActions.success('host', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -481,31 +474,18 @@ describe('Host listpage tests', () => {
 
     await wait();
 
-    // open drop down menu
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    // select option "Apply to all filtered"
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[2]);
-
-    await wait();
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to all filtered');
+    // change to all filtered
+    const tableFooter = getTableFooter();
+    const select = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(select);
+    await clickElement(selectItems[2]);
+    expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered hosts
-    fireEvent.click(screen.getAllByTitle('Export all filtered')[0]);
-
-    await wait();
-
+    await clickElement(screen.getAllByTitle('Export all filtered')[0]);
     expect(exportByFilter).toHaveBeenCalled();
 
-    // delete all filtered hosts
-    fireEvent.click(screen.getAllByTitle('Delete all filtered')[0]);
-
-    await wait();
-
+    await clickElement(screen.getAllByTitle('Delete all filtered')[0]);
     expect(deleteByFilter).toHaveBeenCalled();
   });
 });
