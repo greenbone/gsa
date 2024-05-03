@@ -13,6 +13,7 @@ import {
   queryByRole,
   getByRole,
   getAllByTestId,
+  getByTestId,
 } from 'web/utils/testing';
 
 export const getElementOrDocument = element =>
@@ -129,6 +130,22 @@ export const getDialogContent = dialog => {
 export const getDialogTitle = dialog => {
   dialog = isDefined(dialog) ? dialog : getDialog();
   return dialog.querySelector('.mantine-Modal-title');
+};
+
+/**
+ * Get the save button of a dialog
+ */
+export const getDialogSaveButton = dialog => {
+  dialog = isDefined(dialog) ? dialog : getDialog();
+  return getByTestId(dialog, 'dialog-save-button');
+};
+
+/**
+ * Get the close button of a dialog (in the footer)
+ */
+export const getDialogCloseButton = dialog => {
+  dialog = isDefined(dialog) ? dialog : getDialog();
+  return getByTestId(dialog, 'dialog-close-button');
 };
 
 /**
