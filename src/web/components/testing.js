@@ -91,13 +91,20 @@ export const getSelectedItems = element => {
 };
 
 /**
+ * Change the value of an input element like Select or TestField component
+ */
+export const changeInputValue = (element, value) => {
+  fireEvent.change(element, {target: {value}});
+};
+
+/**
  * Change the input of a Select component
  */
 export const changeSelectInput = (value, input) => {
   if (!isDefined(input)) {
     input = getSelectElement();
   }
-  fireEvent.change(input, {target: {value}});
+  changeInputValue(input, value);
 };
 
 /**
