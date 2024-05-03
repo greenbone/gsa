@@ -16,7 +16,18 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+import {rendererWith, screen, wait} from 'web/utils/testing';
+
+import {
+  clickElement,
+  getCheckBoxes,
+  getPowerFilter,
+  getSelectElement,
+  getSelectItemElementsForSelect,
+  getTableBody,
+  getTableFooter,
+  getTextInputs,
+} from 'web/components/testing';
 
 import NvtsPage, {ToolBarIcons} from '../listpage';
 
@@ -136,10 +147,10 @@ describe('NvtsPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('nvt', defaultSettingfilter),
+      defaultFilterLoadingActions.success('nvt', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -160,8 +171,9 @@ describe('NvtsPage tests', () => {
     await wait();
 
     const display = screen.getAllByTestId('grid-item');
-    const inputs = baseElement.querySelectorAll('input');
-    const selects = screen.getAllByTestId('select-selected-value');
+    const powerFilter = getPowerFilter();
+    const select = getSelectElement(powerFilter);
+    const inputs = getTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: NVTs')[0]).toBeInTheDocument();
@@ -175,8 +187,8 @@ describe('NvtsPage tests', () => {
     ).toBeInTheDocument();
     expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(select).toHaveAttribute('title', 'Loaded filter');
+    expect(select).toHaveValue('--');
 
     // Dashboard
     expect(
@@ -252,10 +264,10 @@ describe('NvtsPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('nvt', defaultSettingfilter),
+      defaultFilterLoadingActions.success('nvt', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -276,13 +288,8 @@ describe('NvtsPage tests', () => {
     await wait();
 
     // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    await clickElement(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
 
@@ -324,10 +331,10 @@ describe('NvtsPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('nvt', defaultSettingfilter),
+      defaultFilterLoadingActions.success('nvt', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -343,33 +350,25 @@ describe('NvtsPage tests', () => {
       entitiesLoadingActions.success([nvt], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<NvtsPage />);
+    render(<NvtsPage />);
 
     await wait();
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[1]);
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to selection');
-
-    const inputs = element.querySelectorAll('input');
+    // change to apply to selection
+    const tableFooter = getTableFooter();
+    const select = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(select);
+    await clickElement(selectItems[1]);
+    expect(select).toHaveValue('Apply to selection');
 
     // select a nvt
-    fireEvent.click(inputs[1]);
-    await wait();
+    const tableBody = getTableBody();
+    const inputs = getCheckBoxes(tableBody);
+    await clickElement(inputs[1]);
 
     // export selected nvt
-    const exportIcon = screen.getAllByTitle('Export selection');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getAllByTitle('Export selection')[0];
+    await clickElement(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
   });
 
@@ -411,10 +410,10 @@ describe('NvtsPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('nvt', defaultSettingfilter),
+      defaultFilterLoadingActions.success('nvt', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -434,25 +433,16 @@ describe('NvtsPage tests', () => {
 
     await wait();
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[2]);
-
-    await wait();
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to all filtered');
+    // change to all filtered
+    const tableFooter = getTableFooter();
+    const select = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(select);
+    await clickElement(selectItems[2]);
+    expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered nvts
-    const exportIcon = screen.getAllByTitle('Export all filtered');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getAllByTitle('Export all filtered')[0];
+    await clickElement(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
 });
