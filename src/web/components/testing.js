@@ -32,7 +32,7 @@ export const getRadioInputs = element => {
  */
 export const getSelectItemElements = element => {
   element = getElementOrDocument(element);
-  return queryAllByRole(element, 'option');
+  return element.querySelectorAll("[role='option']");
 };
 
 export const getSelectItemElementsForSelect = async element => {
