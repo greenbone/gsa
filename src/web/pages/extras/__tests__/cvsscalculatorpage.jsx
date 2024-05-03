@@ -6,9 +6,16 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {fireEvent, rendererWith, waitFor, wait} from 'web/utils/testing';
+import {rendererWith, wait} from 'web/utils/testing';
 
 import CvssCalculator from 'web/pages/extras/cvsscalculatorpage';
+import {
+  changeInputValue,
+  clickElement,
+  getSelectElements,
+  getSelectItemElementsForSelect,
+  getTextInputs,
+} from 'web/components/testing';
 
 const calculateScoreFromVector = testing.fn().mockReturnValue(
   Promise.resolve({
@@ -37,39 +44,44 @@ const location = {
 };
 
 describe('CvssCalculator page tests', () => {
-  test('Should render with default values', () => {
+  test('Should render with default values', async () => {
     const {render} = rendererWith({
       gmp,
       store: true,
     });
 
-    const {element, getAllByTestId} = render(<CvssCalculator />);
+    const {element} = render(<CvssCalculator />);
 
-    const input = getAllByTestId('select-selected-value');
+    await wait();
 
-    waitFor(() => element.querySelectorAll('input'));
-    const vector = element.querySelectorAll('input');
+    const sections = element.querySelectorAll('section');
+    const cvssV2section = sections[0].parentNode;
+    const cvssV2selects = getSelectElements(cvssV2section);
+    const cvssV2vector = getTextInputs(cvssV2section)[0];
 
     /* CVSSv2 input */
-    expect(input[0]).toHaveTextContent('Local');
-    expect(input[1]).toHaveTextContent('Low');
-    expect(input[2]).toHaveTextContent('None');
-    expect(input[3]).toHaveTextContent('None');
-    expect(input[4]).toHaveTextContent('None');
-    expect(input[5]).toHaveTextContent('None');
-    /* CVSSv3 input */
-    expect(input[6]).toHaveTextContent('Network');
-    expect(input[7]).toHaveTextContent('Low');
-    expect(input[8]).toHaveTextContent('None');
-    expect(input[9]).toHaveTextContent('None');
-    expect(input[10]).toHaveTextContent('Unchanged');
-    expect(input[11]).toHaveTextContent('None');
-    expect(input[12]).toHaveTextContent('None');
-    expect(input[13]).toHaveTextContent('None');
+    expect(cvssV2selects[0]).toHaveValue('Local');
+    expect(cvssV2selects[1]).toHaveValue('Low');
+    expect(cvssV2selects[2]).toHaveValue('None');
+    expect(cvssV2selects[3]).toHaveValue('None');
+    expect(cvssV2selects[4]).toHaveValue('None');
+    expect(cvssV2selects[5]).toHaveValue('None');
+    expect(cvssV2vector).toHaveValue('AV:L/AC:L/Au:N/C:N/I:N/A:N');
 
-    expect(vector[0]).toHaveAttribute('value', 'AV:L/AC:L/Au:N/C:N/I:N/A:N');
-    expect(vector[1]).toHaveAttribute(
-      'value',
+    /* CVSSv3 input */
+    const cvssV3section = sections[1].parentNode;
+    const cvssV3selects = getSelectElements(cvssV3section);
+    const cvssV3vector = getTextInputs(cvssV3section)[0];
+
+    expect(cvssV3selects[0]).toHaveValue('Network');
+    expect(cvssV3selects[1]).toHaveValue('Low');
+    expect(cvssV3selects[2]).toHaveValue('None');
+    expect(cvssV3selects[3]).toHaveValue('None');
+    expect(cvssV3selects[4]).toHaveValue('Unchanged');
+    expect(cvssV3selects[5]).toHaveValue('None');
+    expect(cvssV3selects[6]).toHaveValue('None');
+    expect(cvssV3selects[7]).toHaveValue('None');
+    expect(cvssV3vector).toHaveValue(
       'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
     );
   });
@@ -80,35 +92,38 @@ describe('CvssCalculator page tests', () => {
       store: true,
     });
 
-    const {element, getAllByTestId} = render(
-      <CvssCalculator location={location} />,
-    );
+    const {element} = render(<CvssCalculator location={location} />);
 
     await wait();
 
-    const input = getAllByTestId('select-selected-value');
-    const vector = element.querySelectorAll('input');
+    const sections = element.querySelectorAll('section');
+    const cvssV2section = sections[0].parentNode;
+    const cvssV2selects = getSelectElements(cvssV2section);
+    const cvssV2vector = getTextInputs(cvssV2section)[0];
 
     /* CVSSv2 input */
-    expect(input[0]).toHaveTextContent('Network');
-    expect(input[1]).toHaveTextContent('Low');
-    expect(input[2]).toHaveTextContent('None');
-    expect(input[3]).toHaveTextContent('Partial');
-    expect(input[4]).toHaveTextContent('Partial');
-    expect(input[5]).toHaveTextContent('Partial');
-    /* CVSSv3 input */
-    expect(input[6]).toHaveTextContent('Network');
-    expect(input[7]).toHaveTextContent('Low');
-    expect(input[8]).toHaveTextContent('None');
-    expect(input[9]).toHaveTextContent('None');
-    expect(input[10]).toHaveTextContent('Unchanged');
-    expect(input[11]).toHaveTextContent('None');
-    expect(input[12]).toHaveTextContent('None');
-    expect(input[13]).toHaveTextContent('None');
+    expect(cvssV2selects[0]).toHaveValue('Network');
+    expect(cvssV2selects[1]).toHaveValue('Low');
+    expect(cvssV2selects[2]).toHaveValue('None');
+    expect(cvssV2selects[3]).toHaveValue('Partial');
+    expect(cvssV2selects[4]).toHaveValue('Partial');
+    expect(cvssV2selects[5]).toHaveValue('Partial');
+    expect(cvssV2vector).toHaveValue('AV:N/AC:L/Au:N/C:P/I:P/A:P');
 
-    expect(vector[0]).toHaveAttribute('value', 'AV:N/AC:L/Au:N/C:P/I:P/A:P');
-    expect(vector[1]).toHaveAttribute(
-      'value',
+    /* CVSSv3 input */
+    const cvssV3section = sections[1].parentNode;
+    const cvssV3selects = getSelectElements(cvssV3section);
+    const cvssV3vector = getTextInputs(cvssV3section)[0];
+
+    expect(cvssV3selects[0]).toHaveValue('Network');
+    expect(cvssV3selects[1]).toHaveValue('Low');
+    expect(cvssV3selects[2]).toHaveValue('None');
+    expect(cvssV3selects[3]).toHaveValue('None');
+    expect(cvssV3selects[4]).toHaveValue('Unchanged');
+    expect(cvssV3selects[5]).toHaveValue('None');
+    expect(cvssV3selects[6]).toHaveValue('None');
+    expect(cvssV3selects[7]).toHaveValue('None');
+    expect(cvssV3vector).toHaveValue(
       'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
     );
   });
@@ -119,46 +134,46 @@ describe('CvssCalculator page tests', () => {
       store: true,
     });
 
-    const {element, getAllByTestId} = render(
-      <CvssCalculator location={location} />,
+    const {element} = render(<CvssCalculator location={location} />);
+
+    await wait();
+
+    const sections = element.querySelectorAll('section');
+    const cvssV2section = sections[0].parentNode;
+    const cvssV2selects = getSelectElements(cvssV2section);
+    const cvssV2vector = getTextInputs(cvssV2section)[0];
+
+    const cvssV3section = sections[1].parentNode;
+    const cvssV3selects = getSelectElements(cvssV3section);
+    const cvssV3vector = getTextInputs(cvssV3section)[0];
+
+    changeInputValue(cvssV2vector, 'AV:N/AC:L/Au:N/C:N/I:P/A:P');
+    changeInputValue(
+      cvssV3vector,
+      'CVSS:3.1/AV:P/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:H',
     );
 
     await wait();
 
-    const vector = element.querySelectorAll('input');
-
-    fireEvent.change(vector[0], {
-      target: {value: 'AV:N/AC:L/Au:N/C:N/I:P/A:P'},
-    });
-
-    fireEvent.change(vector[1], {
-      target: {value: 'CVSS:3.1/AV:P/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:H'},
-    });
-
-    await wait();
-
-    const input = getAllByTestId('select-selected-value');
-
     /* CVSSv2 input */
-    expect(input[0]).toHaveTextContent('Network');
-    expect(input[1]).toHaveTextContent('Low');
-    expect(input[2]).toHaveTextContent('None');
-    expect(input[3]).toHaveTextContent('None');
-    expect(input[4]).toHaveTextContent('Partial');
-    expect(input[5]).toHaveTextContent('Partial');
-    /* CVSSv3 input */
-    expect(input[6]).toHaveTextContent('Physical');
-    expect(input[7]).toHaveTextContent('High');
-    expect(input[8]).toHaveTextContent('Low');
-    expect(input[9]).toHaveTextContent('Required');
-    expect(input[10]).toHaveTextContent('Changed');
-    expect(input[11]).toHaveTextContent('High');
-    expect(input[12]).toHaveTextContent('High');
-    expect(input[13]).toHaveTextContent('High');
+    expect(cvssV2selects[0]).toHaveValue('Network');
+    expect(cvssV2selects[1]).toHaveValue('Low');
+    expect(cvssV2selects[2]).toHaveValue('None');
+    expect(cvssV2selects[3]).toHaveValue('None');
+    expect(cvssV2selects[4]).toHaveValue('Partial');
+    expect(cvssV2selects[5]).toHaveValue('Partial');
+    expect(cvssV2vector).toHaveValue('AV:N/AC:L/Au:N/C:N/I:P/A:P');
 
-    expect(vector[0]).toHaveAttribute('value', 'AV:N/AC:L/Au:N/C:N/I:P/A:P');
-    expect(vector[1]).toHaveAttribute(
-      'value',
+    /* CVSSv3 input */
+    expect(cvssV3selects[0]).toHaveValue('Physical');
+    expect(cvssV3selects[1]).toHaveValue('High');
+    expect(cvssV3selects[2]).toHaveValue('Low');
+    expect(cvssV3selects[3]).toHaveValue('Required');
+    expect(cvssV3selects[4]).toHaveValue('Changed');
+    expect(cvssV3selects[5]).toHaveValue('High');
+    expect(cvssV3selects[6]).toHaveValue('High');
+    expect(cvssV3selects[7]).toHaveValue('High');
+    expect(cvssV3vector).toHaveValue(
       'CVSS:3.1/AV:P/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:H',
     );
   });
@@ -169,58 +184,49 @@ describe('CvssCalculator page tests', () => {
       store: true,
     });
 
-    const {element, getAllByTestId} = render(
-      <CvssCalculator location={location} />,
-    );
+    const {element} = render(<CvssCalculator location={location} />);
 
     await wait();
 
-    const vector = element.querySelectorAll('input');
+    const sections = element.querySelectorAll('section');
+    const cvssV2section = sections[0].parentNode;
+    const cvssV2selects = getSelectElements(cvssV2section);
+    const cvssV2vector = getTextInputs(cvssV2section)[0];
 
-    const input = getAllByTestId('select-selected-value');
+    const cvssV3section = sections[1].parentNode;
+    const cvssV3selects = getSelectElements(cvssV3section);
+    const cvssV3vector = getTextInputs(cvssV3section)[0];
 
     /* CVSSv2 input */
-    expect(input[0]).toHaveTextContent('Network');
-    expect(input[1]).toHaveTextContent('Low');
-    expect(input[2]).toHaveTextContent('None');
-    expect(input[3]).toHaveTextContent('Partial');
-    expect(input[4]).toHaveTextContent('Partial');
-    expect(input[5]).toHaveTextContent('Partial');
-    /* CVSSv3 input */
-    expect(input[6]).toHaveTextContent('Network');
-    expect(input[7]).toHaveTextContent('Low');
-    expect(input[8]).toHaveTextContent('None');
-    expect(input[9]).toHaveTextContent('None');
-    expect(input[10]).toHaveTextContent('Unchanged');
-    expect(input[11]).toHaveTextContent('None');
-    expect(input[12]).toHaveTextContent('None');
-    expect(input[13]).toHaveTextContent('None');
+    expect(cvssV2selects[0]).toHaveValue('Network');
+    expect(cvssV2selects[1]).toHaveValue('Low');
+    expect(cvssV2selects[2]).toHaveValue('None');
+    expect(cvssV2selects[3]).toHaveValue('Partial');
+    expect(cvssV2selects[4]).toHaveValue('Partial');
+    expect(cvssV2selects[5]).toHaveValue('Partial');
+    expect(cvssV2vector).toHaveValue('AV:N/AC:L/Au:N/C:P/I:P/A:P');
 
-    expect(vector[0]).toHaveAttribute('value', 'AV:N/AC:L/Au:N/C:P/I:P/A:P');
-    expect(vector[1]).toHaveAttribute(
-      'value',
+    /* CVSSv3 input */
+    expect(cvssV3selects[0]).toHaveValue('Network');
+    expect(cvssV3selects[1]).toHaveValue('Low');
+    expect(cvssV3selects[2]).toHaveValue('None');
+    expect(cvssV3selects[3]).toHaveValue('None');
+    expect(cvssV3selects[4]).toHaveValue('Unchanged');
+    expect(cvssV3selects[5]).toHaveValue('None');
+    expect(cvssV3selects[6]).toHaveValue('None');
+    expect(cvssV3selects[7]).toHaveValue('None');
+    expect(cvssV3vector).toHaveValue(
       'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
     );
 
-    const selectFields = getAllByTestId('select-open-button');
+    const cvssV2items = await getSelectItemElementsForSelect(cvssV2selects[0]);
+    await clickElement(cvssV2items[0]);
 
-    fireEvent.click(selectFields[0]);
+    const cvssV3items = await getSelectItemElementsForSelect(cvssV3selects[1]);
+    await clickElement(cvssV3items[1]);
 
-    const selectItems = getAllByTestId('select-item');
-
-    fireEvent.click(selectItems[0]);
-
-    const selectFields2 = getAllByTestId('select-open-button');
-
-    fireEvent.click(selectFields2[7]);
-
-    const selectItems2 = getAllByTestId('select-item');
-
-    fireEvent.click(selectItems2[1]);
-
-    expect(vector[0]).toHaveAttribute('value', 'AV:L/AC:L/Au:N/C:P/I:P/A:P');
-    expect(vector[1]).toHaveAttribute(
-      'value',
+    expect(cvssV2vector).toHaveValue('AV:L/AC:L/Au:N/C:P/I:P/A:P');
+    expect(cvssV3vector).toHaveValue(
       'CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N',
     );
   });
