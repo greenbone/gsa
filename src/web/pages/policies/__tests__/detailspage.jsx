@@ -269,10 +269,10 @@ describe('Policy Detailspage tests', () => {
     expect(element).toHaveTextContent('audit2');
     expect(element).not.toHaveTextContent('scanner');
 
-    const detailslinks = getAllByTestId('details-link');
+    const detailsLinks = getAllByTestId('details-link');
 
-    expect(detailslinks[0]).toHaveAttribute('href', '/audit/1234');
-    expect(detailslinks[1]).toHaveAttribute('href', '/audit/5678');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/audit/1234');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/audit/5678');
   });
 
   test('should render nvt families tab', () => {

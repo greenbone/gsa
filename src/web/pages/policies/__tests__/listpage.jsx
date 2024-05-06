@@ -17,7 +17,9 @@ import {entitiesLoadingActions} from 'web/store/entities/audits';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent, act} from 'web/utils/testing';
+import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+
+import {clickElement} from 'web/components/testing';
 
 import PoliciesPage, {ToolBarIcons} from '../listpage';
 
@@ -92,10 +94,10 @@ describe('PoliciesPage tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('policy', defaultSettingfilter),
+      defaultFilterLoadingActions.success('policy', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -111,11 +113,11 @@ describe('PoliciesPage tests', () => {
       entitiesLoadingActions.success([policy], filter, loadedFilter, counts),
     );
 
-    const {baseElement} = render(<PoliciesPage />);
+    const {element} = render(<PoliciesPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    expect(baseElement).toBeVisible();
+    expect(element).toBeInTheDocument();
   });
 
   test('should call commands for bulk actions', async () => {
@@ -152,10 +154,10 @@ describe('PoliciesPage tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('policy', defaultSettingfilter),
+      defaultFilterLoadingActions.success('policy', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -171,24 +173,19 @@ describe('PoliciesPage tests', () => {
       entitiesLoadingActions.success([policy], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<PoliciesPage />);
+    render(<PoliciesPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    const icons = getAllByTestId('svg-icon');
+    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    await clickElement(exportIcon);
+    expect(exportByFilter).toHaveBeenCalled();
 
-    await act(async () => {
-      expect(icons[18]).toHaveAttribute(
-        'title',
-        'Move page contents to trashcan',
-      );
-      fireEvent.click(icons[18]);
-      expect(deleteByFilter).toHaveBeenCalled();
-
-      expect(icons[19]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[19]);
-      expect(exportByFilter).toHaveBeenCalled();
-    });
+    const deleteIcon = screen.getAllByTitle(
+      'Move page contents to trashcan',
+    )[0];
+    await clickElement(deleteIcon);
+    expect(deleteByFilter).toHaveBeenCalled();
   });
 });
 

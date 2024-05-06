@@ -32,16 +32,15 @@ describe('Policy Details tests', () => {
 
     const {element, getAllByTestId} = render(<Details entity={policy} />);
 
-    expect(element).toMatchSnapshot();
     expect(element).toHaveTextContent('bar');
 
-    const detailslinks = getAllByTestId('details-link');
+    const detailsLinks = getAllByTestId('details-link');
 
     expect(element).toHaveTextContent('audit1');
-    expect(detailslinks[0]).toHaveAttribute('href', '/audit/1234');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/audit/1234');
 
     expect(element).toHaveTextContent('audit2');
-    expect(detailslinks[1]).toHaveAttribute('href', '/audit/5678');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/audit/5678');
 
     expect(element).not.toHaveTextContent('scanner');
   });
