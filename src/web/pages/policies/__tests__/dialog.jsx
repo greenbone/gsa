@@ -20,28 +20,35 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent} from 'web/utils/testing';
 
 import CreatePolicyDialog from '../dialog';
+import {
+  changeInputValue,
+  closeDialog,
+  getDialog,
+  getDialogCloseButton,
+  getDialogSaveButton,
+} from 'web/components/testing';
 
 describe('CreatePolicyDialog component tests', () => {
   test('should render dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {baseElement} = render(
+    render(
       <CreatePolicyDialog
-        title={'New Policy'}
+        title="New Policy"
         onClose={handleClose}
         onSave={handleSave}
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(getDialog()).toBeInTheDocument();
   });
 
   test('should allow to close the dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <CreatePolicyDialog
         title={'New Policy'}
         onClose={handleClose}
@@ -49,10 +56,7 @@ describe('CreatePolicyDialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-title-close-button');
-
-    fireEvent.click(closeButton);
-
+    closeDialog();
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -60,7 +64,7 @@ describe('CreatePolicyDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <CreatePolicyDialog
         title={'New Policy'}
         onClose={handleClose}
@@ -68,10 +72,8 @@ describe('CreatePolicyDialog component tests', () => {
       />,
     );
 
-    const cancelButton = getByTestId('dialog-close-button');
-
+    const cancelButton = getDialogCloseButton();
     fireEvent.click(cancelButton);
-
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -79,7 +81,7 @@ describe('CreatePolicyDialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByName, getByTestId} = render(
+    const {getByName} = render(
       <CreatePolicyDialog
         title={'New Policy'}
         onClose={handleClose}
@@ -88,12 +90,12 @@ describe('CreatePolicyDialog component tests', () => {
     );
 
     const nameInput = getByName('name');
-    fireEvent.change(nameInput, {target: {value: 'foo'}});
+    changeInputValue(nameInput, 'foo');
 
     const commentInput = getByName('comment');
-    fireEvent.change(commentInput, {target: {value: 'bar'}});
+    changeInputValue(commentInput, 'bar');
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({

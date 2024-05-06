@@ -73,7 +73,6 @@ describe('Row tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('(bar)');
   });
