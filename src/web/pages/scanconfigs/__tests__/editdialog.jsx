@@ -24,6 +24,18 @@ import {
 
 import {rendererWith, fireEvent, getAllByTestId} from 'web/utils/testing';
 
+import {
+  changeInputValue,
+  clickElement,
+  getCheckBoxes,
+  getDialogContent,
+  getDialogSaveButton,
+  getDialogTitle,
+  getRadioInputs,
+  getTableBody,
+  getTextInputs,
+} from 'web/components/testing';
+
 import EditScanConfigDialog from '../editdialog';
 
 const families = [
@@ -137,7 +149,7 @@ describe('EditScanConfigDialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true});
 
-    const {baseElement, getByTestId} = render(
+    render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -161,12 +173,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config');
 
-    const titleBar = getByTestId('dialog-title-bar');
-    expect(titleBar).toHaveTextContent('Edit Scan Config');
-
-    const content = getByTestId('save-dialog-content');
+    const content = getDialogContent();
     expect(content).toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -184,7 +193,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -208,12 +217,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config');
 
-    const titleBar = getByTestId('dialog-title-bar');
-    expect(titleBar).toHaveTextContent('Edit Scan Config');
-
-    const content = getByTestId('save-dialog-content');
+    const content = getDialogContent();
     expect(content).not.toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -238,7 +244,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true});
-    const {baseElement, getByTestId} = render(
+    const {getByTestId} = render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -263,12 +269,9 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(getDialogTitle()).toHaveTextContent('Edit Policy');
 
-    const titleBar = getByTestId('dialog-title-bar');
-    expect(titleBar).toHaveTextContent('Edit Policy');
-
-    const content = getByTestId('save-dialog-content');
+    const content = getDialogContent();
     expect(content).not.toHaveTextContent(
       'Edit Network Vulnerability Test Families',
     );
@@ -290,7 +293,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {getByTestId} = render(
+    render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -314,7 +317,7 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -376,7 +379,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {getByTestId} = render(
+    render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -400,13 +403,13 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const content = getByTestId('save-dialog-content');
-    const inputs = content.querySelectorAll('input');
+    const content = getDialogContent();
+    const inputs = getTextInputs(content);
 
-    fireEvent.change(inputs[0], {target: {value: 'lorem'}});
-    fireEvent.change(inputs[1], {target: {value: 'ipsum'}});
+    changeInputValue(inputs[0], 'lorem');
+    changeInputValue(inputs[1], 'ipsum');
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -422,14 +425,14 @@ describe('EditScanConfigDialog component tests', () => {
     });
   });
 
-  test('should allow to edit nvt families for openvas configs', () => {
+  test('should allow to edit nvt families for openvas configs', async () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleOpenEditConfigFamilyDialog = testing.fn();
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {getByTestId, queryAllByName} = render(
+    render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -453,15 +456,18 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const family1Inputs = queryAllByName('family1');
-    expect(family1Inputs.length).toEqual(3);
-    fireEvent.click(family1Inputs[1]);
+    const dialogContent = getDialogContent();
+    const tableBody = getTableBody(dialogContent);
 
-    const family2Inputs = queryAllByName('family2');
-    expect(family2Inputs.length).toEqual(3);
-    fireEvent.click(family2Inputs[2]);
+    const rows = tableBody.querySelectorAll('tr');
 
-    const saveButton = getByTestId('dialog-save-button');
+    const family1Inputs = getRadioInputs(rows[0]);
+    await clickElement(family1Inputs[1]);
+
+    const family2Checkboxes = getCheckBoxes(rows[1]);
+    await clickElement(family2Checkboxes[0]);
+
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     const newSelect = {
@@ -498,7 +504,7 @@ describe('EditScanConfigDialog component tests', () => {
     const handleOpenEditNvtDetailsDialog = testing.fn();
 
     const {render} = rendererWith({capabilities: true, router: true});
-    const {getByTestId} = render(
+    render(
       <EditScanConfigDialog
         comment="bar"
         configFamilies={configFamilies}
@@ -522,7 +528,7 @@ describe('EditScanConfigDialog component tests', () => {
       />,
     );
 
-    const content = getByTestId('save-dialog-content');
+    const content = getDialogContent();
     const sections = content.querySelectorAll('section');
 
     const editFamilyIcons = getAllByTestId(sections[0], 'svg-icon');

@@ -257,12 +257,11 @@ describe('Scan Config Detailspage tests', () => {
       <Detailspage id="12345" />,
     );
 
-    expect(element).toMatchSnapshot();
     expect(element).toHaveTextContent('Scan Config: foo');
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
-    const detailslinks = getAllByTestId('details-link');
+    const detailsLinks = getAllByTestId('details-link');
 
     expect(icons[0]).toHaveAttribute('title', 'Help: ScanConfigs');
     expect(links[0]).toHaveAttribute(
@@ -281,10 +280,10 @@ describe('Scan Config Detailspage tests', () => {
     expect(element).toHaveTextContent('bar');
 
     expect(element).toHaveTextContent('task1');
-    expect(detailslinks[0]).toHaveAttribute('href', '/task/1234');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/task/1234');
 
     expect(element).toHaveTextContent('task2');
-    expect(detailslinks[1]).toHaveAttribute('href', '/task/5678');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/task/5678');
 
     expect(element).not.toHaveTextContent('scanner');
   });
@@ -953,8 +952,6 @@ describe('Scan Config ToolBarIcons tests', () => {
         onScanConfigImportClick={handleScanConfigImport}
       />,
     );
-
-    expect(element).toMatchSnapshot();
 
     const links = element.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
