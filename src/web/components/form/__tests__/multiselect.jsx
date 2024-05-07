@@ -18,13 +18,16 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent, screen, userEvent} from 'web/utils/testing';
+import {render, screen, userEvent} from 'web/utils/testing';
 
 import {
   changeSelectInput,
+  getMultiSelectElement,
   getSelectElement,
   getSelectItemElements,
+  getSelectItemElementsForMultiSelect,
   getSelectedItems,
+  openMultiSelectElement,
   openSelectElement,
 } from 'web/components/testing';
 
@@ -51,9 +54,8 @@ describe('MultiSelect tests', () => {
 
     expect(getSelectItemElements().length).toEqual(0);
 
-    await openSelectElement();
-
-    const domItems = getSelectItemElements();
+    const multiSelect = getMultiSelectElement();
+    const domItems = await getSelectItemElementsForMultiSelect(multiSelect);
     expect(domItems.length).toEqual(2);
     expect(domItems[0]).toHaveTextContent('Bar');
     expect(domItems[1]).toHaveTextContent('Foo');
@@ -199,9 +201,9 @@ describe('MultiSelect tests', () => {
 
     render(<MultiSelect items={items} value={[]} />);
 
-    const input = getSelectElement();
+    const multiSelect = getMultiSelectElement();
+    await openMultiSelectElement(multiSelect);
 
-    await openSelectElement(input);
     expect(getSelectItemElements().length).toEqual(3);
 
     changeSelectInput('ba');
