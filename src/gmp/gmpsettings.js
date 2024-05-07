@@ -48,6 +48,7 @@ class GmpSettings {
       enableGreenboneSensor = false,
       disableLoginForm = false,
       enableStoreDebugLog,
+      enableAssetManagement = false,
       guestUsername,
       guestPassword,
       loglevel,
@@ -119,6 +120,7 @@ class GmpSettings {
     setAndFreeze(this, 'protocolDocUrl', protocolDocUrl);
     setAndFreeze(this, 'vendorVersion', vendorVersion);
     setAndFreeze(this, 'vendorLabel', vendorLabel);
+    setAndFreeze(this, 'enableAssetManagement', enableAssetManagement);
   }
 
   set token(value) {
