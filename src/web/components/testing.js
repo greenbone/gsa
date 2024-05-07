@@ -247,6 +247,14 @@ export const getTableFooter = element => {
 };
 
 /**
+ * Get the table header element
+ */
+export const getTableHeader = element => {
+  element = getElementOrDocument(element);
+  return element.querySelector('thead');
+};
+
+/**
  * Get action items
  */
 export const getActionItems = element => {
