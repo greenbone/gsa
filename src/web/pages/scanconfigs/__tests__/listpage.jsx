@@ -20,7 +20,9 @@ import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent, act} from 'web/utils/testing';
+import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
+
+import {clickElement, getTable} from 'web/components/testing';
 
 import ScanConfigsPage, {ToolBarIcons} from '../listpage';
 
@@ -103,10 +105,10 @@ describe('ScanConfigsPage tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('scanconfig', defaultSettingfilter),
+      defaultFilterLoadingActions.success('scanconfig', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -124,9 +126,10 @@ describe('ScanConfigsPage tests', () => {
 
     const {baseElement} = render(<ScanConfigsPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    expect(baseElement).toBeVisible();
+    expect(baseElement).toBeInTheDocument();
+    getTable();
   });
 
   test('should call commands for bulk actions', async () => {
@@ -163,10 +166,10 @@ describe('ScanConfigsPage tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('scanconfig', defaultSettingfilter),
+      defaultFilterLoadingActions.success('scanconfig', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -182,24 +185,19 @@ describe('ScanConfigsPage tests', () => {
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<ScanConfigsPage />);
+    render(<ScanConfigsPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    const icons = getAllByTestId('svg-icon');
+    const deleteIcon = screen.getAllByTitle(
+      'Move page contents to trashcan',
+    )[0];
+    await clickElement(deleteIcon);
+    expect(deleteByFilter).toHaveBeenCalled();
 
-    await act(async () => {
-      expect(icons[21]).toHaveAttribute(
-        'title',
-        'Move page contents to trashcan',
-      );
-      fireEvent.click(icons[21]);
-      expect(deleteByFilter).toHaveBeenCalled();
-
-      expect(icons[22]).toHaveAttribute('title', 'Export page contents');
-      fireEvent.click(icons[22]);
-      expect(exportByFilter).toHaveBeenCalled();
-    });
+    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    await clickElement(exportIcon);
+    expect(exportByFilter).toHaveBeenCalled();
   });
 });
 

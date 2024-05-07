@@ -28,7 +28,6 @@ import Section from 'web/components/section/section';
 
 import SortBy from 'web/components/sortby/sortby';
 
-import SimpleTable from 'web/components/table/simpletable';
 import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
@@ -194,18 +193,14 @@ const EditScanConfigFamilyDialog = ({
           <Loading />
         ) : (
           <>
-            <SimpleTable>
-              <TableBody>
-                <TableRow>
-                  <TableData>{configNameLabel}</TableData>
-                  <TableData>{configName}</TableData>
-                </TableRow>
-                <TableRow>
-                  <TableData>{_('Family')}</TableData>
-                  <TableData>{familyName}</TableData>
-                </TableRow>
-              </TableBody>
-            </SimpleTable>
+            <div>
+              <div>
+                {configNameLabel}: {configName}
+              </div>
+              <div>
+                {_('Family')}: {familyName}
+              </div>
+            </div>
 
             <Section title={_('Edit Network Vulnerability Tests')}>
               <Table>

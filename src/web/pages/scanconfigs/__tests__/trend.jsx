@@ -25,7 +25,7 @@ describe('Scan Config Trend tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should render static title', () => {

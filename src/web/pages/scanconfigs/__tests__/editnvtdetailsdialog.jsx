@@ -11,6 +11,15 @@ import {setTimezone} from 'web/store/usersettings/actions';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
+import {
+  changeInputValue,
+  getDialogCloseButton,
+  getDialogContent,
+  getDialogSaveButton,
+  getDialogTitle,
+  getRadioInputs,
+} from 'web/components/testing';
+
 import EditNvtDetailsDialog from '../editnvtdetailsdialog';
 
 const preferences = [
@@ -34,7 +43,7 @@ describe('EditNvtDetailsDialog component tests', () => {
 
     store.dispatch(setTimezone('UTC'));
 
-    const {getByTestId} = render(
+    render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -55,11 +64,9 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    const titleBar = getByTestId('dialog-title-bar');
-    expect(titleBar).toHaveTextContent('Edit Scan Config NVT');
+    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
 
-    const content = getByTestId('save-dialog-content');
-
+    const content = getDialogContent();
     expect(content).toHaveTextContent('Config');
     expect(content).toHaveTextContent('foo');
   });
@@ -76,7 +83,7 @@ describe('EditNvtDetailsDialog component tests', () => {
 
     store.dispatch(setTimezone('UTC'));
 
-    const {getByTestId} = render(
+    render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -97,11 +104,9 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    const titleBar = getByTestId('dialog-title-bar');
-    expect(titleBar).toHaveTextContent('Edit Scan Config NVT');
+    expect(getDialogTitle()).toHaveTextContent('Edit Scan Config NVT');
 
-    const content = getByTestId('save-dialog-content');
-
+    const content = getDialogContent();
     expect(content).not.toHaveTextContent('Config');
     expect(content).not.toHaveTextContent('foo');
   });
@@ -116,7 +121,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       router: true,
     });
 
-    const {getByTestId} = render(
+    render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -137,7 +142,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -175,7 +180,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       router: true,
     });
 
-    const {getByTestId} = render(
+    render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -196,7 +201,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
+    const closeButton = getDialogCloseButton();
     fireEvent.click(closeButton);
 
     expect(handleClose).toHaveBeenCalled();
@@ -213,7 +218,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       router: true,
     });
 
-    const {baseElement, getByTestId, getAllByTestId} = render(
+    const {baseElement} = render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -234,14 +239,14 @@ describe('EditNvtDetailsDialog component tests', () => {
       />,
     );
 
-    const radios = getAllByTestId('radio-input');
+    const radios = getRadioInputs();
     fireEvent.click(radios[2]);
     fireEvent.click(radios[5]);
 
     const inputs = baseElement.querySelectorAll('input[type="text"]');
-    fireEvent.change(inputs[1], {target: {value: 'bar'}});
+    changeInputValue(inputs[1], 'bar');
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     const newPreferenceValues = {
@@ -269,7 +274,7 @@ describe('EditNvtDetailsDialog component tests', () => {
       router: true,
     });
 
-    const {getByTestId, getAllByName, getByName} = render(
+    const {getAllByName, getByName} = render(
       <EditNvtDetailsDialog
         configId="c1"
         configName="foo"
@@ -295,9 +300,9 @@ describe('EditNvtDetailsDialog component tests', () => {
     fireEvent.click(useDefaultTimeoutRadios[1]);
 
     const timeoutField = getByName('timeout');
-    fireEvent.change(timeoutField, {target: {value: '100'}});
+    changeInputValue(timeoutField, '100');
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     const preferenceValues = {
