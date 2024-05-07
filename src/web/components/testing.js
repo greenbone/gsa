@@ -35,6 +35,9 @@ export const getSelectItemElements = element => {
   return element.querySelectorAll("[role='option']");
 };
 
+/**
+ * Get the items that are selectable of a Select component
+ */
 export const getSelectItemElementsForSelect = async element => {
   element = isDefined(element) ? element : getSelectElement();
   await openSelectElement(element);
@@ -83,11 +86,50 @@ export const clickElement = async element => {
 };
 
 /**
- * Get selected items of a MultiSelect component
+ * Get all multi select (root) elements
+ */
+export const getMultiSelectElements = element => {
+  element = getElementOrDocument(element);
+  return element.querySelectorAll('.mantine-MultiSelect-root');
+};
+
+/**
+ * Get all multi select (root) element
+ */
+export const getMultiSelectElement = element => {
+  element = getElementOrDocument(element);
+  return element.querySelector('.mantine-MultiSelect-root');
+};
+
+/**
+ * Open a MultiSelect component for displaying item selection
+ */
+export const openMultiSelectElement = async element => {
+  element = isDefined(element) ? element : getMultiSelectElement();
+  const input = getSelectElement(element);
+  return await clickElement(input);
+};
+
+/**
+ * Get current selected items of a MultiSelect component
  */
 export const getSelectedItems = element => {
   element = getElementOrDocument(element);
   return element.querySelectorAll('.mantine-MultiSelect-value');
+};
+
+/**
+ * Get all the selectable items of a MultiSelect component
+ */
+export const getSelectItemElementsForMultiSelect = async element => {
+  element = isDefined(element) ? element : getMultiSelectElement();
+  await openMultiSelectElement(element);
+  const controlElement = element.querySelector('.mantine-MultiSelect-wrapper');
+  const selectItemsId = controlElement.getAttribute('aria-controls');
+  const itemsContainer = document.body.querySelector(
+    '#' + selectItemsId + '-items',
+  );
+  return getSelectItemElements(itemsContainer);
 };
 
 /**
