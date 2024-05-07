@@ -76,7 +76,7 @@ describe('Report Config row tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <Row
         entity={entity}
         onToggleDetailsClick={handleToggleDetailsClick}
@@ -87,7 +87,6 @@ describe('Report Config row tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('(bar)');
     expect(baseElement).toHaveTextContent('baz');
@@ -107,7 +106,7 @@ describe('Report Config row tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <Row
         entity={orphanEntity}
         onToggleDetailsClick={handleToggleDetailsClick}
@@ -118,7 +117,6 @@ describe('Report Config row tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
     expect(baseElement).toHaveTextContent('foo');
     expect(baseElement).toHaveTextContent('Orphan');
     expect(baseElement).toHaveTextContent('(bar)');

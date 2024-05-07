@@ -35,8 +35,6 @@ describe('Report Config Details tests', () => {
 
     const {element, getAllByTestId} = render(<Details entity={config} />);
 
-    expect(element).toMatchSnapshot();
-
     expect(element).toHaveTextContent('StringParam');
     expect(element).toHaveTextContent('StringValue');
 
@@ -51,25 +49,25 @@ describe('Report Config Details tests', () => {
     expect(element).toHaveTextContent('ReportFormatListParam');
     expect(element).toHaveTextContent('non-configurable');
 
-    const detailslinks = getAllByTestId('details-link');
+    const detailsLinks = getAllByTestId('details-link');
 
     // Report format of the config
-    expect(detailslinks[0]).toHaveTextContent('example-configurable-1');
-    expect(detailslinks[0]).toHaveAttribute('href', '/reportformat/123456');
+    expect(detailsLinks[0]).toHaveTextContent('example-configurable-1');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/reportformat/123456');
 
     // Report format params
-    expect(detailslinks[1]).toHaveTextContent('non-configurable-1');
-    expect(detailslinks[1]).toHaveAttribute('href', '/reportformat/654321');
+    expect(detailsLinks[1]).toHaveTextContent('non-configurable-1');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/reportformat/654321');
 
-    expect(detailslinks[2]).toHaveTextContent('non-configurable-2');
-    expect(detailslinks[2]).toHaveAttribute('href', '/reportformat/7654321');
+    expect(detailsLinks[2]).toHaveTextContent('non-configurable-2');
+    expect(detailsLinks[2]).toHaveAttribute('href', '/reportformat/7654321');
 
     // Alerts
-    expect(detailslinks[3]).toHaveTextContent('ABC');
-    expect(detailslinks[3]).toHaveAttribute('href', '/alert/321');
+    expect(detailsLinks[3]).toHaveTextContent('ABC');
+    expect(detailsLinks[3]).toHaveAttribute('href', '/alert/321');
 
-    expect(detailslinks[4]).toHaveTextContent('XYZ');
-    expect(detailslinks[4]).toHaveAttribute('href', '/alert/789');
+    expect(detailsLinks[4]).toHaveTextContent('XYZ');
+    expect(detailsLinks[4]).toHaveAttribute('href', '/alert/789');
   });
 
   test('should render orphaned config details', () => {
@@ -85,8 +83,6 @@ describe('Report Config Details tests', () => {
     const {render} = rendererWith({capabilities: caps, router: true});
 
     const {element} = render(<Details entity={config} />);
-
-    expect(element).toMatchSnapshot();
 
     expect(element).toHaveTextContent(
       'not available for orphaned report configs',

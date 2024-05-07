@@ -23,15 +23,28 @@ import ReportFormat from 'gmp/models/reportformat';
 import {
   rendererWith,
   fireEvent,
-  getAllByTestId,
-  wait,
-  getAllByRole,
-  getByRole,
-  getByTestId,
+  getByName,
+  getAllByName,
 } from 'web/utils/testing';
 
 import {mockReportConfig} from 'web/pages/reportconfigs/__mocks__/mockreportconfig';
 import {mockReportFormats} from '../__mocks__/mockreportformats';
+
+import {
+  changeInputValue,
+  clickElement,
+  getCheckBoxes,
+  getDialogCloseButton,
+  getDialogContent,
+  getDialogSaveButton,
+  getDialogTitle,
+  getMultiSelectElements,
+  getSelectElements,
+  getSelectItemElementsForMultiSelect,
+  getSelectItemElementsForSelect,
+  getSelectedItems,
+  getTableBody,
+} from 'web/components/testing';
 
 import ReportConfigDialog from '../dialog';
 
@@ -47,7 +60,7 @@ describe('Edit Report Config Dialog component tests', () => {
 
     const {render} = rendererWith({capabilities: true, router: true, gmp});
 
-    const {baseElement} = render(
+    render(
       <ReportConfigDialog
         reportconfig={config}
         formats={formats}
@@ -57,18 +70,12 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(getDialogTitle()).toHaveTextContent('Edit Report Config');
 
-    const titleBar = getByTestId(baseElement, 'dialog-title-bar');
-    expect(titleBar).toHaveTextContent('Edit Report Config');
-
-    const content = getByTestId(baseElement, 'save-dialog-content');
-
-    const comboBoxes = getAllByRole(content, 'combobox');
-    expect(comboBoxes[0]).toHaveTextContent('example-configurable-1');
-    expect(getByTestId(comboBoxes[0], 'select-selected-value')).toHaveAttribute(
-      'disabled',
-    );
+    const content = getDialogContent();
+    const selects = getSelectElements(content);
+    expect(selects[0]).toHaveValue('example-configurable-1');
+    expect(selects[0]).toBeDisabled();
   });
 
   test('should save data', () => {
@@ -79,7 +86,7 @@ describe('Edit Report Config Dialog component tests', () => {
     const formats = mockReportFormats;
 
     const {render} = rendererWith({capabilities: true, router: true, gmp});
-    const {baseElement} = render(
+    render(
       <ReportConfigDialog
         reportconfig={config}
         formats={formats}
@@ -89,7 +96,7 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    const saveButton = getByTestId(baseElement, 'dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -131,7 +138,7 @@ describe('Edit Report Config Dialog component tests', () => {
     const formats = mockReportFormats;
 
     const {render} = rendererWith({capabilities: true, router: true, gmp});
-    const {baseElement} = render(
+    render(
       <ReportConfigDialog
         reportconfig={config}
         formats={formats}
@@ -141,15 +148,14 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId(baseElement, 'dialog-close-button');
-
+    const closeButton = getDialogCloseButton();
     fireEvent.click(closeButton);
 
     expect(handleClose).toHaveBeenCalled();
     expect(handleSave).not.toHaveBeenCalled();
   });
 
-  test('should allow to change name, comment and params', () => {
+  test('should allow to change name, comment and params', async () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleValueChange = testing.fn();
@@ -158,7 +164,7 @@ describe('Edit Report Config Dialog component tests', () => {
     const formats = mockReportFormats;
 
     const {render} = rendererWith({capabilities: true, router: true, gmp});
-    const {baseElement} = render(
+    render(
       <ReportConfigDialog
         reportconfig={config}
         formats={formats}
@@ -169,49 +175,42 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    const content = getByTestId(baseElement, 'save-dialog-content');
-    const comboBoxes = getAllByRole(content, 'combobox');
-    let inputs;
+    const content = getDialogContent();
 
     // Set name and comment
-    inputs = content.querySelectorAll('input[name="name"]');
-    fireEvent.change(inputs[0], {target: {value: 'lorem'}});
+    const nameInput = getByName(content, 'name');
+    changeInputValue(nameInput, 'lorem');
 
-    inputs = content.querySelectorAll('input[name="comment"]');
-    fireEvent.change(inputs[0], {target: {value: 'ipsum'}});
+    const commentInput = getByName(content, 'comment');
+    changeInputValue(commentInput, 'ipsum');
 
     // Set params
-    inputs = content.querySelectorAll('input[name="BooleanParam"]');
-    fireEvent.click(inputs[1]);
+    const booleanParam = getAllByName(content, 'BooleanParam');
+    fireEvent.click(booleanParam[1]);
 
-    inputs = content.querySelectorAll('input[name="IntegerParam"]');
-    fireEvent.change(inputs[0], {target: {value: '7'}});
+    const integerParam = getByName(content, 'IntegerParam');
+    changeInputValue(integerParam, '7');
 
-    inputs = content.querySelectorAll('input[name="StringParam"]');
-    fireEvent.change(inputs[0], {target: {value: 'NewString'}});
+    const stringParam = getByName(content, 'StringParam');
+    changeInputValue(stringParam, 'NewString');
 
-    inputs = content.querySelectorAll('textarea[name="TextParam"]');
-    fireEvent.change(inputs[0], {target: {value: 'NewText'}});
+    const textParam = getByName(content, 'TextParam');
+    changeInputValue(textParam, 'NewText');
 
     // Choose new SelectionParam
-    fireEvent.click(getByTestId(comboBoxes[1], 'select-open-button'));
-    const menuId = comboBoxes[1].getAttribute('aria-owns');
-    const menuItems = getAllByTestId(
-      baseElement.querySelector('#' + menuId),
-      'select-item',
-    );
-    fireEvent.click(menuItems[0]);
+    const selects = getSelectElements(content);
+    const menuItems = await getSelectItemElementsForSelect(selects[1]);
+    await clickElement(menuItems[0]);
 
     // Unselect report format from ReportFormatListParam
-    const multiselectDeleteButtons = getAllByTestId(
-      comboBoxes[2],
-      'multiselect-selected-delete',
-    );
-    fireEvent.click(multiselectDeleteButtons[1]);
+    const multiSelects = getMultiSelectElements(content);
+    const selectedItems = getSelectedItems(multiSelects[0]);
+    const deleteIcon = selectedItems[1].querySelector('button');
+    await clickElement(deleteIcon);
 
     expect(handleValueChange).toHaveBeenCalledTimes(6);
 
-    const saveButton = getByTestId(baseElement, 'dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -247,7 +246,7 @@ describe('Edit Report Config Dialog component tests', () => {
     });
   });
 
-  test('should be able to toggle which params use default value', () => {
+  test('should be able to toggle which params use default value', async () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
     const handleValueChange = testing.fn();
@@ -256,7 +255,7 @@ describe('Edit Report Config Dialog component tests', () => {
     const formats = mockReportFormats;
 
     const {render} = rendererWith({capabilities: true, router: true, gmp});
-    const {baseElement} = render(
+    render(
       <ReportConfigDialog
         reportconfig={config}
         formats={formats}
@@ -267,30 +266,31 @@ describe('Edit Report Config Dialog component tests', () => {
       />,
     );
 
-    const content = getByTestId(baseElement, 'save-dialog-content');
-    let inputs;
+    const content = getDialogContent();
+    const tableBody = getTableBody(content);
+    const tableRows = tableBody.querySelectorAll('tr');
 
-    inputs = content.querySelectorAll('input[name="BooleanParam"]');
-    fireEvent.click(inputs[2]);
+    const stringParamRow = tableRows[0];
+    await clickElement(getCheckBoxes(stringParamRow)[0]);
 
-    inputs = content.querySelectorAll('input[name="IntegerParam"]');
-    fireEvent.click(inputs[1]);
+    const textParamRow = tableRows[1];
+    await clickElement(getCheckBoxes(textParamRow)[0]);
 
-    inputs = content.querySelectorAll('input[name="StringParam"]');
-    fireEvent.click(inputs[1]);
+    const integerParamRow = tableRows[2];
+    await clickElement(getCheckBoxes(integerParamRow)[0]);
 
-    inputs = content.querySelectorAll('input[name="TextParam"]');
-    fireEvent.click(inputs[0]);
+    const booleanParaRow = tableRows[3];
+    await clickElement(getCheckBoxes(booleanParaRow)[0]);
 
-    inputs = content.querySelectorAll('input[name="ReportFormatListParam"]');
-    fireEvent.click(inputs[0]);
+    const selectionParamRow = tableRows[4];
+    await clickElement(getCheckBoxes(selectionParamRow)[0]);
 
-    inputs = content.querySelectorAll('input[name="SelectionParam"]');
-    fireEvent.click(inputs[0]);
+    const reportFormatListParamRow = tableRows[5];
+    await clickElement(getCheckBoxes(reportFormatListParamRow)[0]);
 
     expect(handleValueChange).toHaveBeenCalledTimes(6);
 
-    const saveButton = getByTestId(baseElement, 'dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -311,7 +311,7 @@ describe('Edit Report Config Dialog component tests', () => {
         StringParam: 'StringValue',
         TextParam: 'TextValue',
       },
-      // Should be reverse of "shpuld save data" case
+      // Should be reverse of "should save data" case
       params_using_default: {
         BooleanParam: true,
         IntegerParam: false,
@@ -345,10 +345,7 @@ describe('New Report Config Dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
-
-    const titleBar = getByTestId(baseElement, 'dialog-title-bar');
-    expect(titleBar).toHaveTextContent('New Report Config');
+    expect(getDialogTitle()).toHaveTextContent('New Report Config');
 
     expect(baseElement).not.toHaveTextContent('Param');
   });
@@ -385,14 +382,14 @@ describe('New Report Config Dialog component tests', () => {
             __text: 'RF01',
             report_format: {
               _id: 'RF01',
-              name: 'report format 1'
+              name: 'report format 1',
             },
           },
           default: {
             __text: 'RF01',
             report_format: {
               _id: 'RF01',
-              name: 'report format 1'
+              name: 'report format 1',
             },
           },
           type: {
@@ -419,7 +416,7 @@ describe('New Report Config Dialog component tests', () => {
 
     const handleValueChange = testing.fn();
 
-    const {baseElement} = render(
+    render(
       <ReportConfigDialog
         reportconfig={undefined}
         formats={formats}
@@ -429,43 +426,30 @@ describe('New Report Config Dialog component tests', () => {
       />,
     );
 
-    const content = getByTestId(baseElement, 'save-dialog-content');
-    let comboBoxes = getAllByRole(content, 'combobox');
-    let inputs;
-    let menuId;
-    let menuItems;
+    const content = getDialogContent();
+    const nameInput = getByName(content, 'name');
+    changeInputValue(nameInput, 'lorem');
 
-    inputs = content.querySelectorAll('input[name="name"]');
-    fireEvent.change(inputs[0], {target: {value: 'lorem'}});
-
-    inputs = content.querySelectorAll('input[name="comment"]');
-    fireEvent.change(inputs[0], {target: {value: 'ipsum'}});
+    const commentInput = getByName(content, 'comment');
+    changeInputValue(commentInput, 'ipsum');
 
     // Choose new report format
-    fireEvent.click(getByTestId(comboBoxes[0], 'select-open-button'));
-    menuId = comboBoxes[0].getAttribute('aria-owns');
-    menuItems = getAllByTestId(
-      baseElement.querySelector('#' + menuId),
-      'select-item',
-    );
-    fireEvent.click(menuItems[1]);
-    await wait();
+    const select = getSelectElements(content);
+    const menuItems = await getSelectItemElementsForSelect(select[0]);
+    await clickElement(menuItems[1]);
 
     // Set params
     expect(getReportFormat).toHaveBeenCalledWith({id: '1234567'});
-    inputs = content.querySelectorAll('input[name="Param2"]');
-    fireEvent.change(inputs[0], {target: {value: 'XYZ'}});
 
-    comboBoxes = getAllByRole(content, 'combobox');
-    fireEvent.click(getByRole(comboBoxes[1], 'button'));
-    menuId = comboBoxes[1].getAttribute('aria-owns');
-    menuItems = getAllByTestId(
-      baseElement.querySelector('#' + menuId),
-      'multiselect-item-label',
-    );
-    fireEvent.click(menuItems[1]);
+    const param2Input = getByName(content, 'Param2');
+    changeInputValue(param2Input, 'XYZ');
 
-    const saveButton = getByTestId(baseElement, 'dialog-save-button');
+    const multiSelect = getMultiSelectElements(content)[0];
+    const multiSelectMenuItems =
+      await getSelectItemElementsForMultiSelect(multiSelect);
+    await clickElement(multiSelectMenuItems[1]);
+
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -480,7 +464,7 @@ describe('New Report Config Dialog component tests', () => {
       params: {
         Param1: 'ABC',
         Param2: 'XYZ',
-        ReportFormatListParam: ['RF01', '654321'],
+        ReportFormatListParam: ['654321'],
       },
       params_using_default: {
         Param1: true,

@@ -88,7 +88,6 @@ describe('Report Config Details Page tests', () => {
     store.dispatch(entityLoadingActions.success('12345', config));
 
     const {element} = render(<DetailsPage id="12345" />);
-    expect(element).toMatchSnapshot();
 
     // Test parameter details
     const spans = element.querySelectorAll('span');
