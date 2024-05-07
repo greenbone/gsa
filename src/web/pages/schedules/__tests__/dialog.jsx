@@ -7,7 +7,17 @@ import {describe, test, expect, testing} from '@gsa/testing';
 
 import Schedule from 'gmp/models/schedule';
 
-import {render, fireEvent, screen} from 'web/utils/testing';
+import {render, fireEvent} from 'web/utils/testing';
+
+import {
+  changeInputValue,
+  clickElement,
+  closeDialog,
+  getDialogSaveButton,
+  getSelectElements,
+  getSelectItemElementsForSelect,
+  getTextInputs,
+} from 'web/components/testing';
 
 import ScheduleDialog from '../dialog';
 
@@ -54,7 +64,7 @@ const {
 
 describe('ScheduleDialog component tests', () => {
   test('should render with default values', () => {
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement, getByName} = render(
       <ScheduleDialog
         id={scheduleId}
         title={`Edit Schedule ${scheduleName}`}
@@ -72,44 +82,33 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const inputs = baseElement.querySelectorAll('input');
-    const formgroups = getAllByTestId('formgroup-title');
-    const spinnerInputs = getAllByTestId('spinner-input');
+    const inputs = getTextInputs();
+    const selects = getSelectElements();
 
-    expect(formgroups.length).toBe(7);
-
-    expect(formgroups[0]).toHaveTextContent('Name');
     expect(inputs[0]).toHaveAttribute('name', 'name');
-    expect(inputs[0]).toHaveAttribute('value', 'schedule 1'); // name field
+    expect(inputs[0]).toHaveValue('schedule 1'); // name field
 
-    expect(formgroups[1]).toHaveTextContent('Comment');
     expect(inputs[1]).toHaveAttribute('name', 'comment');
-    expect(inputs[1]).toHaveAttribute('value', 'hello world'); // comment field
+    expect(inputs[1]).toHaveValue('hello world'); // comment field
 
-    expect(formgroups[2]).toHaveTextContent('Timezone');
-    const defaultTimezone = screen.getAllByTitle(
-      'Coordinated Universal Time/UTC',
-    );
-    expect(defaultTimezone[0]).toBeInTheDocument();
+    const defaultTimezone = selects[0];
+    expect(defaultTimezone).toHaveValue('Coordinated Universal Time/UTC');
 
-    expect(formgroups[3]).toHaveTextContent('First Run');
     expect(baseElement).toHaveTextContent('02/08/2021');
-    expect(spinnerInputs.length).toBe(4);
-    expect(spinnerInputs[0]).toHaveAttribute('value', '15');
-    expect(spinnerInputs[1]).toHaveAttribute('value', '0');
+    expect(getByName('startHour')).toHaveValue('15');
+    expect(getByName('startMinute')).toHaveValue('0');
 
-    expect(spinnerInputs[2]).toHaveAttribute('value', '19');
-    expect(spinnerInputs[3]).toHaveAttribute('value', '45');
+    expect(getByName('endHour')).toHaveValue('19');
+    expect(getByName('endMinute')).toHaveValue('45');
 
     expect(baseElement).toHaveTextContent('5 hours');
 
-    const recurrenceValue = screen.getAllByTitle('Weekly');
-
-    expect(recurrenceValue[0]).toBeInTheDocument();
+    const recurrence = selects[1];
+    expect(recurrence).toHaveValue('Weekly');
   });
 
   test('should allow to change text field', () => {
-    const {getByName, getByTestId} = render(
+    const {getByName} = render(
       <ScheduleDialog
         title={'New Schedule'}
         onClose={handleClose}
@@ -118,23 +117,23 @@ describe('ScheduleDialog component tests', () => {
     );
 
     const nameInput = getByName('name');
-    expect(nameInput).toHaveAttribute('value', 'Unnamed');
-    fireEvent.change(nameInput, {target: {value: 'foo'}});
-    expect(nameInput).toHaveAttribute('value', 'foo');
+    expect(nameInput).toHaveValue('Unnamed');
+    changeInputValue(nameInput, 'foo');
+    expect(nameInput).toHaveValue('foo');
 
     const commentInput = getByName('comment');
-    expect(commentInput).toHaveAttribute('value', '');
-    fireEvent.change(commentInput, {target: {value: 'bar'}});
-    expect(commentInput).toHaveAttribute('value', 'bar');
+    expect(commentInput).toHaveValue('');
+    changeInputValue(commentInput, 'bar');
+    expect(commentInput).toHaveValue('bar');
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalled(); // handleSave in dialog is over 100 lines long and generates an icalendar. toHaveBeenCalledWith(...) is extremely difficult to test...
   });
 
   test('should allow to close the dialog', () => {
-    const {getByTestId} = render(
+    render(
       <ScheduleDialog
         title={'New Schedule'}
         onClose={handleClose}
@@ -142,72 +141,12 @@ describe('ScheduleDialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-title-close-button');
-
-    fireEvent.click(closeButton);
-
+    closeDialog();
     expect(handleClose).toHaveBeenCalled();
   });
 
-  test('should allow changing spinner values', () => {
-    const {getAllByTestId, getByTestId} = render(
-      <ScheduleDialog
-        id={scheduleId}
-        title={`Edit Schedule ${scheduleName}`}
-        comment={scheduleComment}
-        duration={scheduleDuration}
-        freq={scheduleFrequency}
-        name={scheduleName}
-        startDate={scheduleStartDate}
-        timezone={scheduleTimezone}
-        interval={scheduleInterval}
-        weekdays={scheduleWeekDays}
-        monthdays={scheduleMonthDays}
-        onClose={handleClose}
-        onSave={handleSave}
-      />,
-    );
-
-    const spinnerUpButtons = getAllByTestId('spinner-up');
-    const spinnerDownButtons = getAllByTestId('spinner-down');
-    const spinnerInputs = getAllByTestId('spinner-input');
-
-    expect(spinnerUpButtons.length).toBe(4);
-    expect(spinnerDownButtons.length).toBe(4);
-    expect(spinnerInputs.length).toBe(4);
-
-    fireEvent.click(spinnerUpButtons[0]);
-    expect(spinnerInputs[0]).toHaveAttribute('value', '16');
-
-    fireEvent.click(spinnerDownButtons[0]);
-    expect(spinnerInputs[0]).toHaveAttribute('value', '15');
-
-    fireEvent.click(spinnerUpButtons[1]);
-    expect(spinnerInputs[1]).toHaveAttribute('value', '1');
-
-    fireEvent.click(spinnerDownButtons[1]);
-    expect(spinnerInputs[1]).toHaveAttribute('value', '0');
-
-    fireEvent.click(spinnerUpButtons[2]);
-    expect(spinnerInputs[2]).toHaveAttribute('value', '20');
-
-    fireEvent.click(spinnerDownButtons[2]);
-    expect(spinnerInputs[2]).toHaveAttribute('value', '19');
-
-    fireEvent.click(spinnerUpButtons[3]);
-    expect(spinnerInputs[3]).toHaveAttribute('value', '46');
-
-    fireEvent.click(spinnerDownButtons[3]);
-    expect(spinnerInputs[3]).toHaveAttribute('value', '45');
-
-    const saveButton = getByTestId('dialog-save-button');
-    fireEvent.click(saveButton);
-
-    expect(handleSave).toHaveBeenCalled();
-  });
-
-  test('should allow changing select values', () => {
-    const {getAllByTestId, getByTestId} = render(
+  test('should allow changing select values', async () => {
+    render(
       <ScheduleDialog
         id={scheduleId}
         title={`Edit Schedule ${scheduleName}`}
@@ -226,35 +165,22 @@ describe('ScheduleDialog component tests', () => {
     );
 
     let selectItems;
-    const selectedValues = getAllByTestId('select-selected-value');
-    const selectOpenButton = getAllByTestId('select-open-button');
-    expect(selectOpenButton.length).toBe(2);
-    expect(selectedValues.length).toBe(2);
+    const selects = getSelectElements();
+    expect(selects[0]).toHaveValue('Coordinated Universal Time/UTC');
+    expect(selects[1]).toHaveValue('Weekly');
 
-    expect(selectedValues[0]).toHaveTextContent(
-      'Coordinated Universal Time/UTC',
-    );
-    expect(selectedValues[1]).toHaveTextContent('Weekly');
-
-    fireEvent.click(selectOpenButton[0]);
-
-    selectItems = getAllByTestId('select-item');
+    selectItems = await getSelectItemElementsForSelect(selects[0]);
     expect(selectItems.length).toBe(422);
-    fireEvent.click(selectItems[1]);
+    await clickElement(selectItems[1]);
+    expect(selects[0]).toHaveValue('Africa/Abidjan');
 
-    expect(selectedValues[0]).toHaveTextContent('Africa/Abidjan');
-
-    fireEvent.click(selectOpenButton[1]);
-
-    selectItems = getAllByTestId('select-item');
+    selectItems = await getSelectItemElementsForSelect(selects[1]);
     expect(selectItems.length).toBe(8);
-    fireEvent.click(selectItems[6]);
+    await clickElement(selectItems[6]);
 
-    expect(selectedValues[1]).toHaveTextContent(
-      'Workweek (Monday till Friday)',
-    );
+    expect(selects[1]).toHaveValue('Workweek (Monday till Friday)');
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalled();
