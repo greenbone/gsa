@@ -9,6 +9,7 @@ import {AppNavigation} from '@greenbone/opensight-ui-components';
 
 import useTranslation from 'web/hooks/useTranslation';
 import useCapabilities from 'web/utils/useCapabilities';
+import useGmp from 'web/utils/useGmp';
 
 import TaskIcon from 'web/components/icon/taskicon';
 import Link from 'web/components/link/link';
@@ -52,6 +53,7 @@ import RadiusIcon from 'web/components/icon/radiusicon';
 const Menu = () => {
   const [_] = useTranslation();
   const capabilities = useCapabilities();
+  const gmp = useGmp();
 
   const mayOpScans = [
     'tasks',
@@ -340,6 +342,13 @@ const Menu = () => {
             to: '/about',
           },
         ],
+      },
+    ].filter(Boolean),
+    [
+      gmp.settings.enableAssetManagement && {
+        icon: () => {},
+        label: _('Asset'),
+        to: '/asset-management',
       },
     ].filter(Boolean),
   ];
