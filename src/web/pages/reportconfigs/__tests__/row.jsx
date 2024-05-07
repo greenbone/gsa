@@ -64,7 +64,7 @@ describe('Report Config row tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <Row
         entity={entity}
         onToggleDetailsClick={handleToggleDetailsClick}
@@ -95,7 +95,7 @@ describe('Report Config row tests', () => {
       router: true,
     });
 
-    const {baseElement, getAllByTestId} = render(
+    const {baseElement} = render(
       <Row
         entity={orphanEntity}
         onToggleDetailsClick={handleToggleDetailsClick}

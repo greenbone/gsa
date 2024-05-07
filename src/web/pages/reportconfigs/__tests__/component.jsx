@@ -8,14 +8,17 @@ import {describe, test, expect, testing} from '@gsa/testing';
 import ReportConfig from 'gmp/models/reportconfig';
 import Capabilities from 'gmp/capabilities/capabilities';
 
+import {fireEvent, getByTestId, rendererWith, wait} from 'web/utils/testing';
+
 import {
-  fireEvent,
-  getAllByRole,
-  getAllByTestId,
-  getByTestId,
-  rendererWith,
-  wait,
-} from 'web/utils/testing';
+  clickElement,
+  getDialogContent,
+  getDialogSaveButton,
+  getDialogTitle,
+  getSelectElements,
+  getSelectItemElementsForSelect,
+  getTextInputs,
+} from 'web/components/testing';
 
 import ReportFormatComponent from '../component';
 
@@ -91,7 +94,7 @@ describe('Report Config Component tests', () => {
       store: true,
     });
 
-    const {baseElement} = render(
+    render(
       <ReportFormatComponent onInteraction={handleInteraction}>
         {children}
       </ReportFormatComponent>,
@@ -99,20 +102,23 @@ describe('Report Config Component tests', () => {
     editClick({id: 'rc123'});
 
     await wait();
-    expect(baseElement).toBeVisible();
 
     expect(getReportConfig).toHaveBeenCalledWith({
       id: 'rc123',
     });
     expect(getAllReportFormats).toHaveBeenCalledWith();
 
-    const titleBar = getByTestId(baseElement, 'dialog-title-bar');
-    expect(titleBar).toHaveTextContent('Edit Report Config test report config');
-    const content = getByTestId(baseElement, 'save-dialog-content');
-    expect(content).toHaveTextContent('test report format');
-    expect(content).toHaveTextContent('test param');
+    expect(getDialogTitle()).toHaveTextContent(
+      'Edit Report Config test report config',
+    );
+    const content = getDialogContent();
+    const inputs = getTextInputs(content);
+    expect(inputs[0]).toHaveValue('test report config');
 
-    const saveButton = getByTestId(baseElement, 'dialog-save-button');
+    const select = getSelectElements(content);
+    expect(select[0]).toHaveValue('test report format');
+
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(saveReportConfig).toHaveBeenCalledWith({
@@ -176,7 +182,7 @@ describe('Report Config Component tests', () => {
       store: true,
     });
 
-    const {baseElement} = render(
+    render(
       <ReportFormatComponent onInteraction={handleInteraction}>
         {children}
       </ReportFormatComponent>,
@@ -184,31 +190,24 @@ describe('Report Config Component tests', () => {
     createClick();
 
     await wait();
-    expect(baseElement).toMatchSnapshot();
 
     expect(getAllReportFormats).toHaveBeenCalledWith();
 
-    const titleBar = getByTestId(baseElement, 'dialog-title-bar');
-    expect(titleBar).toHaveTextContent('New Report Config');
-    const content = getByTestId(baseElement, 'save-dialog-content');
+    expect(getDialogTitle()).toHaveTextContent('New Report Config');
+    const content = getDialogContent();
+
+    const selects = getSelectElements(content);
 
     // No report format selected at start
-    expect(content).not.toHaveTextContent('test report format');
+    expect(selects[0]).not.toHaveTextContent('test report format');
     // No params before report format has been selected
     expect(content).not.toHaveTextContent('test param');
 
     // Choose report format
-    const comboBoxes = getAllByRole(content, 'combobox');
-    fireEvent.click(getByTestId(comboBoxes[0], 'select-open-button'));
-    const menuId = comboBoxes[0].getAttribute('aria-owns');
-    const menuItems = getAllByTestId(
-      baseElement.querySelector('#' + menuId),
-      'select-item',
-    );
-    fireEvent.click(menuItems[0]);
-    await wait();
+    const items = await getSelectItemElementsForSelect(selects[0]);
+    await clickElement(items[0]);
 
-    const saveButton = getByTestId(baseElement, 'dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(createReportConfig).toHaveBeenCalledWith({
