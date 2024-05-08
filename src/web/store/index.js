@@ -23,13 +23,20 @@ import {
 
 import logger from 'redux-logger';
 
+import Rejection from 'gmp/http/rejection';
+
 import {isDate} from 'gmp/models/date';
 import {isEvent} from 'gmp/models/event';
 
 import rootReducer from './reducers';
 
+const isError = obj => obj instanceof Error || obj instanceof Rejection;
+
 const isImmutable = value =>
-  isDate(value) || isEvent(value) || isImmutableDefault(value);
+  isDate(value) ||
+  isEvent(value) ||
+  isError(value) ||
+  isImmutableDefault(value);
 
 const configureStore = ({debug = false, testing = false}) => {
   return reduxConfigureStore({
