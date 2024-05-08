@@ -53,7 +53,7 @@
     "history": "^4.10.1",
     "hoist-non-react-statics": "^3.3.2",
     "i18next": "^23.11.3",
-    "i18next-xhr-backend": "3.2.2",
+    "i18next-http-backend": "^2.5.1",
     "ical.js": "^2.0.0",
     "memoize-one": "^6.0.0",
     "moment": "^2.30.1",

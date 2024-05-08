@@ -17,7 +17,7 @@
  */
 
 import i18next from 'i18next';
-import XHRBackend from 'i18next-xhr-backend';
+import HttpBackend from 'i18next-http-backend';
 
 import logger from 'gmp/log';
 
@@ -73,7 +73,7 @@ i18next.on('languageChanged', lang => {
 });
 
 export const initLocale = ({
-  backend = XHRBackend,
+  backend = HttpBackend,
   detector = Detector,
   options = I18N_OPTIONS,
 } = {}) => i18next.use(backend).use(detector).init(options);
