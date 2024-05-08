@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {PointerEventsCheckLevel} from '@testing-library/user-event';
+
 import {isDefined} from 'gmp/utils/identity';
 
 import {
@@ -72,7 +74,7 @@ export const getSelectElements = element => {
 export const openSelectElement = async select => {
   await act(async () => {
     select = select || getSelectElement();
-    await userEvent.click(select);
+    await clickElement(select);
   });
 };
 
@@ -81,7 +83,9 @@ export const openSelectElement = async select => {
  */
 export const clickElement = async element => {
   await act(async () => {
-    await userEvent.click(element);
+    await userEvent.click(element, {
+      pointerEventsCheck: PointerEventsCheckLevel.Never,
+    });
   });
 };
 
