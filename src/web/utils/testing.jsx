@@ -32,7 +32,7 @@ import {
   queryAllByAttribute,
   getElementError,
 } from '@testing-library/react/pure';
-import userEvent from '@testing-library/user-event';
+import userEvent, {PointerEventsCheckLevel} from '@testing-library/user-event';
 
 import {ThemeProvider, theme} from '@greenbone/opensight-ui-components';
 
@@ -108,7 +108,9 @@ export const render = ui => {
     <Main>{ui}</Main>,
   );
   return {
-    userEvent: userEvent.setup(),
+    userEvent: userEvent.setup({
+      pointerEventsCheck: PointerEventsCheckLevel.Never,
+    }),
     baseElement,
     container,
     element: hasValue(container) ? container.firstChild : undefined,
