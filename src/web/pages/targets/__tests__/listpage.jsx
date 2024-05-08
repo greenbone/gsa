@@ -31,6 +31,17 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
+import {
+  clickElement,
+  getCheckBoxes,
+  getPowerFilter,
+  getSelectElement,
+  getSelectItemElementsForSelect,
+  getTableBody,
+  getTableFooter,
+  getTextInputs,
+} from 'web/components/testing';
+
 import TargetPage, {ToolBarIcons} from '../listpage';
 
 let currentSettings;
@@ -137,10 +148,10 @@ describe('TargetPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('target', defaultSettingfilter),
+      defaultFilterLoadingActions.success('target', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -160,8 +171,9 @@ describe('TargetPage tests', () => {
 
     await wait();
 
-    const inputs = baseElement.querySelectorAll('input');
-    const selects = screen.getAllByTestId('select-selected-value');
+    const powerFilter = getPowerFilter();
+    const select = getSelectElement(powerFilter);
+    const inputs = getTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Targets')[0]).toBeInTheDocument();
@@ -176,8 +188,8 @@ describe('TargetPage tests', () => {
     ).toBeInTheDocument();
     expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(select).toHaveAttribute('title', 'Loaded filter');
+    expect(select).toHaveValue('--');
 
     // Table
     const header = baseElement.querySelectorAll('th');
@@ -205,6 +217,7 @@ describe('TargetPage tests', () => {
     expect(screen.getAllByTitle('Clone Target')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Export Target')[0]).toBeInTheDocument();
   });
+
   test('should allow to bulk action on page contents', async () => {
     const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
@@ -237,10 +250,10 @@ describe('TargetPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('target', defaultSettingfilter),
+      defaultFilterLoadingActions.success('target', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -261,23 +274,15 @@ describe('TargetPage tests', () => {
     await wait();
 
     // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    await clickElement(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
-    const deleteIcon = screen.getAllByTitle('Move page contents to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
+    const deleteIcon = screen.getAllByTitle(
+      'Move page contents to trashcan',
+    )[0];
+    await clickElement(deleteIcon);
     expect(deleteByFilter).toHaveBeenCalled();
   });
 
@@ -314,10 +319,10 @@ describe('TargetPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('target', defaultSettingfilter),
+      defaultFilterLoadingActions.success('target', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -333,43 +338,30 @@ describe('TargetPage tests', () => {
       entitiesLoadingActions.success([target], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<TargetPage />);
+    render(<TargetPage />);
 
     await wait();
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[1]);
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to selection');
-
-    const inputs = element.querySelectorAll('input');
+    // change to apply to selection
+    const tableFooter = getTableFooter();
+    const select = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(select);
+    await clickElement(selectItems[1]);
+    expect(select).toHaveValue('Apply to selection');
 
     // select an target
-    fireEvent.click(inputs[1]);
-    await wait();
+    const tableBody = getTableBody();
+    const inputs = getCheckBoxes(tableBody);
+    await clickElement(inputs[1]);
 
     // export selected target
-    const exportIcon = screen.getAllByTitle('Export selection');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getAllByTitle('Export selection')[0];
+    await clickElement(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected target to trashcan
-    const deleteIcon = screen.getAllByTitle('Move selection to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
+    const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
+    await clickElement(deleteIcon);
     expect(deleteByIds).toHaveBeenCalled();
   });
 
@@ -429,35 +421,21 @@ describe('TargetPage tests', () => {
 
     await wait();
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[2]);
-
-    await wait();
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to all filtered');
+    // change to all filtered
+    const tableFooter = getTableFooter();
+    const select = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(select);
+    await clickElement(selectItems[2]);
+    expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered targets
-    const exportIcon = screen.getAllByTitle('Export all filtered');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getAllByTitle('Export all filtered')[0];
+    await clickElement(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered targets to trashcan
-    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
+    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
+    await clickElement(deleteIcon);
     expect(deleteByFilter).toHaveBeenCalled();
   });
 });
