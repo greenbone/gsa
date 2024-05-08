@@ -29,6 +29,7 @@ import useGmp from 'web/utils/useGmp';
 
 import LogoutIcon from 'web/components/icon/logouticon';
 import MySettingsIcon from 'web/components/icon/mysettingsicon';
+import LanguageSwitch from './languageswitch';
 
 const Header = () => {
   const gmp = useGmp();
@@ -69,6 +70,7 @@ const Header = () => {
   ];
   return (
     <AppHeader
+      languageSwitch={<LanguageSwitch />}
       menuPoints={menuPoints}
       isLoggedIn={loggedIn}
       username={username}
@@ -78,5 +80,3 @@ const Header = () => {
 };
 
 export default Header;
-
-// vim: set ts=2 sw=2 tw=80:
