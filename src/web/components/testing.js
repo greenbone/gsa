@@ -277,3 +277,11 @@ export const getCheckBoxes = element => {
   element = getElementOrDocument(element);
   return element.querySelectorAll('.mantine-Checkbox-input');
 };
+
+/**
+ * Get file input elements
+ */
+export const getFileInputs = element => {
+  element = getElementOrDocument(element);
+  return element.querySelectorAll('.mantine-FileInput-input');
+};
