@@ -19,13 +19,13 @@ import {describe, test, expect} from '@gsa/testing';
 
 import date from '../date';
 
-import Event from '../event';
+import Event, {isEvent} from '../event';
 
 const ICAL_FORMAT = 'YYYYMMDD[T]HHmmss[Z]';
 const ICAL_FORMAT_TZ = 'YYYYMMDD[T]HHmmss';
 
 describe('Event model tests', () => {
-  test('should parse event start from icalendar without timzeone', () => {
+  test('should parse event start from icalendar without timezone', () => {
     const icalendar = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
@@ -212,5 +212,30 @@ END:VCALENDAR
     expect(next.isSame(expected)).toEqual(true);
 
     process.env.TZ = tz;
+  });
+});
+
+describe('isEvent tests', () => {
+  test('should return true for valid event', () => {
+    const icalendar = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Greenbone.net//NONSGML Greenbone Security Manager 8.0.0//EN
+BEGIN:VEVENT
+UID:c35f82f1-7798-4b84-b2c4-761a33068956
+DTSTAMP:20190715T124352Z
+DTSTART:20190716T040000
+END:VEVENT
+END:VCALENDAR
+`;
+
+    const event = Event.fromIcal(icalendar, 'Europe/Berlin');
+    expect(isEvent(event)).toEqual(true);
+  });
+
+  test('should return false for invalid event', () => {
+    expect(isEvent({})).toEqual(false);
+    expect(isEvent(false)).toEqual(false);
+    expect(isEvent(null)).toEqual(false);
+    expect(isEvent(undefined)).toEqual(false);
   });
 });
