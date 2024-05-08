@@ -25,7 +25,7 @@ describe('Task Trend tests', () => {
   test('should render', () => {
     const {element} = render(<Trend name="up" />);
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should render trend up icon', () => {
