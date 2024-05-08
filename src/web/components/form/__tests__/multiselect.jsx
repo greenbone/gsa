@@ -18,10 +18,11 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, screen, userEvent} from 'web/utils/testing';
+import {render, screen} from 'web/utils/testing';
 
 import {
   changeSelectInput,
+  clickElement,
   getMultiSelectElement,
   getSelectElement,
   getSelectItemElements,
@@ -118,7 +119,7 @@ describe('MultiSelect tests', () => {
     const domItems = getSelectItemElements();
     expect(domItems.length).toEqual(2);
 
-    await userEvent.click(domItems[1]);
+    await clickElement(domItems[1]);
 
     expect(onChange).toHaveBeenCalledWith(['foo'], undefined);
   });
@@ -144,7 +145,7 @@ describe('MultiSelect tests', () => {
     const domItems = getSelectItemElements();
     expect(domItems.length).toEqual(2);
 
-    await userEvent.click(domItems[0]);
+    await clickElement(domItems[0]);
 
     expect(onChange).toHaveBeenCalledWith(['bar'], 'abc');
   });
@@ -235,7 +236,7 @@ describe('MultiSelect tests', () => {
     expect(selectedItems.length).toEqual(2);
 
     const deleteIcon = selectedItems[0].querySelector('button');
-    await userEvent.click(deleteIcon);
+    await clickElement(deleteIcon);
 
     expect(onChange).toHaveBeenCalledWith(['foo'], undefined);
   });
