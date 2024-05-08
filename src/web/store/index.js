@@ -24,10 +24,12 @@ import {
 import logger from 'redux-logger';
 
 import {isDate} from 'gmp/models/date';
+import {isEvent} from 'gmp/models/event';
 
 import rootReducer from './reducers';
 
-const isImmutable = value => isDate(value) || isImmutableDefault(value);
+const isImmutable = value =>
+  isDate(value) || isEvent(value) || isImmutableDefault(value);
 
 const configureStore = ({debug = false, testing = false}) => {
   return reduxConfigureStore({
@@ -37,12 +39,7 @@ const configureStore = ({debug = false, testing = false}) => {
       const middlewares = getDefaultMiddleware({
         serializableCheck: false,
         // enable immutable check only in development. not in testing and production
-        immutableCheck: testing
-          ? false
-          : {
-              isImmutable,
-              warnAfter: 100,
-            },
+        immutableCheck: testing ? false : {isImmutable, warnAfter: 200},
       });
       if (debug) {
         middlewares.concat(logger);

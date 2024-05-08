@@ -433,6 +433,11 @@ class Event {
   }
 }
 
-export default Event;
+export const isEvent = obj => {
+  return (
+    obj instanceof Event ||
+    (obj != null && obj.event != null && obj.timezone != null)
+  );
+};
 
-// vim: set ts=2 sw=2 tw=80:
+export default Event;
