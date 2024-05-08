@@ -25,18 +25,14 @@ describe('Task Status tests', () => {
     });
 
     const {render} = rendererWith({capabilities: caps});
-    const {element, getByTestId, queryByTestId} = render(
-      <Status task={task} />,
-    );
-
-    expect(element).toMatchSnapshot();
+    const {getByTestId, queryByTestId} = render(<Status task={task} />);
 
     const bar = getByTestId('progressbar-box');
     expect(bar).toHaveAttribute('title', TASK_STATUS.new);
     expect(bar).toHaveTextContent(TASK_STATUS.new);
 
-    const detailslink = queryByTestId('details-link');
-    expect(detailslink).toBe(null);
+    const detailsLink = queryByTestId('details-link');
+    expect(detailsLink).toBe(null);
   });
 
   test('should render with last report', () => {

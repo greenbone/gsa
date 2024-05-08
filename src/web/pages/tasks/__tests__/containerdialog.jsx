@@ -5,21 +5,30 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 
+import Task from 'gmp/models/task';
+
 import {render, fireEvent} from 'web/utils/testing';
 
+import {
+  changeInputValue,
+  getDialog,
+  getDialogCloseButton,
+  getDialogSaveButton,
+} from 'web/components/testing';
+
 import ContainerDialog from '../containerdialog';
-import Task from 'gmp/models/task';
 
 describe('ContainerDialog tests', () => {
   test('should render create dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {baseElement} = render(
+    const {queryByName} = render(
       <ContainerDialog onClose={handleClose} onSave={handleSave} />,
     );
 
-    expect(baseElement).toBeVisible();
+    expect(getDialog()).toBeInTheDocument();
+    expect(queryByName('in_assets')).not.toBeInTheDocument();
   });
 
   test('should render edit dialog', () => {
@@ -27,18 +36,19 @@ describe('ContainerDialog tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {baseElement} = render(
+    const {queryByName} = render(
       <ContainerDialog task={task} onClose={handleClose} onSave={handleSave} />,
     );
 
-    expect(baseElement).toBeVisible();
+    expect(getDialog()).toBeInTheDocument();
+    expect(queryByName('in_assets')).toBeInTheDocument();
   });
 
   test('should change fields in create dialog', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByName, getByTestId} = render(
+    const {getByName} = render(
       <ContainerDialog
         name="foo"
         comment="bar"
@@ -48,12 +58,12 @@ describe('ContainerDialog tests', () => {
     );
 
     const nameInput = getByName('name');
-    fireEvent.change(nameInput, {target: {value: 'ipsum'}});
+    changeInputValue(nameInput, 'ipsum');
 
     const commentInput = getByName('comment');
-    fireEvent.change(commentInput, {target: {value: 'lorem'}});
+    changeInputValue(commentInput, 'lorem');
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -69,7 +79,7 @@ describe('ContainerDialog tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByName, queryAllByName, getByTestId} = render(
+    const {getByName, getAllByName} = render(
       <ContainerDialog
         task={task}
         name="foo"
@@ -80,15 +90,15 @@ describe('ContainerDialog tests', () => {
     );
 
     const nameInput = getByName('name');
-    fireEvent.change(nameInput, {target: {value: 'ipsum'}});
+    changeInputValue(nameInput, 'ipsum');
 
     const commentInput = getByName('comment');
-    fireEvent.change(commentInput, {target: {value: 'lorem'}});
+    changeInputValue(commentInput, 'lorem');
 
-    const [, inAssetsNoRadio] = queryAllByName('in_assets');
+    const [, inAssetsNoRadio] = getAllByName('in_assets');
     fireEvent.click(inAssetsNoRadio);
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
@@ -103,7 +113,7 @@ describe('ContainerDialog tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <ContainerDialog
         name="foo"
         comment="bar"
@@ -112,8 +122,7 @@ describe('ContainerDialog tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
-
+    const closeButton = getDialogCloseButton();
     fireEvent.click(closeButton);
 
     expect(handleClose).toHaveBeenCalled();
