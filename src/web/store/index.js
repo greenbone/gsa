@@ -43,13 +43,13 @@ const configureStore = ({debug = false, testing = false}) => {
     reducer: rootReducer,
     middleware: getDefaultMiddleware => {
       // in production getDefaultMiddleware only creates the redux thunk middleware
-      const middlewares = getDefaultMiddleware({
+      let middlewares = getDefaultMiddleware({
         serializableCheck: false,
         // enable immutable check only in development. not in testing and production
         immutableCheck: testing ? false : {isImmutable, warnAfter: 200},
       });
       if (debug) {
-        middlewares.concat(logger);
+        middlewares = middlewares.concat(logger);
       }
       return middlewares;
     },
