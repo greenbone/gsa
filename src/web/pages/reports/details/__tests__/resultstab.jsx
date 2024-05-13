@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
 import React from 'react';
 import {setLocale} from 'gmp/locale/lang';
 
@@ -117,7 +118,7 @@ let getResults;
 beforeEach(() => {
   // mock gmp commands
 
-  getResults = vi.fn().mockResolvedValue({
+  getResults = testing.fn().mockResolvedValue({
     data: results,
     meta: {
       filter: Filter.fromString(),
@@ -125,7 +126,7 @@ beforeEach(() => {
     },
   });
 
-  getFilters = vi.fn().mockReturnValue(
+  getFilters = testing.fn().mockReturnValue(
     Promise.resolve({
       data: [],
       meta: {
@@ -135,7 +136,7 @@ beforeEach(() => {
     }),
   );
 
-  getDashboardSetting = vi.fn().mockResolvedValue({
+  getDashboardSetting = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -143,7 +144,7 @@ beforeEach(() => {
     },
   });
 
-  getAggregates = vi.fn().mockResolvedValue({
+  getAggregates = testing.fn().mockResolvedValue({
     data: [],
     meta: {
       filter: Filter.fromString(),
@@ -151,20 +152,20 @@ beforeEach(() => {
     },
   });
 
-  currentSettings = vi.fn().mockResolvedValue({
+  currentSettings = testing.fn().mockResolvedValue({
     foo: 'bar',
   });
 });
 
 describe('Report Results Tab tests', () => {
   test('should render Results Tab with compliance information', async () => {
-    const reload = vi.fn();
-    const onFilterAddLogLevelClick = vi.fn();
-    const onFilterDecreaseMinQoDClick = vi.fn();
-    const onFilterEditClick = vi.fn();
-    const onFilterRemoveClick = vi.fn();
-    const onFilterRemoveSeverityClick = vi.fn();
-    const onTargetEditClick = vi.fn();
+    const reload = testing.fn();
+    const onFilterAddLogLevelClick = testing.fn();
+    const onFilterDecreaseMinQoDClick = testing.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterRemoveClick = testing.fn();
+    const onFilterRemoveSeverityClick = testing.fn();
+    const onTargetEditClick = testing.fn();
 
     const gmp = {
       results: {
@@ -270,13 +271,13 @@ describe('Report Results Tab tests', () => {
   });
 
   test('should render Results Tab with compliance information', async () => {
-    const reload = vi.fn();
-    const onFilterAddLogLevelClick = vi.fn();
-    const onFilterDecreaseMinQoDClick = vi.fn();
-    const onFilterEditClick = vi.fn();
-    const onFilterRemoveClick = vi.fn();
-    const onFilterRemoveSeverityClick = vi.fn();
-    const onTargetEditClick = vi.fn();
+    const reload = testing.fn();
+    const onFilterAddLogLevelClick = testing.fn();
+    const onFilterDecreaseMinQoDClick = testing.fn();
+    const onFilterEditClick = testing.fn();
+    const onFilterRemoveClick = testing.fn();
+    const onFilterRemoveSeverityClick = testing.fn();
+    const onTargetEditClick = testing.fn();
 
     const gmp = {
       results: {

@@ -124,8 +124,8 @@ describe('Audit Report Hosts Tab tests', () => {
   test('should render Audit Report Hosts Tab', () => {
     const {hosts} = getMockAuditReport();
 
-    const onSortChange = vi.fn();
-    const onInteraction = vi.fn();
+    const onSortChange = testing.fn();
+    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       gmp,
