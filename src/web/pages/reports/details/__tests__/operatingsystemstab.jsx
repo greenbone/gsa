@@ -105,8 +105,8 @@ describe('Audit Report Operating Systems Tab tests', () => {
   test('should render Audit Report Operating Systems Tab', () => {
     const {operatingsystems} = getMockAuditReport();
 
-    const onSortChange = vi.fn();
-    const onInteraction = vi.fn();
+    const onSortChange = testing.fn();
+    const onInteraction = testing.fn();
 
     const {render, store} = rendererWith({
       router: true,

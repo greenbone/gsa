@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 
@@ -35,18 +36,18 @@ import AuditReportsPage from '../auditreportslistpage';
 
 setLocale('en');
 
-window.URL.createObjectURL = vi.fn();
+window.URL.createObjectURL = testing.fn();
 
 const {entity} = getMockAuditReport();
 
 const reloadInterval = 1;
 const manualUrl = 'test/';
 
-const currentSettings = vi.fn().mockResolvedValue({
+const currentSettings = testing.fn().mockResolvedValue({
   foo: 'bar',
 });
 
-const getFilters = vi.fn().mockReturnValue(
+const getFilters = testing.fn().mockReturnValue(
   Promise.resolve({
     data: [],
     meta: {
@@ -56,7 +57,7 @@ const getFilters = vi.fn().mockReturnValue(
   }),
 );
 
-const getDashboardSetting = vi.fn().mockResolvedValue({
+const getDashboardSetting = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -64,11 +65,11 @@ const getDashboardSetting = vi.fn().mockResolvedValue({
   },
 });
 
-const getUserSetting = vi.fn().mockResolvedValue({
+const getUserSetting = testing.fn().mockResolvedValue({
   filter: null,
 });
 
-const getComplianceAggregates = vi.fn().mockResolvedValue({
+const getComplianceAggregates = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -76,7 +77,7 @@ const getComplianceAggregates = vi.fn().mockResolvedValue({
   },
 });
 
-const getReports = vi.fn().mockResolvedValue({
+const getReports = testing.fn().mockResolvedValue({
   data: [entity],
   meta: {
     filter: Filter.fromString(),
@@ -84,7 +85,7 @@ const getReports = vi.fn().mockResolvedValue({
   },
 });
 
-const getAll = vi.fn().mockResolvedValue({
+const getAll = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -92,7 +93,7 @@ const getAll = vi.fn().mockResolvedValue({
   },
 });
 
-const getReportFormats = vi.fn().mockResolvedValue({
+const getReportFormats = testing.fn().mockResolvedValue({
   data: [],
   meta: {
     filter: Filter.fromString(),
@@ -202,11 +203,11 @@ describe('AuditReportsPage tests', () => {
   });
 
   test('should call commands for bulk actions', async () => {
-    const deleteByFilter = vi.fn().mockResolvedValue({
+    const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 
-    const exportByFilter = vi.fn().mockResolvedValue({
+    const exportByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
     });
 

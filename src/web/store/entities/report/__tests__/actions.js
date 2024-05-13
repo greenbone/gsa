@@ -951,11 +951,11 @@ describe('loadAuditReport function tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -995,11 +995,11 @@ describe('loadAuditReport function tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -1044,11 +1044,11 @@ describe('loadAuditReport function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue([{id: 'foo'}]);
+    const get = testing.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       auditreport: {
@@ -1073,11 +1073,11 @@ describe('loadAuditReport function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockRejectedValue('An Error');
+    const get = testing.fn().mockRejectedValue('An Error');
 
     const gmp = {
       auditreport: {
@@ -1114,11 +1114,11 @@ describe('report loadAuditReportIfNeeded function tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue({data: {foo: 'bar'}});
+    const get = testing.fn().mockResolvedValue({data: {foo: 'bar'}});
 
     const gmp = {
       auditreport: {
@@ -1160,11 +1160,11 @@ describe('report loadAuditReportIfNeeded function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue([{id: 'foo'}]);
+    const get = testing.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       auditreport: {
@@ -1188,11 +1188,11 @@ describe('report loadAuditReportIfNeeded function tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue({data: {foo: 'bar'}});
+    const get = testing.fn().mockResolvedValue({data: {foo: 'bar'}});
 
     const gmp = {
       auditreport: {
@@ -1237,11 +1237,11 @@ describe('report loadAuditReportIfNeeded function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockResolvedValue([{id: 'foo'}]);
+    const get = testing.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       auditreport: {
@@ -1266,11 +1266,11 @@ describe('report loadAuditReportIfNeeded function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const get = vi.fn().mockRejectedValue('An Error');
+    const get = testing.fn().mockRejectedValue('An Error');
 
     const gmp = {
       auditreport: {
@@ -1311,9 +1311,9 @@ describe('loadAuditReportWithThreshold tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const auditreport = {
       report: {
@@ -1325,7 +1325,7 @@ describe('loadAuditReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: auditreport,
     });
 
@@ -1370,9 +1370,9 @@ describe('loadAuditReportWithThreshold tests', () => {
         [id]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const auditreport = {
       report: {
@@ -1384,7 +1384,7 @@ describe('loadAuditReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: auditreport,
     });
 
@@ -1451,9 +1451,9 @@ describe('loadAuditReportWithThreshold tests', () => {
         [reportIdentifier(id, filter)]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const auditreport = {
       report: {
@@ -1465,7 +1465,7 @@ describe('loadAuditReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: auditreport,
     });
 
@@ -1514,9 +1514,9 @@ describe('loadAuditReportWithThreshold tests', () => {
         [reportIdentifier(id, filter)]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const auditreport = {
       report: {
@@ -1528,7 +1528,7 @@ describe('loadAuditReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: auditreport,
     });
 
@@ -1591,9 +1591,9 @@ describe('loadAuditReportWithThreshold tests', () => {
         [id]: true,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const auditreport = {
       report: {
@@ -1605,7 +1605,7 @@ describe('loadAuditReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: auditreport,
     });
 
@@ -1640,9 +1640,9 @@ describe('loadAuditReportWithThreshold tests', () => {
         [reportIdentifier(id, filter)]: true,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
     const auditreport = {
       report: {
@@ -1654,7 +1654,7 @@ describe('loadAuditReportWithThreshold tests', () => {
       },
     };
 
-    const get = vi.fn().mockResolvedValue({
+    const get = testing.fn().mockResolvedValue({
       data: auditreport,
     });
 
@@ -1694,11 +1694,11 @@ describe('loadDeltaAuditReport function tests', () => {
         [identifier]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const getDelta = vi.fn().mockResolvedValue({
+    const getDelta = testing.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -1749,11 +1749,11 @@ describe('loadDeltaAuditReport function tests', () => {
         [identifier]: false,
       },
     });
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const getDelta = vi.fn().mockResolvedValue({
+    const getDelta = testing.fn().mockResolvedValue({
       data: {foo: 'bar'},
     });
 
@@ -1804,11 +1804,11 @@ describe('loadDeltaAuditReport function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const getDelta = vi.fn().mockResolvedValue([{id: 'foo'}]);
+    const getDelta = testing.fn().mockResolvedValue([{id: 'foo'}]);
 
     const gmp = {
       auditreport: {
@@ -1835,11 +1835,11 @@ describe('loadDeltaAuditReport function tests', () => {
       },
     });
 
-    const getState = vi.fn().mockReturnValue(rootState);
+    const getState = testing.fn().mockReturnValue(rootState);
 
-    const dispatch = vi.fn();
+    const dispatch = testing.fn();
 
-    const getDelta = vi.fn().mockRejectedValue('An Error');
+    const getDelta = testing.fn().mockRejectedValue('An Error');
 
     const gmp = {
       auditreport: {

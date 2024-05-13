@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
 import React from 'react';
 
 import Capabilities from 'gmp/capabilities/capabilities';
@@ -34,9 +35,9 @@ const manualUrl = 'test/';
 
 describe('Details Filter Dialog for Audit report', () => {
   test('should render compliance levels filter group', () => {
-    const onFilterChanged = vi.fn();
-    const onFilterCreated = vi.fn();
-    const onCloseClick = vi.fn();
+    const onFilterChanged = testing.fn();
+    const onFilterCreated = testing.fn();
+    const onCloseClick = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=100 min_qod=70 first=1 sort=compliant',
@@ -82,9 +83,9 @@ describe('Details Filter Dialog for Audit report', () => {
   });
 
   test('should render severity levels filter group', () => {
-    const onFilterChanged = vi.fn();
-    const onFilterCreated = vi.fn();
-    const onCloseClick = vi.fn();
+    const onFilterChanged = testing.fn();
+    const onFilterCreated = testing.fn();
+    const onCloseClick = testing.fn();
 
     const filter = Filter.fromString(
       'apply_overrides=0 levels=hmlg rows=100 min_qod=70 first=1 sort=severity',

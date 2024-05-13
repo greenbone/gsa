@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
+import {describe, test, expect, testing} from '@gsa/testing';
 import React from 'react';
 import {rendererWith} from 'web/utils/testing';
 import AuditRow from '../auditreportrow';
@@ -26,8 +26,8 @@ import {getMockAuditReport} from 'web/pages/reports/__mocks__/mockauditreport';
 describe('Audit report row', () => {
   test('should render row for Audit report', () => {
     const {entity} = getMockAuditReport();
-    const onReportDeleteClick = vi.fn();
-    const onReportDeltaSelect = vi.fn();
+    const onReportDeleteClick = testing.fn();
+    const onReportDeltaSelect = testing.fn();
 
     const {render, store} = rendererWith({
       capabilities: true,
