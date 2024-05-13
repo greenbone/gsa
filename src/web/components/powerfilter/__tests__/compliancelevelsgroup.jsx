@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import {describe, test, expect, testing} from '@gsa/testing';
 import {render, fireEvent} from 'web/utils/testing';
 
 import ComplianceLevelsFilterGroup from 'web/components/powerfilter/compliancelevelsgroup';
@@ -24,8 +25,8 @@ import Filter from 'gmp/models/filter';
 describe('ComplianceLevelsFilterGroup audit reports tests', () => {
   test('should call change handler', () => {
     const filter = Filter.fromString('report_compliance_levels=');
-    const handleChange = vi.fn();
-    const handleRemove = vi.fn();
+    const handleChange = testing.fn();
+    const handleRemove = testing.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -43,8 +44,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
 
   test('should check checkbox', () => {
     const filter = Filter.fromString('report_compliance_levels=yn');
-    const handleChange = vi.fn();
-    const handleRemove = vi.fn();
+    const handleChange = testing.fn();
+    const handleRemove = testing.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -62,8 +63,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
   test('should uncheck checkbox', () => {
     const filter1 = Filter.fromString('report_compliance_levels=yni');
     const filter2 = Filter.fromString('report_compliance_levels=yn');
-    const handleChange = vi.fn();
-    const handleRemove = vi.fn();
+    const handleChange = testing.fn();
+    const handleRemove = testing.fn();
     const {element, rerender} = render(
       <ComplianceLevelsFilterGroup
         filter={filter1}
@@ -93,8 +94,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
 
   test('should be unchecked by default', () => {
     const filter = Filter.fromString();
-    const handleChange = vi.fn();
-    const handleRemove = vi.fn();
+    const handleChange = testing.fn();
+    const handleRemove = testing.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -113,8 +114,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
 
   test('should call remove handler', () => {
     const filter = Filter.fromString('report_compliance_levels=y');
-    const handleChange = vi.fn();
-    const handleRemove = vi.fn();
+    const handleChange = testing.fn();
+    const handleRemove = testing.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -135,8 +136,8 @@ describe('ComplianceLevelsFilterGroup audit reports tests', () => {
 describe('ComplianceLevelsFilterGroup audit results tests', () => {
   test('should call change handler', () => {
     const filter = Filter.fromString('compliance_levels=');
-    const handleChange = vi.fn();
-    const handleRemove = vi.fn();
+    const handleChange = testing.fn();
+    const handleRemove = testing.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -155,8 +156,8 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
 
   test('should check checkbox', () => {
     const filter = Filter.fromString('compliance_levels=yn');
-    const handleChange = vi.fn();
-    const handleRemove = vi.fn();
+    const handleChange = testing.fn();
+    const handleRemove = testing.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -175,8 +176,8 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
   test('should uncheck checkbox', () => {
     const filter1 = Filter.fromString('compliance_levels=yni');
     const filter2 = Filter.fromString('compliance_levels=yn');
-    const handleChange = vi.fn();
-    const handleRemove = vi.fn();
+    const handleChange = testing.fn();
+    const handleRemove = testing.fn();
     const {element, rerender} = render(
       <ComplianceLevelsFilterGroup
         filter={filter1}
@@ -208,8 +209,8 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
 
   test('should be unchecked by default', () => {
     const filter = Filter.fromString();
-    const handleChange = vi.fn();
-    const handleRemove = vi.fn();
+    const handleChange = testing.fn();
+    const handleRemove = testing.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
@@ -229,8 +230,8 @@ describe('ComplianceLevelsFilterGroup audit results tests', () => {
 
   test('should call remove handler', () => {
     const filter = Filter.fromString('compliance_levels=y');
-    const handleChange = vi.fn();
-    const handleRemove = vi.fn();
+    const handleChange = testing.fn();
+    const handleRemove = testing.fn();
     const {element} = render(
       <ComplianceLevelsFilterGroup
         filter={filter}
