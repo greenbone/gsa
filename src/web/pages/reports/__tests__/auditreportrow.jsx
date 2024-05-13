@@ -49,7 +49,6 @@ describe('Audit report row', () => {
       </table>,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
     const bars = getAllByTestId('progressbar-box');
     const links = baseElement.querySelectorAll('a');
     const rows = baseElement.querySelectorAll('tr');

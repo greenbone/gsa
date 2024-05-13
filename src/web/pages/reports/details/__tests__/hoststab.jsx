@@ -151,7 +151,6 @@ describe('Audit Report Hosts Tab tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
     const images = baseElement.querySelectorAll('img');
     const links = baseElement.querySelectorAll('a');
     const header = baseElement.querySelectorAll('th');
