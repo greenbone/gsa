@@ -42,8 +42,10 @@ const method_data_fields = [
   'subject',
   'notice',
   'notice_report_format',
+  'notice_report_config',
   'message',
   'notice_attach_format',
+  'notice_attach_config',
   'message_attach',
   'recipient_credential',
   'submethod', // FIXME remove constant submethod!!!
@@ -57,20 +59,24 @@ const method_data_fields = [
   'pkcs12_credential',
   'verinice_server_url',
   'verinice_server_credential',
+  'verinice_server_report_config',
   'verinice_server_report_format',
   'start_task_task',
   'send_host',
   'send_port',
+  'send_report_config',
   'send_report_format',
   'scp_credential',
   'scp_host',
   'scp_known_hosts',
   'scp_path',
   'scp_port',
+  'scp_report_config',
   'scp_report_format',
   'smb_credential',
   'smb_file_path',
   'smb_max_protocol',
+  'smb_report_config',
   'smb_report_format',
   'smb_share_path',
   'tp_sms_hostname',
@@ -80,6 +86,7 @@ const method_data_fields = [
   'delta_type',
   'delta_report_id',
   'report_formats',
+  'report_configs',
   'vfire_base_url',
   'vfire_credential',
   'vfire_session_type',
@@ -127,6 +134,7 @@ class AlertCommand extends EntityCommand {
       filter_id,
       method,
       report_format_ids,
+      report_config_ids,
       ...other
     } = args;
     const data = {
@@ -142,6 +150,7 @@ class AlertCommand extends EntityCommand {
       method,
       filter_id,
       'report_format_ids:': report_format_ids,
+      'report_config_ids:': report_config_ids,
     };
     log.debug('Creating new alert', args, data);
     return this.action(data);
@@ -158,6 +167,7 @@ class AlertCommand extends EntityCommand {
       filter_id,
       method,
       report_format_ids = [],
+      report_config_ids = [],
       ...other
     } = args;
     const data = {
@@ -175,6 +185,8 @@ class AlertCommand extends EntityCommand {
       filter_id,
       'report_format_ids:':
         report_format_ids.length > 0 ? report_format_ids : undefined,
+      'report_config_ids:':
+        report_config_ids.length > 0 ? report_config_ids : undefined,
     };
     log.debug('Saving alert', args, data);
     return this.action(data);
@@ -189,6 +201,10 @@ class AlertCommand extends EntityCommand {
       new_alert.report_formats = map(
         new_alert.get_report_formats_response.report_format,
         format => parseModelFromElement(format, 'reportformat'),
+      );
+      new_alert.report_configs = map(
+        new_alert.get_report_configs_response.report_config,
+        config => parseModelFromElement(config, 'reportconfig'),
       );
       new_alert.credentials = map(
         new_alert.get_credentials_response.credential,
@@ -221,6 +237,12 @@ class AlertCommand extends EntityCommand {
         format => parseModelFromElement(format, 'reportformat'),
       );
       delete edit_alert.get_report_formats_response;
+
+      edit_alert.report_configs = map(
+        edit_alert.get_report_configs_response.report_config,
+        config => parseModelFromElement(config, 'reportconfig'),
+      );
+      delete edit_alert.get_report_configs_response;
 
       edit_alert.credentials = map(
         edit_alert.get_credentials_response.credential,

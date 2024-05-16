@@ -117,6 +117,9 @@ describe('Alert Detailspage tests', () => {
       reportformats: {
         get: getEntities,
       },
+      reportconfigs: {
+        get: getEntities,
+      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -183,6 +186,9 @@ describe('Alert Detailspage tests', () => {
       reportformats: {
         get: getEntities,
       },
+      reportconfigs: {
+        get: getEntities,
+      },
       settings: {manualUrl, reloadInterval},
       user: {
         currentSettings,
@@ -221,6 +227,9 @@ describe('Alert Detailspage tests', () => {
         get: getEntities,
       },
       reportformats: {
+        get: getEntities,
+      },
+      reportconfigs: {
         get: getEntities,
       },
       settings: {manualUrl, reloadInterval},
@@ -276,6 +285,9 @@ describe('Alert Detailspage tests', () => {
         get: getEntities,
       },
       reportformats: {
+        get: getEntities,
+      },
+      reportconfigs: {
         get: getEntities,
       },
       settings: {manualUrl, reloadInterval},

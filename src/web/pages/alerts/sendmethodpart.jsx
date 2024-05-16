@@ -15,7 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useState} from 'react';
+import {selectSaveId} from 'gmp/utils/id';
+import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
 
 import _ from 'gmp/locale';
 
@@ -23,7 +25,6 @@ import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
-import {renderSelectItems} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
@@ -31,13 +32,40 @@ import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
 const SendMethodPart = ({
+  defaultReportConfigId,
+  defaultReportFormatId,
   prefix,
+  reportConfigs,
   reportFormats,
   sendHost,
   sendPort,
+  sendReportConfig,
   sendReportFormat,
+  onSave,
   onChange,
 }) => {
+  const [reportFormatIdInState, setReportFormatId] = useState(
+    selectSaveId(reportFormats, sendReportFormat),
+  );
+  const reportConfigItems = renderSelectItems(
+    reportConfigs.filter(config => {
+      return reportFormatIdInState === config.report_format._id;
+    }),
+    UNSET_VALUE,
+  );
+  const [sendConfigIdInState, setSendConfigId] = useState(
+    selectSaveId(reportConfigs, sendReportConfig, UNSET_VALUE),
+  );
+  const handleReportConfigIdChange = (value, name) => {
+    setSendConfigId(value);
+    onChange(value, name);
+  };
+  const handleReportFormatIdChange = (value, name) => {
+    setSendConfigId(UNSET_VALUE);
+    onChange(UNSET_VALUE, 'method_data_send_report_config');
+    setReportFormatId(value);
+    onChange(value, name);
+  };
   return (
     <Layout flex="column" grow="1">
       <FormGroup title={_('Send to host')}>
@@ -62,9 +90,17 @@ const SendMethodPart = ({
       <FormGroup title={_('Report')}>
         <Select
           name={prefix + 'send_report_format'}
-          value={sendReportFormat}
+          value={reportFormatIdInState}
           items={renderSelectItems(reportFormats)}
-          onChange={onChange}
+          onChange={handleReportFormatIdChange}
+        />
+        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+        <Select
+          name={prefix + 'send_report_config'}
+          id="report-config-select"
+          value={sendConfigIdInState}
+          items={reportConfigItems}
+          onChange={handleReportConfigIdChange}
         />
       </FormGroup>
     </Layout>
@@ -72,12 +108,17 @@ const SendMethodPart = ({
 };
 
 SendMethodPart.propTypes = {
+  defaultReportConfigId: PropTypes.id,
+  defaultReportFormatId: PropTypes.id,
   prefix: PropTypes.string,
+  reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
   sendHost: PropTypes.string.isRequired,
   sendPort: PropTypes.string.isRequired,
+  sendReportConfig: PropTypes.id,
   sendReportFormat: PropTypes.id,
   onChange: PropTypes.func,
+  onSave: PropTypes.func,
 };
 
 export default withPrefix(SendMethodPart);

@@ -16,7 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
+
+import {selectSaveId} from 'gmp/utils/id';
 
 import _ from 'gmp/locale';
 
@@ -51,6 +53,8 @@ import withCapabilities from 'web/utils/withCapabilities';
 import withPrefix from 'web/utils/withPrefix';
 
 const EmailMethodPart = ({
+  defaultReportConfigId,
+  defaultReportFormatId,
   capabilities,
   credentials = [],
   fromAddress,
@@ -60,23 +64,72 @@ const EmailMethodPart = ({
   notice,
   noticeAttachFormat,
   noticeReportFormat,
+  noticeAttachConfig,
+  noticeReportConfig,
   prefix,
   recipientCredential,
+  reportConfigs = [],
   reportFormats = [],
   subject,
   toAddress,
+  onSave,
   onChange,
   onCredentialChange,
   onNewCredentialClick,
 }) => {
   const taskEvent = isTaskEvent(event);
   const secinfoEvent = isSecinfoEvent(event);
-  const reportFormatItems = renderSelectItems(
+  const textReportFormatItems = renderSelectItems(
     reportFormats.filter(
       format =>
         (taskEvent && format.content_type.startsWith('text/')) || !taskEvent,
     ),
   );
+  const reportFormatItems = renderSelectItems(reportFormats);
+  const [attachFormatIdInState, setAttachFormatId] = useState(
+    selectSaveId(reportFormats, noticeAttachFormat),
+  );
+  const attachConfigItems = renderSelectItems(
+    reportConfigs.filter(config => {
+      return attachFormatIdInState === config.report_format._id;
+    }),
+    UNSET_VALUE,
+  );
+  const [attachConfigIdInState, setAttachConfigId] = useState(
+    selectSaveId(reportConfigs, noticeAttachConfig, UNSET_VALUE),
+  );
+  const handleAttachConfigIdChange = (value, name) => {
+    setAttachConfigId(value);
+    onChange(value, name);
+  };
+  const handleAttachFormatIdChange = (value, name) => {
+    setAttachConfigId(UNSET_VALUE);
+    onChange(UNSET_VALUE, 'method_data_notice_attach_config');
+    setAttachFormatId(value);
+    onChange(value, name);
+  };
+  const [reportFormatIdInState, setReportFormatId] = useState(
+    selectSaveId(reportFormats, noticeReportFormat),
+  );
+  const reportConfigItems = renderSelectItems(
+    reportConfigs.filter(config => {
+      return reportFormatIdInState === config.report_format._id;
+    }),
+    UNSET_VALUE,
+  );
+  const [reportConfigIdInState, setReportConfigId] = useState(
+    selectSaveId(reportConfigs, noticeReportConfig, UNSET_VALUE),
+  );
+  const handleReportConfigIdChange = (value, name) => {
+    setReportConfigId(value);
+    onChange(value, name);
+  };
+  const handleReportFormatIdChange = (value, name) => {
+    setReportConfigId(UNSET_VALUE);
+    onChange(UNSET_VALUE, 'method_data_notice_report_config');
+    setReportFormatId(value);
+    onChange(value, name);
+  };
   credentials = credentials.filter(email_credential_filter);
   return (
     <Layout flex="column" grow="1">
@@ -156,12 +209,23 @@ const EmailMethodPart = ({
                     <Select
                       disabled={notice !== EMAIL_NOTICE_INCLUDE}
                       name={prefix + 'notice_report_format'}
-                      value={noticeReportFormat}
-                      items={reportFormatItems}
-                      onChange={onChange}
+                      value={reportFormatIdInState}
+                      items={textReportFormatItems}
+                      onChange={handleReportFormatIdChange}
                     />
                   )}
+
+                  <label htmlFor="report-config-select">Report Config</label>
+                  <Select
+                    disabled={notice !== EMAIL_NOTICE_INCLUDE}
+                    name={prefix + 'notice_report_config'}
+                    id="report-config-select"
+                    value={reportConfigIdInState}
+                    items={reportConfigItems}
+                    onChange={handleReportConfigIdChange}
+                  />
                 </Divider>
+
                 <TextArea
                   disabled={notice !== EMAIL_NOTICE_INCLUDE}
                   name={prefix + 'message'}
@@ -197,11 +261,20 @@ const EmailMethodPart = ({
                       <Select
                         disabled={notice !== EMAIL_NOTICE_ATTACH}
                         name={prefix + 'notice_attach_format'}
-                        value={noticeAttachFormat}
-                        items={renderSelectItems(reportFormats)}
-                        onChange={onChange}
+                        value={attachFormatIdInState}
+                        items={reportFormatItems}
+                        onChange={handleAttachFormatIdChange}
                       />
                     )}
+                    <label htmlFor="attach-config-select">Report Config</label>
+                    <Select
+                      disabled={notice !== EMAIL_NOTICE_ATTACH}
+                      name={prefix + 'notice_attach_config'}
+                      id="attach-config-select"
+                      value={attachConfigIdInState}
+                      items={attachConfigItems}
+                      onChange={handleAttachConfigIdChange}
+                    />
                   </Divider>
                 </Layout>
                 <TextArea
@@ -227,23 +300,31 @@ const EmailMethodPart = ({
 };
 
 EmailMethodPart.propTypes = {
+  attachConfigItems: PropTypes.array,
   capabilities: PropTypes.capabilities.isRequired,
   credentials: PropTypes.array,
+  defaultReportConfigId: PropTypes.id,
+  defaultReportFormatId: PropTypes.id,
   event: PropTypes.string.isRequired,
   fromAddress: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   messageAttach: PropTypes.string.isRequired,
   notice: PropTypes.string.isRequired,
+  noticeAttachConfig: PropTypes.id,
   noticeAttachFormat: PropTypes.id,
+  noticeReportConfig: PropTypes.id,
   noticeReportFormat: PropTypes.id,
   prefix: PropTypes.string.isRequired,
   recipientCredential: PropTypes.id,
+  reportConfigItems: PropTypes.array,
+  reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
   subject: PropTypes.string.isRequired,
   toAddress: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   onCredentialChange: PropTypes.func,
   onNewCredentialClick: PropTypes.func,
+  onSave: PropTypes.func,
 };
 
 export default compose(withCapabilities, withPrefix)(EmailMethodPart);

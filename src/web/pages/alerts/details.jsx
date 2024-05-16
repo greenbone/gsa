@@ -47,7 +47,13 @@ import Condition from './condition';
 import Event from './event';
 import Method from './method';
 
-const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
+const AlertDetails = ({
+  capabilities,
+  entity,
+  links = true,
+  reportFormats,
+  reportConfigs,
+}) => {
   const {comment, condition, event, method, tasks = [], filter} = entity;
   return (
     <Layout flex="column" grow>
@@ -114,6 +120,7 @@ const AlertDetails = ({capabilities, entity, links = true, reportFormats}) => {
                 method={method}
                 details={true}
                 reportFormats={reportFormats}
+                reportConfigs={reportConfigs}
               />
             </TableData>
           </TableRow>
@@ -171,9 +178,9 @@ AlertDetails.propTypes = {
   capabilities: PropTypes.capabilities.isRequired,
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
+  reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
 };
 
 export default withCapabilities(AlertDetails);
-
 // vim: set ts=2 sw=2 tw=80:
