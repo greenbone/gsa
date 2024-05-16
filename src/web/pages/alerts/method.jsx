@@ -54,11 +54,6 @@ import TableRow from 'web/components/table/row';
 
 import {Col} from 'web/entity/page';
 
-import {
-  loadAllEntities as loadAllReportFormats,
-  selector as reportFormatsSelector,
-} from 'web/store/entities/reportformats';
-
 const Table = styled(SimpleTable)`
   margin-top: 5px;
   margin-left: 45px;
