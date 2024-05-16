@@ -175,7 +175,7 @@ class EntitiesContainer extends React.Component {
   handleDelete(entity) {
     const {deleteEntity} = this.props;
 
-    deleteEntity(entity.id).then(this.handleChanged, this.handleError);
+    return deleteEntity(entity.id).then(this.handleChanged, this.handleError);
   }
 
   handleChanged() {
