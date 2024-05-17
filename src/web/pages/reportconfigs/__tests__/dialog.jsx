@@ -381,7 +381,20 @@ describe('New Report Config Dialog component tests', () => {
         },
         {
           name: 'ReportFormatListParam',
-          value: 'DEF',
+          value: {
+            __text: 'RF01',
+            report_format: {
+              _id: 'RF01',
+              name: 'report format 1'
+            },
+          },
+          default: {
+            __text: 'RF01',
+            report_format: {
+              _id: 'RF01',
+              name: 'report format 1'
+            },
+          },
           type: {
             __text: 'report_format_list',
             min: 0,
@@ -467,7 +480,7 @@ describe('New Report Config Dialog component tests', () => {
       params: {
         Param1: 'ABC',
         Param2: 'XYZ',
-        ReportFormatListParam: ['654321'],
+        ReportFormatListParam: ['RF01', '654321'],
       },
       params_using_default: {
         Param1: true,

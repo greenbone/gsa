@@ -230,6 +230,7 @@ export const parseDuration = value => {
  */
 export const parseBoolean = value => {
   if (isString(value)) {
+    if (value.trim().toLowerCase() === 'true') return true;
     value = parseInt(value);
   }
   if (isNumber(value)) {

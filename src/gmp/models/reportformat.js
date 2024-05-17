@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import {isDefined, isObject} from 'gmp/utils/identity';
-import {map} from 'gmp/utils/array';
+import {forEach, map} from 'gmp/utils/array';
 import {isEmpty} from 'gmp/utils/string';
 
 import {parseDate, parseYesNo, YES_VALUE, parseBoolean} from 'gmp/parser';
@@ -48,11 +48,27 @@ class Param {
 
     if (this.type === 'report_format_list') {
       this.value = map(value.report_format, format => format._id);
+      this.default = map(other.default.report_format, format => format._id);
+      this.value_labels = {};
+      this.default_labels = {};
+      forEach(value.report_format, format => {
+        this.value_labels[format._id] = format.name;
+      });
+      forEach(other.default.report_format, format => {
+        this.default_labels[format._id] = format.name;
+      });
     } else if (this.type === 'multi_selection') {
       this.value = JSON.parse(get_value(value));
       this.default = JSON.parse(get_value(other.default));
+    } else if (this.type === 'integer') {
+      this.value = parseInt(get_value(value));
+      this.default = parseInt(get_value(other.default));
+    } else if (this.type === 'boolean') {
+      this.value = parseBoolean(get_value(value));
+      this.default = parseBoolean(get_value(other.default));
     } else {
       this.value = get_value(value);
+      this.default = get_value(other.default);
     }
   }
 }
