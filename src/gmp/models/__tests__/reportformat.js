@@ -231,6 +231,9 @@ describe('ReportFormat model tests', () => {
             value: {
               report_format: [{_id: '42'}, {_id: '21'}],
             },
+            default: {
+              report_format: [{_id: '43'}, {_id: '22'}],
+            },
           },
         ],
       };
