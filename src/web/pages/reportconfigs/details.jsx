@@ -67,7 +67,7 @@ export const ReportConfigParamValue = ({
     `;
     return (
       <OptionsList>
-        {param.value.map(option => (
+        {value.map(option => (
           <li key={param.name + '=' + option}>{option}</li>
         ))}
       </OptionsList>
