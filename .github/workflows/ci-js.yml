@@ -61,6 +61,7 @@ jobs:
       - name: Submit test coverage to codecov.io
         uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
 
   linting:
