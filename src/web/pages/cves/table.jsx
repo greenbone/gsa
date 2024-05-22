@@ -32,6 +32,7 @@ import TableRow from 'web/components/table/row';
 
 import CveDetails from './details';
 import CveRow from './row';
+import {isDefined} from "gmp/utils/identity.js";
 
 const Header = ({
   actionsColumn,
@@ -45,6 +46,7 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
+          rowSpan="2"
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -53,7 +55,8 @@ const Header = ({
           title={_('Name')}
         />
         <TableHead
-          width="62%"
+          rowSpan="2"
+          width="52%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'description' : false}
@@ -61,6 +64,7 @@ const Header = ({
           title={_('Description')}
         />
         <TableHead
+          rowSpan="2"
           width="13%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -69,6 +73,7 @@ const Header = ({
           title={_('Published')}
         />
         <TableHead
+          rowSpan="2"
           width="17%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -77,6 +82,7 @@ const Header = ({
           title={_('CVSS Base Vector')}
         />
         <TableHead
+          rowSpan="2"
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -84,7 +90,34 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('Severity')}
         />
-        {actionsColumn}
+        <TableHead colSpan="2">
+          {"EPSS"}
+        </TableHead>
+        {isDefined(actionsColumn) ? (
+          actionsColumn
+        ) : (
+          <TableHead rowSpan="2" width="5em" align="center">
+            {_('Actions')}
+          </TableHead>
+        )}
+      </TableRow>
+      <TableRow>
+        <TableHead
+          width="5%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'epss_score' : false}
+          onSortChange={onSortChange}
+          title={_('Score')}
+        />
+        <TableHead
+          width="5%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'epss_percentile' : false}
+          onSortChange={onSortChange}
+          title={_('Percentile')}
+        />
       </TableRow>
     </TableHeader>
   );

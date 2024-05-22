@@ -42,6 +42,10 @@ const cve = Cve.fromElement({
   severity: '9.3',
   description: 'foo bar baz',
   usage_type: 'cve',
+  epss: {
+    score: 0.5,
+    percentile: 0.75,
+  },
 });
 
 const reloadInterval = -1;
@@ -193,11 +197,13 @@ describe('CvesPage tests', () => {
 
     const row = baseElement.querySelectorAll('tr');
 
-    expect(row[1]).toHaveTextContent('CVE-2020-9992');
-    expect(row[1]).toHaveTextContent('foo bar baz');
-    expect(row[1]).toHaveTextContent('Thu, Oct 22, 2020 9:15 PM CESTA');
-    expect(row[1]).toHaveTextContent('AV:N/AC:M/Au:N/C:C/I:C/A:C');
-    expect(row[1]).toHaveTextContent('9.3 (High)');
+    expect(row[2]).toHaveTextContent('CVE-2020-9992');
+    expect(row[2]).toHaveTextContent('foo bar baz');
+    expect(row[2]).toHaveTextContent('Thu, Oct 22, 2020 9:15 PM CESTA');
+    expect(row[2]).toHaveTextContent('AV:N/AC:M/Au:N/C:C/I:C/A:C');
+    expect(row[2]).toHaveTextContent('9.3 (High)');
+    expect(row[2]).toHaveTextContent('0.50000');
+    expect(row[2]).toHaveTextContent('0.75000');
   });
 
   test('should allow to bulk action on page contents', async () => {
