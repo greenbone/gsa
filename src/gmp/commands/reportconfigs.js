@@ -41,6 +41,7 @@ export class ReportConfigCommand extends EntityCommand {
       report_format_id,
       params = {},
       params_using_default = {},
+      param_types = {},
     } = args;
 
     const data = {
@@ -52,8 +53,12 @@ export class ReportConfigCommand extends EntityCommand {
 
     for (const prefname in params) {
       let value = params[prefname];
-      if (isArray(params[prefname])) {
-        value = params[prefname].join(',');
+      if (isArray(value)) {
+        if (param_types[prefname] === 'report_format_list') {
+          value = params[prefname].join(',');
+        } else {
+          value = JSON.stringify(params[prefname]);
+        }
       }
       data['param:' + prefname] = value;
     }
@@ -71,7 +76,14 @@ export class ReportConfigCommand extends EntityCommand {
   }
 
   save(args) {
-    const {id, comment, name, params = {}, params_using_default = {}} = args;
+    const {
+      id,
+      comment,
+      name,
+      params = {},
+      params_using_default = {},
+      param_types = {},
+    } = args;
 
     const data = {
       cmd: 'save_report_config',
@@ -91,7 +103,11 @@ export class ReportConfigCommand extends EntityCommand {
     for (const prefname in params) {
       let value = params[prefname];
       if (isArray(params[prefname])) {
-        value = params[prefname].join(',');
+        if (param_types[prefname] === 'report_format_list') {
+          value = params[prefname].join(',');
+        } else {
+          value = JSON.stringify(params[prefname]);
+        }
       }
       data['param:' + prefname] = value;
     }

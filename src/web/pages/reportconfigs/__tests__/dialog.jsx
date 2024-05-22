@@ -94,6 +94,14 @@ describe('Edit Report Config Dialog component tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       ...config,
+      param_types: {
+        BooleanParam: 'boolean',
+        IntegerParam: 'integer',
+        ReportFormatListParam: 'report_format_list',
+        SelectionParam: 'selection',
+        StringParam: 'string',
+        TextParam: 'text',
+      },
       params: {
         BooleanParam: true,
         IntegerParam: 12,
@@ -210,6 +218,14 @@ describe('Edit Report Config Dialog component tests', () => {
       ...config,
       name: 'lorem',
       comment: 'ipsum',
+      param_types: {
+        BooleanParam: 'boolean',
+        IntegerParam: 'integer',
+        ReportFormatListParam: 'report_format_list',
+        SelectionParam: 'selection',
+        StringParam: 'string',
+        TextParam: 'text',
+      },
       params: {
         BooleanParam: false,
         IntegerParam: 7,
@@ -279,6 +295,14 @@ describe('Edit Report Config Dialog component tests', () => {
 
     expect(handleSave).toHaveBeenCalledWith({
       ...config,
+      param_types: {
+        BooleanParam: 'boolean',
+        IntegerParam: 'integer',
+        ReportFormatListParam: 'report_format_list',
+        SelectionParam: 'selection',
+        StringParam: 'string',
+        TextParam: 'text',
+      },
       params: {
         BooleanParam: true,
         IntegerParam: 12,
@@ -357,7 +381,20 @@ describe('New Report Config Dialog component tests', () => {
         },
         {
           name: 'ReportFormatListParam',
-          value: 'DEF',
+          value: {
+            __text: 'RF01',
+            report_format: {
+              _id: 'RF01',
+              name: 'report format 1'
+            },
+          },
+          default: {
+            __text: 'RF01',
+            report_format: {
+              _id: 'RF01',
+              name: 'report format 1'
+            },
+          },
           type: {
             __text: 'report_format_list',
             min: 0,
@@ -435,10 +472,15 @@ describe('New Report Config Dialog component tests', () => {
       name: 'lorem',
       comment: 'ipsum',
       report_format_id: '1234567',
+      param_types: {
+        Param1: 'string',
+        Param2: 'string',
+        ReportFormatListParam: 'report_format_list',
+      },
       params: {
         Param1: 'ABC',
         Param2: 'XYZ',
-        ReportFormatListParam: ['654321'],
+        ReportFormatListParam: ['RF01', '654321'],
       },
       params_using_default: {
         Param1: true,
