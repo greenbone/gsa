@@ -262,7 +262,8 @@ const Method = ({
                 </TableRow>
               )}
 
-              {isDefined(data.scp_report_format?.value) && (
+              {isDefined(data.scp_report_format?.value) &&
+               reportFormats.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Format')}</TableData>
                   <TableData>
@@ -270,7 +271,8 @@ const Method = ({
                   </TableData>
                 </TableRow>
               )}
-              {isDefined(data.scp_report_config?.value) && (
+              {isDefined(data.scp_report_config?.value) &&
+               reportConfigs.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Config')}</TableData>
                   <TableData>
@@ -340,7 +342,8 @@ const Method = ({
                   <TableData>{data.smb_file_path.value}</TableData>
                 </TableRow>
               )}
-              {isDefined(data.smb_report_format?.value) && (
+              {isDefined(data.smb_report_format?.value) &&
+               reportFormats.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Format')}</TableData>
                   <TableData>
@@ -348,7 +351,8 @@ const Method = ({
                   </TableData>
                 </TableRow>
               )}
-              {isDefined(data.smb_report_config?.value) && (
+              {isDefined(data.smb_report_config?.value) &&
+               reportConfigs.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Config')}</TableData>
                   <TableData>
@@ -382,7 +386,8 @@ const Method = ({
             <Col width="88%" />
           </colgroup>
           <TableBody>
-            {details && isDefined(data.send_report_format?.value) && (
+            {details && isDefined(data.send_report_format?.value) &&
+             reportFormats.length > 0 && (
               <TableRow>
                 <TableData>{_('Report Format')}</TableData>
                 <TableData>
@@ -390,7 +395,8 @@ const Method = ({
                 </TableData>
               </TableRow>
             )}
-            {details && isDefined(data.send_report_config?.value) && (
+            {details && isDefined(data.send_report_config?.value) &&
+             reportConfigs.length > 0 && (
               <TableRow>
                 <TableData>{_('Report Config')}</TableData>
                 <TableData>
@@ -503,7 +509,8 @@ const Method = ({
                 </TableRow>
               )}
 
-              {details && isDefined(data.notice_report_format?.value) && (
+              {details && isDefined(data.notice_report_format?.value) &&
+               reportFormats.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Format')}</TableData>
                   <TableData>
@@ -512,7 +519,8 @@ const Method = ({
                 </TableRow>
               )}
 
-              {details && isDefined(data.notice_attach_format?.value) && (
+              {details && isDefined(data.notice_attach_format?.value) &&
+               reportFormats.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Format')}</TableData>
                   <TableData>
@@ -521,7 +529,8 @@ const Method = ({
                 </TableRow>
               )}
 
-              {details && isDefined(data.notice_report_config?.value) && (
+              {details && isDefined(data.notice_report_config?.value) &&
+               reportConfigs.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Config')}</TableData>
                   <TableData>
@@ -530,7 +539,8 @@ const Method = ({
                 </TableRow>
               )}
 
-              {details && isDefined(data.notice_attach_config?.value) && (
+              {details && isDefined(data.notice_attach_config?.value) &&
+               reportConfigs.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Config')}</TableData>
                   <TableData>
@@ -655,7 +665,8 @@ const Method = ({
                 </TableRow>
               )}
 
-              {isDefined(data.verinice_server_report_format?.value) && (
+              {isDefined(data.verinice_server_report_format?.value) &&
+               reportFormats.length > 0 && (
                 <TableRow>
                   <TableData>{_('verinice.PRO Report')}</TableData>
                   <TableData>
@@ -666,7 +677,8 @@ const Method = ({
                 </TableRow>
               )}
 
-              {isDefined(data.verinice_server_report_config?.value) && (
+              {isDefined(data.verinice_server_report_config?.value) &&
+               reportConfigs.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Config')}</TableData>
                   <TableData>
