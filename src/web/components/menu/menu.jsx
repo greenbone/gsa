@@ -349,6 +349,7 @@ const Menu = () => {
         icon: () => {},
         label: _('Asset'),
         to: '/asset-management',
+        isExternal: true,
       },
     ].filter(Boolean),
   ];
