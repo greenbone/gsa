@@ -39,7 +39,7 @@ class FilterTerm {
    * @param {String} relation Relation between keyword and filter, =,<,>,...
    */
   constructor({keyword, value, relation}) {
-    this.keyword = isDefined(keyword) ? keyword.toLowerCase() : keyword;
+    this.keyword = isDefined(keyword) ? String(keyword).toLowerCase() : keyword;
     this.value = value;
     this.relation = relation;
   }

@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+import {parseFloat} from 'gmp/parser';
+
 export const {isArray} = global.Array;
 
 export const isDefined = value => value !== undefined;
@@ -28,6 +31,8 @@ export const isString = value => typeof value === 'string';
 export const isNull = value => value === null;
 
 export const isNumber = value => typeof value === 'number';
+
+export const isNumberOrNumberString = value => !isNaN(parseFloat(value));
 
 export const isFunction = value => typeof value === 'function';
 

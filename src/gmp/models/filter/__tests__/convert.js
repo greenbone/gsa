@@ -248,6 +248,20 @@ describe('convert tests', () => {
       value: 'regexp',
     });
   });
+
+  test('should return correct value and relation when keyword is a number or number string', () => {
+    expect(convert('123', '456', '=')).toEqual({
+      value: '123=456',
+      relation: '~',
+    });
+  });
+
+  test('should return correct value and relation when keyword is a number', () => {
+    expect(convert(123, 456, ':')).toEqual({
+      value: '123:456',
+      relation: '~',
+    });
+  });
 });
 
 // vim: set ts=2 sw=2 tw=80:
