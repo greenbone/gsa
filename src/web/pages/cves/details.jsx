@@ -53,7 +53,7 @@ const CVSS_PROPS = {
 };
 
 const CveDetails = ({entity}) => {
-  const {cvssBaseVector, description, references = [], severity} = entity;
+  const {cvssBaseVector, description, references = [], severity, epss} = entity;
 
   return (
     <Layout flex="column" grow="1">
@@ -96,6 +96,23 @@ const CveDetails = ({entity}) => {
           </TableBody>
         </InfoTable>
       </DetailsBlock>
+
+      {isDefined(epss) && (
+        <DetailsBlock title={_('EPSS')}>
+          <InfoTable>
+            <TableBody>
+              <TableRow>
+                <TableData>{_('Score')}</TableData>
+                <TableData>{epss.score.toFixed(5)}</TableData>
+              </TableRow>
+              <TableRow>
+                <TableData>{_('Percentile')}</TableData>
+                <TableData>{epss.percentile.toFixed(5)}</TableData>
+              </TableRow>
+            </TableBody>
+          </InfoTable>
+        </DetailsBlock>
+      )}
 
       {references.length > 0 && (
         <DetailsBlock title={_('References')}>
