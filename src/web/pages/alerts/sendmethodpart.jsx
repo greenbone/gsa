@@ -39,7 +39,6 @@ const SendMethodPart = ({
   sendPort,
   sendReportConfig,
   sendReportFormat,
-  onSave,
   onChange,
 }) => {
   const [reportFormatIdInState, setReportFormatId] = useState(
@@ -114,7 +113,6 @@ SendMethodPart.propTypes = {
   sendReportConfig: PropTypes.id,
   sendReportFormat: PropTypes.id,
   onChange: PropTypes.func,
-  onSave: PropTypes.func,
 };
 
 export default withPrefix(SendMethodPart);
