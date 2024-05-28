@@ -48,6 +48,10 @@ const entity_v2 = Cve.fromElement({
       'An information disclosure issue was addressed with improved state management. This issue is fixed in macOS Catalina 10.15.6, watchOS 6.2.8. A malicious application may disclose restricted memory.',
     products: 'cpe:/o:apple:mac_os_x:10.15.5 cpe:/o:apple:watchos:6.2.8',
     nvts: '',
+    epss: {
+      score: 0.5,
+      percentile: 0.75,
+    },
     cert: {
       cert_ref: {
         _type: 'CERT-Bund',
@@ -169,6 +173,9 @@ describe('CVE Detailspage tests', () => {
     const {baseElement, element, getAllByTestId} = render(
       <CvePage id="CVE-2020-9997" />,
     );
+
+    expect(baseElement).toHaveTextContent('Score0.50000');
+    expect(baseElement).toHaveTextContent('Percentile0.75000');
 
     const links = baseElement.querySelectorAll('a');
     const icons = getAllByTestId('svg-icon');
