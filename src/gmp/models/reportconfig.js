@@ -56,6 +56,9 @@ class Param {
       forEach(other.default.report_format, format => {
         this.default_labels[format._id] = format.name;
       });
+    } else if (this.type === 'multi_selection') {
+      this.value = JSON.parse(get_value(value));
+      this.default = JSON.parse(get_value(other.default));
     } else if (this.type === 'integer') {
       this.value = parseInt(get_value(value));
       this.default = parseInt(get_value(other.default));

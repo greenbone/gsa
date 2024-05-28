@@ -41,7 +41,7 @@ class ReportFormatCommand extends EntityCommand {
   }
 
   save(args) {
-    const {active, id, id_lists = {}, name, preferences = {}, summary} = args;
+    const {active, id, name, summary} = args;
 
     const data = {
       cmd: 'save_report_format',
@@ -50,19 +50,6 @@ class ReportFormatCommand extends EntityCommand {
       name,
       summary,
     };
-    for (const prefname in preferences) {
-      const prefix = 'preference:nvt[string]:'; // only the format of the prefix is important
-      data[prefix + prefname] = preferences[prefname];
-    }
-
-    const id_list = [];
-    for (const lname in id_lists) {
-      data['include_id_list:' + lname] = 1;
-      for (const val of id_lists[lname]) {
-        id_list.push(lname + ':' + val);
-      }
-    }
-    data['id_list:'] = id_list;
 
     log.debug('Saving report format', args, data);
     return this.action(data);

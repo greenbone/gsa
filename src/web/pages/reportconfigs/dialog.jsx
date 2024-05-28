@@ -68,6 +68,8 @@ const Param = ({
     field = (
       <YesNoRadio
         convert={parseBoolean}
+        yesValue={true}
+        noValue={false}
         name={name}
         value={field_value}
         onChange={onPrefChange}
@@ -80,6 +82,19 @@ const Param = ({
         name={name}
         min={min}
         max={max}
+        value={field_value}
+        onChange={onPrefChange}
+      />
+    );
+  } else if (type === 'multi_selection') {
+    const typeOptions = map(value.options, opt => ({
+      label: opt.name,
+      value: opt.value,
+    }));
+    field = (
+      <MultiSelect
+        name={name}
+        items={typeOptions}
         value={field_value}
         onChange={onPrefChange}
       />
@@ -222,11 +237,21 @@ class Dialog extends React.Component {
   handleSave(data) {
     const {onSave} = this.props;
     if (isDefined(onSave)) {
-      const {params, params_using_default, report_format_id} = this.state;
+      const {
+        params,
+        params_using_default,
+        report_format_id,
+        originalParamInfo,
+      } = this.state;
+      const param_types = {};
+      originalParamInfo.forEach(param_item => {
+        param_types[param_item.name] = param_item.type;
+      });
       onSave({
         ...data,
         params,
         params_using_default,
+        param_types,
         report_format_id,
       });
     }

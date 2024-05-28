@@ -36,6 +36,8 @@ import {map} from 'gmp/utils/array';
 import {isDefined} from 'gmp/utils/identity';
 import {renderYesNo} from 'web/utils/render';
 
+import styled from 'styled-components';
+
 export const ReportConfigParamValue = ({
   param,
   value = param.value,
@@ -58,6 +60,18 @@ export const ReportConfigParamValue = ({
         </DetailsLink>
       );
     });
+  } else if (param.type === 'multi_selection') {
+    const OptionsList = styled.ul`
+      margin: 0;
+      padding-left: 1em;
+    `;
+    return (
+      <OptionsList>
+        {value.map(option => (
+          <li key={param.name + '=' + option}>{option}</li>
+        ))}
+      </OptionsList>
+    );
   } else if (param.type === 'text') {
     return <pre>{value}</pre>;
   } else if (param.type === 'boolean') {
@@ -94,7 +108,7 @@ const ReportConfigDetails = ({entity, links = true}) => {
     params.map(param => {
       return (
         <TableRow key={param.name}>
-          <TableData>{param.name}</TableData>
+          <TableDataAlignTop>{param.name}</TableDataAlignTop>
           <TableData>
             <ReportConfigParamValue param={param} links={links} />
           </TableData>

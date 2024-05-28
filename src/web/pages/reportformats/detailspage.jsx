@@ -40,7 +40,7 @@ import Tabs from 'web/components/tab/tabs';
 
 import Table from 'web/components/table/stripedtable';
 import TableBody from 'web/components/table/body';
-import TableData from 'web/components/table/data';
+import TableData, {TableDataAlignTop} from 'web/components/table/data';
 import TableHeader from 'web/components/table/header';
 import TableHead from 'web/components/table/head';
 import TableRow from 'web/components/table/row';
@@ -66,6 +66,11 @@ import withCapabilities from 'web/utils/withCapabilities';
 
 import ReportFormatComponent from './component';
 import ReportFormatDetails from './details';
+import DetailsLink from 'web/components/link/detailslink';
+import {map} from 'gmp/utils/array';
+import {isDefined} from 'gmp/utils/identity';
+import {renderYesNo} from 'web/utils/render';
+import styled from 'styled-components';
 
 const ToolBarIcons = withCapabilities(
   ({
@@ -125,6 +130,55 @@ Details.propTypes = {
   entity: PropTypes.model.isRequired,
   links: PropTypes.bool,
 };
+const ReportFormatParamValue = ({
+  param,
+  value = param.value,
+  value_labels = param.value_labels,
+  links = true,
+}) => {
+  if (param.type === 'report_format_list') {
+    return map(value, report_format_id => {
+      const label = isDefined(value_labels[report_format_id])
+        ? value_labels[report_format_id]
+        : report_format_id;
+      return (
+        <DetailsLink
+          type="reportformat"
+          key={param.name + '_' + report_format_id}
+          id={report_format_id}
+          textOnly={!links}
+        >
+          {label}
+        </DetailsLink>
+      );
+    });
+  } else if (param.type === 'multi_selection') {
+    const OptionsList = styled.ul`
+      margin: 0;
+      padding-left: 1em;
+    `;
+    return (
+      <OptionsList>
+        {param.value.map(option => (
+          <li key={param.name + '=' + option}>{option}</li>
+        ))}
+      </OptionsList>
+    );
+  } else if (param.type === 'text') {
+    return <pre>{value}</pre>;
+  } else if (param.type === 'boolean') {
+    return renderYesNo(value);
+  }
+
+  return value;
+};
+
+ReportFormatParamValue.propTypes = {
+  links: PropTypes.bool,
+  param: PropTypes.any.isRequired,
+  value: PropTypes.any,
+  value_labels: PropTypes.object,
+};
 
 const Parameters = ({entity}) => {
   const {params = []} = entity;
@@ -143,8 +197,10 @@ const Parameters = ({entity}) => {
           <TableBody>
             {params.map(param => (
               <TableRow key={param.name}>
-                <TableData>{param.name}</TableData>
-                <TableData>{param.value}</TableData>
+                <TableDataAlignTop>{param.name}</TableDataAlignTop>
+                <TableData>
+                  <ReportFormatParamValue param={param} value={param.value} />
+                </TableData>
               </TableRow>
             ))}
           </TableBody>
