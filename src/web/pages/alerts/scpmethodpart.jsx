@@ -42,8 +42,6 @@ import TextArea from 'web/components/form/textarea';
 import NewIcon from 'web/components/icon/newicon';
 
 const ScpMethodPart = ({
-  defaultReportConfigId,
-  defaultReportFormatId,
   prefix,
   credentials = [],
   reportFormats,
@@ -55,7 +53,6 @@ const ScpMethodPart = ({
   scpPath,
   scpReportConfig,
   scpReportFormat,
-  onSave,
   onChange,
   onCredentialChange,
   onNewCredentialClick,
@@ -166,8 +163,6 @@ const ScpMethodPart = ({
 
 ScpMethodPart.propTypes = {
   credentials: PropTypes.array,
-  defaultReportConfigId: PropTypes.id,
-  defaultReportFormatId: PropTypes.id,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
@@ -181,7 +176,6 @@ ScpMethodPart.propTypes = {
   onChange: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func.isRequired,
-  onSave: PropTypes.func,
 };
 
 export default withPrefix(ScpMethodPart);

@@ -53,8 +53,6 @@ import withCapabilities from 'web/utils/withCapabilities';
 import withPrefix from 'web/utils/withPrefix';
 
 const EmailMethodPart = ({
-  defaultReportConfigId,
-  defaultReportFormatId,
   capabilities,
   credentials = [],
   fromAddress,
@@ -72,7 +70,6 @@ const EmailMethodPart = ({
   reportFormats = [],
   subject,
   toAddress,
-  onSave,
   onChange,
   onCredentialChange,
   onNewCredentialClick,
@@ -303,8 +300,6 @@ EmailMethodPart.propTypes = {
   attachConfigItems: PropTypes.array,
   capabilities: PropTypes.capabilities.isRequired,
   credentials: PropTypes.array,
-  defaultReportConfigId: PropTypes.id,
-  defaultReportFormatId: PropTypes.id,
   event: PropTypes.string.isRequired,
   fromAddress: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
@@ -324,7 +319,6 @@ EmailMethodPart.propTypes = {
   onChange: PropTypes.func,
   onCredentialChange: PropTypes.func,
   onNewCredentialClick: PropTypes.func,
-  onSave: PropTypes.func,
 };
 
 export default compose(withCapabilities, withPrefix)(EmailMethodPart);

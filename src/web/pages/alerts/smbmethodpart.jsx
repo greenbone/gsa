@@ -48,8 +48,6 @@ const smbMaxProtocolItems = [
 ];
 
 const SmbMethodPart = ({
-  defaultReportConfigId,
-  defaultReportFormatId,
   prefix,
   credentials = [],
   reportConfigs,
@@ -60,7 +58,6 @@ const SmbMethodPart = ({
   smbReportConfig,
   smbReportFormat,
   smbSharePath,
-  onSave,
   onChange,
   onNewCredentialClick,
   onCredentialChange,
@@ -168,8 +165,6 @@ const SmbMethodPart = ({
 
 SmbMethodPart.propTypes = {
   credentials: PropTypes.array,
-  defaultReportConfigId: PropTypes.id,
-  defaultReportFormatId: PropTypes.id,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
@@ -182,7 +177,6 @@ SmbMethodPart.propTypes = {
   onChange: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func.isRequired,
-  onSave: PropTypes.func,
 };
 
 export default withPrefix(SmbMethodPart);

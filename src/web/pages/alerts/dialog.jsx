@@ -755,8 +755,6 @@ class AlertDialog extends React.Component {
                   reportConfigs={report_configs}
                   reportFormats={report_formats}
                   onChange={onValueChange}
-                  onReportConfigsChange={onReportConfigsChange}
-                  onReportFormatsChange={onReportFormatsChange}
                 />
               )}
 

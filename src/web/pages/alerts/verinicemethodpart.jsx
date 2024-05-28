@@ -38,8 +38,6 @@ import NewIcon from 'web/components/icon/newicon';
 const VERINICE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
 const VeriniceMethodPart = ({
-  defaultReportConfigId,
-  defaultReportFormatId,
   prefix,
   veriniceServerUrl,
   veriniceServerCredential,
@@ -51,7 +49,6 @@ const VeriniceMethodPart = ({
   onChange,
   onCredentialChange,
   onNewCredentialClick,
-  onSave,
 }) => {
   reportFormats = reportFormats.filter(format => format.extension === 'vna');
   credentials = credentials.filter(
@@ -132,8 +129,6 @@ const VeriniceMethodPart = ({
 
 VeriniceMethodPart.propTypes = {
   credentials: PropTypes.array,
-  defaultReportConfigId: PropTypes.id,
-  defaultReportFormatId: PropTypes.id,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
@@ -144,7 +139,6 @@ VeriniceMethodPart.propTypes = {
   onChange: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,
   onNewCredentialClick: PropTypes.func.isRequired,
-  onSave: PropTypes.func,
 };
 
 export default withPrefix(VeriniceMethodPart);

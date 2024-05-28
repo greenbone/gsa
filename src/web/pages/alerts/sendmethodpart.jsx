@@ -32,8 +32,6 @@ import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
 const SendMethodPart = ({
-  defaultReportConfigId,
-  defaultReportFormatId,
   prefix,
   reportConfigs,
   reportFormats,
@@ -108,8 +106,6 @@ const SendMethodPart = ({
 };
 
 SendMethodPart.propTypes = {
-  defaultReportConfigId: PropTypes.id,
-  defaultReportFormatId: PropTypes.id,
   prefix: PropTypes.string,
   reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,

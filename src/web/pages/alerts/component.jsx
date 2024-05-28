@@ -720,7 +720,7 @@ class AlertComponent extends React.Component {
 
           const result_filter_id = selectSaveId(result_filters);
           const report_format_id = selectSaveId(report_formats);
-          const report_config_id = selectSaveId(report_configs);
+          const report_config_id = UNSET_VALUE;
 
           const filterId = isDefined(
             reportComposerDefaults.reportResultFilterId,
