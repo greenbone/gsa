@@ -128,6 +128,7 @@ class AlertComponent extends React.Component {
     this.handleVfireCredentialChange =
       this.handleVfireCredentialChange.bind(this);
     this.handleReportFormatsChange = this.handleReportFormatsChange.bind(this);
+    this.handleReportConfigsChange = this.handleReportConfigsChange.bind(this);
 
     this.openAlertDialog = this.openAlertDialog.bind(this);
     this.handleCloseAlertDialog = this.handleCloseAlertDialog.bind(this);
@@ -327,6 +328,7 @@ class AlertComponent extends React.Component {
           const {
             filters = [],
             report_formats = [],
+            report_configs = [],
             tasks = [],
             alert: lalert,
           } = settings;
@@ -455,6 +457,8 @@ class AlertComponent extends React.Component {
             secinfo_filters,
             report_formats,
             report_format_ids: method.data.report_formats,
+            report_configs,
+            report_config_ids: method.data.report_configs,
 
             condition: condition.type,
             condition_data_count: parseInt(getValue(condition.data.count, 1)),
@@ -531,6 +535,11 @@ class AlertComponent extends React.Component {
                 DEFAULT_NOTICE_REPORT_FORMAT,
               ),
             ),
+            method_data_notice_report_config: selectSaveId(
+              report_configs,
+              getValue(method.data.notice_report_config, UNSET_VALUE),
+              UNSET_VALUE,
+            ),
             method_data_notice_attach_format: selectSaveId(
               report_formats,
               getValue(
@@ -538,10 +547,20 @@ class AlertComponent extends React.Component {
                 DEFAULT_NOTICE_ATTACH_FORMAT,
               ),
             ),
+            method_data_notice_attach_config: selectSaveId(
+              report_configs,
+              getValue(method.data.notice_attach_config, UNSET_VALUE),
+              UNSET_VALUE,
+            ),
 
             method_data_scp_credential: selectSaveId(
               credentials,
               scp_credential_id,
+            ),
+            method_data_scp_report_config: selectSaveId(
+              report_configs,
+              getValue(method.data.scp_report_config, UNSET_VALUE),
+              UNSET_VALUE,
             ),
             method_data_scp_report_format: selectSaveId(
               report_formats,
@@ -560,6 +579,11 @@ class AlertComponent extends React.Component {
 
             method_data_send_port: getValue(method.data.send_port, ''),
             method_data_send_host: getValue(method.data.send_host, ''),
+            method_data_send_report_config: selectSaveId(
+              report_configs,
+              getValue(method.data.send_report_config, UNSET_VALUE),
+              UNSET_VALUE,
+            ),
             method_data_send_report_format: selectSaveId(
               report_formats,
               getValue(method.data.send_report_format),
@@ -578,9 +602,14 @@ class AlertComponent extends React.Component {
               method.data.smb_max_protocol,
               '',
             ),
-            method_data_smb_report_format: getValue(
-              method.data.smb_report_format,
-              '',
+            method_data_smb_report_config: selectSaveId(
+              report_configs,
+              getValue(method.data.smb_report_config, UNSET_VALUE),
+              UNSET_VALUE,
+            ),
+            method_data_smb_report_format: selectSaveId(
+              report_formats,
+              getValue(method.data.smb_report_format),
             ),
             method_data_smb_share_path: getValue(
               method.data.smb_share_path,
@@ -611,6 +640,11 @@ class AlertComponent extends React.Component {
               getValue(method.data.tp_sms_tls_workaround, NO_VALUE),
             ),
 
+            method_data_verinice_server_report_config: selectSaveId(
+              report_configs,
+              getValue(method.data.verinice_server_report_config, UNSET_VALUE),
+              UNSET_VALUE,
+            ),
             method_data_verinice_server_report_format:
               select_verinice_report_id(
                 report_formats,
@@ -672,7 +706,12 @@ class AlertComponent extends React.Component {
       const alertPromise = gmp.alert.newAlertSettings().then(r => r.data);
       Promise.all([credentialPromise, alertPromise]).then(
         ([credentials, settings]) => {
-          const {filters = [], report_formats = [], tasks = []} = settings;
+          const {
+            filters = [],
+            report_formats = [],
+            report_configs = [],
+            tasks = [],
+          } = settings;
           const {reportComposerDefaults} = this.props;
 
           const result_filters = filters.filter(filter_results_filter);
@@ -681,6 +720,7 @@ class AlertComponent extends React.Component {
 
           const result_filter_id = selectSaveId(result_filters);
           const report_format_id = selectSaveId(report_formats);
+          const report_config_id = UNSET_VALUE;
 
           const filterId = isDefined(
             reportComposerDefaults.reportResultFilterId,
@@ -732,12 +772,15 @@ class AlertComponent extends React.Component {
               report_formats,
               DEFAULT_NOTICE_REPORT_FORMAT,
             ),
+            method_data_notice_report_config: undefined,
             method_data_notice_attach_format: selectSaveId(
               report_formats,
               DEFAULT_NOTICE_ATTACH_FORMAT,
             ),
+            method_data_notice_attach_config: undefined,
             method_data_scp_credential: undefined,
             method_data_scp_path: DEFAULT_SCP_PATH,
+            method_data_scp_report_config: report_config_id,
             method_data_scp_report_format: report_format_id,
             method_data_scp_host: undefined,
             method_data_scp_port: 22,
@@ -756,14 +799,17 @@ class AlertComponent extends React.Component {
             method_data_delta_type: undefined,
             method_data_delta_report_id: undefined,
             method_data_recipient_credential: UNSET_VALUE,
+            method_data_send_report_config: report_config_id,
             method_data_send_report_format: report_format_id,
             method_data_start_task_task: selectSaveId(tasks),
             method_data_smb_credential: selectSaveId(smbCredentials),
             method_data_smb_share_path: undefined,
             method_data_smb_file_path: undefined,
             method_data_smb_file_path_type: undefined,
-            method_data_verinice_server_report_format:
-              select_verinice_report_id(report_formats),
+            method_data_smb_report_config: report_config_id,
+            method_data_smb_report_format: report_format_id,
+            method_data_verinice_server_report_config: report_config_id,
+            method_data_verinice_server_report_format: report_format_id,
             method_data_pkcs12_credential: UNSET_VALUE,
             method_data_vfire_credential: undefined,
             method_data_vfire_base_url: undefined,
@@ -779,6 +825,8 @@ class AlertComponent extends React.Component {
             secinfo_filters,
             report_formats,
             report_format_ids: [],
+            report_configs,
+            report_config_ids: [],
             tasks,
             title: _('New Alert'),
           });
@@ -885,6 +933,10 @@ class AlertComponent extends React.Component {
     this.setState({report_format_ids});
   }
 
+  handleReportConfigsChange(report_config_ids) {
+    this.setState({report_config_ids});
+  }
+
   handleInteraction() {
     const {onInteraction} = this.props;
     if (isDefined(onInteraction)) {
@@ -970,9 +1022,12 @@ class AlertComponent extends React.Component {
       method_data_message_attach,
       method_data_notice,
       method_data_notice_report_format,
+      method_data_notice_report_config,
       method_data_notice_attach_format,
+      method_data_notice_attach_config,
       method_data_recipient_credential,
       method_data_scp_credential,
+      method_data_scp_report_config,
       method_data_scp_report_format,
       method_data_scp_path,
       method_data_scp_host,
@@ -980,11 +1035,13 @@ class AlertComponent extends React.Component {
       method_data_scp_known_hosts,
       method_data_send_port,
       method_data_send_host,
+      method_data_send_report_config,
       method_data_send_report_format,
       method_data_smb_credential,
       method_data_smb_file_path,
       method_data_smb_file_path_type,
       method_data_smb_max_protocol,
+      method_data_smb_report_config,
       method_data_smb_report_format,
       method_data_smb_share_path,
       method_data_snmp_agent,
@@ -994,6 +1051,7 @@ class AlertComponent extends React.Component {
       method_data_tp_sms_credential,
       method_data_tp_sms_hostname,
       method_data_tp_sms_tls_workaround,
+      method_data_verinice_server_report_config,
       method_data_verinice_server_report_format,
       method_data_verinice_server_url,
       method_data_verinice_server_credential,
@@ -1012,7 +1070,9 @@ class AlertComponent extends React.Component {
       method_data_delta_type,
       method_data_delta_report_id,
       report_formats,
+      report_configs,
       report_format_ids,
+      report_config_ids,
       composerStoreAsDefault,
       tasks,
     } = this.state;
@@ -1082,6 +1142,7 @@ class AlertComponent extends React.Component {
                 }
                 method_data_details_url={method_data_details_url}
                 report_formats={report_formats}
+                report_configs={report_configs}
                 method_data_to_address={method_data_to_address}
                 method_data_from_address={method_data_from_address}
                 method_data_subject={method_data_subject}
@@ -1091,13 +1152,20 @@ class AlertComponent extends React.Component {
                 method_data_notice_report_format={
                   method_data_notice_report_format
                 }
+                method_data_notice_report_config={
+                  method_data_notice_report_config
+                }
                 method_data_notice_attach_format={
                   method_data_notice_attach_format
+                }
+                method_data_notice_attach_config={
+                  method_data_notice_attach_config
                 }
                 method_data_recipient_credential={
                   method_data_recipient_credential
                 }
                 method_data_scp_credential={method_data_scp_credential}
+                method_data_scp_report_config={method_data_scp_report_config}
                 method_data_scp_report_format={method_data_scp_report_format}
                 method_data_scp_path={method_data_scp_path}
                 method_data_scp_host={method_data_scp_host}
@@ -1105,11 +1173,13 @@ class AlertComponent extends React.Component {
                 method_data_scp_known_hosts={method_data_scp_known_hosts}
                 method_data_send_port={method_data_send_port}
                 method_data_send_host={method_data_send_host}
+                method_data_send_report_config={method_data_send_report_config}
                 method_data_send_report_format={method_data_send_report_format}
                 method_data_smb_credential={method_data_smb_credential}
                 method_data_smb_file_path={method_data_smb_file_path}
                 method_data_smb_file_path_type={method_data_smb_file_path_type}
                 method_data_smb_max_protocol={method_data_smb_max_protocol}
+                method_data_smb_report_config={method_data_smb_report_config}
                 method_data_smb_report_format={method_data_smb_report_format}
                 method_data_smb_share_path={method_data_smb_share_path}
                 method_data_snmp_agent={method_data_snmp_agent}
@@ -1120,6 +1190,9 @@ class AlertComponent extends React.Component {
                 method_data_tp_sms_hostname={method_data_tp_sms_hostname}
                 method_data_tp_sms_tls_workaround={
                   method_data_tp_sms_tls_workaround
+                }
+                method_data_verinice_server_report_config={
+                  method_data_verinice_server_report_config
                 }
                 method_data_verinice_server_report_format={
                   method_data_verinice_server_report_format
@@ -1157,6 +1230,7 @@ class AlertComponent extends React.Component {
                 method_data_delta_type={method_data_delta_type}
                 method_data_delta_report_id={method_data_delta_report_id}
                 report_format_ids={report_format_ids}
+                report_config_ids={report_config_ids}
                 tasks={tasks}
                 onClose={this.handleCloseAlertDialog}
                 onOpenContentComposerDialogClick={
@@ -1178,6 +1252,7 @@ class AlertComponent extends React.Component {
                   return save(d).then(() => this.closeAlertDialog());
                 }}
                 onReportFormatsChange={this.handleReportFormatsChange}
+                onReportConfigsChange={this.handleReportConfigsChange}
                 onEmailCredentialChange={this.handleEmailCredentialChange}
                 onPasswordOnlyCredentialChange={
                   this.handlePasswordOnlyCredentialChange

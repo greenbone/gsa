@@ -107,6 +107,7 @@ export const NOTICE_ATTACH = '2';
 
 export const DEFAULT_NOTICE_REPORT_FORMAT =
   'a3810a62-1f62-11e1-9219-406186ea4fc5';
+export const DEFAULT_NOTICE_REPORT_CONFIG = UNSET_VALUE;
 export const DEFAULT_NOTICE_ATTACH_FORMAT =
   'a0b5bfb2-1f62-11e1-85db-406186ea4fc5';
 
@@ -208,6 +209,8 @@ const DEFAULTS = {
   method_data_notice: DEFAULT_NOTICE,
   method_data_notice_attach_format: DEFAULT_NOTICE_ATTACH_FORMAT,
   method_data_notice_report_format: DEFAULT_NOTICE_REPORT_FORMAT,
+  method_data_notice_attach_config: DEFAULT_NOTICE_REPORT_CONFIG,
+  method_data_notice_report_config: DEFAULT_NOTICE_REPORT_CONFIG,
   method_data_scp_path: DEFAULT_SCP_PATH,
   method_data_scp_host: '',
   method_data_scp_port: 22,
@@ -229,6 +232,8 @@ const DEFAULTS = {
   method_data_delta_type: DELTA_TYPE_NONE,
   method_data_delta_report_id: '',
   name: _('Unnamed'),
+  report_configs: [],
+  report_config_ids: [],
   report_formats: [],
   report_format_ids: [],
   result_filters: [],
@@ -300,8 +305,10 @@ class AlertDialog extends React.Component {
       credentials,
       filter_id,
       title = _('New Alert'),
-      report_formats,
+      report_config_ids,
+      report_configs,
       report_format_ids,
+      report_formats,
       method_data_composer_ignore_pagination,
       method_data_composer_include_notes,
       method_data_composer_include_overrides,
@@ -331,6 +338,7 @@ class AlertDialog extends React.Component {
       onNewVfireCredentialClick,
       onNewTippingPointCredentialClick,
       onOpenContentComposerDialogClick,
+      onReportConfigsChange,
       onReportFormatsChange,
       onSave,
       onPasswordOnlyCredentialChange,
@@ -494,6 +502,7 @@ class AlertDialog extends React.Component {
       method_data_tp_sms_credential,
       method_data_verinice_server_credential,
       method_data_vfire_credential,
+      report_config_ids,
       report_format_ids,
     };
 
@@ -695,10 +704,14 @@ class AlertDialog extends React.Component {
                   notice={values.method_data_notice}
                   noticeAttachFormat={values.method_data_notice_attach_format}
                   noticeReportFormat={values.method_data_notice_report_format}
+                  noticeAttachConfig={values.method_data_notice_attach_config}
+                  noticeReportConfig={values.method_data_notice_report_config}
                   subject={values.method_data_subject}
                   toAddress={values.method_data_to_address}
                   recipientCredential={values.method_data_recipient_credential}
                   reportFormats={report_formats}
+                  reportConfigs={report_configs}
+                  onSave={onSave}
                   onChange={onValueChange}
                   onCredentialChange={onEmailCredentialChange}
                   onNewCredentialClick={onNewEmailCredentialClick}
@@ -717,12 +730,14 @@ class AlertDialog extends React.Component {
                 <ScpMethodPart
                   prefix="method_data"
                   credentials={credentials}
+                  reportConfigs={report_configs}
                   reportFormats={report_formats}
                   scpCredential={values.method_data_scp_credential}
                   scpHost={values.method_data_scp_host}
                   scpPort={values.method_data_scp_port}
                   scpKnownHosts={values.method_data_scp_known_hosts}
                   scpPath={values.method_data_scp_path}
+                  scpReportConfig={values.method_data_scp_report_config}
                   scpReportFormat={values.method_data_scp_report_format}
                   onNewCredentialClick={onNewScpCredentialClick}
                   onCredentialChange={onScpCredentialChange}
@@ -735,7 +750,9 @@ class AlertDialog extends React.Component {
                   prefix="method_data"
                   sendHost={values.method_data_send_host}
                   sendPort={values.method_data_send_port}
+                  sendReportConfig={values.method_data_send_report_config}
                   sendReportFormat={values.method_data_send_report_format}
+                  reportConfigs={report_configs}
                   reportFormats={report_formats}
                   onChange={onValueChange}
                 />
@@ -754,11 +771,13 @@ class AlertDialog extends React.Component {
                 <SmbMethodPart
                   prefix="method_data"
                   credentials={credentials}
+                  reportConfigs={report_configs}
                   reportFormats={report_formats}
                   smbCredential={values.method_data_smb_credential}
                   smbFilePath={values.method_data_smb_file_path}
                   smbMaxProtocol={values.method_data_smb_max_protocol}
                   smbSharePath={values.method_data_smb_share_path}
+                  smbReportConfig={values.method_data_smb_report_config}
                   smbReportFormat={values.method_data_smb_report_format}
                   onNewCredentialClick={onNewSmbCredentialClick}
                   onChange={onValueChange}
@@ -795,10 +814,14 @@ class AlertDialog extends React.Component {
                 <VeriniceMethodPart
                   prefix="method_data"
                   credentials={credentials}
+                  reportConfigs={report_configs}
                   reportFormats={report_formats}
                   veriniceServerUrl={values.method_data_verinice_server_url}
                   veriniceServerCredential={
                     values.method_data_verinice_server_credential
+                  }
+                  veriniceServerReportConfig={
+                    values.method_data_verinice_server_report_config
                   }
                   veriniceServerReportFormat={
                     values.method_data_verinice_server_report_format
@@ -851,6 +874,7 @@ class AlertDialog extends React.Component {
                   onChange={onValueChange}
                   onCredentialChange={onVfireCredentialChange}
                   onReportFormatsChange={onReportFormatsChange}
+                  onReportConfigsChange={onReportConfigsChange}
                   onNewVfireCredentialClick={onNewVfireCredentialClick}
                 />
               )}
@@ -902,7 +926,9 @@ AlertDialog.propTypes = {
   method_data_message: PropTypes.string,
   method_data_message_attach: PropTypes.string,
   method_data_notice: PropTypes.string,
+  method_data_notice_attach_config: PropTypes.id,
   method_data_notice_attach_format: PropTypes.id,
+  method_data_notice_report_config: PropTypes.id,
   method_data_notice_report_format: PropTypes.id,
   method_data_pkcs12_credential: PropTypes.id,
   method_data_recipient_credential: PropTypes.id,
@@ -911,12 +937,15 @@ AlertDialog.propTypes = {
   method_data_scp_known_hosts: PropTypes.string,
   method_data_scp_path: PropTypes.string,
   method_data_scp_port: PropTypes.number,
+  method_data_scp_report_config: PropTypes.id,
   method_data_scp_report_format: PropTypes.id,
   method_data_send_host: PropTypes.string,
   method_data_send_port: PropTypes.string,
+  method_data_send_report_config: PropTypes.id,
   method_data_send_report_format: PropTypes.id,
   method_data_smb_credential: PropTypes.id,
   method_data_smb_file_path: PropTypes.string,
+  method_data_smb_report_config: PropTypes.id,
   method_data_smb_report_format: PropTypes.id,
   method_data_smb_share_path: PropTypes.string,
   method_data_snmp_agent: PropTypes.string,
@@ -929,6 +958,7 @@ AlertDialog.propTypes = {
   method_data_tp_sms_hostname: PropTypes.string,
   method_data_tp_sms_tls_workaround: PropTypes.yesno,
   method_data_verinice_server_credential: PropTypes.id,
+  method_data_verinice_server_report_config: PropTypes.id,
   method_data_verinice_server_report_format: PropTypes.id,
   method_data_verinice_server_url: PropTypes.string,
   method_data_vfire_base_url: PropTypes.string,
@@ -942,6 +972,8 @@ AlertDialog.propTypes = {
   method_data_vfire_credential: PropTypes.id,
   method_data_vfire_session_type: PropTypes.string,
   name: PropTypes.string,
+  report_config_ids: PropTypes.array,
+  report_configs: PropTypes.array,
   report_format_ids: PropTypes.array,
   report_formats: PropTypes.array,
   result_filters: PropTypes.array,
@@ -959,6 +991,7 @@ AlertDialog.propTypes = {
   onNewVfireCredentialClick: PropTypes.func.isRequired,
   onOpenContentComposerDialogClick: PropTypes.func.isRequired,
   onPasswordOnlyCredentialChange: PropTypes.func.isRequired,
+  onReportConfigsChange: PropTypes.func.isRequired,
   onReportFormatsChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   onScpCredentialChange: PropTypes.func.isRequired,

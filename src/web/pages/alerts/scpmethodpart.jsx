@@ -15,7 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {useState} from 'react';
+import {selectSaveId} from 'gmp/utils/id';
 
 import _ from 'gmp/locale';
 
@@ -29,7 +30,7 @@ import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 
-import {renderSelectItems} from 'web/utils/render';
+import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
 import Select from 'web/components/form/select';
@@ -44,16 +45,41 @@ const ScpMethodPart = ({
   prefix,
   credentials = [],
   reportFormats,
+  reportConfigs,
   scpCredential,
   scpHost,
   scpPort,
   scpKnownHosts,
   scpPath,
+  scpReportConfig,
   scpReportFormat,
   onChange,
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const [reportFormatIdInState, setReportFormatId] = useState(
+    selectSaveId(reportFormats, scpReportFormat),
+  );
+  const reportConfigItems = renderSelectItems(
+    reportConfigs.filter(config => {
+      return reportFormatIdInState === config.report_format._id;
+    }),
+    UNSET_VALUE,
+  );
+  const [scpConfigIdInState, setScpConfigId] = useState(
+    selectSaveId(reportConfigs, scpReportConfig, UNSET_VALUE),
+  );
+  const handleReportConfigIdChange = (value, name) => {
+    setScpConfigId(value);
+    onChange(value, name);
+  };
+  const handleReportFormatIdChange = (value, name) => {
+    setScpConfigId(UNSET_VALUE);
+    onChange(UNSET_VALUE, 'method_data_scp_report_config');
+    setReportFormatId(value);
+    onChange(value, name);
+  };
+
   credentials = credentials.filter(ssh_credential_filter);
   return (
     <Layout flex="column" grow="1">
@@ -118,9 +144,17 @@ const ScpMethodPart = ({
       <FormGroup title={_('Report')}>
         <Select
           name={prefix + 'scp_report_format'}
-          value={scpReportFormat}
+          value={reportFormatIdInState}
           items={renderSelectItems(reportFormats)}
-          onChange={onChange}
+          onChange={handleReportFormatIdChange}
+        />
+        <label htmlFor="report-config-select">&nbsp; Report Config &nbsp; </label>
+        <Select
+          name={prefix + 'scp_report_config'}
+          id="report-config-select"
+          value={scpConfigIdInState}
+          items={reportConfigItems}
+          onChange={handleReportConfigIdChange}
         />
       </FormGroup>
     </Layout>
@@ -130,12 +164,14 @@ const ScpMethodPart = ({
 ScpMethodPart.propTypes = {
   credentials: PropTypes.array,
   prefix: PropTypes.string,
+  reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
   scpCredential: PropTypes.id,
   scpHost: PropTypes.string.isRequired,
   scpKnownHosts: PropTypes.string.isRequired,
   scpPath: PropTypes.string.isRequired,
   scpPort: PropTypes.number.isRequired,
+  scpReportConfig: PropTypes.id,
   scpReportFormat: PropTypes.id,
   onChange: PropTypes.func.isRequired,
   onCredentialChange: PropTypes.func.isRequired,

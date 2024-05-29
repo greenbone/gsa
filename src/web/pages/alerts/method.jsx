@@ -67,15 +67,26 @@ const Pre = styled.pre`
   word-wrap: break-word;
 `;
 
-const Method = ({method = {}, details = false, reportFormats = []}) => {
+const Method = ({
+  method = {},
+  details = false,
+  reportFormats = [],
+  reportConfigs = [],
+}) => {
   if (!isDefined(method.type)) {
     return null;
   }
-
   const getReportFormatName = id => {
     const reportFormat = reportFormats.find(format => format.id === id);
     if (isDefined(reportFormat)) {
       return reportFormat.name;
+    }
+    return null;
+  };
+  const getReportConfigName = id => {
+    const reportConfig = reportConfigs.find(config => config.id === id);
+    if (isDefined(reportConfig)) {
+      return reportConfig.name;
     }
     return null;
   };
@@ -160,6 +171,18 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                   </TableData>
                 </TableRow>
               )}
+              {isDefined(data.report_configs) && (
+                <TableRow>
+                  <TableData>{_('Report Configs')}</TableData>
+                  <TableData>
+                    <HorizontalSep separator="," wrap spacing="0">
+                      {data.report_configs.map(id => (
+                        <span key={id}>{getReportConfigName(id)}</span>
+                      ))}
+                    </HorizontalSep>
+                  </TableData>
+                </TableRow>
+              )}
               {isDefined(data.vfire_call_description?.value) && (
                 <TableRow>
                   <TableData>{_('Call Description')}</TableData>
@@ -239,11 +262,21 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                 </TableRow>
               )}
 
-              {isDefined(data.scp_report_format?.value) && (
+              {isDefined(data.scp_report_format?.value) &&
+               reportFormats.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Format')}</TableData>
                   <TableData>
                     {getReportFormatName(data.scp_report_format.value)}
+                  </TableData>
+                </TableRow>
+              )}
+              {isDefined(data.scp_report_config?.value) &&
+               reportConfigs.length > 0 && (
+                <TableRow>
+                  <TableData>{_('Report Config')}</TableData>
+                  <TableData>
+                    {getReportConfigName(data.scp_report_config.value)}
                   </TableData>
                 </TableRow>
               )}
@@ -309,11 +342,21 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                   <TableData>{data.smb_file_path.value}</TableData>
                 </TableRow>
               )}
-              {isDefined(data.smb_report_format?.value) && (
+              {isDefined(data.smb_report_format?.value) &&
+               reportFormats.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Format')}</TableData>
                   <TableData>
                     {getReportFormatName(data.smb_report_format.value)}
+                  </TableData>
+                </TableRow>
+              )}
+              {isDefined(data.smb_report_config?.value) &&
+               reportConfigs.length > 0 && (
+                <TableRow>
+                  <TableData>{_('Report Config')}</TableData>
+                  <TableData>
+                    {getReportConfigName(data.smb_report_config.value)}
                   </TableData>
                 </TableRow>
               )}
@@ -343,11 +386,21 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
             <Col width="88%" />
           </colgroup>
           <TableBody>
-            {details && isDefined(data.send_report_format?.value) && (
+            {details && isDefined(data.send_report_format?.value) &&
+             reportFormats.length > 0 && (
               <TableRow>
                 <TableData>{_('Report Format')}</TableData>
                 <TableData>
                   {getReportFormatName(data.send_report_format.value)}
+                </TableData>
+              </TableRow>
+            )}
+            {details && isDefined(data.send_report_config?.value) &&
+             reportConfigs.length > 0 && (
+              <TableRow>
+                <TableData>{_('Report Config')}</TableData>
+                <TableData>
+                  {getReportConfigName(data.send_report_config.value)}
                 </TableData>
               </TableRow>
             )}
@@ -450,13 +503,14 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                     {data.notice.value === EMAIL_NOTICE_INCLUDE
                       ? _('Include Content')
                       : data.notice.value === EMAIL_NOTICE_ATTACH
-                      ? _('Attach Content')
-                      : _('Simple Notice')}
+                        ? _('Attach Content')
+                        : _('Simple Notice')}
                   </TableData>
                 </TableRow>
               )}
 
-              {details && isDefined(data.notice_report_format?.value) && (
+              {details && isDefined(data.notice_report_format?.value) &&
+               reportFormats.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Format')}</TableData>
                   <TableData>
@@ -465,11 +519,32 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                 </TableRow>
               )}
 
-              {details && isDefined(data.notice_attach_format?.value) && (
+              {details && isDefined(data.notice_attach_format?.value) &&
+               reportFormats.length > 0 && (
                 <TableRow>
                   <TableData>{_('Report Format')}</TableData>
                   <TableData>
                     {getReportFormatName(data.notice_attach_format.value)}
+                  </TableData>
+                </TableRow>
+              )}
+
+              {details && isDefined(data.notice_report_config?.value) &&
+               reportConfigs.length > 0 && (
+                <TableRow>
+                  <TableData>{_('Report Config')}</TableData>
+                  <TableData>
+                    {getReportConfigName(data.notice_report_config.value)}
+                  </TableData>
+                </TableRow>
+              )}
+
+              {details && isDefined(data.notice_attach_config?.value) &&
+               reportConfigs.length > 0 && (
+                <TableRow>
+                  <TableData>{_('Report Config')}</TableData>
+                  <TableData>
+                    {getReportConfigName(data.notice_attach_config.value)}
                   </TableData>
                 </TableRow>
               )}
@@ -590,12 +665,25 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
                 </TableRow>
               )}
 
-              {isDefined(data.verinice_server_report_format?.value) && (
+              {isDefined(data.verinice_server_report_format?.value) &&
+               reportFormats.length > 0 && (
                 <TableRow>
                   <TableData>{_('verinice.PRO Report')}</TableData>
                   <TableData>
                     {getReportFormatName(
                       data.verinice_server_report_format.value,
+                    )}
+                  </TableData>
+                </TableRow>
+              )}
+
+              {isDefined(data.verinice_server_report_config?.value) &&
+               reportConfigs.length > 0 && (
+                <TableRow>
+                  <TableData>{_('Report Config')}</TableData>
+                  <TableData>
+                    {getReportConfigName(
+                      data.verinice_server_report_config.value,
                     )}
                   </TableData>
                 </TableRow>
@@ -669,6 +757,7 @@ const Method = ({method = {}, details = false, reportFormats = []}) => {
 Method.propTypes = {
   details: PropTypes.bool,
   method: PropTypes.object.isRequired,
+  reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
 };
 

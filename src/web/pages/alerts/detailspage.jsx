@@ -62,6 +62,11 @@ import {
   selector as reportFormatsSelector,
 } from 'web/store/entities/reportformats';
 
+import {
+  loadAllEntities as loadAllReportConfigs,
+  selector as reportConfigsSelector,
+} from 'web/store/entities/reportconfigs';
+
 import PropTypes from 'web/utils/proptypes';
 
 import AlertComponent from './component';
@@ -110,6 +115,7 @@ ToolBarIcons.propTypes = {
 const Page = ({
   entity,
   permissions = [],
+  reportConfigs,
   reportFormats,
   onChanged,
   onDownloaded,
@@ -169,6 +175,7 @@ const Page = ({
                       <AlertDetails
                         entity={entity}
                         reportFormats={reportFormats}
+                        reportConfigs={reportConfigs}
                       />
                     </TabPanel>
                     <TabPanel>
@@ -203,6 +210,7 @@ const Page = ({
 Page.propTypes = {
   entity: PropTypes.model,
   permissions: PropTypes.array,
+  reportConfigs: PropTypes.array,
   reportFormats: PropTypes.array,
   onChanged: PropTypes.func.isRequired,
   onDownloaded: PropTypes.func.isRequired,
@@ -214,20 +222,24 @@ const load = gmp => {
   const loadEntityFunc = loadEntity(gmp);
   const loadPermissionsFunc = loadPermissions(gmp);
   const loadAllReportFormatsFunc = loadAllReportFormats(gmp);
+  const loadAllReportConfigsFunc = loadAllReportConfigs(gmp);
   return id => dispatch =>
     Promise.all([
       dispatch(loadEntityFunc(id)),
       dispatch(loadPermissionsFunc(permissionsResourceFilter(id))),
       dispatch(loadAllReportFormatsFunc()),
+      dispatch(loadAllReportConfigsFunc()),
     ]);
 };
 
 const mapStateToProps = (rootState, {id}) => {
   const permissionsSel = permissionsSelector(rootState);
   const reportFormatsSel = reportFormatsSelector(rootState);
+  const reportConfigsSel = reportConfigsSelector(rootState);
   return {
     permissions: permissionsSel.getEntities(permissionsResourceFilter(id)),
     reportFormats: reportFormatsSel.getAllEntities(),
+    reportConfigs: reportConfigsSel.getAllEntities(),
   };
 };
 
