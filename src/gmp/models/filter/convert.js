@@ -16,10 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import {isDefined} from '../../utils/identity';
+import {isDefined, isNumberOrNumberString} from '../../utils/identity';
 import {isEmpty} from '../../utils/string';
 
-import {parseInt} from '../../parser';
+import {parseInt, parseFloat} from '../../parser';
 
 const convertBooleanInt = (keyword, value, relation) => ({
   keyword,
@@ -85,6 +85,10 @@ const convert = (keyword, value, relation) => {
 
   if (isEmpty(keyword)) {
     return {value, relation};
+  }
+
+  if (isNumberOrNumberString(keyword, parseFloat)) {
+    return {value: `"${keyword}${relation}${value}"`, relation: '~'};
   }
 
   return {
