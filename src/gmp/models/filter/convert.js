@@ -19,7 +19,7 @@
 import {isDefined, isNumberOrNumberString} from '../../utils/identity';
 import {isEmpty} from '../../utils/string';
 
-import {parseInt} from '../../parser';
+import {parseInt, parseFloat} from '../../parser';
 
 const convertBooleanInt = (keyword, value, relation) => ({
   keyword,
@@ -87,8 +87,8 @@ const convert = (keyword, value, relation) => {
     return {value, relation};
   }
 
-  if (isNumberOrNumberString(keyword)) {
-    return {value: `${keyword}${relation}${value}`, relation: '~'};
+  if (isNumberOrNumberString(keyword, parseFloat)) {
+    return {value: `"${keyword}${relation}${value}"`, relation: '~'};
   }
 
   return {

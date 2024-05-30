@@ -251,14 +251,15 @@ describe('convert tests', () => {
 
   test('should return correct value and relation when keyword is a number or number string', () => {
     expect(convert('123', '456', '=')).toEqual({
-      value: '123=456',
+      value: '"123=456"',
       relation: '~',
     });
   });
 
   test('should return correct value and relation when keyword is a number', () => {
     expect(convert(123, 456, ':')).toEqual({
-      value: '123:456',
+      value: '"123:456"',
+
       relation: '~',
     });
   });
