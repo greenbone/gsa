@@ -20,7 +20,7 @@ import React from 'react';
 
 import Filter from 'gmp/models/filter.js';
 
-import {isDefined} from 'gmp/utils/identity';
+import {isDefined, isNumber} from 'gmp/utils/identity';
 
 import SeverityBar from 'web/components/bar/severitybar';
 
@@ -42,6 +42,7 @@ import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
 
 import PropTypes from 'web/utils/proptypes';
+import {_} from "gmp/locale/lang.js";
 
 const Row = ({
   actionsComponent: ActionsComponent = EntitiesActions,
@@ -100,6 +101,14 @@ const Row = ({
       </TableData>
       <TableData align="end">
         {entity.qod && <Qod value={entity.qod.value} />}
+      </TableData>
+      <TableData>
+        {isNumber(entity?.epss?.max_severity?.score)
+          ? entity.epss?.max_severity?.score.toFixed(5) : _("N/A")}
+      </TableData>
+      <TableData>
+        {isNumber(entity?.epss?.max_severity?.percentile)
+          ? entity.epss?.max_severity?.percentile.toFixed(5) : _("N/A")}
       </TableData>
       <ActionsComponent {...props} entity={entity} />
     </TableRow>

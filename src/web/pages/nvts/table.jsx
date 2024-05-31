@@ -51,7 +51,8 @@ const Header = ({
     <TableHeader>
       <TableRow>
         <TableHead
-          width="32%"
+          rowSpan="2"
+          width="26%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -59,6 +60,7 @@ const Header = ({
           title={_('Name')}
         />
         <TableHead
+          rowSpan="2"
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -67,6 +69,7 @@ const Header = ({
           title={_('Family')}
         />
         <TableHead
+          rowSpan="2"
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -75,6 +78,7 @@ const Header = ({
           title={_('Created')}
         />
         <TableHead
+          rowSpan="2"
           width="10%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -83,6 +87,7 @@ const Header = ({
           title={_('Modified')}
         />
         <TableHead
+          rowSpan="2"
           width="18%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -90,7 +95,7 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('CVE')}
         />
-        <TableHead width="1%">
+        <TableHead rowSpan="2" width="1%">
           <Layout align="center">
             {sort ? (
               <Sort by="solution_type" onClick={onSortChange}>
@@ -102,6 +107,7 @@ const Header = ({
           </Layout>
         </TableHead>
         <TableHead
+          rowSpan="2"
           width="8%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -110,6 +116,7 @@ const Header = ({
           title={_('Severity')}
         />
         <TableHead
+          rowSpan="2"
           width="3%"
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
@@ -117,7 +124,28 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('QoD')}
         />
+        <TableHead colSpan="2">
+          {_("EPSS")}
+        </TableHead>
         {actionsColumn}
+      </TableRow>
+      <TableRow>
+        <TableHead
+          width="3%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'epss_score' : false}
+          onSortChange={onSortChange}
+          title={_('Score')}
+        />
+        <TableHead
+          width="3%"
+          currentSortDir={currentSortDir}
+          currentSortBy={currentSortBy}
+          sortBy={sort ? 'epss_percentile' : false}
+          onSortChange={onSortChange}
+          title={_('Percentile')}
+        />
       </TableRow>
     </TableHeader>
   );

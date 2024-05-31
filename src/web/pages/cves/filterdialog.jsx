@@ -56,6 +56,14 @@ const SORT_FIELDS = [
     name: 'severity',
     displayName: _l('Severity'),
   },
+  {
+    name: 'epss_score',
+    displayName: _l('EPSS Score'),
+  },
+  {
+    name: 'epss_percentile',
+    displayName: _l('EPSS Percentile'),
+  },
 ];
 
 export default createFilterDialog({

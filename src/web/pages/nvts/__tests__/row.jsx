@@ -48,6 +48,23 @@ const entity = NVT.fromElement({
     _type: 'VendorFix',
     __text: 'This is a description',
   },
+  epss: {
+    max_severity: {
+      score: 0.8765,
+      percentile: 0.9,
+      cve: {
+        _id: 'CVE-2020-1234',
+        severity: 10.0,
+      },
+    },
+    max_epss: {
+      score: 0.9876,
+      percentile: 0.8,
+      cve: {
+        _id: 'CVE-2020-5678',
+      },
+    },
+  },
   refs: {
     ref: [
       {_type: 'cve', _id: 'CVE-2020-1234'},
