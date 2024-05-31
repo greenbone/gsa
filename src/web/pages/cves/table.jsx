@@ -91,7 +91,7 @@ const Header = ({
           title={_('Severity')}
         />
         <TableHead colSpan="2">
-          {"EPSS"}
+          {_("EPSS")}
         </TableHead>
         {isDefined(actionsColumn) ? (
           actionsColumn

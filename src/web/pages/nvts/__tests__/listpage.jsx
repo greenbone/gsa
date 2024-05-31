@@ -45,6 +45,23 @@ const nvt = NVT.fromElement({
     _type: 'VendorFix',
     __text: 'This is a description',
   },
+  epss: {
+    max_severity: {
+      score: 0.8765,
+      percentile: 0.9,
+      cve: {
+        _id: 'CVE-2020-1234',
+        severity: 10.0,
+      },
+    },
+    max_epss: {
+      score: 0.9876,
+      percentile: 0.8,
+      cve: {
+        _id: 'CVE-2020-5678',
+      },
+    },
+  },
   refs: {
     ref: [
       {_type: 'cve', _id: 'CVE-2020-1234'},
@@ -192,16 +209,21 @@ describe('NvtsPage tests', () => {
     expect(header[4]).toHaveTextContent('CVE');
     expect(header[6]).toHaveTextContent('Severity');
     expect(header[7]).toHaveTextContent('QoD');
+    expect(header[8]).toHaveTextContent('EPSS');
+    expect(header[9]).toHaveTextContent('Score');
+    expect(header[10]).toHaveTextContent('Percentile');
 
     const row = baseElement.querySelectorAll('tr');
 
-    expect(row[1]).toHaveTextContent('foo');
-    expect(row[1]).toHaveTextContent('bar');
-    expect(row[1]).toHaveTextContent('Mon, Jun 24, 2019 1:55 PM CEST');
-    expect(row[1]).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
-    expect(row[1]).toHaveTextContent('CVE-2020-1234');
-    expect(row[1]).toHaveTextContent('CVE-2020-5678');
-    expect(row[1]).toHaveTextContent('80 %');
+    expect(row[2]).toHaveTextContent('foo');
+    expect(row[2]).toHaveTextContent('bar');
+    expect(row[2]).toHaveTextContent('Mon, Jun 24, 2019 1:55 PM CEST');
+    expect(row[2]).toHaveTextContent('Mon, Jun 24, 2019 12:12 PM CEST');
+    expect(row[2]).toHaveTextContent('CVE-2020-1234');
+    expect(row[2]).toHaveTextContent('CVE-2020-5678');
+    expect(row[2]).toHaveTextContent('80 %');
+    expect(row[2]).toHaveTextContent('0.87650');
+    expect(row[2]).toHaveTextContent('0.90000');
   });
 
   test('should allow to bulk action on page contents', async () => {

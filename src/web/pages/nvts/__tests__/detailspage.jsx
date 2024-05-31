@@ -67,6 +67,23 @@ const nvt = NVT.fromElement({
       _type: 'VendorFix',
       __text: 'This is a description',
     },
+    epss: {
+      max_severity: {
+        score: 0.8765,
+        percentile: 0.9,
+        cve: {
+          _id: 'CVE-2020-1234',
+          severity: 10.0,
+        },
+      },
+      max_epss: {
+        score: 0.9876,
+        percentile: 0.8,
+        cve: {
+          _id: 'CVE-2020-5678',
+        },
+      },
+    },
     timeout: '',
     refs: {
       ref: [
@@ -307,6 +324,14 @@ describe('Nvt Detailspage tests', () => {
     expect(element).toHaveTextContent('AV:N/AC:M/Au:S/C:P/I:N/A:P');
     expect(element).toHaveTextContent('CVSS Origin');
     expect(element).toHaveTextContent('N/A');
+
+    expect(element).toHaveTextContent('EPSS (CVE with highest severity)');
+    expect(element).toHaveTextContent('EPSS Score');
+    expect(element).toHaveTextContent('0.87650');
+    expect(element).toHaveTextContent('EPSS Percentile');
+    expect(element).toHaveTextContent('0.90000');
+    expect(element).toHaveTextContent('EPSS (highest EPSS score)');
+    expect(element).toHaveTextContent('0.98760');
 
     expect(element).toHaveTextContent('Insight');
     expect(element).toHaveTextContent('Foo');
