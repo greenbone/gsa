@@ -18,7 +18,7 @@
 
 import PropTypes from 'prop-types';
 
-import Metrics from 'web/pages/extras/cvssV4Point0/Metrics';
+import Metrics from 'web/pages/extras/cvssV4/Metrics';
 
 const MetricsGroups = ({
   cvssConfigData,

@@ -47,7 +47,7 @@ import Divider from 'web/components/layout/divider';
 import Section from 'web/components/section/section';
 
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
-import CvssV4Point0Calculator from './cvssV4Point0/CvssV4Point0Calculator';
+import CvssV4Calculator from './cvssV4/CvssV4Calculator';
 
 const StyledTextField = styled(TextField)`
   width: 180px;
@@ -718,7 +718,7 @@ const CvssCalculator = props => (
       <CvssV3Calculator {...props} />
     </Divider>
     <Divider margin="20px" flex="row" align={['center', 'start']} grow>
-      <CvssV4Point0Calculator location={props.location} />
+      <CvssV4Calculator location={props.location} />
     </Divider>
   </Layout>
 );

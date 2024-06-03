@@ -22,8 +22,8 @@ import {
   calculateVector,
   processVector,
   removeUnusedMetrics,
-} from 'web/pages/extras/cvssV4Point0/utils';
-import {expectedMetricOptionsOrdered} from 'web/pages/extras/cvssV4Point0/cvssConfig';
+} from 'web/pages/extras/cvssV4/utils';
+import {expectedMetricOptionsOrdered} from 'web/pages/extras/cvssV4/cvssConfig';
 
 describe('CVSS V4.0 Utils', () => {
   describe('calculateVector', () => {

@@ -18,7 +18,7 @@
 
 import {describe, test, expect} from '@gsa/testing';
 import {fireEvent, rendererWith, wait} from 'web/utils/testing';
-import CvssV4Point0Calculator from 'web/pages/extras/cvssV4Point0/CvssV4Point0Calculator';
+import CvssV4Calculator from 'web/pages/extras/cvssV4/CvssV4Calculator';
 
 const gmp = {};
 
@@ -31,7 +31,7 @@ const location = {
   },
 };
 
-describe('CvssV4Point0Calculator page tests', () => {
+describe('CvssV4Calculator page tests', () => {
   test('Should render with default values', async () => {
     const {render} = rendererWith({
       gmp,
@@ -39,7 +39,7 @@ describe('CvssV4Point0Calculator page tests', () => {
     });
 
     const {getByText, within} = render(
-      <CvssV4Point0Calculator location={location} />,
+      <CvssV4Calculator location={location} />,
     );
 
     const cvssVectorEl = getByText('CVSS Base Vector');
@@ -63,7 +63,7 @@ describe('CvssV4Point0Calculator page tests', () => {
     });
 
     const {getByText, within} = render(
-      <CvssV4Point0Calculator location={locationModified} />,
+      <CvssV4Calculator location={locationModified} />,
     );
 
     const cvssVectorEl = getByText('CVSS Base Vector');
@@ -81,7 +81,7 @@ describe('CvssV4Point0Calculator page tests', () => {
     });
 
     const {getByText, within, element, getAllByTestId} = render(
-      <CvssV4Point0Calculator location={location} />,
+      <CvssV4Calculator location={location} />,
     );
 
     await wait();
@@ -118,7 +118,7 @@ describe('CvssV4Point0Calculator page tests', () => {
     });
 
     const {element, getAllByTestId, getByText, within} = render(
-      <CvssV4Point0Calculator location={location} />,
+      <CvssV4Calculator location={location} />,
     );
 
     await wait();

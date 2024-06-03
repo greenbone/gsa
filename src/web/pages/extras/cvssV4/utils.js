@@ -94,14 +94,14 @@ export const removeUnusedMetrics = cvssVector => {
 /**
  * This function calculates the CVSS score from a CVSS vector.
  * @param {string} cvssVector - The CVSS vector with all the metrics to calculate the score.
- * @returns {number} - The CVSS score.
+ * @returns {number | undefined} - The CVSS score.
  *
  */
 
 export const calculateScoreSafely = cvssVector => {
   try {
     return new CVSS40(cvssVector).Score();
-  } catch (error) {
-    return 0;
+  } catch {
+    return undefined;
   }
 };

@@ -18,7 +18,7 @@
 
 import {describe, test, expect, testing} from '@gsa/testing';
 import {render} from 'web/utils/testing';
-import Metrics from 'web/pages/extras/cvssV4Point0/Metrics';
+import Metrics from 'web/pages/extras/cvssV4/Metrics';
 
 describe('Metrics', () => {
   test('renders the correct number of Select components', () => {

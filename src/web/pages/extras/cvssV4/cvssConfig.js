@@ -39,7 +39,7 @@ export const cvssConfigData = {
       },
       AT: {
         default: 'N',
-        name: 'Attack Required',
+        name: 'Attack Requirements',
         options: {
           N: 'None',
           P: 'Present',
@@ -76,7 +76,7 @@ export const cvssConfigData = {
       },
       VI: {
         default: 'N',
-        name: 'Integrity',
+        name: 'Integrity Impact',
         options: {
           H: 'High',
           L: 'Low',
@@ -85,7 +85,7 @@ export const cvssConfigData = {
       },
       VA: {
         default: 'N',
-        name: 'Availability',
+        name: 'Availability Impact',
         options: {
           H: 'High',
           L: 'Low',
@@ -96,7 +96,7 @@ export const cvssConfigData = {
     'Subsequent System Impact Metrics': {
       SC: {
         default: 'N',
-        name: 'Confidentiality',
+        name: 'Confidentiality Impact',
         options: {
           H: 'High',
           L: 'Low',
@@ -105,7 +105,7 @@ export const cvssConfigData = {
       },
       SI: {
         default: 'N',
-        name: 'Integrity',
+        name: 'Integrity Impact',
         options: {
           H: 'High',
           L: 'Low',
@@ -114,7 +114,7 @@ export const cvssConfigData = {
       },
       SA: {
         default: 'N',
-        name: 'Availability',
+        name: 'Availability Impact',
         options: {
           H: 'High',
           L: 'Low',
@@ -240,7 +240,7 @@ export const cvssConfigData = {
     'Vulnerable System Impact Metrics': {
       MVC: {
         default: 'X',
-        name: 'Confidentiality',
+        name: 'Confidentiality Impact',
         options: {
           X: 'Not Defined',
           H: 'High',
@@ -250,7 +250,7 @@ export const cvssConfigData = {
       },
       MVI: {
         default: 'X',
-        name: 'Integrity',
+        name: 'Integrity Impact',
         options: {
           X: 'Not Defined',
           H: 'High',
@@ -260,7 +260,7 @@ export const cvssConfigData = {
       },
       MVA: {
         default: 'X',
-        name: 'Availability (MVA)',
+        name: 'Availability Impact',
         options: {
           X: 'Not Defined',
           H: 'High',
@@ -272,7 +272,7 @@ export const cvssConfigData = {
     'Subsequent System Impact Metrics': {
       MSC: {
         default: 'X',
-        name: 'Confidentiality',
+        name: 'Confidentiality Impact',
         options: {
           X: 'Not Defined',
           H: 'High',
@@ -282,7 +282,7 @@ export const cvssConfigData = {
       },
       MSI: {
         default: 'X',
-        name: 'Integrity',
+        name: 'Integrity Impact',
         options: {
           X: 'Not Defined',
           S: 'Safety',
@@ -293,7 +293,7 @@ export const cvssConfigData = {
       },
       MSA: {
         default: 'X',
-        name: 'Availability',
+        name: 'Availability Impact',
         options: {
           X: 'Not Defined',
           S: 'Safety',

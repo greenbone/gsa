@@ -23,7 +23,7 @@ import _ from 'gmp/locale';
 import {
   cvssConfigData,
   expectedMetricOptionsOrdered,
-} from 'web/pages/extras/cvssV4Point0/cvssConfig';
+} from 'web/pages/extras/cvssV4/cvssConfig';
 
 import {
   processVector,
@@ -39,15 +39,15 @@ import CvssIcon from 'web/components/icon/cvssicon';
 import SeverityBar from 'web/components/bar/severitybar';
 import styled from 'styled-components';
 import TextField from 'web/components/form/textfield';
-import MetricsGroups from 'web/pages/extras/cvssV4Point0/MetricsGroups';
+import MetricsGroups from 'web/pages/extras/cvssV4/MetricsGroups';
 
 const StyledTextField = styled(TextField)`
   width: 180px;
 `;
 
-const CVSS4Point0 = 'CVSS:4.0/';
+const cvssV4Prefix = 'CVSS:4.0/';
 
-const CvssV4Point0Calculator = ({location}) => {
+const CvssV4Calculator = ({location}) => {
   const initialState = useMemo(() => {
     return expectedMetricOptionsOrdered.reduce((obj, item) => {
       obj[item[0]] = item[1];
@@ -58,15 +58,15 @@ const CvssV4Point0Calculator = ({location}) => {
   const [selectedOptions, setSelectedOptions] = useState(initialState);
 
   const [inputCVSSVector, setInputCVSSVector] = useState(
-    `${CVSS4Point0}${removeUnusedMetrics(selectedOptions)}`,
+    `${cvssV4Prefix}${removeUnusedMetrics(selectedOptions)}`,
   );
 
   const [, renewSession] = useUserSessionTimeout();
 
-  const cvssVector = `${CVSS4Point0}${removeUnusedMetrics(selectedOptions)}`;
+  const cvssVector = `${cvssV4Prefix}${removeUnusedMetrics(selectedOptions)}`;
 
   useEffect(() => {
-    if (location?.query?.cvssVector?.includes(CVSS4Point0)) {
+    if (location?.query?.cvssVector?.includes(cvssV4Prefix)) {
       const newOptions = processVector(location.query.cvssVector);
       setSelectedOptions({...initialState, ...newOptions});
     }
@@ -86,7 +86,7 @@ const CvssV4Point0Calculator = ({location}) => {
   const handleOptionChange = (value, name) => {
     const newOptions = {...selectedOptions, [name]: value};
 
-    setInputCVSSVector(`${CVSS4Point0}${removeUnusedMetrics(newOptions)}`);
+    setInputCVSSVector(`${cvssV4Prefix}${removeUnusedMetrics(newOptions)}`);
     setSelectedOptions(newOptions);
 
     renewSession();
@@ -98,7 +98,7 @@ const CvssV4Point0Calculator = ({location}) => {
     <Layout flex="column" grow>
       <Section
         img={<CvssIcon size="large" />}
-        title={_('CVSSv4 Base Score Calculator')}
+        title={_('CVSSv4 Score Calculator')}
       />
       <h3>{_('From Metrics')}:</h3>
       <MetricsGroups
@@ -126,8 +126,8 @@ const CvssV4Point0Calculator = ({location}) => {
   );
 };
 
-CvssV4Point0Calculator.propTypes = {
+CvssV4Calculator.propTypes = {
   location: PropTypes.object.isRequired,
 };
 
-export default CvssV4Point0Calculator;
+export default CvssV4Calculator;
