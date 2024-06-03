@@ -109,7 +109,7 @@ const CvssV4Point0Calculator = ({location}) => {
       <h3>{_('From Vector')}:</h3>
       <FormGroup title={`CVSS 4.0 ${_('Vector')}`}>
         <StyledTextField
-          name="cvssVector"
+          name="cvssVectorInput"
           value={inputCVSSVector}
           onChange={handleInputCVSSVectorChange}
         />
