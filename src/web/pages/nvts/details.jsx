@@ -12,6 +12,7 @@ import {isDefined, isNumber} from 'gmp/utils/identity';
 import {TAG_NA} from 'gmp/models/nvt';
 
 import PropTypes from 'web/utils/proptypes';
+import useGmp from "web/utils/useGmp.jsx";
 
 import {na, getTranslatableSeverityOrigin} from 'web/utils/render';
 
@@ -45,6 +46,7 @@ const NvtDetails = ({entity, links = true}) => {
     severityOrigin,
     severityDate,
   } = entity;
+  const gmp = useGmp();
   return (
     <Layout flex="column" grow="1">
       {entity.isDeprecated() && <div>{_('This NVT is deprecated.')}</div>}
@@ -97,7 +99,7 @@ const NvtDetails = ({entity, links = true}) => {
                 )}
               </TableData>
             </TableRow>
-            { isDefined(epss?.max_severity) &&
+            { gmp.settings.enableEPSS && isDefined(epss?.max_severity) &&
               <>
                 <TableData colSpan="2">
                   <b>{_('EPSS (CVE with highest severity)')}</b>
@@ -133,7 +135,7 @@ const NvtDetails = ({entity, links = true}) => {
                 </TableRow>
               </>
             }
-            { isDefined(epss?.max_epss) &&
+            { gmp.settings.enableEPSS && isDefined(epss?.max_epss) &&
               <>
                 <TableData colSpan="2">
                   <b>{_('EPSS (highest EPSS score)')}</b>

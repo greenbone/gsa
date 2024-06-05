@@ -139,7 +139,10 @@ describe('CVE Detailspage tests', () => {
         get: getCve,
       },
       reloadInterval,
-      settings: {manualUrl},
+      settings: {
+        manualUrl,
+        enableEPSS: true,
+      },
       user: {
         currentSettings,
         renewSession,

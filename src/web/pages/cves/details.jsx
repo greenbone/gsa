@@ -25,6 +25,7 @@ import TableData from 'web/components/table/data';
 import TableRow from 'web/components/table/row';
 
 import PropTypes from 'web/utils/proptypes';
+import useGmp from "web/utils/useGmp.jsx";
 
 const CVSS_PROPS = {
   cvssAccessVector: _l('Access Vector'),
@@ -49,7 +50,7 @@ const CVSS_PROPS = {
 
 const CveDetails = ({entity}) => {
   const {cvssBaseVector, description, references = [], severity, epss} = entity;
-
+  const gmp = useGmp();
   return (
     <Layout flex="column" grow="1">
       {isDefined(description) && (
@@ -92,7 +93,7 @@ const CveDetails = ({entity}) => {
         </InfoTable>
       </DetailsBlock>
 
-      {isDefined(epss) && (
+      {gmp.settings.enableEPSS && isDefined(epss) && (
         <DetailsBlock title={_('EPSS')}>
           <InfoTable>
             <TableBody>
