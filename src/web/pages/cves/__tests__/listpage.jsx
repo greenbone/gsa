@@ -109,7 +109,7 @@ describe('CvesPage tests', () => {
       filters: {
         get: getFilters,
       },
-      settings: {manualUrl, reloadInterval},
+      settings: {manualUrl, reloadInterval, enableEPSS: true},
       user: {currentSettings, getSetting},
     };
 

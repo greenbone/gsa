@@ -27,6 +27,8 @@ import TableRow from 'web/components/table/row';
 import NvtDetails from './details';
 import NvtRow from './row';
 
+import useGmp from "web/utils/useGmp.jsx";
+
 const Header = ({
   actionsColumn,
   links = true,
@@ -35,12 +37,13 @@ const Header = ({
   currentSortDir,
   onSortChange,
 }) => {
+  const gmp = useGmp();
   return (
     <TableHeader>
       <TableRow>
         <TableHead
           rowSpan="2"
-          width="26%"
+          width={gmp.settings.enableEPSS ? '26%' : '32%'}
           currentSortDir={currentSortDir}
           currentSortBy={currentSortBy}
           sortBy={sort ? 'name' : false}
@@ -112,29 +115,38 @@ const Header = ({
           onSortChange={onSortChange}
           title={_('QoD')}
         />
-        <TableHead colSpan="2">
-          {_("EPSS")}
-        </TableHead>
+        {
+          gmp.settings.enableEPSS &&
+          <TableHead colSpan="2">
+            {_("EPSS")}
+          </TableHead>
+        }
         {actionsColumn}
       </TableRow>
-      <TableRow>
-        <TableHead
-          width="3%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'epss_score' : false}
-          onSortChange={onSortChange}
-          title={_('Score')}
-        />
-        <TableHead
-          width="3%"
-          currentSortDir={currentSortDir}
-          currentSortBy={currentSortBy}
-          sortBy={sort ? 'epss_percentile' : false}
-          onSortChange={onSortChange}
-          title={_('Percentile')}
-        />
-      </TableRow>
+      {
+        gmp.settings.enableEPSS &&
+        <>
+          <TableRow>
+            <TableHead
+              width="3%"
+              currentSortDir={currentSortDir}
+              currentSortBy={currentSortBy}
+              sortBy={sort ? 'epss_score' : false}
+              onSortChange={onSortChange}
+              title={_('Score')}
+            />
+            <TableHead
+              width="3%"
+              currentSortDir={currentSortDir}
+              currentSortBy={currentSortBy}
+              sortBy={sort ? 'epss_percentile' : false}
+              onSortChange={onSortChange}
+              title={_('Percentile')}
+            />
+          </TableRow>
+        </>
+      }
+
     </TableHeader>
   );
 };

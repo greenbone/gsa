@@ -30,6 +30,7 @@ import EntitiesActions from 'web/entities/actions';
 import {RowDetailsToggle} from 'web/entities/row';
 
 import PropTypes from 'web/utils/proptypes';
+import useGmp from "web/utils/useGmp.jsx";
 import {_} from "gmp/locale/lang.js";
 
 const Row = ({
@@ -40,6 +41,7 @@ const Row = ({
   onToggleDetailsClick,
   ...props
 }) => {
+  const gmp = useGmp();
   const handleFilterChanged = () => {
     const filter = Filter.fromString('family="' + entity.family + '"');
     onFilterChanged(filter);
@@ -90,14 +92,19 @@ const Row = ({
       <TableData align="end">
         {entity.qod && <Qod value={entity.qod.value} />}
       </TableData>
-      <TableData>
-        {isNumber(entity?.epss?.max_severity?.score)
-          ? entity.epss?.max_severity?.score.toFixed(5) : _("N/A")}
-      </TableData>
-      <TableData>
-        {isNumber(entity?.epss?.max_severity?.percentile)
-          ? entity.epss?.max_severity?.percentile.toFixed(5) : _("N/A")}
-      </TableData>
+      {
+        gmp.settings.enableEPSS &&
+        <>
+          <TableData>
+            {isNumber(entity?.epss?.max_severity?.score)
+              ? entity.epss?.max_severity?.score.toFixed(5) : _("N/A")}
+          </TableData>
+          <TableData>
+            {isNumber(entity?.epss?.max_severity?.percentile)
+              ? entity.epss?.max_severity?.percentile.toFixed(5) : _("N/A")}
+          </TableData>
+        </>
+      }
       <ActionsComponent {...props} entity={entity} />
     </TableRow>
   );
