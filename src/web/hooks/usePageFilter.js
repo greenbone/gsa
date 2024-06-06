@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
-import {useLocation} from 'react-router-dom';
+import {useLocation, useHistory} from 'react-router-dom';
 
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -14,6 +14,7 @@ import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
 import Filter, {
   DEFAULT_FALLBACK_FILTER,
   DEFAULT_ROWS_PER_PAGE,
+  RESET_FILTER,
 } from 'gmp/models/filter';
 
 import {isDefined, hasValue} from 'gmp/utils/identity';
@@ -40,11 +41,13 @@ const useDefaultFilter = pageName =>
   });
 
 /**
- * Hook to get the filter of a page
+ * Hook to get and update the filter of a page
  *
  * @param {String} pageName Name of the page
  * @param {Object} options Options object
- * @returns Array of the applied filter and boolean indicating if the filter is still loading
+ * @returns Array of the applied filter, boolean indicating if the filter is
+ *          still loading, function to change the filter, function to remove the
+ *          filter and function to reset the filter
  */
 const usePageFilter = (
   pageName,
@@ -53,6 +56,7 @@ const usePageFilter = (
   const gmp = useGmp();
   const dispatch = useDispatch();
   const location = useLocation();
+  const history = useHistory();
 
   // only use location directly if locationQueryFilterString is undefined
   // use null as value for not set at all
@@ -141,7 +145,36 @@ const usePageFilter = (
       isDefined(defaultSettingsFilterError)) &&
     isDefined(rowsPerPage);
 
-  return [returnedFilter, !finishedLoading];
+  const changeFilter = useCallback(
+    filter => {
+      dispatch(setPageFilter(pageName, filter));
+    },
+    [dispatch, pageName],
+  );
+
+  const removeFilter = useCallback(() => {
+    // remove filter from store by setting it to the default filter with first=1 only
+    changeFilter(RESET_FILTER);
+  }, [changeFilter]);
+
+  const resetFilter = useCallback(() => {
+    const query = {...location.query};
+
+    // remove filter param from url
+    delete query.filter;
+
+    history.push({pathname: location.pathname, query});
+
+    changeFilter();
+  }, [changeFilter, history, location]);
+
+  return [
+    returnedFilter,
+    !finishedLoading,
+    changeFilter,
+    removeFilter,
+    resetFilter,
+  ];
 };
 
 export default usePageFilter;
