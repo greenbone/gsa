@@ -7,7 +7,7 @@ import {useCallback, useEffect, useState} from 'react';
 
 import {useLocation, useHistory} from 'react-router-dom';
 
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import {ROWS_PER_PAGE_SETTING_ID} from 'gmp/commands/users';
 
@@ -28,6 +28,8 @@ import {getUserSettingsDefaultFilter} from 'web/store/usersettings/defaultfilter
 
 import useGmp from 'web/utils/useGmp';
 
+import useShallowEqualSelector from './useShallowEqualSelector';
+
 /**
  * Hook to get the default filter of a page from the store
  *
@@ -35,7 +37,7 @@ import useGmp from 'web/utils/useGmp';
  * @returns Array of the default filter and and error if the filter could not be loaded
  */
 const useDefaultFilter = pageName =>
-  useSelector(state => {
+  useShallowEqualSelector(state => {
     const defaultFilterSel = getUserSettingsDefaultFilter(state, pageName);
     return [defaultFilterSel.getFilter(), defaultFilterSel.getError()];
   });
@@ -84,7 +86,7 @@ const usePageFilter = (
     pageName,
   ]);
 
-  let [rowsPerPage, rowsPerPageError] = useSelector(state => {
+  let [rowsPerPage, rowsPerPageError] = useShallowEqualSelector(state => {
     const userSettingDefaultSel = getUserSettingsDefaults(state);
     return [
       userSettingDefaultSel.getValueByName('rowsperpage'),
@@ -113,7 +115,9 @@ const usePageFilter = (
     setLocationQueryFilter(undefined);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const pageFilter = useSelector(state => getPage(state).getFilter(pageName));
+  const pageFilter = useShallowEqualSelector(state =>
+    getPage(state).getFilter(pageName),
+  );
 
   if (hasValue(locationQueryFilter)) {
     returnedFilter = locationQueryFilter;
