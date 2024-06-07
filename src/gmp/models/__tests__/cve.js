@@ -279,4 +279,26 @@ describe('CVE model tests', () => {
     expect(cve.name).toBe('CVE-1234');
     expect(cve.id).toBe('CVE-1234');
   });
+
+  test('should parse CVSS4 metrics', () => {
+    const elem = {
+      cve: {
+        cvss_vector:
+          'CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:A/VC:H/VI:L/VA:N/SC:L/SI:H/SA:N',
+      },
+    };
+    const cve = Cve.fromElement(elem);
+
+    expect(cve.cvssAttackVector).toEqual('Network');
+    expect(cve.cvssAttackComplexity).toEqual('Low');
+    expect(cve.cvssAttackRequirements).toEqual('Present');
+    expect(cve.cvssPrivilegesRequired).toEqual('Low');
+    expect(cve.cvssUserInteraction).toEqual('Active');
+    expect(cve.cvssConfidentialityVS).toEqual('High');
+    expect(cve.cvssIntegrityVS).toEqual('Low');
+    expect(cve.cvssAvailabilityVS).toEqual('None');
+    expect(cve.cvssConfidentialitySS).toEqual('Low');
+    expect(cve.cvssIntegritySS).toEqual('High');
+    expect(cve.cvssAvailabilitySS).toEqual('None');
+  });
 });
