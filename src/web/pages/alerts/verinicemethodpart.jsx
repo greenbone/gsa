@@ -18,12 +18,7 @@
 import React, {useState} from 'react';
 import {selectSaveId} from 'gmp/utils/id';
 
-import _ from 'gmp/locale';
-
 import {USERNAME_PASSWORD_CREDENTIAL_TYPE} from 'gmp/models/credential';
-
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from '../../utils/render';
@@ -34,6 +29,8 @@ import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 
 import NewIcon from 'web/components/icon/newicon';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const VERINICE_CREDENTIAL_TYPES = [USERNAME_PASSWORD_CREDENTIAL_TYPE];
 
@@ -50,6 +47,7 @@ const VeriniceMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const [_] = useTranslation();
   reportFormats = reportFormats.filter(format => format.extension === 'vna');
   credentials = credentials.filter(
     cred => cred.credential_type === USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -77,34 +75,30 @@ const VeriniceMethodPart = ({
     onChange(value, name);
   };
   return (
-    <Layout flex="column" grow="1">
+    <>
       <FormGroup title={_('verinice.PRO URL')}>
         <TextField
           grow="1"
-          size="30"
           name={prefix + 'verinice_server_url'}
           value={veriniceServerUrl}
           onChange={onChange}
         />
       </FormGroup>
 
-      <FormGroup title={_('Credential')}>
-        <Divider>
-          <Select
-            name={prefix + 'verinice_server_credential'}
-            items={renderSelectItems(credentials)}
-            value={veriniceServerCredential}
-            onChange={onCredentialChange}
-          />
-          <Layout>
-            <NewIcon
-              size="small"
-              title={_('Create a credential')}
-              value={VERINICE_CREDENTIAL_TYPES}
-              onClick={onNewCredentialClick}
-            />
-          </Layout>
-        </Divider>
+      <FormGroup title={_('Credential')} direction="row">
+        <Select
+          grow="1"
+          name={prefix + 'verinice_server_credential'}
+          items={renderSelectItems(credentials)}
+          value={veriniceServerCredential}
+          onChange={onCredentialChange}
+        />
+        <NewIcon
+          size="small"
+          title={_('Create a credential')}
+          value={VERINICE_CREDENTIAL_TYPES}
+          onClick={onNewCredentialClick}
+        />
       </FormGroup>
 
       <FormGroup title={_('verinice.PRO Report')}>
@@ -123,7 +117,7 @@ const VeriniceMethodPart = ({
           onChange={handleReportConfigIdChange}
         />
       </FormGroup>
-    </Layout>
+    </>
   );
 };
 

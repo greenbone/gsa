@@ -40,7 +40,7 @@ describe('StartTimeSelection tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should display timezone', () => {

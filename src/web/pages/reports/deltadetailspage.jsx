@@ -80,7 +80,7 @@ import withGmp from 'web/utils/withGmp';
 import TargetComponent from '../targets/component';
 
 import Page from './deltadetailscontent';
-import FilterDialog from './detailsfilterdialog';
+import ReportDetailsFilterDialog from './detailsfilterdialog';
 
 const log = logger.getLogger('web.pages.report.deltadetailspage');
 
@@ -531,7 +531,7 @@ class DeltaReportDetails extends React.Component {
           )}
         </TargetComponent>
         {showFilterDialog && (
-          <FilterDialog
+          <ReportDetailsFilterDialog
             filter={reportFilter}
             delta={true}
             onFilterChanged={this.handleFilterChange}

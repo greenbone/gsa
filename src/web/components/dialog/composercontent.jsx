@@ -20,19 +20,15 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import PropTypes from 'web/utils/proptypes';
+import Theme from 'web/utils/theme';
 
 import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
-import Theme from 'web/utils/theme';
+import useTranslation from 'web/hooks/useTranslation';
 
 export const COMPOSER_CONTENT_DEFAULTS = {
   includeNotes: YES_VALUE,
@@ -52,20 +48,24 @@ const FilterField = styled.div`
 `;
 
 const ComposerContent = ({
-  filterFieldTitle = _(
-    'To change the filter, please filter your results on the report page. This filter will not be stored as default.',
-  ),
+  filterFieldTitle,
   filterString,
   includeNotes,
   includeOverrides,
   onValueChange,
-}) => (
-  <Layout flex="column">
-    <FormGroup title={_('Results Filter')} titleSize="3">
-      <FilterField title={filterFieldTitle}>{filterString}</FilterField>
-    </FormGroup>
-    <FormGroup title={_('Include')} titleSize="3">
-      <Divider>
+}) => {
+  const [_] = useTranslation();
+  filterFieldTitle =
+    filterFieldTitle ||
+    _(
+      'To change the filter, please filter your results on the report page. This filter will not be stored as default.',
+    );
+  return (
+    <>
+      <FormGroup title={_('Results Filter')}>
+        <FilterField title={filterFieldTitle}>{filterString}</FilterField>
+      </FormGroup>
+      <FormGroup title={_('Include')} direction="row">
         <CheckBox
           data-testid="includeNotes"
           name="includeNotes"
@@ -93,10 +93,10 @@ const ComposerContent = ({
           toolTipTitle={_('TLS Certificates are always included for now')}
           onChange={onValueChange}
         />
-      </Divider>
-    </FormGroup>
-  </Layout>
-);
+      </FormGroup>
+    </>
+  );
+};
 
 ComposerContent.propTypes = {
   filterFieldTitle: PropTypes.string,

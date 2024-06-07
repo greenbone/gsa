@@ -38,9 +38,8 @@ import ManualIcon from 'web/components/icon/manualicon';
 import PerformanceIcon from 'web/components/icon/performanceicon';
 import WizardIcon from 'web/components/icon/wizardicon';
 
-import Divider from 'web/components/layout/divider';
 import IconDivider from 'web/components/layout/icondivider';
-import Layout from 'web/components/layout/layout';
+import Column from 'web/components/layout/column';
 import PageTitle from 'web/components/layout/pagetitle';
 
 import LinkTarget from 'web/components/link/target';
@@ -63,6 +62,9 @@ import withGmp from 'web/utils/withGmp';
 import {renderSelectItems} from 'web/utils/render';
 import {styledExcludeProps} from 'web/utils/styledConfig';
 
+import useGmp from 'web/utils/useGmp';
+import useTranslation from 'web/hooks/useTranslation';
+
 import StartEndTimeSelection from './startendtimeselection';
 
 const DURATION_HOUR = 60 * 60;
@@ -80,6 +82,7 @@ const DURATIONS = {
 };
 
 const ToolBar = ({onDurationChangeClick}) => {
+  const [_] = useTranslation(); // eslint-disable-line no-shadow
   return (
     <IconDivider>
       <ManualIcon
@@ -123,23 +126,22 @@ ToolBar.propTypes = {
   onDurationChangeClick: PropTypes.func.isRequired,
 };
 
-const ReportImage = withGmp(
-  ({gmp, name, duration, scannerId, endDate, startDate}) => {
-    const params = {
-      slave_id: scannerId,
-      token: gmp.settings.token,
-    };
+const ReportImage = ({name, duration, scannerId, endDate, startDate}) => {
+  const gmp = useGmp();
+  const params = {
+    slave_id: scannerId,
+    token: gmp.settings.token,
+  };
 
-    if (isDefined(duration)) {
-      params.duration = DURATIONS[duration];
-    } else {
-      params.start_time = startDate.toISOString();
-      params.end_time = endDate.toISOString();
-    }
-    const url = gmp.buildUrl('system_report/' + name + '/report.', params);
-    return <img alt="" src={url} />;
-  },
-);
+  if (isDefined(duration)) {
+    params.duration = DURATIONS[duration];
+  } else {
+    params.start_time = startDate.toISOString();
+    params.end_time = endDate.toISOString();
+  }
+  const url = gmp.buildUrl('system_report/' + name + '/report.', params);
+  return <img alt="" src={url} />;
+};
 
 ReportImage.propTypes = {
   duration: PropTypes.string,
@@ -275,21 +277,21 @@ class PerformancePage extends React.Component {
     return (
       <React.Fragment>
         <PageTitle title={_('Performance')} />
-        <Layout flex="column">
+        <Column>
           <ToolBar onDurationChangeClick={this.handleDurationChange} />
           <Section
             img={<PerformanceIcon size="large" />}
             title={_('Performance')}
           >
-            <StartEndTimeSelection
-              endDate={endDate}
-              timezone={this.props.timezone}
-              startDate={startDate}
-              onChanged={this.handleStartEndChange}
-            />
+            <Column>
+              <StartEndTimeSelection
+                endDate={endDate}
+                timezone={this.props.timezone}
+                startDate={startDate}
+                onChanged={this.handleStartEndChange}
+              />
 
-            <FormGroup title={_('Report for Last')}>
-              <Divider>
+              <FormGroup title={_('Report for Last')} direction="row">
                 <Selector
                   value="hour"
                   duration={duration}
@@ -325,35 +327,35 @@ class PerformancePage extends React.Component {
                 >
                   {_('Year')}
                 </Selector>
-              </Divider>
-            </FormGroup>
-
-            {gmp.settings.enableGreenboneSensor && (
-              <FormGroup title={_('Report for Greenbone Sensor')}>
-                <Select
-                  name="scannerId"
-                  value={sensorId}
-                  items={renderSelectItems(scanners, 0)}
-                  onChange={this.handleValueChange}
-                />
               </FormGroup>
-            )}
 
-            {reports.map(report => (
-              <div key={report.name}>
-                <LinkTarget id={report.name} />
-                <h2>{report.title}</h2>
-                <ReportImage
-                  name={report.name}
-                  duration={duration}
-                  scannerId={sensorId}
-                  startDate={startDate}
-                  endDate={endDate}
-                />
-              </div>
-            ))}
+              {gmp.settings.enableGreenboneSensor && (
+                <FormGroup title={_('Report for Greenbone Sensor')}>
+                  <Select
+                    name="scannerId"
+                    value={sensorId}
+                    items={renderSelectItems(scanners, 0)}
+                    onChange={this.handleValueChange}
+                  />
+                </FormGroup>
+              )}
+
+              {reports.map(report => (
+                <div key={report.name}>
+                  <LinkTarget id={report.name} />
+                  <h2>{report.title}</h2>
+                  <ReportImage
+                    name={report.name}
+                    duration={duration}
+                    scannerId={sensorId}
+                    startDate={startDate}
+                    endDate={endDate}
+                  />
+                </div>
+              ))}
+            </Column>
           </Section>
-        </Layout>
+        </Column>
       </React.Fragment>
     );
   }

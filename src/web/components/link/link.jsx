@@ -82,7 +82,7 @@ Link.propTypes = {
   anchor: PropTypes.string,
   filter: PropTypes.oneOfType([PropTypes.filter, PropTypes.string]),
   query: PropTypes.object,
-  to: PropTypes.string.isRequired,
+  to: PropTypes.string,
 };
 
 Link = styled(withTextOnly(Link))`

@@ -19,79 +19,27 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
-
 import {KeyCode} from 'gmp/utils/event';
 import {isDefined} from 'gmp/utils/identity';
+
+import useTranslation from 'web/hooks/useTranslation';
+
+import Button from 'web/components/form/button';
 import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 import PasswordField from 'web/components/form/passwordfield';
-import ErrorContainer from 'web/components/error/errorcontainer';
 import useFormValues from 'web/components/form/useFormValues';
+
 import ProductImage from 'web/components/img/product';
 import GreenboneLoginLogo from 'web/components/img/greenboneloginlogo';
+
+import ErrorContainer from 'web/components/error/errorcontainer';
+
 import Divider from 'web/components/layout/divider';
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
 import Theme from 'web/utils/theme';
-
-const Button = styled.button`
-  box-sizing: border-box;
-  color: ${Theme.white};
-  background-color: ${Theme.loginButtonGray};
-  border: none;
-  border-radius: 3px;
-  font-size: 1rem;
-  font-weight: normal;
-  min-height: 2.25rem;
-  margin: 0;
-  padding-right: 1.25rem;
-  padding-left: 1.25rem;
-  &:hover {
-    cursor: pointer;
-    background-color: ${Theme.loginButtonHover};
-  }
-  & + & {
-    margin-left: 1.25rem;
-  }
-`;
-
-const StyledFormGroup = styled(FormGroup)`
-  display: flex;
-  flex-grow: 1;
-  margin: 0;
-  font-family: 'DroidSans', Arial, sans-serif;
-  width: 100%;
-  margin-bottom: 1rem;
-`;
-
-const fieldStyles = () => `
-  font-family: 'DroidSans', Arial, sans-serif;
-  width: 100%;
-  font-size: 12pt;
-  margin-top: 16px;
-  margin-bottom: 8px;
-  border: none;
-  border-bottom: 1px solid ${Theme.mediumDarkGray};
-  transition: border-bottom-color 0.2s ease-in-out;
-  &:hover {
-    border-bottom: 2px solid ${Theme.darkGray};
-  }
-  &:focus {
-    outline: none; 
-    border-bottom: 2px solid ${Theme.darkGray};
-  }
-`;
-
-const StyledTextField = styled(TextField)`
-  ${fieldStyles()}
-`;
-
-const StyledPasswordField = styled(PasswordField)`
-  ${fieldStyles()}
-  margin-bottom: 4px;
-`;
 
 const Paper = styled(Layout)`
   background: ${Theme.white};
@@ -110,11 +58,6 @@ const Panel = styled.div`
   margin-bottom: 10px;
 `;
 
-const StyledLayout = styled(Layout)`
-  min-height: 12rem;
-  justify-content: space-evenly;
-`;
-
 const Error = styled.p`
   color: ${Theme.warningRed};
   font-weight: bold;
@@ -126,10 +69,6 @@ const StyledErrorContainer = styled(ErrorContainer)`
   margin: 0 0 0 0;
   font-size: 15px;
   border-radius: 4px;
-`;
-
-const StyledButton = styled(Button)`
-  width: 100%;
 `;
 
 const StyledPanel = styled(Panel)`
@@ -154,6 +93,7 @@ const LoginForm = ({
   onGuestLoginClick,
   onSubmit,
 }) => {
+  const [_] = useTranslation();
   const [{username, password}, handleValueChange] = useFormValues({
     username: '',
     password: '',
@@ -174,11 +114,11 @@ const LoginForm = ({
   return (
     <Paper>
       <Divider flex="column" margin="10px" grow="1">
-        <Layout align={'center'}>
+        <Layout align="center">
           <GreenboneLoginLogo width="300px" />
         </Layout>
 
-        <Layout flex={'column'}>
+        <Layout flex="column">
           {showProtocolInsecure && (
             <StyledPanel data-testid="protocol-insecure">
               <Error>{_('Warning: Connection unencrypted')}</Error>
@@ -219,47 +159,43 @@ const LoginForm = ({
           )}
 
           {showLogin && !isIE11 && (
-            <StyledLayout flex={'column'}>
+            <FormGroup>
               <H1>{_('Sign in to your account')}</H1>
-              <StyledFormGroup size="12" paddingLeft="2px">
-                <StyledTextField
-                  autoComplete="username"
-                  name="username"
-                  grow="1"
-                  placeholder={_('Username')}
-                  value={username}
-                  autoFocus={true}
-                  tabIndex="1"
-                  onChange={handleValueChange}
-                />
-              </StyledFormGroup>
-              <StyledFormGroup size="12" paddingLeft="2px">
-                <StyledPasswordField
-                  autoComplete="current-password"
-                  name="password"
-                  grow="1"
-                  placeholder={_('Password')}
-                  value={password}
-                  onKeyDown={handleKeyDown}
-                  onChange={handleValueChange}
-                />
-              </StyledFormGroup>
-              <StyledButton data-testid="login-button" onClick={handleSubmit}>
+              <TextField
+                autoComplete="username"
+                name="username"
+                placeholder={_('Username')}
+                value={username}
+                autoFocus={true}
+                tabIndex="1"
+                title={_('Username')}
+                onChange={handleValueChange}
+              />
+              <PasswordField
+                autoComplete="current-password"
+                name="password"
+                placeholder={_('Password')}
+                title={_('Password')}
+                value={password}
+                onKeyDown={handleKeyDown}
+                onChange={handleValueChange}
+              />
+              <Button data-testid="login-button" onClick={handleSubmit}>
                 {_('Sign In')}
-              </StyledButton>
-            </StyledLayout>
+              </Button>
+            </FormGroup>
           )}
         </>
 
         {showGuestLogin && (
-          <div data-testid="guest-login">
-            <StyledButton
+          <FormGroup data-testid="guest-login">
+            <Button
               data-testid="guest-login-button"
               onClick={onGuestLoginClick}
             >
               {_('Sign In as Guest')}
-            </StyledButton>
-          </div>
+            </Button>
+          </FormGroup>
         )}
 
         <ProductImageContainer align={'center'}>

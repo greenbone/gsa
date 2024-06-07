@@ -18,14 +18,11 @@
 
 import React, {useState} from 'react';
 
-import styled from 'styled-components';
-
-import _ from 'gmp/locale';
-
 import {NO_VALUE, YES_VALUE} from 'gmp/parser';
 
 import {selectSaveId} from 'gmp/utils/id';
 import {isDefined, isString} from 'gmp/utils/identity';
+
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 
@@ -40,12 +37,7 @@ import CheckBox from 'web/components/form/checkbox';
 import FormGroup from 'web/components/form/formgroup';
 import Select from 'web/components/form/select';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
-const StyledDiv = styled.div`
-  text-align: end;
-`;
+import useTranslation from 'web/hooks/useTranslation';
 
 const DownloadReportDialog = ({
   defaultReportConfigId,
@@ -63,6 +55,7 @@ const DownloadReportDialog = ({
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
   const filterString = isString(filter) ? filter : filter.toFilterString();
 
   if (defaultReportConfigId === '' || !isDefined(defaultReportConfigId)) {
@@ -113,50 +106,46 @@ const DownloadReportDialog = ({
         );
 
         return (
-          <Layout flex="column">
+          <>
             <ComposerContent
               filterString={filterString}
               includeNotes={values.includeNotes}
               includeOverrides={values.includeOverrides}
               onValueChange={onValueChange}
             />
-            <FormGroup title={_('Report Format')} titleSize="3">
-              <Divider flex="column">
-                <Select
-                  name="reportFormatId"
-                  value={reportFormatIdInState}
-                  items={renderSelectItems(reportFormats)}
-                  width="auto"
-                  onChange={handleReportFormatIdChange}
-                />
-              </Divider>
-            </FormGroup>
-            <FormGroup title={_('Report Config')} titleSize="3">
-              <Divider flex="column">
-                <Select
-                  name="reportConfigId"
-                  value={reportConfigIdInState}
-                  items={renderSelectItems(filteredReportConfigs, '')}
-                  width="auto"
-                  onChange={handleReportConfigIdChange}
-                />
-              </Divider>
-            </FormGroup>
-            <StyledDiv>
-              <CheckBox
-                name="storeAsDefault"
-                checked={storeAsDefault}
-                checkedValue={YES_VALUE}
-                unCheckedValue={NO_VALUE}
-                title={_('Store as default')}
-                toolTipTitle={_(
-                  'Store indicated settings (without filter) as default',
-                )}
-                onChange={onValueChange}
+            <FormGroup title={_('Report Format')}>
+              <Select
+                grow="1"
+                name="reportFormatId"
+                value={reportFormatIdInState}
+                items={renderSelectItems(reportFormats)}
+                width="auto"
+                onChange={handleReportFormatIdChange}
               />
-            </StyledDiv>
+            </FormGroup>
+            <FormGroup title={_('Report Config')}>
+              <Select
+                grow="1"
+                name="reportConfigId"
+                value={reportConfigIdInState}
+                items={renderSelectItems(filteredReportConfigs, '')}
+                width="auto"
+                onChange={handleReportConfigIdChange}
+              />
+            </FormGroup>
+            <CheckBox
+              name="storeAsDefault"
+              checked={storeAsDefault}
+              checkedValue={YES_VALUE}
+              unCheckedValue={NO_VALUE}
+              title={_('Store as default')}
+              toolTipTitle={_(
+                'Store indicated settings (without filter) as default',
+              )}
+              onChange={onValueChange}
+            />
             {showThresholdMessage && <ThresholdMessage threshold={threshold} />}
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

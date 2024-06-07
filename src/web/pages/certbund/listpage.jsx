@@ -56,7 +56,6 @@ const Page = ({filter, onFilterChanged, onInteraction, ...props}) => (
     <PageTitle title={_('CERT-Bund Advisories')} />
     <EntitiesPage
       {...props}
-      createFilterType="info"
       dashboard={() => (
         <CertBundDashboard
           filter={filter}

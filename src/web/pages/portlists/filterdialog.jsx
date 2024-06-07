@@ -15,31 +15,71 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {_l} from 'gmp/locale/lang';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
+import PropTypes from 'web/utils/proptypes';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Name'),
-  },
-  {
-    name: 'total',
-    displayName: _l('Port Counts: Total'),
-  },
-  {
-    name: 'tcp',
-    displayName: _l('Port Counts: TCP'),
-  },
-  {
-    name: 'udp',
-    displayName: _l('Port Counts: UDP'),
-  },
-];
+import DefaultFilterDialog from 'web/components/powerfilter/dialog';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-export default createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
+import useTranslation from 'web/hooks/useTranslation';
 
-// vim: set ts=2 sw=2 tw=80:
+const PortListsFilterDialog = ({
+  filter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
+  ...props
+}) => {
+  const [_] = useTranslation();
+  const filterDialogProps = useFilterDialog(filter);
+  const [handleSave] = useFilterDialogSave(
+    'portlist',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
+
+  const SORT_FIELDS = [
+    {
+      name: 'name',
+      displayName: _('Name'),
+    },
+    {
+      name: 'total',
+      displayName: _('Port Counts: Total'),
+    },
+    {
+      name: 'tcp',
+      displayName: _('Port Counts: TCP'),
+    },
+    {
+      name: 'udp',
+      displayName: _('Port Counts: UDP'),
+    },
+  ];
+  return (
+    <FilterDialog onClose={onClose} onSave={handleSave}>
+      <DefaultFilterDialog
+        {...props}
+        {...filterDialogProps}
+        sortFields={SORT_FIELDS}
+      />
+    </FilterDialog>
+  );
+};
+
+PortListsFilterDialog.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
+
+export default PortListsFilterDialog;

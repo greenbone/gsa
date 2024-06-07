@@ -17,10 +17,6 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -29,21 +25,27 @@ import FormGroup from 'web/components/form/formgroup';
 import TextField from 'web/components/form/textfield';
 import Select from 'web/components/form/select';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const FilterDialog = ({
   comment = '',
   id,
-  name = _('Unnamed'),
+  name,
   term = '',
-  title = _('New Filter'),
+  title,
   type,
   types,
   onClose,
   onSave,
 }) => {
+  const [_] = useTranslation();
   const filterOptions = types.map(option => ({
     value: option[0],
-    label: option[1],
+    label: '' + option[1], // convert to string because the new select component does not accept lazy translations
   }));
+
+  name = name || _('Unnamed');
+  title = title || _('New Filter');
 
   return (
     <SaveDialog
@@ -60,13 +62,12 @@ const FilterDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             <FormGroup title={_('Name')}>
               <TextField
                 name="name"
                 grow="1"
                 value={state.name}
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -76,7 +77,6 @@ const FilterDialog = ({
                 name="comment"
                 grow="1"
                 value={state.comment}
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -86,7 +86,6 @@ const FilterDialog = ({
                 name="term"
                 grow="1"
                 value={state.term}
-                size="30"
                 onChange={onValueChange}
               />
             </FormGroup>
@@ -99,7 +98,7 @@ const FilterDialog = ({
                 value={state.type}
               />
             </FormGroup>
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

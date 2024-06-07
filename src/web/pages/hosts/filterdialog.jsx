@@ -15,39 +15,80 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {_l} from 'gmp/locale/lang';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
+import PropTypes from 'web/utils/proptypes';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Name'),
-  },
-  {
-    name: 'hostname',
-    displayName: _l('Hostname'),
-  },
-  {
-    name: 'ip',
-    displayName: _l('IP Address'),
-  },
-  {
-    name: 'os',
-    displayName: _l('Operating System'),
-  },
-  {
-    name: 'severity',
-    displayName: _l('Severity'),
-  },
-  {
-    name: 'modified',
-    displayName: _l('Modified'),
-  },
-];
+import DefaultFilterDialog from 'web/components/powerfilter/dialog';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-export default createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
+import useTranslation from 'web/hooks/useTranslation';
 
-// vim: set ts=2 sw=2 tw=80:
+const GroupsFilterDialog = ({
+  filter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
+  ...props
+}) => {
+  const [_] = useTranslation();
+  const filterDialogProps = useFilterDialog(filter);
+  const [handleSave] = useFilterDialogSave(
+    'host',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
+
+  const SORT_FIELDS = [
+    {
+      name: 'name',
+      displayName: _('Name'),
+    },
+    {
+      name: 'hostname',
+      displayName: _('Hostname'),
+    },
+    {
+      name: 'ip',
+      displayName: _('IP Address'),
+    },
+    {
+      name: 'os',
+      displayName: _('Operating System'),
+    },
+    {
+      name: 'severity',
+      displayName: _('Severity'),
+    },
+    {
+      name: 'modified',
+      displayName: _('Modified'),
+    },
+  ];
+
+  return (
+    <FilterDialog onClose={onClose} onSave={handleSave}>
+      <DefaultFilterDialog
+        {...props}
+        {...filterDialogProps}
+        sortFields={SORT_FIELDS}
+      />
+    </FilterDialog>
+  );
+};
+
+GroupsFilterDialog.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
+
+export default GroupsFilterDialog;

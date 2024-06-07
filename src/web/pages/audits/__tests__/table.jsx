@@ -19,7 +19,6 @@ import {describe, test, expect, testing} from '@gsa/testing';
 
 import Capabilities from 'gmp/capabilities/capabilities';
 import CollectionCounts from 'gmp/collection/collectioncounts';
-import {setLocale} from 'gmp/locale/lang';
 
 import Filter from 'gmp/models/filter';
 import Audit, {AUDIT_STATUS} from 'gmp/models/audit';
@@ -29,8 +28,6 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
 import Table from '../table';
-
-setLocale('en');
 
 const caps = new Capabilities(['everything']);
 
@@ -144,7 +141,6 @@ describe('Audits table tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
     const header = baseElement.querySelectorAll('th');
     expect(header[0]).toHaveTextContent('Name');
     expect(header[1]).toHaveTextContent('Status');

@@ -17,8 +17,6 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {YES_VALUE} from 'gmp/parser';
 
 import SaveDialog from 'web/components/dialog/savedialog';
@@ -30,11 +28,10 @@ import YesNoRadio from 'web/components/form/yesnoradio';
 
 import NewIcon from 'web/components/icon/newicon';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
-
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const ImportDialog = ({
   in_assets = YES_VALUE,
@@ -46,6 +43,7 @@ const ImportDialog = ({
   onSave,
   onTaskChange,
 }) => {
+  const [_] = useTranslation();
   return (
     <SaveDialog
       buttonTitle={_('Import')}
@@ -56,39 +54,36 @@ const ImportDialog = ({
       defaultValues={{in_assets}}
     >
       {({values, onValueChange}) => (
-        <Layout flex="column">
+        <>
           <FormGroup title={_('Report')}>
-            <FileField name="xml_file" onChange={onValueChange} />
+            <FileField grow="1" name="xml_file" onChange={onValueChange} />
           </FormGroup>
-          <FormGroup title={_('Container Task')}>
-            <Divider>
-              <Select
-                name="task_id"
-                value={values.task_id}
-                items={renderSelectItems(tasks)}
-                onChange={onTaskChange}
+          <FormGroup title={_('Container Task')} direction="row">
+            <Select
+              grow="1"
+              name="task_id"
+              value={values.task_id}
+              items={renderSelectItems(tasks)}
+              onChange={onTaskChange}
+            />
+            {newContainerTask && (
+              <NewIcon
+                title={_('Create new Container Task')}
+                onClick={onNewContainerTaskClick}
               />
-              {newContainerTask && (
-                <NewIcon
-                  title={_('Create new Container Task')}
-                  onClick={onNewContainerTaskClick}
-                />
-              )}
-            </Divider>
+            )}
           </FormGroup>
           <FormGroup title={_('Add to Assets')}>
-            <Divider flex="column">
-              <span>
-                {_('Add to Assets with QoD >= 70% and Overrides enabled')}
-              </span>
-              <YesNoRadio
-                value={values.in_assets}
-                name="in_assets"
-                onChange={onValueChange}
-              />
-            </Divider>
+            <span>
+              {_('Add to Assets with QoD >= 70% and Overrides enabled')}
+            </span>
+            <YesNoRadio
+              value={values.in_assets}
+              name="in_assets"
+              onChange={onValueChange}
+            />
           </FormGroup>
-        </Layout>
+        </>
       )}
     </SaveDialog>
   );

@@ -19,6 +19,12 @@ import {describe, test, expect, testing} from '@gsa/testing';
 
 import {render, fireEvent} from 'web/utils/testing';
 
+import {
+  getDialog,
+  getDialogCloseButton,
+  getDialogSaveButton,
+} from 'web/components/testing';
+
 import Dialog from '../dialog';
 
 describe('Ldap dialog component tests', () => {
@@ -27,7 +33,7 @@ describe('Ldap dialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {baseElement} = render(
+    render(
       <Dialog
         authdn="foo"
         enable={true}
@@ -39,7 +45,8 @@ describe('Ldap dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    const dialog = getDialog();
+    expect(dialog).toBeInTheDocument();
   });
 
   test('should save data', () => {
@@ -47,7 +54,7 @@ describe('Ldap dialog component tests', () => {
     const handleSave = testing.fn();
     const handleValueChange = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <Dialog
         authdn="foo"
         enable={true}
@@ -59,8 +66,8 @@ describe('Ldap dialog component tests', () => {
       />,
     );
 
-    const checkBox = getByTestId('dialog-save-button');
-    fireEvent.click(checkBox);
+    const button = getDialogSaveButton();
+    fireEvent.click(button);
     expect(handleSave).toHaveBeenCalledWith({
       authdn: 'foo',
       enable: true,
@@ -73,7 +80,7 @@ describe('Ldap dialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <Dialog
         authdn="foo"
         enable={true}
@@ -83,10 +90,8 @@ describe('Ldap dialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
-
+    const closeButton = getDialogCloseButton();
     fireEvent.click(closeButton);
-
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -117,7 +122,7 @@ describe('Ldap dialog component tests', () => {
     const ldapsOnlyCheck = getByTestId('ldapsOnly-checkbox');
     fireEvent.click(ldapsOnlyCheck);
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({

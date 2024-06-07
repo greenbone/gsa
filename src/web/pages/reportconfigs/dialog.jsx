@@ -37,8 +37,6 @@ import MultiSelect from 'web/components/form/multiselect';
 import Select from 'web/components/form/select';
 import YesNoRadio from 'web/components/form/yesnoradio';
 
-import Layout from 'web/components/layout/layout';
-
 import Table from 'web/components/table/table';
 import TableBody from 'web/components/table/body';
 import TableData from 'web/components/table/data';
@@ -56,7 +54,7 @@ const Param = ({
   formats,
 }) => {
   const {name, type, min, max} = value;
-  const field_value = data[name];
+  const fieldValue = data[name];
 
   const formatOptions = map(formats, format => ({
     label: format.name,
@@ -71,7 +69,7 @@ const Param = ({
         yesValue={true}
         noValue={false}
         name={name}
-        value={field_value}
+        value={fieldValue}
         onChange={onPrefChange}
       />
     );
@@ -82,7 +80,7 @@ const Param = ({
         name={name}
         min={min}
         max={max}
-        value={field_value}
+        value={fieldValue}
         onChange={onPrefChange}
       />
     );
@@ -95,7 +93,7 @@ const Param = ({
       <MultiSelect
         name={name}
         items={typeOptions}
-        value={field_value}
+        value={fieldValue}
         onChange={onPrefChange}
       />
     );
@@ -104,7 +102,7 @@ const Param = ({
       <TextField
         name={name}
         maxLength={max}
-        value={field_value}
+        value={fieldValue}
         onChange={onPrefChange}
       />
     );
@@ -118,7 +116,7 @@ const Param = ({
       <Select
         name={name}
         items={typeOptions}
-        value={field_value}
+        value={fieldValue}
         onChange={onPrefChange}
       />
     );
@@ -127,23 +125,22 @@ const Param = ({
       <MultiSelect
         name={name}
         items={formatOptions}
-        value={field_value}
+        value={fieldValue}
         onChange={onPrefChange}
       />
     );
   } else {
     field = (
       <TextArea
-        cols="80"
-        rows="5"
+        minRows="5"
         name={name}
-        value={field_value}
+        value={fieldValue}
         onChange={onPrefChange}
       />
     );
   }
 
-  const use_default_check = (
+  const useDefaultCheck = (
     <Checkbox
       name={name}
       checked={usingDefaultData[name]}
@@ -155,7 +152,7 @@ const Param = ({
     <TableRow>
       <TableData>{name}</TableData>
       <TableData>{field}</TableData>
-      <TableData>{use_default_check}</TableData>
+      <TableData>{useDefaultCheck}</TableData>
     </TableRow>
   );
 };
@@ -327,10 +324,9 @@ class Dialog extends React.Component {
       >
         {({values: state, onValueChange}) => {
           return (
-            <Layout flex="column">
+            <>
               <FormGroup title={_('Name')}>
                 <TextField
-                  grow="1"
                   name="name"
                   value={state.name}
                   onChange={onValueChange}
@@ -339,7 +335,6 @@ class Dialog extends React.Component {
 
               <FormGroup title={_('Comment')}>
                 <TextField
-                  grow="1"
                   name="comment"
                   value={state.comment}
                   onChange={onValueChange}
@@ -347,35 +342,33 @@ class Dialog extends React.Component {
               </FormGroup>
 
               <FormGroup title={_('Report Format')}>
-                {isDefined(format_items) && format_items.length > 0 && (
+                {isDefined(format_items) && format_items.length > 0 ? (
                   <Select
+                    grow="1"
                     name="report_format"
                     disabled={is_edit}
                     items={format_items}
                     value={state.report_format}
                     onChange={this.handleReportFormatChange}
                   />
-                )}
-                {(!isDefined(format_items) || format_items.length === 0) && (
+                ) : (
                   <span>{_('No configurable report formats found.')}</span>
                 )}
               </FormGroup>
 
               {isDefined(originalParamInfo) && originalParamInfo.length > 0 && (
-                <h2>{_('Parameters')}</h2>
-              )}
-              {isDefined(originalParamInfo) && originalParamInfo.length > 0 && (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead width="25%">{_('Name')}</TableHead>
-                      <TableHead width="70%">{_('Value')}</TableHead>
-                      <TableHead width="10%">{_('Default')}</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {originalParamInfo.map(param => {
-                      return (
+                <>
+                  <h2>{_('Parameters')}</h2>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead width="25%">{_('Name')}</TableHead>
+                        <TableHead width="70%">{_('Value')}</TableHead>
+                        <TableHead width="10%">{_('Default')}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {originalParamInfo.map(param => (
                         <Param
                           key={param.name}
                           value={param}
@@ -388,12 +381,12 @@ class Dialog extends React.Component {
                           }
                           onPrefChange={this.handlePrefChange}
                         />
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </>
               )}
-            </Layout>
+            </>
           );
         }}
       </SaveDialog>

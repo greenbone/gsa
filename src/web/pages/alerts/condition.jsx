@@ -15,8 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import {parseInt} from 'gmp/parser';
@@ -33,7 +31,10 @@ import {
 
 import PropTypes from 'web/utils/proptypes';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const Condition = ({condition = {}, event}) => {
+  const [_] = useTranslation();
   if (!isDefined(condition.type) || !isDefined(condition.data)) {
     return null;
   }

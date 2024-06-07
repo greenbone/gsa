@@ -28,9 +28,21 @@ import {setTimezone, setUsername} from 'web/store/usersettings/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
-import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
+import {rendererWith, screen, wait} from 'web/utils/testing';
 
 import CpesPage, {ToolBarIcons} from '../listpage';
+import {
+  clickElement,
+  getBulkActionItems,
+  getCheckBoxes,
+  getPowerFilter,
+  getSelectElement,
+  getSelectItemElementsForSelect,
+  getTable,
+  getTableBody,
+  getTableFooter,
+  getTextInputs,
+} from 'web/components/testing';
 
 const cpe = CPE.fromElement({
   _id: 'cpe:/a:foo',
@@ -139,10 +151,10 @@ describe('CpesPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('cpe', defaultSettingfilter),
+      defaultFilterLoadingActions.success('cpe', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -158,13 +170,14 @@ describe('CpesPage tests', () => {
       entitiesLoadingActions.success([cpe], filter, loadedFilter, counts),
     );
 
-    const {baseElement} = render(<CpesPage />);
+    render(<CpesPage />);
 
     await wait();
 
     const display = screen.getAllByTestId('grid-item');
-    const inputs = baseElement.querySelectorAll('input');
-    const selects = screen.getAllByTestId('select-selected-value');
+    const powerFilter = getPowerFilter();
+    const inputs = getTextInputs(powerFilter);
+    const select = getSelectElement(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: CPEs')[0]).toBeInTheDocument();
@@ -178,8 +191,8 @@ describe('CpesPage tests', () => {
     ).toBeInTheDocument();
     expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(select).toHaveValue('--');
+    expect(select).toHaveAttribute('title', 'Loaded filter');
 
     // Dashboard
     expect(
@@ -191,7 +204,8 @@ describe('CpesPage tests', () => {
     expect(display[2]).toHaveTextContent('CPEs by CVSS (Total: 0)');
 
     // Table
-    const header = baseElement.querySelectorAll('th');
+    const table = getTable();
+    const header = table.querySelectorAll('th');
 
     expect(header[0]).toHaveTextContent('Name');
     expect(header[1]).toHaveTextContent('Title');
@@ -199,7 +213,7 @@ describe('CpesPage tests', () => {
     expect(header[3]).toHaveTextContent('CVEs');
     expect(header[4]).toHaveTextContent('Severity');
 
-    const row = baseElement.querySelectorAll('tr');
+    const row = table.querySelectorAll('tr');
 
     expect(row[1]).toHaveTextContent('foo');
     expect(row[1]).toHaveTextContent('bar');
@@ -246,10 +260,10 @@ describe('CpesPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('cpe', defaultSettingfilter),
+      defaultFilterLoadingActions.success('cpe', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -270,13 +284,9 @@ describe('CpesPage tests', () => {
     await wait();
 
     // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const bulkActions = getBulkActionItems();
+    const exportIcon = bulkActions[1];
+    await clickElement(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
   });
 
@@ -318,10 +328,10 @@ describe('CpesPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('cpe', defaultSettingfilter),
+      defaultFilterLoadingActions.success('cpe', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -337,32 +347,26 @@ describe('CpesPage tests', () => {
       entitiesLoadingActions.success([cpe], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<CpesPage />);
+    render(<CpesPage />);
 
     await wait();
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[1]);
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to selection');
-
-    const inputs = element.querySelectorAll('input');
+    // change bulk action to apply to selection
+    const tableFooter = getTableFooter();
+    const selectElement = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(selectElement);
+    await clickElement(selectItems[1]);
+    expect(selectElement).toHaveValue('Apply to selection');
 
     // select a cpe
-    fireEvent.click(inputs[1]);
-    await wait();
+    const tableBody = getTableBody();
+    const inputs = getCheckBoxes(tableBody);
+    await clickElement(inputs[1]);
 
     // export selected cpe
-    const exportIcon = screen.getAllByTitle('Export selection');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
+    const bulkActions = getBulkActionItems();
+    const exportIcon = bulkActions[1];
+    await clickElement(exportIcon);
 
     expect(exportByIds).toHaveBeenCalled();
   });
@@ -405,10 +409,10 @@ describe('CpesPage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('cpe', defaultSettingfilter),
+      defaultFilterLoadingActions.success('cpe', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -428,24 +432,17 @@ describe('CpesPage tests', () => {
 
     await wait();
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[2]);
-
-    await wait();
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to all filtered');
+    // change bulk action to apply to all filtered
+    const tableFooter = getTableFooter();
+    const selectElement = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(selectElement);
+    await clickElement(selectItems[2]);
+    expect(selectElement).toHaveValue('Apply to all filtered');
 
     // export all filtered cpes
-    const exportIcon = screen.getAllByTitle('Export all filtered');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
+    const bulkActions = getBulkActionItems();
+    const exportIcon = bulkActions[1];
+    await clickElement(exportIcon);
 
     expect(exportByFilter).toHaveBeenCalled();
   });

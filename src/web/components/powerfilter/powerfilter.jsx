@@ -184,7 +184,11 @@ class PowerFilter extends React.Component {
       onResetClick,
     } = this.props;
     return (
-      <Layout flex="column" align={['start', 'stetch']} className="powerfilter">
+      <Layout
+        flex="column"
+        align={['start', 'stretch']}
+        className="powerfilter"
+      >
         <Layout align={['space-between', 'center']}>
           <LeftDivider align={['start', 'center']}>
             <Layout align={['start', 'center']}>
@@ -244,14 +248,12 @@ class PowerFilter extends React.Component {
             <Select
               items={renderSelectItems(filters, DEFAULT_FILTER_ID)}
               isLoading={isLoadingFilters}
-              menuPosition="right"
               toolTipTitle={_('Loaded filter')}
               value={
                 isDefined(filter) && isDefined(filter.id)
                   ? filter.id
                   : DEFAULT_FILTER_ID
               }
-              width="150px"
               onChange={this.handleNamedFilterChange}
             />
           )}
@@ -278,9 +280,6 @@ PowerFilter.propTypes = {
   onUpdate: PropTypes.func,
 };
 
-export default compose(
-  withCapabilities,
-  withGmp,
-)(PowerFilter);
+export default compose(withCapabilities, withGmp)(PowerFilter);
 
 // vim: set ts=2 sw=2 tw=80:

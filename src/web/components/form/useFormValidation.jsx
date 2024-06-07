@@ -49,13 +49,7 @@ const useFormValidation = (
   {onValidationSuccess, onValidationError, fieldsToValidate},
 ) => {
   const [hasError, setHasError] = useState(false);
-  const [errors, setErrors] = useState(() => {
-    const fieldNames = fieldsToValidate ?? Object.keys(values);
-    return fieldNames.reduce((status, name) => {
-      status[name] = {};
-      return status;
-    }, {});
-  });
+  const [errors, setErrors] = useState({});
 
   const validateValue = useCallback(
     (value, name) => {

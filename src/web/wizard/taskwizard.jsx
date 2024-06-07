@@ -30,8 +30,8 @@ import TextField from 'web/components/form/textfield';
 import {default as WizIcon} from 'web/components/icon/wizardicon';
 import NewIcon from 'web/components/icon/newicon';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+import Column from 'web/components/layout/column';
+import Row from 'web/components/layout/row';
 
 export const WizardContent = styled.div`
   margin: 0 20px;
@@ -62,37 +62,35 @@ const TaskWizard = ({
     defaultValues={{hosts}}
   >
     {({values: state, onValueChange}) => (
-      <Layout>
+      <Row>
         <WizardIcon />
         <WizardContent>
-          <Divider flex="column">
+          <Column>
             <p>
               <b>{_('Quick start: Immediately scan an IP address')}</b>
             </p>
-            <Divider>
+            <Row>
               <span>{_('IP address or hostname:')}</span>
               <TextField
+                grow="1"
                 value={state.hosts}
                 name="hosts"
-                size="30"
                 maxLength="2000"
                 onChange={onValueChange}
               />
-            </Divider>
+            </Row>
             <div>
               {_(
                 'The default address is either your computer' +
                   ' or your network gateway.',
               )}
             </div>
-            <Layout flex="column">
-              {_('As a short-cut the following steps will be done for you:')}
-              <ol>
-                <li>{_('Create a new Target')}</li>
-                <li>{_('Create a new Task')}</li>
-                <li>{_('Start this scan task right away')}</li>
-              </ol>
-            </Layout>
+            {_('As a short-cut the following steps will be done for you:')}
+            <ol>
+              <li>{_('Create a new Target')}</li>
+              <li>{_('Create a new Task')}</li>
+              <li>{_('Start this scan task right away')}</li>
+            </ol>
             <p>
               {_(
                 'As soon as the scan progress is beyond 1%, you can already ' +
@@ -106,14 +104,14 @@ const TaskWizard = ({
                   ' as configured in "My Settings".',
               )}
             </p>
-            <Divider>
+            <Row>
               <span>{_('By clicking the New Task icon')}</span>
               <NewIcon title={_('New Task')} onClick={onNewClick} />
               <span>{_('you can create a new Task yourself.')}</span>
-            </Divider>
-          </Divider>
+            </Row>
+          </Column>
         </WizardContent>
-      </Layout>
+      </Row>
     )}
   </SaveDialog>
 );

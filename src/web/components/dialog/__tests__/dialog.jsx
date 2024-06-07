@@ -22,6 +22,8 @@ import {KeyCode} from 'gmp/utils/event';
 
 import {render, fireEvent} from 'web/utils/testing';
 
+import {queryDialog} from 'web/components/testing';
+
 import Dialog from '../dialog';
 
 describe('Dialog component tests', () => {
@@ -29,21 +31,15 @@ describe('Dialog component tests', () => {
     const handleClose = testing.fn();
     const renderFunc = testing.fn().mockReturnValue(<div />);
 
-    const {baseElement} = render(
-      <Dialog onClose={handleClose}>{renderFunc}</Dialog>,
-    );
+    render(<Dialog onClose={handleClose}>{renderFunc}</Dialog>);
 
-    expect(baseElement).toMatchSnapshot();
+    expect(queryDialog()).toBeInTheDocument();
 
     expect(renderFunc).toHaveBeenCalled();
 
     // eslint-disable-next-line prefer-destructuring
     const renderProps = renderFunc.mock.calls[0][0];
     expect(isFunction(renderProps.close)).toEqual(true);
-    expect(renderProps.moveProps).toBeDefined();
-    expect(isFunction(renderProps.moveProps.onMouseDown)).toEqual(true);
-    expect(renderProps.heightProps).toBeDefined();
-    expect(renderProps.heightProps.maxHeight).toBeDefined();
   });
 
   test('should close Dialog', () => {

@@ -2,16 +2,17 @@
 
 exports[`Main tests > should render main 1`] = `
 .c0 {
-  padding: 5px 10px;
-  height: 100%;
+  padding: 15px;
+  height: calc(-48px + 100vh);
   padding-bottom: 20px;
-}
-
-.c1 {
+  overflow-y: auto;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-flex-basis: 100%;
+  -ms-flex-preferred-size: 100%;
+  flex-basis: 100%;
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
@@ -22,6 +23,6 @@ exports[`Main tests > should render main 1`] = `
 }
 
 <main
-  class="c0 c1"
+  class="c0"
 />
 `;

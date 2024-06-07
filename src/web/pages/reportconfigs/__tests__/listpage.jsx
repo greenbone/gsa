@@ -29,7 +29,9 @@ import {entitiesLoadingActions} from 'web/store/entities/scanconfigs';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor, fireEvent, act} from 'web/utils/testing';
+import {rendererWith, fireEvent, wait, screen} from 'web/utils/testing';
+
+import {clickElement} from 'web/components/testing';
 
 import ReportConfigsPage, {ToolBarIcons} from '../listpage';
 
@@ -99,10 +101,10 @@ describe('ReportConfigsPage tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('reportconfig', defaultSettingfilter),
+      defaultFilterLoadingActions.success('reportconfig', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -120,9 +122,9 @@ describe('ReportConfigsPage tests', () => {
 
     const {baseElement} = render(<ReportConfigsPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toBeInTheDocument();
   });
 
   test('should call commands for bulk actions', async () => {
@@ -159,10 +161,10 @@ describe('ReportConfigsPage tests', () => {
 
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('reportconfig', defaultSettingfilter),
+      defaultFilterLoadingActions.success('reportconfig', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -178,22 +180,15 @@ describe('ReportConfigsPage tests', () => {
       entitiesLoadingActions.success([config], filter, loadedFilter, counts),
     );
 
-    const {baseElement, getAllByTestId} = render(<ReportConfigsPage />);
+    render(<ReportConfigsPage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
-    const icons = getAllByTestId('svg-icon');
-
-    await act(async () => {
-      expect(icons[17]).toHaveAttribute('title', 'Add tag to page contents');
-
-      expect(icons[18]).toHaveAttribute(
-        'title',
-        'Move page contents to trashcan',
-      );
-      fireEvent.click(icons[18]);
-      expect(deleteByFilter).toHaveBeenCalled();
-    });
+    const deleteIcon = screen.getAllByTitle(
+      'Move page contents to trashcan',
+    )[0];
+    await clickElement(deleteIcon);
+    expect(deleteByFilter).toHaveBeenCalled();
   });
 
   describe('ReportConfigsPage ToolBarIcons test', () => {
@@ -215,7 +210,6 @@ describe('ReportConfigsPage tests', () => {
           onReportConfigCreateClick={handleReportConfigCreateClick}
         />,
       );
-      expect(element).toMatchSnapshot();
 
       const icons = getAllByTestId('svg-icon');
       const links = element.querySelectorAll('a');

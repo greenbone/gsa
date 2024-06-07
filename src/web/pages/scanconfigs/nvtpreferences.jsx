@@ -19,8 +19,6 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
-
 import {FoldState} from 'web/components/folding/folding';
 
 import EditIcon from 'web/components/icon/editicon';
@@ -36,17 +34,17 @@ import TableRow from 'web/components/table/row';
 
 import PropTypes from 'web/utils/proptypes';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const StyledTableData = styled(TableData)`
   overflow-wrap: break-word;
 `;
 
-class NvtPreferenceDisplay extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return nextProps.preference !== this.props.preference;
-  }
+const shouldComponentUpdate = (props, nextProps) =>
+  nextProps.preference !== props.preference;
 
-  render() {
-    const {preference, onEditNvtDetailsClick, title} = this.props;
+const NvtPreferenceDisplay = React.memo(
+  ({preference, onEditNvtDetailsClick, title}) => {
     return (
       <TableRow>
         <StyledTableData>{preference.nvt.name}</StyledTableData>
@@ -61,8 +59,9 @@ class NvtPreferenceDisplay extends React.Component {
         </TableData>
       </TableRow>
     );
-  }
-}
+  },
+  shouldComponentUpdate,
+);
 
 export const NvtPreferencePropType = PropTypes.shape({
   nvt: PropTypes.shape({
@@ -83,38 +82,41 @@ const NvtPreferences = ({
   editTitle,
   preferences = [],
   onEditNvtDetailsClick,
-}) => (
-  <Section
-    foldable
-    initialFoldState={FoldState.FOLDED}
-    title={_('Network Vulnerability Test Preferences ({{counts}})', {
-      counts: preferences.length,
-    })}
-  >
-    <Table fixed>
-      <TableHeader>
-        <TableRow>
-          <TableHead width="30%">{_('NVT')}</TableHead>
-          <TableHead width="30%">{_('Name')}</TableHead>
-          <TableHead width="30%">{_('Value')}</TableHead>
-          <TableHead width="10%" align="center">
-            {_('Actions')}
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {preferences.map(pref => (
-          <NvtPreferenceDisplay
-            key={pref.nvt.name + pref.name}
-            title={editTitle}
-            preference={pref}
-            onEditNvtDetailsClick={onEditNvtDetailsClick}
-          />
-        ))}
-      </TableBody>
-    </Table>
-  </Section>
-);
+}) => {
+  const [_] = useTranslation();
+  return (
+    <Section
+      foldable
+      initialFoldState={FoldState.FOLDED}
+      title={_('Network Vulnerability Test Preferences ({{counts}})', {
+        counts: preferences.length,
+      })}
+    >
+      <Table fixed>
+        <TableHeader>
+          <TableRow>
+            <TableHead width="30%">{_('NVT')}</TableHead>
+            <TableHead width="30%">{_('Name')}</TableHead>
+            <TableHead width="30%">{_('Value')}</TableHead>
+            <TableHead width="10%" align="center">
+              {_('Actions')}
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {preferences.map(pref => (
+            <NvtPreferenceDisplay
+              key={pref.nvt.name + pref.name}
+              title={editTitle}
+              preference={pref}
+              onEditNvtDetailsClick={onEditNvtDetailsClick}
+            />
+          ))}
+        </TableBody>
+      </Table>
+    </Section>
+  );
+};
 
 NvtPreferences.propTypes = {
   editTitle: PropTypes.string,

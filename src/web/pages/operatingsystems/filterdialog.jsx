@@ -15,47 +15,88 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import {_l} from 'gmp/locale/lang';
 
-import {createFilterDialog} from 'web/components/powerfilter/dialog';
+import PropTypes from 'web/utils/proptypes';
 
-const SORT_FIELDS = [
-  {
-    name: 'name',
-    displayName: _l('Name'),
-  },
-  {
-    name: 'title',
-    displayName: _l('Title'),
-  },
-  {
-    name: 'latest_severity',
-    displayName: _l('Severity: Latest'),
-  },
-  {
-    name: 'highest_severity',
-    displayName: _l('Severity: Highest'),
-  },
-  {
-    name: 'average_severity',
-    displayName: _l('Severity: Average'),
-  },
-  {
-    name: 'all_hosts',
-    displayName: _l('Hosts (All)'),
-  },
-  {
-    name: 'hosts',
-    displayName: _l('Hosts (Best OS)'),
-  },
-  {
-    name: 'modified',
-    displayName: _l('Modified'),
-  },
-];
+import DefaultFilterDialog from 'web/components/powerfilter/dialog';
+import FilterDialog from 'web/components/powerfilter/filterdialog';
+import useFilterDialog from 'web/components/powerfilter/useFilterDialog';
+import useFilterDialogSave from 'web/components/powerfilter/useFilterDialogSave';
 
-export default createFilterDialog({
-  sortFields: SORT_FIELDS,
-});
+import useTranslation from 'web/hooks/useTranslation';
 
-// vim: set ts=2 sw=2 tw=80:
+const CvesFilterDialog = ({
+  filter,
+  onCloseClick,
+  onClose = onCloseClick,
+  onFilterChanged,
+  onFilterCreated,
+  ...props
+}) => {
+  const [_] = useTranslation();
+  const filterDialogProps = useFilterDialog(filter);
+  const [handleSave] = useFilterDialogSave(
+    'os',
+    {
+      onClose,
+      onFilterChanged,
+      onFilterCreated,
+    },
+    filterDialogProps,
+  );
+
+  const SORT_FIELDS = [
+    {
+      name: 'name',
+      displayName: _('Name'),
+    },
+    {
+      name: 'title',
+      displayName: _('Title'),
+    },
+    {
+      name: 'latest_severity',
+      displayName: _('Severity: Latest'),
+    },
+    {
+      name: 'highest_severity',
+      displayName: _('Severity: Highest'),
+    },
+    {
+      name: 'average_severity',
+      displayName: _('Severity: Average'),
+    },
+    {
+      name: 'all_hosts',
+      displayName: _('Hosts (All)'),
+    },
+    {
+      name: 'hosts',
+      displayName: _('Hosts (Best OS)'),
+    },
+    {
+      name: 'modified',
+      displayName: _('Modified'),
+    },
+  ];
+
+  return (
+    <FilterDialog onClose={onClose} onSave={handleSave}>
+      <DefaultFilterDialog
+        {...props}
+        {...filterDialogProps}
+        sortFields={SORT_FIELDS}
+      />
+    </FilterDialog>
+  );
+};
+
+CvesFilterDialog.propTypes = {
+  filter: PropTypes.filter,
+  onClose: PropTypes.func,
+  onCloseClick: PropTypes.func, // should be removed in future
+  onFilterChanged: PropTypes.func,
+  onFilterCreated: PropTypes.func,
+};
+
+export default CvesFilterDialog;

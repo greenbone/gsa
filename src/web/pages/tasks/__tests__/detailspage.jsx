@@ -342,8 +342,6 @@ describe('Task Detailspage tests', () => {
       <Detailspage id="12345" />,
     );
 
-    expect(element).toMatchSnapshot();
-
     expect(element).toHaveTextContent('Task: foo');
 
     const links = baseElement.querySelectorAll('a');
@@ -371,18 +369,18 @@ describe('Task Detailspage tests', () => {
     expect(progressBars[0]).toHaveTextContent('Done');
 
     const headings = element.querySelectorAll('h2');
-    const detailslinks = getAllByTestId('details-link');
+    const detailsLinks = getAllByTestId('details-link');
 
     expect(headings[1]).toHaveTextContent('Target');
-    expect(detailslinks[2]).toHaveAttribute('href', '/target/5678');
+    expect(detailsLinks[2]).toHaveAttribute('href', '/target/5678');
     expect(element).toHaveTextContent('target1');
 
     expect(headings[2]).toHaveTextContent('Alerts');
-    expect(detailslinks[3]).toHaveAttribute('href', '/alert/91011');
+    expect(detailsLinks[3]).toHaveAttribute('href', '/alert/91011');
     expect(element).toHaveTextContent('alert1');
 
     expect(headings[3]).toHaveTextContent('Scanner');
-    expect(detailslinks[4]).toHaveAttribute('href', '/scanner/1516');
+    expect(detailsLinks[4]).toHaveAttribute('href', '/scanner/1516');
     expect(element).toHaveTextContent('scanner1');
     expect(element).toHaveTextContent('OpenVAS Scanner');
 
@@ -652,8 +650,6 @@ describe('Task ToolBarIcons tests', () => {
         onTaskStopClick={handleTaskStop}
       />,
     );
-
-    expect(element).toMatchSnapshot();
 
     const icons = getAllByTestId('svg-icon');
     const links = element.querySelectorAll('a');

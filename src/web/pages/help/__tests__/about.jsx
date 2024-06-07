@@ -17,7 +17,9 @@
  */
 import {describe, test, expect} from '@gsa/testing';
 
-import {rendererWith, waitFor, fireEvent} from 'web/utils/testing';
+import {rendererWith} from 'web/utils/testing';
+
+import {clickElement, getDialogTitle} from 'web/components/testing';
 
 import AboutPage from '../about';
 
@@ -58,17 +60,12 @@ describe('AboutPage tests', () => {
     };
     const {render} = rendererWith({gmp});
 
-    const {baseElement, getByTestId} = render(<AboutPage />);
+    const {element} = render(<AboutPage />);
 
-    const links = baseElement.querySelectorAll('a');
+    const links = element.querySelectorAll('a');
 
-    fireEvent.click(links[1]);
+    await clickElement(links[1]);
 
-    await waitFor(() => baseElement.querySelectorAll('dialog'));
-
-    const dialogTitleBar = getByTestId('dialog-title-bar');
-    const dialogButtons = baseElement.querySelectorAll('button');
-    expect(dialogTitleBar).toHaveTextContent('You are leaving GSA');
-    expect(dialogButtons.length).toEqual(2);
+    expect(getDialogTitle()).toHaveTextContent('You are leaving GSA');
   });
 });

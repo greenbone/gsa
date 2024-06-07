@@ -17,9 +17,7 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
-import Divider from 'web/components/layout/divider';
+import Row from 'web/components/layout/row';
 import Layout from 'web/components/layout/layout';
 
 import PropTypes from 'web/utils/proptypes';
@@ -29,6 +27,8 @@ import withPrefix from 'web/utils/withPrefix';
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
 import Radio from 'web/components/form/radio';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const VALUE = 'Filter count at least';
 
@@ -40,8 +40,9 @@ const FilterCountLeastConditionPart = ({
   prefix,
   onChange,
 }) => {
+  const [_] = useTranslation();
   return (
-    <Divider>
+    <Row>
       <Radio
         title={_('Filter')}
         value={VALUE}
@@ -61,11 +62,10 @@ const FilterCountLeastConditionPart = ({
         name={prefix + 'at_least_count'}
         type="int"
         min="0"
-        size="5"
         onChange={onChange}
       />
       <Layout>{_('result(s) NVT(s)')}</Layout>
-    </Divider>
+    </Row>
   );
 };
 

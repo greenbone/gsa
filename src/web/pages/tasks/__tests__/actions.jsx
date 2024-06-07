@@ -52,7 +52,7 @@ describe('Task Actions tests', () => {
     const handleTaskStop = testing.fn();
 
     const {render} = rendererWith({capabilities: caps});
-    const {baseElement} = render(
+    const {element} = render(
       <Actions
         entity={task}
         links={true}
@@ -67,7 +67,7 @@ describe('Task Actions tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should call click handlers', () => {

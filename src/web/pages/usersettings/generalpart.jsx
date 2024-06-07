@@ -19,7 +19,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
 import {parseYesNo, YES_VALUE, NO_VALUE} from 'gmp/parser';
 import {isDefined} from 'gmp/utils/identity';
 
@@ -29,13 +28,12 @@ import PasswordField from 'web/components/form/passwordfield';
 import Select from 'web/components/form/select';
 import TextField from 'web/components/form/textfield';
 import TimeZoneSelect from 'web/components/form/timezoneselect';
-import Divider from 'web/components/layout/divider';
 
 import Languages from 'web/utils/languages';
-
 import PropTypes from 'web/utils/proptypes';
-
 import Theme from 'web/utils/theme';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const renderLanguageItems = () =>
   Object.entries(Languages).map(([code, {name, native_name}]) => ({
@@ -48,6 +46,7 @@ const NotificationDiv = styled.div`
 `;
 
 const Notification = ({newPassword, oldPassword, confPassword}) => {
+  const [_] = useTranslation();
   let color;
   let text;
 
@@ -86,7 +85,6 @@ const GeneralPart = ({
   confPassword,
   userInterfaceLanguage,
   rowsPerPage,
-  maxRowsPerPage,
   detailsExportFileName,
   listExportFileName,
   reportExportFileName,
@@ -95,55 +93,45 @@ const GeneralPart = ({
   errors,
   onChange,
 }) => {
+  const [_] = useTranslation();
   return (
-    <React.Fragment>
-      <FormGroup title={_('Timezone')} titleSize="3">
+    <>
+      <FormGroup title={_('Timezone')}>
         <TimeZoneSelect name="timezone" value={timezone} onChange={onChange} />
       </FormGroup>
-      <FormGroup title={_('Change Password')} titleSize="3">
-        <Divider flex="column">
-          <FormGroup title={_('Old')}>
-            <PasswordField
-              name="oldPassword"
-              value={oldPassword}
-              grow="1"
-              size="30"
-              autoComplete="off"
-              onChange={onChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('New')}>
-            <PasswordField
-              name="newPassword"
-              value={newPassword}
-              grow="1"
-              size="30"
-              color="red"
-              autoComplete="off"
-              onChange={onChange}
-            />
-          </FormGroup>
-          <FormGroup title={_('Confirm')}>
-            <PasswordField
-              name="confPassword"
-              value={confPassword}
-              grow="1"
-              size="30"
-              autoComplete="off"
-              border="red"
-              onChange={onChange}
-            />
-          </FormGroup>
-          <FormGroup title=" ">
-            <Notification
-              newPassword={newPassword}
-              oldPassword={oldPassword}
-              confPassword={confPassword}
-            />
-          </FormGroup>
-        </Divider>
+      <FormGroup title={_('Change Password')}>
+        <PasswordField
+          grow="1"
+          title={_('Old')}
+          name="oldPassword"
+          value={oldPassword}
+          autoComplete="off"
+          onChange={onChange}
+        />
+        <PasswordField
+          grow="1"
+          title={_('New')}
+          name="newPassword"
+          value={newPassword}
+          autoComplete="off"
+          onChange={onChange}
+        />
+        <PasswordField
+          title={_('Confirm')}
+          name="confPassword"
+          value={confPassword}
+          autoComplete="off"
+          onChange={onChange}
+        />
       </FormGroup>
-      <FormGroup title={_('User Interface Language')} titleSize="3">
+      <FormGroup title=" ">
+        <Notification
+          newPassword={newPassword}
+          oldPassword={oldPassword}
+          confPassword={confPassword}
+        />
+      </FormGroup>
+      <FormGroup title={_('User Interface Language')}>
         <Select
           name="userInterfaceLanguage"
           value={userInterfaceLanguage}
@@ -151,50 +139,45 @@ const GeneralPart = ({
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('Rows Per Page')} titleSize="3">
+      <FormGroup title={_('Rows Per Page')}>
         <TextField
           name="rowsPerPage"
           hasError={shouldWarn && !!errors.rowsPerPage}
           errorContent={errors.rowsPerPage}
           value={rowsPerPage}
-          size="19"
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('Details Export File Name')} titleSize="3">
+      <FormGroup title={_('Details Export File Name')}>
         <TextField
           name="detailsExportFileName"
           value={detailsExportFileName}
-          size="19"
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('List Export File Name')} titleSize="3">
+      <FormGroup title={_('List Export File Name')}>
         <TextField
           name="listExportFileName"
           value={listExportFileName}
-          size="19"
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('Report Export File Name')} titleSize="3">
+      <FormGroup title={_('Report Export File Name')}>
         <TextField
           name="reportExportFileName"
           value={reportExportFileName}
-          size="19"
           onChange={onChange}
         />
       </FormGroup>
-      <FormGroup title={_('Auto Cache Rebuild')} titleSize="3">
-        <Checkbox
-          name="autoCacheRebuild"
-          checked={parseYesNo(autoCacheRebuild) === YES_VALUE}
-          checkedValue={YES_VALUE}
-          unCheckedValue={NO_VALUE}
-          onChange={onChange}
-        />
-      </FormGroup>
-    </React.Fragment>
+      <Checkbox
+        title={_('Auto Cache Rebuild')}
+        name="autoCacheRebuild"
+        checked={parseYesNo(autoCacheRebuild) === YES_VALUE}
+        checkedValue={YES_VALUE}
+        unCheckedValue={NO_VALUE}
+        onChange={onChange}
+      />
+    </>
   );
 };
 

@@ -27,7 +27,13 @@ import {entitiesLoadingActions} from 'web/store/entities/tasks';
 import {loadingActions} from 'web/store/usersettings/defaults/actions';
 import {defaultFilterLoadingActions} from 'web/store/usersettings/defaultfilters/actions';
 
-import {rendererWith, waitFor} from 'web/utils/testing';
+import {rendererWith, wait} from 'web/utils/testing';
+
+import {
+  getPowerFilter,
+  getSelectElement,
+  getTextInputs,
+} from 'web/components/testing';
 
 import TlsCertificatePage from '../listpage';
 
@@ -154,14 +160,15 @@ describe('TlsCertificatePage tests', () => {
 
     const {baseElement, getAllByTestId} = render(<TlsCertificatePage />);
 
-    await waitFor(() => baseElement.querySelectorAll('table'));
+    await wait();
 
     const display = getAllByTestId('grid-item');
     const icons = getAllByTestId('svg-icon');
-    const inputs = baseElement.querySelectorAll('input');
     const header = baseElement.querySelectorAll('th');
     const row = baseElement.querySelectorAll('tr');
-    const selects = getAllByTestId('select-selected-value');
+    const powerFilter = getPowerFilter();
+    const select = getSelectElement(powerFilter);
+    const inputs = getTextInputs(powerFilter);
 
     // Toolbar Icon
     expect(icons[0]).toHaveAttribute('title', 'Help: TLS Certificate Assets');
@@ -173,8 +180,8 @@ describe('TlsCertificatePage tests', () => {
     expect(icons[3]).toHaveAttribute('title', 'Reset to Default Filter');
     expect(icons[4]).toHaveAttribute('title', 'Help: Powerfilter');
     expect(icons[5]).toHaveAttribute('title', 'Edit Filter');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(select).toHaveAttribute('title', 'Loaded filter');
+    expect(select).toHaveValue('--');
 
     // Dashboard
     expect(icons[7]).toHaveAttribute('title', 'Add new Dashboard Display');

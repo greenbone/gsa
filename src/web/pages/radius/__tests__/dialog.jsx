@@ -17,7 +17,14 @@
  */
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent, userEvent} from 'web/utils/testing';
+import {render, fireEvent} from 'web/utils/testing';
+
+import {
+  changeInputValue,
+  getDialog,
+  getDialogCloseButton,
+  getDialogSaveButton,
+} from 'web/components/testing';
 
 import Dialog from '../dialog';
 
@@ -26,7 +33,7 @@ describe('RADIUS dialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {baseElement} = render(
+    render(
       <Dialog
         enable={true}
         radiushost="foo"
@@ -35,14 +42,14 @@ describe('RADIUS dialog component tests', () => {
       />,
     );
 
-    expect(baseElement).toMatchSnapshot();
+    expect(getDialog()).toBeInTheDocument();
   });
 
   test('should save data', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <Dialog
         enable={true}
         radiushost="foo"
@@ -51,8 +58,8 @@ describe('RADIUS dialog component tests', () => {
       />,
     );
 
-    const checkBox = getByTestId('dialog-save-button');
-    fireEvent.click(checkBox);
+    const saveButton = getDialogSaveButton();
+    fireEvent.click(saveButton);
     expect(handleSave).toHaveBeenCalledWith({
       enable: true,
       radiushost: 'foo',
@@ -64,7 +71,7 @@ describe('RADIUS dialog component tests', () => {
     const handleClose = testing.fn();
     const handleSave = testing.fn();
 
-    const {getByTestId} = render(
+    render(
       <Dialog
         enable={true}
         radiushost="foo"
@@ -73,10 +80,8 @@ describe('RADIUS dialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-close-button');
-
+    const closeButton = getDialogCloseButton();
     fireEvent.click(closeButton);
-
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -97,16 +102,15 @@ describe('RADIUS dialog component tests', () => {
     fireEvent.click(checkBox);
 
     const radiusHostTextField = getByTestId('radiushost-textfield');
-    userEvent.type(radiusHostTextField, 'lorem');
+    changeInputValue(radiusHostTextField, 'lorem');
 
     const radiusKeyTextField = getByTestId('radiuskey-textfield');
-    userEvent.type(radiusKeyTextField, 'bar');
+    changeInputValue(radiusKeyTextField, 'bar');
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
-
     expect(handleSave).toHaveBeenCalledWith({
-      radiushost: 'foolorem',
+      radiushost: 'lorem',
       enable: false,
       radiuskey: 'bar',
     });

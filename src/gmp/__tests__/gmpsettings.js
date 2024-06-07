@@ -61,6 +61,7 @@ describe('GmpSettings tests', () => {
     expect(settings.apiServer).toEqual('localhost:9392');
     expect(settings.disableLoginForm).toEqual(false);
     expect(settings.enableStoreDebugLog).toBeUndefined();
+    expect(settings.enableAssetManagement).toEqual(false);
     expect(settings.guestUsername).toBeUndefined();
     expect(settings.guestPassword).toBeUndefined();
     expect(settings.logLevel).toEqual(DEFAULT_LOG_LEVEL);
@@ -97,6 +98,7 @@ describe('GmpSettings tests', () => {
       disableLoginForm: true,
       enableGreenboneSensor: true,
       enableStoreDebugLog: true,
+      enableAssetManagement: true,
       guestUsername: 'guest',
       guestPassword: 'pass',
       locale: 'en',
@@ -121,6 +123,7 @@ describe('GmpSettings tests', () => {
     expect(settings.apiProtocol).toEqual('http');
     expect(settings.apiServer).toEqual('localhost');
     expect(settings.disableLoginForm).toEqual(true);
+    expect(settings.enableAssetManagement).toEqual(true);
     expect(settings.enableGreenboneSensor).toEqual(true);
     expect(settings.enableStoreDebugLog).toEqual(true);
     expect(settings.guestUsername).toEqual('guest');
@@ -313,6 +316,7 @@ describe('GmpSettings tests', () => {
       apiProtocol: 'http',
       apiServer: 'localhost',
       disableLoginForm: true,
+      enableAssetManagement: true,
       enableGreenboneSensor: true,
       guestUsername: 'guest',
       guestPassword: 'pass',
@@ -342,6 +346,10 @@ describe('GmpSettings tests', () => {
       settings.disableLoginForm = false;
     }).toThrow();
     expect(settings.disableLoginForm).toEqual(true);
+    expect(() => {
+      settings.enableAssetManagement = false;
+    }).toThrow();
+    expect(settings.enableAssetManagement).toEqual(true);
     expect(() => {
       settings.enableGreenboneSensor = false;
     }).toThrow();

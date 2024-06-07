@@ -16,70 +16,52 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import React, {useCallback} from 'react';
 
-import Downshift from 'downshift';
+import {TextInput, Loader} from '@mantine/core';
 
-import _ from 'gmp/locale';
+import {Select as OpenSightSelect} from '@greenbone/opensight-ui-components';
 
 import {isDefined, isArray} from 'gmp/utils/identity';
 
 import PropTypes, {mayRequire} from 'web/utils/proptypes';
 
-import ArrowIcon from 'web/components/icon/arrowicon';
+import useTranslation from 'web/hooks/useTranslation';
 
-import Layout from 'web/components/layout/layout';
+const findItem = (items, value) =>
+  isDefined(items) ? items.find(i => i.value === value) : undefined;
 
-import styled from 'styled-components';
-
-import {
-  Box,
-  caseInsensitiveFilter,
-  Input,
-  Item,
-  ItemContainer,
-  Menu,
-  SelectContainer,
-  SelectedValue,
-} from './selectelements';
-
-import {Marker} from './useFormValidation';
-import {styledExcludeProps} from 'web/utils/styledConfig';
-
-const SingleSelectedValue = styled(SelectedValue)`
-  cursor: default;
-`;
-
-const Div = styledExcludeProps(styled.div, ['hasError'])`
-  display: flex;
-`;
-
-const SelectValueValidator = (props, prop_name, component_name) => {
-  const value = props[prop_name];
+const SelectValueValidator = (props, propName, componentName) => {
+  const value = props[propName];
   const {items} = props;
-  const item = find_item(items, value);
+
+  if (!items || !items.length) {
+    return;
+  }
+
+  const item = findItem(items, value);
 
   if (isArray(items) && isDefined(value) && !isDefined(item)) {
     if (items.length === 0) {
       return new Error(
         'Invalid prop ' +
-          prop_name +
+          propName +
           ' `' +
           value +
           '` for ' +
-          component_name +
+          componentName +
           ' component. items prop is empty.',
       );
     }
     return new Error(
       'Invalid prop ' +
-        prop_name +
+        propName +
         ' `' +
         value +
         '` for ' +
-        component_name +
+        componentName +
         ' component. Prop ' +
-        prop_name +
+        propName +
         ' can not be ' +
         'found in items `' +
         items.map(i => i.value) +
@@ -90,231 +72,78 @@ const SelectValueValidator = (props, prop_name, component_name) => {
 
 const selectValue = mayRequire(SelectValueValidator);
 
-const find_item = (items, value) =>
-  isDefined(items) ? items.find(i => i.value === value) : undefined;
+const Select = ({
+  disabled,
+  dropdownPosition,
+  errorContent,
+  grow,
+  isLoading,
+  items = [],
+  label,
+  name,
+  placeholder,
+  searchable = true,
+  toolTipTitle,
+  value,
+  onChange,
+  ...props
+}) => {
+  const [_] = useTranslation();
 
-const find_label = (items, value) => {
-  const item = find_item(items, value);
-  if (isDefined(item)) {
-    return React.isValidElement(item.label) ? item.label : `${item.label}`;
-  }
-  return value;
-};
+  const handleChange = useCallback(
+    newValue => {
+      if (isDefined(onChange)) {
+        onChange(newValue, name);
+      }
+    },
+    [name, onChange],
+  );
 
-const DEFAULT_WIDTH = '180px';
-
-class Select extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.state = {
-      search: '',
-      isMenuRefAssigned: false,
-    };
-
-    this.input = React.createRef();
-    this.box = React.createRef();
-    this.menu = React.createRef();
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
-    this.notifyRefAssigned = this.notifyRefAssigned.bind(this);
-  }
-
-  notifyRefAssigned() {
-    this.setState({isMenuRefAssigned: true});
-  }
-
-  handleChange(value) {
-    const {name, onChange} = this.props;
-
-    if (isDefined(onChange)) {
-      onChange(value, name);
-    }
-  }
-
-  handleSearch(event) {
-    const {value} = event.target;
-    event.preventDefault(); // prevent handling input by downshift
-
-    this.setState({search: value});
-  }
-
-  handleSelect() {
-    // reset search term
-    this.setState({search: ''});
-  }
-
-  render() {
-    let {disabled = false} = this.props;
-    const {
-      className,
-      errorContent,
-      hasError = false,
-      items,
-      itemToString,
-      menuPosition,
-      value,
-      toolTipTitle,
-      width = DEFAULT_WIDTH,
-      isLoading = false,
-    } = this.props;
-
-    const {search} = this.state;
-
-    disabled = disabled || !isDefined(items) || items.length === 0 || isLoading;
-
-    const displayedItems = isDefined(items)
-      ? items.filter(caseInsensitiveFilter(search))
-      : [];
-
+  if (isLoading) {
     return (
-      <Downshift
-        selectedItem={value}
-        itemToString={itemToString}
-        stateReducer={(state, changes) => {
-          if (isDefined(changes) && isDefined(changes.isOpen)) {
-            return {
-              ...changes,
-              highlightedIndex: displayedItems.findIndex(
-                item => item.value === state.selectedItem,
-              ),
-            };
-          }
-          return changes;
-        }}
-        onChange={this.handleChange}
-        onSelect={this.handleSelect}
-      >
-        {({
-          closeMenu,
-          getInputProps,
-          getItemProps,
-          getMenuProps,
-          getRootProps,
-          getToggleButtonProps,
-          highlightedIndex,
-          inputValue,
-          isOpen,
-          openMenu,
-          selectItem,
-          selectedItem,
-        }) => {
-          const label = isLoading
-            ? _('Loading...')
-            : find_label(items, selectedItem);
-          return (
-            <Div {...getRootProps({})}>
-              <SelectContainer className={className} width={width}>
-                <Box
-                  {...getToggleButtonProps({
-                    disabled,
-                    onClick: isOpen
-                      ? event => {
-                          closeMenu();
-                        }
-                      : event => {
-                          event.preventDownshiftDefault = true; // don't call default handler from downshift
-                          openMenu(() => {
-                            const {current: input} = this.input;
-                            input !== null && input.focus();
-                          }); // set focus to input field after menu is opened
-                        },
-                  })}
-                  hasError={hasError}
-                  isOpen={isOpen}
-                  title={hasError ? errorContent : toolTipTitle}
-                  ref={this.box}
-                >
-                  <SingleSelectedValue
-                    data-testid="select-selected-value"
-                    disabled={disabled}
-                    title={toolTipTitle ? toolTipTitle : label}
-                  >
-                    {label}
-                  </SingleSelectedValue>
-                  <Layout align={['center', 'center']}>
-                    <ArrowIcon
-                      data-testid="select-open-button"
-                      down={!isOpen}
-                      size="small"
-                      isLoading={isLoading}
-                    />
-                  </Layout>
-                </Box>
-                {isOpen && !disabled && (
-                  <Menu
-                    {...getMenuProps({ref: this.menu})}
-                    position={menuPosition}
-                    target={this.box}
-                    menuHeight={
-                      this.menu.current?.getBoundingClientRect().height
-                    }
-                    notifyRefAssigned={this.notifyRefAssigned}
-                  >
-                    <Input
-                      {...getInputProps({
-                        value: search,
-                        disabled,
-                        onChange: this.handleSearch,
-                      })}
-                      data-testid="select-search-input"
-                      ref={this.input}
-                    />
-                    <ItemContainer>
-                      {displayedItems.map(
-                        (
-                          {label: itemLabel, value: itemValue, key = itemValue},
-                          i,
-                        ) => (
-                          <Item
-                            {...getItemProps({
-                              item: itemValue,
-                              isSelected: itemValue === selectedItem,
-                              isActive: i === highlightedIndex,
-                              onClick: event => {
-                                event.preventDownshiftDefault = true;
-                                selectItem(itemValue);
-                              },
-                            })}
-                            data-testid="select-item"
-                            key={key}
-                          >
-                            {React.isValidElement(itemLabel)
-                              ? itemLabel
-                              : `${itemLabel}`}
-                          </Item>
-                        ),
-                      )}
-                    </ItemContainer>
-                  </Menu>
-                )}
-              </SelectContainer>
-              <Marker isVisible={hasError}>×</Marker>
-            </Div>
-          );
-        }}
-      </Downshift>
+      <TextInput
+        styles={{root: {flexGrow: grow}}}
+        placeholder={_('Loading...')}
+        readOnly={true}
+        rightSection={<Loader size="xs" />}
+      />
     );
   }
-}
+  return (
+    <OpenSightSelect
+      {...props}
+      styles={{root: {flexGrow: grow}}}
+      dropdownPosition={dropdownPosition}
+      data={items}
+      disabled={disabled || !items?.length}
+      error={isDefined(errorContent) && `${errorContent}`}
+      searchable={searchable}
+      label={label}
+      title={toolTipTitle}
+      placeholder={placeholder}
+      name={name}
+      value={value}
+      onChange={handleChange}
+    />
+  );
+};
 
 Select.propTypes = {
   disabled: PropTypes.bool,
-  errorContent: PropTypes.string,
-  hasError: PropTypes.bool,
+  dropdownPosition: PropTypes.oneOf(['top', 'bottom']),
+  errorContent: PropTypes.toString,
+  grow: PropTypes.numberOrNumberString,
   isLoading: PropTypes.bool,
-  itemToString: PropTypes.func,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.any.isRequired,
       value: PropTypes.any.isRequired,
-      key: PropTypes.toString,
     }),
   ),
-  menuPosition: PropTypes.oneOf(['left', 'right', 'adjust']),
+  label: PropTypes.string,
   name: PropTypes.string,
+  placeholder: PropTypes.string,
+  searchable: PropTypes.bool,
   toolTipTitle: PropTypes.string,
   value: selectValue,
   width: PropTypes.string,
@@ -322,5 +151,3 @@ Select.propTypes = {
 };
 
 export default Select;
-
-// vim: set ts=2 sw=2 tw=80:

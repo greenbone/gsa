@@ -27,6 +27,12 @@ import {rendererWith} from 'web/utils/testing';
 
 import {getMockDeltaReport} from 'web/pages/reports/__mocks__/mockdeltareport';
 
+import {
+  getPowerFilter,
+  getSelectElement,
+  getTextInputs,
+} from 'web/components/testing';
+
 import DeltaDetailsContent from '../deltadetailscontent';
 
 const filter = Filter.fromString(
@@ -141,19 +147,17 @@ describe('Delta Report Details Content tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-    const inputs = baseElement.querySelectorAll('input');
     const links = baseElement.querySelectorAll('a');
     const tableData = baseElement.querySelectorAll('td');
-    const selects = getAllByTestId('select-selected-value');
     const bars = getAllByTestId('progressbar-box');
-
-    expect(icons.length).toEqual(15);
+    const powerFilter = getPowerFilter();
+    const select = getSelectElement(powerFilter);
+    const inputs = getTextInputs(powerFilter);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('foo');
+    expect(select).toHaveAttribute('title', 'Loaded filter');
+    expect(select).toHaveValue('foo');
 
     // Header
     expect(baseElement).toHaveTextContent(
@@ -313,20 +317,17 @@ describe('Delta Report Details Content tests', () => {
       />,
     );
 
-    const icons = baseElement.querySelectorAll('svg');
-    const inputs = baseElement.querySelectorAll('input');
     const header = baseElement.querySelectorAll('th');
     const rows = baseElement.querySelectorAll('tr');
-    const selects = getAllByTestId('select-selected-value');
     const bars = getAllByTestId('progressbar-box');
-
-    // Toolbar Icons
-    expect(icons.length).toEqual(26);
+    const powerFilter = getPowerFilter();
+    const select = getSelectElement(powerFilter);
+    const inputs = getTextInputs(powerFilter);
 
     // Powerfilter
     expect(inputs[0]).toHaveAttribute('name', 'userFilterString');
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(select).toHaveAttribute('title', 'Loaded filter');
+    expect(select).toHaveValue('--');
 
     // Header
     expect(baseElement).toHaveTextContent(

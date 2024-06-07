@@ -17,70 +17,23 @@
  */
 import {describe, test, expect, testing} from '@gsa/testing';
 
-import {render, fireEvent} from 'web/utils/testing';
+import {render, fireEvent, screen} from 'web/utils/testing';
 
-import Radio, {StyledElement, StyledInput, StyledTitle} from '../radio';
-
-describe('StyledElement tests', () => {
-  test('should render', () => {
-    const {element} = render(<StyledElement />);
-    expect(element).toHaveStyleRule('cursor', 'pointer');
-  });
-
-  test('should render in disabled state', () => {
-    const {element} = render(<StyledElement disabled={true} />);
-    expect(element).toHaveStyleRule('cursor', 'not-allowed');
-  });
-});
-
-describe('StyledInput tests', () => {
-  test('should render', () => {
-    const {element} = render(<StyledInput />);
-    expect(element).not.toHaveStyleRule('cursor');
-    expect(element).not.toHaveStyleRule('opacity');
-  });
-
-  test('should render in disabled state', () => {
-    const {element} = render(<StyledInput disabled={true} />);
-    expect(element).toHaveStyleRule('cursor', 'not-allowed');
-    expect(element).toHaveStyleRule('opacity', '0.7');
-  });
-});
-
-describe('StyledTitle tests', () => {
-  test('should render', () => {
-    const {element} = render(<StyledTitle />);
-    expect(element).not.toHaveStyleRule('cursor');
-    expect(element).toHaveStyleRule('opacity', '1');
-  });
-
-  test('should render in disabled state', () => {
-    const {element} = render(<StyledTitle disabled={true} />);
-    expect(element).toHaveStyleRule('cursor', 'not-allowed');
-    expect(element).toHaveStyleRule('opacity', '0.5');
-  });
-});
+import Radio from '../radio';
 
 describe('Radio tests', () => {
   test('should render radio', () => {
     const {element} = render(<Radio />);
-    expect(element).toMatchSnapshot();
-  });
 
-  test('should render radio with children', () => {
-    const {element} = render(
-      <Radio>
-        <span>child1</span>
-        <span>child2</span>
-      </Radio>,
-    );
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should call change handler', () => {
     const onChange = testing.fn();
 
-    const {element} = render(<Radio onChange={onChange} />);
+    render(<Radio data-testid="input" onChange={onChange} />);
+
+    const element = screen.getByTestId('input');
 
     fireEvent.click(element);
 
@@ -90,7 +43,9 @@ describe('Radio tests', () => {
   test('should call change handler with value', () => {
     const onChange = testing.fn();
 
-    const {element} = render(<Radio value="foo" onChange={onChange} />);
+    render(<Radio data-testid="input" value="foo" onChange={onChange} />);
+
+    const element = screen.getByTestId('input');
 
     fireEvent.click(element);
 
@@ -100,9 +55,11 @@ describe('Radio tests', () => {
   test('should call change handler with value and name', () => {
     const onChange = testing.fn();
 
-    const {element} = render(
-      <Radio name="bar" value="foo" onChange={onChange} />,
+    render(
+      <Radio data-testid="input" name="bar" value="foo" onChange={onChange} />,
     );
+
+    const element = screen.getByTestId('input');
 
     fireEvent.click(element);
 
@@ -112,7 +69,9 @@ describe('Radio tests', () => {
   test('should not call change handler if disabled', () => {
     const onChange = testing.fn();
 
-    const {element} = render(<Radio disabled={true} onChange={onChange} />);
+    render(<Radio data-testid="input" disabled={true} onChange={onChange} />);
+
+    const element = screen.getByTestId('input');
 
     fireEvent.click(element);
 
@@ -120,23 +79,28 @@ describe('Radio tests', () => {
   });
 
   test('should render title', () => {
-    const {getByTestId} = render(<Radio title="foo" />);
+    const {element} = render(<Radio data-testid="input" title="foo" />);
 
-    const titleElement = getByTestId('radio-title');
+    const titleElement = element.querySelector('label');
     expect(titleElement).toHaveTextContent('foo');
   });
 
   test('should not call change handler if already checked', () => {
     const onChange = testing.fn();
 
-    const {element} = render(
-      <Radio checked={true} value="foo" onChange={onChange} />,
+    render(
+      <Radio
+        data-testid="input"
+        checked={true}
+        value="foo"
+        onChange={onChange}
+      />,
     );
+
+    const element = screen.getByTestId('input');
 
     fireEvent.click(element);
 
     expect(onChange).not.toHaveBeenCalled();
   });
 });
-
-// vim: set ts=2 sw=2 tw=80:

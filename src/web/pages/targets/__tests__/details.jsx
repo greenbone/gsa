@@ -136,7 +136,7 @@ describe('Target Details tests', () => {
     );
 
     const headings = element.querySelectorAll('h2');
-    const detailslinks = getAllByTestId('details-link');
+    const detailsLinks = getAllByTestId('details-link');
 
     expect(headings[0]).toHaveTextContent('Hosts');
 
@@ -154,13 +154,13 @@ describe('Target Details tests', () => {
     expect(element).toHaveTextContent('Alive TestScan Config Default');
 
     expect(element).toHaveTextContent('Port List');
-    expect(detailslinks[0]).toHaveAttribute('href', '/portlist/pl_id1');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/portlist/pl_id1');
 
     expect(headings[1]).toHaveTextContent('Credentials');
 
     expect(element).toHaveTextContent('SMB');
 
-    expect(detailslinks[1]).toHaveAttribute('href', '/credential/4784');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/credential/4784');
   });
 
   test('should render full target details with elevate credentials and tasks', () => {
@@ -176,7 +176,7 @@ describe('Target Details tests', () => {
     );
 
     const headings = element.querySelectorAll('h2');
-    const detailslinks = getAllByTestId('details-link');
+    const detailsLinks = getAllByTestId('details-link');
 
     expect(headings[0]).toHaveTextContent('Hosts');
 
@@ -194,26 +194,26 @@ describe('Target Details tests', () => {
     expect(element).toHaveTextContent('Alive TestScan Config Default');
 
     expect(element).toHaveTextContent('Port List');
-    expect(detailslinks[0]).toHaveAttribute('href', '/portlist/pl_id1');
-    expect(detailslinks[0]).toHaveTextContent('pl1');
+    expect(detailsLinks[0]).toHaveAttribute('href', '/portlist/pl_id1');
+    expect(detailsLinks[0]).toHaveTextContent('pl1');
 
     expect(headings[1]).toHaveTextContent('Credentials');
 
     expect(element).toHaveTextContent('SSH');
-    expect(detailslinks[1]).toHaveAttribute('href', '/credential/1235');
-    expect(detailslinks[1]).toHaveTextContent('ssh');
+    expect(detailsLinks[1]).toHaveAttribute('href', '/credential/1235');
+    expect(detailsLinks[1]).toHaveTextContent('ssh');
 
     expect(element).toHaveTextContent('on Port 22');
     expect(element).toHaveTextContent('SSH elevate credential ');
-    expect(detailslinks[2]).toHaveAttribute('href', '/credential/3456');
-    expect(detailslinks[2]).toHaveTextContent('ssh_elevate');
+    expect(detailsLinks[2]).toHaveAttribute('href', '/credential/3456');
+    expect(detailsLinks[2]).toHaveTextContent('ssh_elevate');
 
     expect(element).toHaveTextContent('SMB');
-    expect(detailslinks[3]).toHaveAttribute('href', '/credential/4784');
-    expect(detailslinks[3]).toHaveTextContent('smb_credential');
+    expect(detailsLinks[3]).toHaveAttribute('href', '/credential/4784');
+    expect(detailsLinks[3]).toHaveTextContent('smb_credential');
 
     expect(headings[2]).toHaveTextContent('Tasks using this Target (1)');
-    expect(detailslinks[4]).toHaveAttribute('href', '/task/task_id');
-    expect(detailslinks[4]).toHaveTextContent('task1');
+    expect(detailsLinks[4]).toHaveAttribute('href', '/task/task_id');
+    expect(detailsLinks[4]).toHaveTextContent('task1');
   });
 });

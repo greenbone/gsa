@@ -17,8 +17,6 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
@@ -26,16 +24,21 @@ import withPrefix from 'web/utils/withPrefix';
 import Select from 'web/components/form/select';
 import FormGroup from 'web/components/form/formgroup';
 
-const StartTaskMethodPart = ({prefix, tasks, startTaskTask, onChange}) => (
-  <FormGroup title={_('Start Task')}>
-    <Select
-      name={prefix + 'start_task_task'}
-      value={startTaskTask}
-      items={renderSelectItems(tasks)}
-      onChange={onChange}
-    />
-  </FormGroup>
-);
+import useTranslation from 'web/hooks/useTranslation';
+
+const StartTaskMethodPart = ({prefix, tasks, startTaskTask, onChange}) => {
+  const [_] = useTranslation();
+  return (
+    <FormGroup title={_('Start Task')}>
+      <Select
+        name={prefix + 'start_task_task'}
+        value={startTaskTask}
+        items={renderSelectItems(tasks)}
+        onChange={onChange}
+      />
+    </FormGroup>
+  );
+};
 
 StartTaskMethodPart.propTypes = {
   prefix: PropTypes.string,

@@ -17,8 +17,6 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {
   PASSWORD_ONLY_CREDENTIAL_TYPE,
   password_only_credential_filter,
@@ -39,6 +37,8 @@ import PropTypes from 'web/utils/proptypes';
 import {renderSelectItems, UNSET_VALUE} from 'web/utils/render';
 import withPrefix from 'web/utils/withPrefix';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const SourcefireMethodPart = ({
   credentials,
   pkcs12Credential,
@@ -49,6 +49,7 @@ const SourcefireMethodPart = ({
   onCredentialChange,
   onNewCredentialClick,
 }) => {
+  const [_] = useTranslation();
   const credentialOptions = credentials.filter(password_only_credential_filter);
   return (
     <Layout flex="column" grow="1">

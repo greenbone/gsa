@@ -15,19 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {connect} from 'react-redux';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import styled from 'styled-components';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
-import ErrorDialog from 'web/components/dialog/errordialog';
-
-import LoadingButton from 'web/components/form/loadingbutton';
+import Button from 'web/components/form/button';
 
 import ManualIcon from 'web/components/icon/manualicon';
 import TrashcanIcon from 'web/components/icon/trashcanicon';
@@ -49,12 +43,10 @@ import TableRow from 'web/components/table/row';
 import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 
-import {renewSessionTimeout} from 'web/store/usersettings/actions';
-
-import compose from 'web/utils/compose';
 import PropTypes from 'web/utils/proptypes';
-import withGmp from 'web/utils/withGmp';
+
 import useCapabilities from 'web/utils/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
 
 import AlertsTable from '../alerts/table';
 import ScanConfigsTable from '../scanconfigs/table';
@@ -77,30 +69,35 @@ import TasksTable from '../tasks/table';
 import TicketsTable from '../tickets/table';
 
 import TrashActions from './trashactions';
+import useGmp from 'web/utils/useGmp';
+import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import useDialogNotification from 'web/components/notification/useDialogNotification';
+import DialogNotification from 'web/components/notification/dialognotification';
 
 const Col = styled.col`
   width: 50%;
 `;
 
-const ToolBarIcons = () => (
-  <ManualIcon
-    page="web-interface"
-    anchor="using-the-trashcan"
-    title={_('Help: Trashcan')}
-  />
-);
+const ToolBarIcons = () => {
+  const [_] = useTranslation();
+  return (
+    <ManualIcon
+      page="web-interface"
+      anchor="using-the-trashcan"
+      title={_('Help: Trashcan')}
+    />
+  );
+};
 
 const EmptyTrashButton = ({onClick, isLoading}) => {
+  const [_] = useTranslation();
   const capabilities = useCapabilities();
-
   if (!capabilities.mayOp('empty_trashcan')) {
     return null;
   }
   return (
     <Layout align="end">
-      <LoadingButton onClick={onClick} isLoading={isLoading}>
-        {_('Empty Trash')}
-      </LoadingButton>
+      <Button onClick={onClick}>{_('Empty Trash')}</Button>
     </Layout>
   );
 };
@@ -125,466 +122,466 @@ const separateByUsageType = inputList => {
   return {scan, compliance};
 };
 
-class Trashcan extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = {
-      trash: undefined,
-      isLoading: false,
-    };
+const TrashCanTableRow = ({type, title, count}) => {
+  return (
+    <TableRow key={type}>
+      <TableData>
+        <InnerLink to={type}>{title}</InnerLink>
+      </TableData>
+      <TableData>{count}</TableData>
+    </TableRow>
+  );
+};
 
-    this.createContentRow = this.createContentRow.bind(this);
-    this.createContentsTable = this.createContentsTable.bind(this);
-    this.getTrash = this.getTrash.bind(this);
-    this.handleEmpty = this.handleEmpty.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.handleRestore = this.handleRestore.bind(this);
-    this.handleErrorClose = this.handleErrorClose.bind(this);
-  }
+TrashCanTableRow.propTypes = {
+  count: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+};
 
-  componentDidMount() {
-    this.getTrash();
-  }
+const TrashCanContentsTable = ({trash}) => {
+  const [_] = useTranslation();
 
-  getTrash() {
-    const {gmp} = this.props;
+  const render_alerts = isDefined(trash.alert_list);
+  const render_credentials = isDefined(trash.credential_list);
+  const render_filters = isDefined(trash.filter_list);
+  const render_groups = isDefined(trash.group_list);
+  const render_notes = isDefined(trash.note_list);
+  const render_overrides = isDefined(trash.override_list);
+  const render_permissions = isDefined(trash.permission_list);
+  const render_port_lists = isDefined(trash.port_list_list);
+  const render_report_configs = isDefined(trash.report_config_list);
+  const render_report_formats = isDefined(trash.report_format_list);
+  const render_roles = isDefined(trash.role_list);
+  const render_scanners = isDefined(trash.scanner_list);
+  const render_schedules = isDefined(trash.schedule_list);
+  const render_tags = isDefined(trash.tag_list);
+  const render_targets = isDefined(trash.target_list);
+  const render_tickets = isDefined(trash.ticket_list);
 
-    this.setState({isLoading: true});
+  const {scan: tasks, compliance: audits} = separateByUsageType(
+    trash.task_list,
+  );
+  const renderTasks = isDefined(trash.task_list);
+  const renderAudits = isDefined(trash.task_list);
 
-    return gmp.trashcan.get().then(
+  const {scan: configs, compliance: policies} = separateByUsageType(
+    trash.config_list,
+  );
+  const renderConfigs = isDefined(trash.config_list);
+  const renderPolicies = isDefined(trash.config_list);
+
+  return (
+    <TableBody>
+      {render_alerts && (
+        <TrashCanTableRow
+          type="alert"
+          title={_('Alerts')}
+          count={trash.alert_list.length}
+        />
+      )}
+      {renderAudits && (
+        <TrashCanTableRow
+          type="audit"
+          title={_('Audits')}
+          count={audits.length}
+        />
+      )}
+      {render_credentials && (
+        <TrashCanTableRow
+          type="credential"
+          title={_('Credentials')}
+          count={trash.credential_list.length}
+        />
+      )}
+      {render_filters && (
+        <TrashCanTableRow
+          type="filter"
+          title={_('Filters')}
+          count={trash.filter_list.length}
+        />
+      )}
+      {render_groups && (
+        <TrashCanTableRow
+          type="group"
+          title={_('Groups')}
+          count={trash.group_list.length}
+        />
+      )}
+      {render_notes && (
+        <TrashCanTableRow
+          type="note"
+          title={_('Notes')}
+          count={trash.note_list.length}
+        />
+      )}
+      {render_overrides && (
+        <TrashCanTableRow
+          type="override"
+          title={_('Overrides')}
+          count={trash.override_list.length}
+        />
+      )}
+      {render_permissions && (
+        <TrashCanTableRow
+          type="permission"
+          title={_('Permissions')}
+          count={trash.permission_list.length}
+        />
+      )}
+      {renderPolicies && (
+        <TrashCanTableRow
+          type="policy"
+          title={_('Policies')}
+          count={policies.length}
+        />
+      )}
+      {render_port_lists && (
+        <TrashCanTableRow
+          type="port_list"
+          title={_('Port Lists')}
+          count={trash.port_list_list.length}
+        />
+      )}
+      {render_report_configs && (
+        <TrashCanTableRow
+          type="report_config"
+          title={_('Report Configs')}
+          count={trash.report_config_list.length}
+        />
+      )}
+      {render_report_formats && (
+        <TrashCanTableRow
+          type="report_format"
+          title={_('Report Formats')}
+          count={trash.report_format_list.length}
+        />
+      )}
+      {render_roles && (
+        <TrashCanTableRow
+          type="role"
+          title={_('Roles')}
+          count={trash.role_list.length}
+        />
+      )}
+      {renderConfigs && (
+        <TrashCanTableRow
+          type="config"
+          title={_('Scan Configs')}
+          count={configs.length}
+        />
+      )}
+      {render_scanners && (
+        <TrashCanTableRow
+          type="scanner"
+          title={_('Scanners')}
+          count={trash.scanner_list.length}
+        />
+      )}
+      {render_schedules && (
+        <TrashCanTableRow
+          type="schedule"
+          title={_('Schedules')}
+          count={trash.schedule_list.length}
+        />
+      )}
+      {render_tags && (
+        <TrashCanTableRow
+          type="tag"
+          title={_('Tags')}
+          count={trash.tag_list.length}
+        />
+      )}
+      {render_targets && (
+        <TrashCanTableRow
+          type="target"
+          title={_('Targets')}
+          count={trash.target_list.length}
+        />
+      )}
+      {renderTasks && (
+        <TrashCanTableRow type="task" title={_('Tasks')} count={tasks.length} />
+      )}
+      {render_tickets && (
+        <TrashCanTableRow
+          type="ticket"
+          title={_('Tickets')}
+          count={trash.ticket_list.length}
+        />
+      )}
+    </TableBody>
+  );
+};
+
+TrashCanContentsTable.propTypes = {
+  trash: PropTypes.object.isRequired,
+};
+
+const TrashCan = () => {
+  const gmp = useGmp();
+  const [isLoading, setLoading] = useState(false);
+  let [trash, setTrash] = useState();
+  const [_] = useTranslation();
+  const [, renewSession] = useUserSessionTimeout();
+  const {
+    dialogState: notificationDialogState,
+    closeDialog: closeNotificationDialog,
+    showError,
+  } = useDialogNotification();
+
+  const handleInteraction = renewSession;
+
+  const loadTrash = useCallback(() => {
+    setLoading(true);
+    gmp.trashcan.get().then(
       response => {
-        const trash = response.data;
-        this.setState({trash, isLoading: false});
+        setTrash(response.data);
+        setLoading(false);
       },
+      // eslint-disable-next-line no-shadow
       error => {
-        this.setState({error, isLoading: false});
+        showError(error);
+        setLoading(false);
       },
     );
-  }
+  }, [gmp, showError]);
 
-  handleInteraction() {
-    const {onInteraction} = this.props;
-    if (isDefined(onInteraction)) {
-      onInteraction();
-    }
-  }
+  const handleRestore = entity => {
+    handleInteraction();
 
-  handleRestore(entity) {
-    const {gmp} = this.props;
+    return gmp.trashcan.restore(entity).then(loadTrash).catch(showError);
+  };
 
-    this.handleInteraction();
+  const handleDelete = entity => {
+    handleInteraction();
 
-    return gmp.trashcan
-      .restore(entity)
-      .then(this.getTrash)
-      .catch(error => {
-        this.setState({
-          error,
-        });
-      });
-  }
+    return gmp.trashcan.delete(entity).then(loadTrash).catch(showError);
+  };
 
-  handleDelete(entity) {
-    const {gmp} = this.props;
-
-    this.handleInteraction();
-
-    return gmp.trashcan
-      .delete(entity)
-      .then(this.getTrash)
-      .catch(error => {
-        this.setState({
-          error,
-        });
-      });
-  }
-
-  handleEmpty() {
-    const {gmp} = this.props;
-
-    this.handleInteraction();
+  const handleEmpty = () => {
+    handleInteraction();
 
     gmp.trashcan
       .empty()
-      .then(this.getTrash)
-      .catch(error => {
-        this.setState({
-          error,
-        });
-      });
+      .then(() => {
+        loadTrash();
+      })
+      .catch(showError);
+  };
+
+  // load the data on initial render
+  useEffect(() => {
+    loadTrash();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const tableProps = {
+    links: false,
+    onEntityRestore: handleRestore,
+    onEntityDelete: handleDelete,
+    actionsComponent: TrashActions,
+    footnote: false,
+    footer: false,
+  };
+
+  if (!isDefined(trash) && isLoading) {
+    return <Loading />;
+  } else if (!isDefined(trash)) {
+    trash = {};
   }
 
-  handleErrorClose() {
-    this.setState({
-      error: undefined,
-    });
-  }
+  const {scan: tasks, compliance: audits} = separateByUsageType(
+    trash.task_list,
+  );
+  const {scan: configs, compliance: policies} = separateByUsageType(
+    trash.config_list,
+  );
 
-  createContentRow(type, title, count) {
-    return (
-      <TableRow key={type}>
-        <TableData>
-          <InnerLink to={type}>{title}</InnerLink>
-        </TableData>
-        <TableData>{count}</TableData>
-      </TableRow>
-    );
-  }
+  return (
+    <React.Fragment>
+      <PageTitle title={_('Trashcan')} />
+      <Layout flex="column">
+        <span>
+          {' '}
+          {/* span prevents Toolbar from growing */}
+          <ToolBarIcons />
+        </span>
+        <DialogNotification
+          {...notificationDialogState}
+          onCloseClick={closeNotificationDialog}
+        />
+        <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
+        <EmptyTrashButton onClick={handleEmpty} isLoading={isLoading} />
+        <LinkTarget id="Contents" />
+        <h1>{_('Contents')}</h1>
+        <Table>
+          <colgroup>
+            <Col />
+            <Col />
+          </colgroup>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{_('Type')}</TableHead>
+              <TableHead>{_('Items')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TrashCanContentsTable trash={trash} />
+        </Table>
 
-  createContentsTable(trash) {
-    const render_alerts = isDefined(trash.alert_list);
-    const render_credentials = isDefined(trash.credential_list);
-    const render_filters = isDefined(trash.filter_list);
-    const render_groups = isDefined(trash.group_list);
-    const render_notes = isDefined(trash.note_list);
-    const render_overrides = isDefined(trash.override_list);
-    const render_permissions = isDefined(trash.permission_list);
-    const render_port_lists = isDefined(trash.port_list_list);
-    const render_report_configs = isDefined(trash.report_config_list);
-    const render_report_formats = isDefined(trash.report_format_list);
-    const render_roles = isDefined(trash.role_list);
-    const render_scanners = isDefined(trash.scanner_list);
-    const render_schedules = isDefined(trash.schedule_list);
-    const render_tags = isDefined(trash.tag_list);
-    const render_targets = isDefined(trash.target_list);
-    const render_tickets = isDefined(trash.ticket_list);
-
-    const {scan: tasks, compliance: audits} = separateByUsageType(
-      trash.task_list,
-    );
-    const renderTasks = isDefined(trash.task_list);
-    const renderAudits = isDefined(trash.task_list);
-
-    const {scan: configs, compliance: policies} = separateByUsageType(
-      trash.config_list,
-    );
-    const renderConfigs = isDefined(trash.config_list);
-    const renderPolicies = isDefined(trash.config_list);
-
-    return (
-      <TableBody>
-        {render_alerts &&
-          this.createContentRow('alert', _('Alerts'), trash.alert_list.length)}
-        {renderAudits &&
-          this.createContentRow('audit', _('Audits'), audits.length)}
-        {render_credentials &&
-          this.createContentRow(
-            'credential',
-            _('Credentials'),
-            trash.credential_list.length,
-          )}
-        {render_filters &&
-          this.createContentRow(
-            'filter',
-            _('Filters'),
-            trash.filter_list.length,
-          )}
-        {render_groups &&
-          this.createContentRow('group', _('Groups'), trash.group_list.length)}
-        {render_notes &&
-          this.createContentRow('note', _('Notes'), trash.note_list.length)}
-        {render_overrides &&
-          this.createContentRow(
-            'override',
-            _('Overrides'),
-            trash.override_list.length,
-          )}
-        {render_permissions &&
-          this.createContentRow(
-            'permission',
-            _('Permissions'),
-            trash.permission_list.length,
-          )}
-        {renderPolicies &&
-          this.createContentRow('policy', _('Policies'), policies.length)}
-        {render_port_lists &&
-          this.createContentRow(
-            'port_list',
-            _('Port Lists'),
-            trash.port_list_list.length,
-          )}
-        {render_report_configs &&
-          this.createContentRow(
-            'report_config',
-            _('Report Configs'),
-            trash.report_config_list.length,
-          )}
-        {render_report_formats &&
-          this.createContentRow(
-            'report_format',
-            _('Report Formats'),
-            trash.report_format_list.length,
-          )}
-        {render_roles &&
-          this.createContentRow('role', _('Roles'), trash.role_list.length)}
-        {renderConfigs &&
-          this.createContentRow('config', _('Scan Configs'), configs.length)}
-        {render_scanners &&
-          this.createContentRow(
-            'scanner',
-            _('Scanners'),
-            trash.scanner_list.length,
-          )}
-        {render_schedules &&
-          this.createContentRow(
-            'schedule',
-            _('Schedules'),
-            trash.schedule_list.length,
-          )}
-        {render_tags &&
-          this.createContentRow('tag', _('Tags'), trash.tag_list.length)}
-        {render_targets &&
-          this.createContentRow(
-            'target',
-            _('Targets'),
-            trash.target_list.length,
-          )}
-        {renderTasks && this.createContentRow('task', _('Tasks'), tasks.length)}
-        {render_tickets &&
-          this.createContentRow(
-            'ticket',
-            _('Tickets'),
-            trash.ticket_list.length,
-          )}
-      </TableBody>
-    );
-  }
-
-  render() {
-    const {error, isLoading} = this.state;
-    let {trash} = this.state;
-
-    if (isLoading && !isDefined(trash) && !isDefined(error)) {
-      return <Loading />;
-    } else if (!isDefined(trash)) {
-      trash = {};
-    }
-
-    const {scan: tasks, compliance: audits} = separateByUsageType(
-      trash.task_list,
-    );
-    const {scan: configs, compliance: policies} = separateByUsageType(
-      trash.config_list,
-    );
-
-    const contents_table = this.createContentsTable(trash);
-
-    const table_props = {
-      links: false,
-      onEntityRestore: this.handleRestore,
-      onEntityDelete: this.handleDelete,
-      actionsComponent: TrashActions,
-      footnote: false,
-      footer: false,
-    };
-
-    return (
-      <React.Fragment>
-        <PageTitle title={_('Trashcan')} />
-        <Layout flex="column">
+        {isDefined(trash.alert_list) && (
           <span>
-            {' '}
-            {/* span prevents Toolbar from growing */}
-            <ToolBarIcons />
+            <LinkTarget id="alert" />
+            <h1>{_('Alerts')}</h1>
+            <AlertsTable entities={trash.alert_list} {...tableProps} />
           </span>
-          {error && (
-            <ErrorDialog
-              text={error.message}
-              title={_('Error')}
-              onClose={this.handleErrorClose}
+        )}
+        {isDefined(trash.task_list) && (
+          <span>
+            <LinkTarget id="audit" />
+            <h1>{_('Audits')}</h1>
+            <TasksTable entities={audits} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.credential_list) && (
+          <span>
+            <LinkTarget id="credential" />
+            <h1>{_('Credentials')}</h1>
+            <CredentialsTable
+              entities={trash.credential_list}
+              {...tableProps}
             />
-          )}
-          <Section img={<TrashcanIcon size="large" />} title={_('Trashcan')} />
-          <EmptyTrashButton onClick={this.handleEmpty} isLoading={isLoading} />
-          <LinkTarget id="Contents" />
-          <h1>{_('Contents')}</h1>
-          <Table>
-            <colgroup>
-              <Col />
-              <Col />
-            </colgroup>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{_('Type')}</TableHead>
-                <TableHead>{_('Items')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            {contents_table}
-          </Table>
-
-          {isDefined(trash.alert_list) && (
-            <span>
-              <LinkTarget id="alert" />
-              <h1>{_('Alerts')}</h1>
-              <AlertsTable entities={trash.alert_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.task_list) && (
-            <span>
-              <LinkTarget id="audit" />
-              <h1>{_('Audits')}</h1>
-              <TasksTable entities={audits} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.credential_list) && (
-            <span>
-              <LinkTarget id="credential" />
-              <h1>{_('Credentials')}</h1>
-              <CredentialsTable
-                entities={trash.credential_list}
-                {...table_props}
-              />
-            </span>
-          )}
-          {isDefined(trash.filter_list) && (
-            <span>
-              <LinkTarget id="filter" />
-              <h1>{_('Filters')}</h1>
-              <FiltersTable entities={trash.filter_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.group_list) && (
-            <span>
-              <LinkTarget id="group" />
-              <h1>{_('Groups')}</h1>
-              <GroupsTable entities={trash.group_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.note_list) && (
-            <span>
-              <LinkTarget id="note" />
-              <h1>{_('Notes')}</h1>
-              <NotesTable entities={trash.note_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.override_list) && (
-            <span>
-              <LinkTarget id="override" />
-              <h1>{_('Overrides')}</h1>
-              <OverridesTable entities={trash.override_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.permission_list) && (
-            <span>
-              <LinkTarget id="permission" />
-              <h1>{_('Permissions')}</h1>
-              <PermissionsTable
-                entities={trash.permission_list}
-                {...table_props}
-              />
-            </span>
-          )}
-          {isDefined(trash.config_list) > 0 && (
-            <span>
-              <LinkTarget id="policy" />
-              <h1>{_('Policies')}</h1>
-              <PoliciesTable entities={policies} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.port_list_list) && (
-            <span>
-              <LinkTarget id="port_list" />
-              <h1>{_('Port Lists')}</h1>
-              <PortListsTable
-                entities={trash.port_list_list}
-                {...table_props}
-              />
-            </span>
-          )}
-          {isDefined(trash.report_config_list) && (
-            <span>
-              <LinkTarget id="report_config" />
-              <h1>{_('Report Configs')}</h1>
-              <ReportConfigsTable
-                entities={trash.report_config_list}
-                {...table_props}
-              />
-            </span>
-          )}
-          {isDefined(trash.report_format_list) && (
-            <span>
-              <LinkTarget id="report_format" />
-              <h1>{_('Report Formats')}</h1>
-              <ReportFormatsTable
-                entities={trash.report_format_list}
-                {...table_props}
-              />
-            </span>
-          )}
-          {isDefined(trash.role_list) && (
-            <span>
-              <LinkTarget id="role" />
-              <h1>{_('Roles')}</h1>
-              <RolesTable entities={trash.role_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.config_list) && (
-            <span>
-              <LinkTarget id="config" />
-              <h1>{_('Scan Configs')}</h1>
-              <ScanConfigsTable entities={configs} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.scanner_list) && (
-            <span>
-              <LinkTarget id="scanner" />
-              <h1>{_('Scanners')}</h1>
-              <ScannersTable entities={trash.scanner_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.schedule_list) && (
-            <span>
-              <LinkTarget id="schedule" />
-              <h1>{_('Schedules')}</h1>
-              <SchedulesTable entities={trash.schedule_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.tag_list) && (
-            <span>
-              <LinkTarget id="tag" />
-              <h1>{_('Tags')}</h1>
-              <TagsTable entities={trash.tag_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.target_list) && (
-            <span>
-              <LinkTarget id="target" />
-              <h1>{_('Targets')}</h1>
-              <TargetsTable entities={trash.target_list} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.task_list) > 0 && (
-            <span>
-              <LinkTarget id="task" />
-              <h1>{_('Tasks')}</h1>
-              <TasksTable entities={tasks} {...table_props} />
-            </span>
-          )}
-          {isDefined(trash.ticket_list) && (
-            <span>
-              <LinkTarget id="ticket" />
-              <h1>{_('Tickets')}</h1>
-              <TicketsTable entities={trash.ticket_list} {...table_props} />
-            </span>
-          )}
-        </Layout>
-      </React.Fragment>
-    );
-  }
-}
-
-Trashcan.propTypes = {
-  gmp: PropTypes.gmp.isRequired,
-  onInteraction: PropTypes.func.isRequired,
+          </span>
+        )}
+        {isDefined(trash.filter_list) && (
+          <span>
+            <LinkTarget id="filter" />
+            <h1>{_('Filters')}</h1>
+            <FiltersTable entities={trash.filter_list} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.group_list) && (
+          <span>
+            <LinkTarget id="group" />
+            <h1>{_('Groups')}</h1>
+            <GroupsTable entities={trash.group_list} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.note_list) && (
+          <span>
+            <LinkTarget id="note" />
+            <h1>{_('Notes')}</h1>
+            <NotesTable entities={trash.note_list} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.override_list) && (
+          <span>
+            <LinkTarget id="override" />
+            <h1>{_('Overrides')}</h1>
+            <OverridesTable entities={trash.override_list} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.permission_list) && (
+          <span>
+            <LinkTarget id="permission" />
+            <h1>{_('Permissions')}</h1>
+            <PermissionsTable
+              entities={trash.permission_list}
+              {...tableProps}
+            />
+          </span>
+        )}
+        {isDefined(trash.config_list) > 0 && (
+          <span>
+            <LinkTarget id="policy" />
+            <h1>{_('Policies')}</h1>
+            <PoliciesTable entities={policies} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.port_list_list) && (
+          <span>
+            <LinkTarget id="port_list" />
+            <h1>{_('Port Lists')}</h1>
+            <PortListsTable entities={trash.port_list_list} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.report_config_list) && (
+          <span>
+            <LinkTarget id="report_config" />
+            <h1>{_('Report Configs')}</h1>
+            <ReportConfigsTable
+              entities={trash.report_config_list}
+              {...tableProps}
+            />
+          </span>
+        )}
+        {isDefined(trash.report_format_list) && (
+          <span>
+            <LinkTarget id="report_format" />
+            <h1>{_('Report Formats')}</h1>
+            <ReportFormatsTable
+              entities={trash.report_format_list}
+              {...tableProps}
+            />
+          </span>
+        )}
+        {isDefined(trash.role_list) && (
+          <span>
+            <LinkTarget id="role" />
+            <h1>{_('Roles')}</h1>
+            <RolesTable entities={trash.role_list} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.config_list) && (
+          <span>
+            <LinkTarget id="config" />
+            <h1>{_('Scan Configs')}</h1>
+            <ScanConfigsTable entities={configs} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.scanner_list) && (
+          <span>
+            <LinkTarget id="scanner" />
+            <h1>{_('Scanners')}</h1>
+            <ScannersTable entities={trash.scanner_list} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.schedule_list) && (
+          <span>
+            <LinkTarget id="schedule" />
+            <h1>{_('Schedules')}</h1>
+            <SchedulesTable entities={trash.schedule_list} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.tag_list) && (
+          <span>
+            <LinkTarget id="tag" />
+            <h1>{_('Tags')}</h1>
+            <TagsTable entities={trash.tag_list} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.target_list) && (
+          <span>
+            <LinkTarget id="target" />
+            <h1>{_('Targets')}</h1>
+            <TargetsTable entities={trash.target_list} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.task_list) > 0 && (
+          <span>
+            <LinkTarget id="task" />
+            <h1>{_('Tasks')}</h1>
+            <TasksTable entities={tasks} {...tableProps} />
+          </span>
+        )}
+        {isDefined(trash.ticket_list) && (
+          <span>
+            <LinkTarget id="ticket" />
+            <h1>{_('Tickets')}</h1>
+            <TicketsTable entities={trash.ticket_list} {...tableProps} />
+          </span>
+        )}
+      </Layout>
+    </React.Fragment>
+  );
 };
 
-const mapDispatchToProps = (dispatch, {gmp}) => ({
-  onInteraction: () => dispatch(renewSessionTimeout(gmp)()),
-});
-
-export default compose(
-  withGmp,
-  connect(undefined, mapDispatchToProps),
-)(Trashcan);
-
-// vim: set ts=2 sw=2 tw=80:
+export default TrashCan;

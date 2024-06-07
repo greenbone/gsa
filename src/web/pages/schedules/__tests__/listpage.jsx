@@ -31,6 +31,17 @@ import {loadingActions} from 'web/store/usersettings/defaults/actions';
 
 import {rendererWith, fireEvent, screen, wait} from 'web/utils/testing';
 
+import {
+  clickElement,
+  getCheckBoxes,
+  getPowerFilter,
+  getSelectElement,
+  getSelectItemElementsForSelect,
+  getTableBody,
+  getTableFooter,
+  getTextInputs,
+} from 'web/components/testing';
+
 import SchedulePage, {ToolBarIcons} from '../listpage';
 
 const schedule = Schedule.fromElement({
@@ -107,10 +118,10 @@ describe('SchedulePage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('schedule', defaultSettingfilter),
+      defaultFilterLoadingActions.success('schedule', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -130,8 +141,9 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    const inputs = baseElement.querySelectorAll('input');
-    const selects = screen.getAllByTestId('select-selected-value');
+    const powerFilter = getPowerFilter();
+    const select = getSelectElement(powerFilter);
+    const inputs = getTextInputs(powerFilter);
 
     // Toolbar Icons
     expect(screen.getAllByTitle('Help: Schedules')[0]).toBeInTheDocument();
@@ -146,8 +158,8 @@ describe('SchedulePage tests', () => {
     ).toBeInTheDocument();
     expect(screen.getAllByTitle('Help: Powerfilter')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Edit Filter')[0]).toBeInTheDocument();
-    expect(selects[0]).toHaveAttribute('title', 'Loaded filter');
-    expect(selects[0]).toHaveTextContent('--');
+    expect(select).toHaveAttribute('title', 'Loaded filter');
+    expect(select).toHaveValue('--');
 
     // Table
     const header = baseElement.querySelectorAll('th');
@@ -174,6 +186,7 @@ describe('SchedulePage tests', () => {
     expect(screen.getAllByTitle('Clone Schedule')[0]).toBeInTheDocument();
     expect(screen.getAllByTitle('Export Schedule')[0]).toBeInTheDocument();
   });
+
   test('should allow to bulk action on page contents', async () => {
     const deleteByFilter = testing.fn().mockResolvedValue({
       foo: 'bar',
@@ -206,10 +219,10 @@ describe('SchedulePage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('schedule', defaultSettingfilter),
+      defaultFilterLoadingActions.success('schedule', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -230,23 +243,15 @@ describe('SchedulePage tests', () => {
     await wait();
 
     // export page contents
-    const exportIcon = screen.getAllByTitle('Export page contents');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getAllByTitle('Export page contents')[0];
+    await clickElement(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move page contents to trashcan
-    const deleteIcon = screen.getAllByTitle('Move page contents to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
+    const deleteIcon = screen.getAllByTitle(
+      'Move page contents to trashcan',
+    )[0];
+    await clickElement(deleteIcon);
     expect(deleteByFilter).toHaveBeenCalled();
   });
 
@@ -282,10 +287,10 @@ describe('SchedulePage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('schedule', defaultSettingfilter),
+      defaultFilterLoadingActions.success('schedule', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -301,43 +306,30 @@ describe('SchedulePage tests', () => {
       entitiesLoadingActions.success([schedule], filter, loadedFilter, counts),
     );
 
-    const {element} = render(<SchedulePage />);
+    render(<SchedulePage />);
 
     await wait();
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[1]);
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to selection');
-
-    const inputs = element.querySelectorAll('input');
+    // change to apply to selection
+    const tableFooter = getTableFooter();
+    const select = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(select);
+    await clickElement(selectItems[1]);
+    expect(select).toHaveValue('Apply to selection');
 
     // select an schedule
-    fireEvent.click(inputs[1]);
-    await wait();
+    const tableBody = getTableBody();
+    const inputs = getCheckBoxes(tableBody);
+    await clickElement(inputs[1]);
 
     // export selected schedule
-    const exportIcon = screen.getAllByTitle('Export selection');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getAllByTitle('Export selection')[0];
+    await clickElement(exportIcon);
     expect(exportByIds).toHaveBeenCalled();
 
     // move selected schedule to trashcan
-    const deleteIcon = screen.getAllByTitle('Move selection to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
+    const deleteIcon = screen.getAllByTitle('Move selection to trashcan')[0];
+    await clickElement(deleteIcon);
     expect(deleteByIds).toHaveBeenCalled();
   });
 
@@ -373,10 +365,10 @@ describe('SchedulePage tests', () => {
     store.dispatch(setTimezone('CET'));
     store.dispatch(setUsername('admin'));
 
-    const defaultSettingfilter = Filter.fromString('foo=bar');
+    const defaultSettingFilter = Filter.fromString('foo=bar');
     store.dispatch(loadingActions.success({rowsperpage: {value: '2'}}));
     store.dispatch(
-      defaultFilterLoadingActions.success('schedule', defaultSettingfilter),
+      defaultFilterLoadingActions.success('schedule', defaultSettingFilter),
     );
 
     const counts = new CollectionCounts({
@@ -396,35 +388,21 @@ describe('SchedulePage tests', () => {
 
     await wait();
 
-    const selectFields = screen.getAllByTestId('select-open-button');
-    fireEvent.click(selectFields[1]);
-
-    const selectItems = screen.getAllByTestId('select-item');
-    fireEvent.click(selectItems[2]);
-
-    await wait();
-
-    const selected = screen.getAllByTestId('select-selected-value');
-    expect(selected[1]).toHaveTextContent('Apply to all filtered');
+    // change to all filtered
+    const tableFooter = getTableFooter();
+    const select = getSelectElement(tableFooter);
+    const selectItems = await getSelectItemElementsForSelect(select);
+    await clickElement(selectItems[2]);
+    expect(select).toHaveValue('Apply to all filtered');
 
     // export all filtered schedules
-    const exportIcon = screen.getAllByTitle('Export all filtered');
-
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
-    await wait();
-
+    const exportIcon = screen.getAllByTitle('Export all filtered')[0];
+    await clickElement(exportIcon);
     expect(exportByFilter).toHaveBeenCalled();
 
     // move all filtered schedules to trashcan
-    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan');
-
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
-    await wait();
-
+    const deleteIcon = screen.getAllByTitle('Move all filtered to trashcan')[0];
+    await clickElement(deleteIcon);
     expect(deleteByFilter).toHaveBeenCalled();
   });
 });
@@ -496,7 +474,7 @@ describe('SchedulePage ToolBarIcons test', () => {
       <ToolBarIcons onScheduleCreateClick={handleScheduleCreateClick} />,
     );
 
-    const icons = queryAllByTestId('svg-icon'); // this test is probably approppriate to keep in the old format
+    const icons = queryAllByTestId('svg-icon'); // this test is probably appropriate to keep in the old format
     expect(icons.length).toBe(1);
     expect(icons[0]).toHaveAttribute('title', 'Help: Schedules');
   });

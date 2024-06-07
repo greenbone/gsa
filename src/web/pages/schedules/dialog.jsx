@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-
-import {_, _l} from 'gmp/locale/lang';
+import React, {useState} from 'react';
 
 import {isDefined} from 'gmp/utils/identity';
 
@@ -28,6 +26,7 @@ import PropTypes from 'web/utils/proptypes';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
+import Button from 'web/components/form/button';
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
 import FormGroup from 'web/components/form/formgroup';
@@ -37,15 +36,15 @@ import TimeZoneSelect from 'web/components/form/timezoneselect';
 import CheckBox from 'web/components/form/checkbox';
 import Radio from 'web/components/form/radio';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+import Row from 'web/components/layout/row';
 
+import useTranslation from 'web/hooks/useTranslation';
+
+import {renderDuration} from './render';
 import TimeUnitSelect from './timeunitselect';
 import WeekDaySelect, {WeekDaysPropType} from './weekdayselect';
-import {renderDuration} from './render';
 import DaySelect from './dayselect';
 import MonthDaysSelect from './monthdaysselect';
-import Button from 'web/components/form/button';
 
 const RECURRENCE_ONCE = 'once';
 const RECURRENCE_HOURLY = ReccurenceFrequency.HOURLY;
@@ -56,64 +55,6 @@ const RECURRENCE_YEARLY = ReccurenceFrequency.YEARLY;
 const RECURRENCE_WORKWEEK = 'workweek';
 const RECURRENCE_CUSTOM = 'custom';
 
-const RECURRENCE_TYPE_ITEMS = [
-  {
-    label: _l('Once'),
-    value: RECURRENCE_ONCE,
-  },
-  {
-    label: _l('Hourly'),
-    value: RECURRENCE_HOURLY,
-  },
-  {
-    label: _l('Daily'),
-    value: RECURRENCE_DAILY,
-  },
-  {
-    label: _l('Weekly'),
-    value: RECURRENCE_WEEKLY,
-  },
-  {
-    label: _l('Monthly'),
-    value: RECURRENCE_MONTHLY,
-  },
-  {
-    label: _l('Yearly'),
-    value: RECURRENCE_YEARLY,
-  },
-  {
-    label: _l('Workweek (Monday till Friday)'),
-    value: RECURRENCE_WORKWEEK,
-  },
-  {
-    label: _l('Custom...'),
-    value: RECURRENCE_CUSTOM,
-  },
-];
-
-const NTH_DAY_ITEMS = [
-  {
-    label: _l('The First'),
-    value: '1',
-  },
-  {
-    label: _l('The Second'),
-    value: '2',
-  },
-  {
-    label: _l('The Third'),
-    value: '3',
-  },
-  {
-    label: _l('The Fourth'),
-    value: '4',
-  },
-  {
-    label: _l('The Last'),
-    value: '-1',
-  },
-];
-
 const RepeatMonthly = {
   nth: 'nth',
   days: 'days',
@@ -121,139 +62,190 @@ const RepeatMonthly = {
 
 const getNthWeekday = cdate => Math.ceil(cdate.date() / 7);
 
-class ScheduleDialog extends React.Component {
-  constructor(...args) {
-    super(...args);
-
-    this.state = this.initialState(this.props);
-
-    this.handleSave = this.handleSave.bind(this);
-    this.handleValueChange = this.handleValueChange.bind(this);
-    this.handleStartHoursChange = this.handleStartHoursChange.bind(this);
-    this.handleStartMinutesChange = this.handleStartMinutesChange.bind(this);
-    this.handleEndHoursChange = this.handleEndHoursChange.bind(this);
-    this.handleEndMinutesChange = this.handleEndMinutesChange.bind(this);
-    this.handleTimezoneChange = this.handleTimezoneChange.bind(this);
-    this.handleNowButtonClick = this.handleNowButtonClick.bind(this);
-  }
-
-  initialState(props) {
-    const {
-      duration,
-      timezone = 'UTC',
-      startDate = date().tz(timezone).startOf('hour').add(1, 'hour'),
-    } = props;
-    let {freq, interval = 1, weekdays, monthdays} = this.props;
-
-    const monthly =
-      freq === ReccurenceFrequency.MONTHLY && !isDefined(weekdays)
-        ? RepeatMonthly.days
-        : RepeatMonthly.nth;
-
-    let recurrenceType;
-    if (isDefined(freq)) {
-      if (!isDefined(weekdays) && !isDefined(monthdays) && interval === 1) {
-        recurrenceType = freq;
-      } else {
-        recurrenceType = RECURRENCE_CUSTOM;
+const ScheduleDialog = ({
+  duration,
+  timezone: initialTimezone = 'UTC',
+  startDate: initialStartDate = date()
+    .tz(initialTimezone)
+    .startOf('hour')
+    .add(1, 'hour'),
+  freq: initialFrequency,
+  interval: initialInterval = 1,
+  weekdays: initialWeekdays,
+  monthdays: initialMonthDays,
+  comment = '',
+  id,
+  name,
+  title,
+  onClose,
+  onSave,
+}) => {
+  const [_] = useTranslation();
+  const [timezone, setTimezone] = useState(initialTimezone);
+  const [endDate, setEndDate] = useState(
+    isDefined(duration)
+      ? initialStartDate.clone().add(duration)
+      : initialStartDate.clone().add(1, 'hour'),
+  );
+  const [startDate, setStartDate] = useState(initialStartDate);
+  const [endOpen, setEndOpen] = useState(!isDefined(duration));
+  const [freq, setFreq] = useState(
+    isDefined(initialFrequency) ? initialFrequency : ReccurenceFrequency.WEEKLY,
+  );
+  const [recurrenceType, setRecurrenceType] = useState(() => {
+    if (isDefined(initialFrequency)) {
+      if (
+        !isDefined(initialWeekdays) &&
+        !isDefined(initialMonthDays) &&
+        initialInterval === 1
+      ) {
+        return initialFrequency;
       }
-    } else {
-      recurrenceType = RECURRENCE_ONCE;
-      freq = ReccurenceFrequency.WEEKLY;
+      return RECURRENCE_CUSTOM;
     }
-
-    const endDate = isDefined(duration)
-      ? startDate.clone().add(duration)
-      : startDate.clone().add(1, 'hour');
-
-    if (!isDefined(weekdays)) {
-      weekdays = new WeekDays();
-      weekdays = weekdays.setWeekDayFromDate(startDate);
+    return RECURRENCE_ONCE;
+  });
+  const [interval, setInterval] = useState(initialInterval);
+  const [monthly, setMonthly] = useState(
+    initialFrequency === ReccurenceFrequency.MONTHLY &&
+      !isDefined(initialWeekdays)
+      ? RepeatMonthly.days
+      : RepeatMonthly.nth,
+  );
+  const [weekdays, setWeekdays] = useState(() => {
+    if (isDefined(initialWeekdays)) {
+      return initialWeekdays;
     }
+    return new WeekDays().setWeekDayFromDate(initialStartDate);
+  });
+  const [monthlyNth, setMonthlyNth] = useState(() => {
+    const currentWeekdays = isDefined(initialWeekdays)
+      ? initialWeekdays
+      : new WeekDays().setWeekDayFromDate(initialStartDate);
+    const currentMonthlyDay = currentWeekdays.getSelectedWeekDay();
+    const currentMonthlyNth = currentWeekdays.get(currentMonthlyDay);
+    return currentMonthlyNth === true
+      ? '' + getNthWeekday(initialStartDate)
+      : currentMonthlyDay;
+  });
+  const [monthdays, setMonthdays] = useState(
+    isDefined(initialMonthDays) ? initialMonthDays : [initialStartDate.date()],
+  );
+  const [monthlyDay, setMonthlyDay] = useState(() => {
+    const currentWeekdays = isDefined(initialWeekdays)
+      ? initialWeekdays
+      : new WeekDays().setWeekDayFromDate(initialStartDate);
+    return currentWeekdays.getSelectedWeekDay();
+  });
 
-    const monthlyDay = weekdays.getSelectedWeekDay();
-    let monthlyNth = weekdays.get(monthlyDay);
-    if (monthlyNth === true) {
-      monthlyNth = '' + getNthWeekday(startDate);
-    }
+  name = name || _('Unnamed');
+  title = title || _('New Schedule');
 
-    return {
-      endDate,
-      endOpen: !isDefined(duration),
-      freq,
-      interval,
-      monthdays: isDefined(monthdays) ? monthdays : [startDate.date()],
-      recurrenceType,
-      monthly,
-      monthlyDay,
-      monthlyNth,
-      startDate,
-      timezone,
-      weekdays,
-    };
-  }
+  const RECURRENCE_TYPE_ITEMS = [
+    {
+      label: _('Once'),
+      value: RECURRENCE_ONCE,
+    },
+    {
+      label: _('Hourly'),
+      value: RECURRENCE_HOURLY,
+    },
+    {
+      label: _('Daily'),
+      value: RECURRENCE_DAILY,
+    },
+    {
+      label: _('Weekly'),
+      value: RECURRENCE_WEEKLY,
+    },
+    {
+      label: _('Monthly'),
+      value: RECURRENCE_MONTHLY,
+    },
+    {
+      label: _('Yearly'),
+      value: RECURRENCE_YEARLY,
+    },
+    {
+      label: _('Workweek (Monday till Friday)'),
+      value: RECURRENCE_WORKWEEK,
+    },
+    {
+      label: _('Custom...'),
+      value: RECURRENCE_CUSTOM,
+    },
+  ];
 
-  handleValueChange(value, name) {
-    this.setState({[name]: value});
-  }
+  const NTH_DAY_ITEMS = [
+    {
+      label: _('The First'),
+      value: '1',
+    },
+    {
+      label: _('The Second'),
+      value: '2',
+    },
+    {
+      label: _('The Third'),
+      value: '3',
+    },
+    {
+      label: _('The Fourth'),
+      value: '4',
+    },
+    {
+      label: _('The Last'),
+      value: '-1',
+    },
+  ];
 
-  handleStartHoursChange(value) {
-    this.setState(state => ({
-      startDate: state.startDate.hours(value),
-    }));
-  }
+  duration = endOpen
+    ? undefined
+    : isDefined(endDate) && createDuration(endDate.diff(startDate));
 
-  handleStartMinutesChange(value) {
-    this.setState(state => ({
-      startDate: state.startDate.minutes(value),
-    }));
-  }
+  const handleStartHoursChange = value => {
+    setStartDate(startDate => startDate.hours(value)); // eslint-disable-line no-shadow
+  };
 
-  handleNowButtonClick() {
-    const {timezone} = this.state;
-    const now = date().tz(timezone);
-    this.setState({startDate: now});
-  }
+  const handleStartMinutesChange = value => {
+    setStartDate(startDate => startDate.minutes(value)); // eslint-disable-line no-shadow
+  };
 
-  handleEndHoursChange(value) {
-    this.setState(state => ({
-      endDate: state.endDate.hours(value),
-    }));
-  }
+  const handleNowButtonClick = () => {
+    setStartDate(date().tz(timezone));
+  };
 
-  handleEndMinutesChange(value) {
-    this.setState(state => ({
-      endDate: state.endDate.minutes(value),
-    }));
-  }
+  const handleEndHoursChange = value => {
+    setEndDate(endDate => endDate.hours(value)); // eslint-disable-line no-shadow
+  };
 
-  handleTimezoneChange(value) {
-    this.setState(state => ({
-      endDate: state.endDate.tz(value),
-      startDate: state.startDate.tz(value),
-      timezone: value,
-    }));
-  }
+  const handleEndMinutesChange = value => {
+    setEndDate(endDate => endDate.minutes(value)); // eslint-disable-line no-shadow
+  };
 
-  handleSave({
-    comment,
-    endDate,
-    endOpen = false,
-    freq,
-    id,
-    interval,
-    monthdays,
-    monthly,
-    monthlyDay,
-    monthlyNth,
-    name,
-    recurrenceType,
-    startDate,
-    timezone,
-    weekdays,
-  }) {
-    const {onSave} = this.props;
+  const handleTimezoneChange = value => {
+    setEndDate(endDate => endDate.tz(value)); // eslint-disable-line no-shadow
+    setStartDate(startDate => startDate.tz(value)); // eslint-disable-line no-shadow
+    setTimezone(value);
+  };
 
+  const handleSave = ({
+    comment, // eslint-disable-line no-shadow
+    endDate, // eslint-disable-line no-shadow
+    endOpen = false, // eslint-disable-line no-shadow
+    freq, // eslint-disable-line no-shadow
+    id, // eslint-disable-line no-shadow
+    interval, // eslint-disable-line no-shadow
+    monthdays, // eslint-disable-line no-shadow
+    monthly, // eslint-disable-line no-shadow
+    monthlyDay, // eslint-disable-line no-shadow
+    monthlyNth, // eslint-disable-line no-shadow
+    name, // eslint-disable-line no-shadow
+    recurrenceType, // eslint-disable-line no-shadow
+    startDate, // eslint-disable-line no-shadow
+    timezone, // eslint-disable-line no-shadow
+    weekdays, // eslint-disable-line no-shadow
+  }) => {
     if (!isDefined(onSave)) {
       return Promise.resolve();
     }
@@ -296,7 +288,7 @@ class ScheduleDialog extends React.Component {
       freq = recurrenceType;
     }
 
-    const setWeekdays =
+    const weekdaysSet =
       recurrenceType === RECURRENCE_WORKWEEK ||
       (recurrenceType === RECURRENCE_CUSTOM &&
         freq === ReccurenceFrequency.WEEKLY) ||
@@ -304,7 +296,7 @@ class ScheduleDialog extends React.Component {
         freq === ReccurenceFrequency.MONTHLY &&
         monthly === RepeatMonthly.nth);
 
-    const setMonthydays =
+    const monthDaysSet =
       recurrenceType === RECURRENCE_CUSTOM &&
       freq === ReccurenceFrequency.MONTHLY &&
       monthly === RepeatMonthly.days;
@@ -323,8 +315,8 @@ class ScheduleDialog extends React.Component {
         description: comment,
         freq: recurrenceType === RECURRENCE_ONCE ? undefined : freq,
         interval: isPreDefined ? 1 : interval,
-        monthdays: setMonthydays ? monthdays : undefined,
-        weekdays: setWeekdays ? weekdays : undefined,
+        monthdays: monthDaysSet ? monthdays : undefined,
+        weekdays: weekdaysSet ? weekdays : undefined,
         // convert name to string explicitly to not run into:
         // `TypeError: e.replace is not a function`
         // when name is just numbers.
@@ -341,262 +333,220 @@ class ScheduleDialog extends React.Component {
       icalendar: event.toIcalString(),
       timezone,
     });
-  }
+  };
 
-  render() {
-    const {
-      comment = '',
-      id,
-      name = _('Unnamed'),
-      title = _('New Schedule'),
-      onClose,
-    } = this.props;
+  const defaultValues = {
+    comment,
+    id,
+    name,
+  };
 
-    const {
-      endDate,
-      endOpen,
-      freq,
-      interval,
-      monthdays,
-      recurrenceType,
-      monthly,
-      monthlyDay,
-      monthlyNth,
-      startDate,
-      timezone,
-      weekdays,
-    } = this.state;
+  const values = {
+    endDate,
+    endOpen,
+    freq,
+    interval,
+    monthdays,
+    monthly,
+    monthlyDay,
+    monthlyNth,
+    recurrenceType,
+    startDate,
+    timezone,
+    weekdays,
+  };
 
-    const defaultValues = {
-      comment,
-      id,
-      name,
-    };
+  return (
+    <SaveDialog
+      title={title}
+      defaultValues={defaultValues}
+      values={values}
+      onClose={onClose}
+      onSave={handleSave}
+    >
+      {({values: state, onValueChange}) => (
+        <>
+          <FormGroup title={_('Name')}>
+            <TextField
+              name="name"
+              value={state.name}
+              onChange={onValueChange}
+            />
+          </FormGroup>
 
-    const duration = endOpen
-      ? undefined
-      : createDuration(endDate.diff(startDate));
+          <FormGroup title={_('Comment')}>
+            <TextField
+              name="comment"
+              value={state.comment}
+              onChange={onValueChange}
+            />
+          </FormGroup>
 
-    const values = {
-      endDate,
-      endOpen,
-      freq,
-      interval,
-      monthdays,
-      monthly,
-      monthlyDay,
-      monthlyNth,
-      recurrenceType,
-      startDate,
-      timezone,
-      weekdays,
-    };
+          <FormGroup title={_('Timezone')}>
+            <TimeZoneSelect
+              name="timezone"
+              value={timezone}
+              onChange={handleTimezoneChange}
+            />
+          </FormGroup>
 
-    return (
-      <SaveDialog
-        title={title}
-        defaultValues={defaultValues}
-        values={values}
-        onClose={onClose}
-        onSave={this.handleSave}
-      >
-        {({values: state, onValueChange}) => (
-          <Layout flex="column">
-            <FormGroup title={_('Name')}>
-              <TextField
-                name="name"
-                grow="1"
-                value={state.name}
-                size="30"
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('Comment')}>
-              <TextField
-                name="comment"
-                value={state.comment}
-                grow="1"
-                size="30"
-                onChange={onValueChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('Timezone')}>
-              <TimeZoneSelect
-                name="timezone"
-                value={timezone}
-                onChange={this.handleTimezoneChange}
-              />
-            </FormGroup>
-
-            <FormGroup title={_('First Run')}>
+          <FormGroup title={_('First Run')}>
+            <Row>
               <DatePicker
                 timezone={timezone}
                 name="startDate"
                 value={startDate}
-                onChange={this.handleValueChange}
+                onChange={setStartDate}
                 showYearDropdown
               />
-              <Divider>
-                <Spinner
-                  name="startHour"
-                  type="int"
-                  min="0"
-                  max="23"
-                  size="2"
-                  value={startDate.hours()}
-                  onChange={this.handleStartHoursChange}
-                />
-                <span>h</span>
-                <Spinner
-                  name="startMinute"
-                  type="int"
-                  min="0"
-                  max="59"
-                  size="2"
-                  value={startDate.minutes()}
-                  onChange={this.handleStartMinutesChange}
-                />
-                <span>m</span>
-                <Button title="Now" onClick={this.handleNowButtonClick} />
-              </Divider>
-            </FormGroup>
+              <Spinner
+                name="startHour"
+                type="int"
+                min="0"
+                max="23"
+                value={startDate.hours()}
+                onChange={handleStartHoursChange}
+              />
+              <span>h</span>
+              <Spinner
+                name="startMinute"
+                type="int"
+                min="0"
+                max="59"
+                value={startDate.minutes()}
+                onChange={handleStartMinutesChange}
+              />
+              <span>m</span>
+            </Row>
+            <Button title={_('Now')} onClick={handleNowButtonClick} />
+          </FormGroup>
 
-            <FormGroup title={_('Run Until')}>
+          <FormGroup title={_('Run Until')}>
+            <CheckBox
+              title={_('Open End')}
+              name="endOpen"
+              checked={state.endOpen}
+              onChange={setEndOpen}
+            />
+            <Row>
               <DatePicker
-                disabled={state.endOpen}
                 timezone={timezone}
+                disabled={state.endOpen}
                 name="endDate"
                 value={state.endDate}
-                onChange={this.handleValueChange}
+                onChange={setEndDate}
               />
-              <Divider>
-                <Spinner
-                  disabled={state.endOpen}
-                  name="endHour"
-                  type="int"
-                  min="0"
-                  max="23"
-                  size="2"
-                  value={endDate.hour()}
-                  onChange={this.handleEndHoursChange}
-                />
-                <span>h</span>
-                <Spinner
-                  disabled={state.endOpen}
-                  name="endMinute"
-                  type="int"
-                  min="0"
-                  max="59"
-                  size="2"
-                  value={endDate.minute()}
-                  onChange={this.handleEndMinutesChange}
-                />
-                <span>m</span>
-                <CheckBox
-                  title={_('Open End')}
-                  name="endOpen"
-                  checked={state.endOpen}
-                  onChange={this.handleValueChange}
-                />
-              </Divider>
-            </FormGroup>
-
-            <FormGroup title={_('Duration')}>
-              <span>{renderDuration(duration)}</span>
-            </FormGroup>
-
-            <FormGroup title={_('Recurrence')}>
-              <Select
-                name="recurrenceType"
-                items={RECURRENCE_TYPE_ITEMS}
-                value={state.recurrenceType}
-                onChange={this.handleValueChange}
+              <Spinner
+                disabled={state.endOpen}
+                name="endHour"
+                type="int"
+                min="0"
+                max="23"
+                value={endDate.hour()}
+                onChange={handleEndHoursChange}
               />
-            </FormGroup>
+              <span>h</span>
+              <Spinner
+                disabled={state.endOpen}
+                name="endMinute"
+                type="int"
+                min="0"
+                max="59"
+                value={endDate.minute()}
+                onChange={handleEndMinutesChange}
+              />
+              <span>m</span>
+            </Row>
+          </FormGroup>
 
-            {state.recurrenceType === RECURRENCE_CUSTOM && (
-              <React.Fragment>
-                <FormGroup title={_('Repeat')}>
-                  <Divider>
-                    <span>{_('Every')}</span>
-                    <Spinner
-                      name="interval"
-                      type="int"
-                      min="1"
-                      size="3"
-                      value={state.interval}
-                      onChange={this.handleValueChange}
-                    />
-                    <TimeUnitSelect
-                      name="freq"
-                      value={state.freq}
-                      onChange={this.handleValueChange}
-                    />
-                  </Divider>
+          <FormGroup title={_('Duration')}>
+            <span>{renderDuration(duration)}</span>
+          </FormGroup>
+
+          <FormGroup title={_('Recurrence')}>
+            <Select
+              name="recurrenceType"
+              items={RECURRENCE_TYPE_ITEMS}
+              value={state.recurrenceType}
+              onChange={setRecurrenceType}
+            />
+          </FormGroup>
+
+          {state.recurrenceType === RECURRENCE_CUSTOM && (
+            <>
+              <FormGroup title={_('Repeat')} direction="row">
+                <span>{_('Every')}</span>
+                <Spinner
+                  name="interval"
+                  type="int"
+                  min="1"
+                  value={state.interval}
+                  onChange={setInterval}
+                />
+                <TimeUnitSelect
+                  name="freq"
+                  value={state.freq}
+                  onChange={setFreq}
+                />
+              </FormGroup>
+
+              {state.freq === RECURRENCE_WEEKLY && (
+                <FormGroup title={_('Repeat at')}>
+                  <WeekDaySelect
+                    name="weekdays"
+                    value={weekdays}
+                    onChange={setWeekdays}
+                  />
                 </FormGroup>
+              )}
 
-                {state.freq === RECURRENCE_WEEKLY && (
-                  <FormGroup title={_('Repeat at')}>
-                    <WeekDaySelect
-                      name="weekdays"
-                      value={weekdays}
-                      onChange={this.handleValueChange}
+              {state.freq === RECURRENCE_MONTHLY && (
+                <FormGroup title={_('Repeat at')}>
+                  <Row>
+                    <Radio
+                      name="monthly"
+                      checked={state.monthly === RepeatMonthly.nth}
+                      value={RepeatMonthly.nth}
+                      onChange={setMonthly}
                     />
-                  </FormGroup>
-                )}
-
-                {state.freq === RECURRENCE_MONTHLY && (
-                  <FormGroup title={_('Repeat at')}>
-                    <Divider flex="column">
-                      <Divider>
-                        <Radio
-                          name="monthly"
-                          checked={state.monthly === RepeatMonthly.nth}
-                          value={RepeatMonthly.nth}
-                          onChange={this.handleValueChange}
-                        />
-                        <Select
-                          items={NTH_DAY_ITEMS}
-                          disabled={state.monthly !== RepeatMonthly.nth}
-                          name="monthlyNth"
-                          value={state.monthlyNth}
-                          onChange={this.handleValueChange}
-                        />
-                        <DaySelect
-                          name="monthlyDay"
-                          disabled={state.monthly !== RepeatMonthly.nth}
-                          value={state.monthlyDay}
-                          onChange={this.handleValueChange}
-                        />
-                      </Divider>
-                      <Divider>
-                        <Radio
-                          title={_('Recur on day(s)')}
-                          name="monthly"
-                          checked={state.monthly === RepeatMonthly.days}
-                          value={RepeatMonthly.days}
-                          onChange={this.handleValueChange}
-                        />
-                        <MonthDaysSelect
-                          name="monthdays"
-                          disabled={state.monthly !== RepeatMonthly.days}
-                          value={state.monthdays}
-                          onChange={this.handleValueChange}
-                        />
-                      </Divider>
-                    </Divider>
-                  </FormGroup>
-                )}
-              </React.Fragment>
-            )}
-          </Layout>
-        )}
-      </SaveDialog>
-    );
-  }
-}
+                    <Select
+                      items={NTH_DAY_ITEMS}
+                      disabled={state.monthly !== RepeatMonthly.nth}
+                      name="monthlyNth"
+                      value={state.monthlyNth}
+                      onChange={setMonthlyNth}
+                    />
+                    <DaySelect
+                      name="monthlyDay"
+                      disabled={state.monthly !== RepeatMonthly.nth}
+                      value={state.monthlyDay}
+                      onChange={setMonthlyDay}
+                    />
+                  </Row>
+                  <Row>
+                    <Radio
+                      title={_('Recur on day(s)')}
+                      name="monthly"
+                      checked={state.monthly === RepeatMonthly.days}
+                      value={RepeatMonthly.days}
+                      onChange={setMonthly}
+                    />
+                    <MonthDaysSelect
+                      name="monthdays"
+                      disabled={state.monthly !== RepeatMonthly.days}
+                      value={state.monthdays}
+                      onChange={setMonthdays}
+                    />
+                  </Row>
+                </FormGroup>
+              )}
+            </>
+          )}
+        </>
+      )}
+    </SaveDialog>
+  );
+};
 
 ScheduleDialog.propTypes = {
   comment: PropTypes.string,

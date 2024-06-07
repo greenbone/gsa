@@ -17,15 +17,12 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {PORTLISTS_FILTER_FILTER} from 'gmp/models/filter';
 
 import IconDivider from 'web/components/layout/icondivider';
 import PageTitle from 'web/components/layout/pagetitle';
 
 import PropTypes from 'web/utils/proptypes';
-import withCapabilities from 'web/utils/withCapabilities';
 
 import EntitiesPage from 'web/entities/page';
 import withEntitiesContainer from 'web/entities/withEntitiesContainer';
@@ -40,12 +37,17 @@ import {
   selector as entitiesSelector,
 } from 'web/store/entities/portlists';
 
+import useCapabilities from 'web/utils/useCapabilities';
+import useTranslation from 'web/hooks/useTranslation';
+
 import PortListComponent from './component';
 import PortListsFilterDialog from './filterdialog';
 import PortListsTable from './table';
 
-const ToolBarIcons = withCapabilities(
-  ({capabilities, onPortListCreateClick, onPortListImportClick}) => (
+const ToolBarIcons = ({onPortListCreateClick, onPortListImportClick}) => {
+  const capabilities = useCapabilities();
+  const [_] = useTranslation();
+  return (
     <IconDivider>
       <ManualIcon
         page="scanning"
@@ -60,8 +62,8 @@ const ToolBarIcons = withCapabilities(
         onClick={onPortListImportClick}
       />
     </IconDivider>
-  ),
-);
+  );
+};
 
 ToolBarIcons.propTypes = {
   onPortListCreateClick: PropTypes.func.isRequired,
@@ -74,55 +76,58 @@ const PortListsPage = ({
   onError,
   onInteraction,
   ...props
-}) => (
-  <PortListComponent
-    onCreated={onChanged}
-    onSaved={onChanged}
-    onCloned={onChanged}
-    onCloneError={onError}
-    onDeleted={onChanged}
-    onDeleteError={onError}
-    onDownloaded={onDownloaded}
-    onDownloadError={onError}
-    onImported={onChanged}
-    onImportError={onError}
-    onInteraction={onInteraction}
-  >
-    {({
-      clone,
-      create,
-      delete: delete_func,
-      download,
-      edit,
-      save,
-      import: import_func,
-    }) => (
-      <React.Fragment>
-        <PageTitle title={_('Portlists')} />
-        <EntitiesPage
-          {...props}
-          filterEditDialog={PortListsFilterDialog}
-          filtersFilter={PORTLISTS_FILTER_FILTER}
-          sectionIcon={<PortListIcon size="large" />}
-          table={PortListsTable}
-          title={_('Portlists')}
-          toolBarIcons={ToolBarIcons}
-          onChanged={onChanged}
-          onDownloaded={onDownloaded}
-          onError={onError}
-          onInteraction={onInteraction}
-          onPortListCloneClick={clone}
-          onPortListCreateClick={create}
-          onPortListDeleteClick={delete_func}
-          onPortListDownloadClick={download}
-          onPortListEditClick={edit}
-          onPortListSaveClick={save}
-          onPortListImportClick={import_func}
-        />
-      </React.Fragment>
-    )}
-  </PortListComponent>
-);
+}) => {
+  const [_] = useTranslation();
+  return (
+    <PortListComponent
+      onCreated={onChanged}
+      onSaved={onChanged}
+      onCloned={onChanged}
+      onCloneError={onError}
+      onDeleted={onChanged}
+      onDeleteError={onError}
+      onDownloaded={onDownloaded}
+      onDownloadError={onError}
+      onImported={onChanged}
+      onImportError={onError}
+      onInteraction={onInteraction}
+    >
+      {({
+        clone,
+        create,
+        delete: delete_func,
+        download,
+        edit,
+        save,
+        import: import_func,
+      }) => (
+        <React.Fragment>
+          <PageTitle title={_('Portlists')} />
+          <EntitiesPage
+            {...props}
+            filterEditDialog={PortListsFilterDialog}
+            filtersFilter={PORTLISTS_FILTER_FILTER}
+            sectionIcon={<PortListIcon size="large" />}
+            table={PortListsTable}
+            title={_('Portlists')}
+            toolBarIcons={ToolBarIcons}
+            onChanged={onChanged}
+            onDownloaded={onDownloaded}
+            onError={onError}
+            onInteraction={onInteraction}
+            onPortListCloneClick={clone}
+            onPortListCreateClick={create}
+            onPortListDeleteClick={delete_func}
+            onPortListDownloadClick={download}
+            onPortListEditClick={edit}
+            onPortListSaveClick={save}
+            onPortListImportClick={import_func}
+          />
+        </React.Fragment>
+      )}
+    </PortListComponent>
+  );
+};
 
 PortListsPage.propTypes = {
   onChanged: PropTypes.func.isRequired,
@@ -135,5 +140,3 @@ export default withEntitiesContainer('portlist', {
   entitiesSelector,
   loadEntities,
 })(PortListsPage);
-
-// vim: set ts=2 sw=2 tw=80:

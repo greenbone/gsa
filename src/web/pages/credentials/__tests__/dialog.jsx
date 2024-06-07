@@ -21,6 +21,18 @@ import Credential, {ALL_CREDENTIAL_TYPES} from 'gmp/models/credential';
 
 import {rendererWith, fireEvent} from 'web/utils/testing';
 
+import {
+  changeInputValue,
+  clickElement,
+  closeDialog,
+  getDialog,
+  getDialogCloseButton,
+  getDialogSaveButton,
+  getDialogTitle,
+  getSelectElement,
+  getSelectItemElementsForSelect,
+} from 'web/components/testing';
+
 import CredentialsDialog from '../dialog';
 
 let handleSave;
@@ -56,7 +68,7 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getAllByTestId, getByTestId, getByName} = render(
+    const {getByName} = render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -65,36 +77,28 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const titleBar = getByTestId('dialog-title-bar');
-    const cancelButton = getByTestId('dialog-close-button');
-    const saveButton = getByTestId('dialog-save-button');
-    const formGroups = getAllByTestId('formgroup-title');
-    const selectedValue = getByTestId('select-selected-value');
+    const dialog = getDialog();
+    const dialogTitle = getDialogTitle(dialog);
 
-    expect(titleBar).toHaveTextContent('New Credential');
+    const select = getSelectElement(dialog);
+    const cancelButton = getDialogCloseButton();
+    const saveButton = getDialogSaveButton();
+
+    expect(dialogTitle).toHaveTextContent('New Credential');
 
     const nameInput = getByName('name');
-    expect(formGroups[0]).toHaveTextContent('Name');
-    expect(nameInput).toHaveAttribute('value', 'Unnamed');
+    expect(nameInput).toHaveValue('Unnamed');
 
     const commentInput = getByName('comment');
-    expect(formGroups[1]).toHaveTextContent('Comment');
-    expect(commentInput).toHaveAttribute('value', '');
+    expect(commentInput).toHaveValue('');
 
-    expect(formGroups[2]).toHaveTextContent('Type');
-    expect(selectedValue).toHaveTextContent('Username + Password');
-
-    expect(formGroups[3]).toHaveTextContent('Allow insecure use');
-
-    expect(formGroups[4]).toHaveTextContent('Auto-generate');
+    expect(select).toHaveValue('Username + Password');
 
     const credentialLogin = getByName('credential_login');
-    expect(formGroups[5]).toHaveTextContent('Username');
-    expect(credentialLogin).toHaveAttribute('value', '');
+    expect(credentialLogin).toHaveValue('');
 
     const password = getByName('password');
-    expect(formGroups[6]).toHaveTextContent('Password');
-    expect(password).toHaveAttribute('value', '');
+    expect(password).toHaveValue('');
 
     expect(cancelButton).toHaveTextContent('Cancel');
     expect(saveButton).toHaveTextContent('Save');
@@ -105,7 +109,7 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getAllByTestId, getByTestId, getByName, getAllByName} = render(
+    const {getByName, getAllByName} = render(
       <CredentialsDialog
         allow_insecure={credential.allow_insecure}
         comment={credential.comment}
@@ -119,24 +123,19 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const formGroups = getAllByTestId('formgroup-title');
-    const selectedValue = getByTestId('select-selected-value');
+    const select = getSelectElement();
 
     const nameInput = getByName('name');
-    expect(formGroups[0]).toHaveTextContent('Name');
-    expect(nameInput).toHaveAttribute('value', 'credential 1');
+    expect(nameInput).toHaveValue('credential 1');
 
     const commentInput = getByName('comment');
-    expect(formGroups[1]).toHaveTextContent('Comment');
-    expect(commentInput).toHaveAttribute('value', 'blah');
+    expect(commentInput).toHaveValue('blah');
 
-    expect(formGroups[2]).toHaveTextContent('Type');
-    expect(selectedValue).toHaveTextContent('Username + SSH Key');
+    expect(select).toHaveValue('Username + SSH Key');
 
     const allowInsecure = getAllByName('allow_insecure');
-    expect(formGroups[3]).toHaveTextContent('Allow insecure use');
     expect(allowInsecure[0]).toHaveAttribute('value', '1');
-    expect(allowInsecure[0]).toHaveAttribute('checked');
+    expect(allowInsecure[0]).toBeChecked();
     expect(allowInsecure[1]).toHaveAttribute('value', '0');
   });
 
@@ -145,7 +144,7 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getByName, getByTestId} = render(
+    const {getByName} = render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -155,26 +154,26 @@ describe('CredentialsDialog component tests', () => {
     );
 
     const nameInput = getByName('name');
-    expect(nameInput).toHaveAttribute('value', 'Unnamed');
-    fireEvent.change(nameInput, {target: {value: 'foo'}});
-    expect(nameInput).toHaveAttribute('value', 'foo');
+    expect(nameInput).toHaveValue('Unnamed');
+    changeInputValue(nameInput, 'foo');
+    expect(nameInput).toHaveValue('foo');
 
     const commentInput = getByName('comment');
-    expect(commentInput).toHaveAttribute('value', '');
-    fireEvent.change(commentInput, {target: {value: 'bar'}});
-    expect(commentInput).toHaveAttribute('value', 'bar');
+    expect(commentInput).toHaveValue('');
+    changeInputValue(commentInput, 'bar');
+    expect(commentInput).toHaveValue('bar');
 
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      allow_insecure: 0,
+      allow_insecure: undefined,
       auth_algorithm: 'sha1',
       autogenerate: 0,
-      change_community: 0,
-      change_passphrase: 0,
-      change_password: 0,
-      change_privacy_password: 0,
+      change_community: undefined,
+      change_passphrase: undefined,
+      change_password: undefined,
+      change_privacy_password: undefined,
       comment: 'bar',
       community: '',
       credential_login: '',
@@ -189,12 +188,12 @@ describe('CredentialsDialog component tests', () => {
     });
   });
 
-  test('should allow changing select values', () => {
+  test('should allow changing select values', async () => {
     const {render} = rendererWith({
       capabilities: true,
     });
 
-    const {getAllByTestId, getByTestId} = render(
+    render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -203,33 +202,27 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const selectedValues = getAllByTestId('select-selected-value');
-    const selectOpenButton = getAllByTestId('select-open-button');
-    expect(selectOpenButton.length).toBe(1);
-    expect(selectedValues.length).toBe(1);
+    const select = getSelectElement();
+    expect(select).toHaveValue('Username + Password');
 
-    expect(selectedValues[0]).toHaveTextContent('Username + Password');
+    const selectItems = await getSelectItemElementsForSelect(select);
+    expect(selectItems.length).toEqual(6);
 
-    fireEvent.click(selectOpenButton[0]);
+    // change to password only
+    await clickElement(selectItems[5]);
+    expect(select).toHaveValue('Password only');
 
-    const selectItems = getAllByTestId('select-item');
-
-    expect(selectItems.length).toBe(6);
-    fireEvent.click(selectItems[5]);
-
-    expect(selectedValues[0]).toHaveTextContent('Password only');
-
-    const saveButton = getByTestId('dialog-save-button');
+    const saveButton = getDialogSaveButton();
     fireEvent.click(saveButton);
 
     expect(handleSave).toHaveBeenCalledWith({
-      allow_insecure: 0,
+      allow_insecure: undefined,
       auth_algorithm: 'sha1',
       autogenerate: 0,
-      change_community: 0,
-      change_passphrase: 0,
-      change_password: 0,
-      change_privacy_password: 0,
+      change_community: undefined,
+      change_passphrase: undefined,
+      change_password: undefined,
+      change_privacy_password: undefined,
       comment: '',
       community: '',
       credential_login: '',
@@ -249,7 +242,7 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getByTestId} = render(
+    render(
       <CredentialsDialog
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
@@ -258,10 +251,7 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const closeButton = getByTestId('dialog-title-close-button');
-
-    fireEvent.click(closeButton);
-
+    closeDialog();
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -270,7 +260,7 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getAllByTestId, getByName} = render(
+    const {getByName} = render(
       <CredentialsDialog
         credential_type={'usk'}
         types={ALL_CREDENTIAL_TYPES}
@@ -280,18 +270,14 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const selectedValues = getAllByTestId('select-selected-value');
+    const select = getSelectElement();
 
-    expect(selectedValues[0]).toHaveTextContent('Username + SSH Key');
-
-    const formGroups = getAllByTestId('formgroup-title');
+    expect(select).toHaveValue('Username + SSH Key');
 
     const password = getByName('passphrase');
-    expect(formGroups[6]).toHaveTextContent('Passphrase');
-    expect(password).toHaveAttribute('value', '');
+    expect(password).toHaveValue('');
 
     const privateKey = getByName('private_key');
-    expect(formGroups[7]).toHaveTextContent('Private Key');
     expect(privateKey).toHaveAttribute('type', 'file');
   });
 
@@ -300,9 +286,9 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getAllByTestId, getByName, getAllByName} = render(
+    const {getByName, getAllByName} = render(
       <CredentialsDialog
-        credential_type={'snmp'}
+        credential_type="snmp"
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
         onSave={handleSave}
@@ -310,38 +296,31 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const selectedValues = getAllByTestId('select-selected-value');
-
-    expect(selectedValues[0]).toHaveTextContent('SNMP');
-
-    const formGroups = getAllByTestId('formgroup-title');
+    const select = getSelectElement();
+    expect(select).toHaveValue('SNMP');
 
     const snmpCommunity = getByName('community');
-    expect(formGroups[4]).toHaveTextContent('SNMP Community');
-    expect(snmpCommunity).toHaveAttribute('value', '');
+    expect(snmpCommunity).toHaveValue('');
 
     const username = getByName('credential_login');
-    expect(formGroups[5]).toHaveTextContent('Username');
-    expect(username).toHaveAttribute('value', '');
+    expect(username).toHaveValue('');
 
     const password = getByName('password');
-    expect(formGroups[6]).toHaveTextContent('Password');
-    expect(password).toHaveAttribute('value', '');
+    expect(password).toHaveValue('');
     expect(password).toHaveAttribute('type', 'password');
 
     const privacyPassword = getByName('privacy_password');
-    expect(formGroups[7]).toHaveTextContent('Privacy Password');
-    expect(privacyPassword).toHaveAttribute('value', '');
+    expect(privacyPassword).toHaveValue('');
     expect(privacyPassword).toHaveAttribute('type', 'password');
 
     const authAlgorithm = getAllByName('auth_algorithm');
     expect(authAlgorithm[0]).toHaveAttribute('value', 'md5');
     expect(authAlgorithm[1]).toHaveAttribute('value', 'sha1');
-    expect(authAlgorithm[1]).toHaveAttribute('checked');
+    expect(authAlgorithm[1]).toBeChecked();
 
     const privacyAlgorithm = getAllByName('privacy_algorithm');
     expect(privacyAlgorithm[0]).toHaveAttribute('value', 'aes');
-    expect(privacyAlgorithm[0]).toHaveAttribute('checked');
+    expect(privacyAlgorithm[0]).toBeChecked();
     expect(privacyAlgorithm[1]).toHaveAttribute('value', 'des');
     expect(privacyAlgorithm[2]).toHaveAttribute('value', '');
   });
@@ -351,9 +330,9 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getAllByTestId, getByName} = render(
+    const {getByName} = render(
       <CredentialsDialog
-        credential_type={'smime'}
+        credential_type="smime"
         types={ALL_CREDENTIAL_TYPES}
         onClose={handleClose}
         onSave={handleSave}
@@ -361,14 +340,11 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const selectedValues = getAllByTestId('select-selected-value');
+    const select = getSelectElement();
 
-    expect(selectedValues[0]).toHaveTextContent('S/MIME Certificate');
-
-    const formGroups = getAllByTestId('formgroup-title');
+    expect(select).toHaveValue('S/MIME Certificate');
 
     const certificate = getByName('certificate');
-    expect(formGroups[4]).toHaveTextContent('S/MIME Certificate');
     expect(certificate).toHaveAttribute('type', 'file');
   });
 
@@ -377,7 +353,7 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getAllByTestId, getByName} = render(
+    const {getByName} = render(
       <CredentialsDialog
         credential_type={'pgp'}
         types={ALL_CREDENTIAL_TYPES}
@@ -387,14 +363,10 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const selectedValues = getAllByTestId('select-selected-value');
-
-    expect(selectedValues[0]).toHaveTextContent('PGP Encryption Key');
-
-    const formGroups = getAllByTestId('formgroup-title');
+    const select = getSelectElement();
+    expect(select).toHaveValue('PGP Encryption Key');
 
     const certificate = getByName('public_key');
-    expect(formGroups[4]).toHaveTextContent('PGP Public Key');
     expect(certificate).toHaveAttribute('type', 'file');
   });
 
@@ -403,7 +375,7 @@ describe('CredentialsDialog component tests', () => {
       capabilities: true,
     });
 
-    const {getAllByTestId, getByName} = render(
+    const {getByName} = render(
       <CredentialsDialog
         credential_type={'pw'}
         types={ALL_CREDENTIAL_TYPES}
@@ -413,15 +385,11 @@ describe('CredentialsDialog component tests', () => {
       />,
     );
 
-    const selectedValues = getAllByTestId('select-selected-value');
-
-    expect(selectedValues[0]).toHaveTextContent('Password only');
-
-    const formGroups = getAllByTestId('formgroup-title');
+    const select = getSelectElement();
+    expect(select).toHaveValue('Password only');
 
     const password = getByName('password');
-    expect(formGroups[4]).toHaveTextContent('Password');
-    expect(password).toHaveAttribute('value', '');
+    expect(password).toHaveValue('');
     expect(password).toHaveAttribute('type', 'password');
   });
 });

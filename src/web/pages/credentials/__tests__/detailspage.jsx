@@ -379,30 +379,32 @@ describe('Credential ToolBarIcons tests', () => {
       />,
     );
 
-    const cloneIcon = screen.getAllByTitle('Clone Credential');
-    const editIcon = screen.getAllByTitle('Edit Credential');
-    const deleteIcon = screen.getAllByTitle('Move Credential to trashcan');
-    const exportIcon = screen.getAllByTitle('Export Credential as XML');
-    const downloadPublicKeyIcon = screen.getAllByTitle('Download Public Key');
+    const cloneIcon = screen.getAllByTitle('Clone Credential')[0];
+    const editIcon = screen.getAllByTitle('Edit Credential')[0];
+    const deleteIcon = screen.getAllByTitle('Move Credential to trashcan')[0];
+    const exportIcon = screen.getAllByTitle('Export Credential as XML')[0];
+    const downloadPublicKeyIcon = screen.getAllByTitle(
+      'Download Public Key',
+    )[0];
 
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
+    expect(cloneIcon).toBeInTheDocument();
+    fireEvent.click(cloneIcon);
     expect(handleCredentialCloneClick).toHaveBeenCalledWith(credential);
 
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
+    expect(editIcon).toBeInTheDocument();
+    fireEvent.click(editIcon);
     expect(handleCredentialEditClick).toHaveBeenCalledWith(credential);
 
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
+    expect(deleteIcon).toBeInTheDocument();
+    fireEvent.click(deleteIcon);
     expect(handleCredentialDeleteClick).toHaveBeenCalledWith(credential);
 
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
+    expect(exportIcon).toBeInTheDocument();
+    fireEvent.click(exportIcon);
     expect(handleCredentialDownloadClick).toHaveBeenCalledWith(credential);
 
-    expect(downloadPublicKeyIcon[0]).toBeInTheDocument();
-    fireEvent.click(downloadPublicKeyIcon[0]);
+    expect(downloadPublicKeyIcon).toBeInTheDocument();
+    fireEvent.click(downloadPublicKeyIcon);
     expect(handleCredentialInstallerDownloadClick).toHaveBeenCalledWith(
       credential,
       'key',
@@ -439,32 +441,29 @@ describe('Credential ToolBarIcons tests', () => {
       />,
     );
 
-    const cloneIcon = screen.getAllByTitle('Clone Credential');
+    const cloneIcon = screen.getAllByTitle('Clone Credential')[0];
     const editIcon = screen.getAllByTitle(
       'Permission to edit Credential denied',
-    );
+    )[0];
     const deleteIcon = screen.getAllByTitle(
       'Permission to move Credential to trashcan denied',
-    );
-    const exportIcon = screen.getAllByTitle('Export Credential as XML');
+    )[0];
+    const exportIcon = screen.getAllByTitle('Export Credential as XML')[0];
 
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-
+    expect(cloneIcon).toBeInTheDocument();
+    fireEvent.click(cloneIcon);
     expect(handleCredentialCloneClick).toHaveBeenCalledWith(noPermCredential);
 
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
-
+    expect(editIcon).toBeInTheDocument();
+    fireEvent.click(editIcon);
     expect(handleCredentialEditClick).not.toHaveBeenCalled();
 
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
-
+    expect(deleteIcon).toBeInTheDocument();
+    fireEvent.click(deleteIcon);
     expect(handleCredentialDeleteClick).not.toHaveBeenCalled();
 
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
+    expect(exportIcon).toBeInTheDocument();
+    fireEvent.click(exportIcon);
 
     expect(handleCredentialDownloadClick).toHaveBeenCalledWith(
       noPermCredential,
@@ -500,28 +499,25 @@ describe('Credential ToolBarIcons tests', () => {
         }
       />,
     );
-    const cloneIcon = screen.getAllByTitle('Clone Credential');
-    const editIcon = screen.getAllByTitle('Edit Credential');
-    const deleteIcon = screen.getAllByTitle('Credential is still in use');
-    const exportIcon = screen.getAllByTitle('Export Credential as XML');
+    const cloneIcon = screen.getAllByTitle('Clone Credential')[0];
+    const editIcon = screen.getAllByTitle('Edit Credential')[0];
+    const deleteIcon = screen.getAllByTitle('Credential is still in use')[0];
+    const exportIcon = screen.getAllByTitle('Export Credential as XML')[0];
 
-    expect(cloneIcon[0]).toBeInTheDocument();
-    fireEvent.click(cloneIcon[0]);
-
+    expect(cloneIcon).toBeInTheDocument();
+    fireEvent.click(cloneIcon);
     expect(handleCredentialCloneClick).toHaveBeenCalledWith(credentialInUse);
 
-    expect(editIcon[0]).toBeInTheDocument();
-    fireEvent.click(editIcon[0]);
-
+    expect(editIcon).toBeInTheDocument();
+    fireEvent.click(editIcon);
     expect(handleCredentialEditClick).toHaveBeenCalled();
 
-    expect(deleteIcon[0]).toBeInTheDocument();
-    fireEvent.click(deleteIcon[0]);
+    expect(deleteIcon).toBeInTheDocument();
+    fireEvent.click(deleteIcon);
     expect(handleCredentialDeleteClick).not.toHaveBeenCalled();
 
-    expect(exportIcon[0]).toBeInTheDocument();
-    fireEvent.click(exportIcon[0]);
-
+    expect(exportIcon).toBeInTheDocument();
+    fireEvent.click(exportIcon);
     expect(handleCredentialDownloadClick).toHaveBeenCalledWith(credentialInUse);
   });
 });

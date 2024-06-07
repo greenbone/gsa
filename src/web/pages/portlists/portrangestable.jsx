@@ -17,8 +17,6 @@
  */
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 
 import PropTypes from 'web/utils/proptypes';
@@ -32,7 +30,10 @@ import TableHead from 'web/components/table/head';
 import TableHeader from 'web/components/table/header';
 import TableRow from 'web/components/table/row';
 
+import useTranslation from 'web/hooks/useTranslation';
+
 const PortRangesTable = ({actions = true, portRanges, onDeleteClick}) => {
+  const [_] = useTranslation();
   if (!isDefined(portRanges) || portRanges.length === 0) {
     return _('No Port Ranges available');
   }

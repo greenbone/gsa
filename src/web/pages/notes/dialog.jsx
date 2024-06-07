@@ -18,8 +18,6 @@
 
 import React from 'react';
 
-import _ from 'gmp/locale';
-
 import {isDefined} from 'gmp/utils/identity';
 import {isEmpty} from 'gmp/utils/string';
 
@@ -43,8 +41,7 @@ import DateTime from 'web/components/date/datetime';
 
 import SaveDialog from 'web/components/dialog/savedialog';
 
-import Divider from 'web/components/layout/divider';
-import Layout from 'web/components/layout/layout';
+import Row from 'web/components/layout/row';
 
 import PropTypes from 'web/utils/proptypes';
 import {
@@ -63,6 +60,8 @@ import TextField from 'web/components/form/textfield';
 import Radio from 'web/components/form/radio';
 import Select from 'web/components/form/select';
 import Spinner from 'web/components/form/spinner';
+
+import useTranslation from 'web/hooks/useTranslation';
 
 const NoteDialog = ({
   active = ACTIVE_YES_ALWAYS_VALUE,
@@ -85,11 +84,14 @@ const NoteDialog = ({
   tasks,
   task_uuid,
   text = '',
-  title = _('New Note'),
+  title,
   onClose,
   onSave,
 }) => {
-  const is_edit = isDefined(note);
+  const [_] = useTranslation();
+  const isEdit = isDefined(note);
+
+  title = title || _('New Note');
 
   const data = {
     severity,
@@ -121,7 +123,7 @@ const NoteDialog = ({
     >
       {({values: state, onValueChange}) => {
         return (
-          <Layout flex="column">
+          <>
             {state.fixed && isDefined(oid) && (
               <FormGroup title={_('NVT')} flex="column">
                 <span>{renderNvtName(oid, nvt_name)}</span>
@@ -132,8 +134,8 @@ const NoteDialog = ({
                 <span>{renderNvtName(state.oid, nvt_name)}</span>
               </FormGroup>
             )}
-            {is_edit && !state.fixed && (
-              <FormGroup title={_('NVT')} flex="column">
+            {isEdit && !state.fixed && (
+              <FormGroup title={_('NVT')} direction="column">
                 <Radio
                   title={renderNvtName(oid, nvt_name)}
                   name="oid"
@@ -141,7 +143,7 @@ const NoteDialog = ({
                   value={oid}
                   onChange={onValueChange}
                 />
-                <Divider>
+                <Row>
                   <Radio
                     name="oid"
                     checked={state.oid !== oid}
@@ -154,10 +156,10 @@ const NoteDialog = ({
                     value={state.oid === oid ? DEFAULT_OID_VALUE : state.oid}
                     onChange={onValueChange}
                   />
-                </Divider>
+                </Row>
               </FormGroup>
             )}
-            {!is_edit && !state.fixed && (
+            {!isEdit && !state.fixed && (
               <FormGroup title={_('NVT OID')}>
                 <TextField
                   name="oid"
@@ -166,8 +168,8 @@ const NoteDialog = ({
                 />
               </FormGroup>
             )}
-            <FormGroup title={_('Active')} flex="column">
-              <Divider flex="column">
+            <FormGroup title={_('Active')}>
+              <Row>
                 <Radio
                   name="active"
                   title={_('yes, always')}
@@ -175,8 +177,8 @@ const NoteDialog = ({
                   value={ACTIVE_YES_ALWAYS_VALUE}
                   onChange={onValueChange}
                 />
-                {is_edit && note.isActive() && isDefined(note.endTime) && (
-                  <Divider>
+                {isEdit && note.isActive() && isDefined(note.endTime) && (
+                  <Row>
                     <Radio
                       name="active"
                       title={_('yes, until')}
@@ -185,10 +187,10 @@ const NoteDialog = ({
                       onChange={onValueChange}
                     />
                     <DateTime date={note.endTime} />
-                  </Divider>
+                  </Row>
                 )}
-              </Divider>
-              <Divider>
+              </Row>
+              <Row>
                 <Radio
                   name="active"
                   checked={state.active === ACTIVE_YES_FOR_NEXT_VALUE}
@@ -198,7 +200,6 @@ const NoteDialog = ({
                 />
                 <Spinner
                   name="days"
-                  size="4"
                   type="int"
                   min="1"
                   disabled={state.active !== ACTIVE_YES_FOR_NEXT_VALUE}
@@ -206,7 +207,7 @@ const NoteDialog = ({
                   onChange={onValueChange}
                 />
                 <span>{_('days')}</span>
-              </Divider>
+              </Row>
               <Radio
                 name="active"
                 title={_('no')}
@@ -224,7 +225,7 @@ const NoteDialog = ({
                 value={ANY}
                 onChange={onValueChange}
               />
-              <Divider>
+              <Row>
                 <Radio
                   name="hosts"
                   checked={state.hosts === MANUAL}
@@ -237,7 +238,7 @@ const NoteDialog = ({
                   value={state.hosts_manual}
                   onChange={onValueChange}
                 />
-              </Divider>
+              </Row>
             </FormGroup>
 
             <FormGroup title={_('Location')}>
@@ -248,7 +249,7 @@ const NoteDialog = ({
                 value={ANY}
                 onChange={onValueChange}
               />
-              <Divider>
+              <Row>
                 <Radio
                   name="port"
                   checked={state.port === MANUAL}
@@ -261,7 +262,7 @@ const NoteDialog = ({
                   value={state.port_manual}
                   onChange={onValueChange}
                 />
-              </Divider>
+              </Row>
             </FormGroup>
 
             <FormGroup title={_('Severity')}>
@@ -273,7 +274,7 @@ const NoteDialog = ({
                 onChange={onValueChange}
               />
               {isDefined(severity) && (
-                <Layout>
+                <>
                   {severity > LOG_VALUE ? (
                     <Radio
                       name="severity"
@@ -293,10 +294,10 @@ const NoteDialog = ({
                       onChange={onValueChange}
                     />
                   )}
-                </Layout>
+                </>
               )}
               {!isDefined(severity) && (
-                <Layout>
+                <Row>
                   <Radio
                     name="severity"
                     title={_('> 0.0')}
@@ -313,7 +314,7 @@ const NoteDialog = ({
                     convert={parseFloat}
                     onChange={onValueChange}
                   />
-                </Layout>
+                </Row>
               )}
             </FormGroup>
 
@@ -325,7 +326,7 @@ const NoteDialog = ({
                 value=""
                 onChange={onValueChange}
               />
-              <Divider>
+              <Row>
                 <Radio
                   name="task_id"
                   checked={state.task_id === '0'}
@@ -339,7 +340,7 @@ const NoteDialog = ({
                   disabled={state.task_id !== '0'}
                   onChange={onValueChange}
                 />
-              </Divider>
+              </Row>
             </FormGroup>
 
             <FormGroup title={_('Result')}>
@@ -350,7 +351,7 @@ const NoteDialog = ({
                 value={RESULT_ANY}
                 onChange={onValueChange}
               />
-              <Divider>
+              <Row>
                 <Radio
                   name="result_id"
                   title={
@@ -367,26 +368,24 @@ const NoteDialog = ({
                 {!fixed && (
                   <TextField
                     name="result_uuid"
-                    size="34"
                     disabled={state.result_id !== RESULT_UUID}
                     value={state.result_uuid}
                     onChange={onValueChange}
                   />
                 )}
-              </Divider>
+              </Row>
             </FormGroup>
 
             <FormGroup title={_('Text')}>
               <TextArea
                 name="text"
-                grow="1"
-                rows="10"
-                cols="60"
+                minRows="4"
+                autosize={true}
                 value={state.text}
                 onChange={onValueChange}
               />
             </FormGroup>
-          </Layout>
+          </>
         );
       }}
     </SaveDialog>

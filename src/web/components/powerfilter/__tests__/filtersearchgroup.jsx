@@ -35,7 +35,7 @@ describe('FilterSearchGroup tests', () => {
       />,
     );
 
-    expect(element).toMatchSnapshot();
+    expect(element).toBeInTheDocument();
   });
 
   test('should render value from filter', () => {
