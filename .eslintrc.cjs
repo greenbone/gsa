@@ -45,7 +45,10 @@ module.exports = {
       2,
       'block',
       [
-        ' SPDX-FileCopyrightText: 2024 Greenbone AG',
+        {
+          pattern: ' SPDX-FileCopyrightText: \\d{4} Greenbone AG',
+          template: ' SPDX-FileCopyrightText: 2024 Greenbone AG',
+        },
         ' *',
         ' * SPDX-License-Identifier: AGPL-3.0-or-later',
         ' ',
