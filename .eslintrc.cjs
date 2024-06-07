@@ -6,7 +6,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:vitest-globals/recommended',
   ],
-  plugins: ['react', 'react-hooks'],
+  plugins: ['react', 'react-hooks', 'header'],
   settings: {
     react: {
       version: 'detect',
@@ -41,5 +41,16 @@ module.exports = {
     ],
     'no-class-assign': 'off',
     'no-prototype-builtins': 'off',
+    'header/header': [
+      2,
+      'block',
+      [
+        ' SPDX-FileCopyrightText: 2024 Greenbone AG',
+        ' *',
+        ' * SPDX-License-Identifier: AGPL-3.0-or-later',
+        ' ',
+      ],
+      2,
+    ],
   },
 };
