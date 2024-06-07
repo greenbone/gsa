@@ -56,4 +56,12 @@ module.exports = {
       2,
     ],
   },
+  overrides: [
+    {
+      files: ['vite-env.d.ts'],
+      rules: {
+        'header/header': 'off',
+      },
+    },
+  ],
 };
