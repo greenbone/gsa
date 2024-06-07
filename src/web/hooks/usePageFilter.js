@@ -53,23 +53,40 @@ const useDefaultFilter = pageName =>
  */
 const usePageFilter = (
   pageName,
-  {fallbackFilter, locationQueryFilterString} = {},
+  {
+    fallbackFilter,
+    locationQueryFilterString: initialLocationQueryFilterString,
+  } = {},
 ) => {
   const gmp = useGmp();
   const dispatch = useDispatch();
   const location = useLocation();
   const history = useHistory();
-
-  // only use location directly if locationQueryFilterString is undefined
-  // use null as value for not set at all
-  if (!isDefined(locationQueryFilterString)) {
-    locationQueryFilterString = location?.query?.filter;
-  }
-
-  let returnedFilter;
-
   const [defaultSettingFilter, defaultSettingsFilterError] =
     useDefaultFilter(pageName);
+  let [rowsPerPage, rowsPerPageError] = useShallowEqualSelector(state => {
+    const userSettingDefaultSel = getUserSettingsDefaults(state);
+    return [
+      userSettingDefaultSel.getValueByName('rowsperpage'),
+      userSettingDefaultSel.getError(),
+    ];
+  });
+  const pageFilter = useShallowEqualSelector(state =>
+    getPage(state).getFilter(pageName),
+  );
+
+  // use null as value for not set at all
+  let returnedFilter;
+  // only use location directly if locationQueryFilterString is undefined
+  const locationQueryFilterString = initialLocationQueryFilterString
+    ? initialLocationQueryFilterString
+    : location?.query?.filter;
+
+  const [locationQueryFilter, setLocationQueryFilter] = useState(
+    hasValue(locationQueryFilterString)
+      ? Filter.fromString(locationQueryFilterString)
+      : undefined,
+  );
 
   useEffect(() => {
     if (
@@ -86,25 +103,11 @@ const usePageFilter = (
     pageName,
   ]);
 
-  let [rowsPerPage, rowsPerPageError] = useShallowEqualSelector(state => {
-    const userSettingDefaultSel = getUserSettingsDefaults(state);
-    return [
-      userSettingDefaultSel.getValueByName('rowsperpage'),
-      userSettingDefaultSel.getError(),
-    ];
-  });
-
   useEffect(() => {
     if (!isDefined(rowsPerPage)) {
       dispatch(loadUserSettingDefault(gmp)(ROWS_PER_PAGE_SETTING_ID));
     }
   }, [returnedFilter, rowsPerPage, gmp, dispatch]);
-
-  const [locationQueryFilter, setLocationQueryFilter] = useState(
-    hasValue(locationQueryFilterString)
-      ? Filter.fromString(locationQueryFilterString)
-      : undefined,
-  );
 
   useEffect(() => {
     if (hasValue(locationQueryFilterString)) {
@@ -114,10 +117,6 @@ const usePageFilter = (
     }
     setLocationQueryFilter(undefined);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const pageFilter = useShallowEqualSelector(state =>
-    getPage(state).getFilter(pageName),
-  );
 
   if (hasValue(locationQueryFilter)) {
     returnedFilter = locationQueryFilter;
