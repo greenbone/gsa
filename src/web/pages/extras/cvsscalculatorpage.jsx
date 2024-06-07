@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React, {useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
@@ -46,6 +47,7 @@ import Divider from 'web/components/layout/divider';
 import Section from 'web/components/section/section';
 
 import useUserSessionTimeout from 'web/utils/useUserSessionTimeout';
+import CvssV4Calculator from './cvssV4/CvssV4Calculator';
 
 const StyledTextField = styled(TextField)`
   width: 180px;
@@ -708,7 +710,6 @@ const CvssV3Calculator = props => {
 const CvssCalculator = props => (
   <Layout flex="column">
     <span>
-      {' '}
       {/* span prevents Toolbar from growing */}
       <ToolBarIcons />
     </span>
@@ -716,9 +717,15 @@ const CvssCalculator = props => (
       <CvssV2Calculator {...props} />
       <CvssV3Calculator {...props} />
     </Divider>
+    <Divider margin="20px" flex="row" align={['center', 'start']} grow>
+      <CvssV4Calculator location={props.location} />
+    </Divider>
   </Layout>
 );
 
+CvssCalculator.propTypes = {
+  location: PropTypes.object.isRequired,
+};
 export default CvssCalculator;
 
 // vim: set ts=2 sw=2 tw=80:
