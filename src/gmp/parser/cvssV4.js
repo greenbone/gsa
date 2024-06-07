@@ -3,8 +3,100 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import {isDefined} from 'gmp/utils/identity';
 import {CVSS40} from '@pandatix/js-cvss';
-import {expectedMetricOptionsOrdered} from './cvssConfig';
+
+export const expectedMetricOptionsOrdered = [
+  ['AV', 'N', 'A', 'L', 'P'],
+  ['AC', 'L', 'H'],
+  ['AT', 'N', 'P'],
+  ['PR', 'N', 'L', 'H'],
+  ['UI', 'N', 'P', 'A'],
+  ['VC', 'N', 'L', 'H'],
+  ['VI', 'N', 'L', 'H'],
+  ['VA', 'N', 'L', 'H'],
+  ['SC', 'N', 'L', 'H'],
+  ['SI', 'N', 'L', 'H'],
+  ['SA', 'N', 'L', 'H'],
+  ['E', 'X', 'A', 'P', 'U'],
+  ['CR', 'X', 'H', 'M', 'L'],
+  ['IR', 'X', 'H', 'M', 'L'],
+  ['AR', 'X', 'H', 'M', 'L'],
+  ['MAV', 'X', 'N', 'A', 'L', 'P'],
+  ['MAC', 'X', 'L', 'H'],
+  ['MAT', 'X', 'N', 'P'],
+  ['MPR', 'X', 'N', 'L', 'H'],
+  ['MUI', 'X', 'N', 'P', 'A'],
+  ['MVC', 'X', 'H', 'L', 'N'],
+  ['MVI', 'X', 'H', 'L', 'N'],
+  ['MVA', 'X', 'H', 'L', 'N'],
+  ['MSC', 'X', 'H', 'L', 'N'],
+  ['MSI', 'X', 'S', 'H', 'L', 'N'],
+  ['MSA', 'X', 'S', 'H', 'L', 'N'],
+  ['S', 'X', 'N', 'P'],
+  ['AU', 'X', 'N', 'Y'],
+  ['R', 'X', 'A', 'U', 'I'],
+  ['V', 'X', 'D', 'C'],
+  ['RE', 'X', 'L', 'M', 'H'],
+  ['U', 'X', 'Clear', 'Green', 'Amber', 'Red'],
+];
+
+const cvss4MetricValueToLabels = {
+  AV: {
+    N: 'Network',
+    A: 'Adjacent',
+    L: 'Local',
+    P: 'Physical',
+  },
+  AC: {
+    L: 'Low',
+    H: 'High',
+  },
+  AT: {
+    N: 'None',
+    P: 'Present',
+  },
+  PR: {
+    N: 'None',
+    L: 'Low',
+    H: 'High',
+  },
+  UI: {
+    N: 'None',
+    P: 'Passive',
+    A: 'Active',
+  },
+  VC: {
+    N: 'None',
+    L: 'Low',
+    H: 'High',
+  },
+  VI: {
+    N: 'None',
+    L: 'Low',
+    H: 'High',
+  },
+  VA: {
+    N: 'None',
+    L: 'Low',
+    H: 'High',
+  },
+  SC: {
+    N: 'None',
+    L: 'Low',
+    H: 'High',
+  },
+  SI: {
+    N: 'None',
+    L: 'Low',
+    H: 'High',
+  },
+  SA: {
+    N: 'None',
+    L: 'Low',
+    H: 'High',
+  },
+};
 
 /**
  * This function calculates the CVSS vector from a set of metrics.
@@ -91,4 +183,28 @@ export const calculateScoreSafely = cvssVector => {
   } catch {
     return undefined;
   }
+};
+
+/**
+ * This function parses a CVSS vector string and returns an object with the
+ * metrics as labels.
+ * @param {string} cvssVector - The CVSS vector to parse the metrics from.
+ * @returns {Record<string,string>} - An object with key-value pairs of the metrics.
+ */
+export const parseCvssV4MetricsFromVector = cvssVector => {
+  if (!isDefined(cvssVector) || cvssVector.trim().length === 0) {
+    return {};
+  }
+  let ret = {};
+  const metrics = processVector(cvssVector);
+
+  for (const metric in metrics) {
+    const value = metrics[metric];
+    if (
+      isDefined(cvss4MetricValueToLabels[metric]) &&
+      isDefined(cvss4MetricValueToLabels[metric][value])
+    )
+      ret[metric] = cvss4MetricValueToLabels[metric][value];
+  }
+  return ret;
 };

@@ -7,12 +7,13 @@ import {describe, test, expect} from '@gsa/testing';
 
 import {
   calculateVector,
+  expectedMetricOptionsOrdered,
+  parseCvssV4MetricsFromVector,
   processVector,
   removeUnusedMetrics,
-} from 'web/pages/extras/cvssV4/utils';
-import {expectedMetricOptionsOrdered} from 'web/pages/extras/cvssV4/cvssConfig';
+} from '../cvssV4';
 
-describe('CVSS V4.0 Utils', () => {
+describe('CVSSV4 parser', () => {
   describe('calculateVector', () => {
     test('should correctly calculate the CVSS vector', () => {
       const cvssVectorObject = {
@@ -92,6 +93,44 @@ describe('CVSS V4.0 Utils', () => {
       expect(result).toBe(
         'AV:N/AC:L/AT:N/PR:L/UI:A/VC:N/VI:H/VA:N/SC:L/SI:N/SA:N/MVA:L/MSA:L',
       );
+    });
+  });
+  describe('parseCvssV4MetricsFromVector', () => {
+    test('should return metric labels from CVSS vector', () => {
+      const vectorString =
+        'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:L/VI:H/VA:N/SC:H/SI:L/SA:N';
+      const result = parseCvssV4MetricsFromVector(vectorString);
+      expect(result).toEqual({
+        AV: 'Network',
+        AC: 'Low',
+        AT: 'None',
+        PR: 'None',
+        UI: 'None',
+        VC: 'Low',
+        VI: 'High',
+        VA: 'None',
+        SC: 'High',
+        SI: 'Low',
+        SA: 'None',
+      });
+    });
+
+    test('should return only valid metric labels', () => {
+      const incompleteVectorString =
+        'CVSS:4.0/AV:Q/AC:L/AT:N/PR:N/UI:N/VC:N/CR';
+      const result = parseCvssV4MetricsFromVector(incompleteVectorString);
+      expect(result).toEqual({
+        AC: 'Low',
+        AT: 'None',
+        PR: 'None',
+        UI: 'None',
+        VC: 'None',
+      });
+    });
+
+    test('should return an empty object', () => {
+      expect(parseCvssV4MetricsFromVector('')).toEqual({});
+      expect(parseCvssV4MetricsFromVector()).toEqual({});
     });
   });
 });

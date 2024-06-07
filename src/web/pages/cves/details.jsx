@@ -32,12 +32,19 @@ const CVSS_PROPS = {
   cvssAuthentication: _l('Authentication'),
   cvssAttackVector: _l('Attack Vector'),
   cvssAttackComplexity: _l('Attack Complexity'),
+  cvssAttackRequirements: _l('Attack Requirements'),
   cvssPrivilegesRequired: _l('Privileges Required'),
   cvssUserInteraction: _l('User Interaction'),
   cvssScope: _l('Scope'),
   cvssConfidentialityImpact: _l('Confidentiality Impact'),
   cvssIntegrityImpact: _l('Integrity Impact'),
   cvssAvailabilityImpact: _l('Availability Impact'),
+  cvssConfidentialityVS: _l('Vulnerable System Confidentiality Impact'),
+  cvssIntegrityVS: _l('Vulnerable System Integrity Impact'),
+  cvssAvailabilityVS: _l('Vulnerable System Availability Impact'),
+  cvssConfidentialitySS: _l('Subsequent System Confidentiality Impact'),
+  cvssIntegritySS: _l('Subsequent System Integrity Impact'),
+  cvssAvailabilitySS: _l('Subsequent System Availability Impact'),  
 };
 
 const CveDetails = ({entity}) => {
@@ -78,7 +85,7 @@ const CveDetails = ({entity}) => {
               .map(([name, title]) => (
                 <TableRow key={name}>
                   <TableData>{`${title}`}</TableData>
-                  <TableData>{entity[name]}</TableData>
+                  <TableData>{_(entity[name])}</TableData>
                 </TableRow>
               ))}
           </TableBody>
