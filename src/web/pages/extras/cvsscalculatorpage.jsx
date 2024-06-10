@@ -56,12 +56,12 @@ const CvssV2Calculator = props => {
   const [, renewSession] = useUserSessionTimeout();
 
   const [state, setState] = useState({
-    accessVector: 'LOCAL',
-    accessComplexity: 'LOW',
-    confidentialityImpact: 'NONE',
-    authentication: 'NONE',
-    integrityImpact: 'NONE',
-    availabilityImpact: 'NONE',
+    accessVector: 'Local',
+    accessComplexity: 'Low',
+    confidentialityImpact: 'None',
+    authentication: 'None',
+    integrityImpact: 'None',
+    availabilityImpact: 'None',
     cvssVector: 'AV:L/AC:L/Au:N/C:N/I:N/A:N',
     userVector: 'AV:L/AC:L/Au:N/C:N/I:N/A:N',
     cvssScore: 0,
@@ -197,15 +197,15 @@ const CvssV2Calculator = props => {
         <Select
           items={[
             {
-              value: 'LOCAL',
+              value: 'Local',
               label: _('Local'),
             },
             {
-              value: 'ADJACENT_NETWORK',
+              value: 'Adjacent',
               label: _('Adjacent'),
             },
             {
-              value: 'NETWORK',
+              value: 'Network',
               label: _('Network'),
             },
           ]}
@@ -219,15 +219,15 @@ const CvssV2Calculator = props => {
         <Select
           items={[
             {
-              value: 'LOW',
+              value: 'Low',
               label: _('Low'),
             },
             {
-              value: 'MEDIUM',
+              value: 'Medium',
               label: _('Medium'),
             },
             {
-              value: 'HIGH',
+              value: 'High',
               label: _('High'),
             },
           ]}
@@ -241,15 +241,15 @@ const CvssV2Calculator = props => {
         <Select
           items={[
             {
-              value: 'NONE',
+              value: 'None',
               label: _('None'),
             },
             {
-              value: 'SINGLE_INSTANCE',
+              value: 'Single',
               label: _('Single'),
             },
             {
-              value: 'MULTIPLE_INSTANCES',
+              value: 'Multiple',
               label: _('Multiple'),
             },
           ]}
@@ -263,15 +263,15 @@ const CvssV2Calculator = props => {
         <Select
           items={[
             {
-              value: 'NONE',
+              value: 'None',
               label: _('None'),
             },
             {
-              value: 'PARTIAL',
+              value: 'Partial',
               label: _('Partial'),
             },
             {
-              value: 'COMPLETE',
+              value: 'Complete',
               label: _('Complete'),
             },
           ]}
@@ -284,15 +284,15 @@ const CvssV2Calculator = props => {
         <Select
           items={[
             {
-              value: 'NONE',
+              value: 'None',
               label: _('None'),
             },
             {
-              value: 'PARTIAL',
+              value: 'Partial',
               label: _('Partial'),
             },
             {
-              value: 'COMPLETE',
+              value: 'Complete',
               label: _('Complete'),
             },
           ]}
@@ -306,15 +306,15 @@ const CvssV2Calculator = props => {
         <Select
           items={[
             {
-              value: 'NONE',
+              value: 'None',
               label: _('None'),
             },
             {
-              value: 'PARTIAL',
+              value: 'Partial',
               label: _('Partial'),
             },
             {
-              value: 'COMPLETE',
+              value: 'Complete',
               label: _('Complete'),
             },
           ]}
@@ -353,14 +353,14 @@ const CvssV3Calculator = props => {
   const [, renewSession] = useUserSessionTimeout();
 
   const [state, setState] = useState({
-    attackVector: 'NETWORK',
-    attackComplexity: 'LOW',
-    privilegesRequired: 'NONE',
-    userInteraction: 'NONE',
-    scope: 'UNCHANGED',
-    authentication: 'NONE',
-    integrityImpact: 'NONE',
-    availabilityImpact: 'NONE',
+    attackVector: 'Network',
+    attackComplexity: 'Low',
+    privilegesRequired: 'None',
+    userInteraction: 'None',
+    scope: 'Unchanged',
+    confidentialityImpact: 'None',
+    integrityImpact: 'None',
+    availabilityImpact: 'None',
     cvssVector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
     userVector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N',
     cvssScore: 0,
@@ -509,19 +509,19 @@ const CvssV3Calculator = props => {
         <Select
           items={[
             {
-              value: 'LOCAL',
+              value: 'Local',
               label: _('Local'),
             },
             {
-              value: 'ADJACENT_NETWORK',
+              value: 'Adjacent',
               label: _('Adjacent'),
             },
             {
-              value: 'NETWORK',
+              value: 'Network',
               label: _('Network'),
             },
             {
-              value: 'PHYSICAL',
+              value: 'Physical',
               label: _('Physical'),
             },
           ]}
@@ -535,11 +535,11 @@ const CvssV3Calculator = props => {
         <Select
           items={[
             {
-              value: 'LOW',
+              value: 'Low',
               label: _('Low'),
             },
             {
-              value: 'HIGH',
+              value: 'High',
               label: _('High'),
             },
           ]}
@@ -553,15 +553,15 @@ const CvssV3Calculator = props => {
         <Select
           items={[
             {
-              value: 'NONE',
+              value: 'None',
               label: _('None'),
             },
             {
-              value: 'LOW',
+              value: 'Low',
               label: _('Low'),
             },
             {
-              value: 'HIGH',
+              value: 'High',
               label: _('High'),
             },
           ]}
@@ -575,11 +575,11 @@ const CvssV3Calculator = props => {
         <Select
           items={[
             {
-              value: 'NONE',
+              value: 'None',
               label: _('None'),
             },
             {
-              value: 'REQUIRED',
+              value: 'Required',
               label: _('Required'),
             },
           ]}
@@ -593,11 +593,11 @@ const CvssV3Calculator = props => {
         <Select
           items={[
             {
-              value: 'UNCHANGED',
+              value: 'Unchanged',
               label: _('Unchanged'),
             },
             {
-              value: 'CHANGED',
+              value: 'Changed',
               label: _('Changed'),
             },
           ]}
@@ -611,15 +611,15 @@ const CvssV3Calculator = props => {
         <Select
           items={[
             {
-              value: 'NONE',
+              value: 'None',
               label: _('None'),
             },
             {
-              value: 'LOW',
+              value: 'Low',
               label: _('Low'),
             },
             {
-              value: 'HIGH',
+              value: 'High',
               label: _('High'),
             },
           ]}
@@ -632,15 +632,15 @@ const CvssV3Calculator = props => {
         <Select
           items={[
             {
-              value: 'NONE',
+              value: 'None',
               label: _('None'),
             },
             {
-              value: 'LOW',
+              value: 'Low',
               label: _('Low'),
             },
             {
-              value: 'HIGH',
+              value: 'High',
               label: _('High'),
             },
           ]}
@@ -654,15 +654,15 @@ const CvssV3Calculator = props => {
         <Select
           items={[
             {
-              value: 'NONE',
+              value: 'None',
               label: _('None'),
             },
             {
-              value: 'LOW',
+              value: 'Low',
               label: _('Low'),
             },
             {
-              value: 'HIGH',
+              value: 'High',
               label: _('High'),
             },
           ]}

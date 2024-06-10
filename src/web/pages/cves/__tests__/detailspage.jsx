@@ -192,14 +192,14 @@ describe('CVE Detailspage tests', () => {
       'Last updated:Mon, Oct 26, 2020 8:27 PM UTC',
     );
 
-    expect(element).toHaveTextContent('Attack VectorLOCAL');
-    expect(element).toHaveTextContent('Attack ComplexityLOW');
-    expect(element).toHaveTextContent('Privileges RequiredNONE');
-    expect(element).toHaveTextContent('User InteractionREQUIRED');
-    expect(element).toHaveTextContent('ScopeUNCHANGED');
-    expect(element).toHaveTextContent('Confidentiality ImpactHIGH');
-    expect(element).toHaveTextContent('Integrity ImpactNONE');
-    expect(element).toHaveTextContent('Availability ImpactNONE');
+    expect(element).toHaveTextContent('Attack VectorLocal');
+    expect(element).toHaveTextContent('Attack ComplexityLow');
+    expect(element).toHaveTextContent('Privileges RequiredNone');
+    expect(element).toHaveTextContent('User InteractionRequired');
+    expect(element).toHaveTextContent('ScopeUnchanged');
+    expect(element).toHaveTextContent('Confidentiality ImpactHigh');
+    expect(element).toHaveTextContent('Integrity ImpactNone');
+    expect(element).toHaveTextContent('Availability ImpactNone');
     const progressBars = getAllByTestId('progressbar-box');
     expect(progressBars[0]).toHaveAttribute('title', 'Medium');
     expect(progressBars[0]).toHaveTextContent('5.5 (Medium)');

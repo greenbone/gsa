@@ -129,12 +129,12 @@ describe('CVE model tests', () => {
     const cve = Cve.fromElement(elem);
 
     expect(cve.cvssBaseVector).toEqual('AV:N/AC:L/Au:N/C:C/I:C/A:C');
-    expect(cve.cvssAccessComplexity).toEqual('LOW');
-    expect(cve.cvssAccessVector).toEqual('NETWORK');
-    expect(cve.cvssAuthentication).toEqual('NONE');
-    expect(cve.cvssAvailabilityImpact).toEqual('COMPLETE');
-    expect(cve.cvssConfidentialityImpact).toEqual('COMPLETE');
-    expect(cve.cvssIntegrityImpact).toEqual('COMPLETE');
+    expect(cve.cvssAccessComplexity).toEqual('Low');
+    expect(cve.cvssAccessVector).toEqual('Network');
+    expect(cve.cvssAuthentication).toEqual('None');
+    expect(cve.cvssAvailabilityImpact).toEqual('Complete');
+    expect(cve.cvssConfidentialityImpact).toEqual('Complete');
+    expect(cve.cvssIntegrityImpact).toEqual('Complete');
   });
 
   test('should parse vulnerable products', () => {
